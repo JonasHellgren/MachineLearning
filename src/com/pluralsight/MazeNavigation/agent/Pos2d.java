@@ -1,15 +1,15 @@
 package com.pluralsight.MazeNavigation.agent;
 
-public class State {
-    public byte x;  //x position
-    public byte y;  //y position
+public class Pos2d {
+    private byte x;  //x position
+    private byte y;  //y position
 
 
-    public  State(State s) {   //constructor
+    public Pos2d(Pos2d s) {   //constructor
         this.x=s.x; this.y=s.y;
     }
 
-    public  State(int x, int y) {   //constructor
+    public Pos2d(int x, int y) {   //constructor
         this.x = (byte)x; this.y = (byte)y;
     }
 
@@ -18,23 +18,31 @@ public class State {
     }
 
 
-    public void setS(State s) {
+    public void setS(Pos2d s) {
         this.x = s.x; this.y = s.y;
     }
 
+    public byte getX() {
+        return x;
+    }
 
-    public void add(State s) {
+    public byte getY() {
+        return y;
+    }
+
+    public void add(Pos2d s) {
         this.x= (byte) (this.x+s.x);    this.y= (byte) (this.y+s.y);
     }
 
 
     public void rot(Double theta) {
-        this.x= (byte) (this.x*Math.cos(theta)-this.y*Math.sin(theta));
+        byte xtemp= (byte) (this.x*Math.cos(theta)-this.y*Math.sin(theta));  //store in temp to not corrupt this.y calc
         this.y= (byte) (this.x*Math.sin(theta)+this.y*Math.cos(theta));
+        this.x=xtemp;
     }
 
 
-    public boolean eq(State s) {
+    public boolean eq(Pos2d s) {
         return (this.x==s.x) && (this.y==s.y);
     }
 

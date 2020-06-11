@@ -1,28 +1,40 @@
 package com.pluralsight.MazeNavigation.agent;
 
 public class Status {
-    private State s;  //present agent state
-    private State sold;  //old agent state
+    private Pos2d s;  //present agent state
+    private Pos2d sold;  //previous agent state
+    private double R;  //reward of latest action
 
-    Status () {  //constructor
-        State s=new State(1,1);
-        State snew=new State(1,1);
+    public Status () {  //constructor
+        Pos2d s=new Pos2d(1,1);
+        Pos2d snew=new Pos2d(1,1);
         setS(s);  setSold(snew);
+        R=0;
     }
 
-    public State getS() {
+    public Pos2d getS() {
         return s;
     }
 
-    public void setS(State s) {
+    public void setS(Pos2d s) {
         this.s = s;
     }
 
-    public State getSold() {
+    public Pos2d getSold() {
         return sold;
     }
 
-    public void setSold(State sold) {
+    public void setSold(Pos2d sold) {
         this.sold = sold;
     }
+
+    public double getR() {
+        return R;
+    }
+
+    public void setR(double r) {
+        R = r;
+    }
+
+
 }

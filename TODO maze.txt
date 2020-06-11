@@ -3,6 +3,13 @@ document transition and reward method x
 status class  x
 environment class layout X
 transition method X
-rot method
-reward method
-test transition and reward method method
+rot method  X
+reward method  X
+test transition and reward method method  X
+
+agent class  X
+memory interface class X
+memory tabular  class X
+test memory  X
+
+create builder class for agent setup
