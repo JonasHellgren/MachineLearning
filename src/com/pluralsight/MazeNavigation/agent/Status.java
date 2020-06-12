@@ -1,14 +1,18 @@
 package com.pluralsight.MazeNavigation.agent;
 
+import com.pluralsight.MazeNavigation.enums.Action;
+
 public class Status {
     private Pos2d s;  //present agent state
-    private Pos2d sold;  //previous agent state
+    private Action ach;  //latest chosen action
     private double R;  //reward of latest action
+    private Pos2d sold;  //previous agent state
+
 
     public Status () {  //constructor
         Pos2d s=new Pos2d(1,1);
-        Pos2d snew=new Pos2d(1,1);
-        setS(s);  setSold(snew);
+        Pos2d sold=new Pos2d(1,1);
+        setS(s);  setSold(sold);
         R=0;
     }
 
@@ -36,5 +40,7 @@ public class Status {
         R = r;
     }
 
+    public Action getAch() {  return ach;  }
 
+    public void setAch(Action ach) {    this.ach = ach;  }
 }

@@ -5,11 +5,24 @@ environment class layout X
 transition method X
 rot method  X
 reward method  X
-test transition and reward method method  X
+test transition and reward method   X
 
 agent class  X
 memory interface class X
 memory tabular  class X
 test memory  X
 
+formulate main loop  X
+termstate method in env
+choose action method in agent class
+learn method in agent class
+TestChooseactionLeaarn
 create builder class for agent setup
+
+showMem  in HMI class
+
+Förstå varför ej korrekt Qsa
+
+Korrigera dokumentation R
+
+comment

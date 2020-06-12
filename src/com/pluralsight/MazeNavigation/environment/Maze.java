@@ -13,7 +13,7 @@ public class Maze {
 
     public boolean isStateFeasible(Pos2d s) {
        boolean inmaze=(minx <= s.getX() && s.getX() <= maxx) && (miny <= s.getY() && s.getY() <= maxy);
-       boolean  atblockedcell=(2 == s.getX() && s.getY() == 2);
+       boolean  atblockedcell=isStateBlocked(s);
        return inmaze && !atblockedcell;
     }
 
@@ -24,6 +24,12 @@ public class Maze {
     public boolean isStateTrap(Pos2d s) {
         return (s.getX() ==4 && s.getY() == 2);
     }
+
+    public boolean isStateBlocked(Pos2d s) {
+        return (s.getX() ==2 && s.getY() == 2);
+    }
+
+    public boolean isStateTerminal(Pos2d s) { return (isStateGoal(s) || isStateTrap(s));  }
 
 
 
