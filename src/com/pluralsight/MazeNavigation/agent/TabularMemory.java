@@ -32,4 +32,6 @@ public class TabularMemory implements Memory {
         int nofy=10;  //TODO, hardcoded replace later
         return x*nofy*nofa+y*nofa+ai;
     }
+
+    public void clearMem()  { Qsa.clear(); };
 }

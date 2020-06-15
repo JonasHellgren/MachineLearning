@@ -55,7 +55,7 @@ public class TestAgent {
         memory.saveMem(s,Action.W,0.0);
         agent.chooseAction();  //setting state ach
         env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-        agent.learnQ();
+        agent.learnQ(env.maze);
         //System.out.println("Qsold:"+agent.memory.readMem(sold,Action.E));
         Assert.assertTrue(agent.memory.readMem(sold, Action.E)<1.0);
     }
@@ -71,7 +71,7 @@ public class TestAgent {
         s.setXY(3,2);
         agent.chooseAction();  //setting state ach
         env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-        agent.learnQ();
+        agent.learnQ(env.maze);
         }
         System.out.println("QsoldE:"+agent.memory.readMem(sold,Action.E));
         System.out.println("QsoldN:"+agent.memory.readMem(sold,Action.N));
@@ -81,26 +81,30 @@ public class TestAgent {
         );
     }
 
-    @Test
-    public void learnMultiTrialsAtX3Y3() {
-        s.setXY(3,3);
-        memory.saveMem(s,Action.E,0.000);  //clear mem
-        memory.saveMem(s,Action.N,0.0);    memory.saveMem(s,Action.S,0.0);
-        memory.saveMem(s,Action.W,0.0);
 
-        for (int i = 0; i < 10000; i++) {
+    @Test
+    public void learnAtX3Y3() {
+        int nepismax=10000; int nepis=0;
+        do {
             s.setXY(3,3);
-            agent.chooseAction();  //setting state ach
-            env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-            agent.learnQ();
-        }
-        System.out.println("QsoldE:"+agent.memory.readMem(sold,Action.E));
+            while (!env.maze.isStateTerminal(s))   {
+                agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
+                agent.chooseAction();   //action selection from present policy
+                env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
+                agent.learnQ(env.maze);        //updating memory from experience
+            }
+            nepis++;
+        } while (nepis<nepismax);
+
         System.out.println("QsoldN:"+agent.memory.readMem(sold,Action.N));
-        Assert.assertTrue((agent.memory.readMem(sold, Action.E)>0.5) &&
-                (agent.memory.readMem(sold, Action.N)>0.0) &&
-                (agent.memory.readMem(sold, Action.E)>agent.memory.readMem(sold, Action.N))
-        );
-    }
+        System.out.println("QsoldE:"+agent.memory.readMem(sold,Action.E));
+        System.out.println("QsoldS:"+agent.memory.readMem(sold,Action.S));
+        System.out.println("QsoldW:"+agent.memory.readMem(sold,Action.W));
+
+        Assert.assertEquals(0.92,agent.memory.readMem(sold, Action.E),0.02);
+
+        agent.clearMem();
+        }
 
 
 

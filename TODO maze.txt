@@ -13,13 +13,13 @@ memory tabular  class X
 test memory  X
 
 formulate main loop  X
-termstate method in env
-choose action method in agent class
-learn method in agent class
-TestChooseactionLeaarn
+termstate method in env X
+choose action method in agent class  X
+learn method in agent class  X
+TestLeaarn  X
 create builder class for agent setup
 
-showMem  in HMI class
+showMem  in HMI class  X
 
 Förstå varför ej korrekt Qsa
 

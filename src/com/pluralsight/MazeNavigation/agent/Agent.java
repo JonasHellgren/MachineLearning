@@ -1,6 +1,7 @@
 package com.pluralsight.MazeNavigation.agent;
 
 import com.pluralsight.MazeNavigation.enums.Action;
+import com.pluralsight.MazeNavigation.environment.Maze;
 
 import java.util.Random;
 
@@ -30,12 +31,17 @@ public class Agent {
         status.setAch(ach);
     }
 
-    public void learnQ() {
+    public void learnQ(Maze maze) {
         Pos2d s = status.getS();   //new state, after transition
         Pos2d sold = status.getSold();  //old state, before transition
         Action ach = status.getAch();
         Double Qsa = memory.readMem(sold, ach);
-        Double Qsaopt = memory.readMem(s, getAopt(s));
+        Double Qsaopt;
+
+        if (maze.isStateTerminal(s))
+            Qsaopt=0.0;
+        else
+            Qsaopt= memory.readMem(s, getAopt(s));
 
         Double Qsanew = Qsa + setup.alpha * (status.getR() + setup.gamma * Qsaopt - Qsa);
         memory.saveMem(sold, ach, Qsanew);
@@ -53,4 +59,11 @@ public class Agent {
         }
         return aopt;
     }
+
+    public void clearMem()  { memory.clearMem(); }
+
+    public double calcPra(int nepis, int nepismax) {
+       return setup.getPrastart() + (setup.getPraend() - setup.getPrastart()) * nepis / nepismax;
+    }
+
 }

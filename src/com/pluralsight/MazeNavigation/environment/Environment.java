@@ -57,14 +57,19 @@ public class Environment {
 
     private double CalcReward(Status status) {
         Pos2d s = status.getS();  //s refers to agent position state
-        Pos2d sold = status.getSold();  //s refers to agent old position state
-        double goal = maze.isStateGoal(s) ? 1.0 : 0.0;
-        double trap = maze.isStateTrap(s) ? 1.0 : 0.0;
-        double movpen;
+        //Pos2d sold = status.getSold();  //s refers to agent old position state
+        //double goal = maze.isStateGoal(s) ? 1.0 : 0.0;
+        //double trap = maze.isStateTrap(s) ? 1.0 : 0.0;
+        //double movpen;
         //if (s.eq(sold))  movpen=0; else
-        if (maze.isStateTerminal(s))  movpen=0; else
-        movpen=-0.04;
-        return movpen + 1 * goal - 1 * trap;
+
+        if (maze.isStateGoal(s))
+            return 1;
+        else if  (maze.isStateTrap(s))
+            return -1;
+        else
+            return -0.04;
+
     }
 
 
