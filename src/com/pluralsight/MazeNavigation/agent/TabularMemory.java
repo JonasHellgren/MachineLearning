@@ -5,6 +5,7 @@ import com.pluralsight.MazeNavigation.enums.Action;
 import java.util.TreeMap;
 
 public class TabularMemory implements Memory {
+    //This class implements a tabular memory using TreeMap and Memory interface
 
     TreeMap<Integer, Double> Qsa;  // HashMap of type TreeMap
 

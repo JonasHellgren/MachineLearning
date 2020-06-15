@@ -5,9 +5,9 @@ import com.pluralsight.MazeNavigation.agent.Pos2d;
 public class Maze {
     public static final byte minx=1;
     public static final byte miny=1;
-    public static final byte maxx=4;
-    public static final byte maxy=3;
-    public static final double Pwd=0.2;
+    public static  byte maxx=4;
+    public static  byte maxy=3;
+    public static  double Pwd=0.2;
 
     public Maze () {}; //Constructor
 

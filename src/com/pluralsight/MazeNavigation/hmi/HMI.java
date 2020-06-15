@@ -2,16 +2,15 @@ package com.pluralsight.MazeNavigation.hmi;
 
 import com.pluralsight.MazeNavigation.agent.Agent;
 import com.pluralsight.MazeNavigation.agent.Pos2d;
-import com.pluralsight.MazeNavigation.agent.TabularMemory;
 import com.pluralsight.MazeNavigation.enums.Action;
 import com.pluralsight.MazeNavigation.enums.Showtype;
 import com.pluralsight.MazeNavigation.environment.Maze;
 
-import javax.swing.*;
 
 public class HMI {
 
     public static void showMem(Agent agent, Maze maze, Showtype st) {
+        //This method shows the agent policy
         Pos2d s = agent.status.getS();   //refers to state in agent status
         String txt;  String emptycelltxt;
 
