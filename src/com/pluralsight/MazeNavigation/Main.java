@@ -12,9 +12,9 @@ public class Main {
 
         //create environment, settings with builder
         Environment env = new Environment.Builder()
-                //.defPwd(0.2).build();  //risk of non-desired direction
+                .defPwd(0.2).build();  //default setup, risk of non-desired direction
                 //.defPwd(0.0).build();  //desired direction always realized
-                .defmaxx((byte) 6).defmaxy((byte) 5).build();  //larger world
+                //.defmaxx((byte) 6).defmaxy((byte) 5).build();  //larger world
 
         //create agent
         Agent agent = new Agent();

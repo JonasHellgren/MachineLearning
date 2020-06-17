@@ -23,6 +23,9 @@ showMem  in HMI class  X
 
 Förstå varför ej korrekt Qsa
 
-Korrigera dokumentation R
+Korrigera dokumentation R  x
 
-comment
+comment X
+
+fix gitconfig file error
+https://community.atlassian.com/t5/Git-questions/sourcetree-can-not-find-git-config/qaq-p/18332

@@ -84,7 +84,9 @@ public class TestAgent {
 
     @Test
     public void learnAtX3Y3() {
-        int nepismax=10000; int nepis=0;
+        Environment env = new Environment.Builder()
+                .defPwd(0.0).build();
+        int nepismax=30000; int nepis=0;
         do {
             s.setXY(3,3);
             while (!env.maze.isStateTerminal(s))   {
@@ -101,7 +103,7 @@ public class TestAgent {
         System.out.println("QsoldS:"+agent.memory.readMem(sold,Action.S));
         System.out.println("QsoldW:"+agent.memory.readMem(sold,Action.W));
 
-        Assert.assertEquals(0.92,agent.memory.readMem(sold, Action.E),0.02);
+        Assert.assertEquals(1,agent.memory.readMem(sold, Action.E),0.01);
 
         agent.clearMem();
         }

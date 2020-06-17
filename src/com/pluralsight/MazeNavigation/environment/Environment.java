@@ -59,7 +59,6 @@ public class Environment {  //The environment can be seen as the major host of o
         else
             dsrot.rot(0.0);  //no rotation
 
-
         //Define update of s
         Pos2d sint = new Pos2d(s);
         sint.setS(s);
@@ -72,12 +71,10 @@ public class Environment {  //The environment can be seen as the major host of o
 
         //Calculate and set reward
         status.setR(CalcReward(status));
-
     }
 
     private double CalcReward(Status status) { //This method calculates the reward for transition to state s
         Pos2d s = status.getS();  //s refers to agent position state
-
         if (maze.isStateGoal(s))
             return 1;
         else if  (maze.isStateTrap(s))
@@ -86,6 +83,4 @@ public class Environment {  //The environment can be seen as the major host of o
             return -0.04;
 
     }
-
-
 }
