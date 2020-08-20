@@ -75,12 +75,16 @@ public class Environment {  //The environment can be seen as the major host of o
 
     private double CalcReward(Status status) { //This method calculates the reward for transition to state s
         Pos2d s = status.getS();  //s refers to agent position state
+        double rGoal=0;
+
         if (maze.isStateGoal(s))
-            return 1;
+             rGoal=1;
         else if  (maze.isStateTrap(s))
-            return -1;
+             rGoal=-1;
         else
-            return -0.04;
+             rGoal=0;
+
+            return rGoal-0.04;
 
     }
 }
