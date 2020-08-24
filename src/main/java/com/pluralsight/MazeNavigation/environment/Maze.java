@@ -17,19 +17,19 @@ public class Maze {
        return inmaze && !atblockedcell;
     }
 
-    public boolean isStateGoal(Pos2d s) {
+    static public boolean isStateGoal(Pos2d s) {
         return (s.getX() ==4 && s.getY() == 3);
     }
 
-    public boolean isStateTrap(Pos2d s) {
+    static public boolean isStateTrap(Pos2d s) {
         return (s.getX() ==4 && s.getY() == 2);
     }
 
-    public boolean isStateBlocked(Pos2d s) {
+    static public boolean isStateBlocked(Pos2d s) {
         return (s.getX() ==2 && s.getY() == 2);
     }
 
-    public boolean isStateTerminal(Pos2d s) { return (isStateGoal(s) || isStateTrap(s));  }
+    static public boolean isStateTerminal(Pos2d s) { return (isStateGoal(s) || isStateTrap(s));  }
 
 
 

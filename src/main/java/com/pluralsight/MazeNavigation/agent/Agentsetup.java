@@ -26,4 +26,8 @@ public class Agentsetup {
     public double getPraend() {
         return Praend;
     }
+
+    public double getgamma() {
+        return gamma;
+    }
 }

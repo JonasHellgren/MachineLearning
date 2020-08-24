@@ -9,11 +9,13 @@ public class Agent {  //This class represents an AI agent
     public Agentsetup setup;  //settings such as learning rate
     public Status status;  //variables as present position
     public TabularMemory memory;     //Action value function
+    public NNMemory nnmemory;
 
     public Agent() {  //no arguments constructor
         this.setup = new Agentsetup();
         this.status = new Status();
         this.memory = new TabularMemory();
+        this.nnmemory = new NNMemory();
     }
 
     public void chooseAction() {  //This function chooses an action, can be random if prespribed by Pra
@@ -22,7 +24,6 @@ public class Agent {  //This class represents an AI agent
         if (r < this.setup.getPra()) {  //random action?
             ach = Action.values()[new Random().nextInt(Action.values().length)];
         } else ach = getAopt(status.getS());  //non-random action in present state
-
         status.setAch(ach);
     }
 
