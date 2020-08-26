@@ -13,7 +13,7 @@ import java.util.Random;
 public class TestAgent {
 
     Agent agent=new Agent();
-    TabularMemory memory= agent.memory;
+    TabularMemory memory= agent.tabmemory;
     Pos2d s=agent.status.getS();   //refers to state in agent status
     Pos2d sold=agent.status.getSold();   //refers to state in agent status
     Pos2d s2=new Pos2d(1,1);
@@ -26,7 +26,7 @@ public class TestAgent {
         memory.saveMem(s,Action.E,0.5);
         memory.saveMem(s,Action.S,-0.1);
         memory.saveMem(s,Action.W,-0.2);
-        agent.chooseAction();
+        agent.chooseAction(agent.tabmemory);
         //System.out.println("a:"+agent.status.getAch());
         Assert.assertEquals(Action.N,agent.status.getAch());
     }
@@ -40,7 +40,7 @@ public class TestAgent {
         memory.saveMem(s,Action.W,-0.2);
         int nofactionS=0;
         for (int i = 0; i < 1000000; i++) {
-            agent.chooseAction();
+            agent.chooseAction(agent.tabmemory);
             if (agent.status.getAch()==Action.S)
                 nofactionS++;
         }
@@ -53,11 +53,11 @@ public class TestAgent {
         s.setXY(3,2);  memory.saveMem(s,Action.E,1.000);  //trick agent going E
         memory.saveMem(s,Action.N,0.0);    memory.saveMem(s,Action.S,0.0);
         memory.saveMem(s,Action.W,0.0);
-        agent.chooseAction();  //setting state ach
+        agent.chooseAction(agent.tabmemory);  //setting state ach
         env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-        agent.learnQ(env.maze);
+        agent.learnQ(env.maze,agent.tabmemory);
         //System.out.println("Qsold:"+agent.memory.readMem(sold,Action.E));
-        Assert.assertTrue(agent.memory.readMem(sold, Action.E)<1.0);
+        Assert.assertTrue(agent.tabmemory.readMem(sold, Action.E)<1.0);
     }
 
     @Test
@@ -69,15 +69,15 @@ public class TestAgent {
 
         for (int i = 0; i < 10000; i++) {
         s.setXY(3,2);
-        agent.chooseAction();  //setting state ach
+        agent.chooseAction(agent.tabmemory);  //setting state ach
         env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-        agent.learnQ(env.maze);
+        agent.learnQ(env.maze,agent.tabmemory);
         }
-        System.out.println("QsoldE:"+agent.memory.readMem(sold,Action.E));
-        System.out.println("QsoldN:"+agent.memory.readMem(sold,Action.N));
-        Assert.assertTrue((agent.memory.readMem(sold, Action.E)<-0.5) &&
-                (agent.memory.readMem(sold, Action.N)<-0.0) &&
-                (agent.memory.readMem(sold, Action.E)<agent.memory.readMem(sold, Action.N))
+        System.out.println("QsoldE:"+agent.tabmemory.readMem(sold,Action.E));
+        System.out.println("QsoldN:"+agent.tabmemory.readMem(sold,Action.N));
+        Assert.assertTrue((agent.tabmemory.readMem(sold, Action.E)<-0.5) &&
+                (agent.tabmemory.readMem(sold, Action.N)<-0.0) &&
+                (agent.tabmemory.readMem(sold, Action.E)<agent.tabmemory.readMem(sold, Action.N))
         );
     }
 
@@ -91,23 +91,21 @@ public class TestAgent {
             s.setXY(3,3);
             while (!env.maze.isStateTerminal(s))   {
                 agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
-                agent.chooseAction();   //action selection from present policy
+                agent.chooseAction(agent.tabmemory);   //action selection from present policy
                 env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-                agent.learnQ(env.maze);        //updating memory from experience
+                agent.learnQ(env.maze,agent.tabmemory);        //updating memory from experience
             }
             nepis++;
         } while (nepis<nepismax);
 
-        System.out.println("QsoldN:"+agent.memory.readMem(sold,Action.N));
-        System.out.println("QsoldE:"+agent.memory.readMem(sold,Action.E));
-        System.out.println("QsoldS:"+agent.memory.readMem(sold,Action.S));
-        System.out.println("QsoldW:"+agent.memory.readMem(sold,Action.W));
+        System.out.println("QsoldN:"+agent.tabmemory.readMem(sold,Action.N));
+        System.out.println("QsoldE:"+agent.tabmemory.readMem(sold,Action.E));
+        System.out.println("QsoldS:"+agent.tabmemory.readMem(sold,Action.S));
+        System.out.println("QsoldW:"+agent.tabmemory.readMem(sold,Action.W));
 
-        Assert.assertEquals(1,agent.memory.readMem(sold, Action.E),0.01);
+        Assert.assertEquals(1,agent.tabmemory.readMem(sold, Action.E),0.05);
 
         agent.clearMem();
         }
-
-
 
 }

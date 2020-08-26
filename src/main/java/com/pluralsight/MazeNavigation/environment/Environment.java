@@ -1,5 +1,4 @@
 package com.pluralsight.MazeNavigation.environment;
-
 import com.pluralsight.MazeNavigation.agent.Pos2d;
 import com.pluralsight.MazeNavigation.agent.Status;
 import com.pluralsight.MazeNavigation.enums.Action;

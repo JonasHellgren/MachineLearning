@@ -15,7 +15,7 @@ import java.util.Random;
 public class TestTabularMemory {
 
     Agent agent=new Agent();
-    TabularMemory memory= agent.memory;
+    TabularMemory memory= agent.tabmemory;
     Pos2d s=agent.status.getS();   //refers to state in agent status
     Pos2d s2=new Pos2d(1,1);
     Environment env=new Environment();
