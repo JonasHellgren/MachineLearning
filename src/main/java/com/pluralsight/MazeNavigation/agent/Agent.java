@@ -6,10 +6,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Agent {  //This class represents an AI agent
@@ -41,7 +38,7 @@ public class Agent {  //This class represents an AI agent
         Double Qsa = mem.readMem(sold, ach);  //Q value in state before transition
         Double Qsaopt;  //Q value in state after transition, assuming optimal action
 
-        //following lines are not necessary but ensures zero Qsaopt is s is terminal
+        //following lines are not necessary but ensures zero Qsaopt if s is terminal
         if (maze.isStateTerminal(s))
             Qsaopt=0.0;
         else
@@ -54,8 +51,8 @@ public class Agent {  //This class represents an AI agent
 
     public void learnNN(Maze maze) {  //This method is used to for tabular Q-learning
 
-        HashSet<Transition> rb = nnmemory.repBuff;  //reference to replay buffer
-        HashSet<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
+        List<Transition> rb = nnmemory.repBuff;  //reference to replay buffer
+        List<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
 
         //store transition in replay buffer
         Iterator<Transition> rbiter = rb.iterator();
@@ -65,45 +62,44 @@ public class Agent {  //This class represents an AI agent
         Transition trans = new Transition(sold, status.getAch(), status.getR(), s);
         rb.add(trans);
 
-        System.out.println("Just added trans:"+trans);
-        for (Transition obj : rb) { System.out.println(obj);      }
+        //counter is not zero => decrease counter and return else reset and continue
+        if (!nnmemory.iszeroRbcount()) { nnmemory.decRbcount(); return;   }
+        else
+            nnmemory.resetRbcount();
 
+        //set list rbKeys if rb is not of full length
+        if (rb.size()<nnmemory.RBLEN) {
+            nnmemory.rbKeys.clear();
+            for (int i = 0; i < rb.size(); i++)
+                nnmemory.rbKeys.add(i);
+        }
 
         //create mini batch, i.e. sample random transitions from replay buffer
+        //mini batch length restricted by min(rb present length, mb maxlen)
         Collections.shuffle(nnmemory.rbKeys);  //make number order random
-        mb.clear();
-        //create randomIntsArray, copy of ArrayList numbers
-        int[] randomIntsArray = new int[nnmemory.MBLEN];
-        for (int i = 0; i < nnmemory.MBLEN; i++) { randomIntsArray[i] = (int) nnmemory.rbKeys.get(i);   }
-        System.out.println("nnmemory.rbKeys"+nnmemory.rbKeys);
-        //create mb, ArrayList with NELEMMB elements
-        int i = 0;      int nadded = 0;
-        for (Transition obj : rb) {
-            int finalI = i;
-            boolean contains = IntStream.of(randomIntsArray).anyMatch(x -> x == finalI);
-            if (contains && nadded < nnmemory.MBLEN) {  mb.add(obj);     nadded++;      }
+        mb.clear();         int i = 0;
+        while (i<rb.size() && i<nnmemory.MBLEN) {
+            int chnr = (int) nnmemory.rbKeys.get(i);     mb.add(rb.get(chnr));
             i++;
         }
 
-        System.out.println("mb.size()"+mb.size());
-        for (Transition obj : mb) { System.out.println(obj);      }
-
-        /*
+        //System.out.println("mb.size()"+mb.size());
+        //for (Transition obj : mb) { System.out.println(obj);      }
 
         //set data points, i.e. calculate target q for each transition
         INDArray multinputs  = Nd4j.create(new double[nnmemory.MBLEN][NNMemory.INPUT_NEURONS]);
         INDArray multout   = Nd4j.create(new double[nnmemory.MBLEN][NNMemory.OUTPUT_NEURONS]);
 
-        int rowi=0; Pos2d s,snext; double R, q, qopt;  Action a;
-        for (Transition obj : mb) {
-            s=obj.getS(); a=obj.getA(); R=obj.getR(); snext=obj.getSnext();
+        int rowi=0; Pos2d snext; double R, q, qopt;  Action a;
+        for (Transition tr : mb) {
+            s=tr.getS(); a=tr.getA(); R=tr.getR(); snext=tr.getSnext();
 
-           // if (maze.isStateTerminal(s))
-            //    q=R;
-            //else
-            //{   qopt = nnmemory.readMem(snext, getAopt(snext,nnmemory));
-             //   q=R+setup.getgamma()*qopt; }
-            q=R;
+           if (maze.isStateTerminal(snext))
+               q=R;
+            else
+            {   qopt = nnmemory.readMem(snext, getAopt(snext,nnmemory));
+              q=1*(R+setup.getgamma()*qopt); }
+            //q=R;
 
             multinputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
             multout.putRow(rowi, Nd4j.create(new double[] {q}));
@@ -112,10 +108,13 @@ public class Agent {  //This class represents an AI agent
 
         //train NN
         DataSet ds = new DataSet(multinputs, multout);
-        //System.out.println(multinputs);  System.out.println(multout);
-        nnmemory.net.fit(ds);
+        System.out.println(multinputs);  System.out.println(multout);
+        for (int j = 0; j < nnmemory.NFITITERS; j++) {
+            nnmemory.net.fit(ds);
+        }
+
         multinputs.close();  multout.close();
-        */
+
     }
 
 

@@ -126,7 +126,7 @@ public class TestNNMem {
     @Test
     public void CreaterepBuff() {
         final int NELEM = 10;
-        HashSet<Transition> rb = agent.nnmemory.repBuff;
+        List<Transition> rb = agent.nnmemory.repBuff;
         SetrepBuff(NELEM, rb);  //add elements to rb
         Assert.assertEquals(NELEM, rb.size());  //(long expected, long actual)
         for (Transition obj : rb) { System.out.println(obj);      }
@@ -136,11 +136,11 @@ public class TestNNMem {
     @Test
     public void GetMiniBatch() {
 
-        HashSet<Transition> rb = agent.nnmemory.repBuff;
+        List<Transition> rb = agent.nnmemory.repBuff;
         rb.clear();
         SetrepBuff(NELEM, rb);  //add elements to rb
 
-        HashSet<Transition> mb = new HashSet<>();
+        List<Transition> mb = new LinkedList<>();
         SetMiniBatch(rb, mb);
         System.out.println(numbers);
         for (Transition obj : mb) { System.out.println(obj);      }
@@ -152,11 +152,11 @@ public class TestNNMem {
     @Test
     public void TestTrainNN() {
 
-        HashSet<Transition> rb = agent.nnmemory.repBuff;
+        List<Transition> rb = agent.nnmemory.repBuff;
         rb.clear();
         SetrepBuff(NELEM, rb);  //add elements to rb
 
-        HashSet<Transition> mb = new HashSet<>();
+        List<Transition> mb = new LinkedList<>();
         SetMiniBatch(rb, mb);
 
         INDArray multinputs  = Nd4j.create(new double[NELEMMB][NNMemory.INPUT_NEURONS]);
@@ -203,7 +203,7 @@ public class TestNNMem {
     }
 
 
-    void SetrepBuff(int nofelem, HashSet<Transition> rb) {
+    void SetrepBuff(int nofelem, List<Transition> rb) {
         //Pos2d s = new Pos2d(1, 1);
         Random rand= new Random();;
         int min=0; int max=4;
@@ -223,18 +223,16 @@ public class TestNNMem {
         }
     }
 
-    void SetMiniBatch(HashSet<Transition> rb, HashSet<Transition> mb) {
+    void SetMiniBatch(List<Transition> rb, List<Transition> mb) {
 
         Collections.shuffle(numbers);
         //create randomIntsArray, copy of ArrayList numbers
-        int[] randomIntsArray = new int[NELEMMB];
-        for (int i = 0; i < NELEMMB; i++) { randomIntsArray[i] = (int) numbers.get(i);   }
+        //int[] randomIntsArray = new int[NELEMMB];
+        //for (int i = 0; i < NELEMMB; i++) { randomIntsArray[i] = (int) numbers.get(i);   }
         //create mb, ArrayList with NELEMMB elements
-        int i = 0;      int nadded = 0;
-        for (Transition obj : rb) {
-            int finalI = i;
-            boolean contains = IntStream.of(randomIntsArray).anyMatch(x -> x == finalI);
-            if (contains && nadded < NELEMMB) {  mb.add(obj);     nadded++;      }
+        int i = 0;
+        while (i<rb.size() && i<NELEMMB) {
+            int chnr = (int) numbers.get(i);     mb.add(rb.get(chnr));
             i++;
         }
     }
@@ -254,7 +252,7 @@ public class TestNNMem {
     public void learnNNAtX3Y3() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
-        int nepismax=3; int nepis=0;
+        int nepismax=500; int nepis=0;
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
@@ -277,19 +275,60 @@ public class TestNNMem {
         } while (nepis<nepismax);
 
         Pos2d sold=agent.status.getSold();   //refers to state in agent status
-        System.out.println("QsoldN:"+agent.tabmemory.readMem(sold,Action.N));
-        System.out.println("QsoldE:"+agent.tabmemory.readMem(sold,Action.E));
-        System.out.println("QsoldS:"+agent.tabmemory.readMem(sold,Action.S));
-        System.out.println("QsoldW:"+agent.tabmemory.readMem(sold,Action.W));
+        System.out.println("tabQsoldN:"+agent.tabmemory.readMem(sold,Action.N));
+        System.out.println("tabQsoldE:"+agent.tabmemory.readMem(sold,Action.E));
+        System.out.println("tabQsoldS:"+agent.tabmemory.readMem(sold,Action.S));
+        System.out.println("tabQsoldW:"+agent.tabmemory.readMem(sold,Action.W));
 
         System.out.println("QsoldN:"+agent.nnmemory.readMem(sold,Action.N));
         System.out.println("QsoldE:"+agent.nnmemory.readMem(sold,Action.E));
         System.out.println("QsoldS:"+agent.nnmemory.readMem(sold,Action.S));
         System.out.println("QsoldW:"+agent.nnmemory.readMem(sold,Action.W));
 
-        Assert.assertEquals(1,agent.nnmemory.readMem(sold, Action.E),0.05);
+        Assert.assertEquals(0.96,agent.nnmemory.readMem(sold, Action.E),0.05);
 
         agent.clearMem();
     }
+
+    @Test
+    public void learnNNFromTrials() {
+        Environment env = new Environment.Builder()
+                .defPwd(0.0).build();
+        //Pos2d s=new Pos2d(1,1);
+        Pos2d s=agent.status.getS();   //refers to state in agent status
+        //Pos2d sold=agent.status.getSold();   //refers to state in agent status
+
+        int nepismax = 1000;  //number of episodes
+        for (int nepis = 0; nepis < nepismax; nepis++) {
+            System.out.println("nepis:"+nepis);
+            s.setXY(1, 1);   //set start state, always lower-left cell
+            while (!env.maze.isStateTerminal(s))   {
+            agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
+            agent.chooseAction(agent.tabmemory);   //action selection from present policy
+            env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
+            agent.learnQ(env.maze,agent.tabmemory);        //updating memory from experience
+            agent.learnNN(env.maze);        //updating memory from experience
+            }
+
+        }
+
+        s.setXY(3, 3);   //set start state, always lower-left cell
+        System.out.println("tabQsoldN:"+agent.tabmemory.readMem(s,Action.N));
+        System.out.println("tabQsoldE:"+agent.tabmemory.readMem(s,Action.E));
+        System.out.println("tabQsoldS:"+agent.tabmemory.readMem(s,Action.S));
+        System.out.println("tabQsoldW:"+agent.tabmemory.readMem(s,Action.W));
+
+        System.out.println("QsoldN:"+agent.nnmemory.readMem(s,Action.N));
+        System.out.println("QsoldE:"+agent.nnmemory.readMem(s,Action.E));
+        System.out.println("QsoldS:"+agent.nnmemory.readMem(s,Action.S));
+        System.out.println("QsoldW:"+agent.nnmemory.readMem(s,Action.W));
+
+        Assert.assertEquals(0.91,agent.nnmemory.readMem(s, Action.E),0.05);
+
+        agent.clearMem();
+    }
+
+
+
 
 }

@@ -16,21 +16,29 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class NNMemory implements Memory {
 
     private static final int SEED = 234;
-    private static final double LEARNING_RATE = 0.5;
+    private static final double LEARNING_RATE = 0.001;
     public static final int INPUT_NEURONS = 3;
-    public static final int HIDDEN_NEURONS = 10;
+    public static final int HIDDEN_NEURONS = 100;
     public static final int OUTPUT_NEURONS = 1;
 
     public MultiLayerNetwork net;
-    public HashSet<Transition> repBuff;
-    public HashSet<Transition> miniBatch;
-    public static final int RBLEN = 10;   //replay buffer length
-    public static final int MBLEN = 5;    //mini batch length
+    //public HashSet<Transition> repBuff;
+    //public HashSet<Transition> miniBatch;
+    public List<Transition> repBuff;
+    private int rbCount;
+
+    public List<Transition>  miniBatch;
+    public static final int RBLEN = 500;   //replay buffer length
+    public static final int MBLEN = 20;    //mini batch length
+    public static final int NITERBETWEENFITS=100; //nof iterations between two NN fits
+    public static final int NFITITERS=50; //nof iterations for fitting NN to batch
     public ArrayList rbKeys;  //random integer number set to point out replay buffer items
 
     public NNMemory() {
@@ -43,28 +51,36 @@ public class NNMemory implements Memory {
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
 
         // Hidden Layer
-        DenseLayer.Builder hiddenLayerBuilder = new DenseLayer.Builder();
-        hiddenLayerBuilder.nIn(INPUT_NEURONS);
-        hiddenLayerBuilder.nOut(HIDDEN_NEURONS);
-        hiddenLayerBuilder.activation(Activation.TANH);
+        DenseLayer.Builder hidden1LayerBuilder = new DenseLayer.Builder();
+        hidden1LayerBuilder.nIn(INPUT_NEURONS);
+        hidden1LayerBuilder.nOut(HIDDEN_NEURONS);
+        hidden1LayerBuilder.activation(Activation.TANH);
         //hiddenLayerBuilder.weightInit(new UniformDistribution(0, 1));
-        listBuilder.layer(0, hiddenLayerBuilder.build());
+        listBuilder.layer(0, hidden1LayerBuilder.build());
+
+        // Hidden Layer
+        DenseLayer.Builder hidden2LayerBuilder = new DenseLayer.Builder();
+        hidden2LayerBuilder.nIn(HIDDEN_NEURONS);
+        hidden2LayerBuilder.nOut(HIDDEN_NEURONS);
+        hidden2LayerBuilder.activation(Activation.TANH);
+        listBuilder.layer(1, hidden2LayerBuilder.build());
 
         // Output Layer
         OutputLayer.Builder outputLayerBuilder = new OutputLayer.Builder(LossFunctions.LossFunction.SQUARED_LOSS);
         outputLayerBuilder.nIn(HIDDEN_NEURONS);
         outputLayerBuilder.nOut(OUTPUT_NEURONS);
-        outputLayerBuilder.activation(Activation.TANH);
+        outputLayerBuilder.activation(Activation.IDENTITY);
         //outputLayerBuilder.weightInit(new UniformDistribution(0, 1));
-        listBuilder.layer(1, outputLayerBuilder.build());
+        listBuilder.layer(2, outputLayerBuilder.build());
         MultiLayerConfiguration conf = listBuilder.build();
         net = new MultiLayerNetwork(conf);
         net.init();    System.out.println("Creating NN memory");
 
         //create repBuff, miniBatch and mbkeys
-        repBuff=new HashSet<>();
-        miniBatch=new HashSet<>();
+        repBuff=new ArrayList<>();  //ArrayList because get should be fast
+        miniBatch=new LinkedList<>();  //LinkedList because get should be fast
         rbKeys = new ArrayList(); for (int i = 0; i < RBLEN; i++) rbKeys.add(i);
+        resetRbcount();
     }
 
     @Override
@@ -78,5 +94,10 @@ public class NNMemory implements Memory {
 
     @Override
     public void clearMem()  { };
+
+    public void decRbcount() {rbCount--;}
+    public boolean iszeroRbcount() {return (rbCount==0);}
+    public void resetRbcount() {rbCount=NITERBETWEENFITS;}
+
 
 }
