@@ -108,7 +108,7 @@ public class Agent {  //This class represents an AI agent
 
         //train NN
         DataSet ds = new DataSet(multinputs, multout);
-        System.out.println(multinputs);  System.out.println(multout);
+        //System.out.println(multinputs);  System.out.println(multout);
         for (int j = 0; j < nnmemory.NFITITERS; j++) {
             nnmemory.net.fit(ds);
         }

@@ -23,7 +23,7 @@ import java.util.List;
 public class NNMemory implements Memory {
 
     private static final int SEED = 234;
-    private static final double LEARNING_RATE = 0.001;
+    private static final double LEARNING_RATE = 0.0001;
     public static final int INPUT_NEURONS = 3;
     public static final int HIDDEN_NEURONS = 100;
     public static final int OUTPUT_NEURONS = 1;
@@ -35,10 +35,10 @@ public class NNMemory implements Memory {
     private int rbCount;
 
     public List<Transition>  miniBatch;
-    public static final int RBLEN = 500;   //replay buffer length
+    public static final int RBLEN = 50;   //replay buffer length
     public static final int MBLEN = 20;    //mini batch length
-    public static final int NITERBETWEENFITS=100; //nof iterations between two NN fits
-    public static final int NFITITERS=50; //nof iterations for fitting NN to batch
+    public static final int NITERBETWEENFITS=10; //nof iterations between two NN fits
+    public static final int NFITITERS=10; //nof iterations for fitting NN to batch
     public ArrayList rbKeys;  //random integer number set to point out replay buffer items
 
     public NNMemory() {
@@ -48,6 +48,7 @@ public class NNMemory implements Memory {
         builder.weightInit(WeightInit.XAVIER);
         builder.miniBatch(false);
         builder.updater(new Sgd(LEARNING_RATE));
+        builder.l2(0.00001);
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
 
         // Hidden Layer

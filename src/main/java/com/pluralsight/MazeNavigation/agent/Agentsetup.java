@@ -3,7 +3,7 @@ package com.pluralsight.MazeNavigation.agent;
 public class Agentsetup {
     //protected <=> this class, package and subclasses has access
     protected final double alpha=0.01;
-    protected final double gamma=0.9;
+    protected final double gamma=0.99;
     protected final double Prastart=0.99;
     protected final double Praend=0.5;
     protected double Pra=0.1;

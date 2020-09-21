@@ -68,6 +68,8 @@
             <artifactId>${nd4j.backend}</artifactId>
             <version>${dl4j-master.version}</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.datavec</groupId>
             <artifactId>datavec-api</artifactId>
