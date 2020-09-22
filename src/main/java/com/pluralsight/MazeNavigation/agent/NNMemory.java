@@ -3,7 +3,6 @@ package com.pluralsight.MazeNavigation.agent;
 import com.pluralsight.MazeNavigation.enums.Action;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.distribution.UniformDistribution;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -15,31 +14,24 @@ import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 
 public class NNMemory implements Memory {
 
     private static final int SEED = 234;
-    private static final double LEARNING_RATE = 0.0001;
+    private static final double LEARNING_RATE = 0.001;
     public static final int INPUT_NEURONS = 3;
     public static final int HIDDEN_NEURONS = 100;
     public static final int OUTPUT_NEURONS = 1;
 
     public MultiLayerNetwork net;
-    //public HashSet<Transition> repBuff;
-    //public HashSet<Transition> miniBatch;
     public List<Transition> repBuff;
-    private int rbCount;
 
-    public List<Transition>  miniBatch;
     public static final int RBLEN = 50;   //replay buffer length
-    public static final int MBLEN = 20;    //mini batch length
-    public static final int NITERBETWEENFITS=10; //nof iterations between two NN fits
-    public static final int NFITITERS=10; //nof iterations for fitting NN to batch
-    public ArrayList rbKeys;  //random integer number set to point out replay buffer items
+    public static final int MBLEN = 10;    //mini batch length
+    public static final int NEPOCHS=100; //nof epochs for fitting NN to batch
+
 
     public NNMemory() {
         NeuralNetConfiguration.Builder builder = new NeuralNetConfiguration.Builder();
@@ -48,7 +40,7 @@ public class NNMemory implements Memory {
         builder.weightInit(WeightInit.XAVIER);
         builder.miniBatch(false);
         builder.updater(new Sgd(LEARNING_RATE));
-        builder.l2(0.00001);
+        builder.l2(0.0001);
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
 
         // Hidden Layer
@@ -77,11 +69,9 @@ public class NNMemory implements Memory {
         net = new MultiLayerNetwork(conf);
         net.init();    System.out.println("Creating NN memory");
 
-        //create repBuff, miniBatch and mbkeys
+        //create replay buffer
         repBuff=new ArrayList<>();  //ArrayList because get should be fast
-        miniBatch=new LinkedList<>();  //LinkedList because get should be fast
-        rbKeys = new ArrayList(); for (int i = 0; i < RBLEN; i++) rbKeys.add(i);
-        resetRbcount();
+
     }
 
     @Override
@@ -96,9 +86,6 @@ public class NNMemory implements Memory {
     @Override
     public void clearMem()  { };
 
-    public void decRbcount() {rbCount--;}
-    public boolean iszeroRbcount() {return (rbCount==0);}
-    public void resetRbcount() {rbCount=NITERBETWEENFITS;}
 
 
 }

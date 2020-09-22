@@ -2,8 +2,10 @@ package com.pluralsight.MazeNavigation.agent;
 
 import com.pluralsight.MazeNavigation.enums.Action;
 import com.pluralsight.MazeNavigation.environment.Maze;
+import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.*;
@@ -52,46 +54,30 @@ public class Agent {  //This class represents an AI agent
     public void learnNN(Maze maze) {  //This method is used to for tabular Q-learning
 
         List<Transition> rb = nnmemory.repBuff;  //reference to replay buffer
-        List<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
+        //List<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
 
         //store transition in replay buffer
         Iterator<Transition> rbiter = rb.iterator();
-        if (rb.size()>nnmemory.RBLEN)   //remove first/oldest item in set if set is "full"
+        if (rb.size()>=nnmemory.RBLEN)   //remove first/oldest item in set if set is "full"
             {rbiter.next(); rbiter.remove(); }
+        Random rand= new Random();
         Pos2d sold = new Pos2d(status.getSold());   Pos2d s = new Pos2d(status.getS());  //Important to use new
         Transition trans = new Transition(sold, status.getAch(), status.getR(), s);
         rb.add(trans);
 
-        //counter is not zero => decrease counter and return else reset and continue
-        if (!nnmemory.iszeroRbcount()) { nnmemory.decRbcount(); return;   }
-        else
-            nnmemory.resetRbcount();
+        //rb is not full => return
+        if (rb.size()<nnmemory.RBLEN) { return;   }
 
-        //set list rbKeys if rb is not of full length
-        if (rb.size()<nnmemory.RBLEN) {
-            nnmemory.rbKeys.clear();
-            for (int i = 0; i < rb.size(); i++)
-                nnmemory.rbKeys.add(i);
-        }
+        //System.out.println("rb.size()"+rb.size());
+        //for (Transition obj : rb) { System.out.println(obj);      }
+        //System.out.println(trans);
 
-        //create mini batch, i.e. sample random transitions from replay buffer
-        //mini batch length restricted by min(rb present length, mb maxlen)
-        Collections.shuffle(nnmemory.rbKeys);  //make number order random
-        mb.clear();         int i = 0;
-        while (i<rb.size() && i<nnmemory.MBLEN) {
-            int chnr = (int) nnmemory.rbKeys.get(i);     mb.add(rb.get(chnr));
-            i++;
-        }
-
-        //System.out.println("mb.size()"+mb.size());
-        //for (Transition obj : mb) { System.out.println(obj);      }
-
-        //set data points, i.e. calculate target q for each transition
-        INDArray multinputs  = Nd4j.create(new double[nnmemory.MBLEN][NNMemory.INPUT_NEURONS]);
-        INDArray multout   = Nd4j.create(new double[nnmemory.MBLEN][NNMemory.OUTPUT_NEURONS]);
+        //set data points (inputs,out), i.e. calculate target q for each transition
+        INDArray inputs  = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.INPUT_NEURONS]);
+        INDArray out   = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.OUTPUT_NEURONS]);
 
         int rowi=0; Pos2d snext; double R, q, qopt;  Action a;
-        for (Transition tr : mb) {
+        for (Transition tr : rb) {
             s=tr.getS(); a=tr.getA(); R=tr.getR(); snext=tr.getSnext();
 
            if (maze.isStateTerminal(snext))
@@ -99,21 +85,28 @@ public class Agent {  //This class represents an AI agent
             else
             {   qopt = nnmemory.readMem(snext, getAopt(snext,nnmemory));
               q=1*(R+setup.getgamma()*qopt); }
-            //q=R;
 
-            multinputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
-            multout.putRow(rowi, Nd4j.create(new double[] {q}));
+            inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
+            out.putRow(rowi, Nd4j.create(new double[] {q}));
             rowi++;
         }
 
+        //define iterator
+        int seed = 12345; Random rng = new Random(seed);
+        final DataSet allData = new DataSet(inputs,out);
+        final List<DataSet> list = allData.asList();
+        Collections.shuffle(list,rng);
+        DataSetIterator iterator = new ListDataSetIterator<>(list,nnmemory.MBLEN);
+
+
         //train NN
-        DataSet ds = new DataSet(multinputs, multout);
-        //System.out.println(multinputs);  System.out.println(multout);
-        for (int j = 0; j < nnmemory.NFITITERS; j++) {
-            nnmemory.net.fit(ds);
+        //DataSet ds = new DataSet(multinputs, multout);
+        //System.out.println(inputs);  System.out.println(out);
+        for (int j = 0; j < nnmemory.NEPOCHS; j++) {  //nof iter is NEPOCHS*RBLEN/MBLEN
+            iterator.reset();   nnmemory.net.fit(iterator);
         }
 
-        multinputs.close();  multout.close();
+        inputs.close();  out.close();
 
     }
 

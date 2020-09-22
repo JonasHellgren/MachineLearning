@@ -43,7 +43,7 @@ public class TestNNMem {
     final int ITERATIONS = 1500;
     static final int NELEM = 10;
     final int NELEMMB = 3;
-    static int listenerFrequency=10;
+    static int listenerFrequency=1000;
     Environment env = new Environment.Builder()
             .defPwd(0.2).build();
     //INDArray multinputs = Nd4j.zeros(NELEMMB, NNMemory.INPUT_NEURONS);  //NELEMMB rows
@@ -264,18 +264,18 @@ public class TestNNMem {
     public void learnNNAtX3Y3() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
-        int nepismax=500; int nepis=0;
+        int nepismax=10; int nepis=0;
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
 
         net.setListeners(new ScoreIterationListener(listenerFrequency));
-
+        agent.setup.setgamma(0.1);
 
         do {
             System.out.println("nepis:"+nepis);
             s.setXY(3,3);
-            while (!env.maze.isStateTerminal(s))   {
+            //while (!env.maze.isStateTerminal(s))   {
                 agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
                 agent.chooseAction(agent.tabmemory);   //action selection from present policy
                 env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
@@ -283,9 +283,11 @@ public class TestNNMem {
                 //System.out.print(agent.status.getAch()+", "); System.out.println(agent.status.getS());
                 agent.learnQ(env.maze,agent.tabmemory);        //updating memory from experience
                 agent.learnNN(env.maze);        //updating memory from experience
-            }
+            //}
 
-            nepis++;
+            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nepis++;  }
+
+
         } while (nepis<nepismax);
 
         Pos2d sold=agent.status.getSold();   //refers to state in agent status
@@ -301,7 +303,7 @@ public class TestNNMem {
 
         Assert.assertEquals(0.96,agent.nnmemory.readMem(sold, Action.E),0.05);
 
-        agent.clearMem();
+        agent.clearMem();  agent.setup.setgamma(1);
     }
 
     @Test
@@ -321,8 +323,8 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-
-        int nepismax = 200;  //number of episodes
+        agent.setup.setgamma(0.0);
+        int nepismax = 50;  //number of episodes
         for (int nepis = 0; nepis < nepismax; nepis++) {
             //System.out.println("nepis:"+nepis);
             int x=rand.nextInt((max - min) + 1) + min;
@@ -339,7 +341,7 @@ public class TestNNMem {
 
         for (int y = 3; y >= 1; y--)
             for (int x = 1; x <= 3; x++) {
-                s.setXY(3, 3);
+                s.setXY(x, y);
                 System.out.print("x:"+x+",y:"+y+"___");
                 printMem(s);  //show mem at s
             }
@@ -357,7 +359,7 @@ public class TestNNMem {
         Assert.assertEquals(0.95,agent.nnmemory.readMem(s, Action.E),0.05);
 
 
-        agent.clearMem();
+        agent.clearMem();  agent.setup.setgamma(1);
     }
 
     public void printMem(Pos2d s)
