@@ -15,13 +15,14 @@ public class Agent {  //This class represents an AI agent
     public Agentsetup setup;  //settings such as learning rate
     public Status status;  //variables as present position
     public TabularMemory tabmemory;     //Action value function
-    public NNMemory nnmemory;
+    public NNMemory nnmemory;  public NNMemory nnmemorytar;
 
     public Agent() {  //no arguments constructor
         this.setup = new Agentsetup();
         this.status = new Status();
         this.tabmemory = new TabularMemory();
         this.nnmemory = new NNMemory();
+        this.nnmemorytar = new NNMemory();
     }
 
     public void chooseAction(Memory mem) {  //This function chooses an action, can be random if prespribed by Pra
@@ -51,7 +52,7 @@ public class Agent {  //This class represents an AI agent
         tabmemory.saveMem(sold, ach, Qsanew);
     }
 
-    public void learnNN(Maze maze) {  //This method is used to for tabular Q-learning
+    public void learnNN(Maze maze) {  //This method is used to for DQL
 
         List<Transition> rb = nnmemory.repBuff;  //reference to replay buffer
         //List<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
