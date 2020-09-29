@@ -6,6 +6,7 @@ import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.*;
@@ -102,6 +103,10 @@ public class Agent {  //This class represents an AI agent
         final List<DataSet> list = allData.asList();
         Collections.shuffle(list,rng);
         DataSetIterator iterator = new ListDataSetIterator<>(list,nnmemory.MBLEN);
+
+        //normalize, https://www.bookstack.cn/read/deeplearning4j/a7ea5ae658458207.md#Data%20Normalization
+        //NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
+        //normalizer.fit(iterator); iterator.setPreProcessor(normalizer);
 
 
         //train NN
