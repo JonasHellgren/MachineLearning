@@ -28,7 +28,7 @@ public class NNMemory implements Memory {
     public MultiLayerNetwork net;
     public List<Transition> repBuff;
 
-    public static final int RBLEN = 100;   //replay buffer length
+    public static final int RBLEN = 20;   //replay buffer length
     public static final int MBLEN = 10;    //mini batch length
     public static final int NEPOCHS=1; //nof epochs for fitting NN to batch
 
@@ -40,7 +40,7 @@ public class NNMemory implements Memory {
         builder.weightInit(WeightInit.XAVIER);
         builder.miniBatch(false);
         builder.updater(new Sgd(LEARNING_RATE));
-        builder.l2(0.0001);
+        builder.l2(0.001);
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
 
         // Hidden Layer

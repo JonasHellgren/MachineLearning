@@ -288,6 +288,7 @@ public class TestNNMem {
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
         Random rand= new Random(); int max=3;   int min=3;
+        final boolean policyfromnn=true;
 
         net.setListeners(new ScoreIterationListener(listenerFrequency));
 
@@ -297,22 +298,29 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-        int nstepsmax = 10000;  int nsteps = 0; //number of steps
+        int nstepsmax = 10000;
+        int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);
-            int x=rand.nextInt((max - min) + 1) + min;
-            int y=rand.nextInt((max - min) + 1) + min;
+            int x = rand.nextInt((max - min) + 1) + min;
+            int y = rand.nextInt((max - min) + 1) + min;
             s.setXY(x, y);   //set start state, always lower-left cell
-            while (!env.maze.isStateTerminal(s) && nsteps<nstepsmax)     {
-            agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nsteps/nstepsmax);
-            agent.chooseAction(agent.tabmemory);   //action selection from present policy
-            env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
-            agent.learnQ(env.maze,agent.tabmemory);        //updating memory from experience
-            agent.learnNN(env.maze);        //updating memory from experience
-            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nsteps++;}
+            while (!env.maze.isStateTerminal(s) && nsteps < nstepsmax) {
+                agent.setup.setPra(agent.setup.getPrastart() + (agent.setup.getPraend() - agent.setup.getPrastart()) * nsteps / nstepsmax);
+                if (policyfromnn)
+                    agent.chooseAction(agent.nnmemory);   //action selection from nn memory
+                else
+                    agent.chooseAction(agent.tabmemory);   //action selection from tab memory
+
+                env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
+                agent.learnQ(env.maze, agent.tabmemory);        //updating memory from experience
+                agent.learnNN(env.maze);        //updating memory from experience
+                if (agent.nnmemory.repBuff.size() >= agent.nnmemory.RBLEN) {
+                    nsteps++;
+                }
 
             }
-        }  while (nsteps<nstepsmax);
+        } while (nsteps<nstepsmax);
 
         System.out.println("Tab memory");
         for (int y = 3; y >= 1; y--)

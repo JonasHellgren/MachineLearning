@@ -8,7 +8,7 @@ public class Agentsetup {
     protected final double Praend=0.5;
     protected double Pra=0.1;
     protected final double Qverysmall=-1000000;
-    protected final int countNetReplMax=10;
+    protected final int countNetReplMax=100;
 
     public Agentsetup() {    }  //constructor
 
