@@ -24,6 +24,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 import java.util.*;
@@ -40,10 +41,10 @@ public class TestNNMem {
     MultiLayerNetwork net = agent.nnmemory.net;
     INDArray singleinput = Nd4j.zeros(1, NNMemory.INPUT_NEURONS);  //one row
     INDArray singleout = Nd4j.zeros(1, NNMemory.OUTPUT_NEURONS);  //one row
-    final int ITERATIONS = 1500;
+    final int ITERATIONS = 500;
     static final int NELEM = 10;
     final int NELEMMB = 3;
-    static int listenerFrequency=1000;
+    static int listenerFrequency=100;
     Environment env = new Environment.Builder()
             .defPwd(0.2).build();
     //INDArray multinputs = Nd4j.zeros(NELEMMB, NNMemory.INPUT_NEURONS);  //NELEMMB rows
@@ -146,21 +147,6 @@ public class TestNNMem {
         rb.clear();
     }
 
-    @Test
-    public void GetMiniBatch() {
-
-        List<Transition> rb = agent.nnmemory.repBuff;
-        rb.clear();
-        SetrepBuff(NELEM, rb);  //add elements to rb
-
-        List<Transition> mb = new LinkedList<>();
-        SetMiniBatch(rb, mb);
-        System.out.println(numbers);
-        for (Transition obj : mb) { System.out.println(obj);      }
-
-        rb.clear();        mb.clear();
-    }
-
 
     @Test
     public void TestTrainNN() {
@@ -170,7 +156,6 @@ public class TestNNMem {
         SetrepBuff(NELEM, rb);  //add elements to rb
 
         List<Transition> mb = new LinkedList<>();
-        SetMiniBatch(rb, mb);
 
         INDArray multinputs  = Nd4j.create(new double[NELEMMB][NNMemory.INPUT_NEURONS]);
         INDArray multout   = Nd4j.create(new double[NELEMMB][NNMemory.OUTPUT_NEURONS]);
@@ -235,19 +220,7 @@ public class TestNNMem {
         }
     }
 
-    void SetMiniBatch(List<Transition> rb, List<Transition> mb) {
 
-        Collections.shuffle(numbers);
-        //create randomIntsArray, copy of ArrayList numbers
-        //int[] randomIntsArray = new int[NELEMMB];
-        //for (int i = 0; i < NELEMMB; i++) { randomIntsArray[i] = (int) numbers.get(i);   }
-        //create mb, ArrayList with NELEMMB elements
-        int i = 0;
-        while (i<rb.size() && i<NELEMMB) {
-            int chnr = (int) numbers.get(i);     mb.add(rb.get(chnr));
-            i++;
-        }
-    }
 
     double calcNewq(double R,Pos2d snext) {
         double q;
@@ -264,16 +237,16 @@ public class TestNNMem {
     public void learnNNAtX3Y3() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
-        int nepismax=10; int nepis=0;
+        int nepismax=500; int nepis=0;
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
 
         net.setListeners(new ScoreIterationListener(listenerFrequency));
-        agent.setup.setgamma(0.1);
+        agent.setup.setgamma(0.5);
 
         do {
-            System.out.println("nepis:"+nepis);
+            //System.out.println("nepis:"+nepis);
             s.setXY(3,3);
             //while (!env.maze.isStateTerminal(s))   {
                 agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
@@ -285,7 +258,7 @@ public class TestNNMem {
                 agent.learnNN(env.maze);        //updating memory from experience
             //}
 
-            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nepis++;  }
+            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nepis++;}
 
 
         } while (nepis<nepismax);
@@ -310,6 +283,7 @@ public class TestNNMem {
     public void learnNNFromTrials() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
+        agent.setup.setgamma(0.9);
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
@@ -323,32 +297,43 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-        agent.setup.setgamma(0.0);
-        int nepismax = 50;  //number of episodes
-        for (int nepis = 0; nepis < nepismax; nepis++) {
+        int nstepsmax = 10000;  int nsteps = 0; //number of steps
+        do {
             //System.out.println("nepis:"+nepis);
             int x=rand.nextInt((max - min) + 1) + min;
             int y=rand.nextInt((max - min) + 1) + min;
             s.setXY(x, y);   //set start state, always lower-left cell
-            while (!env.maze.isStateTerminal(s))   {
-            agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
+            while (!env.maze.isStateTerminal(s) && nsteps<nstepsmax)     {
+            agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nsteps/nstepsmax);
             agent.chooseAction(agent.tabmemory);   //action selection from present policy
             env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
             agent.learnQ(env.maze,agent.tabmemory);        //updating memory from experience
             agent.learnNN(env.maze);        //updating memory from experience
-            }
-        }
+            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nsteps++;}
 
+            }
+        }  while (nsteps<nstepsmax);
+
+        System.out.println("Tab memory");
         for (int y = 3; y >= 1; y--)
             for (int x = 1; x <= 3; x++) {
                 s.setXY(x, y);
                 System.out.print("x:"+x+",y:"+y+"___");
-                printMem(s);  //show mem at s
+                printMemTab(s);  //show mem at s
             }
+
 
         HMI.showMem(agent, env.maze, Showtype.MAXQ, MemType.Tab);
         System.out.println();
         HMI.showMem(agent, env.maze, Showtype.BESTA, MemType.Tab);
+
+        System.out.println("NN memory");
+        for (int y = 3; y >= 1; y--)
+            for (int x = 1; x <= 3; x++) {
+                s.setXY(x, y);
+                System.out.print("x:"+x+",y:"+y+"___");
+                printMemNN(s);  //show mem at s
+            }
 
         HMI.showMem(agent, env.maze, Showtype.MAXQ, MemType.NN);
         System.out.println();
@@ -362,17 +347,20 @@ public class TestNNMem {
         agent.clearMem();  agent.setup.setgamma(1);
     }
 
-    public void printMem(Pos2d s)
-    {
-        System.out.print("tabQsoldN:"+agent.tabmemory.readMem(s,Action.N));
-        System.out.print(", tabQsoldE:"+agent.tabmemory.readMem(s,Action.E));
-        System.out.print(", tabQsoldS:"+agent.tabmemory.readMem(s,Action.S));
-        System.out.println(", tabQsoldW:"+agent.tabmemory.readMem(s,Action.W));
+    public void printMemTab(Pos2d s) {
+        DecimalFormat df = new DecimalFormat(); df.setMaximumFractionDigits(2);
+        System.out.print("QN:" + df.format(agent.tabmemory.readMem(s, Action.N)));
+        System.out.print(", QE:" + df.format(agent.tabmemory.readMem(s, Action.E)));
+        System.out.print(", QS:" + df.format(agent.tabmemory.readMem(s, Action.S)));
+        System.out.println(", QW:" + df.format(agent.tabmemory.readMem(s, Action.W)));
+    }
 
-        System.out.print("QsoldN:"+agent.nnmemory.readMem(s,Action.N));
-        System.out.print(", QsoldE:"+agent.nnmemory.readMem(s,Action.E));
-        System.out.print(", QsoldS:"+agent.nnmemory.readMem(s,Action.S));
-        System.out.println(", QsoldW:"+agent.nnmemory.readMem(s,Action.W));
+    public void printMemNN(Pos2d s) {
+        DecimalFormat df = new DecimalFormat(); df.setMaximumFractionDigits(2);
+        System.out.print("QN:"+df.format(agent.nnmemory.readMem(s,Action.N)));
+        System.out.print(", QE:"+df.format(agent.nnmemory.readMem(s,Action.E)));
+        System.out.print(", QS:"+df.format(agent.nnmemory.readMem(s,Action.S)));
+        System.out.println(", QW:"+df.format(agent.nnmemory.readMem(s,Action.W)));
     }
 
 

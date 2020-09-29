@@ -16,6 +16,7 @@ public class Agent {  //This class represents an AI agent
     public Status status;  //variables as present position
     public TabularMemory tabmemory;     //Action value function
     public NNMemory nnmemory;  public NNMemory nnmemorytar;
+    private int countNetRepl; //counter for how how often target net is replaced by primary net
 
     public Agent() {  //no arguments constructor
         this.setup = new Agentsetup();
@@ -23,6 +24,7 @@ public class Agent {  //This class represents an AI agent
         this.tabmemory = new TabularMemory();
         this.nnmemory = new NNMemory();
         this.nnmemorytar = new NNMemory();
+        this.countNetRepl=setup.countNetReplMax;
     }
 
     public void chooseAction(Memory mem) {  //This function chooses an action, can be random if prespribed by Pra
@@ -84,7 +86,7 @@ public class Agent {  //This class represents an AI agent
            if (maze.isStateTerminal(snext))
                q=R;
             else
-            {   qopt = nnmemory.readMem(snext, getAopt(snext,nnmemory));
+            {   qopt = nnmemorytar.readMem(snext, getAopt(snext,nnmemorytar));
               q=1*(R+setup.getgamma()*qopt); }
 
             inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
@@ -108,6 +110,16 @@ public class Agent {  //This class represents an AI agent
         }
 
         inputs.close();  out.close();
+
+        //every C step: copy default net params to target net
+        if (countNetRepl==0) {
+            nnmemorytar.net.setParams(nnmemory.net.params());
+        countNetRepl=setup.countNetReplMax;
+        }
+        else
+            countNetRepl--;
+
+
 
     }
 

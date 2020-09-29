@@ -28,9 +28,9 @@ public class NNMemory implements Memory {
     public MultiLayerNetwork net;
     public List<Transition> repBuff;
 
-    public static final int RBLEN = 50;   //replay buffer length
+    public static final int RBLEN = 100;   //replay buffer length
     public static final int MBLEN = 10;    //mini batch length
-    public static final int NEPOCHS=100; //nof epochs for fitting NN to batch
+    public static final int NEPOCHS=1; //nof epochs for fitting NN to batch
 
 
     public NNMemory() {
