@@ -16,6 +16,7 @@ public class Agent {  //This class represents an AI agent
     public Status status;  //variables as present position
     public TabularMemory tabmemory;     //Action value function
     public NNMemory nnmemory;  public NNMemory nnmemorytar;
+    public List<Transition> repBuff;
     private int countNetRepl; //counter for how how often target net is replaced by primary net
 
     public Agent() {  //no arguments constructor
@@ -25,6 +26,8 @@ public class Agent {  //This class represents an AI agent
         this.nnmemory = new NNMemory();
         this.nnmemorytar = new NNMemory();
         this.countNetRepl=setup.countNetReplMax;
+        //create replay buffer
+        this.repBuff=new ArrayList<>();  //ArrayList because get should be fast
     }
 
     public void chooseAction(Memory mem) {  //This function chooses an action, can be random if prespribed by Pra
@@ -56,8 +59,7 @@ public class Agent {  //This class represents an AI agent
 
     public void learnNN(Maze maze) {  //This method is used to for DQL
 
-        List<Transition> rb = nnmemory.repBuff;  //reference to replay buffer
-        //List<Transition> mb = nnmemory.miniBatch;  //reference to mini batch
+        List<Transition> rb = this.repBuff;  //reference to replay buffer
 
         //store transition in replay buffer
         Iterator<Transition> rbiter = rb.iterator();
@@ -114,7 +116,7 @@ public class Agent {  //This class represents an AI agent
         //every C step: copy default net params to target net
         if (countNetRepl==0) {
             nnmemorytar.net.setParams(nnmemory.net.params());
-        countNetRepl=setup.countNetReplMax;
+            countNetRepl=setup.countNetReplMax;
         }
         else
             countNetRepl--;

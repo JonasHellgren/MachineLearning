@@ -140,7 +140,7 @@ public class TestNNMem {
     @Test
     public void CreaterepBuff() {
         final int NELEM = 10;
-        List<Transition> rb = agent.nnmemory.repBuff;
+        List<Transition> rb = agent.repBuff;
         SetrepBuff(NELEM, rb);  //add elements to rb
         Assert.assertEquals(NELEM, rb.size());  //(long expected, long actual)
         for (Transition obj : rb) { System.out.println(obj);      }
@@ -151,7 +151,7 @@ public class TestNNMem {
     @Test
     public void TestTrainNN() {
 
-        List<Transition> rb = agent.nnmemory.repBuff;
+        List<Transition> rb = agent.repBuff;
         rb.clear();
         SetrepBuff(NELEM, rb);  //add elements to rb
 
@@ -258,7 +258,7 @@ public class TestNNMem {
                 agent.learnNN(env.maze);        //updating memory from experience
             //}
 
-            if (agent.nnmemory.repBuff.size()>=agent.nnmemory.RBLEN) { nepis++;}
+            if (agent.repBuff.size()>=agent.nnmemory.RBLEN) { nepis++;}
 
 
         } while (nepis<nepismax);
@@ -298,7 +298,7 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-        int nstepsmax = 10000;
+        int nstepsmax = 1000;
         int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);
@@ -315,7 +315,7 @@ public class TestNNMem {
                 env.Transition(agent.status);   //updating s and setting sold=s, defining reward R
                 agent.learnQ(env.maze, agent.tabmemory);        //updating memory from experience
                 agent.learnNN(env.maze);        //updating memory from experience
-                if (agent.nnmemory.repBuff.size() >= agent.nnmemory.RBLEN) {
+                if (agent.repBuff.size() >= agent.nnmemory.RBLEN) {
                     nsteps++;
                 }
 

@@ -26,7 +26,6 @@ public class NNMemory implements Memory {
     public static final int OUTPUT_NEURONS = 1;
 
     public MultiLayerNetwork net;
-    public List<Transition> repBuff;
 
     public static final int RBLEN = 20;   //replay buffer length
     public static final int MBLEN = 10;    //mini batch length
@@ -68,9 +67,6 @@ public class NNMemory implements Memory {
         MultiLayerConfiguration conf = listBuilder.build();
         net = new MultiLayerNetwork(conf);
         net.init();    System.out.println("Creating NN memory");
-
-        //create replay buffer
-        repBuff=new ArrayList<>();  //ArrayList because get should be fast
 
     }
 
