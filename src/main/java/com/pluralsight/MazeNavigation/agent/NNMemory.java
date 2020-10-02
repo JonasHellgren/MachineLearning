@@ -13,17 +13,15 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class NNMemory implements Memory {
 
     private static final int SEED = 234;
-    private static final double LEARNING_RATE = 0.01;
-    public static final int INPUT_NEURONS = 2;
-    public static final int HIDDEN_NEURONS = 10;
-    public static final int OUTPUT_NEURONS = 4;
+    private static final double LEARNING_RATE = 0.03;   //learning rate
+    public static final int INPUT_NEURONS = 2;  //nof input neurons
+    public static final int HIDDEN_NEURONS = 10;  //nof neurons in hidden layers
+    public static final int OUTPUT_NEURONS = 4; //nof output neurons
 
     public MultiLayerNetwork net;
 
@@ -35,7 +33,7 @@ public class NNMemory implements Memory {
     public NNMemory() {
         NeuralNetConfiguration.Builder builder = new NeuralNetConfiguration.Builder();
         builder.seed(SEED);
-        //builder.biasInit(0);
+        //builder.biasInit(0); builder.weightInit(WeightInit.ZERO);
         builder.weightInit(WeightInit.XAVIER);
         builder.miniBatch(false);
         builder.updater(new Sgd(LEARNING_RATE));

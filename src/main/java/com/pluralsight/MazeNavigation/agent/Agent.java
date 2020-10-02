@@ -6,11 +6,9 @@ import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
-
 import java.util.*;
-import java.util.stream.IntStream;
+
 
 public class Agent {  //This class represents an AI agent
     public Agentsetup setup;  //settings such as learning rate
@@ -18,7 +16,7 @@ public class Agent {  //This class represents an AI agent
     public TabularMemory tabmemory;     //Action value function
     public NNMemory nnmemory;  public NNMemory nnmemorytar;
     public List<Transition> repBuff;
-    private int countNetRepl; //counter for how how often target net is replaced by primary net
+    private int countNetRepl; //counter for how how often target net is replaced by policy net
 
     public Agent() {  //no arguments constructor
         this.setup = new Agentsetup();
@@ -73,33 +71,30 @@ public class Agent {  //This class represents an AI agent
         //rb is not full => return
         if (rb.size()<nnmemory.RBLEN) { return;   }
 
-        //System.out.println("rb.size()"+rb.size());
-        //for (Transition obj : rb) { System.out.println(obj);      }
-        //System.out.println(trans);
-
         //set data points (inputs,out), i.e. calculate target q for each transition
         INDArray inputs  = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.INPUT_NEURONS]);
         INDArray out   = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.OUTPUT_NEURONS]);
 
-
         int rowi=0; Pos2d snext; double R, q, qopt;  Action a;
-        for (Transition tr : rb) {
+        for (Transition tr : rb) {    //loop replay buffer
             s=tr.getS(); a=tr.getA(); R=tr.getR(); snext=tr.getSnext();
 
+            //input at rowi
+            inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY()}));
+
+           //define q, i.e. reference output for action a
            if (maze.isStateTerminal(snext))
                q=R;
             else
-            {   qopt = nnmemorytar.readMem(snext, getAopt(snext,nnmemorytar));
+            { qopt = nnmemorytar.readMem(snext, getAopt(snext,nnmemorytar));
               q=1*(R+setup.getgamma()*qopt); }
 
-            inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY()}));
-            //INDArray oneinput  = Nd4j.create(new double[1][nnmemory.INPUT_NEURONS]);
-            //oneinput.putRow(0, Nd4j.create(new double[] {s.getX(),s.getY()}));
+            //define tempout, this output is similar as previous output except for output a
             INDArray oneinput= inputs.getRows(rowi);
             INDArray tempout = nnmemory.net.output(oneinput);
             tempout.putScalar(a.val,q);
 
-            out.putRow(rowi, tempout);  //new double[]
+            out.putRow(rowi, tempout);  //new out at rowi
             rowi++;
         }
 
@@ -122,11 +117,7 @@ public class Agent {  //This class represents an AI agent
             iterator.reset();   nnmemory.net.fit(iterator);
         }
 
-        //INDArray oneinput= inputs.getRows(0);
-        //INDArray tempout = nnmemory.net.output(oneinput);
-        //System.out.println(tempout);
-
-        inputs.close();  out.close();
+        inputs.close();  out.close();  //clean up, maybe not necessary
 
         //every C step: copy default net params to target net
         if (countNetRepl==0) {
@@ -135,9 +126,6 @@ public class Agent {  //This class represents an AI agent
         }
         else
             countNetRepl--;
-
-
-
     }
 
 

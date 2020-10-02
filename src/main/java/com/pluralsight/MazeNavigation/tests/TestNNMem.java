@@ -134,53 +134,6 @@ public class TestNNMem {
 
     @Ignore
     @Test
-    public void TestTrainNN() {
-
-        List<Transition> rb = agent.repBuff;
-        rb.clear();
-        SetrepBuff(NELEM, rb);  //add elements to rb
-
-        List<Transition> mb = new LinkedList<>();
-
-        INDArray multinputs  = Nd4j.create(new double[NELEMMB][NNMemory.INPUT_NEURONS]);
-        INDArray multout   = Nd4j.create(new double[NELEMMB][NNMemory.OUTPUT_NEURONS]);
-        double q,R; Action a;
-
-        int rowi=0; Pos2d s,snext;
-        for (Transition obj : mb) {
-        R=obj.getR(); s=obj.getS(); snext=obj.getSnext(); a=obj.getA();
-        q=R; //TODO
-        multinputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
-        multout.putRow(rowi, Nd4j.create(new double[] {q}));
-        rowi++;
-        }
-
-        DataSet ds = new DataSet(multinputs, multout);
-        System.out.println(multinputs);  System.out.println(multout);
-        net.fit(ds);
-        rb.clear();        mb.clear(); multinputs.close();  multout.close();
-    }
-
-    @Ignore
-    @Test
-    public void TestcalcNewq() {
-
-        Pos2d s = new Pos2d(1,1);  //s.setXY(r1,r2);
-        Pos2d snext = new Pos2d(1, 2);
-        double R=s.getX()+s.getY()*0.1;  double Qsa = 0; double Qbest=-1000;
-        for (Action a : Action.values()) {
-            Qsa = agent.nnmemory.readMem(snext, a);
-            System.out.println("Action:"+a+", Qsa:"+Qsa);
-            if (Qsa>Qbest) { Qbest=Qsa; }
-        }
-
-        double q=calcNewq(R,snext);
-        System.out.println("q:"+q);
-        Assert.assertEquals(R+agent.setup.getgamma()*Qbest,q, 0.01);
-    }
-
-    @Ignore
-    @Test
     public void TestShowMem() {
         HMI.showMem(agent, env.maze, Showtype.BESTA, MemType.NN);
         HMI.showMem(agent, env.maze, Showtype.MAXQ, MemType.NN);
@@ -208,17 +161,6 @@ public class TestNNMem {
     }
 
 
-
-    double calcNewq(double R,Pos2d snext) {
-        double q;
-        if (Maze.isStateTerminal(snext))
-            q=R;
-        else {
-            double Qsaopt = agent.nnmemory.readMem(snext, agent.getAopt(snext,agent.nnmemory));
-            q=R+agent.setup.getgamma()*Qsaopt;
-        }
-        return q;
-    }
 
 
     @Test
@@ -270,12 +212,12 @@ public class TestNNMem {
     @Test
     public void learnNNFromTrials() {
         Environment env = new Environment.Builder()
-                .defPwd(0.0).build();
-        agent.setup.setgamma(0.99);
+                .defPwd(0.2).build();
+        agent.setup.setgamma(1);
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
-        Random rand= new Random(); int max=3;   int min=3;
+        //Random rand= new Random(); int max=3;   int min=3;
         final boolean policyfromnn=true;
 
         net.setListeners(new ScoreIterationListener(listenerFrequency));
@@ -290,9 +232,7 @@ public class TestNNMem {
         int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);
-            int x = 1; //rand.nextInt((max - min) + 1) + min;
-            int y = 1; //rand.nextInt((max - min) + 1) + min;
-            s.setXY(x, y);   //set start state, always lower-left cell
+            int x = 1;  int y = 1;  s.setXY(x, y);   //set start state, always lower-left cell
             while (!env.maze.isStateTerminal(s) && nsteps < nstepsmax) {
                 agent.setup.setPra(agent.setup.getPrastart() + (agent.setup.getPraend() - agent.setup.getPrastart()) * nsteps / nstepsmax);
                 if (policyfromnn)

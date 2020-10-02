@@ -8,7 +8,7 @@ public class Agentsetup {
     protected final double Praend=0.1;
     protected double Pra=0.1;
     protected final double Qverysmall=-1000000;
-    protected final int countNetReplMax=100;
+    protected final int countNetReplMax=100;  //nof steps between target NN update
 
     public Agentsetup() {    }  //constructor
 
