@@ -20,14 +20,14 @@ import java.util.List;
 public class NNMemory implements Memory {
 
     private static final int SEED = 234;
-    private static final double LEARNING_RATE = 0.001;
-    public static final int INPUT_NEURONS = 3;
-    public static final int HIDDEN_NEURONS = 100;
-    public static final int OUTPUT_NEURONS = 1;
+    private static final double LEARNING_RATE = 0.01;
+    public static final int INPUT_NEURONS = 2;
+    public static final int HIDDEN_NEURONS = 10;
+    public static final int OUTPUT_NEURONS = 4;
 
     public MultiLayerNetwork net;
 
-    public static final int RBLEN = 20;   //replay buffer length
+    public static final int RBLEN = 100;   //replay buffer length
     public static final int MBLEN = 10;    //mini batch length
     public static final int NEPOCHS=1; //nof epochs for fitting NN to batch
 
@@ -39,7 +39,7 @@ public class NNMemory implements Memory {
         builder.weightInit(WeightInit.XAVIER);
         builder.miniBatch(false);
         builder.updater(new Sgd(LEARNING_RATE));
-        builder.l2(0.001);
+        builder.l2(0.0001);
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
 
         // Hidden Layer
@@ -74,9 +74,9 @@ public class NNMemory implements Memory {
     public double readMem(Pos2d s, Action a) {
         //TBD
         INDArray oneinput  = Nd4j.create(new double[1][INPUT_NEURONS]);
-        oneinput.putRow(0, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
+        oneinput.putRow(0, Nd4j.create(new double[] {s.getX(),s.getY()}));
         INDArray out = net.output(oneinput);
-        return out.getDouble(0, 0);
+        return out.getDouble(0, a.val);
     }
 
     @Override

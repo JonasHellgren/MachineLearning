@@ -66,7 +66,6 @@ public class Agent {  //This class represents an AI agent
         Iterator<Transition> rbiter = rb.iterator();
         if (rb.size()>=nnmemory.RBLEN)   //remove first/oldest item in set if set is "full"
             {rbiter.next(); rbiter.remove(); }
-        Random rand= new Random();
         Pos2d sold = new Pos2d(status.getSold());   Pos2d s = new Pos2d(status.getS());  //Important to use new
         Transition trans = new Transition(sold, status.getAch(), status.getR(), s);
         rb.add(trans);
@@ -82,6 +81,7 @@ public class Agent {  //This class represents an AI agent
         INDArray inputs  = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.INPUT_NEURONS]);
         INDArray out   = Nd4j.create(new double[nnmemory.RBLEN][NNMemory.OUTPUT_NEURONS]);
 
+
         int rowi=0; Pos2d snext; double R, q, qopt;  Action a;
         for (Transition tr : rb) {
             s=tr.getS(); a=tr.getA(); R=tr.getR(); snext=tr.getSnext();
@@ -92,8 +92,14 @@ public class Agent {  //This class represents an AI agent
             {   qopt = nnmemorytar.readMem(snext, getAopt(snext,nnmemorytar));
               q=1*(R+setup.getgamma()*qopt); }
 
-            inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY(),a.val}));
-            out.putRow(rowi, Nd4j.create(new double[] {q}));
+            inputs.putRow(rowi, Nd4j.create(new double[] {s.getX(),s.getY()}));
+            //INDArray oneinput  = Nd4j.create(new double[1][nnmemory.INPUT_NEURONS]);
+            //oneinput.putRow(0, Nd4j.create(new double[] {s.getX(),s.getY()}));
+            INDArray oneinput= inputs.getRows(rowi);
+            INDArray tempout = nnmemory.net.output(oneinput);
+            tempout.putScalar(a.val,q);
+
+            out.putRow(rowi, tempout);  //new double[]
             rowi++;
         }
 
@@ -115,6 +121,10 @@ public class Agent {  //This class represents an AI agent
         for (int j = 0; j < nnmemory.NEPOCHS; j++) {  //nof iter is NEPOCHS*RBLEN/MBLEN
             iterator.reset();   nnmemory.net.fit(iterator);
         }
+
+        //INDArray oneinput= inputs.getRows(0);
+        //INDArray tempout = nnmemory.net.output(oneinput);
+        //System.out.println(tempout);
 
         inputs.close();  out.close();
 

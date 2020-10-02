@@ -16,10 +16,7 @@ import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.model.stats.StatsListener;
 import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
@@ -41,10 +38,10 @@ public class TestNNMem {
     MultiLayerNetwork net = agent.nnmemory.net;
     INDArray singleinput = Nd4j.zeros(1, NNMemory.INPUT_NEURONS);  //one row
     INDArray singleout = Nd4j.zeros(1, NNMemory.OUTPUT_NEURONS);  //one row
-    final int ITERATIONS = 500;
+    final int ITERATIONS = 2000;
     static final int NELEM = 10;
     final int NELEMMB = 3;
-    static int listenerFrequency=100;
+    static int listenerFrequency=500;
     Environment env = new Environment.Builder()
             .defPwd(0.2).build();
     //INDArray multinputs = Nd4j.zeros(NELEMMB, NNMemory.INPUT_NEURONS);  //NELEMMB rows
@@ -59,20 +56,20 @@ public class TestNNMem {
 
     @Test
     public void CalcNNOut() {
-        double[][] myDoubleArr = new double[][]{{1.0, 1.0, 1.0}};
+        double[][] myDoubleArr = new double[][]{{1.0, 1.0}};
         singleinput = Nd4j.create(myDoubleArr);  //Create a row vector from a double array
         INDArray out = net.output(singleinput);
         System.out.println(out);
-        Assert.assertEquals(1, out.rows());  //(long expected, long actual)
+        Assert.assertEquals(1, out.rows());  //Returns the number of rows
     }
 
     @Test
     public void CalcMultipleNNOut() {
 
-        INDArray oneinput  = Nd4j.create(new double[1][3]);
+        INDArray oneinput  = Nd4j.create(new double[1][2]);
         for (int x = 1; x <4 ; x++) {
-            for (int an = 0; an < 4; an++) {
-                oneinput.putRow(0, Nd4j.create(new double[]{x, 1.0, (double) an / 1}));  //x,y,a
+            for (int y = 0; y < 4; y++) {
+                oneinput.putRow(0, Nd4j.create(new double[]{x, y}));  //x,y
                 INDArray out = net.output(oneinput);
                 System.out.print(oneinput+":");              System.out.println(out);
             }
@@ -82,61 +79,49 @@ public class TestNNMem {
 
     @Test
     public void TrainAt111() {
-        final double DESOUT = 0.5;
-        double[][] DoubleArrIn = new double[][]{{1.0, 1.0, 1.0}};  //x,y,a
-        singleinput = Nd4j.create(DoubleArrIn);  //Create a row vector from a double array
-        double[][] DoubleArrOut = new double[][]{{DESOUT}};
-        singleout = Nd4j.create(DoubleArrOut);  //Create a row vector from a double array
-        DataSet ds = new DataSet(singleinput, singleout);
 
-        System.out.println(singleinput);
+        INDArray indata  = Nd4j.create(new double[1][NNMemory.INPUT_NEURONS]);
+        indata.putRow(0, Nd4j.create(new double[] {3,3}));
+        INDArray outdata   = Nd4j.create(new double[1][NNMemory.OUTPUT_NEURONS]);
+        outdata.putRow(0, Nd4j.create(new double[] {-0.5,0.1,0.5,1}));
+
+        DataSet ds = new DataSet(indata, outdata);
+
+
         net.setListeners(new ScoreIterationListener(10));
         for (int i = 0; i < ITERATIONS; i++) {      net.fit(ds);    }
 
-        INDArray out = net.output(singleinput);
+        System.out.println(indata);
+        INDArray out = net.output(indata);
         System.out.println(out);
-        Assert.assertEquals(DESOUT, out.getDouble(0, 0), 0.1);  //(float expected, float actual, float delta)
+        //Assert.assertEquals(DESOUT, out.getDouble(0, 0), 0.1);  //(float expected, float actual, float delta)
     }
+
 
     @Test
     public void TrainAt000and111and222() {
-        final double DESOUT0 = 0.0; final double DESOUT1 = 1; final double DESOUT2 = 2;
-        INDArray multinputs  = Nd4j.create(new double[NELEMMB][3]);
-        multinputs.putRow(0, Nd4j.create(new double[] {3,3,0}));
-        multinputs.putRow(1, Nd4j.create(new double[] {3,3,1}));
-        multinputs.putRow(2, Nd4j.create(new double[] {3,3,2}));
 
-        INDArray multout   = Nd4j.create(new double[NELEMMB][1]);
-        multout.putRow(0, Nd4j.create(new double[] {DESOUT0}));
-        multout.putRow(1, Nd4j.create(new double[] {DESOUT1}));
-        multout.putRow(2, Nd4j.create(new double[] {DESOUT2}));
+        INDArray multinputs  = Nd4j.create(new double[3][NNMemory.INPUT_NEURONS]);
+        multinputs.putRow(0, Nd4j.create(new double[] {3,1}));
+        multinputs.putRow(1, Nd4j.create(new double[] {3,2}));
+        multinputs.putRow(2, Nd4j.create(new double[] {3,3}));
+
+        INDArray multout   = Nd4j.create(new double[3][NNMemory.OUTPUT_NEURONS]);
+        multout.putRow(0, Nd4j.create(new double[] {-0.5,0.1,0.5,1}));
+        multout.putRow(1, Nd4j.create(new double[] {0.5,-0.6,0.5,0}));
+        multout.putRow(2, Nd4j.create(new double[] {0.1,0.4,-0.5,1}));
 
         DataSet ds = new DataSet(multinputs, multout);
 
         net.setListeners(new ScoreIterationListener(10));
         for (int i = 0; i < ITERATIONS; i++) {   net.fit(ds);    }
 
-        //System.out.println(multinputs);
-        INDArray oneinput  = Nd4j.create(new double[1][3]);
-        INDArray out;
-
-        oneinput.putRow(0,multinputs.getRow(0));
-        System.out.println(oneinput);
-        out = net.output(oneinput);        System.out.println(out);
-        Assert.assertEquals(DESOUT0, out.getDouble(0, 0), 0.1);  //(float expected, float actual, float delta)
-
-        oneinput.putRow(0,multinputs.getRow(1)); out = net.output(oneinput);
-        System.out.println(oneinput);      System.out.println(out);
-        Assert.assertEquals(DESOUT1, out.getDouble(0, 0), 0.1);  //(float expected, float actual, float delta)
-
-        oneinput.putRow(0,multinputs.getRow(2)); out = net.output(oneinput);
-        System.out.println(oneinput);      System.out.println(out);
-        Assert.assertEquals(DESOUT2, out.getDouble(0, 0), 0.1);  //(float expected, float actual, float delta)
-
+        System.out.println(multinputs);
+        INDArray out = net.output(multinputs);        System.out.println(out);
 
     }
 
-
+    @Ignore
     @Test
     public void CreaterepBuff() {
         final int NELEM = 10;
@@ -147,7 +132,7 @@ public class TestNNMem {
         rb.clear();
     }
 
-
+    @Ignore
     @Test
     public void TestTrainNN() {
 
@@ -176,6 +161,7 @@ public class TestNNMem {
         rb.clear();        mb.clear(); multinputs.close();  multout.close();
     }
 
+    @Ignore
     @Test
     public void TestcalcNewq() {
 
@@ -193,6 +179,7 @@ public class TestNNMem {
         Assert.assertEquals(R+agent.setup.getgamma()*Qbest,q, 0.01);
     }
 
+    @Ignore
     @Test
     public void TestShowMem() {
         HMI.showMem(agent, env.maze, Showtype.BESTA, MemType.NN);
@@ -233,11 +220,12 @@ public class TestNNMem {
         return q;
     }
 
+
     @Test
     public void learnNNAtX3Y3() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
-        int nepismax=500; int nepis=0;
+        int nepismax=100; int nepis=0;
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
@@ -283,7 +271,7 @@ public class TestNNMem {
     public void learnNNFromTrials() {
         Environment env = new Environment.Builder()
                 .defPwd(0.0).build();
-        agent.setup.setgamma(0.9);
+        agent.setup.setgamma(0.99);
         //Pos2d s=new Pos2d(1,1);
         Pos2d s=agent.status.getS();   //refers to state in agent status
         //Pos2d sold=agent.status.getSold();   //refers to state in agent status
@@ -298,12 +286,12 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-        int nstepsmax = 1000;
+        int nstepsmax = 10000;
         int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);
-            int x = rand.nextInt((max - min) + 1) + min;
-            int y = rand.nextInt((max - min) + 1) + min;
+            int x = 1; //rand.nextInt((max - min) + 1) + min;
+            int y = 1; //rand.nextInt((max - min) + 1) + min;
             s.setXY(x, y);   //set start state, always lower-left cell
             while (!env.maze.isStateTerminal(s) && nsteps < nstepsmax) {
                 agent.setup.setPra(agent.setup.getPrastart() + (agent.setup.getPraend() - agent.setup.getPrastart()) * nsteps / nstepsmax);
