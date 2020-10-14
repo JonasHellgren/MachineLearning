@@ -6,6 +6,7 @@ import com.pluralsight.MazeNavigation.enums.MemType;
 import com.pluralsight.MazeNavigation.enums.Showtype;
 import com.pluralsight.MazeNavigation.environment.Environment;
 import com.pluralsight.MazeNavigation.hmi.HMI;
+import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 
 public class Main {
 
@@ -19,10 +20,11 @@ public class Main {
 
         //create agent
         Agent agent = new Agent();
+        agent.nnmemory.net.setListeners(new ScoreIterationListener(1000));
         Pos2d s = agent.status.getS();   //refer to state in agent status
 
         boolean policyfromnn=true;
-        int nstepsmax = 5000;    int nsteps = 0; //number of steps
+        int nstepsmax = 10000;    int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);
             int x = 1;  int y = 1;  s.setXY(x, y);   //set start state, always lower-left cell

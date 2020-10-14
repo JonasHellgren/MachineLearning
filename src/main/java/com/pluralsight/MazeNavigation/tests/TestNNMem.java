@@ -8,14 +8,9 @@ import com.pluralsight.MazeNavigation.enums.Action;
 import com.pluralsight.MazeNavigation.enums.MemType;
 import com.pluralsight.MazeNavigation.enums.Showtype;
 import com.pluralsight.MazeNavigation.environment.Environment;
-import com.pluralsight.MazeNavigation.environment.Maze;
 import com.pluralsight.MazeNavigation.hmi.HMI;
-import org.deeplearning4j.core.storage.StatsStorage;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.ui.api.UIServer;
-import org.deeplearning4j.ui.model.stats.StatsListener;
-import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
 import org.junit.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -25,10 +20,6 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import java.util.*;
-import java.util.stream.IntStream;
-
-
-
 
 
 
@@ -177,7 +168,7 @@ public class TestNNMem {
 
         do {
             //System.out.println("nepis:"+nepis);
-            s.setXY(3,3);
+            s.setXY(3,2);
             //while (!env.maze.isStateTerminal(s))   {
                 agent.setup.setPra(agent.setup.getPrastart()+(agent.setup.getPraend()-agent.setup.getPrastart())*nepis/nepismax);
                 agent.chooseAction(agent.tabmemory);   //action selection from present policy
@@ -204,7 +195,7 @@ public class TestNNMem {
         System.out.println("QsoldS:"+agent.nnmemory.readMem(sold,Action.S));
         System.out.println("QsoldW:"+agent.nnmemory.readMem(sold,Action.W));
 
-        Assert.assertEquals(0.96,agent.nnmemory.readMem(sold, Action.E),0.05);
+        Assert.assertEquals(-1.04,agent.nnmemory.readMem(sold, Action.E),0.05);
 
         agent.clearMem();  agent.setup.setgamma(1);
     }
@@ -228,7 +219,7 @@ public class TestNNMem {
         //uiServer.attach(statsStorage);
         //net.addListeners(new StatsListener(statsStorage, listenerFrequency));
 
-        int nstepsmax = 10000;
+        int nstepsmax = 1000;
         int nsteps = 0; //number of steps
         do {
             //System.out.println("nepis:"+nepis);

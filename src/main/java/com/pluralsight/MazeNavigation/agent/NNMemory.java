@@ -34,8 +34,8 @@ public class NNMemory implements Memory {
         NeuralNetConfiguration.Builder builder = new NeuralNetConfiguration.Builder();
         builder.seed(SEED);
         //builder.biasInit(0); builder.weightInit(WeightInit.ZERO);
-        builder.weightInit(WeightInit.XAVIER);
-        builder.miniBatch(false);
+        builder.weightInit(WeightInit.XAVIER);  //xavier
+        builder.miniBatch(false); //false
         builder.updater(new Sgd(LEARNING_RATE));
         builder.l2(0.0001);
         NeuralNetConfiguration.ListBuilder listBuilder = builder.list();
@@ -44,7 +44,7 @@ public class NNMemory implements Memory {
         DenseLayer.Builder hidden1LayerBuilder = new DenseLayer.Builder();
         hidden1LayerBuilder.nIn(INPUT_NEURONS);
         hidden1LayerBuilder.nOut(HIDDEN_NEURONS);
-        hidden1LayerBuilder.activation(Activation.TANH);
+        hidden1LayerBuilder.activation(Activation.TANH); //tanh
         //hiddenLayerBuilder.weightInit(new UniformDistribution(0, 1));
         listBuilder.layer(0, hidden1LayerBuilder.build());
 
@@ -52,7 +52,7 @@ public class NNMemory implements Memory {
         DenseLayer.Builder hidden2LayerBuilder = new DenseLayer.Builder();
         hidden2LayerBuilder.nIn(HIDDEN_NEURONS);
         hidden2LayerBuilder.nOut(HIDDEN_NEURONS);
-        hidden2LayerBuilder.activation(Activation.TANH);
+        hidden2LayerBuilder.activation(Activation.TANH); //tanh
         listBuilder.layer(1, hidden2LayerBuilder.build());
 
         // Output Layer
