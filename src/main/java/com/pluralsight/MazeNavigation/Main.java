@@ -8,6 +8,7 @@ import com.pluralsight.MazeNavigation.environment.Environment;
 import com.pluralsight.MazeNavigation.hmi.HMI;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 
+
 public class Main {
 
     public static void main(String[] args) {

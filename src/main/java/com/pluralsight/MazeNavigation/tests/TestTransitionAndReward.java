@@ -5,8 +5,8 @@ import com.pluralsight.MazeNavigation.agent.Status;
 import com.pluralsight.MazeNavigation.enums.Action;
 import com.pluralsight.MazeNavigation.environment.Environment;
 import com.pluralsight.MazeNavigation.environment.Maze;
-import org.junit.*;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class TestTransitionAndReward {
 
