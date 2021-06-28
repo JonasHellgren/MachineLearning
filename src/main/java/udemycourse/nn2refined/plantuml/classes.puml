@@ -1,0 +1,25 @@
+@startuml
+class ActivFunction {
+int stepFunction(float activation)
+}
+
+class Perceptron {
+    private final float[] weights;
+    private final float[][] inputMatrix;   //[datapoint,input feature]
+    private final float[] desiredOutputs;  //one output per datapoint
+
+    + Perceptron(float[][] inputMatrix, float[] desiredOutputs)
+    + train(float learningRate)
+    + float calculateOutput(float[] inputVec)
+    - updateWeights(float learningRate, float[] inVector, float error)
+    - initializeWeights()
+}
+
+
+note bottom
+<math>  calcOut=activFunction(sum(weights*input features)) </math>
+<math>   w_i <- w_i + LEARNING_RATE*in_i*(desOut-calcOut)  </math>
+end note
+
+@enduml
+
