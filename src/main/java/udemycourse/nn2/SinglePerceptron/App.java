@@ -1,11 +1,11 @@
-package udemycourse.nn2.SingleNeuralNetwork.single;
+package udemycourse.nn2.SinglePerceptron;
 
 public class App {
 
 	public static void main(String[] args) {
 		
 		float[][] input = { {0,0}, {0,1}, {1,0}, {1,1} };
-		float[] output = {0,1,1,0};
+		float[] output = {0,1,1,1};  //OR
 		
 		Perceptron perceptron = new Perceptron(input, output);
 		perceptron.train(0.1f);

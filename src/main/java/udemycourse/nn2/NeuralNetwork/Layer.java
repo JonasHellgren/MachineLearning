@@ -1,4 +1,4 @@
-package udemycourse.nn2.NeuralNetwork.neuralnet;
+package udemycourse.nn2.NeuralNetwork;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -26,7 +26,7 @@ public class Layer {
 		}
 	}
 
-	public float[] run(float[] inputArray) {
+	public float[] calcOut(float[] inputArray) {
 		
 		System.arraycopy(inputArray, 0, input, 0, inputArray.length);
 		input[input.length - 1] = 1; // bias

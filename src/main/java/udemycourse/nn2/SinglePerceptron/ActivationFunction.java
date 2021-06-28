@@ -1,4 +1,4 @@
-package udemycourse.nn2.SingleNeuralNetwork.single;
+package udemycourse.nn2.SinglePerceptron;
 
 public class ActivationFunction {
 

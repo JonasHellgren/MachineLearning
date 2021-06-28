@@ -1,4 +1,4 @@
-package udemycourse.nn2.NeuralNetwork.neuralnet;
+package udemycourse.nn2.NeuralNetwork;
 
 
 public class BackpropNeuralNetwork {
@@ -6,7 +6,7 @@ public class BackpropNeuralNetwork {
 	private Layer[] layers;
 	
 	public BackpropNeuralNetwork(int inputSize, int hiddenSize, int outputSize) {
-		layers = new Layer[2];
+		layers = new Layer[2]; //two layers
 		layers[0] = new Layer(inputSize, hiddenSize);
 		layers[1] = new Layer(hiddenSize, outputSize);
 	}
@@ -15,17 +15,17 @@ public class BackpropNeuralNetwork {
 		return layers[index];
 	}
 
-	public float[] run(float[] input) {
+	public float[] calcOutput(float[] input) {
 		float[] inputActivation = input;
 		for (int i = 0; i < layers.length; i++) {
-			inputActivation = layers[i].run(inputActivation);
+			inputActivation = layers[i].calcOut(inputActivation);
 		}
 		return inputActivation;
 	}
 
 	public void train(float[] input, float[] targetOutput, float learningRate, float momentum) {
 		
-		float[] calculatedOutput = run(input);
+		float[] calculatedOutput = calcOutput(input);
 		float[] error = new float[calculatedOutput.length];
 		
 		for (int i = 0; i < error.length; i++) {
