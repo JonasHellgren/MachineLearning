@@ -1,4 +1,4 @@
-package udemycourse.nn2.NeuralNetwork.neuralnet;
+package udemycourse.nn2.NeuralNetwork;
 
 public class NeuralNetConstants {
 

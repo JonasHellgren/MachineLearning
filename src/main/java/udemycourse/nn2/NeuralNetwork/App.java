@@ -1,4 +1,4 @@
-package udemycourse.nn2.NeuralNetwork.neuralnet;
+package udemycourse.nn2.NeuralNetwork;
 
 public class App {
 
@@ -18,12 +18,11 @@ public class App {
 				new float[] { 0 } 
 		};
 
-		BackpropNeuralNetwork backpropagationNeuralNetworks = new BackpropNeuralNetwork(2, 3,1);
-
+		BackpropNeuralNetwork backpropNeuralNetwork = new BackpropNeuralNetwork(2,3,1);
 		for (int iterations = 0; iterations < NeuralNetConstants.ITERATIONS; iterations++) {
 
 			for (int i = 0; i < trainingResults.length; i++) {
-				backpropagationNeuralNetworks.train(trainingData[i], trainingResults[i],
+				backpropNeuralNetwork.train(trainingData[i], trainingResults[i],
 						NeuralNetConstants.LEARNING_RATE, NeuralNetConstants.MOMENTUM);
 			}
 
@@ -31,7 +30,7 @@ public class App {
 			for (int i = 0; i < trainingResults.length; i++) {
 				float[] t = trainingData[i];
 				System.out.printf("%d epoch\n", iterations + 1);
-				System.out.printf("%.1f, %.1f --> %.3f\n", t[0], t[1], backpropagationNeuralNetworks.run(t)[0]);
+				System.out.printf("%.1f, %.1f --> %.3f\n", t[0], t[1], backpropNeuralNetwork.calcOutput(t)[0]);
 			}
 		}
 	}
