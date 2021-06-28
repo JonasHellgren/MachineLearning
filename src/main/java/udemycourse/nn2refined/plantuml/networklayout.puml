@@ -1,0 +1,7 @@
+@startmindmap
++  perceptron
+++_ out=activ(sum(inVec*weights))
+--_ in1
+--_ in2
+
+@endmindmap
