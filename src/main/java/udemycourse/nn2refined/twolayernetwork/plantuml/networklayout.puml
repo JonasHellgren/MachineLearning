@@ -1,7 +1,23 @@
 @startmindmap
-+  perceptron
-++_ out=activ(sum(inVec*weights))
---_ in1
---_ in2
+'+  N31
+'--  N11
+'--  N21
+'--  N31
+
+* hidden layer
+** out layer
+***_ out1
+
+left side
+
+**_ in1
+**_ in2
+**_ bias
+
+
+legend
+nof neurons: 3 (hidden), 1 (out))
+endlegend
+
 
 @endmindmap

@@ -2,36 +2,49 @@ package udemycourse.nn2refined.twolayernetwork;
 
 public class Runner {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        float[][] trainingData = new float[][] {
-                new float[] { 0, 0 },
-                new float[] { 0, 1 },
-                new float[] { 1, 0 },
-                new float[] { 1, 1 }
+        float[][] inData = new float[][]{
+                new float[]{0, 0},
+                new float[]{0, 1},
+                new float[]{1, 0},
+                new float[]{1, 1}
         };
 
-        float[][] trainingResults = new float[][] {
-                new float[] { 0 },
-                new float[] { 1 },
-                new float[] { 1 },
-                new float[] { 0 }
+        float[][] outData = new float[][]{
+                new float[]{0},
+                new float[]{1},
+                new float[]{1},
+                new float[]{0}
         };
 
-        NeuralNetwork backpropNeuralNetwork = new NeuralNetwork(2,3,1);
-        for (int iterations = 0; iterations < Parameters.ITERATIONS; iterations++) {
+        NeuralNetwork network = new NeuralNetwork(
+                Parameters.NOF_LAYERS,
+                Parameters.NOF_INPUTS,
+                Parameters.NOF_NEURONS_HIDDENLAYER,
+                Parameters.NOF_NEURONS_OUTPUTLAYER);
 
-            for (int i = 0; i < trainingResults.length; i++) {
-                backpropNeuralNetwork.train(trainingData[i], trainingResults[i],
+        for (int iteration = 0; iteration < Parameters.NOF_ITERATIONS; iteration++) {
+
+            for (int i = 0; i < outData.length; i++) {
+                network.train(inData[i], outData[i],
                         Parameters.LEARNING_RATE, Parameters.MOMENTUM);
             }
 
-            System.out.println();
-            for (int i = 0; i < trainingResults.length; i++) {
-                float[] t = trainingData[i];
-                System.out.printf("%d epoch\n", iterations + 1);
-                System.out.printf("%.1f, %.1f --> %.3f\n", t[0], t[1], backpropNeuralNetwork.calcOutput(t)[0]);
-            }
+            if (iteration % 1000 == 0)
+                showProgress(inData, outData, network, iteration);
+        }
+    }
+
+    private static void showProgress(float[][] inData,
+                                     float[][] outData,
+                                     NeuralNetwork network,
+                                     int iteration) {
+        System.out.printf("Iteration: %d\n", iteration);
+        for (int idxDataPoint = 0; idxDataPoint < outData.length; idxDataPoint++) {
+            float[] inVec = inData[idxDataPoint];
+
+            System.out.printf("%.1f, %.1f --> %.3f\n", inVec[0], inVec[1], network.calcOutput(inVec)[0]);
         }
     }
 }
