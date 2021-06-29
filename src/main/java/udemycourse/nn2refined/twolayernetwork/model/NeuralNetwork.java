@@ -1,4 +1,4 @@
-package udemycourse.nn2refined.twolayernetwork;
+package udemycourse.nn2refined.twolayernetwork.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class NeuralNetwork {
         trainAllLayers(learningRate, momentum, errorOut);
     }
 
-    private float[] calcErrorVecOutput(float[] outVec, float[] calculatedOutput) {
+    public float[] calcErrorVecOutput(float[] outVec, float[] calculatedOutput) {
         float[] errorOut = new float[calculatedOutput.length];
         for (int idxOut = 0; idxOut < calculatedOutput.length; idxOut++) {
             errorOut[idxOut] = outVec[idxOut] - calculatedOutput[idxOut];

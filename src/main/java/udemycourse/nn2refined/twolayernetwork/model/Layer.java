@@ -1,4 +1,4 @@
-package udemycourse.nn2refined.twolayernetwork;
+package udemycourse.nn2refined.twolayernetwork.model;
 
 import org.jetbrains.annotations.NotNull;
 
