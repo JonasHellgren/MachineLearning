@@ -9,7 +9,7 @@ import java.util.Random;
  * The weights are updated according to:
  * dw_kj=-alpha*dE/da_k*da_k/dn_k*dn_k/dw_kj
  *      =-alpha*(-ta-a)*(derA(a)*(aj)
- *      =-alpha*delta*(aj)
+ *      =-alpha*delta*aj
  * alpha=learning rate, a=activation function output, ta=target activation, derA(a)=a*(1-a) for sigmoid, n=net sum
  * layer k, input j
  *
@@ -48,43 +48,43 @@ public class Layer {
         }
     }
 
-    public float[] calcOut(float[] inputArray) {
-
-        System.arraycopy(inputArray, 0, inVec, 0, inputArray.length);
-        inVec[nofInputs - 1] = 1; // bias
-        int offset = 0;
+    public float[] calcOut(float[] inVec) {
+        System.arraycopy(inVec, 0, this.inVec, 0, inVec.length);
+        this.inVec[nofInputs - 1] = 1; //bias input always one
         for (int idxOutput = 0; idxOutput < nofOutputs; idxOutput++) {
-            float[] netSum = calcNetSum(offset, idxOutput);
+            float[] netSum = calcNetSum(idxOutput);
             outVec[idxOutput] = ActivationFunction.sigmoid(netSum[idxOutput]);
-            offset += nofInputs;
         }
         return Arrays.copyOf(outVec, nofOutputs);
     }
 
     @NotNull
-    private float[] calcNetSum(int offset, int idxOutput) {
+    private float[] calcNetSum(int idxOut) {
         float[] netSum=new float[nofOutputs];
         for (int idxIn = 0; idxIn < nofInputs; idxIn++) {
-            netSum[idxOutput] += weights[offset + idxIn] * inVec[idxIn];
+            int idxWeight = calcIndexWeight(idxOut, idxIn);
+            netSum[idxOut] += weights[idxWeight] * inVec[idxIn];
         }
         return netSum;
     }
 
     public float[] train(float[] error, float learningRate, float momentum) {
-        int offset = 0;
         float[] nextError = new float[nofInputs]; //the input error for next, more left, layer
-
         for (int idxOut = 0; idxOut < nofOutputs; idxOut++) {
             float delta = error[idxOut] * ActivationFunction.dSigmoid(outVec[idxOut]);
             for (int idxIn = 0; idxIn < nofInputs; idxIn++) {
-                int idxWeight = offset + idxIn;
+                int idxWeight = calcIndexWeight(idxOut, idxIn);
                 nextError[idxIn] =  weights[idxWeight] * delta;
                 float dw=inVec[idxIn] * delta * learningRate;
                 updateWeightsAndDWeights(dw,  momentum, idxWeight);
             }
-            offset += nofInputs;
         }
         return nextError;
+    }
+
+    private int calcIndexWeight(int idxOut, int idxIn) {
+        int offset=nofInputs*idxOut;
+        return idxIn+offset;
     }
 
     private void updateWeightsAndDWeights(float dw, float momentum, int idxWeight) {

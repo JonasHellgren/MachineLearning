@@ -24,6 +24,7 @@ public class Runner {
                 Parameters.NOF_NEURONS_HIDDENLAYER,
                 Parameters.NOF_NEURONS_OUTPUTLAYER);
 
+        long startTime = System.currentTimeMillis();  //starting time, long <=> minimum value of 0
         for (int iteration = 0; iteration < Parameters.NOF_ITERATIONS; iteration++) {
 
             for (int i = 0; i < outData.length; i++) {
@@ -34,6 +35,7 @@ public class Runner {
             if (iteration % 1000 == 0)
                 showProgress(inData, outData, network, iteration);
         }
+        System.out.printf("Time used (ms): %d\n", (System.currentTimeMillis()-startTime)/1);
     }
 
     private static void showProgress(float[][] inData,
@@ -43,7 +45,6 @@ public class Runner {
         System.out.printf("Iteration: %d\n", iteration);
         for (int idxDataPoint = 0; idxDataPoint < outData.length; idxDataPoint++) {
             float[] inVec = inData[idxDataPoint];
-
             System.out.printf("%.1f, %.1f --> %.3f\n", inVec[0], inVec[1], network.calcOutput(inVec)[0]);
         }
     }

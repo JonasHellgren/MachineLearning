@@ -10,6 +10,6 @@ public class ActivationFunction {
     }
 
     public static float dSigmoidAlt(float x) {
-        return sigmoid(x)*(1-sigmoid(x)); // because the output is the sigmoid(x) !!! we dont have to apply it twice
+        return sigmoid(x)*(1-sigmoid(x)); //if using sum input
     }
 }

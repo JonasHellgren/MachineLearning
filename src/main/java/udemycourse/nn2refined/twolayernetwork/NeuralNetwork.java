@@ -21,9 +21,6 @@ public class NeuralNetwork {
         this.nofOutputs=outputSize;
     }
 
-    public Layer getLayer(int index) {
-        return layers[index];
-    }
 
     public float[] calcOutput(float[] inVec) {
         float[] outVec=null;
@@ -35,26 +32,25 @@ public class NeuralNetwork {
     }
 
     public void train(float[] inVec, float[] outVec, float learningRate, float momentum) {
-
         float[] calculatedOutput = calcOutput(inVec);
-        float[] errorOut = new float[nofOutputs];
-
-        calcErrorVecOutput(outVec, calculatedOutput, errorOut);
+        float[] errorOut=calcErrorVecOutput(outVec, calculatedOutput);
         trainAllLayers(learningRate, momentum, errorOut);
     }
 
-    private void calcErrorVecOutput(float[] outVec, float[] calculatedOutput, float[] errorOut) {
-        for (int i = 0; i < errorOut.length; i++) {
-            errorOut[i] = outVec[i] - calculatedOutput[i];
+    private float[] calcErrorVecOutput(float[] outVec, float[] calculatedOutput) {
+        float[] errorOut = new float[calculatedOutput.length];
+        for (int idxOut = 0; idxOut < calculatedOutput.length; idxOut++) {
+            errorOut[idxOut] = outVec[idxOut] - calculatedOutput[idxOut];
         }
         logger.trace("error out:"+ Arrays.toString(errorOut));
+        return errorOut;
     }
 
     private void trainAllLayers(float learningRate, float momentum, float[] errorOut) {
         float[] errorLayer = errorOut;
-        for (int i = nofLayers - 1; i >= 0; i--) {
-            errorLayer = layers[i].train(errorLayer, learningRate, momentum);
-            logger.trace("layer i:"+i+", error:"+Arrays.toString(errorLayer));
+        for (int idxLayer = nofLayers - 1; idxLayer >= 0; idxLayer--) {
+            errorLayer = layers[idxLayer].train(errorLayer, learningRate, momentum);
+            logger.trace("layer i:"+idxLayer+", error:"+Arrays.toString(errorLayer));
         }
     }
 
