@@ -5,7 +5,7 @@ public class XORData extends  DataSetter{
     public XORData() {
         defineInData();
         defineOutData();
-        defineNetworkSetup();
+        defineSetup();
     }
 
     @Override
@@ -29,11 +29,12 @@ public class XORData extends  DataSetter{
     }
 
     @Override
-    public void   defineNetworkSetup() {
+    public void defineSetup() {
         this.NOF_LAYERS = 2;
         this.NOF_INPUTS = 2;
         this.NOF_NEURONS_HIDDENLAYER = 3;
         this.NOF_NEURONS_OUTPUTLAYER = 1;
+        this.NOF_ITERATIONS = 10000;
     }
 
 }

@@ -4,7 +4,7 @@ public class CircleClassifierData extends  DataSetter {
     public CircleClassifierData() {
         defineInData();
         defineOutData();
-        defineNetworkSetup();
+        defineSetup();
     }
 
     @Override
@@ -55,10 +55,11 @@ public class CircleClassifierData extends  DataSetter {
     }
 
     @Override
-    public void   defineNetworkSetup() {
+    public void defineSetup() {
         this.NOF_LAYERS = 2;
         this.NOF_INPUTS = 2;
         this.NOF_NEURONS_HIDDENLAYER = 4;
         this.NOF_NEURONS_OUTPUTLAYER = 3;
+        this.NOF_ITERATIONS = 100000;
     }
 }

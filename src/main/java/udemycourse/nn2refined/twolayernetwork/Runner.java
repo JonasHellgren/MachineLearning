@@ -1,9 +1,8 @@
 package udemycourse.nn2refined.twolayernetwork;
 
 import udemycourse.nn2refined.twolayernetwork.datasets.CircleClassifierData;
-import udemycourse.nn2refined.twolayernetwork.datasets.XORData;
 import udemycourse.nn2refined.twolayernetwork.model.NeuralNetwork;
-import udemycourse.nn2refined.twolayernetwork.model.Parameters;
+
 
 import java.util.Arrays;
 
@@ -21,19 +20,19 @@ public class Runner {
                 data.NOF_NEURONS_OUTPUTLAYER);
 
         long startTime = System.currentTimeMillis();  //starting time, long <=> minimum value of 0
-        for (int iteration = 0; iteration < Parameters.NOF_ITERATIONS; iteration++) {
+        for (int iteration = 0; iteration < data.NOF_ITERATIONS; iteration++) {
 
             for (int i = 0; i < data.outData.length; i++) {
                 network.train(data.inData[i], data.outData[i],
-                        Parameters.LEARNING_RATE, Parameters.MOMENTUM);
+                        data.LEARNING_RATE, data.MOMENTUM);
             }
 
             if (iteration % 1000 == 0)
                 showProgress(data.inData, data.outData, network, iteration);
         }
-        System.out.printf("Time used (ms): %d\n", (System.currentTimeMillis() - startTime) / 1);
+        System.out.printf("Time used (ms): %d\n", (System.currentTimeMillis() - startTime));
 
-        showNetworkRespons(data.inData, data.outData, network);
+        showNetworkResponse(data.inData, data.outData, network);
     }
 
     private static void showProgress(float[][] inData,
@@ -46,14 +45,14 @@ public class Runner {
             float[] inVec = inData[idxDataPoint];
             float[] calculatedOutput = network.calcOutput(inVec);
             float[] errorOut=network.calcErrorVecOutput(outData[idxDataPoint], calculatedOutput);
-            errorSum=errorSum+findSumWithoutUsingStream(errorOut);
+            errorSum=errorSum+ calcSingleLoss(errorOut);
         }
-        System.out.println("Iteration:"+ iteration+", Error:"+errorSum);
+        System.out.println("Iteration:"+ iteration+", avgError:"+errorSum/outData.length);
     }
 
-    private static void showNetworkRespons(float[][] inData,
-                                     float[][] outData,
-                                     NeuralNetwork network) {
+    private static void showNetworkResponse(float[][] inData,
+                                            float[][] outData,
+                                            NeuralNetwork network) {
 
         for (int idxDataPoint = 0; idxDataPoint < outData.length; idxDataPoint++) {
             float[] inVec = inData[idxDataPoint];
@@ -74,12 +73,14 @@ public class Runner {
         return roundedArray;
     }
 
-    public static float findSumWithoutUsingStream(float[] array) {
+    public static float calcSingleLoss(float[] errorVec) {
+        //Euclidean distance between the vectors y-y', error=y-y'
+        //https://en.wikipedia.org/wiki/Euclidean_distance
         float sum = 0;
-        for (float value : array) {
-            sum = sum+Math.abs(value);
+        for (float value : errorVec) {
+            sum = (float) (sum+Math.pow(value,2));
         }
-        return sum;
+        return (float) Math.sqrt(sum);
     }
 
 }
