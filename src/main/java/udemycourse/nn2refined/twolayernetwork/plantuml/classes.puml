@@ -1,0 +1,42 @@
+@startuml
+class ActivFunction {
++ float sigmoid(float x)
++ float dSigmoid(float x)
+}
+
+class Layer {
+    float[] inVec;
+    float[] outVec;
+    float[] weights;
+    float[] dWeights;
+
+    + float[] calcOut(float[] inVec)
+    + float[] train(float[] error, float learningRate, float momentum)
+    - initializeWeights()
+    - float[] calcNetSum(int idxOut)
+    - int calcIndexWeight(int idxOut, int idxIn)
+}
+
+note bottom
+<math>  dw_kj=-alpha*dE/da_k*da_k/dn_k*dn_k/dw_kj </math>
+<math>  =-alpha*(-ta-a)*(derA(a)*(aj) </math>
+<math>  =-alpha*delta*aj </math>
+layer k, input j
+end note
+
+class NeuralNetwork {
+    Layer[] layers;
+
+    + float[] calcOutput(float[] inVec)
+    + train(float[] inVec, float[] outVec, float learningRate, float momentum)
+    - float[] calcErrorVecOutput(float[] outVec, float[] calculatedOutput)
+    - trainAllLayers(float learningRate, float momentum, float[] errorOut)
+
+}
+
+
+
+NeuralNetwork "1" *-- "2" Layer
+
+@enduml
+
