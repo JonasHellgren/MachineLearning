@@ -10,7 +10,7 @@ public class IrisData extends  DataSetter {
 
     @Override
     public void defineSetup() {
-        this.NOF_LAYERS = 2;
+        this.NOF_LAYERS = 3;
         this.NOF_INPUTS = 4;
         this.NOF_NEURONS_HIDDENLAYER = 10;
         this.NOF_NEURONS_OUTPUTLAYER = 3;

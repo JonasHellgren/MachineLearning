@@ -1,8 +1,9 @@
 @startmindmap
 
 * hidden layer
-** out layer
-***_ outVec
+** hidden layer
+*** out layer
+****_ outVec
 
 left side
 
@@ -19,7 +20,7 @@ in centimeters. Based on the combination of these four features,
 Fisher developed a linear discriminant model to distinguish the
 species from each other.
 
-4 signals (in), 10 neurons (hidden), 3 neurons (out))
+4 signals (in), 10 neurons (hidden), 10 neurons (hidden), 3 neurons (out))
 Sigmoid activation function
 LEARNING_RATE = 0.01
 end legend
