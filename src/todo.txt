@@ -2,6 +2,7 @@ nofCorrectClassifications method  x
 other udemy examples nn2 x
 code clean up nn2
 plantuml udemy examples nn2
+testa 3 lager
 
 nn3 example tbd
 nn3 example tbd

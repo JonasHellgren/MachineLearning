@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+/***
+ * Contains layers, its constructor defines topology of these layers.
+ */
+
 public class NeuralNetwork {
 
     private static final Logger logger = LoggerFactory.getLogger(NeuralNetwork.class);
@@ -46,13 +50,6 @@ public class NeuralNetwork {
         return errorOut;
     }
 
-    private void trainAllLayers(float learningRate, float momentum, float[] errorOut) {
-        float[] errorLayer = errorOut;
-        for (int idxLayer = nofLayers - 1; idxLayer >= 0; idxLayer--) {
-            errorLayer = layers[idxLayer].train(errorLayer, learningRate, momentum);
-            logger.trace("layer i:"+idxLayer+", error:"+Arrays.toString(errorLayer));
-        }
-    }
 
     public void showProgress(float[][] inData,
                              float[][] outData,
@@ -84,6 +81,14 @@ public class NeuralNetwork {
         }
         System.out.print("nofCorrectClassifications:"+ nofCorrectClassifications+
                 ", nofIncorrectClassifications:"+ (outData.length-nofCorrectClassifications));
+    }
+
+    private void trainAllLayers(float learningRate, float momentum, float[] errorOut) {
+        float[] errorLayer = errorOut;
+        for (int idxLayer = nofLayers - 1; idxLayer >= 0; idxLayer--) {
+            errorLayer = layers[idxLayer].train(errorLayer, learningRate, momentum);
+            logger.trace("layer i:"+idxLayer+", error:"+Arrays.toString(errorLayer));
+        }
     }
 
     private static float getIndexOfMax(float[] vec)

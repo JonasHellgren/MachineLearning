@@ -75,7 +75,7 @@ public class Layer {
             for (int idxIn = 0; idxIn < nofInputs; idxIn++) {
                 int idxWeight = calcIndexWeight(idxOut, idxIn);
                 nextError[idxIn] =  weights[idxWeight] * delta;
-                float dw=inVec[idxIn] * delta * learningRate;
+                float dw=learningRate*delta*inVec[idxIn] ;
                 updateWeightsAndDWeights(dw,  momentum, idxWeight);
             }
         }

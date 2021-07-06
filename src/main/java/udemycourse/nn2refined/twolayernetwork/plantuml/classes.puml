@@ -11,17 +11,21 @@ class Layer {
     float[] dWeights;
 
     + float[] calcOut(float[] inVec)
-    + float[] train(float[] error, float learningRate, float momentum)
+    + float[] train([] error,  learningRate,  momentum)
+    + float[] calcErrorVecOutput([] outVec, [] calculatedOutput)
+    + showProgress(...)
+    + showNetworkResponse(...)
     - initializeWeights()
     - float[] calcNetSum(int idxOut)
     - int calcIndexWeight(int idxOut, int idxIn)
 }
 
 note bottom
-<math>  dw_kj=-alpha*dE/da_k*da_k/dn_k*dn_k/dw_kj </math>
-<math>  =-alpha*(-ta-a)*(derA(a)*(aj) </math>
-<math>  =-alpha*delta*aj </math>
+<math>  dw_kj=-learningRate*dE/da_k*da_k/dn_k*dn_k/dw_kj </math>
+<math>  =-learningRate*(-ta-a)*(derA(a)*(aj) </math>
+<math>  =-learningRate*delta*aj </math>
 layer k, input j
+Intuition: "change weight if affects error and connected to input"
 end note
 
 class NeuralNetwork {
@@ -34,9 +38,30 @@ class NeuralNetwork {
 
 }
 
+class DataSetter {
+setup parameters, e.g. LEARNING_RATE;
+float[][] inData;
+float[][] outData;
 
++ defineSetup();
++ defineInData();
++ defineOutData();
+
+
+}
+
+class XORData { }
+class IrisData { }
+class CircleClassifierData { }
+class NumberImagesData { }
 
 NeuralNetwork "1" *-- "2" Layer
+Layer --> ActivFunction
+
+DataSetter <|-- XORData
+DataSetter <|-- IrisData
+DataSetter <|-- CircleClassifierData
+DataSetter <|-- NumberImagesData
 
 @enduml
 

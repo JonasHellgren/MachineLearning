@@ -1,0 +1,21 @@
+@startmindmap
+
+* hidden layer
+** out layer
+***_ outVec
+
+left side
+
+**_ inVec
+
+
+legend
+3 groups of circles are places in 2d space
+5 circles per group in training examples.
+2 signals (in), 4 neurons (hidden), 3 neurons (out))
+Sigmoid activation function
+LEARNING_RATE = 0.3
+end legend
+
+
+@endmindmap

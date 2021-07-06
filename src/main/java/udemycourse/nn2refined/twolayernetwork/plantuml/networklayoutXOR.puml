@@ -1,0 +1,19 @@
+@startmindmap
+
+* hidden layer
+** out layer
+***_ outVec
+
+left side
+
+**_ inVec
+
+
+legend
+2 signals (in), 3 neurons (hidden), 1 neurons (out))
+Sigmoid activation function
+LEARNING_RATE = 0.3
+end legend
+
+
+@endmindmap
