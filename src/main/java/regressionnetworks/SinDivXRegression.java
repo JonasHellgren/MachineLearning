@@ -1,4 +1,4 @@
-package simpleneuralnetworks;
+package regressionnetworks;
 
 /* *****************************************************************************
  * Copyright (c) 2020 Konduit K.K.
@@ -41,6 +41,8 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+import regressionnetworks.function.MathFunction;
+import regressionnetworks.function.SinXDivXMathFunction;
 
 import javax.swing.*;
 import java.util.Collections;
@@ -55,24 +57,28 @@ import java.util.Random;
  *
  * @author Alex Black
  */
-public class FitSinDivX {
+public class SinDivXRegression {
 
-    public static boolean visualize = true;
-    //Random number generator seed, for reproducability
+    //Random number generator seed, for reproducibility
     public static final int seed = 12345;
     //Number of epochs (full passes of the data)
-    public static final int nEpochs = 300;
+    public static final int nEpochs = 2000;
+    private static final int nIterationsBetweenPrints = 100;
     //How frequently should we plot the network output?
-    private static final int plotFrequency = 250;
+    private static final int plotFrequency = 500;
     //Number of data points
     private static final int nSamples = 1000;
     //Batch size: i.e., each iteration has nSamples/batchSize parameter updates
     public static final int batchSize = 100;
     //Network learning rate
-    public static final double learningRate = 0.01;
+    public static final double learningRate = 0.03;
+    public static final double momentum = 0.9; //for avoiding local minima
     public static final Random rng = new Random(seed);
     public static final int numInputs = 1;
+    public static final int numHiddenNodes = 10;
     private static final int numOutputs = 1;
+    private static final int rangeMin = -10;  // The range of the sample data,
+    private static final int rangeMax = 10;
 
 
     public static void main(final String[] args){
@@ -82,32 +88,33 @@ public class FitSinDivX {
         final MultiLayerConfiguration conf = getDeepDenseLayerNetworkConfiguration();
 
         //Generate the training data
-        final INDArray x = Nd4j.linspace(-10,10,nSamples).reshape(nSamples, 1);
+        final INDArray x = Nd4j.linspace(rangeMin,rangeMax,nSamples).reshape(nSamples, 1);
         final DataSetIterator iterator = getTrainingData(x,fn,batchSize,rng);
 
         //Create the network
-        final MultiLayerNetwork net = new MultiLayerNetwork(conf);        net.init();
-        net.setListeners(new ScoreIterationListener(100));
+        final MultiLayerNetwork net = new MultiLayerNetwork(conf);
+        net.init();
+        net.setListeners(new ScoreIterationListener(nIterationsBetweenPrints));
 
         //Train the network on the full data set, and evaluate in periodically
         final INDArray[] networkPredictions = new INDArray[nEpochs/ plotFrequency];
         for( int i=0; i<nEpochs; i++ ){
-            iterator.reset();            net.fit(iterator);
+            iterator.reset();
+            net.fit(iterator);
             if((i+1) % plotFrequency == 0) networkPredictions[i/ plotFrequency] = net.output(x, false);
         }
 
-        //Plots the target data and the network predictions by default
-        if (visualize) {            plot(fn, x, fn.getFunctionValues(x), networkPredictions);        }
+         plot(fn, x, fn.getFunctionValues(x), networkPredictions);
     }
 
-    /** Returns the network configuration, 2 hidden DenseLayers of size 50.
+    /** Returns the network configuration, 2 hidden DenseLayers of size numHiddenNodes.
      */
     private static MultiLayerConfiguration getDeepDenseLayerNetworkConfiguration() {
-        final int numHiddenNodes = 50;
+
         return new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(learningRate, 0.9))
+                .updater(new Nesterovs(learningRate, momentum))
                 .list()
                 .layer(new DenseLayer.Builder().nIn(numInputs).nOut(numHiddenNodes)
                         .activation(Activation.TANH).build())
@@ -161,7 +168,6 @@ public class FitSinDivX {
         f.add(panel);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.pack();
-
         f.setVisible(true);
     }
 

@@ -1,4 +1,4 @@
-package simpleneuralnetworks;
+package regressionnetworks;
 
 
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
@@ -21,62 +21,76 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Anwar on 3/15/2016.
  * An example of regression neural network for performing addition
+ * Increasing range gives non stable learning.
+ * Note the use of the identity function on the network output layer, for regression
  */
 @SuppressWarnings({"DuplicatedCode", "FieldCanBeLocal"})
-public class FitSum {
+public class SumRegression {
 
-    public static final int seed = 12345;  //Random number generator seed, for reproducability
-    public static final int nEpochs = 200;  //Number of epochs (full passes of the data)
+    public static final int seed = 12345;  //Random number generator seed, for reproducibility
+    public static final int nEpochs = 500;  //Number of epochs (full passes of the data)
+    private static final int nIterationsBetweenPrints = 100;
     private static final int nSamples = 1000;  //Number of data points
     public static final int batchSize = 100;  //each epoch has nSamples/batchSize parameter updates
-    public static final double learningRate = 0.01; //Network learning rate
-    private static int MIN_RANGE = 0;  // The range of the sample data,
-    private static int MAX_RANGE = 3;
+    public static final double learningRate = 0.01;
+    public static final double momentum = 0.9; //for avoiding local minima
+    private static final int rangeMin = -5;  // The range of the sample data,
+    private static final int rangeMax = 5;
     public static final Random rng = new Random(seed);
+
+    public static final int numInput = 2;
+    public static final int nHidden = 10;
+    public static final int numOutputs = 1;
 
     public static void main(String[] args){
         //Generate the training data
         DataSetIterator iterator = getTrainingData(batchSize,rng);
         //Create the network
-        int numInput = 2;    int nHidden = 10;    int numOutputs = 1;
-        MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
+
+        MultiLayerNetwork config = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(learningRate, 0.9))
+                .updater(new Nesterovs(learningRate, momentum))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)
-                        .activation(Activation.RELU) //Can be RELU
-                        .build())
+                        .activation(Activation.RELU).build())
                 .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(nHidden).nOut(numOutputs).build())
                 .build()
         );
-        net.init();         net.setListeners(new ScoreIterationListener(100));
+        config.init();
+        config.setListeners(new ScoreIterationListener(nIterationsBetweenPrints));
 
-        //Train the network on the full data set, and evaluate in periodically
-        for( int i=0; i<nEpochs; i++ ){        iterator.reset();            net.fit(iterator);        }
+        //Train the network on the full data set, and evaluate it periodically
+        for( int i=0; i<nEpochs; i++ ) {
+            iterator.reset();
+            config.fit(iterator);
+        }
 
+        printTestSet(config);
+    }
+
+    private static void printTestSet(MultiLayerNetwork config) {
         //print results of 5 test points
-        final int ntp=5;
-        double[][] inmat=new double[][]{{0.1,0.2},{0.1,2},{2,1},{2,0.2},{5,6}};
-        for (int i=0; i<ntp; i++ ) {
-            final INDArray in = Nd4j.create(new double[] { inmat[i][0], inmat[i][1] }, 1, 2);
-            INDArray output = net.output(in, false);
+
+        double[][] inTestData=new double[][]{{0.1,0.2},{0.1,2},{2,1},{2,0.2},{5,6}};
+        for (int i=0; i<inTestData.length; i++ ) {
+            final INDArray in = Nd4j.create(new double[] { inTestData[i][0], inTestData[i][1] }, 1, 2);
+            INDArray output = config.output(in, false);
             System.out.print(in+" gives "); System.out.println(output);
         }
     }
 
     @SuppressWarnings("SameParameterValue")
-    public static DataSetIterator getTrainingData(int batchSize, Random rand){
+    private static DataSetIterator getTrainingData(int batchSize, Random rand){
         double [] sum = new double[nSamples];
         double [] input1 = new double[nSamples];
         double [] input2 = new double[nSamples];
         for (int i= 0; i< nSamples; i++) {
-            input1[i] = MIN_RANGE + (MAX_RANGE - MIN_RANGE) * rand.nextDouble();
-            input2[i] =  MIN_RANGE + (MAX_RANGE - MIN_RANGE) * rand.nextDouble();
+            input1[i] = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+            input2[i] =  rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
             sum[i] = input1[i] + input2[i];
         }
         INDArray inputNDArray1 = Nd4j.create(input1, nSamples,1);

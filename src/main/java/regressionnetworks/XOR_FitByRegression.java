@@ -1,7 +1,5 @@
-package simpleneuralnetworks;
+package regressionnetworks;
 
-import org.deeplearning4j.nn.api.Layer;
-import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration.ListBuilder;
@@ -10,7 +8,6 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer.Builder;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
@@ -20,48 +17,49 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
-public class XORregress {
+public class XOR_FitByRegression {
     private static final int SEED = 234;
-    private static final int ITERATIONS = 2000;
+    private static final int NOF_ITERATIONS = 1000;
+    private static final int NOF_ITERATIONS_BETWEENPRINTS = 100;
     private static final double LEARNING_RATE = 0.5;
-    private static final int INPUT_NEURONS = 2;
-    private static final int HIDDEN_NEURONS = 4;
-    private static final int OUTPUT_NEURONS = 1;
+    private static final int NOF_INPUT_NEURONS = 2;
+    private static final int NOF_HIDDEN_NEURONS = 4;
+    private static final int NOF_OUTPUT_NEURONS = 1;
 
     public static void main(String[] args) {
         INDArray input = Nd4j.zeros(4, 2);
         INDArray labels = Nd4j.zeros(4, 1);
-        //a row (data point) is defined as  {rowi, in1, in2, out}
+        //new int[] { rowIdx, colIdx }, value}
         input.putScalar(new int[] { 0, 0 }, 0);     input.putScalar(new int[] { 0, 1 }, 0);
-        labels.putScalar(new int[] { 0, 0 }, 0);  //out is zero for in [0,0}
+        labels.putScalar(new int[] { 0, 0 }, 0);  // in [0,0] -> out [0]
         input.putScalar(new int[] { 1, 0 }, 1);     input.putScalar(new int[] { 1, 1 }, 0);
-        labels.putScalar(new int[] { 1, 0 }, 1);  //out is one for in [1,0}
+        labels.putScalar(new int[] { 1, 0 }, 1);  // in [1,0] -> out [1]
         input.putScalar(new int[] { 2, 0 }, 0);     input.putScalar(new int[] { 2, 1 }, 1);
-        labels.putScalar(new int[] { 2, 0 }, 1);    //out is one for in [0,1}
+        labels.putScalar(new int[] { 2, 0 }, 1);    // in [0,1] -> out [1]
         input.putScalar(new int[] { 3, 0 }, 1);       input.putScalar(new int[] { 3, 1 }, 1);
-        labels.putScalar(new int[] { 3, 0 }, 0);   //out is zero for in [1,1}
+        labels.putScalar(new int[] { 3, 0 }, 0);   // in [1,1] -> out [0]
 
         DataSet ds = new DataSet(input, labels);
 
-        NeuralNetConfiguration.Builder builder = new NeuralNetConfiguration.Builder();
-        builder.seed(SEED);
-        builder.biasInit(0);
-        builder.miniBatch(false);
-        builder.updater(new Sgd(LEARNING_RATE));
-        ListBuilder listBuilder = builder.list();
+        NeuralNetConfiguration.Builder config = new NeuralNetConfiguration.Builder();
+        config.seed(SEED);
+        config.biasInit(0);
+        config.miniBatch(false);
+        config.updater(new Sgd(LEARNING_RATE));
+        ListBuilder listBuilder = config.list();
 
         // Hidden Layer
         DenseLayer.Builder hiddenLayerBuilder = new DenseLayer.Builder();
-        hiddenLayerBuilder.nIn(INPUT_NEURONS);
-        hiddenLayerBuilder.nOut(HIDDEN_NEURONS);
+        hiddenLayerBuilder.nIn(NOF_INPUT_NEURONS);
+        hiddenLayerBuilder.nOut(NOF_HIDDEN_NEURONS);
         hiddenLayerBuilder.activation(Activation.SIGMOID);
         hiddenLayerBuilder.weightInit(new UniformDistribution(0, 1));
         listBuilder.layer(0, hiddenLayerBuilder.build());
 
         // Output Layer
         Builder outputLayerBuilder = new OutputLayer.Builder(LossFunctions.LossFunction.SQUARED_LOSS);
-        outputLayerBuilder.nIn(HIDDEN_NEURONS);
-        outputLayerBuilder.nOut(OUTPUT_NEURONS);
+        outputLayerBuilder.nIn(NOF_HIDDEN_NEURONS);
+        outputLayerBuilder.nOut(NOF_OUTPUT_NEURONS);
         outputLayerBuilder.activation(Activation.SIGMOID);
         outputLayerBuilder.weightInit(new UniformDistribution(0, 1));
         listBuilder.layer(1, outputLayerBuilder.build());
@@ -69,13 +67,13 @@ public class XORregress {
         MultiLayerNetwork net = new MultiLayerNetwork(conf);
         net.init();
 
-        net.setListeners(new ScoreIterationListener(100));
+        net.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENPRINTS));
         System.out.println(net.output(input));
 
         net.fit(ds);
 
         // here the actual learning takes place
-        for( int i=0; i < ITERATIONS; i++ ) {      net.fit(ds);      }
+        for(int i = 0; i < NOF_ITERATIONS; i++ ) {      net.fit(ds);      }
 
         System.out.println("Input"); System.out.println(input);
         System.out.println("labels"); System.out.println(labels);

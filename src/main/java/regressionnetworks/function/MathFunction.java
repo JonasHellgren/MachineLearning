@@ -1,4 +1,4 @@
-package simpleneuralnetworks;
+package regressionnetworks.function;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
