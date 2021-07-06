@@ -1,6 +1,6 @@
 package udemycourse.nn2refined.twolayernetwork.datasets;
 
-public class XORData extends  DataSetter{
+public class XORData extends  DataSetter {
 
     public XORData() {
         defineInData();

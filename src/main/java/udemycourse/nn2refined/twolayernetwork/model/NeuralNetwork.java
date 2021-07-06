@@ -54,4 +54,67 @@ public class NeuralNetwork {
         }
     }
 
+    public void showProgress(float[][] inData,
+                             float[][] outData,
+                             int iteration) {
+
+        float errorSum=0;
+        for (int idxDataPoint = 0; idxDataPoint < outData.length; idxDataPoint++) {
+            float[] inVec = inData[idxDataPoint];
+            float[] calculatedOutput = calcOutput(inVec);
+            float[] errorOut= calcErrorVecOutput(outData[idxDataPoint], calculatedOutput);
+            errorSum=errorSum+ calcSingleLoss(errorOut);
+        }
+        System.out.println("Iteration:"+ iteration+", avgError:"+errorSum/outData.length);
+    }
+
+    public void showNetworkResponse(float[][] inData,
+                                    float[][] outData) {
+
+        int nofCorrectClassifications=0;
+        for (int idxDataPoint = 0; idxDataPoint < outData.length; idxDataPoint++) {
+            float[] inVec = inData[idxDataPoint];
+            System.out.print("in:"+ Arrays.toString(inVec)+"--> ");
+            float[] resVec = calcOutput(inVec);
+            System.out.print(Arrays.toString(roundArrayItems(resVec)));
+            System.out.println();
+            nofCorrectClassifications=(getIndexOfMax(resVec)==getIndexOfMax(outData[idxDataPoint]))
+                    ?nofCorrectClassifications+1
+                    :nofCorrectClassifications;
+        }
+        System.out.print("nofCorrectClassifications:"+ nofCorrectClassifications+
+                ", nofIncorrectClassifications:"+ (outData.length-nofCorrectClassifications));
+    }
+
+    private static float getIndexOfMax(float[] vec)
+    {
+        if ( vec == null || vec.length == 0 ) return -1; // null or empty
+
+        int indexOfMax = 0;
+        for ( int i = 1; i < vec.length; i++ )
+        {
+            if ( vec[i] > vec[indexOfMax] ) indexOfMax = i;
+        }
+        return indexOfMax;
+    }
+
+    private static float[] roundArrayItems(float[] array) {
+        float[] roundedArray = new float[array.length];
+
+        for (int i = 0; i < array.length; i++)
+            roundedArray[i] = (float) (Math.round(array[i] * 100.0) / 100.0);
+
+        return roundedArray;
+    }
+
+    public static float calcSingleLoss(float[] errorVec) {
+        //Euclidean distance between the vectors y-y', error=y-y'
+        //https://en.wikipedia.org/wiki/Euclidean_distance
+        float sum = 0;
+        for (float value : errorVec) {
+            sum = (float) (sum+Math.pow(value,2));
+        }
+        return (float) Math.sqrt(sum);
+    }
+
 }
