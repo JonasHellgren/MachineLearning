@@ -1,8 +1,10 @@
 nofCorrectClassifications method  x
 other udemy examples nn2 x
-code clean up nn2
-plantuml udemy examples nn2
-testa 3 lager
+code clean up nn2  x
+plantuml udemy examples nn2 x
+testa 3 lager x
 
-nn3 example tbd
-nn3 example tbd
+nn3 example xor x
+nn3 example iris x
+
+regression examples
