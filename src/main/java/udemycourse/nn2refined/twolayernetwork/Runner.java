@@ -1,6 +1,8 @@
 package udemycourse.nn2refined.twolayernetwork;
 
+import udemycourse.nn2refined.twolayernetwork.datasets.IrisData;
 import udemycourse.nn2refined.twolayernetwork.datasets.NumberImagesData;
+import udemycourse.nn2refined.twolayernetwork.datasets.XORData;
 import udemycourse.nn2refined.twolayernetwork.model.NeuralNetwork;
 public class Runner {
 
@@ -9,10 +11,10 @@ public class Runner {
         final int NOF_ITERATIONS_BETWEEN_PRINTOUTS=1000;
 
         //Used data is selected below by uncommenting/commenting relevant row
-        //XORData data=new XORData();
+        XORData data=new XORData();
         //CircleClassifierData data = new CircleClassifierData();
         //IrisData data = new IrisData();
-        NumberImagesData data = new NumberImagesData();
+        //NumberImagesData data = new NumberImagesData();
 
         NeuralNetwork network = new NeuralNetwork(
                 data.NOF_LAYERS,

@@ -20,7 +20,14 @@ public class NeuralNetwork {
     public NeuralNetwork(int nofLayers, int inputSize, int hiddenSize, int outputSize) {
         layers = new Layer[nofLayers];
         layers[0] = new Layer(inputSize, hiddenSize);
-        layers[1] = new Layer(hiddenSize, outputSize);
+        for (int idxLayer = 1; idxLayer <nofLayers ; idxLayer++) {
+            layers[idxLayer] = new Layer(hiddenSize, hiddenSize);
+            logger.info("Hidden layer created, idx:"+idxLayer);
+        }
+
+
+        layers[nofLayers-1] = new Layer(hiddenSize, outputSize);
+        logger.info("Out layer created, idx:"+(nofLayers-1));
         this.nofLayers=nofLayers;
         this.nofOutputs=outputSize;
     }
