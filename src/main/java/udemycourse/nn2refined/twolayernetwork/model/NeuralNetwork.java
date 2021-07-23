@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+
 /***
  * Contains layers, its constructor defines topology of these layers.
  */
@@ -28,6 +29,7 @@ public class NeuralNetwork {
 
         layers[nofLayers-1] = new Layer(hiddenSize, outputSize);
         logger.info("Out layer created, idx:"+(nofLayers-1));
+
         this.nofLayers=nofLayers;
         this.nofOutputs=outputSize;
     }
@@ -89,6 +91,7 @@ public class NeuralNetwork {
         System.out.print("nofCorrectClassifications:"+ nofCorrectClassifications+
                 ", nofIncorrectClassifications:"+ (outData.length-nofCorrectClassifications));
     }
+
 
     private void trainAllLayers(float learningRate, float momentum, float[] errorOut) {
         float[] errorLayer = errorOut;

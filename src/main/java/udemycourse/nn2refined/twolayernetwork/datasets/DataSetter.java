@@ -2,6 +2,7 @@ package udemycourse.nn2refined.twolayernetwork.datasets;
 
 public abstract class DataSetter {
 
+
     public int NOF_LAYERS=2;
     public int NOF_INPUTS=2;
     public int NOF_NEURONS_HIDDENLAYER=3;
@@ -16,5 +17,6 @@ public abstract class DataSetter {
     abstract  void defineInData();
     abstract  void defineOutData();
     abstract  void defineSetup();
+
 
 }

@@ -15,6 +15,7 @@ class Layer {
     + float[] calcErrorVecOutput([] outVec, [] calculatedOutput)
     + showProgress(...)
     + showNetworkResponse(...)
+
     - initializeWeights()
     - float[] calcNetSum(int idxOut)
     - int calcIndexWeight(int idxOut, int idxIn)
@@ -26,6 +27,7 @@ note bottom
 <math>  =-learningRate*delta*aj </math>
 layer k, input j
 Intuition: "change weight if affects error and connected to input"
+
 end note
 
 class NeuralNetwork {
@@ -46,7 +48,6 @@ float[][] outData;
 + defineSetup();
 + defineInData();
 + defineOutData();
-
 
 }
 

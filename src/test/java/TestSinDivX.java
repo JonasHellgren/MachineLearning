@@ -20,6 +20,7 @@ import org.nd4j.nativeblas.NativeOpsHolder;
 import regressionnetworks.function.MathFunction;
 import regressionnetworks.function.SinXDivXMathFunction;
 
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;

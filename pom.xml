@@ -42,6 +42,7 @@
                     <target>7</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -74,6 +75,7 @@
                     <target>14</target>
                 </configuration>
             </plugin>
+
         </plugins>
 
         <!-- the rest of your build and plugin configuration-->
@@ -175,12 +177,14 @@
             <artifactId>javacv-platform</artifactId>
             <version>1.5.2</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+
     </dependencies>
 
 

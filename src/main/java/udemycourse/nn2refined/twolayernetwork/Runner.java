@@ -4,6 +4,7 @@ import udemycourse.nn2refined.twolayernetwork.datasets.IrisData;
 import udemycourse.nn2refined.twolayernetwork.datasets.NumberImagesData;
 import udemycourse.nn2refined.twolayernetwork.datasets.XORData;
 import udemycourse.nn2refined.twolayernetwork.model.NeuralNetwork;
+
 public class Runner {
 
     public static void main(String[] args) {
@@ -15,6 +16,7 @@ public class Runner {
         //CircleClassifierData data = new CircleClassifierData();
         //IrisData data = new IrisData();
         //NumberImagesData data = new NumberImagesData();
+
 
         NeuralNetwork network = new NeuralNetwork(
                 data.NOF_LAYERS,
@@ -39,6 +41,7 @@ public class Runner {
         System.out.printf("Time used (s): %d\n", (System.currentTimeMillis() - startTime)/1000);
 
         network.showNetworkResponse(data.inData, data.outData);
+
     }
 
 }

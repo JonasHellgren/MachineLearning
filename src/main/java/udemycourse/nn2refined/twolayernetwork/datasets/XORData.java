@@ -2,10 +2,12 @@ package udemycourse.nn2refined.twolayernetwork.datasets;
 
 public class XORData extends  DataSetter {
 
+
     public XORData() {
         defineInData();
         defineOutData();
         defineSetup();
+
     }
 
     @Override
@@ -35,6 +37,7 @@ public class XORData extends  DataSetter {
         this.NOF_NEURONS_HIDDENLAYER = 3;
         this.NOF_NEURONS_OUTPUTLAYER = 1;
         this.NOF_ITERATIONS = 10000;
+
     }
 
 }
