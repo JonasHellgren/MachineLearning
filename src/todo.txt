@@ -1,0 +1,13 @@
+nofCorrectClassifications method  x
+other udemy examples nn2 x
+code clean up nn2  x
+plantuml udemy examples nn2 x
+testa 3 lager x
+
+nn3 example xor x
+nn3 example iris x
+
+regression examples  x
+normalize regression examples
+
+udemu ai4 examples
