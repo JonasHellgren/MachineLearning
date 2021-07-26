@@ -1,0 +1,35 @@
+@startuml
+
+object 0
+object 1
+object 2
+object 3
+object 4
+object 5
+5 : exit
+
+0 <-right-> 4
+4 -right-> 5
+4 <-right-> 3
+3 <-right-> 2
+3 <-up-> 1
+1 -left-> 5
+
+
+object ActionSpace #grey
+ActionSpace : Same as state space
+ActionSpace -up[hidden]-> 3
+
+object Transition #grey
+Transition : New state same as action
+Transition -up[hidden]-> 3
+
+object Reward #grey {
+    R_FAIL if action points out non "neighbor" state
+           R_MOVE if action points out "neighbor" state
+           R_EXIT if action points out exit state
+           }
+Reward -up[hidden]-> ActionSpace
+
+
+@enduml
