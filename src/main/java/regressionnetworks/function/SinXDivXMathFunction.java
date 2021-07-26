@@ -1,12 +1,13 @@
 package regressionnetworks.function;
 
+import org.datavec.api.transform.MathFunction;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
 /**
  * Calculate function value of sine of x divided by x.
  */
-public class SinXDivXMathFunction implements MathFunction {
+public class SinXDivXMathFunction implements MathFunctionInterface {
 
     @Override
     public INDArray getFunctionValues(final INDArray x) {

@@ -2,7 +2,7 @@ package regressionnetworks.function;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
-public interface MathFunction {
+public interface MathFunctionInterface {
 
     INDArray getFunctionValues(INDArray x);
 

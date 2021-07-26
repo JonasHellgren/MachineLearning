@@ -18,6 +18,7 @@ package regressionnetworks;
  ******************************************************************************/
 
 
+import org.datavec.api.transform.MathFunction;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.MathFunction;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.SinXDivXMathFunction;
@@ -41,8 +42,9 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import regressionnetworks.function.MathFunction;
+import regressionnetworks.function.MathFunctionInterface;
 import regressionnetworks.function.SinXDivXMathFunction;
+
 
 import javax.swing.*;
 import java.util.Collections;
@@ -84,7 +86,7 @@ public class SinDivXRegression {
     public static void main(final String[] args){
 
         //Switch these two options to do different functions with different networks
-        final MathFunction fn = new SinXDivXMathFunction();
+        final MathFunctionInterface fn = new SinXDivXMathFunction();
         final MultiLayerConfiguration conf = getDeepDenseLayerNetworkConfiguration();
 
         //Generate the training data
@@ -133,7 +135,7 @@ public class SinDivXRegression {
      * @param rng Random number generator (for repeatability)
      */
     @SuppressWarnings("SameParameterValue")
-    private static DataSetIterator getTrainingData(final INDArray x, final MathFunction function, final int batchSize, final Random rng) {
+    private static DataSetIterator getTrainingData(final INDArray x, final MathFunctionInterface function, final int batchSize, final Random rng) {
         final INDArray y = function.getFunctionValues(x);
         final DataSet allData = new DataSet(x,y);
 
@@ -143,7 +145,7 @@ public class SinDivXRegression {
     }
 
     //Plot the data
-    private static void plot(final MathFunction function, final INDArray x, final INDArray y, final INDArray... predicted) {
+    private static void plot(final MathFunctionInterface function, final INDArray x, final INDArray y, final INDArray... predicted) {
         final XYSeriesCollection dataSet = new XYSeriesCollection();
         addSeries(dataSet,x,y,"True Function (Labels)");
 

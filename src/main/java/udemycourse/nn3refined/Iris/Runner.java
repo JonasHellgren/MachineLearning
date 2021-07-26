@@ -21,6 +21,10 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.Random;
 
+/**
+ * Getting certificate error (IrisDataSetIterator) when running this class
+ */
+
 public class Runner {
     public static void main(String[] args) {
 
