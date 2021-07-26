@@ -1,4 +1,5 @@
 
+import org.datavec.api.transform.MathFunction;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -17,7 +18,9 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.nativeblas.NativeOpsHolder;
-import regressionnetworks.function.MathFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import regressionnetworks.function.MathFunctionInterface;
 import regressionnetworks.function.SinXDivXMathFunction;
 
 
@@ -27,6 +30,8 @@ import java.util.Random;
 
 
 public class TestSinDivX {
+
+
 
     //Random number generator seed, for reproducability
     public static final int seed = 12345;
@@ -48,7 +53,7 @@ public class TestSinDivX {
     @Test
     public void Test1() {
         //Switch these two options to do different functions with different networks
-        final MathFunction fn = new SinXDivXMathFunction();
+        final MathFunctionInterface fn = new SinXDivXMathFunction();
         final MultiLayerConfiguration conf = getDeepDenseLayerNetworkConfiguration();
 
         //Generate the training data
@@ -105,14 +110,13 @@ public class TestSinDivX {
 
     /**
      * Create a DataSetIterator for training
-     *
-     * @param x         X values
+     *  @param x         X values
      * @param function  Function to evaluate
      * @param batchSize Batch size (number of quickstartexamples for every call of DataSetIterator.next())
      * @param rng       Random number generator (for repeatability)
      */
     @SuppressWarnings("SameParameterValue")
-    private static DataSetIterator getTrainingData(final INDArray x, final MathFunction function, final int batchSize, final Random rng) {
+    private static DataSetIterator getTrainingData(final INDArray x, final MathFunctionInterface function, final int batchSize, final Random rng) {
         final INDArray y = function.getFunctionValues(x);
         final DataSet allData = new DataSet(x, y);
 
