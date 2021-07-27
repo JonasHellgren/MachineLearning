@@ -1,0 +1,61 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+interface Environment<StepReturn> {
++ StepReturnInterface step(action, StateInterface state)
+'+ State reset()
+}
+
+interface StepReturnInterface  { }
+
+interface StateInterface  { }
+
+class StepReturn {
+State state;
+Double reward;
+Boolean done;
+}
+
+class FiveRooms {
+EnvironmentParameters envPar;
++ int[] getDiscreteActionSpace()
++ int[] getDiscreteStateSpace()
+}
+
+class State {
+int roomNumber
+}
+
+
+
+Environment  <|-- FiveRooms
+
+FiveRooms *-- State
+FiveRooms *-- StepReturn
+
+StepReturnInterface  <|-- StepReturn
+StateInterface  <|-- State
+
+interface Agent {
++ int chooseAction(State state, DiscreteActionSpace)
++ updateMemory(State oldState, StepReturn)
++ double[] readMemory(State state)
+}
+
+class RoomAgentTabular {
+State state;
+double[][] Qsa;
+}
+
+class RoomAgentNeuralNetwork {
+State state;
+MultiLayerNetwork network;
+}
+
+Agent  <|-- RoomAgentTabular
+Agent  <|-- RoomAgentNeuralNetwork
+
+
+
+@enduml
