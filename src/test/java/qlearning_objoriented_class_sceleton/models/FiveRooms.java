@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class FiveRooms implements Environment {
 
+
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
         public int notYetKnownParameter =0;

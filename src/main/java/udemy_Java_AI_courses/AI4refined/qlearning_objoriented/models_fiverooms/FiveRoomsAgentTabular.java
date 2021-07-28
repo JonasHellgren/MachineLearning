@@ -1,5 +1,6 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms;
 
+import udemy_Java_AI_courses.AI4refined.qlearning.Constants;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
@@ -7,23 +8,38 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Step
 
 public class FiveRoomsAgentTabular implements Agent {
 
-    State state;
-    Double Qsa[][];
+    public State state;
+    public Double Qsa[][];
 
-    public FiveRoomsAgentTabular(EnvironmentParametersAbstract envParams) {
+    public FiveRoomsAgentTabular(FiveRooms.EnvironmentParameters envParams) {
         state=new State();
         for (String varName:envParams.discreteStateVariableNames)
             state.createVariable(varName,0);
 
-        int nofStates=5; //TODO extract from envParams
+        int nofStates=envParams.stateSpace.size();
         int nofActions=envParams.discreteActionsSpace.size();
 
         Qsa=new Double[nofStates][nofActions];
+        for(int state = 0; state< nofStates; ++state) {
+            for (int action = 0; action < nofActions; ++action) {
+                Qsa[state][action] = 0d;
+            }
+        }
     }
 
     @Override
     public Integer chooseBestAction(State state, EnvironmentParametersAbstract envParams) {
-        return null;
+        int maxQState = 0;
+        int nofActions=envParams.discreteActionsSpace.size();
+        double maxQ = envParams.R_FAIL;
+        for(int action=0;action<nofActions;action++) {
+            int roomNr=state.getDiscreteVariable("roomNumber");
+            if( Qsa[roomNr][action] > maxQ) {
+                maxQ = Qsa[roomNr][action];
+                maxQState = action;
+            }
+        }
+        return maxQState;
     }
 
     @Override

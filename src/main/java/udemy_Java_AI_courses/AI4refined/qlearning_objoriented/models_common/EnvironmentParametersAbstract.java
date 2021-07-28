@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EnvironmentParametersAbstract {
+public abstract class EnvironmentParametersAbstract {
     public List<String> discreteStateVariableNames=new ArrayList<>();
     public Map<String,Integer> lowerBoundDiscreteStateVariables=new HashMap<>();
     public Map<String,Integer>  upperBoundDiscreteStateVariables=new HashMap<>();

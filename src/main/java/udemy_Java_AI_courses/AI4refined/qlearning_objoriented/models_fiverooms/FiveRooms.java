@@ -6,12 +6,20 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Stat
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturnAbstract;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class FiveRooms implements Environment {
+
+
 
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
         public int notYetKnownParameter =0;
+        public List<Integer> stateSpace=Arrays.asList(1,2,3,4,5);
+
+        public final double R_FAIL = -1e5;  //non allowed transition
+        public  final double R_MOVE = -0.1;  //move transition
+        public  final double R_EXIT = 100;  //finding exit state reward
     }
 
     public class StepReturn extends StepReturnAbstract {
