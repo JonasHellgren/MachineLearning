@@ -1,59 +1,91 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms;
 
-import udemy_Java_AI_courses.AI4refined.qlearning.Constants;
+import com.google.common.primitives.Doubles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturnAbstract;
+
+import java.util.List;
+import java.util.Random;
 
 public class FiveRoomsAgentTabular implements Agent {
 
+    private static final Logger logger = LoggerFactory.getLogger(FiveRoomsAgentTabular.class);
     public State state;
-    public Double Qsa[][];
+    public double Qsa[][];
+    private final FiveRooms.EnvironmentParameters envParams;  //reference to environment parameters
+    private final Random random=new Random();
+
 
     public FiveRoomsAgentTabular(FiveRooms.EnvironmentParameters envParams) {
+
+        this.envParams=envParams;
         state=new State();
         for (String varName:envParams.discreteStateVariableNames)
-            state.createVariable(varName,0);
+            state.createVariable(varName,envParams.INIT_DEFAULT_ROOM_NUMBER);
 
-        int nofStates=envParams.stateSpace.size();
-        int nofActions=envParams.discreteActionsSpace.size();
-
-        Qsa=new Double[nofStates][nofActions];
-        for(int state = 0; state< nofStates; ++state) {
-            for (int action = 0; action < nofActions; ++action) {
-                Qsa[state][action] = 0d;
-            }
-        }
+        logger.info("Five Rooms Agent Agent created. "+"nofStates:"+envParams.nofStates+", nofActions:"+envParams.nofActions);
+        createInitMemory(envParams);
     }
 
     @Override
-    public Integer chooseBestAction(State state, EnvironmentParametersAbstract envParams) {
-        int maxQState = 0;
-        int nofActions=envParams.discreteActionsSpace.size();
+    public int chooseBestAction(State state) {
+
+        double[] QsVec=readMemory(state);
         double maxQ = envParams.R_FAIL;
-        for(int action=0;action<nofActions;action++) {
-            int roomNr=state.getDiscreteVariable("roomNumber");
-            if( Qsa[roomNr][action] > maxQ) {
-                maxQ = Qsa[roomNr][action];
-                maxQState = action;
+        int bestAction=0;
+        for (int action:envParams.discreteActionsSpace) {
+            if (QsVec[envParams.getIdxAction(action)]>maxQ) {
+                maxQ=QsVec[envParams.getIdxAction(action)];
+                bestAction=envParams.discreteActionsSpace.get(envParams.getIdxAction(action));
             }
         }
-        return maxQState;
+        return bestAction;
     }
 
     @Override
-    public Integer chooseRandomAction(State state, EnvironmentParametersAbstract envParams) {
-        return null;
+    public double findMaxQ(State state) {
+        return Doubles.max(readMemory(state));
     }
 
     @Override
-    public void updateMemory(State oldState, StepReturnAbstract stepReturn) {
-
+    public int chooseRandomAction(List<Integer> aSet) {
+        return aSet.get(random.nextInt(aSet.size()));
     }
 
     @Override
-    public Double[] readMemory(State state) {
-        return Qsa[state.getDiscreteVariable("roomNumber")];
+    public void writeMemory(State state, Integer action, Double value) {
+        Qsa[envParams.getIdxState(state)][envParams.getIdxAction(action)] = value;
     }
+
+    @Override
+    public double readMemory(State state, int action) {
+        return Qsa[envParams.getIdxState(state)][envParams.getIdxAction(action)];
+    }
+
+    public double[] readMemory(State state) {
+        return Qsa[envParams.getIdxState(state)];
+    }
+
+    private void createInitMemory(FiveRooms.EnvironmentParameters envParams) {
+        Qsa=new double[envParams.nofStates][envParams.nofActions];
+        State s=new State(state);
+        for(int idxState = 0; idxState< envParams.nofStates; ++idxState) {
+            for (int idxAction = 0; idxAction < envParams.nofActions; ++idxAction) {
+                s.setVariable("roomNumber", envParams.stateSpace.get(idxState));
+                writeMemory(s, envParams.discreteActionsSpace.get(idxAction),0d);
+            }
+        }
+    }
+
+    public void PrintQsa() {
+        for (int state = 0; state < envParams.stateSpace.size(); ++state) {
+            for (int action = 0; action < envParams.discreteActionsSpace.size(); ++action) {
+                    System.out.printf("%.1f    ", Qsa[state][action]);
+            }
+            System.out.println();
+        }
+    }
+
 }

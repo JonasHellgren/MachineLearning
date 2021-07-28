@@ -18,6 +18,10 @@ public class State {
     }
 
     public State(State state) {
+        copyState(state);
+    }
+    
+    public void copyState(State state) {
         this.discreteVariables.putAll(state.discreteVariables);
         this.continuousVariables.putAll(state.continuousVariables);
     }

@@ -4,7 +4,7 @@
 
 interface Environment {
 + StepReturnAbstract step(action, State state)
-'+ State reset()
++ boolean isTerminalState(State state)
 }
 
 abstract class StepReturnAbstract  {
@@ -24,9 +24,17 @@ class StepReturn {
 }
 
 class EnvironmentParameters {
+List<Integer> stateSpace;
+double R_FAIL, R_MOVE, R_EXIT;
+double GAMMA, ALPHA
+double[][] R;
+
+
 }
 
 class FiveRooms {
++ boolean isTerminalState(State state);
++ List<Integer> getFeasibleActions(State state)
 
 }
 
@@ -42,7 +50,6 @@ Map<String,Double> continuousVariables
 }
 
 
-
 Environment  <|-- FiveRooms
 
 
@@ -53,14 +60,17 @@ StepReturnAbstract  <|-- StepReturn
 EnvironmentParametersAbstract  <|-- EnvironmentParameters
 
 interface Agent {
-+ int chooseAction(State state, DiscreteActionSpace)
-+ updateMemory(State oldState, StepReturn)
-+ double[] readMemory(State state)
+    + chooseBestAction(State state);
+    + findMaxQ(State state);
+    + chooseRandomAction(List<Integer> aSet);
+    + writeMemory(State oldState, Integer Action, Double value);
+    + readMemory(State state, int Action);
 }
 
 class FiveRoomsAgentTabular {
 State state;
 double[][] Qsa;
+FiveRooms.EnvironmentParameters envParams;
 }
 
 class FiveRoomsAgentNeuralNetwork {
