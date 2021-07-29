@@ -12,6 +12,7 @@ import java.util.List;
 /***
  * Environment with 6 rooms. Inner class EnvironmentParameters defines data.
  * Inner class StepReturn is return protocol for step, transition method.
+ * TransitionMatrix expresses new room number, for ex action 5 in room 0 gives new room is 0."
  */
 
 public class SixRooms implements Environment {
@@ -20,24 +21,24 @@ public class SixRooms implements Environment {
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
         public List<Integer> discreteStateSpace = Arrays.asList(0, 1, 2, 3, 4, 5);
 
-        public final double R_FAIL = -1e5;  //non allowed transition
+        public final double R_FAIL = -1;  //non allowed transition
         public final double R_MOVE = -0.1;  //move transition
-        public final double R_EXIT = 100;  //finding exit state reward
+        public final double R_EXIT = 1;  //finding exit state reward
 
         private final int ROOM_EXIT_NUMBER = 5;
         public final int INIT_DEFAULT_ROOM_NUMBER = 1;
 
-        public final double GAMMA = 0.9;  // gamma discount factor
+        public final double GAMMA = 1.0;  // gamma discount factor
         public final double ALPHA = 0.1;  // learning rate
-        public final int NUM_OF_EPISODES = 10000; // number of iterations
+        public final int NUM_OF_EPISODES = 1000; // number of iterations
 
         private final double[][] rewardMatrix = {   //R(s,a) function
                 {R_FAIL, R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL},
-                {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT},
+                {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT+R_MOVE},
                 {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_FAIL},
                 {R_FAIL, R_MOVE, R_MOVE, R_FAIL, R_MOVE, R_FAIL},
-                {R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT},
-                {R_FAIL, R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_EXIT},
+                {R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT+R_MOVE},
+                {R_FAIL, R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_EXIT+R_MOVE},
         };
 
         private final int[][] transitionMatrix = {   //newRoomNr <- T(roomNr,action) function

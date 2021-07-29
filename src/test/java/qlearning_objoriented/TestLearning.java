@@ -38,6 +38,7 @@ public class TestLearning {
     }
 
     agent.PrintQsa();
+    agent.PrintQsaBestAction();
     agent.showPolicy(env);
 }
 

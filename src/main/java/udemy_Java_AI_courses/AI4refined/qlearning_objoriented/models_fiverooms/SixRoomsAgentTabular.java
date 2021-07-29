@@ -82,21 +82,35 @@ public class SixRoomsAgentTabular implements Agent {
         }
     }
 
+
+
     public void PrintQsa() {
+        System.out.println("Qsa");
         State s = new State(state);
-        for (int state : envParams.discreteStateSpace) {
+        for (int roomNr : envParams.discreteStateSpace) {
             for (int action : envParams.discreteActionsSpace) {
-                s.setVariable("roomNumber", state);
+                s.setVariable("roomNumber", roomNr);
                 System.out.printf("%.1f    ", Qsa[envParams.getIdxState(s)][envParams.getIdxAction(action)]);
             }
             System.out.println();
         }
     }
 
+    public void PrintQsaBestAction() {
+        System.out.println("Qsa(s,best action)");
+        State s = new State(state);
+        for (int roomNr : envParams.discreteStateSpace) {
+            s.setVariable("roomNumber", roomNr);
+            System.out.printf("roomNr:"+roomNr+", Q: %.1f    ", findMaxQ(s));
+        }
+        System.out.println();
+    }
+
     public void showPolicy(SixRooms env) {
         // we consider every single state as a starting state
         // until we find the terminal state: we walk according to best action
 
+        System.out.println("Policy for every state");
         for(int starRoomNr=0; starRoomNr<envParams.nofStates; starRoomNr++) {
             SixRooms.StepReturn stepReturn;
             state.setVariable("roomNumber", starRoomNr);
