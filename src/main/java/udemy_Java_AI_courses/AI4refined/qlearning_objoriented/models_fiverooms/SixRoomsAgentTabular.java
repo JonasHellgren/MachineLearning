@@ -21,6 +21,10 @@ public class SixRoomsAgentTabular implements Agent {
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
     private final Random random = new Random();
     public final double Q_INIT = 0;
+    public final double GAMMA = 1.0;  // gamma discount factor
+    public final double ALPHA = 0.1;  // learning rate
+    public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability chossing random action
+    public final int NUM_OF_EPISODES = 1000; // number of iterations
 
     public SixRoomsAgentTabular(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -85,7 +89,7 @@ public class SixRoomsAgentTabular implements Agent {
 
 
     public void PrintQsa() {
-        System.out.println("Qsa");
+        System.out.println("Qsa -----------------------------");
         State s = new State(state);
         for (int roomNr : envParams.discreteStateSpace) {
             for (int action : envParams.discreteActionsSpace) {
@@ -97,7 +101,7 @@ public class SixRoomsAgentTabular implements Agent {
     }
 
     public void PrintQsaBestAction() {
-        System.out.println("Qsa(s,best action)");
+        System.out.println("Qsa(s,best action) ----------------------------- ");
         State s = new State(state);
         for (int roomNr : envParams.discreteStateSpace) {
             s.setVariable("roomNumber", roomNr);
@@ -110,7 +114,7 @@ public class SixRoomsAgentTabular implements Agent {
         // we consider every single state as a starting state
         // until we find the terminal state: we walk according to best action
 
-        System.out.println("Policy for every state");
+        System.out.println("Policy for every state -----------------------------");
         for(int starRoomNr=0; starRoomNr<envParams.nofStates; starRoomNr++) {
             SixRooms.StepReturn stepReturn;
             state.setVariable("roomNumber", starRoomNr);

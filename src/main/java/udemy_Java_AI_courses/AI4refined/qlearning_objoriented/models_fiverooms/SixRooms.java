@@ -28,10 +28,6 @@ public class SixRooms implements Environment {
         private final int ROOM_EXIT_NUMBER = 5;
         public final int INIT_DEFAULT_ROOM_NUMBER = 1;
 
-        public final double GAMMA = 1.0;  // gamma discount factor
-        public final double ALPHA = 0.1;  // learning rate
-        public final int NUM_OF_EPISODES = 1000; // number of iterations
-
         private final double[][] rewardMatrix = {   //R(s,a) function
                 {R_FAIL, R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL},
                 {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT+R_MOVE},
