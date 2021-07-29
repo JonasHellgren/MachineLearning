@@ -17,6 +17,8 @@ import java.util.List;
 
 public class SixRooms implements Environment {
 
+    public EnvironmentParameters parameters = this.new EnvironmentParameters();
+
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
         public List<Integer> discreteStateSpace = Arrays.asList(0, 1, 2, 3, 4, 5);
@@ -64,10 +66,16 @@ public class SixRooms implements Environment {
     }
 
 
-    public class StepReturn extends StepReturnAbstract {
-    }
+    public  class StepReturn extends StepReturnAbstract {
 
-    public EnvironmentParameters parameters = this.new EnvironmentParameters();
+        public StepReturn() {
+            super();
+        }
+
+        public StepReturn(State state, Double reward, Boolean termState) {
+            super(state, reward, termState);
+        }
+    }
 
     //constructor
     public SixRooms() {

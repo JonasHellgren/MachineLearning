@@ -5,6 +5,18 @@ public abstract  class StepReturnAbstract {
     public Double reward;
     public Boolean termState;
 
+    public StepReturnAbstract(State state, Double reward, Boolean termState) {
+        this.state = state;
+        this.reward = reward;
+        this.termState = termState;
+    }
+
+    public StepReturnAbstract() {
+        this.state = new State();
+        this.reward = 0.0;
+        this.termState = false;
+    }
+
     @Override
     public String toString() {
         return "StepReturnAbstract{" +

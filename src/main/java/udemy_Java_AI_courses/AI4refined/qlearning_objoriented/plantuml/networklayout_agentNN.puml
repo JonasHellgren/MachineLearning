@@ -1,0 +1,22 @@
+@startmindmap
+
+* hidden layer
+** hidden layer
+*** out layer
+****_ qVec
+
+left side
+
+**_ roomNr
+
+
+legend
+
+1 signal (in), 5 neurons (hidden), 5 neurons (hidden), 6 neurons (out))
+Sigmoid activation function in hidden layers
+Linear activation function in out layer
+LEARNING_RATE = 0.01
+end legend
+
+
+@endmindmap

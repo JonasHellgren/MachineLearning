@@ -32,7 +32,7 @@ public class SixRoomsAgentTabular implements Agent {
         for (String varName : envParams.discreteStateVariableNames)
             state.createVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
 
-        logger.info("Five Rooms Agent Agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
+        logger.info("Tabular based six rooms agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
         createInitMemory(envParams);
     }
 

@@ -10,7 +10,7 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.S
 import java.util.Arrays;
 import java.util.List;
 
-public class TestAgent {
+public class TestAgentTabular {
 
     State state = new State();
     SixRooms env=new SixRooms();
