@@ -43,7 +43,7 @@ public class TestLearning {
 
     private void simulate(boolean printFlag) {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
-        // a single episode: the agent finds a path from state s to the terminal state
+        // a single episode: the agent finds a path from state s to the exit state
 
         SixRooms.StepReturn stepReturn;
         do {

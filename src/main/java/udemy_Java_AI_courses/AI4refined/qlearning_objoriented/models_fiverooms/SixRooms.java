@@ -31,13 +31,22 @@ public class SixRooms implements Environment {
         public final double ALPHA = 0.1;  // learning rate
         public final int NUM_OF_EPISODES = 10000; // number of iterations
 
-        private final double[][] R = {   //R(s,a) function
+        private final double[][] rewardMatrix = {   //R(s,a) function
                 {R_FAIL, R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL},
                 {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT},
                 {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_FAIL},
                 {R_FAIL, R_MOVE, R_MOVE, R_FAIL, R_MOVE, R_FAIL},
                 {R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT},
                 {R_FAIL, R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_EXIT},
+        };
+
+        private final int[][] transitionMatrix = {   //newRoomNr <- T(roomNr,action) function
+                {0, 0, 0, 0, 4, 0},
+                {1, 1, 1, 3, 1, 5},
+                {2, 2, 2, 3, 2, 2},
+                {3, 1, 2, 3, 4, 3},
+                {0, 4, 4, 3, 4, 5},
+                {5, 1, 5, 5, 4, 5},
         };
 
         private int minRoomNumber;
@@ -78,9 +87,10 @@ public class SixRooms implements Environment {
     public StepReturn step(int action, State state) {
         State newState = new State(state);
         SixRooms.StepReturn stepReturn = new StepReturn();
-        newState.setVariable("roomNumber", action);
+        int newRoomNr=getNewRoomNr(state,action);
+        newState.setVariable("roomNumber", newRoomNr);
         stepReturn.state = newState;
-        stepReturn.reward = parameters.R[parameters.getIdxState(state)][parameters.getIdxAction(action)];
+        stepReturn.reward = parameters.rewardMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
         stepReturn.termState = isTerminalState(newState);
         return stepReturn;
     }
@@ -94,11 +104,15 @@ public class SixRooms implements Environment {
 
         List<Integer> feasibleActions = new ArrayList<>();
         for (int action : parameters.discreteActionsSpace) {
-            if (parameters.R[parameters.getIdxState(state)][parameters.getIdxAction(action)] > parameters.R_FAIL) {
+            if (parameters.rewardMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)] > parameters.R_FAIL) {
                 feasibleActions.add(parameters.discreteActionsSpace.get(parameters.getIdxAction(action)));
             }
         }
         return feasibleActions;
+    }
+
+    private int getNewRoomNr(State state, int action) {
+        return parameters.transitionMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
     }
 
 }
