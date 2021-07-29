@@ -2,10 +2,9 @@ package qlearning_objoriented;
 
 import org.junit.Assert;
 import org.junit.Test;
-import udemy_Java_AI_courses.AI4refined.qlearning.Constants;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.FiveRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.FiveRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
 
 import java.util.List;
 import java.util.Random;
@@ -13,8 +12,8 @@ import java.util.Random;
 public class TestLearning {
 
     State sNew = new State();
-    FiveRooms env=new FiveRooms();
-    FiveRoomsAgentTabular agent=new FiveRoomsAgentTabular(env.parameters);
+    SixRooms env=new SixRooms();
+    SixRoomsAgentTabular agent=new SixRoomsAgentTabular(env.parameters);
     public final double SMALL = 0.001;
     private final Random random=new Random();
 
@@ -39,26 +38,24 @@ public class TestLearning {
     }
 
     agent.PrintQsa();
-    showPolicy();
-
+    agent.showPolicy(env);
 }
 
     private void simulate(boolean printFlag) {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the terminal state
 
-        FiveRooms.StepReturn stepReturn;
+        SixRooms.StepReturn stepReturn;
         do {
 
             List<Integer> aSet = env.getFeasibleActions(agent.state);  // get available actions
-            FiveRooms.EnvironmentParameters p = env.parameters;
 
             int aChosen = agent.chooseRandomAction(aSet);
             stepReturn=env.step(aChosen,agent.state);
             sNew.copyState(stepReturn.state);
             double maxQ = agent.findMaxQ(sNew);
             double qOld = agent.readMemory(agent.state,aChosen);
-            double qNew = qOld + p.ALPHA*(stepReturn.reward+p.GAMMA*maxQ-qOld);
+            double qNew = qOld + env.parameters.ALPHA*(stepReturn.reward+env.parameters.GAMMA*maxQ-qOld);
 
             if (printFlag) {
                 System.out.println(agent.state);
@@ -72,24 +69,6 @@ public class TestLearning {
         } while(!stepReturn.termState);
     }
 
-    public void showPolicy() {
-        // we consider every single state as a starting state
-        // until we find the terminal state: we walk according to best action
 
-        for(int startState=0; startState<env.parameters.nofStates; startState++) {
-
-            int state=startState;
-            FiveRooms.StepReturn stepReturn;
-            agent.state.setVariable("roomNumber",state);
-            System.out.print("Policy: " + agent.state.getDiscreteVariable("roomNumber"));
-            while (!env.isTerminalState(agent.state)) {
-                int bestA = agent.chooseBestAction(agent.state);
-                stepReturn=env.step(bestA,agent.state);
-                agent.state.copyState(stepReturn.state);
-                System.out.print(" -> " + agent.state.getDiscreteVariable("roomNumber"));
-            }
-            System.out.println();
-        }
-    }
 
 }

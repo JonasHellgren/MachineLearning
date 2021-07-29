@@ -5,7 +5,7 @@ import java.util.List;
 public interface Agent {
     int chooseBestAction(State state);
     double findMaxQ(State state);
-    int chooseRandomAction(List<Integer> aSet);
+    int chooseRandomAction(List<Integer> actions);
     void writeMemory(State oldState, Integer Action, Double value);
     double readMemory(State state, int Action);
 }

@@ -5,7 +5,7 @@ import org.junit.Test;
 import qlearning_objoriented_class_sceleton.models.FiveRooms;
 import qlearning_objoriented_class_sceleton.models.State;
 
-public class TestFiveRooms {
+public class TestSixRooms {
 
     State state = new State();
     FiveRooms env=new FiveRooms();

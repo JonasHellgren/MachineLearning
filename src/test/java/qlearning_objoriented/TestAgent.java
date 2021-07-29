@@ -3,11 +3,9 @@ package qlearning_objoriented;
 
 import org.junit.Assert;
 import org.junit.Test;
-import udemy_Java_AI_courses.AI4refined.qlearning.Constants;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.FiveRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.FiveRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +13,8 @@ import java.util.List;
 public class TestAgent {
 
     State state = new State();
-    FiveRooms env=new FiveRooms();
-    FiveRoomsAgentTabular agent=new FiveRoomsAgentTabular(env.parameters);
+    SixRooms env=new SixRooms();
+    SixRoomsAgentTabular agent=new SixRoomsAgentTabular(env.parameters);
     public final double SMALL = 0.001;  //move transition
 
     @Test
@@ -58,7 +56,7 @@ public class TestAgent {
     @Test
     public void stepRoom1Action2ShallGiveFailReward() {
         agent.state.setVariable("roomNumber",1);
-        FiveRooms.StepReturn stepReturn=env.step(2,agent.state);
+        SixRooms.StepReturn stepReturn=env.step(2,agent.state);
         Assert.assertEquals(1,agent.state.getDiscreteVariable("roomNumber"),SMALL);
         Assert.assertEquals(env.parameters.R_FAIL,stepReturn.reward,SMALL);
         agent.state.copyState(stepReturn.state);
@@ -68,7 +66,7 @@ public class TestAgent {
     @Test
     public void stepRoom2Action2ShallGiveFailReward() {
         agent.state.setVariable("roomNumber",2);
-        FiveRooms.StepReturn stepReturn=env.step(3,agent.state);
+        SixRooms.StepReturn stepReturn=env.step(3,agent.state);
         Assert.assertEquals(env.parameters.R_MOVE,stepReturn.reward,SMALL);
         agent.state.copyState(stepReturn.state);
         Assert.assertEquals(3,agent.state.getDiscreteVariable("roomNumber"),SMALL);
