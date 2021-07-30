@@ -10,4 +10,6 @@ nn3 example iris x
 regression examples  x
 normalize regression examples
 
-udemu ai4 examples
+udemu ai4 bandit example
+Test saving fail states-actions
+make Experience and RepBuffer seperate and generic classes. Tveksamt om StepReturnAbstract behövs.

@@ -40,27 +40,22 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     INDArray  outPutNDSet = Nd4j.zeros(MINIBATCH_MAXSIZE,NOF_OUTPUTS);
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
     private final Random random = new Random();
+
     public final int REPLAY_BUFFER_MAXSIZE = 20;
     public static final int MINIBATCH_MAXSIZE = 10;
-
     public static final int SEED = 12345;  //Random number generator seed, for reproducibility
     private static final int NOF_OUTPUTS = 6;
     private static final int NOF_FEATURES = 1;
     private static final int  NOF_NEURONS_HIDDEN=5;
     private static final double L2_REGULATION=0.0001;
-    private static final int BATCH_SIZE = 150;
     private static final int NOF_ITERATIONS = 5000;
-    private static final int NOF_ITERATIONS_BETWEENOUTPUTS =100;
     private static final double LEARNING_RATE =0.5;
 
-    public final double Q_INIT = 0;
-    public final double GAMMA = 1.0;  // gamma discount factor
+    public double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 0.001;  // learning rate
-    public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability chossing random action
+    public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability choosing random action
     public final int NUM_OF_EPISODES = 1000; // number of iterations
 
-
-    // inner classes
     public class Experience {
         public State s;
         public int action;
@@ -75,11 +70,11 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         @Override
         public String toString() {
             return "Experience{" +
-                    "roomNr=" + s.getDiscreteVariable("roomNumber") +
+                    "s=" + s +
                     ", action=" + action +
                     ", reward=" + stepReturn.reward +
                     ", termState=" + stepReturn.termState +
-                    ", roomNrNew=" + stepReturn.state.getDiscreteVariable("roomNumber") +
+                    ", sNew=" + stepReturn.state +
                     '}' + System.lineSeparator();
         }
     }
@@ -116,7 +111,6 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
                     buffer +
                     '}';
         }
-
     }
 
 
@@ -128,9 +122,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
         network= createNetwork();
 
-
         logger.info("Neural network based six rooms agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
-
     }
 
     @Override

@@ -47,6 +47,7 @@ public class TestAgentNeuralNetwork {
     @Test
     public void trainNetworkFromMockReplayBuffer() {
 
+        agent.GAMMA=0; //only care about short term reward => easy to test
         createMockReplayBuffer(agent);
         for( int i=0; i<100; i++ ) {
             List<SixRoomsAgentNeuralNetwork.Experience> miniBatch=agent.replayBuffer.getMiniBatch(6);

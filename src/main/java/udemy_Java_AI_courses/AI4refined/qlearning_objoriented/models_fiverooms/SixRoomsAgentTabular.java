@@ -23,7 +23,7 @@ public class SixRoomsAgentTabular implements Agent {
     public final double Q_INIT = 0;
     public final double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 0.1;  // learning rate
-    public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability chossing random action
+    public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability choosing random action
     public final int NUM_OF_EPISODES = 1000; // number of iterations
 
     public SixRoomsAgentTabular(SixRooms.EnvironmentParameters envParams) {

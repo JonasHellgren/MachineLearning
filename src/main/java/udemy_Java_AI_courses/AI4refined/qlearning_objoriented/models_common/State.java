@@ -84,11 +84,7 @@ public class State {
         for (String name : continuousVariables.keySet())
             continuousVariableKeyValuePairs.add(name + "=" + continuousVariables.get(name));
 
-        return "State{" +
-                "discreteVariables:" +
-                discreteVariableKeyValuePairs +
-                ", continuousVariables:" +
-                continuousVariableKeyValuePairs +
-                '}';
+        return '{'+String.join(",", discreteVariableKeyValuePairs)+
+                String.join(",", continuousVariableKeyValuePairs)+'}';
     }
 }
