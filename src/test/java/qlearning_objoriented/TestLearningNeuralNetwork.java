@@ -21,11 +21,12 @@ public class TestLearningNeuralNetwork {
     @Test
     public void runLearningTextBook() {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
+        agent.PrintQsa();
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
             //System.out.println("iEpisode:"+iEpisode);
             //int startState = random.nextInt(env.parameters.nofStates);
-            int startState = (Math.random()<0.99)?1:4;
+            int startState = (Math.random()<0.5)?1:4;
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
 
@@ -36,6 +37,8 @@ public class TestLearningNeuralNetwork {
 
         agent.PrintQsa();
         System.out.println("nofFits:"+agent.nofFits);
+        System.out.println(agent.network.summary());
+        System.out.println("replayBuffer"+agent.replayBuffer);
         //agent.showPolicy(env);
     }
 

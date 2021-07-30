@@ -47,8 +47,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public static final int SEED = 12345;  //Random number generator seed, for reproducibility
     private static final int NOF_OUTPUTS = 6;
     private static final int NOF_FEATURES = 1;
-    private static final int  NOF_NEURONS_HIDDEN=20;
-    private static final double L2_REGULATION=0.0001;
+    private static final int  NOF_NEURONS_HIDDEN=10;
+    private static final double L2_REGULATION=0.000;
     private static final double LEARNING_RATE =0.1;
 
 
@@ -56,7 +56,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public final double ALPHA = 0.9;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 100; // number of iterations
+    public final int NUM_OF_EPISODES = 200; // number of iterations
     private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=100;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
@@ -117,9 +117,9 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             double qOld = readMemory(exp.s, exp.action);
             double qNew = qOld + ALPHA * (exp.stepReturn.reward + GAMMA * maxQ - qOld);
             double y=exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
-            outFromNetwork.putScalar(0,exp.action,y+exp.s.getDiscreteVariable("roomNumber")*0.0);
+            outFromNetwork.putScalar(0,exp.action,y*0+exp.s.getDiscreteVariable("roomNumber")*0.1);
 
-            INDArray inputNetwork = getStateAsNetworkInput(state);
+            INDArray inputNetwork = getStateAsNetworkInput(exp.s);
             inputNDSet.putRow(idxSample,inputNetwork);
             outPutNDSet.putRow(idxSample,outFromNetwork);
             //System.out.println(exp);
@@ -148,7 +148,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     private INDArray getStateAsNetworkInput(State state) {  //TODO make generic
         double in =  state.getDiscreteVariable("roomNumber");
-        in=in-3;  //TODO clean up normalization
+        in=in*1;  //TODO clean up normalization
         return Nd4j.create(new double[]{in}, 1, NOF_FEATURES);
     }
 
@@ -157,16 +157,20 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
                 .seed(SEED)
                 .weightInit(WeightInit.XAVIER)
                 .l2(L2_REGULATION)
-                .updater(new Sgd(LEARNING_RATE))
-                //.updater(new Nesterovs(LEARNING_RATE, 0.9))
+                //.updater(new Sgd(LEARNING_RATE))
+                .updater(new Nesterovs(LEARNING_RATE, 0.9))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.TANH)
+                        .activation(Activation.SIGMOID)
                         //.weightInit(new UniformDistribution(0, 1))
+                        //.weightInit(WeightInit.XAVIER)
+                        //.biasInit()
                         .build())
                 .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.TANH)
+                        .activation(Activation.SIGMOID)
                         //.weightInit(new UniformDistribution(0, 1))
+                        //.weightInit(WeightInit.XAVIER)
+                        //.biasInit(0)
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
