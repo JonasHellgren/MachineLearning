@@ -20,6 +20,8 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.ReplayBuffer;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 
 import java.util.ArrayList;
@@ -55,64 +57,6 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public final double ALPHA = 0.001;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION = 0.1;  //probability choosing random action
     public final int NUM_OF_EPISODES = 1000; // number of iterations
-
-    public class Experience {
-        public State s;
-        public int action;
-        public SixRooms.StepReturn stepReturn;  //includes reward and sNew
-
-        public Experience(State s, int action, SixRooms.StepReturn stepReturn) {
-            this.s = s;
-            this.action = action;
-            this.stepReturn = stepReturn;
-        }
-
-        @Override
-        public String toString() {
-            return "Experience{" +
-                    "s=" + s +
-                    ", action=" + action +
-                    ", reward=" + stepReturn.reward +
-                    ", termState=" + stepReturn.termState +
-                    ", sNew=" + stepReturn.state +
-                    '}' + System.lineSeparator();
-        }
-    }
-
-    public class ReplayBuffer {
-        public final List<Experience> buffer = new ArrayList<>();
-
-        public void addExperience(Experience experience) {
-            if (buffer.size() >= REPLAY_BUFFER_MAXSIZE)   //remove first/oldest item in set if set is "full"
-                buffer.remove(0);
-            buffer.add(experience);
-        }
-
-        public List<Experience> getMiniBatch(int batchLength) {
-            List<Experience> miniBatch = new ArrayList<>();
-
-            List<Integer> indexes = IntStream.rangeClosed(0, buffer.size() - 1)
-                    .boxed().collect(Collectors.toList());
-            Collections.shuffle(indexes);
-
-            for (int i = 0; i < batchLength; i++)
-                miniBatch.add(buffer.get(indexes.get(i)));
-
-            return miniBatch;
-        }
-
-        @Override
-        public String toString() {
-            return bufferAsString(replayBuffer.buffer);
-        }
-
-        public String bufferAsString(List<Experience> buffer) {
-            return "ReplayBuffer{" + System.lineSeparator() +
-                    buffer +
-                    '}';
-        }
-    }
-
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;

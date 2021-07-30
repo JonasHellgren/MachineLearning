@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentNeuralNetwork;
@@ -39,7 +40,7 @@ public class TestAgentNeuralNetwork {
     @Test
     public void extractMiniBatchFromMockReplayBuffer() {
         createMockReplayBuffer(agent);
-        List<SixRoomsAgentNeuralNetwork.Experience> miniBatch=agent.replayBuffer.getMiniBatch(3);
+        List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(3);
         System.out.println(agent.replayBuffer.bufferAsString(miniBatch));
 
     }
@@ -50,7 +51,7 @@ public class TestAgentNeuralNetwork {
         agent.GAMMA=0; //only care about short term reward => easy to test
         createMockReplayBuffer(agent);
         for( int i=0; i<100; i++ ) {
-            List<SixRoomsAgentNeuralNetwork.Experience> miniBatch=agent.replayBuffer.getMiniBatch(6);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(6);
             DataSetIterator iterator =agent.createTrainingData(miniBatch);
             agent.network.fit(iterator);
         }
@@ -68,8 +69,8 @@ public class TestAgentNeuralNetwork {
             State s = new State(agent.state);
             s.setVariable("roomNumber", 1);
             SixRooms.StepReturn stepReturn = env.step(action, s);  //new in step method => no need for new here
-            SixRoomsAgentNeuralNetwork.Experience experience = agent.new Experience(s, action, stepReturn);
-            agent.replayBuffer.addExperience(experience);
+            Experience experience = new Experience(s, action, stepReturn);
+            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
         }
 
 
