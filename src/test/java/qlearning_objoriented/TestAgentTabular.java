@@ -58,7 +58,7 @@ public class TestAgentTabular {
         agent.state.setVariable("roomNumber",1);
         SixRooms.StepReturn stepReturn=env.step(2,agent.state);
         Assert.assertEquals(1,agent.state.getDiscreteVariable("roomNumber"),SMALL);
-        Assert.assertEquals(env.parameters.R_FAIL,stepReturn.reward,SMALL);
+        Assert.assertEquals(env.parameters.R_FAIL+env.parameters.R_MOVE,stepReturn.reward,SMALL);
         agent.state.copyState(stepReturn.state);
         Assert.assertEquals(1,agent.state.getDiscreteVariable("roomNumber"),SMALL);
     }

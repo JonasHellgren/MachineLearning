@@ -31,12 +31,12 @@ public class SixRooms implements Environment {
         public final int INIT_DEFAULT_ROOM_NUMBER = 1;
 
         private final double[][] rewardMatrix = {   //R(s,a) function
-                {R_FAIL, R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL},
-                {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT+R_MOVE},
-                {R_FAIL, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_FAIL},
-                {R_FAIL, R_MOVE, R_MOVE, R_FAIL, R_MOVE, R_FAIL},
-                {R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_FAIL, R_EXIT+R_MOVE},
-                {R_FAIL, R_MOVE, R_FAIL, R_FAIL, R_MOVE, R_EXIT+R_MOVE},
+                {R_FAIL, R_FAIL, R_FAIL, R_FAIL, 0, R_FAIL},
+                {R_FAIL, R_FAIL, R_FAIL, 0, R_FAIL, R_EXIT},
+                {R_FAIL, R_FAIL, R_FAIL, 0, R_FAIL, R_FAIL},
+                {R_FAIL, 0, 0, R_FAIL, 0, R_FAIL},
+                {0, R_FAIL, R_FAIL, 0, R_FAIL, R_EXIT},
+                {R_FAIL, 0, R_FAIL, R_FAIL, 0, R_EXIT},
         };
 
         private final int[][] transitionMatrix = {   //newRoomNr <- T(roomNr,action) function
@@ -95,7 +95,7 @@ public class SixRooms implements Environment {
         int newRoomNr=getNewRoomNr(state,action);
         newState.setVariable("roomNumber", newRoomNr);
         stepReturn.state = newState;
-        stepReturn.reward = parameters.rewardMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
+        stepReturn.reward = parameters.R_MOVE+parameters.rewardMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
         stepReturn.termState = isTerminalState(newState);
         return stepReturn;
     }

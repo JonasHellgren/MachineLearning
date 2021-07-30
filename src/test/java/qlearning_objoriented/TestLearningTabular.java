@@ -9,7 +9,7 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.S
 import java.util.List;
 import java.util.Random;
 
-public class TestLearning {
+public class TestLearningTabular {
 
     State sNew = new State();
     SixRooms env = new SixRooms();
@@ -72,13 +72,13 @@ public class TestLearning {
     }
 
     @Test
-    public void runLearningOriginal() {
+    public void runLearningTextBook() {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
             int startState = random.nextInt(env.parameters.nofStates);
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
-            simulateOriginal(false);
+            simulateTextBook(false);
         }
 
         agent.PrintQsa();
@@ -86,7 +86,7 @@ public class TestLearning {
         agent.showPolicy(env);
     }
 
-    private void simulateOriginal(boolean printFlag) {
+    private void simulateTextBook(boolean printFlag) {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
