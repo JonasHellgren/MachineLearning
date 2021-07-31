@@ -52,12 +52,12 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private static final double LEARNING_RATE =0.1;
 
 
-    public double GAMMA = 0;  // gamma discount factor
-    public final double ALPHA = 0.9;  // learning rate
+    public double GAMMA = 1.0;  // gamma discount factor
+    public final double ALPHA = 0.99;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
-    public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 200; // number of iterations
-    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=100;
+    public final double PROBABILITY_RANDOM_ACTION_END = 0.9;
+    public final int NUM_OF_EPISODES = 900; // number of iterations
+    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=10;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -117,7 +117,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             double qOld = readMemory(exp.s, exp.action);
             double qNew = qOld + ALPHA * (exp.stepReturn.reward + GAMMA * maxQ - qOld);
             double y=exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
-            outFromNetwork.putScalar(0,exp.action,y*0+exp.s.getDiscreteVariable("roomNumber")*0.1);
+            outFromNetwork.putScalar(0,exp.action,y*1+exp.s.getDiscreteVariable("roomNumber")*0.0);
 
             INDArray inputNetwork = getStateAsNetworkInput(exp.s);
             inputNDSet.putRow(idxSample,inputNetwork);
@@ -206,11 +206,13 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             SixRooms.StepReturn stepReturn;
             state.setVariable("roomNumber", starRoomNr);
             System.out.print("Policy: " + state.getDiscreteVariable("roomNumber"));
-            while (!env.isTerminalState(state)) {
+            int nofSteps=0;
+            while (!env.isTerminalState(state) & nofSteps<10) {
                 int bestA = chooseBestAction(state);
                 stepReturn=env.step(bestA,state);
                 state.copyState(stepReturn.state);
                 System.out.print(" -> " + state.getDiscreteVariable("roomNumber"));
+                nofSteps++;
             }
             System.out.println();
         }

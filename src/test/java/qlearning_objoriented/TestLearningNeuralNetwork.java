@@ -19,14 +19,14 @@ public class TestLearningNeuralNetwork {
     private final Random random = new Random();
 
     @Test
+    //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
         agent.PrintQsa();
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
             //System.out.println("iEpisode:"+iEpisode);
-            //int startState = random.nextInt(env.parameters.nofStates);
-            int startState = (Math.random()<0.5)?1:4;
+            int startState = random.nextInt(env.parameters.nofStates);
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
 
@@ -38,8 +38,8 @@ public class TestLearningNeuralNetwork {
         agent.PrintQsa();
         System.out.println("nofFits:"+agent.nofFits);
         System.out.println(agent.network.summary());
-        System.out.println("replayBuffer"+agent.replayBuffer);
-        //agent.showPolicy(env);
+        //System.out.println("replayBuffer"+agent.replayBuffer);
+        agent.showPolicy(env);
     }
 
     private void simulateTextBook(boolean printFlag, double probRandAction) {
@@ -72,7 +72,7 @@ public class TestLearningNeuralNetwork {
             }
 
             sNew.copyState(stepReturn.state);
-            //agent.state.copyState(sNew);
+            agent.state.copyState(sNew);
 
 
           if (printFlag) {
@@ -81,15 +81,8 @@ public class TestLearningNeuralNetwork {
             }
 
             nofSteps++;
-        } while (!stepReturn.termState & nofSteps<100);
+        } while (!stepReturn.termState & nofSteps<10);
     }
 
-/*
-                sNew.copyState(exp.stepReturn.state);
-    double maxQ = findMaxQ(sNew);
-    double qOld = agent.readMemory(agent.state, aChosen);
-    double qNew = qOld + agent.ALPHA * (stepReturn.reward + agent.GAMMA * maxQ - qOld);
-    double y=stepReturn.termState ? stepReturn.reward : qNew;
-    */
 
 }
