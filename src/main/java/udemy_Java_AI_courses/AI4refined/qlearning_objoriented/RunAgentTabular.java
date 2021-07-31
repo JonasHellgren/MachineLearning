@@ -1,6 +1,7 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented;
 
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
@@ -31,7 +32,7 @@ public class RunAgentTabular {
 		// a single episode: the agent finds a path from state s to the exit state
 
 		State sNew = new State();
-		SixRooms.StepReturn stepReturn;
+		StepReturn stepReturn;
 		do {
 			int aChosen = (Math.random() < agent.PROBABILITY_RANDOM_ACTION) ?
 					agent.chooseRandomAction(env.parameters.discreteActionsSpace) :

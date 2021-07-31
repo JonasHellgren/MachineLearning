@@ -4,6 +4,7 @@ package qlearning_objoriented;
 import org.junit.Assert;
 import org.junit.Test;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
@@ -56,7 +57,7 @@ public class TestAgentTabular {
     @Test
     public void stepRoom1Action2ShallGiveFailRewardAndStayInSameRoom() {
         agent.state.setVariable("roomNumber",1);
-        SixRooms.StepReturn stepReturn=env.step(2,agent.state);
+        StepReturn stepReturn=env.step(2,agent.state);
         Assert.assertEquals(1,agent.state.getDiscreteVariable("roomNumber"),SMALL);
         Assert.assertEquals(env.parameters.R_FAIL+env.parameters.R_MOVE,stepReturn.reward,SMALL);
         agent.state.copyState(stepReturn.state);
@@ -66,7 +67,7 @@ public class TestAgentTabular {
     @Test
     public void stepRoom2Action3ShallGiveFailRewardAndGotoRoom3() {
         agent.state.setVariable("roomNumber",2);
-        SixRooms.StepReturn stepReturn=env.step(3,agent.state);
+        StepReturn stepReturn=env.step(3,agent.state);
         Assert.assertEquals(env.parameters.R_MOVE,stepReturn.reward,SMALL);
         agent.state.copyState(stepReturn.state);
         Assert.assertEquals(3,agent.state.getDiscreteVariable("roomNumber"),SMALL);

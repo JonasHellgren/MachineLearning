@@ -17,10 +17,7 @@ import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.ReplayBuffer;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -194,7 +191,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
         System.out.println("Policy for every state -----------------------------");
         for(int starRoomNr=0; starRoomNr<envParams.nofStates; starRoomNr++) {
-            SixRooms.StepReturn stepReturn;
+            StepReturn stepReturn;
             state.setVariable("roomNumber", starRoomNr);
             System.out.print("Policy: " + state.getDiscreteVariable("roomNumber"));
             int nofSteps=0;

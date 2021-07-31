@@ -3,6 +3,7 @@ package qlearning_objoriented;
 import org.junit.Assert;
 import org.junit.Test;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
@@ -48,7 +49,7 @@ public class TestLearningTabular {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
-        SixRooms.StepReturn stepReturn;
+        StepReturn stepReturn;
         do {
 
             List<Integer> aSet = env.getFeasibleActions(agent.state);  // get available actions
@@ -90,7 +91,7 @@ public class TestLearningTabular {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
-        SixRooms.StepReturn stepReturn;
+        StepReturn stepReturn;
         do {
             int aChosen = (Math.random() < agent.PROBABILITY_RANDOM_ACTION) ?
                     agent.chooseRandomAction(env.parameters.discreteActionsSpace) :

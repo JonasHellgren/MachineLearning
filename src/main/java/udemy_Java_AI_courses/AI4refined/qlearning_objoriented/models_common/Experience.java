@@ -5,9 +5,9 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.Si
 public class Experience {
     public State s;
     public int action;
-    public SixRooms.StepReturn stepReturn;  //includes reward and sNew
+    public StepReturn stepReturn;  //includes reward and sNew
 
-    public Experience(State s, int action, SixRooms.StepReturn stepReturn) {
+    public Experience(State s, int action, StepReturn stepReturn) {
         this.s = s;
         this.action = action;
         this.stepReturn = stepReturn;

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
@@ -113,7 +114,7 @@ public class TestAgentNeuralNetwork {
         for (int action = 0; action < 6; action++) {
             State s = new State(agent.state);
             s.setVariable("roomNumber", 1);
-            SixRooms.StepReturn stepReturn = env.step(action, s);  //new in step method => no need for new here
+            StepReturn stepReturn = env.step(action, s);  //new in step method => no need for new here
             Experience experience = new Experience(s, action, stepReturn);
             agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
         }

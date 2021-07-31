@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
@@ -46,7 +47,7 @@ public class TestLearningNeuralNetwork {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
-        SixRooms.StepReturn stepReturn;
+        StepReturn stepReturn;
         int miniBatchSize=SixRoomsAgentNeuralNetwork.MINI_BATCH_MAXSIZE;
         int nofSteps=0;
         do {

@@ -62,7 +62,7 @@ public class SixRooms implements Environment {
         }
     }
 
-
+/*
     public  class StepReturn extends StepReturnAbstract {
 
         public StepReturn() {
@@ -74,6 +74,8 @@ public class SixRooms implements Environment {
         }
     }
 
+
+ */
     //constructor
     public SixRooms() {
         parameters.discreteStateVariableNames.add("roomNumber");
@@ -88,7 +90,7 @@ public class SixRooms implements Environment {
     @Override
     public StepReturn step(int action, State state) {
         State newState = new State(state);
-        SixRooms.StepReturn stepReturn = new StepReturn();
+        StepReturn stepReturn = new StepReturn();
         int newRoomNr=getNewRoomNr(state,action);
         newState.setVariable("roomNumber", newRoomNr);
         stepReturn.state = newState;
@@ -145,7 +147,7 @@ public class SixRooms implements Environment {
         State s = new State(agent.getState());
         System.out.println("Policy for every state -----------------------------");
         for(int starRoomNr=0; starRoomNr<parameters.nofStates; starRoomNr++) {
-            SixRooms.StepReturn stepReturn;
+            StepReturn stepReturn;
             s.setVariable("roomNumber", starRoomNr);
             System.out.print("Policy: " + s.getDiscreteVariable("roomNumber"));
             while (!isTerminalState(s)) {
