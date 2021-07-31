@@ -4,13 +4,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentNeuralNetwork;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
 import java.util.List;
 
@@ -57,7 +55,7 @@ public class TestAgentNeuralNetwork {
 
         //s.setVariable("roomNumber", 2);  System.out.println(agent.calcOutFromNetwork(s,agent.network));
 
-        agent.PrintQsa();
+        env.PrintQsa(agent);
     }
 
 

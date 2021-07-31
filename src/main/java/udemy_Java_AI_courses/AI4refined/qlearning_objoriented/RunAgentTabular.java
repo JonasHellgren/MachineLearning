@@ -1,8 +1,8 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented;
 
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
 import java.util.Random;
 
@@ -21,9 +21,9 @@ public class RunAgentTabular {
 			runEpisode(agent, env);
 		}
 
-		agent.PrintQsa();
-		agent.PrintQsaBestAction();
-		agent.showPolicy(env);
+		env.PrintQsa(agent);
+		env.PrintQsaBestAction(agent);
+		env.showPolicy(agent);
 	}
 
 	private static void runEpisode(SixRoomsAgentTabular agent, SixRooms env) {

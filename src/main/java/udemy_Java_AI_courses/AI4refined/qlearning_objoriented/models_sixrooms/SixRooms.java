@@ -1,9 +1,6 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms;
+package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
 
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Environment;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturnAbstract;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,5 +116,47 @@ public class SixRooms implements Environment {
     private int getNewRoomNr(State state, int action) {
         return parameters.transitionMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
     }
+
+    public void PrintQsa(Agent agent) {
+        System.out.println("Qsa -----------------------------");
+        State s = new State(agent.getState());
+        for (int roomNr : parameters.discreteStateSpace) {
+            for (int action : parameters.discreteActionsSpace) {
+                s.setVariable("roomNumber", roomNr);
+                System.out.printf("%.3f    ", agent.readMemory(s, action));
+            }
+            System.out.println();
+        }
+    }
+
+    public void PrintQsaBestAction(Agent agent) {
+        System.out.println("Qsa(s,best action) ----------------------------- ");
+        State s = new State(agent.getState());
+        for (int roomNr : parameters.discreteStateSpace) {
+            s.setVariable("roomNumber", roomNr);
+            System.out.printf("roomNr:"+roomNr+", Q: %.1f    ", agent.findMaxQ(s));
+        }
+        System.out.println();
+    }
+
+    public void showPolicy(Agent agent) {
+        // we consider every single state as a starting state
+        // until we find the terminal state: we walk according to best action
+        State s = new State(agent.getState());
+        System.out.println("Policy for every state -----------------------------");
+        for(int starRoomNr=0; starRoomNr<parameters.nofStates; starRoomNr++) {
+            SixRooms.StepReturn stepReturn;
+            s.setVariable("roomNumber", starRoomNr);
+            System.out.print("Policy: " + s.getDiscreteVariable("roomNumber"));
+            while (!isTerminalState(s)) {
+                int bestA = agent.chooseBestAction(s);
+                stepReturn=step(bestA,s);
+                s.copyState(stepReturn.state);
+                System.out.print(" -> " + s.getDiscreteVariable("roomNumber"));
+            }
+            System.out.println();
+        }
+    }
+
 
 }

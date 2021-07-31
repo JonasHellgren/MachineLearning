@@ -4,8 +4,8 @@ package qlearning_objoriented;
 import org.junit.Assert;
 import org.junit.Test;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TestAgentTabular {
 
     @Test
     public void PrintQsa() {
-        agent.PrintQsa();
+        env.PrintQsa(agent);
     }
 
     @Test

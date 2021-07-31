@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentNeuralNetwork;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
 import java.util.List;
 import java.util.Random;
@@ -22,7 +22,7 @@ public class TestLearningNeuralNetwork {
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
-        agent.PrintQsa();
+        env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
             //System.out.println("iEpisode:"+iEpisode);
@@ -35,11 +35,11 @@ public class TestLearningNeuralNetwork {
             simulateTextBook(true,probRandAction);
         }
 
-        agent.PrintQsa();
+        env.PrintQsa(agent);
         System.out.println("nofFits:"+agent.nofFits);
         System.out.println(agent.network.summary());
         //System.out.println("replayBuffer"+agent.replayBuffer);
-        agent.showPolicy(env);
+        env.showPolicy(agent);
     }
 
     private void simulateTextBook(boolean printFlag, double probRandAction) {

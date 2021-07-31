@@ -3,8 +3,8 @@ package qlearning_objoriented;
 import org.junit.Assert;
 import org.junit.Test;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRoomsAgentTabular;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
 import java.util.List;
 import java.util.Random;
@@ -21,7 +21,7 @@ public class TestLearningTabular {
     public void SimulateFromRoom1ShallBePositiveQForAction5inRoom1OrRoom4() {
         agent.state.setVariable("roomNumber", 0);
         simulateUdemy(true);
-        agent.PrintQsa();
+        env.PrintQsa(agent);
         State state1 = new State(agent.state);
         state1.setVariable("roomNumber", 1);
         State state4 = new State(agent.state);
@@ -39,9 +39,9 @@ public class TestLearningTabular {
             simulateUdemy(false);
         }
 
-        agent.PrintQsa();
-        agent.PrintQsaBestAction();
-        agent.showPolicy(env);
+        env.PrintQsa(agent);
+        env.PrintQsaBestAction(agent);
+        env.showPolicy(agent);
     }
 
     private void simulateUdemy(boolean printFlag) {
@@ -81,9 +81,9 @@ public class TestLearningTabular {
             simulateTextBook(false);
         }
 
-        agent.PrintQsa();
-        agent.PrintQsaBestAction();
-        agent.showPolicy(env);
+        env.PrintQsa(agent);
+        env.PrintQsaBestAction(agent);
+        env.showPolicy(agent);
     }
 
     private void simulateTextBook(boolean printFlag) {

@@ -1,6 +1,6 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common;
 
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms.SixRooms;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 
 public class Experience {
     public State s;

@@ -1,10 +1,9 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_fiverooms;
+package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
 
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.distribution.UniformDistribution;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -15,7 +14,6 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
-import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +53,9 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 0.99;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
-    public final double PROBABILITY_RANDOM_ACTION_END = 0.9;
+    public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public final int NUM_OF_EPISODES = 900; // number of iterations
-    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=10;
+    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -69,6 +67,10 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         networkTarget= createNetwork();
 
         logger.info("Neural network based six rooms agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
+    }
+
+    public State getState() {
+        return state;
     }
 
     @Override
@@ -185,17 +187,6 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         return network;
     }
 
-    public void PrintQsa() {
-        System.out.println("Qsa -----------------------------");
-        State s = new State(state);
-        for (int roomNr : envParams.discreteStateSpace) {
-            for (int action : envParams.discreteActionsSpace) {
-                s.setVariable("roomNumber", roomNr);
-                System.out.printf("%.3f    ", readMemory(s, action));
-            }
-            System.out.println();
-        }
-    }
 
     public void showPolicy(SixRooms env) {
         // we consider every single state as a starting state
