@@ -8,6 +8,7 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.optimize.listeners.PerformanceListener;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -51,7 +52,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public final double ALPHA = 0.99;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 900; // number of iterations
+    public final int NUM_OF_EPISODES = 90; // number of iterations
     private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
@@ -179,31 +180,10 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
         MultiLayerNetwork network = new MultiLayerNetwork(configuration);
         network.init();
+        network.setListeners(new PerformanceListener(100));
         //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
 
         return network;
-    }
-
-
-    public void showPolicy(SixRooms env) {
-        // we consider every single state as a starting state
-        // until we find the terminal state: we walk according to best action
-
-        System.out.println("Policy for every state -----------------------------");
-        for(int starRoomNr=0; starRoomNr<envParams.nofStates; starRoomNr++) {
-            StepReturn stepReturn;
-            state.setVariable("roomNumber", starRoomNr);
-            System.out.print("Policy: " + state.getDiscreteVariable("roomNumber"));
-            int nofSteps=0;
-            while (!env.isTerminalState(state) & nofSteps<10) {
-                int bestA = chooseBestAction(state);
-                stepReturn=env.step(bestA,state);
-                state.copyState(stepReturn.state);
-                System.out.print(" -> " + state.getDiscreteVariable("roomNumber"));
-                nofSteps++;
-            }
-            System.out.println();
-        }
     }
 
 

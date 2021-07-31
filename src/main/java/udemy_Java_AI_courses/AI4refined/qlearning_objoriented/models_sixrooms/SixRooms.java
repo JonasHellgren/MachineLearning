@@ -144,17 +144,20 @@ public class SixRooms implements Environment {
     public void showPolicy(Agent agent) {
         // we consider every single state as a starting state
         // until we find the terminal state: we walk according to best action
+        final int MAX_NO_STEPS=10;
         State s = new State(agent.getState());
         System.out.println("Policy for every state -----------------------------");
         for(int starRoomNr=0; starRoomNr<parameters.nofStates; starRoomNr++) {
             StepReturn stepReturn;
             s.setVariable("roomNumber", starRoomNr);
             System.out.print("Policy: " + s.getDiscreteVariable("roomNumber"));
-            while (!isTerminalState(s)) {
+            int nofSteps=0;
+            while (!isTerminalState(s) & nofSteps<MAX_NO_STEPS) {
                 int bestA = agent.chooseBestAction(s);
                 stepReturn=step(bestA,s);
                 s.copyState(stepReturn.state);
                 System.out.print(" -> " + s.getDiscreteVariable("roomNumber"));
+                nofSteps++;
             }
             System.out.println();
         }
