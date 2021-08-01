@@ -72,8 +72,13 @@ public class TestLearningNeuralNetwork {
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(miniBatchSize);
             if (miniBatch.size()==miniBatchSize) {
+
+                //long startTime=System.currentTimeMillis();
                 DataSetIterator iterator = agent.createTrainingData(miniBatch);
+                //System.out.println("time createTrainingData"+(System.currentTimeMillis()-startTime));
+                //startTime=System.currentTimeMillis();
                 agent.network.fit(iterator);
+                //System.out.println("time fit"+(System.currentTimeMillis()-startTime));
 
                 if (printFlag) {
                     //System.out.println("replayBuffer"+agent.replayBuffer);

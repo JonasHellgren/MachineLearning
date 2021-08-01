@@ -8,7 +8,6 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.deeplearning4j.optimize.listeners.PerformanceListener;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -40,8 +39,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private final Random random = new Random();
     public List<Double> bellmanErrorList=new ArrayList<>();
 
-    public final int REPLAY_BUFFER_MAXSIZE = 1000;
-    public static final int MINI_BATCH_MAXSIZE = 10;
+    public final int REPLAY_BUFFER_MAXSIZE = 100;
+    public static final int MINI_BATCH_MAXSIZE = 20;
     public static final int SEED = 12345;  //Random number generator seed, for reproducibility
     private static final int NOF_OUTPUTS = 6;
     private static final int NOF_FEATURES = 1;
@@ -49,12 +48,11 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private static final double L2_REGULATION=0.000;
     private static final double LEARNING_RATE =0.5;
 
-
     public double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 1.0;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 900; // number of iterations
+    public final int NUM_OF_EPISODES = 500; // number of iterations
     private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=10;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
@@ -120,13 +118,11 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             double bellmanError=exp.stepReturn.termState ? 0:exp.stepReturn.reward + GAMMA * maxQ - qOld;
             double qNew = qOld + ALPHA * bellmanError;
             double y=exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
-            outFromNetwork.putScalar(0,exp.action,y*1+exp.s.getDiscreteVariable("roomNumber")*0.0);
+            outFromNetwork.putScalar(0,exp.action,y);
 
-            INDArray inputNetwork = getStateAsNetworkInput(exp.s);
+            INDArray inputNetwork = exp.s.getStateVariablesAsNetworkInput(envParams);
             inputNDSet.putRow(idxSample,inputNetwork);
             outPutNDSet.putRow(idxSample,outFromNetwork);
-            //System.out.println(exp);
-
             bellmanErrorList.add(bellmanError);
         }
 
@@ -134,9 +130,6 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
 
-
-        //System.out.println(inputNDSet);
-        //System.out.println(outPutNDSet);
 
         DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
         List<DataSet> listDs = dataSet.asList();
@@ -159,22 +152,16 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
                 break;
         }
         return sumBellmanError/(j+1);
-
-
     }
 
 
 
     public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network) {
-        INDArray inputNetwork = getStateAsNetworkInput(state);
+        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         return network.output(inputNetwork, false);
     }
 
-    private INDArray getStateAsNetworkInput(State state) {  //TODO make generic
-        double in =  state.getDiscreteVariable("roomNumber");
-        in=in*1;  //TODO clean up normalization
-        return Nd4j.create(new double[]{in}, 1, NOF_FEATURES);
-    }
+
 
     private  MultiLayerNetwork createNetwork() {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()

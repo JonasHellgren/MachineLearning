@@ -62,20 +62,6 @@ public class SixRooms implements Environment {
         }
     }
 
-/*
-    public  class StepReturn extends StepReturnAbstract {
-
-        public StepReturn() {
-            super();
-        }
-
-        public StepReturn(State state, Double reward, Boolean termState) {
-            super(state, reward, termState);
-        }
-    }
-
-
- */
     //constructor
     public SixRooms() {
         parameters.discreteStateVariableNames.add("roomNumber");
@@ -87,6 +73,12 @@ public class SixRooms implements Environment {
     }
 
     //methods
+
+
+    public EnvironmentParameters getParameters() {
+        return parameters;
+    }
+
     @Override
     public StepReturn step(int action, State state) {
         State newState = new State(state);

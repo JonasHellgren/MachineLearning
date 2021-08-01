@@ -1,5 +1,7 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common;
 
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +73,24 @@ public class State {
             return null;
         } else
             return continuousVariables.get(name);
+    }
+
+    public INDArray getStateVariablesAsNetworkInput(EnvironmentParametersAbstract envParams) {
+
+        int nofFeatures=0;
+        List<Double> varValues=new ArrayList<>();
+        for (String varName:envParams.discreteStateVariableNames) {
+            varValues.add((double) getDiscreteVariable(varName));
+            nofFeatures++;
+        }
+
+        for (String varName:envParams.continuousStateVariableNames) {
+            varValues.add(getContinuousVariable(varName));
+            nofFeatures++;
+        }
+
+        double[] array = varValues.stream().mapToDouble(d -> d).toArray();
+        return Nd4j.create(array, 1, nofFeatures);
     }
 
     @Override
