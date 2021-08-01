@@ -14,6 +14,7 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
+import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private static final int  NOF_NEURONS_HIDDEN=10;
     private static final double L2_REGULATION=0.000;
     private static final double LEARNING_RATE =0.5;
+    private static final double MOMENTUM=0.8;
 
     public double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 1.0;  // learning rate
@@ -190,20 +192,14 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
                 .weightInit(WeightInit.XAVIER)
                 .l2(L2_REGULATION)
                 //.updater(new Sgd(LEARNING_RATE))
-                .updater(new Nesterovs(LEARNING_RATE, 0.9))
+                .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.SIGMOID)
-                        //.weightInit(new UniformDistribution(0, 1))
-                        //.weightInit(WeightInit.XAVIER)
-                        //.biasInit()
-                        .build())
+                           .build())
                 .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.SIGMOID)
-                        //.weightInit(new UniformDistribution(0, 1))
-                        //.weightInit(WeightInit.XAVIER)
-                        //.biasInit(0)
-                        .build())
+                          .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
