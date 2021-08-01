@@ -10,7 +10,6 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Stat
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentTabular;
 
 import java.util.List;
 import java.util.Random;
@@ -23,6 +22,7 @@ public class TestLearningNeuralNetwork {
     SixRoomsAgentNeuralNetwork agent = new SixRoomsAgentNeuralNetwork(env.parameters);
     public final double SMALL = 0.001;
     private final Random random = new Random();
+    private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =100;
 
     @Test
     //https://www.saashanair.com/dqn-code/
@@ -35,8 +35,8 @@ public class TestLearningNeuralNetwork {
         env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
-            if (iEpisode  % 10 == 0)
-                System.out.println("iEpisode:"+iEpisode);
+            if (iEpisode  % NOF_EPISODES_BETWEEN_PRINTOUTS == 0)
+                System.out.println("iEpisode:"+iEpisode+" bellmanError:"+agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS));
             int startState = random.nextInt(env.parameters.nofStates);
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state

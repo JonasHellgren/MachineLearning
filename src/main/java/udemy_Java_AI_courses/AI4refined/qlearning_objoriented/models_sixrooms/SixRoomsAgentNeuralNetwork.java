@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -37,6 +38,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_OUTPUTS);
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
     private final Random random = new Random();
+    public List<Double> bellmanErrorList=new ArrayList<>();
 
     public final int REPLAY_BUFFER_MAXSIZE = 1000;
     public static final int MINI_BATCH_MAXSIZE = 10;
@@ -45,15 +47,15 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private static final int NOF_FEATURES = 1;
     private static final int  NOF_NEURONS_HIDDEN=10;
     private static final double L2_REGULATION=0.000;
-    private static final double LEARNING_RATE =0.1;
+    private static final double LEARNING_RATE =0.5;
 
 
     public double GAMMA = 1.0;  // gamma discount factor
-    public final double ALPHA = 0.99;  // learning rate
+    public final double ALPHA = 1.0;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 90; // number of iterations
-    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
+    public final int NUM_OF_EPISODES = 900; // number of iterations
+    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=10;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -115,7 +117,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
             double maxQ = findMaxQTargetNetwork(exp.stepReturn.state)*1;
             double qOld = readMemory(exp.s, exp.action);
-            double qNew = qOld + ALPHA * (exp.stepReturn.reward + GAMMA * maxQ - qOld);
+            double bellmanError=exp.stepReturn.termState ? 0:exp.stepReturn.reward + GAMMA * maxQ - qOld;
+            double qNew = qOld + ALPHA * bellmanError;
             double y=exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
             outFromNetwork.putScalar(0,exp.action,y*1+exp.s.getDiscreteVariable("roomNumber")*0.0);
 
@@ -123,6 +126,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             inputNDSet.putRow(idxSample,inputNetwork);
             outPutNDSet.putRow(idxSample,outFromNetwork);
             //System.out.println(exp);
+
+            bellmanErrorList.add(bellmanError);
         }
 
         nofFits++;
@@ -137,6 +142,25 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         List<DataSet> listDs = dataSet.asList();
         Collections.shuffle(listDs);
         return new ListDataSetIterator<>(listDs);
+    }
+
+    public double getBellmanErrorAverage(int nofSteps) {
+
+        if (bellmanErrorList.size()==0)
+            return 1;
+
+        double sumBellmanError=0;
+        int j;
+        for (j = 0; j < nofSteps; j++) {
+            int idxListPos=bellmanErrorList.size()-j-1;
+            if (idxListPos>=0)
+                sumBellmanError=sumBellmanError+Math.abs(bellmanErrorList.get(idxListPos));
+            else
+                break;
+        }
+        return sumBellmanError/(j+1);
+
+
     }
 
 
@@ -180,7 +204,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
         MultiLayerNetwork network = new MultiLayerNetwork(configuration);
         network.init();
-        network.setListeners(new PerformanceListener(100));
+        //network.setListeners(new PerformanceListener(100));
         //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
 
         return network;
