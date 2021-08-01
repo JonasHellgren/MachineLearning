@@ -89,8 +89,8 @@ public class State {
             nofFeatures++;
         }
 
-        double[] array = varValues.stream().mapToDouble(d -> d).toArray();
-        return Nd4j.create(array, 1, nofFeatures);
+        double[] varValuesAsArray = varValues.stream().mapToDouble(d -> d).toArray();
+        return Nd4j.create(varValuesAsArray, 1, nofFeatures);
     }
 
     @Override

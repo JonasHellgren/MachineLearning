@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -33,10 +32,10 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public final ReplayBuffer replayBuffer = new ReplayBuffer();
     public MultiLayerNetwork network;   //neural network memory
     public MultiLayerNetwork networkTarget;   //neural network memory
-    INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_FEATURES);
-    INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_OUTPUTS);
+
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
     private final Random random = new Random();
+    double bellmanErrorStep;
     public List<Double> bellmanErrorList=new ArrayList<>();
 
     public final int REPLAY_BUFFER_MAXSIZE = 100;
@@ -79,7 +78,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     @Override
     public double findMaxQ(State state) {
-        INDArray outFromNetwork= calcOutFromNetwork(state, network);
+        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
          return outFromNetwork.max().getDouble();
     }
 
@@ -95,46 +95,75 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     @Override
     public double readMemory(State state, int action) {
-        INDArray outFromNetwork= calcOutFromNetwork(state, network);
+        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
+        return outFromNetwork.getDouble(action);
+    }
+
+    public double readMemory(INDArray inputNetwork, int action) {
+        INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
         return outFromNetwork.getDouble(action);
     }
 
     public double findMaxQTargetNetwork(State state) {
-        INDArray outFromNetwork= calcOutFromNetwork(state, networkTarget);
+        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
     }
 
+    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network) {
+        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        return network.output(inputNetwork, false);
+    }
+
+    public INDArray calcOutFromNetwork(INDArray inputNetwork,MultiLayerNetwork network) {
+        return network.output(inputNetwork, false);
+    }
+
+
     public  DataSetIterator createTrainingData(List<Experience> miniBatch){
 
-        if (miniBatch.size()> MINI_BATCH_MAXSIZE)
+        INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_FEATURES);
+        INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_OUTPUTS);
+
+        if (miniBatch.size() > MINI_BATCH_MAXSIZE)
             logger.error("To big mini batch");
 
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
             Experience exp=miniBatch.get(idxSample);
-            INDArray outFromNetwork= calcOutFromNetwork(exp.s, network);
-
-            double maxQ = findMaxQTargetNetwork(exp.stepReturn.state)*1;
-            double qOld = readMemory(exp.s, exp.action);
-            double bellmanError=exp.stepReturn.termState ? 0:exp.stepReturn.reward + GAMMA * maxQ - qOld;
-            double qNew = qOld + ALPHA * bellmanError;
-            double y=exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
-            outFromNetwork.putScalar(0,exp.action,y);
-
             INDArray inputNetwork = exp.s.getStateVariablesAsNetworkInput(envParams);
-            inputNDSet.putRow(idxSample,inputNetwork);
-            outPutNDSet.putRow(idxSample,outFromNetwork);
-            bellmanErrorList.add(bellmanError);
+            INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
+            outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork);
+            addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
+            bellmanErrorList.add(bellmanErrorStep);
         }
 
+        maybeUpdateTargetNetwork();
+        DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
+        List<DataSet> listDs = dataSet.asList();
+
+        return new ListDataSetIterator<>(listDs);
+    }
+
+    private void maybeUpdateTargetNetwork() {
         nofFits++;
         if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
+    }
 
+    private void addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet, int idxSample, INDArray inputNetwork, INDArray outFromNetwork) {
+        inputNDSet.putRow(idxSample, inputNetwork);
+        outPutNDSet.putRow(idxSample, outFromNetwork);
+    }
 
-        DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
-        List<DataSet> listDs = dataSet.asList();
-        Collections.shuffle(listDs);
-        return new ListDataSetIterator<>(listDs);
+    private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork) {
+        double maxQ = findMaxQTargetNetwork(exp.stepReturn.state)*1;
+        double qOld = readMemory(inputNetwork, exp.action);
+        bellmanErrorStep= exp.stepReturn.termState ? 0: exp.stepReturn.reward + GAMMA * maxQ - qOld;
+        double qNew = qOld + ALPHA * bellmanErrorStep;
+        double y= exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
+        outFromNetwork.putScalar(0, exp.action,y);
+        return outFromNetwork;
     }
 
     public double getBellmanErrorAverage(int nofSteps) {
@@ -153,14 +182,6 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         }
         return sumBellmanError/(j+1);
     }
-
-
-
-    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network) {
-        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
-        return network.output(inputNetwork, false);
-    }
-
 
 
     private  MultiLayerNetwork createNetwork() {
