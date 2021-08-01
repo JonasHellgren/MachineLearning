@@ -23,7 +23,6 @@ public class TestAgentNeuralNetwork {
 
     @Before
     public void setup() {
-
     }
 
     @Test

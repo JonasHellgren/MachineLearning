@@ -2,12 +2,21 @@ package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/***
+ * Experience replay is described in https://arxiv.org/pdf/1511.05952.pdf
+ */
+
 public class ReplayBuffer {
     public final List<Experience> buffer = new ArrayList<>();
+
+    public static final int BELLMAN_ERROR_MAX=10;
+    public static final double RB_EPS=0.1;
+    public static final double RB_ALP=0.01;
 
     public void addExperience(Experience experience, int REPLAY_BUFFER_MAXSIZE) {
         if (buffer.size() >= REPLAY_BUFFER_MAXSIZE)   //remove first/oldest item in set if set is "full"
@@ -31,6 +40,60 @@ public class ReplayBuffer {
         return miniBatch;
     }
 
+    public List<Experience> getMiniBatchPrioritizedExperienceReplay(int batchLength) {
+        calcPrioInReplayBufferFromBellmanError();
+        calcSortCriteriaInReplayBuffer();
+           List<Experience> miniBatch=extractMiniBatchFromBufferAccordingToSortCriteria( batchLength);
+        double beta=1;
+        calcImportanceSamplingWeights(miniBatch, beta);
+        return extractMiniBatchFromBufferAccordingToSortCriteria( batchLength);
+    }
+
+    public void calcPrioInReplayBufferFromBellmanError() {
+        for (Experience exper : buffer)
+            exper.pExpRep.priority = Math.min(Math.abs(exper.pExpRep.beError), BELLMAN_ERROR_MAX) + RB_EPS;
+    }
+
+    public void calcSortCriteriaInReplayBuffer() {
+        double sumOfPrios = 0;
+        for (Experience exper : buffer)
+            sumOfPrios = sumOfPrios + Math.pow(exper.pExpRep.priority, RB_ALP);
+
+        for (Experience exper : buffer) {
+            exper.pExpRep.Psampling = Math.pow(exper.pExpRep.priority, RB_ALP) / sumOfPrios;
+            exper.pExpRep.sortCriteria = exper.pExpRep.Psampling * Math.random();
+        }
+    }
+
+    public List<Experience> extractMiniBatchFromBufferAccordingToSortCriteria(int batchLength) {
+        List<Experience> sortedRepBuff = buffer.stream()
+                .sorted(Comparator.comparing(Experience::getSortCriteria).reversed())
+                .collect(Collectors.toList());
+
+        return sortedRepBuff.stream()
+                .limit(batchLength)
+                .collect(Collectors.toList());
+    }
+
+    public void calcImportanceSamplingWeights(List<Experience> miniBatch, double beta)  {
+        List<Double> weights=new ArrayList<>();
+        for (Experience exper : miniBatch) {
+            exper.pExpRep.w = Math.pow(1 / (buffer.size() * exper.pExpRep.Psampling), beta);
+            weights.add(exper.pExpRep.w );
+            //System.out.println("Psampling:"+exper.pExpRep.Psampling+", w:"+ exper.pExpRep.w);
+        }
+
+        normalizeWeights(miniBatch, weights);
+    }
+
+    private void normalizeWeights(List<Experience> miniBatch, List<Double> weights) {
+        double wMax= weights.stream().mapToDouble(Double::doubleValue).max().getAsDouble();
+        for (Experience exper : miniBatch) {
+            exper.pExpRep.w = exper.pExpRep.w / wMax;
+        }
+    }
+
+
     @Override
     public String toString() {
         return bufferAsString(buffer);
@@ -41,4 +104,17 @@ public class ReplayBuffer {
                 buffer +
                 '}';
     }
+
+    public String pExpRepInfoAsString(List<Experience> buffer) {
+
+        List<String> text=new ArrayList<>();
+        for (Experience exper : buffer) {
+            text.add(exper.pExpRep.toString());
+        }
+
+        return "PrioritizedExperienceReplay{" + System.lineSeparator() +
+                text +
+                '}';
+    }
+
 }

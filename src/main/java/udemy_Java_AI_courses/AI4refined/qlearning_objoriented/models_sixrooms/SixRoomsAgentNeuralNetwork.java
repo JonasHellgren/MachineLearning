@@ -136,6 +136,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             INDArray inputNetwork = exp.s.getStateVariablesAsNetworkInput(envParams);
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
             outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork);
+            changeBellmanErrorVariableInBufferItem(exp);
             addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
             bellmanErrorList.add(bellmanErrorStep);
         }
@@ -145,6 +146,12 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         List<DataSet> listDs = dataSet.asList();
 
         return new ListDataSetIterator<>(listDs);
+    }
+
+    //To enable prioritized experience replay items in full experience buffer are modified
+    //possible because mini batch item exp is reference to item in buffer
+    private void changeBellmanErrorVariableInBufferItem(Experience exp) {
+        exp.pExpRep.beError=Math.abs(bellmanErrorStep);
     }
 
     private void maybeUpdateTargetNetwork() {
@@ -162,7 +169,8 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         double maxQ = findMaxQTargetNetwork(exp.stepReturn.state)*1;
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep= exp.stepReturn.termState ? 0: exp.stepReturn.reward + GAMMA * maxQ - qOld;
-        double qNew = qOld + ALPHA * bellmanErrorStep;
+        double qNew = qOld + exp.pExpRep.w*ALPHA * bellmanErrorStep;
+
         double y= exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
         outFromNetwork.putScalar(0, exp.action,y);
         return outFromNetwork;

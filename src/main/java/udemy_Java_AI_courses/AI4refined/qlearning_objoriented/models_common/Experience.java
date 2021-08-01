@@ -6,11 +6,40 @@ public class Experience {
     public State s;
     public int action;
     public StepReturn stepReturn;  //includes reward and sNew
+    public PrioritizedExperienceReplay pExpRep=new PrioritizedExperienceReplay();
+
+    public class PrioritizedExperienceReplay {
+        public double beError;
+        public double priority;
+        public double Psampling;
+        public double sortCriteria;
+        public double w;
+
+        public PrioritizedExperienceReplay() {
+            beError=1; priority=0; Psampling=0; sortCriteria=0;  //todo better beError init
+            w=1;
+        }
+
+        @Override
+        public String toString() {
+            return "PrioritizedExperienceReplay{" +
+                    "beError=" + beError +
+                    ", priority=" + priority +
+                    ", Psampling=" + Psampling +
+                    ", sortCriteria=" + sortCriteria +
+                    ", w=" + w +
+                    '}'+ System.lineSeparator();
+        }
+    }
 
     public Experience(State s, int action, StepReturn stepReturn) {
         this.s = s;
         this.action = action;
         this.stepReturn = stepReturn;
+    }
+
+    public double getSortCriteria() {
+        return pExpRep.sortCriteria;
     }
 
     @Override

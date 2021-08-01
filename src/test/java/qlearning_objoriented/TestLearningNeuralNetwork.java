@@ -70,13 +70,20 @@ public class TestLearningNeuralNetwork {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
 
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(miniBatchSize);
+            //List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(miniBatchSize);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize);
+
+            //System.out.println(miniBatch);
+            //System.out.println(agent.replayBuffer.pExpRepInfoAsString(miniBatch));
+
             if (miniBatch.size()==miniBatchSize) {
 
                 //long startTime=System.currentTimeMillis();
                 DataSetIterator iterator = agent.createTrainingData(miniBatch);
                 //System.out.println("time createTrainingData"+(System.currentTimeMillis()-startTime));
                 //startTime=System.currentTimeMillis();
+                //double newLearningRate=
+                //agent.network.setLearningRate(0.5);
                 agent.network.fit(iterator);
                 //System.out.println("time fit"+(System.currentTimeMillis()-startTime));
 
