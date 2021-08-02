@@ -115,7 +115,7 @@ public class TestAgentNeuralNetwork {
             s.setVariable("roomNumber", 1);
             StepReturn stepReturn = env.step(action, s);  //new in step method => no need for new here
             Experience experience = new Experience(s, action, stepReturn);
-            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
+            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_SIZE);
         }
 
 

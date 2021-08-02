@@ -42,6 +42,21 @@ public class SixRoomsAgentTabular implements Agent {
     }
 
     @Override
+    public double getRB_EPS() {
+        return 0;
+    }
+
+    @Override
+    public double getRB_ALP() {
+        return 0;
+    }
+
+    @Override
+    public double getBETA0() {
+        return 0;
+    }
+
+    @Override
     public int chooseBestAction(State state) {
 
         double[] QsVec = readMemory(state);

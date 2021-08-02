@@ -35,15 +35,13 @@ public class TestLearningNeuralNetwork {
         env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
-            if (iEpisode  % NOF_EPISODES_BETWEEN_PRINTOUTS == 0)
+            if (iEpisode  % NOF_EPISODES_BETWEEN_PRINTOUTS == 0 & iEpisode>0)
                 System.out.println("iEpisode:"+iEpisode+" bellmanError:"+agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS));
             int startState = random.nextInt(env.parameters.nofStates);
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
 
-            double probRandAction=agent.PROBABILITY_RANDOM_ACTION_START+
-                    (agent.PROBABILITY_RANDOM_ACTION_END-agent.PROBABILITY_RANDOM_ACTION_START)*iEpisode/agent.NUM_OF_EPISODES;
-            simulateTextBook(true,probRandAction);
+            simulateTextBook(true,(double) iEpisode/agent.NUM_OF_EPISODES);
         }
 
         env.PrintQsa(agent);
@@ -53,13 +51,15 @@ public class TestLearningNeuralNetwork {
         env.showPolicy(agent);
     }
 
-    private void simulateTextBook(boolean printFlag, double probRandAction) {
+    private void simulateTextBook(boolean printFlag, double fEpisodes) {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
         StepReturn stepReturn;
-        int miniBatchSize=SixRoomsAgentNeuralNetwork.MINI_BATCH_MAXSIZE;
+        int miniBatchSize=SixRoomsAgentNeuralNetwork.MINI_BATCH_SIZE;
         int nofSteps=0;
+        double probRandAction=agent.PROBABILITY_RANDOM_ACTION_START+
+                (agent.PROBABILITY_RANDOM_ACTION_END-agent.PROBABILITY_RANDOM_ACTION_START)*fEpisodes;
         do {
             int aChosen = (Math.random() < probRandAction) ?
                     agent.chooseRandomAction(env.parameters.discreteActionsSpace) :
@@ -68,10 +68,10 @@ public class TestLearningNeuralNetwork {
             stepReturn = env.step(aChosen, agent.state);
 
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
-            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
+            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_SIZE);
 
             //List<Experience> miniBatch=agent.replayBuffer.getMiniBatch(miniBatchSize);
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize,agent,fEpisodes);
 
             //System.out.println(miniBatch);
             //System.out.println(agent.replayBuffer.pExpRepInfoAsString(miniBatch));

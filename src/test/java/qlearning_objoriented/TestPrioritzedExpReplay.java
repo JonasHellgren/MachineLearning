@@ -3,13 +3,13 @@ package qlearning_objoriented;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRooms;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestPrioritzedExpReplay {
@@ -26,10 +26,10 @@ public class TestPrioritzedExpReplay {
         for (int aChosen = 0; aChosen < (5+1) ; aChosen++) {
             StepReturn stepReturn = env.step(aChosen, agent.state);
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1; i++) {
                 Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
                 experience.pExpRep.beError=Math.pow(aChosen,1)*0.1;
-                agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_MAXSIZE);
+                agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_SIZE);
             }
 
         }
@@ -38,14 +38,13 @@ public class TestPrioritzedExpReplay {
     @Test
     public void printDummyBuffer() {
         System.out.println(agent.replayBuffer);
-        agent.replayBuffer.calcPrioInReplayBufferFromBellmanError();
-        agent.replayBuffer.calcSortCriteriaInReplayBuffer();
-        agent.replayBuffer.calcPrioInReplayBufferFromBellmanError();
+        List<Experience> miniBatch= agent.replayBuffer.
+                getMiniBatchPrioritizedExperienceReplay(1,agent,0);
 
         for(Experience exp:agent.replayBuffer.buffer)
             System.out.println(exp.pExpRep);
 
-        List<Experience> miniBatch= agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(1);
+
         System.out.println(miniBatch);
 
     }
@@ -57,7 +56,7 @@ public class TestPrioritzedExpReplay {
         int nAction3=0;
         int nAction5=0;
         for (int i = 0; i < 1000 ; i++) {
-            List<Experience> miniBatch= agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(1);
+            List<Experience> miniBatch= agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(1,agent,(double) i/1000);
 
             if (miniBatch.get(0).action==0)
                 nAction0++;
@@ -80,12 +79,30 @@ public class TestPrioritzedExpReplay {
     public void timeTest() {
 
         long startTime=System.currentTimeMillis();
+        List<Experience> miniBatch=new ArrayList<>();
         for (int i = 0; i < 100000 ; i++) {
-            List<Experience> miniBatch= agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(10);
-
+            miniBatch= agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(10,agent,0);
         }
 
-        System.out.println("time ms:"+(System.currentTimeMillis()-startTime));
+        System.out.println("buffer.size:"+agent.replayBuffer.buffer.size()+", miniBatch.size:"+miniBatch.size()+", time ms:"+(System.currentTimeMillis()-startTime));
+
+    }
+
+    @Test
+    public void createTrainingDataShallChangeBellmanErrorsInRepBuffer() {
+
+        int BATCHLENGTH=agent.replayBuffer.buffer.size();
+        System.out.println(agent.replayBuffer);
+        List<Experience> miniBatch= agent.replayBuffer.
+                getMiniBatchPrioritizedExperienceReplay(BATCHLENGTH,agent,0);
+
+        System.out.println(agent.replayBuffer.pExpRepInfoAsString(miniBatch));
+
+        agent.createTrainingData(miniBatch);
+
+        System.out.println(agent.replayBuffer.pExpRepInfoAsString(agent.replayBuffer.buffer));
+
+        //System.out.println(agent.replayBuffer);
 
     }
 

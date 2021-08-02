@@ -7,6 +7,7 @@ public class Experience {
     public int action;
     public StepReturn stepReturn;  //includes reward and sNew
     public PrioritizedExperienceReplay pExpRep=new PrioritizedExperienceReplay();
+    private final int BE_ERROR_INIT=10;
 
     public class PrioritizedExperienceReplay {
         public double beError;
@@ -16,7 +17,8 @@ public class Experience {
         public double w;
 
         public PrioritizedExperienceReplay() {
-            beError=1; priority=0; Psampling=0; sortCriteria=0;  //todo better beError init
+            beError=BE_ERROR_INIT;
+            priority=0; Psampling=0; sortCriteria=0;  //todo better beError init
             w=1;
         }
 

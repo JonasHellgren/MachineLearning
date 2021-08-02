@@ -14,7 +14,6 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
-import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +22,10 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+/***
+ * Following paramaters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
+ */
 
 public class SixRoomsAgentNeuralNetwork implements Agent {
 
@@ -39,22 +42,25 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     double bellmanErrorStep;
     public List<Double> bellmanErrorList=new ArrayList<>();
 
-    public final int REPLAY_BUFFER_MAXSIZE = 100;
-    public static final int MINI_BATCH_MAXSIZE = 20;
+    public final int REPLAY_BUFFER_SIZE = 100;
+    public static final int MINI_BATCH_SIZE = 30;
     public static final int SEED = 12345;  //Random number generator seed, for reproducibility
     private static final int NOF_OUTPUTS = 6;
     private static final int NOF_FEATURES = 1;
     private static final int  NOF_NEURONS_HIDDEN=10;
-    private static final double L2_REGULATION=0.000;
-    private static final double LEARNING_RATE =0.5;
+    private static final double L2_REGULATION=0.000001;
+    private static final double LEARNING_RATE =0.1;
     private static final double MOMENTUM=0.8;
+    public  final double RB_EPS=0.1;
+    public  final double RB_ALP=0.99;  //0 <=> uniform distribution from bellman error for minibatch selection
+    public  final double BETA0=0.1;
 
     public double GAMMA = 1.0;  // gamma discount factor
     public final double ALPHA = 1.0;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 500; // number of iterations
-    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=10;
+    public final int NUM_OF_EPISODES = 900; // number of iterations
+    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -70,6 +76,21 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     public State getState() {
         return state;
+    }
+
+    @Override
+    public double getRB_EPS() {
+        return RB_EPS;
+    }
+
+    @Override
+    public double getRB_ALP() {
+        return RB_ALP;
+    }
+
+    @Override
+    public double getBETA0() {
+        return BETA0;
     }
 
     @Override
@@ -125,10 +146,10 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     public  DataSetIterator createTrainingData(List<Experience> miniBatch){
 
-        INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_FEATURES);
-        INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_MAXSIZE,NOF_OUTPUTS);
+        INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
+        INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
 
-        if (miniBatch.size() > MINI_BATCH_MAXSIZE)
+        if (miniBatch.size() > MINI_BATCH_SIZE)
             logger.error("To big mini batch");
 
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
@@ -137,6 +158,9 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
             outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork);
             changeBellmanErrorVariableInBufferItem(exp);
+
+            //System.out.println("priority:"+exp.pExpRep.priority+", bellmanErrorStep:"+bellmanErrorStep);
+
             addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
             bellmanErrorList.add(bellmanErrorStep);
         }
@@ -166,12 +190,11 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     }
 
     private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork) {
-        double maxQ = findMaxQTargetNetwork(exp.stepReturn.state)*1;
         double qOld = readMemory(inputNetwork, exp.action);
-        bellmanErrorStep= exp.stepReturn.termState ? 0: exp.stepReturn.reward + GAMMA * maxQ - qOld;
-        double qNew = qOld + exp.pExpRep.w*ALPHA * bellmanErrorStep;
-
-        double y= exp.stepReturn.termState ? exp.stepReturn.reward : qNew;
+        bellmanErrorStep= exp.stepReturn.termState ?
+                exp.stepReturn.reward - qOld:
+                exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state) - qOld;
+        double y=qOld + exp.pExpRep.w*ALPHA * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
         return outFromNetwork;
     }
