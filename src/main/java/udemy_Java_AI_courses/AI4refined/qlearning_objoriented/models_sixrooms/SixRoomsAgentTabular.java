@@ -82,6 +82,13 @@ public class SixRoomsAgentTabular implements Agent {
     }
 
     @Override
+    public int chooseAction(double fractionEpisodesFinished) {
+        return (Math.random() < PROBABILITY_RANDOM_ACTION) ?
+                chooseRandomAction(envParams.discreteActionsSpace) :
+                chooseBestAction(state);
+    }
+
+    @Override
     public void writeMemory(State state, Integer action, Double value) {
         Qsa[envParams.getIdxState(state)][envParams.getIdxAction(action)] = value;
     }

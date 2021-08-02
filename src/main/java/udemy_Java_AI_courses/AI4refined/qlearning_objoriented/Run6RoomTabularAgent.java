@@ -7,7 +7,7 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.Si
 
 import java.util.Random;
 
-public class RunAgentTabular {
+public class Run6RoomTabularAgent {
 
     public static void main(String[] args) {
 
@@ -19,7 +19,7 @@ public class RunAgentTabular {
 			int startState=env.parameters.discreteStateSpace.get(random.nextInt(env.parameters.discreteStateSpace.size()));
 			agent.state.setVariable("roomNumber", startState);
 			if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
-			runEpisode(agent, env);
+			runEpisode(agent, env, (double) iEpisode/agent.NUM_OF_EPISODES);
 		}
 
 		env.PrintQsa(agent);
@@ -27,17 +27,14 @@ public class RunAgentTabular {
 		env.showPolicy(agent);
 	}
 
-	private static void runEpisode(SixRoomsAgentTabular agent, SixRooms env) {
+	private static void runEpisode(SixRoomsAgentTabular agent, SixRooms env, double fEpisodes) {
 		// Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
 		// a single episode: the agent finds a path from state s to the exit state
 
 		State sNew = new State();
 		StepReturn stepReturn;
 		do {
-			int aChosen = (Math.random() < agent.PROBABILITY_RANDOM_ACTION) ?
-					agent.chooseRandomAction(env.parameters.discreteActionsSpace) :
-					agent.chooseBestAction(agent.state);
-
+			int aChosen=agent.chooseAction(fEpisodes);
 			stepReturn = env.step(aChosen, agent.state);
 			sNew.copyState(stepReturn.state);
 			double maxQ = agent.findMaxQ(sNew);

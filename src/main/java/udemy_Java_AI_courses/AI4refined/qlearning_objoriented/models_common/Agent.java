@@ -11,6 +11,7 @@ public interface Agent {
     int chooseBestAction(State state);
     double findMaxQ(State state);
     int chooseRandomAction(List<Integer> actions);
+    int chooseAction(double fractionEpisodesFinished);
     void writeMemory(State oldState, Integer Action, Double value);
     double readMemory(State state, int Action);
 }

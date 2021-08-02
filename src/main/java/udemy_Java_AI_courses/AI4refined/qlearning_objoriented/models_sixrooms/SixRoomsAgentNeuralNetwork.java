@@ -52,7 +52,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     private static final double LEARNING_RATE =0.1;
     private static final double MOMENTUM=0.8;
     public  final double RB_EPS=0.1;
-    public  final double RB_ALP=0.99;  //0 <=> uniform distribution from bellman error for minibatch selection
+    public  final double RB_ALP=0.9;  //0 <=> uniform distribution from bellman error for minibatch selection
     public  final double BETA0=0.1;
 
     public double GAMMA = 1.0;  // gamma discount factor
@@ -109,6 +109,16 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     @Override
     public int chooseRandomAction(List<Integer> actions) {
         return actions.get(random.nextInt(actions.size()));
+    }
+
+    @Override
+    public int chooseAction(double fractionEpisodesFinished) {
+        double probRandAction=PROBABILITY_RANDOM_ACTION_START+
+                  (PROBABILITY_RANDOM_ACTION_END-PROBABILITY_RANDOM_ACTION_START)*fractionEpisodesFinished;
+
+        return (Math.random() < probRandAction) ?
+                chooseRandomAction(envParams.discreteActionsSpace) :
+                chooseBestAction(state);
     }
 
     @Override
