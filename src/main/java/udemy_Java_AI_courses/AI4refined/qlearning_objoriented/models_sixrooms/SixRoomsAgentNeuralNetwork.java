@@ -66,7 +66,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         this.envParams = envParams;
         state = new State();
         for (String varName : envParams.discreteStateVariableNames)
-            state.createVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
+            state.createDiscreteVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
 
         network= createNetwork();
         networkTarget= createNetwork();

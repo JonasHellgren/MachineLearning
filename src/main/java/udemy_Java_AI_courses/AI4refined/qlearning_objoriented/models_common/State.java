@@ -33,7 +33,7 @@ public class State {
         this.continuousVariables.putAll(state.continuousVariables);
     }
 
-    public void createVariable(String name, Integer value) {
+    public void createDiscreteVariable(String name, Integer value) {
         discreteVariables.put(name, value);
     }
 
@@ -54,7 +54,7 @@ public class State {
             return discreteVariables.get(name);
     }
 
-    public void createVariable(String name, Double value) {
+    public void createContinuousVariable(String name, Double value) {
         continuousVariables.put(name, value);
     }
 
