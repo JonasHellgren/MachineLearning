@@ -57,7 +57,7 @@ public class TestMountainCarEnvironment {
         StepReturn stepReturn=env.step(0,state);
         System.out.println(stepReturn.state);
 
-        for (int i = 0; i <10 ; i++) {
+        for (int i = 0; i <1300 ; i++) {
 
             stepReturn=env.step(0,state);
             state.copyState(stepReturn.state);
@@ -65,10 +65,10 @@ public class TestMountainCarEnvironment {
             double position=state.getContinuousVariable("position");
             double height=env.height(position);
             //env.panel.setCarPosition(position,height);
-            env.panel.setCarPosition(i*-0.1,env.height(i*-0.1));
+            env.panel.setCarPosition(i*-0.001,env.height(i*-0.001));
             System.out.println(env.panel.carPosition);
             env.panel.repaint();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(10);
         }
 
     }

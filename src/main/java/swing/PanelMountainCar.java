@@ -39,8 +39,8 @@ public class PanelMountainCar extends JPanel {
     private void plotCar(Graphics2D g2d,double x,double y) {
         //g2d.setColor('r');
 
-        g2d.drawOval((int) (xScaler.calcOutX(x)+0*xScaler.scale(carRadius)/2),
-                (int) (yScaler.calcOutY(y)+0*xScaler.scale(carRadius)/2),
+        g2d.drawOval((int) (xScaler.calcOutX(x)+-1*xScaler.scale(carRadius)/2),
+                (int) (yScaler.calcOutY(y)+-1*xScaler.scale(carRadius)/2),
                 xScaler.scale(carRadius),yScaler.scale(carRadius));
     }
 

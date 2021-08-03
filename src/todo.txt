@@ -13,6 +13,10 @@ normalize regression examples
 udemu ai4 bandit example
 Test saving fail states-actions
 
+undvika calcOutX calcOutY, sätt flip som klass parameter
+marginal i Frame
+testa med regel baserad action, tex 2 om pos>tbd och 0 om pos<tbd
+
 Undivk code duplication genom tex ytterligare interface AgentNetwork som har default method av bla calcOutFromNetwork
 
 GPU speed up
