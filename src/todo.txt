@@ -13,6 +13,7 @@ normalize regression examples
 udemu ai4 bandit example
 Test saving fail states-actions
 
+Undivk code duplication genom tex ytterligare interface AgentNetwork som har default method av bla calcOutFromNetwork
 
 GPU speed up
 https://subscription.packtpub.com/book/data/9781788995207/1/ch01lvl1sec09/configuring-dl4j-for-a-gpu-accelerated-environment

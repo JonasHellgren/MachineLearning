@@ -15,8 +15,8 @@ import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.Si
 import java.util.List;
 import java.util.Random;
 
-public class TestLearningNeuralNetwork {
-    private static final Logger logger = LoggerFactory.getLogger(TestLearningNeuralNetwork.class);
+public class TestLearningNeuralNetwork6Rooms {
+    private static final Logger logger = LoggerFactory.getLogger(TestLearningNeuralNetwork6Rooms.class);
 
     State sNew = new State();
     SixRooms env = new SixRooms();

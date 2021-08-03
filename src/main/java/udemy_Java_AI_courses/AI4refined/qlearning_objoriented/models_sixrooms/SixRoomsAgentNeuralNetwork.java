@@ -59,7 +59,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public final double ALPHA = 1.0;  // learning rate
     public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 900; // number of iterations
+    public final int NUM_OF_EPISODES = 1000; // number of iterations
     private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
@@ -199,12 +199,20 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         outPutNDSet.putRow(idxSample, outFromNetwork);
     }
 
+    //Network output y for state s defined as
+    //y=    q(s)*(1- alpha )+alpha*( r – q(s) )   (term state)
+    //      q(s)*(1- alpha )+alpha*( r+gama*maxQ(s’)-q(s))   (not term state)
+    //alpha=1 =>
+    //y=    r  (term state)
+    //      r+gama*maxQ(s’)-q(s)  (not term state)
+    //skipped ..*(1- alpha ), made learning less stable
     private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep= exp.stepReturn.termState ?
                 exp.stepReturn.reward - qOld:
                 exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state) - qOld;
-        double y=qOld + exp.pExpRep.w*ALPHA * bellmanErrorStep;
+        double alpha=exp.pExpRep.w*ALPHA;
+        double y=qOld*1 + alpha * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
         return outFromNetwork;
     }
