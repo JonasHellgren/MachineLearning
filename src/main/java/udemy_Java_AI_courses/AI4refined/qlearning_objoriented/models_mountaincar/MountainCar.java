@@ -1,11 +1,15 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_mountaincar;
 
+import swing.*;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Environment;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /***
  *         Num    Observation               Min            Max
@@ -36,6 +40,13 @@ public class MountainCar implements Environment  {
 
     public MountainCar.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
+    private FrameEnvironment frame;
+    public PanelMountainCar panel;
+    final  int W=1000;
+    final  int H=300;  //frame size
+    final  double CAR_RADIUS=0.05;
+
+
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
 
@@ -55,6 +66,8 @@ public class MountainCar implements Environment  {
         public int nofActions;
         public int minAction;
 
+
+
         public EnvironmentParameters() {
         }
     }
@@ -67,7 +80,40 @@ public class MountainCar implements Environment  {
             parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1, 2));
             parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
             parameters.nofActions = parameters.discreteActionsSpace.size();
+
+            frame=new FrameEnvironment();
+            ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,0,W);
+            ScaleLinear yScaler=new ScaleLinear(0,1,0,H);
+            LineData roadData=createRoadData();
+            Position2D carPositionInit=new Position2D(0.0,height(0.0));
+            panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
+            frame.add(panel);
+            frame.setSize(W, H);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            panel.repaint();
         }
+
+    private LineData createRoadData() {
+
+        final int NOF_POINTS=100;
+        List<Double> xList=new ArrayList<>();
+        List<Double> yList=new ArrayList<>();
+        for (int i = 0; i < NOF_POINTS ; i++) {
+            double f=(double) i/NOF_POINTS;
+            double x=parameters.min_position*(1-f)+parameters.max_position*f;
+            State state = new State();
+            state.createContinuousVariable("position",x);
+            double y=height(x);
+            xList.add(x);
+            yList.add(y);
+        }
+        return new LineData(
+                xList.stream().mapToDouble(d -> d).toArray(),
+                yList.stream().mapToDouble(d -> d).toArray());
+
+
+    }
 
 
     @Override
@@ -87,7 +133,6 @@ public class MountainCar implements Environment  {
             velocity=(position <= parameters.min_position & velocity < 0)?0:velocity;
             newState.setVariable("position", position);
             newState.setVariable("velocity", velocity);
-
             stepReturn.state = newState;
             stepReturn.termState = isTerminalState(newState);
             stepReturn.reward = (stepReturn.termState)?0:-1.0;
@@ -104,5 +149,13 @@ public class MountainCar implements Environment  {
         public double height(State state) {
         return Math.sin(3 * state.getContinuousVariable("position")) * 0.45 + 0.55;
         }
+
+        public double height(double position) {
+            State state = new State();
+            state.createContinuousVariable("position",position);
+            return height(state);
+        }
+
+
 
 }
