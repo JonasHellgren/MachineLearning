@@ -33,14 +33,14 @@ public class PanelMountainCar extends JPanel {
 
     private void plotLine(Graphics2D g2d,double[] line1x,double[] line1y) {
             ////flip because swing defines y=0 as upper in panel
-            g2d.drawPolyline(xScaler.calcOutX(line1x),yScaler.calcOutY(line1y), line1x.length);
+            g2d.drawPolyline(xScaler.calcOut(line1x),yScaler.calcOut(line1y), line1x.length);
     }
 
     private void plotCar(Graphics2D g2d,double x,double y) {
         //g2d.setColor('r');
 
-        g2d.drawOval((int) (xScaler.calcOutX(x)+-1*xScaler.scale(carRadius)/2),
-                (int) (yScaler.calcOutY(y)+-1*xScaler.scale(carRadius)/2),
+        g2d.drawOval((int) (xScaler.calcOut(x)+-1*xScaler.scale(carRadius)/2),
+                (int) (yScaler.calcOut(y)+-1*xScaler.scale(carRadius)/2),
                 xScaler.scale(carRadius),yScaler.scale(carRadius));
     }
 

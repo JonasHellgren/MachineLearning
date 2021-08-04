@@ -11,23 +11,19 @@ public class ScaleLinear {
     public double d0,d1;    //domain, inputs
     public double r0,r1;    //range, outputs
 
-    public ScaleLinear(double d0, double d1, double r0, double r1) {
+    boolean flip; //true <=> flip range <=> for ex d0 corresponds to r1
+                    //false <=> not flip range <=> for ex d0 corresponds to r0
+    public ScaleLinear(double d0, double d1, double r0, double r1,boolean flip) {
         this.d0 = d0;
         this.d1 = d1;
         this.r0 = r0;
         this.r1 = r1;
+        this.flip = flip;
         setScaleParameters(d0, d1, r0, r1);
     }
 
-    public int calcOutX(double in) {
-        return calcOut(in,false);
-    }
 
-    public int calcOutY(double in) {
-        return calcOut(in,true);
-    }
-
-    public int calcOut(double in,boolean flip) {
+    public int calcOut(double in) {
         double y=m*in+b;
         return (flip)?(int) (r1-y):(int) (y);
     }
@@ -36,16 +32,8 @@ public class ScaleLinear {
         return (int) (sizeInDomain*(r1-r0)/(d1-d0));
     }
 
-    public int[] calcOutX (double[] inVec) {
-        return calcOut(inVec,false);
-    }
 
-    public int[] calcOutY (double[] inVec) {
-        //flip because swing defines y=0 as upper in panel
-        return calcOut(inVec,true);
-    }
-
-    public int[] calcOut(double[] inVec,boolean flip) {
+    public int[] calcOut(double[] inVec) {
 
         int[] outVec=new int[inVec.length];
         for (int i = 0; i < inVec.length; i++) {

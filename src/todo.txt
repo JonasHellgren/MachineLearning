@@ -1,45 +1,13 @@
-nofCorrectClassifications method  x
-other udemy examples nn2 x
-code clean up nn2  x
-plantuml udemy examples nn2 x
-testa 3 lager x
 
-nn3 example xor x
-nn3 example iris x
 
-regression examples  x
-normalize regression examples
-
-udemu ai4 bandit example
-Test saving fail states-actions
 
 undvika calcOutX calcOutY, sätt flip som klass parameter
 marginal i Frame
 testa med regel baserad action, tex 2 om pos>tbd och 0 om pos<tbd
-
 Undivk code duplication genom tex ytterligare interface AgentNetwork som har default method av bla calcOutFromNetwork
 
-GPU speed up
-https://subscription.packtpub.com/book/data/9781788995207/1/ch01lvl1sec09/configuring-dl4j-for-a-gpu-accelerated-environment
-https://www.youtube.com/watch?v=4UiDG7iC4uY
-https://deeplearning4j.konduit.ai/multi-project/explanation/configuration/backends/cudnn
-https://mgubaidullin.github.io/deeplearning4j-docs/gpu#
 
-
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-cuda-10.0</artifactId>
-            <version>1.0.0-beta7</version>
-        </dependency>
-
-                <dependency>
-                    <groupId>org.nd4j</groupId>
-                    <artifactId>nd4j-native</artifactId>
-                    <version>${dl4j-master.version}</version>
-                </dependency>
-                <dependency>
-                <groupId>org.nd4j</groupId>
-                <artifactId>nd4j-native</artifactId>
-                <version>${dl4j-master.version}</version>
-                <classifier>windows-x86_64-avx2</classifier>
-                </dependency>
+när tid
+normalize regression examples
+udemu ai4 bandit example
+Test saving fail states-actions

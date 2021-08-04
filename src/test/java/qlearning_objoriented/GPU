@@ -1,0 +1,24 @@
+GPU speed up
+https://subscription.packtpub.com/book/data/9781788995207/1/ch01lvl1sec09/configuring-dl4j-for-a-gpu-accelerated-environment
+https://www.youtube.com/watch?v=4UiDG7iC4uY
+https://deeplearning4j.konduit.ai/multi-project/explanation/configuration/backends/cudnn
+https://mgubaidullin.github.io/deeplearning4j-docs/gpu#
+
+
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-cuda-10.0</artifactId>
+            <version>1.0.0-beta7</version>
+        </dependency>
+
+                <dependency>
+                    <groupId>org.nd4j</groupId>
+                    <artifactId>nd4j-native</artifactId>
+                    <version>${dl4j-master.version}</version>
+                </dependency>
+                <dependency>
+                <groupId>org.nd4j</groupId>
+                <artifactId>nd4j-native</artifactId>
+                <version>${dl4j-master.version}</version>
+                <classifier>windows-x86_64-avx2</classifier>
+                </dependency>
