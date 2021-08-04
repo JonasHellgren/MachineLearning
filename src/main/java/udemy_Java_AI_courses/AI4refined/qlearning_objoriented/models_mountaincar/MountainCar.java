@@ -42,8 +42,9 @@ public class MountainCar implements Environment  {
 
     private FrameEnvironment frame;
     public PanelMountainCar panel;
-    final  int W=1000;
+    final  int W=600;
     final  int H=300;  //frame size
+    final int MARGIN=50;  //frame margin
     final  double CAR_RADIUS=0.05;
 
 
@@ -82,8 +83,8 @@ public class MountainCar implements Environment  {
             parameters.nofActions = parameters.discreteActionsSpace.size();
 
             frame=new FrameEnvironment();
-            ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,0,W,false);
-            ScaleLinear yScaler=new ScaleLinear(0,1,0,H,true);
+            ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,MARGIN,W-MARGIN,false,MARGIN);
+            ScaleLinear yScaler=new ScaleLinear(0,1,MARGIN,H-MARGIN,true,MARGIN);
             LineData roadData=createRoadData();
             Position2D carPositionInit=new Position2D(0.0,height(0.0));
             panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
