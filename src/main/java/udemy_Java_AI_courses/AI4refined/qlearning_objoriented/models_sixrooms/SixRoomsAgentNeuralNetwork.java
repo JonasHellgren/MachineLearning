@@ -1,5 +1,6 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
 
+
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -17,7 +18,10 @@ import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.ReplayBuffer;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +107,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     public double findMaxQ(State state) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
-         return outFromNetwork.max().getDouble();
+        return outFromNetwork.max().getDouble();
     }
 
     @Override
@@ -114,7 +118,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     @Override
     public int chooseAction(double fractionEpisodesFinished) {
         double probRandAction=PROBABILITY_RANDOM_ACTION_START+
-                  (PROBABILITY_RANDOM_ACTION_END-PROBABILITY_RANDOM_ACTION_START)*fractionEpisodesFinished;
+                (PROBABILITY_RANDOM_ACTION_END-PROBABILITY_RANDOM_ACTION_START)*fractionEpisodesFinished;
 
         return (Math.random() < probRandAction) ?
                 chooseRandomAction(envParams.discreteActionsSpace) :
@@ -123,7 +127,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
     @Override
     public void writeMemory(State oldState, Integer Action, Double value) {
-    //not valid for NN
+        //not valid for NN
     }
 
     @Override
@@ -154,7 +158,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     }
 
 
-    public  DataSetIterator createTrainingData(List<Experience> miniBatch){
+    public DataSetIterator createTrainingData(List<Experience> miniBatch){
 
         INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
         INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
@@ -245,10 +249,10 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.SIGMOID)
-                           .build())
+                        .build())
                 .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.SIGMOID)
-                          .build())
+                        .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
@@ -265,3 +269,4 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
 
 }
+

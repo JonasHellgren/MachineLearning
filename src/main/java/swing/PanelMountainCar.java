@@ -14,7 +14,11 @@ public class PanelMountainCar extends JPanel {
     double carRadius;
 
 
-    public PanelMountainCar(ScaleLinear xScaler, ScaleLinear yScaler, LineData roadData, Position2D carPosition, double carRadius) {
+    public PanelMountainCar(ScaleLinear xScaler,
+                            ScaleLinear yScaler,
+                            LineData roadData,
+                            Position2D carPosition,
+                            double carRadius) {
         this.xScaler = xScaler;
         this.yScaler = yScaler;
         this.roadData = roadData;

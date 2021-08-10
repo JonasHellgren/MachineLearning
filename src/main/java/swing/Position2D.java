@@ -17,3 +17,4 @@ public class Position2D {
                 '}';
     }
 }
+

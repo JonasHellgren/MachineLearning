@@ -36,7 +36,7 @@ import java.util.List;
  *          Episode length is greater than 200
  */
 
-public class MountainCar implements Environment  {
+public class MountainCar implements Environment {
 
     public MountainCar.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
@@ -73,27 +73,27 @@ public class MountainCar implements Environment  {
         }
     }
 
-        //constructor
-        public MountainCar() {
-            parameters.continuousStateVariableNames.add("position");
-            parameters.continuousStateVariableNames.add("velocity");
-            parameters.discreteStateVariableNames.add("nofSteps");
-            parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1, 2));
-            parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
-            parameters.nofActions = parameters.discreteActionsSpace.size();
+    //constructor
+    public MountainCar() {
+        parameters.continuousStateVariableNames.add("position");
+        parameters.continuousStateVariableNames.add("velocity");
+        parameters.discreteStateVariableNames.add("nofSteps");
+        parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1, 2));
+        parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
+        parameters.nofActions = parameters.discreteActionsSpace.size();
 
-            frame=new FrameEnvironment();
-            ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,MARGIN,W-MARGIN,false,MARGIN);
-            ScaleLinear yScaler=new ScaleLinear(0,1,MARGIN,H-MARGIN,true,MARGIN);
-            LineData roadData=createRoadData();
-            Position2D carPositionInit=new Position2D(0.0,height(0.0));
-            panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
-            frame.add(panel);
-            frame.setSize(W, H);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            panel.repaint();
-        }
+        frame=new FrameEnvironment();
+        ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,MARGIN,W-MARGIN,false,MARGIN);
+        ScaleLinear yScaler=new ScaleLinear(0,1,MARGIN,H-MARGIN,true,MARGIN);
+        LineData roadData=createRoadData();
+        Position2D carPositionInit=new Position2D(0.0,height(0.0));
+        panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
+        frame.add(panel);
+        frame.setSize(W, H);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.repaint();
+    }
 
     private LineData createRoadData() {
 
@@ -123,39 +123,39 @@ public class MountainCar implements Environment  {
     }
 
     @Override
-        public StepReturn step(int action, State state) {
-            State newState = new State(state);
-            StepReturn stepReturn = new StepReturn();
-            double position=state.getContinuousVariable("position");
-            double velocity=state.getContinuousVariable("velocity");
-            velocity += (action - 1) * parameters.force + Math.cos(3 * position) * (-parameters.gravity);
-            position += velocity;
-            position = this.clip(position, parameters.min_position, parameters.max_position);
-            velocity=(position <= parameters.min_position & velocity < 0)?0:velocity;
-            newState.setVariable("position", position);
-            newState.setVariable("velocity", velocity);
-            stepReturn.state = newState;
-            stepReturn.termState = isTerminalState(newState);
-            stepReturn.reward = (stepReturn.termState)?0:-1.0;
-            return stepReturn;
-        }
+    public StepReturn step(int action, State state) {
+        State newState = new State(state);
+        StepReturn stepReturn = new StepReturn();
+        double position=state.getContinuousVariable("position");
+        double velocity=state.getContinuousVariable("velocity");
+        velocity += (action - 1) * parameters.force + Math.cos(3 * position) * (-parameters.gravity);
+        position += velocity;
+        position = this.clip(position, parameters.min_position, parameters.max_position);
+        velocity=(position <= parameters.min_position & velocity < 0)?0:velocity;
+        newState.setVariable("position", position);
+        newState.setVariable("velocity", velocity);
+        stepReturn.state = newState;
+        stepReturn.termState = isTerminalState(newState);
+        stepReturn.reward = (stepReturn.termState)?0:-1.0;
+        return stepReturn;
+    }
 
-        @Override
-        public boolean isTerminalState(State state) {
-            return (state.getContinuousVariable("position")>=parameters.goal_position &
-                    state.getContinuousVariable("velocity")>=parameters.goal_velocity |
-                    state.getDiscreteVariable("nofSteps")>=parameters.max_nof_steps);
-        }
+    @Override
+    public boolean isTerminalState(State state) {
+        return (state.getContinuousVariable("position")>=parameters.goal_position &
+                state.getContinuousVariable("velocity")>=parameters.goal_velocity |
+                state.getDiscreteVariable("nofSteps")>=parameters.max_nof_steps);
+    }
 
-        public double height(State state) {
+    public double height(State state) {
         return Math.sin(3 * state.getContinuousVariable("position")) * 0.45 + 0.55;
-        }
+    }
 
-        public double height(double position) {
-            State state = new State();
-            state.createContinuousVariable("position",position);
-            return height(state);
-        }
+    public double height(double position) {
+        State state = new State();
+        state.createContinuousVariable("position",position);
+        return height(state);
+    }
 
 
 

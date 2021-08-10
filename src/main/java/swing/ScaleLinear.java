@@ -1,6 +1,5 @@
 package swing;
 
-
 //range:   0...r0............r1...rMax   where r0-0=rMax-r1=Margin
 public class ScaleLinear {
 //This function uses linear scaling out=m*in+b to relate output to input
@@ -15,7 +14,7 @@ public class ScaleLinear {
     final  int H=300;  //frame size
 
     boolean flip; //true <=> flip range <=> for ex d0 corresponds to r1
-                    //false <=> not flip range <=> for ex d0 corresponds to r0
+    //false <=> not flip range <=> for ex d0 corresponds to r0
 
 
     public ScaleLinear(double d0, double d1, int r0, int r1,boolean flip, int MARGIN) {
@@ -45,7 +44,7 @@ public class ScaleLinear {
         int[] outVec=new int[inVec.length];
         for (int i = 0; i < inVec.length; i++) {
             double y=m*inVec[i]+b;
-              outVec[i]=(flip)? (int) (rMax-y):(int) y;
+            outVec[i]=(flip)? (int) (rMax-y):(int) y;
 
         }
         return outVec;
@@ -58,3 +57,4 @@ public class ScaleLinear {
     }
 
 }
+
