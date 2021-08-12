@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Agent {
+    + chooseBestAction(State state);
+    + findMaxQ(State state);
+    + chooseRandomAction(List<Integer> aSet);
+    + readMemory(State state, int Action);
+}
+
+class AgentTabular {
+State state;
+double[][] Qsa;
++ writeMemory(State oldState, Integer Action, Double value);
+}
+
+abstract class AgentNeuralNetwork {
+State state;
+ReplayBuffer replayBuffer
+MultiLayerNetwork network
+MultiLayerNetwork networkTarget
+Random random
+double bellmanErrorStep
+List<Double> bellmanErrorList
+
++ State getState()
++ int chooseBestAction(State state)
++ double findMaxQ(State state)
++ chooseRandomAction(List<Integer> actions)
++ double readMemory(State state, int action)
+- double readMemory(INDArray inputNetwork, int action)
+- double findMaxQTargetNetwork(State state)
++ INDArray calcOutFromNetwork(State state,MultiLayerNetwork network)
+- INDArray calcOutFromNetwork(INDArray inputNetwork,MultiLayerNetwork network)
++ DataSetIterator createTrainingData(List<Experience> miniBatch)
++ void changeBellmanErrorVariableInBufferItem(Experience exp)
++ void maybeUpdateTargetNetwork()
++ addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet,.....)
++ INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork)
++ double getBellmanErrorAverage(int nofSteps)
++ abstract MultiLayerNetwork createNetwork()
+}
+
+Agent  <|-- AgentTabular
+Agent  <|-- AgentNeuralNetwork
+
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+interface Environment {
++ StepReturnAbstract step(action, State state)
++ boolean isTerminalState(State state)
+}
+
+abstract class StepReturnAbstract  {
+State state;
+Double reward;
+Boolean done;
+ }
+
+ abstract class EnvironmentParametersAbstract  {
+ List<String> discreteStateVariableNames;
+ List<String> continuousStateVariableNames;
+ List<Integer> discreteActionsSpace;
+  }
+
+
+class StepReturn {
+}
+
+class EnvironmentParameters {
+List<Integer> stateSpace;
+double R_FAIL, R_MOVE, R_EXIT;
+double GAMMA, ALPHA
+double[][] R;
+}
+
+class SixRooms {
++ boolean isTerminalState(State state);
++ List<Integer> getFeasibleActions(State state)
+}
+
+class MountainCar {
++ boolean isTerminalState(State state);
+}
+
+
+Environment  <|-- SixRooms
+Environment  <|-- MountainCar
+
+
+
+StepReturnAbstract  <|-- StepReturn
+EnvironmentParametersAbstract  <|-- EnvironmentParameters
+
+
+
+
+
+@enduml
