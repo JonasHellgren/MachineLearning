@@ -1,4 +1,4 @@
-package swing;
+package java_ai_gym.swing;
 
 public class Position2D {
     public double x;

@@ -1,4 +1,4 @@
-package swing;
+package java_ai_gym.swing;
 
 //range:   0...r0............r1...rMax   where r0-0=rMax-r1=Margin
 public class ScaleLinear {

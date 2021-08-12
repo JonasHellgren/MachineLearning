@@ -1,4 +1,4 @@
-package swing;
+package java_ai_gym.swing;
 
 public class LineData {
     public double [] xData;

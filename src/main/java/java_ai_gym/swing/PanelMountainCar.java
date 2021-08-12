@@ -1,6 +1,4 @@
-package swing;
-
-import javafx.geometry.Pos;
+package java_ai_gym.swing;
 
 import javax.swing.*;
 import java.awt.*;

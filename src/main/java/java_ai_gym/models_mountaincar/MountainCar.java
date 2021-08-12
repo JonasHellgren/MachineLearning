@@ -1,10 +1,10 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_mountaincar;
+package java_ai_gym.models_mountaincar;
 
-import swing.*;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Environment;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.EnvironmentParametersAbstract;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
+import java_ai_gym.models_common.Environment;
+import java_ai_gym.models_common.EnvironmentParametersAbstract;
+import java_ai_gym.models_common.State;
+import java_ai_gym.models_common.StepReturn;
+import java_ai_gym.swing.*;
 
 import javax.swing.*;
 import java.util.ArrayList;

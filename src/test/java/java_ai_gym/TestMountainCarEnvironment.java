@@ -1,13 +1,11 @@
-package qlearning_objoriented;
+package java_ai_gym;
 
+import java_ai_gym.models_common.State;
+import java_ai_gym.models_common.StepReturn;
+import java_ai_gym.models_mountaincar.MountainCar;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import org.junit.jupiter.api.Disabled;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.StepReturn;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_mountaincar.MountainCar;
 
 
 import java.util.concurrent.TimeUnit;
