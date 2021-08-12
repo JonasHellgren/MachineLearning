@@ -142,7 +142,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         return outFromNetwork.getDouble(action);
     }
 
-    public double findMaxQTargetNetwork(State state) {
+    private double findMaxQTargetNetwork(State state) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
@@ -158,7 +158,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     }
 
 
-    public DataSetIterator createTrainingData(List<Experience> miniBatch){
+    public DataSetIterator createTrainingData(List<Experience> miniBatch) {
 
         INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
         INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
