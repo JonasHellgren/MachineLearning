@@ -1,6 +1,6 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
+package java_ai_gym.models_sixrooms;
 
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.*;
+import java_ai_gym.models_common.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SixRooms implements Environment {
 
-    public EnvironmentParameters parameters = this.new EnvironmentParameters();
+    public SixRooms.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
@@ -75,7 +75,7 @@ public class SixRooms implements Environment {
     //methods
 
 
-    public EnvironmentParameters getParameters() {
+    public SixRooms.EnvironmentParameters getParameters() {
         return parameters;
     }
 
@@ -111,6 +111,7 @@ public class SixRooms implements Environment {
         return parameters.transitionMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
     }
 
+
     public void PrintQsa(Agent agent) {
         System.out.println("Qsa -----------------------------");
         State s = new State(agent.getState());
@@ -122,6 +123,7 @@ public class SixRooms implements Environment {
             System.out.println();
         }
     }
+
 
     public void PrintQsaBestAction(Agent agent) {
         System.out.println("Qsa(s,best action) ----------------------------- ");

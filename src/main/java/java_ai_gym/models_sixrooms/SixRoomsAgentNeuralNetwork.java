@@ -1,6 +1,10 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
+package java_ai_gym.models_sixrooms;
 
 
+import java_ai_gym.models_common.Agent;
+import java_ai_gym.models_common.Experience;
+import java_ai_gym.models_common.ReplayBuffer;
+import java_ai_gym.models_common.State;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -18,10 +22,7 @@ import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Experience;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.ReplayBuffer;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +143,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
         return outFromNetwork.getDouble(action);
     }
 
-    public double findMaxQTargetNetwork(State state) {
+    private double findMaxQTargetNetwork(State state) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
@@ -269,4 +270,3 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
 
 
 }
-

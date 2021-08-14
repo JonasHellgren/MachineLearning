@@ -1,20 +1,14 @@
-package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
+package java_ai_gym.models_sixrooms;
+
 
 import com.google.common.primitives.Doubles;
 
+import java_ai_gym.models_common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
-
 
 import java.util.List;
 import java.util.Random;
-
-/***
- * Agent implementation that solves simple toy problem: find exit room
- */
-
 public class SixRoomsAgentTabular implements Agent {
 
     private static final Logger logger = LoggerFactory.getLogger(SixRoomsAgentTabular.class);

@@ -1,7 +1,5 @@
 package java_ai_gym.models_common;
 
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
