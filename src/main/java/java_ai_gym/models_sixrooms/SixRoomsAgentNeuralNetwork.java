@@ -134,8 +134,7 @@ public class SixRoomsAgentNeuralNetwork implements Agent {
     @Override
     public double readMemory(State state, int action) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
-        INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
-        return outFromNetwork.getDouble(action);
+        return readMemory(inputNetwork,  action);
     }
 
     public double readMemory(INDArray inputNetwork, int action) {

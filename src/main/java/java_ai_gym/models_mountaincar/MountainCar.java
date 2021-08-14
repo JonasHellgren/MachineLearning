@@ -6,7 +6,6 @@ import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.swing.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,17 +35,15 @@ import java.util.List;
  *          Episode length is greater than 200
  */
 
-public class MountainCar implements Environment {
+public class MountainCar extends Environment {
 
     public MountainCar.EnvironmentParameters parameters = this.new EnvironmentParameters();
+    final  int FRAME_WEIGHT =600;
+    final  int FRAME_HEIGHT =300;
+    final int FRAME_MARGIN =50;  //frame margin
 
-    private FrameEnvironment frame;
     public PanelMountainCar panel;
-    final  int W=600;
-    final  int H=300;  //frame size
-    final int MARGIN=50;  //frame margin
     final  double CAR_RADIUS=0.05;
-
 
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
@@ -67,8 +64,6 @@ public class MountainCar implements Environment {
         public int nofActions;
         public int minAction;
 
-
-
         public EnvironmentParameters() {
         }
     }
@@ -82,16 +77,17 @@ public class MountainCar implements Environment {
         parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
         parameters.nofActions = parameters.discreteActionsSpace.size();
 
-        frame=new FrameEnvironment();
-        ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,MARGIN,W-MARGIN,false,MARGIN);
-        ScaleLinear yScaler=new ScaleLinear(0,1,MARGIN,H-MARGIN,true,MARGIN);
+        frame=new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar");
+        ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,
+                FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
+                false, FRAME_MARGIN);
+        ScaleLinear yScaler=new ScaleLinear(0,1, FRAME_MARGIN,
+                FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
+
         LineData roadData=createRoadData();
         Position2D carPositionInit=new Position2D(0.0,height(0.0));
         panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
         frame.add(panel);
-        frame.setSize(W, H);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.repaint();
     }
 
@@ -112,8 +108,6 @@ public class MountainCar implements Environment {
         return new LineData(
                 xList.stream().mapToDouble(d -> d).toArray(),
                 yList.stream().mapToDouble(d -> d).toArray());
-
-
     }
 
 

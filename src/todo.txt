@@ -4,9 +4,14 @@
 undvika calcOutX calcOutY, sätt flip som klass parameter  x
 marginal i Frame  X
 skapa separat package: Java based open GYM  x
+
+Environment som abstract isf interface x
+getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters?
+Agent interface döps om till Eploratory
+Bas klasser för agent nn resp agent tabular
+
 binary string variable i State   https://stackoverflow.com/questions/7602665/store-an-array-in-hashmap/7602742
 testa med regel baserad action, tex 2 om pos>tbd och 0 om pos<tbd
-Undivk code duplication genom tex ytterligare interface AgentNetwork som har default method av bla calcOutFromNetwork
 prova relu som activ function för six rooms
 
 när tid

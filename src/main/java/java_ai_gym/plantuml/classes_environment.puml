@@ -36,8 +36,6 @@ class SixRooms {
 + List<Integer> getFeasibleActions(State state)
 }
 
-class SixRooms_StateAsInteger {
-}
 
 class SixRooms_StateAsBinaryString {
 }
@@ -49,8 +47,7 @@ class MountainCar {
 Environment  <|-- SixRooms
 Environment  <|-- MountainCar
 
-SixRooms  <|-- SixRooms_StateAsInteger
-SixRooms_StateAsInteger  <|-- SixRooms_StateAsBinaryString
+SixRooms  <|-- SixRooms_StateAsBinaryString
 
 
 StepReturnAbstract  <|-- StepReturn

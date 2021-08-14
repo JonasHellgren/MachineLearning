@@ -1,10 +1,14 @@
 package java_ai_gym.models_common;
 
-public interface Environment {
-    EnvironmentParametersAbstract getParameters();
-    StepReturn step(int action, State state);  //polymorphism: step can return any sub class of StepReturnAbstract
-    boolean isTerminalState(State state);
-    default  double clip(double variable, double minValue, double maxValue) {
+import java_ai_gym.swing.FrameEnvironment;
+
+public abstract class  Environment {
+
+    protected FrameEnvironment frame;
+    protected abstract EnvironmentParametersAbstract getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract
+    protected abstract StepReturn step(int action, State state);
+    protected abstract boolean isTerminalState(State state);
+    protected double clip(double variable, double minValue, double maxValue) {
         double lowerThanMax= Math.min(variable, maxValue);
         return Math.max(lowerThanMax, minValue);
     }

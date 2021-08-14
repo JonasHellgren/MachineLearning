@@ -52,7 +52,7 @@ public class TestLearningNeuralNetworkSixRooms {
         System.out.println(agent.network.summary());
         env.showPolicy(agent);
 
-        Assert.assertTrue(agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS)<0.02);
+        Assert.assertTrue(agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS)<0.05);
 
         agent.state.setVariable("roomNumber", 0);
         Assert.assertEquals(4,agent.chooseBestAction(agent.state));

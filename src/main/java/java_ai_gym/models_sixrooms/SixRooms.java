@@ -12,7 +12,7 @@ import java.util.List;
  * TransitionMatrix expresses new room number, for ex action 5 in room 0 gives new room is 0."
  */
 
-public class SixRooms implements Environment {
+public class SixRooms extends Environment {
 
     public SixRooms.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
