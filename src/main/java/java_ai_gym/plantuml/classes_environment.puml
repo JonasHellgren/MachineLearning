@@ -2,9 +2,14 @@
 'https://plantuml.com/class-diagram
 
 
-interface Environment {
+abstract class Environment {
+FrameEnvironment frame
+int W
+int H
++ EnvironmentParametersAbstract getParameters();
 + StepReturnAbstract step(action, State state)
 + boolean isTerminalState(State state)
++ double clip(double variable, double minValue, double maxValue)
 }
 
 abstract class StepReturnAbstract  {
@@ -45,7 +50,7 @@ Environment  <|-- SixRooms
 Environment  <|-- MountainCar
 
 SixRooms  <|-- SixRooms_StateAsInteger
-SixRooms  <|-- SixRooms_StateAsBinaryString
+SixRooms_StateAsInteger  <|-- SixRooms_StateAsBinaryString
 
 
 StepReturnAbstract  <|-- StepReturn

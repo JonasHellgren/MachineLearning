@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-interface Agent {
+interface Exploratory {
     + chooseBestAction(State state);
     + findMaxQ(State state);
     + chooseRandomAction(List<Integer> aSet);
@@ -41,7 +41,7 @@ List<Double> bellmanErrorList
 + abstract MultiLayerNetwork createNetwork()
 }
 
-Agent  <|-- AgentTabular
-Agent  <|-- AgentNeuralNetwork
+Exploratory  <|-- AgentTabular
+Exploratory  <|-- AgentNeuralNetwork
 
 @enduml
