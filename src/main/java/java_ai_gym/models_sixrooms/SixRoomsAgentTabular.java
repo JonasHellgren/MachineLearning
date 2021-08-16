@@ -26,6 +26,7 @@ public class SixRoomsAgentTabular extends AgentTabular {
         this.NUM_OF_EPISODES = 10000;
     }
 
+    //TODO remove following three
     @Override
     public double getRB_EPS() {
         return 0;

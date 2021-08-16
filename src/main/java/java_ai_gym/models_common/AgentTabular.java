@@ -3,13 +3,12 @@ package java_ai_gym.models_common;
 
 import com.google.common.primitives.Doubles;
 
-import java_ai_gym.models_sixrooms.SixRooms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Random;
-public abstract class AgentTabular implements Exploratory {
+public abstract class AgentTabular implements Learnable {
 
     private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
     public State state;

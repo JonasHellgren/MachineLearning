@@ -112,7 +112,7 @@ public class SixRooms extends Environment {
     }
 
 
-    public void PrintQsa(Exploratory agent) {
+    public void PrintQsa(Learnable agent) {
         System.out.println("Qsa -----------------------------");
         State s = new State(agent.getState());
         for (int roomNr : parameters.discreteStateSpace) {
@@ -125,7 +125,7 @@ public class SixRooms extends Environment {
     }
 
 
-    public void PrintQsaBestAction(Exploratory agent) {
+    public void PrintQsaBestAction(Learnable agent) {
         System.out.println("Qsa(s,best action) ----------------------------- ");
         State s = new State(agent.getState());
         for (int roomNr : parameters.discreteStateSpace) {
@@ -135,7 +135,7 @@ public class SixRooms extends Environment {
         System.out.println();
     }
 
-    public void showPolicy(Exploratory agent) {
+    public void showPolicy(Learnable agent) {
         // we consider every single state as a starting state
         // until we find the terminal state: we walk according to best action
         final int MAX_NO_STEPS=10;

@@ -1,7 +1,6 @@
-package java_ai_gym.temp;
+package java_ai_gym.models_common;
 
 
-import java_ai_gym.models_common.*;
 import java_ai_gym.models_sixrooms.SixRooms;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.BackpropType;
@@ -27,10 +26,10 @@ import java.util.List;
 import java.util.Random;
 
 /***
- * Following paramaters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
+ * Following parameters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
  */
 
-public class SixRoomsAgentNeuralNetwork implements Exploratory {
+public class SixRoomsAgentNeuralNetwork implements Learnable {
 
     private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
     public State state;
@@ -97,13 +96,13 @@ public class SixRoomsAgentNeuralNetwork implements Exploratory {
     }
 
     @Override
-    public int chooseBestAction(State state) {
-        INDArray outFromNetwork= calcOutFromNetwork(state, network);
+    public int chooseBestAction(State state,EnvironmentParametersAbstract envParams) {
+        INDArray outFromNetwork = calcOutFromNetwork(state, network);
         return outFromNetwork.argMax().getInt();
     }
 
     @Override
-    public double findMaxQ(State state) {
+    public double findMaxQ(State state,EnvironmentParametersAbstract envParams) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
         return outFromNetwork.max().getDouble();
@@ -115,22 +114,22 @@ public class SixRoomsAgentNeuralNetwork implements Exploratory {
     }
 
     @Override
-    public int chooseAction(double fractionEpisodesFinished) {
+    public int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams) {
         double probRandAction=PROBABILITY_RANDOM_ACTION_START+
                 (PROBABILITY_RANDOM_ACTION_END-PROBABILITY_RANDOM_ACTION_START)*fractionEpisodesFinished;
 
         return (Math.random() < probRandAction) ?
                 chooseRandomAction(envParams.discreteActionsSpace) :
-                chooseBestAction(state);
+                chooseBestAction(state,envParams);
     }
 
     @Override
-    public void writeMemory(State oldState, Integer Action, Double value) {
+    public void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams) {
         //not valid for NN
     }
 
     @Override
-    public double readMemory(State state, int action) {
+    public double readMemory(State state, int action,EnvironmentParametersAbstract envParams) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         return readMemory(inputNetwork,  action);
     }

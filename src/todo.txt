@@ -7,8 +7,9 @@ skapa separat package: Java based open GYM  x
 
 Environment som abstract isf interface x
 getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters? onödig  X
-Agent interface döps om till Eploratory
-Bas klasser för agent nn resp agent tabular
+Agent interface döps om till Learnable
+Bas klass för agent tabular x
+Bas klass för agent nn
 
 binary string variable i State   https://stackoverflow.com/questions/7602665/store-an-array-in-hashmap/7602742
 testa med regel baserad action, tex 2 om pos>tbd och 0 om pos<tbd

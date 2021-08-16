@@ -2,6 +2,7 @@ package java_ai_gym;
 
 
 import java_ai_gym.models_common.Experience;
+import java_ai_gym.models_common.SixRoomsAgentNeuralNetwork;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_sixrooms.SixRooms;
@@ -12,7 +13,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
+
 
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Random;
 public class TestLearningNeuralNetworkSixRooms {
     private static final Logger logger = LoggerFactory.getLogger(TestLearningNeuralNetworkSixRooms.class);
 
-    /*
+
 
     State sNew = new State();
     SixRooms env = new SixRooms();
@@ -58,16 +59,16 @@ public class TestLearningNeuralNetworkSixRooms {
         Assert.assertTrue(agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS)<0.05);
 
         agent.state.setVariable("roomNumber", 0);
-        Assert.assertEquals(4,agent.chooseBestAction(agent.state));
+        Assert.assertEquals(4,agent.chooseBestAction(agent.state,env.parameters));
 
         agent.state.setVariable("roomNumber", 1);
-        Assert.assertEquals(5,agent.chooseBestAction(agent.state));
+        Assert.assertEquals(5,agent.chooseBestAction(agent.state,env.parameters));
 
         agent.state.setVariable("roomNumber", 2);
-        Assert.assertEquals(3,agent.chooseBestAction(agent.state));
+        Assert.assertEquals(3,agent.chooseBestAction(agent.state,env.parameters));
 
         agent.state.setVariable("roomNumber", 4);
-        Assert.assertEquals(5,agent.chooseBestAction(agent.state));
+        Assert.assertEquals(5,agent.chooseBestAction(agent.state,env.parameters));
 
 
 
@@ -82,7 +83,7 @@ public class TestLearningNeuralNetworkSixRooms {
         int nofSteps=0;
 
         do {
-            int aChosen=agent.chooseAction(fEpisodes);
+            int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_SIZE);
@@ -108,5 +109,5 @@ public class TestLearningNeuralNetworkSixRooms {
         } while (!stepReturn.termState & nofSteps<10);
     }
 
-*/
+
 }

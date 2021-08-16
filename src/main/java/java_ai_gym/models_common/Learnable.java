@@ -3,7 +3,7 @@ package java_ai_gym.models_common;
 
 import java.util.List;
 
-public interface Exploratory {
+public interface Learnable {
 
 
     State getState();
@@ -13,8 +13,6 @@ public interface Exploratory {
     int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams);
     void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams);
     double readMemory(State state, int Action,EnvironmentParametersAbstract envParams);
-
-
 
     //TODO move following methods to NNAgent
     double getRB_EPS();
