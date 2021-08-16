@@ -6,7 +6,7 @@ marginal i Frame  X
 skapa separat package: Java based open GYM  x
 
 Environment som abstract isf interface x
-getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters?
+getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters? onödig  X
 Agent interface döps om till Eploratory
 Bas klasser för agent nn resp agent tabular
 

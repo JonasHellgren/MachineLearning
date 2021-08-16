@@ -1,5 +1,6 @@
 package java_ai_gym;
 
+import java_ai_gym.models_common.EnvironmentParametersAbstract;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_mountaincar.MountainCar;
@@ -17,9 +18,11 @@ public class TestMountainCarEnvironment {
 
     @Test @Ignore
     public void EnvironmentParameters() {
-        Assert.assertEquals(env.parameters.continuousStateVariableNames.get(0),"position");
-        Assert.assertEquals(env.parameters.continuousStateVariableNames.get(1),"velocity");
-        Assert.assertEquals(env.parameters.discreteActionsSpace.size(),3,0.01);
+        Assert.assertEquals("position",env.parameters.continuousStateVariableNames.get(0));
+        Assert.assertEquals("velocity",env.parameters.continuousStateVariableNames.get(1));
+        Assert.assertEquals(3,env.parameters.discreteActionsSpace.size(),0.01);
+        Assert.assertEquals(-1.2,env.parameters.MIN_POSITION,0.01);
+
     }
 
 

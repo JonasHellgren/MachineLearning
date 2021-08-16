@@ -48,21 +48,18 @@ public class MountainCar extends Environment {
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
 
-        public final double R_MOVE = -1.0;  //move transition
-        public final double R_EXIT = 0;  //finding exit state reward
+        public final double MIN_POSITION = -1.2;
+        public final double MAX_POSITION = 0.6;
+        public final double MAX_SPEED = 0.07;
+        public final double GOAL_POSITION = 0.5;
+        public final double GOAL_VELOCITY = 0;
+        public final int MAX_NOF_STEPS =200;
 
-        public final double min_position = -1.2;
-        public final double max_position = 0.6;
-        public final double max_speed = 0.07;
-        public final double goal_position = 0.5;
-        public final double goal_velocity = 0;
-        public final int max_nof_steps=200;
+        public final double FORCE = 0.001;
+        public final double GRAVITY = 0.0025;
 
-        public final double force = 0.001;
-        public final double gravity = 0.0025;
-
-        public int nofActions;
-        public int minAction;
+        public int NOF_ACTIONS;
+        public int MIN_ACTION;
 
         public EnvironmentParameters() {
         }
@@ -74,11 +71,11 @@ public class MountainCar extends Environment {
         parameters.continuousStateVariableNames.add("velocity");
         parameters.discreteStateVariableNames.add("nofSteps");
         parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1, 2));
-        parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
-        parameters.nofActions = parameters.discreteActionsSpace.size();
+        parameters.MIN_ACTION = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
+        parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
 
         frame=new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar");
-        ScaleLinear xScaler=new ScaleLinear(parameters.min_position,parameters.max_position,
+        ScaleLinear xScaler=new ScaleLinear(parameters.MIN_POSITION,parameters.MAX_POSITION,
                 FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
                 false, FRAME_MARGIN);
         ScaleLinear yScaler=new ScaleLinear(0,1, FRAME_MARGIN,
@@ -98,7 +95,7 @@ public class MountainCar extends Environment {
         List<Double> yList=new ArrayList<>();
         for (int i = 0; i < NOF_POINTS ; i++) {
             double f=(double) i/NOF_POINTS;
-            double x=parameters.min_position*(1-f)+parameters.max_position*f;
+            double x=parameters.MIN_POSITION *(1-f)+parameters.MAX_POSITION *f;
             State state = new State();
             state.createContinuousVariable("position",x);
             double y=height(x);
@@ -111,10 +108,6 @@ public class MountainCar extends Environment {
     }
 
 
-    @Override
-    public EnvironmentParametersAbstract getParameters() {
-        return parameters;
-    }
 
     @Override
     public StepReturn step(int action, State state) {
@@ -122,10 +115,10 @@ public class MountainCar extends Environment {
         StepReturn stepReturn = new StepReturn();
         double position=state.getContinuousVariable("position");
         double velocity=state.getContinuousVariable("velocity");
-        velocity += (action - 1) * parameters.force + Math.cos(3 * position) * (-parameters.gravity);
+        velocity += (action - 1) * parameters.FORCE + Math.cos(3 * position) * (-parameters.GRAVITY);
         position += velocity;
-        position = this.clip(position, parameters.min_position, parameters.max_position);
-        velocity=(position <= parameters.min_position & velocity < 0)?0:velocity;
+        position = this.clip(position, parameters.MIN_POSITION, parameters.MAX_POSITION);
+        velocity=(position <= parameters.MIN_POSITION & velocity < 0)?0:velocity;
         newState.setVariable("position", position);
         newState.setVariable("velocity", velocity);
         stepReturn.state = newState;
@@ -136,9 +129,9 @@ public class MountainCar extends Environment {
 
     @Override
     public boolean isTerminalState(State state) {
-        return (state.getContinuousVariable("position")>=parameters.goal_position &
-                state.getContinuousVariable("velocity")>=parameters.goal_velocity |
-                state.getDiscreteVariable("nofSteps")>=parameters.max_nof_steps);
+        return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
+                state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY |
+                state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS);
     }
 
     public double height(State state) {

@@ -5,7 +5,6 @@ import java_ai_gym.swing.FrameEnvironment;
 public abstract class  Environment {
 
     protected FrameEnvironment frame;
-    protected abstract EnvironmentParametersAbstract getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
     protected double clip(double variable, double minValue, double maxValue) {
