@@ -1,10 +1,8 @@
-package java_ai_gym.models_sixrooms;
+package java_ai_gym.temp;
 
 
-import java_ai_gym.models_common.Agent;
-import java_ai_gym.models_common.Experience;
-import java_ai_gym.models_common.ReplayBuffer;
-import java_ai_gym.models_common.State;
+import java_ai_gym.models_common.*;
+import java_ai_gym.models_sixrooms.SixRooms;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -32,9 +30,9 @@ import java.util.Random;
  * Following paramaters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
  */
 
-public class SixRoomsAgentNeuralNetwork implements Agent {
+public class SixRoomsAgentNeuralNetwork implements Exploratory {
 
-    private static final Logger logger = LoggerFactory.getLogger(SixRoomsAgentTabular.class);
+    private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
     public State state;
     public int nofFits=0;
 

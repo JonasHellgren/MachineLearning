@@ -53,11 +53,11 @@ public class SixRooms extends Environment {
         public EnvironmentParameters() {
         }
 
-        public int getIdxState(State state) {
+        protected int getIdxState(State state) {
             return state.getDiscreteVariable("roomNumber") - parameters.minRoomNumber;
         }
 
-        public int getIdxAction(int action) {
+        protected int getIdxAction(int action) {
             return action - parameters.minAction;
         }
     }
@@ -112,30 +112,30 @@ public class SixRooms extends Environment {
     }
 
 
-    public void PrintQsa(Agent agent) {
+    public void PrintQsa(Exploratory agent) {
         System.out.println("Qsa -----------------------------");
         State s = new State(agent.getState());
         for (int roomNr : parameters.discreteStateSpace) {
             for (int action : parameters.discreteActionsSpace) {
                 s.setVariable("roomNumber", roomNr);
-                System.out.printf("%.3f    ", agent.readMemory(s, action));
+                System.out.printf("%.3f    ", agent.readMemory(s, action,parameters));
             }
             System.out.println();
         }
     }
 
 
-    public void PrintQsaBestAction(Agent agent) {
+    public void PrintQsaBestAction(Exploratory agent) {
         System.out.println("Qsa(s,best action) ----------------------------- ");
         State s = new State(agent.getState());
         for (int roomNr : parameters.discreteStateSpace) {
             s.setVariable("roomNumber", roomNr);
-            System.out.printf("roomNr:"+roomNr+", Q: %.1f    ", agent.findMaxQ(s));
+            System.out.printf("roomNr:"+roomNr+", Q: %.1f    ", agent.findMaxQ(s,parameters));
         }
         System.out.println();
     }
 
-    public void showPolicy(Agent agent) {
+    public void showPolicy(Exploratory agent) {
         // we consider every single state as a starting state
         // until we find the terminal state: we walk according to best action
         final int MAX_NO_STEPS=10;
@@ -147,7 +147,7 @@ public class SixRooms extends Environment {
             System.out.print("Policy: " + s.getDiscreteVariable("roomNumber"));
             int nofSteps=0;
             while (!isTerminalState(s) & nofSteps<MAX_NO_STEPS) {
-                int bestA = agent.chooseBestAction(s);
+                int bestA = agent.chooseBestAction(s,parameters);
                 stepReturn=step(bestA,s);
                 s.copyState(stepReturn.state);
                 System.out.print(" -> " + s.getDiscreteVariable("roomNumber"));

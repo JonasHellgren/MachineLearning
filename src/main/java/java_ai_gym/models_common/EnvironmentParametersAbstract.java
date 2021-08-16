@@ -12,4 +12,11 @@ public abstract class EnvironmentParametersAbstract {
 
     public List<String> continuousStateVariableNames=new ArrayList<>();
     public List<Integer> discreteActionsSpace=new ArrayList<>();
+
+    protected abstract int getIdxState(State state);
+    protected abstract  int getIdxAction(int action);
+
+    public List<Integer> getDiscreteActionsSpace() {
+        return discreteActionsSpace;
+    }
 }

@@ -4,6 +4,7 @@ package java_ai_gym;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_sixrooms.SixRooms;
+import java_ai_gym.models_common.AgentTabular;
 import java_ai_gym.models_sixrooms.SixRoomsAgentTabular;
 import org.junit.Test;
 
@@ -40,11 +41,11 @@ public class TestLearningTabularSixRooms {
 
         StepReturn stepReturn;
         do {
-            int aChosen = agent.chooseAction(fEpisodes);
+            int aChosen = agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
             sNew.copyState(stepReturn.state);
-            double maxQ = agent.findMaxQ(sNew);
-            double qOld = agent.readMemory(agent.state, aChosen);
+            double maxQ = agent.findMaxQ(sNew,env.parameters);
+            double qOld = agent.readMemory(agent.state, aChosen,env.parameters);
             double qNew = qOld + agent.ALPHA * (stepReturn.reward + agent.GAMMA * maxQ - qOld);
 
             if (printFlag) {
@@ -52,7 +53,9 @@ public class TestLearningTabularSixRooms {
                 System.out.println(stepReturn);
             }
 
-            agent.writeMemory(agent.state, aChosen, stepReturn.termState ? stepReturn.reward : qNew);
+            agent.writeMemory(agent.state,
+                    aChosen, stepReturn.termState ? stepReturn.reward : qNew,
+                    env.parameters);
             agent.state.copyState(sNew);
         } while (!stepReturn.termState);
     }

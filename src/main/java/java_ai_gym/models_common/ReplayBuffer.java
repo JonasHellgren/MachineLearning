@@ -41,7 +41,7 @@ public class ReplayBuffer {
         return miniBatch;
     }
 
-    public List<Experience> getMiniBatchPrioritizedExperienceReplay(int batchLength, Agent agent, double fEpisodes) {
+    public List<Experience> getMiniBatchPrioritizedExperienceReplay(int batchLength, Exploratory agent, double fEpisodes) {
         this.rb_eps=agent.getRB_EPS();
         this.rb_alp=agent.getRB_ALP();
         this.beta0=agent.getBETA0();

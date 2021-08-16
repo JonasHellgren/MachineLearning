@@ -5,13 +5,14 @@ import java_ai_gym.models_common.Experience;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_sixrooms.SixRooms;
-import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
+//import java_ai_gym.temp.SixRoomsAgentNeuralNetwork;
 import org.jcodec.common.Assert;
 import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4jBackend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
 
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.Random;
 
 public class TestLearningNeuralNetworkSixRooms {
     private static final Logger logger = LoggerFactory.getLogger(TestLearningNeuralNetworkSixRooms.class);
+
+    /*
 
     State sNew = new State();
     SixRooms env = new SixRooms();
@@ -105,5 +108,5 @@ public class TestLearningNeuralNetworkSixRooms {
         } while (!stepReturn.termState & nofSteps<10);
     }
 
-
+*/
 }

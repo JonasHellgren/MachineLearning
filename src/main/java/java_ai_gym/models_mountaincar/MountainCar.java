@@ -63,6 +63,16 @@ public class MountainCar extends Environment {
 
         public EnvironmentParameters() {
         }
+
+        @Override
+        protected int getIdxState(State state) {
+            return 0;
+        }
+
+        @Override
+        protected int getIdxAction(int action) {
+            return 0;
+        }
     }
 
     //constructor
