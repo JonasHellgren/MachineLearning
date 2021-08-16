@@ -5,7 +5,6 @@ import java.util.List;
 
 public interface Learnable {
 
-
     State getState();
     int chooseBestAction(State state, EnvironmentParametersAbstract envParams);
     double findMaxQ(State state,EnvironmentParametersAbstract envParams);
@@ -14,10 +13,4 @@ public interface Learnable {
     void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams);
     double readMemory(State state, int Action,EnvironmentParametersAbstract envParams);
 
-    //TODO move following methods to NNAgent
-    double getRB_EPS();
-
-    double getRB_ALP();
-
-    double getBETA0();
 }

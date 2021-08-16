@@ -26,21 +26,6 @@ public class SixRoomsAgentTabular extends AgentTabular {
         this.NUM_OF_EPISODES = 10000;
     }
 
-    //TODO remove following three
-    @Override
-    public double getRB_EPS() {
-        return 0;
-    }
-
-    @Override
-    public double getRB_ALP() {
-        return 0;
-    }
-
-    @Override
-    public double getBETA0() {
-        return 0;
-    }
 
     protected void createInitMemory(SixRooms.EnvironmentParameters envParams) {
         Qsa = new double[envParams.nofStates][envParams.nofActions];

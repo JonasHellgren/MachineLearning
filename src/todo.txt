@@ -7,15 +7,18 @@ skapa separat package: Java based open GYM  x
 
 Environment som abstract isf interface x
 getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters? onödig  X
-Agent interface döps om till Learnable
+Agent interface döps om till Learnable x
 Bas klass för agent tabular x
-Bas klass för agent nn
+Bas klass för agent nn  x
+Warning: Initializing ND4J with Generic x86 binary on a CPU with AVX/AVX2 support
+testa med regel baserad action för MountainCar, tex 2 om pos>tbd och 0 om pos<tbd
+MountainCar agent
 
+
+
+när tid:
 binary string variable i State   https://stackoverflow.com/questions/7602665/store-an-array-in-hashmap/7602742
-testa med regel baserad action, tex 2 om pos>tbd och 0 om pos<tbd
 prova relu som activ function för six rooms
-
-när tid
 GPU vs CPU för riktigt stor nn/batch
 normalize regression examples
 udemu ai4 bandit example

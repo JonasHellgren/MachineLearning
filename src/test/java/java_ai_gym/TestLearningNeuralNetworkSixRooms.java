@@ -2,11 +2,12 @@ package java_ai_gym;
 
 
 import java_ai_gym.models_common.Experience;
-import java_ai_gym.models_common.SixRoomsAgentNeuralNetwork;
+import java_ai_gym.models_common.AgentNeuralNetwork;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_sixrooms.SixRooms;
 //import java_ai_gym.temp.SixRoomsAgentNeuralNetwork;
+import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
 import org.jcodec.common.Assert;
 import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -79,20 +80,20 @@ public class TestLearningNeuralNetworkSixRooms {
         // a single episode: the agent finds a path from state s to the exit state
 
         StepReturn stepReturn;
-        int miniBatchSize=SixRoomsAgentNeuralNetwork.MINI_BATCH_SIZE;
+        int miniBatchSize= agent.MINI_BATCH_SIZE;
         int nofSteps=0;
 
         do {
             int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
-            agent.replayBuffer.addExperience(experience, agent.REPLAY_BUFFER_SIZE);
+            agent.replayBuffer.addExperience(experience);
 
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize,agent,fEpisodes);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize,fEpisodes);
 
             if (miniBatch.size()==miniBatchSize) {
 
-                DataSetIterator iterator = agent.createTrainingData(miniBatch);
+                DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
                 agent.network.fit(iterator);
 
                 if (printFlag) {

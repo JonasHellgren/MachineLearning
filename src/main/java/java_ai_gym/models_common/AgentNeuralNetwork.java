@@ -29,75 +29,46 @@ import java.util.Random;
  * Following parameters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
  */
 
-public class SixRoomsAgentNeuralNetwork implements Learnable {
+public abstract class AgentNeuralNetwork implements Learnable {
 
     private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
     public State state;
-    public int nofFits=0;
-
-    public final ReplayBuffer replayBuffer = new ReplayBuffer();
+    public  ReplayBuffer replayBuffer;
     public MultiLayerNetwork network;   //neural network memory
     public MultiLayerNetwork networkTarget;   //neural network memory
 
-    private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
     private final Random random = new Random();
+
+    public int nofFits=0;
     double bellmanErrorStep;
     public List<Double> bellmanErrorList=new ArrayList<>();
 
-    public final int REPLAY_BUFFER_SIZE = 100;
-    public static final int MINI_BATCH_SIZE = 30;
-    public static final int SEED = 12345;  //Random number generator seed, for reproducibility
-    private static final int NOF_OUTPUTS = 6;
-    private static final int NOF_FEATURES = 1;
-    private static final int  NOF_NEURONS_HIDDEN=10;
-    private static final double L2_REGULATION=0.000001;
-    private static final double LEARNING_RATE =0.1;
-    private static final double MOMENTUM=0.8;
-    public  final double RB_EPS=0.1;
-    public  final double RB_ALP=0.9;  //0 <=> uniform distribution from bellman error for minibatch selection
-    public  final double BETA0=0.1;
+    protected  int SEED = 12345;  //Random number generator seed, for reproducibility
 
-    public double GAMMA = 1.0;  // gamma discount factor
-    public final double ALPHA = 1.0;  // learning rate
-    public final double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
-    public final double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public final int NUM_OF_EPISODES = 1000; // number of iterations
-    private static final int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
+    protected  Integer NOF_OUTPUTS ;
+    protected  Integer NOF_FEATURES ;
+    protected  Integer  NOF_NEURONS_HIDDEN;
 
-    public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
-        this.envParams = envParams;
-        state = new State();
-        for (String varName : envParams.discreteStateVariableNames)
-            state.createDiscreteVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
+    public  int MINI_BATCH_SIZE = 30;
+    protected  double L2_REGULATION=0.000001;
+    protected  double LEARNING_RATE =0.1;
+    protected  double MOMENTUM=0.8;
 
-        network= createNetwork();
-        networkTarget= createNetwork();
+    protected double GAMMA = 1.0;  // gamma discount factor
+    protected  double ALPHA = 1.0;  // learning rate in Q-learning update
+    protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
+    protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
+    public  int NUM_OF_EPISODES = 1000; // number of iterations
+    protected int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
-        logger.info("Neural network based six rooms agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
-    }
-
+    @Override
     public State getState() {
         return state;
     }
 
     @Override
-    public double getRB_EPS() {
-        return RB_EPS;
-    }
-
-    @Override
-    public double getRB_ALP() {
-        return RB_ALP;
-    }
-
-    @Override
-    public double getBETA0() {
-        return BETA0;
-    }
-
-    @Override
     public int chooseBestAction(State state,EnvironmentParametersAbstract envParams) {
-        INDArray outFromNetwork = calcOutFromNetwork(state, network);
+        INDArray outFromNetwork = calcOutFromNetwork(state, network,envParams);
         return outFromNetwork.argMax().getInt();
     }
 
@@ -139,13 +110,13 @@ public class SixRoomsAgentNeuralNetwork implements Learnable {
         return outFromNetwork.getDouble(action);
     }
 
-    private double findMaxQTargetNetwork(State state) {
+    private double findMaxQTargetNetwork(State state,EnvironmentParametersAbstract envParams) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
     }
 
-    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network) {
+    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network,EnvironmentParametersAbstract envParams) {
         INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
         return network.output(inputNetwork, false);
     }
@@ -155,7 +126,7 @@ public class SixRoomsAgentNeuralNetwork implements Learnable {
     }
 
 
-    public DataSetIterator createTrainingData(List<Experience> miniBatch) {
+    public DataSetIterator createTrainingData(List<Experience> miniBatch,EnvironmentParametersAbstract envParams) {
 
         INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
         INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
@@ -167,7 +138,7 @@ public class SixRoomsAgentNeuralNetwork implements Learnable {
             Experience exp=miniBatch.get(idxSample);
             INDArray inputNetwork = exp.s.getStateVariablesAsNetworkInput(envParams);
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
-            outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork);
+            outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork,envParams);
             changeBellmanErrorVariableInBufferItem(exp);
 
             //System.out.println("priority:"+exp.pExpRep.priority+", bellmanErrorStep:"+bellmanErrorStep);
@@ -207,11 +178,11 @@ public class SixRoomsAgentNeuralNetwork implements Learnable {
     //y=    r  (term state)
     //      r+gama*maxQ(s’)-q(s)  (not term state)
     //skipped ..*(1- alpha ), made learning less stable
-    private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork) {
+    private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep= exp.stepReturn.termState ?
                 exp.stepReturn.reward - qOld:
-                exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state) - qOld;
+                exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state,envParams) - qOld;
         double alpha=exp.pExpRep.w*ALPHA;
         double y=qOld*1 + alpha * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
@@ -235,34 +206,15 @@ public class SixRoomsAgentNeuralNetwork implements Learnable {
         return sumBellmanError/(j+1);
     }
 
-
-    private  MultiLayerNetwork createNetwork() {
-        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
-                .seed(SEED)
-                .weightInit(WeightInit.XAVIER)
-                .l2(L2_REGULATION)
-                //.updater(new Sgd(LEARNING_RATE))
-                .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
-                .list()
-                .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.SIGMOID)
-                        .build())
-                .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.SIGMOID)
-                        .build())
-                .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
-                        .activation(Activation.IDENTITY)
-                        .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
-                .backpropType(BackpropType.Standard)
-                .build();
-
-        MultiLayerNetwork network = new MultiLayerNetwork(configuration);
-        network.init();
-        //network.setListeners(new PerformanceListener(100));
-        //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
-
-        return network;
+    protected  boolean isAnyNetworkSizeFieldNull() {
+        return (NOF_OUTPUTS==null | NOF_FEATURES==null | NOF_NEURONS_HIDDEN==null);
     }
+
+    protected  boolean isAnyFieldNull() {
+        return (state==null | replayBuffer==null | network==null | networkTarget==null);
+
+    }
+
 
 
 }
