@@ -1,9 +1,6 @@
 package java_ai_gym.models_sixrooms;
 
-import java_ai_gym.models_common.AgentNeuralNetwork;
-import java_ai_gym.models_common.AgentTabular;
-import java_ai_gym.models_common.ReplayBuffer;
-import java_ai_gym.models_common.State;
+import java_ai_gym.models_common.*;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -12,10 +9,15 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
@@ -89,6 +91,15 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
 
         return network;
+    }
+
+    @Override
+    protected INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+        String varName1=envParams.discreteStateVariableNames.get(0);  //room number
+        double[] varValuesAsArray = {
+                (double) state.getDiscreteVariable(varName1)
+        };
+        return Nd4j.create(varValuesAsArray, 1, NOF_FEATURES);
     }
 
 }

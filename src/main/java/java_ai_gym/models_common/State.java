@@ -75,23 +75,7 @@ public class State {
             return continuousVariables.get(name);
     }
 
-    public INDArray getStateVariablesAsNetworkInput(EnvironmentParametersAbstract envParams) {
 
-        int nofFeatures=0;
-        List<Double> varValues=new ArrayList<>();
-        for (String varName:envParams.discreteStateVariableNames) {
-            varValues.add((double) getDiscreteVariable(varName));
-            nofFeatures++;
-        }
-
-        for (String varName:envParams.continuousStateVariableNames) {
-            varValues.add(getContinuousVariable(varName));
-            nofFeatures++;
-        }
-
-        double[] varValuesAsArray = varValues.stream().mapToDouble(d -> d).toArray();
-        return Nd4j.create(varValuesAsArray, 1, nofFeatures);
-    }
 
     @Override
     public String toString() {

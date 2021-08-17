@@ -61,6 +61,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public  int NUM_OF_EPISODES = 1000; // number of iterations
     protected int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
+    protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
+
     @Override
     public State getState() {
         return state;
@@ -74,7 +76,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     @Override
     public double findMaxQ(State state,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray inputNetwork = setNetworkInput(state, envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
         return outFromNetwork.max().getDouble();
     }
@@ -101,9 +103,11 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     @Override
     public double readMemory(State state, int action,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray inputNetwork = setNetworkInput(state, envParams);
         return readMemory(inputNetwork,  action);
     }
+
+
 
     public double readMemory(INDArray inputNetwork, int action) {
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
@@ -111,13 +115,13 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     private double findMaxQTargetNetwork(State state,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray inputNetwork = setNetworkInput(state, envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
     }
 
     public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams);
+        INDArray inputNetwork = setNetworkInput(state, envParams);
         return network.output(inputNetwork, false);
     }
 
@@ -136,7 +140,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
             Experience exp=miniBatch.get(idxSample);
-            INDArray inputNetwork = exp.s.getStateVariablesAsNetworkInput(envParams);
+            INDArray inputNetwork = setNetworkInput(exp.s, envParams);
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
             outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork,envParams);
             changeBellmanErrorVariableInBufferItem(exp);
