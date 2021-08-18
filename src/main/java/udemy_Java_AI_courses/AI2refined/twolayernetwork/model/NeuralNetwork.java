@@ -1,9 +1,8 @@
-package udemycourse.nn2refined.twolayernetwork.model;
+package udemy_Java_AI_courses.AI2refined.twolayernetwork.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 
 /***
@@ -12,7 +11,7 @@ import java.util.Arrays;
 
 public class NeuralNetwork {
 
-    private static final Logger logger = LoggerFactory.getLogger(NeuralNetwork.class);
+    private static final Logger logger = Logger.getLogger(NeuralNetwork.class.getName());
 
     private final Layer[] layers;
     final int nofLayers;
@@ -55,7 +54,7 @@ public class NeuralNetwork {
         for (int idxOut = 0; idxOut < calculatedOutput.length; idxOut++) {
             errorOut[idxOut] = outVec[idxOut] - calculatedOutput[idxOut];
         }
-        logger.trace("error out:"+ Arrays.toString(errorOut));
+        logger.fine("error out:"+ Arrays.toString(errorOut));
         return errorOut;
     }
 
@@ -97,7 +96,7 @@ public class NeuralNetwork {
         float[] errorLayer = errorOut;
         for (int idxLayer = nofLayers - 1; idxLayer >= 0; idxLayer--) {
             errorLayer = layers[idxLayer].train(errorLayer, learningRate, momentum);
-            logger.trace("layer i:"+idxLayer+", error:"+Arrays.toString(errorLayer));
+            logger.fine("layer i:"+idxLayer+", error:"+Arrays.toString(errorLayer));
         }
     }
 

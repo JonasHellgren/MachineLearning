@@ -12,16 +12,14 @@ import org.jcodec.common.Assert;
 import org.junit.Test;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4jBackend;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class TestLearningNeuralNetworkSixRooms {
-    private static final Logger logger = LoggerFactory.getLogger(TestLearningNeuralNetworkSixRooms.class);
+    private static final Logger logger = Logger.getLogger(TestLearningNeuralNetworkSixRooms.class.getName());
 
 
 
@@ -37,8 +35,8 @@ public class TestLearningNeuralNetworkSixRooms {
     public void runLearningTextBook() {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
-        logger.info("Nd4jBackend.BACKEND_PRIORITY_CPU: {}", Nd4jBackend.BACKEND_PRIORITY_CPU);
-        logger.info("Nd4jBackend.BACKEND_PRIORITY_GPU: {}", Nd4jBackend.BACKEND_PRIORITY_GPU);
+        //logger.info("Nd4jBackend.BACKEND_PRIORITY_CPU: {}", Nd4jBackend.BACKEND_PRIORITY_CPU);
+        //logger.info("Nd4jBackend.BACKEND_PRIORITY_GPU: {}", Nd4jBackend.BACKEND_PRIORITY_GPU);
 
         env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {

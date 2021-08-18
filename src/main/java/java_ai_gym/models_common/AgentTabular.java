@@ -3,14 +3,13 @@ package java_ai_gym.models_common;
 
 import com.google.common.primitives.Doubles;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
+
 public abstract class AgentTabular implements Learnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
+    private static final Logger logger = Logger.getLogger(AgentTabular.class.getName());
     public State state;
     public double[][] Qsa;   //tabular memory
 

@@ -2,26 +2,30 @@ package java_ai_gym.swing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 
 public class PanelMountainCar extends JPanel {
+
 
     ScaleLinear xScaler;
     ScaleLinear yScaler;
     LineData roadData;
     public Position2D carPosition;
-    double carRadius;
+    double velocity;
+    public JLabel  label;
 
+    double CAR_RADIUS;
 
     public PanelMountainCar(ScaleLinear xScaler,
                             ScaleLinear yScaler,
                             LineData roadData,
                             Position2D carPosition,
-                            double carRadius) {
+                            double CAR_RADIUS) {
         this.xScaler = xScaler;
         this.yScaler = yScaler;
         this.roadData = roadData;
         this.carPosition=carPosition;
-        this.carRadius=carRadius;
+        this.CAR_RADIUS = CAR_RADIUS;
     }
 
     public void drawPlot(Graphics2D g2d) {
@@ -29,11 +33,12 @@ public class PanelMountainCar extends JPanel {
         plotCar(g2d,carPosition.x, carPosition.y);
     }
 
-    public void setCarPosition(double x, double y) {
-        carPosition.x=x;   carPosition.y=y;
+    public void setCarStates(double x, double y,double velocity) {
+        carPosition.x=x;   carPosition.y=y; this.velocity = velocity;
     }
 
-    private void plotLine(Graphics2D g2d,double[] line1x,double[] line1y) {
+
+    private void plotLine(Graphics2D g2d, double[] line1x, double[] line1y) {
             ////flip because swing defines y=0 as upper in panel
             g2d.drawPolyline(xScaler.calcOut(line1x),yScaler.calcOut(line1y), line1x.length);
     }
@@ -41,9 +46,16 @@ public class PanelMountainCar extends JPanel {
     private void plotCar(Graphics2D g2d,double x,double y) {
         //g2d.setColor('r');
 
-        g2d.drawOval((int) (xScaler.calcOut(x)+-1*xScaler.scale(carRadius)/2),
-                (int) (yScaler.calcOut(y)+-1*xScaler.scale(carRadius)/2),
-                xScaler.scale(carRadius),yScaler.scale(carRadius));
+        g2d.drawOval((int) (xScaler.calcOut(x)+-1*xScaler.scale(CAR_RADIUS)/2),
+                (int) (yScaler.calcOut(y)+-1*xScaler.scale(CAR_RADIUS)/2),
+                xScaler.scale(CAR_RADIUS),yScaler.scale(CAR_RADIUS));
+    }
+
+    private void textCarStates(Graphics2D g2d,double x,double y, double velocity)  {
+        label.setText("pos x:"+new DecimalFormat("#.##").format(x)+
+                ", pos y:"+new DecimalFormat("#.##").format(y)+
+                ", velocity:"+new DecimalFormat("#.##").format(velocity));
+
     }
 
     @Override
@@ -54,6 +66,7 @@ public class PanelMountainCar extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         drawPlot(g2d);
+        textCarStates(g2d,carPosition.x, carPosition.y,velocity);
 
     }
 

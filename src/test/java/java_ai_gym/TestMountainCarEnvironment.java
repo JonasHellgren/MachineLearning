@@ -50,7 +50,7 @@ public class TestMountainCarEnvironment {
         TimeUnit.SECONDS.sleep(3);
     }
 
-    @Test
+    @Test @Ignore
     public void setAction0MovesLeftManyTimes() throws InterruptedException {
         state.createContinuousVariable("position",-0.5);
         state.createContinuousVariable("velocity",0.0);
@@ -60,19 +60,51 @@ public class TestMountainCarEnvironment {
         System.out.println(stepReturn.state);
 
         for (int i = 0; i <1300 ; i++) {
-
             stepReturn=env.step(0,state);
             state.copyState(stepReturn.state);
             System.out.println(state);
-            double position=state.getContinuousVariable("position");
-            double height=env.height(position);
-            //env.panel.setCarPosition(position,height);
-            env.panel.setCarPosition(i*-0.001,env.height(i*-0.001));
-            System.out.println(env.panel.carPosition);
+            double position=i*-0.001;
+            env.panel.setCarStates(position,env.height(position),state.getContinuousVariable("velocity"));
             env.panel.repaint();
             TimeUnit.MILLISECONDS.sleep(10);
         }
 
     }
+
+    @Test
+    public void setRuleBasedAction() throws InterruptedException {
+        state.createContinuousVariable("position",env.startPosition);
+        state.createContinuousVariable("velocity",env.startVelocity);
+        state.createDiscreteVariable("nofSteps",0);
+        System.out.println(state);
+        StepReturn stepReturn=env.step(0,state);
+        System.out.println(stepReturn.state);
+        int action=1;
+
+        do {
+
+            double position=state.getContinuousVariable("position");
+            double velocity=state.getContinuousVariable("velocity");
+
+            action=(velocity <0)?0:2;
+            stepReturn=env.step(action,state);
+            state.copyState(stepReturn.state);
+
+            env.panel.setCarStates(position,env.height(position),velocity);
+            env.panel.repaint();
+            TimeUnit.MILLISECONDS.sleep(100);
+
+            if (stepReturn.termState) {
+                System.out.println("Terminal state reached");
+                System.out.println(state);
+                System.out.println(stepReturn);
+            }
+
+        } while (!stepReturn.termState);
+
+        TimeUnit.MILLISECONDS.sleep(1000);
+
+    }
+
 
 }

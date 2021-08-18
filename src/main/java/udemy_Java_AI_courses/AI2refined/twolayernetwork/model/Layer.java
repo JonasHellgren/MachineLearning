@@ -1,4 +1,4 @@
-package udemycourse.nn2refined.twolayernetwork.model;
+package udemy_Java_AI_courses.AI2refined.twolayernetwork.model;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +53,7 @@ public class Layer {
         this.inVec[nofInputs - 1] = 1; //bias input always one
         for (int idxOutput = 0; idxOutput < nofOutputs; idxOutput++) {
             float[] netSum = calcNetSum(idxOutput);
-            outVec[idxOutput] = ActivationFunction.sigmoid(netSum[idxOutput]);
+            outVec[idxOutput] = udemycourse.nn2refined.twolayernetwork.model.ActivationFunction.sigmoid(netSum[idxOutput]);
         }
         return Arrays.copyOf(outVec, nofOutputs);
     }
@@ -71,7 +71,7 @@ public class Layer {
     public float[] train(float[] error, float learningRate, float momentum) {
         float[] nextError = new float[nofInputs]; //the input error for next, more left, layer
         for (int idxOut = 0; idxOut < nofOutputs; idxOut++) {
-            float delta = error[idxOut] * ActivationFunction.dSigmoid(outVec[idxOut]);
+            float delta = error[idxOut] * udemycourse.nn2refined.twolayernetwork.model.ActivationFunction.dSigmoid(outVec[idxOut]);
             for (int idxIn = 0; idxIn < nofInputs; idxIn++) {
                 int idxWeight = calcIndexWeight(idxOut, idxIn);
                 nextError[idxIn] =  weights[idxWeight] * delta;

@@ -2,13 +2,13 @@ package java_ai_gym.models_common;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /***
  * Generic state class, can include discrete and/or continuous variables.
@@ -16,7 +16,9 @@ import java.util.Map;
  */
 
 public class State {
-    private static final Logger logger = LoggerFactory.getLogger(State.class);
+
+    private final static Logger logger = Logger.getLogger(State.class.getName());
+
 
     Map<String, Integer> discreteVariables = new HashMap<>();
     Map<String, Double> continuousVariables = new HashMap<>();
@@ -40,7 +42,7 @@ public class State {
     public void setVariable(String name, Integer value) {
 
         if (!discreteVariables.containsKey(name))
-            logger.error("Error when setting state variable, following variable does not exist:" + name);
+            logger.warning("Error when setting state variable, following variable does not exist:" + name);
         else
             discreteVariables.replace(name, value);
     }
@@ -48,7 +50,7 @@ public class State {
     public Integer getDiscreteVariable(String name) {
 
         if (!discreteVariables.containsKey(name)) {
-            logger.error("Error when getting state variable, following variable does not exist:" + name);
+            logger.warning("Error when getting state variable, following variable does not exist:" + name);
             return null;
         } else
             return discreteVariables.get(name);
@@ -61,7 +63,7 @@ public class State {
     public void setVariable(String name, Double value) {
 
         if (!continuousVariables.containsKey(name))
-            logger.error("Error setting state variable, it does not exist:" + name);
+            logger.warning("Error setting state variable, it does not exist:" + name);
         else
             continuousVariables.replace(name, value);
     }
@@ -69,7 +71,7 @@ public class State {
     public Double getContinuousVariable(String name) {
 
         if (!continuousVariables.containsKey(name)) {
-            logger.error("Error getting state variable, it does not exist:" + name);
+            logger.warning("Error getting state variable, it does not exist:" + name);
             return null;
         } else
             return continuousVariables.get(name);

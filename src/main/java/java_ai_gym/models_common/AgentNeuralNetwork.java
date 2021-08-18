@@ -17,13 +17,12 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /***
  * Following parameters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
@@ -31,7 +30,8 @@ import java.util.Random;
 
 public abstract class AgentNeuralNetwork implements Learnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(AgentTabular.class);
+    private final static Logger logger = Logger.getLogger(AgentNeuralNetwork.class.getName());
+  //  private static final Logger logger = LoggerFactory.getLogger(AgentNeuralNetwork.class);
     public State state;
     public  ReplayBuffer replayBuffer;
     public MultiLayerNetwork network;   //neural network memory
@@ -136,7 +136,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
 
         if (miniBatch.size() > MINI_BATCH_SIZE)
-            logger.error("To big mini batch");
+            logger.warning("To big mini batch");
 
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
             Experience exp=miniBatch.get(idxSample);

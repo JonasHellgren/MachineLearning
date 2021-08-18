@@ -2,12 +2,12 @@ package java_ai_gym.models_sixrooms;
 
 import java_ai_gym.models_common.AgentTabular;
 import java_ai_gym.models_common.State;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.logging.Logger;
 
 public class SixRoomsAgentTabular extends AgentTabular {
 
-    private static final Logger logger = LoggerFactory.getLogger(SixRoomsAgentTabular.class);
+    private static final Logger logger = java.util.logging.Logger.getLogger(SixRoomsAgentTabular.class.getName());
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
     public SixRoomsAgentTabular(SixRooms.EnvironmentParameters envParams) {

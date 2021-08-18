@@ -6,14 +6,18 @@ import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.swing.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /***
  *         Num    Observation               Min            Max
  *         0      Car Position              -1.2           0.6
  *         1      Car Velocity              -0.07          0.07
+ *
+ *         min { sin(3*x) * 0.45 + 0.55 },   x=-1.2..0.6 => x=-0.5235
  *     Actions:
  *         Type: Discrete(3)
  *         Num    Action
@@ -43,13 +47,22 @@ public class MountainCar extends Environment {
     final int FRAME_MARGIN =50;  //frame margin
 
     public PanelMountainCar panel;
+    public JLabel  label;
     final  double CAR_RADIUS=0.05;
+    public double startPosition;
+    public double startVelocity=0;
 
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
 
         public final double MIN_POSITION = -1.2;
         public final double MAX_POSITION = 0.6;
+        public final double MIN_START_POSITION = -0.6;
+        public final double MAX_START_POSITION = -0.4;
+
+        public final double MIN_START_VELOCITY = 0.0;
+        public final double MAX_START_VELOCITY = 0.0;
+
         public final double MAX_SPEED = 0.07;
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
@@ -60,6 +73,7 @@ public class MountainCar extends Environment {
 
         public int NOF_ACTIONS;
         public int MIN_ACTION;
+
 
         public EnvironmentParameters() {
         }
@@ -84,6 +98,13 @@ public class MountainCar extends Environment {
         parameters.MIN_ACTION = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
 
+        LineData roadData=createRoadData();
+        setStartPositionAndVelocity();
+        setupFrameAndPanel(roadData);
+        panel.repaint();
+    }
+
+    private void setupFrameAndPanel(LineData roadData) {
         frame=new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar");
         ScaleLinear xScaler=new ScaleLinear(parameters.MIN_POSITION,parameters.MAX_POSITION,
                 FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
@@ -91,11 +112,21 @@ public class MountainCar extends Environment {
         ScaleLinear yScaler=new ScaleLinear(0,1, FRAME_MARGIN,
                 FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
 
-        LineData roadData=createRoadData();
-        Position2D carPositionInit=new Position2D(0.0,height(0.0));
-        panel=new PanelMountainCar(xScaler,  yScaler,roadData, carPositionInit,CAR_RADIUS);
+        Position2D carPositionInit=new Position2D(startPosition,height(startPosition));
+        panel=new PanelMountainCar(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
+        label = new JLabel();
+        panel.label=label;
+        label.setText("label text");
+        panel.add(label);
         frame.add(panel);
-        panel.repaint();
+    }
+
+    private void setStartPositionAndVelocity() {
+        startPosition= parameters.MIN_START_POSITION+
+                Math.random()*(parameters.MAX_START_POSITION-parameters.MIN_START_POSITION);
+
+        startVelocity= parameters.MIN_START_VELOCITY+
+                Math.random()*(parameters.MAX_START_VELOCITY-parameters.MIN_START_VELOCITY);
     }
 
     private LineData createRoadData() {
@@ -133,7 +164,9 @@ public class MountainCar extends Environment {
         newState.setVariable("velocity", velocity);
         stepReturn.state = newState;
         stepReturn.termState = isTerminalState(newState);
-        stepReturn.reward = (stepReturn.termState)?0:-1.0;
+        stepReturn.reward = (stepReturn.termState)?
+                0:
+                -1.0;
         return stepReturn;
     }
 

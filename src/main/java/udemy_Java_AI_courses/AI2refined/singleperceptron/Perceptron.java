@@ -1,8 +1,8 @@
 package udemycourse.nn2refined.singleperceptron;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.Random;
+import java.util.logging.Logger;
 
 /***
  * A set of input features are fed to the perceptron. A training example is {input features, desired output}.
@@ -17,7 +17,7 @@ import java.util.Random;
  */
 
 public class Perceptron {
-    private static final Logger logger = LoggerFactory.getLogger(Perceptron.class);
+    private static final Logger logger = Logger.getLogger(Perceptron.class.getName());
 
     private final float[] weights;
     private final float[][] inputMatrix;   //[datapoint,input feature]
@@ -79,6 +79,6 @@ public class Perceptron {
         float sum = 0f;
         for(int idxInput=0;idxInput<nofInputFeatures;++idxInput)
             sum = sum + weights[idxInput] * inputVec[idxInput];
-        return ActivFunction.stepFunction(sum);
+        return udemycourse.nn2refined.singleperceptron.ActivFunction.stepFunction(sum);
     }
 }

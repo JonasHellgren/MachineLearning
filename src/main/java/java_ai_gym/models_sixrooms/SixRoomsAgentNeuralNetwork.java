@@ -13,15 +13,14 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
-    private static final Logger logger = LoggerFactory.getLogger(SixRoomsAgentNeuralNetwork.class);
+    private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
 
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
@@ -42,7 +41,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_FEATURES = 1;
         this.NOF_NEURONS_HIDDEN=10;
         if (isAnyNetworkSizeFieldNull())
-            logger.error("Some network size field is not set, i.e. null");
+            logger.warning("Some network size field is not set, i.e. null");
         network= createNetwork();
         networkTarget= createNetwork();
 
@@ -59,7 +58,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
         if (isAnyFieldNull())
-            logger.error("Some field in AgentNeuralNetwork is not set, i.e. null");
+            logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
         else
             logger.info("Neural network based six rooms agent created. " + "nofStates:" + envParams.nofStates + ", nofActions:" + envParams.nofActions);
 
@@ -95,10 +94,13 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
     @Override
     protected INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
-        String varName1=envParams.discreteStateVariableNames.get(0);  //room number
         double[] varValuesAsArray = {
-                (double) state.getDiscreteVariable(varName1)
+                (double) state.getDiscreteVariable("roomNumber")
         };
+
+        if (varValuesAsArray.length!=NOF_FEATURES)
+            logger.warning("Wrong number of network inputs");
+
         return Nd4j.create(varValuesAsArray, 1, NOF_FEATURES);
     }
 

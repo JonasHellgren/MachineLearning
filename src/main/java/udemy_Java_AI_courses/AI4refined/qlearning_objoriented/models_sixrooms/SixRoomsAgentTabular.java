@@ -1,15 +1,13 @@
 package udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms;
 
 import com.google.common.primitives.Doubles;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
 import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
 
 
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /***
  * Agent implementation that solves simple toy problem: find exit room
@@ -17,7 +15,7 @@ import java.util.Random;
 
 public class SixRoomsAgentTabular implements Agent {
 
-    private static final Logger logger = LoggerFactory.getLogger(SixRoomsAgentTabular.class);
+    private static final Logger logger = Logger.getLogger(SixRoomsAgentTabular.class.getName());
     public State state;
     public double[][] Qsa;   //tabular memory
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters

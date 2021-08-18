@@ -1,7 +1,8 @@
 package udemy_Java_AI_courses.AI2refined.twolayernetwork;
 
 import udemy_Java_AI_courses.AI2refined.twolayernetwork.datasets.XORData;
-import udemycourse.nn2refined.twolayernetwork.model.NeuralNetwork;
+import udemy_Java_AI_courses.AI2refined.twolayernetwork.model.NeuralNetwork;
+
 
 public class Runner {
 
