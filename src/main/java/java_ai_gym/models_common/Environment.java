@@ -11,4 +11,9 @@ public abstract class  Environment {
         double lowerThanMax= Math.min(variable, maxValue);
         return Math.max(lowerThanMax, minValue);
     }
+
+    protected boolean isZero(double value) {
+        return (Math.abs(value-0)<2*Double.MIN_VALUE);
+    }
+
 }

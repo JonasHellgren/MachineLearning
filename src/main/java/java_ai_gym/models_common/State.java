@@ -4,6 +4,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,13 @@ public class State {
             return continuousVariables.get(name);
     }
 
+    public int nofDiscreteVariables() {
+        return discreteVariables.size();
+    }
+
+    public int nofContinuousVariables() {
+        return continuousVariables.size();
+    }
 
 
     @Override
@@ -85,12 +93,19 @@ public class State {
         List<String> continuousVariableKeyValuePairs = new ArrayList<>();
 
         for (String name : discreteVariables.keySet())
-            discreteVariableKeyValuePairs.add(name + "=" + discreteVariables.get(name));
+            discreteVariableKeyValuePairs.add(name + "=" +
+                    new DecimalFormat("#.##").format(discreteVariables.get(name))
+            );
+
 
         for (String name : continuousVariables.keySet())
-            continuousVariableKeyValuePairs.add(name + "=" + continuousVariables.get(name));
+            continuousVariableKeyValuePairs.add(name + "=" +
+                    new DecimalFormat("#.##").format(continuousVariables.get(name))
+            );
 
-        return '{'+String.join(",", discreteVariableKeyValuePairs)+
+
+        return '{'+String.join(", ", discreteVariableKeyValuePairs)+
+                System.getProperty("line.separator")+
                 String.join(",", continuousVariableKeyValuePairs)+'}';
     }
 }

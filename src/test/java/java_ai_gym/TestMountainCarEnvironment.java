@@ -73,12 +73,12 @@ public class TestMountainCarEnvironment {
 
     @Test
     public void setRuleBasedAction() throws InterruptedException {
-        state.createContinuousVariable("position",env.startPosition);
-        state.createContinuousVariable("velocity",env.startVelocity);
+        state.createContinuousVariable("position",env.parameters.startPosition);
+        state.createContinuousVariable("velocity",env.parameters.startVelocity);
         state.createDiscreteVariable("nofSteps",0);
+        env.initState(state);
         System.out.println(state);
         StepReturn stepReturn=env.step(0,state);
-        System.out.println(stepReturn.state);
         int action=1;
 
         do {
@@ -92,10 +92,10 @@ public class TestMountainCarEnvironment {
 
             env.panel.setCarStates(position,env.height(position),velocity);
             env.panel.repaint();
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(10);
 
-            if (stepReturn.termState) {
-                System.out.println("Terminal state reached");
+            if (env.isGoalState(stepReturn)) {
+                System.out.println("Goal state reached");
                 System.out.println(state);
                 System.out.println(stepReturn);
             }
