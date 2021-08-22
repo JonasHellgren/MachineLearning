@@ -6,7 +6,7 @@ import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_mountaincar.MountainCar;
 import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
-import org.apache.arrow.flatbuf.Int;
+import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,8 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class TestLearningMountainCarNetwork {
+
+    private static final Logger logger = Logger.getLogger(TestLearningMountainCarNetwork.class.getName());
+
 
     State sNew = new State();
     MountainCar env = new MountainCar();
@@ -28,13 +32,14 @@ public class TestLearningMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
     private static final int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
 
-    @Test @Ignore
+    @Test  @Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
 
-        //env.parameters.NON_TERMINAL_REWARD=-10;
         agent.GAMMA=0;
         env.parameters.MAX_START_POSITION=env.parameters.POSITION_AT_MIN_HEIGHT;
         env.parameters.MIN_START_POSITION=env.parameters.POSITION_AT_MIN_HEIGHT;
+        env.parameters.MIN_START_VELOCITY=0;
+        env.parameters.MAX_START_VELOCITY=0;
         agent.MINI_BATCH_SIZE=10;
 
         for (int i = 0; i <agent.MINI_BATCH_SIZE ; i++) {
@@ -52,14 +57,97 @@ public class TestLearningMountainCarNetwork {
 
         for (int i = 0; i < 100 ; i++) {
             fitFromMiniBatch(miniBatch);
+            printQsa();
         }
-
-        printQsa();
 
         Assert.assertEquals(0.0,agent.readMemory(agent.state,0,env.parameters),50);
         Assert.assertEquals(-100,agent.readMemory(agent.state,1,env.parameters),50);
         Assert.assertEquals(-200,agent.readMemory(agent.state,2,env.parameters),50);
 
+    }
+
+
+    @Test
+    public void learnAtDifferentInputsZeroGamma() {
+
+        agent.GAMMA=0;
+        agent.MINI_BATCH_SIZE=10;
+
+        //List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION);
+        List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
+
+        List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
+        //List<Double> velocitiesList = Arrays.asList(0.0);
+
+        for (int i = 0; i <10 ; i++) {
+
+        for (double pos:positionsList) {
+            for (double vel:velocitiesList) {
+                for (int a:env.parameters.discreteActionsSpace) {
+                    env.parameters.NON_TERMINAL_REWARD = calcMockReward(pos, vel, a);
+                    agent.state.setVariable("position", pos);
+                    agent.state.setVariable("velocity", vel);
+                    agent.state.setVariable("nofSteps", 0);
+                    StepReturn stepReturn = env.step(a, agent.state);
+                    Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                    agent.replayBuffer.addExperience(experience);
+                }
+            }
+       }
+
+        }
+
+
+
+        //System.out.println(agent.replayBuffer);
+        // System.out.println(miniBatch);     System.out.println(agent.state);
+
+
+        System.out.println("calcMockReward(pos, vel, 0):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 0));
+        System.out.println("calcMockReward(pos, vel, 1):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 1));
+        System.out.println("calcMockReward(pos, vel, 2):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 2));
+
+        List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
+
+        //System.out.println(miniBatch);
+
+        for (int i = 0; i < 10 ; i++) {
+           // System.out.println("i;"+i);
+            miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
+            fitFromMiniBatch(miniBatch);
+            agent.state.setVariable("position",positionsList.get(0));
+            agent.state.setVariable("velocity",velocitiesList.get(0));
+            printQsa();
+        }
+
+        System.out.println("----------------");
+        for (double pos:positionsList) {
+            for (double vel:velocitiesList) {
+                agent.state.setVariable("position",pos);
+                agent.state.setVariable("velocity",vel);
+                System.out.println("position:"+pos+", velocity:"+vel);
+                System.out.println("calcMockReward"+
+                        ", a=0:" +calcMockReward(pos,vel, 0)+
+                        ", a=1:"+calcMockReward(pos,vel, 1)+
+                        ", a=2:"+calcMockReward(pos,vel, 2));
+
+                printQsa();
+            }
+        }
+
+        double pos=positionsList.get(0);  double vel=velocitiesList.get(0);
+        agent.state.setVariable("position",pos);
+        agent.state.setVariable("velocity",vel);
+        Assert.assertEquals(calcMockReward(pos, vel, 0),agent.readMemory(agent.state,0,env.parameters),10);
+        Assert.assertEquals(calcMockReward(pos, vel, 1),agent.readMemory(agent.state,1,env.parameters),10);
+        Assert.assertEquals(calcMockReward(pos, vel, 2),agent.readMemory(agent.state,2,env.parameters),10);
+
+    }
+
+    private double calcMockReward(double pos, double vel, int a) {
+        return            pos * 100 +
+                        vel * 100 +
+                        (double) 1 * a;
     }
 
 
@@ -85,7 +173,7 @@ public class TestLearningMountainCarNetwork {
 
         /*System.out.println(agent.replayBuffer);    System.out.println(miniBatch);     System.out.println(agent.state); */
 
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 1000 ; i++) {
             printQsa();
             fitFromMiniBatch(miniBatch);
             agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
@@ -99,7 +187,7 @@ public class TestLearningMountainCarNetwork {
     }
 
 
-    @Test
+    @Test @Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -242,9 +330,10 @@ public class TestLearningMountainCarNetwork {
     private void fitFromMiniBatch(List<Experience> miniBatch) {
         if (miniBatch.size()== agent.MINI_BATCH_SIZE) {
             DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
-
             agent.network.fit(iterator,agent.NUM_OF_EPOCHS);
         }
+        else
+            logger.warning("miniBatch.size() < agent.MINI_BATCH_SIZE");
     }
 
 

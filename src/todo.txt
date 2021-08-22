@@ -20,11 +20,14 @@ MountainCar agent
 ---------------
 inte behöva träna nn varje steg  x
 ibland vissa policy för episode med start i tbd  x
+antal steg isf antal episoder avgör networkTarget uppdatering etc
 träna vissa olika värden olika states
+alternativ reward
+
 spara policy/nn
 plotta policy
 ett lager mindre
-antal steg isf antal episoder avgör networkTarget uppdatering etc
+
 test där stor exp replay buffer skapas som agent trånas från
 
 bellmanError verkar för litet
