@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /***
  *         Num    Observation               Min            Max
@@ -46,9 +45,11 @@ public class MountainCar extends Environment {
     final  int FRAME_HEIGHT =300;
     final int FRAME_MARGIN =50;  //frame margin
 
-    public PanelMountainCar panel;
+    public PanelMountainCarAnimation animationPanel;
+    public PanelMountainCarPlot plotPanel;
     public JLabel  label;
     final  double CAR_RADIUS=0.05;
+    final  int CIRCLE_RADIUS_IN_DOTS =10;
 
 
     // inner classes
@@ -105,11 +106,12 @@ public class MountainCar extends Environment {
         LineData roadData=createRoadData();
         setStartPositionAndVelocity();
         setupFrameAndPanel(roadData);
-        panel.repaint();
+        animationPanel.repaint();
     }
 
     private void setupFrameAndPanel(LineData roadData) {
-        frame=new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar");
+        animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar animation");
+        plotFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar plots");
         ScaleLinear xScaler=new ScaleLinear(parameters.MIN_POSITION,parameters.MAX_POSITION,
                 FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
                 false, FRAME_MARGIN);
@@ -117,22 +119,47 @@ public class MountainCar extends Environment {
                 FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
 
         Position2D carPositionInit=new Position2D(parameters.startPosition,height(parameters.startPosition));
-        panel=new PanelMountainCar(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
+        animationPanel =new PanelMountainCarAnimation(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
         label = new JLabel();
-        panel.label=label;
+        animationPanel.label=label;
         label.setText("label text");
-        panel.add(label);
-        frame.add(panel);
-        frame.setVisible(true);
+        animationPanel.add(label);
+        animationFrame.add(animationPanel);
+        animationFrame.setVisible(true);
+
+        animationFrame.add(animationPanel);
+        animationFrame.setVisible(true);
+
+        //todo replavce with PanelMountainCarPlot
+        List<Position2D> circlePositionList=new ArrayList<>();
+        List<Integer> actionList=new ArrayList<>();
+        circlePositionList.add(new Position2D(0.5,0));
+        actionList.add(1);
+
+        ScaleLinear yScalerVelocity=new ScaleLinear(-parameters.MAX_SPEED,parameters.MAX_SPEED,
+                FRAME_MARGIN,FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
+        plotPanel =new PanelMountainCarPlot(xScaler,yScalerVelocity, circlePositionList, actionList, CIRCLE_RADIUS_IN_DOTS);
+        plotFrame.add(plotPanel);
+        plotFrame.setVisible(true);
+
+
 
     }
 
     private void setStartPositionAndVelocity() {
-        parameters.startPosition= parameters.MIN_START_POSITION+
-                Math.random()*(parameters.MAX_START_POSITION-parameters.MIN_START_POSITION);
+        parameters.startPosition=calcRandomPosition();
+        parameters.startVelocity= calcRandomVelocity();
+    }
 
-        parameters.startVelocity= parameters.MIN_START_VELOCITY+
-                Math.random()*(parameters.MAX_START_VELOCITY-parameters.MIN_START_VELOCITY);
+    private double calcRandomPosition() {
+        return parameters.MIN_POSITION+
+                Math.random()*(parameters.MAX_POSITION-parameters.MIN_POSITION);
+    }
+
+    private double calcRandomVelocity() {
+        double minSpeed=-parameters.MAX_SPEED;
+        return  minSpeed+
+                Math.random()*(parameters.MAX_SPEED-minSpeed);
     }
 
     private LineData createRoadData() {
@@ -189,8 +216,15 @@ public class MountainCar extends Environment {
         state.createContinuousVariable("position",parameters.startPosition);
         state.createContinuousVariable("velocity",parameters.startVelocity);
         state.createDiscreteVariable("nofSteps",0);
+    }
+
+    public void setRandomStateValues(State state) {
+        state.setVariable("position",calcRandomPosition());
+        state.setVariable("velocity",calcRandomVelocity());
+        state.setVariable("nofSteps",0);
 
     }
+
 
     @Override
     public boolean isTerminalState(State state) {

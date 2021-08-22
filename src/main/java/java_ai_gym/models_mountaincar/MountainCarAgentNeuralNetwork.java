@@ -22,6 +22,8 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.logging.Logger;
 
+//https://sudonull.com/post/31369-Mountain-Car-we-solve-the-classic-problem-with-reinforcement-training-Petersburg-Tower-Blog
+
 public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
@@ -44,22 +46,22 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 32;
+        this.NOF_NEURONS_HIDDEN = 100;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
         networkTarget = createNetwork();
 
-        this.MINI_BATCH_SIZE = 5;
+        this.MINI_BATCH_SIZE = 50;
         this.L2_REGULATION = 0.00000;
-        this.LEARNING_RATE = 0.001;
+        this.LEARNING_RATE = 0.00001;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
         this.ALPHA = 1.0;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.05;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.NUM_OF_EPISODES = 200; // number of iterations
+        this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
         this.NOF_STEPS_BETWEEN_FITS = 5;

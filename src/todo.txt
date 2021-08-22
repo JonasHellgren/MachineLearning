@@ -20,9 +20,10 @@ MountainCar agent
 ---------------
 inte behöva träna nn varje steg  x
 ibland vissa policy för episode med start i tbd  x
+träna olika värden olika states x
 learnAtDifferentInputsZeroGamma  FUCKAR  !!
+skap PanelMountainCarPlot
 antal steg isf antal episoder avgör networkTarget uppdatering etc
-träna vissa olika värden olika states
 alternativ reward
 
 spara policy/nn

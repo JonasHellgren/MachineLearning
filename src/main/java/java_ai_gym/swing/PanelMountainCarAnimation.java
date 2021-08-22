@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 
-public class PanelMountainCar extends JPanel {
+public class PanelMountainCarAnimation extends JPanel {
 
 
     ScaleLinear xScaler;
@@ -16,11 +16,11 @@ public class PanelMountainCar extends JPanel {
 
     double CAR_RADIUS;
 
-    public PanelMountainCar(ScaleLinear xScaler,
-                            ScaleLinear yScaler,
-                            LineData roadData,
-                            Position2D carPosition,
-                            double CAR_RADIUS) {
+    public PanelMountainCarAnimation(ScaleLinear xScaler,
+                                     ScaleLinear yScaler,
+                                     LineData roadData,
+                                     Position2D carPosition,
+                                     double CAR_RADIUS) {
         this.xScaler = xScaler;
         this.yScaler = yScaler;
         this.roadData = roadData;

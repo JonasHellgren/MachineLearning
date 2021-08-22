@@ -1,6 +1,5 @@
 package java_ai_gym;
 
-import java_ai_gym.models_common.EnvironmentParametersAbstract;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_mountaincar.MountainCar;
@@ -64,8 +63,8 @@ public class TestMountainCarEnvironment {
             state.copyState(stepReturn.state);
             System.out.println(state);
             double position=i*-0.001;
-            env.panel.setCarStates(position,env.height(position),state.getContinuousVariable("velocity"));
-            env.panel.repaint();
+            env.animationPanel.setCarStates(position,env.height(position),state.getContinuousVariable("velocity"));
+            env.animationPanel.repaint();
             TimeUnit.MILLISECONDS.sleep(10);
         }
 
@@ -90,9 +89,9 @@ public class TestMountainCarEnvironment {
             stepReturn=env.step(action,state);
             state.copyState(stepReturn.state);
 
-            env.panel.setCarStates(position,env.height(position),velocity);
-            env.panel.repaint();
-            TimeUnit.MILLISECONDS.sleep(10);
+            env.animationPanel.setCarStates(position,env.height(position),velocity);
+            env.animationPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(100);
 
             if (env.isGoalState(stepReturn)) {
                 System.out.println("Goal state reached");

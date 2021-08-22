@@ -4,7 +4,8 @@ import java_ai_gym.swing.FrameEnvironment;
 
 public abstract class  Environment {
 
-    protected FrameEnvironment frame;
+    protected FrameEnvironment animationFrame;
+    protected FrameEnvironment plotFrame;
     public int nofSteps=0;
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);

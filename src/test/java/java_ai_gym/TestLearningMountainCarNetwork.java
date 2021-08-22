@@ -6,7 +6,7 @@ import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_mountaincar.MountainCar;
 import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
-import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
+import java_ai_gym.swing.Position2D;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class TestLearningMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
     private static final int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
 
-    @Test  //@Ignore
+    @Test  @Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
 
         agent.GAMMA=0;
@@ -45,8 +45,9 @@ public class TestLearningMountainCarNetwork {
         for (int i = 0; i <agent.MINI_BATCH_SIZE ; i++) {
             env.initState(agent.state);
             int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
-            env.parameters.NON_TERMINAL_REWARD=(double) -100*aChosen;
+            //env.parameters.NON_TERMINAL_REWARD=(double) -100*aChosen;
             StepReturn stepReturn = env.step(aChosen, agent.state);
+            stepReturn.reward=(double) -100*aChosen;  //mocking reward
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience);
         }
@@ -55,7 +56,7 @@ public class TestLearningMountainCarNetwork {
 
         /*System.out.println(agent.replayBuffer);    System.out.println(miniBatch);     System.out.println(agent.state); */
 
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 50 ; i++) {
             fitFromMiniBatch(miniBatch);
             printQsa();
         }
@@ -67,36 +68,33 @@ public class TestLearningMountainCarNetwork {
     }
 
 
-    @Test
+    @Test  @Ignore
     public void learnAtDifferentInputsZeroGamma() {
 
         agent.GAMMA=0;
-        //agent.MINI_BATCH_SIZE=10;
 
-        //List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION);
+        List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION/2);
         List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
 
-        List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
+        //List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
         //List<Double> velocitiesList = Arrays.asList(0.0);
 
-        for (int i = 0; i <100 ; i++) {
-
+        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
         for (double pos:positionsList) {
             for (double vel:velocitiesList) {
                 for (int a:env.parameters.discreteActionsSpace) {
-                    env.parameters.NON_TERMINAL_REWARD = calcMockReward(pos, vel, a);
+                    //env.parameters.NON_TERMINAL_REWARD = calcMockReward(pos, vel, a);
                     agent.state.setVariable("position", pos);
                     agent.state.setVariable("velocity", vel);
                     agent.state.setVariable("nofSteps", 0);
                     StepReturn stepReturn = env.step(a, agent.state);
+                    stepReturn.reward=calcMockReward(pos, vel, a);  //mocking reward
                     Experience experience = new Experience(new State(agent.state), a, stepReturn);
                     agent.replayBuffer.addExperience(experience);
                 }
             }
        }
-
         }
-
 
 
         //System.out.println(agent.replayBuffer);
@@ -136,8 +134,6 @@ public class TestLearningMountainCarNetwork {
             }
         }
 
-        fitFromMiniBatch(miniBatch);
-
         double pos=positionsList.get(0);  double vel=velocitiesList.get(0);
         agent.state.setVariable("position",pos);
         agent.state.setVariable("velocity",vel);
@@ -147,12 +143,76 @@ public class TestLearningMountainCarNetwork {
 
     }
 
+    @Test  //@Ignore
+    public void learnFromRandomInputsZeroGamma() throws InterruptedException {
+
+        agent.GAMMA=0;
+
+        List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION/2);
+        List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
+
+        //List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
+        //List<Double> velocitiesList = Arrays.asList(0.0);
+
+        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
+                    for (int a:env.parameters.discreteActionsSpace) {
+                        env.setRandomStateValues(agent.state);
+                        StepReturn stepReturn = env.step(a, agent.state);
+                        stepReturn.reward=calcRuleBasedReward(
+                                agent.state.getContinuousVariable("position"),
+                                agent.state.getContinuousVariable("velocity"),
+                                a);  //mocking reward
+                        Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                        agent.replayBuffer.addExperience(experience);
+            }
+        }
+
+
+        for (int i = 0; i < 100 ; i++) {
+            // System.out.println("i;"+i);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
+            //System.out.println(miniBatch);
+            fitFromMiniBatch(miniBatch);
+            agent.state.setVariable("position",positionsList.get(0));
+            agent.state.setVariable("velocity",velocitiesList.get(0));
+            //printQsa();
+        }
+
+        List<Position2D> circlePositionList=new ArrayList<>();
+        List<Integer> actionList=new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            env.setRandomStateValues(agent.state);
+
+            circlePositionList.add(new Position2D(
+                    agent.state.getContinuousVariable("position"),
+                            agent.state.getContinuousVariable("velocity")));
+            actionList.add(agent.chooseBestAction(agent.state,env.parameters));
+
+            System.out.println(
+                    "position:"+agent.state.getContinuousVariable("position")+
+                    ", velocity:"+agent.state.getContinuousVariable("velocity"));
+            printQsa();
+        }
+
+        testPolicy(0);
+
+        env.plotPanel.setCircleData(circlePositionList,actionList);
+        env.plotPanel.repaint();
+        TimeUnit.MILLISECONDS.sleep(10000);
+
+    }
+
+
     private double calcMockReward(double pos, double vel, int a) {
         return            pos * 100 +
                         vel * 100 +
                         (double) 1 * a;
     }
 
+    private double calcRuleBasedReward(double pos, double vel, int a) {
+        int desiredAction=(vel <-0.001)?0:2;
+        return (a==desiredAction)?1.0:0.0;
+    }
 
     @Test @Ignore
     public void learnAtSameInputStandardRewardNonZeroGamma() {
@@ -166,8 +226,9 @@ public class TestLearningMountainCarNetwork {
         for (int i = 0; i <agent.MINI_BATCH_SIZE ; i++) {
             env.initState(agent.state);
             int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
-            env.parameters.NON_TERMINAL_REWARD=(double) -1+0.1*aChosen;
+            //env.parameters.NON_TERMINAL_REWARD=(double) -1+0.1*aChosen;
             StepReturn stepReturn = env.step(aChosen, agent.state);
+            stepReturn.reward=(double) -1+0.1*aChosen; //mocking reward
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience);
         }
@@ -190,7 +251,7 @@ public class TestLearningMountainCarNetwork {
     }
 
 
-    @Test @Ignore
+    @Test  @Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -228,15 +289,23 @@ public class TestLearningMountainCarNetwork {
         System.out.println();
     }
 
-    private void printQsaAtPosBottomZeroSpeed(int iEpisode) {
+    private void printQsaAtPosBottomZeroSpeedAndRightPosSomeSpeed(int iEpisode) {
 
         if (iEpisode % NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
             agent.state.setVariable("position", env.parameters.POSITION_AT_MIN_HEIGHT);
             agent.state.setVariable("velocity", 0.0);
 
             for (int aChosen : env.parameters.discreteActionsSpace)
-                System.out.print("aChosen: " + aChosen + ", Q:" + agent.readMemory(agent.state, aChosen, env.parameters) + "; ");
+                System.out.print("PosBottomZeroSpeed aChosen: " + aChosen + ", Q:" + agent.readMemory(agent.state, aChosen, env.parameters) + "; ");
             System.out.println();
+
+            agent.state.setVariable("position", env.parameters.MAX_START_POSITION);
+            agent.state.setVariable("velocity", env.parameters.MAX_START_VELOCITY);
+
+            for (int aChosen : env.parameters.discreteActionsSpace)
+                System.out.print("RightPosSomeSpee aChosen: " + aChosen + ", Q:" + agent.readMemory(agent.state, aChosen, env.parameters) + "; ");
+            System.out.println();
+
         }
     }
 
@@ -320,7 +389,7 @@ public class TestLearningMountainCarNetwork {
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
         printBellmanError(iEpisode,nofSteps,maxPosition);
         testPolicy(iEpisode);
-        printQsaAtPosBottomZeroSpeed(iEpisode);
+        printQsaAtPosBottomZeroSpeedAndRightPosSomeSpeed(iEpisode);
 
 
         //System.out.println("nofSteps:"+nofSteps);
@@ -355,8 +424,8 @@ public class TestLearningMountainCarNetwork {
             agent.state.copyState(stepReturn.state);
 
             System.out.println(agent.state);
-            env.panel.setCarStates(position,env.height(position),velocity);
-            env.panel.repaint();
+            env.animationPanel.setCarStates(position,env.height(position),velocity);
+            env.animationPanel.repaint();
             TimeUnit.MILLISECONDS.sleep(100);
 
             if (env.isGoalState(stepReturn)) {
