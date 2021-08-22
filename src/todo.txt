@@ -17,10 +17,23 @@ startPosition verkar fel x
 printa pos and speed i panel  x
 förstå varför grafik ej visas ibland x
 MountainCar agent
-detaljstudera episod
-printa exempel nn out
-mer info för varje episode, tex score, max pos, nn ut vid tbd
+---------------
+inte behöva träna nn varje steg  x
+ibland vissa policy för episode med start i tbd  x
+träna vissa olika värden olika states
+spara policy/nn
 plotta policy
+ett lager mindre
+antal steg isf antal episoder avgör networkTarget uppdatering etc
+test där stor exp replay buffer skapas som agent trånas från
+
+bellmanError verkar för litet
+detaljstudera episod
+
+printa exempel nn out  x
+mer info för varje episode, tex score, max pos, nn ut vid tbd x
+
+fixa bellmanErrorList for 6Rooms
 
 
 

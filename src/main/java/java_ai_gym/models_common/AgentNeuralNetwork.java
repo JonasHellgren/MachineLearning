@@ -1,22 +1,13 @@
 package java_ai_gym.models_common;
 
 
-import java_ai_gym.models_sixrooms.SixRooms;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
-import org.deeplearning4j.nn.conf.BackpropType;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
+
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
-import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.config.Nesterovs;
-import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 
 import java.util.ArrayList;
@@ -41,7 +32,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     public int nofFits=0;
     double bellmanErrorStep;
-    public List<Double> bellmanErrorList=new ArrayList<>();
+    public List<Double> bellmanErrorListItemPerEpisode =new ArrayList<>();
+    public List<Double> bellmanErrorListItemPerStep =new ArrayList<>();
 
     protected  int SEED = 12345;  //Random number generator seed, for reproducibility
 
@@ -51,15 +43,17 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     public  int MINI_BATCH_SIZE = 30;
     protected  double L2_REGULATION=0.000001;
-    protected  double LEARNING_RATE =0.1;
+    protected  double LEARNING_RATE =0.01;
     protected  double MOMENTUM=0.8;
 
-    protected double GAMMA = 1.0;  // gamma discount factor
+    public double GAMMA = 1.0;  // gamma discount factor
     protected  double ALPHA = 1.0;  // learning rate in Q-learning update
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 1000; // number of iterations
+    public  int NUM_OF_EPOCHS = 10; // number of iterations
     protected int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
+    public  int NOF_STEPS_BETWEEN_FITS=10;
 
     protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
 
@@ -138,6 +132,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         if (miniBatch.size() > MINI_BATCH_SIZE)
             logger.warning("To big mini batch");
 
+        double sumBellmanError=0;
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
             Experience exp=miniBatch.get(idxSample);
             INDArray inputNetwork = setNetworkInput(exp.s, envParams);
@@ -148,14 +143,31 @@ public abstract class AgentNeuralNetwork implements Learnable {
             //System.out.println("priority:"+exp.pExpRep.priority+", bellmanErrorStep:"+bellmanErrorStep);
 
             addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
-            bellmanErrorList.add(bellmanErrorStep);
+
+            sumBellmanError=sumBellmanError+Math.abs(bellmanErrorStep);
         }
+
+        if (miniBatch.size()>0)
+            bellmanErrorListItemPerStep.add(sumBellmanError/miniBatch.size());
+        else
+            bellmanErrorListItemPerStep.add(sumBellmanError);
 
         maybeUpdateTargetNetwork();
         DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
+        //System.out.println("dataSet:"+dataSet);
         List<DataSet> listDs = dataSet.asList();
 
         return new ListDataSetIterator<>(listDs);
+    }
+
+    public void addBellmanErrorItemForEpisodeAndClearPerStepList() {
+        int nofItems=bellmanErrorListItemPerStep.size();
+        if (nofItems>0) {
+            double beEpis = bellmanErrorListItemPerStep.stream().mapToDouble(f -> f.doubleValue()).sum();
+            bellmanErrorListItemPerEpisode.add(beEpis/ nofItems);
+        }
+
+        bellmanErrorListItemPerStep.clear();
     }
 
     //To enable prioritized experience replay items in full experience buffer are modified
@@ -195,15 +207,15 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     public double getBellmanErrorAverage(int nofSteps) {
 
-        if (bellmanErrorList.size()==0)
+        if (bellmanErrorListItemPerEpisode.size()==0)
             return 1;
 
         double sumBellmanError=0;
         int j;
         for (j = 0; j < nofSteps; j++) {
-            int idxListPos=bellmanErrorList.size()-j-1;
+            int idxListPos= bellmanErrorListItemPerEpisode.size()-j-1;
             if (idxListPos>=0)
-                sumBellmanError=sumBellmanError+Math.abs(bellmanErrorList.get(idxListPos));
+                sumBellmanError=sumBellmanError+Math.abs(bellmanErrorListItemPerEpisode.get(idxListPos));
             else
                 break;
         }

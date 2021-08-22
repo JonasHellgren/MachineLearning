@@ -5,6 +5,7 @@ import java_ai_gym.swing.FrameEnvironment;
 public abstract class  Environment {
 
     protected FrameEnvironment frame;
+    public int nofSteps=0;
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
     protected double clip(double variable, double minValue, double maxValue) {

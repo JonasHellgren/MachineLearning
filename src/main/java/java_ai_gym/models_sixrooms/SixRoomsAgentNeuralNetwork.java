@@ -47,7 +47,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.MINI_BATCH_SIZE=30;
         this.L2_REGULATION=0.000001;
-        this.LEARNING_RATE =0.1;
+        this.LEARNING_RATE =0.9;
         this.MOMENTUM=0.8;
 
         this.GAMMA = 1.0;  // gamma discount factor
@@ -55,6 +55,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = 1000; // number of iterations
+        this.NUM_OF_EPOCHS=3;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
 
         if (isAnyFieldNull())

@@ -25,7 +25,7 @@ public class TestLearningNeuralNetworkSixRooms {
     SixRoomsAgentNeuralNetwork agent = new SixRoomsAgentNeuralNetwork(env.parameters);
     public final double SMALL = 0.001;
     private final Random random = new Random();
-    private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =100;
+    private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =50;
 
     @Test
     //https://www.saashanair.com/dqn-code/
@@ -38,13 +38,11 @@ public class TestLearningNeuralNetworkSixRooms {
         env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
 
-            if (iEpisode  % NOF_EPISODES_BETWEEN_PRINTOUTS == 0 & iEpisode>0)
-                System.out.println("iEpisode:"+iEpisode+" bellmanError:"+agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS));
             int startState = random.nextInt(env.parameters.nofStates);
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
 
-            simulateTextBook(false,(double) iEpisode/agent.NUM_OF_EPISODES);
+            simulateTextBook(false,iEpisode);
         }
 
         env.PrintQsa(agent);
@@ -70,12 +68,20 @@ public class TestLearningNeuralNetworkSixRooms {
 
     }
 
-    private void simulateTextBook(boolean printFlag, double fEpisodes) {
+    private void printBellmanError(int iEpisode) {
+        if (iEpisode % NOF_EPISODES_BETWEEN_PRINTOUTS == 0 | iEpisode == 0)
+            System.out.println("iEpisode:"+ iEpisode +" bellmanError:"+
+                    agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS)
+            );
+    }
+
+    private void simulateTextBook(boolean printFlag, int iEpisode) {
         // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
         // a single episode: the agent finds a path from state s to the exit state
 
         StepReturn stepReturn;
         int miniBatchSize= agent.MINI_BATCH_SIZE;
+        double fEpisodes=(double) iEpisode/agent.NUM_OF_EPISODES;
         int nofSteps=0;
 
         do {
@@ -89,7 +95,7 @@ public class TestLearningNeuralNetworkSixRooms {
             if (miniBatch.size()==miniBatchSize) {
 
                 DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
-                agent.network.fit(iterator);
+                agent.network.fit(iterator,agent.NUM_OF_EPOCHS);
 
                 if (printFlag) {
                     System.out.println("replayBuffer"+agent.replayBuffer);
@@ -103,6 +109,9 @@ public class TestLearningNeuralNetworkSixRooms {
 
             nofSteps++;
         } while (!stepReturn.termState & nofSteps<10);
+
+        agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
+        printBellmanError(iEpisode);
     }
 
 

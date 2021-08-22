@@ -25,10 +25,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
 
-    private final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
+    public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
     public final double RB_EPS = 0.1;
-    public final double RB_ALP = 0.9;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public final double RB_ALP = 0.1;  //0 <=> uniform distribution from bellman error for mini batch selection
     public final double BETA0 = 0.1;
     public final int REPLAY_BUFFER_SIZE = 100;
 
@@ -50,16 +50,18 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         networkTarget = createNetwork();
 
         this.MINI_BATCH_SIZE = 30;
-        this.L2_REGULATION = 0.0001;
-        this.LEARNING_RATE = 0.001;
+        this.L2_REGULATION = 0.001;
+        this.LEARNING_RATE = 0.0001;
         this.MOMENTUM = 0.2;
 
-        this.GAMMA = 0.9;  // gamma discount factor
-        this.ALPHA = 1.0;  // learning rate
-        this.PROBABILITY_RANDOM_ACTION_START = 0.2;  //probability choosing random action
+        this.GAMMA = 0.99;  // gamma discount factor
+        this.ALPHA = 0.9;  // learning rate
+        this.PROBABILITY_RANDOM_ACTION_START = 0.05;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.NUM_OF_EPISODES = 100; // number of iterations
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
+        this.NUM_OF_EPISODES = 2000; // number of iterations
+        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
+        this.NOF_STEPS_BETWEEN_FITS = 5;
 
         if (isAnyFieldNull())
             logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
@@ -67,6 +69,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
             logger.info("Neural network based MountainCar agent created. " + "nofStates:" + 3 + ", nofActions:" + envParams.NOF_ACTIONS);
 
     }
+
+
 
     private MultiLayerNetwork createNetwork() {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
@@ -97,10 +101,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
     @Override
-    protected INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+    public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
         double[] varValuesAsArray = {
                  state.getContinuousVariable("position"),
-                 state.getContinuousVariable("velocity")
+                 state.getContinuousVariable("velocity")*10
         };
 
         if (varValuesAsArray.length != NOF_FEATURES)
