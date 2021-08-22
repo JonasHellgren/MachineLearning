@@ -17,6 +17,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
+import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.logging.Logger;
@@ -49,17 +50,17 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         network = createNetwork();
         networkTarget = createNetwork();
 
-        this.MINI_BATCH_SIZE = 30;
-        this.L2_REGULATION = 0.001;
+        this.MINI_BATCH_SIZE = 5;
+        this.L2_REGULATION = 0.00000;
         this.LEARNING_RATE = 0.001;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
-        this.ALPHA = 0.9;  // learning rate
+        this.ALPHA = 1.0;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.05;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 200; // number of iterations
-        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
+        this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
         this.NOF_STEPS_BETWEEN_FITS = 5;
 
@@ -83,10 +84,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.RELU)
                         .build())
-                .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.RELU)
-                        .build())
-                .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+               // .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
+                 //       .activation(Activation.RELU)
+                 //       .build())
+                .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
                 .backpropType(BackpropType.Standard)

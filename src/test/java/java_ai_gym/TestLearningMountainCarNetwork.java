@@ -32,7 +32,7 @@ public class TestLearningMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
     private static final int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
 
-    @Test  @Ignore
+    @Test  //@Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
 
         agent.GAMMA=0;
@@ -71,7 +71,7 @@ public class TestLearningMountainCarNetwork {
     public void learnAtDifferentInputsZeroGamma() {
 
         agent.GAMMA=0;
-        agent.MINI_BATCH_SIZE=10;
+        //agent.MINI_BATCH_SIZE=10;
 
         //List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION);
         List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
@@ -79,7 +79,7 @@ public class TestLearningMountainCarNetwork {
         List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
         //List<Double> velocitiesList = Arrays.asList(0.0);
 
-        for (int i = 0; i <10 ; i++) {
+        for (int i = 0; i <100 ; i++) {
 
         for (double pos:positionsList) {
             for (double vel:velocitiesList) {
@@ -111,9 +111,10 @@ public class TestLearningMountainCarNetwork {
 
         //System.out.println(miniBatch);
 
-        for (int i = 0; i < 10 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
            // System.out.println("i;"+i);
             miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
+            System.out.println(miniBatch);
             fitFromMiniBatch(miniBatch);
             agent.state.setVariable("position",positionsList.get(0));
             agent.state.setVariable("velocity",velocitiesList.get(0));
@@ -134,6 +135,8 @@ public class TestLearningMountainCarNetwork {
                 printQsa();
             }
         }
+
+        fitFromMiniBatch(miniBatch);
 
         double pos=positionsList.get(0);  double vel=velocitiesList.get(0);
         agent.state.setVariable("position",pos);
@@ -171,7 +174,7 @@ public class TestLearningMountainCarNetwork {
 
         List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
 
-        /*System.out.println(agent.replayBuffer);    System.out.println(miniBatch);     System.out.println(agent.state); */
+        //System.out.println(agent.replayBuffer);   // System.out.println(miniBatch);     System.out.println(agent.state); */
 
         for (int i = 0; i < 1000 ; i++) {
             printQsa();
