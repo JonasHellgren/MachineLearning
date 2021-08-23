@@ -4,7 +4,6 @@ import java_ai_gym.models_common.AgentNeuralNetwork;
 import java_ai_gym.models_common.EnvironmentParametersAbstract;
 import java_ai_gym.models_common.ReplayBuffer;
 import java_ai_gym.models_common.State;
-import java_ai_gym.models_sixrooms.SixRooms;
 import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -17,7 +16,6 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
-import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.logging.Logger;
@@ -63,7 +61,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
+        this.NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE = 1000;
         this.NOF_STEPS_BETWEEN_FITS = 5;
 
         if (isAnyFieldNull())

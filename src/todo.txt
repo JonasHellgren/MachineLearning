@@ -22,7 +22,8 @@ inte behöva träna nn varje steg  x
 ibland vissa policy för episode med start i tbd  x
 träna olika värden olika states x
 learnAtDifferentInputsZeroGamma  FUCKAR  !!
-skap PanelMountainCarPlot
+skap PanelMountainCarPlot  x
+skapa seperata test för funk approx resp inlärning
 antal steg isf antal episoder avgör networkTarget uppdatering etc
 alternativ reward
 

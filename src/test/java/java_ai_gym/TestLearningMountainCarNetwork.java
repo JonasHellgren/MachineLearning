@@ -124,7 +124,7 @@ public class TestLearningMountainCarNetwork {
             for (double vel:velocitiesList) {
                 agent.state.setVariable("position",pos);
                 agent.state.setVariable("velocity",vel);
-                System.out.println("position:"+pos+", velocity:"+vel);
+                printAgentPositionAndState();
                 System.out.println("calcMockReward"+
                         ", a=0:" +calcMockReward(pos,vel, 0)+
                         ", a=1:"+calcMockReward(pos,vel, 1)+
@@ -156,7 +156,7 @@ public class TestLearningMountainCarNetwork {
 
         while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
                     for (int a:env.parameters.discreteActionsSpace) {
-                        env.setRandomStateValues(agent.state);
+                        env.setRandomStateValuesAny(agent.state);
                         StepReturn stepReturn = env.step(a, agent.state);
                         stepReturn.reward=calcRuleBasedReward(
                                 agent.state.getContinuousVariable("position"),
@@ -167,34 +167,29 @@ public class TestLearningMountainCarNetwork {
             }
         }
 
+        testPolicy(100);
+        for (int i = 0; i < 50 ; i++) {
+            if (i % 10 ==0)
+             System.out.println("i:"+i+"success ratio:"+testPolicy(100));
 
-        for (int i = 0; i < 100 ; i++) {
-            // System.out.println("i;"+i);
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            //System.out.println(miniBatch);
             fitFromMiniBatch(miniBatch);
-            agent.state.setVariable("position",positionsList.get(0));
-            agent.state.setVariable("velocity",velocitiesList.get(0));
-            //printQsa();
         }
 
-        List<Position2D> circlePositionList=new ArrayList<>();
-        List<Integer> actionList=new ArrayList<>();
+
+        List<Position2D> circlePositionList = new ArrayList<>();
+        List<Integer> actionList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            env.setRandomStateValues(agent.state);
+            env.setRandomStateValuesAny(agent.state);
 
             circlePositionList.add(new Position2D(
                     agent.state.getContinuousVariable("position"),
-                            agent.state.getContinuousVariable("velocity")));
-            actionList.add(agent.chooseBestAction(agent.state,env.parameters));
+                    agent.state.getContinuousVariable("velocity")));
+            actionList.add(agent.chooseBestAction(agent.state, env.parameters));
 
-            System.out.println(
-                    "position:"+agent.state.getContinuousVariable("position")+
-                    ", velocity:"+agent.state.getContinuousVariable("velocity"));
+            printAgentPositionAndState();
             printQsa();
         }
-
-        testPolicy(0);
 
         env.plotPanel.setCircleData(circlePositionList,actionList);
         env.plotPanel.repaint();
@@ -202,11 +197,17 @@ public class TestLearningMountainCarNetwork {
 
     }
 
+    private void printAgentPositionAndState() {
+        System.out.println(
+                "position:" + agent.state.getContinuousVariable("position") +
+                        ", velocity:" + agent.state.getContinuousVariable("velocity"));
+    }
+
 
     private double calcMockReward(double pos, double vel, int a) {
-        return            pos * 100 +
-                        vel * 100 +
-                        (double) 1 * a;
+        return pos * 100 +
+                vel * 100 +
+                (double) 1 * a;
     }
 
     private double calcRuleBasedReward(double pos, double vel, int a) {
@@ -270,7 +271,7 @@ public class TestLearningMountainCarNetwork {
         animatePolicy();
 
         // env.PrintQsa(agent);
-        System.out.println("nofFits:"+agent.nofFits+", nof steps:"+env.nofSteps);
+        System.out.println("nofFits:"+agent.nofFits+", nof steps:"+agent.state.nofSteps);
         System.out.println(agent.network.summary());
         //env.showPolicy(agent);
 
@@ -319,26 +320,20 @@ public class TestLearningMountainCarNetwork {
                     ", max position:"+maxPosition);
     }
 
-    private void testPolicy(int iEpisode) {
-        if (iEpisode % NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
-            env.initState(agent.state);
+    private int testPolicy(int nofTests) {
 
-            List<Integer> nofStepsList=new ArrayList<>();
-            List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
-            List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,0d,env.parameters.MAX_SPEED);
-            agent.state.setVariable("nofSteps",0);
-
-            for (double pos:positionsList) {
-                for (double vel:velocitiesList) {
-                    agent.state.setVariable("position",pos);
-                    agent.state.setVariable("velocity",vel);
-                    runPolicy();
-                    nofStepsList.add(agent.state.getDiscreteVariable("nofSteps") );
-                }
-            }
-            System.out.println("iEpisode:"+iEpisode+", nofStepsList:" + nofStepsList);
-
+        List<Integer> nofStepsList = new ArrayList<>();
+        int nofSuccessTests = 0;
+        for (int i = 0; i < nofTests; i++) {
+            env.setRandomStateValuesStart(agent.state);
+            runPolicy();
+            int nofSteps = agent.state.getDiscreteVariable("nofSteps");
+            nofStepsList.add(nofSteps);
+            if (nofSteps < env.parameters.MAX_NOF_STEPS)
+                nofSuccessTests++;
         }
+        return nofSuccessTests / nofTests;
+
     }
 
     private void runPolicy() {
@@ -367,7 +362,7 @@ public class TestLearningMountainCarNetwork {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience);
 
-            if (env.nofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+            if (agent.state.nofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
                 List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, fEpisodes);
                 fitFromMiniBatch(miniBatch);
             }

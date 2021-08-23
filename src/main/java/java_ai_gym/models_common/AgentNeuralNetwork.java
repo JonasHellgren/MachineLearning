@@ -31,6 +31,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     private final Random random = new Random();
 
     public int nofFits=0;
+    //public int nofSteps=0;
     double bellmanErrorStep;
     public List<Double> bellmanErrorListItemPerEpisode =new ArrayList<>();
     public List<Double> bellmanErrorListItemPerStep =new ArrayList<>();
@@ -52,7 +53,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 1000; // number of iterations
     public  int NUM_OF_EPOCHS = 10; // number of iterations
-    protected int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
+    protected int NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE =1000;
     public  int NOF_STEPS_BETWEEN_FITS=10;
 
     protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
@@ -152,6 +153,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         else
             bellmanErrorListItemPerStep.add(sumBellmanError);
 
+        nofFits++;
         maybeUpdateTargetNetwork();
         DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
         //System.out.println("dataSet:"+dataSet);
@@ -177,9 +179,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     private void maybeUpdateTargetNetwork() {
-        nofFits++;
-        if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
+
+        /*
+        if (nofFits % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
+            networkTarget.setParams(network.params());  */
+
+        if (state.nofSteps % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
+
     }
 
     private void addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet, int idxSample, INDArray inputNetwork, INDArray outFromNetwork) {

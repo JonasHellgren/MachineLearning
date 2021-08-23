@@ -147,11 +147,15 @@ public class MountainCar extends Environment {
     }
 
     private void setStartPositionAndVelocity() {
-        parameters.startPosition=calcRandomPosition();
-        parameters.startVelocity= calcRandomVelocity();
+        parameters.startPosition=calcRandomFromIntervall(parameters.MIN_START_POSITION,parameters.MAX_START_POSITION);
+        parameters.startVelocity= calcRandomFromIntervall(parameters.MIN_START_VELOCITY,parameters.MAX_START_VELOCITY);
     }
 
-    private double calcRandomPosition() {
+    private double calcRandomFromIntervall(double minValue, double maxValue) {
+        return minValue+Math.random()*(maxValue-minValue);
+    }
+
+    /* private double calcRandomPosition() {
         return parameters.MIN_POSITION+
                 Math.random()*(parameters.MAX_POSITION-parameters.MIN_POSITION);
     }
@@ -160,7 +164,7 @@ public class MountainCar extends Environment {
         double minSpeed=-parameters.MAX_SPEED;
         return  minSpeed+
                 Math.random()*(parameters.MAX_SPEED-minSpeed);
-    }
+    }  */
 
     private LineData createRoadData() {
 
@@ -202,7 +206,8 @@ public class MountainCar extends Environment {
         //stepReturn.reward = isGoalState(stepReturn)?
                 0:
                 parameters.NON_TERMINAL_REWARD;
-        nofSteps++;
+
+        state.nofSteps++;
         return stepReturn;
     }
 
@@ -218,11 +223,26 @@ public class MountainCar extends Environment {
         state.createDiscreteVariable("nofSteps",0);
     }
 
-    public void setRandomStateValues(State state) {
-        state.setVariable("position",calcRandomPosition());
-        state.setVariable("velocity",calcRandomVelocity());
-        state.setVariable("nofSteps",0);
+    public void setRandomStateValuesStart(State state) {
+        setRandomStateValues(state, true);
+    }
 
+    public void setRandomStateValuesAny(State state) {
+        setRandomStateValues(state, false);
+    }
+
+
+    private void setRandomStateValues(State state, boolean startState) {
+
+        if (startState) {
+            state.setVariable("position", calcRandomFromIntervall(parameters.MIN_START_POSITION, parameters.MAX_START_POSITION));
+            state.setVariable("velocity", calcRandomFromIntervall(parameters.MIN_START_VELOCITY, parameters.MAX_START_VELOCITY));
+        } else {
+            state.setVariable("position", calcRandomFromIntervall(parameters.MIN_POSITION, parameters.MAX_POSITION));
+            state.setVariable("velocity", calcRandomFromIntervall(-parameters.MAX_SPEED, parameters.MAX_SPEED));
+        }
+
+        state.setVariable("nofSteps", 0);
     }
 
 

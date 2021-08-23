@@ -6,7 +6,7 @@ public abstract class  Environment {
 
     protected FrameEnvironment animationFrame;
     protected FrameEnvironment plotFrame;
-    public int nofSteps=0;
+
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
     protected double clip(double variable, double minValue, double maxValue) {

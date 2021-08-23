@@ -14,8 +14,6 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
@@ -56,7 +54,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=3;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE=50;
+        this.NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE =50;
 
         if (isAnyFieldNull())
             logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
