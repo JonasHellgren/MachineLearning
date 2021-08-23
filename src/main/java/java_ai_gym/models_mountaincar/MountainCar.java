@@ -207,7 +207,7 @@ public class MountainCar extends Environment {
                 0:
                 parameters.NON_TERMINAL_REWARD;
 
-        state.nofSteps++;
+        state.totalNofSteps++;
         return stepReturn;
     }
 

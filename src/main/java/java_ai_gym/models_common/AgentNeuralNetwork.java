@@ -184,7 +184,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         if (nofFits % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());  */
 
-        if (state.nofSteps % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
+        if (state.totalNofSteps % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
 
     }

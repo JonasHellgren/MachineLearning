@@ -167,6 +167,8 @@ public class TestLearningMountainCarNetwork {
             }
         }
 
+
+
         testPolicy(100);
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0)
@@ -175,6 +177,9 @@ public class TestLearningMountainCarNetwork {
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
             fitFromMiniBatch(miniBatch);
         }
+
+        System.out.println("state:"+agent.state);
+        System.out.println("totalNofSteps:"+agent.state.totalNofSteps);
 
 
         List<Position2D> circlePositionList = new ArrayList<>();
@@ -271,7 +276,7 @@ public class TestLearningMountainCarNetwork {
         animatePolicy();
 
         // env.PrintQsa(agent);
-        System.out.println("nofFits:"+agent.nofFits+", nof steps:"+agent.state.nofSteps);
+        System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
         //env.showPolicy(agent);
 
@@ -362,7 +367,7 @@ public class TestLearningMountainCarNetwork {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience);
 
-            if (agent.state.nofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+            if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
                 List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, fEpisodes);
                 fitFromMiniBatch(miniBatch);
             }
