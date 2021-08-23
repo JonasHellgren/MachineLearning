@@ -23,12 +23,17 @@ ibland vissa policy för episode med start i tbd  x
 träna olika värden olika states x
 learnAtDifferentInputsZeroGamma  FUCKAR  !!
 skap PanelMountainCarPlot  x
-skapa seperata test för funk approx resp inlärning
-antal steg isf antal episoder avgör networkTarget uppdatering etc
+plotta policy x
+antal steg isf antal episoder avgör networkTarget uppdatering etc x
+prova SixRooms
+learnAtSameInputStandardRewardNonZeroGamma verkar krångla
+kolla av nof steps, nollställa vid rätt tillfälla
+snygga upp kod, tex några metoder från test klass in i andra klasser, undvika kalla createContinuousVariable flera ggr
 alternativ reward
 
+skapa seperata test för funk approx resp inlärning
 spara policy/nn
-plotta policy
+
 ett lager mindre
 
 test där stor exp replay buffer skapas som agent trånas från

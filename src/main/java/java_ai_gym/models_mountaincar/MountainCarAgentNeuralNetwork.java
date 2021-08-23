@@ -57,7 +57,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.GAMMA = 0.99;  // gamma discount factor
         this.ALPHA = 1.0;  // learning rate
-        this.PROBABILITY_RANDOM_ACTION_START = 0.05;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=5;  //nof fits per mini batch

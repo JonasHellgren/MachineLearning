@@ -30,7 +30,7 @@ public class TestLearningMountainCarNetwork {
     public final double SMALL = 0.001;
     private final Random random = new Random();
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
-    private static final int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
+
 
     @Test  @Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
@@ -143,16 +143,10 @@ public class TestLearningMountainCarNetwork {
 
     }
 
-    @Test  //@Ignore
+    @Test  @Ignore
     public void learnFromRandomInputsZeroGamma() throws InterruptedException {
 
         agent.GAMMA=0;
-
-        List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION/2);
-        List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
-
-        //List<Double> positionsList = Arrays.asList(env.parameters.POSITION_AT_MIN_HEIGHT);
-        //List<Double> velocitiesList = Arrays.asList(0.0);
 
         while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
                     for (int a:env.parameters.discreteActionsSpace) {
@@ -168,11 +162,11 @@ public class TestLearningMountainCarNetwork {
         }
 
 
-
-        testPolicy(100);
+        int nofTests=100;
+        testPolicy(nofTests);
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0)
-             System.out.println("i:"+i+"success ratio:"+testPolicy(100));
+             System.out.println("i:"+i+"success ratio:"+testPolicy(nofTests));
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
             fitFromMiniBatch(miniBatch);
@@ -202,25 +196,9 @@ public class TestLearningMountainCarNetwork {
 
     }
 
-    private void printAgentPositionAndState() {
-        System.out.println(
-                "position:" + agent.state.getContinuousVariable("position") +
-                        ", velocity:" + agent.state.getContinuousVariable("velocity"));
-    }
 
 
-    private double calcMockReward(double pos, double vel, int a) {
-        return pos * 100 +
-                vel * 100 +
-                (double) 1 * a;
-    }
-
-    private double calcRuleBasedReward(double pos, double vel, int a) {
-        int desiredAction=(vel <-0.001)?0:2;
-        return (a==desiredAction)?1.0:0.0;
-    }
-
-    @Test @Ignore
+    @Test  @Ignore
     public void learnAtSameInputStandardRewardNonZeroGamma() {
 
         //env.parameters.NON_TERMINAL_REWARD=-10;
@@ -257,7 +235,7 @@ public class TestLearningMountainCarNetwork {
     }
 
 
-    @Test  @Ignore
+    @Test  //@Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -270,7 +248,10 @@ public class TestLearningMountainCarNetwork {
             env.initState(agent.state);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
             //System.out.println("Start state:");     System.out.println(agent.state);
-            simulateTextBook(false,iEpisode);
+            simulateTextBook(false, iEpisode);
+
+            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0)
+                System.out.println("iEpisode:" + iEpisode + ", success ratio:" + testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY));
         }
 
         animatePolicy();
@@ -288,6 +269,24 @@ public class TestLearningMountainCarNetwork {
 
     }
 
+    private void printAgentPositionAndState() {
+        System.out.println(
+                "position:" + agent.state.getContinuousVariable("position") +
+                        ", velocity:" + agent.state.getContinuousVariable("velocity"));
+    }
+
+
+    private double calcMockReward(double pos, double vel, int a) {
+        return pos * 100 +
+                vel * 100 +
+                (double) 1 * a;
+    }
+
+    private double calcRuleBasedReward(double pos, double vel, int a) {
+        int desiredAction=(vel <-0.001)?0:2;
+        return (a==desiredAction)?1.0:0.0;
+    }
+
 
     private void printQsa() {
         for (int aChosen : env.parameters.discreteActionsSpace)
@@ -297,7 +296,7 @@ public class TestLearningMountainCarNetwork {
 
     private void printQsaAtPosBottomZeroSpeedAndRightPosSomeSpeed(int iEpisode) {
 
-        if (iEpisode % NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
+        if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
             agent.state.setVariable("position", env.parameters.POSITION_AT_MIN_HEIGHT);
             agent.state.setVariable("velocity", 0.0);
 
@@ -387,9 +386,9 @@ public class TestLearningMountainCarNetwork {
 
         //System.out.println(agent.bellmanErrorListItemPerStep);
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
-        printBellmanError(iEpisode,nofSteps,maxPosition);
-        testPolicy(iEpisode);
-        printQsaAtPosBottomZeroSpeedAndRightPosSomeSpeed(iEpisode);
+        //printBellmanError(iEpisode,nofSteps,maxPosition);
+
+        //printQsaAtPosBottomZeroSpeedAndRightPosSomeSpeed(iEpisode);
 
 
         //System.out.println("nofSteps:"+nofSteps);
