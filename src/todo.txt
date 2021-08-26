@@ -28,7 +28,8 @@ antal steg isf antal episoder avgör networkTarget uppdatering etc x
 prova SixRooms  x
 learnAtSameInputStandardRewardNonZeroGamma verkar krångla   x
 kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i state, nofFits i AgentNetwork, nofSteps i "specific" State.
-snygga upp kod, tex några metoder från test klass in i andra klasser, undvika kalla createContinuousVariable flera ggr
+snygga upp kod, tex några metoder från test klass in i andra klasser,   x
+undvika kalla createContinuousVariable flera ggr
 alternativ reward
 
 skapa seperata test för funk approx resp inlärning

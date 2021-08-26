@@ -263,6 +263,28 @@ public class MountainCar extends Environment {
         return height(state);
     }
 
+    public int testPolicy(int nofTests,MountainCarAgentNeuralNetwork agent) {
 
+        List<Integer> nofStepsList = new ArrayList<>();
+        int nofSuccessTests = 0;
+        for (int i = 0; i < nofTests; i++) {
+            setRandomStateValuesStart(agent.state);
+            runPolicy(agent);
+            int nofSteps = agent.state.getDiscreteVariable("nofSteps");
+            nofStepsList.add(nofSteps);
+            if (nofSteps < parameters.MAX_NOF_STEPS)
+                nofSuccessTests++;
+        }
+        return nofSuccessTests / nofTests;
+
+    }
+
+    private void runPolicy(MountainCarAgentNeuralNetwork agent) {
+        StepReturn stepReturn;
+        do {
+            stepReturn=step(agent.chooseBestAction(agent.state, parameters),agent.state);
+            agent.state.copyState(stepReturn.state);
+        } while (!stepReturn.termState);
+    }
 
 }

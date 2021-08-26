@@ -114,4 +114,17 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         return Nd4j.create(varValuesAsArray, 1, NOF_FEATURES);
     }
 
+    public void printPositionAndVelocity() {
+        System.out.println(
+                "position:" + state.getContinuousVariable("position") +
+                        ", velocity:" + state.getContinuousVariable("velocity"));
+    }
+
+    public void printQsa(EnvironmentParametersAbstract envParams) {
+        for (int aChosen : envParams.discreteActionsSpace)
+            System.out.print("aChosen: " + aChosen + ", Q:" + readMemory(state, aChosen, envParams) + "; ");
+        System.out.println();
+    }
+
+
 }
