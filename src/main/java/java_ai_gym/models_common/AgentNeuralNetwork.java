@@ -53,7 +53,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 1000; // number of iterations
     public  int NUM_OF_EPOCHS = 10; // number of iterations
-    protected int NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE =1000;
+    public int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =20;
     public  int NOF_STEPS_BETWEEN_FITS=10;
     public int NOF_TESTS_WHEN_TESTING_POLICY=100;
     public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
@@ -126,6 +126,16 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return network.output(inputNetwork, false);
     }
 
+    public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams ) {
+        if (miniBatch.size()== MINI_BATCH_SIZE) {
+            DataSetIterator iterator = createTrainingData(miniBatch,envParams);
+            network.fit(iterator,NUM_OF_EPOCHS);
+            nofFits++;
+        }
+        else
+            logger.warning("miniBatch.size() < agent.MINI_BATCH_SIZE");
+    }
+
 
     public DataSetIterator createTrainingData(List<Experience> miniBatch,EnvironmentParametersAbstract envParams) {
 
@@ -155,8 +165,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         else
             bellmanErrorListItemPerStep.add(sumBellmanError);
 
-        nofFits++;
-        maybeUpdateTargetNetwork();
+
         DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
         //System.out.println("dataSet:"+dataSet);
         List<DataSet> listDs = dataSet.asList();
@@ -180,13 +189,9 @@ public abstract class AgentNeuralNetwork implements Learnable {
         exp.pExpRep.beError=Math.abs(bellmanErrorStep);
     }
 
-    private void maybeUpdateTargetNetwork() {
+    public void maybeUpdateTargetNetwork() {
 
-        /*
-        if (nofFits % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
-            networkTarget.setParams(network.params());  */
-
-        if (state.totalNofSteps % NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
+        if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
 
     }

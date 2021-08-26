@@ -32,7 +32,7 @@ public class TestLearningMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
 
 
-    @Test  @Ignore
+    @Test  //@Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
 
         agent.GAMMA=0;
@@ -57,7 +57,7 @@ public class TestLearningMountainCarNetwork {
         /*System.out.println(agent.replayBuffer);    System.out.println(miniBatch);     System.out.println(agent.state); */
 
         for (int i = 0; i < 50 ; i++) {
-            fitFromMiniBatch(miniBatch);
+            agent.fitFromMiniBatch(miniBatch,env.parameters);
             printQsa();
         }
 
@@ -113,7 +113,7 @@ public class TestLearningMountainCarNetwork {
            // System.out.println("i;"+i);
             miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
             System.out.println(miniBatch);
-            fitFromMiniBatch(miniBatch);
+            agent.fitFromMiniBatch(miniBatch,env.parameters);
             agent.state.setVariable("position",positionsList.get(0));
             agent.state.setVariable("velocity",velocitiesList.get(0));
             printQsa();
@@ -169,7 +169,7 @@ public class TestLearningMountainCarNetwork {
              System.out.println("i:"+i+"success ratio:"+testPolicy(nofTests));
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            fitFromMiniBatch(miniBatch);
+            agent.fitFromMiniBatch(miniBatch,env.parameters);
         }
 
         System.out.println("state:"+agent.state);
@@ -196,46 +196,41 @@ public class TestLearningMountainCarNetwork {
 
     }
 
-
-
-    @Test  @Ignore
+    @Test   @Ignore
     public void learnAtSameInputStandardRewardNonZeroGamma() {
 
         //env.parameters.NON_TERMINAL_REWARD=-10;
         agent.GAMMA=0.99;
-        env.parameters.MAX_START_POSITION=env.parameters.POSITION_AT_MIN_HEIGHT;
-        env.parameters.MIN_START_POSITION=env.parameters.POSITION_AT_MIN_HEIGHT;
-        agent.MINI_BATCH_SIZE=10;
-
-        for (int i = 0; i <agent.MINI_BATCH_SIZE ; i++) {
-            env.initState(agent.state);
-            int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
-            //env.parameters.NON_TERMINAL_REWARD=(double) -1+0.1*aChosen;
-            StepReturn stepReturn = env.step(aChosen, agent.state);
-            stepReturn.reward=(double) -1+0.1*aChosen; //mocking reward
-            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
-            agent.replayBuffer.addExperience(experience);
+        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
+            for (int a:env.parameters.discreteActionsSpace) {
+                env.setRandomStateValuesAny(agent.state);
+                StepReturn stepReturn = env.step(a, agent.state);
+                Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                agent.replayBuffer.addExperience(experience);
+            }
         }
 
         List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
 
         //System.out.println(agent.replayBuffer);   // System.out.println(miniBatch);     System.out.println(agent.state); */
 
-        for (int i = 0; i < 1000 ; i++) {
+        for (int i = 0; i < 500; i++) {
             printQsa();
-            fitFromMiniBatch(miniBatch);
+            agent.fitFromMiniBatch(miniBatch,env.parameters);
+            if (i % agent.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
+                agent.networkTarget.setParams(agent.network.params());
+
             agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
-            printBellmanError(i,0,0);
+            printBellmanError(i, 0, 0);
         }
 
-     /*   Assert.assertEquals(0.0,agent.readMemory(agent.state,0,env.parameters),10);
-        Assert.assertEquals(-100,agent.readMemory(agent.state,1,env.parameters),10);
-        Assert.assertEquals(-200,agent.readMemory(agent.state,2,env.parameters),10);  */
+       Assert.assertTrue(agent.readMemory(agent.state,0,env.parameters) < -10);
+
 
     }
 
 
-    @Test  //@Ignore
+    @Test  @Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -368,8 +363,10 @@ public class TestLearningMountainCarNetwork {
 
             if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
                 List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, fEpisodes);
-                fitFromMiniBatch(miniBatch);
+                agent.fitFromMiniBatch(miniBatch,env.parameters);
             }
+
+            agent.maybeUpdateTargetNetwork();
 
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);
@@ -398,14 +395,7 @@ public class TestLearningMountainCarNetwork {
 
     }
 
-    private void fitFromMiniBatch(List<Experience> miniBatch) {
-        if (miniBatch.size()== agent.MINI_BATCH_SIZE) {
-            DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
-            agent.network.fit(iterator,agent.NUM_OF_EPOCHS);
-        }
-        else
-            logger.warning("miniBatch.size() < agent.MINI_BATCH_SIZE");
-    }
+
 
 
     public void animatePolicy() throws InterruptedException {

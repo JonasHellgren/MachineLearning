@@ -61,7 +61,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
-        this.NOF_STEPS_BETWEEN_TARGET_NETWORK_UPDATE = 1000;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 20;
         this.NOF_STEPS_BETWEEN_FITS = 5;
 
         if (isAnyFieldNull())
