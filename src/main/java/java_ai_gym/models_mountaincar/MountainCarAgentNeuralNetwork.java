@@ -45,7 +45,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 100;
+        this.NOF_NEURONS_HIDDEN = 30;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
@@ -53,8 +53,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
         this.MINI_BATCH_SIZE = 100;
-        this.L2_REGULATION = 0.00000;
-        this.LEARNING_RATE = 0.00001;
+        this.L2_REGULATION = 0.00001;
+        this.LEARNING_RATE = 0.000001;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
@@ -62,7 +62,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.5;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 100; // number of iterations
-        this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
+        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 5;
         this.NOF_STEPS_BETWEEN_FITS = 10;
 

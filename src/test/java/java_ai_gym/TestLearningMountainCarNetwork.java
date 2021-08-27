@@ -27,7 +27,7 @@ public class TestLearningMountainCarNetwork {
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
-        //agent.GAMMA=0; //TODO remove
+        agent.GAMMA=0; //TODO remove
 
         //env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {

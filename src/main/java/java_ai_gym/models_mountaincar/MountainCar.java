@@ -204,8 +204,8 @@ public class MountainCar extends Environment {
                 Math.abs (newState.getContinuousVariable("position")) -
                 Math.abs(state.getContinuousVariable("position")));
 
-        //int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
-        //stepReturn.reward= (action==desiredAction)?1.0:0.0;
+        int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
+        stepReturn.reward= (action==desiredAction)?1.0:0.0;
 
         //stepReturn.reward=Math.abs(state.getContinuousVariable("velocity"));
 

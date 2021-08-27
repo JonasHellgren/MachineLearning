@@ -151,21 +151,27 @@ public class TestLFunctionApproximationMountainCarNetwork {
         }
 
         System.out.println("state:"+agent.state);
-        System.out.println("totalNofSteps:"+agent.state.totalNofSteps);
+        System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
 
 
         List<Position2D> circlePositionList = new ArrayList<>();
         List<Integer> actionList = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             env.setRandomStateValuesAny(agent.state);
 
-            circlePositionList.add(new Position2D(
-                    agent.state.getContinuousVariable("position"),
-                    agent.state.getContinuousVariable("velocity")));
+            double pos=agent.state.getContinuousVariable("position");
+            double vel=agent.state.getContinuousVariable("velocity");
+            circlePositionList.add(new Position2D(pos,vel));
             actionList.add(agent.chooseBestAction(agent.state, env.parameters));
 
             agent.printPositionAndVelocity();
             agent.printQsa(env.parameters);
+
+            for (int a : env.parameters.discreteActionsSpace)
+                Assert.assertEquals(calcRuleBasedReward(pos, vel, a),
+                        agent.readMemory(agent.state, a, env.parameters),
+                        0.2);
+
         }
 
         env.plotPanel.setCircleData(circlePositionList,actionList);

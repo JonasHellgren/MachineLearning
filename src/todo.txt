@@ -32,6 +32,7 @@ snygga upp kod, tex några metoder från test klass in i andra klasser,   x
 stepReturn.reward=-1 för learnAtSameInputStandardRewardNonZeroGamma
 undvika kalla createContinuousVariable flera ggr x
 alternativ reward
+lära sig Q för regelabserad, väl lika mellan actions
 
 skapa seperata test för funk approx resp inlärning
 spara policy/nn
