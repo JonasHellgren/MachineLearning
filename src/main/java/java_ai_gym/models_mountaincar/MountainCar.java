@@ -130,7 +130,6 @@ public class MountainCar extends Environment {
         animationFrame.add(animationPanel);
         animationFrame.setVisible(true);
 
-        //todo replavce with PanelMountainCarPlot
         List<Position2D> circlePositionList=new ArrayList<>();
         List<Integer> actionList=new ArrayList<>();
         circlePositionList.add(new Position2D(0.5,0));
@@ -174,8 +173,8 @@ public class MountainCar extends Environment {
         for (int i = 0; i < NOF_POINTS ; i++) {
             double f=(double) i/NOF_POINTS;
             double x=parameters.MIN_POSITION *(1-f)+parameters.MAX_POSITION *f;
-            State state = new State();
-            state.createContinuousVariable("position",x);
+            //State state = new State();
+            //state.createContinuousVariable("position",x);
             double y=height(x);
             xList.add(x);
             yList.add(y);
@@ -218,9 +217,9 @@ public class MountainCar extends Environment {
 
     public void initState(State state) {
         setStartPositionAndVelocity();
-        state.createContinuousVariable("position",parameters.startPosition);
-        state.createContinuousVariable("velocity",parameters.startVelocity);
-        state.createDiscreteVariable("nofSteps",0);
+        state.setVariable("position",parameters.startPosition);
+        state.setVariable("velocity",parameters.startVelocity);
+        state.setVariable("nofSteps",0);
     }
 
     public void setRandomStateValuesStart(State state) {
