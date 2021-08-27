@@ -63,6 +63,11 @@ public class ReplayBuffer {
         return extractMiniBatchFromBufferAccordingToSortCriteria( batchLength);
     }
 
+    public boolean isFull(AgentNeuralNetwork agent) {
+        return size()==agent.REPLAY_BUFFER_SIZE;
+
+    }
+
     private void calcPrioInReplayBufferFromBellmanError() {
         for (Experience exper : buffer)
             exper.pExpRep.priority = Math.min(Math.abs(exper.pExpRep.beError), BELLMAN_ERROR_MAX) + RB_EPS;

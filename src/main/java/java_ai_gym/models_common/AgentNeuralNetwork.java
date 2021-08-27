@@ -42,6 +42,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  Integer NOF_FEATURES ;
     protected  Integer  NOF_NEURONS_HIDDEN;
 
+    public  int REPLAY_BUFFER_SIZE = 100;
     public  int MINI_BATCH_SIZE = 30;
     protected  double L2_REGULATION=0.000001;
     protected  double LEARNING_RATE =0.01;
@@ -51,12 +52,12 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  double ALPHA = 1.0;  // learning rate in Q-learning update
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
-    public  int NUM_OF_EPISODES = 100; // number of iterations
+    public  int NUM_OF_EPISODES = 200; // number of iterations
     public  int NUM_OF_EPOCHS = 10; // number of iterations
     public int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =20;
     public  int NOF_STEPS_BETWEEN_FITS=10;
     public int NOF_TESTS_WHEN_TESTING_POLICY=100;
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
+    public int NOF_EPISODES_BETWEEN_POLICY_TEST=1;
 
     protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
 

@@ -31,7 +31,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     public final double RB_EPS = 0.1;
     public final double RB_ALP = 0.0;  //0 <=> uniform distribution from bellman error for mini batch selection
     public final double BETA0 = 0.1;
-    public final int REPLAY_BUFFER_SIZE = 100;
+
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -40,6 +40,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         state.createContinuousVariable("position", envParams.startPosition);
         state.createContinuousVariable("velocity", envParams.startPosition);
 
+        this.REPLAY_BUFFER_SIZE = 1000;
         replayBuffer = new ReplayBuffer(RB_EPS, RB_ALP, BETA0, REPLAY_BUFFER_SIZE);
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
@@ -50,19 +51,20 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         network = createNetwork();
         networkTarget = createNetwork();
 
-        this.MINI_BATCH_SIZE = 50;
+
+        this.MINI_BATCH_SIZE = 100;
         this.L2_REGULATION = 0.00000;
         this.LEARNING_RATE = 0.00001;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
         this.ALPHA = 1.0;  // learning rate
-        this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_START = 0.5;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.NUM_OF_EPISODES = 1000; // number of iterations
-        this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 20;
-        this.NOF_STEPS_BETWEEN_FITS = 5;
+        this.NUM_OF_EPISODES = 100; // number of iterations
+        this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 5;
+        this.NOF_STEPS_BETWEEN_FITS = 10;
 
         if (isAnyFieldNull())
             logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");

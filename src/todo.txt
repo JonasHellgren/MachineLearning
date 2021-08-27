@@ -30,7 +30,7 @@ learnAtSameInputStandardRewardNonZeroGamma verkar krångla   x
 kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i state, nofFits i AgentNetwork, nofSteps i "specific" State.
 snygga upp kod, tex några metoder från test klass in i andra klasser,   x
 stepReturn.reward=-1 för learnAtSameInputStandardRewardNonZeroGamma
-undvika kalla createContinuousVariable flera ggr
+undvika kalla createContinuousVariable flera ggr x
 alternativ reward
 
 skapa seperata test för funk approx resp inlärning

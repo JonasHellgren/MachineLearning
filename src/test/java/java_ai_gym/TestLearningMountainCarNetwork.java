@@ -27,20 +27,41 @@ public class TestLearningMountainCarNetwork {
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
+        //agent.GAMMA=0; //TODO remove
 
         //env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
             env.initState(agent.state);
+            System.out.println(agent.state);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
             //System.out.println("Start state:");     System.out.println(agent.state);
             simulateTextBook(false, iEpisode);
 
             if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0)
                 System.out.println("iEpisode:" + iEpisode + ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent));
+
+            System.out.println("------------------------------");
+
+
+            agent.state.setVariable("position",env.parameters.MIN_START_POSITION/2);
+            agent.state.setVariable("velocity",env.parameters.MIN_START_VELOCITY/2);
+            agent.printQsa(env.parameters);
+
+            agent.state.setVariable("position",env.parameters.MAX_START_POSITION/10);
+            agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/10);
+            agent.printQsa(env.parameters);
+
+            agent.state.setVariable("position",env.parameters.MAX_START_POSITION/2);
+            agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/2);
+            agent.printQsa(env.parameters);
+
+
+
+
         }
 
 
-        animatePolicy();
+        //animatePolicy();
 
         // env.PrintQsa(agent);
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
@@ -61,30 +82,54 @@ public class TestLearningMountainCarNetwork {
         // a single episode: the agent finds a path from state s to the exit state
 
         StepReturn stepReturn;
-        double fEpisodes=(double) iEpisode/agent.NUM_OF_EPISODES;
+        double fEpisodes=(double) iEpisode/ (double) agent.NUM_OF_EPISODES;
         int nofSteps=0;  double maxPosition=-Double.MAX_VALUE;
+
+
 
         do {
             int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
+
+            /*
+
+            System.out.println("--------------");
+            System.out.println(agent.state);
+            System.out.println(stepReturn.state);
+            System.out.println(stepReturn);  */
+
+
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
             agent.replayBuffer.addExperience(experience);
 
-            if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
-                List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, fEpisodes);
-                agent.fitFromMiniBatch(miniBatch,env.parameters);
+            //System.out.println("fEpisodes:"+fEpisodes);
+
+            //System.out.println("agent.replayBuffer.size():"+agent.replayBuffer.size());
+            if (agent.replayBuffer.isFull(agent)) {
+
+                //System.out.println(agent.replayBuffer);
+                if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+                    //System.out.println("fitting");
+                    List<Experience> miniBatch =
+                            agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, 0.5);
+                    agent.fitFromMiniBatch(miniBatch, env.parameters);
+                    agent.maybeUpdateTargetNetwork();
+
+                    //System.out.println(miniBatch);
+                }
             }
 
-            agent.maybeUpdateTargetNetwork();
+
 
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);
 
+/*
             if (env.isGoalState(stepReturn)) {
                 System.out.println("Goal state reached");
                 System.out.println(agent.state);
                 System.out.println(stepReturn);
-            }
+            }  */
 
             nofSteps++;  maxPosition=Math.max(maxPosition,agent.state.getContinuousVariable("position"));
 

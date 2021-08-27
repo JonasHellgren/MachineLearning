@@ -18,6 +18,11 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+/*** These tests focus on the function approximator of the agent, i.e. training of neural network.
+ * By "mocking" of the reward tests become standalone, independent of the actual reward function.
+ *
+ */
+
 public class TestLFunctionApproximationMountainCarNetwork {
 
     private static final Logger logger = Logger.getLogger(TestLFunctionApproximationMountainCarNetwork.class.getName());
@@ -27,7 +32,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
 
 
-    @Test  //@Ignore
+    @Test  @Ignore
     public void learnAtSameInputBigNegativeRewardZeroGamma() {
 
         agent.GAMMA=0;
@@ -59,7 +64,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
     }
 
 
-    @Test  //@Ignore
+    @Test  @Ignore
     public void learnAtDifferentInputsZeroGamma() {
 
         agent.GAMMA=0;
@@ -89,11 +94,9 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         for (int i = 0; i < 100 ; i++) {
             List<Experience>  miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            System.out.println(miniBatch);
             agent.fitFromMiniBatch(miniBatch,env.parameters);
             agent.state.setVariable("position",positionsList.get(0));
             agent.state.setVariable("velocity",velocitiesList.get(0));
-            agent.printQsa(env.parameters);
         }
 
         System.out.println("----------------");
@@ -138,8 +141,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
         }
 
 
-        int nofTests=100;
-        env.testPolicy(nofTests,agent);
+        int nofTests=100;        env.testPolicy(nofTests,agent);
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0)
              System.out.println("i:"+i+"success ratio:"+env.testPolicy(nofTests,agent));
@@ -172,7 +174,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
     }
 
-    @Test   //@Ignore
+    @Test   @Ignore
     public void learnAtSameInputStandardRewardNonZeroGamma() {
 
         agent.GAMMA=0.99;
@@ -180,6 +182,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
             for (int a:env.parameters.discreteActionsSpace) {
                 env.setRandomStateValuesAny(agent.state);
                 StepReturn stepReturn = env.step(a, agent.state);
+                stepReturn.reward=-1.0;
                 Experience experience = new Experience(new State(agent.state), a, stepReturn);
                 agent.replayBuffer.addExperience(experience);
             }

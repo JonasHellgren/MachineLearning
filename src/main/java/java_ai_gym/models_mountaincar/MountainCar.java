@@ -68,7 +68,8 @@ public class MountainCar extends Environment {
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
-        public  double NON_TERMINAL_REWARD = -1.0;
+        public  double NON_TERMINAL_REWARD = -0.1;
+        public  double ALPHA_POS_CHANGE=30;
 
         public final double FORCE = 0.001;
         public final double GRAVITY = 0.0025;
@@ -154,16 +155,6 @@ public class MountainCar extends Environment {
         return minValue+Math.random()*(maxValue-minValue);
     }
 
-    /* private double calcRandomPosition() {
-        return parameters.MIN_POSITION+
-                Math.random()*(parameters.MAX_POSITION-parameters.MIN_POSITION);
-    }
-
-    private double calcRandomVelocity() {
-        double minSpeed=-parameters.MAX_SPEED;
-        return  minSpeed+
-                Math.random()*(parameters.MAX_SPEED-minSpeed);
-    }  */
 
     private LineData createRoadData() {
 
@@ -201,10 +192,22 @@ public class MountainCar extends Environment {
         newState.setVariable("nofSteps", state.getDiscreteVariable("nofSteps")+1);
         stepReturn.state = newState;
         stepReturn.termState = isTerminalState(newState);
+        double GAMMA=0.99; //TODO from agent
+
+
         stepReturn.reward = (stepReturn.termState)?
         //stepReturn.reward = isGoalState(stepReturn)?
                 0:
                 parameters.NON_TERMINAL_REWARD;
+
+        stepReturn.reward=stepReturn.reward + parameters.ALPHA_POS_CHANGE * (GAMMA *
+                Math.abs (newState.getContinuousVariable("position")) -
+                Math.abs(state.getContinuousVariable("position")));
+
+        //int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
+        //stepReturn.reward= (action==desiredAction)?1.0:0.0;
+
+        //stepReturn.reward=Math.abs(state.getContinuousVariable("velocity"));
 
         state.totalNofSteps++;
         return stepReturn;
@@ -262,7 +265,7 @@ public class MountainCar extends Environment {
         return height(state);
     }
 
-    public int testPolicy(int nofTests,MountainCarAgentNeuralNetwork agent) {
+    public double testPolicy(int nofTests,MountainCarAgentNeuralNetwork agent) {
 
         List<Integer> nofStepsList = new ArrayList<>();
         int nofSuccessTests = 0;
@@ -274,7 +277,8 @@ public class MountainCar extends Environment {
             if (nofSteps < parameters.MAX_NOF_STEPS)
                 nofSuccessTests++;
         }
-        return nofSuccessTests / nofTests;
+
+        return (double) nofSuccessTests / (double) nofTests;
 
     }
 
