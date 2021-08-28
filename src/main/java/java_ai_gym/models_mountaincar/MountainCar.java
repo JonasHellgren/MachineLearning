@@ -68,8 +68,8 @@ public class MountainCar extends Environment {
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
-        public  double NON_TERMINAL_REWARD = -1.0;
-        public  double ALPHA_POS_CHANGE=300;
+        public  double NON_TERMINAL_REWARD = -0.1;
+        public  double ALPHA_POS_CHANGE=30;
 
         public final double FORCE = 0.001;
         public final double GRAVITY = 0.0025;
@@ -200,12 +200,17 @@ public class MountainCar extends Environment {
                 0:
                 parameters.NON_TERMINAL_REWARD;
 
-        stepReturn.reward=stepReturn.reward + parameters.ALPHA_POS_CHANGE * (GAMMA *
+        double posChangeReward= + parameters.ALPHA_POS_CHANGE * (GAMMA *
                 Math.abs (newState.getContinuousVariable("position")) -
                 Math.abs(state.getContinuousVariable("position")));
 
         int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
-        stepReturn.reward= (action==desiredAction)?1.0:0.0;
+        double desActionReward= (action==desiredAction)?1.0:0.0;
+
+
+        stepReturn.reward=stepReturn.reward+0.01*desActionReward+0.0*posChangeReward;
+
+        //stepReturn.reward=stepReturn.reward+desActionReward;
 
         //stepReturn.reward=Math.abs(state.getContinuousVariable("velocity"));
 
