@@ -45,7 +45,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 30;
+        this.NOF_NEURONS_HIDDEN = 50;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
@@ -54,7 +54,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.MINI_BATCH_SIZE = 100;
         this.L2_REGULATION = 0.00001;
-        this.LEARNING_RATE = 0.000001;
+        this.LEARNING_RATE = 0.01;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
@@ -84,12 +84,12 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
                 .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.RELU)
+                        .activation(Activation.LEAKYRELU)
                         .build())
-               // .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
-                 //       .activation(Activation.RELU)
-                 //       .build())
-                .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
+                        .activation(Activation.LEAKYRELU)
+                        .build())
+                .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
                 .backpropType(BackpropType.Standard)

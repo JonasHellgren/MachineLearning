@@ -68,8 +68,8 @@ public class MountainCar extends Environment {
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
-        public  double NON_TERMINAL_REWARD = -0.1;
-        public  double ALPHA_POS_CHANGE=30;
+        public  double NON_TERMINAL_REWARD = -1.0;
+        public  double ALPHA_POS_CHANGE=300;
 
         public final double FORCE = 0.001;
         public final double GRAVITY = 0.0025;

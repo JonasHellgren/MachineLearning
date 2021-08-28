@@ -143,11 +143,15 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         int nofTests=100;        env.testPolicy(nofTests,agent);
         for (int i = 0; i < 50 ; i++) {
-            if (i % 10 ==0)
-             System.out.println("i:"+i+"success ratio:"+env.testPolicy(nofTests,agent));
+            if (i % 10 ==0) {
+                System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
+                agent.printQsa(env.parameters);
+            }
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
             agent.fitFromMiniBatch(miniBatch,env.parameters);
+
+
         }
 
         System.out.println("state:"+agent.state);
@@ -156,7 +160,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         List<Position2D> circlePositionList = new ArrayList<>();
         List<Integer> actionList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             env.setRandomStateValuesAny(agent.state);
 
             double pos=agent.state.getContinuousVariable("position");
@@ -170,7 +174,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
             for (int a : env.parameters.discreteActionsSpace)
                 Assert.assertEquals(calcRuleBasedReward(pos, vel, a),
                         agent.readMemory(agent.state, a, env.parameters),
-                        0.2);
+                        0.5);
 
         }
 
