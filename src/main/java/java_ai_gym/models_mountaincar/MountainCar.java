@@ -68,7 +68,7 @@ public class MountainCar extends Environment {
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
-        public  double NON_TERMINAL_REWARD = -0.1;
+        public  double NON_TERMINAL_REWARD = -1.0;
         public  double ALPHA_POS_CHANGE=30;
 
         public final double FORCE = 0.001;
@@ -208,7 +208,7 @@ public class MountainCar extends Environment {
         double desActionReward= (action==desiredAction)?1.0:0.0;
 
 
-        stepReturn.reward=stepReturn.reward+0.01*desActionReward+0.0*posChangeReward;
+        stepReturn.reward=stepReturn.reward+0.001*desActionReward+0.0*posChangeReward;
 
         //stepReturn.reward=stepReturn.reward+desActionReward;
 

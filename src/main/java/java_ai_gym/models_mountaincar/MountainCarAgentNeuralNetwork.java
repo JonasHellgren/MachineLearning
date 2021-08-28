@@ -29,7 +29,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
     public final double RB_EPS = 0.1;
-    public final double RB_ALP = 0.0;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public final double RB_ALP = 0.5;  //0 <=> uniform distribution from bellman error for mini batch selection
     public final double BETA0 = 0.1;
 
 
@@ -45,25 +45,25 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 50;
+        this.NOF_NEURONS_HIDDEN = 30;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
         networkTarget = createNetwork();
 
 
-        this.MINI_BATCH_SIZE = 100;
-        this.L2_REGULATION = 0.00001;
-        this.LEARNING_RATE = 0.0001;
+        this.MINI_BATCH_SIZE = 20;
+        this.L2_REGULATION = 0.01;
+        this.LEARNING_RATE = 0.0000001;
         this.MOMENTUM = 0.8;
 
         this.GAMMA = 0.99;  // gamma discount factor
         this.ALPHA = 1.0;  // learning rate
-        this.PROBABILITY_RANDOM_ACTION_START = 0.5;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 100; // number of iterations
         this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 5;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 50;
         this.NOF_STEPS_BETWEEN_FITS = 10;
 
         if (isAnyFieldNull())
