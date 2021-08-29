@@ -49,7 +49,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 100;
+        this.NOF_NEURONS_HIDDEN = 10;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
@@ -63,17 +63,17 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
 
-        this.MINI_BATCH_SIZE = 50;
-        this.L2_REGULATION = 0.0001;
-        this.LEARNING_RATE = 0.00001;
-        this.MOMENTUM = 0.8;
+        this.MINI_BATCH_SIZE = 100;
+        this.L2_REGULATION = 0.00001;
+        this.LEARNING_RATE = 0.0001;
+        this.MOMENTUM = 0.9;
 
         this.GAMMA = 0.99;  // gamma discount factor
-        this.ALPHA = 1.0;  // learning rate
+        this.ALPHA = 0.9;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.01;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.001;
         this.NUM_OF_EPISODES = 50; // number of iterations
-        this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
+        this.NUM_OF_EPOCHS=50;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
         this.NOF_STEPS_BETWEEN_FITS = 5;
 
@@ -100,7 +100,13 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
                 .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.LEAKYRELU)
                         .build())
-                .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                .layer(2, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
+                        .activation(Activation.LEAKYRELU)
+                        .build())
+                .layer(3, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
+                        .activation(Activation.LEAKYRELU)
+                        .build())
+                .layer(4, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
                 .backpropType(BackpropType.Standard)

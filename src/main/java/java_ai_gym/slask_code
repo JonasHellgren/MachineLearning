@@ -15,3 +15,23 @@
         double[] varValuesAsArray = varValues.stream().mapToDouble(d -> d).toArray();
         return Nd4j.create(varValuesAsArray, 1, nofFeatures);
     }
+
+
+         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
+                    .seed(SEED)
+                    .weightInit(WeightInit.XAVIER)
+                    .l2(L2_REGULATION)
+                    //.updater(new Sgd(LEARNING_RATE))
+                    .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
+                    .list()
+                    .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
+                            .activation(Activation.LEAKYRELU)
+                            .build())
+                    .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
+                            .activation(Activation.LEAKYRELU)
+                            .build())
+                    .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                            .activation(Activation.IDENTITY)
+                            .nIn(NOF_NEURONS_HIDDEN).nOut(NOF_OUTPUTS).build())
+                    .backpropType(BackpropType.Standard)
+                    .build();

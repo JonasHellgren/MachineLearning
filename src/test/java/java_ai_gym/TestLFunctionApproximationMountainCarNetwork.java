@@ -145,6 +145,9 @@ public class TestLFunctionApproximationMountainCarNetwork {
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0) {
                 System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
+
+                agent.state.setVariable("position", env.parameters.POSITION_AT_MIN_HEIGHT);
+                agent.state.setVariable("velocity", env.parameters.MAX_SPEED/100);
                 agent.printQsa(env.parameters);
             }
 
@@ -160,8 +163,9 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         List<Position2D> circlePositionList = new ArrayList<>();
         List<Integer> actionList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            env.setRandomStateValuesAny(agent.state);
+        for (int i = 0; i < 100; i++) {
+            //env.setRandomStateValuesAny(agent.state);
+            env.setRandomStateValuesStart(agent.state);
 
             double pos=agent.state.getContinuousVariable("position");
             double vel=agent.state.getContinuousVariable("velocity");

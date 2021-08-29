@@ -41,6 +41,7 @@ större replay buffer
 minska q learning rate
 printa mer än succes ratio, tex bellman error
 annan nn arkitekur
+pusha till repo
 
 
 minskande learning rate
