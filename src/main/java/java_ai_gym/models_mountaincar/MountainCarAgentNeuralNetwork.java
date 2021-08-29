@@ -68,16 +68,16 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.MINI_BATCH_SIZE = 100;
         this.L2_REGULATION = 0.000001;
         this.LEARNING_RATE = 0.001;
-        this.MOMENTUM = 0.5;
+        this.MOMENTUM = 0.0;
 
         this.GAMMA = 0.99;  // gamma discount factor
         this.ALPHA = 1.0;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.001;
-        this.NUM_OF_EPISODES = 1500; // number of iterations
-        this.NUM_OF_EPOCHS=5;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
-        this.NOF_STEPS_BETWEEN_FITS = 10;
+        this.NUM_OF_EPISODES = 1000; // number of iterations
+        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
+        this.NOF_STEPS_BETWEEN_FITS = NUM_OF_EPOCHS;
 
         if (isAnyFieldNull())
             logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
@@ -94,8 +94,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
                 .weightInit(WeightInit.XAVIER)
                 .l2(L2_REGULATION)
                 .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
-                .updater(new Sgd(LEARNING_RATE))
-                //.updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
+                //.updater(new Sgd(LEARNING_RATE))
+                .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.TANH)
