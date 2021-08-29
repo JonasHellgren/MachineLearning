@@ -35,8 +35,11 @@ skapa seperata test för funk approx  resp inlärning  x
 alternativ reward
 lära sig Q för regelabserad, väl lika mellan actions x
 nofFits:2376, totalNofSteps:1227936 stämmer inte
-nyanlända experience, prioritet?
-normalisiering
+nyanlända experience, prioritet?  x
+normalisiering   x
+större replay buffer
+minska q learning rate
+printa mer än succes ratio, tex bellman error
 annan nn arkitekur
 
 

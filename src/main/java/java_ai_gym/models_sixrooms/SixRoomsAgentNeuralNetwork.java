@@ -25,6 +25,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
     public  final double RB_EPS=0.1;
     public  final double RB_ALP=0.9;  //0 <=> uniform distribution from bellman error for mini batch selection
     public  final double BETA0=0.1;
+    public final double  BE_ERROR_INIT=10;
     public final int REPLAY_BUFFER_SIZE = 100;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {

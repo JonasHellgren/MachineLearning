@@ -15,7 +15,7 @@ public class Experience {
         public double w;
 
         public PrioritizedExperienceReplay() {
-            beError=BE_ERROR_INIT;
+
             priority=0; Psampling=0; sortCriteria=0;  //todo better beError init
             w=1;
         }
@@ -32,10 +32,11 @@ public class Experience {
         }
     }
 
-    public Experience(State s, int action, StepReturn stepReturn) {
+    public Experience(State s, int action, StepReturn stepReturn, double beErrorInit) {
         this.s = s;
         this.action = action;
         this.stepReturn = stepReturn;
+        this.pExpRep.beError=beErrorInit;
     }
 
     public double getSortCriteria() {

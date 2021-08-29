@@ -99,7 +99,7 @@ public class TestLearningMountainCarNetwork {
             System.out.println(stepReturn);  */
 
 
-            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
+            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn, agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
             //System.out.println("fEpisodes:"+fEpisodes);

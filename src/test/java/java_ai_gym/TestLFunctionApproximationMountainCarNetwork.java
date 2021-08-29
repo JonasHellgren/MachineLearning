@@ -47,7 +47,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
             int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
             StepReturn stepReturn = env.step(aChosen, agent.state);
             stepReturn.reward=(double) -100*aChosen;  //mocking reward
-            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
+            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
         }
 
@@ -80,7 +80,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
                     agent.state.setVariable("nofSteps", 0);
                     StepReturn stepReturn = env.step(a, agent.state);
                     stepReturn.reward=calcMockReward(pos, vel, a);  //mocking reward
-                    Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                    Experience experience = new Experience(new State(agent.state), a, stepReturn,agent.BE_ERROR_INIT);
                     agent.replayBuffer.addExperience(experience);
                 }
             }
@@ -135,7 +135,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
                                 agent.state.getContinuousVariable("position"),
                                 agent.state.getContinuousVariable("velocity"),
                                 a);  //mocking reward
-                        Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                        Experience experience = new Experience(new State(agent.state), a, stepReturn,agent.BE_ERROR_INIT);
                         agent.replayBuffer.addExperience(experience);
             }
         }
@@ -193,7 +193,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
                 env.setRandomStateValuesAny(agent.state);
                 StepReturn stepReturn = env.step(a, agent.state);
                 stepReturn.reward=-1.0;
-                Experience experience = new Experience(new State(agent.state), a, stepReturn);
+                Experience experience = new Experience(new State(agent.state), a, stepReturn, agent.BE_ERROR_INIT);
                 agent.replayBuffer.addExperience(experience);
             }
         }

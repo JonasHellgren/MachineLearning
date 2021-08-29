@@ -5,6 +5,7 @@ import java_ai_gym.models_common.EnvironmentParametersAbstract;
 import java_ai_gym.models_common.ReplayBuffer;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
+import java_ai_gym.swing.ScaleLinear;
 import org.deeplearning4j.nn.conf.BackpropType;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -31,7 +32,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     public final double RB_EPS = 0.1;
     public final double RB_ALP = 0.5;  //0 <=> uniform distribution from bellman error for mini batch selection
     public final double BETA0 = 0.1;
+    public final double  BE_ERROR_INIT=0;
 
+    ScaleLinear posScaler;
+    ScaleLinear velScaler;
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -51,6 +55,13 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         network = createNetwork();
         networkTarget = createNetwork();
 
+        posScaler=new ScaleLinear(envParams.MIN_POSITION,envParams.MAX_POSITION,
+                -1,1,false,0);
+
+        velScaler=new ScaleLinear(-envParams.MAX_SPEED,envParams.MAX_SPEED,
+                -1,1,false,0);
+
+
 
         this.MINI_BATCH_SIZE = 50;
         this.L2_REGULATION = 0.0001;
@@ -61,7 +72,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.ALPHA = 1.0;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.01;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.001;
-        this.NUM_OF_EPISODES = 100; // number of iterations
+        this.NUM_OF_EPISODES = 50; // number of iterations
         this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
         this.NOF_STEPS_BETWEEN_FITS = 5;
@@ -106,9 +117,12 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     @Override
     public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
         double[] varValuesAsArray = {
-                 state.getContinuousVariable("position"),
-                 state.getContinuousVariable("velocity")*10
+                // state.getContinuousVariable("position"),
+                posScaler.calcOutDouble(state.getContinuousVariable("position")),
+               //  state.getContinuousVariable("velocity")*10
+                velScaler.calcOutDouble(state.getContinuousVariable("velocity"))
         };
+
 
         if (varValuesAsArray.length != NOF_FEATURES)
             logger.warning("Wrong number of network inputs");

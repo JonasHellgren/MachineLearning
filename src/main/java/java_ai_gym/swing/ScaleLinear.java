@@ -34,6 +34,11 @@ public class ScaleLinear {
         return (flip)?(int) (rMax-y):(int) (y);
     }
 
+    public double calcOutDouble(double in) {
+        double y=m*in+b;
+        return (flip)? (rMax-y): (y);
+    }
+
     public int scale(double sizeInDomain) {
         return (int) (sizeInDomain*(r1-r0)/(d1-d0));
     }

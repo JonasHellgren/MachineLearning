@@ -87,7 +87,7 @@ public class TestLearningNeuralNetworkSixRooms {
         do {
             int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
-            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn);
+            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize,fEpisodes);
