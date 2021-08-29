@@ -57,12 +57,12 @@ public class MountainCar extends Environment {
 
         public final double MIN_POSITION = -1.2;
         public final double MAX_POSITION = 0.6;
-        public  double MIN_START_POSITION = -0.6;  // -0.6;
-        public  double MAX_START_POSITION = 0.5;  //-0.4;
+        public  double MIN_START_POSITION = -1.2;  // -0.6;
+        public  double MAX_START_POSITION = 0.6;  //-0.4;
         public final double POSITION_AT_MIN_HEIGHT = -0.5235;
 
-        public double MIN_START_VELOCITY = -0.03;
-        public double MAX_START_VELOCITY = 0.03;
+        public double MIN_START_VELOCITY = -0.07;
+        public double MAX_START_VELOCITY = 0.07;
 
         public final double MAX_SPEED = 0.07;
         public final double GOAL_POSITION = 0.5;
@@ -208,7 +208,7 @@ public class MountainCar extends Environment {
         double desActionReward= (action==desiredAction)?1.0:0.0;
 
 
-        stepReturn.reward=stepReturn.reward+0.001*desActionReward+0.0*posChangeReward;
+        stepReturn.reward=stepReturn.reward+0.0*desActionReward+0.0*posChangeReward;
 
         //stepReturn.reward=stepReturn.reward+desActionReward;
 

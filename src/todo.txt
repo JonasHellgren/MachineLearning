@@ -38,8 +38,10 @@ nofFits:2376, totalNofSteps:1227936 stämmer inte
 nyanlända experience, prioritet?  x
 normalisiering   x
 större replay buffer
+ändra range
+MIN_START_VELOCITY och MIN_START_POS ändrat
 minska q learning rate
-printa mer än succes ratio, tex bellman error
+testPlicy printa mer än succes ratio, tex bellman error, antal steg
 annan nn arkitekur
 pusha till repo
 
