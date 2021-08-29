@@ -289,10 +289,12 @@ public class MountainCar extends Environment {
 
     private void runPolicy(MountainCarAgentNeuralNetwork agent) {
         StepReturn stepReturn;
+        int tempTotalNofSteps=agent.state.totalNofSteps;  //evaluation shall not affect totalNofSteps
         do {
             stepReturn=step(agent.chooseBestAction(agent.state, parameters),agent.state);
             agent.state.copyState(stepReturn.state);
         } while (!stepReturn.termState);
+        agent.state.totalNofSteps=tempTotalNofSteps;
     }
 
 }

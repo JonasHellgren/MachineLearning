@@ -31,11 +31,17 @@ kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i state, nof
 snygga upp kod, tex några metoder från test klass in i andra klasser,   x
 stepReturn.reward=-1 för learnAtSameInputStandardRewardNonZeroGamma
 undvika kalla createContinuousVariable flera ggr x
+skapa seperata test för funk approx  resp inlärning  x
 alternativ reward
 lära sig Q för regelabserad, väl lika mellan actions x
+nofFits:2376, totalNofSteps:1227936 stämmer inte
+nyanlända experience, prioritet?
+normalisiering
+annan nn arkitekur
+
+
 minskande learning rate
 
-skapa seperata test för funk approx resp inlärning
 spara policy/nn
 
 ett lager mindre
