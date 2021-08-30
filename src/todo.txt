@@ -34,32 +34,27 @@ undvika kalla createContinuousVariable flera ggr x
 skapa seperata test för funk approx  resp inlärning  x
 alternativ reward
 lära sig Q för regelabserad, väl lika mellan actions x
-nofFits:2376, totalNofSteps:1227936 stämmer inte
+nofFits:2376, totalNofSteps:1227936 stämmer inte  x
 nyanlända experience, prioritet?  x
 normalisiering   x
-större replay buffer
-ändra range
-MIN_START_VELOCITY och MIN_START_POS ändrat
+ändra range  x
+annan nn arkitekur, testat LEAKRELU, funkar sämre  x
+
+testa SixRooms
 minska q learning rate
-förträna så att allla Qsa är -100
-testPlicy printa mer än succes ratio, tex bellman error, antal steg
-annan nn arkitekur
+mer info i anim fönster, tex max Qsa
+animera under träning
+testPolicy printa mer än succes ratio, tex bellman error, antal steg
+plotta policy, succesratio vs episod
+ersätta ScaleLinear med tex dl4j normalizer
+code clear up
 pusha till repo
 
+annan environment, tex chart pole
 
-minskande learning rate
 
-spara policy/nn
-
-ett lager mindre
-
-test där stor exp replay buffer skapas som agent trånas från
-bellmanError verkar för litet
-detaljstudera episod
-printa exempel nn out  x
-mer info för varje episode, tex score, max pos, nn ut vid tbd x
 fixa bellmanErrorList for 6Rooms
-snabba upp SixRooms
+
 
 
 

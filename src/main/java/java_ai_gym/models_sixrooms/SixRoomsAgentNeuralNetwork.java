@@ -26,7 +26,6 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
     public  final double RB_ALP=0.9;  //0 <=> uniform distribution from bellman error for mini batch selection
     public  final double BETA0=0.1;
     public final double  BE_ERROR_INIT=10;
-    public final int REPLAY_BUFFER_SIZE = 100;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -34,6 +33,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         for (String varName : envParams.discreteStateVariableNames)
             state.createDiscreteVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
 
+        this.REPLAY_BUFFER_SIZE = 100;
         replayBuffer = new ReplayBuffer(RB_EPS,RB_ALP,BETA0,REPLAY_BUFFER_SIZE);
 
         this.NOF_OUTPUTS = 6;
@@ -44,7 +44,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         network= createNetwork();
         networkTarget= createNetwork();
 
-        this.MINI_BATCH_SIZE=30;
+        this.MINI_BATCH_SIZE=10;
         this.L2_REGULATION=0.000001;
         this.LEARNING_RATE =0.9;
         this.MOMENTUM=0.8;
@@ -54,8 +54,9 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = 1000; // number of iterations
-        this.NUM_OF_EPOCHS=3;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =50;
+        this.NUM_OF_EPOCHS=20;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =5;
+        this.NOF_STEPS_BETWEEN_FITS=1;
 
         if (isAnyFieldNull())
             logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
@@ -94,12 +95,14 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
     @Override
     protected INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+        int nofRooms=envParams.discreteActionsSpace.size();
         double[] varValuesAsArray = {
-                (double) state.getDiscreteVariable("roomNumber")
+                (double) state.getDiscreteVariable("roomNumber")/(double) nofRooms
         };
 
         if (varValuesAsArray.length!=NOF_FEATURES)
             logger.warning("Wrong number of network inputs");
+
 
         return Nd4j.create(varValuesAsArray, 1, NOF_FEATURES);
     }

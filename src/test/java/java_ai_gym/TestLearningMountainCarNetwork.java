@@ -42,26 +42,13 @@ public class TestLearningMountainCarNetwork {
 
             System.out.println("------------------------------");
 
-
-            agent.state.setVariable("position",env.parameters.MIN_START_POSITION/2);
-            agent.state.setVariable("velocity",env.parameters.MIN_START_VELOCITY/2);
-            agent.printQsa(env.parameters);
-
-            agent.state.setVariable("position",env.parameters.MAX_START_POSITION/10);
-            agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/10);
-            agent.printQsa(env.parameters);
-
-            agent.state.setVariable("position",env.parameters.MAX_START_POSITION/2);
-            agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/2);
-            agent.printQsa(env.parameters);
-
-
+            printStates();
 
 
         }
 
 
-        //animatePolicy();
+        animatePolicy();
 
         // env.PrintQsa(agent);
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
@@ -74,6 +61,20 @@ public class TestLearningMountainCarNetwork {
         agent.state.setVariable("velocity", env.parameters.MAX_SPEED/10);
         Assert.assertEquals(2,agent.chooseBestAction(agent.state,env.parameters));
 
+    }
+
+    private void printStates() {
+        agent.state.setVariable("position",env.parameters.MIN_START_POSITION/2);
+        agent.state.setVariable("velocity",env.parameters.MIN_START_VELOCITY/2);
+        agent.printQsa(env.parameters);
+
+        agent.state.setVariable("position",env.parameters.MAX_START_POSITION/10);
+        agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/10);
+        agent.printQsa(env.parameters);
+
+        agent.state.setVariable("position",env.parameters.MAX_START_POSITION/2);
+        agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/2);
+        agent.printQsa(env.parameters);
     }
 
 
@@ -90,13 +91,6 @@ public class TestLearningMountainCarNetwork {
         do {
             int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
-
-            /*
-
-            System.out.println("--------------");
-            System.out.println(agent.state);
-            System.out.println(stepReturn.state);
-            System.out.println(stepReturn);  */
 
 
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn, agent.BE_ERROR_INIT);
