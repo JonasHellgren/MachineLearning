@@ -41,6 +41,8 @@ normalisiering   x
 annan nn arkitekur, testat LEAKRELU, funkar sämre  x
 
 testa SixRooms
+NOF_STEPS_BETWEEN_FITS tillämpas på six rooms?
+exp.pExpRep.w
 minska q learning rate
 mer info i anim fönster, tex max Qsa
 animera under träning

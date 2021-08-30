@@ -46,7 +46,8 @@ public class TestLearningNeuralNetworkSixRooms {
         }
 
         env.PrintQsa(agent);
-        System.out.println("nofFits:"+agent.nofFits);
+        //System.out.println("nofFits:"+agent.nofFits);
+        System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
         env.showPolicy(agent);
 
@@ -90,19 +91,26 @@ public class TestLearningNeuralNetworkSixRooms {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize,fEpisodes);
+            if (agent.replayBuffer.isFull(agent)) {
+                if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+                    List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize, fEpisodes);
+                    agent.fitFromMiniBatch(miniBatch, env.parameters);
+                    agent.maybeUpdateTargetNetwork();
+                }
+            }
 
+            /*
             if (miniBatch.size()==miniBatchSize) {
 
                 DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
                 agent.network.fit(iterator,agent.NUM_OF_EPOCHS);
 
                 if (printFlag) {
-                    System.out.println("replayBuffer"+agent.replayBuffer);
+                    //System.out.println("replayBuffer"+agent.replayBuffer);
                     System.out.println("miniBatch"+miniBatch);
                 }
 
-            }
+            }  */
 
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);

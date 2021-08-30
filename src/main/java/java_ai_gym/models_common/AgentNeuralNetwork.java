@@ -215,7 +215,9 @@ public abstract class AgentNeuralNetwork implements Learnable {
                 exp.stepReturn.reward - qOld:
                 exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state,envParams) - qOld;
         double alpha=exp.pExpRep.w*ALPHA;
+        alpha=1;
         double y=qOld*1 + alpha * bellmanErrorStep;
+        //y=exp.action;
         outFromNetwork.putScalar(0, exp.action,y);
         return outFromNetwork;
     }

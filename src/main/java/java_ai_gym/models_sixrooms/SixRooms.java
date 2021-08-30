@@ -88,6 +88,7 @@ public class SixRooms extends Environment {
         stepReturn.state = newState;
         stepReturn.reward = parameters.R_MOVE+parameters.rewardMatrix[parameters.getIdxState(state)][parameters.getIdxAction(action)];
         stepReturn.termState = isTerminalState(newState);
+        state.totalNofSteps++;
         return stepReturn;
     }
 

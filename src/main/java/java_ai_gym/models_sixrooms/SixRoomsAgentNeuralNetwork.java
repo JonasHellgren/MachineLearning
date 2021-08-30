@@ -23,9 +23,9 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
     public  final double RB_EPS=0.1;
-    public  final double RB_ALP=0.9;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public  final double RB_ALP=0.0;  //0 <=> uniform distribution from bellman error for mini batch selection
     public  final double BETA0=0.1;
-    public final double  BE_ERROR_INIT=10;
+    public final double  BE_ERROR_INIT=0;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -38,24 +38,24 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = 6;
         this.NOF_FEATURES = 1;
-        this.NOF_NEURONS_HIDDEN=10;
+        this.NOF_NEURONS_HIDDEN=20;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network= createNetwork();
         networkTarget= createNetwork();
 
         this.MINI_BATCH_SIZE=10;
-        this.L2_REGULATION=0.000001;
-        this.LEARNING_RATE =0.9;
-        this.MOMENTUM=0.8;
+        this.L2_REGULATION=0.000000;
+        this.LEARNING_RATE =0.0001;
+        this.MOMENTUM=0.1;
 
-        this.GAMMA = 1.0;  // gamma discount factor
-        this.ALPHA = 1.0;  // learning rate
+        this.GAMMA = 0.0; //1.0;  // gamma discount factor
+        this.ALPHA = 0.9;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
-        this.NUM_OF_EPISODES = 1000; // number of iterations
-        this.NUM_OF_EPOCHS=20;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =5;
+        this.NUM_OF_EPISODES = 1500; // number of iterations
+        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =10;
         this.NOF_STEPS_BETWEEN_FITS=1;
 
         if (isAnyFieldNull())
@@ -74,10 +74,10 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
                 .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.SIGMOID)
+                        .activation(Activation.TANH)
                         .build())
                 .layer(1, new DenseLayer.Builder().nIn(NOF_NEURONS_HIDDEN).nOut(NOF_NEURONS_HIDDEN)
-                        .activation(Activation.SIGMOID)
+                        .activation(Activation.TANH)
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
