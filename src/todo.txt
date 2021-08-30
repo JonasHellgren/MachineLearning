@@ -41,15 +41,16 @@ normalisiering   x
 annan nn arkitekur, testat LEAKRELU, funkar sämre  x
 
 testa SixRooms
-NOF_STEPS_BETWEEN_FITS tillämpas på six rooms?
-exp.pExpRep.w
+test fcn approx på six rooms
 minska q learning rate
 mer info i anim fönster, tex max Qsa
 animera under träning
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
 plotta policy, succesratio vs episod
 ersätta ScaleLinear med tex dl4j normalizer
-code clear up
+code clean up:
+- agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function
+- flytta state.totalNofSteps++;
 pusha till repo
 
 annan environment, tex chart pole
