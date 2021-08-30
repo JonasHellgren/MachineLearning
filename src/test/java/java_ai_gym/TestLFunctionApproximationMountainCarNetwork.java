@@ -53,7 +53,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
         for (int i = 0; i < 50 ; i++) {
-            agent.fitFromMiniBatch(miniBatch,env.parameters);
+            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
             agent.printQsa(env.parameters);
         }
 
@@ -94,7 +94,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         for (int i = 0; i < 100 ; i++) {
             List<Experience>  miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            agent.fitFromMiniBatch(miniBatch,env.parameters);
+            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
             agent.state.setVariable("position",positionsList.get(0));
             agent.state.setVariable("velocity",velocitiesList.get(0));
         }
@@ -142,7 +142,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
 
         int nofTests=100;        env.testPolicy(nofTests,agent);
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 300 ; i++) {
             if (i % 10 ==0) {
                 System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
 
@@ -151,8 +151,8 @@ public class TestLFunctionApproximationMountainCarNetwork {
                 agent.printQsa(env.parameters);
             }
 
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            agent.fitFromMiniBatch(miniBatch,env.parameters);
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,1);
+            agent.fitFromMiniBatch(miniBatch,env.parameters,0);
 
 
         }
@@ -192,6 +192,8 @@ public class TestLFunctionApproximationMountainCarNetwork {
     public void learnAtSameInputStandardRewardNonZeroGamma() {
 
         agent.GAMMA=0.99;
+
+
         while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
             for (int a:env.parameters.discreteActionsSpace) {
                 env.setRandomStateValuesAny(agent.state);
@@ -206,7 +208,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         for (int i = 0; i < 500; i++) {
             agent.printQsa(env.parameters);
-            agent.fitFromMiniBatch(miniBatch,env.parameters);
+            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
             if (i % agent.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
                 agent.networkTarget.setParams(agent.network.params());
 
@@ -230,7 +232,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
     private double calcRuleBasedReward(double pos, double vel, int a) {
         int desiredAction=(vel <-0.001)?0:2;
         double rAction=(a==desiredAction)?1.0:0.0;
-        return -100*1+rAction;
+        return -30*1+rAction;
     }
 
 

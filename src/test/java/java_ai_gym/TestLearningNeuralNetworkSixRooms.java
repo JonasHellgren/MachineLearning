@@ -82,7 +82,7 @@ public class TestLearningNeuralNetworkSixRooms {
 
         StepReturn stepReturn;
         int miniBatchSize= agent.MINI_BATCH_SIZE;
-        double fEpisodes=(double) iEpisode/agent.NUM_OF_EPISODES;
+        double fEpisodes=(double) iEpisode/ (double) agent.NUM_OF_EPISODES;
         int nofSteps=0;
 
         do {
@@ -91,12 +91,11 @@ public class TestLearningNeuralNetworkSixRooms {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
-            if (agent.replayBuffer.isFull(agent)) {
-                if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+            if (agent.replayBuffer.isFull(agent) & agent.isTimeToFit() ) {
                     List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize, fEpisodes);
-                    agent.fitFromMiniBatch(miniBatch, env.parameters);
+                    agent.fitFromMiniBatch(miniBatch, env.parameters,fEpisodes);
                     agent.maybeUpdateTargetNetwork();
-                }
+
             }
 
             /*

@@ -31,7 +31,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     private final Random random = new Random();
 
     public int nofFits=0;
-    //public int nofSteps=0;
+    protected double alphaAsFcnOfEpisode;
     double bellmanErrorStep;
     public List<Double> bellmanErrorListItemPerEpisode =new ArrayList<>();
     public List<Double> bellmanErrorListItemPerStep =new ArrayList<>();
@@ -49,7 +49,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  double MOMENTUM=0.8;
 
     public double GAMMA = 1.0;  // gamma discount factor
-    protected  double ALPHA = 1.0;  // learning rate in Q-learning update
+    protected  double ALPHA_START=1;  // learning rate in Q-learning update
+    protected  double ALPHA_END=0.1;
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 200; // number of iterations
@@ -127,7 +128,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return network.output(inputNetwork, false);
     }
 
-    public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams ) {
+    public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams, double fEpisodes ) {
+        alphaAsFcnOfEpisode=ALPHA_START+fEpisodes*(ALPHA_END-ALPHA_START);
         if (miniBatch.size()== MINI_BATCH_SIZE) {
             DataSetIterator iterator = createTrainingData(miniBatch,envParams);
             network.fit(iterator,NUM_OF_EPOCHS);
@@ -184,6 +186,10 @@ public abstract class AgentNeuralNetwork implements Learnable {
         bellmanErrorListItemPerStep.clear();
     }
 
+    public boolean isTimeToFit() {
+        return  state.totalNofSteps % NOF_STEPS_BETWEEN_FITS == 0;
+    }
+
     //To enable prioritized experience replay items in full experience buffer are modified
     //possible because mini batch item exp is reference to item in buffer
     private void changeBellmanErrorVariableInBufferItem(Experience exp) {
@@ -191,10 +197,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     public void maybeUpdateTargetNetwork() {
-
         if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
             networkTarget.setParams(network.params());
-
     }
 
     private void addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet, int idxSample, INDArray inputNetwork, INDArray outFromNetwork) {
@@ -214,7 +218,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         bellmanErrorStep= exp.stepReturn.termState ?
                 exp.stepReturn.reward - qOld:
                 exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state,envParams) - qOld;
-        double alpha=exp.pExpRep.w*ALPHA;
+        double alpha=exp.pExpRep.w*alphaAsFcnOfEpisode;
         //alpha=1;
         double y=qOld*1 + alpha * bellmanErrorStep;
         //y=exp.action;

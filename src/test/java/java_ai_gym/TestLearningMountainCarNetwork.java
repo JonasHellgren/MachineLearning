@@ -99,18 +99,15 @@ public class TestLearningMountainCarNetwork {
             //System.out.println("fEpisodes:"+fEpisodes);
 
             //System.out.println("agent.replayBuffer.size():"+agent.replayBuffer.size());
-            if (agent.replayBuffer.isFull(agent)) {
-
-                //System.out.println(agent.replayBuffer);
-                if (agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0) {
+            if (agent.replayBuffer.isFull(agent) & agent.isTimeToFit() ) {
                     //System.out.println("fitting");
                     List<Experience> miniBatch =
                             agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, 0.5);
-                    agent.fitFromMiniBatch(miniBatch, env.parameters);
+                    agent.fitFromMiniBatch(miniBatch, env.parameters,fEpisodes);
                     agent.maybeUpdateTargetNetwork();
 
                     //System.out.println(miniBatch);
-                }
+
             }
 
 
@@ -125,6 +122,7 @@ public class TestLearningMountainCarNetwork {
                 System.out.println(stepReturn);
             }  */
 
+            env.render(agent);
             nofSteps++;  maxPosition=Math.max(maxPosition,agent.state.getContinuousVariable("position"));
 
         } while (!stepReturn.termState);
@@ -145,15 +143,13 @@ public class TestLearningMountainCarNetwork {
 
         do {
 
-            double position=agent.state.getContinuousVariable("position");
-            double velocity=agent.state.getContinuousVariable("velocity");
+      //      double position=agent.state.getContinuousVariable("position");
+       //     double velocity=agent.state.getContinuousVariable("velocity");
 
             stepReturn=env.step(agent.chooseBestAction(agent.state, env.parameters),agent.state);
             agent.state.copyState(stepReturn.state);
 
-            System.out.println(agent.state);
-            env.animationPanel.setCarStates(position,env.height(position),velocity);
-            env.animationPanel.repaint();
+            env.render(agent);
             TimeUnit.MILLISECONDS.sleep(100);
 
             if (env.isGoalState(stepReturn)) {

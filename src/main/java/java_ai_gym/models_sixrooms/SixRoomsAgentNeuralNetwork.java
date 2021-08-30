@@ -50,9 +50,6 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.MOMENTUM=0.1;
 
         this.GAMMA = 1.0; //1.0;  // gamma discount factor
-        this.ALPHA = 0.9;  // learning rate
-        this.PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
-        this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = 1000; // number of iterations
         this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =5;

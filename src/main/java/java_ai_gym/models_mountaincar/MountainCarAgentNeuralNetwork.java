@@ -32,7 +32,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
     public final double RB_EPS = 0.1;
-    public final double RB_ALP = 0.9;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public  double RB_ALP = 0.1;  //0 <=> uniform distribution from bellman error for mini batch selection
     public final double BETA0 = 0.1;
     public final double  BE_ERROR_INIT=0;
 
@@ -67,16 +67,15 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.MINI_BATCH_SIZE = 10;
         this.L2_REGULATION = 0.000001;
-        this.LEARNING_RATE = 0.001;
+        this.LEARNING_RATE = 0.0001;
         this.MOMENTUM = 0.0;
 
         this.GAMMA = 0.99;  // gamma discount factor
-        this.ALPHA = 1.0;  // learning rate
         this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.001;
         this.NUM_OF_EPISODES = 200; // number of iterations
-        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
+        this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
         this.NOF_STEPS_BETWEEN_FITS = NUM_OF_EPOCHS;
 
         if (isAnyFieldNull())

@@ -40,17 +40,20 @@ normalisiering   x
 ändra range  x
 annan nn arkitekur, testat LEAKRELU, funkar sämre  x
 
-testa SixRooms
-test fcn approx på six rooms
-minska q learning rate
+testa SixRooms  x
+
+code clean up:
+- agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function  x
+- flytta state.totalNofSteps++;   VET EJ HUR
+- render function  x
+- render function i abstract class
+minska q learning rate   x
+animera under träning   x
 mer info i anim fönster, tex max Qsa
-animera under träning
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
 plotta policy, succesratio vs episod
 ersätta ScaleLinear med tex dl4j normalizer
-code clean up:
-- agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function
-- flytta state.totalNofSteps++;
+
 pusha till repo
 
 annan environment, tex chart pole
@@ -63,6 +66,7 @@ fixa bellmanErrorList for 6Rooms
 
 
 när tid:
+test fcn approx på six rooms
 binary string variable i State   https://stackoverflow.com/questions/7602665/store-an-array-in-hashmap/7602742
 prova relu som activ function för six rooms
 GPU vs CPU för riktigt stor nn/batch

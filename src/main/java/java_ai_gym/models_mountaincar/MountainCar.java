@@ -192,27 +192,18 @@ public class MountainCar extends Environment {
         newState.setVariable("nofSteps", state.getDiscreteVariable("nofSteps")+1);
         stepReturn.state = newState;
         stepReturn.termState = isTerminalState(newState);
-        double GAMMA=0.99; //TODO from agent
-
-
         stepReturn.reward = (stepReturn.termState)?
-        //stepReturn.reward = isGoalState(stepReturn)?
                 0:
                 parameters.NON_TERMINAL_REWARD;
 
-        double posChangeReward= + parameters.ALPHA_POS_CHANGE * (GAMMA *
+        /*
+        double posChangeReward= + parameters.ALPHA_POS_CHANGE * (0.99 *
                 Math.abs (newState.getContinuousVariable("position")) -
-                Math.abs(state.getContinuousVariable("position")));
+                Math.abs(state.getContinuousVariable("position")));  */
 
         int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
         double desActionReward= (action==desiredAction)?1.0:0.0;
-
-
-        stepReturn.reward=stepReturn.reward+0.0*desActionReward+0.0*posChangeReward;
-
-        //stepReturn.reward=stepReturn.reward+desActionReward;
-
-        //stepReturn.reward=Math.abs(state.getContinuousVariable("velocity"));
+        stepReturn.reward=stepReturn.reward+0.0*desActionReward;
 
         state.totalNofSteps++;
         return stepReturn;
@@ -258,6 +249,14 @@ public class MountainCar extends Environment {
         return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
                 state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY |
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS);
+    }
+
+    public void render(MountainCarAgentNeuralNetwork agent) {
+        double position=agent.state.getContinuousVariable("position");
+        double velocity=agent.state.getContinuousVariable("velocity");
+        animationPanel.setCarStates(position,height(position),velocity);
+        animationPanel.repaint();
+
     }
 
     public double height(State state) {
