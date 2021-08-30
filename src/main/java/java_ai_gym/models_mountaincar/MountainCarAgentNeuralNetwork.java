@@ -32,9 +32,9 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
     public final double RB_EPS = 0.1;
-    public  double RB_ALP = 0.1;  //0 <=> uniform distribution from bellman error for mini batch selection
-    public final double BETA0 = 0.1;
-    public final double  BE_ERROR_INIT=0;
+    public  double RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public final double BETA0 = 0.0;
+    public final double  BE_ERROR_INIT=0;  //do not favor new comers
 
     ScaleLinear posScaler;
     ScaleLinear velScaler;
@@ -51,7 +51,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 200;
+        this.NOF_NEURONS_HIDDEN = 50;
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
@@ -65,17 +65,19 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
 
-        this.MINI_BATCH_SIZE = 10;
+        this.MINI_BATCH_SIZE = 50;
         this.L2_REGULATION = 0.000001;
         this.LEARNING_RATE = 0.0001;
         this.MOMENTUM = 0.0;
 
         this.GAMMA = 0.99;  // gamma discount factor
-        this.PROBABILITY_RANDOM_ACTION_START = 0.1;  //probability choosing random action
-        this.PROBABILITY_RANDOM_ACTION_END = 0.001;
-        this.NUM_OF_EPISODES = 200; // number of iterations
+        this.PROBABILITY_RANDOM_ACTION_START = 0.3;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_END = 0.01;
+        this.ALPHA_START=1.0;
+        this.ALPHA_END=0.1;
+        this.NUM_OF_EPISODES = 100; // number of iterations
         this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
         this.NOF_STEPS_BETWEEN_FITS = NUM_OF_EPOCHS;
 
         if (isAnyFieldNull())

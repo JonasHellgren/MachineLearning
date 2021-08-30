@@ -142,7 +142,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
 
         int nofTests=100;        env.testPolicy(nofTests,agent);
-        for (int i = 0; i < 300 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             if (i % 10 ==0) {
                 System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
 

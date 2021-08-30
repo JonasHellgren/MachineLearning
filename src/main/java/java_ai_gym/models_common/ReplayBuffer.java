@@ -37,6 +37,10 @@ public class ReplayBuffer {
         return buffer.size();
     }
 
+    public void clear() {
+        buffer.clear();
+    }
+
     public List<Experience> getMiniBatch(int batchLength) {
         List<Experience> miniBatch = new ArrayList<>();
 

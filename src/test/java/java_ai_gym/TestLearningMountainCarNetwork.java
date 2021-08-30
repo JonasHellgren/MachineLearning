@@ -27,6 +27,10 @@ public class TestLearningMountainCarNetwork {
     public void runLearningTextBook() throws InterruptedException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
+      /*  initNetwork();
+        agent.replayBuffer.clear();
+        agent.networkTarget.setParams(agent.network.params());  */
+
         agent.GAMMA=0.99; //TODO remove
 
         //env.PrintQsa(agent);
@@ -55,11 +59,9 @@ public class TestLearningMountainCarNetwork {
         System.out.println(agent.network.summary());
         //env.showPolicy(agent);
 
-        Assert.assertTrue(agent.getBellmanErrorAverage(NOF_EPISODES_BETWEEN_PRINTOUTS)<0.05);
+        Assert.assertTrue(env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent)>0.9);
 
-        agent.state.setVariable("position", env.parameters.POSITION_AT_MIN_HEIGHT+0.1);
-        agent.state.setVariable("velocity", env.parameters.MAX_SPEED/10);
-        Assert.assertEquals(2,agent.chooseBestAction(agent.state,env.parameters));
+
 
     }
 
@@ -161,6 +163,37 @@ public class TestLearningMountainCarNetwork {
         } while (!stepReturn.termState);
 
         TimeUnit.MILLISECONDS.sleep(1000);
+
+    }
+
+    public void initNetwork() {
+        agent.GAMMA=0;
+
+        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
+            for (int a:env.parameters.discreteActionsSpace) {
+                env.setRandomStateValuesAny(agent.state);
+                StepReturn stepReturn = env.step(a, agent.state);
+                stepReturn.reward=-20.0;
+                Experience experience = new Experience(new State(agent.state), a, stepReturn,agent.BE_ERROR_INIT);
+                agent.replayBuffer.addExperience(experience);
+            }
+        }
+
+
+        int nofTests=100;        env.testPolicy(nofTests,agent);
+        for (int i = 0; i < 50 ; i++) {
+            if (i % 10 ==0) {
+                System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
+                agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
+                agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
+                agent.printQsa(env.parameters);
+            }
+
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,1);
+            agent.fitFromMiniBatch(miniBatch,env.parameters,0);
+
+        }
+
 
     }
 
