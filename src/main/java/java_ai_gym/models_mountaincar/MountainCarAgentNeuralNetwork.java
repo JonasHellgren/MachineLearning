@@ -74,10 +74,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.3;  //probability choosing random action
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.ALPHA_START=1.0;
-        this.ALPHA_END=0.1;
+        this.ALPHA_END=0.01;
         this.NUM_OF_EPISODES = 100; // number of iterations
         this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 10;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 50;
         this.NOF_STEPS_BETWEEN_FITS = NUM_OF_EPOCHS;
 
         if (isAnyFieldNull())

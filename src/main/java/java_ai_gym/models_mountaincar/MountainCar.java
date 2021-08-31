@@ -251,10 +251,10 @@ public class MountainCar extends Environment {
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS);
     }
 
-    public void render(MountainCarAgentNeuralNetwork agent) {
+    public void render(MountainCarAgentNeuralNetwork agent, int action) {
         double position=agent.state.getContinuousVariable("position");
         double velocity=agent.state.getContinuousVariable("velocity");
-        animationPanel.setCarStates(position,height(position),velocity);
+        animationPanel.setCarStates(position,height(position),velocity,action);
         animationPanel.repaint();
 
     }

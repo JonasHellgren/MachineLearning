@@ -124,7 +124,7 @@ public class TestLearningMountainCarNetwork {
                 System.out.println(stepReturn);
             }  */
 
-            env.render(agent);
+            env.render(agent,aChosen);
             nofSteps++;  maxPosition=Math.max(maxPosition,agent.state.getContinuousVariable("position"));
 
         } while (!stepReturn.termState);
@@ -148,10 +148,11 @@ public class TestLearningMountainCarNetwork {
       //      double position=agent.state.getContinuousVariable("position");
        //     double velocity=agent.state.getContinuousVariable("velocity");
 
-            stepReturn=env.step(agent.chooseBestAction(agent.state, env.parameters),agent.state);
+            int aBest=agent.chooseBestAction(agent.state, env.parameters);
+            stepReturn=env.step(aBest,agent.state);
             agent.state.copyState(stepReturn.state);
 
-            env.render(agent);
+            env.render(agent,aBest);
             TimeUnit.MILLISECONDS.sleep(100);
 
             if (env.isGoalState(stepReturn)) {

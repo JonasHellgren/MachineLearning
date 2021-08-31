@@ -49,12 +49,14 @@ code clean up:
 - render function i abstract class
 minska q learning rate   x
 animera under träning   x
+färga circle sfa action i animering  x
+pusha till repo
+
 mer info i anim fönster, tex max Qsa
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
 plotta policy, succesratio vs episod
 ersätta ScaleLinear med tex dl4j normalizer
 
-pusha till repo
 
 annan environment, tex chart pole
 

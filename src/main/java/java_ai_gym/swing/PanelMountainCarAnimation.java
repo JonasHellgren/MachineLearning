@@ -1,16 +1,21 @@
 package java_ai_gym.swing;
 
+import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
+
 import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.logging.Logger;
 
 public class PanelMountainCarAnimation extends JPanel {
 
+    private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
 
     ScaleLinear xScaler;
     ScaleLinear yScaler;
     LineData roadData;
     public Position2D carPosition;
+    Color carColor;
     double velocity;
     public JLabel  label;
 
@@ -33,8 +38,28 @@ public class PanelMountainCarAnimation extends JPanel {
         plotCar(g2d,carPosition.x, carPosition.y);
     }
 
-    public void setCarStates(double x, double y,double velocity) {
+    public void setCarStates(double x, double y,double velocity, int action) {
         carPosition.x=x;   carPosition.y=y; this.velocity = velocity;
+
+
+        switch (action) {
+            case 0:
+                carColor = Color.RED;
+                break;
+            case 1:
+                carColor = Color.YELLOW;
+                break;
+            case 2:
+                carColor = Color.GREEN;
+                break;
+            default:
+                carColor = Color.BLACK;
+                logger.warning("Non existing action, painting car as black");
+                break;
+            // code block
+        }
+
+
     }
 
 
@@ -44,7 +69,7 @@ public class PanelMountainCarAnimation extends JPanel {
     }
 
     private void plotCar(Graphics2D g2d,double x,double y) {
-        //g2d.setColor('r');
+        g2d.setColor(carColor);
 
         g2d.drawOval((int) (xScaler.calcOut(x)+-1*xScaler.scale(CAR_RADIUS)/2),
                 (int) (yScaler.calcOut(y)+-1*xScaler.scale(CAR_RADIUS)/2),
