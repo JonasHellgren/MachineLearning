@@ -41,10 +41,14 @@ public class TestLearningMountainCarNetwork {
             //System.out.println("Start state:");     System.out.println(agent.state);
             simulateTextBook(false, iEpisode);
 
-            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0)
-                System.out.println("iEpisode:" + iEpisode + ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent));
 
             System.out.println("------------------------------");
+            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0)
+                System.out.println("iEpisode:" + iEpisode +
+                        ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent)+
+                        ", tbd:" + 0.0);
+
+
 
             printStates();
 

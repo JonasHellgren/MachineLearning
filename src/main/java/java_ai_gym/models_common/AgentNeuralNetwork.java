@@ -1,6 +1,7 @@
 package java_ai_gym.models_common;
 
 
+import java_ai_gym.models_mountaincar.MountainCar;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -31,7 +32,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     private final Random random = new Random();
 
     public int nofFits=0;
-    protected double alphaAsFcnOfEpisode;
+    protected double networkLearningRate;
     double bellmanErrorStep;
     public List<Double> bellmanErrorListItemPerEpisode =new ArrayList<>();
     public List<Double> bellmanErrorListItemPerStep =new ArrayList<>();
@@ -44,13 +45,20 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     public  int REPLAY_BUFFER_SIZE = 100;
     public  int MINI_BATCH_SIZE = 30;
+    public   double RB_EPS=0.1;
+    public   double RB_ALP=0.5;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public   double BETA0=0.1;
+    public  double  BE_ERROR_INIT=0;
+
+
     protected  double L2_REGULATION=0.000001;
-    protected  double LEARNING_RATE =0.01;
+    //protected  double LEARNING_RATE =0.01;
+    protected  double LEARNING_RATE_START =1e-2;
+    protected  double LEARNING_RATE_END =1e-2;
     protected  double MOMENTUM=0.8;
 
     public double GAMMA = 1.0;  // gamma discount factor
-    protected  double ALPHA_START=1;  // learning rate in Q-learning update
-    protected  double ALPHA_END=0.1;
+    protected  double ALPHA=1;  // learning rate in Q-learning update
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 200; // number of iterations
@@ -129,7 +137,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams, double fEpisodes ) {
-        alphaAsFcnOfEpisode=ALPHA_START+fEpisodes*(ALPHA_END-ALPHA_START);
+        networkLearningRate = LEARNING_RATE_START +fEpisodes*(LEARNING_RATE_END - LEARNING_RATE_START);
+        network.setLearningRate(networkLearningRate);
         if (miniBatch.size()== MINI_BATCH_SIZE) {
             DataSetIterator iterator = createTrainingData(miniBatch,envParams);
             network.fit(iterator,NUM_OF_EPOCHS);
@@ -212,14 +221,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
     //alpha=1 =>
     //y=    r  (term state)
     //      r+gama*maxQ(s’)-q(s)  (not term state)
-    //skipped ..*(1- alpha ), made learning less stable
+    //skipped ..*(1- alpha), made learning less stable
     private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep= exp.stepReturn.termState ?
                 exp.stepReturn.reward - qOld:
                 exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state,envParams) - qOld;
-        double alpha=exp.pExpRep.w*alphaAsFcnOfEpisode;
-        //alpha=1;
+        double alpha=exp.pExpRep.w*ALPHA;
+        //double alpha=alphaAsFcnOfEpisode;
         double y=qOld*1 + alpha * bellmanErrorStep;
         //y=exp.action;
         outFromNetwork.putScalar(0, exp.action,y);
@@ -249,7 +258,13 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     protected  boolean isAnyFieldNull() {
         return (state==null | replayBuffer==null | network==null | networkTarget==null);
+    }
 
+    protected void showConstructorLogMessage() {
+        if (isAnyFieldNull())
+            logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
+        else
+            logger.info("Neural network based agent created. ");
     }
 
 

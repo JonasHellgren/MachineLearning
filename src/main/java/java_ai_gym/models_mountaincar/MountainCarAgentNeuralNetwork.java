@@ -18,7 +18,6 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
-import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.logging.Logger;
@@ -31,10 +30,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
-    public final double RB_EPS = 0.1;
-    public  double RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
-    public final double BETA0 = 0.0;
-    public final double  BE_ERROR_INIT=0;  //do not favor new comers
+
 
     ScaleLinear posScaler;
     ScaleLinear velScaler;
@@ -46,57 +42,71 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         state.createContinuousVariable("position", envParams.startPosition);
         state.createContinuousVariable("velocity", envParams.startPosition);
 
-        this.REPLAY_BUFFER_SIZE = 1000;
-        replayBuffer = new ReplayBuffer(RB_EPS, RB_ALP, BETA0, REPLAY_BUFFER_SIZE);
+        createReplayBuffer();
+        createInputNormalizers(envParams);
+        createNetworks(envParams);
+        defineLearningParameters();
+        showConstructorLogMessage();
 
+    }
+
+    private void createInputNormalizers(MountainCar.EnvironmentParameters envParams) {
+        posScaler=new ScaleLinear(envParams.MIN_POSITION, envParams.MAX_POSITION,
+                -1,1,false,0);
+
+        velScaler=new ScaleLinear(-envParams.MAX_SPEED, envParams.MAX_SPEED,
+                -1,1,false,0);
+    }
+
+    private void createReplayBuffer() {
+        this.REPLAY_BUFFER_SIZE = 1000;
+        this.MINI_BATCH_SIZE = 30;
+        this.RB_EPS = 0.1;
+        this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
+        this.BETA0 = 0.0;
+        this.BE_ERROR_INIT=0;  //do not favor new comers
+        replayBuffer = new ReplayBuffer(RB_EPS, RB_ALP, BETA0, REPLAY_BUFFER_SIZE);
+    }
+
+
+    private void defineLearningParameters() {
+        this.GAMMA = 0.99;  // gamma discount factor
+        this.PROBABILITY_RANDOM_ACTION_START = 0.3;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_END = 0.01;
+        this.NUM_OF_EPISODES = 1000; // number of iterations
+        this.NUM_OF_EPOCHS=3;  //nof fits per mini batch
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 50;
+        this.NOF_STEPS_BETWEEN_FITS = 1;
+    }
+
+    private void createNetworks(MountainCar.EnvironmentParameters envParams) {
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
         this.NOF_NEURONS_HIDDEN = 50;
+        this.L2_REGULATION = 1e-8;
+        this.LEARNING_RATE_START =1e-2;
+        this.LEARNING_RATE_END =1e-5;
+        this.MOMENTUM = 0.8;
+
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
         network = createNetwork();
         networkTarget = createNetwork();
-
-        posScaler=new ScaleLinear(envParams.MIN_POSITION,envParams.MAX_POSITION,
-                -1,1,false,0);
-
-        velScaler=new ScaleLinear(-envParams.MAX_SPEED,envParams.MAX_SPEED,
-                -1,1,false,0);
-
-
-
-        this.MINI_BATCH_SIZE = 50;
-        this.L2_REGULATION = 0.000001;
-        this.LEARNING_RATE = 0.0001;
-        this.MOMENTUM = 0.0;
-
-        this.GAMMA = 0.99;  // gamma discount factor
-        this.PROBABILITY_RANDOM_ACTION_START = 0.3;  //probability choosing random action
-        this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.ALPHA_START=1.0;
-        this.ALPHA_END=0.01;
-        this.NUM_OF_EPISODES = 100; // number of iterations
-        this.NUM_OF_EPOCHS=1;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 50;
-        this.NOF_STEPS_BETWEEN_FITS = NUM_OF_EPOCHS;
-
-        if (isAnyFieldNull())
-            logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
-        else
-            logger.info("Neural network based MountainCar agent created. " + "nofStates:" + 3 + ", nofActions:" + envParams.NOF_ACTIONS);
-
     }
 
 
-
     private MultiLayerNetwork createNetwork() {
+
+        logger.info("Creating network, initital learning rate:"+this.LEARNING_RATE_START+
+                ", L2_REGULATION:"+L2_REGULATION+", NOF_NEURONS_HIDDEN:"+NOF_NEURONS_HIDDEN);
+
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
                 .seed(SEED)
                 .weightInit(WeightInit.XAVIER)
                 .l2(L2_REGULATION)
                 .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
                 //.updater(new Sgd(LEARNING_RATE))
-                .updater(new Nesterovs(LEARNING_RATE, MOMENTUM))
+                .updater(new Nesterovs(LEARNING_RATE_START, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.TANH)

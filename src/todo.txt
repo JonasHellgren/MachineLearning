@@ -50,10 +50,11 @@ code clean up:
 minska q learning rate   x
 animera under träning   x
 färga circle sfa action i animering  x
-pusha till repo
+pusha till repo  x
 
 mer info i anim fönster, tex max Qsa
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
+testa få learning rate verkligen ändras
 plotta policy, succesratio vs episod
 ersätta ScaleLinear med tex dl4j normalizer
 
