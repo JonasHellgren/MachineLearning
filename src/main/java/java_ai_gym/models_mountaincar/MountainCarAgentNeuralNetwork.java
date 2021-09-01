@@ -39,8 +39,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.envParams = envParams;
         state = new State();
         state.createDiscreteVariable("nofSteps", 0);
-        state.createContinuousVariable("position", envParams.startPosition);
-        state.createContinuousVariable("velocity", envParams.startPosition);
+        state.createContinuousVariable("position", envParams.POSITION_AT_MIN_HEIGHT);
+        state.createContinuousVariable("velocity", 0.0);
 
         createReplayBuffer();
         createInputNormalizers(envParams);
@@ -59,7 +59,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
     private void createReplayBuffer() {
-        this.REPLAY_BUFFER_SIZE = 1000;
+        this.REPLAY_BUFFER_SIZE = 2000;
         this.MINI_BATCH_SIZE = 30;
         this.RB_EPS = 0.1;
         this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
@@ -71,11 +71,11 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void defineLearningParameters() {
         this.GAMMA = 0.99;  // gamma discount factor
-        this.PROBABILITY_RANDOM_ACTION_START = 0.3;  //probability choosing random action
+        this.PROBABILITY_RANDOM_ACTION_START = 0.5;
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.NUM_OF_EPISODES = 1000; // number of iterations
-        this.NUM_OF_EPOCHS=3;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 50;
+        this.NUM_OF_EPISODES = 100;
+        this.NUM_OF_EPOCHS=1;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
         this.NOF_STEPS_BETWEEN_FITS = 1;
     }
 
@@ -85,7 +85,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_NEURONS_HIDDEN = 50;
         this.L2_REGULATION = 1e-8;
         this.LEARNING_RATE_START =1e-2;
-        this.LEARNING_RATE_END =1e-5;
+        this.LEARNING_RATE_END =1e-4;
         this.MOMENTUM = 0.8;
 
         if (isAnyNetworkSizeFieldNull())

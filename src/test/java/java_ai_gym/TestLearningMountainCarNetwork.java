@@ -35,22 +35,23 @@ public class TestLearningMountainCarNetwork {
 
         //env.PrintQsa(agent);
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
-            env.initState(agent.state);
-            System.out.println(agent.state);
+            //env.initState(agent.state);
+            env.setRandomStateValuesAny(agent.state);
+            //System.out.println(agent.state);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
             //System.out.println("Start state:");     System.out.println(agent.state);
             simulateTextBook(false, iEpisode);
 
 
-            System.out.println("------------------------------");
-            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0)
+            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
+                System.out.println("------------------------------");
                 System.out.println("iEpisode:" + iEpisode +
-                        ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent)+
+                        ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY, agent) +
                         ", tbd:" + 0.0);
 
+                printStates();
+            }
 
-
-            printStates();
 
 
         }
@@ -143,7 +144,8 @@ public class TestLearningMountainCarNetwork {
 
     public void animatePolicy() throws InterruptedException {
 
-        env.initState(agent.state);
+        // env.initState(agent.state);
+        env.setRandomStateValuesStart(agent.state);
         System.out.println(agent.state);
         StepReturn stepReturn;
 

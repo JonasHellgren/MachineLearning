@@ -44,10 +44,10 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
     private void defineLearningParameters() {
-        this.GAMMA = 1.0;  // gamma discount factor
-        this.NUM_OF_EPISODES = 1000; // number of iterations
-        this.NUM_OF_EPOCHS=10;  //nof fits per mini batch
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =10;
+        this.GAMMA = 1.0;
+        this.NUM_OF_EPISODES = 2000;
+        this.NUM_OF_EPOCHS=1;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =5;
         this.NOF_STEPS_BETWEEN_FITS=1;
     }
 
@@ -57,7 +57,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_NEURONS_HIDDEN=20;
         this.L2_REGULATION=1e-8;
         this.LEARNING_RATE_START =0.1;
-        this.LEARNING_RATE_END =0.1;
+        this.LEARNING_RATE_END =0.01;
         this.MOMENTUM=0.1;
 
         if (isAnyNetworkSizeFieldNull())

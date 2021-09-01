@@ -43,7 +43,8 @@ public class TestLFunctionApproximationMountainCarNetwork {
         agent.MINI_BATCH_SIZE=10;
 
       while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
-            env.initState(agent.state);
+            //env.initState(agent.state);
+            env.setRandomStateValuesAny(agent.state);
             int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
             StepReturn stepReturn = env.step(aChosen, agent.state);
             stepReturn.reward=(double) -100*aChosen;  //mocking reward

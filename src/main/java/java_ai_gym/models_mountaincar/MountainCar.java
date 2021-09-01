@@ -77,8 +77,8 @@ public class MountainCar extends Environment {
         public int NOF_ACTIONS;
         public int MIN_ACTION;
 
-        public double startPosition;
-        public double startVelocity=0;
+       // public double startPosition;
+       // public double startVelocity=0;
 
 
         public EnvironmentParameters() {
@@ -105,7 +105,7 @@ public class MountainCar extends Environment {
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
 
         LineData roadData=createRoadData();
-        setStartPositionAndVelocity();
+        //setStartPositionAndVelocity();
         setupFrameAndPanel(roadData);
         animationPanel.repaint();
     }
@@ -119,8 +119,9 @@ public class MountainCar extends Environment {
         ScaleLinear yScaler=new ScaleLinear(0,1, FRAME_MARGIN,
                 FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
 
-        Position2D carPositionInit=new Position2D(parameters.startPosition,height(parameters.startPosition));
+        Position2D carPositionInit=new Position2D(parameters.POSITION_AT_MIN_HEIGHT,height(parameters.POSITION_AT_MIN_HEIGHT));
         animationPanel =new PanelMountainCarAnimation(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
+
         label = new JLabel();
         animationPanel.label=label;
         label.setText("label text");
@@ -146,10 +147,11 @@ public class MountainCar extends Environment {
 
     }
 
+    /*
     private void setStartPositionAndVelocity() {
         parameters.startPosition=calcRandomFromIntervall(parameters.MIN_START_POSITION,parameters.MAX_START_POSITION);
         parameters.startVelocity= calcRandomFromIntervall(parameters.MIN_START_VELOCITY,parameters.MAX_START_VELOCITY);
-    }
+    }  */
 
     private double calcRandomFromIntervall(double minValue, double maxValue) {
         return minValue+Math.random()*(maxValue-minValue);
@@ -214,12 +216,12 @@ public class MountainCar extends Environment {
                 stepReturn.state.getDiscreteVariable("nofSteps")<parameters.MAX_NOF_STEPS);
     }
 
-    public void initState(State state) {
+  /*  public void initState(State state) {
         setStartPositionAndVelocity();
         state.setVariable("position",parameters.startPosition);
         state.setVariable("velocity",parameters.startVelocity);
         state.setVariable("nofSteps",0);
-    }
+    } */
 
     public void setRandomStateValuesStart(State state) {
         setRandomStateValues(state, true);

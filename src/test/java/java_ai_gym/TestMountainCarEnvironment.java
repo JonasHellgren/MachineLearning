@@ -72,10 +72,13 @@ public class TestMountainCarEnvironment {
 
     @Test
     public void setRuleBasedAction() throws InterruptedException {
+
+        /*
         state.createContinuousVariable("position",env.parameters.startPosition);
         state.createContinuousVariable("velocity",env.parameters.startVelocity);
         state.createDiscreteVariable("nofSteps",0);
-        env.initState(state);
+        env.initState(state);  */
+        env.setRandomStateValuesAny(state);
         System.out.println(state);
         StepReturn stepReturn=env.step(0,state);
         int action=1;
