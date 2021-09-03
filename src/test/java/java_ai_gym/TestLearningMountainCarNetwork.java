@@ -71,16 +71,16 @@ public class TestLearningMountainCarNetwork {
     }
 
     private void printStates() {
-        agent.state.setVariable("position",env.parameters.MIN_START_POSITION/2);
-        agent.state.setVariable("velocity",env.parameters.MIN_START_VELOCITY/2);
+        agent.state.setVariable("position",env.parameters.MIN_POSITION/2);
+        agent.state.setVariable("velocity",-env.parameters.MAX_SPEED/2);
         agent.printQsa(env.parameters);
 
-        agent.state.setVariable("position",env.parameters.MAX_START_POSITION/10);
-        agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/10);
+        agent.state.setVariable("position",env.parameters.MAX_POSITION/10);
+        agent.state.setVariable("velocity",env.parameters.MAX_SPEED/10);
         agent.printQsa(env.parameters);
 
-        agent.state.setVariable("position",env.parameters.MAX_START_POSITION/2);
-        agent.state.setVariable("velocity",env.parameters.MAX_START_VELOCITY/2);
+        agent.state.setVariable("position",env.parameters.MAX_POSITION/2);
+        agent.state.setVariable("velocity",env.parameters.MAX_SPEED/2);
         agent.printQsa(env.parameters);
     }
 

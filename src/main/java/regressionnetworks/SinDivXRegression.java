@@ -18,7 +18,6 @@ package regressionnetworks;
  ******************************************************************************/
 
 
-import org.datavec.api.transform.MathFunction;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.MathFunction;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.SinXDivXMathFunction;

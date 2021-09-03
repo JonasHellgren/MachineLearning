@@ -143,7 +143,8 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
 
         int nofTests=100;        env.testPolicy(nofTests,agent);
-        for (int i = 0; i < 100 ; i++) {
+        int nofEpis=100;
+        for (int i = 0; i < nofEpis ; i++) {
             if (i % 10 ==0) {
                 System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
 
@@ -153,7 +154,8 @@ public class TestLFunctionApproximationMountainCarNetwork {
             }
 
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,1);
-            agent.fitFromMiniBatch(miniBatch,env.parameters,0);
+            double fEpis=(double) i/ (double) nofEpis;
+            agent.fitFromMiniBatch(miniBatch,env.parameters,fEpis);
 
 
         }

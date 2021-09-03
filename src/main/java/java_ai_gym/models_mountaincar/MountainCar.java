@@ -59,15 +59,17 @@ public class MountainCar extends Environment {
         public final double MAX_POSITION = 0.6;
         public final double MAX_SPEED = 0.07;
 
-        public  double MIN_START_POSITION = -0.8;  // -0.6;
-        public  double MAX_START_POSITION = 0.5;  //-0.4;
+        public final double POSITION_AT_MIN_HEIGHT = -0.5235;
+        public  double MIN_START_POSITION = POSITION_AT_MIN_HEIGHT-0.3;  // -0.8;
+        public  double MAX_START_POSITION = POSITION_AT_MIN_HEIGHT+1.0;  //0.5;
         public double MIN_START_VELOCITY = -0.06;
         public double MAX_START_VELOCITY = 0.06;
 
-        public final double POSITION_AT_MIN_HEIGHT = -0.5235;
+
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
+        public final int MAX_NOF_STEPS_POLICY_TEST=500;
         public  double NON_TERMINAL_REWARD = -1.0;
         public  double ALPHA_POS_CHANGE=30;
 
@@ -253,6 +255,12 @@ public class MountainCar extends Environment {
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS);
     }
 
+    public boolean isTerminalStatePolicyTest(State state) {
+        return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
+                state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY |
+                state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS_POLICY_TEST);
+    }
+
     public void render(MountainCarAgentNeuralNetwork agent, int action) {
         double position=agent.state.getContinuousVariable("position");
         double velocity=agent.state.getContinuousVariable("velocity");
@@ -280,7 +288,7 @@ public class MountainCar extends Environment {
             runPolicy(agent);
             int nofSteps = agent.state.getDiscreteVariable("nofSteps");
             nofStepsList.add(nofSteps);
-            if (nofSteps < parameters.MAX_NOF_STEPS)
+            if (nofSteps < parameters.MAX_NOF_STEPS_POLICY_TEST)
                 nofSuccessTests++;
         }
 
@@ -294,7 +302,7 @@ public class MountainCar extends Environment {
         do {
             stepReturn=step(agent.chooseBestAction(agent.state, parameters),agent.state);
             agent.state.copyState(stepReturn.state);
-        } while (!stepReturn.termState);
+        } while (!isTerminalStatePolicyTest(agent.state));
         agent.state.totalNofSteps=tempTotalNofSteps;
     }
 

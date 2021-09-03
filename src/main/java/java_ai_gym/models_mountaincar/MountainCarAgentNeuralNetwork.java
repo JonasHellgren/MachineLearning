@@ -18,6 +18,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
+import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.logging.Logger;
@@ -60,10 +61,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void createReplayBuffer() {
         this.REPLAY_BUFFER_SIZE = 2000;
-        this.MINI_BATCH_SIZE = 30;
+        this.MINI_BATCH_SIZE = 50;
         this.RB_EPS = 0.1;
-        this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
-        this.BETA0 = 0.0;
+        this.RB_ALP = 0.0;  //0 <=> uniform distribution from bellman error for mini batch selection
+        this.BETA0 = 0.1;
         this.BE_ERROR_INIT=0;  //do not favor new comers
         replayBuffer = new ReplayBuffer(RB_EPS, RB_ALP, BETA0, REPLAY_BUFFER_SIZE);
     }
@@ -71,7 +72,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void defineLearningParameters() {
         this.GAMMA = 0.99;  // gamma discount factor
-        this.PROBABILITY_RANDOM_ACTION_START = 0.5;
+        this.PROBABILITY_RANDOM_ACTION_START = 0.3;
         this.PROBABILITY_RANDOM_ACTION_END = 0.01;
         this.NUM_OF_EPISODES = 100;
         this.NUM_OF_EPOCHS=1;
@@ -82,11 +83,11 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     private void createNetworks(MountainCar.EnvironmentParameters envParams) {
         this.NOF_OUTPUTS = envParams.NOF_ACTIONS;
         this.NOF_FEATURES = state.nofContinuousVariables();
-        this.NOF_NEURONS_HIDDEN = 50;
-        this.L2_REGULATION = 1e-8;
-        this.LEARNING_RATE_START =1e-2;
-        this.LEARNING_RATE_END =1e-4;
-        this.MOMENTUM = 0.8;
+        this.NOF_NEURONS_HIDDEN = 100;
+        this.L2_REGULATION = 1e-6;
+        this.LEARNING_RATE_START =1e-1;
+        this.LEARNING_RATE_END =1e-2;
+        this.MOMENTUM = 0.0;
 
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
@@ -105,8 +106,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
                 .weightInit(WeightInit.XAVIER)
                 .l2(L2_REGULATION)
                 .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
-                //.updater(new Sgd(LEARNING_RATE))
-                .updater(new Nesterovs(LEARNING_RATE_START, MOMENTUM))
+                .updater(new Sgd(LEARNING_RATE_START))
+                //.updater(new Nesterovs(LEARNING_RATE_START, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_FEATURES).nOut(NOF_NEURONS_HIDDEN)
                         .activation(Activation.TANH)
