@@ -61,7 +61,7 @@ public class MountainCar extends Environment {
 
         public final double POSITION_AT_MIN_HEIGHT = -0.5235;
         public  double MIN_START_POSITION = POSITION_AT_MIN_HEIGHT-0.3;  // -0.8;
-        public  double MAX_START_POSITION = POSITION_AT_MIN_HEIGHT+1.0;  //0.5;
+        public  double MAX_START_POSITION = POSITION_AT_MIN_HEIGHT+0.3;  //0.5;
         public double MIN_START_VELOCITY = -0.06;
         public double MAX_START_VELOCITY = 0.06;
 

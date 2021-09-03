@@ -66,7 +66,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =20;
     public  int NOF_STEPS_BETWEEN_FITS=10;
     public int NOF_TESTS_WHEN_TESTING_POLICY=100;
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
+    public int NOF_EPISODES_BETWEEN_POLICY_TEST=5;
 
     protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
 

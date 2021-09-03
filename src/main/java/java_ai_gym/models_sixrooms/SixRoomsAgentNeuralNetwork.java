@@ -47,7 +47,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.GAMMA = 1.0;
         this.NUM_OF_EPISODES = 2000;
         this.NUM_OF_EPOCHS=1;
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =5;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =10;
         this.NOF_STEPS_BETWEEN_FITS=1;
     }
 
@@ -56,9 +56,9 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_FEATURES = 1;
         this.NOF_NEURONS_HIDDEN=20;
         this.L2_REGULATION=1e-8;
-        this.LEARNING_RATE_START =0.1;
-        this.LEARNING_RATE_END =0.01;
-        this.MOMENTUM=0.1;
+        this.LEARNING_RATE_START =0.01;
+        this.LEARNING_RATE_END =0.001;
+        this.MOMENTUM=0.8;
 
         if (isAnyNetworkSizeFieldNull())
             logger.warning("Some network size field is not set, i.e. null");
