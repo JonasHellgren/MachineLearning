@@ -25,16 +25,21 @@ import java.util.logging.Logger;
 
 //https://sudonull.com/post/31369-Mountain-Car-we-solve-the-classic-problem-with-reinforcement-training-Petersburg-Tower-Blog
 
+/***
+ * The parameter PRECISION defines how extensive/precise the training shall be. The higher, the more precise
+ * , but more time demanding, training.
+ */
+
 public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
 
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
-
-
     ScaleLinear posScaler;
     ScaleLinear velScaler;
+
+    final double  PRECISION=1;
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -61,7 +66,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void createReplayBuffer() {
         this.REPLAY_BUFFER_SIZE = 2000;
-        this.MINI_BATCH_SIZE = 30;
+        this.MINI_BATCH_SIZE = (int) (30*PRECISION);
         this.RB_EPS = 0.1;
         this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
         this.BETA0 = 0.1;
@@ -73,10 +78,10 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     private void defineLearningParameters() {
         this.GAMMA = 0.99;  // gamma discount factor
         this.PROBABILITY_RANDOM_ACTION_START = 0.5;
-        this.PROBABILITY_RANDOM_ACTION_END = 0.01;
-        this.NUM_OF_EPISODES = 100;
+        this.PROBABILITY_RANDOM_ACTION_END = 0.1;
+        this.NUM_OF_EPISODES = (int) (100*PRECISION);
         this.NUM_OF_EPOCHS=1;
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = 100;
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*PRECISION);
         this.NOF_STEPS_BETWEEN_FITS = 1;
     }
 
@@ -85,8 +90,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.NOF_FEATURES = state.nofContinuousVariables();
         this.NOF_NEURONS_HIDDEN = 50;
         this.L2_REGULATION = 1e-8;
-        this.LEARNING_RATE_START =1e-2;
-        this.LEARNING_RATE_END =1e-4;
+        this.LEARNING_RATE_START =1e-2/PRECISION;
+        this.LEARNING_RATE_END =1e-4/PRECISION;
         this.MOMENTUM = 0.8;
 
         if (isAnyNetworkSizeFieldNull())
