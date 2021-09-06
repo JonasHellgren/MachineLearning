@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 /***
  * The parameter PRECISION defines how extensive/precise the training shall be. The higher, the more precise
- * , but more time demanding, training.
+ * , but more time demanding, training. Recommended values are {1,10}
  */
 
 public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
@@ -39,7 +39,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     ScaleLinear posScaler;
     ScaleLinear velScaler;
 
-    final double  PRECISION=1;
+    final double  PRECISION=10;
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -66,7 +66,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void createReplayBuffer() {
         this.REPLAY_BUFFER_SIZE = 2000;
-        this.MINI_BATCH_SIZE = (int) (30*PRECISION);
+        this.MINI_BATCH_SIZE = (int) (30*Math.sqrt(PRECISION));
         this.RB_EPS = 0.1;
         this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
         this.BETA0 = 0.1;
@@ -81,7 +81,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = (int) (100*PRECISION);
         this.NUM_OF_EPOCHS=1;
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*PRECISION);
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*1);
         this.NOF_STEPS_BETWEEN_FITS = 1;
     }
 
