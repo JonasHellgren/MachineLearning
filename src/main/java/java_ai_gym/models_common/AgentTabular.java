@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
+/***
+ * Neural network based agent. Sub classes do for example define Qsa.
+ */
+
 public abstract class AgentTabular implements Learnable {
 
     private static final Logger logger = Logger.getLogger(AgentTabular.class.getName());
@@ -19,6 +23,7 @@ public abstract class AgentTabular implements Learnable {
     public  double ALPHA;  // learning rate
     public  double PROBABILITY_RANDOM_ACTION ;  //probability choosing random action
     public  int NUM_OF_EPISODES; // number of iterations
+
 
     @Override
     public State getState() {
@@ -70,8 +75,5 @@ public abstract class AgentTabular implements Learnable {
     public double[] readMemory(State state,EnvironmentParametersAbstract envParams) {
         return Qsa[envParams.getIdxState(state)];
     }
-
-
-
 
 }

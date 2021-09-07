@@ -17,7 +17,6 @@ public class SixRooms extends Environment {
 
     private static final Logger logger = Logger.getLogger(SixRooms.class.getName());
 
-
     public SixRooms.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
     // inner classes

@@ -41,29 +41,24 @@ public class TestLearningMountainCarNetwork {
         agent.GAMMA=0.99; //TODO remove
         plotPolicy();
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
-            //env.initState(agent.state);
             env.setRandomStateValuesAny(agent.state);
-            //System.out.println(agent.state);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
-            //System.out.println("Start state:");     System.out.println(agent.state);
             simulateTextBook(false, iEpisode);
 
 
             if (iEpisode % env.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
-                System.out.println("------------------------------");
-
-                System.out.printf("int: %d ",iEpisode);
-                System.out.printf(", success ratio: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio);
-                System.out.printf(", average of maxQ: %.2f ", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).maxQaverage);
-                System.out.printf(", average bellman error: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).bellmanErrAverage);
-                System.out.printf(", avgNofSteps: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).avgNofSteps);
+                MountainCar.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
+                System.out.printf("iEpisode: %d ",iEpisode);
+                System.out.printf(", success ratio: %.2f", policyTestReturn.successRatio);
+                System.out.printf(", average of maxQ: %.2f ", policyTestReturn.maxQaverage);
+                System.out.printf(", average bellman error: %.2f", policyTestReturn.bellmanErrAverage);
+                System.out.printf(", avg(NofSteps div maxNofsteps): %.2f", policyTestReturn.avgNofSteps/env.parameters.MAX_NOF_STEPS_POLICY_TEST);
                 System.out.println();
-                printStates();
             }
         }
 
         plotPolicy();
-        TimeUnit.MILLISECONDS.sleep(100000);
+        TimeUnit.MILLISECONDS.sleep(1000);
         animatePolicy();
 
         // env.PrintQsa(agent);
@@ -109,15 +104,13 @@ public class TestLearningMountainCarNetwork {
             //System.out.println("fEpisodes:"+fEpisodes);
 
             //System.out.println("agent.replayBuffer.size():"+agent.replayBuffer.size());
-            if (agent.replayBuffer.isFull(agent) & agent.isTimeToFit() ) {
+            if (agent.replayBuffer.isFull(agent) & agent.isItTimeToFit() ) {
                     //System.out.println("fitting");
                     List<Experience> miniBatch =
                             agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE, 0.5);
                     agent.fitFromMiniBatch(miniBatch, env.parameters,fEpisodes);
                     agent.maybeUpdateTargetNetwork();
-
                     //System.out.println(miniBatch);
-
             }
 
             sNew.copyState(stepReturn.state);

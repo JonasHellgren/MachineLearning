@@ -23,6 +23,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
+    NetworkInputNormalizer roomScaler;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -30,11 +31,16 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         for (String varName : envParams.discreteStateVariableNames)
             state.createDiscreteVariable(varName, envParams.INIT_DEFAULT_ROOM_NUMBER);
 
+        createInputNormalizer();
         createReplayBuffer();
         createNetworks();
         defineLearningParameters();
         showConstructorLogMessage();
     }
+
+    private void createInputNormalizer() {
+    roomScaler=new  NetworkInputNormalizer(0, envParams.discreteActionsSpace.size(),-1,1);
+}
 
     private void createReplayBuffer() {
         this.REPLAY_BUFFER_SIZE = 100;
@@ -45,8 +51,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private void defineLearningParameters() {
         this.GAMMA = 1.0;
-        this.NUM_OF_EPISODES = 2000;
-        this.NUM_OF_EPOCHS=1;
+        this.NUM_OF_EPISODES = 1000;
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =10;
         this.NOF_STEPS_BETWEEN_FITS=1;
     }
@@ -66,7 +71,8 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         networkTarget= createNetwork();
     }
 
-    private MultiLayerNetwork createNetwork() {
+    @Override
+    public MultiLayerNetwork createNetwork() {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
                 .seed(SEED)
                 .weightInit(WeightInit.XAVIER)
@@ -99,7 +105,8 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
     public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
         int nofRooms=envParams.discreteActionsSpace.size();
         double[] varValuesAsArray = {
-                (double) state.getDiscreteVariable("roomNumber")/(double) nofRooms
+                //(double) state.getDiscreteVariable("roomNumber")/(double) nofRooms
+                roomScaler.calcOutDouble(state.getDiscreteVariable("roomNumber"))
         };
 
         if (varValuesAsArray.length!=NOF_FEATURES)

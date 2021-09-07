@@ -1,9 +1,6 @@
 package java_ai_gym.models_mountaincar;
 
-import java_ai_gym.models_common.AgentNeuralNetwork;
-import java_ai_gym.models_common.EnvironmentParametersAbstract;
-import java_ai_gym.models_common.ReplayBuffer;
-import java_ai_gym.models_common.State;
+import java_ai_gym.models_common.*;
 import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
 import java_ai_gym.swing.ScaleLinear;
 import org.deeplearning4j.nn.conf.BackpropType;
@@ -36,8 +33,11 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     public final MountainCar.EnvironmentParameters envParams;  //reference to environment parameters
 
-    ScaleLinear posScaler;
-    ScaleLinear velScaler;
+    //ScaleLinear posScaler;
+    //ScaleLinear velScaler;
+
+    NetworkInputNormalizer posScaler;
+    NetworkInputNormalizer velScaler;
 
     final double  PRECISION=1;
 
@@ -53,15 +53,11 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         createNetworks(envParams);
         defineLearningParameters();
         showConstructorLogMessage();
-
     }
 
     private void createInputNormalizers(MountainCar.EnvironmentParameters envParams) {
-        posScaler=new ScaleLinear(envParams.MIN_POSITION, envParams.MAX_POSITION,
-                -1,1,false,0);
-
-        velScaler=new ScaleLinear(-envParams.MAX_SPEED, envParams.MAX_SPEED,
-                -1,1,false,0);
+        posScaler=new NetworkInputNormalizer(envParams.MIN_POSITION, envParams.MAX_POSITION,-1,1);
+        velScaler=new NetworkInputNormalizer(-envParams.MAX_SPEED, envParams.MAX_SPEED,-1,1);
     }
 
     private void createReplayBuffer() {
@@ -80,7 +76,6 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.5;
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = (int) (100*PRECISION);
-        this.NUM_OF_EPOCHS=1;
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*Math.sqrt(PRECISION));
         this.NOF_STEPS_BETWEEN_FITS = 1;
     }
@@ -100,8 +95,8 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         networkTarget = createNetwork();
     }
 
-
-    private MultiLayerNetwork createNetwork() {
+    @Override
+    public MultiLayerNetwork createNetwork() {
 
         logger.info("Creating network, initital learning rate:"+this.LEARNING_RATE_START+
                 ", L2_REGULATION:"+L2_REGULATION+", NOF_NEURONS_HIDDEN:"+NOF_NEURONS_HIDDEN);
@@ -131,8 +126,6 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
         MultiLayerNetwork network = new MultiLayerNetwork(configuration);
         network.init();
-        //network.setListeners(new PerformanceListener(100));
-        //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
 
         return network;
     }
@@ -140,12 +133,9 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     @Override
     public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
         double[] varValuesAsArray = {
-                // state.getContinuousVariable("position"),
                 posScaler.calcOutDouble(state.getContinuousVariable("position")),
-               //  state.getContinuousVariable("velocity")*10
                 velScaler.calcOutDouble(state.getContinuousVariable("velocity"))
         };
-
 
         if (varValuesAsArray.length != NOF_FEATURES)
             logger.warning("Wrong number of network inputs");

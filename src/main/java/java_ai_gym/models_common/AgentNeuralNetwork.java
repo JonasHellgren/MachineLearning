@@ -17,18 +17,22 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 /***
+ * Neural network based agent. Sub classes do for example define the network.
  * Following parameters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
+ *  Network output y for state s defined as
+ *  y=    q(s)+alpha*( r – q(s) )   (term state)
+ *        q(s)+alpha*( r+gama*maxQ(s’)-q(s))   (not term state)
+ *
  */
 
 public abstract class AgentNeuralNetwork implements Learnable {
 
     private final static Logger logger = Logger.getLogger(AgentNeuralNetwork.class.getName());
-  //  private static final Logger logger = LoggerFactory.getLogger(AgentNeuralNetwork.class);
+
     public State state;
-    public  ReplayBuffer replayBuffer;
+    public ReplayBuffer replayBuffer;
     public MultiLayerNetwork network;   //neural network memory
     public MultiLayerNetwork networkTarget;   //neural network memory
-
     private final Random random = new Random();
 
     public int nofFits=0;
@@ -50,9 +54,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public   double BETA0=0.1;
     public  double  BE_ERROR_INIT=0;
 
-
-    protected  double L2_REGULATION=0.000001;
-    //protected  double LEARNING_RATE =0.01;
+    protected  double L2_REGULATION=1e-5;
     protected  double LEARNING_RATE_START =1e-2;
     protected  double LEARNING_RATE_END =1e-2;
     protected  double MOMENTUM=0.8;
@@ -62,11 +64,11 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 200; // number of iterations
-    public  int NUM_OF_EPOCHS = 1; //nof fits per mini batch
+    public final int NUM_OF_EPOCHS = 1; //nof fits per mini batch
     public int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =20;
     public  int NOF_STEPS_BETWEEN_FITS=10;
 
-
+    public abstract  MultiLayerNetwork createNetwork();
     public abstract  INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams);
 
     @Override
@@ -114,7 +116,6 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
 
-
     public double readMemory(INDArray inputNetwork, int action) {
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
         return outFromNetwork.getDouble(action);
@@ -147,7 +148,6 @@ public abstract class AgentNeuralNetwork implements Learnable {
             logger.warning("miniBatch.size() < agent.MINI_BATCH_SIZE");
     }
 
-
     public DataSetIterator createTrainingData(List<Experience> miniBatch,EnvironmentParametersAbstract envParams) {
 
         INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
@@ -161,24 +161,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
             Experience exp=miniBatch.get(idxSample);
             INDArray inputNetwork = setNetworkInput(exp.s, envParams);
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
-            outFromNetwork = modifyNetworkOut(exp, inputNetwork, outFromNetwork,envParams);
+            modifyNetworkOut(exp, inputNetwork, outFromNetwork,envParams);
             changeBellmanErrorVariableInBufferItem(exp);
-
-            //System.out.println("priority:"+exp.pExpRep.priority+", bellmanErrorStep:"+bellmanErrorStep);
-
             addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
-
             sumBellmanError=sumBellmanError+Math.abs(bellmanErrorStep);
         }
 
-        if (miniBatch.size()>0)
-            bellmanErrorListItemPerStep.add(sumBellmanError/miniBatch.size());
-        else
-            bellmanErrorListItemPerStep.add(sumBellmanError);
-
-
+        bellmanErrorListItemPerStep.add(sumBellmanError/Math.max(miniBatch.size(),1));
         DataSet dataSet = new DataSet(inputNDSet, outPutNDSet);
-        //System.out.println("dataSet:"+dataSet);
         List<DataSet> listDs = dataSet.asList();
 
         return new ListDataSetIterator<>(listDs);
@@ -187,14 +177,13 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public void addBellmanErrorItemForEpisodeAndClearPerStepList() {
         int nofItems=bellmanErrorListItemPerStep.size();
         if (nofItems>0) {
-            double beEpis = bellmanErrorListItemPerStep.stream().mapToDouble(f -> f.doubleValue()).sum();
+            double beEpis = bellmanErrorListItemPerStep.stream().mapToDouble(f -> f).sum();
             bellmanErrorListItemPerEpisode.add(beEpis/ nofItems);
         }
-
         bellmanErrorListItemPerStep.clear();
     }
 
-    public boolean isTimeToFit() {
+    public boolean isItTimeToFit() {
         return  state.totalNofSteps % NOF_STEPS_BETWEEN_FITS == 0;
     }
 
@@ -214,22 +203,13 @@ public abstract class AgentNeuralNetwork implements Learnable {
         outPutNDSet.putRow(idxSample, outFromNetwork);
     }
 
-    //Network output y for state s defined as
-    //y=    q(s)*(1- alpha )+alpha*( r – q(s) )   (term state)
-    //      q(s)*(1- alpha )+alpha*( r+gama*maxQ(s’)-q(s))   (not term state)
-    //alpha=1 =>
-    //y=    r  (term state)
-    //      r+gama*maxQ(s’)-q(s)  (not term state)
-    //skipped ..*(1- alpha), made learning less stable
-    private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
+
+    private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
         double alpha=exp.pExpRep.w*ALPHA;
-        //double alpha=alphaAsFcnOfEpisode;
         double y=qOld*1 + alpha * bellmanErrorStep;
-        //y=exp.action;
         outFromNetwork.putScalar(0, exp.action,y);
-        return outFromNetwork;
     }
 
     public double calcBellmanErrorStep(StepReturn stepReturn, double qOld, EnvironmentParametersAbstract envParams) {

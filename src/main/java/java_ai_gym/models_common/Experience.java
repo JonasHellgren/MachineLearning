@@ -15,9 +15,7 @@ public class Experience {
         public double w;
 
         public PrioritizedExperienceReplay() {
-
-            priority=0; Psampling=0; sortCriteria=0;  //todo better beError init
-            w=1;
+            priority=0; Psampling=0; sortCriteria=0;   w=1;
         }
 
         @Override

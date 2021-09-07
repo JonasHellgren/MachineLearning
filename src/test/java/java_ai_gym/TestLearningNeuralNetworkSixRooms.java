@@ -91,7 +91,7 @@ public class TestLearningNeuralNetworkSixRooms {
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
-            if (agent.replayBuffer.isFull(agent) & agent.isTimeToFit() ) {
+            if (agent.replayBuffer.isFull(agent) & agent.isItTimeToFit() ) {
                     List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize, fEpisodes);
                     agent.fitFromMiniBatch(miniBatch, env.parameters,fEpisodes);
                     agent.maybeUpdateTargetNetwork();

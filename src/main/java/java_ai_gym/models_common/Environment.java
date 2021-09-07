@@ -27,7 +27,6 @@ public abstract class  Environment {
 
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
-
     protected abstract boolean isTerminalStatePolicyTest(State state);
     protected abstract boolean isPolicyTestSuccessful(State state);
     protected abstract void setRandomStateValuesStart(State state);

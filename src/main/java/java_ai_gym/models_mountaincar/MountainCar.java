@@ -48,7 +48,7 @@ public class MountainCar extends Environment {
     final  int CIRCLE_RADIUS_IN_DOTS =10;
 
     public int NOF_TESTS_WHEN_TESTING_POLICY=100;
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=5;
+    public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
     public int NOD_DOTS_PLOTTED_POLICY=1000;
 
     public PanelMountainCarAnimation animationPanel;
@@ -79,7 +79,6 @@ public class MountainCar extends Environment {
         public final int MAX_NOF_STEPS =200;
         public final int MAX_NOF_STEPS_POLICY_TEST=500;
         public  double NON_TERMINAL_REWARD = -1.0;
-        public  double ALPHA_POS_CHANGE=30;
 
         public final double FORCE = 0.001;
         public final double GRAVITY = 0.0025;

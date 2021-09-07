@@ -48,9 +48,6 @@ public class ReplayBuffer {
                 .boxed().collect(Collectors.toList());
         Collections.shuffle(indexes);
 
-        //System.out.println("buffer.size:"+buffer.size());
-        //System.out.println("indexes:"+indexes);
-
         for (int i = 0; i < Math.min(batchLength,indexes.size()); i++)
             miniBatch.add(buffer.get(indexes.get(i)));
 
