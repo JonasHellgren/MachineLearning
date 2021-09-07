@@ -17,7 +17,11 @@ public class PanelMountainCarAnimation extends JPanel {
     public Position2D carPosition;
     Color carColor;
     double velocity;
-    public JLabel  label;
+    double maxQ;
+    public JLabel labelPosX;
+    public JLabel labelPosY;
+    public JLabel labelVelocity;
+    public JLabel  labelMaxQ;
 
     double CAR_RADIUS;
 
@@ -38,8 +42,8 @@ public class PanelMountainCarAnimation extends JPanel {
         plotCar(g2d,carPosition.x, carPosition.y);
     }
 
-    public void setCarStates(double x, double y,double velocity, int action) {
-        carPosition.x=x;   carPosition.y=y; this.velocity = velocity;
+    public void setCarStates(double x, double y,double velocity, int action, double maxQ) {
+        carPosition.x=x;   carPosition.y=y; this.velocity = velocity; this.maxQ=maxQ;
 
 
         switch (action) {
@@ -77,9 +81,11 @@ public class PanelMountainCarAnimation extends JPanel {
     }
 
     private void textCarStates(Graphics2D g2d,double x,double y, double velocity)  {
-        label.setText("pos x:"+new DecimalFormat("#.##").format(x)+
-                ", pos y:"+new DecimalFormat("#.##").format(y)+
-                ", velocity:"+new DecimalFormat("#.##").format(velocity));
+        labelPosX.setText("pos x:"+new DecimalFormat("#.##").format(x));
+        labelPosY.setText("pos y:"+new DecimalFormat("#.##").format(y));
+        labelVelocity.setText("velocity:"+new DecimalFormat("#.##").format(velocity));
+        labelMaxQ.setText("maxQ:"+new DecimalFormat("#.##").format(maxQ));
+
 
     }
 

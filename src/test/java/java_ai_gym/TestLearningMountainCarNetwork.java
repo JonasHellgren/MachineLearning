@@ -43,17 +43,16 @@ public class TestLearningMountainCarNetwork {
             simulateTextBook(false, iEpisode);
 
 
-            if (iEpisode % agent.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
+            if (iEpisode % env.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
                 System.out.println("------------------------------");
                 System.out.println("iEpisode:" + iEpisode +
-                        ", success ratio:" + env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY, agent) +
-                        ", tbd:" + 0.0);
+                        ", success ratio:" + env.testPolicy(agent).successRatio +
+                        ", average of maxQ:" + env.testPolicy(agent).maxQaverage +
+                        ", average bellman error:" + env.testPolicy(agent).bellmanErrAverage +
+                        ", avgNofSteps:" + env.testPolicy(agent).avgNofSteps);
 
                 printStates();
             }
-
-
-
         }
 
 
@@ -64,7 +63,7 @@ public class TestLearningMountainCarNetwork {
         System.out.println(agent.network.summary());
         //env.showPolicy(agent);
 
-        Assert.assertTrue(env.testPolicy(agent.NOF_TESTS_WHEN_TESTING_POLICY,agent)>0.9);
+        Assert.assertTrue(env.testPolicy(agent).successRatio>0.9);
 
 
 
@@ -91,15 +90,11 @@ public class TestLearningMountainCarNetwork {
 
         StepReturn stepReturn;
         double fEpisodes=(double) iEpisode/ (double) agent.NUM_OF_EPISODES;
-        int nofSteps=0;  double maxPosition=-Double.MAX_VALUE;
-
-
+        double maxPosition=-Double.MAX_VALUE;
 
         do {
             int aChosen=agent.chooseAction(fEpisodes,env.parameters);
             stepReturn = env.step(aChosen, agent.state);
-
-
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn, agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
 
@@ -117,8 +112,6 @@ public class TestLearningMountainCarNetwork {
 
             }
 
-
-
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);
 
@@ -130,7 +123,7 @@ public class TestLearningMountainCarNetwork {
             }  */
 
             env.render(agent,aChosen);
-            nofSteps++;  maxPosition=Math.max(maxPosition,agent.state.getContinuousVariable("position"));
+            maxPosition=Math.max(maxPosition,agent.state.getContinuousVariable("position"));
 
         } while (!stepReturn.termState);
 
@@ -186,11 +179,10 @@ public class TestLearningMountainCarNetwork {
             }
         }
 
-
-        int nofTests=100;        env.testPolicy(nofTests,agent);
+      env.testPolicy(agent);
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0) {
-                System.out.println("i:" + i + "success ratio:" + env.testPolicy(nofTests, agent));
+                System.out.println("i:" + i + "success ratio:" + env.testPolicy( agent));
                 agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
                 agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
                 agent.printQsa(env.parameters);

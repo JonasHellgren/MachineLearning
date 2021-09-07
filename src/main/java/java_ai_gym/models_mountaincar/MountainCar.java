@@ -1,14 +1,12 @@
 package java_ai_gym.models_mountaincar;
 
-import java_ai_gym.models_common.Environment;
-import java_ai_gym.models_common.EnvironmentParametersAbstract;
-import java_ai_gym.models_common.State;
-import java_ai_gym.models_common.StepReturn;
+import java_ai_gym.models_common.*;
 import java_ai_gym.swing.*;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 /***
@@ -44,12 +42,23 @@ public class MountainCar extends Environment {
     final  int FRAME_WEIGHT =600;
     final  int FRAME_HEIGHT =300;
     final int FRAME_MARGIN =50;  //frame margin
+    final int LABEL_WEIGHT =FRAME_WEIGHT/2;
+    final int LABEL_HEIGHT =15;
+    final int LABEL_XPOS =10;
+    final int LABEL_XPOSY_MIN =0;
+    final  double CAR_RADIUS=0.05;
+    final  int CIRCLE_RADIUS_IN_DOTS =10;
+
+    public int NOF_TESTS_WHEN_TESTING_POLICY=100;
+    public int NOF_EPISODES_BETWEEN_POLICY_TEST=5;
 
     public PanelMountainCarAnimation animationPanel;
     public PanelMountainCarPlot plotPanel;
-    public JLabel  label;
-    final  double CAR_RADIUS=0.05;
-    final  int CIRCLE_RADIUS_IN_DOTS =10;
+    public JLabel labelPosX;
+    public JLabel labelPosY;
+    public JLabel labelVelocity;
+    public JLabel  labelMaxQ;
+
 
 
     // inner classes
@@ -65,11 +74,10 @@ public class MountainCar extends Environment {
         public double MIN_START_VELOCITY = -0.06;
         public double MAX_START_VELOCITY = 0.06;
 
-
         public final double GOAL_POSITION = 0.5;
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
-        public final int MAX_NOF_STEPS_POLICY_TEST=500;
+        public final int MAX_NOF_STEPS_POLICY_TEST=300;
         public  double NON_TERMINAL_REWARD = -1.0;
         public  double ALPHA_POS_CHANGE=30;
 
@@ -95,6 +103,18 @@ public class MountainCar extends Environment {
         protected int getIdxAction(int action) {
             return 0;
         }
+    }
+
+    public class PolicyTestReturn {
+        public double successRatio;
+        public double avgNofSteps;
+        public double maxQaverage;
+        public double bellmanErrAverage;
+    }
+
+    public class RunPolicyReturn {
+        public double avgMaxQ;
+        public double avgBellmannErr;
     }
 
     //constructor
@@ -123,13 +143,9 @@ public class MountainCar extends Environment {
 
         Position2D carPositionInit=new Position2D(parameters.POSITION_AT_MIN_HEIGHT,height(parameters.POSITION_AT_MIN_HEIGHT));
         animationPanel =new PanelMountainCarAnimation(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
+        animationPanel.setLayout(null);
 
-        label = new JLabel();
-        animationPanel.label=label;
-        label.setText("label text");
-        animationPanel.add(label);
-        animationFrame.add(animationPanel);
-        animationFrame.setVisible(true);
+        addLabelsToPanel();
 
         animationFrame.add(animationPanel);
         animationFrame.setVisible(true);
@@ -147,6 +163,35 @@ public class MountainCar extends Environment {
 
 
 
+    }
+
+    private void addLabelsToPanel() {
+        int labelIndex=0;
+
+        labelPosX = new JLabel("pos x");
+        animationPanel.labelPosX=labelPosX;
+        addLabelToPanel(labelPosX, labelIndex);
+        labelIndex++;
+
+        labelPosY = new JLabel("pos y");
+        animationPanel.labelPosY=labelPosY;
+        addLabelToPanel(labelPosY, labelIndex);
+        labelIndex++;
+
+        labelVelocity = new JLabel("velocity");
+        animationPanel.labelVelocity=labelVelocity;
+        addLabelToPanel(labelVelocity, labelIndex);
+        labelIndex++;
+
+        labelMaxQ = new JLabel("max Q");
+        animationPanel.labelMaxQ=labelMaxQ;
+        addLabelToPanel(labelMaxQ, labelIndex);
+        labelIndex++;
+    }
+
+    private void addLabelToPanel(JLabel label, int labelIndex) {
+        animationPanel.add(label);
+        label.setBounds(LABEL_XPOS, LABEL_XPOSY_MIN+ labelIndex *LABEL_HEIGHT, LABEL_WEIGHT, LABEL_HEIGHT);
     }
 
     /*
@@ -264,7 +309,8 @@ public class MountainCar extends Environment {
     public void render(MountainCarAgentNeuralNetwork agent, int action) {
         double position=agent.state.getContinuousVariable("position");
         double velocity=agent.state.getContinuousVariable("velocity");
-        animationPanel.setCarStates(position,height(position),velocity,action);
+        double maxQ=agent.findMaxQTargetNetwork(agent.state,parameters);
+        animationPanel.setCarStates(position,height(position),velocity,action,maxQ);
         animationPanel.repaint();
 
     }
@@ -279,31 +325,65 @@ public class MountainCar extends Environment {
         return height(state);
     }
 
-    public double testPolicy(int nofTests,MountainCarAgentNeuralNetwork agent) {
+    public PolicyTestReturn testPolicy(AgentNeuralNetwork agent) {
 
         List<Integer> nofStepsList = new ArrayList<>();
+        List<Double> maxQaverageList = new ArrayList<>();
+        List<Double> bellmanErrList = new ArrayList<>();
         int nofSuccessTests = 0;
-        for (int i = 0; i < nofTests; i++) {
+        for (int i = 0; i < NOF_TESTS_WHEN_TESTING_POLICY; i++) {
             setRandomStateValuesStart(agent.state);
-            runPolicy(agent);
+            RunPolicyReturn runPolicyReturn=runPolicy(agent);
             int nofSteps = agent.state.getDiscreteVariable("nofSteps");
             nofStepsList.add(nofSteps);
-            if (nofSteps < parameters.MAX_NOF_STEPS_POLICY_TEST)
+            maxQaverageList.add(runPolicyReturn.avgMaxQ);
+            bellmanErrList.add(runPolicyReturn.avgBellmannErr);
+            if (isPolicyTestSuccesful(agent))
                 nofSuccessTests++;
         }
 
-        return (double) nofSuccessTests / (double) nofTests;
+        PolicyTestReturn policyTestReturn=new PolicyTestReturn();
+        IntSummaryStatistics statsNofSteps = nofStepsList.stream().mapToInt(a -> a).summaryStatistics();
+        DoubleSummaryStatistics statsMaxQ = maxQaverageList.stream().mapToDouble(a -> a).summaryStatistics();
+        DoubleSummaryStatistics statsBellmanErr = bellmanErrList.stream().mapToDouble(a -> a).summaryStatistics();
+        policyTestReturn.avgNofSteps=statsNofSteps.getAverage();
+        policyTestReturn.successRatio=nofSuccessTests / (double) NOF_TESTS_WHEN_TESTING_POLICY;
+        policyTestReturn.maxQaverage=statsMaxQ.getAverage();
+        policyTestReturn.bellmanErrAverage=statsBellmanErr.getAverage();
 
+        return policyTestReturn;
     }
 
-    private void runPolicy(MountainCarAgentNeuralNetwork agent) {
+    public boolean isPolicyTestSuccesful(AgentNeuralNetwork agent) {
+        return   (agent.state.getDiscreteVariable("nofSteps") <
+                    parameters.MAX_NOF_STEPS_POLICY_TEST);
+    }
+
+    private RunPolicyReturn runPolicy(AgentNeuralNetwork agent) {
         StepReturn stepReturn;
+        List<Double> maxQList = new ArrayList<>();
+        List<Double> bellmanErrList = new ArrayList<>();
+
         int tempTotalNofSteps=agent.state.totalNofSteps;  //evaluation shall not affect totalNofSteps
         do {
             stepReturn=step(agent.chooseBestAction(agent.state, parameters),agent.state);
             agent.state.copyState(stepReturn.state);
+
+            INDArray inputNetwork = agent.setNetworkInput(agent.state, parameters);
+            double qOld = agent.readMemory(inputNetwork, agent.chooseBestAction(agent.state, parameters));
+            double bellmanErrorStep=agent.calcBellmanErrorStep(stepReturn, qOld, parameters);
+
+            maxQList.add(agent.findMaxQTargetNetwork(agent.state,parameters));
+            bellmanErrList.add(Math.abs(bellmanErrorStep));
         } while (!isTerminalStatePolicyTest(agent.state));
         agent.state.totalNofSteps=tempTotalNofSteps;
+
+        RunPolicyReturn runPolicyReturn=new RunPolicyReturn();
+        DoubleSummaryStatistics statsMaxQ = maxQList.stream().mapToDouble(a -> a).summaryStatistics();
+        runPolicyReturn.avgMaxQ=statsMaxQ.getAverage();
+        DoubleSummaryStatistics statsBellmanErr = bellmanErrList.stream().mapToDouble(a -> a).summaryStatistics();
+        runPolicyReturn.avgBellmannErr=statsBellmanErr.getAverage();
+        return runPolicyReturn;
     }
 
 }

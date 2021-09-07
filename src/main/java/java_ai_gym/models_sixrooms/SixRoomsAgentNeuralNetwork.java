@@ -96,7 +96,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
     @Override
-    protected INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+    public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
         int nofRooms=envParams.discreteActionsSpace.size();
         double[] varValuesAsArray = {
                 (double) state.getDiscreteVariable("roomNumber")/(double) nofRooms

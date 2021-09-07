@@ -65,10 +65,9 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public  int NUM_OF_EPOCHS = 1; //nof fits per mini batch
     public int NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE =20;
     public  int NOF_STEPS_BETWEEN_FITS=10;
-    public int NOF_TESTS_WHEN_TESTING_POLICY=100;
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=5;
 
-    protected abstract  INDArray setNetworkInput(State state,EnvironmentParametersAbstract envParams);
+
+    public abstract  INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams);
 
     @Override
     public State getState() {
@@ -121,7 +120,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return outFromNetwork.getDouble(action);
     }
 
-    private double findMaxQTargetNetwork(State state,EnvironmentParametersAbstract envParams) {
+    public double findMaxQTargetNetwork(State state,EnvironmentParametersAbstract envParams) {
         INDArray inputNetwork = setNetworkInput(state, envParams);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
@@ -224,15 +223,19 @@ public abstract class AgentNeuralNetwork implements Learnable {
     //skipped ..*(1- alpha), made learning less stable
     private INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
-        bellmanErrorStep= exp.stepReturn.termState ?
-                exp.stepReturn.reward - qOld:
-                exp.stepReturn.reward + GAMMA * findMaxQTargetNetwork(exp.stepReturn.state,envParams) - qOld;
+        bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
         double alpha=exp.pExpRep.w*ALPHA;
         //double alpha=alphaAsFcnOfEpisode;
         double y=qOld*1 + alpha * bellmanErrorStep;
         //y=exp.action;
         outFromNetwork.putScalar(0, exp.action,y);
         return outFromNetwork;
+    }
+
+    public double calcBellmanErrorStep(StepReturn stepReturn, double qOld, EnvironmentParametersAbstract envParams) {
+        return stepReturn.termState ?
+                stepReturn.reward - qOld :
+                stepReturn.reward + GAMMA * findMaxQTargetNetwork(stepReturn.state, envParams) - qOld;
     }
 
     public double getBellmanErrorAverage(int nofSteps) {

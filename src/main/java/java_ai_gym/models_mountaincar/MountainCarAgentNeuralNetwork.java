@@ -39,7 +39,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     ScaleLinear posScaler;
     ScaleLinear velScaler;
 
-    final double  PRECISION=10;
+    final double  PRECISION=1;
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -81,7 +81,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NUM_OF_EPISODES = (int) (100*PRECISION);
         this.NUM_OF_EPOCHS=1;
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*1);
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*Math.sqrt(PRECISION));
         this.NOF_STEPS_BETWEEN_FITS = 1;
     }
 

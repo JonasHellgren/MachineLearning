@@ -52,15 +52,14 @@ animera under träning   x
 färga circle sfa action i animering  x
 pusha till repo  x
 
-snyggare textning i anim fönster
-mer info i anim fönster, tex max Qsa
+snyggare textning i anim fönster  x
+mer info i anim fönster, tex max Qsa   x
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
-plotta policy, succesratio vs episod
+plotta policy, prickar med olika färg
 ersätta ScaleLinear med tex dl4j normalizer
 code clean up
 
 annan environment, tex chart pole
-
 
 fixa bellmanErrorList for 6Rooms
 
