@@ -5,10 +5,12 @@ import java_ai_gym.models_common.State;
 import java_ai_gym.models_common.StepReturn;
 import java_ai_gym.models_mountaincar.MountainCar;
 import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
+import java_ai_gym.swing.Position2D;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +23,11 @@ public class TestLearningMountainCarNetwork {
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
 
 
+    @Test @Ignore
+    public void testPrintf () {
+        System.out.printf("int: %d ",2); System.out.printf(", num: %.4f",0.6646437352353);
+    }
+
     @Test
    // @Ignore
     //https://www.saashanair.com/dqn-code/
@@ -32,8 +39,7 @@ public class TestLearningMountainCarNetwork {
         agent.networkTarget.setParams(agent.network.params());  */
 
         agent.GAMMA=0.99; //TODO remove
-
-        //env.PrintQsa(agent);
+        plotPolicy();
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
             //env.initState(agent.state);
             env.setRandomStateValuesAny(agent.state);
@@ -45,17 +51,19 @@ public class TestLearningMountainCarNetwork {
 
             if (iEpisode % env.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0) {
                 System.out.println("------------------------------");
-                System.out.println("iEpisode:" + iEpisode +
-                        ", success ratio:" + env.testPolicy(agent).successRatio +
-                        ", average of maxQ:" + env.testPolicy(agent).maxQaverage +
-                        ", average bellman error:" + env.testPolicy(agent).bellmanErrAverage +
-                        ", avgNofSteps:" + env.testPolicy(agent).avgNofSteps);
 
+                System.out.printf("int: %d ",iEpisode);
+                System.out.printf(", success ratio: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio);
+                System.out.printf(", average of maxQ: %.2f ", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).maxQaverage);
+                System.out.printf(", average bellman error: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).bellmanErrAverage);
+                System.out.printf(", avgNofSteps: %.2f", env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).avgNofSteps);
+                System.out.println();
                 printStates();
             }
         }
 
-
+        plotPolicy();
+        TimeUnit.MILLISECONDS.sleep(100000);
         animatePolicy();
 
         // env.PrintQsa(agent);
@@ -63,7 +71,7 @@ public class TestLearningMountainCarNetwork {
         System.out.println(agent.network.summary());
         //env.showPolicy(agent);
 
-        Assert.assertTrue(env.testPolicy(agent).successRatio>0.9);
+        Assert.assertTrue(env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.9);
 
 
 
@@ -163,8 +171,22 @@ public class TestLearningMountainCarNetwork {
         } while (!stepReturn.termState);
 
         TimeUnit.MILLISECONDS.sleep(1000);
-
     }
+
+    public void plotPolicy() {
+        List<Position2D> circlePositionList = new ArrayList<>();
+        List<Integer> actionList = new ArrayList<>();
+        for (int i = 0; i < env.NOD_DOTS_PLOTTED_POLICY; i++) {
+            env.setRandomStateValuesAny(agent.state);
+            double pos=agent.state.getContinuousVariable("position");
+            double vel=agent.state.getContinuousVariable("velocity");
+            circlePositionList.add(new Position2D(pos,vel));
+            actionList.add(agent.chooseBestAction(agent.state, env.parameters));
+        }
+        env.plotPanel.setCircleData(circlePositionList,actionList);
+        env.plotPanel.repaint();
+    }
+
 
     public void initNetwork() {
         agent.GAMMA=0;
@@ -179,10 +201,10 @@ public class TestLearningMountainCarNetwork {
             }
         }
 
-      env.testPolicy(agent);
+      env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
         for (int i = 0; i < 50 ; i++) {
             if (i % 10 ==0) {
-                System.out.println("i:" + i + "success ratio:" + env.testPolicy( agent));
+                System.out.println("i:" + i + "success ratio:" + env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY));
                 agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
                 agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
                 agent.printQsa(env.parameters);

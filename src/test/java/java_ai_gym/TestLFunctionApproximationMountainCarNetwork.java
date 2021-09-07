@@ -142,12 +142,11 @@ public class TestLFunctionApproximationMountainCarNetwork {
         }
 
 
-        env.testPolicy(agent);
+        env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
         int nofEpis=100;
         for (int i = 0; i < nofEpis ; i++) {
             if (i % 10 ==0) {
-                System.out.println("i:" + i + "success ratio:" + env.testPolicy(agent));
-
+                System.out.println("i:" + i + "success ratio:" + env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY));
                 agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
                 agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
                 agent.printQsa(env.parameters);

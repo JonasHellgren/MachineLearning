@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 public class PanelMountainCarPlot extends JPanel {
     private static final Logger logger = Logger.getLogger(PanelMountainCarPlot.class.getName());
 
-
     ScaleLinear xScaler;
     ScaleLinear yScaler;
 
@@ -32,7 +31,6 @@ public class PanelMountainCarPlot extends JPanel {
         this.actionList = actionList;
         this.CIRCLE_RADIUS = CIRCLE_RADIUS;
     }
-
 
 
     public void setCircleData(List<Position2D> circlePositionList,List<Integer> actionList) {

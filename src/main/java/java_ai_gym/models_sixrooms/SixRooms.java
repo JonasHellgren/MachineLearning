@@ -5,6 +5,7 @@ import java_ai_gym.models_common.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 /***
  * Environment with 6 rooms. Inner class EnvironmentParameters defines data.
@@ -13,6 +14,9 @@ import java.util.List;
  */
 
 public class SixRooms extends Environment {
+
+    private static final Logger logger = Logger.getLogger(SixRooms.class.getName());
+
 
     public SixRooms.EnvironmentParameters parameters = this.new EnvironmentParameters();
 
@@ -95,6 +99,22 @@ public class SixRooms extends Environment {
     @Override
     public boolean isTerminalState(State state) {
         return (state.getDiscreteVariable("roomNumber") == parameters.ROOM_EXIT_NUMBER);
+    }
+
+    @Override
+    public boolean isTerminalStatePolicyTest(State state) {
+        return (isTerminalState(state));
+    }
+
+    @Override
+    public void setRandomStateValuesStart(State state) {
+        logger.warning("This method is not implemented");
+    }
+
+    @Override
+    public boolean isPolicyTestSuccessful(State state) {
+        logger.warning("This method is not implemented");
+        return  false;
     }
 
     public List<Integer> getFeasibleActions(State state) {
