@@ -15,8 +15,7 @@ public class ScaleLinear {
 
     boolean flip; //true <=> flip range <=> for ex d0 corresponds to r1
     //false <=> not flip range <=> for ex d0 corresponds to r0
-
-
+    
     public ScaleLinear(double d0, double d1, int r0, int r1,boolean flip, int MARGIN) {
         this.d0 = d0;
         this.d1 = d1;

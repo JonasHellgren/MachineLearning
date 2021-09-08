@@ -60,7 +60,6 @@ public class PanelMountainCarAnimation extends JPanel {
                 carColor = Color.BLACK;
                 logger.warning("Non existing action, painting car as black");
                 break;
-            // code block
         }
 
 
@@ -85,8 +84,6 @@ public class PanelMountainCarAnimation extends JPanel {
         labelPosY.setText("pos y:"+new DecimalFormat("#.##").format(y));
         labelVelocity.setText("velocity:"+new DecimalFormat("#.##").format(velocity));
         labelMaxQ.setText("maxQ:"+new DecimalFormat("#.##").format(maxQ));
-
-
     }
 
     @Override

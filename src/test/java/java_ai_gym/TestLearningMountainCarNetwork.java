@@ -50,9 +50,11 @@ public class TestLearningMountainCarNetwork {
                 MountainCar.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
                 System.out.printf("iEpisode: %d ",iEpisode);
                 System.out.printf(", success ratio: %.2f", policyTestReturn.successRatio);
-                System.out.printf(", average of maxQ: %.2f ", policyTestReturn.maxQaverage);
-                System.out.printf(", average bellman error: %.2f", policyTestReturn.bellmanErrAverage);
-                System.out.printf(", avg(NofSteps div maxNofsteps): %.2f", policyTestReturn.avgNofSteps/env.parameters.MAX_NOF_STEPS_POLICY_TEST);
+                System.out.printf(", avg of maxQ: %.2f ", policyTestReturn.maxQaverage);
+                System.out.printf(", avg bellman err: %.2f", policyTestReturn.bellmanErrAverage);
+                System.out.printf(", avg(NofSteps) div maxNofsteps: %.2f", policyTestReturn.avgNofSteps/env.parameters.MAX_NOF_STEPS_POLICY_TEST);
+                System.out.printf(", learning rate: %.5f", agent.calcLearningRate((double) iEpisode/ (double) agent.NUM_OF_EPISODES));
+                System.out.printf(", prob random action: %.5f", agent.calcProbRandAction((double) iEpisode/ (double) agent.NUM_OF_EPISODES));
                 System.out.println();
             }
         }

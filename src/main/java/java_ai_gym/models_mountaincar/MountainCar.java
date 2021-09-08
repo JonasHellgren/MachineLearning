@@ -47,7 +47,7 @@ public class MountainCar extends Environment {
     final  double CAR_RADIUS=0.05;
     final  int CIRCLE_RADIUS_IN_DOTS =10;
 
-    public int NOF_TESTS_WHEN_TESTING_POLICY=100;
+    public int NOF_TESTS_WHEN_TESTING_POLICY=10;
     public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
     public int NOD_DOTS_PLOTTED_POLICY=1000;
 
@@ -78,17 +78,13 @@ public class MountainCar extends Environment {
         public final double GOAL_VELOCITY = 0;
         public final int MAX_NOF_STEPS =200;
         public final int MAX_NOF_STEPS_POLICY_TEST=500;
-        public  double NON_TERMINAL_REWARD = -1.0;
+        public  double NON_TERMINAL_REWARD = -1.0;  //-1.0
 
         public final double FORCE = 0.001;
         public final double GRAVITY = 0.0025;
 
         public int NOF_ACTIONS;
         public int MIN_ACTION;
-
-       // public double startPosition;
-       // public double startVelocity=0;
-
 
         public EnvironmentParameters() {
         }
@@ -104,9 +100,6 @@ public class MountainCar extends Environment {
         }
     }
 
-
-
-    //constructor
     public MountainCar() {
         parameters.continuousStateVariableNames.add("position");
         parameters.continuousStateVariableNames.add("velocity");
@@ -116,7 +109,6 @@ public class MountainCar extends Environment {
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
 
         LineData roadData=createRoadData();
-        //setStartPositionAndVelocity();
         setupFrameAndPanel(roadData);
         animationPanel.repaint();
     }
@@ -195,11 +187,6 @@ public class MountainCar extends Environment {
         label.setBounds(LABEL_XPOS, LABEL_XPOSY_MIN+ labelIndex *LABEL_HEIGHT, LABEL_WEIGHT, LABEL_HEIGHT);
     }
 
-    /*
-    private void setStartPositionAndVelocity() {
-        parameters.startPosition=calcRandomFromIntervall(parameters.MIN_START_POSITION,parameters.MAX_START_POSITION);
-        parameters.startVelocity= calcRandomFromIntervall(parameters.MIN_START_VELOCITY,parameters.MAX_START_VELOCITY);
-    }  */
 
     private double calcRandomFromIntervall(double minValue, double maxValue) {
         return minValue+Math.random()*(maxValue-minValue);
@@ -214,8 +201,6 @@ public class MountainCar extends Environment {
         for (int i = 0; i < NOF_POINTS ; i++) {
             double f=(double) i/NOF_POINTS;
             double x=parameters.MIN_POSITION *(1-f)+parameters.MAX_POSITION *f;
-            //State state = new State();
-            //state.createContinuousVariable("position",x);
             double y=height(x);
             xList.add(x);
             yList.add(y);
@@ -224,8 +209,6 @@ public class MountainCar extends Environment {
                 xList.stream().mapToDouble(d -> d).toArray(),
                 yList.stream().mapToDouble(d -> d).toArray());
     }
-
-
 
     @Override
     public StepReturn step(int action, State state) {
@@ -246,11 +229,6 @@ public class MountainCar extends Environment {
                 0:
                 parameters.NON_TERMINAL_REWARD;
 
-        /*
-        double posChangeReward= + parameters.ALPHA_POS_CHANGE * (0.99 *
-                Math.abs (newState.getContinuousVariable("position")) -
-                Math.abs(state.getContinuousVariable("position")));  */
-
         int desiredAction=(state.getContinuousVariable("velocity") <-0.001)?0:2;
         double desActionReward= (action==desiredAction)?1.0:0.0;
         stepReturn.reward=stepReturn.reward+0.0*desActionReward;
@@ -264,12 +242,6 @@ public class MountainCar extends Environment {
                 stepReturn.state.getDiscreteVariable("nofSteps")<parameters.MAX_NOF_STEPS);
     }
 
-  /*  public void initState(State state) {
-        setStartPositionAndVelocity();
-        state.setVariable("position",parameters.startPosition);
-        state.setVariable("velocity",parameters.startVelocity);
-        state.setVariable("nofSteps",0);
-    } */
 
     @Override
     public void setRandomStateValuesStart(State state) {

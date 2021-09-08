@@ -12,7 +12,7 @@ public class FrameEnvironment  extends JFrame {
         setSize(W, H);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle(title);
     }
 

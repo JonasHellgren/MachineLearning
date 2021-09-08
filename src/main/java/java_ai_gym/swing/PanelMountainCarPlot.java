@@ -38,10 +38,7 @@ public class PanelMountainCarPlot extends JPanel {
         this.actionList = actionList;
     }
 
-
-
     private void drawCircles(Graphics2D g2d) {
-        ////flip because swing defines y=0 as upper in panel
 
         int i=0;
         Color col;
@@ -68,8 +65,6 @@ public class PanelMountainCarPlot extends JPanel {
         g2d.fillOval((int) (xScaler.calcOut(x)+-CIRCLE_RADIUS/2),
                 (int) (yScaler.calcOut(y)+-CIRCLE_RADIUS/2),
                 CIRCLE_RADIUS,CIRCLE_RADIUS);
-
-                //xScaler.scale(CIRCLE_RADIUS),yScaler.scale(CIRCLE_RADIUS));
     }
 
     @Override

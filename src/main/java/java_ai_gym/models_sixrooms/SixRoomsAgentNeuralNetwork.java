@@ -23,7 +23,7 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
     private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
-    NetworkInputNormalizer roomScaler;
+    ScalerLinear roomScaler;
 
     public SixRoomsAgentNeuralNetwork(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -35,11 +35,13 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
         createReplayBuffer();
         createNetworks();
         defineLearningParameters();
+        createLearningRateScaler();
+        createProbRandActionScaler();
         showConstructorLogMessage();
     }
 
     private void createInputNormalizer() {
-    roomScaler=new  NetworkInputNormalizer(0, envParams.discreteActionsSpace.size(),-1,1);
+    roomScaler=new  ScalerLinear(0, envParams.discreteActionsSpace.size(),-1,1);
 }
 
     private void createReplayBuffer() {
@@ -114,6 +116,17 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
         return Nd4j.create(varValuesAsArray, 1, NOF_FEATURES);
+    }
+
+
+    @Override
+    public void  createLearningRateScaler() {
+        learningRateScaler=new ScalerExponential(0,1,LEARNING_RATE_START,LEARNING_RATE_END);
+    }
+
+    @Override
+    public void  createProbRandActionScaler() {
+        probRandActionScaler=new ScalerExponential(0,1,PROBABILITY_RANDOM_ACTION_START,PROBABILITY_RANDOM_ACTION_END);
     }
 
 }

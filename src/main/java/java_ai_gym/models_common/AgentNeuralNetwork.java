@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * Following parameters are especially critical: MINI_BATCH_SIZE, NOF_NEURONS_HIDDEN, LEARNING_RATE, RB_ALP
  *  Network output y for state s defined as
  *  y=    q(s)+alpha*( r – q(s) )   (term state)
- *        q(s)+alpha*( r+gama*maxQ(s’)-q(s))   (not term state)
+ *        q(s)+alpha*( r+gama*maxQ(s’)-q(s))   (non term state)
  *
  */
 
@@ -34,9 +34,10 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public MultiLayerNetwork network;   //neural network memory
     public MultiLayerNetwork networkTarget;   //neural network memory
     private final Random random = new Random();
+    protected ScalerExponential learningRateScaler;
+    public  ScalerExponential probRandActionScaler;
 
     public int nofFits=0;
-    protected double networkLearningRate;
     double bellmanErrorStep;
     public List<Double> bellmanErrorListItemPerEpisode =new ArrayList<>();
     public List<Double> bellmanErrorListItemPerStep =new ArrayList<>();
@@ -70,6 +71,8 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     public abstract  MultiLayerNetwork createNetwork();
     public abstract  INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams);
+    public abstract void  createLearningRateScaler();
+    public abstract void  createProbRandActionScaler();
 
     @Override
     public State getState() {
@@ -96,10 +99,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
 
     @Override
     public int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams) {
-        double probRandAction=PROBABILITY_RANDOM_ACTION_START+
-                (PROBABILITY_RANDOM_ACTION_END-PROBABILITY_RANDOM_ACTION_START)*fractionEpisodesFinished;
-
-        return (Math.random() < probRandAction) ?
+        return (Math.random() < calcProbRandAction(fractionEpisodesFinished)) ?
                 chooseRandomAction(envParams.discreteActionsSpace) :
                 chooseBestAction(state,envParams);
     }
@@ -137,8 +137,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams, double fEpisodes ) {
-        networkLearningRate = LEARNING_RATE_START +fEpisodes*(LEARNING_RATE_END - LEARNING_RATE_START);
-        network.setLearningRate(networkLearningRate);
+        network.setLearningRate(calcLearningRate(fEpisodes));
         if (miniBatch.size()== MINI_BATCH_SIZE) {
             DataSetIterator iterator = createTrainingData(miniBatch,envParams);
             network.fit(iterator,NUM_OF_EPOCHS);
@@ -250,6 +249,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
             logger.info("Neural network based agent created. ");
     }
 
+
+    public double calcLearningRate(double fEpisodes)  {
+        return learningRateScaler.calcOutDouble(fEpisodes);
+    }
+
+    public  double calcProbRandAction(double fractionEpisodesFinished) {
+        return probRandActionScaler.calcOutDouble(fractionEpisodesFinished);
+    }
 
 
 }

@@ -54,6 +54,7 @@ pusha till repo  x
 
 snyggare textning i anim fönster  x
 mer info i anim fönster, tex max Qsa   x
+0 <=> uniform distribution  = 0.9
 testPolicy printa mer än succes ratio, tex bellman error, antal steg
 plotta policy, prickar med olika färg
 
@@ -61,7 +62,9 @@ code clean up
 - bantad ScaleLinear: LinearScaler i ModelsCommon
 - förklara RB_EPS etc
 
-
+prova mindre reward  x ger inget
+prova annan gradientNormalization  x
+eps decay  x
 annan environment, tex chart pole
 
 fixa bellmanErrorList for 6Rooms

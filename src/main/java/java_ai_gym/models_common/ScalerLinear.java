@@ -4,18 +4,14 @@ package java_ai_gym.models_common;
  * This class uses linear scaling, out=m*in+b, to relate output to input
  * Used to normalize network inputs
  */
-
-
-public class NetworkInputNormalizer {
-
-
+public class ScalerLinear {
     private double b;
     private double m;
 
     public double d0, d1;    //domain, inputs
     public double r0, r1;    //range, outputs
 
-    public NetworkInputNormalizer(double d0, double d1, int r0, int r1) {
+    public ScalerLinear(double d0, double d1, double r0, double r1) {
         this.d0 = d0;
         this.d1 = d1;
         this.r0 = r0;
