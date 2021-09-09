@@ -43,7 +43,6 @@ public class TestLFunctionApproximationMountainCarNetwork {
         agent.MINI_BATCH_SIZE=10;
 
       while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
-            //env.initState(agent.state);
             env.setRandomStateValuesAny(agent.state);
             int aChosen=agent.chooseRandomAction(env.parameters.discreteActionsSpace);
             StepReturn stepReturn = env.step(aChosen, agent.state);
@@ -65,69 +64,24 @@ public class TestLFunctionApproximationMountainCarNetwork {
     }
 
 
-    @Test  @Ignore
-    public void learnAtDifferentInputsZeroGamma() {
+
+
+    @Test
+    public void learnFromRandomInputsZeroGammaMockedReward() throws InterruptedException {
 
         agent.GAMMA=0;
-        List<Double> positionsList = Arrays.asList(env.parameters.MIN_START_POSITION,0.0,env.parameters.MAX_START_POSITION/2);
-        List<Double> velocitiesList = Arrays.asList(-env.parameters.MAX_SPEED,env.parameters.MAX_SPEED);
+        createReplayBuffer();
+        trainAgent();
+        System.out.println("state:"+agent.state);
+        System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
 
-        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
-        for (double pos:positionsList) {
-            for (double vel:velocitiesList) {
-                for (int a:env.parameters.discreteActionsSpace) {
-                    agent.state.setVariable("position", pos);
-                    agent.state.setVariable("velocity", vel);
-                    agent.state.setVariable("nofSteps", 0);
-                    StepReturn stepReturn = env.step(a, agent.state);
-                    stepReturn.reward=calcMockReward(pos, vel, a);  //mocking reward
-                    Experience experience = new Experience(new State(agent.state), a, stepReturn,agent.BE_ERROR_INIT);
-                    agent.replayBuffer.addExperience(experience);
-                }
-            }
-       }
-        }
-
-        System.out.println("calcMockReward(pos, vel, 0):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 0));
-        System.out.println("calcMockReward(pos, vel, 1):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 1));
-        System.out.println("calcMockReward(pos, vel, 2):"+calcMockReward(positionsList.get(0), velocitiesList.get(0), 2));
-
-
-        for (int i = 0; i < 100 ; i++) {
-            List<Experience>  miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
-            agent.state.setVariable("position",positionsList.get(0));
-            agent.state.setVariable("velocity",velocitiesList.get(0));
-        }
-
-        System.out.println("----------------");
-        for (double pos:positionsList) {
-            for (double vel:velocitiesList) {
-                agent.state.setVariable("position",pos);
-                agent.state.setVariable("velocity",vel);
-                agent.printPositionAndVelocity();
-                System.out.println("calcMockReward"+
-                        ", a=0:" +calcMockReward(pos,vel, 0)+
-                        ", a=1:"+calcMockReward(pos,vel, 1)+
-                        ", a=2:"+calcMockReward(pos,vel, 2));
-                agent.printQsa(env.parameters);
-            }
-        }
-
-        double pos=positionsList.get(0);  double vel=velocitiesList.get(0);
-        agent.state.setVariable("position",pos);
-        agent.state.setVariable("velocity",vel);
-        Assert.assertEquals(calcMockReward(pos, vel, 0),agent.readMemory(agent.state,0,env.parameters),10);
-        Assert.assertEquals(calcMockReward(pos, vel, 1),agent.readMemory(agent.state,1,env.parameters),10);
-        Assert.assertEquals(calcMockReward(pos, vel, 2),agent.readMemory(agent.state,2,env.parameters),10);
+        setCirclesToPlot();
+        env.plotPanel.repaint();
+        TimeUnit.MILLISECONDS.sleep(10000);
 
     }
 
-    @Test  //@Ignore
-    public void learnFromRandomInputsZeroGamma() throws InterruptedException {
-
-        agent.GAMMA=0;
-
+    private void createReplayBuffer() {
         while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
                     for (int a:env.parameters.discreteActionsSpace) {
                         env.setRandomStateValuesAny(agent.state);
@@ -140,29 +94,26 @@ public class TestLFunctionApproximationMountainCarNetwork {
                         agent.replayBuffer.addExperience(experience);
             }
         }
+    }
 
-
-        env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
-        int nofEpis=100;
-        for (int i = 0; i < nofEpis ; i++) {
+    private void trainAgent() {
+        agent.LEARNING_RATE_START=1e-2;
+        agent.LEARNING_RATE_END=1e-3;
+        agent.NUM_OF_EPISODES=1000;
+        agent.createLearningRateScaler();
+        for (int i = 0; i < agent.NUM_OF_EPISODES ; i++) {
             if (i % 10 ==0) {
-                System.out.println("i:" + i + "success ratio:" + env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY));
-                agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
-                agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
-                agent.printQsa(env.parameters);
+                System.out.print("episode: "+ i);
+                System.out.printf(", learning rate: %.5f", agent.calcLearningRate(agent.calcFractionEpisodes(i)));
+                System.out.printf(", fraction Episodes: %.5f", agent.calcFractionEpisodes(i));
+                System.out.println();
             }
-
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,1);
-            double fEpis=(double) i/ (double) nofEpis;
-            agent.fitFromMiniBatch(miniBatch,env.parameters,fEpis);
-
-
+            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,agent.calcFractionEpisodes(i));
+            agent.fitFromMiniBatch(miniBatch,env.parameters,agent.calcFractionEpisodes(i));
         }
+    }
 
-        System.out.println("state:"+agent.state);
-        System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
-
-
+    private void setCirclesToPlot() {
         List<Position2D> circlePositionList = new ArrayList<>();
         List<Integer> actionList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -185,44 +136,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
         }
 
         env.plotPanel.setCircleData(circlePositionList,actionList);
-        env.plotPanel.repaint();
-        TimeUnit.MILLISECONDS.sleep(10000);
-
     }
-
-    @Test   @Ignore
-    public void learnAtSameInputStandardRewardNonZeroGamma() {
-
-        agent.GAMMA=0.99;
-
-
-        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
-            for (int a:env.parameters.discreteActionsSpace) {
-                env.setRandomStateValuesAny(agent.state);
-                StepReturn stepReturn = env.step(a, agent.state);
-                stepReturn.reward=-1.0;
-                Experience experience = new Experience(new State(agent.state), a, stepReturn, agent.BE_ERROR_INIT);
-                agent.replayBuffer.addExperience(experience);
-            }
-        }
-
-        List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
-
-        for (int i = 0; i < 500; i++) {
-            agent.printQsa(env.parameters);
-            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
-            if (i % agent.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
-                agent.networkTarget.setParams(agent.network.params());
-
-            agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
-            printBellmanError(i, 0, 0);
-        }
-
-       Assert.assertTrue(agent.readMemory(agent.state,0,env.parameters) < -10);
-
-    }
-
-
 
 
     private double calcMockReward(double pos, double vel, int a) {
@@ -234,7 +148,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
     private double calcRuleBasedReward(double pos, double vel, int a) {
         int desiredAction=(vel <-0.001)?0:2;
         double rAction=(a==desiredAction)?1.0:0.0;
-        return -30*1+rAction;
+        return -10*1+rAction;
     }
 
 

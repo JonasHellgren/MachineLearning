@@ -62,12 +62,23 @@ code clean up
 - bantad ScaleLinear: LinearScaler i ModelsCommon
 - förklara RB_EPS etc
 
-prova mindre reward  x ger inget
-prova annan gradientNormalization  x
 eps decay  x
+momentum x  verkar bra med stort, typ 0.99
+mer clipping  olika BE_ERROR_MAX
+minska ALPHA
+studera minibatch
+minibatch ej exp rep
+annan w init
+min avg max på weights
+exploderar w utan gradientNormalization?
+
+
 annan environment, tex chart pole
 
+
 fixa bellmanErrorList for 6Rooms
+
+
 
 
 

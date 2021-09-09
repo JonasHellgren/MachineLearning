@@ -47,10 +47,6 @@ public class MountainCar extends Environment {
     final  double CAR_RADIUS=0.05;
     final  int CIRCLE_RADIUS_IN_DOTS =10;
 
-    public int NOF_TESTS_WHEN_TESTING_POLICY=10;
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
-    public int NOD_DOTS_PLOTTED_POLICY=1000;
-
     public PanelMountainCarAnimation animationPanel;
     public JLabel labelPosX;
     public JLabel labelPosY;
@@ -281,13 +277,13 @@ public class MountainCar extends Environment {
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
 
-    public void render(MountainCarAgentNeuralNetwork agent, int action) {
+    @Override
+    public void render(AgentNeuralNetwork agent, int action) {
         double position=agent.state.getContinuousVariable("position");
         double velocity=agent.state.getContinuousVariable("velocity");
         double maxQ=agent.findMaxQTargetNetwork(agent.state,parameters);
         animationPanel.setCarStates(position,height(position),velocity,action,maxQ);
         animationPanel.repaint();
-
     }
 
     public double height(State state) {

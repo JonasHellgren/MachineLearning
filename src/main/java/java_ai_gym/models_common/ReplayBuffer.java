@@ -16,7 +16,7 @@ public class ReplayBuffer {
 
     public static final int BELLMAN_ERROR_MAX=10;
     public  double RB_EPS =1.0;
-    public double RB_ALP =0.1;
+    public double RB_ALP =0.1;  //0 <=> uniform distribution from bellman error for mini batch selection
     public double BETA0 =0.5;
     public int REPLAY_BUFFER_SIZE = 100;
 
@@ -39,6 +39,10 @@ public class ReplayBuffer {
 
     public void clear() {
         buffer.clear();
+    }
+
+    public List<Experience> getBuffer() {
+        return buffer;
     }
 
     public List<Experience> getMiniBatch(int batchLength) {

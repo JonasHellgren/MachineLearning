@@ -116,6 +116,10 @@ public class SixRooms extends Environment {
         return  false;
     }
 
+    @Override
+    public void render(AgentNeuralNetwork agent, int action) {
+    }
+
     public List<Integer> getFeasibleActions(State state) {
 
         List<Integer> feasibleActions = new ArrayList<>();

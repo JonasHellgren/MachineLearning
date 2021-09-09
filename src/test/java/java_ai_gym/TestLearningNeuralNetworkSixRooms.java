@@ -23,7 +23,6 @@ public class TestLearningNeuralNetworkSixRooms {
     State sNew = new State();
     SixRooms env = new SixRooms();
     SixRoomsAgentNeuralNetwork agent = new SixRoomsAgentNeuralNetwork(env.parameters);
-    public final double SMALL = 0.001;
     private final Random random = new Random();
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =50;
 
@@ -42,7 +41,8 @@ public class TestLearningNeuralNetworkSixRooms {
             agent.state.setVariable("roomNumber", startState);
             if (env.isTerminalState(agent.state)) continue;  // we do not want to start with the terminal state
 
-            simulateTextBook(false,iEpisode);
+            env.simulateEpisode(agent,iEpisode,env,env.parameters);
+            printBellmanError(iEpisode);
         }
 
         env.PrintQsa(agent);
@@ -76,50 +76,6 @@ public class TestLearningNeuralNetworkSixRooms {
             );
     }
 
-    private void simulateTextBook(boolean printFlag, int iEpisode) {
-        // Q learning equation: Q[s][a] = Q[s][a] + alpha ( R[s][a] + gamma (max Q[sNew]) - Q[s][a] )
-        // a single episode: the agent finds a path from state s to the exit state
-
-        StepReturn stepReturn;
-        int miniBatchSize= agent.MINI_BATCH_SIZE;
-        double fEpisodes=(double) iEpisode/ (double) agent.NUM_OF_EPISODES;
-        int nofSteps=0;
-
-        do {
-            int aChosen=agent.chooseAction(fEpisodes,env.parameters);
-            stepReturn = env.step(aChosen, agent.state);
-            Experience experience = new Experience(new State(agent.state), aChosen, stepReturn,agent.BE_ERROR_INIT);
-            agent.replayBuffer.addExperience(experience);
-
-            if (agent.replayBuffer.isFull(agent) & agent.isItTimeToFit() ) {
-                    List<Experience> miniBatch = agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(miniBatchSize, fEpisodes);
-                    agent.fitFromMiniBatch(miniBatch, env.parameters,fEpisodes);
-                    agent.maybeUpdateTargetNetwork();
-
-            }
-
-            /*
-            if (miniBatch.size()==miniBatchSize) {
-
-                DataSetIterator iterator = agent.createTrainingData(miniBatch,env.parameters);
-                agent.network.fit(iterator,agent.NUM_OF_EPOCHS);
-
-                if (printFlag) {
-                    //System.out.println("replayBuffer"+agent.replayBuffer);
-                    System.out.println("miniBatch"+miniBatch);
-                }
-
-            }  */
-
-            sNew.copyState(stepReturn.state);
-            agent.state.copyState(sNew);
-
-            nofSteps++;
-        } while (!stepReturn.termState & nofSteps<10);
-
-        agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
-        printBellmanError(iEpisode);
-    }
 
 
 }

@@ -54,14 +54,15 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public   double RB_ALP=0.5;  //0 <=> uniform distribution from bellman error for mini batch selection
     public   double BETA0=0.1;
     public  double  BE_ERROR_INIT=0;
+    public  double  BE_ERROR_MAX=10; //used for clipping
 
-    protected  double L2_REGULATION=1e-5;
-    protected  double LEARNING_RATE_START =1e-2;
-    protected  double LEARNING_RATE_END =1e-2;
-    protected  double MOMENTUM=0.8;
+    public  double L2_REGULATION=1e-5;
+    public  double LEARNING_RATE_START =1e-2;
+    public  double LEARNING_RATE_END =1e-2;
+    public  double MOMENTUM=0.8;
 
     public double GAMMA = 1.0;  // gamma discount factor
-    protected  double ALPHA=1;  // learning rate in Q-learning update
+    protected  double ALPHA=1.0;  // learning rate in Q-learning update
     protected  double PROBABILITY_RANDOM_ACTION_START = 0.9;  //probability choosing random action
     protected  double PROBABILITY_RANDOM_ACTION_END = 0.1;
     public  int NUM_OF_EPISODES = 200; // number of iterations
@@ -202,10 +203,20 @@ public abstract class AgentNeuralNetwork implements Learnable {
         outPutNDSet.putRow(idxSample, outFromNetwork);
     }
 
+    protected double clip(double variable, double minValue, double maxValue) {
+        double lowerThanMax= Math.min(variable, maxValue);
+        return Math.max(lowerThanMax, minValue);
+    }
 
     private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
+
+        /*
+        if (Math.abs(bellmanErrorStep)>10)
+            logger.warning("Big bellman error");  */
+
+        bellmanErrorStep=clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
         double alpha=exp.pExpRep.w*ALPHA;
         double y=qOld*1 + alpha * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
@@ -250,13 +261,16 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
 
-    public double calcLearningRate(double fEpisodes)  {
-        return learningRateScaler.calcOutDouble(fEpisodes);
+    public double calcLearningRate(double fractionEpisodesFinished)  {
+        return learningRateScaler.calcOutDouble(fractionEpisodesFinished);
     }
 
     public  double calcProbRandAction(double fractionEpisodesFinished) {
         return probRandActionScaler.calcOutDouble(fractionEpisodesFinished);
     }
 
+    public double calcFractionEpisodes(int iEpisode) {
+        return (double) iEpisode / (double) NUM_OF_EPISODES;
+    }
 
 }
