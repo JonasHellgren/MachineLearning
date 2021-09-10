@@ -57,6 +57,8 @@ public class MountainCar extends Environment {
     public JLabel labelXaxis;
     public JLabel labelYaxis;
 
+
+
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
 
@@ -104,6 +106,7 @@ public class MountainCar extends Environment {
         parameters.MIN_ACTION = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
 
+        createVariablesInState(getTemplateState());
         LineData roadData=createRoadData();
         setupFrameAndPanel(roadData);
         animationPanel.repaint();
@@ -137,9 +140,6 @@ public class MountainCar extends Environment {
         addLabelsToPlotPanel();
         plotFrame.add(plotPanel);
         plotFrame.setVisible(true);
-
-
-
     }
 
     private void addLabelsToAnimationPanel() {
@@ -184,11 +184,6 @@ public class MountainCar extends Environment {
     }
 
 
-    private double calcRandomFromIntervall(double minValue, double maxValue) {
-        return minValue+Math.random()*(maxValue-minValue);
-    }
-
-
     private LineData createRoadData() {
 
         final int NOF_POINTS=100;
@@ -206,10 +201,14 @@ public class MountainCar extends Environment {
                 yList.stream().mapToDouble(d -> d).toArray());
     }
 
+
+
     @Override
     public StepReturn step(int action, State state) {
+
         State newState = new State(state);
         StepReturn stepReturn = new StepReturn();
+        //newState.copyState(state);
         double position=state.getContinuousVariable("position");
         double velocity=state.getContinuousVariable("velocity");
         velocity += (action - 1) * parameters.FORCE + Math.cos(3 * position) * (-parameters.GRAVITY);
@@ -303,6 +302,13 @@ public class MountainCar extends Environment {
                     parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
 
+    @Override
+    public void createVariablesInState(State state)
+    {
+        state.createDiscreteVariable("nofSteps", 0);
+        state.createContinuousVariable("position", 0.0);
+        state.createContinuousVariable("velocity", 0.0);
+    }
 
 
 }

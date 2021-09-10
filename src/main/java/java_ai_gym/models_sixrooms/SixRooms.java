@@ -181,5 +181,11 @@ public class SixRooms extends Environment {
         }
     }
 
+    @Override
+    public void createVariablesInState(State state)
+    {
+        state.createDiscreteVariable("roomNumber", 0);
+    }
+
 
 }

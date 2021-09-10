@@ -12,13 +12,12 @@ import java.util.concurrent.TimeUnit;
 
 public class TestMountainCarEnvironment {
 
-    State state = new State();
-    MountainCar env=new MountainCar();
 
+    MountainCar env=new MountainCar();
+    State state = new State(env.getTemplateState());
 
     @Test
     public void setRuleBasedAction() throws InterruptedException {
-
         env.setRandomStateValuesAny(state);
         System.out.println(state);
         StepReturn stepReturn=env.step(0,state);

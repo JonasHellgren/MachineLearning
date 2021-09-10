@@ -15,6 +15,7 @@ public abstract class  Environment {
     public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
     public int NOF_TESTS_WHEN_TESTING_POLICY=10;
     public int NOD_DOTS_PLOTTED_POLICY=1000;
+    private State templateState=new State();
 
     public class PolicyTestReturn {
         public double successRatio;
@@ -37,6 +38,11 @@ public abstract class  Environment {
     protected abstract boolean isPolicyTestSuccessful(State state);
     protected abstract void setRandomStateValuesStart(State state);
     public abstract void render(AgentNeuralNetwork agent, int action);
+    public abstract void createVariablesInState(State state) ;
+
+    public State getTemplateState() {
+        return templateState;
+    }
 
     protected double clip(double variable, double minValue, double maxValue) {
         double lowerThanMax= Math.min(variable, maxValue);
@@ -151,7 +157,10 @@ public abstract class  Environment {
         } while (!stepReturn.termState);
 
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
+    }
 
+    protected double calcRandomFromIntervall(double minValue, double maxValue) {
+        return minValue+Math.random()*(maxValue-minValue);
     }
 
 }

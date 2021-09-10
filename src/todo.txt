@@ -77,7 +77,7 @@ annan environment, tex chart pole
 
 
 fixa bellmanErrorList for 6Rooms
-
+newState och stepReturn, flytta från step
 
 
 

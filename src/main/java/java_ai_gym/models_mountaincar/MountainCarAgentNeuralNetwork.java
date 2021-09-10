@@ -61,13 +61,13 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
     private void createReplayBuffer() {
-        this.REPLAY_BUFFER_SIZE = 1000;
+        this.REPLAY_BUFFER_SIZE = 2000;
         this.MINI_BATCH_SIZE = (int) (30*1);
         this.RB_EPS = 0.1;
         this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
         this.BETA0 = 0.1;
         this.BE_ERROR_INIT=0;  //do not favor new comers
-        this.BE_ERROR_MAX=1;
+        this.BE_ERROR_MAX=0.1;
         replayBuffer = new ReplayBuffer(RB_EPS, RB_ALP, BETA0, REPLAY_BUFFER_SIZE);
     }
 
@@ -78,7 +78,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.5;
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NOF_STEPS_BETWEEN_FITS = 1;
-        this.NUM_OF_EPISODES = (int) (100*NOF_STEPS_BETWEEN_FITS*PRECISION);
+        this.NUM_OF_EPISODES = (int) (200*NOF_STEPS_BETWEEN_FITS*PRECISION);
         this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*Math.sqrt(PRECISION));
     }
 
