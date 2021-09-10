@@ -37,13 +37,7 @@ import java.util.List;
 public class MountainCar extends Environment {
 
     public MountainCar.EnvironmentParameters parameters = this.new EnvironmentParameters();
-    final  int FRAME_WEIGHT =600;
-    final  int FRAME_HEIGHT =300;
-    final int FRAME_MARGIN =50;  //frame margin
-    final int LABEL_WEIGHT =FRAME_WEIGHT/2;
-    final int LABEL_HEIGHT =15;
-    final int LABEL_XPOS =10;
-    final int LABEL_XPOSY_MIN =0;
+
     final  double CAR_RADIUS=0.05;
     final  int CIRCLE_RADIUS_IN_DOTS =10;
 
@@ -56,8 +50,6 @@ public class MountainCar extends Environment {
     public PanelMountainCarPlot plotPanel;
     public JLabel labelXaxis;
     public JLabel labelYaxis;
-
-
 
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
@@ -113,13 +105,13 @@ public class MountainCar extends Environment {
     }
 
     private void setupFrameAndPanel(LineData roadData) {
-        animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar animation");
-        plotFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"MountainCar plots");
+        animationFrame =new FrameEnvironment(gfxSettings.FRAME_WEIGHT, gfxSettings.FRAME_HEIGHT,"MountainCar animation");
+        plotFrame =new FrameEnvironment(gfxSettings.FRAME_WEIGHT, gfxSettings.FRAME_HEIGHT,"MountainCar plots");
         ScaleLinear xScaler=new ScaleLinear(parameters.MIN_POSITION,parameters.MAX_POSITION,
-                FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
-                false, FRAME_MARGIN);
-        ScaleLinear yScaler=new ScaleLinear(0,1, FRAME_MARGIN,
-                FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
+                gfxSettings.FRAME_MARGIN, gfxSettings.FRAME_WEIGHT - gfxSettings.FRAME_MARGIN,
+                false,gfxSettings.FRAME_MARGIN);
+        ScaleLinear yScaler=new ScaleLinear(0,1, gfxSettings.FRAME_MARGIN,
+                gfxSettings.FRAME_HEIGHT - gfxSettings.FRAME_MARGIN,true, gfxSettings.FRAME_MARGIN);
 
         Position2D carPositionInit=new Position2D(parameters.POSITION_AT_MIN_HEIGHT,height(parameters.POSITION_AT_MIN_HEIGHT));
         animationPanel =new PanelMountainCarAnimation(xScaler,yScaler, roadData, carPositionInit,CAR_RADIUS);
@@ -134,7 +126,7 @@ public class MountainCar extends Environment {
         actionList.add(1);
 
         ScaleLinear yScalerVelocity=new ScaleLinear(-parameters.MAX_SPEED,parameters.MAX_SPEED,
-                FRAME_MARGIN,FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
+                gfxSettings.FRAME_MARGIN,gfxSettings.FRAME_HEIGHT - gfxSettings.FRAME_MARGIN,true, gfxSettings.FRAME_MARGIN);
         plotPanel =new PanelMountainCarPlot(xScaler,yScalerVelocity, circlePositionList, actionList, CIRCLE_RADIUS_IN_DOTS);
         plotPanel.setLayout(null);
         addLabelsToPlotPanel();
@@ -168,19 +160,26 @@ public class MountainCar extends Environment {
 
     private void addLabelsToPlotPanel() {
         labelXaxis = new JLabel("position (x)");
-        addLabelToPanel(labelXaxis, FRAME_WEIGHT/2, (int) FRAME_HEIGHT- FRAME_MARGIN*1);
+        addLabelToPanel(
+                labelXaxis,
+                gfxSettings.FRAME_WEIGHT/2,
+                gfxSettings.FRAME_HEIGHT- gfxSettings.FRAME_MARGIN*1);
         labelYaxis = new JLabel("velocity (y)");
         addLabelToPanel(labelYaxis, 0, 0);
     }
 
     private void addLabelToPanel(JLabel label, int posX, int posY) {
         plotPanel.add(label);
-        label.setBounds(posX, posY, LABEL_WEIGHT, LABEL_HEIGHT);
+        label.setBounds(posX, posY, gfxSettings.LABEL_WEIGHT, gfxSettings.LABEL_HEIGHT);
     }
 
     private void addLabelToPanel(JLabel label, int labelIndex) {
         animationPanel.add(label);
-        label.setBounds(LABEL_XPOS, LABEL_XPOSY_MIN+ labelIndex *LABEL_HEIGHT, LABEL_WEIGHT, LABEL_HEIGHT);
+        label.setBounds(
+                gfxSettings.LABEL_XPOS,
+             gfxSettings.LABEL_XPOSY_MIN+ labelIndex *gfxSettings.LABEL_HEIGHT,
+                gfxSettings.LABEL_WEIGHT,
+                gfxSettings.LABEL_HEIGHT);
     }
 
 

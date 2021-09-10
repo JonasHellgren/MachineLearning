@@ -89,7 +89,7 @@ public class TestLearningMountainCarNetwork {
     public void plotPolicy() {
         List<Position2D> circlePositionList = new ArrayList<>();
         List<Integer> actionList = new ArrayList<>();
-        for (int i = 0; i < env.NOD_DOTS_PLOTTED_POLICY; i++) {
+        for (int i = 0; i < env.gfxSettings.NOF_DOTS_PLOTTED_POLICY; i++) {
             env.setRandomStateValuesAny(agent.state);
             double pos=agent.state.getContinuousVariable("position");
             double vel=agent.state.getContinuousVariable("velocity");

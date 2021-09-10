@@ -4,9 +4,7 @@ import java_ai_gym.models_common.*;
 import java_ai_gym.swing.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
 /***
@@ -53,16 +51,6 @@ public class CartPole extends Environment {
     private static final Logger logger = Logger.getLogger(CartPole.class.getName());
 
     public CartPole.EnvironmentParameters parameters = this.new EnvironmentParameters();
-    final  int FRAME_WEIGHT =600;
-    final  int FRAME_HEIGHT =300;
-    final int FRAME_MARGIN =50;  //frame margin
-    final int LABEL_WEIGHT =FRAME_WEIGHT/2;
-    final int LABEL_HEIGHT =15;
-    final int LABEL_XPOS =10;
-    final int LABEL_XPOSY_MIN =0;
-    final  double CAR_RADIUS=0.05;
-    final  int CIRCLE_RADIUS_IN_DOTS =10;
-
     public PanelCartPoleAnimation animationPanel;
     public JLabel labelX;
     public JLabel labelTheta;
@@ -103,7 +91,6 @@ public class CartPole extends Environment {
         public int NOF_ACTIONS;
 
         public EnvironmentParameters() {
-
         }
 
         @Override
@@ -133,14 +120,13 @@ public class CartPole extends Environment {
     }
 
     private void setupFrameAndPanel() {
-        animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"CartPole animation");
-        plotFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"CartPole plots");
+        animationFrame =new FrameEnvironment(gfxSettings.FRAME_WEIGHT, gfxSettings.FRAME_HEIGHT,"CartPole animation");
+        plotFrame =new FrameEnvironment(gfxSettings.FRAME_WEIGHT, gfxSettings.FRAME_HEIGHT,"CartPole plots");
         ScaleLinear xScaler=new ScaleLinear(-parameters.X_TRESHOLD,parameters.X_TRESHOLD,
-                FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
-                false, FRAME_MARGIN);
-        ScaleLinear yScaler=new ScaleLinear(parameters.Y_MIN,parameters.Y_MAX, FRAME_MARGIN,
-                FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
-
+                gfxSettings.FRAME_MARGIN, gfxSettings.FRAME_WEIGHT - gfxSettings.FRAME_MARGIN,
+                false, gfxSettings.FRAME_MARGIN);
+        ScaleLinear yScaler=new ScaleLinear(parameters.Y_MIN,parameters.Y_MAX, gfxSettings.FRAME_MARGIN,
+                gfxSettings.FRAME_HEIGHT - gfxSettings. FRAME_MARGIN,true, gfxSettings.FRAME_MARGIN);
 
         animationPanel =new PanelCartPoleAnimation(xScaler,yScaler);
         animationPanel.setLayout(null);  //to enable tailor made position
@@ -193,8 +179,6 @@ public class CartPole extends Environment {
         addLabelToPanel(labelNofSteps, labelIndex);
         labelIndex++;
 
-
-
         labelMaxQ = new JLabel("maxQ");
         animationPanel.labelMaxQ=labelMaxQ;
         addLabelToPanel(labelMaxQ, labelIndex);
@@ -204,7 +188,11 @@ public class CartPole extends Environment {
 
     private void addLabelToPanel(JLabel label, int labelIndex) {
         animationPanel.add(label);
-        label.setBounds(LABEL_XPOS, LABEL_XPOSY_MIN+ labelIndex *LABEL_HEIGHT, LABEL_WEIGHT, LABEL_HEIGHT);
+        label.setBounds(
+                gfxSettings.LABEL_XPOS,
+             gfxSettings.LABEL_XPOSY_MIN+ labelIndex * gfxSettings.LABEL_HEIGHT,
+                gfxSettings.LABEL_WEIGHT,
+                gfxSettings.LABEL_HEIGHT);
     }
 
 

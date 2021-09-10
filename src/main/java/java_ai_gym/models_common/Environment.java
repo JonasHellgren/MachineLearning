@@ -14,7 +14,19 @@ public abstract class  Environment {
 
     public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
     public int NOF_TESTS_WHEN_TESTING_POLICY=10;
-    public int NOD_DOTS_PLOTTED_POLICY=1000;
+
+    public class GraphicsSettings  {
+        public final  int FRAME_WEIGHT =600;
+        public final  int FRAME_HEIGHT =300;
+        public final int FRAME_MARGIN =50;  //frame margin
+        public final int LABEL_WEIGHT =FRAME_WEIGHT/2;
+        public final int LABEL_HEIGHT =15;
+        public final int LABEL_XPOS =10;
+        public final int LABEL_XPOSY_MIN =0;
+        public int NOF_DOTS_PLOTTED_POLICY =1000;
+    }
+
+
     private State templateState=new State();
 
     public class PolicyTestReturn {
@@ -31,6 +43,7 @@ public abstract class  Environment {
 
     protected FrameEnvironment animationFrame;
     protected FrameEnvironment plotFrame;
+    public GraphicsSettings gfxSettings =new GraphicsSettings();
 
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
