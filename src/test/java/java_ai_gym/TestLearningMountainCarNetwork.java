@@ -72,7 +72,7 @@ public class TestLearningMountainCarNetwork {
             stepReturn=env.step(aBest,agent.state);
             agent.state.copyState(stepReturn.state);
 
-            env.render(agent,aBest);
+            env.render(agent.state, agent.findMaxQTargetNetwork(agent.state,env.parameters),aBest);
             TimeUnit.MILLISECONDS.sleep(100);
 
             if (env.isGoalState(stepReturn)) {

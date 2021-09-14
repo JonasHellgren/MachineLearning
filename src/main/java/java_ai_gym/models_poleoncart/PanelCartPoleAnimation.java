@@ -26,6 +26,7 @@ public class PanelCartPoleAnimation extends JPanel {
     double maxQ;
 
     Color cartColor;
+    Color poleColor;
     public JLabel labelX;
     public JLabel labelTheta;
     public JLabel labelXDot;
@@ -44,7 +45,9 @@ public class PanelCartPoleAnimation extends JPanel {
         this.yScaler = yScaler;
         cartPosition=new Position2D(0,CART_Y);
 
-        this.theta = 0; this.maxQ=0; cartColor = Color.RED;
+        this.theta = 0; this.maxQ=0;
+        cartColor = Color.RED;
+        poleColor = Color.BLACK;
     }
 
     public void drawPlot(Graphics2D g2d) {
@@ -107,6 +110,7 @@ public class PanelCartPoleAnimation extends JPanel {
            |_______________|
         */
 
+        g2d.setColor(poleColor);
         double x0=x; double x1=x+POLE_LENGTH*Math.sin(theta);
         double y0=cartPosition.y+CART_HEIGHT/2; double y1=y0+POLE_LENGTH*Math.cos(theta);
 

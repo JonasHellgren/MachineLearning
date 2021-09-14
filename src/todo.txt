@@ -78,16 +78,24 @@ cart pole agent  x
 
 pole reward från fail state  x
 göra test policy mer flexibel  nja, verker ej gå   x
-långsammare slutanimering
-spara bästa policy hittils
+långsammare slutanimering  x
+spara bästa policy hittils x
 hyper par från artikel
-annan skalning på input
-prova mindre massa cart
+annan skalning på input    x
+prova mindre massa cart   verkar ej påverka nämnvärt, mest försvåra x
+enkom cart ändra färg sfa action  x
+mer exp replay x
 
 spara bästa policy hittils även för mountain car
 newState och stepReturn, flytta från step
+döp om badstate till fail state Environment
 fail state fcn för mountain car
 
+clean up
+- state isf agent till render
+- animatePolicy till Environment
+- load and save methoder i base NnAgentClass
+- diverse tex calcRandomFromIntervall til class MathUtils
 
 
 när tid:

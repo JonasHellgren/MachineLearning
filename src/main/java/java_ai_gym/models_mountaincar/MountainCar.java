@@ -276,10 +276,9 @@ public class MountainCar extends Environment {
     }
 
     @Override
-    public void render(AgentNeuralNetwork agent, int action) {
-        double position=agent.state.getContinuousVariable("position");
-        double velocity=agent.state.getContinuousVariable("velocity");
-        double maxQ=agent.findMaxQTargetNetwork(agent.state,parameters);
+    public void render(State state, double maxQ, int action) {
+        double position=state.getContinuousVariable("position");
+        double velocity=state.getContinuousVariable("velocity");
         animationPanel.setCarStates(position,height(position),velocity,action,maxQ);
         animationPanel.repaint();
     }

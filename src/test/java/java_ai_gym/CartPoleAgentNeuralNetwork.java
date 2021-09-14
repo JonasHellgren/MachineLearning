@@ -21,6 +21,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import java.util.logging.Logger;
 
 /***
+ * Hyper parameters settings influenced by
  * https://arxiv.org/pdf/2006.04938.pdf
  *
  */
@@ -73,8 +74,8 @@ public class CartPoleAgentNeuralNetwork extends AgentNeuralNetwork {
         this.PROBABILITY_RANDOM_ACTION_START = 0.99;
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;
         this.NOF_STEPS_BETWEEN_FITS = 1;
-        this.NUM_OF_EPISODES = (int) (750*NOF_STEPS_BETWEEN_FITS*PRECISION);
-        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (10*Math.sqrt(PRECISION));
+        this.NUM_OF_EPISODES = (int) (500*NOF_STEPS_BETWEEN_FITS*PRECISION);
+        this.NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE = (int) (100*Math.sqrt(PRECISION));
     }
 
     private void createNetworks(CartPole.EnvironmentParameters envParams) {

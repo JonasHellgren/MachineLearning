@@ -44,6 +44,7 @@ import java.util.logging.Logger;
  *         Solved Requirements:
  *         Considered solved when the average return is greater than or equal to
  *         195.0 over 100 consecutive trials.
+
  */
 
 public class CartPole extends Environment {
@@ -66,7 +67,7 @@ public class CartPole extends Environment {
     // inner classes
     public class EnvironmentParameters extends EnvironmentParametersAbstract {
         public final double GRAVITY = 9.8;
-        public final double MASSCART = 1.0;
+        public final double MASSCART = 1.0;  //1.0
         public final double MASSPOLE = 0.1;
         public final double TOTAL_MASS = MASSPOLE + MASSCART;
         public final double LENGTH = 0.5;  // actually half the pole's length
@@ -78,14 +79,14 @@ public class CartPole extends Environment {
         public final double X_TRESHOLD = 2;
         public final double Y_MAX = 1;   //domain limit
         public final double Y_MIN = -0.5;
-        public final double THETA_DOT_THRESHOLD_RADIANS  = 10; //Double.MAX_VALUE;
-        public final double X_DOT_TRESHOLD = 10; //Double.MAX_VALUE;
+        public final double THETA_DOT_THRESHOLD_RADIANS  = 5; //Double.MAX_VALUE; 10
+        public final double X_DOT_TRESHOLD = 5; //Double.MAX_VALUE;  10
 
         public final double ANY_VARIABLE_TRESHOLD_START =  0.05;
 
         public final double X_TERMINATION = 2.4;
         public final double THETA_TERMINATION  = 12  * Math.PI / 360;
-        public final int MAX_NOF_STEPS =200;
+        public  int MAX_NOF_STEPS =200;
         public final int MAX_NOF_STEPS_POLICY_TEST=300;
         public  double NON_TERMINAL_REWARD = 1.0;
         public int NOF_ACTIONS;
@@ -277,11 +278,8 @@ public class CartPole extends Environment {
     }
 
     @Override
-    public void render(AgentNeuralNetwork agent, int action) {
-        double x=agent.state.getContinuousVariable("x");
-        double theta=agent.state.getContinuousVariable("theta");
-        double maxQ=agent.findMaxQTargetNetwork(agent.state,parameters);
-        animationPanel.setCartPoleStates(agent.state,action,maxQ);
+    public void render(State state, double maxQ, int action) {
+        animationPanel.setCartPoleStates(state,action,maxQ);
         animationPanel.repaint();
     }
 

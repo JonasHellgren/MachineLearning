@@ -117,7 +117,7 @@ public class SixRooms extends Environment {
     }
 
     @Override
-    public void render(AgentNeuralNetwork agent, int action) {
+    public void render(State state, double Qmax, int action) {
     }
 
     public List<Integer> getFeasibleActions(State state) {

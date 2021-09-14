@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public abstract class  Environment {
 
@@ -50,7 +51,7 @@ public abstract class  Environment {
     protected abstract boolean isTerminalStatePolicyTest(State state);
     protected abstract boolean isPolicyTestSuccessful(State state);
     protected abstract void setRandomStateValuesStart(State state);
-    public abstract void render(AgentNeuralNetwork agent, int action);
+    public abstract void render(State state,double maxQ, int action);
     public abstract void createVariablesInState(State state) ;
 
     public State getTemplateState() {
@@ -164,7 +165,7 @@ public abstract class  Environment {
 
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);
-            env.render(agent,aChosen);
+            env.render(agent.state,agent.findMaxQTargetNetwork(agent.state,envParams),aChosen);
 
         } while (!stepReturn.termState);
 
@@ -174,5 +175,22 @@ public abstract class  Environment {
     protected double calcRandomFromIntervall(double minValue, double maxValue) {
         return minValue+Math.random()*(maxValue-minValue);
     }
+
+    /*
+    public void animatePolicy(long timeMilliSecPerFrame) throws InterruptedException {
+        env.setRandomStateValuesStart(agent.state);
+        System.out.println(agent.state);
+        StepReturn stepReturn;
+        do {
+            int aBest=agent.chooseBestAction(agent.state, env.parameters);
+            stepReturn=env.step(aBest,agent.state);
+            agent.state.copyState(stepReturn.state);
+            render(agent,aBest);
+            TimeUnit.MILLISECONDS.sleep(timeMilliSecPerFrame);
+
+        } while (!stepReturn.termState);
+
+        TimeUnit.MILLISECONDS.sleep(1000);
+    }  */
 
 }

@@ -31,7 +31,7 @@ public class TestLearningCartPoleNetwork {
     File polePolicyInitTarget = new File("c:/temp/polePolicyInitTarget");
     File polePolicy = new File("c:/temp/polePolicy");
     File polePolicyTarget = new File("c:/temp/polePolicyTarget");
-    final long TIME_MILLIS_FRAME=200;
+    final long TIME_MILLIS_FRAME=100;
 
     @Test @Ignore
     //https://www.saashanair.com/dqn-code/
@@ -92,11 +92,14 @@ public class TestLearningCartPoleNetwork {
         animatePolicy(TIME_MILLIS_FRAME);
     }
 
-    @Test  @Ignore
+    @Test  // @Ignore
     public void animateBestPolicy() throws IOException, InterruptedException {
         logger.info("Loading best policy");
         loadPolicy(polePolicy, polePolicyTarget);
+        env.parameters.MAX_NOF_STEPS=(int) 1e6;
         animatePolicy(TIME_MILLIS_FRAME);
+        System.out.println(agent.state);
+        System.out.println("isCartPoleInBadState:"+env.isCartPoleInBadState(agent.state));
     }
 
     public void loadPolicy(File polePolicy, File polePolicTarget) throws IOException, InterruptedException {
@@ -114,7 +117,7 @@ public class TestLearningCartPoleNetwork {
             int aBest=agent.chooseBestAction(agent.state, env.parameters);
             stepReturn=env.step(aBest,agent.state);
             agent.state.copyState(stepReturn.state);
-            env.render(agent,aBest);
+            env.render(agent.state,agent.findMaxQTargetNetwork(agent.state,env.parameters),aBest);
             TimeUnit.MILLISECONDS.sleep(timeMilliSecPerFrame);
 
         } while (!stepReturn.termState);
