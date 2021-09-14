@@ -28,7 +28,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
     private static final Logger logger = Logger.getLogger(TestLFunctionApproximationMountainCarNetwork.class.getName());
 
     MountainCar env = new MountainCar();
-    MountainCarAgentNeuralNetwork agent = new MountainCarAgentNeuralNetwork(env.parameters);
+    MountainCarAgentNeuralNetwork agent = new MountainCarAgentNeuralNetwork(env.parameters,env.getTemplateState());
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS =10;
 
 

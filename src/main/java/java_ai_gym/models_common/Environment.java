@@ -132,7 +132,7 @@ public abstract class  Environment {
         System.out.printf(", success ratio: %.2f", policyTestReturn.successRatio);
         System.out.printf(", avg of maxQ: %.2f ", policyTestReturn.maxQaverage);
         System.out.printf(", avg bellman err: %.2f", policyTestReturn.bellmanErrAverage);
-        System.out.printf(", avg(NofSteps) div maxNofsteps: %.2f", policyTestReturn.avgNofSteps/MAX_NOF_STEPS_POLICY_TEST);
+        System.out.printf(", avg(NofSteps): %.2f", policyTestReturn.avgNofSteps);
         System.out.printf(", learning rate: %.5f", agent.calcLearningRate(agent.calcFractionEpisodes(iEpisode)));
         System.out.printf(", prob random action: %.5f", agent.calcProbRandAction(agent.calcFractionEpisodes(iEpisode)));
         System.out.println();
@@ -146,7 +146,6 @@ public abstract class  Environment {
         StepReturn stepReturn;
         State sNew = new State();
         double fEpisodes=agent.calcFractionEpisodes(iEpisode);
-
         do {
             int aChosen=agent.chooseAction(fEpisodes,envParams);
             stepReturn = env.step(aChosen, agent.state);

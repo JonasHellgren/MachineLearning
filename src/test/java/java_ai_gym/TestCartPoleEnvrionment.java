@@ -58,13 +58,9 @@ public class TestCartPoleEnvrionment {
         System.out.println(state);
         StepReturn stepReturn; //=env.step(0,state);
         int action=1;
-        double xStart;
-        double thetaStart;
-
         do {
-
-            double x=state.getContinuousVariable("x");  xStart=x;
-            double theta=state.getContinuousVariable("theta");  thetaStart=theta;
+            double x=state.getContinuousVariable("x");
+            double theta=state.getContinuousVariable("theta");
 
             action=random.nextInt(env.parameters.discreteActionsSpace.size());
             stepReturn=env.step(action,state);

@@ -48,18 +48,19 @@ public abstract class AgentNeuralNetwork implements Learnable {
     protected  Integer NOF_FEATURES ;
     protected  Integer  NOF_NEURONS_HIDDEN;
 
-    public  int REPLAY_BUFFER_SIZE = 100;
+    public  int REPLAY_BUFFER_SIZE = 1000;
     public  int MINI_BATCH_SIZE = 30;
     public   double RB_EPS=0.1;
     public   double RB_ALP=0.5;  //0 <=> uniform distribution from bellman error for mini batch selection
     public   double BETA0=0.1;
-    public  double  BE_ERROR_INIT=0;
+    public  double  BE_ERROR_INIT=0;  // 0 <=> do not favor new comers
     public  double  BE_ERROR_MAX=10; //used for clipping
 
     public  double L2_REGULATION=1e-5;
     public  double LEARNING_RATE_START =1e-2;
     public  double LEARNING_RATE_END =1e-2;
     public  double MOMENTUM=0.8;
+    public  double GRADIENT_NORMALIZATION_THRESHOLD=1;
 
     public double GAMMA = 1.0;  // gamma discount factor
     protected  double ALPHA=1.0;  // learning rate in Q-learning update

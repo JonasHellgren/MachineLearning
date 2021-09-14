@@ -21,7 +21,7 @@ public class TestLearningMountainCarNetwork {
     private static final Logger logger = Logger.getLogger(TestLearningMountainCarNetwork.class.getName());
     State sNew = new State();
     MountainCar env = new MountainCar();
-    MountainCarAgentNeuralNetwork agent = new MountainCarAgentNeuralNetwork(env.parameters);
+    MountainCarAgentNeuralNetwork agent = new MountainCarAgentNeuralNetwork(env.parameters,env.getTemplateState());
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS = 10;
 
 
@@ -141,8 +141,6 @@ public class TestLearningMountainCarNetwork {
             agent.fitFromMiniBatch(miniBatch,env.parameters,0);
 
         }
-
-
     }
 
 }

@@ -76,17 +76,17 @@ public class CartPole extends Environment {
 
         public final double THETA_THRESHOLD_RADIANS  = 12 * 2 * 3.141592 / 360;
         public final double X_TRESHOLD = 2;
-        public final double Y_MAX = 2;   //domain limit
-        public final double Y_MIN = -1;
-        public final double THETA_DOT_THRESHOLD_RADIANS  = Double.MAX_VALUE;
-        public final double X_DOT_TRESHOLD = Double.MAX_VALUE;
+        public final double Y_MAX = 1;   //domain limit
+        public final double Y_MIN = -0.5;
+        public final double THETA_DOT_THRESHOLD_RADIANS  = 10; //Double.MAX_VALUE;
+        public final double X_DOT_TRESHOLD = 10; //Double.MAX_VALUE;
 
         public final double ANY_VARIABLE_TRESHOLD_START =  0.05;
 
         public final double X_TERMINATION = 2.4;
         public final double THETA_TERMINATION  = 12  * Math.PI / 360;
         public final int MAX_NOF_STEPS =200;
-        public final int MAX_NOF_STEPS_POLICY_TEST=500;
+        public final int MAX_NOF_STEPS_POLICY_TEST=300;
         public  double NON_TERMINAL_REWARD = 1.0;
         public int NOF_ACTIONS;
 
@@ -111,8 +111,8 @@ public class CartPole extends Environment {
         parameters.continuousStateVariableNames.add("thetaDot");
 
         parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1));
-        //parameters.MIN_ACTION = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
+        NOF_EPISODES_BETWEEN_POLICY_TEST=25;
 
         createVariablesInState(getTemplateState());
         setupFrameAndPanel();
@@ -234,9 +234,8 @@ public class CartPole extends Environment {
 
         stepReturn.state = newState;
         stepReturn.termState = isTerminalState(newState);
-        stepReturn.reward = (stepReturn.termState)?
-                0:
-                parameters.NON_TERMINAL_REWARD;
+        //stepReturn.reward = (stepReturn.termState)?0:parameters.NON_TERMINAL_REWARD;
+        stepReturn.reward = (isCartPoleInBadState(newState))?0:parameters.NON_TERMINAL_REWARD;
 
         state.totalNofSteps++;
         return stepReturn;
@@ -252,23 +251,29 @@ public class CartPole extends Environment {
         state.setVariable("xDot", calcRandomFromIntervall(low,high));
         state.setVariable("theta", calcRandomFromIntervall(low,high));
         state.setVariable("thetaDot", calcRandomFromIntervall(low,high));
+        state.setVariable("nofSteps", 0);
     }
-
 
 
     @Override
     public boolean isTerminalState(State state) {
-        return (state.getContinuousVariable("x") >= parameters.X_TRESHOLD |
-                state.getContinuousVariable("x") <= -parameters.X_TRESHOLD |
-                state.getContinuousVariable("theta") >= parameters.THETA_THRESHOLD_RADIANS |
-                state.getContinuousVariable("theta") <=-parameters.THETA_THRESHOLD_RADIANS |
+        return (isCartPoleInBadState(state) |
                 state.getDiscreteVariable("nofSteps") >= parameters.MAX_NOF_STEPS);
     }
 
+
     @Override
     public boolean isTerminalStatePolicyTest(State state) {
-        logger.warning("Not implemented");
-        return true;
+        return (isCartPoleInBadState(state) |
+                state.getDiscreteVariable("nofSteps") >= parameters.MAX_NOF_STEPS_POLICY_TEST);
+    }
+
+    public boolean isCartPoleInBadState(State state)
+    {
+        return (state.getContinuousVariable("x") >= parameters.X_TRESHOLD |
+                state.getContinuousVariable("x") <= -parameters.X_TRESHOLD |
+                state.getContinuousVariable("theta") >= parameters.THETA_THRESHOLD_RADIANS |
+                state.getContinuousVariable("theta") <=-parameters.THETA_THRESHOLD_RADIANS);
     }
 
     @Override
@@ -282,7 +287,7 @@ public class CartPole extends Environment {
 
     @Override
     public boolean isPolicyTestSuccessful(State state) {
-        return   (state.getDiscreteVariable("nofSteps") <
+        return   (state.getDiscreteVariable("nofSteps") >=
                 parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
 

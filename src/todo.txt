@@ -73,12 +73,20 @@ min avg max på weights
 exploderar w utan gradientNormalization?
 
 
-annan environment, tex chart pole
+annan environment, tex chart pole  x
+cart pole agent  x
 
+pole reward från fail state  x
+göra test policy mer flexibel  nja, verker ej gå   x
+långsammare slutanimering
+spara bästa policy hittils
+hyper par från artikel
+annan skalning på input
+prova mindre massa cart
 
-fixa bellmanErrorList for 6Rooms
+spara bästa policy hittils även för mountain car
 newState och stepReturn, flytta från step
-
+fail state fcn för mountain car
 
 
 
