@@ -250,11 +250,11 @@ public class MountainCar extends Environment {
     private void setRandomStateValues(State state, boolean startState) {
 
         if (startState) {
-            state.setVariable("position", calcRandomFromIntervall(parameters.MIN_START_POSITION, parameters.MAX_START_POSITION));
-            state.setVariable("velocity", calcRandomFromIntervall(parameters.MIN_START_VELOCITY, parameters.MAX_START_VELOCITY));
+            state.setVariable("position", MathUtils.calcRandomFromIntervall(parameters.MIN_START_POSITION, parameters.MAX_START_POSITION));
+            state.setVariable("velocity", MathUtils.calcRandomFromIntervall(parameters.MIN_START_VELOCITY, parameters.MAX_START_VELOCITY));
         } else {
-            state.setVariable("position", calcRandomFromIntervall(parameters.MIN_POSITION, parameters.MAX_POSITION));
-            state.setVariable("velocity", calcRandomFromIntervall(-parameters.MAX_SPEED, parameters.MAX_SPEED));
+            state.setVariable("position", MathUtils.calcRandomFromIntervall(parameters.MIN_POSITION, parameters.MAX_POSITION));
+            state.setVariable("velocity", MathUtils.calcRandomFromIntervall(-parameters.MAX_SPEED, parameters.MAX_SPEED));
         }
 
         state.setVariable("nofSteps", 0);

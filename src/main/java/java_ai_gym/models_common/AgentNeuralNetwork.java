@@ -5,12 +5,15 @@ import java_ai_gym.models_mountaincar.MountainCar;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -204,20 +207,12 @@ public abstract class AgentNeuralNetwork implements Learnable {
         outPutNDSet.putRow(idxSample, outFromNetwork);
     }
 
-    protected double clip(double variable, double minValue, double maxValue) {
-        double lowerThanMax= Math.min(variable, maxValue);
-        return Math.max(lowerThanMax, minValue);
-    }
+
 
     private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
         double qOld = readMemory(inputNetwork, exp.action);
         bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
-
-        /*
-        if (Math.abs(bellmanErrorStep)>10)
-            logger.warning("Big bellman error");  */
-
-        bellmanErrorStep=clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
+        bellmanErrorStep=MathUtils.clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
         double alpha=exp.pExpRep.w*ALPHA;
         double y=qOld*1 + alpha * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
@@ -274,4 +269,16 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return (double) iEpisode / (double) NUM_OF_EPISODES;
     }
 
-}
+    public void savePolicy(String filePath) throws IOException {
+        File polePolicy = new File(filePath+"polePolicy.nw");
+        File polePolicyTarget = new File(filePath+"polePolicyTarget.nw");
+        network.save(polePolicy);
+        networkTarget.save(polePolicyTarget);
+    }
+
+    public void loadPolicy(String filePath) throws IOException, InterruptedException {
+        File polePolicy = new File(filePath+"polePolicy.nw");
+        File polePolicyTarget = new File(filePath+"polePolicyTarget.nw");
+        network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
+        networkTarget = ModelSerializer.restoreMultiLayerNetwork(polePolicyTarget);
+    }}

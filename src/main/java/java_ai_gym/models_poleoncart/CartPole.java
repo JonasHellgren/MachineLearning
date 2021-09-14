@@ -248,10 +248,10 @@ public class CartPole extends Environment {
     public void setRandomStateValuesStart(State state) {
         double low=-parameters.ANY_VARIABLE_TRESHOLD_START;
         double high=parameters.ANY_VARIABLE_TRESHOLD_START;
-        state.setVariable("x", calcRandomFromIntervall(low,high));
-        state.setVariable("xDot", calcRandomFromIntervall(low,high));
-        state.setVariable("theta", calcRandomFromIntervall(low,high));
-        state.setVariable("thetaDot", calcRandomFromIntervall(low,high));
+        state.setVariable("x", MathUtils.calcRandomFromIntervall(low,high));
+        state.setVariable("xDot", MathUtils.calcRandomFromIntervall(low,high));
+        state.setVariable("theta", MathUtils.calcRandomFromIntervall(low,high));
+        state.setVariable("thetaDot", MathUtils.calcRandomFromIntervall(low,high));
         state.setVariable("nofSteps", 0);
     }
 

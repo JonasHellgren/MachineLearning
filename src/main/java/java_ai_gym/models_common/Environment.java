@@ -174,9 +174,7 @@ public abstract class  Environment {
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
     }
 
-    protected double calcRandomFromIntervall(double minValue, double maxValue) {
-        return minValue+Math.random()*(maxValue-minValue);
-    }
+
 
     public void animatePolicy(AgentNeuralNetwork agent, EnvironmentParametersAbstract envParams) throws InterruptedException {
         setRandomStateValuesStart(agent.state);

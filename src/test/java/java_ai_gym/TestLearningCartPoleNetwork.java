@@ -27,9 +27,10 @@ public class TestLearningCartPoleNetwork {
     File polePolicyInitTarget = new File("c:/temp/polePolicyInitTarget");
     File polePolicy = new File("c:/temp/polePolicy");
     File polePolicyTarget = new File("c:/temp/polePolicyTarget");
+    String filePathBest = "c:/temp/best/";
+    String filePathInit = "c:/temp/init/";
 
-
-    @Test @Ignore
+    @Test //@Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException, IOException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -38,8 +39,7 @@ public class TestLearningCartPoleNetwork {
 
         //plotPolicy();
         logger.info("Init policy found and saved");
-        agent.network.save(polePolicyInit);
-        agent.networkTarget.save(polePolicyInitTarget);
+        agent.savePolicy(filePathInit);
         double bestNofSteps=0;
         for (int iEpisode = 0; iEpisode <= agent.NUM_OF_EPISODES; ++iEpisode) {
             env.setRandomStateValuesStart(agent.state);
@@ -60,8 +60,7 @@ public class TestLearningCartPoleNetwork {
                 if (policyTestReturn.avgNofSteps>bestNofSteps) {
                     bestNofSteps=policyTestReturn.avgNofSteps;
                     logger.info("New best policy found and saved");
-                    agent.network.save(polePolicy);
-                    agent.networkTarget.save(polePolicyTarget);
+                    agent.savePolicy(filePathBest);
                 }
             }
         }
@@ -81,29 +80,30 @@ public class TestLearningCartPoleNetwork {
 
     }
 
-    @Test
+    @Test //@Ignore
     public void animateInitPolicy() throws IOException, InterruptedException {
         logger.info("Loading init policy");
-        loadPolicy(polePolicyInit, polePolicyInitTarget);
+        agent.loadPolicy(filePathInit);
         env.animatePolicy(agent, env.parameters);
     }
 
-    @Test  // @Ignore
+    @Test   @Ignore
     public void animateBestPolicy() throws IOException, InterruptedException {
         logger.info("Loading best policy");
-        loadPolicy(polePolicy, polePolicyTarget);
+        agent.loadPolicy(filePathBest);
         env.parameters.MAX_NOF_STEPS=(int) 1e6;
         env.animatePolicy(agent, env.parameters);
         System.out.println(agent.state);
         System.out.println("isCartPoleInBadState:"+env.isFailsState(agent.state));
     }
 
+    /*
     public void loadPolicy(File polePolicy, File polePolicTarget) throws IOException, InterruptedException {
         agent.network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
         agent.networkTarget = ModelSerializer.restoreMultiLayerNetwork(polePolicTarget);
         Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
         env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
-
+*/
 
 }

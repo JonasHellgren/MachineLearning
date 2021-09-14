@@ -91,12 +91,12 @@ clean up
 - animatePolicy till Environment  x
 - newState och stepReturn, flytta från step  skippar  x
 - döp om badstate till fail state Environment  x
-- load and save methoder i base NnAgentClass
+- load and save methoder i base NnAgentClass  x
 - diverse tex calcRandomFromIntervall til class MathUtils
 
 
 spara bästa policy hittils även för mountain car
-fail state fcn för mountain car
+fail state fcn för mountain car  x
 
 
 när tid:
