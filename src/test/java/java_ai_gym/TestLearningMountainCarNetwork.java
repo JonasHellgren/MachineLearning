@@ -52,7 +52,7 @@ public class TestLearningMountainCarNetwork {
 
         plotPolicy();
         TimeUnit.MILLISECONDS.sleep(1000);
-        animatePolicy();
+        env.animatePolicy(agent, env.parameters);
 
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
@@ -60,31 +60,6 @@ public class TestLearningMountainCarNetwork {
 
     }
 
-
-    public void animatePolicy() throws InterruptedException {
-        env.setRandomStateValuesStart(agent.state);
-        System.out.println(agent.state);
-        StepReturn stepReturn;
-
-        do {
-
-            int aBest=agent.chooseBestAction(agent.state, env.parameters);
-            stepReturn=env.step(aBest,agent.state);
-            agent.state.copyState(stepReturn.state);
-
-            env.render(agent.state, agent.findMaxQTargetNetwork(agent.state,env.parameters),aBest);
-            TimeUnit.MILLISECONDS.sleep(100);
-
-            if (env.isGoalState(stepReturn)) {
-                System.out.println("Goal state reached");
-                System.out.println(agent.state);
-                System.out.println(stepReturn);
-            }
-
-        } while (!stepReturn.termState);
-
-        TimeUnit.MILLISECONDS.sleep(1000);
-    }
 
     public void plotPolicy() {
         List<Position2D> circlePositionList = new ArrayList<>();

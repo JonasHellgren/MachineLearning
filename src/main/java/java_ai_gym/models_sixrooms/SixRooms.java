@@ -106,6 +106,12 @@ public class SixRooms extends Environment {
     }
 
     @Override
+    public boolean isFailsState(State state) {
+        logger.warning("This method is not implemented");
+        return true;
+    }
+
+    @Override
     public void setRandomStateValuesStart(State state) {
         logger.warning("This method is not implemented");
     }

@@ -263,16 +263,20 @@ public class MountainCar extends Environment {
 
     @Override
     public boolean isTerminalState(State state) {
-        return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
-                state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY |
+        return  (isFailsState(state) |
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS);
     }
 
     @Override
     public boolean isTerminalStatePolicyTest(State state) {
-        return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
-                state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY |
+        return (isFailsState(state) |
                 state.getDiscreteVariable("nofSteps")>=parameters.MAX_NOF_STEPS_POLICY_TEST);
+    }
+
+    @Override
+    public boolean isFailsState(State state)  {
+        return (state.getContinuousVariable("position")>=parameters.GOAL_POSITION &
+                state.getContinuousVariable("velocity")>=parameters.GOAL_VELOCITY);
     }
 
     @Override

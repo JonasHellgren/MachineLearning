@@ -3,11 +3,7 @@ package java_ai_gym;
 import java_ai_gym.models_common.Environment;
 import java_ai_gym.models_common.Experience;
 import java_ai_gym.models_common.State;
-import java_ai_gym.models_common.StepReturn;
-import java_ai_gym.models_mountaincar.MountainCar;
-import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
 import java_ai_gym.models_poleoncart.CartPole;
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -31,7 +27,7 @@ public class TestLearningCartPoleNetwork {
     File polePolicyInitTarget = new File("c:/temp/polePolicyInitTarget");
     File polePolicy = new File("c:/temp/polePolicy");
     File polePolicyTarget = new File("c:/temp/polePolicyTarget");
-    final long TIME_MILLIS_FRAME=100;
+
 
     @Test @Ignore
     //https://www.saashanair.com/dqn-code/
@@ -77,7 +73,7 @@ public class TestLearningCartPoleNetwork {
         agent.network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
         Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
         env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
-        animatePolicy(TIME_MILLIS_FRAME);
+        env.animatePolicy(agent, env.parameters);
 
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
@@ -89,7 +85,7 @@ public class TestLearningCartPoleNetwork {
     public void animateInitPolicy() throws IOException, InterruptedException {
         logger.info("Loading init policy");
         loadPolicy(polePolicyInit, polePolicyInitTarget);
-        animatePolicy(TIME_MILLIS_FRAME);
+        env.animatePolicy(agent, env.parameters);
     }
 
     @Test  // @Ignore
@@ -97,9 +93,9 @@ public class TestLearningCartPoleNetwork {
         logger.info("Loading best policy");
         loadPolicy(polePolicy, polePolicyTarget);
         env.parameters.MAX_NOF_STEPS=(int) 1e6;
-        animatePolicy(TIME_MILLIS_FRAME);
+        env.animatePolicy(agent, env.parameters);
         System.out.println(agent.state);
-        System.out.println("isCartPoleInBadState:"+env.isCartPoleInBadState(agent.state));
+        System.out.println("isCartPoleInBadState:"+env.isFailsState(agent.state));
     }
 
     public void loadPolicy(File polePolicy, File polePolicTarget) throws IOException, InterruptedException {
@@ -109,20 +105,5 @@ public class TestLearningCartPoleNetwork {
         env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
 
-    public void animatePolicy(long timeMilliSecPerFrame) throws InterruptedException {
-        env.setRandomStateValuesStart(agent.state);
-        System.out.println(agent.state);
-        StepReturn stepReturn;
-        do {
-            int aBest=agent.chooseBestAction(agent.state, env.parameters);
-            stepReturn=env.step(aBest,agent.state);
-            agent.state.copyState(stepReturn.state);
-            env.render(agent.state,agent.findMaxQTargetNetwork(agent.state,env.parameters),aBest);
-            TimeUnit.MILLISECONDS.sleep(timeMilliSecPerFrame);
-
-        } while (!stepReturn.termState);
-
-        TimeUnit.MILLISECONDS.sleep(1000);
-    }
 
 }

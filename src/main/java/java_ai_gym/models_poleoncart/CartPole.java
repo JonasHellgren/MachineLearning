@@ -236,7 +236,7 @@ public class CartPole extends Environment {
         stepReturn.state = newState;
         stepReturn.termState = isTerminalState(newState);
         //stepReturn.reward = (stepReturn.termState)?0:parameters.NON_TERMINAL_REWARD;
-        stepReturn.reward = (isCartPoleInBadState(newState))?0:parameters.NON_TERMINAL_REWARD;
+        stepReturn.reward = (isFailsState(newState))?0:parameters.NON_TERMINAL_REWARD;
 
         state.totalNofSteps++;
         return stepReturn;
@@ -258,18 +258,19 @@ public class CartPole extends Environment {
 
     @Override
     public boolean isTerminalState(State state) {
-        return (isCartPoleInBadState(state) |
+        return (isFailsState(state) |
                 state.getDiscreteVariable("nofSteps") >= parameters.MAX_NOF_STEPS);
     }
 
 
     @Override
     public boolean isTerminalStatePolicyTest(State state) {
-        return (isCartPoleInBadState(state) |
+        return (isFailsState(state) |
                 state.getDiscreteVariable("nofSteps") >= parameters.MAX_NOF_STEPS_POLICY_TEST);
     }
 
-    public boolean isCartPoleInBadState(State state)
+    @Override
+    public boolean isFailsState(State state)
     {
         return (state.getContinuousVariable("x") >= parameters.X_TRESHOLD |
                 state.getContinuousVariable("x") <= -parameters.X_TRESHOLD |

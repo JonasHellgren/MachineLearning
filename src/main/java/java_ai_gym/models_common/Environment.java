@@ -25,6 +25,7 @@ public abstract class  Environment {
         public final int LABEL_XPOS =10;
         public final int LABEL_XPOSY_MIN =0;
         public int NOF_DOTS_PLOTTED_POLICY =1000;
+        final long TIME_MILLIS_FRAME=100;
     }
 
 
@@ -48,6 +49,7 @@ public abstract class  Environment {
 
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
+    protected abstract boolean isFailsState(State state);
     protected abstract boolean isTerminalStatePolicyTest(State state);
     protected abstract boolean isPolicyTestSuccessful(State state);
     protected abstract void setRandomStateValuesStart(State state);
@@ -176,21 +178,20 @@ public abstract class  Environment {
         return minValue+Math.random()*(maxValue-minValue);
     }
 
-    /*
-    public void animatePolicy(long timeMilliSecPerFrame) throws InterruptedException {
-        env.setRandomStateValuesStart(agent.state);
+    public void animatePolicy(AgentNeuralNetwork agent, EnvironmentParametersAbstract envParams) throws InterruptedException {
+        setRandomStateValuesStart(agent.state);
         System.out.println(agent.state);
         StepReturn stepReturn;
         do {
-            int aBest=agent.chooseBestAction(agent.state, env.parameters);
-            stepReturn=env.step(aBest,agent.state);
+            int aBest=agent.chooseBestAction(agent.state, envParams);
+            stepReturn=step(aBest,agent.state);
             agent.state.copyState(stepReturn.state);
-            render(agent,aBest);
-            TimeUnit.MILLISECONDS.sleep(timeMilliSecPerFrame);
+            render(agent.state,agent.findMaxQTargetNetwork(agent.state,envParams),aBest);
+            TimeUnit.MILLISECONDS.sleep(gfxSettings.TIME_MILLIS_FRAME);
 
         } while (!stepReturn.termState);
 
         TimeUnit.MILLISECONDS.sleep(1000);
-    }  */
+    }
 
 }
