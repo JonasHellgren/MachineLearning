@@ -23,10 +23,6 @@ public class TestLearningCartPoleNetwork {
     CartPoleAgentNeuralNetwork agent = new CartPoleAgentNeuralNetwork(env.parameters,env.getTemplateState());
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS = 10;
 
-    File polePolicyInit = new File("c:/temp/polePolicyInit");
-    File polePolicyInitTarget = new File("c:/temp/polePolicyInitTarget");
-    File polePolicy = new File("c:/temp/polePolicy");
-    File polePolicyTarget = new File("c:/temp/polePolicyTarget");
     String filePathBest = "c:/temp/best/";
     String filePathInit = "c:/temp/init/";
 
@@ -35,10 +31,7 @@ public class TestLearningCartPoleNetwork {
     public void runLearningTextBook() throws InterruptedException, IOException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
-        //agent.GAMMA=0;
-
-        //plotPolicy();
-        logger.info("Init policy found and saved");
+        logger.info("Init policy defined and saved");
         agent.savePolicy(filePathInit);
         double bestNofSteps=0;
         for (int iEpisode = 0; iEpisode <= agent.NUM_OF_EPISODES; ++iEpisode) {
@@ -49,11 +42,8 @@ public class TestLearningCartPoleNetwork {
                     agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(
                             agent.MINI_BATCH_SIZE,
                             agent.calcFractionEpisodes(iEpisode));
-            //plotMiniBatch(miniBatch);
 
-            //System.out.println("replayBuffer.size:"+agent.replayBuffer.size()+", totalNofSteps:"+agent.state.totalNofSteps);
-
-            if (env.isTimeForPolicyTest(iEpisode)) {
+              if (env.isTimeForPolicyTest(iEpisode)) {
                 Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
                 env.printPolicyTest(iEpisode, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
 
@@ -65,15 +55,10 @@ public class TestLearningCartPoleNetwork {
             }
         }
 
-        //plotPolicy();
-        TimeUnit.MILLISECONDS.sleep(1000);
-        //agent.network.load(polePolicy);
-        logger.info("Loading best policy");
-        agent.network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
+
+        animateBestPolicy();
         Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
         env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
-        env.animatePolicy(agent, env.parameters);
-
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
         Assert.assertTrue(env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.8);
@@ -97,13 +82,5 @@ public class TestLearningCartPoleNetwork {
         System.out.println("isCartPoleInBadState:"+env.isFailsState(agent.state));
     }
 
-    /*
-    public void loadPolicy(File polePolicy, File polePolicTarget) throws IOException, InterruptedException {
-        agent.network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
-        agent.networkTarget = ModelSerializer.restoreMultiLayerNetwork(polePolicTarget);
-        Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
-        env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
-    }
-*/
 
 }

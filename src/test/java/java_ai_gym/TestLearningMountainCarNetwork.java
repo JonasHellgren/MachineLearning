@@ -9,8 +9,10 @@ import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
 import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
 import java_ai_gym.swing.Position2D;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,15 +25,19 @@ public class TestLearningMountainCarNetwork {
     MountainCar env = new MountainCar();
     MountainCarAgentNeuralNetwork agent = new MountainCarAgentNeuralNetwork(env.parameters,env.getTemplateState());
     private static final int NOF_EPISODES_BETWEEN_PRINTOUTS = 10;
+    String filePathBest = "c:/temp/montcar/best/";
+    String filePathInit = "c:/temp/montcar/init/";
 
 
-
-    @Test
+    @Test @Ignore
     //https://www.saashanair.com/dqn-code/
-    public void runLearningTextBook() throws InterruptedException {
+    public void runLearningTextBook() throws InterruptedException, IOException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
 
+        logger.info("Init policy defined and saved");
+        agent.savePolicy(filePathInit);
         plotPolicy();
+        double bestNofSteps=Double.MAX_VALUE;
         for (int iEpisode = 0; iEpisode < agent.NUM_OF_EPISODES; ++iEpisode) {
             env.setRandomStateValuesAny(agent.state);
             env.simulateEpisode(agent, iEpisode, env, env.parameters);
@@ -42,11 +48,16 @@ public class TestLearningMountainCarNetwork {
                             agent.calcFractionEpisodes(iEpisode));
             plotMiniBatch(miniBatch);
 
-            //System.out.println("replayBuffer.size:"+agent.replayBuffer.size()+", totalNofSteps:"+agent.state.totalNofSteps);
-
             if (env.isTimeForPolicyTest(iEpisode)) {
                 Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
                 env.printPolicyTest(iEpisode, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
+
+                if (policyTestReturn.avgNofSteps<bestNofSteps) {
+                    bestNofSteps=policyTestReturn.avgNofSteps;
+                    logger.info("New best policy found and saved");
+                    agent.savePolicy(filePathBest);
+                }
+
             }
         }
 
@@ -89,33 +100,21 @@ public class TestLearningMountainCarNetwork {
     }
 
 
+    @Test //@Ignore
+    public void animateInitPolicy() throws IOException, InterruptedException {
+        logger.info("Loading init policy");
+        agent.loadPolicy(filePathInit);
+        env.animatePolicy(agent, env.parameters);
+    }
 
-    public void initNetwork() {
-        agent.GAMMA=0;
-
-        while (agent.replayBuffer.size()<agent.REPLAY_BUFFER_SIZE) {
-            for (int a:env.parameters.discreteActionsSpace) {
-                env.setRandomStateValuesAny(agent.state);
-                StepReturn stepReturn = env.step(a, agent.state);
-                stepReturn.reward=-20.0;
-                Experience experience = new Experience(new State(agent.state), a, stepReturn,agent.BE_ERROR_INIT);
-                agent.replayBuffer.addExperience(experience);
-            }
-        }
-
-      env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
-        for (int i = 0; i < 50 ; i++) {
-            if (i % 10 ==0) {
-                System.out.println("i:" + i + "success ratio:" + env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY));
-                agent.state.setVariable("position", env.parameters.MAX_START_POSITION/2);
-                agent.state.setVariable("velocity", env.parameters.MAX_SPEED/2);
-                agent.printQsa(env.parameters);
-            }
-
-            List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,1);
-            agent.fitFromMiniBatch(miniBatch,env.parameters,0);
-
-        }
+    @Test   //@Ignore
+    public void animateBestPolicy() throws IOException, InterruptedException {
+        logger.info("Loading best policy");
+        agent.loadPolicy(filePathBest);
+        env.parameters.MAX_NOF_STEPS=(int) 1e6;
+        env.animatePolicy(agent, env.parameters);
+        System.out.println(agent.state);
+        System.out.println("isBadState:"+env.isFailsState(agent.state));
     }
 
 }

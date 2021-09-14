@@ -174,8 +174,6 @@ public abstract class  Environment {
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
     }
 
-
-
     public void animatePolicy(AgentNeuralNetwork agent, EnvironmentParametersAbstract envParams) throws InterruptedException {
         setRandomStateValuesStart(agent.state);
         System.out.println(agent.state);
