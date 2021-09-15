@@ -98,6 +98,12 @@ clean up
 spara bästa policy hittils även för mountain car  x
 fail state fcn för mountain car  x
 
+printa [min,avg,max] nofSteps  x
+plantuml
+beskrivande .md fil
+pong environment
+
+
 
 när tid:
 test fcn approx på six rooms

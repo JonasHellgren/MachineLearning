@@ -113,7 +113,7 @@ public class CartPole extends Environment {
 
         parameters.discreteActionsSpace.addAll(Arrays.asList(0, 1));
         parameters.NOF_ACTIONS = parameters.discreteActionsSpace.size();
-        NOF_EPISODES_BETWEEN_POLICY_TEST=25;
+        policyTestSettings.NOF_EPISODES_BETWEEN_POLICY_TEST=25;
 
         createVariablesInState(getTemplateState());
         setupFrameAndPanel();
@@ -134,22 +134,6 @@ public class CartPole extends Environment {
         addLabelsToAnimationPanel();
         animationFrame.add(animationPanel);
         animationFrame.setVisible(true);
-
-
-        /*
-        List<Position2D> circlePositionList=new ArrayList<>();
-        List<Integer> actionList=new ArrayList<>();
-        circlePositionList.add(new Position2D(0.5,0));
-        actionList.add(1);
-
-
-        ScaleLinear yScalerVelocity=new ScaleLinear(-parameters.MAX_SPEED,parameters.MAX_SPEED,
-                FRAME_MARGIN,FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
-        plotPanel =new PanelMountainCarPlot(xScaler,yScalerVelocity, circlePositionList, actionList, CIRCLE_RADIUS_IN_DOTS);
-        plotPanel.setLayout(null);
-        addLabelsToPlotPanel();
-        plotFrame.add(plotPanel);
-        plotFrame.setVisible(true);  */
     }
 
     private void addLabelsToAnimationPanel() {

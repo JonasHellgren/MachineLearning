@@ -212,7 +212,7 @@ public class MountainCar extends Environment {
         double velocity=state.getContinuousVariable("velocity");
         velocity += (action - 1) * parameters.FORCE + Math.cos(3 * position) * (-parameters.GRAVITY);
         position += velocity;
-        position = this.clip(position, parameters.MIN_POSITION, parameters.MAX_POSITION);
+        position = MathUtils.clip(position, parameters.MIN_POSITION, parameters.MAX_POSITION);
         velocity=(position <= parameters.MIN_POSITION & velocity < 0)?0:velocity;
         newState.setVariable("position", position);
         newState.setVariable("velocity", velocity);

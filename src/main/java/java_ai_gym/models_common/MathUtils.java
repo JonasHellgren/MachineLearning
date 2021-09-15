@@ -11,4 +11,9 @@ public class MathUtils {
         return Math.max(lowerThanMax, minValue);
     }
 
+
+    protected static boolean isZero(double value) {
+        return (Math.abs(value-0)<2*Double.MIN_VALUE);
+    }
+
 }

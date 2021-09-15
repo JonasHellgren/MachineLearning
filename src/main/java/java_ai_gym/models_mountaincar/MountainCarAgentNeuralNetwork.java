@@ -37,7 +37,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     ScalerLinear posScaler;
     ScalerLinear velScaler;
-    final double  PRECISION=1;
+    final double  PRECISION=10;
 
     public MountainCarAgentNeuralNetwork(MountainCar.EnvironmentParameters envParams, State templateState) {
         this.envParams = envParams;
@@ -57,7 +57,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
     private void createReplayBuffer() {
-        this.REPLAY_BUFFER_SIZE = 2000;
+        this.REPLAY_BUFFER_SIZE = (int) (2000*PRECISION);
         this.MINI_BATCH_SIZE = (int) (30*1);
         this.RB_EPS = 0.1;
         this.RB_ALP = 0.3;  //0 <=> uniform distribution from bellman error for mini batch selection
@@ -69,7 +69,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
     private void defineLearningParameters() {
-        this.GAMMA = 0.99;  // gamma discount factor
+        this.GAMMA = 0.95;  // gamma discount factor
         this.ALPHA = 1.0;  // Q-learning factor
         this.PROBABILITY_RANDOM_ACTION_START = 0.5;
         this.PROBABILITY_RANDOM_ACTION_END = 0.1;

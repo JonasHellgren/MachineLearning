@@ -1,6 +1,9 @@
-package java_ai_gym.swing;
+package java_ai_gym.models_mountaincar;
 
 import java_ai_gym.models_sixrooms.SixRoomsAgentNeuralNetwork;
+import java_ai_gym.swing.LineData;
+import java_ai_gym.swing.Position2D;
+import java_ai_gym.swing.ScaleLinear;
 
 import javax.swing.*;
 import java.awt.*;

@@ -5,16 +5,15 @@ import java_ai_gym.models_mountaincar.MountainCarAgentNeuralNetwork;
 import java_ai_gym.swing.FrameEnvironment;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
-import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
-import java.util.IntSummaryStatistics;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class  Environment {
 
-    public int NOF_EPISODES_BETWEEN_POLICY_TEST=10;
-    public int NOF_TESTS_WHEN_TESTING_POLICY=10;
+    public class PolicyTestSettings {
+        public int NOF_EPISODES_BETWEEN_POLICY_TEST = 10;
+        public int NOF_TESTS_WHEN_TESTING_POLICY = 10;
+    }
 
     public class GraphicsSettings  {
         public final  int FRAME_WEIGHT =600;
@@ -28,12 +27,11 @@ public abstract class  Environment {
         final long TIME_MILLIS_FRAME=100;
     }
 
-
-    private State templateState=new State();
-
     public class PolicyTestReturn {
         public double successRatio;
+        public double minNofSteps;
         public double avgNofSteps;
+        public double maxNofSteps;
         public double maxQaverage;
         public double bellmanErrAverage;
     }
@@ -43,9 +41,14 @@ public abstract class  Environment {
         public double avgBellmannErr;
     }
 
+    private State templateState=new State();
     protected FrameEnvironment animationFrame;
     protected FrameEnvironment plotFrame;
     public GraphicsSettings gfxSettings =new GraphicsSettings();
+    public PolicyTestSettings policyTestSettings= new PolicyTestSettings();
+
+    public abstract void render(State state,double maxQ, int action);
+    public abstract void createVariablesInState(State state) ;
 
     protected abstract StepReturn step(int action, State state);
     protected abstract boolean isTerminalState(State state);
@@ -53,20 +56,9 @@ public abstract class  Environment {
     protected abstract boolean isTerminalStatePolicyTest(State state);
     protected abstract boolean isPolicyTestSuccessful(State state);
     protected abstract void setRandomStateValuesStart(State state);
-    public abstract void render(State state,double maxQ, int action);
-    public abstract void createVariablesInState(State state) ;
 
     public State getTemplateState() {
         return templateState;
-    }
-
-    protected double clip(double variable, double minValue, double maxValue) {
-        double lowerThanMax= Math.min(variable, maxValue);
-        return Math.max(lowerThanMax, minValue);
-    }
-
-    protected boolean isZero(double value) {
-        return (Math.abs(value-0)<2*Double.MIN_VALUE);
     }
 
     public PolicyTestReturn testPolicy(AgentNeuralNetwork agent,EnvironmentParametersAbstract parameters, int nofTest) {
@@ -90,7 +82,9 @@ public abstract class  Environment {
         IntSummaryStatistics statsNofSteps = nofStepsList.stream().mapToInt(a -> a).summaryStatistics();
         DoubleSummaryStatistics statsMaxQ = maxQaverageList.stream().mapToDouble(a -> a).summaryStatistics();
         DoubleSummaryStatistics statsBellmanErr = bellmanErrList.stream().mapToDouble(a -> a).summaryStatistics();
+        policyTestReturn.minNofSteps=statsNofSteps.getMin();
         policyTestReturn.avgNofSteps=statsNofSteps.getAverage();
+        policyTestReturn.maxNofSteps=statsNofSteps.getMax();
         policyTestReturn.successRatio=nofSuccessTests / (double) nofTest;
         policyTestReturn.maxQaverage=statsMaxQ.getAverage();
         policyTestReturn.bellmanErrAverage=statsBellmanErr.getAverage();
@@ -126,7 +120,7 @@ public abstract class  Environment {
     }
 
     public boolean isTimeForPolicyTest(int iEpisode) {
-       return (iEpisode % NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0);
+       return (iEpisode % policyTestSettings.NOF_EPISODES_BETWEEN_POLICY_TEST == 0 | iEpisode == 0);
     }
 
     public void printPolicyTest(int iEpisode, AgentNeuralNetwork agent, PolicyTestReturn policyTestReturn, int MAX_NOF_STEPS_POLICY_TEST) {
@@ -135,7 +129,11 @@ public abstract class  Environment {
         System.out.printf(", success ratio: %.2f", policyTestReturn.successRatio);
         System.out.printf(", avg of maxQ: %.2f ", policyTestReturn.maxQaverage);
         System.out.printf(", avg bellman err: %.2f", policyTestReturn.bellmanErrAverage);
-        System.out.printf(", avg(NofSteps): %.2f", policyTestReturn.avgNofSteps);
+
+        System.out.printf(",  [min, avg, max] NofSteps: [%.0f, %.0f, %.0f]",
+                policyTestReturn.minNofSteps,
+                policyTestReturn.avgNofSteps,
+                policyTestReturn.maxNofSteps);
         System.out.printf(", learning rate: %.5f", agent.calcLearningRate(agent.calcFractionEpisodes(iEpisode)));
         System.out.printf(", prob random action: %.5f", agent.calcProbRandAction(agent.calcFractionEpisodes(iEpisode)));
         System.out.println();
@@ -162,7 +160,10 @@ public abstract class  Environment {
                                 agent.calcFractionEpisodes(iEpisode));
 
                 agent.fitFromMiniBatch(miniBatch, envParams,fEpisodes);
-                agent.maybeUpdateTargetNetwork();
+
+                if (agent.isItTimeToUpdateTargetNetwork())
+                    agent.updateTargetNetwork();
+
             }
 
             sNew.copyState(stepReturn.state);

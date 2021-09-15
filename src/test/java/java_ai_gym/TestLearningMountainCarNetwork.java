@@ -29,7 +29,7 @@ public class TestLearningMountainCarNetwork {
     String filePathInit = "c:/temp/montcar/init/";
 
 
-    @Test @Ignore
+    @Test //@Ignore
     //https://www.saashanair.com/dqn-code/
     public void runLearningTextBook() throws InterruptedException, IOException {
         // episode: a full iteration when the agent starts from a random state and finds the terminal state
@@ -49,7 +49,7 @@ public class TestLearningMountainCarNetwork {
             plotMiniBatch(miniBatch);
 
             if (env.isTimeForPolicyTest(iEpisode)) {
-                Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
+                Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.policyTestSettings.NOF_TESTS_WHEN_TESTING_POLICY);
                 env.printPolicyTest(iEpisode, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
 
                 if (policyTestReturn.avgNofSteps<bestNofSteps) {
@@ -63,11 +63,12 @@ public class TestLearningMountainCarNetwork {
 
         plotPolicy();
         TimeUnit.MILLISECONDS.sleep(1000);
+        agent.loadPolicy(filePathBest);
         env.animatePolicy(agent, env.parameters);
 
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
-        Assert.assertTrue(env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.8);
+        Assert.assertTrue(env.testPolicy(agent, env.parameters, env.policyTestSettings.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.8);
 
     }
 
@@ -100,7 +101,7 @@ public class TestLearningMountainCarNetwork {
     }
 
 
-    @Test //@Ignore
+    @Test @Ignore
     public void animateInitPolicy() throws IOException, InterruptedException {
         logger.info("Loading init policy");
         agent.loadPolicy(filePathInit);

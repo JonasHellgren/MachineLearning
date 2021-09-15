@@ -15,6 +15,7 @@ import org.nd4j.linalg.factory.Nd4j;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -191,71 +192,19 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return  state.totalNofSteps % NOF_STEPS_BETWEEN_FITS == 0;
     }
 
+    public boolean isItTimeToUpdateTargetNetwork() {
+        return  (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0);
+    }
+
     //To enable prioritized experience replay items in full experience buffer are modified
     //possible because mini batch item exp is reference to item in buffer
     private void changeBellmanErrorVariableInBufferItem(Experience exp) {
         exp.pExpRep.beError=Math.abs(bellmanErrorStep);
     }
 
-    public void maybeUpdateTargetNetwork() {
-        if (nofFits % NOF_FITS_BETWEEN_TARGET_NETWORK_UPDATE == 0)
-            networkTarget.setParams(network.params());
+    public void updateTargetNetwork() {
+        networkTarget.setParams(network.params());
     }
-
-    private void addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet, int idxSample, INDArray inputNetwork, INDArray outFromNetwork) {
-        inputNDSet.putRow(idxSample, inputNetwork);
-        outPutNDSet.putRow(idxSample, outFromNetwork);
-    }
-
-
-
-    private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
-        double qOld = readMemory(inputNetwork, exp.action);
-        bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
-        bellmanErrorStep=MathUtils.clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
-        double alpha=exp.pExpRep.w*ALPHA;
-        double y=qOld*1 + alpha * bellmanErrorStep;
-        outFromNetwork.putScalar(0, exp.action,y);
-    }
-
-    public double calcBellmanErrorStep(StepReturn stepReturn, double qOld, EnvironmentParametersAbstract envParams) {
-        return stepReturn.termState ?
-                stepReturn.reward - qOld :
-                stepReturn.reward + GAMMA * findMaxQTargetNetwork(stepReturn.state, envParams) - qOld;
-    }
-
-    public double getBellmanErrorAverage(int nofSteps) {
-
-        if (bellmanErrorListItemPerEpisode.size()==0)
-            return 1;
-
-        double sumBellmanError=0;
-        int j;
-        for (j = 0; j < nofSteps; j++) {
-            int idxListPos= bellmanErrorListItemPerEpisode.size()-j-1;
-            if (idxListPos>=0)
-                sumBellmanError=sumBellmanError+Math.abs(bellmanErrorListItemPerEpisode.get(idxListPos));
-            else
-                break;
-        }
-        return sumBellmanError/(j+1);
-    }
-
-    protected  boolean isAnyNetworkSizeFieldNull() {
-        return (NOF_OUTPUTS==null | NOF_FEATURES==null | NOF_NEURONS_HIDDEN==null);
-    }
-
-    protected  boolean isAnyFieldNull() {
-        return (state==null | replayBuffer==null | network==null | networkTarget==null);
-    }
-
-    protected void showConstructorLogMessage() {
-        if (isAnyFieldNull())
-            logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
-        else
-            logger.info("Neural network based agent created. ");
-    }
-
 
     public double calcLearningRate(double fractionEpisodesFinished)  {
         return learningRateScaler.calcOutDouble(fractionEpisodesFinished);
@@ -281,4 +230,55 @@ public abstract class AgentNeuralNetwork implements Learnable {
         File polePolicyTarget = new File(filePath+"polePolicyTarget.nw");
         network = ModelSerializer.restoreMultiLayerNetwork(polePolicy);
         networkTarget = ModelSerializer.restoreMultiLayerNetwork(polePolicyTarget);
-    }}
+    }
+
+
+    //---- private methods
+
+    private void addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet, int idxSample, INDArray inputNetwork, INDArray outFromNetwork) {
+        inputNDSet.putRow(idxSample, inputNetwork);
+        outPutNDSet.putRow(idxSample, outFromNetwork);
+    }
+
+    private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
+        double qOld = readMemory(inputNetwork, exp.action);
+        bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
+        bellmanErrorStep=MathUtils.clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
+        double alpha=exp.pExpRep.w*ALPHA;
+        double y=qOld*1 + alpha * bellmanErrorStep;
+        outFromNetwork.putScalar(0, exp.action,y);
+    }
+
+    public double calcBellmanErrorStep(StepReturn stepReturn, double qOld, EnvironmentParametersAbstract envParams) {
+        return stepReturn.termState ?
+                stepReturn.reward - qOld :
+                stepReturn.reward + GAMMA * findMaxQTargetNetwork(stepReturn.state, envParams) - qOld;
+    }
+
+
+    public double getBellmanErrorAverage(int nofSteps) {
+        if (bellmanErrorListItemPerEpisode.size()==0)
+            return 1;
+        DoubleSummaryStatistics beStats = bellmanErrorListItemPerEpisode.stream().mapToDouble(a -> a).summaryStatistics();
+        return beStats.getAverage();
+    }
+
+    protected  boolean isAnyNetworkSizeFieldNull() {
+        return (NOF_OUTPUTS==null | NOF_FEATURES==null | NOF_NEURONS_HIDDEN==null);
+    }
+
+    protected  boolean isAnyFieldNull() {
+        return (state==null | replayBuffer==null | network==null | networkTarget==null);
+    }
+
+    protected void showConstructorLogMessage() {
+        if (isAnyFieldNull())
+            logger.warning("Some field in AgentNeuralNetwork is not set, i.e. null");
+        else
+            logger.info("Neural network based agent created. ");
+    }
+
+
+
+
+}

@@ -1,4 +1,4 @@
-package java_ai_gym;
+package java_ai_gym.models_poleoncart;
 
 import java_ai_gym.models_common.*;
 import java_ai_gym.models_mountaincar.MountainCar;

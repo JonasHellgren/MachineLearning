@@ -57,7 +57,7 @@ public abstract class AgentTabular implements Learnable {
     @Override
     public int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams) {
         return (Math.random() < PROBABILITY_RANDOM_ACTION) ?
-                chooseRandomAction(envParams.getDiscreteActionsSpace()) :
+                chooseRandomAction(envParams.discreteActionsSpace) :
                 chooseBestAction(state,envParams);
     }
 

@@ -4,15 +4,13 @@ import java_ai_gym.models_common.Environment;
 import java_ai_gym.models_common.Experience;
 import java_ai_gym.models_common.State;
 import java_ai_gym.models_poleoncart.CartPole;
-import org.deeplearning4j.util.ModelSerializer;
+import java_ai_gym.models_poleoncart.CartPoleAgentNeuralNetwork;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class TestLearningCartPoleNetwork {
@@ -44,7 +42,7 @@ public class TestLearningCartPoleNetwork {
                             agent.calcFractionEpisodes(iEpisode));
 
               if (env.isTimeForPolicyTest(iEpisode)) {
-                Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
+                Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.policyTestSettings.NOF_TESTS_WHEN_TESTING_POLICY);
                 env.printPolicyTest(iEpisode, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
 
                 if (policyTestReturn.avgNofSteps>bestNofSteps) {
@@ -57,11 +55,11 @@ public class TestLearningCartPoleNetwork {
 
 
         animateBestPolicy();
-        Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY);
+        Environment.PolicyTestReturn policyTestReturn = env.testPolicy(agent, env.parameters, env.policyTestSettings.NOF_TESTS_WHEN_TESTING_POLICY);
         env.printPolicyTest(agent.NUM_OF_EPISODES, agent, policyTestReturn, env.parameters.MAX_NOF_STEPS_POLICY_TEST);
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
-        Assert.assertTrue(env.testPolicy(agent, env.parameters, env.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.8);
+        Assert.assertTrue(env.testPolicy(agent, env.parameters, env.policyTestSettings.NOF_TESTS_WHEN_TESTING_POLICY).successRatio>0.8);
 
     }
 
