@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 /***
  * Environment with 6 rooms. Inner class EnvironmentParameters defines data.
  * Class StepReturn is return protocol for step, transition method.
- * TransitionMatrix expresses new room number, for ex action 5 in room 0 gives new room is 0."
+ * TransitionMatrix expresses new room number, for ex action 5 in room 0 gives new room is 5."
+ * There are 6 rooms: room 0-room 5. The action specifies the new room. Non allowed destination rooms/actions gives bad reward.
+ * Entering goal room 5 gives high reward and terminates an episode.
  */
 
 public class SixRooms extends Environment {
@@ -73,6 +75,7 @@ public class SixRooms extends Environment {
         parameters.minAction = parameters.discreteActionsSpace.stream().min(Integer::compare).orElse(0);
         parameters.nofStates = parameters.discreteStateSpace.size();
         parameters.nofActions = parameters.discreteActionsSpace.size();
+        createVariablesInState(getTemplateState());
     }
 
     //methods
