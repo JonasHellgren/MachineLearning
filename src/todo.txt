@@ -99,7 +99,8 @@ spara bästa policy hittils även för mountain car  x
 fail state fcn för mountain car  x
 
 printa [min,avg,max] nofSteps  x
-plantuml
+plantuml  x
+setNetworkInput(state, envParams)     envParams verkar inte behövas här och på andra ställen
 beskrivande .md fil
 pong environment
 
