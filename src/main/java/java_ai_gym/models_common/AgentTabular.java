@@ -16,6 +16,7 @@ public abstract class AgentTabular implements Learnable {
     private static final Logger logger = Logger.getLogger(AgentTabular.class.getName());
     public State state;
     public double[][] Qsa;   //tabular memory
+    public EnvironmentParametersAbstract envParams;  //sub class constructor must define this field
 
     private final Random random = new Random();
     public  double Q_INIT;
@@ -30,13 +31,14 @@ public abstract class AgentTabular implements Learnable {
     }
 
     @Override
-    public int chooseBestAction(State state,EnvironmentParametersAbstract envParams) {
+    public int chooseBestAction(State state) {
 
-        double[] QsVec = readMemory(state,envParams);
+        double[] QsVec = readMemory(state);
+
         double maxQ = -Double.MAX_VALUE;
         int bestAction = envParams.discreteActionsSpace.get(0);
         for (int action : envParams.discreteActionsSpace) {
-            if (QsVec[envParams.getIdxAction(action)] > maxQ) {
+             if (QsVec[envParams.getIdxAction(action)] > maxQ) {
                 maxQ = QsVec[envParams.getIdxAction(action)];
                 bestAction = envParams.discreteActionsSpace.get(envParams.getIdxAction(action));
             }
@@ -45,8 +47,8 @@ public abstract class AgentTabular implements Learnable {
     }
 
     @Override
-    public double findMaxQ(State state,EnvironmentParametersAbstract envParams) {
-        return Doubles.max(readMemory(state,envParams));
+    public double findMaxQ(State state) {
+        return Doubles.max(readMemory(state));
     }
 
     @Override
@@ -55,23 +57,23 @@ public abstract class AgentTabular implements Learnable {
     }
 
     @Override
-    public int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams) {
+    public int chooseAction(double fractionEpisodesFinished,List<Integer> actions) {
         return (Math.random() < PROBABILITY_RANDOM_ACTION) ?
                 chooseRandomAction(envParams.discreteActionsSpace) :
-                chooseBestAction(state,envParams);
+                chooseBestAction(state);
     }
 
     @Override
-    public void writeMemory(State state, Integer action, Double value,EnvironmentParametersAbstract envParams) {
+    public void writeMemory(State state, Integer action, Double value) {
         Qsa[envParams.getIdxState(state)][envParams.getIdxAction(action)] = value;
     }
 
     @Override
-    public double readMemory(State state, int action,EnvironmentParametersAbstract envParams) {
+    public double readMemory(State state, int action) {
         return Qsa[envParams.getIdxState(state)][envParams.getIdxAction(action)];
     }
 
-    public double[] readMemory(State state,EnvironmentParametersAbstract envParams) {
+    public double[] readMemory(State state) {
         return Qsa[envParams.getIdxState(state)];
     }
 

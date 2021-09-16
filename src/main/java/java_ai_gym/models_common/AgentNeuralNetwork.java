@@ -76,7 +76,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
     public  int NOF_STEPS_BETWEEN_FITS=10;
 
     public abstract  MultiLayerNetwork createNetwork();
-    public abstract  INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams);
+    public abstract  INDArray setNetworkInput(State state);
     public abstract void  createLearningRateScaler();
     public abstract void  createProbRandActionScaler();
 
@@ -86,14 +86,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     @Override
-    public int chooseBestAction(State state,EnvironmentParametersAbstract envParams) {
-        INDArray outFromNetwork = calcOutFromNetwork(state, network,envParams);
+    public int chooseBestAction(State state) {
+        INDArray outFromNetwork = calcOutFromNetwork(state, network);
         return outFromNetwork.argMax().getInt();
     }
 
     @Override
-    public double findMaxQ(State state,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = setNetworkInput(state, envParams);
+    public double findMaxQ(State state) {
+        INDArray inputNetwork = setNetworkInput(state);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
         return outFromNetwork.max().getDouble();
     }
@@ -104,20 +104,20 @@ public abstract class AgentNeuralNetwork implements Learnable {
     }
 
     @Override
-    public int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams) {
+    public int chooseAction(double fractionEpisodesFinished,List<Integer> actions) {
         return (Math.random() < calcProbRandAction(fractionEpisodesFinished)) ?
-                chooseRandomAction(envParams.discreteActionsSpace) :
-                chooseBestAction(state,envParams);
+                chooseRandomAction(actions) :
+                chooseBestAction(state);
     }
 
     @Override
-    public void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams) {
+    public void writeMemory(State oldState, Integer Action, Double value) {
         //not valid for NN
     }
 
     @Override
-    public double readMemory(State state, int action,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = setNetworkInput(state, envParams);
+    public double readMemory(State state, int action) {
+        INDArray inputNetwork = setNetworkInput(state);
         return readMemory(inputNetwork,  action);
     }
 
@@ -127,14 +127,14 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return outFromNetwork.getDouble(action);
     }
 
-    public double findMaxQTargetNetwork(State state,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = setNetworkInput(state, envParams);
+    public double findMaxQTargetNetwork(State state) {
+        INDArray inputNetwork = setNetworkInput(state);
         INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, networkTarget);
         return outFromNetwork.max().getDouble();
     }
 
-    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network,EnvironmentParametersAbstract envParams) {
-        INDArray inputNetwork = setNetworkInput(state, envParams);
+    public INDArray calcOutFromNetwork(State state,MultiLayerNetwork network) {
+        INDArray inputNetwork = setNetworkInput(state);
         return network.output(inputNetwork, false);
     }
 
@@ -142,10 +142,10 @@ public abstract class AgentNeuralNetwork implements Learnable {
         return network.output(inputNetwork, false);
     }
 
-    public void fitFromMiniBatch(List<Experience> miniBatch,EnvironmentParametersAbstract envParams, double fEpisodes ) {
+    public void fitFromMiniBatch(List<Experience> miniBatch, double fEpisodes ) {
         network.setLearningRate(calcLearningRate(fEpisodes));
         if (miniBatch.size()== MINI_BATCH_SIZE) {
-            DataSetIterator iterator = createTrainingData(miniBatch,envParams);
+            DataSetIterator iterator = createTrainingData(miniBatch);
             network.fit(iterator,NUM_OF_EPOCHS);
             nofFits++;
         }
@@ -153,7 +153,7 @@ public abstract class AgentNeuralNetwork implements Learnable {
             logger.warning("miniBatch.size() < agent.MINI_BATCH_SIZE");
     }
 
-    public DataSetIterator createTrainingData(List<Experience> miniBatch,EnvironmentParametersAbstract envParams) {
+    public DataSetIterator createTrainingData(List<Experience> miniBatch) {
 
         INDArray inputNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_FEATURES);
         INDArray  outPutNDSet = Nd4j.zeros(MINI_BATCH_SIZE,NOF_OUTPUTS);
@@ -164,9 +164,9 @@ public abstract class AgentNeuralNetwork implements Learnable {
         double sumBellmanError=0;
         for (int idxSample= 0; idxSample < miniBatch.size(); idxSample++) {
             Experience exp=miniBatch.get(idxSample);
-            INDArray inputNetwork = setNetworkInput(exp.s, envParams);
+            INDArray inputNetwork = setNetworkInput(exp.s);
             INDArray outFromNetwork= calcOutFromNetwork(inputNetwork, network);
-            modifyNetworkOut(exp, inputNetwork, outFromNetwork,envParams);
+            modifyNetworkOut(exp, inputNetwork, outFromNetwork);
             changeBellmanErrorVariableInBufferItem(exp);
             addTrainingExample(inputNDSet, outPutNDSet, idxSample, inputNetwork, outFromNetwork);
             sumBellmanError=sumBellmanError+Math.abs(bellmanErrorStep);
@@ -232,6 +232,12 @@ public abstract class AgentNeuralNetwork implements Learnable {
         networkTarget = ModelSerializer.restoreMultiLayerNetwork(polePolicyTarget);
     }
 
+    public double getBellmanErrorAverage(int nofSteps) {
+        if (bellmanErrorListItemPerEpisode.size()==0)
+            return 1;
+        DoubleSummaryStatistics beStats = bellmanErrorListItemPerEpisode.stream().mapToDouble(a -> a).summaryStatistics();
+        return beStats.getAverage();
+    }
 
     //---- private methods
 
@@ -240,27 +246,19 @@ public abstract class AgentNeuralNetwork implements Learnable {
         outPutNDSet.putRow(idxSample, outFromNetwork);
     }
 
-    private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork,EnvironmentParametersAbstract envParams) {
+    private void modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork) {
         double qOld = readMemory(inputNetwork, exp.action);
-        bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld, envParams);
+        bellmanErrorStep=calcBellmanErrorStep(exp.stepReturn, qOld);
         bellmanErrorStep=MathUtils.clip(bellmanErrorStep,-BE_ERROR_MAX,BE_ERROR_MAX);
         double alpha=exp.pExpRep.w*ALPHA;
         double y=qOld*1 + alpha * bellmanErrorStep;
         outFromNetwork.putScalar(0, exp.action,y);
     }
 
-    public double calcBellmanErrorStep(StepReturn stepReturn, double qOld, EnvironmentParametersAbstract envParams) {
+    protected double calcBellmanErrorStep(StepReturn stepReturn, double qOld) {
         return stepReturn.termState ?
                 stepReturn.reward - qOld :
-                stepReturn.reward + GAMMA * findMaxQTargetNetwork(stepReturn.state, envParams) - qOld;
-    }
-
-
-    public double getBellmanErrorAverage(int nofSteps) {
-        if (bellmanErrorListItemPerEpisode.size()==0)
-            return 1;
-        DoubleSummaryStatistics beStats = bellmanErrorListItemPerEpisode.stream().mapToDouble(a -> a).summaryStatistics();
-        return beStats.getAverage();
+                stepReturn.reward + GAMMA * findMaxQTargetNetwork(stepReturn.state) - qOld;
     }
 
     protected  boolean isAnyNetworkSizeFieldNull() {

@@ -5,10 +5,10 @@ import java.util.List;
 
 public interface Learnable {
     State getState();
-    int chooseBestAction(State state, EnvironmentParametersAbstract envParams);
-    double findMaxQ(State state,EnvironmentParametersAbstract envParams);
+    int chooseBestAction(State state);
+    double findMaxQ(State state);
     int chooseRandomAction(List<Integer> actions);
-    int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams);
-    void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams);
-    double readMemory(State state, int Action,EnvironmentParametersAbstract envParams);
+    int chooseAction(double fractionEpisodesFinished,List<Integer> actions);
+    void writeMemory(State oldState, Integer Action, Double value);
+    double readMemory(State state, int Action);
 }

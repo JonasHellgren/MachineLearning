@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public class SixRoomsAgentTabular extends AgentTabular {
 
     private static final Logger logger = java.util.logging.Logger.getLogger(SixRoomsAgentTabular.class.getName());
-    private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
+    //private final SixRooms.EnvironmentParameters envParams;  //reference to environment parameters
 
     public SixRoomsAgentTabular(SixRooms.EnvironmentParameters envParams) {
         this.envParams = envParams;
@@ -33,7 +33,7 @@ public class SixRoomsAgentTabular extends AgentTabular {
         for (int state : envParams.discreteStateSpace) {
             for (int action : envParams.discreteActionsSpace) {
                 s.setVariable("roomNumber", state);
-                writeMemory(s, action, Q_INIT,envParams);
+                writeMemory(s, action, Q_INIT);
             }
         }
     }

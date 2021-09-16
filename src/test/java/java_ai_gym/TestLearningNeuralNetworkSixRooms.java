@@ -52,16 +52,16 @@ public class TestLearningNeuralNetworkSixRooms {
         env.showPolicy(agent);
 
         agent.state.setVariable("roomNumber", 0);
-        Assert.assertEquals(4,agent.chooseBestAction(agent.state,env.parameters));
+        Assert.assertEquals(4,agent.chooseBestAction(agent.state));
 
         agent.state.setVariable("roomNumber", 1);
-        Assert.assertEquals(5,agent.chooseBestAction(agent.state,env.parameters));
+        Assert.assertEquals(5,agent.chooseBestAction(agent.state));
 
         agent.state.setVariable("roomNumber", 2);
-        Assert.assertEquals(3,agent.chooseBestAction(agent.state,env.parameters));
+        Assert.assertEquals(3,agent.chooseBestAction(agent.state));
 
         agent.state.setVariable("roomNumber", 4);
-        Assert.assertEquals(5,agent.chooseBestAction(agent.state,env.parameters));
+        Assert.assertEquals(5,agent.chooseBestAction(agent.state));
 
 
 

@@ -67,7 +67,7 @@ public class TestLearningCartPoleNetwork {
     public void animateInitPolicy() throws IOException, InterruptedException {
         logger.info("Loading init policy");
         agent.loadPolicy(filePathInit);
-        env.animatePolicy(agent, env.parameters);
+        env.animatePolicy(agent);
     }
 
     @Test   @Ignore
@@ -75,7 +75,7 @@ public class TestLearningCartPoleNetwork {
         logger.info("Loading best policy");
         agent.loadPolicy(filePathBest);
         env.parameters.MAX_NOF_STEPS=(int) 1e6;
-        env.animatePolicy(agent, env.parameters);
+        env.animatePolicy(agent);
         System.out.println(agent.state);
         System.out.println("isCartPoleInBadState:"+env.isFailsState(agent.state));
     }

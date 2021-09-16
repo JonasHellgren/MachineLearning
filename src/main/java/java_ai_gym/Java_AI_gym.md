@@ -21,6 +21,7 @@ Additional comments and descriptions:
 * Every environment has a variable parameters defining data in the class. For cart pole it can for example be the pole mass.
 * The class EnvironmentParametersAbstract "forces" the constructor of an environment to define the names of the states in the environment.
 * The step method, defined in all environments, is very critical. It defines the consequence of taking an action in a specific state.
+* The abstract class Environment has a field templateState. It is a of type State and includes all variables relevant for the environment. For example x, cart x-position, in CartPole environment. Handy when  
 
 ## Environments
 ### Six rooms

@@ -166,7 +166,7 @@ public class CartPoleAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
     @Override
-    public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+    public INDArray setNetworkInput(State state) {
         double[] varValuesAsArray = {
                 xScaler.calcOutDouble(state.getContinuousVariable("x")),
                 xDotScaler.calcOutDouble(state.getContinuousVariable("xDot")),
@@ -181,9 +181,9 @@ public class CartPoleAgentNeuralNetwork extends AgentNeuralNetwork {
     }
 
 
-    public void printQsa(EnvironmentParametersAbstract envParams) {
+    public void printQsa() {
         for (int aChosen : envParams.discreteActionsSpace)
-            System.out.print("aChosen: " + aChosen + ", Q:" + readMemory(state, aChosen, envParams) + "; ");
+            System.out.print("aChosen: " + aChosen + ", Q:" + readMemory(state, aChosen) + "; ");
         System.out.println();
     }
 

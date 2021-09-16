@@ -162,7 +162,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
 
     @Override
-    public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
+    public INDArray setNetworkInput(State state) {
         double[] varValuesAsArray = {
                 posScaler.calcOutDouble(state.getContinuousVariable("position")),
                 velScaler.calcOutDouble(state.getContinuousVariable("velocity"))
@@ -182,7 +182,7 @@ public class MountainCarAgentNeuralNetwork extends AgentNeuralNetwork {
 
     public void printQsa(EnvironmentParametersAbstract envParams) {
         for (int aChosen : envParams.discreteActionsSpace)
-            System.out.print("aChosen: " + aChosen + ", Q:" + readMemory(state, aChosen, envParams) + "; ");
+            System.out.print("aChosen: " + aChosen + ", Q:" + readMemory(state, aChosen) + "; ");
         System.out.println();
     }
 

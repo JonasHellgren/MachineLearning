@@ -64,7 +64,7 @@ public class TestLearningMountainCarNetwork {
         plotPolicy();
         TimeUnit.MILLISECONDS.sleep(1000);
         agent.loadPolicy(filePathBest);
-        env.animatePolicy(agent, env.parameters);
+        env.animatePolicy(agent);
 
         System.out.println("nofFits:"+agent.nofFits+", totalNofSteps:"+agent.state.totalNofSteps);
         System.out.println(agent.network.summary());
@@ -81,7 +81,7 @@ public class TestLearningMountainCarNetwork {
             double pos=agent.state.getContinuousVariable("position");
             double vel=agent.state.getContinuousVariable("velocity");
             circlePositionList.add(new Position2D(pos,vel));
-            actionList.add(agent.chooseBestAction(agent.state, env.parameters));
+            actionList.add(agent.chooseBestAction(agent.state));
         }
         env.plotPanel.setCircleData(circlePositionList,actionList);
         env.plotPanel.repaint();
@@ -105,7 +105,7 @@ public class TestLearningMountainCarNetwork {
     public void animateInitPolicy() throws IOException, InterruptedException {
         logger.info("Loading init policy");
         agent.loadPolicy(filePathInit);
-        env.animatePolicy(agent, env.parameters);
+        env.animatePolicy(agent);
     }
 
     @Test   //@Ignore
@@ -113,7 +113,7 @@ public class TestLearningMountainCarNetwork {
         logger.info("Loading best policy");
         agent.loadPolicy(filePathBest);
         env.parameters.MAX_NOF_STEPS=(int) 1e6;
-        env.animatePolicy(agent, env.parameters);
+        env.animatePolicy(agent);
         System.out.println(agent.state);
         System.out.println("isBadState:"+env.isFailsState(agent.state));
     }

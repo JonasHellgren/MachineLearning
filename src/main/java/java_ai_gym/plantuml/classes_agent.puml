@@ -5,8 +5,8 @@ interface Learnable {
     + int chooseBestAction(State state);
     + double findMaxQ(State state);
     + int chooseRandomAction(List<Integer> aSet);
-    + int chooseAction(double fractionEpisodesFinished,EnvironmentParametersAbstract envParams);
-    + void writeMemory(State oldState, Integer Action, Double value,EnvironmentParametersAbstract envParams);
+    + int chooseAction(double fractionEpisodesFinished);
+    + void writeMemory(State oldState, Integer Action, Double value);
     + double readMemory(State state, int Action);
 }
 

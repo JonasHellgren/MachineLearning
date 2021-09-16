@@ -99,14 +99,14 @@ public abstract class  Environment {
 
         int tempTotalNofSteps=agent.state.totalNofSteps;  //evaluation shall not affect totalNofSteps
         do {
-            stepReturn=step(agent.chooseBestAction(agent.state, parameters),agent.state);
+            stepReturn=step(agent.chooseBestAction(agent.state),agent.state);
             agent.state.copyState(stepReturn.state);
 
-            INDArray inputNetwork = agent.setNetworkInput(agent.state, parameters);
-            double qOld = agent.readMemory(inputNetwork, agent.chooseBestAction(agent.state, parameters));
-            double bellmanErrorStep=agent.calcBellmanErrorStep(stepReturn, qOld, parameters);
+            INDArray inputNetwork = agent.setNetworkInput(agent.state);
+            double qOld = agent.readMemory(inputNetwork, agent.chooseBestAction(agent.state));
+            double bellmanErrorStep=agent.calcBellmanErrorStep(stepReturn, qOld);
 
-            maxQList.add(agent.findMaxQTargetNetwork(agent.state,parameters));
+            maxQList.add(agent.findMaxQTargetNetwork(agent.state));
             bellmanErrList.add(Math.abs(bellmanErrorStep));
         } while (!isTerminalStatePolicyTest(agent.state));
         agent.state.totalNofSteps=tempTotalNofSteps;
@@ -148,7 +148,7 @@ public abstract class  Environment {
         State sNew = new State();
         double fEpisodes=agent.calcFractionEpisodes(iEpisode);
         do {
-            int aChosen=agent.chooseAction(fEpisodes,envParams);
+            int aChosen=agent.chooseAction(fEpisodes,envParams.discreteActionsSpace);
             stepReturn = env.step(aChosen, agent.state);
             Experience experience = new Experience(new State(agent.state), aChosen, stepReturn, agent.BE_ERROR_INIT);
             agent.replayBuffer.addExperience(experience);
@@ -159,7 +159,7 @@ public abstract class  Environment {
                                 agent.MINI_BATCH_SIZE,
                                 agent.calcFractionEpisodes(iEpisode));
 
-                agent.fitFromMiniBatch(miniBatch, envParams,fEpisodes);
+                agent.fitFromMiniBatch(miniBatch,fEpisodes);
 
                 if (agent.isItTimeToUpdateTargetNetwork())
                     agent.updateTargetNetwork();
@@ -168,22 +168,22 @@ public abstract class  Environment {
 
             sNew.copyState(stepReturn.state);
             agent.state.copyState(sNew);
-            env.render(agent.state,agent.findMaxQTargetNetwork(agent.state,envParams),aChosen);
+            env.render(agent.state,agent.findMaxQTargetNetwork(agent.state),aChosen);
 
         } while (!stepReturn.termState);
 
         agent.addBellmanErrorItemForEpisodeAndClearPerStepList();
     }
 
-    public void animatePolicy(AgentNeuralNetwork agent, EnvironmentParametersAbstract envParams) throws InterruptedException {
+    public void animatePolicy(AgentNeuralNetwork agent) throws InterruptedException {
         setRandomStateValuesStart(agent.state);
         System.out.println(agent.state);
         StepReturn stepReturn;
         do {
-            int aBest=agent.chooseBestAction(agent.state, envParams);
+            int aBest=agent.chooseBestAction(agent.state);
             stepReturn=step(aBest,agent.state);
             agent.state.copyState(stepReturn.state);
-            render(agent.state,agent.findMaxQTargetNetwork(agent.state,envParams),aBest);
+            render(agent.state,agent.findMaxQTargetNetwork(agent.state),aBest);
             TimeUnit.MILLISECONDS.sleep(gfxSettings.TIME_MILLIS_FRAME);
 
         } while (!stepReturn.termState);

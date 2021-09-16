@@ -97,17 +97,13 @@ public class SixRoomsAgentNeuralNetwork extends AgentNeuralNetwork {
 
         MultiLayerNetwork network = new MultiLayerNetwork(configuration);
         network.init();
-        //network.setListeners(new PerformanceListener(100));
-        //network.setListeners(new ScoreIterationListener(NOF_ITERATIONS_BETWEENOUTPUTS));
 
         return network;
     }
 
     @Override
-    public INDArray setNetworkInput(State state, EnvironmentParametersAbstract envParams) {
-        int nofRooms=envParams.discreteActionsSpace.size();
+    public INDArray setNetworkInput(State state) {
         double[] varValuesAsArray = {
-                //(double) state.getDiscreteVariable("roomNumber")/(double) nofRooms
                 roomScaler.calcOutDouble(state.getDiscreteVariable("roomNumber"))
         };
 

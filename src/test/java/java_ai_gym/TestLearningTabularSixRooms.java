@@ -41,11 +41,11 @@ public class TestLearningTabularSixRooms {
 
         StepReturn stepReturn;
         do {
-            int aChosen = agent.chooseAction(fEpisodes,env.parameters);
+            int aChosen = agent.chooseAction(fEpisodes,env.parameters.discreteActionsSpace);
             stepReturn = env.step(aChosen, agent.state);
             sNew.copyState(stepReturn.state);
-            double maxQ = agent.findMaxQ(sNew,env.parameters);
-            double qOld = agent.readMemory(agent.state, aChosen,env.parameters);
+            double maxQ = agent.findMaxQ(sNew);
+            double qOld = agent.readMemory(agent.state,aChosen);
             double qNew = qOld + agent.ALPHA * (stepReturn.reward + agent.GAMMA * maxQ - qOld);
 
             if (printFlag) {
@@ -54,8 +54,7 @@ public class TestLearningTabularSixRooms {
             }
 
             agent.writeMemory(agent.state,
-                    aChosen, stepReturn.termState ? stepReturn.reward : qNew,
-                    env.parameters);
+                    aChosen, stepReturn.termState ? stepReturn.reward : qNew);
             agent.state.copyState(sNew);
         } while (!stepReturn.termState);
     }

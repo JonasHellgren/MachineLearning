@@ -53,13 +53,13 @@ public class TestLFunctionApproximationMountainCarNetwork {
 
         List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,0.5);
         for (int i = 0; i < 50 ; i++) {
-            agent.fitFromMiniBatch(miniBatch,env.parameters,1);
+            agent.fitFromMiniBatch(miniBatch,1);
             agent.printQsa(env.parameters);
         }
 
-        Assert.assertEquals(0.0,agent.readMemory(agent.state,0,env.parameters),50);
-        Assert.assertEquals(-100,agent.readMemory(agent.state,1,env.parameters),50);
-        Assert.assertEquals(-200,agent.readMemory(agent.state,2,env.parameters),50);
+        Assert.assertEquals(0.0,agent.readMemory(agent.state,0),50);
+        Assert.assertEquals(-100,agent.readMemory(agent.state,1),50);
+        Assert.assertEquals(-200,agent.readMemory(agent.state,2),50);
 
     }
 
@@ -109,7 +109,7 @@ public class TestLFunctionApproximationMountainCarNetwork {
                 System.out.println();
             }
             List<Experience> miniBatch=agent.replayBuffer.getMiniBatchPrioritizedExperienceReplay(agent.MINI_BATCH_SIZE,agent.calcFractionEpisodes(i));
-            agent.fitFromMiniBatch(miniBatch,env.parameters,agent.calcFractionEpisodes(i));
+            agent.fitFromMiniBatch(miniBatch,agent.calcFractionEpisodes(i));
         }
     }
 
@@ -123,14 +123,14 @@ public class TestLFunctionApproximationMountainCarNetwork {
             double pos=agent.state.getContinuousVariable("position");
             double vel=agent.state.getContinuousVariable("velocity");
             circlePositionList.add(new Position2D(pos,vel));
-            actionList.add(agent.chooseBestAction(agent.state, env.parameters));
+            actionList.add(agent.chooseBestAction(agent.state));
 
             agent.printPositionAndVelocity();
             agent.printQsa(env.parameters);
 
             for (int a : env.parameters.discreteActionsSpace)
                 Assert.assertEquals(calcRuleBasedReward(pos, vel, a),
-                        agent.readMemory(agent.state, a, env.parameters),
+                        agent.readMemory(agent.state, a),
                         0.5);
 
         }

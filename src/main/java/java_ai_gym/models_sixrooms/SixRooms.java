@@ -77,7 +77,6 @@ public class SixRooms extends Environment {
 
     //methods
 
-
     public SixRooms.EnvironmentParameters getParameters() {
         return parameters;
     }
@@ -148,7 +147,7 @@ public class SixRooms extends Environment {
         for (int roomNr : parameters.discreteStateSpace) {
             for (int action : parameters.discreteActionsSpace) {
                 s.setVariable("roomNumber", roomNr);
-                System.out.printf("%.3f    ", agent.readMemory(s, action,parameters));
+                System.out.printf("%.3f    ", agent.readMemory(s, action));
             }
             System.out.println();
         }
@@ -160,7 +159,7 @@ public class SixRooms extends Environment {
         State s = new State(agent.getState());
         for (int roomNr : parameters.discreteStateSpace) {
             s.setVariable("roomNumber", roomNr);
-            System.out.printf("roomNr:"+roomNr+", Q: %.1f    ", agent.findMaxQ(s,parameters));
+            System.out.printf("roomNr:"+roomNr+", Q: %.1f"+", bestA:"+agent.chooseBestAction(s)+"  ", agent.findMaxQ(s));
         }
         System.out.println();
     }
@@ -177,7 +176,9 @@ public class SixRooms extends Environment {
             System.out.print("Policy: " + s.getDiscreteVariable("roomNumber"));
             int nofSteps=0;
             while (!isTerminalState(s) & nofSteps<MAX_NO_STEPS) {
-                int bestA = agent.chooseBestAction(s,parameters);
+                int bestA = agent.chooseBestAction(s);
+          //      System.out.println();
+           //     System.out.println("roomNumber: " +s.getDiscreteVariable("roomNumber")+", bestA: " +bestA);
                 stepReturn=step(bestA,s);
                 s.copyState(stepReturn.state);
                 System.out.print(" -> " + s.getDiscreteVariable("roomNumber"));
