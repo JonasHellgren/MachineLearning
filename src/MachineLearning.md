@@ -33,21 +33,21 @@ Learning rate and and momentum are two hyper parameters. They are explained belo
 Typically the network parameters (weights and biases) are updated using the gradient of loss, i.e. difference between desired and actual network output. 
 ![node](../src/mdpics/gradient_vs_stochastic_gradient.png)
 
-##Package AI2refined
+## Package AI2refined
 In one sub package a single perceptron model is coded. It is trained on a logic or data set. As mentioned in the course it can be used on for example XOR.
 Single perceptron can't be used if input set not is linearly separable.
 In another sub package, a feed forward network id developed from scratch.  
 
-##Package AI3refined
+## Package AI3refined
 Example datasets, XOR and IRIS, are trained using the [Deeplearning4j](https://deeplearning4j.org/) . The package requires adequate pom.xml dependencies.
 
-##Package AI4refined
+## Package AI4refined
 The reinforcement learning technique Q-learning is applied on a maze problem: 6 rooms.
 The environment is described below.
 
 ![node](../src/mdpics/6room_environment.png)
 
 
-##Package regressionnetworks
+## Package regressionnetworks
 Example regression problems are solved by [Deeplearning4j](https://deeplearning4j.org/). One example is learning a network a mathematical function: sin(x)/x in the range [-10,10].
 
