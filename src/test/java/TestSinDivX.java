@@ -1,5 +1,4 @@
 
-import org.datavec.api.transform.MathFunction;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -18,8 +17,6 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.nativeblas.NativeOpsHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import regressionnetworks.function.MathFunctionInterface;
 import regressionnetworks.function.SinXDivXMathFunction;
 

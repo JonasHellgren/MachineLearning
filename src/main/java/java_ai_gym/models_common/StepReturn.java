@@ -1,5 +1,10 @@
 package java_ai_gym.models_common;
 
+/** This class is used by the Environment class.
+ *  It defines the return of the step method.
+ *
+*/
+
 public  class StepReturn {
     public State state;
     public Double reward;

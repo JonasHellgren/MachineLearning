@@ -1,6 +1,5 @@
 package regressionnetworks.function;
 
-import org.datavec.api.transform.MathFunction;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.ops.transforms.Transforms;
 

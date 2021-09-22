@@ -1,11 +1,14 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-interface Agent {
-    + chooseBestAction(State state);
-    + findMaxQ(State state);
-    + chooseRandomAction(List<Integer> aSet);
-    + readMemory(State state, int Action);
+
+interface Learnable {
+    + int chooseBestAction(State state);
+    + double findMaxQ(State state);
+    + int chooseRandomAction(List<Integer> aSet);
+    + int chooseAction(double fractionEpisodesFinished);
+    + void writeMemory(State oldState, Integer Action, Double value);
+    + double readMemory(State state, int Action);
 }
 
 class AgentTabular {
@@ -23,25 +26,40 @@ Random random
 double bellmanErrorStep
 List<Double> bellmanErrorList
 
+ScalerExponential learningRateScaler;
+ScalerExponential probRandActionScaler;
+
 + State getState()
 + int chooseBestAction(State state)
 + double findMaxQ(State state)
 + chooseRandomAction(List<Integer> actions)
 + double readMemory(State state, int action)
+
++ boolean isItTimeToFit()
++ INDArray calcOutFromNetwork(State state,MultiLayerNetwork network)
++ DataSetIterator createTrainingData(List<Experience> miniBatch)
++ double getBellmanErrorAverage(int nofSteps)
++ MultiLayerNetwork createNetwork()
++ boolean isItTimeToUpdateTargetNetwork()
++ updateTargetNetwork()
++ savePolicy(String filePath)
++ loadPolicy(String filePath)
+
 - double readMemory(INDArray inputNetwork, int action)
 - double findMaxQTargetNetwork(State state)
-+ INDArray calcOutFromNetwork(State state,MultiLayerNetwork network)
 - INDArray calcOutFromNetwork(INDArray inputNetwork,MultiLayerNetwork network)
-+ DataSetIterator createTrainingData(List<Experience> miniBatch)
-+ void changeBellmanErrorVariableInBufferItem(Experience exp)
-+ void maybeUpdateTargetNetwork()
-+ addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet,.....)
-+ INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork)
-+ double getBellmanErrorAverage(int nofSteps)
-+ abstract MultiLayerNetwork createNetwork()
+- void changeBellmanErrorVariableInBufferItem(Experience exp)
+- addTrainingExample(INDArray inputNDSet, INDArray outPutNDSet,.....)
+- INDArray modifyNetworkOut(Experience exp, INDArray inputNetwork, INDArray outFromNetwork)
+
 }
 
-Agent  <|-- AgentTabular
-Agent  <|-- AgentNeuralNetwork
+Learnable  <|-- AgentTabular
+Learnable  <|-- AgentNeuralNetwork
+
+AgentNeuralNetwork  <|-- SixRoomsAgentNeuralNetwork
+AgentNeuralNetwork  <|-- MountainCarAgentNeuralNetwork
+AgentNeuralNetwork  <|-- CartPoleAgentNeuralNetwork
+AgentNeuralNetwork  <|-- PongAgentNeuralNetwork
 
 @enduml

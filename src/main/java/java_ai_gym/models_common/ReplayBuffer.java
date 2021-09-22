@@ -1,7 +1,5 @@
 package java_ai_gym.models_common;
 
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.Agent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,14 +15,34 @@ public class ReplayBuffer {
     public final List<Experience> buffer = new ArrayList<>();
 
     public static final int BELLMAN_ERROR_MAX=10;
-    public  double rb_eps=1.0;
-    public double rb_alp=0.1;
-    public double beta0=0.5;
+    public  double RB_EPS =1.0;
+    public double RB_ALP =0.1;  //0 <=> uniform distribution from bellman error for mini batch selection
+    public double BETA0 =0.5;
+    public int REPLAY_BUFFER_SIZE = 100;
 
-    public void addExperience(Experience experience, int REPLAY_BUFFER_MAXSIZE) {
-        if (buffer.size() >= REPLAY_BUFFER_MAXSIZE)   //remove first/oldest item in set if set is "full"
+    public ReplayBuffer(double RB_EPS, double RB_ALP, double BETA0,int REPLAY_BUFFER_SIZE) {
+        this.RB_EPS = RB_EPS;
+        this.RB_ALP = RB_ALP;
+        this.BETA0 = BETA0;
+        this.REPLAY_BUFFER_SIZE = REPLAY_BUFFER_SIZE;
+    }
+
+    public void addExperience(Experience experience) {
+        if (buffer.size() >= REPLAY_BUFFER_SIZE)   //remove first/oldest item in set if set is "full"
             buffer.remove(0);
         buffer.add(experience);
+    }
+
+    public int size() {
+        return buffer.size();
+    }
+
+    public void clear() {
+        buffer.clear();
+    }
+
+    public List<Experience> getBuffer() {
+        return buffer;
     }
 
     public List<Experience> getMiniBatch(int batchLength) {
@@ -34,40 +52,39 @@ public class ReplayBuffer {
                 .boxed().collect(Collectors.toList());
         Collections.shuffle(indexes);
 
-        //System.out.println("buffer.size:"+buffer.size());
-        //System.out.println("indexes:"+indexes);
-
         for (int i = 0; i < Math.min(batchLength,indexes.size()); i++)
             miniBatch.add(buffer.get(indexes.get(i)));
 
         return miniBatch;
     }
 
-    public List<Experience> getMiniBatchPrioritizedExperienceReplay(int batchLength, Agent agent, double fEpisodes) {
-        this.rb_eps=agent.getRB_EPS();
-        this.rb_alp=agent.getRB_ALP();
-        this.beta0=agent.getBETA0();
+    public List<Experience> getMiniBatchPrioritizedExperienceReplay(int batchLength, double fEpisodes) {
 
         calcPrioInReplayBufferFromBellmanError();
         calcSortCriteriaInReplayBuffer();
            List<Experience> miniBatch=extractMiniBatchFromBufferAccordingToSortCriteria( batchLength);
-        double beta=beta0*(1-fEpisodes)+1*fEpisodes;  //linearly anneal β from its initial value β0 to 1
+        double beta= BETA0 *(1-fEpisodes)+1*fEpisodes;  //linearly anneal β from its initial value β0 to 1
         calcImportanceSamplingWeights(miniBatch, beta);
         return extractMiniBatchFromBufferAccordingToSortCriteria( batchLength);
     }
 
+    public boolean isFull(AgentNeuralNetwork agent) {
+        return size()==agent.REPLAY_BUFFER_SIZE;
+
+    }
+
     private void calcPrioInReplayBufferFromBellmanError() {
         for (Experience exper : buffer)
-            exper.pExpRep.priority = Math.min(Math.abs(exper.pExpRep.beError), BELLMAN_ERROR_MAX) + rb_eps;
+            exper.pExpRep.priority = Math.min(Math.abs(exper.pExpRep.beError), BELLMAN_ERROR_MAX) + RB_EPS;
     }
 
     private void calcSortCriteriaInReplayBuffer() {
         double sumOfPrios = 0;
         for (Experience exper : buffer)
-            sumOfPrios = sumOfPrios + Math.pow(exper.pExpRep.priority, rb_alp);
+            sumOfPrios = sumOfPrios + Math.pow(exper.pExpRep.priority, RB_ALP);
 
         for (Experience exper : buffer) {
-            exper.pExpRep.Psampling = Math.pow(exper.pExpRep.priority, rb_alp) / sumOfPrios;
+            exper.pExpRep.Psampling = Math.pow(exper.pExpRep.priority, RB_ALP) / sumOfPrios;
             exper.pExpRep.sortCriteria = exper.pExpRep.Psampling * Math.random();
         }
     }

@@ -12,64 +12,41 @@ import java.util.concurrent.TimeUnit;
 
 public class TestMountainCarEnvironment {
 
-    State state = new State();
+
     MountainCar env=new MountainCar();
-
-    @Test @Ignore
-    public void EnvironmentParameters() {
-        Assert.assertEquals(env.parameters.continuousStateVariableNames.get(0),"position");
-        Assert.assertEquals(env.parameters.continuousStateVariableNames.get(1),"velocity");
-        Assert.assertEquals(env.parameters.discreteActionsSpace.size(),3,0.01);
-    }
-
-
-    @Test @Ignore
-    public void setAction1NoStateChange() {
-        state.createContinuousVariable("position",-0.5);
-        state.createContinuousVariable("velocity",0.0);
-        state.createDiscreteVariable("nofSteps",0);
-        System.out.println(state);
-        StepReturn stepReturn=env.step(1,state);
-        System.out.println(stepReturn.state);
-        Assert.assertEquals(-0.5,stepReturn.state.getContinuousVariable("position"),0.01);
-    }
-
-    @Test @Ignore
-    public void setAction0MovesLeft() throws InterruptedException {
-        state.createContinuousVariable("position",-0.5);
-        state.createContinuousVariable("velocity",0.0);
-        state.createDiscreteVariable("nofSteps",0);
-        System.out.println(state);
-        StepReturn stepReturn=env.step(0,state);
-        System.out.println(stepReturn.state);
-        Assert.assertTrue(stepReturn.state.getContinuousVariable("position")<-0.5);
-
-        TimeUnit.SECONDS.sleep(3);
-    }
+    State state = new State(env.getTemplateState());
 
     @Test
-    public void setAction0MovesLeftManyTimes() throws InterruptedException {
-        state.createContinuousVariable("position",-0.5);
-        state.createContinuousVariable("velocity",0.0);
-        state.createDiscreteVariable("nofSteps",0);
+    public void setRuleBasedAction() throws InterruptedException {
+        env.setRandomStateValuesAny(state);
         System.out.println(state);
         StepReturn stepReturn=env.step(0,state);
-        System.out.println(stepReturn.state);
+        int action=1;
 
-        for (int i = 0; i <1300 ; i++) {
+        do {
 
-            stepReturn=env.step(0,state);
-            state.copyState(stepReturn.state);
-            System.out.println(state);
             double position=state.getContinuousVariable("position");
-            double height=env.height(position);
-            //env.panel.setCarPosition(position,height);
-            env.panel.setCarPosition(i*-0.001,env.height(i*-0.001));
-            System.out.println(env.panel.carPosition);
-            env.panel.repaint();
-            TimeUnit.MILLISECONDS.sleep(10);
-        }
+            double velocity=state.getContinuousVariable("velocity");
+
+            action=(velocity <0)?0:2;
+            stepReturn=env.step(action,state);
+            state.copyState(stepReturn.state);
+
+            env.animationPanel.setCarStates(position,env.height(position),velocity,action,0);
+            env.animationPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(100);
+
+            if (env.isGoalState(stepReturn)) {
+                System.out.println("Goal state reached");
+                System.out.println(state);
+                System.out.println(stepReturn);
+            }
+
+        } while (!stepReturn.termState);
+
+        TimeUnit.MILLISECONDS.sleep(1000);
 
     }
+
 
 }

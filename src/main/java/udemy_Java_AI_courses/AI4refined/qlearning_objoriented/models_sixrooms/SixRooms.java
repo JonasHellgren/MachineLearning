@@ -8,7 +8,7 @@ import java.util.List;
 
 /***
  * Environment with 6 rooms. Inner class EnvironmentParameters defines data.
- * Inner class StepReturn is return protocol for step, transition method.
+ * Class StepReturn is return protocol for step, transition method.
  * TransitionMatrix expresses new room number, for ex action 5 in room 0 gives new room is 0."
  */
 
