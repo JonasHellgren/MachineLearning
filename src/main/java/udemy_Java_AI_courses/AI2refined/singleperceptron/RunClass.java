@@ -1,5 +1,6 @@
-package udemycourse.nn2refined.singleperceptron;
+package udemy_Java_AI_courses.AI2refined.singleperceptron;
 
+import udemy_Java_AI_courses.AI2refined.singleperceptron.model.Perceptron;
 
 import java.util.Arrays;
 
@@ -13,8 +14,8 @@ public class RunClass {
         float[][] input = { {0,0}, {0,1}, {1,0}, {1,1} };
         float[] output = {0,1,1,1};  //OR
 
-        Perceptron perceptron = new Perceptron(input, output);
-        perceptron.train(LEARNING_RATE,NOFITERATIONS_MAX);
+       Perceptron perceptron = new Perceptron(input, output);
+       perceptron.train(LEARNING_RATE,NOFITERATIONS_MAX);
 
         System.out.println("Neural network training is ready! Predictions: ");
 

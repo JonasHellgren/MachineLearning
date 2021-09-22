@@ -1,4 +1,4 @@
-package udemycourse.nn2refined.singleperceptron;
+package udemy_Java_AI_courses.AI2refined.singleperceptron.model;
 
 
 import java.util.Random;
