@@ -13,6 +13,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetworkOCR\neuralnet\BackpropNeuralNetwork.java
 C:\JavaCode\MachineLearning\src\main\java\simpleneuralnetworks\SinXDivXMathFunction.java
 C:\JavaCode\MachineLearning\src\main\java\regressionnetworks\SinDivXRegression.java
+C:\JavaCode\MachineLearning\src\main\java\neuroph\TestBinaryClass.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-cuda-specific-examples\src\main\java\org\deeplearning4j\examples\multigpu\vgg16\dataHelpers\FlowerDataSetIteratorFeaturized.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetworkOCR\neuralnet\NeuralNetConstants.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\tictactoe\TicTacToePlayer.java
@@ -113,6 +114,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetwor
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI4refined\qlearning_objoriented\models_common\Environment.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-spark-examples\dl4j-spark\src\main\java\org\deeplearning4j\transferlearning\vgg16\dataHelpers\FeaturizedPreSave.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\userInterface\util\UIExampleUtils.java
+C:\JavaCode\MachineLearning\src\main\java\neuroph\BreastCancerSample.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-spark-examples\dl4j-spark\src\main\java\org\deeplearning4j\transferlearning\vgg16\dataHelpers\FlowerDataSetIteratorFeaturized.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\datavec-examples\src\main\java\org\datavec\transform\basic\CustomReduceExample.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\feedforward\classification\detectgender\PredictGenderTrain.java
@@ -185,6 +187,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\misc\lossfunctions\GaussianMixtureIterator.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\misc\modelsaving\SaveLoadMultiLayerNetwork.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2refined\twolayernetwork\datasets\DataSetter.java
+C:\JavaCode\MachineLearning\src\main\java\neuroph\IrisClassificationSample.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-cuda-specific-examples\src\main\java\org\deeplearning4j\examples\multigpu\vgg16\dataHelpers\FlowerDataSetIterator.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI4refined\qlearning_objoriented\models_common\StepReturn.java
 C:\JavaCode\MachineLearning\src\main\java\com\pluralsight\MazeNavigation\enums\Showtype.java
