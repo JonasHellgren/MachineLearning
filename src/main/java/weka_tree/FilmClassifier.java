@@ -8,30 +8,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class DecisionTree {
+/**
+ * http://technobium.com/decision-trees-explained-using-weka/
+ */
 
-    private Instances trainingData;
+public class FilmClassifier {
 
-    public static void main(String[] args) throws Exception {
-
-        DecisionTree decisionTree = new DecisionTree("classification_data/films.arff");
-        Id3 id3tree = decisionTree.trainTheTree();
-
-        // Print the resulted tree
-        System.out.println(id3tree.toString());
-
-        // Test the tree
-        Instance testInstance = decisionTree.prepareTestInstance();
-        int result = (int) id3tree.classifyInstance(testInstance);
-
-        String readableResult = decisionTree.trainingData.attribute(3).value(result);
-        System.out.println(" ----------------------------------------- ");
-        System.out.println("Test data               : " + testInstance);
-        System.out.println("Test data classification: " + readableResult);
-    }
-
-    public DecisionTree(String fileName) {
+    static Instances loadTrainingData(String fileName) {
         BufferedReader reader = null;
+        Instances trainingData = null;
         try {
             // Read the training data
             reader = new BufferedReader(new FileReader(fileName));
@@ -50,9 +35,10 @@ public class DecisionTree {
                 }
             }
         }
+        return trainingData;
     }
 
-    private Id3 trainTheTree() {
+    static Id3 trainTheTree(Instances trainingData) {
         Id3 id3tree = new Id3();
 
         String[] options = new String[1];
@@ -69,7 +55,7 @@ public class DecisionTree {
         return id3tree;
     }
 
-    private Instance prepareTestInstance() {
+    static Instance prepareTestInstance(Instances trainingData) {
         Instance instance = new Instance(3);
         instance.setDataset(trainingData);
 
