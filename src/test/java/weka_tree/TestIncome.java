@@ -13,16 +13,21 @@ public class TestIncome {
 
     Instances trainingData;
     String[] options;
+    Attribute age;
+    Attribute education;
+    Attribute status;
+    Attribute occupation;
+    Attribute incomeCategory;
 
     @Before
     public void init() {
 
         ArrayList<Attribute> attributes = new ArrayList<>();
-        Attribute age = new Attribute("age");
-        Attribute education = new Attribute("education",Arrays.asList("bachelor","highSchool","doctorate"));
-        Attribute status = new Attribute("status",Arrays.asList("neverMarried","married","divorced"));
-        Attribute occupation = new Attribute("occupation",Arrays.asList("transport","pro","agri","army"));
-        Attribute incomeCategory = new Attribute("incomeCategory",Arrays.asList("low","medium","high"));
+        age = new Attribute("age");
+        education = new Attribute("education", Arrays.asList("bachelor", "highSchool", "doctorate"));
+        status = new Attribute("status", Arrays.asList("neverMarried", "married", "divorced"));
+        occupation = new Attribute("occupation", Arrays.asList("transport", "pro", "agri", "army"));
+        incomeCategory = new Attribute("incomeCategory", Arrays.asList("low", "medium", "high"));
 
         attributes.add(age);
         attributes.add(education);
@@ -32,33 +37,16 @@ public class TestIncome {
 
         trainingData = new Instances("whatever", attributes, 0);
 
-        Instance i1 = new DenseInstance(5);
-        i1.setValue(age, 39);
-        i1.setValue(education, "bachelor");
-        i1.setValue(status, "neverMarried");
-        i1.setValue(occupation, "transport");
-        i1.setValue(incomeCategory, "medium");
-        trainingData.add(i1);
+        trainingData.add(createInstance(39, "bachelor", "neverMarried", "transport", "medium"));
+        trainingData.add(createInstance(50, "bachelor", "married", "pro", "medium"));
+        trainingData.add(createInstance(18, "highSchool", "neverMarried", "agri", "low"));
+        trainingData.add(createInstance(28, "bachelor", "married", "pro", "medium"));
+        trainingData.add(createInstance(37, "highSchool", "married", "agri", "medium"));
+        trainingData.add(createInstance(24, "highSchool", "neverMarried", "army", "low"));
+        trainingData.add(createInstance(52, "highSchool", "divorced", "transport", "medium"));
+        trainingData.add(createInstance(40, "doctorate", "married", "pro", "high"));
 
-        Instance i2 = new DenseInstance(5);
-        i2.setValue(age, 50);
-        i2.setValue(education, "bachelor");
-        i2.setValue(status, "married");
-        i2.setValue(occupation, "pro");
-        i2.setValue(incomeCategory, "medium");
-        trainingData.add(i2);
-
-        Instance i3 = new DenseInstance(5);
-        i3.setValue(age, 26);
-        i3.setValue(education, "highSchool");
-        i3.setValue(status, "neverMarried");
-        i3.setValue(occupation, "agri");
-        i3.setValue(incomeCategory, "low");
-        trainingData.add(i3);
-
-
-
-        options=new String[] { "-C", "0.50", "-M", "1" };
+        options = new String[]{"-C", "0.50", "-M", "1"};
     }
 
     @Test
@@ -68,10 +56,31 @@ public class TestIncome {
 
     @Test
     public void createTree() {
-
-        J48 tree = TreeHelper.trainTheTree(trainingData,options);
-        // Print the resulted tree
+        J48 tree = TreeHelper.trainTheTree(trainingData, options);
         System.out.println(tree);
+    }
+
+    @Test
+    public void createTreeTrainManyTimes() {
+
+        J48 tree=null;
+
+        for (int i = 0; i < 10000; i++) {
+            tree = TreeHelper.trainTheTree(trainingData,options);
+        }
+
+        System.out.println(tree);
+    }
+
+    Instance createInstance(int a, String ed, String st, String occup, String categ) {
+        Instance i1 = new DenseInstance(5);
+        i1.setValue(age, a);
+        i1.setValue(education, ed);
+        i1.setValue(status, st);
+        i1.setValue(occupation, occup);
+        i1.setValue(incomeCategory, categ);
+        return i1;
+
     }
 
 }
