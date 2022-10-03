@@ -27,6 +27,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2refined\twolayernetwork\model\Parameters.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\recurrent\character\melodl4j\Midi2MelodyStrings.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\lstm-hdfs\src\main\java\org\deeplearning4j\examples\BaseDataSetIterator.java
+C:\JavaCode\MachineLearning\src\main\java\neuroph\NormalizationSample.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\recurrent\seq2seq\Seq2SeqPredicter.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-cuda-specific-examples\src\main\java\org\deeplearning4j\examples\multigpu\w2vsentiment\Word2VecSentimentRNN.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\recurrent\video\VideoGenerator.java
@@ -70,6 +71,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetwor
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetworkIris\neuralnet\BackpropNeuralNetwork.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetwork\App.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\misc\lossfunctions\CustomLossL1L2.java
+C:\JavaCode\MachineLearning\src\main\java\weka_tree\TestFilms.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2refined\singleperceptron\RunClass.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetworkOCR\neuralnet\App.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\misc\customlayers\layer\CustomLayer.java
@@ -100,6 +102,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\tictactoe\TicTacToeGameTrainer.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\feedforward\xor\XorExample.java
 C:\JavaCode\MachineLearning\src\main\java\com\pluralsight\MazeNavigation\agent\Agentsetup.java
+C:\JavaCode\MachineLearning\src\main\java\neuroph\Evaluator.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\recurrent\word2vecsentiment\Word2VecSentimentRNN.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\transferlearning\vgg16\dataHelpers\FeaturizedPreSave.java
 C:\JavaCode\MachineLearning\src\main\java\simpleneuralnetworks\XORregress.java
@@ -211,6 +214,7 @@ C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI4\narmedbandit
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\NeuralNetworkIris\neuralnet\ActivationFunction.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3refined\Iris\Runner.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\SinglePerceptron\Perceptron.java
+C:\JavaCode\MachineLearning\src\main\java\weka_tree\TestWeather.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\dl4j-examples\src\main\java\org\deeplearning4j\examples\dataexamples\PreprocessNormalizerExample.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI2\Clustering\ActivationFunction.java
 C:\JavaCode\MachineLearning\src\main\java\udemy_Java_AI_courses\AI3\deeplearning4j-examples-parent\nd4j-examples\src\main\java\org\nd4j\examples\Nd4jEx13_LargeMatrices.java

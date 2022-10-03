@@ -8,7 +8,7 @@ Some maven dependencies, for ex,
     <version>2.98</version>
     </dependency>
 
-gives compiling code
+gives non compiling code
 
         <dependency>
             <groupId>org.beykery</groupId>

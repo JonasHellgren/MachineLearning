@@ -1,0 +1,7 @@
+https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
+
+https://www.tutorialspoint.com/weka/weka_classifiers.htm
+
+http://www.java2s.com/example/java/machine-learning-ai/weka-j48-tree.html
+
+https://github.com/technobium/weka-decision-trees
