@@ -1,5 +1,6 @@
-package quarantine;
+package weka_tree;
 
+import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -7,11 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- * http://technobium.com/decision-trees-explained-using-weka/
- */
-
-public class FilmClassifier {
+public class TreeHelper {
 
     static Instances loadTrainingData(String fileName) {
         BufferedReader reader = null;
@@ -37,15 +34,18 @@ public class FilmClassifier {
         return trainingData;
     }
 
-    static Id3 trainTheTree(Instances trainingData) {
-        Id3 id3tree = new Id3();
+    /**
+     * “-C 0.25 -M 1” options are selected for the algorithm. There options represent:
+     * confidenceFactor — The confidence factor used for pruning (smaller values incur more pruning).
+     * minNumObj — The minimum number of instances per leaf.
+     */
 
-        String[] options = new String[1];
-        // Use unpruned tree.
-        options[0] = "-U";
+    static J48 trainTheTree(Instances trainingData, String[] options) {
+        J48 id3tree = new J48();
 
         try {
             id3tree.setOptions(options);
+            trainingData.setClassIndex(trainingData.numAttributes()-1);
             id3tree.buildClassifier(trainingData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,6 +54,7 @@ public class FilmClassifier {
         return id3tree;
     }
 
+/*
     static Instance prepareTestInstance(Instances trainingData) {
         Instance instance = new Instance(3);
         instance.setDataset(trainingData);
@@ -65,4 +66,6 @@ public class FilmClassifier {
         return instance;
     }
 
+
+ */
 }

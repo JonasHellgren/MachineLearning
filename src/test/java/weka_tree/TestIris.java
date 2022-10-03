@@ -11,16 +11,19 @@ import weka.core.Instances;
 public class TestIris {
 
     public static final String FILE = "classification_data/iris.arff";
+    String[] options;
     Instances trainingData;
 
     @Before
     public void init() {
-        trainingData = IrisTree.loadTrainingData(FILE);
+        trainingData = TreeHelper.loadTrainingData(FILE);
+        options = new String[4];
+        options=new String[] { "-C", "0.25", "-M", "30" };
     }
 
     @Test
     public void createTree() {
-            J48 j48Tree = IrisTree.trainTheTree(trainingData);
+            J48 j48Tree = TreeHelper.trainTheTree(trainingData,options);
             System.out.println(j48Tree);
     }
 
@@ -30,7 +33,7 @@ public class TestIris {
         J48 j48Tree=null;
 
         for (int i = 0; i < 1000; i++) {
-            j48Tree = IrisTree.trainTheTree(trainingData);
+            j48Tree = TreeHelper.trainTheTree(trainingData,options);
         }
 
         System.out.println(j48Tree);
