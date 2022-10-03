@@ -1,6 +1,5 @@
-package weka_tree;
+package quarantine;
 
-import weka.classifiers.trees.Id3;
 import weka.core.Instance;
 import weka.core.Instances;
 

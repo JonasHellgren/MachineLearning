@@ -1,8 +1,9 @@
-package weka_tree;
+package quarantine;
 
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
+import quarantine.FilmClassifier;
 import weka.classifiers.trees.Id3;
 import weka.core.Instance;
 import weka.core.Instances;

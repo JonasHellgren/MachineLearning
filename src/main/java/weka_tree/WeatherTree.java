@@ -1,6 +1,6 @@
 package weka_tree;
 
-public class TestWeather {
+public class WeatherTree {
 /*
     Instances train = DataSource.read("./weather.nominal.arff");
     int cid1 = train.numAttributes() - 1;
