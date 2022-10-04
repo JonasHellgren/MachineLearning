@@ -35,6 +35,17 @@ It has one miss classification for age > 24.
 ### Speed test
 The indication is that it in Java takes in the order of a millisecond to construct a tree.
 
+### Modularity
+Weka library, dependency below, is compatible with the Java module system. For ex no split 
+packages according to test project with two modules. One module providing data and the other doing
+classification.
+
+     <dependency>
+        <groupId>nz.ac.waikato.cms.weka</groupId>
+        <artifactId>weka-stable</artifactId>
+        <version>3.8.3</version>
+    </dependency>
+
 ### References
 More about decision trees in:
 
