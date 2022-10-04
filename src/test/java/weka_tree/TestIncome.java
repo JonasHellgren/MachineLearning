@@ -9,7 +9,6 @@ import weka.core.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class TestIncome {
 
@@ -68,13 +67,13 @@ public class TestIncome {
     @Test
     public void valueOfSingleInstance() {
         J48 tree = TreeHelper.trainTheTree(trainingData, options);
-        Instance instance=createInstance(39, "bachelor", "neverMarried", "transport", DEFAULT_CATEGORY);
+        Instance instance = createInstance(39, "bachelor", "neverMarried", "transport", DEFAULT_CATEGORY);
         instance.setDataset(trainingData);
         int result = (int) tree.classifyInstance(instance);
         String readableResult = incomeCategory.value(result);
         System.out.println("readableResult = " + readableResult);
 
-        Assert.assertEquals("medium",readableResult);
+        Assert.assertEquals("medium", readableResult);
 
     }
 
@@ -82,23 +81,23 @@ public class TestIncome {
     @Test
     public void valueOfSingleInstanceWithDoctorate() {
         J48 tree = TreeHelper.trainTheTree(trainingData, options);
-        Instance instance=createInstance(39, "doctorate", "neverMarried", "transport", DEFAULT_CATEGORY);
+        Instance instance = createInstance(39, "doctorate", "neverMarried", "transport", DEFAULT_CATEGORY);
         instance.setDataset(trainingData);
         int result = (int) tree.classifyInstance(instance);
         String readableResult = incomeCategory.value(result);
         System.out.println("readableResult = " + readableResult);
 
-        Assert.assertEquals("high",readableResult);
+        Assert.assertEquals("high", readableResult);
 
     }
 
     @Test
     public void createTreeTrainManyTimes() {
 
-        J48 tree=null;
+        J48 tree = null;
 
         for (int i = 0; i < 10000; i++) {
-            tree = TreeHelper.trainTheTree(trainingData,options);
+            tree = TreeHelper.trainTheTree(trainingData, options);
         }
 
         System.out.println(tree);

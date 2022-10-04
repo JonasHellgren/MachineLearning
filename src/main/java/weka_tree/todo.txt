@@ -9,4 +9,6 @@ https://github.com/technobium/weka-decision-trees
 
 in code creation of instances  x
 värde enstaka instance x
+beskrivning
+pucha
 modularity of weka trees

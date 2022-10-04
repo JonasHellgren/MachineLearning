@@ -1,9 +1,7 @@
 package weka_tree;
 
 import weka.classifiers.trees.J48;
-import weka.core.Instance;
 import weka.core.Instances;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,18 +52,4 @@ public class TreeHelper {
         return id3tree;
     }
 
-/*
-    static Instance prepareTestInstance(Instances trainingData) {
-        Instance instance = new Instance(3);
-        instance.setDataset(trainingData);
-
-        instance.setValue(trainingData.attribute(0), "Europe");
-        instance.setValue(trainingData.attribute(1), "no");
-        instance.setValue(trainingData.attribute(2), "comedy");
-
-        return instance;
-    }
-
-
- */
 }
