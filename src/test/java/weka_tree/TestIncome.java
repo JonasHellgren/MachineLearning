@@ -1,5 +1,7 @@
 package weka_tree;
 
+import lombok.SneakyThrows;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import weka.classifiers.trees.J48;
@@ -11,6 +13,8 @@ import java.util.List;
 
 public class TestIncome {
 
+    public static final int NUM_ATTRIBUTES = 5;
+    public static final String DEFAULT_CATEGORY = "low";
     Instances trainingData;
     String[] options;
     Attribute age;
@@ -60,6 +64,34 @@ public class TestIncome {
         System.out.println(tree);
     }
 
+    @SneakyThrows
+    @Test
+    public void valueOfSingleInstance() {
+        J48 tree = TreeHelper.trainTheTree(trainingData, options);
+        Instance instance=createInstance(39, "bachelor", "neverMarried", "transport", DEFAULT_CATEGORY);
+        instance.setDataset(trainingData);
+        int result = (int) tree.classifyInstance(instance);
+        String readableResult = incomeCategory.value(result);
+        System.out.println("readableResult = " + readableResult);
+
+        Assert.assertEquals("medium",readableResult);
+
+    }
+
+    @SneakyThrows
+    @Test
+    public void valueOfSingleInstanceWithDoctorate() {
+        J48 tree = TreeHelper.trainTheTree(trainingData, options);
+        Instance instance=createInstance(39, "doctorate", "neverMarried", "transport", DEFAULT_CATEGORY);
+        instance.setDataset(trainingData);
+        int result = (int) tree.classifyInstance(instance);
+        String readableResult = incomeCategory.value(result);
+        System.out.println("readableResult = " + readableResult);
+
+        Assert.assertEquals("high",readableResult);
+
+    }
+
     @Test
     public void createTreeTrainManyTimes() {
 
@@ -73,7 +105,7 @@ public class TestIncome {
     }
 
     Instance createInstance(int a, String ed, String st, String occup, String categ) {
-        Instance i1 = new DenseInstance(5);
+        Instance i1 = new DenseInstance(NUM_ATTRIBUTES);
         i1.setValue(age, a);
         i1.setValue(education, ed);
         i1.setValue(status, st);

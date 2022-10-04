@@ -7,5 +7,6 @@ http://www.java2s.com/example/java/machine-learning-ai/weka-j48-tree.html
 https://github.com/technobium/weka-decision-trees
 
 
-in code creation of instances
+in code creation of instances  x
+värde enstaka instance x
 modularity of weka trees
