@@ -1,7 +1,7 @@
 ## Tree classification with Weka
 
 Decision trees are a classic supervised learning algorithms, it is easy to interpret a decision tree.
-Weka (Waikato Environment for Knowledge Analysis) is a Java library implementing decision trees .
+Weka (Waikato Environment for Knowledge Analysis) is a Java library implementing decision trees.
 
 ### Algorithm
 The main concept behind decision tree learning is the following: starting from the training data, we will build a predictive model which is mapped to a tree structure. The goal is to achieve perfect classification with minimal number of decision
