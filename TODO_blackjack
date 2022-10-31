@@ -7,14 +7,10 @@ major classes
 - StateMemory
 - ActionStateMemory
 
-define environment
-- reward function
-- step
-- tester
-
 
 StateCards Cards StateObserved  x
-
+CardsHelper  x
+test clone
 TestEnvironment
 
 

@@ -1,5 +1,6 @@
 package black_jack.environment;
 
+import black_jack.helper.CardsHelper;
 import black_jack.models.Card;
 import black_jack.models.CardAction;
 import black_jack.models.StateCards;
@@ -11,6 +12,14 @@ import java.util.stream.Collectors;
 public class BlackJackEnvironment implements EnvironmentInterface {
 
     public static final int MAX_SUM_DEALER_FOR_HITTING = 17;
+    public static final boolean STOP_PLAYING_IF_BUST = true;
+    public static final boolean STOP_PLAYING_IF_NOT_BUST = false;
+    public static final boolean STOP_PLAYING = true;
+    public static final int REWARD_BUST = -1;
+    public static final int REWARD_STICK_BUT_NOT_BUST = 0;
+    public static final int REWARD_DEALER_HAS_BETTER_HAND = -1;
+    public static final double REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD = 1.5;
+    public static final int REWARD_PLAYER_BETTER_HAND = 1;
 
     @Override
     public StepReturnBJ step(CardAction action, StateCards state0) {
@@ -19,70 +28,33 @@ public class BlackJackEnvironment implements EnvironmentInterface {
         StepReturnBJ stepReturnBJ;
 
         if (action.equals(CardAction.hit))  {
-
-            addRandomPlayerCard(state);
-            final boolean stopPlayingIfBust = true;
-            final boolean stopPlayingIfNotBust = true;
-            final double rewardBust=-1;
-            final double rewardStickButNotBust=0;
-
-            stepReturnBJ=(isPlayerBust(state))
-                    ? new StepReturnBJ(state,stopPlayingIfBust,rewardBust)
-                    : new StepReturnBJ(state,stopPlayingIfNotBust,rewardStickButNotBust);
-
-
+            state.addPlayerCard(Card.newRandom());
+            stepReturnBJ=(CardsHelper.isPlayerBust(state))
+                    ? new StepReturnBJ(state, STOP_PLAYING_IF_BUST, REWARD_BUST)
+                    : new StepReturnBJ(state, STOP_PLAYING_IF_NOT_BUST, REWARD_STICK_BUT_NOT_BUST);
         } else
         {
-            final boolean stopPlaying = true;
-
-            while (state.sumHandDealer()< MAX_SUM_DEALER_FOR_HITTING) {
-                state.addDealerCard(Card.newRandom());
-            }
-
-            boolean playerHasBetterHand=scoreHandPlayer(state)>scoreHandDealer(state);
-            boolean hasAceAndFacedCard=isAceAndFacedCard(state.getCardsPlayer());
-
-            double reward=(!playerHasBetterHand)
-                    ? -1
-                    : (hasAceAndFacedCard)  ? 1.5 : 1;
-
-            stepReturnBJ=new StepReturnBJ(state,stopPlaying,reward);
+            addDealerCardsUntilMaxSum(state);
+            boolean playerHasBetterHand=CardsHelper.scoreHandPlayer(state)>CardsHelper.scoreHandDealer(state);
+            boolean hasAceAndFacedCard=CardsHelper.isAceAndFacedCard(state.getCardsPlayer());
+            double reward = getReward(playerHasBetterHand, hasAceAndFacedCard);
+            stepReturnBJ=new StepReturnBJ(state, STOP_PLAYING,reward);
 
         }
-
-
         return stepReturnBJ;
     }
 
-
-    private void addRandomPlayerCard(StateCards cards) {
-        cards.addPlayerCard(Card.newRandom());
+    private void addDealerCardsUntilMaxSum(StateCards state) {
+        while (CardsHelper.sumHandPlayer(state)< MAX_SUM_DEALER_FOR_HITTING) {
+            state.addDealerCard(Card.newRandom());
+        }
     }
 
-    private boolean isPlayerBust(StateCards state)  {
-        return state.sumHandPlayer()>21;
+    private double getReward(boolean playerHasBetterHand, boolean hasAceAndFacedCard) {
+        return (!playerHasBetterHand)
+                ? REWARD_DEALER_HAS_BETTER_HAND
+                : hasAceAndFacedCard ? REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD : REWARD_PLAYER_BETTER_HAND;
     }
 
-    private boolean isDealerBust(StateCards state)  {
-        return state.sumHandDealer()>21;
-    }
-
-    public long scoreHandPlayer(StateCards state) {
-        return (isPlayerBust(state))
-        ? 0
-        :state.sumHandPlayer();
-    }
-
-    public long scoreHandDealer(StateCards state) {
-        return (isDealerBust(state))
-                ? 0
-                :state.sumHandDealer();
-    }
-
-    boolean isAceAndFacedCard(List<Card> cards) {
-        List<Long> cardValues= cards.stream().map(c -> c.getValue()).collect(Collectors.toList());
-        return  cardValues.contains(1L) && cardValues.contains(10L);
-
-    }
 
 }
