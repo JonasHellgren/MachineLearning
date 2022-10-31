@@ -21,9 +21,18 @@ public class StateCards {
     List<Card> cardsPlayer;
     List<Card> cardsDealer;
 
+    public static List<Card> newPair(long card1Value, long card2Value)  {
+        List<Card> cards=new ArrayList<>();
+        cards.add(new Card(card1Value));
+        cards.add(new Card(card2Value));
+        return  cards;
+    }
+
     public StateCards() {
-        cardsPlayer=drawTwoRandomCards();
-        cardsDealer=drawTwoRandomCards();
+        cardsPlayer=new ArrayList<>();
+        cardsDealer=new ArrayList<>();
+        cardsPlayer.addAll(drawTwoRandomCards());
+        cardsDealer.addAll(drawTwoRandomCards());
     }
 
     public StateCards(List<Card> cardsPlayer, List<Card> cardsDealer) {
@@ -32,30 +41,42 @@ public class StateCards {
     }
 
     List<Card> drawTwoRandomCards() {
-        return Arrays.asList(new Card(),new Card());
+        List<Card> cards=new ArrayList<>();
+        cards.add(new Card());
+        cards.add(new Card());
+        return  cards;
     }
 
-    StateObserved observeState() {
+    public StateObserved observeState() {
         return new StateObserved(
                 sumHand(cardsPlayer),
                 usableAce(cardsPlayer),
-                cardsPlayer.get(0).value
+                cardsDealer.get(0).value
         );
     }
 
-    public long sumHand(List<Card> cards) {
-        return (usableAce(cards))
-                ? sumCardValues(cards)
-                : sumCardValues(cards)+10;
+    public void addPlayerCard(Card card)  {
+        cardsPlayer.add(card);
     }
 
-    public boolean usableAce(List<Card> cards) {
+
+    public void addDealerCard(Card card)  {
+        cardsDealer.add(card);
+    }
+
+    public static long sumHand(List<Card> cards) {
+        return (usableAce(cards))
+                ? sumCardValues(cards)+STRONG_ACE_ADDED_VALUE
+                : sumCardValues(cards);
+    }
+
+    public static boolean usableAce(List<Card> cards) {
         boolean isThereAnyAce=cards.stream().anyMatch(c -> c.value== ACE_VALUE);
         boolean sumHandWithUsableAceNotBust=sumCardValues(cards)+ STRONG_ACE_ADDED_VALUE <= MAX_CARDS_SUM;
         return isThereAnyAce && sumHandWithUsableAceNotBust;
     }
 
-    public long sumCardValues(List<Card> cards) {
+    private static long sumCardValues(List<Card> cards) {
         List<Long> numbers= cards.stream().map(c -> c.value).collect(Collectors.toList());
         return numbers.stream().mapToInt(Long::intValue).sum();
     }

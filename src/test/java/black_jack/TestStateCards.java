@@ -2,6 +2,8 @@ package black_jack;
 
 import black_jack.models.Card;
 import black_jack.models.StateCards;
+import black_jack.models.StateObserved;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,14 +28,60 @@ public class TestStateCards {
     }
 
     @Test public void createPlayerHandFaceCardAnd9DealerHandAceAnd7() {
+        StateCards dealerAndPlayerCards = getStateCards();
 
-        List<Card> cardsPlayer= Arrays.asList(new Card(10), new Card(9));  //todo, snyggare med static constructor
-        List<Card> cardsDealer= Arrays.asList(new Card(1), new Card(7));
-
-        StateCards dealerAndPlayerCards=new StateCards(cardsPlayer,cardsDealer);
         System.out.println("dealerAndPlayerCards = " + dealerAndPlayerCards);
         Assert.assertEquals(2,dealerAndPlayerCards.getCardsDealer().size());
         Assert.assertEquals(2,dealerAndPlayerCards.getCardsPlayer().size());
+    }
+
+
+
+    @Test public void observeState() {
+        StateCards dealerAndPlayerCards = getStateCards();
+        StateObserved obs=dealerAndPlayerCards.observeState();
+
+        System.out.println("obs = " + obs);
+
+        Assert.assertEquals(19,obs.sumHandPlayer);
+        Assert.assertFalse(obs.playerHasUsableAce);
+        Assert.assertEquals(1,obs.dealerCardValue);
+    }
+
+    @Test public void sumHand()  {
+        Assert.assertEquals(19,StateCards.sumHand(StateCards.newPair(10, 9)));
+        Assert.assertEquals(21,StateCards.sumHand(StateCards.newPair(10, 1)));   //usable ace
+
+        StateCards threeCards = getStateCards();
+        threeCards.addPlayerCard(new Card(1));
+        Assert.assertEquals(10+9+1,StateCards.sumHand(threeCards.getCardsPlayer()));   //no usable ace for player
+
+    }
+
+    @Test public void usableAce()  {
+        Assert.assertEquals(19,StateCards.sumHand(StateCards.newPair(10, 9)));
+        Assert.assertEquals(21,StateCards.sumHand(StateCards.newPair(10, 1)));   //usable ace
+
+        StateCards threeCards = getStateCards();
+        threeCards.addPlayerCard(new Card(1));
+        Assert.assertFalse(StateCards.usableAce(threeCards.getCardsPlayer()));   //no usable ace for player
+        Assert.assertTrue(StateCards.usableAce(threeCards.getCardsDealer()));   //usable ace for dealer
+
+    }
+
+
+    @NotNull
+    private StateCards getStateCards() {
+        List<Card> cardsPlayer = StateCards.newPair(10, 9);
+        List<Card> cardsDealer = StateCards.newPair(1, 7);
+        return new StateCards(cardsPlayer, cardsDealer);
+    }
+
+    @NotNull
+    private StateCards getStateCardsUcableAce() {
+        List<Card> cardsPlayer = StateCards.newPair(1, 10);
+        List<Card> cardsDealer = StateCards.newPair(1, 7);
+        return new StateCards(cardsPlayer, cardsDealer);
     }
 
 }

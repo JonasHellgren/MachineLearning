@@ -12,6 +12,9 @@ define environment
 - step
 - tester
 
+
+StateCards Cards StateObserved
+
 Monte Carlo Policy Evaluation med enkel regelstrategi
 
 On-Policy Monte Carlo Control
