@@ -1,6 +1,6 @@
 package black_jack.models;
 
-import black_jack.helper.CardsHelper;
+import black_jack.helper.CardsInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -63,8 +63,8 @@ public class StateCards {
 
     public StateObserved observeState() {
         return new StateObserved(
-                CardsHelper.sumHand(cardsPlayer),
-                CardsHelper.usableAce(cardsPlayer),
+                CardsInfo.sumHand(cardsPlayer),
+                CardsInfo.usableAce(cardsPlayer),
                 cardsDealer.get(0).value
         );
     }

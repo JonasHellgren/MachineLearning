@@ -1,6 +1,6 @@
 package black_jack;
 
-import black_jack.helper.CardsHelper;
+import black_jack.helper.CardsInfo;
 import black_jack.models.Card;
 import black_jack.models.StateCards;
 import black_jack.models.StateObserved;
@@ -49,23 +49,23 @@ public class TestStateCards {
     }
 
     @Test public void sumHand()  {
-        Assert.assertEquals(19, CardsHelper.sumHand(StateCards.newPair(10, 9)));
-        Assert.assertEquals(21, CardsHelper.sumHand(StateCards.newPair(10, 1)));   //usable ace
+        Assert.assertEquals(19, CardsInfo.sumHand(StateCards.newPair(10, 9)));
+        Assert.assertEquals(21, CardsInfo.sumHand(StateCards.newPair(10, 1)));   //usable ace
 
         StateCards threeCards = getStateCards();
         threeCards.addPlayerCard(Card.newWithValue(1));
-        Assert.assertEquals(10+9+1, CardsHelper.sumHand(threeCards.getCardsPlayer()));   //no usable ace for player
+        Assert.assertEquals(10+9+1, CardsInfo.sumHand(threeCards.getCardsPlayer()));   //no usable ace for player
 
     }
 
     @Test public void usableAce()  {
-        Assert.assertEquals(19, CardsHelper.sumHand(StateCards.newPair(10, 9)));
-        Assert.assertEquals(21, CardsHelper.sumHand(StateCards.newPair(10, 1)));   //usable ace
+        Assert.assertEquals(19, CardsInfo.sumHand(StateCards.newPair(10, 9)));
+        Assert.assertEquals(21, CardsInfo.sumHand(StateCards.newPair(10, 1)));   //usable ace
 
         StateCards threeCards = getStateCards();
         threeCards.addPlayerCard(Card.newWithValue(1));
-        Assert.assertFalse(CardsHelper.usableAce(threeCards.getCardsPlayer()));   //no usable ace for player
-        Assert.assertTrue(CardsHelper.usableAce(threeCards.getCardsDealer()));   //usable ace for dealer
+        Assert.assertFalse(CardsInfo.usableAce(threeCards.getCardsPlayer()));   //no usable ace for player
+        Assert.assertTrue(CardsInfo.usableAce(threeCards.getCardsDealer()));   //usable ace for dealer
 
     }
 

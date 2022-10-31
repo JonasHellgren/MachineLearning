@@ -6,7 +6,7 @@ import black_jack.models.StateCards;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CardsHelper {
+public class CardsInfo {
 
     public static final int MAX_CARDS_SUM = 21;
     public static final int STRONG_ACE_ADDED_VALUE = 10;
@@ -60,7 +60,7 @@ public class CardsHelper {
         return sumHandDealer(state)>BUST_LIMIT;
     }
 
-    public static boolean isAceAndFacedCard(List<Card> cards) {
+    public static boolean isAceAndFacedCardPresent(List<Card> cards) {
         List<Long> cardValues= cards.stream().map(c -> c.getValue()).collect(Collectors.toList());
         return  cardValues.contains(ACE_VALUE_LONG) && cardValues.contains(FACE_CARD_VALUE);
     }

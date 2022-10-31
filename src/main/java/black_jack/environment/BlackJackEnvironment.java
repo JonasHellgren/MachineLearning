@@ -1,13 +1,10 @@
 package black_jack.environment;
 
-import black_jack.helper.CardsHelper;
+import black_jack.helper.CardsInfo;
 import black_jack.models.Card;
 import black_jack.models.CardAction;
 import black_jack.models.StateCards;
 import black_jack.models.StepReturnBJ;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BlackJackEnvironment implements EnvironmentInterface {
 
@@ -29,15 +26,15 @@ public class BlackJackEnvironment implements EnvironmentInterface {
 
         if (action.equals(CardAction.hit))  {
             state.addPlayerCard(Card.newRandom());
-            stepReturnBJ=(CardsHelper.isPlayerBust(state))
+            stepReturnBJ=(CardsInfo.isPlayerBust(state))
                     ? new StepReturnBJ(state, STOP_PLAYING_IF_BUST, REWARD_BUST)
                     : new StepReturnBJ(state, STOP_PLAYING_IF_NOT_BUST, REWARD_STICK_BUT_NOT_BUST);
         } else
         {
             addDealerCardsUntilMaxSum(state);
-            boolean playerHasBetterHand=CardsHelper.scoreHandPlayer(state)>CardsHelper.scoreHandDealer(state);
-            boolean hasAceAndFacedCard=CardsHelper.isAceAndFacedCard(state.getCardsPlayer());
-            double reward = getReward(playerHasBetterHand, hasAceAndFacedCard);
+            boolean playerHasBetterHand= CardsInfo.scoreHandPlayer(state)> CardsInfo.scoreHandDealer(state);
+            boolean playerHasAceAndFacedCard= CardsInfo.isAceAndFacedCardPresent(state.getCardsPlayer());
+            double reward = getRewardStick(playerHasBetterHand, playerHasAceAndFacedCard);
             stepReturnBJ=new StepReturnBJ(state, STOP_PLAYING,reward);
 
         }
@@ -45,12 +42,12 @@ public class BlackJackEnvironment implements EnvironmentInterface {
     }
 
     private void addDealerCardsUntilMaxSum(StateCards state) {
-        while (CardsHelper.sumHandPlayer(state)< MAX_SUM_DEALER_FOR_HITTING) {
+        while (CardsInfo.sumHandPlayer(state)< MAX_SUM_DEALER_FOR_HITTING) {
             state.addDealerCard(Card.newRandom());
         }
     }
 
-    private double getReward(boolean playerHasBetterHand, boolean hasAceAndFacedCard) {
+    private double getRewardStick(boolean playerHasBetterHand, boolean hasAceAndFacedCard) {
         return (!playerHasBetterHand)
                 ? REWARD_DEALER_HAS_BETTER_HAND
                 : hasAceAndFacedCard ? REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD : REWARD_PLAYER_BETTER_HAND;
