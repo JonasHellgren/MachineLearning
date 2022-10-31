@@ -15,13 +15,13 @@ public class TestStateCards {
 
     @Test
     public void createCard() {
-        Card card=new Card(1);
+        Card card=Card.newWithValue(1);
         System.out.println("card = " + card);
         Assert.assertEquals(1,card.getValue());
     }
 
     @Test public void createTwoRandomHands() {
-        StateCards dealerAndPlayerCards=new StateCards();
+        StateCards dealerAndPlayerCards=StateCards.newRandomPairs() ;
         System.out.println("dealerAndPlayerCards = " + dealerAndPlayerCards);
         Assert.assertEquals(2,dealerAndPlayerCards.getCardsDealer().size());
         Assert.assertEquals(2,dealerAndPlayerCards.getCardsPlayer().size());
@@ -53,7 +53,7 @@ public class TestStateCards {
         Assert.assertEquals(21,StateCards.sumHand(StateCards.newPair(10, 1)));   //usable ace
 
         StateCards threeCards = getStateCards();
-        threeCards.addPlayerCard(new Card(1));
+        threeCards.addPlayerCard(Card.newWithValue(1));
         Assert.assertEquals(10+9+1,StateCards.sumHand(threeCards.getCardsPlayer()));   //no usable ace for player
 
     }
@@ -63,7 +63,7 @@ public class TestStateCards {
         Assert.assertEquals(21,StateCards.sumHand(StateCards.newPair(10, 1)));   //usable ace
 
         StateCards threeCards = getStateCards();
-        threeCards.addPlayerCard(new Card(1));
+        threeCards.addPlayerCard(Card.newWithValue(1));
         Assert.assertFalse(StateCards.usableAce(threeCards.getCardsPlayer()));   //no usable ace for player
         Assert.assertTrue(StateCards.usableAce(threeCards.getCardsDealer()));   //usable ace for dealer
 

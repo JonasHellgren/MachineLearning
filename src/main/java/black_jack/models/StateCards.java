@@ -23,16 +23,27 @@ public class StateCards {
 
     public static List<Card> newPair(long card1Value, long card2Value)  {
         List<Card> cards=new ArrayList<>();
-        cards.add(new Card(card1Value));
-        cards.add(new Card(card2Value));
+        cards.add(Card.newWithValue(card1Value));
+        cards.add(Card.newWithValue(card2Value));
         return  cards;
     }
+
+    public static StateCards EMPTY() {
+        return new StateCards();
+    }
+
+    public static StateCards newRandomPairs() {
+        StateCards cards=EMPTY();
+        cards.cardsPlayer.addAll(drawTwoRandomCards());
+        cards.getCardsDealer().addAll(drawTwoRandomCards());
+        return cards;
+    }
+
 
     public StateCards() {
         cardsPlayer=new ArrayList<>();
         cardsDealer=new ArrayList<>();
-        cardsPlayer.addAll(drawTwoRandomCards());
-        cardsDealer.addAll(drawTwoRandomCards());
+
     }
 
     public StateCards(List<Card> cardsPlayer, List<Card> cardsDealer) {
@@ -40,10 +51,17 @@ public class StateCards {
         this.cardsDealer = cardsDealer;
     }
 
-    List<Card> drawTwoRandomCards() {
+    public static StateCards clone(StateCards otherCards)  {
+        StateCards newCards=EMPTY();
+        newCards.cardsPlayer.addAll(new ArrayList<>(otherCards.getCardsPlayer()));
+        newCards.cardsDealer.addAll(new ArrayList<>(otherCards.getCardsDealer()));
+        return newCards;
+    }
+
+    static List<Card> drawTwoRandomCards() {
         List<Card> cards=new ArrayList<>();
-        cards.add(new Card());
-        cards.add(new Card());
+        cards.add(Card.newRandom());
+        cards.add(Card.newRandom());
         return  cards;
     }
 
@@ -62,6 +80,17 @@ public class StateCards {
 
     public void addDealerCard(Card card)  {
         cardsDealer.add(card);
+    }
+
+
+    public long sumHandPlayer() {
+        return sumHand(cardsPlayer);
+    }
+
+
+
+    public long sumHandDealer() {
+        return sumHand(cardsDealer);
     }
 
     public static long sumHand(List<Card> cards) {

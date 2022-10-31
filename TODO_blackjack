@@ -13,7 +13,10 @@ define environment
 - tester
 
 
-StateCards Cards StateObserved
+StateCards Cards StateObserved  x
+
+TestEnvironment
+
 
 Monte Carlo Policy Evaluation med enkel regelstrategi
 
