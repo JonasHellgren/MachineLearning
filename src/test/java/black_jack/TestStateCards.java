@@ -1,6 +1,5 @@
 package black_jack;
 
-import black_jack.helper.CardsInfo;
 import black_jack.models.Card;
 import black_jack.models.StateCards;
 import black_jack.models.StateObserved;
@@ -34,7 +33,7 @@ public class TestStateCards {
     }
 
     @Test public void createPlayerHandFaceCardAnd9DealerHandAceAnd7() {
-        StateCards dealerAndPlayerCards = getStateCards();
+        StateCards dealerAndPlayerCards = getCards();
 
         System.out.println("dealerAndPlayerCards = " + dealerAndPlayerCards);
         Assert.assertEquals(2,dealerAndPlayerCards.getCardsDealer().size());
@@ -43,7 +42,7 @@ public class TestStateCards {
 
 
     @Test public void cloneCards() {
-        StateCards cards=getStateCards();
+        StateCards cards= getCards();
         StateCards cardsCopy=StateCards.clone(cards);
 
         for (int i = 0; i < cards.getCardsPlayer().size() ; i++) {
@@ -54,7 +53,7 @@ public class TestStateCards {
     }
 
     @Test public void observeState() {
-        StateCards dealerAndPlayerCards = getStateCards();
+        StateCards dealerAndPlayerCards = getCards();
         StateObserved obs=dealerAndPlayerCards.observeState();
 
         System.out.println("obs = " + obs);
@@ -66,7 +65,7 @@ public class TestStateCards {
 
 
     @NotNull
-    private StateCards getStateCards() {
+    private StateCards getCards() {
         List<Card> cardsPlayer = StateCards.newPair(10, 9);
         List<Card> cardsDealer = StateCards.newPair(1, 7);
         return new StateCards(cardsPlayer, cardsDealer);
