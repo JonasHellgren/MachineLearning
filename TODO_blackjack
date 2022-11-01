@@ -12,11 +12,11 @@ StateCards Cards StateObserved  x
 CardsInfo  x
 test clone x
 TestCardsInfo  x
-TestEnvironment
+TestEnvironment  x
 
-
+TestStateObserved  x
+Drawing a grid
 Monte Carlo Policy Evaluation med enkel regelstrategi
-
 On-Policy Monte Carlo Control
 
 
@@ -24,3 +24,5 @@ On-Policy Monte Carlo Control
 https://ernie55ernie.github.io/assets/blackjack.html
 
 https://towardsdatascience.com/learning-to-win-blackjack-with-monte-carlo-methods-61c90a52d53e
+
+https://youtu.be/NxUllV998UQ

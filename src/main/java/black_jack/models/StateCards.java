@@ -61,6 +61,8 @@ public class StateCards {
     }
 
     public StateObserved observeState() {
+
+        //todo check
         return new StateObserved(
                 CardsInfo.sumHand(cardsPlayer),
                 CardsInfo.usableAce(cardsPlayer),
