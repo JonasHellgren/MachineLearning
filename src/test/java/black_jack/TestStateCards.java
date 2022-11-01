@@ -20,6 +20,12 @@ public class TestStateCards {
         Assert.assertEquals(1,card.getValue());
     }
 
+    @Test public void EMPTY() {
+        StateCards cards=StateCards.EMPTY();
+        Assert.assertTrue(cards.getCardsPlayer().isEmpty());
+        Assert.assertTrue(cards.getCardsDealer().isEmpty());
+    }
+
     @Test public void createTwoRandomHands() {
         StateCards dealerAndPlayerCards=StateCards.newRandomPairs() ;
         System.out.println("dealerAndPlayerCards = " + dealerAndPlayerCards);
@@ -36,6 +42,16 @@ public class TestStateCards {
     }
 
 
+    @Test public void cloneCards() {
+        StateCards cards=getStateCards();
+        StateCards cardsCopy=StateCards.clone(cards);
+
+        for (int i = 0; i < cards.getCardsPlayer().size() ; i++) {
+            Assert.assertEquals(cards.getCardsDealer().get(i).getValue(),cardsCopy.getCardsDealer().get(i).getValue());
+            Assert.assertEquals(cards.getCardsPlayer().get(i).getValue(),cardsCopy.getCardsPlayer().get(i).getValue());
+        }
+
+    }
 
     @Test public void observeState() {
         StateCards dealerAndPlayerCards = getStateCards();
@@ -48,27 +64,6 @@ public class TestStateCards {
         Assert.assertEquals(1,obs.dealerCardValue);
     }
 
-    @Test public void sumHand()  {
-        Assert.assertEquals(19, CardsInfo.sumHand(StateCards.newPair(10, 9)));
-        Assert.assertEquals(21, CardsInfo.sumHand(StateCards.newPair(10, 1)));   //usable ace
-
-        StateCards threeCards = getStateCards();
-        threeCards.addPlayerCard(Card.newWithValue(1));
-        Assert.assertEquals(10+9+1, CardsInfo.sumHand(threeCards.getCardsPlayer()));   //no usable ace for player
-
-    }
-
-    @Test public void usableAce()  {
-        Assert.assertEquals(19, CardsInfo.sumHand(StateCards.newPair(10, 9)));
-        Assert.assertEquals(21, CardsInfo.sumHand(StateCards.newPair(10, 1)));   //usable ace
-
-        StateCards threeCards = getStateCards();
-        threeCards.addPlayerCard(Card.newWithValue(1));
-        Assert.assertFalse(CardsInfo.usableAce(threeCards.getCardsPlayer()));   //no usable ace for player
-        Assert.assertTrue(CardsInfo.usableAce(threeCards.getCardsDealer()));   //usable ace for dealer
-
-    }
-
 
     @NotNull
     private StateCards getStateCards() {
@@ -77,11 +72,5 @@ public class TestStateCards {
         return new StateCards(cardsPlayer, cardsDealer);
     }
 
-    @NotNull
-    private StateCards getStateCardsUcableAce() {
-        List<Card> cardsPlayer = StateCards.newPair(1, 10);
-        List<Card> cardsDealer = StateCards.newPair(1, 7);
-        return new StateCards(cardsPlayer, cardsDealer);
-    }
 
 }

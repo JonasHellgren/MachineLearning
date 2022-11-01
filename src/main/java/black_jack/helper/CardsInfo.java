@@ -19,6 +19,10 @@ public class CardsInfo {
         return sumHand(state.getCardsPlayer());
     }
 
+    public static long sumHandDealer(StateCards state) {
+        return sumHand(state.getCardsDealer());
+    }
+
     public static  long scoreHandPlayer(StateCards state) {
         return (isPlayerBust(state))
                 ? 0
@@ -29,10 +33,6 @@ public class CardsInfo {
         return (isDealerBust(state))
                 ? 0
                 : sumHandDealer(state);
-    }
-
-    public static long sumHandDealer(StateCards state) {
-        return sumHand(state.getCardsDealer());
     }
 
     public static long sumHand(List<Card> cards) {

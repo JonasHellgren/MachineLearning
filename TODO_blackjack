@@ -10,7 +10,8 @@ major classes
 
 StateCards Cards StateObserved  x
 CardsInfo  x
-test clone
+test clone x
+TestCardsInfo  x
 TestEnvironment
 
 

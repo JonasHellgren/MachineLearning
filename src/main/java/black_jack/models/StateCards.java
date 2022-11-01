@@ -31,10 +31,9 @@ public class StateCards {
     public static StateCards newRandomPairs() {
         StateCards cards=EMPTY();
         cards.cardsPlayer.addAll(drawTwoRandomCards());
-        cards.getCardsDealer().addAll(drawTwoRandomCards());
+        cards.cardsDealer.addAll(drawTwoRandomCards());
         return cards;
     }
-
 
     public StateCards() {
         cardsPlayer=new ArrayList<>();
