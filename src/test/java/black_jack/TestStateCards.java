@@ -49,7 +49,19 @@ public class TestStateCards {
             Assert.assertEquals(cards.getCardsDealer().get(i).getValue(),cardsCopy.getCardsDealer().get(i).getValue());
             Assert.assertEquals(cards.getCardsPlayer().get(i).getValue(),cardsCopy.getCardsPlayer().get(i).getValue());
         }
+    }
 
+    @Test public void copyCards() {
+        StateCards cards1=getCards();
+        cards1.setCardsPlayer(StateCards.newPair(1, 2));
+        StateCards cards2=getCards();
+
+        cards2.copy(cards1);
+
+        System.out.println("cards2 = " + cards2);
+
+        Assert.assertEquals(1,cards2.getCardsPlayer().get(0).getValue());
+        Assert.assertEquals(2,cards2.getCardsPlayer().get(1).getValue());
     }
 
     @Test public void observeState() {

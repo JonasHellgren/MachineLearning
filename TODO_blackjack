@@ -15,8 +15,15 @@ TestCardsInfo  x
 TestEnvironment  x
 
 TestStateObserved  x
-Drawing a grid
 Monte Carlo Policy Evaluation med enkel regelstrategi
+- EpisodeItem
+- Episode
+- RuleBasedPolicies
+- StateReturns
+- ValueMemory
+- ValueMemoryUpdater
+
+Drawing a grid
 On-Policy Monte Carlo Control
 
 

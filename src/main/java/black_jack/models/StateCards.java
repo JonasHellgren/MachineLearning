@@ -12,8 +12,6 @@ import java.util.List;
 @Getter
 @ToString
 public class StateCards {
-
-
     List<Card> cardsPlayer;
     List<Card> cardsDealer;
 
@@ -44,6 +42,15 @@ public class StateCards {
     public StateCards(List<Card> cardsPlayer, List<Card> cardsDealer) {
         this.cardsPlayer = cardsPlayer;
         this.cardsDealer = cardsDealer;
+    }
+
+    public void copy(StepReturnBJ returnBJ) {
+        copy(returnBJ.cards);
+    }
+
+    public void copy(StateCards otherCards) {
+        this.cardsPlayer=otherCards.cardsPlayer;
+        this.cardsDealer=otherCards.cardsDealer;
     }
 
     public static StateCards clone(StateCards otherCards)  {
