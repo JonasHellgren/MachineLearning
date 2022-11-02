@@ -47,12 +47,7 @@ public class TestEpisode {
         return new StateCards(cardsPlayer, cardsDealer);
     }
 
-    @NotNull
-    private StateCards getVeryBadCardsForPlayer() {
-        List<Card> cardsPlayer = StateCards.newPair(5, 2);
-        List<Card> cardsDealer = StateCards.newPair(8, 10);
-        return new StateCards(cardsPlayer, cardsDealer);
-    }
+
 
 
 }

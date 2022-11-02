@@ -51,8 +51,6 @@ public class BlackJackEnvironment implements EnvironmentInterface {
 
           //  boolean isDealerBust=CardsInfo.isDealerBust(state);
           //  System.out.println("state = " + state+", playerHasBetterHand = " + playerHasBetterHand+", isDealerBust="+isDealerBust);
-
-
         }
         return stepReturnBJ;
     }

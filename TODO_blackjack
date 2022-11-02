@@ -16,9 +16,9 @@ TestEnvironment  x
 
 TestStateObserved  x
 Monte Carlo Policy Evaluation med enkel regelstrategi
-- EpisodeItem
-- Episode
-- RuleBasedPolicies
+- EpisodeItem  x
+- Episode  x
+- RuleBasedPolicies  x
 - StateReturns
 - ValueMemory
 - ValueMemoryUpdater
