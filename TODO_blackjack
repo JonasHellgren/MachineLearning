@@ -20,7 +20,7 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - Episode  x
 - RuleBasedPolicies  x
 - isStatePresentBeforeTimeStep  x
-- ReturnsForEpisode
+- ReturnsForEpisode x
 - ValueMemory
 - ValueMemoryUpdater
 

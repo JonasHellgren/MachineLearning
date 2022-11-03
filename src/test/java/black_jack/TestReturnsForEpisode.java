@@ -57,7 +57,7 @@ public class TestReturnsForEpisode {
 
         Assert.assertEquals(3,returnsForEpisode.nofItems());
         Assert.assertEquals(-1,returnsForEpisode.getItem(1).returnValue, DELTA);
-        Assert.assertEquals(-1,returnsForEpisode.getItem(3).returnValue, DELTA);
+        Assert.assertEquals(-1,returnsForEpisode.getItem(2).returnValue, DELTA);
 
     }
 
