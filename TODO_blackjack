@@ -21,8 +21,8 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - RuleBasedPolicies  x
 - isStatePresentBeforeTimeStep  x
 - ReturnsForEpisode x
-- ValueMemory
-- ValueMemoryUpdater
+- ValueMemory x
+- learnMemoryFromManyEpisodes
 
 Drawing a grid
 On-Policy Monte Carlo Control

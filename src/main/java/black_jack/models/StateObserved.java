@@ -1,10 +1,20 @@
 package black_jack.models;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Objects;
+
+/***
+ *
+ * https://www.baeldung.com/java-hashcode
+ * (at)EqualsAndHashCode is candidate solution to equals and hashCode
+ */
 
 @AllArgsConstructor
 @ToString
+
 public class StateObserved {
     public long sumHandPlayer;  //the players current sum
     public boolean playerHasUsableAce; //whether or not the player holds a usable ace (0 or 1).
@@ -23,6 +33,11 @@ public class StateObserved {
         return otherState.sumHandPlayer == this.sumHandPlayer &&
                 otherState.playerHasUsableAce == this.playerHasUsableAce &&
                 otherState.dealerCardValue == this.dealerCardValue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sumHandPlayer, playerHasUsableAce,dealerCardValue);
     }
 
 }

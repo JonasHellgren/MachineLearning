@@ -49,6 +49,17 @@ public class TestStateObserved {
         Assert.assertFalse(s1.equals(s2));
     }
 
+    @Test public void testDifferentHashCode() {
+        StateCards cards1 = cards1();
+        StateCards cards2 = cards2();
+
+        System.out.println("cards1.observeState().hashCode() = " + cards1.observeState().hashCode());
+
+        Assert.assertNotEquals(cards1.observeState().hashCode(),cards2.observeState().hashCode());
+
+
+    }
+
     @NotNull
     private StateCards cards1() {
         List<Card> cardsPlayer = StateCards.newPair(10, 9);
