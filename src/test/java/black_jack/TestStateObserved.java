@@ -36,6 +36,18 @@ public class TestStateObserved {
         Assert.assertEquals(5, observed.dealerCardValue);
     }
 
+    @Test public void testEquals1() {
+        StateObserved s1=new StateObserved(12,false,17);
+        StateObserved s2=new StateObserved(12,false,17);
+        Assert.assertTrue(s1.equals(s2));
+    }
+
+
+    @Test public void testEquals2() {
+        StateObserved s1=new StateObserved(12,false,17);
+        StateObserved s2=new StateObserved(11,false,17);
+        Assert.assertFalse(s1.equals(s2));
+    }
 
     @NotNull
     private StateCards cards1() {

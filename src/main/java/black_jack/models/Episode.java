@@ -27,12 +27,11 @@ public class Episode {
         episode.add(new EpisodeItem(s,a,r));
     }
 
-    public EpisodeItem getItem(Integer index) {
-        if (index<0 || index>=nofItems()) {
-            throw new IllegalArgumentException();
-        }
-        return episode.get(index);
+    public EpisodeItem getItem(Integer timeStep) {
+        throwExceptionIfNonValidTimeStep(timeStep);
+        return episode.get(timeStep);
     }
+
 
     public EpisodeItem getEndItem() {
         if (nofItems()<1) {
@@ -40,6 +39,26 @@ public class Episode {
         }
 
         return episode.get(nofItems()-1);
+    }
+
+    public boolean isStatePresentBeforeTimeStep(StateObserved state, Integer timeStep) {
+        throwExceptionIfNonValidTimeStep(timeStep);
+
+        //todo replace with streams
+        for (int i = 0; i < timeStep ; i++) {
+            EpisodeItem ei=episode.get(i);
+            if (state.equals(ei.state)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void throwExceptionIfNonValidTimeStep(Integer timeStep) {
+        if (timeStep <0 || timeStep >=nofItems()) {
+            throw new IllegalArgumentException();
+        }
     }
 
 }

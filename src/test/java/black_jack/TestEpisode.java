@@ -3,8 +3,8 @@ package black_jack;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.models.*;
-import org.jcodec.common.Assert;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +38,22 @@ public class TestEpisode {
         System.out.println("episode = " + episode);
 
         Assert.assertTrue(episode.nofItems()>0);
+    }
+
+    @Test public void testIsStatePresentBeforeTimeStep() {
+        StateObserved s1=new StateObserved(2,false,17);
+        StateObserved s2=new StateObserved(5,false,17);
+        StateObserved s3=new StateObserved(12,false,17);
+        StateObserved s4=new StateObserved(21,false,17);
+
+        episode.add(s1,CardAction.hit,0d);
+        episode.add(s2,CardAction.hit,0d);
+        episode.add(s3,CardAction.hit,0d);
+        episode.add(s4,CardAction.stick,1d);
+
+        Assert.assertTrue(episode.isStatePresentBeforeTimeStep(s1,3));
+        Assert.assertFalse(episode.isStatePresentBeforeTimeStep(s4,1));
+
     }
 
     @NotNull
