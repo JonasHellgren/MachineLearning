@@ -2,6 +2,7 @@ package black_jack;
 
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
+import black_jack.helper.Learner;
 import black_jack.models.*;
 import black_jack.policies.RuleBasedPolicies;
 import org.junit.Assert;
@@ -18,13 +19,15 @@ public class TestValueMemory {
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
     ValueMemory valueMemory;
+    Learner learner;
 
     @Before
     public void init() {
         environment=new BlackJackEnvironment();
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
-        valueMemory = new ValueMemory(ALPHA);
+        valueMemory = new ValueMemory();
+        learner = new Learner(valueMemory,ALPHA);
     }
 
     @Test
@@ -45,14 +48,14 @@ public class TestValueMemory {
         System.out.println("returnsForEpisode = " + returnsForEpisode);
 
         for (int i = 0; i < NOF_UPDATES; i++) {
-            valueMemory.updateMemory(returnsForEpisode);
+            learner.updateMemory(returnsForEpisode);
         }
 
         System.out.println("valueMemory = " + valueMemory);
 
         Assert.assertEquals(4, valueMemory.nofItems());
-        Assert.assertEquals(1, valueMemory.getValue(s1), DELTA);
-        Assert.assertEquals(1, valueMemory.getValue(s2), DELTA);
+        Assert.assertEquals(1, valueMemory.read(s1), DELTA);
+        Assert.assertEquals(1, valueMemory.read(s2), DELTA);
 
     }
 
@@ -64,7 +67,7 @@ public class TestValueMemory {
             Episode episode=runEpisode(cards);
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
-            valueMemory.updateMemory(returnsForEpisode);
+            learner.updateMemory(returnsForEpisode);
         }
 
         System.out.println("valueMemory = " + valueMemory);

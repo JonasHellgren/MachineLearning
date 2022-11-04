@@ -1,5 +1,6 @@
 package black_jack.models;
 
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashMap;
@@ -10,20 +11,13 @@ import java.util.Set;
 public class ValueMemory {
 
     public static final double DEFAULT_VALUE = 0d;
-    public static final double ALPHA_DEFAULT = 0.1;
 
-    double alpha = ALPHA_DEFAULT;
     Map<Integer, Double> stateValueMap;
     Set<StateObserved> visitedStates;
 
     public ValueMemory() {
         stateValueMap = new HashMap<>();
         visitedStates = new HashSet<>();
-    }
-
-    public ValueMemory(double alpha) {
-        this();
-        this.alpha = alpha;
     }
 
     public void clear() {
@@ -35,21 +29,14 @@ public class ValueMemory {
         return stateValueMap.size();
     }
 
-    public void updateMemory(ReturnsForEpisode returns) {
-        for (ReturnItem ri : returns.getReturns()) {
-            updateMemory(ri);
-        }
-    }
-
-    public void updateMemory(ReturnItem ri) {
-        double oldValue = getValue(ri.state);
-        double newValue = oldValue + alpha * (ri.returnValue - oldValue);
-        stateValueMap.put(ri.state.hashCode(), newValue);
-        visitedStates.add(ri.state);
-    }
-
-    public double getValue(StateObserved state) {
+    public double read(StateObserved state) {
         return stateValueMap.getOrDefault(state.hashCode(), DEFAULT_VALUE);
+    }
+
+    public void write(StateObserved state, double value) {
+        stateValueMap.put(state.hashCode(),value);
+        visitedStates.add(state);
+
     }
 
     @Override
