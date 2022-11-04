@@ -19,9 +19,13 @@ public class Learner {
         this.numberOfVisitsMemory=numberOfVisitsMemory;
     }
 
-    public Learner(ValueMemory valueMemory, NumberOfVisitsMemory numberOfVisitsMemory, double alpha) {
+    public Learner(ValueMemory valueMemory,
+                   NumberOfVisitsMemory numberOfVisitsMemory,
+                   double alpha,
+                   boolean regardNofVisitsFlag) {
         this(valueMemory,numberOfVisitsMemory);
         this.alpha = alpha;
+        this.regardNofVisitsFlag=regardNofVisitsFlag;
     }
 
     public void updateMemory(ReturnsForEpisode returns) {

@@ -2,18 +2,21 @@ package black_jack;
 
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
+import black_jack.helper.EpisodeRunner;
 import black_jack.helper.Learner;
 import black_jack.models.*;
-import black_jack.policies.RuleBasedPolicies;
+import black_jack.policies.HitBelow20Policy;
+import black_jack.policies.PolicyInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestValueMemory {
     public static final double DELTA = 0.1;
-    public static final int NOF_UPDATES = 100;
-    public static final double ALPHA = 0.1;
-    public static final int NOF_EPISODES = 1_000_000;
+    public static final int NOF_UPDATES = 1000;
+    public static final double ALPHA = 0.01;
+    boolean regardNofVisitsFlag=true;
+    public static final int NOF_EPISODES = 100_000;
 
     EnvironmentInterface environment;
     Episode episode;
@@ -21,6 +24,7 @@ public class TestValueMemory {
     ValueMemory valueMemory;
     NumberOfVisitsMemory numberOfVisitsMemory;
     Learner learner;
+    PolicyInterface policy;
 
     @Before
     public void init() {
@@ -29,7 +33,8 @@ public class TestValueMemory {
         returnsForEpisode = new ReturnsForEpisode();
         valueMemory = new ValueMemory();
         numberOfVisitsMemory=new NumberOfVisitsMemory();
-        learner = new Learner(valueMemory,numberOfVisitsMemory,ALPHA);
+        learner = new Learner(valueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
+        policy = new HitBelow20Policy();
     }
 
     @Test
@@ -64,9 +69,14 @@ public class TestValueMemory {
     @Test
     public void learnMemoryFromManyEpisodes() {
 
+        EpisodeRunner episodeRunner=new EpisodeRunner(environment,policy);
+
+
         for (int i = 0; i < NOF_EPISODES; i++) {
             StateCards cards = StateCards.newRandomPairs();
-            Episode episode=runEpisode(cards);
+            //Episode episode=runEpisode(cards);
+            Episode episode=episodeRunner.play(cards);
+
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
             learner.updateMemory(returnsForEpisode);
@@ -80,7 +90,7 @@ public class TestValueMemory {
         Episode episode = new Episode();
         boolean stopPlaying;
         do {
-            CardAction action = RuleBasedPolicies.hitBelow20(cards.observeState());
+            CardAction action = policy.hitOrStick(cards.observeState());
             StepReturnBJ returnBJ = environment.step(action, cards);
             stopPlaying= returnBJ.stopPlaying;
             episode.add(cards.observeState(), action, returnBJ.reward);

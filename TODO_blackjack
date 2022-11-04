@@ -24,8 +24,8 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - ValueMemory x
 - Learner  x
 - NumberOfVisitsMemory  x
-- learnMemoryFromManyEpisodes
-- runEpisode i klass
+- learnMemoryFromManyEpisodes x
+- EpisodeRunner x
 
 Drawing a grid
 On-Policy Monte Carlo Control

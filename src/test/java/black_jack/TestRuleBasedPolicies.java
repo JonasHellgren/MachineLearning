@@ -3,7 +3,8 @@ package black_jack;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.models.*;
-import black_jack.policies.RuleBasedPolicies;
+import black_jack.policies.HitBelow20Policy;
+import black_jack.policies.PolicyInterface;
 import org.jcodec.common.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -17,24 +18,26 @@ public class TestRuleBasedPolicies {
     public static final int NOF_RUNS = 1000;
     EnvironmentInterface environment;
     Episode episode;
+    PolicyInterface policy;
 
     @Before
     public void init() {
         environment=new BlackJackEnvironment();
         episode=new Episode();
+        policy=new HitBelow20Policy();
     }
 
     @Test public void hitBelow20() {
         StateCards cards= StateCards.newRandomPairs();
         cards.setCardsPlayer(StateCards.newPair(5,5));
-        Assert.assertTrue(RuleBasedPolicies.hitBelow20(cards.observeState()).equals(CardAction.hit));
+        Assert.assertTrue(policy.hitOrStick(cards.observeState()).equals(CardAction.hit));
     }
 
 
     @Test public void stickAt20() {
         StateCards cards= StateCards.newRandomPairs();
         cards.setCardsPlayer(StateCards.newPair(10,10));
-        Assert.assertTrue(RuleBasedPolicies.hitBelow20(cards.observeState()).equals(CardAction.stick));
+        Assert.assertTrue(policy.hitOrStick(cards.observeState()).equals(CardAction.stick));
     }
 
     @Test
@@ -68,7 +71,7 @@ public class TestRuleBasedPolicies {
         episode.clear();
         boolean stopPlaying;
         do {
-            CardAction action = RuleBasedPolicies.hitBelow20(cards.observeState());
+            CardAction action = policy.hitOrStick(cards.observeState());
             StepReturnBJ returnBJ = environment.step(action, cards);
             stopPlaying= returnBJ.stopPlaying;
             episode.add(cards.observeState(), action, returnBJ.reward);
