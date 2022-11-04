@@ -1,20 +1,27 @@
 package black_jack;
 
+import black_jack.environment.BlackJackEnvironment;
+import black_jack.environment.EnvironmentInterface;
 import black_jack.models.*;
+import black_jack.policies.RuleBasedPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestValueMemory {
     public static final double DELTA = 0.1;
-    public static final int NOF_UPDATES = 10;
-    public static final double ALPHA = 0.9;
+    public static final int NOF_UPDATES = 100;
+    public static final double ALPHA = 0.1;
+    public static final int NOF_EPISODES = 1_000_000;
+
+    EnvironmentInterface environment;
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
     ValueMemory valueMemory;
 
     @Before
     public void init() {
+        environment=new BlackJackEnvironment();
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
         valueMemory = new ValueMemory(ALPHA);
@@ -52,5 +59,28 @@ public class TestValueMemory {
     @Test
     public void learnMemoryFromManyEpisodes() {
 
+        for (int i = 0; i < NOF_EPISODES; i++) {
+            StateCards cards = StateCards.newRandomPairs();
+            Episode episode=runEpisode(cards);
+            returnsForEpisode.clear();
+            returnsForEpisode.appendReturns(episode);
+            valueMemory.updateMemory(returnsForEpisode);
+        }
+
+        System.out.println("valueMemory = " + valueMemory);
+
+    }
+
+    private Episode runEpisode(StateCards cards) {
+        Episode episode = new Episode();
+        boolean stopPlaying;
+        do {
+            CardAction action = RuleBasedPolicies.hitBelow20(cards.observeState());
+            StepReturnBJ returnBJ = environment.step(action, cards);
+            stopPlaying= returnBJ.stopPlaying;
+            episode.add(cards.observeState(), action, returnBJ.reward);
+            cards.copy(returnBJ);
+        } while (!stopPlaying);
+        return episode;
     }
 }

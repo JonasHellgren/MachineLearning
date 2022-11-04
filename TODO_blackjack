@@ -22,7 +22,10 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - isStatePresentBeforeTimeStep  x
 - ReturnsForEpisode x
 - ValueMemory x
+- Learner
+- NumberOfVisitsMemory
 - learnMemoryFromManyEpisodes
+- runEpisode i klass
 
 Drawing a grid
 On-Policy Monte Carlo Control
