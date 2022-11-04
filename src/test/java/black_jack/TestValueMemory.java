@@ -70,19 +70,20 @@ public class TestValueMemory {
     public void learnMemoryFromManyEpisodes() {
 
         EpisodeRunner episodeRunner=new EpisodeRunner(environment,policy);
-
-
         for (int i = 0; i < NOF_EPISODES; i++) {
             StateCards cards = StateCards.newRandomPairs();
-            //Episode episode=runEpisode(cards);
             Episode episode=episodeRunner.play(cards);
-
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
             learner.updateMemory(returnsForEpisode);
         }
 
-        System.out.println("valueMemory = " + valueMemory);
+        //System.out.println("valueMemory = " + valueMemory);
+
+        System.out.println("valueMemory.nofItems() = " + valueMemory.nofItems());
+
+        Assert.assertTrue(valueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+
 
     }
 
