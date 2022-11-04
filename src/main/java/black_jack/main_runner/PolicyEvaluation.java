@@ -8,20 +8,22 @@ import black_jack.models.*;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.bytedeco.librealsense.frame;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PolicyEvaluation {
 
-    public static final int NOF_EPISODES = 100_000_000;
+    public static final int NOF_EPISODES = 1_000_000;
     static final int MAX_HANDS_SUM_PLAYER=21;
     static final int MAX_DEALER_CARD=10;
     private static final int SQUARE_SIZE = 30;
     private static final double MIN_VALUE = -1d;
-    private static final double MAX_VALUE = 1.0d;
+    private static final double MAX_VALUE = 1.5d;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
-    private static final double ALPHA = 0.01;
+    private static final double ALPHA = 0.001;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;
 
     public static void main(String[] args) {
@@ -43,7 +45,12 @@ public class PolicyEvaluation {
         ValueMemory valueMemory=new ValueMemory();
         NumberOfVisitsMemory numberOfVisitsMemory=new NumberOfVisitsMemory();
         Learner learner=new Learner(valueMemory,numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
-        for (int i = 0; i < NOF_EPISODES; i++) {
+        for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
+
+            if (episodeNumber % 1_00_000 == 0) {
+                System.out.println("i = " + episodeNumber);
+            }
+
             StateCards cards = StateCards.newRandomPairs();
             Episode episode=episodeRunner.play(cards);
             returnsForEpisode.clear();

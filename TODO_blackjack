@@ -29,6 +29,15 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 
 GridPanel x
 clean up GridPanel
+kunna texta värden i celler en decimal
+Värden axlar x-y i Gridpanel
+Titlar axlar GridPanel - kanske på extra celler
+GridPanel mer generisk
+automatiskt sätta SQUARE_SIZE
+clean up PolicyEvaluation
+mer logiska package - tex minnen i separat
+REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD som 1?
+
 On-Policy Monte Carlo Control
 
 
