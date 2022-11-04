@@ -25,6 +25,14 @@ public class GridPanel  extends JPanel  {
         setBackground(Color.WHITE); // Set the background color for this panel.
     }
 
+    public void setColorAtCell(int row, int col, Color color) {
+        if (row<0 || row>=gridRows || col<0 ||col>=gridCols) {
+            throw new IllegalArgumentException("Wrong raw/column number");
+        }
+        this.gridColor[gridRows-row-1][col]=color;
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0,0,getWidth(),getHeight());

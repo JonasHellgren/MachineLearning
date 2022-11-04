@@ -27,7 +27,8 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - learnMemoryFromManyEpisodes x
 - EpisodeRunner x
 
-Drawing a grid
+GridPanel x
+clean up GridPanel
 On-Policy Monte Carlo Control
 
 
