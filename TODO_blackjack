@@ -22,8 +22,8 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - isStatePresentBeforeTimeStep  x
 - ReturnsForEpisode x
 - ValueMemory x
-- Learner
-- NumberOfVisitsMemory
+- Learner  x
+- NumberOfVisitsMemory  x
 - learnMemoryFromManyEpisodes
 - runEpisode i klass
 

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ValueMemory {
+public class ValueMemory implements MemoryInterface {
 
     public static final double DEFAULT_VALUE = 0d;
 

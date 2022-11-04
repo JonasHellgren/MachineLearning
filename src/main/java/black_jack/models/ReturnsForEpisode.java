@@ -10,6 +10,10 @@ import java.util.List;
 @Getter
 public class ReturnsForEpisode {
 
+    public static final double DISCOUNT_FACTOR_DEFAULT = 1d;
+
+    private double discountFactor = DISCOUNT_FACTOR_DEFAULT;
+
     List<ReturnItem> returns;
 
     //Map<StateObserved,Double> stateReturnMap;
@@ -17,6 +21,11 @@ public class ReturnsForEpisode {
 
     public ReturnsForEpisode() {
         returns = new ArrayList<>();
+    }
+
+    public ReturnsForEpisode(double discountFactor) {
+        this();
+        this.discountFactor = discountFactor;
     }
 
     public int nofItems() {
@@ -42,7 +51,7 @@ public class ReturnsForEpisode {
         double G=0;
         for (int i = episode.nofItems()-1; i >=0 ; i--) {
             EpisodeItem ei= episode.getItem(i);
-            G=G+1*ei.reward;
+            G=G+ discountFactor *ei.reward;
             if (!episode.isStatePresentBeforeTimeStep(ei.state,i)) {
                 this.add(ei.state,G);  //todo, first visit flag
             }

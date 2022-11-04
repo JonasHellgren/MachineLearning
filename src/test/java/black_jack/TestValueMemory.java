@@ -19,6 +19,7 @@ public class TestValueMemory {
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
     ValueMemory valueMemory;
+    NumberOfVisitsMemory numberOfVisitsMemory;
     Learner learner;
 
     @Before
@@ -27,7 +28,8 @@ public class TestValueMemory {
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
         valueMemory = new ValueMemory();
-        learner = new Learner(valueMemory,ALPHA);
+        numberOfVisitsMemory=new NumberOfVisitsMemory();
+        learner = new Learner(valueMemory,numberOfVisitsMemory,ALPHA);
     }
 
     @Test
