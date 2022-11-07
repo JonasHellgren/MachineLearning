@@ -14,6 +14,12 @@ import org.bytedeco.librealsense.frame;
 import javax.swing.*;
 import java.awt.*;
 
+/***
+ *      Candidate parameter setting:
+ *     private static final double ALPHA = 0.9;  //critical parameter setting
+ *     private static final boolean NOF_VISITS_FLAG = true;  //critical parameter setting
+ */
+
 public class PolicyEvaluation {
 
     public static final int NOF_EPISODES = 1_000_000;
@@ -24,7 +30,9 @@ public class PolicyEvaluation {
     private static final double MAX_VALUE = 1.5d;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
     private static final double ALPHA = 0.001;  //critical parameter setting
-    private static final boolean NOF_VISITS_FLAG = false;
+    private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
+
+
 
     public static void main(String[] args) {
         JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.

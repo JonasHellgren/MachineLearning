@@ -36,7 +36,14 @@ public class ValueMemory implements MemoryInterface {
     public void write(StateObserved state, double value) {
         stateValueMap.put(state.hashCode(),value);
         visitedStates.add(state);
+    }
 
+    public double average() {
+        double sum = stateValueMap.values().stream().mapToDouble(d -> d).sum();
+        int nofItems=stateValueMap.size();
+        return (nofItems==0)
+                ? 0
+                :sum/(double)nofItems;
     }
 
     @Override

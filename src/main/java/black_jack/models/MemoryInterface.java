@@ -6,4 +6,5 @@ public interface MemoryInterface {
     int nofItems();
     double read(StateObserved state);
     void write(StateObserved state, double Value);
+    double average();
 }

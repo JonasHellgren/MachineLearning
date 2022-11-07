@@ -81,22 +81,12 @@ public class TestValueMemory {
         //System.out.println("valueMemory = " + valueMemory);
 
         System.out.println("valueMemory.nofItems() = " + valueMemory.nofItems());
+        System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfVisitsMemory.nofItems());
+        System.out.println("valueMemory.average() = " + valueMemory.average());
+        System.out.println("numberOfVisitsMemory.average() = " + numberOfVisitsMemory.average());
 
         Assert.assertTrue(valueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
-
-
+        Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
     }
 
-    private Episode runEpisode(StateCards cards) {
-        Episode episode = new Episode();
-        boolean stopPlaying;
-        do {
-            CardAction action = policy.hitOrStick(cards.observeState());
-            StepReturnBJ returnBJ = environment.step(action, cards);
-            stopPlaying= returnBJ.stopPlaying;
-            episode.add(cards.observeState(), action, returnBJ.reward);
-            cards.copy(returnBJ);
-        } while (!stopPlaying);
-        return episode;
-    }
 }

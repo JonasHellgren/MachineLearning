@@ -28,6 +28,7 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - EpisodeRunner x
 
 GridPanel x
+NumberOfVisitsMemory räknas nof inte upp
 clean up GridPanel
 kunna texta värden i celler en decimal
 Värden axlar x-y i Gridpanel

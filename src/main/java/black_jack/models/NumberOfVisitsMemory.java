@@ -33,6 +33,15 @@ public class NumberOfVisitsMemory implements MemoryInterface {
         throw new RuntimeException("Not implemented method");
     }
 
+    @Override
+    public double average() {
+        int sum = stateNofVisitsMap.values().stream().mapToInt(d -> d).sum();
+        int nofItems=stateNofVisitsMap.size();
+        return (nofItems==0)
+                ? 0
+                :(double) sum/(double)nofItems;
+    }
+
     public void increase(StateObserved state) {
         int oldNofVisits=stateNofVisitsMap.getOrDefault(state.hashCode(),INIT_VALUE);
         stateNofVisitsMap.put(state.hashCode(),oldNofVisits+1);

@@ -31,6 +31,10 @@ public class Learner {
     public void updateMemory(ReturnsForEpisode returns) {
         for (ReturnItem ri : returns.getReturns()) {
             updateMemory(ri);
+            if (regardNofVisitsFlag) {
+                numberOfVisitsMemory.increase(ri.state);
+            }
+
         }
     }
 
