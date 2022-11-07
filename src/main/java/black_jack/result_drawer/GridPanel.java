@@ -5,13 +5,15 @@ import java.awt.*;
 
 public class GridPanel  extends JPanel  {
 
+    private static final Color BACKGROUND_COLOR = Color.WHITE;
+    private static final Color LINE_COLOR = Color.BLACK;
     private final int gridRows; // Number of rows of squares.
     private final int gridCols; // Number of columns of squares.
     private final Color[][] gridColor; /* gridColor[r][c] is the color for square in row r, column c;
 	                                 if it  is null, the square has the panel's background color.*/
     private final Color lineColor; // Color for lines drawn between squares; if null, no lines are drawn.
 
-    public GridPanel(int rows, int columns, int preferredSquareSize) {
+    public GridPanel(int rows, int columns, float relativeFrameSize) {
         this.gridColor = new Color[rows][columns]; // Create the array that stores square colors.
         gridRows = rows;
         gridCols = columns;
@@ -19,10 +21,18 @@ public class GridPanel  extends JPanel  {
         this.gridColor[5][5] = new Color( (int)(225*Math.random()),
                 (int)(225*Math.random()),(int)(225*Math.random()) );
 
-        lineColor = Color.BLACK;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        float preferedFrameWidth=screenSize.width*relativeFrameSize;
+        int sqSizeWidth=Math.round(preferedFrameWidth/ (float) gridCols);
+        float preferedFrameHeight=screenSize.height*relativeFrameSize;
+        int sqSizeHeight=Math.round(preferedFrameHeight/ (float) gridCols);
+
+        int preferredSquareSize=Math.min(sqSizeWidth,sqSizeHeight);
+
+        lineColor = LINE_COLOR;
         setPreferredSize( new Dimension(preferredSquareSize*columns,
                 preferredSquareSize*rows) );
-        setBackground(Color.WHITE); // Set the background color for this panel.
+        setBackground(BACKGROUND_COLOR); // Set the background color for this panel.
     }
 
     public void setColorAtCell(int row, int col, Color color) {

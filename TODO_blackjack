@@ -28,13 +28,15 @@ Monte Carlo Policy Evaluation med enkel regelstrategi
 - EpisodeRunner x
 
 GridPanel x
-NumberOfVisitsMemory räknas nof inte upp
+NumberOfVisitsMemory räknas nof inte upp  x
+automatiskt sätta SQUARE_SIZE  x
 clean up GridPanel
+gridColor som enda parameter i GridPanel constructor
 kunna texta värden i celler en decimal
 Värden axlar x-y i Gridpanel
 Titlar axlar GridPanel - kanske på extra celler
 GridPanel mer generisk
-automatiskt sätta SQUARE_SIZE
+
 clean up PolicyEvaluation
 mer logiska package - tex minnen i separat
 REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD som 1?

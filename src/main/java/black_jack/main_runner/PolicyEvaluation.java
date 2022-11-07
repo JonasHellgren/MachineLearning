@@ -22,26 +22,26 @@ import java.awt.*;
 
 public class PolicyEvaluation {
 
-    public static final int NOF_EPISODES = 1_000_000;
+    public static final int NOF_EPISODES = 1_00_000;
     static final int MAX_HANDS_SUM_PLAYER=21;
     static final int MAX_DEALER_CARD=10;
     private static final int SQUARE_SIZE = 30;
     private static final double MIN_VALUE = -1d;
     private static final double MAX_VALUE = 1.5d;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
-    private static final double ALPHA = 0.001;  //critical parameter setting
+    private static final double ALPHA = 0.01;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
-
+    private static final float RELATIVE_FRAME_SIZE = 0.25f;
 
 
     public static void main(String[] args) {
         JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelNoUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,MAX_DEALER_CARD,SQUARE_SIZE);  // Create an object of type Grid.
+        GridPanel panelNoUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,MAX_DEALER_CARD, RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane( panelNoUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameNoUsableAce);
 
         JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,MAX_DEALER_CARD, SQUARE_SIZE);  // Create an object of type Grid.
+        GridPanel panelUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,MAX_DEALER_CARD, RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameUsableAce.setContentPane( panelUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
 
