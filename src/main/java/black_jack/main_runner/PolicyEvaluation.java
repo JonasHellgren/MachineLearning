@@ -30,8 +30,7 @@ public class PolicyEvaluation {
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
     static final int MAX_HANDS_SUM_PLAYER=21;
     private static final int MIN_DEALER_CARD = 1;
-    static final int MAX_DEALER_CARD=11;
-    private static final int SQUARE_SIZE = 30;
+    static final int MAX_DEALER_CARD=10;
     private static final double MIN_VALUE = -1d;
     private static final double MAX_VALUE = 1.5d;
 
@@ -43,18 +42,19 @@ public class PolicyEvaluation {
 
     public static void main(String[] args) {
 
-        List<Integer> xTicks = IntStream.range(MIN_DEALER_CARD,MAX_DEALER_CARD).boxed().collect(Collectors.toList());
-        List<Integer> yTicks = IntStream.range(LOWER_HANDS_SUM_PLAYER,MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
+        List<Integer> xSet = IntStream.rangeClosed(MIN_DEALER_CARD,MAX_DEALER_CARD).boxed().collect(Collectors.toList());
+        List<Integer> ySet = IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER,MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
 
-        System.out.println("xTicks = " + xTicks);
+        System.out.println("xSet = " + xSet);
+        System.out.println("ySet = " + ySet);
 
         JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelNoUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,xTicks.size(), RELATIVE_FRAME_SIZE,xTicks,yTicks);  // Create an object of type Grid.
+        GridPanel panelNoUsableAce = new GridPanel( xSet,ySet,RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane( panelNoUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameNoUsableAce);
 
         JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelUsableAce = new GridPanel(MAX_HANDS_SUM_PLAYER,xTicks.size(), RELATIVE_FRAME_SIZE,xTicks,yTicks);  // Create an object of type Grid.
+        GridPanel panelUsableAce = new GridPanel(xSet,ySet,RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameUsableAce.setContentPane( panelUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
 
@@ -80,9 +80,9 @@ public class PolicyEvaluation {
         }
 
         boolean usableAce=false;
-        setPanel(panelNoUsableAce, valueMemory, usableAce,xTicks,yTicks);
+        setPanel(panelNoUsableAce, valueMemory, usableAce,xSet,ySet);
         usableAce=true;
-        setPanel(panelUsableAce, valueMemory, usableAce,xTicks,yTicks);
+        setPanel(panelUsableAce, valueMemory, usableAce,xSet,ySet);
 
      //   panelUsableAce.setColorAtCell(5,5,new Color(22,44,222));
 

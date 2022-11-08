@@ -33,6 +33,7 @@ automatiskt sätta SQUARE_SIZE  x
 Värden axel x i Gridpanel x
 Värden axel y i Gridpanel
 Titlar axlar GridPanel - kanske på extra celler
+GridPanel builder
 
 clean up GridPanel
 gridColor som enda parameter i GridPanel constructor
