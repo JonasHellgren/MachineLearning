@@ -76,18 +76,36 @@ public class GridPanel extends JPanel {
         setBackground(BACKGROUND_COLOR);
     }
 
-    private void setCellSize() {
-        cellWidth = (double) getWidth() / (nofColumns + NOF_EXTRA_COLS);
-        cellHeight = (double) getHeight() /(nofRows +NOF_EXTRA_ROWS);
+    private void setCellSize(float relativeFrameSize) {
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        float preferedFrameWidth = screenSize.width * relativeFrameSize;
+        float preferedFrameHeight = screenSize.height * relativeFrameSize;
+
+        cellWidth = (double) preferedFrameWidth / (nofColumns + NOF_EXTRA_COLS);
+        cellHeight = (double) preferedFrameHeight /(nofRows +NOF_EXTRA_ROWS);
+
+        //cellWidth = (double) getWidth() / (nofColumns + NOF_EXTRA_COLS);
+        //cellHeight = (double) getHeight() /(nofRows +NOF_EXTRA_ROWS);
+
+
     }
 
     private void defineAndSetSquareSize(int rows, int columns, float relativeFrameSize) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         float preferedFrameWidth = screenSize.width * relativeFrameSize;
-        int sqSizeWidth = Math.round(preferedFrameWidth / (float) (nofColumns + NOF_EXTRA_COLS));
         float preferedFrameHeight = screenSize.height * relativeFrameSize;
-        int sqSizeHeight = Math.round(preferedFrameHeight / (float) (nofColumns + NOF_EXTRA_ROWS));
-        int preferredSquareSize = Math.min(sqSizeWidth, sqSizeHeight);
+        //int sqSizeWidth = Math.round(preferedFrameWidth / (float) (nofColumns + NOF_EXTRA_COLS));
+        //int sqSizeHeight = Math.round(preferedFrameHeight / (float) (nofColumns + NOF_EXTRA_ROWS));
+
+        setCellSize(relativeFrameSize);
+        //int preferredSquareSize = Math.min(sqSizeWidth, sqSizeHeight);
+        int preferredSquareSize = (int) Math.min(cellWidth, cellHeight);
+
+        System.out.println("preferredSquareSize = " + preferredSquareSize);
+        System.out.println("cellWidth = " + cellWidth);
+        System.out.println("cellHeight = " + cellHeight);
+
         setPreferredSize(new Dimension(preferredSquareSize * columns,
                 preferredSquareSize * rows));
     }
@@ -141,7 +159,7 @@ public class GridPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        setCellSize();
+       // setCellSize();
         fillSquaresWithColor(g);
         fillSquaresWithText(g);
         drawHorizontalLines(g);
