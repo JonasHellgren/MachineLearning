@@ -2,6 +2,7 @@ package black_jack.result_drawer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 
 public class GridPanel extends JPanel {
@@ -13,14 +14,15 @@ public class GridPanel extends JPanel {
     private static final Color TEXT_COLOR = Color.BLUE;
     private final int nofRaws; // Number of rows of squares.
     private final int nofColumns; // Number of columns of squares.
-    List<Integer> xSet;
-    List<Integer> ySet;
+    List<Integer> xSet,ySet;
+    String xLabel, yLabel;
+
     private final Color[][] gridColor; /* gridColor[r][c] is the color for square in row r, column c;
 	                                 if it  is null, the square has the panel's background color.*/
     double cellWidth;
     double cellHeight;
 
-    public GridPanel(List<Integer> xSet, List<Integer> ySet,float relativeFrameSize) {
+    public GridPanel(List<Integer> xSet, List<Integer> ySet, String xLabel, String yLabel,float relativeFrameSize) {
 
         /*
         if (xTicks.size()!=columns) {
@@ -35,6 +37,8 @@ public class GridPanel extends JPanel {
        // gridCols = columns;
         this.xSet = xSet;
         this.ySet = ySet;
+        this.xLabel=xLabel;
+        this.yLabel=yLabel;
 
         defineAndSetSquareSize(nofRaws, nofColumns, relativeFrameSize);
         setBackground(BACKGROUND_COLOR); // Set the background color for this panel.
@@ -80,6 +84,9 @@ public class GridPanel extends JPanel {
         drawVerticalLines(g);
         textXticks(g);
         textYticks(g);
+        textXlabel(g);
+        textYlabel(g);
+
     }
 
     private void drawVerticalLines(Graphics g) {
@@ -129,6 +136,31 @@ public class GridPanel extends JPanel {
             g.setColor(TEXT_COLOR);
             g.drawString(ySet.get(row).toString(), (int) ((1)*cellWidth),y);
         }
+    }
+
+    private void textXlabel(Graphics g) {
+        g.setColor(TEXT_COLOR);
+        int y = (int) ((nofRaws+NOF_EXTRA_ROWS) * cellHeight);
+        g.drawString(xLabel, (int) ((2)*cellWidth),y);
+    }
+
+    private void textYlabel(Graphics g) {
+
+
+        g.setColor(TEXT_COLOR);
+        Graphics2D g2 = (Graphics2D) g;
+        //AffineTransform orig = g2.getTransform();
+
+        AffineTransform at = new AffineTransform();
+
+
+        for (int charIdx = 0; charIdx < yLabel.length(); charIdx++) {
+            int y = (int) ((nofRaws) * cellHeight/2+(nofRaws-charIdx) * cellHeight/2);  //i=0 => y = nofRaws*cellHeight
+            at.setToRotation(Math.toRadians(-90), (int) ((1)*cellWidth),y);
+            g2.setTransform(at);
+            g2.drawString(yLabel.substring(charIdx,charIdx+1), (int) ((1)*cellWidth),y);
+        }
+        //g2.setTransform(orig);
     }
 
 }

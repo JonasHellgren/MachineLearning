@@ -37,7 +37,8 @@ public class PolicyEvaluation {
     private static final double ALPHA = 0.01;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final float RELATIVE_FRAME_SIZE = 0.25f;
-
+    private static final String X_LABEL = "Dealer card";
+    private static final String Y_LABEL = "Player sum";
 
 
     public static void main(String[] args) {
@@ -49,12 +50,12 @@ public class PolicyEvaluation {
         System.out.println("ySet = " + ySet);
 
         JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelNoUsableAce = new GridPanel( xSet,ySet,RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
+        GridPanel panelNoUsableAce = new GridPanel( xSet,ySet, X_LABEL, Y_LABEL, RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane( panelNoUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameNoUsableAce);
 
         JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelUsableAce = new GridPanel(xSet,ySet,RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
+        GridPanel panelUsableAce = new GridPanel(xSet,ySet,X_LABEL, Y_LABEL,RELATIVE_FRAME_SIZE);  // Create an object of type Grid.
         frameUsableAce.setContentPane( panelUsableAce );  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
 
