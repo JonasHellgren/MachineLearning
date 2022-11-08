@@ -58,7 +58,6 @@ public class PolicyEvaluation {
         frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
 
-
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new HitBelow20Policy();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);

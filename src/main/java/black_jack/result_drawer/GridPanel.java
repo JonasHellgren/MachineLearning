@@ -68,21 +68,18 @@ public class GridPanel extends JPanel {
                      int nofDecimals,
                      boolean textCellValues) {
 
-        nofRows = ySet.size();
-        nofColumns = xSet.size();
-
 
         this.xSet = xSet;
         this.ySet = ySet;
         this.xLabel = xLabel;
         this.yLabel = yLabel;
-
+        this.gridNumbers = gridNumbers;
+        this.gridColor = gridColor;
         this.nofDecimals = nofDecimals;
         this.textCellValues = textCellValues;
 
-        this.gridNumbers = gridNumbers;
-        this.gridColor = gridColor;
-
+        this.nofRows = ySet.size();
+        this.nofColumns = xSet.size();
         this.cellSize = defineAndSetCellSize(relativeFrameSize);
         setPreferredSize(new Dimension(cellSize * (nofColumns + NOF_EXTRA_COLS),
                 cellSize * (nofRows + NOF_EXTRA_ROWS)));
