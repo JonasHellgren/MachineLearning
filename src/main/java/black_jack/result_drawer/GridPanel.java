@@ -3,6 +3,8 @@ package black_jack.result_drawer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 //@Builder
@@ -14,6 +16,7 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
     private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.5f;
+    private static final int DEFAULT_NOF_DECIMALS = 1;
 
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
@@ -22,6 +25,7 @@ public class GridPanel extends JPanel {
 	                                 if it  is null, the square has the panel's background color.*/
 
     private final Double[][] gridNumbers;
+    int nofDecimals;
 
     private final int nofRows; // Number of rows of squares.
     private final int nofColumns; // Number of columns of squares.
@@ -32,7 +36,7 @@ public class GridPanel extends JPanel {
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel) {
-        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()], DEFAULT_RELATIVE_FRAME_SIZE);
+        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()], DEFAULT_RELATIVE_FRAME_SIZE,DEFAULT_NOF_DECIMALS);
     }
 
     public GridPanel(List<Integer> xSet,
@@ -40,7 +44,8 @@ public class GridPanel extends JPanel {
                      String xLabel,
                      String yLabel,
                      Color[][] gridColor,
-                     float relativeFrameSize) {
+                     float relativeFrameSize,
+                     int nofDecimals) {
 
         nofRows = ySet.size();
         nofColumns = xSet.size();
@@ -51,10 +56,9 @@ public class GridPanel extends JPanel {
         this.xLabel=xLabel;
         this.yLabel=yLabel;
 
-        gridNumbers=new Double[nofRows][nofColumns];
-        gridNumbers[0][0]=1d;
-        gridNumbers[2][2]=1d;
+        this.nofDecimals=nofDecimals;
 
+        gridNumbers=new Double[nofRows][nofColumns];
         defineAndSetSquareSize(nofRows, nofColumns, relativeFrameSize);
         setBackground(BACKGROUND_COLOR);
     }
@@ -159,10 +163,12 @@ public class GridPanel extends JPanel {
         g.setColor(TEXT_COLOR);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
-                if (gridNumbers[row][col] != null) {
+                Double value=gridNumbers[row][col];
+                if (value != null) {
                     int x = getXpos(col);
                     int y = getYPos(row+1);  //lower left corner of square
-                    g.drawString(gridNumbers[row][col].toString(), x, y);
+                    BigDecimal bd=BigDecimal.valueOf(value).setScale(nofDecimals, RoundingMode.HALF_DOWN);
+                    g.drawString(bd.toString(), x, y);
                 }
             }
         }
