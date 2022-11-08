@@ -1,5 +1,7 @@
 package black_jack.result_drawer;
 
+import black_jack.models.StateObserved;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -36,13 +38,21 @@ public class GridPanel extends JPanel {
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel) {
-        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()], DEFAULT_RELATIVE_FRAME_SIZE,DEFAULT_NOF_DECIMALS);
+        this(   xSet,
+                ySet,
+                xLabel,
+                yLabel,
+                new Double[ySet.size()][xSet.size()],
+                new Color[ySet.size()][xSet.size()],
+                DEFAULT_RELATIVE_FRAME_SIZE,
+                DEFAULT_NOF_DECIMALS);
     }
 
     public GridPanel(List<Integer> xSet,
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel,
+                     Double[][] gridNumbers,
                      Color[][] gridColor,
                      float relativeFrameSize,
                      int nofDecimals) {
@@ -57,8 +67,7 @@ public class GridPanel extends JPanel {
         this.yLabel=yLabel;
 
         this.nofDecimals=nofDecimals;
-
-        gridNumbers=new Double[nofRows][nofColumns];
+        this.gridNumbers=gridNumbers;
         defineAndSetSquareSize(nofRows, nofColumns, relativeFrameSize);
         setBackground(BACKGROUND_COLOR);
     }
@@ -79,10 +88,27 @@ public class GridPanel extends JPanel {
                 preferredSquareSize * rows));
     }
 
+    public void setColorsAtCells() {
+
+        double MIN_VALUE = -1d;
+        double MAX_VALUE = 1.5d;
+
+        for (int y : ySet) {
+            for (int x : xSet) {
+                double value = gridNumbers[getRowIdx(y)][getColIdx(x)];
+                double strength = (value - MIN_VALUE) / (MAX_VALUE - MIN_VALUE); //normalization
+                int rgb = Math.min((int) (strength * 255), 255);
+                setColorAtCell(y,x, new Color(rgb, rgb, rgb));
+
+            }
+        }
+
+    }
+
     public void setColorAtCell(int row, int col, Color color) {
         int colIdx = getColIdx(col);
         int rowIdx = getRowIdx(row);
-        this.gridColor[nofRows - rowIdx - 1][colIdx] = color;
+        this.gridColor[rowIdx][colIdx] = color;
     }
 
     public void setNumbersAtCell(int row, int col, Double num) {
@@ -94,7 +120,7 @@ public class GridPanel extends JPanel {
     private int getRowIdx(int row) {
         int rowIdx= ySet.indexOf(row);
         if (rowIdx ==-1) {
-            throw new IllegalArgumentException("Non defined y value");
+            throw new IllegalArgumentException("Non defined y value, y ="+row);
         }
         return rowIdx;
     }
@@ -102,7 +128,7 @@ public class GridPanel extends JPanel {
     private int getColIdx(int col) {
         int colIdx= xSet.indexOf(col);
         if (colIdx==-1) {
-            throw new IllegalArgumentException("Non defined x value");
+            throw new IllegalArgumentException("Non defined x value, x = "+col);
         }
         return colIdx;
     }

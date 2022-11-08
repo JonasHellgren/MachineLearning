@@ -28,9 +28,9 @@ public class PolicyEvaluation {
 
     public static final int NOF_EPISODES = 1_00_000;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
-    static final int MAX_HANDS_SUM_PLAYER=21;
+    static final int MAX_HANDS_SUM_PLAYER = 21;
     private static final int MIN_DEALER_CARD = 1;
-    static final int MAX_DEALER_CARD=10;
+    static final int MAX_DEALER_CARD = 10;
     private static final double MIN_VALUE = -1d;
     private static final double MAX_VALUE = 1.5d;
 
@@ -42,30 +42,30 @@ public class PolicyEvaluation {
 
     public static void main(String[] args) {
 
-        List<Integer> xSet = IntStream.rangeClosed(MIN_DEALER_CARD,MAX_DEALER_CARD).boxed().collect(Collectors.toList());
-        List<Integer> ySet = IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER,MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
+        List<Integer> xSet = IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
+        List<Integer> ySet = IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
 
         System.out.println("xSet = " + xSet);
         System.out.println("ySet = " + ySet);
 
         JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelNoUsableAce = new GridPanel( xSet,ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
-        frameNoUsableAce.setContentPane( panelNoUsableAce );  // Add the Grid panel to the window.
+        GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
+        frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.
         fixFrame(frameNoUsableAce);
 
         JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelUsableAce = new GridPanel(xSet,ySet,X_LABEL, Y_LABEL);  // Create an object of type Grid.
-        frameUsableAce.setContentPane( panelUsableAce );  // Add the Grid panel to the window.
+        GridPanel panelUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
+        frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
 
 
-        EnvironmentInterface environment=new BlackJackEnvironment();
-        PolicyInterface policy= new HitBelow20Policy();
-        EpisodeRunner episodeRunner=new EpisodeRunner(environment,policy);
+        EnvironmentInterface environment = new BlackJackEnvironment();
+        PolicyInterface policy = new HitBelow20Policy();
+        EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
-        ValueMemory valueMemory=new ValueMemory();
-        NumberOfVisitsMemory numberOfVisitsMemory=new NumberOfVisitsMemory();
-        Learner learner=new Learner(valueMemory,numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
+        ValueMemory valueMemory = new ValueMemory();
+        NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
+        Learner learner = new Learner(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
 
             if (episodeNumber % 1_00_000 == 0) {
@@ -73,31 +73,30 @@ public class PolicyEvaluation {
             }
 
             StateCards cards = StateCards.newRandomPairs();
-            Episode episode=episodeRunner.play(cards);
+            Episode episode = episodeRunner.play(cards);
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
             learner.updateMemory(returnsForEpisode);
         }
 
-        boolean usableAce=false;
-        setPanel(panelNoUsableAce, valueMemory, usableAce,xSet,ySet);
-        usableAce=true;
-        setPanel(panelUsableAce, valueMemory, usableAce,xSet,ySet);
+        boolean usableAce = false;
+        setPanel(panelNoUsableAce, valueMemory, usableAce, xSet, ySet);
+        usableAce = true;
+        setPanel(panelUsableAce, valueMemory, usableAce, xSet, ySet);
 
         panelNoUsableAce.repaint();
         panelUsableAce.repaint();
     }
 
-    private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce,List<Integer> xTicks,List<Integer> yTicks) {
-            for (int i:yTicks) {
-            for (int j:xTicks) {
-                double value= valueMemory.read(new StateObserved(i, usableAce,j));
-                double  strength=(value-MIN_VALUE)/(MAX_VALUE-MIN_VALUE); //normalization
-                int rgb=Math.min((int) (strength*255),255);
-                panel.setColorAtCell(i,j,new Color(rgb,rgb,rgb));
-                panel.setNumbersAtCell(i,j,value);
+    private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce, List<Integer> xTicks, List<Integer> yTicks) {
+        for (int i : yTicks) {
+            for (int j : xTicks) {
+                double value = valueMemory.read(new StateObserved(i, usableAce, j));
+                panel.setNumbersAtCell(i, j, value);
             }
         }
+        panel.setColorsAtCells();
+
     }
 
     private static void fixFrame(JFrame frame) {
@@ -105,9 +104,9 @@ public class PolicyEvaluation {
         Dimension screenSize; // A simple object containing the screen's width and height.
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int top, left;  // position for top left corner of the window
-        left = ( screenSize.width - frame.getWidth() ) / 2;
-        top = ( screenSize.height - frame.getHeight() ) / 2;
-        frame.setLocation(left,top);
+        left = (screenSize.width - frame.getWidth()) / 2;
+        top = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(left, top);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
