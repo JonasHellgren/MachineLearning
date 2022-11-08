@@ -1,7 +1,5 @@
 package black_jack.result_drawer;
 
-import black_jack.models.StateObserved;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -19,9 +17,12 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
-    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.5f;
+    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.75f;
     private static final int DEFAULT_NOF_DECIMALS = 1;
     private static final int RBG_MAX = 255;
+    private static final double RELATIVE_FONT_SIZE_TEXT = 0.6;
+    private static final double RELATIVE_FONT_SIZE_NUMBERS = 0.4;
+
 
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
@@ -189,7 +190,7 @@ public class GridPanel extends JPanel {
     }
 
     private void fillSquaresWithText(Graphics g) {
-        g.setColor(TEXT_COLOR);
+        setTextPropertiesNumbers(g);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
                 Double value=gridNumbers[row][col];
@@ -213,34 +214,48 @@ public class GridPanel extends JPanel {
     }
 
     private void textXticks(Graphics g) {
+        setTextPropertiesNumbers(g);
         for (int col = 0; col < nofColumns; col++) {
             int x = getXpos(col);
-            g.setColor(TEXT_COLOR);
-            g.drawString(xSet.get(col).toString(), x,(int) ((nofRows +1)*cellHeight));
+             g.drawString(xSet.get(col).toString(), x,(int) ((nofRows +1)*cellHeight));
         }
     }
 
     private void textYticks(Graphics g) {
+        setTextPropertiesNumbers(g);
         for (int row = 0; row < nofRows; row++) {
             int y = (int) ((nofRows -row) * cellHeight);
-            g.setColor(TEXT_COLOR);
             g.drawString(ySet.get(row).toString(), (int) ((1)*cellWidth),y);
         }
     }
 
-    private void textXlabel(Graphics g) {
+    private void setTextPropertiesNumbers(Graphics g) {
         g.setColor(TEXT_COLOR);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (cellHeight* RELATIVE_FONT_SIZE_NUMBERS)));
+    }
+
+
+    private void setTextPropertiesText(Graphics g) {
+        g.setColor(TEXT_COLOR);
+        g.setFont(new Font("TimesRoman", Font.BOLD, (int) (cellHeight* RELATIVE_FONT_SIZE_TEXT)));
+    }
+
+    private void textXlabel(Graphics g) {
+        setTextPropertiesText(g);
         int y = getYPos(nofRows +NOF_EXTRA_ROWS);
         g.drawString(xLabel, (int) ((NOF_EXTRA_COLS)*cellWidth),y);
     }
 
     //https://kodejava.org/how-do-i-draw-a-vertical-text-in-java-2d/
     private void textYlabel(Graphics g) {
-        g.setColor(TEXT_COLOR);
+        setTextPropertiesText(g);
+
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform at = new AffineTransform();
         for (int charIdx = 0; charIdx < yLabel.length(); charIdx++) {
-            int y = (int) ((nofRows) * cellHeight/2+(nofRows -charIdx) * cellHeight/2);  //charIdx=0 => y = nofRaws*cellHeight
+          //  int y = (int) ((nofRows) * cellHeight/2+(nofRows -charIdx) * cellHeight/2);  //charIdx=0 => y = nofRaws*cellHeight
+
+            int y = (int) ((nofRows) * cellHeight-charIdx * cellHeight* RELATIVE_FONT_SIZE_TEXT);  //charIdx=0 => y = nofRaws*cellHeight
             at.setToRotation(Math.toRadians(-90), (int) ((1)*cellWidth),y);
             g2.setTransform(at);
             g2.drawString(yLabel.substring(charIdx,charIdx+1), (int) ((1)*cellWidth),y);
