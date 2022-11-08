@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
+//@Builder
 public class GridPanel extends JPanel {
 
     private static final Color BACKGROUND_COLOR = Color.WHITE;
@@ -12,41 +13,49 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
-    private final int nofRaws; // Number of rows of squares.
-    private final int nofColumns; // Number of columns of squares.
+    private static final float RELATIVE_FRAME_SIZE = 0.25f;
+
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
 
     private final Color[][] gridColor; /* gridColor[r][c] is the color for square in row r, column c;
 	                                 if it  is null, the square has the panel's background color.*/
+
+    private final int nofRows; // Number of rows of squares.
+    private final int nofColumns; // Number of columns of squares.
     double cellWidth;
     double cellHeight;
 
-    public GridPanel(List<Integer> xSet, List<Integer> ySet, String xLabel, String yLabel,float relativeFrameSize) {
+    public GridPanel(List<Integer> xSet,
+                     List<Integer> ySet,
+                     String xLabel,
+                     String yLabel) {
+        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()],RELATIVE_FRAME_SIZE);
+    }
 
-        /*
-        if (xTicks.size()!=columns) {
-            throw new IllegalArgumentException("Bad length of xTicks");
-        }  */
+    public GridPanel(List<Integer> xSet,
+                     List<Integer> ySet,
+                     String xLabel,
+                     String yLabel,
+                     Color[][] gridColor,
+                     float relativeFrameSize) {
 
-        nofRaws = ySet.size();
+        nofRows = ySet.size();
         nofColumns = xSet.size();
 
-        this.gridColor = new Color[nofRaws][nofColumns]; // Create the array that stores square colors.
-       // gridRows = rows;
-       // gridCols = columns;
+        this.gridColor = gridColor;
         this.xSet = xSet;
         this.ySet = ySet;
         this.xLabel=xLabel;
         this.yLabel=yLabel;
 
-        defineAndSetSquareSize(nofRaws, nofColumns, relativeFrameSize);
-        setBackground(BACKGROUND_COLOR); // Set the background color for this panel.
+        defineAndSetSquareSize(nofRows, nofColumns, relativeFrameSize);
+        setBackground(BACKGROUND_COLOR);
     }
 
     private void setCellSize() {
         cellWidth = (double) getWidth() / (nofColumns + NOF_EXTRA_COLS);
-        cellHeight = (double) getHeight() /(nofRaws +NOF_EXTRA_ROWS);
+        cellHeight = (double) getHeight() /(nofRows +NOF_EXTRA_ROWS);
     }
 
     private void defineAndSetSquareSize(int rows, int columns, float relativeFrameSize) {
@@ -61,17 +70,12 @@ public class GridPanel extends JPanel {
     }
 
     public void setColorAtCell(int row, int col, Color color) {
-
         int colIdx= xSet.indexOf(col);
         int rawIdx= ySet.indexOf(row);
         if (rawIdx==-1 || colIdx==-1) {
-            System.out.println("row = " + row);
-            System.out.println("gridRows = " + nofRaws);
-            System.out.println("col = " + col);
-            System.out.println("gridCols = " + nofColumns);
-            throw new IllegalArgumentException("Wrong raw/column number");
+            throw new IllegalArgumentException("Non defined x/y value");
         }
-        this.gridColor[nofRaws - rawIdx - 1][colIdx] = color;
+        this.gridColor[nofRows - rawIdx - 1][colIdx] = color;
     }
 
     @Override
@@ -92,13 +96,13 @@ public class GridPanel extends JPanel {
     private void drawVerticalLines(Graphics g) {
         for (int col = 0; col < nofColumns; col++) {
             int x = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
-            g.drawLine(x, 0, x, (int) (nofRaws *cellHeight));
+            g.drawLine(x, 0, x, (int) (nofRows *cellHeight));
         }
     }
 
     private void drawHorisontalLines(Graphics g) {
         g.setColor(LINE_COLOR);
-        for (int row = 1; row < nofRaws +1; row++) {
+        for (int row = 1; row < nofRows +1; row++) {
             int y = (int) (row * cellHeight);
             int xOffset=(int) (NOF_EXTRA_COLS*cellWidth);
             g.drawLine(xOffset, y, xOffset+(int) (nofColumns *cellHeight), y);
@@ -106,9 +110,7 @@ public class GridPanel extends JPanel {
     }
 
     private void fillSquaresWithColor(Graphics g) {
-        double cellWidth = (double) getWidth() / (nofColumns + NOF_EXTRA_COLS);
-        double cellHeight = (double) getHeight() /(nofRaws +NOF_EXTRA_ROWS);
-        for (int row = 0; row < nofRaws; row++) {
+        for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
                 if (gridColor[row][col] != null) {
                     int x1 = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
@@ -126,13 +128,13 @@ public class GridPanel extends JPanel {
         for (int col = 0; col < nofColumns; col++) {
             int x = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
             g.setColor(TEXT_COLOR);
-            g.drawString(xSet.get(col).toString(), x,(int) ((nofRaws +1)*cellHeight));
+            g.drawString(xSet.get(col).toString(), x,(int) ((nofRows +1)*cellHeight));
         }
     }
 
     private void textYticks(Graphics g) {
-        for (int row = 0; row < nofRaws; row++) {
-            int y = (int) ((nofRaws-row) * cellHeight);
+        for (int row = 0; row < nofRows; row++) {
+            int y = (int) ((nofRows -row) * cellHeight);
             g.setColor(TEXT_COLOR);
             g.drawString(ySet.get(row).toString(), (int) ((1)*cellWidth),y);
         }
@@ -140,27 +142,21 @@ public class GridPanel extends JPanel {
 
     private void textXlabel(Graphics g) {
         g.setColor(TEXT_COLOR);
-        int y = (int) ((nofRaws+NOF_EXTRA_ROWS) * cellHeight);
+        int y = (int) ((nofRows +NOF_EXTRA_ROWS) * cellHeight);
         g.drawString(xLabel, (int) ((2)*cellWidth),y);
     }
 
+    //https://kodejava.org/how-do-i-draw-a-vertical-text-in-java-2d/
     private void textYlabel(Graphics g) {
-
-
         g.setColor(TEXT_COLOR);
         Graphics2D g2 = (Graphics2D) g;
-        //AffineTransform orig = g2.getTransform();
-
         AffineTransform at = new AffineTransform();
-
-
         for (int charIdx = 0; charIdx < yLabel.length(); charIdx++) {
-            int y = (int) ((nofRaws) * cellHeight/2+(nofRaws-charIdx) * cellHeight/2);  //i=0 => y = nofRaws*cellHeight
+            int y = (int) ((nofRows) * cellHeight/2+(nofRows -charIdx) * cellHeight/2);  //charIdx=0 => y = nofRaws*cellHeight
             at.setToRotation(Math.toRadians(-90), (int) ((1)*cellWidth),y);
             g2.setTransform(at);
             g2.drawString(yLabel.substring(charIdx,charIdx+1), (int) ((1)*cellWidth),y);
         }
-        //g2.setTransform(orig);
     }
 
 }

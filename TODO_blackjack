@@ -32,11 +32,11 @@ NumberOfVisitsMemory räknas nof inte upp  x
 automatiskt sätta SQUARE_SIZE  x
 Värden axel x i Gridpanel x
 Värden axel y i Gridpanel  x
-Titlar axlar GridPanel - kanske på extra celler
-GridPanel builder
+Titlar axlar GridPanel - kanske på extra celler  x
+GridPanel builder - blir för bökigt x
 
 clean up GridPanel
-gridColor som enda parameter i GridPanel constructor
+gridColor som  parameter i GridPanel constructor
 kunna texta värden i celler en decimal
 GridPanel mer generisk
 
