@@ -13,7 +13,7 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
-    private static final float RELATIVE_FRAME_SIZE = 0.25f;
+    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.25f;
 
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
@@ -30,7 +30,7 @@ public class GridPanel extends JPanel {
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel) {
-        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()],RELATIVE_FRAME_SIZE);
+        this(xSet,ySet,xLabel,yLabel,new Color[ySet.size()][xSet.size()], DEFAULT_RELATIVE_FRAME_SIZE);
     }
 
     public GridPanel(List<Integer> xSet,
@@ -90,12 +90,11 @@ public class GridPanel extends JPanel {
         textYticks(g);
         textXlabel(g);
         textYlabel(g);
-
     }
 
     private void drawVerticalLines(Graphics g) {
         for (int col = 0; col < nofColumns; col++) {
-            int x = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
+            int x = getXpos(col);
             g.drawLine(x, 0, x, (int) (nofRows *cellHeight));
         }
     }
@@ -103,30 +102,43 @@ public class GridPanel extends JPanel {
     private void drawHorisontalLines(Graphics g) {
         g.setColor(LINE_COLOR);
         for (int row = 1; row < nofRows +1; row++) {
-            int y = (int) (row * cellHeight);
+            int y = getYPos(row);
             int xOffset=(int) (NOF_EXTRA_COLS*cellWidth);
             g.drawLine(xOffset, y, xOffset+(int) (nofColumns *cellHeight), y);
         }
     }
 
+
     private void fillSquaresWithColor(Graphics g) {
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
-                if (gridColor[row][col] != null) {
-                    int x1 = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
-                    int y1 = (int) ((row) * cellHeight);
-                    int x2 = (int) ((NOF_EXTRA_COLS +col + 1) * cellWidth);
-                    int y2 = (int) ((row + 1) * cellHeight);
-                    g.setColor(gridColor[row][col]);
-                    g.fillRect(x1, y1, (x2 - x1), (y2 - y1));
-                }
+                fillSquareWithColor(g, row, col);
             }
         }
     }
 
+    private void fillSquareWithColor(Graphics g, int row, int col) {
+        if (gridColor[row][col] != null) {
+            int x1 = getXpos(col);
+            int y1 = getYPos(row);
+            int x2 = getXpos(col +1);
+            int y2 = getYPos(row +1);
+            g.setColor(gridColor[row][col]);
+            g.fillRect(x1, y1, (x2 - x1), (y2 - y1));
+        }
+    }
+
+    private int getXpos(int col) {
+        return (int) ((NOF_EXTRA_COLS +col) * cellWidth);
+    }
+
+    private int getYPos(int row) {
+        return (int) (row * cellHeight);
+    }
+
     private void textXticks(Graphics g) {
         for (int col = 0; col < nofColumns; col++) {
-            int x = (int) ((NOF_EXTRA_COLS +col) * cellWidth);
+            int x = getXpos(col);
             g.setColor(TEXT_COLOR);
             g.drawString(xSet.get(col).toString(), x,(int) ((nofRows +1)*cellHeight));
         }
@@ -142,8 +154,8 @@ public class GridPanel extends JPanel {
 
     private void textXlabel(Graphics g) {
         g.setColor(TEXT_COLOR);
-        int y = (int) ((nofRows +NOF_EXTRA_ROWS) * cellHeight);
-        g.drawString(xLabel, (int) ((2)*cellWidth),y);
+        int y = getYPos(nofRows +NOF_EXTRA_ROWS);
+        g.drawString(xLabel, (int) ((NOF_EXTRA_COLS)*cellWidth),y);
     }
 
     //https://kodejava.org/how-do-i-draw-a-vertical-text-in-java-2d/
