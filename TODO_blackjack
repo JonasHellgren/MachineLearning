@@ -35,9 +35,11 @@ Värden axel y i Gridpanel  x
 Titlar axlar GridPanel - kanske på extra celler  x
 GridPanel builder - blir för bökigt x
 
-clean up GridPanel
-gridColor som  parameter i GridPanel constructor
-kunna texta värden i celler en decimal
+clean up GridPanel x
+gridColor som  parameter i GridPanel constructor x
+kunna texta värden i celler
+ en decimal
+font size
 GridPanel mer generisk
 
 clean up PolicyEvaluation

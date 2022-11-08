@@ -84,21 +84,18 @@ public class PolicyEvaluation {
         usableAce=true;
         setPanel(panelUsableAce, valueMemory, usableAce,xSet,ySet);
 
-     //   panelUsableAce.setColorAtCell(5,5,new Color(22,44,222));
-
         panelNoUsableAce.repaint();
         panelUsableAce.repaint();
     }
 
     private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce,List<Integer> xTicks,List<Integer> yTicks) {
-        //for (int i = LOWER_HANDS_SUM_PLAYER; i < MAX_HANDS_SUM_PLAYER; i++) {
             for (int i:yTicks) {
             for (int j:xTicks) {
                 double value= valueMemory.read(new StateObserved(i, usableAce,j));
                 double  strength=(value-MIN_VALUE)/(MAX_VALUE-MIN_VALUE); //normalization
                 int rgb=Math.min((int) (strength*255),255);
-              //  System.out.println("i = " + i+",j  = " + j+", strength = " + strength+", value = " + value+", rgb = " + rgb);
                 panel.setColorAtCell(i,j,new Color(rgb,rgb,rgb));
+                panel.setNumbersAtCell(i,j,value);
             }
         }
     }

@@ -13,13 +13,15 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
-    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.25f;
+    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.5f;
 
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
 
     private final Color[][] gridColor; /* gridColor[r][c] is the color for square in row r, column c;
 	                                 if it  is null, the square has the panel's background color.*/
+
+    private final Double[][] gridNumbers;
 
     private final int nofRows; // Number of rows of squares.
     private final int nofColumns; // Number of columns of squares.
@@ -49,6 +51,10 @@ public class GridPanel extends JPanel {
         this.xLabel=xLabel;
         this.yLabel=yLabel;
 
+        gridNumbers=new Double[nofRows][nofColumns];
+        gridNumbers[0][0]=1d;
+        gridNumbers[2][2]=1d;
+
         defineAndSetSquareSize(nofRows, nofColumns, relativeFrameSize);
         setBackground(BACKGROUND_COLOR);
     }
@@ -70,12 +76,31 @@ public class GridPanel extends JPanel {
     }
 
     public void setColorAtCell(int row, int col, Color color) {
-        int colIdx= xSet.indexOf(col);
-        int rawIdx= ySet.indexOf(row);
-        if (rawIdx==-1 || colIdx==-1) {
-            throw new IllegalArgumentException("Non defined x/y value");
+        int colIdx = getColIdx(col);
+        int rowIdx = getRowIdx(row);
+        this.gridColor[nofRows - rowIdx - 1][colIdx] = color;
+    }
+
+    public void setNumbersAtCell(int row, int col, Double num) {
+        int colIdx = getColIdx(col);
+        int rowIdx = getRowIdx(row);
+        this.gridNumbers[nofRows - rowIdx - 1][colIdx] = num;
+    }
+
+    private int getRowIdx(int row) {
+        int rowIdx= ySet.indexOf(row);
+        if (rowIdx ==-1) {
+            throw new IllegalArgumentException("Non defined y value");
         }
-        this.gridColor[nofRows - rawIdx - 1][colIdx] = color;
+        return rowIdx;
+    }
+
+    private int getColIdx(int col) {
+        int colIdx= xSet.indexOf(col);
+        if (colIdx==-1) {
+            throw new IllegalArgumentException("Non defined x value");
+        }
+        return colIdx;
     }
 
     @Override
@@ -84,7 +109,8 @@ public class GridPanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         setCellSize();
         fillSquaresWithColor(g);
-        drawHorisontalLines(g);
+        fillSquaresWithText(g);
+        drawHorizontalLines(g);
         drawVerticalLines(g);
         textXticks(g);
         textYticks(g);
@@ -99,7 +125,7 @@ public class GridPanel extends JPanel {
         }
     }
 
-    private void drawHorisontalLines(Graphics g) {
+    private void drawHorizontalLines(Graphics g) {
         g.setColor(LINE_COLOR);
         for (int row = 1; row < nofRows +1; row++) {
             int y = getYPos(row);
@@ -110,6 +136,7 @@ public class GridPanel extends JPanel {
 
 
     private void fillSquaresWithColor(Graphics g) {
+        g.setColor(TEXT_COLOR);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
                 fillSquareWithColor(g, row, col);
@@ -127,6 +154,20 @@ public class GridPanel extends JPanel {
             g.fillRect(x1, y1, (x2 - x1), (y2 - y1));
         }
     }
+
+    private void fillSquaresWithText(Graphics g) {
+        g.setColor(TEXT_COLOR);
+        for (int row = 0; row < nofRows; row++) {
+            for (int col = 0; col < nofColumns; col++) {
+                if (gridNumbers[row][col] != null) {
+                    int x = getXpos(col);
+                    int y = getYPos(row+1);  //lower left corner of square
+                    g.drawString(gridNumbers[row][col].toString(), x, y);
+                }
+            }
+        }
+    }
+
 
     private int getXpos(int col) {
         return (int) ((NOF_EXTRA_COLS +col) * cellWidth);
