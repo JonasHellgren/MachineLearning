@@ -8,12 +8,10 @@ import black_jack.models.*;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import org.bytedeco.librealsense.frame;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -41,32 +39,43 @@ public class PolicyEvaluation {
 
 
     public static void main(String[] args) {
+        ValueMemory valueMemory = new ValueMemory();
+        playBlackJackManyTimesAndSetValueMemory(valueMemory);
 
-        List<Integer> xSet = IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
+        GridPanel panelNoUsableAce = createNoUsableAceFrameAndPanel();
+        GridPanel panelUsableAce = createUsableAceFrameAndPanel();
+        showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
+    }
+
+    @NotNull
+    private static List<Integer> getYset() {
         List<Integer> ySet = IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
+        return ySet;
+    }
 
-        System.out.println("xSet = " + xSet);
-        System.out.println("ySet = " + ySet);
+    @NotNull
+    private static List<Integer> getXset() {
+        return IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
+    }
 
-        JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
-        frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.
-        fixFrame(frameNoUsableAce);
+    private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, ValueMemory valueMemory) {
+        boolean usableAce = false;
+        setPanel(panelNoUsableAce, valueMemory, usableAce);
+        usableAce = true;
+        setPanel(panelUsableAce, valueMemory, usableAce);
 
-        JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
-        GridPanel panelUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
-        frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
-        fixFrame(frameUsableAce);
+        panelNoUsableAce.repaint();
+        panelUsableAce.repaint();
+    }
 
+    private static void playBlackJackManyTimesAndSetValueMemory(ValueMemory valueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new HitBelow20Policy();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
-        ValueMemory valueMemory = new ValueMemory();
         NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
         Learner learner = new Learner(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
-
             if (episodeNumber % 1_00_000 == 0) {
                 System.out.println("i = " + episodeNumber);
             }
@@ -77,19 +86,35 @@ public class PolicyEvaluation {
             returnsForEpisode.appendReturns(episode);
             learner.updateMemory(returnsForEpisode);
         }
-
-        boolean usableAce = false;
-        setPanel(panelNoUsableAce, valueMemory, usableAce, xSet, ySet);
-        usableAce = true;
-        setPanel(panelUsableAce, valueMemory, usableAce, xSet, ySet);
-
-        panelNoUsableAce.repaint();
-        panelUsableAce.repaint();
     }
 
-    private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce, List<Integer> xTicks, List<Integer> yTicks) {
-        for (int y : yTicks) {
-            for (int x : xTicks) {
+    @NotNull
+    private static GridPanel createUsableAceFrameAndPanel() {
+        List<Integer> xSet = getXset();
+        List<Integer> ySet = getYset();
+        JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
+        GridPanel panelUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
+        frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
+        fixFrame(frameUsableAce);
+        return panelUsableAce;
+    }
+
+    @NotNull
+    private static GridPanel createNoUsableAceFrameAndPanel() {
+        List<Integer> xSet = getXset();
+        List<Integer> ySet = getYset();
+        JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
+        GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
+        frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.
+        fixFrame(frameNoUsableAce);
+        return panelNoUsableAce;
+    }
+
+    private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce) {
+        List<Integer> xSet = getXset();
+        List<Integer> ySet = getYset();
+        for (int y : ySet) {
+            for (int x : xSet) {
                 double value = valueMemory.read(new StateObserved(y, usableAce, x));
                 panel.setNumbersAtCell(x,y, value);
             }

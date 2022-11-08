@@ -68,7 +68,6 @@ public class GridPanel extends JPanel {
                      int nofDecimals,
                      boolean textCellValues) {
 
-
         this.xSet = xSet;
         this.ySet = ySet;
         this.xLabel = xLabel;
