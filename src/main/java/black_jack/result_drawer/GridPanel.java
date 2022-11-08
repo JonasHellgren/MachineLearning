@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //@Builder
 public class GridPanel extends JPanel {
@@ -19,6 +21,7 @@ public class GridPanel extends JPanel {
     private static final Color TEXT_COLOR = Color.BLUE;
     private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.5f;
     private static final int DEFAULT_NOF_DECIMALS = 1;
+    private static final int RBG_MAX = 255;
 
     List<Integer> xSet,ySet;
     String xLabel, yLabel;
@@ -89,20 +92,20 @@ public class GridPanel extends JPanel {
     }
 
     public void setColorsAtCells() {
-
-        double MIN_VALUE = -1d;
-        double MAX_VALUE = 1.5d;
+        double MIN_VALUE_BACKUP = -1d;
+        double MAX_VALUE_BACKUP = 1d;
+        List<Double> doubleList = Arrays.stream(gridNumbers).flatMap(Arrays::stream).collect(Collectors.toList());
+        double minValue=doubleList.stream().mapToDouble(Double::doubleValue).min().orElse(MIN_VALUE_BACKUP);
+        double maxValue=doubleList.stream().mapToDouble(Double::doubleValue).max().orElse(MAX_VALUE_BACKUP);
 
         for (int y : ySet) {
             for (int x : xSet) {
                 double value = gridNumbers[getRowIdx(y)][getColIdx(x)];
-                double strength = (value - MIN_VALUE) / (MAX_VALUE - MIN_VALUE); //normalization
-                int rgb = Math.min((int) (strength * 255), 255);
+                double strength = (value - minValue) / (maxValue - minValue); //normalization
+                int rgb = Math.min((int) (strength * RBG_MAX), RBG_MAX);
                 setColorAtCell(y,x, new Color(rgb, rgb, rgb));
-
             }
         }
-
     }
 
     public void setColorAtCell(int row, int col, Color color) {

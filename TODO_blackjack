@@ -39,7 +39,7 @@ clean up GridPanel x
 gridColor som  parameter i GridPanel constructor x
 kunna texta värden i celler x
  en decimal x
- logic sätta gridColor i GridPanel
+ logic sätta gridColor i GridPanel x
 font size
 GridPanel mer generisk
 
