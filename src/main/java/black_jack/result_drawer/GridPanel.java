@@ -1,5 +1,7 @@
 package black_jack.result_drawer;
 
+import lombok.Setter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -9,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Builder
+@Setter
 public class GridPanel extends JPanel {
 
     private static final Color BACKGROUND_COLOR = Color.WHITE;
@@ -17,39 +19,43 @@ public class GridPanel extends JPanel {
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
     private static final Color TEXT_COLOR = Color.BLUE;
-    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.75f;
-    private static final int DEFAULT_NOF_DECIMALS = 1;
     private static final int RBG_MAX = 255;
     private static final double RELATIVE_FONT_SIZE_TEXT = 0.6;
     private static final double RELATIVE_FONT_SIZE_NUMBERS = 0.4;
 
+    private static final float DEFAULT_RELATIVE_FRAME_SIZE = 0.5f;
+    private static final int DEFAULT_NOF_DECIMALS = 1;
+    private static final boolean DEFAULT_SHOW_TEXT_FLAG = true;
+    private static final double TEXT_WH_RATIO = 0.6;
 
-    List<Integer> xSet,ySet;
+
+    List<Integer> xSet, ySet;
     String xLabel, yLabel;
 
-    private final Color[][] gridColor; /* gridColor[r][c] is the color for square in row r, column c;
-	                                 if it  is null, the square has the panel's background color.*/
+    private final Color[][] gridColor; /* gridColor[r][c] is the color for cell in row r, column c;
+	                                   if it  is null, the Cell has the panel's background color.*/
 
     private final Double[][] gridNumbers;
-    int nofDecimals;
+    private final int nofDecimals;
+    private boolean textCellValues;
 
-    private final int nofRows; // Number of rows of squares.
-    private final int nofColumns; // Number of columns of squares.
-    double cellWidth;
-    double cellHeight;
+    private final int nofRows; // Number of rows of cells.
+    private final int nofColumns; // Number of columns of cells.
+    int cellSize;
 
     public GridPanel(List<Integer> xSet,
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel) {
-        this(   xSet,
+        this(xSet,
                 ySet,
                 xLabel,
                 yLabel,
                 new Double[ySet.size()][xSet.size()],
                 new Color[ySet.size()][xSet.size()],
                 DEFAULT_RELATIVE_FRAME_SIZE,
-                DEFAULT_NOF_DECIMALS);
+                DEFAULT_NOF_DECIMALS,
+                DEFAULT_SHOW_TEXT_FLAG);
     }
 
     public GridPanel(List<Integer> xSet,
@@ -59,98 +65,81 @@ public class GridPanel extends JPanel {
                      Double[][] gridNumbers,
                      Color[][] gridColor,
                      float relativeFrameSize,
-                     int nofDecimals) {
+                     int nofDecimals,
+                     boolean textCellValues) {
 
         nofRows = ySet.size();
         nofColumns = xSet.size();
 
-        this.gridColor = gridColor;
+
         this.xSet = xSet;
         this.ySet = ySet;
-        this.xLabel=xLabel;
-        this.yLabel=yLabel;
+        this.xLabel = xLabel;
+        this.yLabel = yLabel;
 
-        this.nofDecimals=nofDecimals;
-        this.gridNumbers=gridNumbers;
-        defineAndSetSquareSize(nofRows, nofColumns, relativeFrameSize);
+        this.nofDecimals = nofDecimals;
+        this.textCellValues = textCellValues;
+
+        this.gridNumbers = gridNumbers;
+        this.gridColor = gridColor;
+
+        this.cellSize = defineAndSetCellSize(relativeFrameSize);
+        setPreferredSize(new Dimension(cellSize * (nofColumns + NOF_EXTRA_COLS),
+                cellSize * (nofRows + NOF_EXTRA_ROWS)));
         setBackground(BACKGROUND_COLOR);
     }
 
-    private void setCellSize(float relativeFrameSize) {
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        float preferedFrameWidth = screenSize.width * relativeFrameSize;
-        float preferedFrameHeight = screenSize.height * relativeFrameSize;
-
-        cellWidth = (double) preferedFrameWidth / (nofColumns + NOF_EXTRA_COLS);
-        cellHeight = (double) preferedFrameHeight /(nofRows +NOF_EXTRA_ROWS);
-
-        //cellWidth = (double) getWidth() / (nofColumns + NOF_EXTRA_COLS);
-        //cellHeight = (double) getHeight() /(nofRows +NOF_EXTRA_ROWS);
-
-
-    }
-
-    private void defineAndSetSquareSize(int rows, int columns, float relativeFrameSize) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        float preferedFrameWidth = screenSize.width * relativeFrameSize;
-        float preferedFrameHeight = screenSize.height * relativeFrameSize;
-        //int sqSizeWidth = Math.round(preferedFrameWidth / (float) (nofColumns + NOF_EXTRA_COLS));
-        //int sqSizeHeight = Math.round(preferedFrameHeight / (float) (nofColumns + NOF_EXTRA_ROWS));
-
-        setCellSize(relativeFrameSize);
-        //int preferredSquareSize = Math.min(sqSizeWidth, sqSizeHeight);
-        int preferredSquareSize = (int) Math.min(cellWidth, cellHeight);
-
-        System.out.println("preferredSquareSize = " + preferredSquareSize);
-        System.out.println("cellWidth = " + cellWidth);
-        System.out.println("cellHeight = " + cellHeight);
-
-        setPreferredSize(new Dimension(preferredSquareSize * columns,
-                preferredSquareSize * rows));
-    }
 
     public void setColorsAtCells() {
         double MIN_VALUE_BACKUP = -1d;
         double MAX_VALUE_BACKUP = 1d;
         List<Double> doubleList = Arrays.stream(gridNumbers).flatMap(Arrays::stream).collect(Collectors.toList());
-        double minValue=doubleList.stream().mapToDouble(Double::doubleValue).min().orElse(MIN_VALUE_BACKUP);
-        double maxValue=doubleList.stream().mapToDouble(Double::doubleValue).max().orElse(MAX_VALUE_BACKUP);
+        double minValue = doubleList.stream().mapToDouble(Double::doubleValue).min().orElse(MIN_VALUE_BACKUP);
+        double maxValue = doubleList.stream().mapToDouble(Double::doubleValue).max().orElse(MAX_VALUE_BACKUP);
 
         for (int y : ySet) {
             for (int x : xSet) {
                 double value = gridNumbers[getRowIdx(y)][getColIdx(x)];
                 double strength = (value - minValue) / (maxValue - minValue); //normalization
                 int rgb = Math.min((int) (strength * RBG_MAX), RBG_MAX);
-                setColorAtCell(y,x, new Color(rgb, rgb, rgb));
+                setColorAtCell(x, y, new Color(rgb, rgb, rgb));
             }
         }
     }
 
-    public void setColorAtCell(int row, int col, Color color) {
-        int colIdx = getColIdx(col);
-        int rowIdx = getRowIdx(row);
+    public void setColorAtCell(int x, int y, Color color) {
+        int colIdx = getColIdx(x);
+        int rowIdx = getRowIdx(y);
         this.gridColor[rowIdx][colIdx] = color;
     }
 
-    public void setNumbersAtCell(int row, int col, Double num) {
-        int colIdx = getColIdx(col);
-        int rowIdx = getRowIdx(row);
+    public void setNumbersAtCell(int x, int y, Double num) {
+        int colIdx = getColIdx(x);
+        int rowIdx = getRowIdx(y);
         this.gridNumbers[nofRows - rowIdx - 1][colIdx] = num;
     }
 
-    private int getRowIdx(int row) {
-        int rowIdx= ySet.indexOf(row);
-        if (rowIdx ==-1) {
-            throw new IllegalArgumentException("Non defined y value, y ="+row);
+    private int defineAndSetCellSize(float relativeFrameSize) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        float preferedFrameWidth = screenSize.width * relativeFrameSize;
+        float preferedFrameHeight = screenSize.height * relativeFrameSize;
+        int sqSizeWidth = Math.round(preferedFrameWidth / (float) (nofColumns + NOF_EXTRA_COLS));
+        int sqSizeHeight = Math.round(preferedFrameHeight / (float) (nofRows + NOF_EXTRA_ROWS));
+        return Math.min(sqSizeWidth, sqSizeHeight);
+    }
+
+    private int getRowIdx(int y) {
+        int rowIdx = ySet.indexOf(y);
+        if (rowIdx == -1) {
+            throw new IllegalArgumentException("Non defined y value, y =" + y);
         }
         return rowIdx;
     }
 
-    private int getColIdx(int col) {
-        int colIdx= xSet.indexOf(col);
-        if (colIdx==-1) {
-            throw new IllegalArgumentException("Non defined x value, x = "+col);
+    private int getColIdx(int x) {
+        int colIdx = xSet.indexOf(x);
+        if (colIdx == -1) {
+            throw new IllegalArgumentException("Non defined x value, x = " + x);
         }
         return colIdx;
     }
@@ -159,9 +148,10 @@ public class GridPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-       // setCellSize();
-        fillSquaresWithColor(g);
-        fillSquaresWithText(g);
+        fillCellsWithColor(g);
+        if (textCellValues) {
+            fillCellsWithText(g);
+        }
         drawHorizontalLines(g);
         drawVerticalLines(g);
         textXticks(g);
@@ -173,49 +163,49 @@ public class GridPanel extends JPanel {
     private void drawVerticalLines(Graphics g) {
         for (int col = 0; col < nofColumns; col++) {
             int x = getXpos(col);
-            g.drawLine(x, 0, x, (int) (nofRows *cellHeight));
+            g.drawLine(x, 0, x, (nofRows * cellSize));
         }
     }
 
     private void drawHorizontalLines(Graphics g) {
         g.setColor(LINE_COLOR);
-        for (int row = 1; row < nofRows +1; row++) {
+        for (int row = 1; row < nofRows + 1; row++) {
             int y = getYPos(row);
-            int xOffset=(int) (NOF_EXTRA_COLS*cellWidth);
-            g.drawLine(xOffset, y, xOffset+(int) (nofColumns *cellHeight), y);
+            int xOffset =  NOF_EXTRA_COLS * cellSize;
+            g.drawLine(xOffset, y, xOffset + (nofColumns * cellSize), y);
         }
     }
 
 
-    private void fillSquaresWithColor(Graphics g) {
+    private void fillCellsWithColor(Graphics g) {
         g.setColor(TEXT_COLOR);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
-                fillSquareWithColor(g, row, col);
+                fillCellWithColor(g, row, col);
             }
         }
     }
 
-    private void fillSquareWithColor(Graphics g, int row, int col) {
+    private void fillCellWithColor(Graphics g, int row, int col) {
         if (gridColor[row][col] != null) {
             int x1 = getXpos(col);
             int y1 = getYPos(row);
-            int x2 = getXpos(col +1);
-            int y2 = getYPos(row +1);
+            int x2 = getXpos(col + 1);
+            int y2 = getYPos(row + 1);
             g.setColor(gridColor[row][col]);
             g.fillRect(x1, y1, (x2 - x1), (y2 - y1));
         }
     }
 
-    private void fillSquaresWithText(Graphics g) {
+    private void fillCellsWithText(Graphics g) {
         setTextPropertiesNumbers(g);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
-                Double value=gridNumbers[row][col];
+                Double value = gridNumbers[row][col];
                 if (value != null) {
                     int x = getXpos(col);
-                    int y = getYPos(row+1);  //lower left corner of square
-                    BigDecimal bd=BigDecimal.valueOf(value).setScale(nofDecimals, RoundingMode.HALF_DOWN);
+                    int y = getYPos(row + 1);  //lower left corner of Cell
+                    BigDecimal bd = BigDecimal.valueOf(value).setScale(nofDecimals, RoundingMode.HALF_DOWN);
                     g.drawString(bd.toString(), x, y);
                 }
             }
@@ -224,44 +214,44 @@ public class GridPanel extends JPanel {
 
 
     private int getXpos(int col) {
-        return (int) ((NOF_EXTRA_COLS +col) * cellWidth);
+        return (NOF_EXTRA_COLS + col) * cellSize;
     }
 
     private int getYPos(int row) {
-        return (int) (row * cellHeight);
+        return (row * cellSize);
     }
 
     private void textXticks(Graphics g) {
         setTextPropertiesNumbers(g);
         for (int col = 0; col < nofColumns; col++) {
             int x = getXpos(col);
-             g.drawString(xSet.get(col).toString(), x,(int) ((nofRows +1)*cellHeight));
+            g.drawString(xSet.get(col).toString(), x,  (nofRows + 1) * cellSize);
         }
     }
 
     private void textYticks(Graphics g) {
         setTextPropertiesNumbers(g);
         for (int row = 0; row < nofRows; row++) {
-            int y = (int) ((nofRows -row) * cellHeight);
-            g.drawString(ySet.get(row).toString(), (int) ((1)*cellWidth),y);
+            int y =  (nofRows - row) * cellSize;
+            g.drawString(ySet.get(row).toString(),  cellSize, y);
         }
     }
 
     private void setTextPropertiesNumbers(Graphics g) {
         g.setColor(TEXT_COLOR);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (cellHeight* RELATIVE_FONT_SIZE_NUMBERS)));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (cellSize * RELATIVE_FONT_SIZE_NUMBERS)));
     }
 
 
     private void setTextPropertiesText(Graphics g) {
         g.setColor(TEXT_COLOR);
-        g.setFont(new Font("TimesRoman", Font.BOLD, (int) (cellHeight* RELATIVE_FONT_SIZE_TEXT)));
+        g.setFont(new Font("TimesRoman", Font.BOLD, (int) (cellSize * RELATIVE_FONT_SIZE_TEXT)));
     }
 
     private void textXlabel(Graphics g) {
         setTextPropertiesText(g);
-        int y = getYPos(nofRows +NOF_EXTRA_ROWS);
-        g.drawString(xLabel, (int) ((NOF_EXTRA_COLS)*cellWidth),y);
+        int y = getYPos(nofRows + NOF_EXTRA_ROWS);
+        g.drawString(xLabel, (NOF_EXTRA_COLS) * cellSize, y);
     }
 
     //https://kodejava.org/how-do-i-draw-a-vertical-text-in-java-2d/
@@ -271,12 +261,11 @@ public class GridPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform at = new AffineTransform();
         for (int charIdx = 0; charIdx < yLabel.length(); charIdx++) {
-          //  int y = (int) ((nofRows) * cellHeight/2+(nofRows -charIdx) * cellHeight/2);  //charIdx=0 => y = nofRaws*cellHeight
-
-            int y = (int) ((nofRows) * cellHeight-charIdx * cellHeight* RELATIVE_FONT_SIZE_TEXT);  //charIdx=0 => y = nofRaws*cellHeight
-            at.setToRotation(Math.toRadians(-90), (int) ((1)*cellWidth),y);
+            int y = (int) ((nofRows) * cellSize -
+                    charIdx * cellSize * RELATIVE_FONT_SIZE_TEXT* TEXT_WH_RATIO);  //charIdx=0 => y = nofRaws*cellHeight
+            at.setToRotation(Math.toRadians(-90), (cellSize), y);
             g2.setTransform(at);
-            g2.drawString(yLabel.substring(charIdx,charIdx+1), (int) ((1)*cellWidth),y);
+            g2.drawString(yLabel.substring(charIdx, charIdx + 1), (cellSize), y);
         }
     }
 

@@ -89,14 +89,14 @@ public class PolicyEvaluation {
     }
 
     private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce, List<Integer> xTicks, List<Integer> yTicks) {
-        for (int i : yTicks) {
-            for (int j : xTicks) {
-                double value = valueMemory.read(new StateObserved(i, usableAce, j));
-                panel.setNumbersAtCell(i, j, value);
+        for (int y : yTicks) {
+            for (int x : xTicks) {
+                double value = valueMemory.read(new StateObserved(y, usableAce, x));
+                panel.setNumbersAtCell(x,y, value);
             }
         }
         panel.setColorsAtCells();
-
+        panel.setTextCellValues(false);
     }
 
     private static void fixFrame(JFrame frame) {
