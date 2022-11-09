@@ -17,22 +17,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /***
- *      Candidate parameter setting:
+ *     Candidate parameter setting:
  *     private static final double ALPHA = 0.9;  //critical parameter setting
  *     private static final boolean NOF_VISITS_FLAG = true;  //critical parameter setting
  */
 
 public class PolicyEvaluation {
 
-    public static final int NOF_EPISODES = 1_00_000;
+    public static final int NOF_EPISODES = 500_000;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
     static final int MAX_HANDS_SUM_PLAYER = 21;
     private static final int MIN_DEALER_CARD = 1;
     static final int MAX_DEALER_CARD = 10;
-    private static final double MIN_VALUE = -1d;
-    private static final double MAX_VALUE = 1.5d;
 
-    private static final double ALPHA = 0.01;  //critical parameter setting
+    private static final double ALPHA = 0.001;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";
     private static final String Y_LABEL = "Player sum";
@@ -49,8 +47,7 @@ public class PolicyEvaluation {
 
     @NotNull
     private static List<Integer> getYset() {
-        List<Integer> ySet = IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
-        return ySet;
+        return IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
     }
 
     @NotNull
@@ -59,11 +56,8 @@ public class PolicyEvaluation {
     }
 
     private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, ValueMemory valueMemory) {
-        boolean usableAce = false;
-        setPanel(panelNoUsableAce, valueMemory, usableAce);
-        usableAce = true;
-        setPanel(panelUsableAce, valueMemory, usableAce);
-
+        setPanel(panelNoUsableAce, valueMemory, false);
+        setPanel(panelUsableAce, valueMemory, true);
         panelNoUsableAce.repaint();
         panelUsableAce.repaint();
     }

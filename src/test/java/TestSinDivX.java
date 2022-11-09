@@ -28,8 +28,6 @@ import java.util.Random;
 
 public class TestSinDivX {
 
-
-
     //Random number generator seed, for reproducability
     public static final int seed = 12345;
     //Number of epochs (full passes of the data)
