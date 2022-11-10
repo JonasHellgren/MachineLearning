@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -24,7 +27,7 @@ import java.util.stream.IntStream;
 
 public class PolicyEvaluation {
 
-    public static final int NOF_EPISODES = 500_000;
+    public static final int NOF_EPISODES = 200_000;
     private static final int LOWER_HANDS_SUM_PLAYER = 10;
     static final int MAX_HANDS_SUM_PLAYER = 21;
     private static final int MIN_DEALER_CARD = 1;
@@ -34,14 +37,17 @@ public class PolicyEvaluation {
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";
     private static final String Y_LABEL = "Player sum";
+    private static final int NOF_DECIMALS_FRAME_TITLE = 2;
 
 
     public static void main(String[] args) {
         ValueMemory valueMemory = new ValueMemory();
         playBlackJackManyTimesAndSetValueMemory(valueMemory);
 
-        GridPanel panelNoUsableAce = createNoUsableAceFrameAndPanel();
-        GridPanel panelUsableAce = createUsableAceFrameAndPanel();
+        String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(valueMemory,false);
+        String frameTitleUsableAce= "Usable ace, average value = "+getAverageValue(valueMemory,true);
+        GridPanel panelNoUsableAce = createNoUsableAceFrameAndPanel(frameTitleNoUsableAce);
+        GridPanel panelUsableAce = createUsableAceFrameAndPanel(frameTitleUsableAce);
         showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
     }
 
@@ -83,10 +89,10 @@ public class PolicyEvaluation {
     }
 
     @NotNull
-    private static GridPanel createUsableAceFrameAndPanel() {
+    private static GridPanel createUsableAceFrameAndPanel(String frameTitle) {
         List<Integer> xSet = getXset();
         List<Integer> ySet = getYset();
-        JFrame frameUsableAce = new JFrame("Usable ace");  // Create a window with "Grid" in the title bar.
+        JFrame frameUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
         frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
         fixFrame(frameUsableAce);
@@ -94,10 +100,10 @@ public class PolicyEvaluation {
     }
 
     @NotNull
-    private static GridPanel createNoUsableAceFrameAndPanel() {
+    private static GridPanel createNoUsableAceFrameAndPanel(String frameTitle) {
         List<Integer> xSet = getXset();
         List<Integer> ySet = getYset();
-        JFrame frameNoUsableAce = new JFrame("No usable ace");  // Create a window with "Grid" in the title bar.
+        JFrame frameNoUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.
         fixFrame(frameNoUsableAce);
@@ -114,8 +120,28 @@ public class PolicyEvaluation {
             }
         }
         panel.setColorsAtCells();
-        panel.setTextCellValues(false);
+        panel.setTextCellValues(true);
     }
+
+    private static String getAverageValue(ValueMemory valueMemory, boolean usableAce) {
+        List<Double> valueList=new ArrayList<>();
+        List<Integer> xSet = getXset();
+        List<Integer> ySet = getYset();
+        for (int y : ySet) {
+            for (int x : xSet) {
+                double value = valueMemory.read(new StateObserved(y, usableAce, x));
+                valueList.add(value);
+            }
+        }
+        double avg= valueList.stream()
+                .mapToDouble(v -> v)
+                .average()
+                .orElse(Double.NaN);
+
+        BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
+        return bd.toString();
+    }
+
 
     private static void fixFrame(JFrame frame) {
         frame.pack(); // Set the size of the window based on the panel's preferred size.

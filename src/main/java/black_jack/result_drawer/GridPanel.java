@@ -145,6 +145,7 @@ public class GridPanel extends JPanel {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         fillCellsWithColor(g);
+
         if (textCellValues) {
             fillCellsWithText(g);
         }
