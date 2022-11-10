@@ -1,0 +1,17 @@
+@startuml
+class black_jack.models_returns.ReturnItem {
++ StateObserved state
++ Double returnValue
+}
+class black_jack.models_returns.ReturnsForEpisode {
++ {static} double DISCOUNT_FACTOR_DEFAULT
+- double discountFactor
+~ List<ReturnItem> returns
++ int nofItems()
++ void clear()
++ void add(StateObserved,Double)
++ ReturnItem getItem(Integer)
++ void appendReturns(Episode)
++ String toString()
+}
+@enduml

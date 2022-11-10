@@ -1,4 +1,4 @@
-package black_jack.models;
+package black_jack.models_cards;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,5 +1,6 @@
-package black_jack.models;
+package black_jack.models_cards;
 
+import black_jack.environment.StepReturnBJ;
 import black_jack.helper.CardsInfo;
 import lombok.Getter;
 import lombok.Setter;

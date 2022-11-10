@@ -1,9 +1,9 @@
 package black_jack.helper;
 
-import black_jack.models.NumberOfVisitsMemory;
-import black_jack.models.ReturnItem;
-import black_jack.models.ReturnsForEpisode;
-import black_jack.models.ValueMemory;
+import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_returns.ReturnItem;
+import black_jack.models_returns.ReturnsForEpisode;
+import black_jack.models_memory.ValueMemory;
 
 public class Learner {
     public static final double ALPHA_DEFAULT = 0.1;

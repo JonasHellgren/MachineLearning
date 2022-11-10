@@ -1,8 +1,8 @@
 package black_jack;
 
 import black_jack.helper.CardsInfo;
-import black_jack.models.Card;
-import black_jack.models.StateCards;
+import black_jack.models_cards.Card;
+import black_jack.models_cards.StateCards;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;

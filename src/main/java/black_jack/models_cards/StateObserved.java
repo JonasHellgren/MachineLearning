@@ -1,7 +1,6 @@
-package black_jack.models;
+package black_jack.models_cards;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Objects;

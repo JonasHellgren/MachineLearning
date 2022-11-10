@@ -1,8 +1,8 @@
 package black_jack.helper;
 
-import black_jack.models.Card;
-import black_jack.models.StateCards;
-import black_jack.models.StateObserved;
+import black_jack.models_cards.Card;
+import black_jack.models_cards.StateCards;
+import black_jack.models_cards.StateObserved;
 
 import java.util.List;
 import java.util.stream.Collectors;

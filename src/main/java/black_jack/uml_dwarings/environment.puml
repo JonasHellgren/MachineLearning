@@ -1,0 +1,27 @@
+@startuml
+class black_jack.environment.BlackJackEnvironment {
++ {static} int MAX_SUM_DEALER_FOR_HITTING
++ {static} boolean STOP_PLAYING
++ {static} int REWARD_BUST
++ {static} int REWARD_STICK_BUT_NOT_BUST
++ {static} int REWARD_DEALER_HAS_BETTER_HAND
++ double REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD
++ {static} int REWARD_PLAYER_BETTER_HAND
++ {static} BlackJackEnvironment newHigherRewardIfAceAndFaceCard()
++ {static} BlackJackEnvironment newSameRewardIfAceAndFaceCard()
++ StepReturnBJ step(CardAction,StateCards)
+- void addDealerCardsUntilMaxSum(StateCards)
+- double getRewardStick(boolean,boolean)
+}
+class black_jack.environment.StepReturnBJ {
++ StateCards cards
++ boolean stopPlaying
++ double reward
+}
+interface black_jack.environment.EnvironmentInterface {
+~ StepReturnBJ step(CardAction,StateCards)
+}
+
+
+black_jack.environment.EnvironmentInterface <|.. black_jack.environment.BlackJackEnvironment
+@enduml

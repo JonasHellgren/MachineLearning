@@ -1,0 +1,17 @@
+@startuml
+class black_jack.models_episode.Episode {
+~ List<EpisodeItem> episode
++ Integer nofItems()
++ void clear()
++ void add(StateObserved,CardAction,Double)
++ EpisodeItem getItem(Integer)
++ EpisodeItem getEndItem()
++ boolean isStatePresentBeforeTimeStep(StateObserved,Integer)
+- void throwExceptionIfNonValidTimeStep(Integer)
+}
+class black_jack.models_episode.EpisodeItem {
++ StateObserved state
++ CardAction action
++ Double reward
+}
+@enduml

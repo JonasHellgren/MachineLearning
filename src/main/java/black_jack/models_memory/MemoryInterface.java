@@ -1,4 +1,6 @@
-package black_jack.models;
+package black_jack.models_memory;
+
+import black_jack.models_cards.StateObserved;
 
 public interface MemoryInterface {
 

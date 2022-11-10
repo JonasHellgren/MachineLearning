@@ -2,10 +2,10 @@ package black_jack;
 
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
-import black_jack.models.Card;
-import black_jack.models.CardAction;
-import black_jack.models.StateCards;
-import black_jack.models.StepReturnBJ;
+import black_jack.models_cards.Card;
+import black_jack.enums.CardAction;
+import black_jack.models_cards.StateCards;
+import black_jack.environment.StepReturnBJ;
 import org.jcodec.common.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

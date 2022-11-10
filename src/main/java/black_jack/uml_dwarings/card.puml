@@ -1,0 +1,30 @@
+@startuml
+class black_jack.models.Card {
+~ long value
++ {static} Card newRandom()
++ {static} Card newWithValue(long)
+- void setRandomValue()
+- {static} Integer getRandomItemFromIntegerList(List<Integer>)
+}
+class black_jack.models.StateCards {
+~ List<Card> cardsPlayer
+~ List<Card> cardsDealer
++ {static} List<Card> newPair(long,long)
++ {static} StateCards EMPTY()
++ {static} StateCards newRandomPairs()
++ void copy(StepReturnBJ)
++ void copy(StateCards)
++ {static} StateCards clone(StateCards)
+~ {static} List<Card> drawTwoRandomCards()
++ StateObserved observeState()
++ void addPlayerCard(Card)
++ void addDealerCard(Card)
+}
+class black_jack.models.StateObserved {
++ long sumHandPlayer
++ boolean playerHasUsableAce
++ long dealerCardValue
++ boolean equals(Object)
++ int hashCode()
+}
+@enduml

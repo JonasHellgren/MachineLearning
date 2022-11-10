@@ -1,8 +1,12 @@
 package black_jack;
 
+import black_jack.enums.CardAction;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
-import black_jack.models.*;
+import black_jack.environment.StepReturnBJ;
+import black_jack.models_cards.*;
+import black_jack.models_episode.Episode;
+import black_jack.models_episode.EpisodeItem;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import org.jcodec.common.Assert;

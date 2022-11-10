@@ -1,6 +1,9 @@
 package black_jack;
 
-import black_jack.models.*;
+import black_jack.enums.CardAction;
+import black_jack.models_cards.*;
+import black_jack.models_episode.Episode;
+import black_jack.models_returns.ReturnsForEpisode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +27,7 @@ public class TestReturnsForEpisode {
         StateObserved s3=new StateObserved(12,false,17);
         StateObserved s4=new StateObserved(21,false,17);
 
-        episode.add(s1,CardAction.hit,0d);
+        episode.add(s1, CardAction.hit,0d);
         episode.add(s2,CardAction.hit,0d);
         episode.add(s3,CardAction.hit,0d);
         episode.add(s4,CardAction.stick,1d);

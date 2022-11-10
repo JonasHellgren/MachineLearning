@@ -1,7 +1,6 @@
-package black_jack.models;
+package black_jack.models_memory;
 
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import black_jack.models_cards.StateObserved;
 
 import java.util.HashMap;
 import java.util.HashSet;

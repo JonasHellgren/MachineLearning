@@ -1,7 +1,7 @@
 package black_jack.policies;
 
-import black_jack.models.CardAction;
-import black_jack.models.StateObserved;
+import black_jack.enums.CardAction;
+import black_jack.models_cards.StateObserved;
 
 public interface PolicyInterface {
 

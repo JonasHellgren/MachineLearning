@@ -1,5 +1,6 @@
-package black_jack.models;
+package black_jack.environment;
 
+import black_jack.models_cards.StateCards;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 

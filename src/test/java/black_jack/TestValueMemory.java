@@ -1,10 +1,15 @@
 package black_jack;
 
+import black_jack.enums.CardAction;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
 import black_jack.helper.Learner;
-import black_jack.models.*;
+import black_jack.models_cards.*;
+import black_jack.models_episode.Episode;
+import black_jack.models_returns.ReturnsForEpisode;
+import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.ValueMemory;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import org.junit.Assert;

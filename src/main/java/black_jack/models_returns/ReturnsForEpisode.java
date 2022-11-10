@@ -1,5 +1,8 @@
-package black_jack.models;
+package black_jack.models_returns;
 
+import black_jack.models_cards.StateObserved;
+import black_jack.models_episode.Episode;
+import black_jack.models_episode.EpisodeItem;
 import lombok.Getter;
 import lombok.ToString;
 

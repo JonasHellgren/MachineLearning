@@ -1,5 +1,6 @@
-package black_jack.models;
+package black_jack.models_returns;
 
+import black_jack.models_cards.StateObserved;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
