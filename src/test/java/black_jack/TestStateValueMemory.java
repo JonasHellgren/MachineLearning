@@ -7,9 +7,9 @@ import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateValue;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
+import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.models_memory.NumberOfVisitsMemory;
-import black_jack.models_memory.ValueMemory;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import org.junit.Assert;
@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import java.util.Set;
 
-public class TestValueMemory {
+public class TestStateValueMemory {
     public static final double DELTA = 0.1;
     public static final int NOF_UPDATES = 10_000;
     public static final double ALPHA = 0.01;
@@ -28,7 +28,7 @@ public class TestValueMemory {
     EnvironmentInterface environment;
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
-    ValueMemory valueMemory;
+    StateValueMemory stateValueMemory;
     NumberOfVisitsMemory numberOfVisitsMemory;
     LearnerStateValue learner;
     PolicyInterface policy;
@@ -38,9 +38,9 @@ public class TestValueMemory {
         environment=new BlackJackEnvironment();
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
-        valueMemory = new ValueMemory();
+        stateValueMemory = new StateValueMemory();
         numberOfVisitsMemory=new NumberOfVisitsMemory();
-        learner = new LearnerStateValue(valueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
+        learner = new LearnerStateValue(stateValueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
         policy = new HitBelow20Policy();
     }
 
@@ -66,11 +66,11 @@ public class TestValueMemory {
             learner.updateMemory(returnsForEpisode);
         }
 
-        System.out.println("valueMemory = " + valueMemory);
+        System.out.println("valueMemory = " + stateValueMemory);
 
-        Assert.assertEquals(4, valueMemory.nofItems());
-        Assert.assertEquals(1, valueMemory.read(s1), DELTA);
-        Assert.assertEquals(1, valueMemory.read(s2), DELTA);
+        Assert.assertEquals(4, stateValueMemory.nofItems());
+        Assert.assertEquals(1, stateValueMemory.read(s1), DELTA);
+        Assert.assertEquals(1, stateValueMemory.read(s2), DELTA);
 
     }
 
@@ -88,12 +88,12 @@ public class TestValueMemory {
 
         //System.out.println("valueMemory = " + valueMemory);
 
-        System.out.println("valueMemory.nofItems() = " + valueMemory.nofItems());
+        System.out.println("valueMemory.nofItems() = " + stateValueMemory.nofItems());
         System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfVisitsMemory.nofItems());
-        System.out.println("valueMemory.average() = " + valueMemory.average());
+        System.out.println("valueMemory.average() = " + stateValueMemory.average());
         System.out.println("numberOfVisitsMemory.average() = " + numberOfVisitsMemory.average());
 
-        Assert.assertTrue(valueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+        Assert.assertTrue(stateValueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
         Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
     }
 

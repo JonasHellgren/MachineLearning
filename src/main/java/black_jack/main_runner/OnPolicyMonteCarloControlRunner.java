@@ -1,7 +1,6 @@
 package black_jack.main_runner;
 
-import black_jack.models_memory.ValueMemory;
-import black_jack.result_drawer.GridPanel;
+import black_jack.models_memory.StateValueMemory;
 
 public class OnPolicyMonteCarloControlRunner {
 
@@ -14,7 +13,7 @@ public class OnPolicyMonteCarloControlRunner {
 
 
     public static void main(String[] args) {
-        ValueMemory valueMemory = new ValueMemory();
+        StateValueMemory stateValueMemory = new StateValueMemory();
      /*   playBlackJackManyTimesAndSetValueMemory(valueMemory);
 
         String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(valueMemory,false);

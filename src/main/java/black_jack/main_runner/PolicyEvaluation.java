@@ -6,9 +6,9 @@ import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateValue;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
+import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.models_memory.NumberOfVisitsMemory;
-import black_jack.models_memory.ValueMemory;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
@@ -42,30 +42,30 @@ public class PolicyEvaluation {
 
 
     public static void main(String[] args) {
-        ValueMemory valueMemory = new ValueMemory();
-        playBlackJackManyTimesAndSetValueMemory(valueMemory);
+        StateValueMemory stateValueMemory = new StateValueMemory();
+        playBlackJackManyTimesAndSetValueMemory(stateValueMemory);
 
-        String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(valueMemory,false);
-        String frameTitleUsableAce= "Usable ace, average value = "+getAverageValue(valueMemory,true);
+        String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(stateValueMemory,false);
+        String frameTitleUsableAce= "Usable ace, average value = "+getAverageValue(stateValueMemory,true);
         GridPanel panelNoUsableAce = createNoUsableAceFrameAndPanel(frameTitleNoUsableAce);
         GridPanel panelUsableAce = createUsableAceFrameAndPanel(frameTitleUsableAce);
-        showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
+        showValueMemory(panelNoUsableAce, panelUsableAce, stateValueMemory);
     }
 
-    private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, ValueMemory valueMemory) {
-        setPanel(panelNoUsableAce, valueMemory, false);
-        setPanel(panelUsableAce, valueMemory, true);
+    private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, StateValueMemory stateValueMemory) {
+        setPanel(panelNoUsableAce, stateValueMemory, false);
+        setPanel(panelUsableAce, stateValueMemory, true);
         panelNoUsableAce.repaint();
         panelUsableAce.repaint();
     }
 
-    private static void playBlackJackManyTimesAndSetValueMemory(ValueMemory valueMemory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(StateValueMemory stateValueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new HitBelow20Policy();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
-        LearnerStateValue learner = new LearnerStateValue(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
+        LearnerStateValue learner = new LearnerStateValue(stateValueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
             sometimeLogEpisodeNumber(episodeNumber);
             StateCards cards = StateCards.newRandomPairs();
@@ -104,12 +104,12 @@ public class PolicyEvaluation {
         return panelNoUsableAce;
     }
 
-    private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce) {
+    private static void setPanel(GridPanel panel, StateValueMemory stateValueMemory, boolean usableAce) {
         List<Integer> xSet = StateObserved.getDealerCardList();
         List<Integer> ySet = StateObserved.getHandsSumList();
         for (int y : ySet) {
             for (int x : xSet) {
-                double value = valueMemory.read(new StateObserved(y, usableAce, x));
+                double value = stateValueMemory.read(new StateObserved(y, usableAce, x));
                 panel.setNumbersAtCell(x,y, value);
             }
         }
@@ -117,11 +117,11 @@ public class PolicyEvaluation {
         panel.setTextCellValues(true);
     }
 
-    private static String getAverageValue(ValueMemory valueMemory, boolean usableAce) {
+    private static String getAverageValue(StateValueMemory stateValueMemory, boolean usableAce) {
         Predicate<StateObserved> p = (usableAce)
                 ?s -> s.playerHasUsableAce
                 :s -> !s.playerHasUsableAce;
-        Set<Double> valueList= valueMemory.valuesOf(p);
+        Set<Double> valueList= stateValueMemory.valuesOf(p);
         double avg= valueList.stream().filter(Objects::nonNull).mapToDouble(v -> v).average().orElse(Double.NaN);
         BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
         return bd.toString();

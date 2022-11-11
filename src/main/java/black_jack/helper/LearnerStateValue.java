@@ -1,52 +1,50 @@
 package black_jack.helper;
 
 import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnItem;
 import black_jack.models_returns.ReturnsForEpisode;
-import black_jack.models_memory.ValueMemory;
 import lombok.Setter;
 
 @Setter
-public class LearnerStateValue {
-    private static final double ALPHA_DEFAULT = 0.1;
-    private static final boolean FLAG_DEFAULT=true;
-
-    ValueMemory valueMemory; //reference
+public class LearnerStateValue implements LearnerInterface {
+    StateValueMemory stateValueMemory; //reference
     NumberOfVisitsMemory numberOfVisitsMemory;
-    double alpha = ALPHA_DEFAULT;
-    boolean regardNofVisitsFlag= FLAG_DEFAULT;
+    double alpha = LearnerInterface.ALPHA_DEFAULT;
+    boolean regardNofVisitsFlag= LearnerInterface.FLAG_DEFAULT;
 
-    public LearnerStateValue(ValueMemory valueMemory, NumberOfVisitsMemory numberOfVisitsMemory) {
-        this.valueMemory=valueMemory;
+    public LearnerStateValue(StateValueMemory stateValueMemory, NumberOfVisitsMemory numberOfVisitsMemory) {
+        this.stateValueMemory = stateValueMemory;
         this.numberOfVisitsMemory=numberOfVisitsMemory;
     }
 
-    public LearnerStateValue(ValueMemory valueMemory,
+    public LearnerStateValue(StateValueMemory stateValueMemory,
                              NumberOfVisitsMemory numberOfVisitsMemory,
                              double alpha,
                              boolean regardNofVisitsFlag) {
-        this(valueMemory,numberOfVisitsMemory);
+        this(stateValueMemory,numberOfVisitsMemory);
         this.alpha = alpha;
         this.regardNofVisitsFlag=regardNofVisitsFlag;
     }
 
+    @Override
     public void updateMemory(ReturnsForEpisode returns) {
         for (ReturnItem ri : returns.getReturns()) {
             updateMemory(ri);
             if (regardNofVisitsFlag) {
                 numberOfVisitsMemory.increase(ri.state);
             }
-
         }
     }
 
+    @Override
     public void updateMemory(ReturnItem ri) {
-        double oldValue = valueMemory.read(ri.state);
+        double oldValue = stateValueMemory.read(ri.state);
         double coeffNumberOfVisits=(regardNofVisitsFlag)
                             ?1/(1 + numberOfVisitsMemory.read(ri.state))
                             :1;
         double newValue = oldValue + alpha * coeffNumberOfVisits * (ri.returnValue - oldValue);
-        valueMemory.write(ri.state, newValue);
+        stateValueMemory.write(ri.state, newValue);
     }
 
 }

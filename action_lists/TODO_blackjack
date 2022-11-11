@@ -48,7 +48,7 @@ Avergae value  x
 mer logiska package - tex minnen i separat  x
 REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD som 1?
 
-valueMemory.average smarare med utan ace
+stateValueMemory.average smarare med utan ace
 
 StateActionObserved  x
 StateActionValueMemory  x

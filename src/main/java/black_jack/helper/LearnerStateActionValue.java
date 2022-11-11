@@ -3,19 +3,15 @@ package black_jack.helper;
 import black_jack.models_cards.StateActionObserved;
 import black_jack.models_memory.NumberOfVisitsMemory;
 import black_jack.models_memory.StateActionValueMemory;
-import black_jack.models_memory.ValueMemory;
 import black_jack.models_returns.ReturnItem;
 import black_jack.models_returns.ReturnsForEpisode;
 
-public class LearnerStateActionValue {
-
-    private static final double ALPHA_DEFAULT = 0.1;
-    private static final boolean FLAG_DEFAULT=true;
+public class LearnerStateActionValue implements LearnerInterface {
 
     StateActionValueMemory valueMemory; //reference
     NumberOfVisitsMemory numberOfVisitsMemory;
-    double alpha = ALPHA_DEFAULT;
-    boolean regardNofVisitsFlag= FLAG_DEFAULT;
+    double alpha = LearnerInterface.ALPHA_DEFAULT;
+    boolean regardNofVisitsFlag= LearnerInterface.FLAG_DEFAULT;
 
     public LearnerStateActionValue(StateActionValueMemory valueMemory, NumberOfVisitsMemory numberOfVisitsMemory) {
         this.valueMemory=valueMemory;
@@ -31,6 +27,7 @@ public class LearnerStateActionValue {
         this.regardNofVisitsFlag=regardNofVisitsFlag;
     }
 
+    @Override
     public void updateMemory(ReturnsForEpisode returns) {
         for (ReturnItem ri : returns.getReturns()) {
             updateMemory(ri);
@@ -41,6 +38,7 @@ public class LearnerStateActionValue {
         }
     }
 
+    @Override
     public void updateMemory(ReturnItem ri) {
         StateActionObserved sa=new StateActionObserved(ri.state,ri.cardAction);
         double oldValue = valueMemory.read(sa);
