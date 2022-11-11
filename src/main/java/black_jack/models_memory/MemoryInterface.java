@@ -13,5 +13,7 @@ public interface MemoryInterface<T> {
     double readBestValue(StateObserved state);
     void write(T state, double Value);
     double average();
+   // Set<Double> valuesOf(Predicate<StateObserved> p);
+
     Set<Double> valuesOf(Predicate<StateObserved> p);
 }

@@ -9,16 +9,19 @@ import black_jack.models_cards.StateActionObserved;
 import black_jack.models_cards.StateCards;
 import black_jack.models_cards.StateObserved;
 import black_jack.models_episode.Episode;
-import black_jack.models_memory.NumberOfStateActionsVisitsMemory;
-import black_jack.models_memory.NumberOfStateVisitsMemory;
-import black_jack.models_memory.StateActionValueMemory;
-import black_jack.models_memory.StateValueMemory;
+import black_jack.models_memory.*;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.policies.PolicyGreedyOnStateActionMemory;
 import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
 
 @Log
 public class OnPolicyMonteCarloControlRunner {
@@ -33,11 +36,12 @@ public class OnPolicyMonteCarloControlRunner {
 
 
     public static void main(String[] args) {
-        StateActionValueMemory memory = new StateActionValueMemory();
+        MemoryInterface<StateActionObserved> memory = new StateActionValueMemory();
         playBlackJackManyTimesAndSetValueMemory(memory);
 
-        String frameTitleNoUsableAce="No usable ace, average value = "; //+getAverageValue(valueMemory,false);
-        String frameTitleUsableAce= "Usable ace, average value = "; //+getAverageValue(valueMemory,true);
+        AverageValueCalculator<StateActionObserved> ac=new AverageValueCalculator<>();
+        String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
+        String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
@@ -45,17 +49,15 @@ public class OnPolicyMonteCarloControlRunner {
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
 
 
-        System.out.println("memory.getStateActionValueMap().size() = " + memory.getStateActionValueMap().size());
-
     }
 
-    private static void playBlackJackManyTimesAndSetValueMemory(StateActionValueMemory memory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateActionObserved> memory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
-        PolicyInterface policy = new PolicyGreedyOnStateActionMemory(memory, PROBABILITY_RANDOM_ACTION);
+        PolicyInterface policy = new PolicyGreedyOnStateActionMemory((StateActionValueMemory) memory, PROBABILITY_RANDOM_ACTION);
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         NumberOfStateActionsVisitsMemory visitsMemory = new NumberOfStateActionsVisitsMemory();
-        LearnerStateActionValue learner = new LearnerStateActionValue(memory, visitsMemory, ALPHA, NOF_VISITS_FLAG);
+        LearnerStateActionValue learner = new LearnerStateActionValue((StateActionValueMemory) memory, visitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
             sometimeLogEpisodeNumber(episodeNumber);
             StateCards cards = StateCards.newRandomPairs();
@@ -70,6 +72,16 @@ public class OnPolicyMonteCarloControlRunner {
         if (episodeNumber % 100_000 == 0) {
             log.info("i = " + episodeNumber);
         }
+    }
+
+    private static String getAverageValue(MemoryInterface<StateActionObserved> stateValueMemory, boolean usableAce) {
+        Predicate<StateObserved> p = (usableAce)
+                ?s -> s.playerHasUsableAce
+                :s -> !s.playerHasUsableAce;
+        Set<Double> valueList= stateValueMemory.valuesOf(p);
+        double avg= valueList.stream().filter(Objects::nonNull).mapToDouble(v -> v).average().orElse(Double.NaN);
+        BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
+        return bd.toString();
     }
 
 }

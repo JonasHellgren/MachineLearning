@@ -10,7 +10,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @ToString
 @Getter
-public class StateActionObserved {
+public class StateActionObserved implements StateInterface {
 
     StateObserved stateObserved;
     CardAction cardAction;
@@ -50,4 +50,8 @@ public class StateActionObserved {
                 cardAction);
     }
 
+    @Override
+    public boolean playerHasUsableAce() {
+        return stateObserved.playerHasUsableAce;
+    }
 }

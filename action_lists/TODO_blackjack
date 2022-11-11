@@ -60,6 +60,9 @@ PolicyRandom x
 
 draft OnPolicyMonteCarloControlRunner x
 
+valuesOf i interface  x
+snygga upp StateInterface
+
 On-Policy Monte Carlo Control
 
 https://ernie55ernie.github.io/assets/blackjack.html

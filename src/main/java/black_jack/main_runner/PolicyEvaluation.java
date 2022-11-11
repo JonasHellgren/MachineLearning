@@ -36,15 +36,16 @@ public class PolicyEvaluation {
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";
     private static final String Y_LABEL = "Player sum";
-    private static final int NOF_DECIMALS_FRAME_TITLE = 2;
+
 
 
     public static void main(String[] args) {
         MemoryInterface<StateObserved> stateValueMemory = new StateValueMemory();
         playBlackJackManyTimesAndSetValueMemory(stateValueMemory);
 
-        String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(stateValueMemory,false);
-        String frameTitleUsableAce= "Usable ace, average value = "+getAverageValue(stateValueMemory,true);
+        AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
+        String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(stateValueMemory,false);
+        String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(stateValueMemory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
@@ -79,15 +80,7 @@ public class PolicyEvaluation {
 
 
 
-    private static String getAverageValue(MemoryInterface<StateObserved> stateValueMemory, boolean usableAce) {
-        Predicate<StateObserved> p = (usableAce)
-                ?s -> s.playerHasUsableAce
-                :s -> !s.playerHasUsableAce;
-        Set<Double> valueList= stateValueMemory.valuesOf(p);
-        double avg= valueList.stream().filter(Objects::nonNull).mapToDouble(v -> v).average().orElse(Double.NaN);
-        BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
-        return bd.toString();
-    }
+
 
 
 

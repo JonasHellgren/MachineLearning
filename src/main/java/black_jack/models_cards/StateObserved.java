@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @ToString
-public class StateObserved {
+public class StateObserved  implements StateInterface {
     public static final int LOWER_HANDS_SUM_PLAYER = 10;
     public static final int MAX_HANDS_SUM_PLAYER = 21;
     public static final int MIN_DEALER_CARD = 1;
@@ -61,7 +61,7 @@ public class StateObserved {
     }
 
     @NotNull
-    public static List<Integer> getHandsSumList() {
+    public static List<Integer> getHandsSumList() {  //todo till interface
         return IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
     }
 
@@ -70,4 +70,7 @@ public class StateObserved {
         return IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
     }
 
+    public boolean playerHasUsableAce() {
+        return playerHasUsableAce;
+    }
 }

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Getter
 public class StateActionValueMemory implements MemoryInterface<StateActionObserved> {
@@ -64,9 +65,15 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
         //return 0;
     }
 
+
+
     @Override
     public Set<Double> valuesOf(Predicate<StateObserved> p) {
-       throw new RuntimeException("Not implemented");
+        Set<StateObserved> stateSet=StateObserved.allStates();
+        Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
+        Set<Double> setDouble=new HashSet<>();
+        set.forEach(s -> setDouble.add(readBestValue(s)));
+        return setDouble;
     }
 
     @Override
