@@ -1,9 +1,8 @@
 package black_jack.helper;
 
-import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnItem;
-import black_jack.models_returns.ReturnsForEpisode;
 import lombok.Setter;
 
 @Setter
@@ -11,17 +10,17 @@ public class LearnerStateValue extends LearnerAbstract {
     StateValueMemory stateValueMemory; //reference
 
     public LearnerStateValue(StateValueMemory stateValueMemory,
-                             NumberOfVisitsMemory numberOfVisitsMemory) {
-        super(numberOfVisitsMemory,LearnerInterface.ALPHA_DEFAULT,LearnerInterface.FLAG_DEFAULT);
+                             NumberOfStateVisitsMemory numberOfStateVisitsMemory) {
+        super(numberOfStateVisitsMemory,LearnerInterface.ALPHA_DEFAULT,LearnerInterface.FLAG_DEFAULT);
         this.stateValueMemory = stateValueMemory;
-        this.numberOfVisitsMemory=numberOfVisitsMemory;
+        this.numberOfStateVisitsMemory = numberOfStateVisitsMemory;
     }
 
     public LearnerStateValue(StateValueMemory stateValueMemory,
-                             NumberOfVisitsMemory numberOfVisitsMemory,
+                             NumberOfStateVisitsMemory numberOfStateVisitsMemory,
                              double alpha,
                              boolean regardNofVisitsFlag) {
-        this(stateValueMemory,numberOfVisitsMemory);
+        this(stateValueMemory, numberOfStateVisitsMemory);
         this.alpha = alpha;
         this.regardNofVisitsFlag=regardNofVisitsFlag;
     }

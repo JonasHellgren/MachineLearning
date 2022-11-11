@@ -8,7 +8,7 @@ import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
-import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
@@ -64,8 +64,8 @@ public class PolicyEvaluation {
         PolicyInterface policy = new PolicyHitBelow20();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
-        NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
-        LearnerStateValue learner = new LearnerStateValue(stateValueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
+        NumberOfStateVisitsMemory numberOfStateVisitsMemory = new NumberOfStateVisitsMemory();
+        LearnerStateValue learner = new LearnerStateValue(stateValueMemory, numberOfStateVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
             sometimeLogEpisodeNumber(episodeNumber);
             StateCards cards = StateCards.newRandomPairs();

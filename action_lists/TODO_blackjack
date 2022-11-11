@@ -58,7 +58,6 @@ LearnerInterface<T>  x
 TestStateActionValueMemory
 PolicyRandom
 
-
 On-Policy Monte Carlo Control
 
 https://ernie55ernie.github.io/assets/blackjack.html

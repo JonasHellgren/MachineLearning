@@ -5,13 +5,13 @@ import black_jack.models_cards.StateObserved;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NumberOfVisitsMemory implements MemoryInterface<StateObserved> {
+public class NumberOfStateVisitsMemory implements MemoryInterface<StateObserved> {
 
     public static final int INIT_VALUE = 0;
 
     Map<Integer, Integer> stateNofVisitsMap;
 
-    public NumberOfVisitsMemory() {
+    public NumberOfStateVisitsMemory() {
         this.stateNofVisitsMap = new HashMap<>();
     }
 

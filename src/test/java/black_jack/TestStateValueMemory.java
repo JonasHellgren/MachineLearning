@@ -9,7 +9,7 @@ import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
-import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class TestStateValueMemory {
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
     StateValueMemory stateValueMemory;
-    NumberOfVisitsMemory numberOfVisitsMemory;
+    NumberOfStateVisitsMemory numberOfStateVisitsMemory;
     LearnerStateValue learner;
     PolicyInterface policy;
 
@@ -39,8 +39,8 @@ public class TestStateValueMemory {
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
         stateValueMemory = new StateValueMemory();
-        numberOfVisitsMemory=new NumberOfVisitsMemory();
-        learner = new LearnerStateValue(stateValueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
+        numberOfStateVisitsMemory =new NumberOfStateVisitsMemory();
+        learner = new LearnerStateValue(stateValueMemory, numberOfStateVisitsMemory,ALPHA,regardNofVisitsFlag);
         policy = new PolicyHitBelow20();
     }
 
@@ -89,12 +89,12 @@ public class TestStateValueMemory {
         //System.out.println("valueMemory = " + valueMemory);
 
         System.out.println("valueMemory.nofItems() = " + stateValueMemory.nofItems());
-        System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfVisitsMemory.nofItems());
+        System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfStateVisitsMemory.nofItems());
         System.out.println("valueMemory.average() = " + stateValueMemory.average());
-        System.out.println("numberOfVisitsMemory.average() = " + numberOfVisitsMemory.average());
+        System.out.println("numberOfVisitsMemory.average() = " + numberOfStateVisitsMemory.average());
 
         Assert.assertTrue(stateValueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
-        Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+        Assert.assertTrue(numberOfStateVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
     }
 
     @Test public void allStates() {

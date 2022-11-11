@@ -4,15 +4,17 @@ import black_jack.enums.CardAction;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
+import black_jack.helper.LearnerAbstract;
 import black_jack.helper.LearnerStateActionValue;
 import black_jack.models_cards.StateActionObserved;
 import black_jack.models_cards.StateCards;
 import black_jack.models_episode.Episode;
-import black_jack.models_memory.NumberOfVisitsMemory;
+import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.models_memory.StateActionValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
+import black_jack.policies.PolicyRandom;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,15 +27,14 @@ public class TestStateActionValueMemory {
     private static final double ZERO_REWARD = 0d;
     private static final double ONE_REWARD = 1d;
     boolean regardNofVisitsFlag=true;
-    public static final int NOF_EPISODES = 500_000;
+    public static final int NOF_EPISODES = 100_000;
 
     EnvironmentInterface environment;
     Episode episode;
     ReturnsForEpisode returnsForEpisode;
     StateActionValueMemory stateActionValueMemory;
-    NumberOfVisitsMemory numberOfVisitsMemory;
-    LearnerStateActionValue learner;
-    PolicyInterface policy;
+    NumberOfStateVisitsMemory numberOfStateVisitsMemory;
+    LearnerAbstract learner;
 
     @Before
     public void init() {
@@ -41,9 +42,9 @@ public class TestStateActionValueMemory {
         episode = new Episode();
         returnsForEpisode = new ReturnsForEpisode();
         stateActionValueMemory = new StateActionValueMemory();
-        numberOfVisitsMemory=new NumberOfVisitsMemory();
-        learner = new LearnerStateActionValue(stateActionValueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
-        policy = new PolicyHitBelow20();
+        numberOfStateVisitsMemory =new NumberOfStateVisitsMemory();
+        learner = new LearnerStateActionValue(stateActionValueMemory, numberOfStateVisitsMemory,ALPHA,regardNofVisitsFlag);
+
     }
 
     @Test
@@ -76,26 +77,27 @@ public class TestStateActionValueMemory {
 
     @Test
     public void learnMemoryFromManyEpisodes() {
-        trainMemory(policy);
+        trainMemory(new PolicyHitBelow20());
         System.out.println("valueMemory.nofItems() = " + stateActionValueMemory.nofItems());
-        System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfVisitsMemory.nofItems());
-        System.out.println("numberOfVisitsMemory.average() = " + numberOfVisitsMemory.average());
+        System.out.println("numberOfVisitsMemory.nofItems() = " + numberOfStateVisitsMemory.nofItems());
+        System.out.println("numberOfVisitsMemory.average() = " + numberOfStateVisitsMemory.average());
         System.out.println("valueMemory = " + stateActionValueMemory);
 
         Assert.assertTrue(stateActionValueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
-        Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+        Assert.assertTrue(numberOfStateVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
     }
 
     @Test
-    public void learnAtSumPlayer20StickIsBetterThanHit() {
-        trainMemory(policy);
+    public void learnForSumPlayer21StickIsBetterThanHit() {
+        trainMemory(new PolicyRandom());  //todo PolicyRandom
 
-        double valueStick=stateActionValueMemory.read(StateActionObserved.newStateAction(20,true,10,CardAction.stick));
-        double valueHit=stateActionValueMemory.read(StateActionObserved.newStateAction(20,true,10,CardAction.hit));
+        double valueStick=stateActionValueMemory.read(StateActionObserved.newStateAction(21,true,10,CardAction.stick));
+        double valueHit=stateActionValueMemory.read(StateActionObserved.newStateAction(21,true,10,CardAction.hit));
 
         System.out.println("valueStick = " + valueStick+", valueHit = " + valueHit);
+        learner.getNumberOfStateVisitsMemory().read(StateActionObserved.newStateAction(20,true,10,CardAction.stick))
 
-//        Assert.assertTrue(stateActionValueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+        Assert.assertTrue(valueStick>valueHit);  //sumPlayer*cardDealer*ace*margin
   //      Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
     }
 
