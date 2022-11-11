@@ -2,7 +2,7 @@ package black_jack;
 
 import black_jack.models_cards.Card;
 import black_jack.models_cards.StateCards;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedObserved;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class TestStateObserved {
     @Test
     public void testCards1() {
         StateCards cards = cards1();
-        StateObserved observed = cards.observeState();
+        StateObservedObserved observed = cards.observeState();
 
         System.out.println("observed = " + observed);
 
@@ -27,7 +27,7 @@ public class TestStateObserved {
     @Test
     public void testCards2() {
         StateCards cards = cards2();
-        StateObserved observed = cards.observeState();
+        StateObservedObserved observed = cards.observeState();
 
         System.out.println("observed = " + observed);
 
@@ -37,15 +37,15 @@ public class TestStateObserved {
     }
 
     @Test public void testEquals1() {
-        StateObserved s1=new StateObserved(12,false,17);
-        StateObserved s2=new StateObserved(12,false,17);
+        StateObservedObserved s1=new StateObservedObserved(12,false,17);
+        StateObservedObserved s2=new StateObservedObserved(12,false,17);
         Assert.assertTrue(s1.equals(s2));
     }
 
 
     @Test public void testEquals2() {
-        StateObserved s1=new StateObserved(12,false,17);
-        StateObserved s2=new StateObserved(11,false,17);
+        StateObservedObserved s1=new StateObservedObserved(12,false,17);
+        StateObservedObserved s2=new StateObservedObserved(11,false,17);
         Assert.assertFalse(s1.equals(s2));
     }
 

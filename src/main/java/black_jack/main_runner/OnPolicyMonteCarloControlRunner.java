@@ -4,24 +4,15 @@ import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateActionValue;
-import black_jack.helper.LearnerStateValue;
-import black_jack.models_cards.StateActionObserved;
+import black_jack.models_cards.StateObservedActionObserved;
 import black_jack.models_cards.StateCards;
-import black_jack.models_cards.StateObserved;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.*;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.policies.PolicyGreedyOnStateActionMemory;
-import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
 
 @Log
 public class OnPolicyMonteCarloControlRunner {
@@ -36,22 +27,23 @@ public class OnPolicyMonteCarloControlRunner {
 
 
     public static void main(String[] args) {
-        MemoryInterface<StateActionObserved> memory = new StateActionValueMemory();
+        MemoryInterface<StateObservedActionObserved> memory = new StateActionValueMemory();
         playBlackJackManyTimesAndSetValueMemory(memory);
 
-        AverageValueCalculator<StateActionObserved> ac=new AverageValueCalculator<>();
+        AverageValueCalculator<StateObservedActionObserved> ac=new AverageValueCalculator<>();
         String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
         String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
-        MemoryShower<StateActionObserved> ms=new MemoryShower<>();
+        MemoryShower<StateObservedActionObserved> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
 
+        //show policy todo
 
     }
 
-    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateActionObserved> memory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObservedActionObserved> memory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new PolicyGreedyOnStateActionMemory((StateActionValueMemory) memory, PROBABILITY_RANDOM_ACTION);
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);

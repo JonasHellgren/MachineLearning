@@ -47,10 +47,10 @@ public class TestStateValueMemory {
     @Test
     public void learnMemoryFromOneEpisode() {
 
-        StateObserved s1 = new StateObserved(2, false, 17);
-        StateObserved s2 = new StateObserved(5, false, 17);
-        StateObserved s3 = new StateObserved(12, false, 17);
-        StateObserved s4 = new StateObserved(21, false, 17);
+        StateObservedObserved s1 = new StateObservedObserved(2, false, 17);
+        StateObservedObserved s2 = new StateObservedObserved(5, false, 17);
+        StateObservedObserved s3 = new StateObservedObserved(12, false, 17);
+        StateObservedObserved s4 = new StateObservedObserved(21, false, 17);
 
         episode.add(s1, CardAction.hit, 0d);
         episode.add(s2, CardAction.hit, 0d);
@@ -98,7 +98,7 @@ public class TestStateValueMemory {
     }
 
     @Test public void allStates() {
-        Set<StateObserved> stateSet= StateInterface.allStates();
+        Set<StateObservedObserved> stateSet= StateObservedInterface.allStates();
         System.out.println("stateSet = " + stateSet);
         System.out.println("stateSet.size() = " + stateSet.size());
         Assert.assertTrue(stateSet.size()>200);

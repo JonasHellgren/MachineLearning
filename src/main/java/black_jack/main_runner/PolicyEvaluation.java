@@ -15,12 +15,6 @@ import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
 
 /***
  *     Candidate parameter setting:
@@ -40,22 +34,22 @@ public class PolicyEvaluation {
 
 
     public static void main(String[] args) {
-        MemoryInterface<StateObserved> stateValueMemory = new StateValueMemory();
-        playBlackJackManyTimesAndSetValueMemory(stateValueMemory);
+        MemoryInterface<StateObservedObserved> memory = new StateValueMemory();
+        playBlackJackManyTimesAndSetValueMemory(memory);
 
-        AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
-        String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(stateValueMemory,false);
-        String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(stateValueMemory,true);
+        AverageValueCalculator<StateObservedObserved> ac=new AverageValueCalculator<>();
+        String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
+        String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
-        MemoryShower<StateObserved> ms=new MemoryShower<>();
-        ms.showValueMemory(panelNoUsableAce, panelUsableAce, stateValueMemory);
+        MemoryShower<StateObservedObserved> ms=new MemoryShower<>();
+        ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
     }
 
 
 
-    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObserved> stateValueMemory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObservedObserved> stateValueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new PolicyHitBelow20();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);

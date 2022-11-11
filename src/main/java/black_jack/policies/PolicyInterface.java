@@ -1,10 +1,10 @@
 package black_jack.policies;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedObserved;
 
 public interface PolicyInterface {
 
-    CardAction hitOrStick(StateObserved observed);
+    CardAction hitOrStick(StateObservedObserved observed);
 
 }

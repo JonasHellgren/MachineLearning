@@ -68,13 +68,13 @@ public class StateCards {
         return  cards;
     }
 
-    public StateObserved observeState() {
+    public StateObservedObserved observeState() {
 
         if (cardsPlayer.size()<2 || cardsDealer.size()<2) {
             throw new IllegalArgumentException("To few player and/or dealer cards defined");
         }
 
-        return new StateObserved(
+        return new StateObservedObserved(
                 CardsInfo.sumHand(cardsPlayer),
                 CardsInfo.usableAce(cardsPlayer),
                 cardsDealer.get(0).value

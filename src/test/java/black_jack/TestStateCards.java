@@ -2,7 +2,7 @@ package black_jack;
 
 import black_jack.models_cards.Card;
 import black_jack.models_cards.StateCards;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedObserved;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class TestStateCards {
 
     @Test public void observeState() {
         StateCards dealerAndPlayerCards = getCards();
-        StateObserved obs=dealerAndPlayerCards.observeState();
+        StateObservedObserved obs=dealerAndPlayerCards.observeState();
 
         System.out.println("obs = " + obs);
 

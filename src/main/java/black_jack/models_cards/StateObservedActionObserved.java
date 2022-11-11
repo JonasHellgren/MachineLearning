@@ -10,21 +10,21 @@ import java.util.Objects;
 @AllArgsConstructor
 @ToString
 @Getter
-public class StateActionObserved implements StateInterface {
+public class StateObservedActionObserved implements StateObservedInterface {
 
-    StateObserved stateObserved;
+    StateObservedObserved stateObserved;
     CardAction cardAction;
 
-    public static StateActionObserved newFromScalars(long sumHandPlayer,
-                                                     boolean playerHasUsableAce,
-                                                     long dealerCardValue,
-                                                     CardAction cardAction) {
-        return new StateActionObserved(new StateObserved(sumHandPlayer, playerHasUsableAce, dealerCardValue),cardAction);
+    public static StateObservedActionObserved newFromScalars(long sumHandPlayer,
+                                                             boolean playerHasUsableAce,
+                                                             long dealerCardValue,
+                                                             CardAction cardAction) {
+        return new StateObservedActionObserved(new StateObservedObserved(sumHandPlayer, playerHasUsableAce, dealerCardValue),cardAction);
     }
 
-    public static StateActionObserved newFromStateAndAction(StateObserved state,
-                                                     CardAction cardAction) {
-        return new StateActionObserved(state,cardAction);
+    public static StateObservedActionObserved newFromStateAndAction(StateObservedObserved state,
+                                                                    CardAction cardAction) {
+        return new StateObservedActionObserved(state,cardAction);
     }
 
     @Override
@@ -33,10 +33,10 @@ public class StateActionObserved implements StateInterface {
         if (obj == this) return true;
 
         //check if the argument has the correct typ
-        if (!(obj instanceof StateActionObserved)) return false;
+        if (!(obj instanceof StateObservedActionObserved)) return false;
 
         //For each significant field in the class, check if that field matches the corresponding field of this object
-        StateActionObserved otherState = (StateActionObserved) obj;
+        StateObservedActionObserved otherState = (StateObservedActionObserved) obj;
         return  otherState.stateObserved.equals(this.stateObserved) &&
                 otherState.cardAction == this.cardAction;
     }

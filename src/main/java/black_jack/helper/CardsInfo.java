@@ -2,7 +2,7 @@ package black_jack.helper;
 
 import black_jack.models_cards.Card;
 import black_jack.models_cards.StateCards;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedObserved;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,13 +66,13 @@ public class CardsInfo {
         return  cardValues.contains(ACE_VALUE_LONG) && cardValues.contains(FACE_CARD_VALUE);
     }
 
-    public static  long scoreHandPlayer(StateObserved observed) {
+    public static  long scoreHandPlayer(StateObservedObserved observed) {
         return (isPlayerBust(observed))
                 ? 0
                 : observed.sumHandPlayer;
     }
 
-    public static boolean isPlayerBust(StateObserved observed)  {
+    public static boolean isPlayerBust(StateObservedObserved observed)  {
         return observed.sumHandPlayer> BUST_LIMIT;
     }
 

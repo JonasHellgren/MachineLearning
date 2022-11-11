@@ -1,8 +1,8 @@
 package black_jack.models_episode;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateActionObserved;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedObserved;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -26,11 +26,11 @@ public class Episode {
         episode.clear();
     }
 
-    public void add(StateObserved s, CardAction a, Double r) {
+    public void add(StateObservedObserved s, CardAction a, Double r) {
         episode.add(new EpisodeItem(s,a,r));
     }
 
-    public void add(StateActionObserved sa, Double r) {
+    public void add(StateObservedActionObserved sa, Double r) {
         episode.add(new EpisodeItem(sa.getStateObserved(),sa.getCardAction(),r));
     }
 
@@ -48,7 +48,7 @@ public class Episode {
         return episode.get(nofItems()-1);
     }
 
-    public boolean isStatePresentBeforeTimeStep(StateObserved state, Integer timeStep) {
+    public boolean isStatePresentBeforeTimeStep(StateObservedObserved state, Integer timeStep) {
         throwExceptionIfNonValidTimeStep(timeStep);
 
         //todo replace with streams

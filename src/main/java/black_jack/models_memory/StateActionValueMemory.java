@@ -1,9 +1,9 @@
 package black_jack.models_memory;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateActionObserved;
-import black_jack.models_cards.StateInterface;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedInterface;
+import black_jack.models_cards.StateObservedObserved;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -14,12 +14,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Getter
-public class StateActionValueMemory implements MemoryInterface<StateActionObserved> {
+public class StateActionValueMemory implements MemoryInterface<StateObservedActionObserved> {
 
     public static final double DEFAULT_VALUE = -0d;
 
     Map<Integer, Double> stateActionValueMap;
-    Set<StateActionObserved> visitedStates;
+    Set<StateObservedActionObserved> visitedStates;
 
     public StateActionValueMemory() {
         this.stateActionValueMap = new HashMap<>();
@@ -38,24 +38,24 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
     }
 
     @Override
-    public double read(StateActionObserved state) {
+    public double read(StateObservedActionObserved state) {
         return stateActionValueMap.getOrDefault(state.hashCode(), DEFAULT_VALUE);
     }
 
     @Override
-    public double readBestValue(StateObserved state) {
+    public double readBestValue(StateObservedObserved state) {
         double valueHit=stateActionValueMap.getOrDefault(
-                StateActionObserved.newFromStateAndAction(state, CardAction.hit).hashCode()
+                StateObservedActionObserved.newFromStateAndAction(state, CardAction.hit).hashCode()
                 ,DEFAULT_VALUE);
         double valueStick=stateActionValueMap.getOrDefault(
-                StateActionObserved.newFromStateAndAction(state, CardAction.stick).hashCode()
+                StateObservedActionObserved.newFromStateAndAction(state, CardAction.stick).hashCode()
                 ,DEFAULT_VALUE);
 
         return Math.max(valueHit,valueStick);
     }
 
     @Override
-    public void write(StateActionObserved state, double value) {
+    public void write(StateObservedActionObserved state, double value) {
         stateActionValueMap.put(state.hashCode(),value);
         visitedStates.add(state);
     }
@@ -69,9 +69,9 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
 
 
     @Override
-    public Set<Double> valuesOf(Predicate<StateObserved> p) {
-        Set<StateObserved> stateSet= StateInterface.allStates();
-        Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
+    public Set<Double> valuesOf(Predicate<StateObservedObserved> p) {
+        Set<StateObservedObserved> stateSet= StateObservedInterface.allStates();
+        Set<StateObservedObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
         Set<Double> setDouble=new HashSet<>();
         set.forEach(s -> setDouble.add(readBestValue(s)));
         return setDouble;
@@ -80,7 +80,7 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (StateActionObserved s : visitedStates) {
+        for (StateObservedActionObserved s : visitedStates) {
             sb.append(s.toString()).append(", value = ").
                     append(stateActionValueMap.getOrDefault(s.hashCode(), DEFAULT_VALUE)).
                     append(System.getProperty("line.separator"));

@@ -1,7 +1,7 @@
 package black_jack.main_runner;
 
-import black_jack.models_cards.StateInterface;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedInterface;
+import black_jack.models_cards.StateObservedObserved;
 import black_jack.models_memory.MemoryInterface;
 import black_jack.result_drawer.GridPanel;
 
@@ -17,11 +17,11 @@ public class MemoryShower<T> {
     }
 
      void setPanel(GridPanel panel, MemoryInterface<T> stateValueMemory, boolean usableAce) {
-        List<Integer> xSet = StateInterface.getDealerCardList();
-        List<Integer> ySet = StateInterface.getHandsSumList();
+        List<Integer> xSet = StateObservedInterface.getDealerCardList();
+        List<Integer> ySet = StateObservedInterface.getHandsSumList();
         for (int y : ySet) {
             for (int x : xSet) {
-                StateObserved s=new StateObserved(y, usableAce, x);
+                StateObservedObserved s=new StateObservedObserved(y, usableAce, x);
                 double value = stateValueMemory.readBestValue(s);
                 panel.setNumbersAtCell(x,y, value);
             }

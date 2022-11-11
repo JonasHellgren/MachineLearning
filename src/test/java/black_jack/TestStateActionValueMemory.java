@@ -5,7 +5,7 @@ import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateActionValue;
-import black_jack.models_cards.StateActionObserved;
+import black_jack.models_cards.StateObservedActionObserved;
 import black_jack.models_cards.StateCards;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.NumberOfStateActionsVisitsMemory;
@@ -51,10 +51,10 @@ public class TestStateActionValueMemory {
     @Test
     public void learnMemoryFromOneEpisode() {
 
-        StateActionObserved s1 = StateActionObserved.newFromScalars(2, false, 17,CardAction.hit);
-        StateActionObserved s2 = StateActionObserved.newFromScalars(5, false, 17,CardAction.hit);
-        StateActionObserved s3 = StateActionObserved.newFromScalars(12, false, 17,CardAction.hit);
-        StateActionObserved s4 = StateActionObserved.newFromScalars(21, false, 17,CardAction.stick);
+        StateObservedActionObserved s1 = StateObservedActionObserved.newFromScalars(2, false, 17,CardAction.hit);
+        StateObservedActionObserved s2 = StateObservedActionObserved.newFromScalars(5, false, 17,CardAction.hit);
+        StateObservedActionObserved s3 = StateObservedActionObserved.newFromScalars(12, false, 17,CardAction.hit);
+        StateObservedActionObserved s4 = StateObservedActionObserved.newFromScalars(21, false, 17,CardAction.stick);
 
         episode.add(s1, ZERO_REWARD);
         episode.add(s2, ZERO_REWARD);
@@ -92,10 +92,10 @@ public class TestStateActionValueMemory {
     public void learnForSumPlayer21StickIsBetterThanHit() {
         trainMemory(new PolicyRandom());
 
-        double valueStick=stateActionValueMemory.read(StateActionObserved.newFromScalars(21,true,10,CardAction.stick));
-        double valueHit=stateActionValueMemory.read(StateActionObserved.newFromScalars(21,true,10,CardAction.hit));
+        double valueStick=stateActionValueMemory.read(StateObservedActionObserved.newFromScalars(21,true,10,CardAction.stick));
+        double valueHit=stateActionValueMemory.read(StateObservedActionObserved.newFromScalars(21,true,10,CardAction.hit));
 
-        double nofVisits=learner.getNumberOfStateActionsVisitsMemory().read(StateActionObserved.newFromScalars(20,true,10,CardAction.stick));
+        double nofVisits=learner.getNumberOfStateActionsVisitsMemory().read(StateObservedActionObserved.newFromScalars(20,true,10,CardAction.stick));
 
         System.out.println("valueStick = " + valueStick+", valueHit = " + valueHit);
         System.out.println("nofVisits = " + nofVisits);
@@ -108,10 +108,10 @@ public class TestStateActionValueMemory {
     public void learnFromMemoryRandomGreedyPolicy() {
         trainMemory(new PolicyGreedyOnStateActionMemory(stateActionValueMemory, PROBABILITY_RANDOM_ACTION));
 
-        double valueStick=stateActionValueMemory.read(StateActionObserved.newFromScalars(21,true,10,CardAction.stick));
-        double valueHit=stateActionValueMemory.read(StateActionObserved.newFromScalars(21,true,10,CardAction.hit));
+        double valueStick=stateActionValueMemory.read(StateObservedActionObserved.newFromScalars(21,true,10,CardAction.stick));
+        double valueHit=stateActionValueMemory.read(StateObservedActionObserved.newFromScalars(21,true,10,CardAction.hit));
 
-        double nofVisits=learner.getNumberOfStateActionsVisitsMemory().read(StateActionObserved.newFromScalars(20,true,10,CardAction.stick));
+        double nofVisits=learner.getNumberOfStateActionsVisitsMemory().read(StateObservedActionObserved.newFromScalars(20,true,10,CardAction.stick));
 
         System.out.println("valueStick = " + valueStick+", valueHit = " + valueHit);
         System.out.println("nofVisits = " + nofVisits);

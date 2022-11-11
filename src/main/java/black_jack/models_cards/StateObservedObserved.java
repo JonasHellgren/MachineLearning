@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @ToString
-public class StateObserved  implements StateInterface {
+public class StateObservedObserved implements StateObservedInterface {
 
 
     public long sumHandPlayer;  //the players current sum
@@ -25,10 +25,10 @@ public class StateObserved  implements StateInterface {
         if (obj == this) return true;
 
         //check if the argument has the correct typ
-        if (!(obj instanceof StateObserved)) return false;
+        if (!(obj instanceof StateObservedObserved)) return false;
 
         //For each significant field in the class, check if that field matches the corresponding field of this object
-        StateObserved otherState = (StateObserved) obj;
+        StateObservedObserved otherState = (StateObservedObserved) obj;
         return otherState.sumHandPlayer == this.sumHandPlayer &&
                 otherState.playerHasUsableAce == this.playerHasUsableAce &&
                 otherState.dealerCardValue == this.dealerCardValue;

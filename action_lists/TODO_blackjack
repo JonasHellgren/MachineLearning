@@ -61,7 +61,15 @@ PolicyRandom x
 draft OnPolicyMonteCarloControlRunner x
 
 valuesOf i interface  x
-snygga upp StateInterface
+snygga upp StateInterface  x
+playBlackJackManyTimesAndSetValueMemory i klass BlackJackPlayer
+grafik som visar policy, dvs när hit/stick vs state. En för usable ace, annan utan asuable ace
+MemoryInterface - T extends StateInterface
+snygga upp
+nya plantUml
+dokumentation i md fil
+
+
 
 On-Policy Monte Carlo Control
 

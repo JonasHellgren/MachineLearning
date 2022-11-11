@@ -1,14 +1,14 @@
 package black_jack.models_memory;
 
-import black_jack.models_cards.StateActionObserved;
-import black_jack.models_cards.StateObserved;
+import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedObserved;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class NumberOfStateActionsVisitsMemory  implements MemoryInterface<StateActionObserved> {
+public class NumberOfStateActionsVisitsMemory  implements MemoryInterface<StateObservedActionObserved> {
 
     public static final int INIT_VALUE = 0;
     Map<Integer, Integer> stateActionNofVisitsMap;
@@ -28,17 +28,17 @@ public class NumberOfStateActionsVisitsMemory  implements MemoryInterface<StateA
     }
 
     @Override
-    public double read(StateActionObserved state) {
+    public double read(StateObservedActionObserved state) {
         return stateActionNofVisitsMap.getOrDefault(state.hashCode(),INIT_VALUE);
     }
 
     @Override
-    public double readBestValue(StateObserved state) {
+    public double readBestValue(StateObservedObserved state) {
         throw new RuntimeException("Not implemented method");
     }
 
     @Override
-    public void write(StateActionObserved state, double Value) {
+    public void write(StateObservedActionObserved state, double Value) {
         throw new RuntimeException("Not implemented method");
     }
 
@@ -49,11 +49,11 @@ public class NumberOfStateActionsVisitsMemory  implements MemoryInterface<StateA
     }
 
     @Override
-    public Set<Double> valuesOf(Predicate<StateObserved> p) {
+    public Set<Double> valuesOf(Predicate<StateObservedObserved> p) {
         throw new RuntimeException("Not implemented");
     }
 
-    public void increase(StateActionObserved state) {
+    public void increase(StateObservedActionObserved state) {
         int oldNofVisits=stateActionNofVisitsMap.getOrDefault(state.hashCode(),INIT_VALUE);
         stateActionNofVisitsMap.put(state.hashCode(),oldNofVisits+1);
     }
