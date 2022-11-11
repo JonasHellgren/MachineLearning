@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 @Log
 public class PolicyEvaluation {
 
-    public static final int NOF_EPISODES = 200_000;
+    public static final int NOF_EPISODES = 500_000;
     private static final double ALPHA = 0.001;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";

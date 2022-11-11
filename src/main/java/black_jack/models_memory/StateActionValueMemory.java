@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 @Getter
 public class StateActionValueMemory implements MemoryInterface<StateActionObserved> {
 
-    public static final double DEFAULT_VALUE = 0d;
+    public static final double DEFAULT_VALUE = -0d;
 
     Map<Integer, Double> stateActionValueMap;
     Set<StateActionObserved> visitedStates;

@@ -18,7 +18,7 @@ public class GridPanel extends JPanel {
     private static final Color LINE_COLOR = Color.BLACK;
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
-    private static final Color TEXT_COLOR = Color.BLUE;
+    private static final Color TEXT_COLOR = Color.RED;
     private static final int RBG_MAX = 255;
     private static final double RELATIVE_FONT_SIZE_TEXT = 0.6;
     private static final double RELATIVE_FONT_SIZE_NUMBERS = 0.4;

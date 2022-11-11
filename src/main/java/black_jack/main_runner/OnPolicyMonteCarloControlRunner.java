@@ -23,13 +23,13 @@ import lombok.extern.java.Log;
 @Log
 public class OnPolicyMonteCarloControlRunner {
 
-    public static final int NOF_EPISODES = 200_000;
-    private static final double ALPHA = 0.001;  //critical parameter setting
+    public static final int NOF_EPISODES = 500_000;
+    private static final double ALPHA = 0.003;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";
     private static final String Y_LABEL = "Player sum";
     private static final int NOF_DECIMALS_FRAME_TITLE = 2;
-    private static final double PROBABILITY_RANDOM_ACTION = 0.1;
+    private static final double PROBABILITY_RANDOM_ACTION = 0.05;
 
 
     public static void main(String[] args) {
@@ -43,6 +43,10 @@ public class OnPolicyMonteCarloControlRunner {
 
         MemoryShower<StateActionObserved> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
+
+
+        System.out.println("memory.getStateActionValueMap().size() = " + memory.getStateActionValueMap().size());
+
     }
 
     private static void playBlackJackManyTimesAndSetValueMemory(StateActionValueMemory memory) {
@@ -63,7 +67,7 @@ public class OnPolicyMonteCarloControlRunner {
     }
 
     private static void sometimeLogEpisodeNumber(int episodeNumber) {
-        if (episodeNumber % 1_00_000 == 0) {
+        if (episodeNumber % 100_000 == 0) {
             log.info("i = " + episodeNumber);
         }
     }
