@@ -1,5 +1,6 @@
 package black_jack.models_memory;
 
+import black_jack.models_cards.StateInterface;
 import black_jack.models_cards.StateObserved;
 import freemarker.ext.jsp.FreemarkerTag;
 
@@ -61,7 +62,7 @@ public class StateValueMemory implements MemoryInterface<StateObserved> {
 
     @Override
     public Set<Double> valuesOf(Predicate<StateObserved> p) {
-        Set<StateObserved> stateSet=StateObserved.allStates();
+        Set<StateObserved> stateSet= StateInterface.allStates();
         Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
         Set<Double> setDouble=new HashSet<>();
         set.forEach(s -> setDouble.add(stateValueMap.get(s.hashCode())));

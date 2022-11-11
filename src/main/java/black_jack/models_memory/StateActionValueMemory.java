@@ -2,6 +2,7 @@ package black_jack.models_memory;
 
 import black_jack.enums.CardAction;
 import black_jack.models_cards.StateActionObserved;
+import black_jack.models_cards.StateInterface;
 import black_jack.models_cards.StateObserved;
 import lombok.Getter;
 
@@ -69,7 +70,7 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
 
     @Override
     public Set<Double> valuesOf(Predicate<StateObserved> p) {
-        Set<StateObserved> stateSet=StateObserved.allStates();
+        Set<StateObserved> stateSet= StateInterface.allStates();
         Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
         Set<Double> setDouble=new HashSet<>();
         set.forEach(s -> setDouble.add(readBestValue(s)));

@@ -74,14 +74,5 @@ public class OnPolicyMonteCarloControlRunner {
         }
     }
 
-    private static String getAverageValue(MemoryInterface<StateActionObserved> stateValueMemory, boolean usableAce) {
-        Predicate<StateObserved> p = (usableAce)
-                ?s -> s.playerHasUsableAce
-                :s -> !s.playerHasUsableAce;
-        Set<Double> valueList= stateValueMemory.valuesOf(p);
-        double avg= valueList.stream().filter(Objects::nonNull).mapToDouble(v -> v).average().orElse(Double.NaN);
-        BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
-        return bd.toString();
-    }
 
 }
