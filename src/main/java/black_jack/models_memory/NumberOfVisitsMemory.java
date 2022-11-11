@@ -5,7 +5,7 @@ import black_jack.models_cards.StateObserved;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NumberOfVisitsMemory implements MemoryInterface {
+public class NumberOfVisitsMemory implements MemoryInterface<StateObserved> {
 
     public static final int INIT_VALUE = 0;
 

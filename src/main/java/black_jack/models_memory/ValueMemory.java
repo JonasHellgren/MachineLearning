@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ValueMemory implements MemoryInterface {
+public class ValueMemory implements MemoryInterface<StateObserved> {
 
     public static final double DEFAULT_VALUE = 0d;
 
