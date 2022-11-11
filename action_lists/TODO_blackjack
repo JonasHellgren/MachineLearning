@@ -50,6 +50,13 @@ REWARD_PLAYER_BETTER_HAND_AND_ACE_AND_FACE_CARD som 1?
 
 valueMemory.average smarare med utan ace
 
+StateActionObserved  x
+StateActionValueMemory
+MemoryInterface<P>
+ActionValueLearner
+TestActionValueMemory
+
+
 On-Policy Monte Carlo Control
 
 https://ernie55ernie.github.io/assets/blackjack.html

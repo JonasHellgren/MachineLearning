@@ -19,7 +19,6 @@ import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @ToString
-
 public class StateObserved {
     public static final int LOWER_HANDS_SUM_PLAYER = 10;
     public static final int MAX_HANDS_SUM_PLAYER = 21;

@@ -21,24 +21,29 @@ public class ValueMemory implements MemoryInterface {
         visitedStates = new HashSet<>();
     }
 
+    @Override
     public void clear() {
         stateValueMap.clear();
         visitedStates.clear();
     }
 
+    @Override
     public int nofItems() {
         return stateValueMap.size();
     }
 
+    @Override
     public double read(StateObserved state) {
         return stateValueMap.getOrDefault(state.hashCode(), DEFAULT_VALUE);
     }
 
+    @Override
     public void write(StateObserved state, double value) {
         stateValueMap.put(state.hashCode(),value);
         visitedStates.add(state);
     }
 
+    @Override
     public double average() {
         double sum = stateValueMap.values().stream()
                 .mapToDouble(d -> d).sum();

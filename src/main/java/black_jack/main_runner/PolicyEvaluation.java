@@ -3,7 +3,7 @@ package black_jack.main_runner;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
-import black_jack.helper.Learner;
+import black_jack.helper.LearnerValue;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_returns.ReturnsForEpisode;
@@ -12,19 +12,17 @@ import black_jack.models_memory.ValueMemory;
 import black_jack.policies.HitBelow20Policy;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /***
  *     Candidate parameter setting:
@@ -32,6 +30,7 @@ import java.util.stream.IntStream;
  *     private static final boolean NOF_VISITS_FLAG = true;  //critical parameter setting
  */
 
+@Log
 public class PolicyEvaluation {
 
     public static final int NOF_EPISODES = 200_000;
@@ -66,17 +65,20 @@ public class PolicyEvaluation {
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
-        Learner learner = new Learner(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
+        LearnerValue learner = new LearnerValue(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
-            if (episodeNumber % 1_00_000 == 0) {
-                System.out.println("i = " + episodeNumber);
-            }
-
+            sometimeLogEpisodeNumber(episodeNumber);
             StateCards cards = StateCards.newRandomPairs();
             Episode episode = episodeRunner.play(cards);
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
             learner.updateMemory(returnsForEpisode);
+        }
+    }
+
+    private static void sometimeLogEpisodeNumber(int episodeNumber) {
+        if (episodeNumber % 1_00_000 == 0) {
+            log.info("i = " + episodeNumber);
         }
     }
 
