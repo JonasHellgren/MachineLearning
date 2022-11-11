@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 @Getter
 public class StateActionValueMemory implements MemoryInterface<StateActionObserved> {
@@ -48,6 +49,11 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
     public double average() {
         throw  new RuntimeException("Non defined method");
         //return 0;
+    }
+
+    @Override
+    public Set<Double> valuesOf(Predicate<StateObserved> p) {
+       throw new RuntimeException("Not implemented");
     }
 
     @Override

@@ -9,28 +9,28 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Setter
-@Getter
 abstract public class LearnerAbstract implements LearnerInterface {
 
-    NumberOfStateVisitsMemory numberOfStateVisitsMemory;
+
     double alpha;
     boolean regardNofVisitsFlag;
 
     public abstract void updateMemory(ReturnItem ri);
+    public abstract void increaseNofVisits(ReturnItem ri);
 
     @Override
     public void updateMemoryFromEpisodeReturns(ReturnsForEpisode returns) {
         for (ReturnItem ri : returns.getReturns()) {
             updateMemory(ri);
             if (regardNofVisitsFlag) {
-                numberOfStateVisitsMemory.increase(ri.state);
+                increaseNofVisits(ri);
             }
         }
     }
 
-    double getNewValue(ReturnItem ri, double oldValue) {
+    double getNewValue(ReturnItem ri, double oldValue, int nofVisits) {
         double coeffNumberOfVisits=(regardNofVisitsFlag)
-                ?1/(1 + numberOfStateVisitsMemory.read(ri.state))
+                ?1/(float) (1 + nofVisits)
                 :1;
         return oldValue + alpha * coeffNumberOfVisits * (ri.returnValue - oldValue);
     }

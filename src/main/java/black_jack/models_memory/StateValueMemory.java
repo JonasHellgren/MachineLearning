@@ -53,6 +53,7 @@ public class StateValueMemory implements MemoryInterface<StateObserved> {
                 :sum/(double)nofItems;
     }
 
+    @Override
     public Set<Double> valuesOf(Predicate<StateObserved> p) {
         Set<StateObserved> stateSet=StateObserved.allStates();
         Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());

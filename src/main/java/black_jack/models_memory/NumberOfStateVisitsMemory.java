@@ -4,11 +4,12 @@ import black_jack.models_cards.StateObserved;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class NumberOfStateVisitsMemory implements MemoryInterface<StateObserved> {
 
     public static final int INIT_VALUE = 0;
-
     Map<Integer, Integer> stateNofVisitsMap;
 
     public NumberOfStateVisitsMemory() {
@@ -42,6 +43,11 @@ public class NumberOfStateVisitsMemory implements MemoryInterface<StateObserved>
         return (nofItems==0)
                 ? 0
                 :(double) sum/(double)nofItems;
+    }
+
+    @Override
+    public Set<Double> valuesOf(Predicate<StateObserved> p) {
+        throw  new RuntimeException("Not implemented");
     }
 
     public void increase(StateObserved state) {

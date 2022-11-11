@@ -1,5 +1,6 @@
 package black_jack.helper;
 
+import black_jack.models_cards.StateActionObserved;
 import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnItem;
@@ -8,10 +9,11 @@ import lombok.Setter;
 @Setter
 public class LearnerStateValue extends LearnerAbstract {
     StateValueMemory stateValueMemory; //reference
+    NumberOfStateVisitsMemory numberOfStateVisitsMemory;
 
     public LearnerStateValue(StateValueMemory stateValueMemory,
                              NumberOfStateVisitsMemory numberOfStateVisitsMemory) {
-        super(numberOfStateVisitsMemory,LearnerInterface.ALPHA_DEFAULT,LearnerInterface.FLAG_DEFAULT);
+        super(LearnerInterface.ALPHA_DEFAULT,LearnerInterface.FLAG_DEFAULT);
         this.stateValueMemory = stateValueMemory;
         this.numberOfStateVisitsMemory = numberOfStateVisitsMemory;
     }
@@ -25,11 +27,19 @@ public class LearnerStateValue extends LearnerAbstract {
         this.regardNofVisitsFlag=regardNofVisitsFlag;
     }
 
+    @Override
+    public void increaseNofVisits(ReturnItem ri) {
+        numberOfStateVisitsMemory.increase(ri.state);
+    }
 
+    @Override
     public void updateMemory(ReturnItem ri) {
+        StateActionObserved sa=new StateActionObserved(ri.state,ri.cardAction);
         double oldValue = stateValueMemory.read(ri.state);
-        double newValue = getNewValue(ri, oldValue);
+        int nofVisits= (int) numberOfStateVisitsMemory.read(ri.state);
+        double newValue = getNewValue(ri, oldValue,nofVisits);
         stateValueMemory.write(ri.state, newValue);
     }
+
 
 }

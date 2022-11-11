@@ -15,11 +15,16 @@ public class StateActionObserved {
     StateObserved stateObserved;
     CardAction cardAction;
 
-    public static StateActionObserved newStateAction(long sumHandPlayer,
+    public static StateActionObserved newFromScalars(long sumHandPlayer,
                                                      boolean playerHasUsableAce,
                                                      long dealerCardValue,
                                                      CardAction cardAction) {
         return new StateActionObserved(new StateObserved(sumHandPlayer, playerHasUsableAce, dealerCardValue),cardAction);
+    }
+
+    public static StateActionObserved newFromStateAndAction(StateObserved state,
+                                                     CardAction cardAction) {
+        return new StateActionObserved(state,cardAction);
     }
 
     @Override
