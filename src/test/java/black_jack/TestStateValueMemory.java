@@ -63,7 +63,7 @@ public class TestStateValueMemory {
 
         learner.setRegardNofVisitsFlag(false);
         for (int i = 0; i < NOF_UPDATES; i++) {
-            learner.updateMemory(returnsForEpisode);
+            learner.updateMemoryFromEpisodeReturns(returnsForEpisode);
         }
 
         System.out.println("valueMemory = " + stateValueMemory);
@@ -83,7 +83,7 @@ public class TestStateValueMemory {
             Episode episode=episodeRunner.play(cards);
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
-            learner.updateMemory(returnsForEpisode);
+            learner.updateMemoryFromEpisodeReturns(returnsForEpisode);
         }
 
         //System.out.println("valueMemory = " + valueMemory);

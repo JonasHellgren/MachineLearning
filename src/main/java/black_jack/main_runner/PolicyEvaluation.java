@@ -72,7 +72,7 @@ public class PolicyEvaluation {
             Episode episode = episodeRunner.play(cards);
             returnsForEpisode.clear();
             returnsForEpisode.appendReturns(episode);
-            learner.updateMemory(returnsForEpisode);
+            learner.updateMemoryFromEpisodeReturns(returnsForEpisode);
         }
     }
 

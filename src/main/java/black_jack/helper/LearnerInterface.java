@@ -8,7 +8,7 @@ public interface LearnerInterface {
      double ALPHA_DEFAULT = 0.1;
      boolean FLAG_DEFAULT=true;
 
-    void updateMemory(ReturnsForEpisode returns);
+    void updateMemoryFromEpisodeReturns(ReturnsForEpisode returns);
     void updateMemory(ReturnItem ri);
 
 }
