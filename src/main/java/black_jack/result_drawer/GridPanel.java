@@ -77,6 +77,8 @@ public class GridPanel extends JPanel {
         this.nofDecimals = nofDecimals;
         this.textCellValues = textCellValues;
 
+
+
         this.nofRows = ySet.size();
         this.nofColumns = xSet.size();
         this.cellSize = defineAndSetCellSize(relativeFrameSize);

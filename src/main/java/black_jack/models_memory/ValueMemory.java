@@ -38,11 +38,22 @@ public class ValueMemory implements MemoryInterface {
     }
 
     public double average() {
-        double sum = stateValueMap.values().stream().mapToDouble(d -> d).sum();
+        double sum = stateValueMap.values().stream()
+                .mapToDouble(d -> d).sum();
         int nofItems=stateValueMap.size();
         return (nofItems==0)
                 ? 0
                 :sum/(double)nofItems;
+    }
+
+    public Set<Double> valuesOf() {
+        Set<Double> set=new HashSet<>();
+
+        Set<StateObserved> stateSet=StateObserved.allStates();
+
+        return set;
+
+
     }
 
     @Override

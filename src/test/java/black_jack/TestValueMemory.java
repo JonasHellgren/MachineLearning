@@ -16,6 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
+
 public class TestValueMemory {
     public static final double DELTA = 0.1;
     public static final int NOF_UPDATES = 1000;
@@ -92,6 +94,13 @@ public class TestValueMemory {
 
         Assert.assertTrue(valueMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
         Assert.assertTrue(numberOfVisitsMemory.nofItems()>15*10*2*0.5);  //sumPlayer*cardDealer*ace*margin
+    }
+
+    @Test public void allStates() {
+        Set<StateObserved> stateSet= StateObserved.allStates();
+        System.out.println("stateSet = " + stateSet);
+        System.out.println("stateSet.size() = " + stateSet.size());
+        Assert.assertTrue(stateSet.size()>200);
     }
 
 }

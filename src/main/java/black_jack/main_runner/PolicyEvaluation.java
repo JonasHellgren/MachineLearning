@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -55,6 +56,7 @@ public class PolicyEvaluation {
         showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
     }
 
+    /*
     @NotNull
     private static List<Integer> getYset() {
         return IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
@@ -63,7 +65,7 @@ public class PolicyEvaluation {
     @NotNull
     private static List<Integer> getXset() {
         return IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
-    }
+    }  */
 
     private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, ValueMemory valueMemory) {
         setPanel(panelNoUsableAce, valueMemory, false);
@@ -94,8 +96,8 @@ public class PolicyEvaluation {
 
     @NotNull
     private static GridPanel createUsableAceFrameAndPanel(String frameTitle) {
-        List<Integer> xSet = getXset();
-        List<Integer> ySet = getYset();
+        List<Integer> xSet = StateObserved.getDealerCardList();
+        List<Integer> ySet = StateObserved.getHandsSumList();
         JFrame frameUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
         frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
@@ -105,8 +107,8 @@ public class PolicyEvaluation {
 
     @NotNull
     private static GridPanel createNoUsableAceFrameAndPanel(String frameTitle) {
-        List<Integer> xSet = getXset();
-        List<Integer> ySet = getYset();
+        List<Integer> xSet = StateObserved.getDealerCardList();
+        List<Integer> ySet = StateObserved.getHandsSumList();
         JFrame frameNoUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, X_LABEL, Y_LABEL);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.
@@ -115,8 +117,8 @@ public class PolicyEvaluation {
     }
 
     private static void setPanel(GridPanel panel, ValueMemory valueMemory, boolean usableAce) {
-        List<Integer> xSet = getXset();
-        List<Integer> ySet = getYset();
+        List<Integer> xSet = StateObserved.getDealerCardList();
+        List<Integer> ySet = StateObserved.getHandsSumList();
         for (int y : ySet) {
             for (int x : xSet) {
                 double value = valueMemory.read(new StateObserved(y, usableAce, x));
@@ -128,7 +130,7 @@ public class PolicyEvaluation {
     }
 
     private static String getAverageValue(ValueMemory valueMemory, boolean usableAce) {
-        List<Double> valueList=new ArrayList<>();
+        /* List<Double> valueList=new ArrayList<>();
         List<Integer> xSet = getXset();
         List<Integer> ySet = getYset();
         for (int y : ySet) {
@@ -140,7 +142,9 @@ public class PolicyEvaluation {
         double avg= valueList.stream()
                 .mapToDouble(v -> v)
                 .average()
-                .orElse(Double.NaN);
+                .orElse(Double.NaN);  */
+
+        double avg=valueMemory.average();
 
         BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
         return bd.toString();
