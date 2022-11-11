@@ -4,7 +4,9 @@ import black_jack.models_memory.NumberOfVisitsMemory;
 import black_jack.models_returns.ReturnItem;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.models_memory.ValueMemory;
+import lombok.Setter;
 
+@Setter
 public class Learner {
     public static final double ALPHA_DEFAULT = 0.1;
     private static final boolean FLAG_DEFAULT=true;

@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class TestValueMemory {
     public static final double DELTA = 0.1;
-    public static final int NOF_UPDATES = 1000;
+    public static final int NOF_UPDATES = 10_000;
     public static final double ALPHA = 0.01;
     boolean regardNofVisitsFlag=true;
     public static final int NOF_EPISODES = 100_000;
@@ -61,6 +61,7 @@ public class TestValueMemory {
 
         System.out.println("returnsForEpisode = " + returnsForEpisode);
 
+        learner.setRegardNofVisitsFlag(false);
         for (int i = 0; i < NOF_UPDATES; i++) {
             learner.updateMemory(returnsForEpisode);
         }

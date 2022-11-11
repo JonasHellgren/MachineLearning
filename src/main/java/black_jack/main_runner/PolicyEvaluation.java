@@ -144,7 +144,17 @@ public class PolicyEvaluation {
                 .average()
                 .orElse(Double.NaN);  */
 
-        double avg=valueMemory.average();
+        //double avg=valueMemory.average();
+
+        Set<Double> valueList= valueMemory.valuesOf();
+
+        System.out.println("valueList = " + valueList);
+        double avg= valueList.stream()
+                .filter(v -> v!=null)
+                .mapToDouble(v -> v)
+                .average()
+                .orElse(Double.NaN);
+
 
         BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
         return bd.toString();

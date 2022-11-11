@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ValueMemory implements MemoryInterface {
 
@@ -47,13 +48,19 @@ public class ValueMemory implements MemoryInterface {
     }
 
     public Set<Double> valuesOf() {
-        Set<Double> set=new HashSet<>();
 
         Set<StateObserved> stateSet=StateObserved.allStates();
 
-        return set;
+        Set<StateObserved> set=stateSet.stream()
+                .filter(s -> s.playerHasUsableAce)
+                .collect(Collectors.toSet());
 
+        Set<Double> setDouble=new HashSet<>();
+        set.forEach(s -> setDouble.add(stateValueMap.get(s.hashCode())));
 
+                //.mapToInt(s -> s.hashCode()).collect(Collectors.toSet());
+
+        return setDouble;
     }
 
     @Override
