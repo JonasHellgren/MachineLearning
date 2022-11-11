@@ -1,7 +1,7 @@
 package black_jack.models_returns;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateObservedObserved;
+import black_jack.models_cards.StateObserved;
 import black_jack.models_episode.Episode;
 import black_jack.models_episode.EpisodeItem;
 import lombok.Getter;
@@ -40,7 +40,7 @@ public class ReturnsForEpisode {
         returns.clear();
     }
 
-    public void add(StateObservedObserved state, CardAction cardAction, Double returnValue) {
+    public void add(StateObserved state, CardAction cardAction, Double returnValue) {
         returns.add(new ReturnItem(state, cardAction, returnValue));
     }
 

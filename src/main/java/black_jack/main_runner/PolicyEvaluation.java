@@ -34,22 +34,22 @@ public class PolicyEvaluation {
 
 
     public static void main(String[] args) {
-        MemoryInterface<StateObservedObserved> memory = new StateValueMemory();
+        MemoryInterface<StateObserved> memory = new StateValueMemory();
         playBlackJackManyTimesAndSetValueMemory(memory);
 
-        AverageValueCalculator<StateObservedObserved> ac=new AverageValueCalculator<>();
+        AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
         String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
         String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
-        MemoryShower<StateObservedObserved> ms=new MemoryShower<>();
+        MemoryShower<StateObserved> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
     }
 
 
 
-    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObservedObserved> stateValueMemory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObserved> stateValueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new PolicyHitBelow20();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);

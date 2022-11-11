@@ -1,8 +1,8 @@
 package black_jack.policies;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateObservedActionObserved;
-import black_jack.models_cards.StateObservedObserved;
+import black_jack.models_cards.StateObservedAction;
+import black_jack.models_cards.StateObserved;
 import black_jack.models_memory.StateActionValueMemory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class PolicyGreedyOnStateActionMemory implements PolicyInterface {
     }
 
     @Override
-    public CardAction hitOrStick(StateObservedObserved state) {
+    public CardAction hitOrStick(StateObserved state) {
         return (random.nextDouble()<probabilityRandomAction)
                 ? policyRandom.hitOrStick(state)
                 : hitOrStickNonRandom(state);
@@ -51,10 +51,10 @@ public class PolicyGreedyOnStateActionMemory implements PolicyInterface {
     }
 
 
-    public CardAction hitOrStickNonRandom(StateObservedObserved observed) {
+    public CardAction hitOrStickNonRandom(StateObserved observed) {
         actionValueList.clear();
         for (CardAction action:CardAction.values()) {
-            double value = stateActionValueMemory.read(new StateObservedActionObserved(observed, action));
+            double value = stateActionValueMemory.read(new StateObservedAction(observed, action));
             actionValueList.add(new ActionValue(action,value));
         }
 

@@ -1,7 +1,7 @@
 package black_jack.policies;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateObservedObserved;
+import black_jack.models_cards.StateObserved;
 
 import java.util.Random;
 
@@ -14,7 +14,7 @@ public class PolicyRandom implements PolicyInterface {
     }
 
     @Override
-    public CardAction hitOrStick(StateObservedObserved observed) {
+    public CardAction hitOrStick(StateObserved observed) {
         return (random.nextInt(2)==0)
                 ?CardAction.stick
                 :CardAction.hit;

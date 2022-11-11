@@ -1,13 +1,13 @@
 package black_jack.models_memory;
 
-import black_jack.models_cards.StateObservedObserved;
+import black_jack.models_cards.StateObserved;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class NumberOfStateVisitsMemory implements MemoryInterface<StateObservedObserved> {
+public class NumberOfStateVisitsMemory implements MemoryInterface<StateObserved> {
 
     public static final int INIT_VALUE = 0;
     Map<Integer, Integer> stateNofVisitsMap;
@@ -27,17 +27,17 @@ public class NumberOfStateVisitsMemory implements MemoryInterface<StateObservedO
     }
 
     @Override
-    public double read(StateObservedObserved state) {
+    public double read(StateObserved state) {
         return stateNofVisitsMap.getOrDefault(state.hashCode(),INIT_VALUE);
     }
 
     @Override
-    public double readBestValue(StateObservedObserved state) {
+    public double readBestValue(StateObserved state) {
         throw new RuntimeException("Not implemented method");
     }
 
     @Override
-    public void write(StateObservedObserved state, double Value) {
+    public void write(StateObserved state, double Value) {
         throw new RuntimeException("Not implemented method");
     }
 
@@ -51,11 +51,11 @@ public class NumberOfStateVisitsMemory implements MemoryInterface<StateObservedO
     }
 
     @Override
-    public Set<Double> valuesOf(Predicate<StateObservedObserved> p) {
+    public Set<Double> valuesOf(Predicate<StateObserved> p) {
         throw  new RuntimeException("Not implemented");
     }
 
-    public void increase(StateObservedObserved state) {
+    public void increase(StateObserved state) {
         int oldNofVisits=stateNofVisitsMap.getOrDefault(state.hashCode(),INIT_VALUE);
         stateNofVisitsMap.put(state.hashCode(),oldNofVisits+1);
     }

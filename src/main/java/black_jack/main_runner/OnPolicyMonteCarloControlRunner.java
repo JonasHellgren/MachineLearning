@@ -4,7 +4,7 @@ import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateActionValue;
-import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedAction;
 import black_jack.models_cards.StateCards;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.*;
@@ -27,23 +27,23 @@ public class OnPolicyMonteCarloControlRunner {
 
 
     public static void main(String[] args) {
-        MemoryInterface<StateObservedActionObserved> memory = new StateActionValueMemory();
+        MemoryInterface<StateObservedAction> memory = new StateActionValueMemory();
         playBlackJackManyTimesAndSetValueMemory(memory);
 
-        AverageValueCalculator<StateObservedActionObserved> ac=new AverageValueCalculator<>();
+        AverageValueCalculator<StateObservedAction> ac=new AverageValueCalculator<>();
         String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
         String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
 
-        MemoryShower<StateObservedActionObserved> ms=new MemoryShower<>();
+        MemoryShower<StateObservedAction> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
 
         //show policy todo
 
     }
 
-    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObservedActionObserved> memory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObservedAction> memory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new PolicyGreedyOnStateActionMemory((StateActionValueMemory) memory, PROBABILITY_RANDOM_ACTION);
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);

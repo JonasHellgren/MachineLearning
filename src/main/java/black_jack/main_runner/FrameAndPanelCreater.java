@@ -1,6 +1,6 @@
 package black_jack.main_runner;
 
-import black_jack.models_cards.StateObservedInterface;
+import black_jack.models_cards.StateInterface;
 import black_jack.result_drawer.GridPanel;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,8 +12,8 @@ public class FrameAndPanelCreater {
 
     @NotNull
     static GridPanel createUsableAceFrameAndPanel(String frameTitle, String xLabel, String yLabel) {
-        List<Integer> xSet = StateObservedInterface.getDealerCardList();
-        List<Integer> ySet = StateObservedInterface.getHandsSumList();
+        List<Integer> xSet = StateInterface.getDealerCardList();
+        List<Integer> ySet = StateInterface.getHandsSumList();
         JFrame frameUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelUsableAce = new GridPanel(xSet, ySet, xLabel, yLabel);  // Create an object of type Grid.
         frameUsableAce.setContentPane(panelUsableAce);  // Add the Grid panel to the window.
@@ -23,8 +23,8 @@ public class FrameAndPanelCreater {
 
     @NotNull
     static GridPanel createNoUsableAceFrameAndPanel(String frameTitle, String xLabel, String yLabel) {
-        List<Integer> xSet = StateObservedInterface.getDealerCardList();
-        List<Integer> ySet = StateObservedInterface.getHandsSumList();
+        List<Integer> xSet = StateInterface.getDealerCardList();
+        List<Integer> ySet = StateInterface.getHandsSumList();
         JFrame frameNoUsableAce = new JFrame(frameTitle);  // Create a window with "Grid" in the title bar.
         GridPanel panelNoUsableAce = new GridPanel(xSet, ySet, xLabel, yLabel);  // Create an object of type Grid.
         frameNoUsableAce.setContentPane(panelNoUsableAce);  // Add the Grid panel to the window.

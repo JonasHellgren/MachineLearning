@@ -1,6 +1,6 @@
 package black_jack.helper;
 
-import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedAction;
 import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnItem;
@@ -34,7 +34,7 @@ public class LearnerStateValue extends LearnerAbstract {
 
     @Override
     public void updateMemory(ReturnItem ri) {
-        StateObservedActionObserved sa=new StateObservedActionObserved(ri.state,ri.cardAction);
+        StateObservedAction sa=new StateObservedAction(ri.state,ri.cardAction);
         double oldValue = stateValueMemory.read(ri.state);
         int nofVisits= (int) numberOfStateVisitsMemory.read(ri.state);
         double newValue = getNewValue(ri, oldValue,nofVisits);

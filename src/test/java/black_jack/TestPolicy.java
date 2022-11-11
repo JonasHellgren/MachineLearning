@@ -1,9 +1,9 @@
 package black_jack;
 
 import black_jack.enums.CardAction;
-import black_jack.models_cards.StateObservedActionObserved;
+import black_jack.models_cards.StateObservedAction;
 import black_jack.models_cards.StateCards;
-import black_jack.models_cards.StateObservedObserved;
+import black_jack.models_cards.StateObserved;
 import black_jack.models_memory.StateActionValueMemory;
 import black_jack.policies.PolicyGreedyOnStateActionMemory;
 import black_jack.policies.PolicyInterface;
@@ -43,9 +43,9 @@ public class TestPolicy {
 
     @Test public void testPolicyGreedyOnStateActionMemory() {
         StateActionValueMemory memory = new StateActionValueMemory();
-        StateObservedObserved state=new StateObservedObserved(21,true,10);
-        memory.write(StateObservedActionObserved.newFromStateAndAction(state,CardAction.stick),1);
-        memory.write(StateObservedActionObserved.newFromStateAndAction(state,CardAction.hit),0);
+        StateObserved state=new StateObserved(21,true,10);
+        memory.write(StateObservedAction.newFromStateAndAction(state,CardAction.stick),1);
+        memory.write(StateObservedAction.newFromStateAndAction(state,CardAction.hit),0);
 
         PolicyGreedyOnStateActionMemory policy=new PolicyGreedyOnStateActionMemory(memory,0);
         CardAction action=policy.hitOrStick(state);
@@ -56,9 +56,9 @@ public class TestPolicy {
 
     @Test public void testPolicyRandomGreedyOnStateActionMemory() {
         StateActionValueMemory memory = new StateActionValueMemory();
-        StateObservedObserved state=new StateObservedObserved(21,true,10);
-        memory.write(StateObservedActionObserved.newFromStateAndAction(state,CardAction.stick),1);
-        memory.write(StateObservedActionObserved.newFromStateAndAction(state,CardAction.hit),0);
+        StateObserved state=new StateObserved(21,true,10);
+        memory.write(StateObservedAction.newFromStateAndAction(state,CardAction.stick),1);
+        memory.write(StateObservedAction.newFromStateAndAction(state,CardAction.hit),0);
 
         PolicyGreedyOnStateActionMemory policy=new PolicyGreedyOnStateActionMemory(memory, HIGH_PROBABILITY_RANDOM_ACTION);
 
