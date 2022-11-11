@@ -1,5 +1,6 @@
 package black_jack.models_memory;
 
+import black_jack.enums.CardAction;
 import black_jack.models_cards.StateActionObserved;
 import black_jack.models_cards.StateObserved;
 import lombok.Getter;
@@ -37,6 +38,18 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
     @Override
     public double read(StateActionObserved state) {
         return stateActionValueMap.getOrDefault(state.hashCode(), DEFAULT_VALUE);
+    }
+
+    @Override
+    public double readBestValue(StateObserved state) {
+        double valueHit=stateActionValueMap.getOrDefault(
+                StateActionObserved.newFromStateAndAction(state, CardAction.hit).hashCode()
+                ,DEFAULT_VALUE);
+        double valueStick=stateActionValueMap.getOrDefault(
+                StateActionObserved.newFromStateAndAction(state, CardAction.stick).hashCode()
+                ,DEFAULT_VALUE);
+
+        return Math.max(valueHit,valueStick);
     }
 
     @Override

@@ -5,7 +5,9 @@ import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
 import black_jack.helper.LearnerStateActionValue;
 import black_jack.helper.LearnerStateValue;
+import black_jack.models_cards.StateActionObserved;
 import black_jack.models_cards.StateCards;
+import black_jack.models_cards.StateObserved;
 import black_jack.models_episode.Episode;
 import black_jack.models_memory.NumberOfStateActionsVisitsMemory;
 import black_jack.models_memory.NumberOfStateVisitsMemory;
@@ -38,7 +40,9 @@ public class OnPolicyMonteCarloControlRunner {
         String frameTitleUsableAce= "Usable ace, average value = "; //+getAverageValue(valueMemory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
-     //   showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
+
+        MemoryShower<StateActionObserved> ms=new MemoryShower<>();
+        ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
     }
 
     private static void playBlackJackManyTimesAndSetValueMemory(StateActionValueMemory memory) {

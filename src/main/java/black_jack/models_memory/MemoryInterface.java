@@ -10,6 +10,7 @@ public interface MemoryInterface<T> {
     void clear();
     int nofItems();
     double read(T state);
+    double readBestValue(StateObserved state);
     void write(T state, double Value);
     double average();
     Set<Double> valuesOf(Predicate<StateObserved> p);

@@ -1,6 +1,7 @@
 package black_jack.models_memory;
 
 import black_jack.models_cards.StateObserved;
+import freemarker.ext.jsp.FreemarkerTag;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +36,11 @@ public class StateValueMemory implements MemoryInterface<StateObserved> {
     @Override
     public double read(StateObserved state) {
         return stateValueMap.getOrDefault(state.hashCode(), DEFAULT_VALUE);
+    }
+
+    @Override
+    public double readBestValue(StateObserved state) {
+        return read(state);  //trivial if no action/one value
     }
 
     @Override

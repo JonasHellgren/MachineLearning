@@ -40,19 +40,21 @@ public class PolicyEvaluation {
 
 
     public static void main(String[] args) {
-        MemoryInterface stateValueMemory = new StateValueMemory();
+        MemoryInterface<StateObserved> stateValueMemory = new StateValueMemory();
         playBlackJackManyTimesAndSetValueMemory(stateValueMemory);
 
         String frameTitleNoUsableAce="No usable ace, average value = "+getAverageValue(stateValueMemory,false);
         String frameTitleUsableAce= "Usable ace, average value = "+getAverageValue(stateValueMemory,true);
         GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
         GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
-        showValueMemory(panelNoUsableAce, panelUsableAce, stateValueMemory);
+
+        MemoryShower<StateObserved> ms=new MemoryShower<>();
+        ms.showValueMemory(panelNoUsableAce, panelUsableAce, stateValueMemory);
     }
 
 
 
-    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface stateValueMemory) {
+    private static void playBlackJackManyTimesAndSetValueMemory(MemoryInterface<StateObserved> stateValueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
         PolicyInterface policy = new PolicyHitBelow20();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
@@ -75,25 +77,7 @@ public class PolicyEvaluation {
         }
     }
 
-    private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, MemoryInterface<StateObserved> stateValueMemory) {
-        setPanel(panelNoUsableAce, stateValueMemory, false);
-        setPanel(panelUsableAce, stateValueMemory, true);
-        panelNoUsableAce.repaint();
-        panelUsableAce.repaint();
-    }
 
-    private static void setPanel(GridPanel panel, MemoryInterface<StateObserved> stateValueMemory, boolean usableAce) {
-        List<Integer> xSet = StateObserved.getDealerCardList();
-        List<Integer> ySet = StateObserved.getHandsSumList();
-        for (int y : ySet) {
-            for (int x : xSet) {
-                double value = stateValueMemory.read(new StateObserved(y, usableAce, x));
-                panel.setNumbersAtCell(x,y, value);
-            }
-        }
-        panel.setColorsAtCells();
-        panel.setTextCellValues(true);
-    }
 
     private static String getAverageValue(MemoryInterface<StateObserved> stateValueMemory, boolean usableAce) {
         Predicate<StateObserved> p = (usableAce)

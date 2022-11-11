@@ -32,6 +32,11 @@ public class NumberOfStateVisitsMemory implements MemoryInterface<StateObserved>
     }
 
     @Override
+    public double readBestValue(StateObserved state) {
+        throw new RuntimeException("Not implemented method");
+    }
+
+    @Override
     public void write(StateObserved state, double Value) {
         throw new RuntimeException("Not implemented method");
     }
