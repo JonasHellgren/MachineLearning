@@ -9,7 +9,7 @@ import black_jack.models_episode.Episode;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.models_memory.NumberOfVisitsMemory;
-import black_jack.policies.HitBelow20Policy;
+import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
@@ -61,7 +61,7 @@ public class PolicyEvaluation {
 
     private static void playBlackJackManyTimesAndSetValueMemory(StateValueMemory stateValueMemory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
-        PolicyInterface policy = new HitBelow20Policy();
+        PolicyInterface policy = new PolicyHitBelow20();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();

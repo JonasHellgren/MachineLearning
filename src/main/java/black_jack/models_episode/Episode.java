@@ -1,6 +1,7 @@
 package black_jack.models_episode;
 
 import black_jack.enums.CardAction;
+import black_jack.models_cards.StateActionObserved;
 import black_jack.models_cards.StateObserved;
 import lombok.ToString;
 
@@ -27,6 +28,10 @@ public class Episode {
 
     public void add(StateObserved s, CardAction a, Double r) {
         episode.add(new EpisodeItem(s,a,r));
+    }
+
+    public void add(StateActionObserved sa, Double r) {
+        episode.add(new EpisodeItem(sa.getStateObserved(),sa.getCardAction(),r));
     }
 
     public EpisodeItem getItem(Integer timeStep) {

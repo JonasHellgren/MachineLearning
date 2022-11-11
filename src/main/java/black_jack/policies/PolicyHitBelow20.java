@@ -4,7 +4,7 @@ import black_jack.helper.CardsInfo;
 import black_jack.enums.CardAction;
 import black_jack.models_cards.StateObserved;
 
-public class HitBelow20Policy implements PolicyInterface {
+public class PolicyHitBelow20 implements PolicyInterface {
 
     @Override
     public  CardAction hitOrStick(StateObserved observed) {

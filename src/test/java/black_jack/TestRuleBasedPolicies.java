@@ -7,7 +7,7 @@ import black_jack.environment.StepReturnBJ;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_episode.EpisodeItem;
-import black_jack.policies.HitBelow20Policy;
+import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import org.jcodec.common.Assert;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class TestRuleBasedPolicies {
     public void init() {
         environment=new BlackJackEnvironment();
         episode=new Episode();
-        policy=new HitBelow20Policy();
+        policy=new PolicyHitBelow20();
     }
 
     @Test public void hitBelow20() {

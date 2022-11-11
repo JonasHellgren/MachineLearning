@@ -10,7 +10,7 @@ import black_jack.models_episode.Episode;
 import black_jack.models_memory.StateValueMemory;
 import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.models_memory.NumberOfVisitsMemory;
-import black_jack.policies.HitBelow20Policy;
+import black_jack.policies.PolicyHitBelow20;
 import black_jack.policies.PolicyInterface;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,7 +41,7 @@ public class TestStateValueMemory {
         stateValueMemory = new StateValueMemory();
         numberOfVisitsMemory=new NumberOfVisitsMemory();
         learner = new LearnerStateValue(stateValueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
-        policy = new HitBelow20Policy();
+        policy = new PolicyHitBelow20();
     }
 
     @Test
