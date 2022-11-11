@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ValueMemory implements MemoryInterface {
@@ -47,19 +48,11 @@ public class ValueMemory implements MemoryInterface {
                 :sum/(double)nofItems;
     }
 
-    public Set<Double> valuesOf() {
-
+    public Set<Double> valuesOf(Predicate<StateObserved> p) {
         Set<StateObserved> stateSet=StateObserved.allStates();
-
-        Set<StateObserved> set=stateSet.stream()
-                .filter(s -> s.playerHasUsableAce)
-                .collect(Collectors.toSet());
-
+        Set<StateObserved> set=stateSet.stream().filter(p).collect(Collectors.toSet());
         Set<Double> setDouble=new HashSet<>();
         set.forEach(s -> setDouble.add(stateValueMap.get(s.hashCode())));
-
-                //.mapToInt(s -> s.hashCode()).collect(Collectors.toSet());
-
         return setDouble;
     }
 

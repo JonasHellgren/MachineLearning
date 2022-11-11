@@ -20,7 +20,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,11 +35,6 @@ import java.util.stream.IntStream;
 public class PolicyEvaluation {
 
     public static final int NOF_EPISODES = 200_000;
-    private static final int LOWER_HANDS_SUM_PLAYER = 10;
-    static final int MAX_HANDS_SUM_PLAYER = 21;
-    private static final int MIN_DEALER_CARD = 1;
-    static final int MAX_DEALER_CARD = 10;
-
     private static final double ALPHA = 0.001;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";
@@ -55,17 +52,6 @@ public class PolicyEvaluation {
         GridPanel panelUsableAce = createUsableAceFrameAndPanel(frameTitleUsableAce);
         showValueMemory(panelNoUsableAce, panelUsableAce, valueMemory);
     }
-
-    /*
-    @NotNull
-    private static List<Integer> getYset() {
-        return IntStream.rangeClosed(LOWER_HANDS_SUM_PLAYER, MAX_HANDS_SUM_PLAYER).boxed().collect(Collectors.toList());
-    }
-
-    @NotNull
-    private static List<Integer> getXset() {
-        return IntStream.rangeClosed(MIN_DEALER_CARD, MAX_DEALER_CARD).boxed().collect(Collectors.toList());
-    }  */
 
     private static void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, ValueMemory valueMemory) {
         setPanel(panelNoUsableAce, valueMemory, false);
@@ -130,32 +116,11 @@ public class PolicyEvaluation {
     }
 
     private static String getAverageValue(ValueMemory valueMemory, boolean usableAce) {
-        /* List<Double> valueList=new ArrayList<>();
-        List<Integer> xSet = getXset();
-        List<Integer> ySet = getYset();
-        for (int y : ySet) {
-            for (int x : xSet) {
-                double value = valueMemory.read(new StateObserved(y, usableAce, x));
-                valueList.add(value);
-            }
-        }
-        double avg= valueList.stream()
-                .mapToDouble(v -> v)
-                .average()
-                .orElse(Double.NaN);  */
-
-        //double avg=valueMemory.average();
-
-        Set<Double> valueList= valueMemory.valuesOf();
-
-        System.out.println("valueList = " + valueList);
-        double avg= valueList.stream()
-                .filter(v -> v!=null)
-                .mapToDouble(v -> v)
-                .average()
-                .orElse(Double.NaN);
-
-
+        Predicate<StateObserved> p = (usableAce)
+                ?s -> s.playerHasUsableAce
+                :s -> !s.playerHasUsableAce;
+        Set<Double> valueList= valueMemory.valuesOf(p);
+        double avg= valueList.stream().filter(Objects::nonNull).mapToDouble(v -> v).average().orElse(Double.NaN);
         BigDecimal bd = BigDecimal.valueOf(avg).setScale(NOF_DECIMALS_FRAME_TITLE, RoundingMode.HALF_DOWN);
         return bd.toString();
     }
