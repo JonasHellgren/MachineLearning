@@ -7,8 +7,8 @@ import black_jack.models_memory.ValueMemory;
 import lombok.Setter;
 
 @Setter
-public class LearnerValue {
-    public static final double ALPHA_DEFAULT = 0.1;
+public class LearnerStateValue {
+    private static final double ALPHA_DEFAULT = 0.1;
     private static final boolean FLAG_DEFAULT=true;
 
     ValueMemory valueMemory; //reference
@@ -16,15 +16,15 @@ public class LearnerValue {
     double alpha = ALPHA_DEFAULT;
     boolean regardNofVisitsFlag= FLAG_DEFAULT;
 
-    public LearnerValue(ValueMemory valueMemory, NumberOfVisitsMemory numberOfVisitsMemory) {
+    public LearnerStateValue(ValueMemory valueMemory, NumberOfVisitsMemory numberOfVisitsMemory) {
         this.valueMemory=valueMemory;
         this.numberOfVisitsMemory=numberOfVisitsMemory;
     }
 
-    public LearnerValue(ValueMemory valueMemory,
-                        NumberOfVisitsMemory numberOfVisitsMemory,
-                        double alpha,
-                        boolean regardNofVisitsFlag) {
+    public LearnerStateValue(ValueMemory valueMemory,
+                             NumberOfVisitsMemory numberOfVisitsMemory,
+                             double alpha,
+                             boolean regardNofVisitsFlag) {
         this(valueMemory,numberOfVisitsMemory);
         this.alpha = alpha;
         this.regardNofVisitsFlag=regardNofVisitsFlag;

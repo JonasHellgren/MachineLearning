@@ -15,7 +15,8 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
 
     @Override
     public void clear() {
-
+        stateActionValueMap.clear();
+        visitedStates.clear();
     }
 
     @Override
@@ -32,7 +33,6 @@ public class StateActionValueMemory implements MemoryInterface<StateActionObserv
     public void write(StateActionObserved state, double value) {
         stateActionValueMap.put(state.hashCode(),value);
         visitedStates.add(state);
-
     }
 
     @Override

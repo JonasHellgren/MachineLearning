@@ -53,7 +53,8 @@ valueMemory.average smarare med utan ace
 StateActionObserved  x
 StateActionValueMemory  x
 MemoryInterface<P>  x
-ActionValueLearner
+LearnerStateActionValue  x
+LearnerInterface<T>
 TestActionValueMemory
 
 

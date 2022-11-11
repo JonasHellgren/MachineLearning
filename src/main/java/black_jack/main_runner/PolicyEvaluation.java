@@ -3,7 +3,7 @@ package black_jack.main_runner;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
-import black_jack.helper.LearnerValue;
+import black_jack.helper.LearnerStateValue;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_returns.ReturnsForEpisode;
@@ -65,7 +65,7 @@ public class PolicyEvaluation {
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         NumberOfVisitsMemory numberOfVisitsMemory = new NumberOfVisitsMemory();
-        LearnerValue learner = new LearnerValue(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
+        LearnerStateValue learner = new LearnerStateValue(valueMemory, numberOfVisitsMemory, ALPHA, NOF_VISITS_FLAG);
         for (int episodeNumber = 0; episodeNumber < NOF_EPISODES; episodeNumber++) {
             sometimeLogEpisodeNumber(episodeNumber);
             StateCards cards = StateCards.newRandomPairs();

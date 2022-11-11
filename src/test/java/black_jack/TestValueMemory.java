@@ -4,7 +4,7 @@ import black_jack.enums.CardAction;
 import black_jack.environment.BlackJackEnvironment;
 import black_jack.environment.EnvironmentInterface;
 import black_jack.helper.EpisodeRunner;
-import black_jack.helper.LearnerValue;
+import black_jack.helper.LearnerStateValue;
 import black_jack.models_cards.*;
 import black_jack.models_episode.Episode;
 import black_jack.models_returns.ReturnsForEpisode;
@@ -30,7 +30,7 @@ public class TestValueMemory {
     ReturnsForEpisode returnsForEpisode;
     ValueMemory valueMemory;
     NumberOfVisitsMemory numberOfVisitsMemory;
-    LearnerValue learner;
+    LearnerStateValue learner;
     PolicyInterface policy;
 
     @Before
@@ -40,7 +40,7 @@ public class TestValueMemory {
         returnsForEpisode = new ReturnsForEpisode();
         valueMemory = new ValueMemory();
         numberOfVisitsMemory=new NumberOfVisitsMemory();
-        learner = new LearnerValue(valueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
+        learner = new LearnerStateValue(valueMemory,numberOfVisitsMemory,ALPHA,regardNofVisitsFlag);
         policy = new HitBelow20Policy();
     }
 

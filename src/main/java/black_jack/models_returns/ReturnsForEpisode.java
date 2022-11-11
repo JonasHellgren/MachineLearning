@@ -1,5 +1,6 @@
 package black_jack.models_returns;
 
+import black_jack.enums.CardAction;
 import black_jack.models_cards.StateObserved;
 import black_jack.models_episode.Episode;
 import black_jack.models_episode.EpisodeItem;
@@ -39,8 +40,8 @@ public class ReturnsForEpisode {
         returns.clear();
     }
 
-    public void add(StateObserved state, Double returnValue) {
-        returns.add(new ReturnItem(state, returnValue));
+    public void add(StateObserved state, CardAction cardAction, Double returnValue) {
+        returns.add(new ReturnItem(state, cardAction, returnValue));
     }
 
     public ReturnItem getItem(Integer index) {
@@ -56,7 +57,7 @@ public class ReturnsForEpisode {
             EpisodeItem ei= episode.getItem(i);
             G=G+ discountFactor *ei.reward;
             if (!episode.isStatePresentBeforeTimeStep(ei.state,i)) {
-                this.add(ei.state,G);  //todo, first visit flag
+                this.add(ei.state,ei.action,G);  //todo, first visit flag
             }
         }
     }
