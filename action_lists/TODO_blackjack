@@ -63,8 +63,8 @@ draft OnPolicyMonteCarloControlRunner x
 valuesOf i interface  x
 snygga upp StateInterface  x
 playBlackJackManyTimesAndSetValueMemory i klass BlackJackPlayer  x
-grafik som visar policy, dvs när hit/stick vs state. En för usable ace, annan utan asuable ace
-olika färg text
+grafik som visar policy, dvs när hit/stick vs state. En för usable ace, annan utan asuable ace  x
+olika färg text  x
 MemoryInterface - T extends StateInterface
 snygga upp
 nya plantUml

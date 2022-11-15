@@ -18,7 +18,10 @@ public class GridPanel extends JPanel {
     private static final Color LINE_COLOR = Color.BLACK;
     private static final int NOF_EXTRA_COLS = 2;
     private static final int NOF_EXTRA_ROWS = 2;
-    private static final Color TEXT_COLOR = Color.RED;
+    private static final Color TEXT_COLOR_CELLS = Color.RED;
+    private static final Color TEXT_COLOR_AXIS = Color.BLUE;
+
+
     private static final int RBG_MAX = 255;
     private static final double RELATIVE_FONT_SIZE_TEXT = 0.6;
     private static final double RELATIVE_FONT_SIZE_NUMBERS = 0.4;
@@ -76,8 +79,6 @@ public class GridPanel extends JPanel {
         this.gridColor = gridColor;
         this.nofDecimals = nofDecimals;
         this.textCellValues = textCellValues;
-
-
 
         this.nofRows = ySet.size();
         this.nofColumns = xSet.size();
@@ -177,7 +178,7 @@ public class GridPanel extends JPanel {
 
 
     private void fillCellsWithColor(Graphics g) {
-        g.setColor(TEXT_COLOR);
+        g.setColor(TEXT_COLOR_CELLS);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
                 fillCellWithColor(g, row, col);
@@ -197,7 +198,7 @@ public class GridPanel extends JPanel {
     }
 
     private void fillCellsWithText(Graphics g) {
-        setTextPropertiesNumbers(g);
+        setTextPropertiesNumbers(g,TEXT_COLOR_CELLS);
         for (int row = 0; row < nofRows; row++) {
             for (int col = 0; col < nofColumns; col++) {
                 Double value = gridNumbers[row][col];
@@ -221,7 +222,7 @@ public class GridPanel extends JPanel {
     }
 
     private void textXticks(Graphics g) {
-        setTextPropertiesNumbers(g);
+        setTextPropertiesNumbers(g,TEXT_COLOR_AXIS);
         for (int col = 0; col < nofColumns; col++) {
             int x = getXpos(col);
             g.drawString(xSet.get(col).toString(), x,  (nofRows + 1) * cellSize);
@@ -229,21 +230,21 @@ public class GridPanel extends JPanel {
     }
 
     private void textYticks(Graphics g) {
-        setTextPropertiesNumbers(g);
+        setTextPropertiesNumbers(g, TEXT_COLOR_AXIS);
         for (int row = 0; row < nofRows; row++) {
             int y =  (nofRows - row) * cellSize;
             g.drawString(ySet.get(row).toString(),  cellSize, y);
         }
     }
 
-    private void setTextPropertiesNumbers(Graphics g) {
-        g.setColor(TEXT_COLOR);
+    private void setTextPropertiesNumbers(Graphics g, Color color) {
+        g.setColor(color);
         g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (cellSize * RELATIVE_FONT_SIZE_NUMBERS)));
     }
 
 
     private void setTextPropertiesText(Graphics g) {
-        g.setColor(TEXT_COLOR);
+        g.setColor(TEXT_COLOR_AXIS);
         g.setFont(new Font("TimesRoman", Font.BOLD, (int) (cellSize * RELATIVE_FONT_SIZE_TEXT)));
     }
 
