@@ -23,7 +23,7 @@ import lombok.extern.java.Log;
  */
 
 @Log
-public class PolicyEvaluation {
+public class PolicyEvaluationRunner {
 
     public static final int NOF_EPISODES = 500_000;
     private static final double ALPHA = 0.001;  //critical parameter setting
@@ -35,6 +35,14 @@ public class PolicyEvaluation {
 
     public static void main(String[] args) {
         MemoryInterface<StateObserved> memory = new StateValueMemory();
+        NumberOfStateVisitsMemory numberOfStateVisitsMemory = new NumberOfStateVisitsMemory();
+
+        BlackJackPlayer player=new BlackJackPlayer(
+                new PolicyHitBelow20(),
+                new LearnerStateValue((StateValueMemory)memory, numberOfStateVisitsMemory, ALPHA, NOF_VISITS_FLAG),
+                NOF_EPISODES);
+        player.playAndSetValueMemory(memory);
+
         playBlackJackManyTimesAndSetValueMemory(memory);
 
         AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
