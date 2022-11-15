@@ -64,6 +64,7 @@ Fig 5. Optimal policy.
 ## Reflections
 The average value of Monte Carlo control results is higher compared to the rule based policy. Compare Fig 1 to Fig 2.
 Another reflection is that the presence of a usable ace is advantageous.
+For convergence, the number of episodes is in the order of millions.
 
 ## Code implementation
 The code main loop is below. By using polymorphism, it is valid for both policy evaluation and control.
