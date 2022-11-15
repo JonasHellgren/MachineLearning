@@ -10,7 +10,7 @@ import black_jack.result_drawer.GridPanel;
 
 import java.util.List;
 
-public class MemoryShower<T> {
+public class MemoryShower<T extends StateInterface> {
 
      void showValueMemory(GridPanel panelNoUsableAce, GridPanel panelUsableAce, MemoryInterface<T> memory) {
         setPanelBestValue(panelNoUsableAce, memory, false);

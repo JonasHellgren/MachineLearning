@@ -1,11 +1,12 @@
 package black_jack.models_memory;
 
+import black_jack.models_cards.StateInterface;
 import black_jack.models_cards.StateObserved;
 
 import java.util.Set;
 import java.util.function.Predicate;
 
-public interface MemoryInterface<T> {
+public interface MemoryInterface<T extends StateInterface> {
 
     void clear();
     int nofItems();
