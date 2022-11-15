@@ -29,7 +29,7 @@ public class BlackJackPlayer {
         this.nofEpisodes = nofEpisodes;
     }
 
-    public   void playAndSetValueMemory(MemoryInterface memory) {
+    public   void playAndSetMemory(MemoryInterface memory) {
         EnvironmentInterface environment = new BlackJackEnvironment();
        // PolicyInterface policy = new PolicyGreedyOnStateActionMemory((StateActionValueMemory) memory, PROBABILITY_RANDOM_ACTION);
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
