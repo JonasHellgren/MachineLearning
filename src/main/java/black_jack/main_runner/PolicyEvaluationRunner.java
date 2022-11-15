@@ -31,8 +31,7 @@ public class PolicyEvaluationRunner {
                 new PolicyHitBelow20(),
                 new LearnerStateValue(memory, numberOfStateVisitsMemory, ALPHA, NOF_VISITS_FLAG),
                 NOF_EPISODES);
-        player.playAndSetMemory(memory);
-
+        player.playAndSetMemory();
 
         AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
         String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
