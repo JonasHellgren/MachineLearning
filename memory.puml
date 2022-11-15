@@ -1,0 +1,39 @@
+@startuml
+interface black_jack.models_memory.MemoryInterface {
+~ void clear()
+~ int nofItems()
+~ double read(T)
+~ double readBestValue(StateObserved)
+~ void write(T,double)
+~ double average()
+~ Set<Double> valuesOf(Predicate<StateObserved>)
+}
+class black_jack.models_memory.NumberOfStateActionsVisitsMemory {
++ {static} int INIT_VALUE
+~ Map<Integer,Integer> stateActionNofVisitsMap
+
+}
+class black_jack.models_memory.StateValueMemory {
++ {static} double DEFAULT_VALUE
+~ Map<Integer,Double> stateValueMap
+~ Set<StateObserved> visitedStates
+
+}
+class black_jack.models_memory.NumberOfStateVisitsMemory {
++ {static} int INIT_VALUE
+~ Map<Integer,Integer> stateNofVisitsMap
+
+}
+class black_jack.models_memory.StateActionValueMemory {
++ {static} double DEFAULT_VALUE
+~ Map<Integer,Double> stateActionValueMap
+~ Set<StateObservedAction> visitedStates
+
+}
+
+
+black_jack.models_memory.MemoryInterface <|.. black_jack.models_memory.NumberOfStateActionsVisitsMemory
+black_jack.models_memory.MemoryInterface <|.. black_jack.models_memory.StateValueMemory
+black_jack.models_memory.MemoryInterface <|.. black_jack.models_memory.NumberOfStateVisitsMemory
+black_jack.models_memory.MemoryInterface <|.. black_jack.models_memory.StateActionValueMemory
+@enduml

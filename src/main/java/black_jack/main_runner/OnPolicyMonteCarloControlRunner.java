@@ -10,7 +10,7 @@ import lombok.extern.java.Log;
 @Log
 public class OnPolicyMonteCarloControlRunner {
 
-    public static final int NOF_EPISODES = 1_000_000;
+    public static final int NOF_EPISODES = 100_000_000;
     private static final double ALPHA = 0.001;  //critical parameter setting
     private static final boolean NOF_VISITS_FLAG = false;  //critical parameter setting
     private static final String X_LABEL = "Dealer card";

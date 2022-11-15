@@ -66,13 +66,11 @@ playBlackJackManyTimesAndSetValueMemory i klass BlackJackPlayer  x
 grafik som visar policy, dvs när hit/stick vs state. En för usable ace, annan utan asuable ace  x
 olika färg text  x
 MemoryInterface - T extends StateInterface x
-snygga upp
-nya plantUml
+snygga upp  x
+nya plantUml x
 dokumentation i md fil
 
 
-
-On-Policy Monte Carlo Control
 
 https://ernie55ernie.github.io/assets/blackjack.html
 
