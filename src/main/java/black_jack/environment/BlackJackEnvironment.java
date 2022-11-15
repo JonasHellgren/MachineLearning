@@ -6,6 +6,10 @@ import black_jack.enums.CardAction;
 import black_jack.models_cards.StateCards;
 import lombok.NoArgsConstructor;
 
+/**
+ * Determines what is the consequence of different actions? Hit or stick?
+ */
+
 @NoArgsConstructor
 public class BlackJackEnvironment implements EnvironmentInterface {
 
@@ -47,9 +51,6 @@ public class BlackJackEnvironment implements EnvironmentInterface {
             boolean playerHasAceAndFacedCard= CardsInfo.isAceAndFacedCardPresent(state.getCardsPlayer());
             double reward = getRewardStick(playerHasBetterHand, playerHasAceAndFacedCard);
             stepReturnBJ=new StepReturnBJ(state, STOP_PLAYING,reward);
-
-          //  boolean isDealerBust=CardsInfo.isDealerBust(state);
-          //  System.out.println("state = " + state+", playerHasBetterHand = " + playerHasBetterHand+", isDealerBust="+isDealerBust);
         }
         return stepReturnBJ;
     }

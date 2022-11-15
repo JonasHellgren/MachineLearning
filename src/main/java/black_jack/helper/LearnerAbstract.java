@@ -1,16 +1,13 @@
 package black_jack.helper;
 
-import black_jack.models_memory.NumberOfStateVisitsMemory;
 import black_jack.models_returns.ReturnItem;
 import black_jack.models_returns.ReturnsForEpisode;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
 @Setter
 abstract public class LearnerAbstract implements LearnerInterface {
-
 
     double alpha;
     boolean regardNofVisitsFlag;

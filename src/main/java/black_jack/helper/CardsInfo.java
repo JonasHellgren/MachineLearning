@@ -7,6 +7,10 @@ import black_jack.models_cards.StateObserved;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Helper class that extract information from cards
+ */
+
 public class CardsInfo {
 
     public static final int MAX_CARDS_SUM = 21;

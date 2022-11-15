@@ -13,15 +13,10 @@ import java.util.List;
 @ToString
 @Getter
 public class ReturnsForEpisode {
-
     public static final double DISCOUNT_FACTOR_DEFAULT = 1d;
-
     private double discountFactor = DISCOUNT_FACTOR_DEFAULT;
 
     List<ReturnItem> returns;
-
-    //Map<StateObserved,Double> stateReturnMap;
-
 
     public ReturnsForEpisode() {
         returns = new ArrayList<>();

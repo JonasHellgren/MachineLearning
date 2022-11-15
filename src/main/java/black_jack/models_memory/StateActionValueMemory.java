@@ -63,10 +63,7 @@ public class StateActionValueMemory implements MemoryInterface<StateObservedActi
     @Override
     public double average() {
         throw  new RuntimeException("Non defined method");
-        //return 0;
     }
-
-
 
     @Override
     public Set<Double> valuesOf(Predicate<StateObserved> p) {

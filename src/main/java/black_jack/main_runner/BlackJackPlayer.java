@@ -10,9 +10,14 @@ import black_jack.models_returns.ReturnsForEpisode;
 import black_jack.policies.PolicyInterface;
 import lombok.extern.java.Log;
 
+/***
+ * A compiling class that gathers policy, learner, environment etc to play and learn
+ */
+
 @Log
 public class BlackJackPlayer {
 
+    private static final int NOF_ITERATIONS_BETWEEN_LOGS = 100_000;
     PolicyInterface policy;
     LearnerInterface learner;
     int nofEpisodes;
@@ -23,8 +28,8 @@ public class BlackJackPlayer {
         this.nofEpisodes = nofEpisodes;
     }
 
-    public   void playAndSetMemory() {
-        EnvironmentInterface environment = new BlackJackEnvironment();
+    public void playAndSetMemory() {
+        EnvironmentInterface environment = BlackJackEnvironment.newSameRewardIfAceAndFaceCard();
         EpisodeRunner episodeRunner = new EpisodeRunner(environment, policy);
         ReturnsForEpisode returnsForEpisode = new ReturnsForEpisode();
         for (int episodeNumber = 0; episodeNumber < nofEpisodes; episodeNumber++) {
@@ -38,7 +43,7 @@ public class BlackJackPlayer {
     }
 
     private static void sometimeLogEpisodeNumber(int episodeNumber) {
-        if (episodeNumber % 100_000 == 0) {
+        if (episodeNumber % NOF_ITERATIONS_BETWEEN_LOGS == 0) {
             log.info("i = " + episodeNumber);
         }
     }

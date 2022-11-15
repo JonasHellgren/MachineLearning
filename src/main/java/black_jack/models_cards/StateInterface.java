@@ -6,8 +6,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/***
+ * StateInterface and it sub classes is not the same as StateCards. StateCards is the raw full information.
+ * StateInterface expresses the information given to the player.
+ */
+
 public interface StateInterface {
-    int LOWER_HANDS_SUM_PLAYER = 11;
+    int LOWER_HANDS_SUM_PLAYER = 12;
     int MAX_HANDS_SUM_PLAYER = 21;
     int MIN_DEALER_CARD = 1;
     int MAX_DEALER_CARD = 10;

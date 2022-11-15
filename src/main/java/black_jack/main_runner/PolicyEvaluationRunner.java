@@ -34,10 +34,12 @@ public class PolicyEvaluationRunner {
         player.playAndSetMemory();
 
         AverageValueCalculator<StateObserved> ac=new AverageValueCalculator<>();
-        String frameTitleNoUsableAce="No usable ace, average value = "+ac.getAverageValue(memory,false);
-        String frameTitleUsableAce= "Usable ace, average value = "+ac.getAverageValue(memory,true);
-        GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(frameTitleNoUsableAce,X_LABEL, Y_LABEL);
-        GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(frameTitleUsableAce,X_LABEL, Y_LABEL);
+        GridPanel panelNoUsableAce = FrameAndPanelCreator.createNoUsableAceFrameAndPanel(
+                        "No usable ace, average value = "+ac.getAverageValue(memory,false), //frame title
+                        X_LABEL, Y_LABEL);
+        GridPanel panelUsableAce = FrameAndPanelCreator.createUsableAceFrameAndPanel(
+                "Usable ace, average value = "+ac.getAverageValue(memory,true),
+                X_LABEL, Y_LABEL);
 
         MemoryShower<StateObserved> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);

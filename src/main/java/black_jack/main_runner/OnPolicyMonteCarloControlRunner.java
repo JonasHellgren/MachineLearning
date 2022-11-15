@@ -29,20 +29,20 @@ public class OnPolicyMonteCarloControlRunner {
         player.playAndSetMemory();
 
         AverageValueCalculator<StateObservedAction> ac=new AverageValueCalculator<>();
-        GridPanel panelNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(
+        GridPanel panelNoUsableAce = FrameAndPanelCreator.createNoUsableAceFrameAndPanel(
                 "No usable ace, average value = "+ac.getAverageValue(memory,false),  //frame title
                 X_LABEL,Y_LABEL);
-        GridPanel panelUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(
+        GridPanel panelUsableAce = FrameAndPanelCreator.createUsableAceFrameAndPanel(
                 "Usable ace, average value = "+ac.getAverageValue(memory,true),
                 X_LABEL,Y_LABEL);
 
         MemoryShower<StateObservedAction> ms=new MemoryShower<>();
         ms.showValueMemory(panelNoUsableAce, panelUsableAce, memory);
 
-        GridPanel panelPolicyNoUsableAce = FrameAndPanelCreater.createNoUsableAceFrameAndPanel(
+        GridPanel panelPolicyNoUsableAce = FrameAndPanelCreator.createNoUsableAceFrameAndPanel(
                 "No usable ace policy (hit=1)",
                 X_LABEL,Y_LABEL);
-        GridPanel panelPolicyUsableAce = FrameAndPanelCreater.createUsableAceFrameAndPanel(
+        GridPanel panelPolicyUsableAce = FrameAndPanelCreator.createUsableAceFrameAndPanel(
                 "Usable ace policy",
                 X_LABEL,Y_LABEL);
 

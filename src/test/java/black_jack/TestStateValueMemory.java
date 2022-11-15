@@ -101,7 +101,7 @@ public class TestStateValueMemory {
         Set<StateObserved> stateSet= StateInterface.allStates();
         System.out.println("stateSet = " + stateSet);
         System.out.println("stateSet.size() = " + stateSet.size());
-        Assert.assertTrue(stateSet.size()>200);
+        Assert.assertTrue(stateSet.size()>150);
     }
 
 }

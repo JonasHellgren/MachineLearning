@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class FrameAndPanelCreater {
+public class FrameAndPanelCreator {
 
     @NotNull
     static GridPanel createUsableAceFrameAndPanel(String frameTitle, String xLabel, String yLabel) {

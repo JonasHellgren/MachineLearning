@@ -3,7 +3,6 @@ package black_jack.main_runner;
 import black_jack.models_cards.StateInterface;
 import black_jack.models_cards.StateObserved;
 import black_jack.models_memory.MemoryInterface;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;

@@ -34,7 +34,6 @@ public class LearnerStateValue extends LearnerAbstract {
 
     @Override
     public void updateMemory(ReturnItem ri) {
-        StateObservedAction sa=new StateObservedAction(ri.state,ri.cardAction);
         double oldValue = stateValueMemory.read(ri.state);
         int nofVisits= (int) numberOfStateVisitsMemory.read(ri.state);
         double newValue = getNewValue(ri, oldValue,nofVisits);
