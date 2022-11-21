@@ -1,10 +1,12 @@
 package mcts_spacegame.models;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class SpaceCell {
 
     public boolean isObstacle;

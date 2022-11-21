@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import mcts_spacegame.models.SpaceCell;
 import mcts_spacegame.models.SpaceGrid;
 import mcts_spacegame.models.SpaceGridInterface;
 import org.junit.Assert;
@@ -24,11 +25,11 @@ public class TestSpaceGrid {
         Assert.assertEquals(3,spaceGrid.getNofRows());
         Assert.assertEquals(3,spaceGrid.getNofColumns());
 
-        Assert.assertTrue(spaceGrid.getCell(0,0).isOnLowerBorder);
-        Assert.assertFalse(spaceGrid.getCell(0,1).isOnUpperBorder);
-        Assert.assertTrue(spaceGrid.getCell(0,2).isOnUpperBorder);
-        Assert.assertFalse(spaceGrid.getCell(0,0).isObstacle);
-        Assert.assertTrue(spaceGrid.getCell(2,0).isGoal);
+        Assert.assertTrue(spaceGrid.getCell(0,0).orElse(SpaceCell.EMPTY()).isOnLowerBorder);
+        Assert.assertFalse(spaceGrid.getCell(0,1).orElse(SpaceCell.EMPTY()).isOnUpperBorder);
+        Assert.assertTrue(spaceGrid.getCell(0,2).orElse(SpaceCell.EMPTY()).isOnUpperBorder);
+        Assert.assertFalse(spaceGrid.getCell(0,0).orElse(SpaceCell.EMPTY()).isObstacle);
+        Assert.assertTrue(spaceGrid.getCell(2,0).orElse(SpaceCell.EMPTY()).isGoal);
 
     }
 
@@ -41,11 +42,11 @@ public class TestSpaceGrid {
         Assert.assertEquals(3,spaceGrid.getNofRows());
         Assert.assertEquals(7,spaceGrid.getNofColumns());
 
-        Assert.assertFalse(spaceGrid.getCell(0,0).isObstacle);
+        Assert.assertFalse(spaceGrid.getCell(0,0).orElse(SpaceCell.EMPTY()).isObstacle);
         System.out.println("spaceGrid.getCell(1,0) = " + spaceGrid.getCell(1, 0));
-        Assert.assertTrue(spaceGrid.getCell(1,0).isObstacle);
-        Assert.assertTrue(spaceGrid.getCell(2,1).isObstacle);
-        Assert.assertTrue(spaceGrid.getCell(3,1).isObstacle);
+        Assert.assertTrue(spaceGrid.getCell(1,0).orElse(SpaceCell.EMPTY()).isObstacle);
+        Assert.assertTrue(spaceGrid.getCell(2,1).orElse(SpaceCell.EMPTY()).isObstacle);
+        Assert.assertTrue(spaceGrid.getCell(3,1).orElse(SpaceCell.EMPTY()).isObstacle);
 
 
     }

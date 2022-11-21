@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestEnvironmentWithNoObstacles {
 
     private static final double DELTA = 0.1;
@@ -26,29 +28,94 @@ public class TestEnvironmentWithNoObstacles {
     public void moveStillFromx0y0() {
         State pos=new State(0,0);
         StepReturn stepReturn= environment.step(Action.still,pos);
-
         System.out.println("stepReturn = " + stepReturn);
-
-        Assert.assertEquals(1,stepReturn.newPosition.x, DELTA);
-        Assert.assertEquals(0,stepReturn.newPosition.y, DELTA);
-        Assert.assertFalse(stepReturn.isTerminal);
-        Assert.assertEquals(0,stepReturn.reward,DELTA);
+        assertAll(
+                () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
+                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertEquals(0,stepReturn.reward,DELTA)
+        );
     }
 
 
     @Test
-    public void moveUpFromx0y0() {
+    public void moveDownFromXis0Yis0() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.up,pos);
-
+        StepReturn stepReturn= environment.step(Action.down,pos);
         System.out.println("stepReturn = " + stepReturn);
-
-        Assert.assertEquals(1,stepReturn.newPosition.x, DELTA);
-        Assert.assertEquals(0,stepReturn.newPosition.y, DELTA);
-        Assert.assertTrue(stepReturn.isTerminal);
-        Assert.assertEquals(Environment.CRASH_COST,stepReturn.reward,DELTA);
+        assertAll(
+                () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
+                () -> assertTrue(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.CRASH_COST-Environment.MOVE_COST,stepReturn.reward,DELTA)
+        );
     }
 
+
+    @Test
+    public void moveStillFromXis0Yis0() {
+        State pos=new State(0,0);
+        StepReturn stepReturn= environment.step(Action.still,pos);
+        System.out.println("stepReturn = " + stepReturn);
+        assertAll(
+                () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
+                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.STILL_COST,stepReturn.reward,DELTA)
+        );
+    }
+
+    @Test
+    public void moveStillFromXis1Yis1() {
+        State pos=new State(1,1);
+        StepReturn stepReturn= environment.step(Action.still,pos);
+        System.out.println("stepReturn = " + stepReturn);
+        assertAll(
+                () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
+                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.STILL_COST,stepReturn.reward,DELTA)
+        );
+    }
+
+    @Test
+    public void moveUpFromXis1Yis1() {
+        State pos=new State(1,1);
+        StepReturn stepReturn= environment.step(Action.up,pos);
+        System.out.println("stepReturn = " + stepReturn);
+        assertAll(
+                () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(2,stepReturn.newPosition.y, DELTA),
+                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.MOVE_COST,stepReturn.reward,DELTA)
+        );
+    }
+
+    @Test
+    public void moveStillFromXis2Yis1() {
+        State pos=new State(2,1);
+        StepReturn stepReturn= environment.step(Action.still,pos);
+        System.out.println("stepReturn = " + stepReturn);
+        assertAll(
+                () -> assertEquals(3,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
+                () -> assertTrue(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.STILL_COST,stepReturn.reward,DELTA)
+        );
+    }
+
+    @Test
+    public void moveStillFromXis3Yis1IsNonValidPosition() {
+        State pos=new State(3,1);
+        StepReturn stepReturn= environment.step(Action.still,pos);
+        System.out.println("stepReturn = " + stepReturn);
+        assertAll(
+                () -> assertEquals(3,stepReturn.newPosition.x, DELTA),
+                () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
+                () -> assertTrue(stepReturn.isTerminal),
+                () -> assertEquals(-Environment.CRASH_COST,stepReturn.reward,DELTA)
+        );
+    }
 
 
 }

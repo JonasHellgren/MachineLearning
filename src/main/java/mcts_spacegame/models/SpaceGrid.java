@@ -9,6 +9,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /***
  *   The space grid below has 3 rows and 7 columns. For example is cell (1,2) filled with an obstacle.
@@ -47,19 +48,23 @@ public class SpaceGrid implements SpaceGridInterface {
         fillGrid(occupiedCells);
     }
 
-    public SpaceCell getCell(State state) {
+    public Optional<SpaceCell> getCell(State state) {
         return getCell(state.x,state.y);
 
     }
-    public SpaceCell getCell(Integer x, Integer y) {
+    public Optional<SpaceCell> getCell(Integer x, Integer y) {
 
+        Optional<SpaceCell> spaceCellOpt=Optional.empty();
         RowAndColumn rc=convertPos(x,y);
 
         if (rc.column < 0 || rc.column >= nofColumns || rc.row < 0 || rc.row >= nofRows) {
-            log.warning("Non valid grid position");
-            return SpaceCell.EMPTY();
+            log.fine("Non valid grid position");
+            return spaceCellOpt;
         }
-        return grid[rc.column][rc.row];
+        spaceCellOpt=Optional.of(grid[rc.column][rc.row]);
+        return spaceCellOpt;
+
+        //return grid[rc.column][rc.row];
     }
 
 
@@ -104,7 +109,7 @@ public class SpaceGrid implements SpaceGridInterface {
         for (int y = nofRows-1; y >=0; y--) {
             sb.append("|");
             for (int x = 0; x < nofColumns; x++) {
-                String cell = (getCell(x, y).isObstacle) ? "o" : " ";
+                String cell = (getCell(x, y).orElse(SpaceCell.EMPTY()).isObstacle) ? "o" : " ";
                 sb.append(cell).append("|");
             }
             sb.append(System.getProperty("line.separator"));

@@ -6,10 +6,11 @@ import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public interface SpaceGridInterface {
 
-    SpaceCell getCell(Integer x, Integer y);
+    Optional<SpaceCell> getCell(Integer x, Integer y);
     void clear();
     void fillGrid(List<Pair<Integer, Integer>> occupiedCells);
 
