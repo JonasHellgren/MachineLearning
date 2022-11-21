@@ -3,6 +3,7 @@ package mcts_spacegame.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 
@@ -28,6 +29,7 @@ import java.util.List;
 public class SpaceGrid implements SpaceGridInterface {
 
     @AllArgsConstructor
+    @ToString
     static
     class RowAndColumn {
         public int column;
@@ -60,10 +62,7 @@ public class SpaceGrid implements SpaceGridInterface {
         return grid[rc.column][rc.row];
     }
 
-    private RowAndColumn convertPos(int x, int y) {
-        return  new RowAndColumn(x,nofRows-y-1);
 
-    }
 
     public void clear() {
         fillGrid(new ArrayList<>());
@@ -71,16 +70,15 @@ public class SpaceGrid implements SpaceGridInterface {
 
     public void fillGrid(List<Pair<Integer, Integer>> occupiedCells) {
 
-        for (int row = 0; row < nofRows; row++) {
-            for (int col = 0; col < nofColumns; col++) {
-
-                int finalCol = col;
-                int finalRow = row;
+        for (int y = 0; y < nofRows; y++) {
+            for (int x = 0; x < nofColumns; x++) {
+                RowAndColumn rc=convertPos(x,y);
+                int finalY = y;
                 boolean isObstacle = occupiedCells.stream().
-                        anyMatch(p -> p.getFirst() == finalCol && p.getSecond() == finalRow);
-                boolean isGoal = (col == nofColumns - 1);
-                boolean isOnLowerBorder = (row == nofRows - 1);
-                boolean isOnUpperBorder = (row == 0);
+                        anyMatch(p -> p.getFirst() == rc.column && p.getSecond() == finalY);
+                boolean isGoal = (rc.column== nofColumns - 1);
+                boolean isOnUpperBorder = (y == nofRows - 1);
+                boolean isOnLowerBorder = (y== 0);
 
                 SpaceCell cell = new SpaceCell(
                         isObstacle,
@@ -88,20 +86,25 @@ public class SpaceGrid implements SpaceGridInterface {
                         isOnLowerBorder,
                         isOnUpperBorder
                 );
-                grid[col][row] = cell;
+                grid[rc.column][rc.row] = cell;
 
             }
         }
+    }
+
+    private RowAndColumn convertPos(int x, int y) {
+        return  new RowAndColumn(x,nofRows-y-1);
+
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(System.getProperty("line.separator"));
-        for (int row = 0; row < nofRows; row++) {
+        for (int y = nofRows-1; y >=0; y--) {
             sb.append("|");
-            for (int col = 0; col < nofColumns; col++) {
-                String cell = (getCell(col, row).isObstacle) ? "o" : " ";
+            for (int x = 0; x < nofColumns; x++) {
+                String cell = (getCell(x, y).isObstacle) ? "o" : " ";
                 sb.append(cell).append("|");
             }
             sb.append(System.getProperty("line.separator"));

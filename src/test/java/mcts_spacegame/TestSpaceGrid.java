@@ -24,9 +24,9 @@ public class TestSpaceGrid {
         Assert.assertEquals(3,spaceGrid.getNofRows());
         Assert.assertEquals(3,spaceGrid.getNofColumns());
 
-        Assert.assertTrue(spaceGrid.getCell(0,0).isOnUpperBorder);
+        Assert.assertTrue(spaceGrid.getCell(0,0).isOnLowerBorder);
         Assert.assertFalse(spaceGrid.getCell(0,1).isOnUpperBorder);
-        Assert.assertTrue(spaceGrid.getCell(0,2).isOnLowerBorder);
+        Assert.assertTrue(spaceGrid.getCell(0,2).isOnUpperBorder);
         Assert.assertFalse(spaceGrid.getCell(0,0).isObstacle);
         Assert.assertTrue(spaceGrid.getCell(2,0).isGoal);
 
@@ -42,7 +42,8 @@ public class TestSpaceGrid {
         Assert.assertEquals(7,spaceGrid.getNofColumns());
 
         Assert.assertFalse(spaceGrid.getCell(0,0).isObstacle);
-        Assert.assertTrue(spaceGrid.getCell(1,2).isObstacle);
+        System.out.println("spaceGrid.getCell(1,0) = " + spaceGrid.getCell(1, 0));
+        Assert.assertTrue(spaceGrid.getCell(1,0).isObstacle);
         Assert.assertTrue(spaceGrid.getCell(2,1).isObstacle);
         Assert.assertTrue(spaceGrid.getCell(3,1).isObstacle);
 
