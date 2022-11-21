@@ -1,3 +1,14 @@
 
 fler tester environment
 
+kolla composite pattern
+
+models_mcts
+- TreeNode
+- Tree
+
+logic_mcts
+- TreePolicy
+- DefaultPolicy
+- Backup
+

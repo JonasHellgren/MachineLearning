@@ -27,7 +27,7 @@ public class Environment implements EnvironmentInterface {
     public StepReturn step(Action action, State oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
-        if (cellPresentOpt.isEmpty()) {
+        if (cellPresentOpt.isEmpty()) {  //if present position not is defined, assume crash
             return new StepReturn(oldPosition,true,-CRASH_COST);
         }
 
