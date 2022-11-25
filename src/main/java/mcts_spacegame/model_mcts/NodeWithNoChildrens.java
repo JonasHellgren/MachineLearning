@@ -19,7 +19,7 @@ public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
     @Override
     @SneakyThrows
     public void addChildNode(NodeInterface node) {
-        throw new NoSuchMethodException("Can't add child to person without child");
+        throw new NoSuchMethodException("Can't add child to node without child");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
 
     @Override
     public void printTree() {
-        System.out.println(super.getName());
+        System.out.println(nameAndDepthAsString()+"(T)");
     }
 
     @Override
@@ -75,5 +75,11 @@ public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
     @Override
     public double getActionValue(Action a) {
         return 0;
+    }
+
+    @SneakyThrows
+    @Override
+    public void expand(NodeInterface childNode, Action action, double G) {
+        throw new NoSuchMethodException("Can't expand node without child");
     }
 }
