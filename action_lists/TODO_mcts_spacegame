@@ -14,8 +14,12 @@ testCounter
 
 logic_mcts
 - NodeSelector x
-- DefaultPolicy
-- Backup
+- SimulationPolicy x
+- BackupModifer created x
+- NodeWithChildren, NodeTerminalFail, NodeTerminalNoFail
+- BackupModifer
+- TestBackupModifer
+
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf
 

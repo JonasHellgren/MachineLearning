@@ -6,6 +6,7 @@ import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,14 +59,7 @@ public class TestEnvironmentWithObstacles {
 
         System.out.println("environment = " + environment);
 
-        StepReturn stepReturn;
-        do {
-            System.out.println("pos = " + pos);
-            stepReturn = environment.step(Action.still,pos);
-            pos.setFromReturn(stepReturn);
-        } while (!stepReturn.isTerminal);
-
-        StepReturn finalStepReturn = stepReturn;
+        StepReturn finalStepReturn = stepToTerminal(pos);
         assertAll(
                 () -> assertEquals(6, pos.x, DELTA),  //at goal, new position will be equal to present pos
                 () -> assertEquals(2,pos.y, DELTA),
@@ -74,20 +68,24 @@ public class TestEnvironmentWithObstacles {
         );
     }
 
+    @NotNull
+    private StepReturn stepToTerminal(State pos) {
+        StepReturn stepReturn;
+        do {
+            System.out.println("pos = " + pos);
+            stepReturn = environment.step(Action.still, pos);
+            pos.setFromReturn(stepReturn);
+        } while (!stepReturn.isTerminal);
+        return stepReturn;
+    }
+
     @Test
     public void multipleMovesStillFromx0y1GivesMovingToObstacle() {
         State pos=new State(0,1);
 
         System.out.println("environment = " + environment);
 
-        StepReturn stepReturn;
-        do {
-            System.out.println("pos = " + pos);
-            stepReturn = environment.step(Action.still,pos);
-            pos.setFromReturn(stepReturn);
-        } while (!stepReturn.isTerminal);
-
-        StepReturn finalStepReturn = stepReturn;
+        StepReturn finalStepReturn = stepToTerminal(pos);
         assertAll(
                 () -> assertEquals(2, pos.x, DELTA),
                 () -> assertEquals(1,pos.y, DELTA),

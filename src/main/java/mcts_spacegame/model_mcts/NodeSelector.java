@@ -3,7 +3,6 @@ package mcts_spacegame.model_mcts;
 import common.MathUtils;
 import lombok.Getter;
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.models_space.State;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,9 +34,9 @@ public class NodeSelector {
         return currentNode;
     }
 
-    NodeInterface selectChild(NodeInterface node) {
+    public NodeInterface selectChild(NodeInterface node) {
         List<Pair<NodeInterface,Double>> nodeUCTPairs=getListOfPairs(node);
-        nodeUCTPairs.forEach(System.out::println);
+      //  nodeUCTPairs.forEach(System.out::println);
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
         return pair.orElseThrow().getFirst();
     }
@@ -58,7 +57,7 @@ public class NodeSelector {
         return nodeUCTPairs;
     }
 
-    double calcUct(NodeInterface node, Action action) {
+    private double calcUct(NodeInterface node, Action action) {
         double v=node.getActionValue(action);
         int nParent=node.getNofVisits();
         int n=node.getNofActionSelections(action);
