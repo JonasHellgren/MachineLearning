@@ -1,4 +1,4 @@
-package mcts_spacegame.models;
+package mcts_spacegame.models_space;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

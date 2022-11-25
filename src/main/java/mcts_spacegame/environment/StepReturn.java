@@ -2,7 +2,7 @@ package mcts_spacegame.environment;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import mcts_spacegame.models.State;
+import mcts_spacegame.models_space.State;
 
 @AllArgsConstructor
 @ToString

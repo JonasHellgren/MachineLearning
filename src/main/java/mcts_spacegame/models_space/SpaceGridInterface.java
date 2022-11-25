@@ -1,4 +1,4 @@
-package mcts_spacegame.models;
+package mcts_spacegame.models_space;
 
 import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ public interface SpaceGridInterface {
     Optional<SpaceCell> getCell(Integer x, Integer y);
     void clear();
     void fillGrid(List<Pair<Integer, Integer>> occupiedCells);
-
 
     static SpaceGrid newWithNoObstacles(int nofRows,int nofColumns) {
         List<Pair<Integer, Integer>> occupiedCells= new ArrayList<>();

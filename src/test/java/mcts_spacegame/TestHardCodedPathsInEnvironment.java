@@ -3,18 +3,16 @@ package mcts_spacegame;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
-import mcts_spacegame.models.SpaceGrid;
-import mcts_spacegame.models.SpaceGridInterface;
-import mcts_spacegame.models.State;
+import mcts_spacegame.models_space.SpaceGrid;
+import mcts_spacegame.models_space.SpaceGridInterface;
+import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestHardCodedPathsInEnvironment {

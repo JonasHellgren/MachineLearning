@@ -1,8 +1,7 @@
-package mcts_spacegame.models;
+package mcts_spacegame.models_space;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
