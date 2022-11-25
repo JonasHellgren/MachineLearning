@@ -15,7 +15,7 @@ import java.util.Optional;
 public class Environment implements EnvironmentInterface {
 
     public static final double MOVE_COST = 1d;
-    public static final double  STILL_COST=0d;
+    public static final double STILL_COST=0d;
     public static final double CRASH_COST = 100d;
     SpaceGrid spaceGrid;
 
@@ -30,10 +30,11 @@ public class Environment implements EnvironmentInterface {
         if (cellPresentOpt.isEmpty()) {  //if present position not is defined, assume crash
             return new StepReturn(oldPosition,true,-CRASH_COST);
         }
-
         State newPosition = getNewPosition(action, oldPosition);
+
         Optional<SpaceCell> cellNewOpt = spaceGrid.getCell(newPosition);
-        if (cellNewOpt.isEmpty()) {  //if new position not is defined, assume it to be equal old position
+        if (cellNewOpt.isEmpty()) {
+            log.info("new position is outside grid, assume it to be equal old position");
             newPosition=oldPosition;
             cellNewOpt=cellPresentOpt;
         }

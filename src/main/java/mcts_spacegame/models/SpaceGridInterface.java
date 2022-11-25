@@ -1,8 +1,6 @@
 package mcts_spacegame.models;
 
-import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.util.Pair;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
