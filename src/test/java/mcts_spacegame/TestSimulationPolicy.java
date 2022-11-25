@@ -3,8 +3,6 @@ package mcts_spacegame;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
-import mcts_spacegame.model_mcts.MostlyStillPolicy;
-import mcts_spacegame.model_mcts.NodeInterface;
 import mcts_spacegame.model_mcts.SimulationPolicyInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
@@ -18,9 +16,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSimulationPolicy {

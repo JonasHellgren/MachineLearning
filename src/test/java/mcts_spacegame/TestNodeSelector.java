@@ -2,7 +2,7 @@ package mcts_spacegame;
 
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
-import mcts_spacegame.model_mcts.NodeInterface;
+import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
@@ -23,7 +23,7 @@ public class TestNodeSelector {
         nodeRoot = NodeInterface.newNode(new State(0, 0), Action.notApplicable);
         chUp = NodeInterface.newNode(new State(1, 1),Action.up);
         chStill = NodeInterface.newNode(new State(1, 0),Action.still);
-        chDown = NodeInterface.newNoChildNode(new State(1, 0),Action.down); //terminal
+        chDown = NodeInterface.newTerminalFail(new State(1, 0),Action.down); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
         nodeRoot.addChildNode(chDown);

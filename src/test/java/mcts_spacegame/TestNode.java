@@ -1,8 +1,7 @@
 package mcts_spacegame;
 
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.model_mcts.NodeInterface;
+import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,9 +11,19 @@ public class TestNode {
     private static final double SIM_RES = -1d;
     Action ACTION_ANY=Action.still;
 
+    @Test public void testTypes() {
+        NodeInterface nodeWithChilds=NodeInterface.newNode(new State(0, 0),ACTION_ANY);
+        NodeInterface nodeTerminalFail=NodeInterface.newTerminalFail(new State(0, 0),ACTION_ANY);
+        NodeInterface nodeTerminalNoFail=NodeInterface.newTerminalNoFail(new State(0, 0),ACTION_ANY);
+
+        Assert.assertTrue(nodeWithChilds.isNodeWithChildren());
+        Assert.assertTrue(nodeTerminalFail.isNodeTerminalFail());
+        Assert.assertTrue(nodeTerminalNoFail.isNodeTerminalNoFail());
+    }
+
     @Test
     public void oneNoChildNode() {
-        NodeInterface node = NodeInterface.newNoChildNode(new State(0, 0),ACTION_ANY);
+        NodeInterface node = NodeInterface.newTerminalFail(new State(0, 0),ACTION_ANY);
         node.printTree();
 
         Assert.assertEquals(0, node.nofChildNodes());
@@ -25,7 +34,7 @@ public class TestNode {
         NodeInterface nodeRoot = NodeInterface.newNode(new State(0, 0),ACTION_ANY);
         NodeInterface chUp = NodeInterface.newNode(new State(1, 1),ACTION_ANY);
         NodeInterface chStill = NodeInterface.newNode(new State(1, 0),ACTION_ANY);
-        NodeInterface chDown = NodeInterface.newNoChildNode(new State(1, 0),ACTION_ANY); //terminal
+        NodeInterface chDown = NodeInterface.newTerminalFail(new State(1, 0),ACTION_ANY); //terminal
 
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
@@ -38,7 +47,7 @@ public class TestNode {
         NodeInterface nodeRoot = NodeInterface.newNode(new State(0, 0),ACTION_ANY);
         NodeInterface chUp1 = NodeInterface.newNode(new State(1, 1),ACTION_ANY);
         NodeInterface chStill1 = NodeInterface.newNode(new State(1, 0),ACTION_ANY);
-        NodeInterface chDown1 = NodeInterface.newNoChildNode(new State(1, 0),ACTION_ANY); //terminal
+        NodeInterface chDown1 = NodeInterface.newTerminalFail(new State(1, 0),ACTION_ANY); //terminal
 
         nodeRoot.addChildNode(chUp1);
         nodeRoot.addChildNode(chStill1);

@@ -3,6 +3,7 @@ package mcts_spacegame.model_mcts;
 import common.MathUtils;
 import lombok.Getter;
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 

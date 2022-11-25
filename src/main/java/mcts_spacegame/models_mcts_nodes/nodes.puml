@@ -1,0 +1,21 @@
+@startuml
+abstract class mcts_spacegame.models_mcts_nodes.NodeAbstract {
+}
+class mcts_spacegame.models_mcts_nodes.NodeWithNoChildren {
+}
+class mcts_spacegame.models_mcts_nodes.NodeWithChildren {
+}
+class mcts_spacegame.models_mcts_nodes.NodeTerminalFail {
+}
+interface mcts_spacegame.models_mcts_nodes.NodeInterface {
+}
+class mcts_spacegame.models_mcts_nodes.NodeTerminalNoFail {
+}
+
+
+mcts_spacegame.models_mcts_nodes.NodeInterface <|.. mcts_spacegame.models_mcts_nodes.NodeAbstract
+mcts_spacegame.models_mcts_nodes.NodeAbstract <|-- mcts_spacegame.models_mcts_nodes.NodeWithNoChildren
+mcts_spacegame.models_mcts_nodes.NodeAbstract <|-- mcts_spacegame.models_mcts_nodes.NodeWithChildren
+mcts_spacegame.models_mcts_nodes.NodeWithNoChildren <|-- mcts_spacegame.models_mcts_nodes.NodeTerminalFail
+mcts_spacegame.models_mcts_nodes.NodeWithNoChildren <|-- mcts_spacegame.models_mcts_nodes.NodeTerminalNoFail
+@enduml

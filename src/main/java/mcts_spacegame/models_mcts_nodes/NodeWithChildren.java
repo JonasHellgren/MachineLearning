@@ -1,11 +1,12 @@
-package mcts_spacegame.model_mcts;
+package mcts_spacegame.models_mcts_nodes;
 
 import common.MathUtils;
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.model_mcts.Counter;
 
 import java.util.*;
 
-public class NodeWithChildrens extends NodeAbstract {
+public final class NodeWithChildren extends NodeAbstract {
 
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
@@ -15,7 +16,7 @@ public class NodeWithChildrens extends NodeAbstract {
     Map<Action, Double> Qsa;
     Map<Action, Integer> nSA;
 
-    public NodeWithChildrens(String name,Action action) {
+    public NodeWithChildren(String name, Action action) {
         super(name,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;

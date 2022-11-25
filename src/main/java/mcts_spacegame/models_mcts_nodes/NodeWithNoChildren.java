@@ -1,15 +1,16 @@
-package mcts_spacegame.model_mcts;
+package mcts_spacegame.models_mcts_nodes;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.model_mcts.Counter;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
+public abstract class NodeWithNoChildren extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeWithNoChildrens(String name,Action action) {
+    public NodeWithNoChildren(String name, Action action) {
         super(name,action);
     }
 
