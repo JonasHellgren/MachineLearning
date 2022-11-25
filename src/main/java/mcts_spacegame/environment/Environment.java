@@ -28,7 +28,9 @@ public class Environment implements EnvironmentInterface {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
         if (cellPresentOpt.isEmpty()) {  //if present position not is defined, assume crash
-            return new StepReturn(oldPosition,true,-CRASH_COST);
+            return StepReturn.builder()
+                    .newPosition(oldPosition).isTerminal(true).isFail(true).reward(-CRASH_COST)
+                    .build();
         }
         State newPosition = getNewPosition(action, oldPosition);
 
@@ -49,8 +51,9 @@ public class Environment implements EnvironmentInterface {
         double costMotion = (action.equals(Action.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;
-
-        return new StepReturn(newPosition, isTerminal, reward);
+        return StepReturn.builder()
+                .newPosition(newPosition).isTerminal(isTerminal).isFail(isCrashing).reward(reward)
+                .build();
     }
 
     @NotNull

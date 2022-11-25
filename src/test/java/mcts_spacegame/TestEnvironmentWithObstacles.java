@@ -34,6 +34,7 @@ public class TestEnvironmentWithObstacles {
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
                 () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
                 () -> assertTrue(stepReturn.isTerminal),
+                () -> assertTrue(stepReturn.isFail),
                 () -> assertEquals(-Environment.CRASH_COST,stepReturn.reward,DELTA)
         );
     }
@@ -64,6 +65,7 @@ public class TestEnvironmentWithObstacles {
                 () -> assertEquals(6, pos.x, DELTA),  //at goal, new position will be equal to present pos
                 () -> assertEquals(2,pos.y, DELTA),
                 () -> assertTrue(finalStepReturn.isTerminal),
+                () -> assertFalse(finalStepReturn.isFail),
                 () -> assertEquals(-Environment.STILL_COST,finalStepReturn.reward,DELTA)
         );
     }
