@@ -6,7 +6,7 @@ import mcts_spacegame.model_mcts.Counter;
 
 import java.util.*;
 
-public final class NodeWithChildren extends NodeAbstract {
+public final class NodeNotTerminal extends NodeAbstract {
 
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
@@ -16,7 +16,7 @@ public final class NodeWithChildren extends NodeAbstract {
     Map<Action, Double> Qsa;
     Map<Action, Integer> nSA;
 
-    public NodeWithChildren(String name, Action action) {
+    public NodeNotTerminal(String name, Action action) {
         super(name,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;

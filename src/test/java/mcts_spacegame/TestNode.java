@@ -12,13 +12,13 @@ public class TestNode {
     Action ACTION_ANY=Action.still;
 
     @Test public void testTypes() {
-        NodeInterface nodeWithChilds=NodeInterface.newNode(new State(0, 0),ACTION_ANY);
+        NodeInterface nodeWithChilds=NodeInterface.newNotTerminal(new State(0, 0),ACTION_ANY);
         NodeInterface nodeTerminalFail=NodeInterface.newTerminalFail(new State(0, 0),ACTION_ANY);
-        NodeInterface nodeTerminalNoFail=NodeInterface.newTerminalNoFail(new State(0, 0),ACTION_ANY);
+        NodeInterface nodeTerminalNoFail=NodeInterface.newTerminalNotFail(new State(0, 0),ACTION_ANY);
 
-        Assert.assertTrue(nodeWithChilds.isNodeWithChildren());
-        Assert.assertTrue(nodeTerminalFail.isNodeTerminalFail());
-        Assert.assertTrue(nodeTerminalNoFail.isNodeTerminalNoFail());
+        Assert.assertTrue(nodeWithChilds.isNotTerminal());
+        Assert.assertTrue(nodeTerminalFail.isTerminalFail());
+        Assert.assertTrue(nodeTerminalNoFail.isTerminalNoFail());
     }
 
     @Test
@@ -31,9 +31,9 @@ public class TestNode {
 
     @Test
     public void rootWithThreeChilds() {
-        NodeInterface nodeRoot = NodeInterface.newNode(new State(0, 0),ACTION_ANY);
-        NodeInterface chUp = NodeInterface.newNode(new State(1, 1),ACTION_ANY);
-        NodeInterface chStill = NodeInterface.newNode(new State(1, 0),ACTION_ANY);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(new State(0, 0),ACTION_ANY);
+        NodeInterface chUp = NodeInterface.newNotTerminal(new State(1, 1),ACTION_ANY);
+        NodeInterface chStill = NodeInterface.newNotTerminal(new State(1, 0),ACTION_ANY);
         NodeInterface chDown = NodeInterface.newTerminalFail(new State(1, 0),ACTION_ANY); //terminal
 
         nodeRoot.addChildNode(chUp);
@@ -44,17 +44,17 @@ public class TestNode {
 
     @Test
     public void rootWithGrandChilds() {
-        NodeInterface nodeRoot = NodeInterface.newNode(new State(0, 0),ACTION_ANY);
-        NodeInterface chUp1 = NodeInterface.newNode(new State(1, 1),ACTION_ANY);
-        NodeInterface chStill1 = NodeInterface.newNode(new State(1, 0),ACTION_ANY);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(new State(0, 0),ACTION_ANY);
+        NodeInterface chUp1 = NodeInterface.newNotTerminal(new State(1, 1),ACTION_ANY);
+        NodeInterface chStill1 = NodeInterface.newNotTerminal(new State(1, 0),ACTION_ANY);
         NodeInterface chDown1 = NodeInterface.newTerminalFail(new State(1, 0),ACTION_ANY); //terminal
 
         nodeRoot.addChildNode(chUp1);
         nodeRoot.addChildNode(chStill1);
         nodeRoot.addChildNode(chDown1);
 
-        NodeInterface chUp2 = NodeInterface.newNode(new State(2, 1),ACTION_ANY);
-        NodeInterface chStill2 = NodeInterface.newNode(new State(2, 0),ACTION_ANY);
+        NodeInterface chUp2 = NodeInterface.newNotTerminal(new State(2, 1),ACTION_ANY);
+        NodeInterface chStill2 = NodeInterface.newNotTerminal(new State(2, 0),ACTION_ANY);
         chStill1.addChildNode(chUp2);
         chStill1.addChildNode(chStill2);
 
@@ -63,11 +63,11 @@ public class TestNode {
 
     @Test
     public void imitateStillActionFromRootFollowedByExpansion() {
-        NodeInterface nodeRoot = NodeInterface.newNode(new State(0, 0),Action.notApplicable);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(new State(0, 0),Action.notApplicable);
         Action action = Action.still;
      //   double treeRewards = Environment.STILL_COST;
       //  double simRewards = SIM_RES;
-        NodeInterface chStill1 = NodeInterface.newNode(new State(1, 0),ACTION_ANY);
+        NodeInterface chStill1 = NodeInterface.newNotTerminal(new State(1, 0),ACTION_ANY);
 
         nodeRoot.expand(chStill1,action);
 

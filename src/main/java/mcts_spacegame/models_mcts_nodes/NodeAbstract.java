@@ -29,16 +29,16 @@ public abstract class NodeAbstract implements NodeInterface {
         return BLANK_SPACE.repeat(Math.max(0, depth)) +name;
     }
 
-    public boolean isNodeWithChildren() {
-        return (this instanceof NodeWithChildren);
+    public boolean isNotTerminal() {
+        return (this instanceof NodeNotTerminal);
     }
 
-    public boolean isNodeTerminalFail() {
+    public boolean isTerminalFail() {
         return (this instanceof NodeTerminalFail);
     }
 
-    public boolean isNodeTerminalNoFail() {
-        return (this instanceof NodeTerminalNoFail);
+    public boolean isTerminalNoFail() {
+        return (this instanceof NodeTerminalNotFail);
     }
 
 

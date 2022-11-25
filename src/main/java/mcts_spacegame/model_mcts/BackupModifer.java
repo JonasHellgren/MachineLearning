@@ -34,5 +34,22 @@ public class BackupModifer {
     }
 
 
+    public void backup()  {
+
+        double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
+
+        int lengthPath= nodesFromRootToSelected.size();
+        NodeInterface endNode=nodesFromRootToSelected.get(lengthPath-1);
+
+        if (endNode.isTerminalNoFail() || endNode.isNotTerminal())  {
+            //backupNormalFromTreeSteps();
+        } else
+        {
+           // backupDefensiveFromTreeSteps();
+        }
+
+
+    }
+
 
 }

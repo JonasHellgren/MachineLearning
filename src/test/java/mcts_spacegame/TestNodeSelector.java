@@ -20,9 +20,9 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        nodeRoot = NodeInterface.newNode(new State(0, 0), Action.notApplicable);
-        chUp = NodeInterface.newNode(new State(1, 1),Action.up);
-        chStill = NodeInterface.newNode(new State(1, 0),Action.still);
+        nodeRoot = NodeInterface.newNotTerminal(new State(0, 0), Action.notApplicable);
+        chUp = NodeInterface.newNotTerminal(new State(1, 1),Action.up);
+        chStill = NodeInterface.newNotTerminal(new State(1, 0),Action.still);
         chDown = NodeInterface.newTerminalFail(new State(1, 0),Action.down); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);

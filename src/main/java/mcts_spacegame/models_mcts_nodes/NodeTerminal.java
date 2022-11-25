@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class NodeWithNoChildren extends NodeAbstract {  //todo TerminalLeaf
+public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeWithNoChildren(String name, Action action) {
+    public NodeTerminal(String name, Action action) {
         super(name,action);
     }
 

@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 /***
- * A terminal node has no childrens and represents a terminal state, for ex reached goal.
+ * A terminal node has no children and represents a terminal state, for ex reached goal.
  * A node is expandable if it represents a non-terminal state and if it has unvisited children.
  *
  *              NodeAbstract
  *               /    \
  *              /      \
- *   NodeWithChildren   NodeWithNoChildren (abstract)
+ *   NodeNotTerminal    NodeTerminal (abstract)
  *                         /    \
  *                        /      \
- *           NodeTerminalFail   NodeTerminalNoFail
+ *           NodeTerminalFail   NodeTerminalNotFail
  */
 
 public interface NodeInterface {
@@ -39,20 +39,20 @@ public interface NodeInterface {
     Set<Action> getActionSet();
     void expand(NodeInterface childNode, Action action);
 
-    boolean isNodeWithChildren();
-    boolean isNodeTerminalFail();
-    boolean isNodeTerminalNoFail();
+    boolean isNotTerminal();
+    boolean isTerminalFail();
+    boolean isTerminalNoFail();
 
-    static NodeWithChildren newNode(State s, Action action) {
-        return new NodeWithChildren(s.toString(),action);
+    static NodeNotTerminal newNotTerminal(State s, Action action) {
+        return new NodeNotTerminal(s.toString(),action);
     }
 
     static NodeTerminalFail newTerminalFail(State s, Action action) {
         return new NodeTerminalFail(s.toString(),action);
     }
 
-    static NodeTerminalNoFail newTerminalNoFail(State s, Action action) {
-        return new NodeTerminalNoFail(s.toString(),action);
+    static NodeTerminalNotFail newTerminalNotFail(State s, Action action) {
+        return new NodeTerminalNotFail(s.toString(),action);
     }
 
 

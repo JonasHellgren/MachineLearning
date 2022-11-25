@@ -11,5 +11,4 @@ public class StepReturn {
     public boolean isTerminal;
     public boolean isFail;
     public double reward;
-
 }
