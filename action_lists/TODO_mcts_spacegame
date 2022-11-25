@@ -19,6 +19,7 @@ logic_mcts
 - NodeWithChildren, NodeTerminalFail, NodeTerminalNoFail  x
 - isFail in StepReturn  x
 - döp om nodeWithChikdren  x
+- BackupModifer comment
 - BackupModifer
 - TestBackupModifer
 
