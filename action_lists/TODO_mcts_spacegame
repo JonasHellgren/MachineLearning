@@ -9,10 +9,11 @@ models_mcts
 - NodeWithNoChildrens x
 - NodeWithChildrens x
 
-TestNodes
+TestNode x
+testCounter
 
 logic_mcts
-- TreePolicy
+- NodeSelector x
 - DefaultPolicy
 - Backup
 

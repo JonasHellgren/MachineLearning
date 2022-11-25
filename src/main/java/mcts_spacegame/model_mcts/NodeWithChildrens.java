@@ -3,10 +3,7 @@ package mcts_spacegame.model_mcts;
 import common.MathUtils;
 import mcts_spacegame.enums.Action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NodeWithChildrens extends NodeAbstract {
 
@@ -18,17 +15,17 @@ public class NodeWithChildrens extends NodeAbstract {
     Map<Action, Double> Qsa;
     Map<Action, Integer> nSA;
 
-    public NodeWithChildrens(String name) {
-        super(name);
+    public NodeWithChildrens(String name,Action action) {
+        super(name,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;
         Qsa = new HashMap<>();
-        for (Action a : Action.values()) {
+        for (Action a : Action.applicableActions()) {
             Qsa.put(a, INIT_ACTION_VALUE);
         }
 
         nSA = new HashMap<>();
-        for (Action a : Action.values()) {
+        for (Action a : Action.applicableActions()) {
             nSA.put(a, INIT_NOF_VISITS);
         }
 
@@ -109,16 +106,22 @@ public class NodeWithChildrens extends NodeAbstract {
     }
 
     @Override
-    public void expand(NodeInterface childNode, Action action, double G) {
+    public Set<Action> getActionSet() {
+        return Qsa.keySet();
+    }
+
+    @Override
+    public void expand(NodeInterface childNode, Action action) {
         addChildNode(childNode);
         increaseNofVisits();
         increaseNofActionSelections(action);
-        updateActionValue(G, action);
     }
 
     @Override
     public String toString() {
-        return "nof childs = " + childNodes.size() +
+        return "name = "+name+
+                ", nof childs = " + childNodes.size() +
+                ", action = " + action +
                 ", nof visits = " + nofVisits +
                 ", action values =" + Qsa.entrySet() +
                 ", action visits =" + nSA.entrySet();

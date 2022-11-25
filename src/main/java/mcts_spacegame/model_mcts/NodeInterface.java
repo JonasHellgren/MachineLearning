@@ -4,6 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_space.State;
 
 import java.util.List;
+import java.util.Set;
 
 /***
  * A terminal node has no childrens and represents a terminal state, for ex reached goal.
@@ -15,6 +16,7 @@ public interface NodeInterface {
     List<NodeInterface> getChildNodes();
     int getDepth();
     String getName();
+    Action getAction();
     int nofChildNodes();
     int nofSubNodes();
     void printTree();
@@ -26,14 +28,15 @@ public interface NodeInterface {
     int getNofVisits();
     int getNofActionSelections(Action a);
     double getActionValue(Action a);
-    void expand(NodeInterface childNode, Action action, double G);
+    Set<Action> getActionSet();
+    void expand(NodeInterface childNode, Action action);
 
-    static NodeWithNoChildrens newNoChildNode(State s) {
-        return new NodeWithNoChildrens(s.toString());
+    static NodeWithNoChildrens newNoChildNode(State s,Action action) {
+        return new NodeWithNoChildrens(s.toString(),action);
     }
 
-    static NodeWithChildrens newNode(State s) {
-        return new NodeWithChildrens(s.toString());
+    static NodeWithChildrens newNode(State s,Action action) {
+        return new NodeWithChildrens(s.toString(),action);
     }
 
 

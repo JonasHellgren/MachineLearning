@@ -5,11 +5,12 @@ import mcts_spacegame.enums.Action;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeWithNoChildrens(String name) {
-        super(name);
+    public NodeWithNoChildrens(String name,Action action) {
+        super(name,action);
     }
 
     @Override
@@ -77,9 +78,21 @@ public class NodeWithNoChildrens extends NodeAbstract {  //todo TerminalLeaf
         return 0;
     }
 
+    @Override
+    public Set<Action> getActionSet() {
+        return Collections.emptySet();
+    }
+
     @SneakyThrows
     @Override
-    public void expand(NodeInterface childNode, Action action, double G) {
+    public void expand(NodeInterface childNode, Action action) {
         throw new NoSuchMethodException("Can't expand node without child");
     }
+
+    @Override
+    public String toString() {
+        return  "name = "+name+
+                "nof childs = " + 0;
+    }
+
 }
