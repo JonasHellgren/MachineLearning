@@ -5,8 +5,9 @@ kolla composite pattern x
 
 models_mcts
 - NodeInterface
-- TreeNode
-- Tree
+- NodeAbstract
+- NodeWithNoChildrens
+- NodeWithChildrens
 
 logic_mcts
 - TreePolicy

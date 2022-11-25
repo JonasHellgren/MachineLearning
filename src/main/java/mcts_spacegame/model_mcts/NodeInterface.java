@@ -1,6 +1,13 @@
 package mcts_spacegame.model_mcts;
 
+import mcts_spacegame.enums.Action;
+
 import java.util.List;
+
+/***
+ * A terminal node has no childrens and represents a terminal state, for ex reached goal.
+ * A node is expandable if it represents a non-terminal state and if it has unvisited children.
+ */
 
 public interface NodeInterface {
     void addChildNode(NodeInterface node);
@@ -12,9 +19,9 @@ public interface NodeInterface {
     void printTree();
 
     void increaseNofVisits();
-    void increaseNofActionSelections(int a);
-    void updateActionValue(double G, int a);
+    void increaseNofActionSelections(Action a);
+    void updateActionValue(double G, Action a);
     int getNofVisits();
-    int getNofActionSelections(int a);
-    double getActionValue(int a);
+    int getNofActionSelections(Action a);
+    double getActionValue(Action a);
 }
