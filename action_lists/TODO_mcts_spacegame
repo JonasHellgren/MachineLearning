@@ -16,7 +16,8 @@ logic_mcts
 - NodeSelector x
 - SimulationPolicy x
 - BackupModifer created x
-- NodeWithChildren, NodeTerminalFail, NodeTerminalNoFail
+- NodeWithChildren, NodeTerminalFail, NodeTerminalNoFail  x
+- isFail in StepReturn
 - BackupModifer
 - TestBackupModifer
 

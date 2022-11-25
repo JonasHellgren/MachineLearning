@@ -1,5 +1,10 @@
 package mcts_spacegame.model_mcts;
 
+import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.models_mcts_nodes.NodeInterface;
+
+import java.util.List;
+
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
@@ -15,6 +20,18 @@ package mcts_spacegame.model_mcts;
  */
 
 public class BackupModifer {
+
+    List<NodeInterface> nodesFromRootToSelected;
+    List<StepReturn> treeSteps;
+    List<List<StepReturn>> simulationResults;
+
+    public BackupModifer(List<NodeInterface> nodesFromRootToSelected,
+                         List<StepReturn> treeSteps,
+                         List<List<StepReturn>> simulationResults) {
+        this.nodesFromRootToSelected = nodesFromRootToSelected;
+        this.treeSteps = treeSteps;
+        this.simulationResults = simulationResults;
+    }
 
 
 
