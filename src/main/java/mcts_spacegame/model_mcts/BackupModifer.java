@@ -1,6 +1,6 @@
 package mcts_spacegame.model_mcts;
 
-import black_jack.models_episode.EpisodeItem;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -16,11 +16,11 @@ import java.util.List;
  *   end node in path:
  *   1) terminal-non fail => normal backup
  *   2) non terminal => normal backup
- *   3) terminal-non fail => defensive backup (simulations not applicable for case)
+ *   3) terminal-fail => defensive backup (simulations not applicable for case)
  *
  *    normal backup = backup all nodes in path
- *    defensive backup = backup parent of end node AND set grand parent as terminal if its
- *    all children's all are fail-terminal
+ *    defensive backup = backup end node AND set it parent as terminal if parents
+ *    all children are fail-terminal
  *
  *   a single simulation:
  *   1) terminal-non fail => normal backup
@@ -28,6 +28,7 @@ import java.util.List;
  *
  */
 
+@Log
 public class BackupModifer {
 
     private static final int DISCOUNT_FACTOR = 1;
@@ -36,6 +37,7 @@ public class BackupModifer {
     List<NodeInterface> nodesFromRootToSelected;
     List<StepReturn> treeSteps;
     List<List<StepReturn>> simulationResults;
+    int nofNodesOnPath;
 
     double discountFactor;
 
@@ -48,7 +50,7 @@ public class BackupModifer {
         this.nodesFromRootToSelected = nodesFromRootToSelected;
         this.treeSteps = treeSteps;
         this.simulationResults = simulationResults;
-
+        this.nofNodesOnPath= nodesFromRootToSelected.size();
 
         if (actions.size()!= nodesFromRootToSelected.size() || actions.size()!= treeSteps.size())  {
             System.out.println("actions.size() = " + actions.size());
@@ -66,20 +68,36 @@ public class BackupModifer {
 
         double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
 
-        int lengthPath= nodesFromRootToSelected.size();
-        NodeInterface endNode=nodesFromRootToSelected.get(lengthPath-1);
+        NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
 
-        if (endNode.isTerminalNoFail() || endNode.isNotTerminal())  {
+        System.out.println("nodeSelected = " + nodeSelected);
+
+        StepReturn stepReturnOfSelected=treeSteps.get(nofNodesOnPath-1);
+
+        if (!stepReturnOfSelected.isFail)  {
             backupNormalFromTreeSteps();
         } else
         {
-           // backupDefensiveFromTreeSteps();
+            backupDefensiveFromTreeSteps();
         }
     }
 
     private void backupNormalFromTreeSteps()  {
-        List<Double> GList = getgList();
+        List<Double> GList = getgList(treeSteps);
         updateNodesFromReturns(GList,nodesFromRootToSelected);
+    }
+
+    private void backupDefensiveFromTreeSteps() {
+        log.info("defensiveBackupOfSelectedNode");
+        defensiveBackupOfSelectedNode();
+        //setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal()  TODO
+    }
+
+    private void defensiveBackupOfSelectedNode() {
+        NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
+        StepReturn stepReturnOfSelected=treeSteps.get(nofNodesOnPath-1);
+        Action actionInSelected=actions.get(nofNodesOnPath-1);
+        updateNode(nodeSelected, stepReturnOfSelected.reward, actionInSelected);
     }
 
     private void updateNodesFromReturns(List<Double> GList,List<NodeInterface> nodesFromRootToSelected) {
@@ -98,7 +116,7 @@ public class BackupModifer {
     }
 
     @NotNull
-    private List<Double> getgList() {
+    private List<Double> getgList(List<StepReturn> treeSteps) {
         double G=0;
         List<Double> GList=new ArrayList<>();
         for (int i = treeSteps.size()-1; i >=0 ; i--) {

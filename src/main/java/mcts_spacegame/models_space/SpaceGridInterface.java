@@ -21,12 +21,12 @@ public interface SpaceGridInterface {
      *      -----------------------------
      *      |   |   |   |   |   |   | G |
      *      |   |   | O | O |   |   | G |
-     *      |   | O |   |   |   |   | G |
+     *      |   | O |   | O |   |   | G |
      *      -----------------------------
      */
     static SpaceGrid new3times7Grid() {
         List<Pair<Integer, Integer>> occupiedCells= Arrays.asList(
-                new Pair<>(2,1), new Pair<>(3,1), new Pair<>(1,0));
+                new Pair<>(2,1), new Pair<>(3,1), new Pair<>(1,0), new Pair<>(3,0));
         return new SpaceGrid(3,7,occupiedCells);
     }
 

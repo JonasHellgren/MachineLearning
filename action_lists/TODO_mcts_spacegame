@@ -22,7 +22,7 @@ logic_mcts
 - BackupModifer comment  x
 - BackupModifer - backupNormalFromTreeSteps  x
 - TestBackupModifer - backupNormalFromTreeSteps  x
-- BackupModifer - backupDefensiveFromTreeSteps
+- BackupModifer - backupDefensiveFromTreeSteps x
 - TestBackupModifer - backupDefensiveFromTreeSteps
 . kunna radera noder
 
