@@ -35,13 +35,16 @@ public class TestBackupModifer {
 
     @Test
     public void moveFromx0y0Tox6y2GivesTwoMoveCost() {
-        State pos=new State(0,0);
+        State rootState=new State(0,0);
         List<Action> actions= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still,Action.still);
-        List<StepReturn> stepReturns = getReturnForActions(pos, actions);
-        List<NodeInterface> nodesFromRootToSelected=getNodes(actions,stepReturns);
+        List<StepReturn> stepReturns = getReturnForActions(rootState.copy(), actions);
+        //System.out.println("rootState = " + rootState);
+        List<NodeInterface> nodesFromRootToSelected=getNodes(actions,rootState,stepReturns);
 
-        stepReturns.forEach(System.out::println);
+        actions.forEach(System.out::println);
         nodesFromRootToSelected.forEach(System.out::println);
+        stepReturns.forEach(System.out::println);
+
 
         bum=new BackupModifer(actions,nodesFromRootToSelected,stepReturns,simulationResultsEmpty);
 
@@ -56,7 +59,7 @@ public class TestBackupModifer {
     private List<StepReturn> getReturnForActions(State pos, List<Action> actions) {
         List<StepReturn> stepReturns=new ArrayList<>();
         for (Action action: actions) {
-            System.out.println("pos = " + pos);
+           // System.out.println("pos = " + pos);
             StepReturn stepReturn= environment.step(action, pos);
             pos.setFromReturn(stepReturn);
 
@@ -69,22 +72,30 @@ public class TestBackupModifer {
         return stepReturns;
     }
 
-    private List<NodeInterface> getNodes(List<Action> actions, List<StepReturn> stepReturns) {
+    private List<NodeInterface> getNodes(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
 
-        List<NodeInterface> nodes=new ArrayList<>();
+        List<NodeInterface> nodesOnPath=new ArrayList<>();
+        NodeInterface nodeRoot=NodeInterface.newNotTerminal(rootState,Action.notApplicable);
+        nodesOnPath.add(nodeRoot);
         for (int i = 0; i < actions.size() ; i++) {
             StepReturn sr=stepReturns.get(i);
             Action a=actions.get(i);
 
+            NodeInterface nodeAdded;
             if (!sr.isTerminal) {
-                nodes.add(NodeInterface.newNotTerminal(sr.newPosition,a));
+                nodeAdded=NodeInterface.newNotTerminal(sr.newPosition,a);
             } else if (sr.isFail) {
-                nodes.add(NodeInterface.newTerminalFail(sr.newPosition,a));
+                nodeAdded=NodeInterface.newTerminalFail(sr.newPosition,a);
             } else {
-                nodes.add(NodeInterface.newTerminalNotFail(sr.newPosition,a));
+                nodeAdded=NodeInterface.newTerminalNotFail(sr.newPosition,a);
             }
+
+            if (nodeAdded.isNotTerminal()) {
+                nodesOnPath.add(nodeAdded);
+            }
+
         }
-        return nodes;
+        return nodesOnPath;
     }
 
 }

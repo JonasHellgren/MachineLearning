@@ -4,6 +4,7 @@ import black_jack.models_episode.EpisodeItem;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +49,12 @@ public class BackupModifer {
         this.treeSteps = treeSteps;
         this.simulationResults = simulationResults;
 
+
         if (actions.size()!= nodesFromRootToSelected.size() || actions.size()!= treeSteps.size())  {
+            System.out.println("actions.size() = " + actions.size());
+            System.out.println("nodesFromRootToSelected.size() = " + nodesFromRootToSelected.size());
+            System.out.println("treeSteps.size() = " + treeSteps.size());
+
             throw new IllegalArgumentException("Non equal sizes of input lists");
         }
 
@@ -72,6 +78,27 @@ public class BackupModifer {
     }
 
     private void backupNormalFromTreeSteps()  {
+        List<Double> GList = getgList();
+        updateNodesFromReturns(GList,nodesFromRootToSelected);
+    }
+
+    private void updateNodesFromReturns(List<Double> GList,List<NodeInterface> nodesFromRootToSelected) {
+        double G;
+        for (NodeInterface node:nodesFromRootToSelected)  {
+            Action action=actions.get(nodesFromRootToSelected.indexOf(node));
+            G= GList.get(nodesFromRootToSelected.indexOf(node));
+            updateNode(node,G, action);
+        }
+    }
+
+    private void updateNode(NodeInterface node, double G, Action action) {
+        node.increaseNofVisits();
+        node.increaseNofActionSelections(action);
+        node.updateActionValue(G, action);
+    }
+
+    @NotNull
+    private List<Double> getgList() {
         double G=0;
         List<Double> GList=new ArrayList<>();
         for (int i = treeSteps.size()-1; i >=0 ; i--) {
@@ -80,18 +107,7 @@ public class BackupModifer {
             GList.add(G);
             }
         Collections.reverse(GList);
-        System.out.println("GList = " + GList);
-
-
-        for (NodeInterface node:nodesFromRootToSelected)  {
-            Action action=actions.get(nodesFromRootToSelected.indexOf(node));
-            G= GList.get(nodesFromRootToSelected.indexOf(node));
-            node.increaseNofVisits();
-            node.increaseNofActionSelections(action);
-            node.updateActionValue(G,action);
-        }
-
-
+        return GList;
     }
 
 

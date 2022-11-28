@@ -20,8 +20,8 @@ logic_mcts
 - isFail in StepReturn  x
 - döp om nodeWithChikdren  x
 - BackupModifer comment  x
-- BackupModifer - backupNormalFromTreeSteps
-- TestBackupModifer - backupNormalFromTreeSteps
+- BackupModifer - backupNormalFromTreeSteps  x
+- TestBackupModifer - backupNormalFromTreeSteps  x
 - BackupModifer - backupDefensiveFromTreeSteps
 - TestBackupModifer - backupDefensiveFromTreeSteps
 . kunna radera noder
