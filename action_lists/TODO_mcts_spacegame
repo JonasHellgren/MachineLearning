@@ -23,9 +23,15 @@ logic_mcts
 - BackupModifer - backupNormalFromTreeSteps  x
 - TestBackupModifer - backupNormalFromTreeSteps  x
 - BackupModifer - backupDefensiveFromTreeSteps x
-- ersätt List<StepReturn> treeSteps
-- TestBackupModifer - backupDefensiveFromTreeSteps
+- ersätt List<StepReturn> treeSteps  x
+- clean up x
+- tänk om BackupModifer, behöver modifiera träd (rootState) från actions, stepReturnOfSelected och sim res
+- moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap
+- backupFromSimulations
+- TestBackupModifer - backupFromSimulations
+- TestSelectionExpansionSimulationBackup
 . kunna radera noder
+- setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal
 
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf

@@ -8,6 +8,7 @@ import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,6 +129,13 @@ public class TestBackupModifer {
         bum.backup();
 
 
+        State trapState=new State(2,0);
+        List<Action> actionsUpInEnd= Arrays.asList(Action.up,Action.down,Action.up);
+        nodesFromRootToSelected= createNodesOnPath(actionsUpInEnd,trapState,stepReturns);
+        StepReturn srSelected=stepAndUpdateState(trapState, actionsUpInEnd.get(actionsUpInEnd.size()-1));
+        bum=new BackupModifer(actions,nodesFromRootToSelected,srSelected,simulationResultsEmpty);
+        bum.backup();
+
         nodesFromRootToSelected.forEach(System.out::println);
 
         double valueUpRoot=nodesFromRootToSelected.get(0).getActionValue(Action.up);
@@ -139,55 +147,39 @@ public class TestBackupModifer {
 
     }
 
-/*
-    private List<StepReturn> getReturnForActions(State pos, List<Action> actions) {
-        List<StepReturn> stepReturns=new ArrayList<>();
-        for (Action action: actions) {
-           // System.out.println("pos = " + pos);
-            StepReturn stepReturn= environment.step(action, pos);
-            pos.setFromReturn(stepReturn);
-
-            stepReturns.add(stepReturn);
-
-            if (stepReturn.isTerminal) {
-                break;
-            }
-        }
-        return stepReturns;
-    } */
-
     private List<NodeInterface> createNodesOnPath(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
 
         List<NodeInterface> nodesOnPath=new ArrayList<>();
         stepReturns.clear();
-        State pos=rootState.copy();
+        State state=rootState.copy();
         NodeInterface nodeRoot=NodeInterface.newNotTerminal(rootState,Action.notApplicable);
         nodesOnPath.add(nodeRoot);
-        Action actionInSelectedNode=actions.get(actions.size()-1);
         for (Action a: actions) {
-            StepReturn sr = environment.step(a, pos);
-            pos.setFromReturn(sr);
+            StepReturn sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
-            NodeInterface nodeLastlyAdded=nodesOnPath.get(nodesOnPath.size()-1);
-            nodeLastlyAdded.saveRewardForAction(a,sr.reward);
-
-
-            NodeInterface nodeAdded;
-            /* if (!sr.isTerminal) {
-                nodeAdded=NodeInterface.newNotTerminal(sr.newPosition,a);
-            } else if (sr.isFail) {
-                nodeAdded=NodeInterface.newTerminalFail(sr.newPosition,a);
-            } else {
-                nodeAdded=NodeInterface.newTerminalNotFail(sr.newPosition,a);
-            }*/
-
-            nodeAdded=NodeInterface.newNotTerminal(sr.newPosition,a);
-            if (nodesOnPath.size()<actions.size()) {
-                nodesOnPath.add(nodeAdded);
-            }
-
+            saveRewardToNodeMemoryForLastlyAddedNode(nodesOnPath, a, sr);
+            addNodeToPathIfNotResultOfFinalAction(actions, nodesOnPath, a, sr);
         }
         return nodesOnPath;
+    }
+
+    @NotNull
+    private StepReturn stepAndUpdateState(State pos, Action a) {
+        StepReturn sr = environment.step(a, pos);
+        pos.setFromReturn(sr);
+        return sr;
+    }
+
+    private void addNodeToPathIfNotResultOfFinalAction(List<Action> actions, List<NodeInterface> nodesOnPath, Action a, StepReturn sr) {
+        NodeInterface nodeAdded=NodeInterface.newNotTerminal(sr.newPosition, a);
+        if (nodesOnPath.size()< actions.size()) {
+            nodesOnPath.add(nodeAdded);
+        }
+    }
+
+    private void saveRewardToNodeMemoryForLastlyAddedNode(List<NodeInterface> nodesOnPath, Action a, StepReturn sr) {
+        NodeInterface nodeLastlyAdded= nodesOnPath.get(nodesOnPath.size()-1);
+        nodeLastlyAdded.saveRewardForAction(a, sr.reward);
     }
 
 }
