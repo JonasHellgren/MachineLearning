@@ -19,9 +19,12 @@ logic_mcts
 - NodeWithChildren, NodeTerminalFail, NodeTerminalNoFail  x
 - isFail in StepReturn  x
 - döp om nodeWithChikdren  x
-- BackupModifer comment
-- BackupModifer
-- TestBackupModifer
+- BackupModifer comment  x
+- BackupModifer - backupNormalFromTreeSteps
+- TestBackupModifer - backupNormalFromTreeSteps
+- BackupModifer - backupDefensiveFromTreeSteps
+- TestBackupModifer - backupDefensiveFromTreeSteps
+. kunna radera noder
 
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf
