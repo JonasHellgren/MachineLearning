@@ -6,21 +6,30 @@ import lombok.Setter;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 @EqualsAndHashCode
 public abstract class NodeAbstract implements NodeInterface {
-
+    private static final double INIT_REWARD_VALUE = 0d;
     private static final String BLANK_SPACE = "  ";
     String name;
     Action action;
     int depth;
     Counter counter;
+    Map<Action, Double> actionRewardMap;
 
     public NodeAbstract(String name,Action action) {
         this.name = name;
         this.action=action;
         depth=0;
+        this.actionRewardMap=new HashMap<>();
+        for (Action a : Action.applicableActions()) {
+            actionRewardMap.put(a, INIT_REWARD_VALUE);
+        }
+
     }
 
     protected abstract void nofOffSpringsRec(NodeInterface node, Counter counter);
@@ -41,5 +50,12 @@ public abstract class NodeAbstract implements NodeInterface {
         return (this instanceof NodeTerminalNotFail);
     }
 
+    public void saveRewardForAction(Action action, double reward) {
+        actionRewardMap.put(action,reward);
+    }
+
+    public double loadRewardForAction(Action action) {
+       return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
+    }
 
 }

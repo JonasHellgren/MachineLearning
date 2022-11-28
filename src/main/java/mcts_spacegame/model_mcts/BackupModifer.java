@@ -35,44 +35,46 @@ public class BackupModifer {
 
     List<Action> actions;
     List<NodeInterface> nodesFromRootToSelected;
-    List<StepReturn> treeSteps;
+    StepReturn stepReturnOfSelected;
     List<List<StepReturn>> simulationResults;
-    int nofNodesOnPath;
 
+    int nofNodesOnPath;
+    int nofActionsOnPath;
+    NodeInterface nodeSelected;
     double discountFactor;
 
 
     public BackupModifer(List<Action> actions,
                          List<NodeInterface> nodesFromRootToSelected,
-                         List<StepReturn> treeSteps,
+                         StepReturn stepReturnOfSelected,
                          List<List<StepReturn>> simulationResults) {
         this.actions=actions;
         this.nodesFromRootToSelected = nodesFromRootToSelected;
-        this.treeSteps = treeSteps;
+        this.stepReturnOfSelected = stepReturnOfSelected;
         this.simulationResults = simulationResults;
         this.nofNodesOnPath= nodesFromRootToSelected.size();
+        this.nofActionsOnPath=actions.size();
 
-        if (actions.size()!= nodesFromRootToSelected.size() || actions.size()!= treeSteps.size())  {
+        if (nofActionsOnPath!= nofNodesOnPath)  {
             System.out.println("actions.size() = " + actions.size());
             System.out.println("nodesFromRootToSelected.size() = " + nodesFromRootToSelected.size());
-            System.out.println("treeSteps.size() = " + treeSteps.size());
 
-            throw new IllegalArgumentException("Non equal sizes of input lists");
+            throw new IllegalArgumentException("Non compatible sizes of input lists");
         }
 
+        nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
         discountFactor= DISCOUNT_FACTOR;
     }
 
 
     public void backup()  {
 
-        double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
+     //   double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
 
         NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
 
         System.out.println("nodeSelected = " + nodeSelected);
 
-        StepReturn stepReturnOfSelected=treeSteps.get(nofNodesOnPath-1);
 
         if (!stepReturnOfSelected.isFail)  {
             backupNormalFromTreeSteps();
@@ -83,8 +85,24 @@ public class BackupModifer {
     }
 
     private void backupNormalFromTreeSteps()  {
-        List<Double> GList = getgList(treeSteps);
+        List<Double> rewards = getRewards();
+        List<Double> GList = getReturns(rewards);
+        System.out.println("rewards = " + rewards);
+        System.out.println("GList = " + GList);
         updateNodesFromReturns(GList,nodesFromRootToSelected);
+    }
+
+    @NotNull
+    private List<Double> getRewards() {
+        List<Double> rewards=new ArrayList<>();
+        for (NodeInterface nodeOnPath:nodesFromRootToSelected) {
+            if (!nodeOnPath.equals(nodeSelected)) {
+                Action action=actions.get(nodesFromRootToSelected.indexOf(nodeOnPath));
+                rewards.add(nodeOnPath.loadRewardForAction(action));
+            }
+        }
+        rewards.add(stepReturnOfSelected.reward);
+        return rewards;
     }
 
     private void backupDefensiveFromTreeSteps() {
@@ -95,8 +113,11 @@ public class BackupModifer {
 
     private void defensiveBackupOfSelectedNode() {
         NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
-        StepReturn stepReturnOfSelected=treeSteps.get(nofNodesOnPath-1);
-        Action actionInSelected=actions.get(nofNodesOnPath-1);
+
+        System.out.println("nofNodesOnPath = " + nofNodesOnPath);
+        System.out.println("nodeSelected = " + nodeSelected);
+
+        Action actionInSelected=actions.get(nofActionsOnPath-1);
         updateNode(nodeSelected, stepReturnOfSelected.reward, actionInSelected);
     }
 
@@ -115,13 +136,13 @@ public class BackupModifer {
         node.updateActionValue(G, action);
     }
 
-    @NotNull
-    private List<Double> getgList(List<StepReturn> treeSteps) {
+    @NotNull   //todo streams..
+    private List<Double> getReturns(List<Double> rewards) {
         double G=0;
         List<Double> GList=new ArrayList<>();
-        for (int i = treeSteps.size()-1; i >=0 ; i--) {
-            StepReturn ei= treeSteps.get(i);
-            G=G+ discountFactor *ei.reward;
+        for (int i = rewards.size()-1; i >=0 ; i--) {
+            double reward= rewards.get(i);
+            G=G+ discountFactor *reward;
             GList.add(G);
             }
         Collections.reverse(GList);

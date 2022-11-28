@@ -11,4 +11,14 @@ public class StepReturn {
     public boolean isTerminal;
     public boolean isFail;
     public double reward;
+
+    public StepReturn copy() {
+        return StepReturn.builder().
+                newPosition(this.newPosition.copy())
+                .isTerminal(isTerminal)
+                .isFail(isFail)
+                .reward(reward)
+                .build();
+    }
+
 }

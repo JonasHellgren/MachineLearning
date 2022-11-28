@@ -43,6 +43,9 @@ public interface NodeInterface {
     boolean isTerminalFail();
     boolean isTerminalNoFail();
 
+    void saveRewardForAction(Action action, double reward);
+    double loadRewardForAction(Action action);
+
     static NodeNotTerminal newNotTerminal(State s, Action action) {
         return new NodeNotTerminal(s.toString(),action);
     }

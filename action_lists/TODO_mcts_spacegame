@@ -23,6 +23,7 @@ logic_mcts
 - BackupModifer - backupNormalFromTreeSteps  x
 - TestBackupModifer - backupNormalFromTreeSteps  x
 - BackupModifer - backupDefensiveFromTreeSteps x
+- ersätt List<StepReturn> treeSteps
 - TestBackupModifer - backupDefensiveFromTreeSteps
 . kunna radera noder
 

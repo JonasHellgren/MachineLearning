@@ -123,9 +123,10 @@ public final class NodeNotTerminal extends NodeAbstract {
         return "name = "+name+
                 ", nof childs = " + childNodes.size() +
                 ", action = " + action +
-                ", nof visits = " + nofVisits +
-                ", action values =" + Qsa.entrySet() +
-                ", action visits =" + nSA.entrySet();
+                ", state visits = " + nofVisits +
+                ", values =" + Qsa.entrySet() +
+                ", visits =" + nSA.entrySet()+
+                ", rewards = "+actionRewardMap.entrySet();
     }
 
 }
