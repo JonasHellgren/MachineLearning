@@ -24,18 +24,33 @@ public class ActionSelector {
 
         List<Action> nonTestedActions = getNonTestedActions();
         int nofNonTestedActions=nonTestedActions.size();
-        ConditionalUtils.executeOnlyIfConditionIsTrue(nofNonTestedActions==0,
-                () -> log.warning("No non tested actions"));
-        return nonTestedActions.get(RandomUtils.nextInt(0,nofNonTestedActions));
+        if(nofNonTestedActions==0) {
+            log.warning("No non tested actions");
+            List<Action> testedActions = getTestedActions();
+            int nofTestedActions=testedActions.size();
+
+            if (nofTestedActions==0) {
+                throw new RuntimeException("nofTestedActions=0");
+            }
+
+            return testedActions.get(RandomUtils.nextInt(0, nofTestedActions));
+        } else {
+            return nonTestedActions.get(RandomUtils.nextInt(0, nofNonTestedActions));
+        }
     }
 
     @NotNull
     private List<Action> getNonTestedActions() {
-        List<Action> testedActions = nodeSelected.getChildNodes().stream()
-                .map(NodeInterface::getAction).collect(Collectors.toList());
+        List<Action> testedActions = getTestedActions();
         List<Action> nonTestedActions=new ArrayList<>(Action.applicableActions());  //must be mutable
         nonTestedActions.removeAll(testedActions);
         return nonTestedActions;
+    }
+
+    @NotNull
+    private List<Action> getTestedActions() {
+        return nodeSelected.getChildNodes().stream()
+                .map(NodeInterface::getAction).collect(Collectors.toList());
     }
 
 }

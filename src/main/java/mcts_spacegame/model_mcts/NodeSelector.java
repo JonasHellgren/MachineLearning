@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/***
+ * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
+ */
+
 @Getter
 @Log
 public class NodeSelector {
@@ -25,20 +29,20 @@ public class NodeSelector {
 
     public NodeSelector(NodeInterface nodeRoot) {
         this.nodeRoot = nodeRoot;
-        this.nodesFromRootToSelected=new ArrayList<>();
-        this.actionsFromRootToSelected=new ArrayList<>();
+        this.nodesFromRootToSelected = new ArrayList<>();
+        this.actionsFromRootToSelected = new ArrayList<>();
     }
 
     public NodeInterface select() {
         nodesFromRootToSelected.clear();
-        NodeInterface currentNode=nodeRoot;
+        NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-        while (currentNodeHasNonTerminalChilds(currentNode)) {
+        while (currentNodeNotIsLeaf(currentNode)) {
             if (selectChild(currentNode).isEmpty()) {
+                log.warning("No valid node selected,all children are terminal-fail");
                 break;
             } else {
-                log.warning("No valid node selected");
-                currentNode=selectChild(currentNode).get();  //todo not repear selectChild
+                currentNode = selectChild(currentNode).get();  //todo not repeat selectChild
             }
 
             actionsFromRootToSelected.add(currentNode.getAction());
@@ -47,14 +51,19 @@ public class NodeSelector {
         return currentNode;
     }
 
-    private boolean currentNodeHasNonTerminalChilds(NodeInterface currentNode) {
-        List<NodeInterface> nonTerminalNodes = getNonTerminalChildrenNodes(currentNode);
-        return nonTerminalNodes.size() > 0;
+    private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {
+        //List<NodeInterface> nonTerminalNodes = getNonTerminalChildrenNodes(currentNode);
+        List<NodeInterface> childNodes = currentNode.getChildNodes();
+        int nofTestedActions = childNodes.size();
+        int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(),1,Integer.MAX_VALUE);  //todo debatable
+        //return nonTerminalNodes.size() > 0;
+        boolean isLeaf=nofTestedActions<maxNofTestedActionsToBeLeaf;
+        return !isLeaf;
     }
 
     public Optional<NodeInterface> selectChild(NodeInterface node) {
-        List<Pair<NodeInterface,Double>> nodeUCTPairs= getListOfPairsExcludeTerminalNodes(node);
-      //  nodeUCTPairs.forEach(System.out::println);
+        List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeTerminalNodes(node);
+        //  nodeUCTPairs.forEach(System.out::println);
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
 
         return pair.isEmpty()
@@ -69,37 +78,36 @@ public class NodeSelector {
                 reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
     }
 
-    private List<Pair<NodeInterface,Double>> getListOfPairsExcludeTerminalNodes(NodeInterface node) {
-        List<Pair<NodeInterface,Double>> nodeUCTPairs=new ArrayList<>();
-        List<NodeInterface> nonTerminalNodes = getNonTerminalChildrenNodes(node);
+    private List<Pair<NodeInterface, Double>> getListOfPairsExcludeTerminalNodes(NodeInterface node) {
+        List<Pair<NodeInterface, Double>> nodeUCTPairs = new ArrayList<>();
+        List<NodeInterface> nonTerminalNodes = getNonFailChildrenNodes(node);
 
-        for (NodeInterface childNode: nonTerminalNodes ) {
-            Action actionToReachChildNode=childNode.getAction();
-            double uct=calcUct(node,actionToReachChildNode);
-            nodeUCTPairs.add(new Pair<>(childNode,uct));
+        for (NodeInterface childNode : nonTerminalNodes) {
+            Action actionToReachChildNode = childNode.getAction();
+            double uct = calcUct(node, actionToReachChildNode);
+            nodeUCTPairs.add(new Pair<>(childNode, uct));
         }
         return nodeUCTPairs;
     }
 
     @NotNull
-    private List<NodeInterface> getNonTerminalChildrenNodes(NodeInterface node) {
-        List<NodeInterface> nonTerminalNodes= node.getChildNodes().stream()
-                .filter(NodeInterface::isNotTerminal)
+    private List<NodeInterface> getNonFailChildrenNodes(NodeInterface node) {
+        return node.getChildNodes().stream()
+                .filter(n -> !n.isTerminalFail())
                 .collect(Collectors.toList());
-        return nonTerminalNodes;
     }
 
     private double calcUct(NodeInterface node, Action action) {
-        double v=node.getActionValue(action);
-        int nParent=node.getNofVisits();
-        int n=node.getNofActionSelections(action);
+        double v = node.getActionValue(action);
+        int nParent = node.getNofVisits();
+        int n = node.getNofActionSelections(action);
         return calcUct(v, nParent, n);
     }
 
     public double calcUct(double v, int nParent, int n) {  //good for testing
         return (MathUtils.isZero(n))
                 ? UCT_MAX
-                : v + C *Math.sqrt(Math.log(nParent)/ n);
+                : v + C * Math.sqrt(Math.log(nParent) / n);
     }
 
 

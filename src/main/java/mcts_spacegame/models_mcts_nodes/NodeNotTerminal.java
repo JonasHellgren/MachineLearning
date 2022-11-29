@@ -45,11 +45,8 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     @Override
     public void addChildNode(NodeInterface node) {
-        ConditionalUtils.executeOnlyIfConditionIsTrue(childNodes.contains(node),
-                () -> log.warning("Node already added"));
-
-        log.info("Adding node");
-        System.out.println("depth = " + depth);
+      //  ConditionalUtils.executeOnlyIfConditionIsTrue(childNodes.contains(node),
+       //         () -> log.warning("Node already added"));
 
         childNodes.add(node);
         node.setDepth(depth + 1);

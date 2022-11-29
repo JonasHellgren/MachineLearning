@@ -55,7 +55,7 @@ public class TestSelectionExpansionSimulationBackup {
     @Test
     public void tenIterations() {
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 30; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             System.out.println("xxxxxxxxxxxxxxxxxxxx i = " + i);
             //System.out.println("nodeSelected = " + nodeSelected);
