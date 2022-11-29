@@ -4,6 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_space.State;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /***
@@ -25,6 +26,7 @@ public interface NodeInterface {
     int getDepth();
     String getName();
     Action getAction();
+    Optional<NodeInterface> getChild(Action action);
     int nofChildNodes();
     int nofSubNodes();
     void printTree();

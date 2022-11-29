@@ -52,6 +52,12 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
+    public Optional<NodeInterface> getChild(Action action) {
+        List<NodeInterface> children= getChildNodes();
+        return children.stream().filter(c -> c.getAction().equals(action)).findFirst();
+    }
+
+    @Override
     public int nofChildNodes() {
         return childNodes.size();
     }

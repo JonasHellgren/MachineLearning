@@ -6,6 +6,7 @@ import mcts_spacegame.model_mcts.Counter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
@@ -27,6 +28,11 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     @Override
     public List<NodeInterface> getChildNodes() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Optional<NodeInterface> getChild(Action action) {
+        return Optional.empty();
     }
 
     @Override

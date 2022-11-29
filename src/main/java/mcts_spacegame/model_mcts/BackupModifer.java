@@ -3,6 +3,7 @@ package mcts_spacegame.model_mcts;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,8 +34,9 @@ public class BackupModifer {
 
     private static final int DISCOUNT_FACTOR = 1;
 
-    List<Action> actions;
-    List<NodeInterface> nodesFromRootToSelected;
+    NodeInterface rootTree;
+    List<Action> actionsToSelected;
+    Action actionOnSelected;
     StepReturn stepReturnOfSelected;
     List<List<StepReturn>> simulationResults;
 
@@ -43,26 +45,34 @@ public class BackupModifer {
     NodeInterface nodeSelected;
     double discountFactor;
 
+    TreeInfoHelper treeInfoHelper;
 
-    public BackupModifer(List<Action> actions,
-                         List<NodeInterface> nodesFromRootToSelected,
+    public BackupModifer(NodeInterface rootTree,
+                         List<Action> actionsToSelected,
+                         Action actionOnSelected,
                          StepReturn stepReturnOfSelected,
                          List<List<StepReturn>> simulationResults) {
-        this.actions=actions;
-        this.nodesFromRootToSelected = nodesFromRootToSelected;
+        this.rootTree = rootTree;
+        this.actionsToSelected = actionsToSelected;
+        this.actionOnSelected=actionOnSelected;
         this.stepReturnOfSelected = stepReturnOfSelected;
         this.simulationResults = simulationResults;
-        this.nofNodesOnPath= nodesFromRootToSelected.size();
-        this.nofActionsOnPath=actions.size();
+        this.nofNodesOnPath= actionsToSelected.size();
+        this.nofActionsOnPath= actionsToSelected.size();
 
+        /*
         if (nofActionsOnPath!= nofNodesOnPath)  {
             System.out.println("actions.size() = " + actions.size());
-            System.out.println("nodesFromRootToSelected.size() = " + nodesFromRootToSelected.size());
+            System.out.println("nodesFromRootToSelected.size() = " + this.rootTree.size());
 
             throw new IllegalArgumentException("Non compatible sizes of input lists");
         }
 
-        nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
+         */
+
+
+        treeInfoHelper=new TreeInfoHelper(rootTree);
+        nodeSelected=treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence"
         discountFactor= DISCOUNT_FACTOR;
     }
 
@@ -70,8 +80,6 @@ public class BackupModifer {
     public void backup()  {
 
      //   double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
-
-        NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
 
         System.out.println("nodeSelected = " + nodeSelected);
 
@@ -89,15 +97,18 @@ public class BackupModifer {
         List<Double> GList = getReturns(rewards);
         System.out.println("rewards = " + rewards);
         System.out.println("GList = " + GList);
-        updateNodesFromReturns(GList,nodesFromRootToSelected);
+        List<NodeInterface> nodesOnPath=treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
+        updateNodesFromReturns(GList, nodesOnPath);
     }
 
     @NotNull
     private List<Double> getRewards() {
         List<Double> rewards=new ArrayList<>();
-        for (NodeInterface nodeOnPath:nodesFromRootToSelected) {
+        List<NodeInterface> nodesOnPath=treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
+
+        for (NodeInterface nodeOnPath: nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {
-                Action action=actions.get(nodesFromRootToSelected.indexOf(nodeOnPath));
+                Action action= actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.loadRewardForAction(action));
             }
         }
@@ -112,19 +123,18 @@ public class BackupModifer {
     }
 
     private void defensiveBackupOfSelectedNode() {
-        NodeInterface nodeSelected=nodesFromRootToSelected.get(nofNodesOnPath-1);
 
         System.out.println("nofNodesOnPath = " + nofNodesOnPath);
         System.out.println("nodeSelected = " + nodeSelected);
+        System.out.println("stepReturnOfSelected = " + stepReturnOfSelected);
 
-        Action actionInSelected=actions.get(nofActionsOnPath-1);
-        updateNode(nodeSelected, stepReturnOfSelected.reward, actionInSelected);
+        updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected);
     }
 
     private void updateNodesFromReturns(List<Double> GList,List<NodeInterface> nodesFromRootToSelected) {
         double G;
         for (NodeInterface node:nodesFromRootToSelected)  {
-            Action action=actions.get(nodesFromRootToSelected.indexOf(node));
+            Action action= actionsToSelected.get(nodesFromRootToSelected.indexOf(node));
             G= GList.get(nodesFromRootToSelected.indexOf(node));
             updateNode(node,G, action);
         }

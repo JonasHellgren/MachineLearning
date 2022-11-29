@@ -27,6 +27,7 @@ logic_mcts
 - clean up x
 - tänk om BackupModifer, behöver modifiera träd (rootState) från actions, stepReturnOfSelected och sim res
 - moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap
+- TestTreeInfoHelper
 - backupFromSimulations
 - TestBackupModifer - backupFromSimulations
 - TestSelectionExpansionSimulationBackup
