@@ -29,9 +29,9 @@ public abstract class NodeAbstract implements NodeInterface {
         this.action=action;
         depth=0;
         this.actionRewardMap=new HashMap<>();
-        for (Action a : Action.applicableActions()) {
+/*        for (Action a : Action.applicableActions()) {
             actionRewardMap.put(a, INIT_REWARD_VALUE);
-        }
+        }  */
 
     }
 

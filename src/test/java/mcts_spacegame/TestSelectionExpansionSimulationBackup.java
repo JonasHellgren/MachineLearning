@@ -4,6 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
+import mcts_spacegame.model_mcts.ActionSelector;
 import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -37,7 +38,7 @@ public class TestSelectionExpansionSimulationBackup {
 
     @Test
     public void oneIteration() {
-        NodeInterface nodeSelected = select(startState,nodeRoot);
+        NodeInterface nodeSelected = select(nodeRoot);
         StepReturn sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
         backPropagate(sr);
@@ -54,11 +55,14 @@ public class TestSelectionExpansionSimulationBackup {
     @Test
     public void tenIterations() {
 
-        for (int i = 0; i <10 ; i++) {
-        NodeInterface nodeSelected = select(startState,nodeRoot);
-        StepReturn sr = chooseActionAndExpand(nodeSelected);
-        //todo simulation
-        backPropagate(sr);
+        for (int i = 0; i < 2; i++) {
+            NodeInterface nodeSelected = select(nodeRoot);
+            System.out.println("xxxxxxxxxxxxxxxxxxxx i = " + i);
+            //System.out.println("nodeSelected = " + nodeSelected);
+            nodeRoot.printTree();
+            StepReturn sr = chooseActionAndExpand(nodeSelected);
+            //todo simulation
+            backPropagate(sr);
         }
 
         nodeRoot.printTree();
@@ -69,20 +73,22 @@ public class TestSelectionExpansionSimulationBackup {
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
     }
 
-    private NodeInterface select(State startState, NodeInterface nodeRoot) {
-        NodeSelector ns=new NodeSelector(nodeRoot);
-        actionsToSelected=ns.getActionsFromRootToSelected();
+    private NodeInterface select(NodeInterface nodeRoot) {
+        NodeSelector ns = new NodeSelector(nodeRoot);
+        actionsToSelected = ns.getActionsFromRootToSelected();
         return ns.select();
     }
 
     @NotNull
     private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
-        State state= TreeInfoHelper.getState(startState,environment,actionsToSelected);
-        actionInSelected=Action.up; //todo
+        State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        ActionSelector as=new ActionSelector(nodeSelected);
+        actionInSelected=as.select();
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
-        nodeSelected.addChildNode(child);
+        if (nodeSelected.isNotTerminal())  {
+        nodeSelected.addChildNode(child); }
         return sr;
     }
 
@@ -94,10 +100,6 @@ public class TestSelectionExpansionSimulationBackup {
                 .build();
         bum.backup();
     }
-
-
-
-
 
 
 }

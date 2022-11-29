@@ -1,6 +1,7 @@
 package mcts_spacegame.models_mcts_nodes;
 
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Log
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
     public NodeTerminal(String name, Action action) {
@@ -22,7 +24,7 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     @Override
     @SneakyThrows
     public void addChildNode(NodeInterface node) {
-        throw new NoSuchMethodException("Can't add child to node without child");
+        log.warning("Can't add child to node without child");
     }
 
     @Override
