@@ -79,7 +79,7 @@ public class BackupModifier {
         bm.nofActionsOnPath = actionsToSelected.size();
         bm.treeInfoHelper = new TreeInfoHelper(rootTree);
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence"
-        bm.nodesOnPath = bm.treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
+        bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         return bm;
     }
 

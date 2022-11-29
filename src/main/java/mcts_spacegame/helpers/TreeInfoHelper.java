@@ -33,7 +33,7 @@ public class TreeInfoHelper {
         return Optional.of(parent);
     }
 
-    public Optional<List<NodeInterface>> getNodesVisitedForActions(List<Action> actionsToSelected) {
+    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<Action> actionsToSelected) {
 
         NodeInterface parent;
         parent=rootTree;

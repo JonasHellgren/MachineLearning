@@ -31,7 +31,6 @@ public class TestBackupModifier {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
         stepReturns = new ArrayList<>();
-
     }
 
     @Test
@@ -91,7 +90,7 @@ public class TestBackupModifier {
 
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         double upAtRoot=nodeRoot.getActionValue(Action.up);
-        double stillAfterObstacles=tih.getNodesVisitedForActions(actionsToSelected).orElseThrow().get(3).getActionValue(Action.still);
+        double stillAfterObstacles=tih.getNodesOnPathForActions(actionsToSelected).orElseThrow().get(3).getActionValue(Action.still);
         System.out.println("upAtRoot = " + upAtRoot);
         System.out.println("stillAfterObstacles = " + stillAfterObstacles);
 
@@ -221,17 +220,6 @@ public class TestBackupModifier {
 
     private boolean isNotFinalActionInList(List<Action> actions, int addedChilds) {
         return addedChilds < actions.size();
-    }
-
-    private void printLists(List<Action> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
-
-        System.out.println("-----------------------------");
-        nodeRoot.printTree();
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
-        tih.getNodesVisitedForActions(actions).get().forEach(System.out::println);
-
-        System.out.println("-----------------------------");
-
     }
 
     @NotNull
