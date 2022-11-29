@@ -1,11 +1,10 @@
 package mcts_spacegame;
 
-import com.google.gson.stream.JsonToken;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.model_mcts.BackupModifer;
+import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
@@ -13,39 +12,34 @@ import mcts_spacegame.models_space.State;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
 
-public class TestBackupModifer {
+public class TestBackupModifier {
 
     private static final double DELTA = 0.1;
     private static final int DELTA_BIG = 2;
     SpaceGrid spaceGrid;
     Environment environment;
-    BackupModifer bum;
-    List<List<StepReturn>> simulationResultsEmpty;
-
+    BackupModifier bum;
     List<StepReturn> stepReturns;
     StepReturn getStepReturnOfSelected;
 
     @Before
     public void init() {
-        spaceGrid= SpaceGridInterface.new3times7Grid();
-        environment=new Environment(spaceGrid);
-
-        simulationResultsEmpty=new ArrayList<>(new ArrayList<>());
-
-        stepReturns=new ArrayList<>();
+        spaceGrid = SpaceGridInterface.new3times7Grid();
+        environment = new Environment(spaceGrid);
+        stepReturns = new ArrayList<>();
 
     }
 
-    @Test public void testCreatedTree() {
-        State rootState=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still,Action.still);
+    @Test
+    public void testCreatedTree() {
+        State rootState = new State(0, 0);
+        List<Action> actions = Arrays.asList(Action.up, Action.up, Action.still, Action.still, Action.still, Action.still, Action.still);
 
-        NodeInterface treeRoot= createMCTSTree(actions,rootState,stepReturns);
+        NodeInterface treeRoot = createMCTSTree(actions, rootState, stepReturns);
         treeRoot.printTree();
 
     }
@@ -53,26 +47,28 @@ public class TestBackupModifer {
 
     @Test
     public void moveDownFromX0Y0ToGetFailState() {
-        State rootState=new State(0,0);
+        State rootState = new State(0, 0);
 
-        List<Action> actionsToSelected= Collections.emptyList();
-        Action actionInSelected=Action.down;
+        List<Action> actionsToSelected = Collections.emptyList();
+        Action actionInSelected = Action.down;
         List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
-        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        NodeInterface nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
-
-        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .build();
         bum.backup();
 
         printLists(actions, stepReturns, nodeRoot);
 
-        double valueDown=nodeRoot.getActionValue(Action.down);
+        double valueDown = nodeRoot.getActionValue(Action.down);
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueDown);
-        Assert.assertEquals(-Environment.CRASH_COST,valueDown, DELTA_BIG);
+        Assert.assertEquals(-Environment.CRASH_COST, valueDown, DELTA_BIG);
 
     }
-
 
 
 
@@ -84,7 +80,11 @@ public class TestBackupModifer {
 
         List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .build();
         bum.backup();
 
         printLists(actions, stepReturns, nodeRoot);
@@ -109,8 +109,11 @@ public class TestBackupModifer {
         Action actionInSelected=Action.still;
         List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-
-        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .build();
         bum.backup();
 
         printLists(actions, stepReturns, nodeRoot);
@@ -134,9 +137,11 @@ public class TestBackupModifer {
         Action actionInSelected=Action.still;
         List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-
-
-        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .build();
         bum.backup();
 
         State state = getState(rootState, actionsToSelected);
@@ -163,6 +168,9 @@ public class TestBackupModifer {
 
     }
 
+
+
+
     @NotNull
     private NodeInterface updateTreeFromActionInState(List<Action> actionsToSelected,
                                                       Action actionInSelected,
@@ -172,14 +180,18 @@ public class TestBackupModifer {
         getStepReturnOfSelected= environment.step(actionInSelected, state);
         NodeInterface nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
         nodeSelected.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
-        bum=new BackupModifer(nodeRoot, actionsToSelected, actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .build();
         bum.backup();
         return nodeSelected;
     }
 
     private State getState(State rootState, List<Action> actionsToSelected) {
-        State state= rootState.copy();
-        for (Action a: actionsToSelected) {
+        State state = rootState.copy();
+        for (Action a : actionsToSelected) {
             StepReturn sr = stepAndUpdateState(state, a);
         }
         return state;
@@ -188,22 +200,22 @@ public class TestBackupModifer {
     private NodeInterface createMCTSTree(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
 
         stepReturns.clear();
-        State state=rootState.copy();
-        NodeInterface nodeRoot=NodeInterface.newNotTerminal(rootState,Action.notApplicable);
-        NodeInterface parent=nodeRoot;
-        int nofAddedChilds=0;
-        for (Action a: actions) {
+        State state = rootState.copy();
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, Action.notApplicable);
+        NodeInterface parent = nodeRoot;
+        int nofAddedChilds = 0;
+        for (Action a : actions) {
             StepReturn sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
-            NodeInterface child=NodeInterface.newNotTerminal(sr.newPosition, a);
+            NodeInterface child = NodeInterface.newNotTerminal(sr.newPosition, a);
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }
-            parent=child;
+            parent = child;
             nofAddedChilds++;
         }
-        getStepReturnOfSelected=stepReturns.get(stepReturns.size()-1);
+        getStepReturnOfSelected = stepReturns.get(stepReturns.size() - 1);
         return nodeRoot;
     }
 
@@ -215,7 +227,7 @@ public class TestBackupModifer {
 
         System.out.println("-----------------------------");
         nodeRoot.printTree();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
         tih.getNodesVisitedForActions(actions).get().forEach(System.out::println);
 
         System.out.println("-----------------------------");
