@@ -31,6 +31,7 @@ logic_mcts
 - TestTreeInfoHelper x
 - TestSelectionExpansionSimulationBackup x
 - delete NodeInterface expand()  x
+- bug getNonTestedActions fixad
 - NodeSelector strular
 - backupFromSimulations
 - TestBackupModifer - backupFromSimulations
