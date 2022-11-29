@@ -1,7 +1,10 @@
 package mcts_spacegame.helpers;
 
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.environment.Environment;
+import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.State;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +69,20 @@ public class TreeInfoHelper {
         actions.addAll(actionsToSelected);
         actions.addAll(actionOnSelectedList);
         return actions;
+    }
+
+    public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
+        State state = rootState.copy();
+        for (Action a : actionsToSelected) {
+            StepReturn sr = stepAndUpdateState(environment,state, a);
+        }
+        return state;
+    }
+
+    private static StepReturn stepAndUpdateState(Environment environment, State pos, Action a) {
+        StepReturn sr = environment.step(a, pos);
+        pos.setFromReturn(sr);
+        return sr;
     }
 
 }

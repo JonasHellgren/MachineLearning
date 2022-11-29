@@ -1,6 +1,7 @@
 package mcts_spacegame.models_mcts_nodes;
 
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.State;
 
 import java.util.List;
@@ -60,6 +61,15 @@ public interface NodeInterface {
         return new NodeTerminalNotFail(s.toString(),action);
     }
 
+    static NodeInterface newNode(StepReturn stepReturn,Action action) {
+        if (!stepReturn.isTerminal) {
+            return newNotTerminal(stepReturn.newPosition, action);
+        } else if (stepReturn.isFail) {
+            return newTerminalFail(stepReturn.newPosition, action);
+        } else {
+            return newTerminalNotFail(stepReturn.newPosition, action);
+        }
 
+    }
 
 }

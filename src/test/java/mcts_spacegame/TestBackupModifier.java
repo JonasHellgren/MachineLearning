@@ -168,8 +168,6 @@ public class TestBackupModifier {
     }
 
 
-
-
     @NotNull
     private NodeInterface updateTreeFromActionInState(List<Action> actionsToSelected,
                                                       Action actionInSelected,
@@ -220,6 +218,15 @@ public class TestBackupModifier {
 
     private boolean isNotFinalActionInList(List<Action> actions, int addedChilds) {
         return addedChilds < actions.size();
+    }
+
+    private void printLists(List<Action> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
+        System.out.println("-----------------------------");
+        nodeRoot.printTree();
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
+
+        System.out.println("-----------------------------");
     }
 
     @NotNull

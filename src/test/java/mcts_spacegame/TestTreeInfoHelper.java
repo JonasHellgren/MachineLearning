@@ -17,10 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TestTreeInfoHelper {
-
-    private static final double DELTA = 0.1;
     private static final int DELTA_BIG = 2;
-    private static final double DELTA1 = 10d;
     SpaceGrid spaceGrid;
     Environment environment;
     NodeInterface nodeRoot;
@@ -51,7 +48,7 @@ public class TestTreeInfoHelper {
     @Test public void rewardOfStillInX2Y0IsBad() {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
-        Assert.assertEquals(-Environment.CRASH_COST,node.loadRewardForAction(Action.still), DELTA1);
+        Assert.assertEquals(-Environment.CRASH_COST,node.loadRewardForAction(Action.still), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {

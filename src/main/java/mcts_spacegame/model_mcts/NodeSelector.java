@@ -18,21 +18,28 @@ public class NodeSelector {
     public static final int UCT_MAX = 1000;
     NodeInterface nodeRoot;
     List<NodeInterface> nodesFromRootToSelected;
+    List<Action> actionsFromRootToSelected;
 
     public NodeSelector(NodeInterface nodeRoot) {
         this.nodeRoot = nodeRoot;
         this.nodesFromRootToSelected=new ArrayList<>();
+        this.actionsFromRootToSelected=new ArrayList<>();
     }
 
-    public NodeInterface findNode() {
+    public NodeInterface select() {
         nodesFromRootToSelected.clear();
         NodeInterface currentNode=nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-        while (currentNode.nofChildNodes()!=0) {
+        while (currenNodeHasChilds(currentNode)) {
             currentNode=selectChild(currentNode);
+            actionsFromRootToSelected.add(currentNode.getAction());
             nodesFromRootToSelected.add(currentNode);
         }
         return currentNode;
+    }
+
+    private boolean currenNodeHasChilds(NodeInterface currentNode) {
+        return currentNode.nofChildNodes() != 0;
     }
 
     public NodeInterface selectChild(NodeInterface node) {

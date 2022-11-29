@@ -65,7 +65,7 @@ public class TestNodeSelector {
         addExperience(nodeRoot,Action.down,-Environment.CRASH_COST+SIM_RES);
 
         NodeSelector ns=new NodeSelector(nodeRoot);
-        NodeInterface nodeFound=ns.findNode();
+        NodeInterface nodeFound=ns.select();
 
         System.out.println("nodeFound = " + nodeFound);
         ns.getNodesFromRootToSelected().forEach(System.out::println);

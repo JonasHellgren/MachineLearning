@@ -69,7 +69,7 @@ public class TestNode {
       //  double simRewards = SIM_RES;
         NodeInterface chStill1 = NodeInterface.newNotTerminal(new State(1, 0),ACTION_ANY);
 
-        nodeRoot.expand(chStill1,action);
+        nodeRoot.addChildNode(chStill1);
 
         System.out.println("nodeRoot = " + nodeRoot);
 
