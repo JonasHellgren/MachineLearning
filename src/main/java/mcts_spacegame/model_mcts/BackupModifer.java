@@ -43,6 +43,7 @@ public class BackupModifer {
     int nofNodesOnPath;
     int nofActionsOnPath;
     NodeInterface nodeSelected;
+    List<NodeInterface> nodesOnPath;
     double discountFactor;
 
     TreeInfoHelper treeInfoHelper;
@@ -51,39 +52,24 @@ public class BackupModifer {
                          List<Action> actionsToSelected,
                          Action actionOnSelected,
                          StepReturn stepReturnOfSelected,
-                         List<List<StepReturn>> simulationResults) {
+                         List<List<StepReturn>> simulationResultsOnSelected) {
         this.rootTree = rootTree;
         this.actionsToSelected = actionsToSelected;
         this.actionOnSelected=actionOnSelected;
         this.stepReturnOfSelected = stepReturnOfSelected;
-        this.simulationResults = simulationResults;
+        this.simulationResults = simulationResultsOnSelected;
         this.nofNodesOnPath= actionsToSelected.size();
         this.nofActionsOnPath= actionsToSelected.size();
 
-        /*
-        if (nofActionsOnPath!= nofNodesOnPath)  {
-            System.out.println("actions.size() = " + actions.size());
-            System.out.println("nodesFromRootToSelected.size() = " + this.rootTree.size());
-
-            throw new IllegalArgumentException("Non compatible sizes of input lists");
-        }
-
-         */
-
-
         treeInfoHelper=new TreeInfoHelper(rootTree);
         nodeSelected=treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence"
+        nodesOnPath=treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
+
         discountFactor= DISCOUNT_FACTOR;
     }
 
 
     public void backup()  {
-
-     //   double sumRewardsFromTreeSteps=treeSteps.stream().mapToDouble(r -> r.reward).sum();
-
-        System.out.println("nodeSelected = " + nodeSelected);
-
-
         if (!stepReturnOfSelected.isFail)  {
             backupNormalFromTreeSteps();
         } else
@@ -95,16 +81,12 @@ public class BackupModifer {
     private void backupNormalFromTreeSteps()  {
         List<Double> rewards = getRewards();
         List<Double> GList = getReturns(rewards);
-        System.out.println("rewards = " + rewards);
-        System.out.println("GList = " + GList);
-        List<NodeInterface> nodesOnPath=treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
-        updateNodesFromReturns(GList, nodesOnPath);
+        updateNodesFromReturns(GList);
     }
 
     @NotNull
     private List<Double> getRewards() {
         List<Double> rewards=new ArrayList<>();
-        List<NodeInterface> nodesOnPath=treeInfoHelper.getNodesVisitedForActions(actionsToSelected).orElseThrow();
 
         for (NodeInterface nodeOnPath: nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {
@@ -124,18 +106,15 @@ public class BackupModifer {
 
     private void defensiveBackupOfSelectedNode() {
 
-        System.out.println("nofNodesOnPath = " + nofNodesOnPath);
-        System.out.println("nodeSelected = " + nodeSelected);
-        System.out.println("stepReturnOfSelected = " + stepReturnOfSelected);
-
         updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected);
     }
 
-    private void updateNodesFromReturns(List<Double> GList,List<NodeInterface> nodesFromRootToSelected) {
+    private void updateNodesFromReturns(List<Double> GList) {
         double G;
-        for (NodeInterface node:nodesFromRootToSelected)  {
-            Action action= actionsToSelected.get(nodesFromRootToSelected.indexOf(node));
-            G= GList.get(nodesFromRootToSelected.indexOf(node));
+        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionOnSelected);
+        for (NodeInterface node:nodesOnPath)  {
+            Action action= actions.get(nodesOnPath.indexOf(node));
+            G= GList.get(nodesOnPath.indexOf(node));
             updateNode(node,G, action);
         }
     }
@@ -158,6 +137,8 @@ public class BackupModifer {
         Collections.reverse(GList);
         return GList;
     }
+
+
 
 
 }

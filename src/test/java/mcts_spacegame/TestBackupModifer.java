@@ -1,8 +1,10 @@
 package mcts_spacegame;
 
+import com.google.gson.stream.JsonToken;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifer;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -52,53 +54,44 @@ public class TestBackupModifer {
     @Test
     public void moveDownFromX0Y0ToGetFailState() {
         State rootState=new State(0,0);
+
         List<Action> actionsToSelected= Collections.emptyList();
-        List<Action> actionOnSelected= Collections.singletonList(Action.down);
-
-        List<Action> actions=new ArrayList<>();
-        actions.addAll(actionsToSelected);
-        actions.addAll(actionOnSelected);
-
+        Action actionInSelected=Action.down;
+        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-
-
         printLists(actions, stepReturns, nodeRoot);
 
-        bum=new BackupModifer(nodeRoot,actionsToSelected,Action.down,getStepReturnOfSelected,simulationResultsEmpty);
+        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
         bum.backup();
 
         printLists(actions, stepReturns, nodeRoot);
 
-        Optional<NodeInterface> node=nodeRoot.getChild(Action.down);
         double valueDown=nodeRoot.getActionValue(Action.down);
-
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueDown);
-
         Assert.assertEquals(-Environment.CRASH_COST,valueDown, DELTA_BIG);
 
     }
 
-/*
+
+
 
     @Test
-    @Ignore
     public void moveFromX0Y0Tox6y2GivesTwoMoveCost() {
         State rootState=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still,Action.still);
-        List<NodeInterface> nodesFromRootToSelected= createNodesOnPath(actions,rootState,stepReturns);
+        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still);
+        Action actionInSelected=Action.still;
 
-        printLists(actions, stepReturns, nodesFromRootToSelected);
-
-        bum=new BackupModifer(actions,nodesFromRootToSelected,getStepReturnOfSelected(stepReturns),simulationResultsEmpty);
+        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
         bum.backup();
 
-        printLists(actions, stepReturns, nodesFromRootToSelected);
-        System.out.println("xxxxxxxxx stepReturns xxxxxxxxxxxxxx");
-        stepReturns.forEach(System.out::println);
+        printLists(actions, stepReturns, nodeRoot);
 
-        double upAtRoot=nodesFromRootToSelected.get(0).getActionValue(Action.up);
-        double stillAfterObstacles=nodesFromRootToSelected.get(3).getActionValue(Action.still);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        double upAtRoot=nodeRoot.getActionValue(Action.up);
+        double stillAfterObstacles=tih.getNodesVisitedForActions(actionsToSelected).orElseThrow().get(3).getActionValue(Action.still);
         System.out.println("upAtRoot = " + upAtRoot);
         System.out.println("stillAfterObstacles = " + stillAfterObstacles);
 
@@ -108,26 +101,23 @@ public class TestBackupModifer {
     }
 
 
-    private StepReturn getStepReturnOfSelected(List<StepReturn> stepReturns) {
-        return stepReturns.get(stepReturns.size()-1);
-    }
 
     @Test
-    @Ignore
     public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
         State rootState=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.up,Action.down,Action.still);
+        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
+        Action actionInSelected=Action.still;
+        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
 
-        List<NodeInterface> nodesFromRootToSelected= createNodesOnPath(actions,rootState,stepReturns);
-
-        printLists(actions, stepReturns, nodesFromRootToSelected);
-
-        bum=new BackupModifer(actions,nodesFromRootToSelected,getStepReturnOfSelected(stepReturns),simulationResultsEmpty);
+        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
         bum.backup();
-        printLists(actions, stepReturns, nodesFromRootToSelected);
 
-        double valueUpRoot=nodesFromRootToSelected.get(0).getActionValue(Action.up);
-        double valueStillSelected=nodesFromRootToSelected.get(2).getActionValue(Action.still);
+        printLists(actions, stepReturns, nodeRoot);
+
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        double valueUpRoot=nodeRoot.getActionValue(Action.up);
+        double valueStillSelected=tih.getValueForActionInNode(actionsToSelected,Action.still).get();
         System.out.println("valueUpRoot = " + valueUpRoot);
         System.out.println("valueStillSelected = " + valueStillSelected);
         Assert.assertEquals(-0,valueUpRoot, DELTA);
@@ -135,33 +125,65 @@ public class TestBackupModifer {
 
     }
 
+
+
     @Test
-    @Ignore
     public void moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap() {
         State rootState=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.up,Action.down,Action.still);
-        List<NodeInterface> nodesFromRootToSelected= createNodesOnPath(actions,rootState,stepReturns);
-        bum=new BackupModifer(actions,nodesFromRootToSelected,getStepReturnOfSelected(stepReturns),simulationResultsEmpty);
+        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
+        Action actionInSelected=Action.still;
+        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+
+
+        bum=new BackupModifer(nodeRoot,actionsToSelected,actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
         bum.backup();
 
+        State state = getState(rootState, actionsToSelected);
+        actionInSelected=Action.down;
+        updateTreeFromActionInState(actionsToSelected, actionInSelected, nodeRoot, state);
 
-        State trapState=new State(2,0);
-        List<Action> actionsUpInEnd= Arrays.asList(Action.up,Action.down,Action.up);
-        nodesFromRootToSelected= createNodesOnPath(actionsUpInEnd,trapState,stepReturns);
-        StepReturn srSelected=stepAndUpdateState(trapState, actionsUpInEnd.get(actionsUpInEnd.size()-1));
-        bum=new BackupModifer(actions,nodesFromRootToSelected,srSelected,simulationResultsEmpty);
+        state = getState(rootState, actionsToSelected);
+        actionInSelected=Action.up;
+        NodeInterface nodeSelected = updateTreeFromActionInState(actionsToSelected, actionInSelected, nodeRoot, state);
+
+
+        nodeRoot.printTree();
+        System.out.println("nodeSelected = " + nodeSelected);
+
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        Optional<Double> valueUp=tih.getValueForActionInNode(actionsToSelected,Action.up);
+        Optional<Double> valueStill=tih.getValueForActionInNode(actionsToSelected,Action.still);
+        Optional<Double> valueDown=tih.getValueForActionInNode(actionsToSelected,Action.down);
+
+        Assert.assertEquals(-0,nodeRoot.getActionValue(Action.up), DELTA);
+        Assert.assertEquals(-Environment.CRASH_COST,valueUp.get(), DELTA_BIG);
+        Assert.assertEquals(-Environment.CRASH_COST,valueStill.get(), DELTA_BIG);
+        Assert.assertEquals(-Environment.CRASH_COST,valueDown.get(), DELTA_BIG);
+
+    }
+
+    @NotNull
+    private NodeInterface updateTreeFromActionInState(List<Action> actionsToSelected,
+                                                      Action actionInSelected,
+                                                      NodeInterface nodeRoot,
+                                                      State state) {
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        getStepReturnOfSelected= environment.step(actionInSelected, state);
+        NodeInterface nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
+        nodeSelected.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
+        bum=new BackupModifer(nodeRoot, actionsToSelected, actionInSelected,getStepReturnOfSelected,simulationResultsEmpty);
         bum.backup();
+        return nodeSelected;
+    }
 
-        nodesFromRootToSelected.forEach(System.out::println);
-
-        double valueUpRoot=nodesFromRootToSelected.get(0).getActionValue(Action.up);
-        double valueStillSelected=nodesFromRootToSelected.get(2).getActionValue(Action.still);
-        System.out.println("valueUpRoot = " + valueUpRoot);
-        System.out.println("valueStillSelected = " + valueStillSelected);
-        Assert.assertEquals(-0,valueUpRoot, DELTA);
-        Assert.assertEquals(-Environment.CRASH_COST,valueStillSelected, DELTA_BIG);
-
-    }  */
+    private State getState(State rootState, List<Action> actionsToSelected) {
+        State state= rootState.copy();
+        for (Action a: actionsToSelected) {
+            StepReturn sr = stepAndUpdateState(state, a);
+        }
+        return state;
+    }
 
     private NodeInterface createMCTSTree(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
 
@@ -192,10 +214,10 @@ public class TestBackupModifer {
     private void printLists(List<Action> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
 
         System.out.println("-----------------------------");
-        actions.forEach(System.out::println);
         nodeRoot.printTree();
-       // System.out.println("getStepReturnOfSelected(stepReturns) = " + getStepReturnOfSelected(stepReturns));
-        //  stepReturns.forEach(System.out::println);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        tih.getNodesVisitedForActions(actions).get().forEach(System.out::println);
+
         System.out.println("-----------------------------");
 
     }
