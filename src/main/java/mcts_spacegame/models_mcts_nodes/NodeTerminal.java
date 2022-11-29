@@ -90,12 +90,6 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
         return Collections.emptySet();
     }
 
-    @SneakyThrows
-    @Override
-    public void expand(NodeInterface childNode, Action action) {
-        throw new NoSuchMethodException("Can't expand node without child");
-    }
-
     @Override
     public String toString() {
         return  "name = "+name+

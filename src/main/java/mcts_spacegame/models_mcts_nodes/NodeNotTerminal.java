@@ -1,11 +1,14 @@
 package mcts_spacegame.models_mcts_nodes;
 
+import common.ConditionalUtils;
 import common.MathUtils;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
 
 import java.util.*;
 
+@Log
 public final class NodeNotTerminal extends NodeAbstract {
 
     private static final double INIT_ACTION_VALUE = 0d;
@@ -42,6 +45,12 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     @Override
     public void addChildNode(NodeInterface node) {
+        ConditionalUtils.executeOnlyIfConditionIsTrue(childNodes.contains(node),
+                () -> log.warning("Node already added"));
+
+        log.info("Adding node");
+        System.out.println("depth = " + depth);
+
         childNodes.add(node);
         node.setDepth(depth + 1);
     }
@@ -117,12 +126,6 @@ public final class NodeNotTerminal extends NodeAbstract {
         return Qsa.keySet();
     }
 
-    @Override
-    public void expand(NodeInterface childNode, Action action) {
-        addChildNode(childNode);
-        increaseNofVisits();
-        increaseNofActionSelections(action);
-    }
 
     @Override
     public String toString() {

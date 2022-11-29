@@ -29,8 +29,8 @@ logic_mcts
 - moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap
 - clean up BackupModifer  x
 - TestTreeInfoHelper x
-- TestSelectionExpansionSimulationBackup
-- delete NodeInterface expand()
+- TestSelectionExpansionSimulationBackup x
+- delete NodeInterface expand()  x
 - backupFromSimulations
 - TestBackupModifer - backupFromSimulations
 

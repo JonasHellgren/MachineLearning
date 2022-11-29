@@ -40,7 +40,6 @@ public interface NodeInterface {
     int getNofActionSelections(Action a);
     double getActionValue(Action a);
     Set<Action> getActionSet();
-    void expand(NodeInterface childNode, Action action);
 
     boolean isNotTerminal();
     boolean isTerminalFail();

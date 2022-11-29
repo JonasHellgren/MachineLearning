@@ -1,8 +1,10 @@
 package mcts_spacegame.models_mcts_nodes;
 
+import common.ConditionalUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
 
@@ -12,6 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Log
 public abstract class NodeAbstract implements NodeInterface {
     private static final double INIT_REWARD_VALUE = 0d;
     private static final String BLANK_SPACE = "  ";
@@ -51,6 +54,9 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public void saveRewardForAction(Action action, double reward) {
+        ConditionalUtils.executeOnlyIfConditionIsTrue(actionRewardMap.containsKey(action),
+                () -> log.warning("Reward for action already defined"));
+
         actionRewardMap.put(action,reward);
     }
 

@@ -37,7 +37,7 @@ public class TestSelectionExpansionSimulationBackup {
 
     @Test
     public void oneIteration() {
-        NodeInterface nodeSelected = select(startState);
+        NodeInterface nodeSelected = select(startState,nodeRoot);
         StepReturn sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
         backPropagate(sr);
@@ -55,7 +55,7 @@ public class TestSelectionExpansionSimulationBackup {
     public void tenIterations() {
 
         for (int i = 0; i <10 ; i++) {
-        NodeInterface nodeSelected = select(startState);
+        NodeInterface nodeSelected = select(startState,nodeRoot);
         StepReturn sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
         backPropagate(sr);
@@ -69,8 +69,7 @@ public class TestSelectionExpansionSimulationBackup {
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
     }
 
-    private NodeInterface select(State startState) {
-        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+    private NodeInterface select(State startState, NodeInterface nodeRoot) {
         NodeSelector ns=new NodeSelector(nodeRoot);
         actionsToSelected=ns.getActionsFromRootToSelected();
         return ns.select();
