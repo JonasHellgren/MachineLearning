@@ -42,9 +42,8 @@ logic_mcts
 - findNodeMatchingNodeState x
 - (x=6, y=2)(T-NF) repeteras  x
 - corrext equals x
-- clean up makeSelectedTerminal etc
--     public void iterateFromX2Y0()
-- bör inte nof visits uppdateras även för defensive backup
+- clean up makeSelectedTerminal etc  x
+- bör inte nof visits uppdateras även för defensive backup - görs för selected
 - kolla UCT värden
 - NodeSelector - inte välja samma action igen
 - backupFromSimulations
