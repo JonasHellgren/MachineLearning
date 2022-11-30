@@ -8,12 +8,11 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
@@ -85,11 +84,9 @@ public class BackupModifier {
 
 
     public void backup() {
-        if (!stepReturnOfSelected.isFail) {
-            backupNormalFromTreeSteps();
-        } else {
-            backupDefensiveFromTreeSteps();
-        }
+                ConditionalUtils.executeDependantOnCondition(!stepReturnOfSelected.isFail,
+                        this::backupNormalFromTreeSteps,
+                        this::backupDefensiveFromTreeSteps);
     }
 
     private void backupNormalFromTreeSteps() {
@@ -114,11 +111,59 @@ public class BackupModifier {
     private void backupDefensiveFromTreeSteps() {
         log.info("defensiveBackupOfSelectedNode");
         defensiveBackupOfSelectedNode();
-        //setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal()  TODO
+        setSelectedAsTerminalIfAllItsChildrenAreTerminal(); //  TODO
     }
 
     private void defensiveBackupOfSelectedNode() {
         updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected);
+    }
+
+    private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
+        Set<Action> children=nodeSelected.getChildNodes().stream()
+                .filter(n -> n.isTerminalFail()).map(n -> n.getAction())
+                .collect(Collectors.toSet());
+
+
+        System.out.println("children = " + children);
+        ConditionalUtils.executeOnlyIfConditionIsTrue(children.size()==Action.applicableActions().size(),
+                () -> makeSelectedTerminal());
+    }
+
+    private void makeSelectedTerminal() {
+        NodeInterface nodeCurrent=rootTree;
+
+        System.out.println("actionsToSelected = " + actionsToSelected);
+
+        Optional<NodeInterface> parentToSelected=Optional.empty();
+        Action actionToSelected=Action.notApplicable;
+        for (Action action:actionsToSelected)  {
+            boolean isSelectedChildToCurrent=nodeCurrent.getChildNodes().contains(nodeSelected);
+
+            System.out.println("nodeCurrent = " + nodeCurrent);
+
+            if (isSelectedChildToCurrent) {
+                log.info("isSelectedChildToCurrent");
+                parentToSelected=Optional.of(nodeCurrent);
+                actionToSelected=action;
+            }
+            System.out.println("action = " + action);
+
+            nodeCurrent=nodeCurrent.getChild(action).orElseThrow();
+        }
+
+        if (parentToSelected.isEmpty()) {
+            throw new RuntimeException("parent to selected not found");
+        }
+
+        NodeInterface selectedAsTerminalFail=new NodeTerminalFail(nodeSelected.getName(),actionToSelected); //todo State in static constructor
+
+        List<NodeInterface> childrenToParent=parentToSelected.get().getChildNodes();
+      //  parentToSelected.get().getChild(actionToSelected);
+
+        childrenToParent.remove(nodeSelected);
+        parentToSelected.get().addChildNode(selectedAsTerminalFail);
+
+
     }
 
     private void updateNodesFromReturns(List<Double> GList) {

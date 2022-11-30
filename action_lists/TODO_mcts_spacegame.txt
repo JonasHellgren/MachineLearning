@@ -32,7 +32,7 @@ logic_mcts
 - TestSelectionExpansionSimulationBackup x
 - delete NodeInterface expand()  x
 - bug getNonTestedActions fixad  x
-- setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal
+- setSelectedAsTerminalIfAllItsChildrenAreTerminal x
 - bör inte nof visits uppdateras även för defensive backup
 - kolla UCT värden
 - NodeSelector - inte välja samma action igen

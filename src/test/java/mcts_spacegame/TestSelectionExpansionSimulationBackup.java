@@ -58,7 +58,7 @@ public class TestSelectionExpansionSimulationBackup {
     public void tenIterations() {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 15; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
 
             StepReturn sr = chooseActionAndExpand(nodeSelected);
@@ -76,6 +76,9 @@ public class TestSelectionExpansionSimulationBackup {
         Optional<NodeInterface> node11=tih.getNodeReachedForActions(actions);
         System.out.println("node11.get() = " + node11.get());
 
+        actions = Arrays.asList(Action.up,Action.down);
+        Optional<NodeInterface> node20=tih.getNodeReachedForActions(actions);
+        System.out.println("node20.get() = " + node20.get());
 
         double valueUp = nodeRoot.getActionValue(Action.up);
         System.out.println("nodeRoot = " + nodeRoot);
