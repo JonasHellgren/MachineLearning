@@ -34,17 +34,11 @@ public class Environment implements EnvironmentInterface {
         }
         State newPosition = getNewPosition(action, oldPosition);
 
-        Optional<SpaceCell> cellNewOpt = spaceGrid.getCell(newPosition);
-        if (cellNewOpt.isEmpty()) {
-            log.info("new position is outside grid, assume it to be equal old position");
-            newPosition=oldPosition;
-            cellNewOpt=cellPresentOpt;
-        }
-
-        boolean isCrashingIntoWall =
+          boolean isCrashingIntoWall =
                 cellPresentOpt.get().isOnLowerBorder && action.equals(Action.down) ||
                         cellPresentOpt.get().isOnUpperBorder && action.equals(Action.up);
-        boolean isCrashingIntoObstacle = cellNewOpt.get().isObstacle;
+        Optional<SpaceCell> cellNewOpt = spaceGrid.getCell(newPosition);
+        boolean isCrashingIntoObstacle = cellNewOpt.orElse(cellPresentOpt.get()).isObstacle; //if new cell not exists use present
         boolean isGoal = cellPresentOpt.get().isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isGoal;

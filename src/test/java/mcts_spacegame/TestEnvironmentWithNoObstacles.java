@@ -96,7 +96,7 @@ public class TestEnvironmentWithNoObstacles {
         StepReturn stepReturn= environment.step(Action.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
-                () -> assertEquals(2,stepReturn.newPosition.x, DELTA),  //new position is outside grid => equal old position
+                () -> assertEquals(3,stepReturn.newPosition.x, DELTA),  //new position is outside grid
                 () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
                 () -> assertTrue(stepReturn.isTerminal),
                 () -> assertEquals(-Environment.STILL_COST,stepReturn.reward,DELTA)

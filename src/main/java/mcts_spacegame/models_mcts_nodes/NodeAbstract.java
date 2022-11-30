@@ -58,7 +58,7 @@ public abstract class NodeAbstract implements NodeInterface {
 
     public void saveRewardForAction(Action action, double reward) {
         ConditionalUtils.executeOnlyIfConditionIsTrue(actionRewardMap.containsKey(action),
-                () -> log.warning("Reward for action already defined"));
+                () -> log.fine("Reward for action already defined"));
 
         actionRewardMap.put(action,reward);
     }

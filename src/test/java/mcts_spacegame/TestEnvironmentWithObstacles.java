@@ -62,7 +62,7 @@ public class TestEnvironmentWithObstacles {
 
         StepReturn finalStepReturn = stepToTerminal(pos);
         assertAll(
-                () -> assertEquals(6, pos.x, DELTA),  //at goal, new position will be equal to present pos
+                () -> assertEquals(7, pos.x, DELTA),  //outside grid
                 () -> assertEquals(2,pos.y, DELTA),
                 () -> assertTrue(finalStepReturn.isTerminal),
                 () -> assertFalse(finalStepReturn.isFail),
