@@ -43,10 +43,10 @@ logic_mcts
 - (x=6, y=2)(T-NF) repeteras  x
 - corrext equals x
 - clean up makeSelectedTerminal etc  x
-- kan ha pos utanför grid
-- bör inte nof visits uppdateras även för defensive backup - görs för selected
-- kolla UCT värden
-- NodeSelector - inte välja samma action igen
+- kan ha pos utanför grid  x
+- bör inte nof visits uppdateras även för defensive backup - görs för selected x
+- kolla UCT värden - verkar stämma  x
+- NodeSelector - inte välja samma action igen  x
 - backupFromSimulations
 - TestBackupModifer - backupFromSimulations
 

@@ -81,9 +81,9 @@ public abstract class NodeAbstract implements NodeInterface {
     @Override
     public String toString() {
         return  "name = "+name+
-                ", nof children = " + 0+
-                ", action = " + action +
-                ", depth = " + depth;
+                ", nof ch. = " + 0+
+                ", a = " + action +
+                ", d = " + depth;
     }
 
 }

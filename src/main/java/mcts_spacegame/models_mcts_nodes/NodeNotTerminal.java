@@ -93,14 +93,19 @@ public final class NodeNotTerminal extends NodeAbstract {
         nSA.put(a, n + 1);
     }
 
+    /***
+     * Q (s,a) is the mean outcome of all simulations in which action a was selected in state s
+     * https://www.lamsade.dauphine.fr/~cazenave/mcts-gelly-silver.pdf
+     */
+
     @Override
     public void updateActionValue(double G, Action a) {
-        if (MathUtils.isZero(getNofActionSelections(a))) {
+        int nofVisitsForAction=getNofActionSelections(a);
+        if (MathUtils.isZero(nofVisitsForAction)) {
             throw new RuntimeException("Zero nof visits for action = " + a);
         }
-
         double qOld = getActionValue(a);
-        double qNew = qOld + ALPHA * (G - qOld) / (double) getNofActionSelections(a);
+        double qNew = qOld + ALPHA * (G - qOld) / (double) nofVisitsForAction;
         Qsa.put(a, qNew);
     }
 
