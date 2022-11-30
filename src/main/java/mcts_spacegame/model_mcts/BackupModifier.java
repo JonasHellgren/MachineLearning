@@ -155,7 +155,7 @@ public class BackupModifier {
             throw new RuntimeException("parent to selected not found");
         }
 
-        NodeInterface selectedAsTerminalFail=new NodeTerminalFail(nodeSelected.getName(),actionToSelected); //todo State in static constructor
+        NodeInterface selectedAsTerminalFail=NodeInterface.newTerminalFail(nodeSelected.getState(),actionToSelected);
 
         List<NodeInterface> childrenToParent=parentToSelected.get().getChildNodes();
       //  parentToSelected.get().getChild(actionToSelected);

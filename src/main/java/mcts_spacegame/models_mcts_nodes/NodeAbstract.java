@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
+import mcts_spacegame.models_space.State;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +21,15 @@ public abstract class NodeAbstract implements NodeInterface {
     private static final String BLANK_SPACE = "  ";
     String name;
     Action action;
+    State state;
     int depth;
     Counter counter;
     Map<Action, Double> actionRewardMap;
 
-    public NodeAbstract(String name,Action action) {
-        this.name = name;
+    public NodeAbstract(State state,Action action) {
+        this.name = state.toString();
         this.action=action;
+        this.state=state;
         depth=0;
         this.actionRewardMap=new HashMap<>();
 /*        for (Action a : Action.applicableActions()) {

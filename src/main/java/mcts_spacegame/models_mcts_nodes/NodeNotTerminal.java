@@ -5,6 +5,7 @@ import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
+import mcts_spacegame.models_space.State;
 
 import java.util.*;
 
@@ -19,8 +20,8 @@ public final class NodeNotTerminal extends NodeAbstract {
     Map<Action, Double> Qsa;
     Map<Action, Integer> nSA;
 
-    public NodeNotTerminal(String name, Action action) {
-        super(name,action);
+    public NodeNotTerminal(State state, Action action) {
+        super(state,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;
         Qsa = new HashMap<>();

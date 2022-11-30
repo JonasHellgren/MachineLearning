@@ -36,7 +36,7 @@ logic_mcts
 - skilja på TF och T i printTree x
 - bestPath x
 - State data i node
-- hitt viss node
+- hitta viss node i path
 - asserts i tenIterations
 - clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup
@@ -46,7 +46,7 @@ logic_mcts
 - TestBackupModifer - backupFromSimulations
 
 . kunna radera noder
-
+- hitta viss node i träd
 
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf

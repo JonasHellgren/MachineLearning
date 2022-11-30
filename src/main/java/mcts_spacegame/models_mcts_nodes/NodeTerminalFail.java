@@ -1,10 +1,11 @@
 package mcts_spacegame.models_mcts_nodes;
 
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.models_space.State;
 
 public final class NodeTerminalFail extends NodeTerminal {
-    public NodeTerminalFail(String name, Action action) {
-        super(name, action);
+    public NodeTerminalFail(State state, Action action) {
+        super(state, action);
     }
 
     @Override

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.model_mcts.Counter;
+import mcts_spacegame.models_space.State;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.Set;
 @Log
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeTerminal(String name, Action action) {
-        super(name,action);
+    public NodeTerminal(State state, Action action) {
+        super(state,action);
     }
 
     @Override

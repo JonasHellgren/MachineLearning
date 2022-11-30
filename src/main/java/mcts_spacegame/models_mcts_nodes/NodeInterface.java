@@ -28,6 +28,7 @@ public interface NodeInterface {
     String getName();
     Action getAction();
     Optional<NodeInterface> getChild(Action action);
+    State getState();
     int nofChildNodes();
     int nofSubNodes();
     void printTree();
@@ -49,15 +50,15 @@ public interface NodeInterface {
     double loadRewardForAction(Action action);
 
     static NodeNotTerminal newNotTerminal(State s, Action action) {
-        return new NodeNotTerminal(s.toString(),action);
+        return new NodeNotTerminal(s,action);
     }
 
     static NodeTerminalFail newTerminalFail(State s, Action action) {
-        return new NodeTerminalFail(s.toString(),action);
+        return new NodeTerminalFail(s,action);
     }
 
     static NodeTerminalNotFail newTerminalNotFail(State s, Action action) {
-        return new NodeTerminalNotFail(s.toString(),action);
+        return new NodeTerminalNotFail(s,action);
     }
 
     static NodeInterface newNode(StepReturn stepReturn,Action action) {
