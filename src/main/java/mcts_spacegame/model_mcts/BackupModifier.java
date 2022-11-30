@@ -124,7 +124,6 @@ public class BackupModifier {
                 .collect(Collectors.toSet());
 
 
-        System.out.println("children = " + children);
         ConditionalUtils.executeOnlyIfConditionIsTrue(children.size()==Action.applicableActions().size(),
                 () -> makeSelectedTerminal());
     }
@@ -132,21 +131,18 @@ public class BackupModifier {
     private void makeSelectedTerminal() {
         NodeInterface nodeCurrent=rootTree;
 
-        System.out.println("actionsToSelected = " + actionsToSelected);
 
         Optional<NodeInterface> parentToSelected=Optional.empty();
         Action actionToSelected=Action.notApplicable;
         for (Action action:actionsToSelected)  {
             boolean isSelectedChildToCurrent=nodeCurrent.getChildNodes().contains(nodeSelected);
 
-            System.out.println("nodeCurrent = " + nodeCurrent);
 
             if (isSelectedChildToCurrent) {
                 log.info("isSelectedChildToCurrent");
                 parentToSelected=Optional.of(nodeCurrent);
                 actionToSelected=action;
             }
-            System.out.println("action = " + action);
 
             nodeCurrent=nodeCurrent.getChild(action).orElseThrow();
         }

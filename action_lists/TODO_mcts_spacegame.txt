@@ -40,7 +40,7 @@ logic_mcts
 - TestNodeInfoHelper  x
 - asserts i tenIterations x
 - findNodeMatchingNodeState x
-- (x=6, y=2)(T-NF) repeteras
+- (x=6, y=2)(T-NF) repeteras  x
 - clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup
 - kolla UCT värden

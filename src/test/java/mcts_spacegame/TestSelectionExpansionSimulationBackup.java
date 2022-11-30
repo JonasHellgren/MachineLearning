@@ -93,7 +93,14 @@ public class TestSelectionExpansionSimulationBackup {
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
-        if (nodeSelected.isNotTerminal())  {
+        boolean isChildAddedEarlier=NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
+
+        if (isChildAddedEarlier) {
+            System.out.println("nodeSelected.getChildNodes() = " + nodeSelected.getChildNodes());
+            System.out.println("child = " + child);
+        }
+
+        if (nodeSelected.isNotTerminal() && !isChildAddedEarlier)  {
         nodeSelected.addChildNode(child); }
         return sr;
     }

@@ -10,7 +10,7 @@ public final class NodeTerminalNotFail extends NodeTerminal {
 
     @Override
     public void printTree() {
-        System.out.println(nameAndDepthAsString()+"(T-NF)");
+        System.out.println(nameAndDepthAsString()+"T-NF");
     }
 
     @Override
