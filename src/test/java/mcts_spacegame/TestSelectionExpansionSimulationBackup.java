@@ -92,7 +92,7 @@ public class TestSelectionExpansionSimulationBackup {
         System.out.println("valueDown = " + valueUp);
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
 
-        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(bestPath, new State(3,2));
+        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(bestPath, new State(5,2));
         System.out.println("node = " + node);
         Assert.assertFalse(node.isEmpty());
 
