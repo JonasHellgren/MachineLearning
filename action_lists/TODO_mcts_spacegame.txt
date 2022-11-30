@@ -32,12 +32,15 @@ logic_mcts
 - TestSelectionExpansionSimulationBackup x
 - delete NodeInterface expand()  x
 - bug getNonTestedActions fixad  x
+- setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal
+- bör inte nof visits uppdateras även för defensive backup
+- kolla UCT värden
 - NodeSelector - inte välja samma action igen
 - backupFromSimulations
 - TestBackupModifer - backupFromSimulations
 
 . kunna radera noder
-- setParentOfSelectedAsTerminalIfAllItChildrenAreTerminal
+
 
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf

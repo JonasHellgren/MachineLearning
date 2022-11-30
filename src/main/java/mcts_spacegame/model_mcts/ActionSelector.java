@@ -25,7 +25,7 @@ public class ActionSelector {
         List<Action> nonTestedActions = getNonTestedActions();
         int nofNonTestedActions=nonTestedActions.size();
         if(nofNonTestedActions==0) {
-            log.warning("No non tested actions");
+            log.warning("No non-tested actions");
             List<Action> testedActions = getTestedActions();
             int nofTestedActions=testedActions.size();
 
