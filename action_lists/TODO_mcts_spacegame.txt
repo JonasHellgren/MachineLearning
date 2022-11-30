@@ -35,8 +35,9 @@ logic_mcts
 - setSelectedAsTerminalIfAllItsChildrenAreTerminal x
 - skilja på TF och T i printTree x
 - bestPath x
-- State data i node
-- hitta viss node i path
+- State data i node x
+- hitta viss node i list of nodes  x
+- TestNodeInfoHelper
 - asserts i tenIterations
 - clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup

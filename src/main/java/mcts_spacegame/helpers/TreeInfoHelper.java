@@ -88,17 +88,20 @@ public class TreeInfoHelper {
 
     public List<NodeInterface> getBestPath() {
         List<NodeInterface> bestPath = new ArrayList<>();
-        NodeSelector ns = new NodeSelector(rootTree);
-        ns.select();
-        List<Action> actionsToSelected = ns.getActionsFromRootToSelected();
+        List<Action> actionsToSelected = getActionsOnBestPath();
 
-        System.out.println("actionsToSelected = " + actionsToSelected);
         NodeInterface node = rootTree;
         for (Action action : actionsToSelected) {
             bestPath.add(node);
             node = node.getChild(action).orElseThrow();
         }
         return bestPath;
+    }
+
+    public List<Action> getActionsOnBestPath() {
+        NodeSelector ns = new NodeSelector(rootTree);
+        ns.select();
+        return ns.getActionsFromRootToSelected();
     }
 
 }

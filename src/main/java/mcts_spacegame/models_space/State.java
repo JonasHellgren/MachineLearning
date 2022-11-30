@@ -1,11 +1,13 @@
 package mcts_spacegame.models_space;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import mcts_spacegame.environment.StepReturn;
 
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class State {
    public Integer x,y;
 

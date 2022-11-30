@@ -3,6 +3,7 @@ package mcts_spacegame;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.ActionSelector;
 import mcts_spacegame.model_mcts.BackupModifier;
@@ -82,6 +83,7 @@ public class TestSelectionExpansionSimulationBackup {
 
         System.out.println("xxxxxxxxx bestPath xxxxxxxxxxx ");
         List<NodeInterface> bestPath=tih.getBestPath();
+        System.out.println("tih.getActionsOnBestPath() = " + tih.getActionsOnBestPath());
         System.out.println("bestPath.size() = " + bestPath.size());
         bestPath.forEach(System.out::println);
 
@@ -89,6 +91,11 @@ public class TestSelectionExpansionSimulationBackup {
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueUp);
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
+
+        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(bestPath, new State(3,2));
+        System.out.println("node = " + node);
+        Assert.assertFalse(node.isEmpty());
+
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
