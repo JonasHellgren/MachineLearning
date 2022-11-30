@@ -3,6 +3,7 @@ package mcts_spacegame.helpers;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 
@@ -24,13 +25,13 @@ public class TreeInfoHelper {
     public Optional<NodeInterface> getNodeReachedForActions(List<Action> actions) {
 
         NodeInterface parent;
-        parent=rootTree;
-        for (Action action:actions) {
-            Optional<NodeInterface> child=parent.getChild(action);
+        parent = rootTree;
+        for (Action action : actions) {
+            Optional<NodeInterface> child = parent.getChild(action);
             if (child.isEmpty()) {
                 return Optional.empty();
             }
-            parent=child.get();
+            parent = child.get();
         }
 
         return Optional.of(parent);
@@ -39,15 +40,15 @@ public class TreeInfoHelper {
     public Optional<List<NodeInterface>> getNodesOnPathForActions(List<Action> actionsToSelected) {
 
         NodeInterface parent;
-        parent=rootTree;
-        List<NodeInterface> nodes=new ArrayList<>();
-        for (Action action:actionsToSelected) {
-            Optional<NodeInterface> child=parent.getChild(action);
+        parent = rootTree;
+        List<NodeInterface> nodes = new ArrayList<>();
+        for (Action action : actionsToSelected) {
+            Optional<NodeInterface> child = parent.getChild(action);
             if (child.isEmpty()) {
                 return Optional.empty();
             }
             nodes.add(parent);
-            parent=child.get();
+            parent = child.get();
         }
         nodes.add(parent);
 
@@ -55,7 +56,7 @@ public class TreeInfoHelper {
     }
 
     public Optional<Double> getValueForActionInNode(List<Action> actionsToSelected, Action action) {
-        Optional<NodeInterface> node=getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface> node = getNodeReachedForActions(actionsToSelected);
 
         return (node.isEmpty())
                 ? Optional.empty()
@@ -64,8 +65,8 @@ public class TreeInfoHelper {
     }
 
     public static List<Action> getAllActions(List<Action> actionsToSelected, Action actionOnSelected) {
-        List<Action> actionOnSelectedList= Collections.singletonList(actionOnSelected);
-        List<Action> actions=new ArrayList<>();
+        List<Action> actionOnSelectedList = Collections.singletonList(actionOnSelected);
+        List<Action> actions = new ArrayList<>();
         actions.addAll(actionsToSelected);
         actions.addAll(actionOnSelectedList);
         return actions;
@@ -74,7 +75,7 @@ public class TreeInfoHelper {
     public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
         State state = rootState.copy();
         for (Action a : actionsToSelected) {
-            StepReturn sr = stepAndUpdateState(environment,state, a);
+            StepReturn sr = stepAndUpdateState(environment, state, a);
         }
         return state;
     }
@@ -83,6 +84,21 @@ public class TreeInfoHelper {
         StepReturn sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;
+    }
+
+    public List<NodeInterface> getBestPath() {
+        List<NodeInterface> bestPath = new ArrayList<>();
+        NodeSelector ns = new NodeSelector(rootTree);
+        ns.select();
+        List<Action> actionsToSelected = ns.getActionsFromRootToSelected();
+
+        System.out.println("actionsToSelected = " + actionsToSelected);
+        NodeInterface node = rootTree;
+        for (Action action : actionsToSelected) {
+            bestPath.add(node);
+            node = node.getChild(action).orElseThrow();
+        }
+        return bestPath;
     }
 
 }

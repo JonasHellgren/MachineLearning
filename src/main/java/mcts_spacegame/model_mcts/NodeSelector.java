@@ -23,12 +23,12 @@ public class NodeSelector {
 
     private static final int C = 1;
     public static final int UCT_MAX = 1000;
-    NodeInterface nodeRoot;
+    final NodeInterface nodeRoot;
     List<NodeInterface> nodesFromRootToSelected;
     List<Action> actionsFromRootToSelected;
 
     public NodeSelector(NodeInterface nodeRoot) {
-        this.nodeRoot = nodeRoot;
+        this.nodeRoot = nodeRoot;  //todo copy
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
     }

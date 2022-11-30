@@ -52,10 +52,11 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
         return 0;
     }
 
+    /*
     @Override
     public void printTree() {
         System.out.println(nameAndDepthAsString()+"(T)");
-    }
+    }  */
 
     @Override
     public void increaseNofVisits() {

@@ -33,6 +33,12 @@ logic_mcts
 - delete NodeInterface expand()  x
 - bug getNonTestedActions fixad  x
 - setSelectedAsTerminalIfAllItsChildrenAreTerminal x
+- skilja på TF och T i printTree x
+- bestPath x
+- State data i node
+- hitt viss node
+- asserts i tenIterations
+- clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup
 - kolla UCT värden
 - NodeSelector - inte välja samma action igen

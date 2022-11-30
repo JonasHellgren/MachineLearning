@@ -6,4 +6,9 @@ public final class NodeTerminalFail extends NodeTerminal {
     public NodeTerminalFail(String name, Action action) {
         super(name, action);
     }
+
+    @Override
+    public void printTree() {
+        System.out.println(nameAndDepthAsString()+"(TF)");
+    }
 }
