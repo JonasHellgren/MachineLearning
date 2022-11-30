@@ -37,7 +37,7 @@ logic_mcts
 - bestPath x
 - State data i node x
 - hitta viss node i list of nodes  x
-- TestNodeInfoHelper
+- TestNodeInfoHelper  x
 - asserts i tenIterations
 - clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup
