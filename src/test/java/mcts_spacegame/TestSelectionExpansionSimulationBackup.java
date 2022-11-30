@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
@@ -21,9 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@Log
 public class TestSelectionExpansionSimulationBackup {
 
     private static final int DELTA_BIG = 2;
+    private static final int NOF_ITERATIONS = 50;
     SpaceGrid spaceGrid;
     Environment environment;
     NodeInterface nodeRoot;
@@ -35,12 +38,11 @@ public class TestSelectionExpansionSimulationBackup {
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
-        startState = new State(0, 0);
-        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
     }
 
     @Test
     public void oneIteration() {
+        initTree(new State(0, 0));
         NodeInterface nodeSelected = select(nodeRoot);
         StepReturn sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
@@ -55,27 +57,63 @@ public class TestSelectionExpansionSimulationBackup {
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
     }
 
+    private void initTree(State state) {
+        startState = state;
+        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+    }
+
     @Test
-    public void thirtyIterations() {
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        for (int i = 0; i < 30; i++) {
-            NodeInterface nodeSelected = select(nodeRoot);
-            StepReturn sr = chooseActionAndExpand(nodeSelected);
-            //todo simulation
-            backPropagate(sr);
-        }
+    public void iterateFromX0Y0() {
+        initTree(new State(0, 0));
+        doMCTSIterations();
 
         nodeRoot.printTree();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         tih.getBestPath().forEach(System.out::println);
-
-        double valueUp = nodeRoot.getActionValue(Action.up);
-        Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
 
         Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
         Assert.assertFalse(node11.isEmpty());
         Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
+    }
 
+
+    @Test
+    public void iterateFromX0Y2() {
+        initTree(new State(0, 2));
+        doMCTSIterations();
+
+        nodeRoot.printTree();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        tih.getBestPath().forEach(System.out::println);
+
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,2));
+        Assert.assertFalse(node12.isEmpty());
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Assert.assertFalse(node52.isEmpty());
+    }
+
+    @Test
+    public void iterateFromX2Y0() {
+        initTree(new State(2,0));
+        doMCTSIterations();
+
+        nodeRoot.printTree();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        System.out.println("tih.getBestPath().size() = " + tih.getBestPath().size());
+        tih.getBestPath().forEach(System.out::println);
+
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2,0));
+        Assert.assertTrue(node12.isPresent());
+    }
+
+    private void doMCTSIterations() {
+        for (int i = 0; i < NOF_ITERATIONS; i++) {
+            NodeInterface nodeSelected = select(nodeRoot);
+            StepReturn sr = chooseActionAndExpand(nodeSelected);
+            //todo simulation
+            backPropagate(sr);
+        }
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
@@ -96,8 +134,7 @@ public class TestSelectionExpansionSimulationBackup {
         boolean isChildAddedEarlier=NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
 
         if (isChildAddedEarlier) {
-            System.out.println("nodeSelected.getChildNodes() = " + nodeSelected.getChildNodes());
-            System.out.println("child = " + child);
+            log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected);
         }
 
         if (nodeSelected.isNotTerminal() && !isChildAddedEarlier)  {

@@ -85,9 +85,10 @@ public class TreeInfoHelper {
         List<Action> actionsToSelected = getActionsOnBestPath();
 
         NodeInterface node = rootTree;
+        bestPath.add(node);
         for (Action action : actionsToSelected) {
-            bestPath.add(node);
             node = node.getChild(action).orElseThrow();
+            bestPath.add(node);
         }
         return bestPath;
     }

@@ -148,7 +148,9 @@ public class BackupModifier {
         }
 
         if (parentToSelected.isEmpty()) {
-            throw new RuntimeException("parent to selected not found");
+            rootTree.printTree();
+            log.warning("parent to selected not found, probably children of root node are all terminal-fail");
+            return;
         }
 
         NodeInterface selectedAsTerminalFail=NodeInterface.newTerminalFail(nodeSelected.getState(),actionToSelected);
@@ -158,7 +160,6 @@ public class BackupModifier {
 
         childrenToParent.remove(nodeSelected);
         parentToSelected.get().addChildNode(selectedAsTerminalFail);
-
 
     }
 
