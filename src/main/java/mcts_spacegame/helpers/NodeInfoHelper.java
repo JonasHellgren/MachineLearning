@@ -12,4 +12,8 @@ public class NodeInfoHelper {
         return nodes.stream().filter(n -> n.getState().equals(state)).findFirst();
     }
 
+    public static Optional<NodeInterface>  findNodeMatchingNode(List<NodeInterface> nodes, NodeInterface node)  {
+        return nodes.stream().filter(n -> n.equals(node)).findFirst();
+    }
+
 }

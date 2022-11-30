@@ -32,7 +32,7 @@ public class TestTreeInfoHelper {
         State rootState=new State(0,0);
         actionsToSelected= Arrays.asList(Action.up,Action.down);
         actionInSelected=Action.still;
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         nodeRoot= createMCTSTree(actions,rootState);
     }
 

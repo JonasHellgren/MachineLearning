@@ -41,7 +41,7 @@ public abstract class NodeAbstract implements NodeInterface {
     protected abstract void nofOffSpringsRec(NodeInterface node, Counter counter);
 
     String nameAndDepthAsString() {
-        return BLANK_SPACE.repeat(Math.max(0, depth)) +name;
+        return BLANK_SPACE.repeat(Math.max(0, depth)) + name;
     }
 
     public boolean isNotTerminal() {
@@ -66,5 +66,7 @@ public abstract class NodeAbstract implements NodeInterface {
     public double loadRewardForAction(Action action) {
        return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
     }
+
+
 
 }

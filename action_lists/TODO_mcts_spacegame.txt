@@ -38,7 +38,9 @@ logic_mcts
 - State data i node x
 - hitta viss node i list of nodes  x
 - TestNodeInfoHelper  x
-- asserts i tenIterations
+- asserts i tenIterations x
+- findNodeMatchingNodeState x
+- (x=6, y=2)(T-NF) repeteras
 - clean up makeSelectedTerminal etc
 - bör inte nof visits uppdateras även för defensive backup
 - kolla UCT värden

@@ -18,12 +18,10 @@ public class TestNodeInfoHelper {
     @Before
     public void init() {
         nodes=new ArrayList<>();
-
         nodes.add(NodeInterface.newNotTerminal(new State(0,0), Action.notApplicable));
         nodes.add(NodeInterface.newNotTerminal(new State(1,0), Action.still));
         nodes.add(NodeInterface.newNotTerminal(new State(2,0), Action.still));
         nodes.add(NodeInterface.newNotTerminal(new State(3,0), Action.still));
-
     }
 
     @Test
@@ -31,10 +29,33 @@ public class TestNodeInfoHelper {
         Assert.assertTrue(NodeInfoHelper.findNodeMatchingState(nodes,new State(0,0)).isPresent());
     }
 
-
     @Test
     public void nodeWithX10Y0IsNotPresent() {
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingState(nodes,new State(10,0)).isPresent());
+    }
+
+    @Test
+    public void findNodeMatchingExistingNode() {
+        NodeInterface node=NodeInterface.newNotTerminal(new State(0,0), Action.notApplicable);
+        Assert.assertTrue(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
+    }
+
+    @Test
+    public void findNodeMatchingNodeOfOtherClass() {
+        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), Action.notApplicable);
+        Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
+    }
+
+    @Test
+    public void findNodeMatchingNodeOfOtherAction() {
+        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), Action.still);
+        Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
+    }
+
+    @Test
+    public void findNodeMatchingNodeOfOtherState() {
+        NodeInterface node=NodeInterface.newTerminalFail(new State(10,0), Action.still);
+        Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
 }

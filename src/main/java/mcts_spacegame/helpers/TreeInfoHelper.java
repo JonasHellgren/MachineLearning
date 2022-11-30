@@ -64,13 +64,7 @@ public class TreeInfoHelper {
 
     }
 
-    public static List<Action> getAllActions(List<Action> actionsToSelected, Action actionOnSelected) {
-        List<Action> actionOnSelectedList = Collections.singletonList(actionOnSelected);
-        List<Action> actions = new ArrayList<>();
-        actions.addAll(actionsToSelected);
-        actions.addAll(actionOnSelectedList);
-        return actions;
-    }
+
 
     public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
         State state = rootState.copy();

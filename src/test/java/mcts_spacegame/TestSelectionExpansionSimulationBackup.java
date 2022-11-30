@@ -56,45 +56,25 @@ public class TestSelectionExpansionSimulationBackup {
     }
 
     @Test
-    public void tenIterations() {
+    public void thirtyIterations() {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 30; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-
             StepReturn sr = chooseActionAndExpand(nodeSelected);
             //todo simulation
             backPropagate(sr);
         }
 
-        //System.out.println("xxxxxxxxxxxxxxxxxxxx i = " + i);
-        System.out.println("xxxxxxxxxxxxxxxxxxxx ");
-
-        //System.out.println("nodeSelected = " + nodeSelected);
         nodeRoot.printTree();
-
-        List<Action> actions = Arrays.asList(Action.up);
-        Optional<NodeInterface> node11=tih.getNodeReachedForActions(actions);
-        System.out.println("node11.get() = " + node11.get());
-
-        actions = Arrays.asList(Action.up,Action.down);
-        Optional<NodeInterface> node20=tih.getNodeReachedForActions(actions);
-        System.out.println("node20.get() = " + node20.get());
-
-        System.out.println("xxxxxxxxx bestPath xxxxxxxxxxx ");
-        List<NodeInterface> bestPath=tih.getBestPath();
-        System.out.println("tih.getActionsOnBestPath() = " + tih.getActionsOnBestPath());
-        System.out.println("bestPath.size() = " + bestPath.size());
-        bestPath.forEach(System.out::println);
+        tih.getBestPath().forEach(System.out::println);
 
         double valueUp = nodeRoot.getActionValue(Action.up);
-        System.out.println("nodeRoot = " + nodeRoot);
-        System.out.println("valueDown = " + valueUp);
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
 
-        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(bestPath, new State(5,2));
-        System.out.println("node = " + node);
-        Assert.assertFalse(node.isEmpty());
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
+        Assert.assertFalse(node11.isEmpty());
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Assert.assertFalse(node52.isEmpty());
 
     }
 

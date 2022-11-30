@@ -50,7 +50,7 @@ public class TestBackupModifier {
 
         List<Action> actionsToSelected = Collections.emptyList();
         Action actionInSelected = Action.down;
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
         bum = BackupModifier.builder().rootTree(nodeRoot)
@@ -77,7 +77,7 @@ public class TestBackupModifier {
         List<Action> actionsToSelected= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still);
         Action actionInSelected=Action.still;
 
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -106,7 +106,7 @@ public class TestBackupModifier {
         State rootState=new State(0,0);
         List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
         Action actionInSelected=Action.still;
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -134,7 +134,7 @@ public class TestBackupModifier {
         State rootState=new State(0,0);
         List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
         Action actionInSelected=Action.still;
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionInSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)

@@ -168,7 +168,7 @@ public class BackupModifier {
 
     private void updateNodesFromReturns(List<Double> GList) {
         double G;
-        List<Action> actions = TreeInfoHelper.getAllActions(actionsToSelected, actionOnSelected);
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
             G = GList.get(nodesOnPath.indexOf(node));

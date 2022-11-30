@@ -124,7 +124,6 @@ public final class NodeNotTerminal extends NodeAbstract {
         return Qsa.keySet();
     }
 
-
     @Override
     public String toString() {
         return "name = "+name+
@@ -134,6 +133,13 @@ public final class NodeNotTerminal extends NodeAbstract {
                 ", values =" + Qsa.entrySet() +
                 ", visits =" + nSA.entrySet()+
                 ", rewards = "+actionRewardMap.entrySet();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;  //check if the argument is a reference to this object
+        if (!(obj instanceof NodeNotTerminal)) return false;  //check if correct typ
+        return super.equals(obj);  //abstract class is annotated with @EqualsAndHashCode, fields checked
     }
 
 }

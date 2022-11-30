@@ -10,6 +10,14 @@ public final class NodeTerminalNotFail extends NodeTerminal {
 
     @Override
     public void printTree() {
-        System.out.println(nameAndDepthAsString()+"(NF)");
+        System.out.println(nameAndDepthAsString()+"(T-NF)");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof NodeTerminalNotFail)) return false;
+        return super.equals(obj);
+    }
+
 }
