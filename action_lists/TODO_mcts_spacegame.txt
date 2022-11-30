@@ -41,6 +41,7 @@ logic_mcts
 - asserts i tenIterations x
 - findNodeMatchingNodeState x
 - (x=6, y=2)(T-NF) repeteras  x
+- corrext equals x
 - clean up makeSelectedTerminal etc
 -     public void iterateFromX2Y0()
 - bör inte nof visits uppdateras även för defensive backup

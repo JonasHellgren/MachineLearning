@@ -67,6 +67,23 @@ public abstract class NodeAbstract implements NodeInterface {
        return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        //For each significant field in the class, check if that field matches the corresponding field of this object
+        NodeAbstract equalsSample = (NodeAbstract) obj;
+        boolean isSameState = equalsSample.getState().equals(this.getState());
+        boolean isSameAction = equalsSample.getAction()==this.getAction();
+        boolean isSameDepth = equalsSample.getDepth()==this.getDepth();
 
+        return isSameState && isSameAction && isSameDepth;
+    }
+
+    @Override
+    public String toString() {
+        return  "name = "+name+
+                ", nof children = " + 0+
+                ", action = " + action +
+                ", depth = " + depth;
+    }
 
 }

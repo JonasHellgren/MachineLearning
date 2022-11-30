@@ -13,6 +13,11 @@ public class NodeInfoHelper {
     }
 
     public static Optional<NodeInterface>  findNodeMatchingNode(List<NodeInterface> nodes, NodeInterface node)  {
+
+        System.out.println("-----------------");
+        nodes.forEach(System.out::println);
+        System.out.println("node = " + node.toString());
+
         return nodes.stream().filter(n -> n.equals(node)).findFirst();
     }
 

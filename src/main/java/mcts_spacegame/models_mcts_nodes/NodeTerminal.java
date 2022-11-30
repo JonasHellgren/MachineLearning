@@ -94,10 +94,6 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
         return Collections.emptySet();
     }
 
-    @Override
-    public String toString() {
-        return  "name = "+name+
-                "nof childs = " + 0;
-    }
+
 
 }

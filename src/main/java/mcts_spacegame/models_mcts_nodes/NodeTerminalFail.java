@@ -4,13 +4,16 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_space.State;
 
 public final class NodeTerminalFail extends NodeTerminal {
+
+    private static final String CLASS_NAME = "T-Fail";
+
     public NodeTerminalFail(State state, Action action) {
         super(state, action);
     }
 
     @Override
     public void printTree() {
-        System.out.println(nameAndDepthAsString()+"T-Fail");
+        System.out.println(nameAndDepthAsString()+ CLASS_NAME);
     }
 
     @Override
@@ -19,4 +22,6 @@ public final class NodeTerminalFail extends NodeTerminal {
         if (!(obj instanceof NodeTerminalFail)) return false;
         return super.equals(obj);
     }
+
+
 }

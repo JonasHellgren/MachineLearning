@@ -131,6 +131,7 @@ public class TestSelectionExpansionSimulationBackup {
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
+        child.setDepth(nodeSelected.getDepth()+1);  //easy to forget
         boolean isChildAddedEarlier=NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
 
         if (isChildAddedEarlier) {

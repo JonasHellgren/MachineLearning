@@ -126,9 +126,7 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     @Override
     public String toString() {
-        return "name = "+name+
-                ", nof childs = " + childNodes.size() +
-                ", action = " + action +
+        return super.toString() +
                 ", state visits = " + nofVisits +
                 ", values =" + Qsa.entrySet() +
                 ", visits =" + nSA.entrySet()+
