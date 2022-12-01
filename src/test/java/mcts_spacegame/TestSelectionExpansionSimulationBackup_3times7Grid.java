@@ -67,8 +67,6 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
     }
 
-
-
     @Test
     public void iterateFromX0Y0() {
         initTree(new State(0, 0));
@@ -81,8 +79,6 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
     }
-
-
 
     @Test
     public void iterateFromX0Y2() {

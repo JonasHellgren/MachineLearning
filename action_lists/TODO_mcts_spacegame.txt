@@ -50,8 +50,10 @@ logic_mcts
 skissa new5times15Grid  X
 Inte uct vid best path  x
 Storlek träd x
-Vad händer selected är terminal not fail
-Class som gör iterationer och gör statistik på bästa path etc. Skapas med builder och har par för inställningar.
+Class MonteCarloTreeCreator  x
+TestMonteCarloTreeCreator
+begränsa trädjup med maxTreeDepth i settings
+klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator
 - BackupAlsoFromSimulations_3times7Grid
 
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
@@ -60,6 +62,7 @@ Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Explor
 
 . kunna radera noder
 - hitta viss node i träd
+Vad händer selected är terminal not fail - inget speicellt  x
 
 
 https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf
