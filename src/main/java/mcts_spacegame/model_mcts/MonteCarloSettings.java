@@ -8,7 +8,7 @@ public class MonteCarloSettings {
     private final int C_DEFAULT=1;
 
     @Builder.Default
-    int nofIterations=NOF_ITERATIONS_DEFAULT;
+    int maxNofIterations =NOF_ITERATIONS_DEFAULT;
     @Builder.Default
     int coefficientExploitationExploration =C_DEFAULT;
 

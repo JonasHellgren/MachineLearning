@@ -46,13 +46,14 @@ public class MonteCarloTreeCreator {
         return mctc;
     }
 
-    public void doMCTSIterations() {
-        for (int i = 0; i < settings.nofIterations; i++) {
+    public NodeInterface doMCTSIterations() {
+        for (int i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             StepReturn sr = chooseActionAndExpand(nodeSelected);
             //todo simulation
             backPropagate(sr);
         }
+        return nodeRoot;
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
