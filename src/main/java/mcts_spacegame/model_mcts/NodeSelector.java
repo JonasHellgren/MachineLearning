@@ -21,17 +21,26 @@ import java.util.stream.Collectors;
 @Log
 public class NodeSelector {
 
-    private static final int C = 1;
+    private static final double C_DEFAULT = 1;
     public static final int UCT_MAX = 1000;
+    private static final double VALUE_AT_EVALUATION_IF_NEVER_VISITED = -Double.MAX_VALUE;
     final NodeInterface nodeRoot;
     List<NodeInterface> nodesFromRootToSelected;
     List<Action> actionsFromRootToSelected;
+    private final double C;
 
     public NodeSelector(NodeInterface nodeRoot) {
+        this(nodeRoot,C_DEFAULT);
+    }
+
+    public NodeSelector(NodeInterface nodeRoot, double C) {
         this.nodeRoot = nodeRoot;  //todo copy
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
+        this.C=C;
     }
+
+    //todo constructor for setting function that test if node is leaf, i.e. sets maxNofTestedActionsToBeLeaf
 
     public NodeInterface select() {
         nodesFromRootToSelected.clear();
@@ -104,7 +113,16 @@ public class NodeSelector {
         return calcUct(v, nParent, n);
     }
 
+    /***
+     * zero C is the case when analysis is performed, after evaluation, and best path is expected
+     * after evaluation, it is bad to never have been visited (n==0)
+     */
+
     public double calcUct(double v, int nParent, int n) {  //good for testing
+        if (MathUtils.isZero(C)) {
+            return (n==0)? VALUE_AT_EVALUATION_IF_NEVER_VISITED :v;
+        }
+
         return (MathUtils.isZero(n))
                 ? UCT_MAX
                 : v + C * Math.sqrt(Math.log(nParent) / n);

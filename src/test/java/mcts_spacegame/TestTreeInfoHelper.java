@@ -23,7 +23,8 @@ public class TestTreeInfoHelper {
     NodeInterface nodeRoot;
     List<Action> actionsToSelected;
     Action actionInSelected;
-
+    List<Action> actions;
+    TreeInfoHelper tih;
     @Before
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
@@ -32,13 +33,14 @@ public class TestTreeInfoHelper {
         State rootState=new State(0,0);
         actionsToSelected= Arrays.asList(Action.up,Action.down);
         actionInSelected=Action.still;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        actions = Action.getAllActions(actionsToSelected, actionInSelected);
         nodeRoot= createMCTSTree(actions,rootState);
+        tih=new TreeInfoHelper(nodeRoot);
+
     }
 
     @Test
     public void nodeSelectedIsX2Y0() {
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
         System.out.println("node = " + node);
         Assert.assertTrue(node.getName().contains("x=2"));
@@ -46,18 +48,22 @@ public class TestTreeInfoHelper {
     }
 
     @Test public void rewardOfStillInX2Y0IsBad() {
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
         Assert.assertEquals(-Environment.CRASH_COST,node.loadRewardForAction(Action.still), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         List<NodeInterface> nodes=tih.getNodesOnPathForActions(actionsToSelected).get();
 
         nodes.forEach(System.out::println);
 
         Assert.assertEquals(3,nodes.size());
+    }
+
+    @Test public void testNofNodesInTree() {
+        int nofNodes=tih.nofNodesInTree();
+        System.out.println("nofNodes = " + nofNodes);
+        Assert.assertEquals(actions.size(),nofNodes);
     }
 
     private NodeInterface createMCTSTree(List<Action> actions, State rootState) {

@@ -49,6 +49,15 @@ public class TestNodeSelector {
         Assert.assertTrue(uctHighValue>uctLowValue);
     }
 
+    @Test public void nofVisitsDoesNotAffectZeroC() {
+        int nParent=10, nofVisitsSmall=0, nofVisitsBig= (int) 1e5, C=0;
+        NodeSelector ns=new NodeSelector(nodeRoot,C);
+        double uctLowValue=ns.calcUct(1.0,nParent,nofVisitsSmall); //C=0 gives nofVisitsSmall does not matter
+        double uctHighValue=ns.calcUct(1.1,nParent,nofVisitsBig);
+        System.out.println("uctLowValue = " + uctLowValue+", uctHighValue = " + uctHighValue);
+        Assert.assertTrue(uctHighValue>uctLowValue); //
+    }
+
     @Test public void uctZeroVisitsGivesUCTMax() {
         int nParent=10, nofVisits=0;
         NodeSelector ns=new NodeSelector(nodeRoot);

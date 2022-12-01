@@ -4,11 +4,11 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.model_mcts.NodeSelector;
+import mcts_spacegame.models_mcts_nodes.Counter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,8 +64,6 @@ public class TreeInfoHelper {
 
     }
 
-
-
     public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
         State state = rootState.copy();
         for (Action a : actionsToSelected) {
@@ -80,23 +78,23 @@ public class TreeInfoHelper {
         return sr;
     }
 
-    public List<NodeInterface> getBestPath() {
-        List<NodeInterface> bestPath = new ArrayList<>();
-        List<Action> actionsToSelected = getActionsOnBestPath();
-
-        NodeInterface node = rootTree;
-        bestPath.add(node);
-        for (Action action : actionsToSelected) {
-            node = node.getChild(action).orElseThrow();
-            bestPath.add(node);
-        }
-        return bestPath;
+    public List<NodeInterface> getBestPath(double C) {
+        NodeSelector ns = new NodeSelector(rootTree,C);
+        ns.select();
+        return ns.getNodesFromRootToSelected();
     }
 
-    public List<Action> getActionsOnBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree);
-        ns.select();
-        return ns.getActionsFromRootToSelected();
+    public int nofNodesInTree() {
+        Counter counter = new Counter();
+        nofOffSpringsRecursive(rootTree,counter);
+        return counter.value();
+    }
+
+    void nofOffSpringsRecursive(NodeInterface node, Counter counter) {
+        for (NodeInterface  child:node.getChildNodes()) {
+            counter.increment();
+            nofOffSpringsRecursive(child,counter);
+        }
     }
 
 }

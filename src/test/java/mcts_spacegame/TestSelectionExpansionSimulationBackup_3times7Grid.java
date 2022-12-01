@@ -25,6 +25,9 @@ import java.util.Optional;
 @Log
 public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
+    private final double C_FOR_BEST_PATH=0;
+    private final double C_FOR_UCT=1;
+
     private static final int DELTA_BIG = 2;
     private static final int NOF_ITERATIONS = 50;
     SpaceGrid spaceGrid;
@@ -33,11 +36,18 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     List<Action> actionsToSelected;
     Action actionInSelected;
     State startState;
+    TreeInfoHelper tih;
 
     @Before
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
+    }
+
+    private void initTree(State state) {
+        startState = state;
+        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+        tih=new TreeInfoHelper(nodeRoot);
     }
 
     @Test
@@ -57,25 +67,21 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
     }
 
-    private void initTree(State state) {
-        startState = state;
-        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
-    }
+
 
     @Test
     public void iterateFromX0Y0() {
         initTree(new State(0, 0));
         doMCTSIterations();
 
-        nodeRoot.printTree();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        tih.getBestPath().forEach(System.out::println);
+        doPrinting(tih);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
     }
+
 
 
     @Test
@@ -83,13 +89,11 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         initTree(new State(0, 2));
         doMCTSIterations();
 
-        nodeRoot.printTree();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        tih.getBestPath().forEach(System.out::println);
+        doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,2));
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -98,13 +102,17 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         initTree(new State(2,0));
         doMCTSIterations();
 
-        nodeRoot.printTree();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        System.out.println("tih.getBestPath().size() = " + tih.getBestPath().size());
-        tih.getBestPath().forEach(System.out::println);
+        doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2,0));
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(2,0));
         Assert.assertTrue(node12.isPresent());
+    }
+
+
+    private void doPrinting(TreeInfoHelper tih) {
+        System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
+        nodeRoot.printTree();
+        tih.getBestPath(C_FOR_BEST_PATH).forEach(System.out::println);
     }
 
     private void doMCTSIterations() {
@@ -117,7 +125,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot);
+        NodeSelector ns = new NodeSelector(nodeRoot,C_FOR_UCT);
         NodeInterface nodeSelected=ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
