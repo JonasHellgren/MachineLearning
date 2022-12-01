@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
-public class TestSelectionExpansionSimulationBackup {
+public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     private static final int DELTA_BIG = 2;
     private static final int NOF_ITERATIONS = 50;

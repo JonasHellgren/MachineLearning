@@ -47,7 +47,15 @@ logic_mcts
 - bör inte nof visits uppdateras även för defensive backup - görs för selected x
 - kolla UCT värden - verkar stämma  x
 - NodeSelector - inte välja samma action igen  x
-- backupFromSimulations
+skissa new5times15Grid
+Inte uct vid best path
+Storlek träd
+Vad händer selected är terminal not fail
+Class som gör iterationer och gör statistik på bästa path etc. Skapas med builder och har par för inställningar.
+- BackupAlsoFromSimulations_3times7Grid
+
+Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
+- koda new5times10Grid - hur får + vid goad
 - TestBackupModifer - backupFromSimulations
 
 . kunna radera noder

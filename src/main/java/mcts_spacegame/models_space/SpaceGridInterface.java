@@ -30,5 +30,16 @@ public interface SpaceGridInterface {
         return new SpaceGrid(3,7,occupiedCells);
     }
 
+    /***
+     *      -------------------------------------------------------------
+     *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   |G+6|   (best, +2)
+     *      |   |   |   |   | O | O | O | O | O | O | O | O | O | O | G |
+     *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   |G+3|   (second best. +1)
+     *      |   |   |   |   | O | O | O | O | O | O | O |O  |O  |O  | G |
+     *      | S |   |   |   |   |   |   |   |   |   |   |   |   |   | G |   (worst, 0)
+     *      -------------------------------------------------------------
+     */
+
+    //new5times15Grid
 
 }
