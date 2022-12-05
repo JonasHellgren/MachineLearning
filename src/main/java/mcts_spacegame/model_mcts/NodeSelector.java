@@ -22,22 +22,33 @@ import java.util.stream.Collectors;
 public class NodeSelector {
 
     private static final double C_DEFAULT = 1;
+    private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT=false;
     public static final int UCT_MAX = 1000;
-    private static final double VALUE_AT_EVALUATION_IF_NEVER_VISITED = -Double.MAX_VALUE;
-    final NodeInterface nodeRoot;
     List<NodeInterface> nodesFromRootToSelected;
     List<Action> actionsFromRootToSelected;
-    private final double C;
+
+    final NodeInterface nodeRoot;
+    private final double coefficientExploitationExploration;  //often called C in literature
+    final boolean isExcludeChildrenNeverVisited;  //true when best path is desired
 
     public NodeSelector(NodeInterface nodeRoot) {
-        this(nodeRoot,C_DEFAULT);
+        this(nodeRoot,C_DEFAULT,EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
-    public NodeSelector(NodeInterface nodeRoot, double C) {
+    public NodeSelector(NodeInterface nodeRoot, boolean isExcludeChildrenNeverVisited ) {
+        this(nodeRoot,C_DEFAULT,isExcludeChildrenNeverVisited);
+    }
+
+    public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration) {
+        this(nodeRoot, coefficientExploitationExploration,EXCLUDE_NEVER_VISITED_DEFAULT);
+    }
+
+    public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration, boolean isExcludeChildrenNeverVisited) {
         this.nodeRoot = nodeRoot;  //todo copy
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
-        this.C=C;
+        this.coefficientExploitationExploration = coefficientExploitationExploration;
+        this.isExcludeChildrenNeverVisited =isExcludeChildrenNeverVisited;
     }
 
     //todo constructor for setting function that test if node is leaf, i.e. sets maxNofTestedActionsToBeLeaf
@@ -90,8 +101,11 @@ public class NodeSelector {
     private List<Pair<NodeInterface, Double>> getListOfPairsExcludeTerminalNodes(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = new ArrayList<>();
         List<NodeInterface> nonTerminalNodes = getNonFailChildrenNodes(node);
+        List<NodeInterface> nodes=(isExcludeChildrenNeverVisited)
+                ? getVisitedNodes(nonTerminalNodes)
+                : nonTerminalNodes;
 
-        for (NodeInterface childNode : nonTerminalNodes) {
+        for (NodeInterface childNode : nodes) {
             Action actionToReachChildNode = childNode.getAction();
             double uct = calcUct(node, actionToReachChildNode);
             nodeUCTPairs.add(new Pair<>(childNode, uct));
@@ -106,6 +120,12 @@ public class NodeSelector {
                 .collect(Collectors.toList());
     }
 
+    private List<NodeInterface> getVisitedNodes(List<NodeInterface> nodes) {
+        return  nodes.stream()
+                .filter(n -> n.getNofVisits()>0)
+                .collect(Collectors.toList());
+    }
+
     private double calcUct(NodeInterface node, Action action) {
         double v = node.getActionValue(action);
         int nParent = node.getNofVisits();
@@ -113,19 +133,11 @@ public class NodeSelector {
         return calcUct(v, nParent, n);
     }
 
-    /***
-     * zero C is the case when analysis is performed, after evaluation, and best path is expected
-     * after evaluation, it is bad to never have been visited (n==0)
-     */
 
     public double calcUct(double v, int nParent, int n) {  //good for testing
-        if (MathUtils.isZero(C)) {
-            return (n==0)? VALUE_AT_EVALUATION_IF_NEVER_VISITED :v;
-        }
-
         return (MathUtils.isZero(n))
                 ? UCT_MAX
-                : v + C * Math.sqrt(Math.log(nParent) / n);
+                : v + coefficientExploitationExploration * Math.sqrt(Math.log(nParent) / n);
     }
 
 

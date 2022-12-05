@@ -19,7 +19,6 @@ import java.util.Optional;
 public class TestMonteCarloSearchStatistics {
 
     private static final int MAX_TREE_DEPTH = 3;
-    private final double C_FOR_BEST_PATH=0;
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
 

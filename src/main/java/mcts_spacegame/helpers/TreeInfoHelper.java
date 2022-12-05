@@ -90,8 +90,8 @@ public class TreeInfoHelper {
         return sr;
     }
 
-    public List<NodeInterface> getBestPath(double C) {
-        NodeSelector ns = new NodeSelector(rootTree,C);
+    public List<NodeInterface> getBestPath() {
+        NodeSelector ns = new NodeSelector(rootTree,true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }

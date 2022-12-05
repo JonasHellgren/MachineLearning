@@ -25,7 +25,6 @@ import java.util.Optional;
 @Log
 public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
-    private final double C_FOR_BEST_PATH=0;
     private final double C_FOR_UCT=1;
 
     private static final int DELTA_BIG = 2;
@@ -74,9 +73,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,1));
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -87,9 +86,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,2));
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -100,7 +99,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(2,0));
+        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2,0));
         Assert.assertTrue(node12.isPresent());
     }
 
@@ -108,7 +107,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private void doPrinting(TreeInfoHelper tih) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         nodeRoot.printTree();
-        tih.getBestPath(C_FOR_BEST_PATH).forEach(System.out::println);
+        tih.getBestPath().forEach(System.out::println);
     }
 
     private void doMCTSIterations() {

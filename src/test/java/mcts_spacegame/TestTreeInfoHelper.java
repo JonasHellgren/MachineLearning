@@ -62,8 +62,10 @@ public class TestTreeInfoHelper {
 
     @Test public void testNofNodesInTree() {
         int nofNodes=tih.nofNodesInTree();
+        nodeRoot.printTree();
+
         System.out.println("nofNodes = " + nofNodes);
-        Assert.assertEquals(actions.size(),nofNodes);
+        Assert.assertEquals(actions.size()+1,nofNodes);
     }
 
     private NodeInterface createMCTSTree(List<Action> actions, State rootState) {

@@ -56,13 +56,13 @@ begränsa trädjup med maxTreeDepth i settings
 getMaxTreeDepth i TreeInfoHelper x
 getMaxTreeDepth i TreeInfoHelper med operation som argument x
 testa maxTreeDepth x
-klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator
+klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator  x
 TestMonteCarloSearchStatistics  x
-snygga upp för C==0
+snygga upp för C==0  x
 - BackupAlsoFromSimulations_3times7Grid
 
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
-- koda new5times10Grid - hur får + vid goal
+- koda new5times10Grid - hur få + vid goal
 - TestBackupModifer - backupFromSimulations
 
 . kunna radera noder

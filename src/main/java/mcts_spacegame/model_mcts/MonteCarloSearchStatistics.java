@@ -20,7 +20,7 @@ public class MonteCarloSearchStatistics {
     int maxDepth;
     float averageNofChildrenPerNode;
     float usedTimeInMilliSeconds;
-
+    float usedRelativeTimeInPercentage;
 
     public MonteCarloSearchStatistics(@NonNull  NodeInterface nodeRoot, @NonNull CpuTimer cpuTimer) {
         this.nodeRoot = nodeRoot;
@@ -34,6 +34,7 @@ public class MonteCarloSearchStatistics {
         maxDepth= tih.maxDepth();
         averageNofChildrenPerNode=calcAverageNofChildrensPerNodeThatHasChildren();
         usedTimeInMilliSeconds=cpuTimer.absoluteProgress();
+        usedRelativeTimeInPercentage =cpuTimer.getRelativeProgress()*100;
     }
 
     private float calcAverageNofChildrensPerNodeThatHasChildren() {

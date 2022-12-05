@@ -13,7 +13,7 @@ public class CpuTimer {
     protected long timeBudgetMillis;
 
     long absoluteProgress;
-    double relativeProgress;
+    float relativeProgress;
 
     public CpuTimer(long timeBudgetMillis) {
         this.timeBudgetMillis = timeBudgetMillis;
@@ -33,8 +33,8 @@ public class CpuTimer {
         return System.currentTimeMillis() > startTimeMillis + timeBudgetMillis;
     }
 
-    public double relativeProgress() {
-        return absoluteProgress()/ (double) timeBudgetMillis;
+    public float relativeProgress() {
+        return absoluteProgress()/ (float) timeBudgetMillis;
     }
 
     public long absoluteProgress() {
