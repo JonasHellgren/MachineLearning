@@ -1,6 +1,7 @@
 package mcts_spacegame.model_mcts;
 
 import common.ConditionalUtils;
+import common.CpuTimer;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Setter;
@@ -27,6 +28,8 @@ public class MonteCarloTreeCreator {
 
     NodeInterface nodeRoot;
     TreeInfoHelper tih;
+    CpuTimer cpuTimer;
+
     List<Action> actionsToSelected;
     Action actionInSelected;
 
@@ -39,23 +42,33 @@ public class MonteCarloTreeCreator {
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
 
+
         ConditionalUtils.executeDependantOnCondition(Objects.isNull(monteCarloSettings),
                 () -> mctc.settings = MonteCarloSettings.newDefault(),
                 () -> mctc.settings = monteCarloSettings);
 
         mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
         mctc.tih=new TreeInfoHelper(mctc.nodeRoot);
+        mctc.cpuTimer=new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         return mctc;
     }
 
     public NodeInterface doMCTSIterations() {
+        cpuTimer.reset();
         for (int i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             StepReturn sr = chooseActionAndExpand(nodeSelected);
             //todo simulation
             backPropagate(sr);
         }
+        cpuTimer.stop();
         return nodeRoot;
+    }
+
+    public MonteCarloSearchStatistics getStatistics() {
+        MonteCarloSearchStatistics statistics=new MonteCarloSearchStatistics(nodeRoot,cpuTimer);
+        statistics.setStatistics();
+        return statistics;
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {

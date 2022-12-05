@@ -54,9 +54,11 @@ Class MonteCarloTreeCreator  x
 TestMonteCarloTreeCreator  x
 begränsa trädjup med maxTreeDepth i settings
 getMaxTreeDepth i TreeInfoHelper x
-getMaxTreeDepth i TreeInfoHelper med operation som argument
-testa maxTreeDepth
+getMaxTreeDepth i TreeInfoHelper med operation som argument x
+testa maxTreeDepth x
 klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator
+TestMonteCarloSearchStatistics  x
+snygga upp för C==0
 - BackupAlsoFromSimulations_3times7Grid
 
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration

@@ -1,10 +1,11 @@
 package mcts_spacegame.helpers;
 
+import lombok.Getter;
+import lombok.Setter;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.model_mcts.NodeSelector;
-import mcts_spacegame.models_mcts_nodes.Counter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 
@@ -14,6 +15,16 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class TreeInfoHelper {
+
+    @Setter
+    @Getter
+    public class Counter {
+        int count;
+        public Counter( ) {
+            count = 0;
+        }
+
+    }
 
     NodeInterface rootTree;
 
@@ -88,6 +99,14 @@ public class TreeInfoHelper {
     public int nofNodesInTree() {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface,Integer> inc = (a,b) -> a+1;
+        counter.setCount(1);  //don't forget grandma
+        evalRecursive(rootTree,counter,inc);
+        return counter.getCount();
+    }
+
+    public int nofNodesWithNoChildren() {
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface,Integer> inc = (a,b) -> (b.nofChildNodes()==0) ? a+1:a;
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
     }
@@ -99,6 +118,13 @@ public class TreeInfoHelper {
         return counter.getCount();
     }
 
+    public int totalNofChildren() {
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface,Integer> nofChilds = (a,b) -> a+b.nofChildNodes();
+        counter.setCount(nofChilds.apply(counter.getCount(),rootTree)); //don't forget grandma
+        evalRecursive(rootTree,counter,nofChilds);
+        return counter.getCount();
+    }
 
     private void evalRecursive(NodeInterface node, Counter counter, BiFunction<Integer,NodeInterface,Integer> bif) {
         for (NodeInterface  child:node.getChildNodes()) {
