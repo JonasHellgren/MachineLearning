@@ -15,7 +15,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 public class TestMonteCarloTreeCreator_3times5grid {
-
+    private final double C_FOR_BEST_PATH=0;
     MonteCarloTreeCreator monteCarloTreeCreator;
 
     @Before
@@ -29,15 +29,34 @@ public class TestMonteCarloTreeCreator_3times5grid {
     }
 
     @Test
-    public void iterateFromX2Y0() {
+    public void iterateFromX0Y0() {
         NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
         doPrinting(tih,nodeRoot);
 
-      //  Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(2,0));
-      //  Assert.assertTrue(node12.isPresent());
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,1));
+        Assert.assertTrue(node11.isPresent());
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
+        Assert.assertTrue(node52.isPresent());
+
     }
+
+    @Test
+    public void iterateFromX2Y0() {
+        monteCarloTreeCreator.setStartState(new State(2,0));
+        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+
+        doPrinting(tih,nodeRoot);
+
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(1,1));
+        Assert.assertFalse(node11.isPresent());
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
+        Assert.assertFalse(node52.isPresent());
+
+    }
+
 
     private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());

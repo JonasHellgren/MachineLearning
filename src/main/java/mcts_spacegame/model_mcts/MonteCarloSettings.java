@@ -4,8 +4,8 @@ import lombok.Builder;
 
 @Builder
 public class MonteCarloSettings {
-    private final int NOF_ITERATIONS_DEFAULT=1000;
-    private final int C_DEFAULT=1;
+    private static final int NOF_ITERATIONS_DEFAULT=1000;
+    private static final int C_DEFAULT=1;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;

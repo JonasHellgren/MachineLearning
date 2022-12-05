@@ -3,6 +3,7 @@ package mcts_spacegame.model_mcts;
 import common.ConditionalUtils;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Log
+@Setter
 public class MonteCarloTreeCreator {
 
     Environment environment;

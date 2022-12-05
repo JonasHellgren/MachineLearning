@@ -51,7 +51,7 @@ skissa new5times15Grid  X
 Inte uct vid best path  x
 Storlek träd x
 Class MonteCarloTreeCreator  x
-TestMonteCarloTreeCreator
+TestMonteCarloTreeCreator  x
 begränsa trädjup med maxTreeDepth i settings
 klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator
 - BackupAlsoFromSimulations_3times7Grid
