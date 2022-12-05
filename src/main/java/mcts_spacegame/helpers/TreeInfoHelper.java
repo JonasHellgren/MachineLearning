@@ -7,11 +7,11 @@ import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.Counter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
-import org.apache.arrow.flatbuf.Int;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class TreeInfoHelper {
 
@@ -87,28 +87,25 @@ public class TreeInfoHelper {
 
     public int nofNodesInTree() {
         Counter counter = new Counter();
-        nofOffSpringsRecursive(rootTree,counter);
-        return counter.value();
-    }
-
-    void nofOffSpringsRecursive(NodeInterface node, Counter counter) {
-        for (NodeInterface  child:node.getChildNodes()) {
-            counter.increment();
-            nofOffSpringsRecursive(child,counter);
-        }
+        BiFunction<Integer,NodeInterface,Integer> inc = (a,b) -> a+1;
+        evalRecursive(rootTree,counter,inc);
+        return counter.getCount();
     }
 
     public int maxDepth() {
         Counter counter = new Counter();
-        maxDepthRecursive(rootTree,counter);
-        return counter.value();
+        BiFunction<Integer,NodeInterface,Integer> max = (a,b) -> Math.max(a,b.getDepth());
+        evalRecursive(rootTree,counter,max);
+        return counter.getCount();
     }
 
-    void maxDepthRecursive(NodeInterface node, Counter counter) {
+
+    private void evalRecursive(NodeInterface node, Counter counter, BiFunction<Integer,NodeInterface,Integer> bif) {
         for (NodeInterface  child:node.getChildNodes()) {
-            counter.setMyCount(Math.max(counter.value(),child.getDepth()));
-            maxDepthRecursive(child,counter);
+            counter.setCount(bif.apply(counter.getCount(),child));
+            evalRecursive(child,counter,bif);
         }
     }
+
 
 }

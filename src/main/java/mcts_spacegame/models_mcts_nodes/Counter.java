@@ -1,22 +1,14 @@
 package mcts_spacegame.models_mcts_nodes;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Counter {
-    int myCount;
+    int count;
     public Counter( ) {
-        myCount = 0;
-    }
-    public void increment ( ) {
-        myCount++;
-    }
-    public void reset ( ) {
-        myCount = 0;
+        count = 0;
     }
 
-    public void setMyCount(int count) {
-        myCount=count;
-    }
-
-    public int value ( ) {
-        return myCount;
-    }
 }
