@@ -15,6 +15,7 @@ import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,8 +59,8 @@ public class MonteCarloTreeCreator {
         for (int i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             StepReturn sr = chooseActionAndExpand(nodeSelected);
-            //todo simulation
-            backPropagate(sr);
+            SimulationResults simulationResults=simulate(nodeSelected);
+            backPropagate(sr,simulationResults);
         }
         cpuTimer.stop();
         return nodeRoot;
@@ -100,13 +101,39 @@ public class MonteCarloTreeCreator {
         return sr;
     }
 
-    private void backPropagate(StepReturn sr) {
+    SimulationResults simulate(NodeInterface nodeSelected) {
+        SimulationResults simulationResults=new SimulationResults();
+        State pos= nodeSelected.getState().copy();
+
+        for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
+            List<StepReturn> returns = stepToTerminal(pos.copy(), settings.policy);
+            double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
+            boolean isEndingInFail=returns.get(returns.size()-1).isFail;
+            simulationResults.add(sumOfRewards,isEndingInFail);
+        }
+        return simulationResults;
+    }
+
+    private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
         BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
                 .build();
         bum.backup();
+    }
+
+    private List<StepReturn> stepToTerminal(State pos,SimulationPolicyInterface policy) {
+        List<StepReturn> returns=new ArrayList<>();
+        StepReturn stepReturn;
+        do {
+            Action action=policy.chooseAction(pos);
+            stepReturn = environment.step(action, pos);
+            pos.setFromReturn(stepReturn);
+            returns.add(stepReturn);
+
+        } while (!stepReturn.isTerminal);
+        return returns;
     }
 
 }

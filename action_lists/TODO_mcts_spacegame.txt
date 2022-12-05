@@ -59,7 +59,10 @@ testa maxTreeDepth x
 klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator  x
 TestMonteCarloSearchStatistics  x
 snygga upp för C==0  x
-- BackupAlsoFromSimulations_3times7Grid
+SimulationResults x
+TestMonteCarloTreeCreatorWithSimulations_3times5grid
+
+BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations
 
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
 - koda new5times10Grid - hur få + vid goal

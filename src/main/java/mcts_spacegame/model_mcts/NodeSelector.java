@@ -43,7 +43,9 @@ public class NodeSelector {
         this(nodeRoot, coefficientExploitationExploration,EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
-    public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration, boolean isExcludeChildrenNeverVisited) {
+    public NodeSelector(NodeInterface nodeRoot,
+                        double coefficientExploitationExploration,
+                        boolean isExcludeChildrenNeverVisited) {
         this.nodeRoot = nodeRoot;  //todo copy
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
@@ -72,18 +74,15 @@ public class NodeSelector {
     }
 
     private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {
-        //List<NodeInterface> nonTerminalNodes = getNonTerminalChildrenNodes(currentNode);
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(),1,Integer.MAX_VALUE);  //todo debatable
-        //return nonTerminalNodes.size() > 0;
         boolean isLeaf=nofTestedActions<maxNofTestedActionsToBeLeaf;
         return !isLeaf;
     }
 
     public Optional<NodeInterface> selectChild(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeTerminalNodes(node);
-        //  nodeUCTPairs.forEach(System.out::println);
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
 
         return pair.isEmpty()
@@ -134,7 +133,7 @@ public class NodeSelector {
     }
 
 
-    public double calcUct(double v, int nParent, int n) {  //good for testing
+    public double calcUct(double v, int nParent, int n) {  //good for testing => public
         return (MathUtils.isZero(n))
                 ? UCT_MAX
                 : v + coefficientExploitationExploration * Math.sqrt(Math.log(nParent) / n);
