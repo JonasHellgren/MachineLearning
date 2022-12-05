@@ -11,6 +11,11 @@ public class Counter {
     public void reset ( ) {
         myCount = 0;
     }
+
+    public void setMyCount(int count) {
+        myCount=count;
+    }
+
     public int value ( ) {
         return myCount;
     }

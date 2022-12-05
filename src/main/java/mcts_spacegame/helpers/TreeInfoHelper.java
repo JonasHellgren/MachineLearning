@@ -7,6 +7,7 @@ import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.Counter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
+import org.apache.arrow.flatbuf.Int;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,19 @@ public class TreeInfoHelper {
         for (NodeInterface  child:node.getChildNodes()) {
             counter.increment();
             nofOffSpringsRecursive(child,counter);
+        }
+    }
+
+    public int maxDepth() {
+        Counter counter = new Counter();
+        maxDepthRecursive(rootTree,counter);
+        return counter.value();
+    }
+
+    void maxDepthRecursive(NodeInterface node, Counter counter) {
+        for (NodeInterface  child:node.getChildNodes()) {
+            counter.setMyCount(Math.max(counter.value(),child.getDepth()));
+            maxDepthRecursive(child,counter);
         }
     }
 

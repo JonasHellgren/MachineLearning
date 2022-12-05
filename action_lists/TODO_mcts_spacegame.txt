@@ -53,7 +53,8 @@ Storlek träd x
 Class MonteCarloTreeCreator  x
 TestMonteCarloTreeCreator  x
 begränsa trädjup med maxTreeDepth i settings
-getMaxTreeDepth i TreeInfoHelper
+getMaxTreeDepth i TreeInfoHelper x
+getMaxTreeDepth i TreeInfoHelper med operation som argument
 testa maxTreeDepth
 klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator
 - BackupAlsoFromSimulations_3times7Grid

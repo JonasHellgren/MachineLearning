@@ -3,6 +3,7 @@ package mcts_spacegame;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -17,11 +18,12 @@ import java.util.Optional;
 public class TestMonteCarloTreeCreator_3times5grid {
     private final double C_FOR_BEST_PATH=0;
     MonteCarloTreeCreator monteCarloTreeCreator;
+    Environment environment;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
-        Environment environment = new Environment(spaceGrid);
+        environment = new Environment(spaceGrid);
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
                 .startState(new State(0,0))
@@ -54,6 +56,24 @@ public class TestMonteCarloTreeCreator_3times5grid {
         Assert.assertFalse(node11.isPresent());
         Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(C_FOR_BEST_PATH), new State(5,2));
         Assert.assertFalse(node52.isPresent());
+    }
+
+    @Test public void maxTreeDepth() {
+        MonteCarloSettings settings= MonteCarloSettings.builder().maxTreeDepth(3).build();
+
+        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(new State(0,0))
+                .monteCarloSettings(settings)
+                .build();
+        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+
+        doPrinting(tih,nodeRoot);
+        System.out.println("tih.maxDepth() = " + tih.maxDepth());
+
+        Assert.assertEquals(3,tih.maxDepth());
+
 
     }
 
