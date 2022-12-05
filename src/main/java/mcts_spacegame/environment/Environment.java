@@ -33,15 +33,14 @@ public class Environment implements EnvironmentInterface {
                     .build();
         }
         State newPosition = getNewPosition(action, oldPosition);
-
+        SpaceCell cellNew=spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
           boolean isCrashingIntoWall =
                 cellPresentOpt.get().isOnLowerBorder && action.equals(Action.down) ||
                         cellPresentOpt.get().isOnUpperBorder && action.equals(Action.up);
-        Optional<SpaceCell> cellNewOpt = spaceGrid.getCell(newPosition);
-        boolean isCrashingIntoObstacle = cellNewOpt.orElse(cellPresentOpt.get()).isObstacle; //if new cell not exists use present
-        boolean isGoal = cellPresentOpt.get().isGoal;
+        boolean isCrashingIntoObstacle = cellNew.isObstacle; //if new cell not exists use present
+        boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
-        boolean isTerminal = isCrashing || isGoal;
+        boolean isTerminal = isCrashing || isMovingIntoGoal;
         double costMotion = (action.equals(Action.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;

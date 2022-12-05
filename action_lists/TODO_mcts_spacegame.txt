@@ -60,6 +60,7 @@ klass MonteCarloSearchStatistics, placeras i MonteCarloTreeCreator  x
 TestMonteCarloSearchStatistics  x
 snygga upp för C==0  x
 SimulationResults x
+simulatingFromX5Y1NeverFails x
 TestMonteCarloTreeCreatorWithSimulations_3times5grid
 
 BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations

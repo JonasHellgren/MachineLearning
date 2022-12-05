@@ -65,14 +65,14 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveStillFromXis1Yis1() {
+    public void moveStillFromXis1YisCrash() {
         State pos=new State(1,1);
         StepReturn stepReturn= environment.step(Action.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
                 () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
-                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertTrue(stepReturn.isTerminal),
                 () -> assertEquals(-Environment.STILL_COST,stepReturn.reward,DELTA)
         );
     }
@@ -85,7 +85,7 @@ public class TestEnvironmentWithNoObstacles {
         assertAll(
                 () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
                 () -> assertEquals(2,stepReturn.newPosition.y, DELTA),
-                () -> assertFalse(stepReturn.isTerminal),
+                () -> assertTrue(stepReturn.isTerminal),
                 () -> assertEquals(-Environment.MOVE_COST,stepReturn.reward,DELTA)
         );
     }

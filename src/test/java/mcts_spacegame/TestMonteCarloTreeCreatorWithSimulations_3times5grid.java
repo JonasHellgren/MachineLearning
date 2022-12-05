@@ -5,6 +5,7 @@ import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
+import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
@@ -13,20 +14,24 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
+    MonteCarloSettings settings;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
-        MonteCarloSettings settings= MonteCarloSettings.builder()
+        settings= MonteCarloSettings.builder()
                 .maxTreeDepth(3)
-                .nofSimulationsPerNode(5)
+                .maxNofIterations(10)
+                .nofSimulationsPerNode(50)
                 .build();
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
@@ -36,17 +41,32 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
     }
 
     @Test
-    public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+    public void simulatingFromX5Y1NeverFails() {
+        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(new State(5,1))
+                .monteCarloSettings(settings)
+                .build();
+        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
+        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
+        List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
+       // failList.forEach(System.out::println);
+        Assert.assertFalse(failList.contains(true));
+    }
 
-        doPrinting(tih,nodeRoot);
+    @Test
+    public void simulatingFromX5Y2SomeTimeFails() {
+        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(new State(5,2))
+                .monteCarloSettings(settings)
+                .build();
+        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
+        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
+        List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
+     //   failList.forEach(System.out::println);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
-        Assert.assertTrue(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
-        Assert.assertTrue(node52.isPresent());
-
+        Assert.assertTrue(failList.contains(true));
     }
 
     private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
