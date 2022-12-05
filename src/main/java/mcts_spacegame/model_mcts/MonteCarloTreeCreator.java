@@ -75,12 +75,14 @@ public class MonteCarloTreeCreator {
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
         child.setDepth(nodeSelected.getDepth()+1);  //easy to forget
         boolean isChildAddedEarlier= NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
+        boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
+        boolean isChildNotToDeep=child.getDepth()<=settings.maxTreeDepth;
 
         if (isChildAddedEarlier) {
             log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected);
         }
 
-        if (nodeSelected.isNotTerminal() && !isChildAddedEarlier)  {
+        if (isSelectedNotTerminal && !isChildAddedEarlier && isChildNotToDeep)  {
             nodeSelected.addChildNode(child); }
         return sr;
     }
