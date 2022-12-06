@@ -8,6 +8,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,14 +24,10 @@ import java.util.stream.Collectors;
  *    defensive backup = backup end node AND set it parent as terminal if parents
  *    all children are fail-terminal
  *
- *   a single simulation:
- *   1) terminal-non fail => normal backup
- *   2) terminal-fail =>  defensive backup
- *
  */
 
 @Log
-public class BackupModifier {
+public class BackupModifierFromSteps {
 
     private static final int DISCOUNT_FACTOR_DEFAULT = 1;
 
@@ -38,8 +35,7 @@ public class BackupModifier {
     List<Action> actionsToSelected;
     Action actionOnSelected;
     StepReturn stepReturnOfSelected;
-    List<List<StepReturn>> simulationResults;
-    double discountFactor;
+    MonteCarloSettings settings;
 
     TreeInfoHelper treeInfoHelper;
     int nofNodesOnPath;
@@ -49,27 +45,20 @@ public class BackupModifier {
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static BackupModifier newBUM(NodeInterface rootTree,
-                                     @NonNull List<Action> actionsToSelected,
-                                     @NonNull Action actionOnSelected,
-                                     @NonNull StepReturn stepReturnOfSelected,
-                                     List<List<StepReturn>> simulationResultsOnSelected,
-                                     Double discountFactor) {
-        BackupModifier bm = new BackupModifier();
+    private static BackupModifierFromSteps newBUM(NodeInterface rootTree,
+                                                  @NonNull List<Action> actionsToSelected,
+                                                  @NonNull Action actionOnSelected,
+                                                  @NonNull StepReturn stepReturnOfSelected,
+                                                  MonteCarloSettings settings) {
+        BackupModifierFromSteps bm = new BackupModifierFromSteps();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
         bm.stepReturnOfSelected = stepReturnOfSelected;
-        bm.simulationResults = simulationResultsOnSelected;
 
-        ConditionalUtils.executeDependantOnCondition(Objects.isNull(simulationResultsOnSelected),
-                () -> bm.simulationResults = new ArrayList<>(new ArrayList<>()),
-                () -> bm.simulationResults = simulationResultsOnSelected);
-
-        ConditionalUtils.executeDependantOnCondition(Objects.isNull(discountFactor),
-                () -> bm.discountFactor = DISCOUNT_FACTOR_DEFAULT,
-                () -> bm.discountFactor = discountFactor);
-
+        ConditionalUtils.executeDependantOnCondition(Objects.isNull(settings),
+                () -> bm.settings = MonteCarloSettings.builder().build(),
+                () -> bm.settings = settings);
 
         bm.nofNodesOnPath = actionsToSelected.size();
         bm.nofActionsOnPath = actionsToSelected.size();
@@ -81,21 +70,20 @@ public class BackupModifier {
 
 
     public void backup() {
-                ConditionalUtils.executeDependantOnCondition(!stepReturnOfSelected.isFail,
-                        this::backupNormalFromTreeSteps,
-                        this::backupDefensiveFromTreeSteps);
+        ConditionalUtils.executeDependantOnCondition(!stepReturnOfSelected.isFail,
+                this::backupNormalFromTreeSteps,
+                this::backupDefensiveFromTreeSteps);
     }
 
     private void backupNormalFromTreeSteps() {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
-        List<Double> GList = getReturns(rewards);
-        updateNodesFromReturns(GList);
+        List<Double> returns = getReturns(rewards);
+        updateNodesFromReturns(returns);
     }
 
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
-
         for (NodeInterface nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {
                 Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
@@ -117,25 +105,25 @@ public class BackupModifier {
     }
 
     private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
-        Set<Action> children=nodeSelected.getChildNodes().stream()
+        Set<Action> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
 
-        ConditionalUtils.executeOnlyIfConditionIsTrue(children.size()==Action.applicableActions().size(),
+        ConditionalUtils.executeOnlyIfConditionIsTrue(children.size() == Action.applicableActions().size(),
                 this::makeSelectedTerminal);
     }
 
     private void makeSelectedTerminal() {
-        NodeInterface nodeCurrent=rootTree;
-        Optional<NodeInterface> parentToSelected=Optional.empty();
-        Action actionToSelected=Action.notApplicable;
-        for (Action action:actionsToSelected)  {
-            boolean isSelectedChildToCurrent=nodeCurrent.getChildNodes().contains(nodeSelected);
+        NodeInterface nodeCurrent = rootTree;
+        Optional<NodeInterface> parentToSelected = Optional.empty();
+        Action actionToSelected = Action.notApplicable;
+        for (Action action : actionsToSelected) {
+            boolean isSelectedChildToCurrent = nodeCurrent.getChildNodes().contains(nodeSelected);
             if (isSelectedChildToCurrent) {
-                parentToSelected=Optional.of(nodeCurrent);
-                actionToSelected=action;
+                parentToSelected = Optional.of(nodeCurrent);
+                actionToSelected = action;
             }
-            nodeCurrent=nodeCurrent.getChild(action).orElseThrow();
+            nodeCurrent = nodeCurrent.getChild(action).orElseThrow();
         }
 
         if (parentToSelected.isEmpty()) {
@@ -144,38 +132,38 @@ public class BackupModifier {
             return;
         }
 
-        NodeInterface selectedAsTerminalFail=NodeInterface.newTerminalFail(nodeSelected.getState(),actionToSelected);
-        List<NodeInterface> childrenToParent=parentToSelected.get().getChildNodes();
+        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState(), actionToSelected);
+        List<NodeInterface> childrenToParent = parentToSelected.get().getChildNodes();
         childrenToParent.remove(nodeSelected);
         parentToSelected.get().addChildNode(selectedAsTerminalFail);
     }
 
-    private void updateNodesFromReturns(List<Double> GList) {
-        double G;
+    private void updateNodesFromReturns(List<Double> returns) {
+        double singleReturn;
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
-            G = GList.get(nodesOnPath.indexOf(node));
-            updateNode(node, G, action);
+            singleReturn = returns.get(nodesOnPath.indexOf(node));
+            updateNode(node, singleReturn, action);
         }
     }
 
-    private void updateNode(NodeInterface node, double G, Action action) {
+    private void updateNode(NodeInterface node, double singleReturn, Action action) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
-        node.updateActionValue(G, action);
+        node.updateActionValue(singleReturn, action);
     }
 
     private List<Double> getReturns(List<Double> rewards) {
-        double G = 0;
-        List<Double> GList = new ArrayList<>();
+        double singleReturn = 0;
+        List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
             double reward = rewards.get(i);
-            G = G + discountFactor * reward;
-            GList.add(G);
+            singleReturn = singleReturn + settings.discountFactorSteps * reward;
+            returns.add(singleReturn);
         }
-        Collections.reverse(GList);
-        return GList;
+        Collections.reverse(returns);
+        return returns;
     }
 
 

@@ -64,8 +64,6 @@ public class MonteCarloTreeCreator {
             SimulationResults simulationResults=simulate(nodeSelected);
             backPropagate(sr,simulationResults);
 
-            System.out.println("simulationResults = " + simulationResults);
-
             if (cpuTimer.isTimeExceeded()) {
                 break;
             }
@@ -112,27 +110,17 @@ public class MonteCarloTreeCreator {
     public SimulationResults simulate(NodeInterface nodeSelected) {
         SimulationResults simulationResults=new SimulationResults();
         State pos= nodeSelected.getState().copy();
-
-        System.out.println("settings.nofSimulationsPerNode = " + settings.nofSimulationsPerNode);
-
         for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
             List<StepReturn> returns = stepToTerminal(pos.copy(), settings.policy);
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
             boolean isEndingInFail=returns.get(returns.size()-1).isFail;
-
-            System.out.println("returns = " + returns);
-            if (isEndingInFail) {
-                log.warning("returns = " + returns);
-
-            }
-
             simulationResults.add(sumOfRewards,isEndingInFail);
         }
         return simulationResults;
     }
 
     private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
-        BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
+        BackupModifierFromSteps bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)

@@ -31,7 +31,7 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         settings= MonteCarloSettings.builder()
                 .maxTreeDepth(3)
                 .maxNofIterations(10)
-                .nofSimulationsPerNode(50)
+                .nofSimulationsPerNode(500)
                 .build();
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
@@ -64,8 +64,6 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
         SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
-     //   failList.forEach(System.out::println);
-
         Assert.assertTrue(failList.contains(true));
     }
 

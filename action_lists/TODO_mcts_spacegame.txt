@@ -61,9 +61,15 @@ TestMonteCarloSearchStatistics  x
 snygga upp för C==0  x
 SimulationResults x
 simulatingFromX5Y1NeverFails x
-TestMonteCarloTreeCreatorWithSimulations_3times5grid
+BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations  x
+BackupModifierFromSteps -> settings
+BackupModifierFromSimulations
+TestBackupModifierFromSimulations
 
-BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations
+SimulationResult- lägg till valueInGoal
+MonteCarloTreeCreator - nytt fält ValueMemory valueMemory
+TestValueMemory
+
 
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
 - koda new5times10Grid - hur få + vid goal

@@ -10,6 +10,10 @@ public class MonteCarloSettings {
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
     private static final SimulationPolicyInterface POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
+    private static final double DISCOUNT_FACTOR_STEPS_DEFAULT = 1;
+    private static final double DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT = 1;
+    private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT = 0.1;
+
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -23,6 +27,12 @@ public class MonteCarloSettings {
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
     @Builder.Default
     SimulationPolicyInterface policy=POLICY_DEFAULT;
+    @Builder.Default
+    double discountFactorSteps=DISCOUNT_FACTOR_STEPS_DEFAULT;
+    @Builder.Default
+    double discountFactorSimulationNormal=DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT;
+    @Builder.Default
+    double discountFactorSimulationDefensive=DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT;
 
 
     public static MonteCarloSettings newDefault() {

@@ -7,7 +7,7 @@ import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.ActionSelector;
-import mcts_spacegame.model_mcts.BackupModifier;
+import mcts_spacegame.model_mcts.BackupModifierFromSteps;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -18,7 +18,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,7 +146,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     private void backPropagate(StepReturn sr) {
-        BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
+        BackupModifierFromSteps bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)

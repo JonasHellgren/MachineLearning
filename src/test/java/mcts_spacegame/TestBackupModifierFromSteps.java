@@ -4,7 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.model_mcts.BackupModifier;
+import mcts_spacegame.model_mcts.BackupModifierFromSteps;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
@@ -16,13 +16,13 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class TestBackupModifier {
+public class TestBackupModifierFromSteps {
 
     private static final double DELTA = 0.1;
     private static final int DELTA_BIG = 2;
     SpaceGrid spaceGrid;
     Environment environment;
-    BackupModifier bum;
+    BackupModifierFromSteps bum;
     List<StepReturn> stepReturns;
     StepReturn getStepReturnOfSelected;
 
@@ -53,7 +53,7 @@ public class TestBackupModifier {
         List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
@@ -79,7 +79,7 @@ public class TestBackupModifier {
 
         List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
@@ -108,7 +108,7 @@ public class TestBackupModifier {
         Action actionInSelected=Action.still;
         List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
@@ -136,7 +136,7 @@ public class TestBackupModifier {
         Action actionInSelected=Action.still;
         List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
@@ -177,7 +177,7 @@ public class TestBackupModifier {
         getStepReturnOfSelected= environment.step(actionInSelected, state);
         NodeInterface nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
         nodeSelected.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
