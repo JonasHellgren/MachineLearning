@@ -65,7 +65,9 @@ BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations  x
 BackupModifierFromSteps -> settings  x
 BackupModifierAbstract x
 TestSimulationResults  x
+updateActionValue ALPHA  x
 BackupModifierFromSimulations
+
 TestBackupModifierFromSimulations
 
 SimulationResult- lägg till valueInGoal

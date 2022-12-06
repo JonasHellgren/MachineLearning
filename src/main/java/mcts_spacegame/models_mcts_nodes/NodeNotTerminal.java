@@ -14,7 +14,6 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
-    private static final double ALPHA = 1;
     List<NodeInterface> childNodes;
     int nofVisits;
     Map<Action, Double> Qsa;
@@ -99,13 +98,13 @@ public final class NodeNotTerminal extends NodeAbstract {
      */
 
     @Override
-    public void updateActionValue(double G, Action a) {
+    public void updateActionValue(double G, Action a,double alpha) {
         int nofVisitsForAction=getNofActionSelections(a);
         if (MathUtils.isZero(nofVisitsForAction)) {
             throw new RuntimeException("Zero nof visits for action = " + a);
         }
         double qOld = getActionValue(a);
-        double qNew = qOld + ALPHA * (G - qOld) / (double) nofVisitsForAction;
+        double qNew = qOld + alpha * (G - qOld) / (double) nofVisitsForAction;
         Qsa.put(a, qNew);
     }
 

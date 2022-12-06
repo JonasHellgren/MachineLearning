@@ -70,7 +70,7 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public void updateActionValue(double G, Action a) {
+    public void updateActionValue(double G, Action a,double alpha) {
 
     }
 

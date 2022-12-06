@@ -36,7 +36,7 @@ public interface NodeInterface {
     void setDepth(int depth);
     void increaseNofVisits();
     void increaseNofActionSelections(Action a);
-    void updateActionValue(double G, Action a);
+    void updateActionValue(double G, Action a, double alpha);
     int getNofVisits();
     int getNofActionSelections(Action a);
     double getActionValue(Action a);

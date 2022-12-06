@@ -34,6 +34,11 @@ public class TestMonteCarloTreeCreator_3times5grid {
         NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
+        System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
+
+        System.out.println("tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow() =");
+        tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
+
         doPrinting(tih,nodeRoot);
 
         Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));

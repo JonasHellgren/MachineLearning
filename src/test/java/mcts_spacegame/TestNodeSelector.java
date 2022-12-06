@@ -89,7 +89,7 @@ public class TestNodeSelector {
     private void addExperience(NodeInterface node, Action action, double G) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
-        node.updateActionValue(G,action);
+        node.updateActionValue(G,action,1);
     }
 
 }

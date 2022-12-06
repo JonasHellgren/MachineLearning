@@ -137,9 +137,9 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
     }
 
     private void updateNode(NodeInterface node, double singleReturn, Action action) {
-        node.increaseNofVisits();
-        node.increaseNofActionSelections(action);
-        node.updateActionValue(singleReturn, action);
+        node.increaseNofVisits();  //todo move to backPropagate
+        node.increaseNofActionSelections(action);  //todo move to backPropagate
+        node.updateActionValue(singleReturn, action,settings.alphaBackupSteps);
     }
 
     private List<Double> getReturns(List<Double> rewards) {
