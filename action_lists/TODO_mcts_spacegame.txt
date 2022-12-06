@@ -71,8 +71,8 @@ alphaBackupSimulation -> alphaBackupSimulationNormal and alphaBackupSimulationDe
 SimulationResult- lägg till valueInGoal x
 MonteCarloTreeCreator - nytt fält ValueMemory valueMemory  x
 getTerminalStateValues  x
-Skapa NodeValueMemory
-TestValueMemory
+Skapa NodeValueMemory  x
+TestNodeValueMemory  x
 koda new5times10Grid - hur få + vid goal
 
 clean up
