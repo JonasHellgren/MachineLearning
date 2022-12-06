@@ -53,7 +53,8 @@ public class TestBackupModifierFromSimulations {
         treeInfoHelper=new TreeInfoHelper(treeRoot);
         simulationResults = new SimulationResults();
         settings= MonteCarloSettings.builder()
-                .alphaBackupSimulation(1)
+                .alphaBackupSimulationNormal(1)
+                .alphaBackupSimulationDefensive(1)
                 .coefficientMaxAverageReturn(1)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();
@@ -124,7 +125,7 @@ public class TestBackupModifierFromSimulations {
     }
 
     @Test public void backUpTwoSimulationsResultsBothAreFail() {
-        double g1=-10, g2=-10;  //only g1 is backed up due to fail simulation is rejected
+        double g1=-10, g2=-10;
         simulationResults.add(g1, true);
         simulationResults.add(g2, true);
 

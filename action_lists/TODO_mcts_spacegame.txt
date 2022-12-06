@@ -66,21 +66,15 @@ BackupModifierFromSteps -> settings  x
 BackupModifierAbstract x
 TestSimulationResults  x
 updateActionValue ALPHA  x
-TestBackupModifierFromSimulations
-
-BackupModifierFromSimulations
-
-TestBackupModifierFromSimulations
-
+TestBackupModifierFromSimulations  x
+alphaBackupSimulation -> alphaBackupSimulationNormal and alphaBackupSimulationDefensive x
 SimulationResult- lägg till valueInGoal
 MonteCarloTreeCreator - nytt fält ValueMemory valueMemory
 TestValueMemory
+koda new5times10Grid - hur få + vid goal
 
-
+clean up
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
-- koda new5times10Grid - hur få + vid goal
-- TestBackupModifer - backupFromSimulations
-
 . kunna radera noder
 - hitta viss node i träd
 Vad händer selected är terminal not fail - inget speicellt  x
