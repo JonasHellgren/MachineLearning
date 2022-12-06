@@ -29,12 +29,15 @@ import java.util.stream.Collectors;
 @Log
 public class BackupModifierFromSteps extends BackupModifierAbstract {
 
+    StepReturn stepReturnOfSelected;
+
     public BackupModifierFromSteps(NodeInterface rootTree,
                                    List<Action> actionsToSelected,
                                    Action actionOnSelected,
                                    StepReturn stepReturnOfSelected,
                                    MonteCarloSettings settings) {
-        super(rootTree, actionsToSelected, actionOnSelected, stepReturnOfSelected, settings);
+        super(rootTree, actionsToSelected, actionOnSelected, settings);
+        this.stepReturnOfSelected=stepReturnOfSelected;
     }
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
@@ -44,17 +47,12 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
                                                   @NonNull Action actionOnSelected,
                                                   @NonNull StepReturn stepReturnOfSelected,
                                                   MonteCarloSettings settings) {
-        BackupModifierFromSteps bm = new BackupModifierFromSteps(
+        return new BackupModifierFromSteps(
                 rootTree,
                 actionsToSelected,
                 actionOnSelected,
                 stepReturnOfSelected,
                 settings);
-        bm.rootTree = rootTree;
-        bm.actionsToSelected = actionsToSelected;
-        bm.actionOnSelected = actionOnSelected;
-        bm.stepReturnOfSelected = stepReturnOfSelected;
-        return  bm;
 
     }
 

@@ -64,6 +64,7 @@ simulatingFromX5Y1NeverFails x
 BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations  x
 BackupModifierFromSteps -> settings  x
 BackupModifierAbstract x
+TestSimulationResults  x
 BackupModifierFromSimulations
 TestBackupModifierFromSimulations
 

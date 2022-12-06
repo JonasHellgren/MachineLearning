@@ -1,5 +1,6 @@
 package mcts_spacegame.model_mcts;
 
+import common.ConditionalUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import mcts_spacegame.enums.Action;
@@ -15,19 +16,22 @@ import java.util.List;
  *    defensive backup = use alphaDefensive and discountFactorSimulationDefensive
  *
  *   a single simulation:
- *   1) all simulations are terminal-non fail => defensive backup
+ *   1) all simulations are terminal-fail => defensive backup
  *   2) at least one simulation is terminal-non fail => normal backup from mix of max and average of non-fail simulations
  *
  *
  */
 public class BackupModifierFromSimulations extends BackupModifierAbstract {
 
+    SimulationResults simulationResults;
+
     public BackupModifierFromSimulations(NodeInterface rootTree,
                                    List<Action> actionsToSelected,
                                    Action actionOnSelected,
-                                   StepReturn stepReturnOfSelected,
+                                   SimulationResults simulationResults,
                                    MonteCarloSettings settings) {
-        super(rootTree, actionsToSelected, actionOnSelected, stepReturnOfSelected, settings);
+        super(rootTree, actionsToSelected, actionOnSelected, settings);
+        this.simulationResults=simulationResults;
     }
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
@@ -35,21 +39,32 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
     private static BackupModifierFromSimulations newBUM(NodeInterface rootTree,
                                                   @NonNull List<Action> actionsToSelected,
                                                   @NonNull Action actionOnSelected,
-                                                  @NonNull StepReturn stepReturnOfSelected,
+                                                  @NonNull SimulationResults simulationResults,
                                                   MonteCarloSettings settings) {
-        BackupModifierFromSimulations bm = new BackupModifierFromSimulations(
-                rootTree,
+        return new BackupModifierFromSimulations(rootTree,
                 actionsToSelected,
                 actionOnSelected,
-                stepReturnOfSelected,
+                simulationResults,
                 settings);
-        bm.rootTree = rootTree;
-        bm.actionsToSelected = actionsToSelected;
-        bm.actionOnSelected = actionOnSelected;
-        bm.stepReturnOfSelected = stepReturnOfSelected;
-        return  bm;
 
     }
+
+    public void backup() {
+        ConditionalUtils.executeDependantOnCondition(!simulationResults.areAllSimulationsTerminalFail(),
+                this::backupNormal,
+                this::backupDefensive);
+    }
+
+    public void backupNormal() {
+
+    }
+
+
+    public void backupDefensive() {
+
+    }
+
+
 
 
 }

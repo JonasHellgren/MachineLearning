@@ -16,7 +16,6 @@ public class BackupModifierAbstract {
     NodeInterface rootTree;
     List<Action> actionsToSelected;
     Action actionOnSelected;
-    StepReturn stepReturnOfSelected;
     MonteCarloSettings settings;
 
     TreeInfoHelper treeInfoHelper;
@@ -28,12 +27,10 @@ public class BackupModifierAbstract {
     public BackupModifierAbstract(NodeInterface rootTree,
                                   List<Action> actionsToSelected,
                                   Action actionOnSelected,
-                                  StepReturn stepReturnOfSelected,
-                                  MonteCarloSettings settings) {
+                                    MonteCarloSettings settings) {
         this.rootTree = rootTree;
         this.actionsToSelected = actionsToSelected;
         this.actionOnSelected = actionOnSelected;
-        this.stepReturnOfSelected = stepReturnOfSelected;
         ConditionalUtils.executeDependantOnCondition(Objects.isNull(settings),
                 () -> this.settings = MonteCarloSettings.builder().build(),
                 () -> this.settings = settings);
