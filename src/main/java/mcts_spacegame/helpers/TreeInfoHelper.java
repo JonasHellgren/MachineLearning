@@ -91,7 +91,7 @@ public class TreeInfoHelper {
     }
 
     public List<NodeInterface> getBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree,true);
+        NodeSelector ns = new NodeSelector(rootTree,0,true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }

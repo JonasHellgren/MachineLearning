@@ -1,8 +1,10 @@
 package mcts_spacegame.model_mcts;
 
 import lombok.Builder;
+import lombok.ToString;
 
 @Builder
+@ToString
 public class MonteCarloSettings {
     private static final int NOF_ITERATIONS_DEFAULT=1000;
     private static final int C_DEFAULT=1;

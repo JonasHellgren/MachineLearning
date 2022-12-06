@@ -30,6 +30,8 @@ public class TestBackupModifierFromSimulations {
     private static final Action ACTION_ON_SELECTED = Action.still;
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 0.9;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
+    private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1;
+    private static final int ALPHA_BACKUP_SIMULATION_NORMAL = 1;
     List<Action> actions = Arrays.asList(Action.up, Action.up);
 
     SpaceGrid spaceGrid;
@@ -53,8 +55,8 @@ public class TestBackupModifierFromSimulations {
         treeInfoHelper=new TreeInfoHelper(treeRoot);
         simulationResults = new SimulationResults();
         settings= MonteCarloSettings.builder()
-                .alphaBackupSimulationNormal(1)
-                .alphaBackupSimulationDefensive(1)
+                .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
+                .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
                 .coefficientMaxAverageReturn(1)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();
@@ -105,10 +107,10 @@ public class TestBackupModifierFromSimulations {
         );
     }
 
-    @Test public void backUpTwoSimulationsResultsOneIsFail() {
+    @Test public void backupTwoSimulationsResultsOneIsFail() {
         double g1=1, g2=11;  //only g1 is backed up due to fail simulation is rejected
-        simulationResults.add(g1, false);
-        simulationResults.add(g2, true);
+        simulationResults.add(g1,false);
+        simulationResults.add(g2,true);
 
         BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
         bms.backup();
@@ -124,7 +126,7 @@ public class TestBackupModifierFromSimulations {
         );
     }
 
-    @Test public void backUpTwoSimulationsResultsBothAreFail() {
+    @Test public void backupTwoSimulationsResultsBothAreFail() {
         double g1=-10, g2=-10;
         simulationResults.add(g1, true);
         simulationResults.add(g2, true);
@@ -137,9 +139,12 @@ public class TestBackupModifierFromSimulations {
         System.out.println("values = " + values);
 
         assertAll(
-                () -> assertEquals(g1,values.get(values.size()-1), DELTA),
-                () -> assertEquals(g1*DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,values.get(values.size()-2), DELTA),
-                () -> assertEquals(g1*Math.pow(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,2),values.get(values.size()-3), DELTA)
+                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE,
+                        values.get(values.size()-1), DELTA),
+                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE*DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,
+                        values.get(values.size()-2), DELTA),
+                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE*Math.pow(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,2),
+                        values.get(values.size()-3), DELTA)
         );
     }
 
@@ -153,8 +158,6 @@ public class TestBackupModifierFromSimulations {
                 .settings(settings).build();
 
         NodeInterface nodeSelected=treeInfoHelper.getNodeReachedForActions(actions).orElseThrow();
-        nodeSelected.increaseNofVisits();  //normally done in backPropagate
-        nodeSelected.increaseNofActionSelections(ACTION_ON_SELECTED);  //normally done in backPropagate
         return bms;
     }
 
@@ -189,8 +192,6 @@ public class TestBackupModifierFromSimulations {
             StepReturn sr = stepAndUpdateState(state, a);
              NodeInterface child = NodeInterface.newNotTerminal(sr.newPosition, a);
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
-                parent.increaseNofVisits();  //normally done in backPropagate
-                parent.increaseNofActionSelections(a);  //normally done in backPropagate
                 parent.addChildNode(child);
             }
             parent = child;

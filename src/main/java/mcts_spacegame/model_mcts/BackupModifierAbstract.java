@@ -56,5 +56,11 @@ public class BackupModifierAbstract {
 
     }
 
+    protected void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
+        node.increaseNofVisits();
+        node.increaseNofActionSelections(action);
+        node.updateActionValue(singleReturn, action,alpha);
+    }
+
 
 }

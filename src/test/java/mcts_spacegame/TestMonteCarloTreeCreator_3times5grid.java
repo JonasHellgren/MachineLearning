@@ -77,8 +77,6 @@ public class TestMonteCarloTreeCreator_3times5grid {
         System.out.println("tih.maxDepth() = " + tih.maxDepth());
 
         Assert.assertEquals(3,tih.maxDepth());
-
-
     }
 
 

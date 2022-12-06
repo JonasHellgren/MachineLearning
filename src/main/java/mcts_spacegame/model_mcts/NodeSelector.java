@@ -82,7 +82,14 @@ public class NodeSelector {
     }
 
     public Optional<NodeInterface> selectChild(NodeInterface node) {
-        List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeTerminalNodes(node);
+        List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);
+
+
+        if (isExcludeChildrenNeverVisited) {
+            System.out.println("isExcludeChildrenNeverVisited");
+            nodeUCTPairs.stream().forEach(p -> System.out.println(p.getFirst().getName()+", "+p.getSecond()));
+        }
+
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
 
         return pair.isEmpty()
@@ -97,7 +104,7 @@ public class NodeSelector {
                 reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
     }
 
-    private List<Pair<NodeInterface, Double>> getListOfPairsExcludeTerminalNodes(NodeInterface node) {
+    private List<Pair<NodeInterface, Double>> getListOfPairsExcludeFailNodes(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = new ArrayList<>();
         List<NodeInterface> nonTerminalNodes = getNonFailChildrenNodes(node);
         List<NodeInterface> nodes=(isExcludeChildrenNeverVisited)

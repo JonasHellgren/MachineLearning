@@ -53,6 +53,10 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
     }
 
     public void backup() {
+        if (simulationResults.size()==0) {
+            return;
+        }
+
         ConditionalUtils.executeDependantOnCondition(!simulationResults.areAllSimulationsTerminalFail(),
                 this::backupNormal,
                 this::backupDefensive);
@@ -89,13 +93,13 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
             Action action = actions.get(nodesOnPath.indexOf(node));
             int nofNodesRemaining=nofNodesOnPath-nodesOnPath.indexOf(node)-1;
             double discount=Math.pow(discountFactor,nofNodesRemaining);
-            updateNode(node, singleReturn*discount, action,alpha);
+            super.updateNode(node, singleReturn*discount, action,alpha);
         }
     }
-
+/*
     private void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
         node.updateActionValue(singleReturn, action, alpha);
     }
-
+*/
 
 }

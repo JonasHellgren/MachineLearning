@@ -73,6 +73,7 @@ MonteCarloTreeCreator - nytt fält ValueMemory valueMemory  x
 getTerminalStateValues  x
 Skapa NodeValueMemory  x
 TestNodeValueMemory  x
+getBestPath verkar inte funka korrekt
 koda new5times10Grid - hur få + vid goal
 
 clean up

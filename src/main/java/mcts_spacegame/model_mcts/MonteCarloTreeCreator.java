@@ -122,12 +122,22 @@ public class MonteCarloTreeCreator {
     }
 
     private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
-        BackupModifierFromSteps bum = BackupModifierFromSteps.builder().rootTree(nodeRoot)
+        BackupModifierFromSteps bumSteps = BackupModifierFromSteps.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
+                .settings(settings)
                 .stepReturnOfSelected(sr)
                 .build();
-        bum.backup();
+        bumSteps.backup();
+
+        BackupModifierFromSimulations bumSim = BackupModifierFromSimulations.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .settings(settings)
+                .simulationResults(simulationResults)
+                .build();
+        bumSim.backup();
+
     }
 
     private List<StepReturn> stepToTerminal(State pos,SimulationPolicyInterface policy) {
