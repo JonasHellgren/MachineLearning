@@ -62,7 +62,8 @@ snygga upp för C==0  x
 SimulationResults x
 simulatingFromX5Y1NeverFails x
 BackupModifier -> BackupModifierFromSteps amd BackupModifierFromSimulations  x
-BackupModifierFromSteps -> settings
+BackupModifierFromSteps -> settings  x
+BackupModifierAbstract x
 BackupModifierFromSimulations
 TestBackupModifierFromSimulations
 

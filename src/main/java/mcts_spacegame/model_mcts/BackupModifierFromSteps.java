@@ -27,21 +27,15 @@ import java.util.stream.Collectors;
  */
 
 @Log
-public class BackupModifierFromSteps {
+public class BackupModifierFromSteps extends BackupModifierAbstract {
 
-    private static final int DISCOUNT_FACTOR_DEFAULT = 1;
-
-    NodeInterface rootTree;
-    List<Action> actionsToSelected;
-    Action actionOnSelected;
-    StepReturn stepReturnOfSelected;
-    MonteCarloSettings settings;
-
-    TreeInfoHelper treeInfoHelper;
-    int nofNodesOnPath;
-    int nofActionsOnPath;
-    NodeInterface nodeSelected;
-    List<NodeInterface> nodesOnPath;
+    public BackupModifierFromSteps(NodeInterface rootTree,
+                                   List<Action> actionsToSelected,
+                                   Action actionOnSelected,
+                                   StepReturn stepReturnOfSelected,
+                                   MonteCarloSettings settings) {
+        super(rootTree, actionsToSelected, actionOnSelected, stepReturnOfSelected, settings);
+    }
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
@@ -50,22 +44,18 @@ public class BackupModifierFromSteps {
                                                   @NonNull Action actionOnSelected,
                                                   @NonNull StepReturn stepReturnOfSelected,
                                                   MonteCarloSettings settings) {
-        BackupModifierFromSteps bm = new BackupModifierFromSteps();
+        BackupModifierFromSteps bm = new BackupModifierFromSteps(
+                rootTree,
+                actionsToSelected,
+                actionOnSelected,
+                stepReturnOfSelected,
+                settings);
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
         bm.stepReturnOfSelected = stepReturnOfSelected;
+        return  bm;
 
-        ConditionalUtils.executeDependantOnCondition(Objects.isNull(settings),
-                () -> bm.settings = MonteCarloSettings.builder().build(),
-                () -> bm.settings = settings);
-
-        bm.nofNodesOnPath = actionsToSelected.size();
-        bm.nofActionsOnPath = actionsToSelected.size();
-        bm.treeInfoHelper = new TreeInfoHelper(rootTree);
-        bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence"
-        bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
-        return bm;
     }
 
 
