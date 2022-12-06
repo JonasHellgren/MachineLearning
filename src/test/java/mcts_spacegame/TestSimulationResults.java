@@ -33,8 +33,21 @@ public class TestSimulationResults {
         simulationResults.add(1, false);
         simulationResults.add(2, false);
 
+        simulationResults.getResults().forEach(System.out::println);
+
         Assert.assertTrue(simulationResults.maxReturn().isPresent());
         Assert.assertEquals(2, simulationResults.maxReturn().orElseThrow(), DELTA);
+    }
+
+    @Test public void maxReturnWithTerminalValue() {
+        simulationResults.add(0,0, false);  //zero terminal value
+        simulationResults.add(1,0, false);  //zero terminal value
+        simulationResults.add(3,-3, false);  //non zero terminal value
+
+        simulationResults.getResults().forEach(System.out::println);
+
+        Assert.assertTrue(simulationResults.maxReturn().isPresent());
+        Assert.assertEquals(1, simulationResults.maxReturn().orElseThrow(), DELTA);
     }
 
 

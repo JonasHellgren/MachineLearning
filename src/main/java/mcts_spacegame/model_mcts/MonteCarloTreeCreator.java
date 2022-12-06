@@ -1,5 +1,6 @@
 package mcts_spacegame.model_mcts;
 
+import black_jack.models_memory.StateValueMemory;
 import common.ConditionalUtils;
 import common.CpuTimer;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class MonteCarloTreeCreator {
 
     Environment environment;
     State startState;
+    //NodeValueMemory memory;
     MonteCarloSettings settings;
 
     NodeInterface nodeRoot;

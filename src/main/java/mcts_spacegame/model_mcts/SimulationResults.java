@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @ToString
 public class SimulationResults {
@@ -16,7 +17,7 @@ public class SimulationResults {
     @ToString
     public static class SimulationResult {
         public double singleReturn;
-        public double valueInGoal;
+        public double valueInTerminalState;
         public boolean isEndingInFail;
     }
 
@@ -48,20 +49,28 @@ public class SimulationResults {
 
     public OptionalDouble maxReturn() {
         List<Double> returnList = getReturnListForNonFailing();
-        return returnList.stream().mapToDouble(Double::doubleValue).max();
+        List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
+        return sumListElements(returnList, terminalValueList).stream()
+                .mapToDouble(Double::doubleValue)
+                .max();
     }
 
     public OptionalDouble averageReturn() {
         List<Double> returnList = getReturnListForNonFailing();
-        return returnList.stream().mapToDouble(Double::doubleValue).average();
+        List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
+        return sumListElements(returnList, terminalValueList).stream()
+                .mapToDouble(Double::doubleValue)
+                .average();
     }
 
     public OptionalDouble anyFailingReturn() {
         List<Double> returnList = getReturnsForFailing();
+        List<Double> terminalValueList = getTerminalStateValuesForFailing();
+        List<Double> sumList=sumListElements(returnList,terminalValueList);
         Random r=new Random();
         return (returnList.size()==0)
                 ? OptionalDouble.empty()
-                : OptionalDouble.of(returnList.get(r.nextInt(returnList.size())));
+                : OptionalDouble.of(sumList.get(r.nextInt(sumList.size())));
     }
 
     public List<Double> getReturnListForNonFailing() {
@@ -74,8 +83,22 @@ public class SimulationResults {
         return getReturns(results);
     }
 
+    public List<Double> getTerminalStateValuesForNonFailing() {
+        List<SimulationResult> results= nonFailingResults();
+        return getTerminalStateValues(results);
+    }
+
+    public List<Double> getTerminalStateValuesForFailing() {
+        List<SimulationResult> results= failingResults();
+        return getTerminalStateValues(results);
+    }
+
     private List<Double> getReturns(List<SimulationResult> results) {
         return results.stream().map(r -> r.singleReturn).collect(Collectors.toList());
+    }
+
+    private List<Double> getTerminalStateValues(List<SimulationResult> results) {
+        return results.stream().map(r -> r.valueInTerminalState).collect(Collectors.toList());
     }
 
     private List<SimulationResult> nonFailingResults() {
@@ -84,6 +107,12 @@ public class SimulationResults {
 
     private List<SimulationResult> failingResults() {
         return results.stream().filter(r -> r.isEndingInFail).collect(Collectors.toList());
+    }
+
+    private List<Double> sumListElements(List<Double> returnList, List<Double> terminalValueList) {
+        return IntStream.range(0, returnList.size())
+                .mapToObj(i -> returnList.get(i) + terminalValueList.get(i))
+                .collect(Collectors.toList());
     }
 
 }

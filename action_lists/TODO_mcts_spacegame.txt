@@ -68,8 +68,10 @@ TestSimulationResults  x
 updateActionValue ALPHA  x
 TestBackupModifierFromSimulations  x
 alphaBackupSimulation -> alphaBackupSimulationNormal and alphaBackupSimulationDefensive x
-SimulationResult- lägg till valueInGoal
-MonteCarloTreeCreator - nytt fält ValueMemory valueMemory
+SimulationResult- lägg till valueInGoal x
+MonteCarloTreeCreator - nytt fält ValueMemory valueMemory  x
+getTerminalStateValues  x
+Skapa NodeValueMemory
 TestValueMemory
 koda new5times10Grid - hur få + vid goal
 
