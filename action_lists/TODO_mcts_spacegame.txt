@@ -66,6 +66,8 @@ BackupModifierFromSteps -> settings  x
 BackupModifierAbstract x
 TestSimulationResults  x
 updateActionValue ALPHA  x
+TestBackupModifierFromSimulations
+
 BackupModifierFromSimulations
 
 TestBackupModifierFromSimulations

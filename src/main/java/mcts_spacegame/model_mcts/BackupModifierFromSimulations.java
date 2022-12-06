@@ -3,6 +3,7 @@ package mcts_spacegame.model_mcts;
 import common.ConditionalUtils;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -21,6 +22,8 @@ import java.util.List;
  *
  *
  */
+
+@Log
 public class BackupModifierFromSimulations extends BackupModifierAbstract {
 
     SimulationResults simulationResults;
@@ -56,26 +59,29 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
     }
 
     public void backupNormal() {
+        log.info("backupNormal");
         double maxReturn=simulationResults.maxReturn().orElseThrow();
         double avgReturn=simulationResults.averageReturn().orElseThrow();
         double c=settings.coefficientMaxAverageReturn;
         double mixReturn=c*maxReturn+(1-c)*avgReturn;
-        updateNodesFromReturn(mixReturn, settings.discountFactorSimulationNormal);
+        updateNodesFromReturn(mixReturn, settings.discountFactorSimulationNormal,settings.alphaBackupSimulation);
     }
 
 
     public void backupDefensive() {
-
+        log.info("backupDefensive");
+        double failReturn=simulationResults.anyFailingReturn().orElseThrow();
+        updateNodesFromReturn(failReturn, settings.discountFactorSimulationDefensive,settings.alphaBackupSimulation);
     }
 
 
     /**
-     *    (r)  ->  (1) ->  (2) ->  (3)->  (4)
+     *    nodesOnPath = (r)  ->  (1) ->  (2) ->  (3) ->  (4)
      *    node i will have discount of discountFactor^nofNodesRemaining
      *    so for this example with discountFactor=0.9 => discount (r) is 0.9^(5-0-1)=0.9^4 and for (4) it is 0.9^(5-4-1) = 1
      */
 
-    private void updateNodesFromReturn(double singleReturn, double discountFactor) {
+    private void updateNodesFromReturn(double singleReturn, double discountFactor, double alpha) {
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         int nofNodesOnPath = nodesOnPath.size();
 
@@ -83,12 +89,12 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
             Action action = actions.get(nodesOnPath.indexOf(node));
             int nofNodesRemaining=nofNodesOnPath-nodesOnPath.indexOf(node)-1;
             double discount=Math.pow(discountFactor,nofNodesRemaining);
-            updateNode(node, singleReturn*discount, action);
+            updateNode(node, singleReturn*discount, action,alpha);
         }
     }
 
-    private void updateNode(NodeInterface node, double singleReturn, Action action) {
-        node.updateActionValue(singleReturn, action, settings.alphaBackupSimulation);
+    private void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
+        node.updateActionValue(singleReturn, action, alpha);
     }
 
 
