@@ -26,7 +26,7 @@ import java.util.Objects;
  */
 
 @Log
-public class BackupModifierFromSimulations {
+public class SimulationReturnsExtractor {
 
     List<NodeInterface> nodesOnPath;
     SimulationResults simulationResults;
@@ -36,11 +36,11 @@ public class BackupModifierFromSimulations {
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static BackupModifierFromSimulations newBUM(@NonNull NodeInterface rootTree,
-                                                  @NonNull List<Action> actionsToSelected,
-                                                   @NonNull SimulationResults simulationResults,
-                                                  MonteCarloSettings settings) {
-        BackupModifierFromSimulations bms=new BackupModifierFromSimulations();
+    private static SimulationReturnsExtractor newBUM(@NonNull NodeInterface rootTree,
+                                                     @NonNull List<Action> actionsToSelected,
+                                                     @NonNull SimulationResults simulationResults,
+                                                     MonteCarloSettings settings) {
+        SimulationReturnsExtractor bms=new SimulationReturnsExtractor();
         TreeInfoHelper treeInfoHelper=new TreeInfoHelper(rootTree);
         bms.nodesOnPath = treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bms.simulationResults = simulationResults;

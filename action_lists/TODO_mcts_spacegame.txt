@@ -84,7 +84,7 @@ weightReturnsSimulation weightReturnsSteps x
 test multiplyListElements x
 BackupModifierFromSteps -> BackupModifier  x
 BackupModifierAbstract ta veck  x
-BackupModifierFromSimulations -> SimulationReturnsExtractor
+BackupModifierFromSimulations -> SimulationReturnsExtractor  x
 iterateFromX0Y2 fastnar ibland i sub optimal lösning, nytt test iterateFromX0Y2MultipleTimes
 kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor

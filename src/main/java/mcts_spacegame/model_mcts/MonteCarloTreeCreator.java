@@ -151,7 +151,7 @@ public class MonteCarloTreeCreator {
     }
 
     private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
-        BackupModifierFromSimulations bumSim = BackupModifierFromSimulations.builder().rootTree(nodeRoot)
+        SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .settings(settings)
                 .simulationResults(simulationResults)

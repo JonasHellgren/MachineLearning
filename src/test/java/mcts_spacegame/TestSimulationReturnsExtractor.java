@@ -4,7 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.model_mcts.BackupModifierFromSimulations;
+import mcts_spacegame.model_mcts.SimulationReturnsExtractor;
 import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SimulationResults;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestBackupModifierFromSimulations {
+public class TestSimulationReturnsExtractor {
 
     private static final double DELTA = 0.1;
     private static final int DELTA_BIG = 2;
@@ -71,7 +71,7 @@ public class TestBackupModifierFromSimulations {
         double g=1;
         simulationResults.add(g, false);
 
-        BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
+        SimulationReturnsExtractor bms = getBackupModifierFromSimulations();
         List<Double> values=bms.backup();
 
 //        List<Double> values=getActionValuesOnPath();
@@ -91,7 +91,7 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g1, false);
         simulationResults.add(g2, false);
 
-        BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
+        SimulationReturnsExtractor bms = getBackupModifierFromSimulations();
         List<Double> values=bms.backup();
 
 //        List<Double> values=getActionValuesOnPath();
@@ -110,7 +110,7 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g1,false);
         simulationResults.add(g2,true);
 
-        BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
+        SimulationReturnsExtractor bms = getBackupModifierFromSimulations();
         List<Double> values=bms.backup();
 
        // List<Double> values=getActionValuesOnPath();
@@ -129,7 +129,7 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g1, true);
         simulationResults.add(g2, true);
 
-        BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
+        SimulationReturnsExtractor bms = getBackupModifierFromSimulations();
         List<Double> values=bms.backup();
 
      //   List<Double> values=getActionValuesOnPath();
@@ -147,8 +147,8 @@ public class TestBackupModifierFromSimulations {
     }
 
 
-    private BackupModifierFromSimulations getBackupModifierFromSimulations() {
-        BackupModifierFromSimulations bms=BackupModifierFromSimulations.builder()
+    private SimulationReturnsExtractor getBackupModifierFromSimulations() {
+        SimulationReturnsExtractor bms= SimulationReturnsExtractor.builder()
                 .rootTree(treeRoot)
                 .actionsToSelected(actions)
                 .simulationResults(simulationResults)
