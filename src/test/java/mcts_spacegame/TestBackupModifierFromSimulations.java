@@ -151,7 +151,6 @@ public class TestBackupModifierFromSimulations {
         BackupModifierFromSimulations bms=BackupModifierFromSimulations.builder()
                 .rootTree(treeRoot)
                 .actionsToSelected(actions)
-                .actionOnSelected(ACTION_ON_SELECTED)
                 .simulationResults(simulationResults)
                 .settings(settings).build();
 

@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
+import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
@@ -24,31 +26,30 @@ import java.util.List;
  */
 
 @Log
-public class BackupModifierFromSimulations extends BackupModifierAbstract {
+public class BackupModifierFromSimulations {
 
+    List<NodeInterface> nodesOnPath;
     SimulationResults simulationResults;
+    MonteCarloSettings settings;
 
-    public BackupModifierFromSimulations(NodeInterface rootTree,
-                                   List<Action> actionsToSelected,
-                                   Action actionOnSelected,
-                                   SimulationResults simulationResults,
-                                   MonteCarloSettings settings) {
-        super(rootTree, actionsToSelected, actionOnSelected, settings);
-        this.simulationResults=simulationResults;
-    }
+
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static BackupModifierFromSimulations newBUM(NodeInterface rootTree,
+    private static BackupModifierFromSimulations newBUM(@NonNull NodeInterface rootTree,
                                                   @NonNull List<Action> actionsToSelected,
-                                                  @NonNull Action actionOnSelected,
-                                                  @NonNull SimulationResults simulationResults,
+                                                   @NonNull SimulationResults simulationResults,
                                                   MonteCarloSettings settings) {
-        return new BackupModifierFromSimulations(rootTree,
-                actionsToSelected,
-                actionOnSelected,
-                simulationResults,
-                settings);
+        BackupModifierFromSimulations bms=new BackupModifierFromSimulations();
+        TreeInfoHelper treeInfoHelper=new TreeInfoHelper(rootTree);
+        bms.nodesOnPath = treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
+        bms.simulationResults = simulationResults;
+
+        Conditionals.executeOneOfTwo(Objects.isNull(settings),
+                () -> bms.settings = MonteCarloSettings.builder().build(),
+                () -> bms.settings = settings);
+        return bms;
+
     }
 
     public List<Double>  backup() {

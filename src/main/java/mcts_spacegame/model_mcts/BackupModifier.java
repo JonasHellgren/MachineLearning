@@ -48,7 +48,6 @@ public class BackupModifier {
     NodeInterface nodeSelected;
     List<NodeInterface> nodesOnPath;
 
-
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
     private static BackupModifier newBUM(NodeInterface rootTree,
