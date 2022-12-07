@@ -5,7 +5,7 @@ import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifierFromSimulations;
-import mcts_spacegame.model_mcts.BackupModifierFromSteps;
+import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -36,7 +36,7 @@ public class TestBackupModifierFromSimulations {
 
     SpaceGrid spaceGrid;
     Environment environment;
-    BackupModifierFromSteps bum;
+    BackupModifier bum;
     List<StepReturn> stepReturns;
     NodeInterface treeRoot;
     TreeInfoHelper treeInfoHelper;

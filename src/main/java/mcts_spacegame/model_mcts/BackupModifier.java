@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
 import java.util.*;
@@ -24,36 +25,51 @@ import java.util.stream.Collectors;
  *    defensive backup = backup end node AND set it parent as terminal if parents
  *    all children are fail-terminal
  *
+ *  *              (r)
+ *  *             /   \
+ *  *           (1)    (2)
+ *  *          /   \
+ *  *        (3)    (4)
+ *  *
+ *  *      actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
+ *
  */
 
 @Log
-public class BackupModifierFromSteps extends BackupModifierAbstract {
+public class BackupModifier {
 
+    NodeInterface rootTree;
+    List<Action> actionsToSelected;
+    Action actionOnSelected;
     StepReturn stepReturnOfSelected;
+    MonteCarloSettings settings;
 
-    public BackupModifierFromSteps(NodeInterface rootTree,
-                                   List<Action> actionsToSelected,
-                                   Action actionOnSelected,
-                                   StepReturn stepReturnOfSelected,
-                                   MonteCarloSettings settings) {
-        super(rootTree, actionsToSelected, actionOnSelected, settings);
-        this.stepReturnOfSelected=stepReturnOfSelected;
-    }
+    TreeInfoHelper treeInfoHelper;
+    NodeInterface nodeSelected;
+    List<NodeInterface> nodesOnPath;
+
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static BackupModifierFromSteps newBUM(NodeInterface rootTree,
-                                                  @NonNull List<Action> actionsToSelected,
-                                                  @NonNull Action actionOnSelected,
-                                                  @NonNull StepReturn stepReturnOfSelected,
-                                                  MonteCarloSettings settings) {
-        return new BackupModifierFromSteps(
-                rootTree,
-                actionsToSelected,
-                actionOnSelected,
-                stepReturnOfSelected,
-                settings);
+    private static BackupModifier newBUM(NodeInterface rootTree,
+                                         @NonNull List<Action> actionsToSelected,
+                                         @NonNull Action actionOnSelected,
+                                         @NonNull StepReturn stepReturnOfSelected,
+                                         MonteCarloSettings settings) {
+        BackupModifier bm=new BackupModifier();
+        bm.rootTree = rootTree;
+        bm.actionsToSelected = actionsToSelected;
+        bm.actionOnSelected = actionOnSelected;
+        bm.stepReturnOfSelected=stepReturnOfSelected;
+        Conditionals.executeOneOfTwo(Objects.isNull(settings),
+                () -> bm.settings = MonteCarloSettings.builder().build(),
+                () -> bm.settings = settings);
 
+        bm.treeInfoHelper = new TreeInfoHelper(rootTree);
+
+        bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
+        bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence
+        return bm;
     }
 
     public void backup() {
@@ -92,7 +108,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
     }
 
     private void defensiveBackupOfSelectedNode() {
-        super.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupDefensive);
+        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupDefensive);
     }
 
     private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
@@ -141,11 +157,9 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
-            super.updateNode(node, singleReturn, action,settings.alphaBackupNormal);
+            this.updateNode(node, singleReturn, action,settings.alphaBackupNormal);
         }
     }
-
-
 
     private List<Double> getReturns(List<Double> rewards) {
         double singleReturn = 0;
@@ -157,6 +171,12 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
         }
         Collections.reverse(returns);
         return returns;
+    }
+
+     void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
+        node.increaseNofVisits();
+        node.increaseNofActionSelections(action);
+        node.updateActionValue(singleReturn, action,alpha);
     }
 
 

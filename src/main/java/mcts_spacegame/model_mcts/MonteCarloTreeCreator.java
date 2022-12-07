@@ -159,7 +159,7 @@ public class MonteCarloTreeCreator {
                 .build();
         List<Double> returnsSimulation=bumSim.backup();
 
-        BackupModifierFromSteps bumSteps = BackupModifierFromSteps.builder().rootTree(nodeRoot)
+        BackupModifier bumSteps = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .settings(settings)

@@ -25,8 +25,6 @@ public class BackupModifierAbstract {
     MonteCarloSettings settings;
 
     TreeInfoHelper treeInfoHelper;
-    //int nofNodesOnPath;
-  //  int nofActionsOnPath;
     NodeInterface nodeSelected;
     List<NodeInterface> nodesOnPath;
 
@@ -41,15 +39,10 @@ public class BackupModifierAbstract {
                 () -> this.settings = MonteCarloSettings.builder().build(),
                 () -> this.settings = settings);
 
-        //this.nofNodesOnPath = actionsToSelected.size();
-       // this.nofActionsOnPath = actionsToSelected.size();
         this.treeInfoHelper = new TreeInfoHelper(rootTree);
 
         this.nodesOnPath = this.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
-       // this.nofNodesOnPath = nodesOnPath.size();
-
         this.nodeSelected = this.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();  //"No node for action sequence"
-
     }
 
     protected void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
