@@ -45,7 +45,7 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
-                .isBackupFromSteps(false)
+                //.isBackupFromSteps(false)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();

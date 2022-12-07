@@ -22,12 +22,11 @@ public class TestMonteCarloTreeCreator_5times15grid {
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
     private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_STEPS_NORMAL = 0.1;
+    private static final double ALPHA_BACKUP_STEPS_NORMAL = 1.0;
     private static final int MAX_NOF_ITERATIONS = 1000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 10;
-    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 1;
-
+    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 2;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -45,7 +44,6 @@ public class TestMonteCarloTreeCreator_5times15grid {
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
-                .isBackupFromSteps(true)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();

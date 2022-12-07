@@ -14,8 +14,8 @@ import java.util.List;
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
 
- *    normal backup = use alphaNormal and discountFactorSimulationNormal
- *    defensive backup = use alphaDefensive and discountFactorSimulationDefensive
+ *    normal backup = use discountFactorSimulationNormal
+ *    defensive backup = use discountFactorSimulationDefensive
  *
  *   a single simulation:
  *   1) at least one simulation is terminal-non fail => normal backup from mix of max and average of non-fail simulations
@@ -98,10 +98,5 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
         }
         return returnsSimulation;
     }
-/*
-    private void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
-        node.updateActionValue(singleReturn, action, alpha);
-    }
-*/
 
 }
