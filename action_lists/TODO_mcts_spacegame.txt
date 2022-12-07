@@ -75,12 +75,13 @@ Skapa NodeValueMemory  x
 TestNodeValueMemory  x
 getBestPath verkar inte funka korrekt
 setStartState buggar  x
+flagga kopppla bort steps  x
 koda new5times10Grid - hur få + vid goal
 
 clean up
 dokumentera - speciellt termer
 
-
+best path beror bara på value nofVisits kan ju även påverka val
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
 . kunna radera noder
 - hitta viss node i träd

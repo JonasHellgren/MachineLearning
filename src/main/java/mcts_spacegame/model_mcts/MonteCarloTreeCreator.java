@@ -137,7 +137,8 @@ public class MonteCarloTreeCreator {
                 .settings(settings)
                 .stepReturnOfSelected(sr)
                 .build();
-        bumSteps.backup();
+        ConditionalUtils.executeOnlyIfConditionIsTrue(settings.isBackupFromSteps,
+                bumSteps::backup);
 
         BackupModifierFromSimulations bumSim = BackupModifierFromSimulations.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)

@@ -29,6 +29,7 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
     private static final int MAX_NOF_ITERATIONS = 50;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 3;
+    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 10;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -47,7 +48,9 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
+                .isBackupFromSteps(false)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
+                .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
@@ -66,7 +69,6 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
         SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
-       // failList.forEach(System.out::println);
         Assert.assertFalse(failList.contains(true));
     }
 
