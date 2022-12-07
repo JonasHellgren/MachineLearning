@@ -19,7 +19,7 @@ public class TestBinaryClass {
         trainingSet.add(new DataSetRow(new double[]{1, 0}, new double[]{1}));
         trainingSet.add(new DataSetRow(new double[]{1, 1}, new double[]{0}));
 
-        MultiLayerPerceptron neuralNet = new MultiLayerPerceptron(TransferFunctionType.TANH, 2, 3, 1);
+        MultiLayerPerceptron neuralNet = new MultiLayerPerceptron(TransferFunctionType.TANH, 2, 2, 1);
         neuralNet.learn(trainingSet);
 
       //  Evaluation.runFullEvaluation(neuralNet, trainingSet);  //gives nullPointerException

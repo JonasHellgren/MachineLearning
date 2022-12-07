@@ -23,12 +23,13 @@ public class TestMonteCarloTreeCreator_5times15grid {
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
     private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1d;
-    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 0.9d;
-    private static final double ALPHA_BACKUP_STEPS = 0.9d;
+    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 1.0d;
     private static final int MAX_NOF_ITERATIONS = 1000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 1;
+    private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
+    private static final int ALPHA_BACKUP_STEPS_NORMAL = 1;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -39,7 +40,8 @@ public class TestMonteCarloTreeCreator_5times15grid {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new Environment(spaceGrid);
         MonteCarloSettings settings= MonteCarloSettings.builder()
-                .alphaBackupSteps(ALPHA_BACKUP_STEPS)
+                .alphaBackupStepsNormal(ALPHA_BACKUP_STEPS_NORMAL)
+                .alphaBackupStepsDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
                 .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
@@ -47,7 +49,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
-                .isBackupFromSteps(false)
+                .isBackupFromSteps(true)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
@@ -92,8 +94,8 @@ public class TestMonteCarloTreeCreator_5times15grid {
         NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(1,3));
         assertStateIsOnBestPath(tih,State.newState(3,4));
+        assertStateIsOnBestPath(tih,State.newState(4,4));
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {

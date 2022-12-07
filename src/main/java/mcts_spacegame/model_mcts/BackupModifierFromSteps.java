@@ -88,7 +88,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
     }
 
     private void defensiveBackupOfSelectedNode() {
-        super.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupSteps);
+        super.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupStepsDefensive);
     }
 
     private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
@@ -131,7 +131,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
             singleReturn = returns.get(nodesOnPath.indexOf(node));
-            super.updateNode(node, singleReturn, action,settings.alphaBackupSteps);
+            super.updateNode(node, singleReturn, action,settings.alphaBackupStepsNormal);
         }
     }
 

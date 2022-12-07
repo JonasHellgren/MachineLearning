@@ -30,6 +30,8 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 3;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 10;
+    private static final int ALPHA_BACKUP_STEPS_NORMAL = 1;
+    private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -40,7 +42,8 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
         settings= MonteCarloSettings.builder()
-                .alphaBackupSteps(ALPHA_BACKUP_STEPS)
+                .alphaBackupStepsNormal(ALPHA_BACKUP_STEPS_NORMAL)
+                .alphaBackupStepsDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
                 .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
