@@ -105,4 +105,11 @@ public class MathUtils {
                 .collect(Collectors.toList());
     }
 
+    public static List<Double> multiplyListElements(List<Double> list, double scalar) {
+        return list.stream()
+                .map(num -> num * scalar)
+                .collect(Collectors.toList());
+
+    }
+
 }

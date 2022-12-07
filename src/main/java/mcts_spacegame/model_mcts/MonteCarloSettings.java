@@ -19,6 +19,8 @@ public class MonteCarloSettings {
     private static final double C_MAX_AVERAGE_RETURN_BACKUP=0;  //1 <=> only max, 0 <=> only average
     private static final double ALPHA_NORMAL_DEFAULT =1;
     private static final double ALPHA_DEFENSIVE_DEFAULT =1;
+    private static final double WEIGHT_STEPS_DEFAULT =1;
+    private static final double WEIGHT_SIMULATION_DEFAULT =1;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -46,7 +48,10 @@ public class MonteCarloSettings {
     double alphaBackupNormal = ALPHA_NORMAL_DEFAULT;
     @Builder.Default
     double alphaBackupDefensive = ALPHA_DEFENSIVE_DEFAULT;
-
+    @Builder.Default
+    double weightReturnsSteps = WEIGHT_STEPS_DEFAULT;
+    @Builder.Default
+    double weightReturnsSimulation = WEIGHT_SIMULATION_DEFAULT;
 
 
     public static MonteCarloSettings newDefault() {

@@ -24,7 +24,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
     private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
     private static final double ALPHA_BACKUP_STEPS_NORMAL = 1.0;
     private static final int MAX_NOF_ITERATIONS = 1000;
-    private static final int NOF_SIMULATIONS_PER_NODE = 100;
+    private static final int NOF_SIMULATIONS_PER_NODE = 10;
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 2;
 
@@ -58,7 +58,6 @@ public class TestMonteCarloTreeCreator_5times15grid {
                 .monteCarloSettings(settings)
                 .memory(memory)
                 .build();
-
     }
 
     @Test

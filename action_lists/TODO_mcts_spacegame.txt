@@ -80,10 +80,12 @@ MonteCarloSearchStatistics buggar  x
 koda new5times10Grid - hur få + vid goal x
 simulate(nodeSelected,actionInSelected)  x
 List<Double> returnsSteps,List<Double> returnsSimulation  x
-weightReturnsSimulation
+weightReturnsSimulation weightReturnsSteps x
+test multiplyListElements x
 BackupModifierFromSteps -> BackupModifier
 BackupModifierAbstract ta veck
 BackupModifierFromSimulations -> SimulationReturnsExtractor
+kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor
 new5times10Grid redefine memory so lower corridor is choosen
 

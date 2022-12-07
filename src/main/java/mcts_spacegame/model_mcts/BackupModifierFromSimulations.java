@@ -13,14 +13,13 @@ import java.util.List;
 
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
-
- *    normal backup = use discountFactorSimulationNormal
- *    defensive backup = use discountFactorSimulationDefensive
  *
- *   a single simulation:
+ *   from a set of simulations:
  *   1) at least one simulation is terminal-non fail => normal backup from mix of max and average of non-fail simulations
  *   2) all simulations are terminal-fail => defensive backup
  *
+ *    normal backup = use discountFactorSimulationNormal
+ *    defensive backup = use discountFactorSimulationDefensive
  *
  */
 
@@ -54,7 +53,7 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
 
     public List<Double>  backup() {
         if (simulationResults.size()==0) {
-            return new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d));
+            return new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d));  //todo into MathUtils
         }
         List<Double> returnsSimulation;
         if(!simulationResults.areAllSimulationsTerminalFail()) {

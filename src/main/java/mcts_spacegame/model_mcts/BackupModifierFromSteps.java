@@ -134,6 +134,8 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
             throw new IllegalArgumentException("Non equal list lengths");
         }
 
+        returnsSteps = MathUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
+        returnsSimulation = MathUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
         List<Double> returnsSum= MathUtils.sumListElements(returnsSteps,returnsSimulation);
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
