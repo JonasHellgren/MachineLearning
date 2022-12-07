@@ -11,6 +11,10 @@ import mcts_spacegame.environment.StepReturn;
 public class State {
    public Integer x,y;
 
+   public static State newState(int x, int y) {
+      return new State(x,y);
+   }
+
    public State copy () {
       return new State(x,y);
    }

@@ -1,11 +1,10 @@
 package mcts_spacegame.model_mcts;
 
-import common.ConditionalUtils;
+import common.Conditionals;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
 import java.util.List;
@@ -57,7 +56,7 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
             return;
         }
 
-        ConditionalUtils.executeDependantOnCondition(!simulationResults.areAllSimulationsTerminalFail(),
+        Conditionals.executeOneOfTwo(!simulationResults.areAllSimulationsTerminalFail(),
                 this::backupNormal,
                 this::backupDefensive);
     }

@@ -1,7 +1,6 @@
 package mcts_spacegame.model_mcts;
 
-import black_jack.models_memory.StateValueMemory;
-import common.ConditionalUtils;
+import common.Conditionals;
 import common.CpuTimer;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class MonteCarloTreeCreator {
 
     Environment environment;
     State startState;
-    //NodeValueMemory memory;
+    NodeValueMemory memory;
     MonteCarloSettings settings;
 
     NodeInterface nodeRoot;
@@ -42,15 +41,20 @@ public class MonteCarloTreeCreator {
     @Builder
     private static MonteCarloTreeCreator newMCTC(@NonNull Environment environment,
                                                  @NonNull State startState,
-                                                 MonteCarloSettings monteCarloSettings) {
+                                                 MonteCarloSettings monteCarloSettings,
+                                                 NodeValueMemory memory) {
         MonteCarloTreeCreator mctc=new MonteCarloTreeCreator();
         mctc.environment = environment;
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
 
-        ConditionalUtils.executeDependantOnCondition(Objects.isNull(monteCarloSettings),
+        Conditionals.executeOneOfTwo(Objects.isNull(monteCarloSettings),
                 () -> mctc.settings = MonteCarloSettings.newDefault(),
                 () -> mctc.settings = monteCarloSettings);
+
+        Conditionals.executeOneOfTwo(Objects.isNull(memory),
+                () -> mctc.memory = NodeValueMemory.newEmpty(),
+                () -> mctc.memory = memory);
 
         setSomeFields(startState, mctc);
         return mctc;
@@ -80,6 +84,8 @@ public class MonteCarloTreeCreator {
         }
         nofIterations=i;
         this.cpuTimer.stop();
+        log.info("time used = " + cpuTimer.getAbsoluteProgress());
+
         return nodeRoot;
     }
 
@@ -109,12 +115,11 @@ public class MonteCarloTreeCreator {
         boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
         boolean isChildNotToDeep=child.getDepth()<=settings.maxTreeDepth;
 
-        if (isChildAddedEarlier) {
-            log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected);
-        }
+        Conditionals.executeIfTrue(isChildAddedEarlier, () ->
+            log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected));
 
-        if (isSelectedNotTerminal && !isChildAddedEarlier && isChildNotToDeep)  {
-            nodeSelected.addChildNode(child); }
+        Conditionals.executeIfTrue(isSelectedNotTerminal && !isChildAddedEarlier && isChildNotToDeep, () ->
+            nodeSelected.addChildNode(child));
         return sr;
     }
 
@@ -123,9 +128,11 @@ public class MonteCarloTreeCreator {
         State pos= nodeSelected.getState().copy();
         for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
             List<StepReturn> returns = stepToTerminal(pos.copy(), settings.policy);
+            StepReturn endReturn = returns.get(returns.size()-1);
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
-            boolean isEndingInFail=returns.get(returns.size()-1).isFail;
-            simulationResults.add(sumOfRewards,isEndingInFail);
+            double valueInTerminal=memory.read(endReturn.newPosition);
+            boolean isEndingInFail=endReturn.isFail;
+            simulationResults.add(sumOfRewards,valueInTerminal,isEndingInFail);
         }
         return simulationResults;
     }
@@ -137,7 +144,7 @@ public class MonteCarloTreeCreator {
                 .settings(settings)
                 .stepReturnOfSelected(sr)
                 .build();
-        ConditionalUtils.executeOnlyIfConditionIsTrue(settings.isBackupFromSteps,
+        Conditionals.executeIfTrue(settings.isBackupFromSteps,
                 bumSteps::backup);
 
         BackupModifierFromSimulations bumSim = BackupModifierFromSimulations.builder().rootTree(nodeRoot)
@@ -158,7 +165,6 @@ public class MonteCarloTreeCreator {
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);
-
         } while (!stepReturn.isTerminal);
         return returns;
     }

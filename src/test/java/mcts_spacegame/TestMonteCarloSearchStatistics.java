@@ -32,7 +32,7 @@ public class TestMonteCarloSearchStatistics {
                 .monteCarloSettings(MonteCarloSettings.builder()
                         .maxTreeDepth(MAX_TREE_DEPTH)
                         .coefficientExploitationExploration(1)
-                        .maxNofIterations(200).build())
+                        .maxNofIterations(500).build())
                 .build();
     }
 

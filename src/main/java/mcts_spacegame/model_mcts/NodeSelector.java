@@ -29,14 +29,14 @@ public class NodeSelector {
 
     final NodeInterface nodeRoot;
     private final double coefficientExploitationExploration;  //often called C in literature
-    final boolean isExcludeChildrenNeverVisited;  //true when best path is desired
+    final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
 
     public NodeSelector(NodeInterface nodeRoot) {
         this(nodeRoot,C_DEFAULT,EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
-    public NodeSelector(NodeInterface nodeRoot, boolean isExcludeChildrenNeverVisited ) {
-        this(nodeRoot,C_DEFAULT,isExcludeChildrenNeverVisited);
+    public NodeSelector(NodeInterface nodeRoot, boolean isExcludeChildrenThatNeverHaveBeenVisited) {
+        this(nodeRoot,C_DEFAULT, isExcludeChildrenThatNeverHaveBeenVisited);
     }
 
     public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration) {
@@ -45,12 +45,12 @@ public class NodeSelector {
 
     public NodeSelector(NodeInterface nodeRoot,
                         double coefficientExploitationExploration,
-                        boolean isExcludeChildrenNeverVisited) {
+                        boolean isExcludeChildrenThatNeverHaveBeenVisited) {
         this.nodeRoot = nodeRoot;  //todo copy
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
         this.coefficientExploitationExploration = coefficientExploitationExploration;
-        this.isExcludeChildrenNeverVisited =isExcludeChildrenNeverVisited;
+        this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
     //todo constructor for setting function that test if node is leaf, i.e. sets maxNofTestedActionsToBeLeaf
@@ -83,19 +83,10 @@ public class NodeSelector {
 
     public Optional<NodeInterface> selectChild(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);
-
-
-        if (isExcludeChildrenNeverVisited) {
-            System.out.println("isExcludeChildrenNeverVisited");
-            nodeUCTPairs.stream().forEach(p -> System.out.println(p.getFirst().getName()+", "+p.getSecond()));
-        }
-
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
-
         return pair.isEmpty()
                 ? Optional.empty()
                 : Optional.ofNullable(pair.get().getFirst());
-
     }
 
     @NotNull
@@ -107,7 +98,7 @@ public class NodeSelector {
     private List<Pair<NodeInterface, Double>> getListOfPairsExcludeFailNodes(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = new ArrayList<>();
         List<NodeInterface> nonTerminalNodes = getNonFailChildrenNodes(node);
-        List<NodeInterface> nodes=(isExcludeChildrenNeverVisited)
+        List<NodeInterface> nodes=(isExcludeChildrenThatNeverHaveBeenVisited)
                 ? getVisitedNodes(nonTerminalNodes)
                 : nonTerminalNodes;
 

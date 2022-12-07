@@ -21,6 +21,8 @@ import java.util.Optional;
  *      |   | O |   |   |   |   | G |       |
  *      -----------------------------       |
  *
+ *   Every cell in very most right column are goals
+ *
  */
 
 

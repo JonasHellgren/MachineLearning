@@ -63,8 +63,6 @@ public class Environment implements EnvironmentInterface {
             case still:
                 break;
         }
-
-        newPosition.y= MathUtils.clip(newPosition.y,0, spaceGrid.getNofRows()-1);
         newPosition.x++;
         return newPosition;
     }

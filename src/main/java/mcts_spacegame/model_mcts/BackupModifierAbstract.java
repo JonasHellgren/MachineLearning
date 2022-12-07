@@ -1,13 +1,9 @@
 package mcts_spacegame.model_mcts;
 
-import common.ConditionalUtils;
-import lombok.Builder;
-import lombok.NonNull;
+import common.Conditionals;
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +37,7 @@ public class BackupModifierAbstract {
         this.rootTree = rootTree;
         this.actionsToSelected = actionsToSelected;
         this.actionOnSelected = actionOnSelected;
-        ConditionalUtils.executeDependantOnCondition(Objects.isNull(settings),
+        Conditionals.executeOneOfTwo(Objects.isNull(settings),
                 () -> this.settings = MonteCarloSettings.builder().build(),
                 () -> this.settings = settings);
 

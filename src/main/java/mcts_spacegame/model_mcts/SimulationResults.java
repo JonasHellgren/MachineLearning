@@ -2,6 +2,7 @@ package mcts_spacegame.model_mcts;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import mcts_spacegame.models_space.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +114,18 @@ public class SimulationResults {
         return IntStream.range(0, returnList.size())
                 .mapToObj(i -> returnList.get(i) + terminalValueList.get(i))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb=new StringBuilder();
+        sb.append(System.getProperty("line.separator"));
+        for (SimulationResult res:results) {
+            sb.append("Result = ").append(res);
+            sb.append(System.getProperty("line.separator"));
+        }
+        return sb.toString();
     }
 
 }

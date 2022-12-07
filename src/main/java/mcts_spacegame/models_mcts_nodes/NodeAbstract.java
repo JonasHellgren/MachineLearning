@@ -1,6 +1,6 @@
 package mcts_spacegame.models_mcts_nodes;
 
-import common.ConditionalUtils;
+import common.Conditionals;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,7 +57,7 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public void saveRewardForAction(Action action, double reward) {
-        ConditionalUtils.executeOnlyIfConditionIsTrue(actionRewardMap.containsKey(action),
+        Conditionals.executeIfTrue(actionRewardMap.containsKey(action),
                 () -> log.fine("Reward for action already defined"));
 
         actionRewardMap.put(action,reward);
@@ -81,7 +81,7 @@ public abstract class NodeAbstract implements NodeInterface {
     @Override
     public String toString() {
         return  "name = "+name+
-                ", nof ch. = " + 0+
+              //  ", nof ch. = " + 0+
                 ", a = " + action +
                 ", d = " + depth;
     }

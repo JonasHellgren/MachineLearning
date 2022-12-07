@@ -9,12 +9,14 @@ import java.util.Optional;
 public interface SpaceGridInterface {
 
     Optional<SpaceCell> getCell(Integer x, Integer y);
+
     void clear();
+
     void fillGrid(List<Pair<Integer, Integer>> occupiedCells);
 
-    static SpaceGrid newWithNoObstacles(int nofRows,int nofColumns) {
-        List<Pair<Integer, Integer>> occupiedCells= new ArrayList<>();
-        return new SpaceGrid(nofRows,nofColumns,occupiedCells);
+    static SpaceGrid newWithNoObstacles(int nofRows, int nofColumns) {
+        List<Pair<Integer, Integer>> occupiedCells = new ArrayList<>();
+        return new SpaceGrid(nofRows, nofColumns, occupiedCells);
     }
 
     /***
@@ -25,9 +27,9 @@ public interface SpaceGridInterface {
      *      -----------------------------
      */
     static SpaceGrid new3times7Grid() {
-        List<Pair<Integer, Integer>> occupiedCells= Arrays.asList(
-                new Pair<>(2,1), new Pair<>(3,1), new Pair<>(1,0), new Pair<>(3,0));
-        return new SpaceGrid(3,7,occupiedCells);
+        List<Pair<Integer, Integer>> occupiedCells = Arrays.asList(
+                new Pair<>(2, 1), new Pair<>(3, 1), new Pair<>(1, 0), new Pair<>(3, 0));
+        return new SpaceGrid(3, 7, occupiedCells);
     }
 
     /***
@@ -39,6 +41,16 @@ public interface SpaceGridInterface {
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   | G |   (worst, 0)
      *      -------------------------------------------------------------
      */
+    static SpaceGrid new5times15Grid() {
+        List<Pair<Integer, Integer>> occupiedCells = new ArrayList<>();
+        List<Pair<Integer, Integer>> rowY1 = createRow(1);
+        List<Pair<Integer, Integer>> rowY3 = createRow(3);
+        occupiedCells.addAll(rowY1);
+        occupiedCells.addAll(rowY3);
+       // occupiedCells.addAll(Arrays.asList(new Pair<>(14, 0), new Pair<>(14, 2), new Pair<>(14, 4)));
+        return new SpaceGrid(5, 15, occupiedCells);
+    }
+
 
     //new5times15Grid
 
@@ -52,5 +64,13 @@ public interface SpaceGridInterface {
      *      -------------------------------------------------------------
      */
 
+    private static List<Pair<Integer, Integer>> createRow(int ri) {
+        List<Pair<Integer, Integer>> row = new ArrayList<>();
+        for (int ci = 4; ci < 15; ci++) {
+            row.add(new Pair<>(ci, ri));
+        }
+        return row;
+    }
 
 }
+

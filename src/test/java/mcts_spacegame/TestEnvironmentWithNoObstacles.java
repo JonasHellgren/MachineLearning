@@ -44,7 +44,7 @@ public class TestEnvironmentWithNoObstacles {
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
-                () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
+                () -> assertEquals(-1,stepReturn.newPosition.y, DELTA),
                 () -> assertTrue(stepReturn.isTerminal),
                 () -> assertEquals(-Environment.CRASH_COST-Environment.MOVE_COST,stepReturn.reward,DELTA)
         );

@@ -1,12 +1,11 @@
 package mcts_spacegame.model_mcts;
 
-import common.ConditionalUtils;
+import common.Conditionals;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
-import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
 import java.util.*;
@@ -58,7 +57,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
 
 
     public void backup() {
-        ConditionalUtils.executeDependantOnCondition(!stepReturnOfSelected.isFail,
+        Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
                 this::backupNormalFromTreeSteps,
                 this::backupDefensiveFromTreeSteps);
     }
@@ -97,7 +96,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
 
-        ConditionalUtils.executeOnlyIfConditionIsTrue(children.size() == Action.applicableActions().size(),
+        Conditionals.executeIfTrue(children.size() == Action.applicableActions().size(),
                 this::makeSelectedTerminal);
     }
 

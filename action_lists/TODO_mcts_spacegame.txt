@@ -76,7 +76,10 @@ TestNodeValueMemory  x
 getBestPath verkar inte funka korrekt
 setStartState buggar  x
 flagga kopppla bort steps  x
-koda new5times10Grid - hur få + vid goal
+MonteCarloSearchStatistics buggar  x
+koda new5times10Grid - hur få + vid goal x
+testa hyper par
+gör om mine så nedre vägen är bättre
 
 clean up
 dokumentera - speciellt termer

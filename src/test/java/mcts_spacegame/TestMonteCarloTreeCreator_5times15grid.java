@@ -1,10 +1,13 @@
 package mcts_spacegame;
 
+import common.MathUtils;
+import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
+import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -12,34 +15,30 @@ import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
-
+public class TestMonteCarloTreeCreator_5times15grid {
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 1d;
-    private static final double ALPHA_BACKUP_STEPS = 0.0d;
-    private static final int MAX_NOF_ITERATIONS = 50;
+    private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1d;
+    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 0.9d;
+    private static final double ALPHA_BACKUP_STEPS = 0.9d;
+    private static final int MAX_NOF_ITERATIONS = 1000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
-    private static final int MAX_TREE_DEPTH = 3;
-    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 10;
+    private static final int MAX_TREE_DEPTH = 10;
+    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 1;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
-    MonteCarloSettings settings;
+    NodeValueMemory memory;
 
     @Before
     public void init() {
-        SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
+        SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new Environment(spaceGrid);
-        settings= MonteCarloSettings.builder()
+        MonteCarloSettings settings= MonteCarloSettings.builder()
                 .alphaBackupSteps(ALPHA_BACKUP_STEPS)
                 .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
                 .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
@@ -52,66 +51,55 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
+        memory=NodeValueMemory.newEmpty();
+        memory.write(State.newState(14,0),0);
+        memory.write(State.newState(14,2),3);
+        memory.write(State.newState(14,4),6);
+
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(new State(0,0))
+                .startState(State.newState(0,2))
                 .monteCarloSettings(settings)
+                .memory(memory)
                 .build();
+
     }
 
     @Test
-    public void simulatingFromX5Y1NeverFails() {
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(new State(5,1))
-                .monteCarloSettings(settings)
-                .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
-        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
-        List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
-        Assert.assertFalse(failList.contains(true));
+    public void printEnvironment() {
+        System.out.println("environment = " + environment);
+        System.out.println("memory = " + memory);
+    }
+
+    @Test public void moveFromX13Y4IntoGoalWithHighValue() {
+        NodeInterface nodeMock= NodeInterface.newNotTerminal(State.newState(13,4), Action.still);
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(nodeMock);
+        boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
+        System.out.println("simulationResults = " + simulationResults);
+        Assert.assertTrue(any6);
+    }
+
+    @Test public void moveFromX9Y4IntoGoalWithHighValue() {
+        NodeInterface nodeMock= NodeInterface.newNotTerminal(State.newState(5,4), Action.still);
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(nodeMock);
+        boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
+        System.out.println("simulationResults = " + simulationResults);
+        Assert.assertTrue(any6);
     }
 
     @Test
-    public void simulatingFromX5Y2SomeTimeFails() {
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(new State(5,2))
-                .monteCarloSettings(settings)
-                .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
-        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
-        List<Boolean> failList=results.getResults().stream()
-                .map(r -> r.isEndingInFail).collect(Collectors.toList());
-        Assert.assertTrue(failList.contains(true));
-    }
-
-    @Test
-    public void iterateFromX0Y0() {
+    public void iterateFromX0Y2() {
         NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,new State(1,1));
-        assertStateIsOnBestPath(tih,new State(3,2));
+        assertStateIsOnBestPath(tih,State.newState(1,3));
+        assertStateIsOnBestPath(tih,State.newState(3,4));
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {
         Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }
-
-    @Test
-    public void iterateFromX0Y1() {
-        monteCarloTreeCreator.setStartState(new State(0,1));
-        NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
-
-        doPrinting(nodeRoot);
-
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,new State(1,2));
-        assertStateIsOnBestPath(tih,new State(3,2));
-    }
-
 
     private void doPrinting(NodeInterface nodeRoot) {
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
