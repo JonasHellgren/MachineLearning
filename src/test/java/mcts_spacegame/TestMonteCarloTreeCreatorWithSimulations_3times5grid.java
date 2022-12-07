@@ -12,6 +12,7 @@ import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -86,6 +87,14 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
     @Test
     public void iterateFromX0Y0() {
         NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
+        doPrinting(nodeRoot);
+    }
+
+    @Test
+    public void iterateFromX0Y1() {
+        monteCarloTreeCreator.setStartState(new State(0,1));
+        NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
+
         doPrinting(nodeRoot);
     }
 

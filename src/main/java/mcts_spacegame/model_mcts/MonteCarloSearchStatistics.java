@@ -19,12 +19,14 @@ public class MonteCarloSearchStatistics {
     int nofNodesWithNoChildren;
     int maxDepth;
     float averageNofChildrenPerNode;
+    int nofIterations;
     float usedTimeInMilliSeconds;
     float usedRelativeTimeInPercentage;
 
-    public MonteCarloSearchStatistics(@NonNull  NodeInterface nodeRoot, @NonNull CpuTimer cpuTimer) {
+    public MonteCarloSearchStatistics(@NonNull  NodeInterface nodeRoot, @NonNull CpuTimer cpuTimer, int nofIterations) {
         this.nodeRoot = nodeRoot;
         this.cpuTimer=cpuTimer;
+        this.nofIterations=nofIterations;
     }
 
     public void setStatistics() {

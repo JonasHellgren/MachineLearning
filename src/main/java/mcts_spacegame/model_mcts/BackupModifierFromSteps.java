@@ -128,7 +128,6 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
 
     private void updateNodesFromReturns(List<Double> returns) {
         double singleReturn;
-        System.out.println("settings.alphaBackupSteps = " + settings.alphaBackupSteps);
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));

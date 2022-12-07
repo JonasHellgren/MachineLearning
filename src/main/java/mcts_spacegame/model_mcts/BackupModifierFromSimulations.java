@@ -63,7 +63,7 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
     }
 
     public void backupNormal() {
-        log.info("backupNormal");
+        log.fine("backupNormal");
         double maxReturn=simulationResults.maxReturn().orElseThrow();
         double avgReturn=simulationResults.averageReturn().orElseThrow();
         double c=settings.coefficientMaxAverageReturn;
@@ -73,7 +73,7 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
 
 
     public void backupDefensive() {
-        log.info("backupDefensive");
+        log.fine("backupDefensive");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
         updateNodesFromReturn(failReturn, settings.discountFactorSimulationDefensive,settings.alphaBackupSimulationDefensive);
     }

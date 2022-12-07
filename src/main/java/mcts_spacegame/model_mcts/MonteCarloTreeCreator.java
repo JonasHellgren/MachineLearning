@@ -34,6 +34,7 @@ public class MonteCarloTreeCreator {
     NodeInterface nodeRoot;
     TreeInfoHelper tih;
     CpuTimer cpuTimer;
+    int nofIterations;
 
     List<Action> actionsToSelected;
     Action actionInSelected;
@@ -47,35 +48,43 @@ public class MonteCarloTreeCreator {
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
 
-
         ConditionalUtils.executeDependantOnCondition(Objects.isNull(monteCarloSettings),
                 () -> mctc.settings = MonteCarloSettings.newDefault(),
                 () -> mctc.settings = monteCarloSettings);
 
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
-        mctc.tih=new TreeInfoHelper(mctc.nodeRoot);
-        mctc.cpuTimer=new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
+        setSomeFields(startState, mctc);
         return mctc;
     }
 
+    private static void setSomeFields(@NonNull State startState, MonteCarloTreeCreator mctc) {
+        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+        mctc.tih = new TreeInfoHelper(mctc.nodeRoot);
+        mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
+        mctc.nofIterations=0;
+    }
+
     public NodeInterface doMCTSIterations() {
-        cpuTimer.reset();
-        for (int i = 0; i < settings.maxNofIterations; i++) {
+        setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
+        this.cpuTimer.reset();
+        int i;
+        for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             StepReturn sr = chooseActionAndExpand(nodeSelected);
             SimulationResults simulationResults=simulate(nodeSelected);
             backPropagate(sr,simulationResults);
 
             if (cpuTimer.isTimeExceeded()) {
+                log.warning("Time exceeded");
                 break;
             }
         }
-        cpuTimer.stop();
+        nofIterations=i;
+        this.cpuTimer.stop();
         return nodeRoot;
     }
 
     public MonteCarloSearchStatistics getStatistics() {
-        MonteCarloSearchStatistics statistics=new MonteCarloSearchStatistics(nodeRoot,cpuTimer);
+        MonteCarloSearchStatistics statistics=new MonteCarloSearchStatistics(nodeRoot,cpuTimer,nofIterations);
         statistics.setStatistics();
         return statistics;
     }
