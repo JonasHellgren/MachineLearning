@@ -22,14 +22,15 @@ import java.util.Optional;
 public class TestMonteCarloTreeCreator_5times15grid {
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
+    private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
+    private static final double ALPHA_BACKUP_STEPS_NORMAL = 0.1;
     private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1d;
     private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 1.0d;
     private static final int MAX_NOF_ITERATIONS = 1000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 1;
-    private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
-    private static final int ALPHA_BACKUP_STEPS_NORMAL = 1;
+
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -74,16 +75,14 @@ public class TestMonteCarloTreeCreator_5times15grid {
     }
 
     @Test public void moveFromX13Y4IntoGoalWithHighValue() {
-        NodeInterface nodeMock= NodeInterface.newNotTerminal(State.newState(13,4), Action.still);
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(nodeMock);
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(13,4));
         boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
     }
 
     @Test public void moveFromX9Y4IntoGoalWithHighValue() {
-        NodeInterface nodeMock= NodeInterface.newNotTerminal(State.newState(5,4), Action.still);
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(nodeMock);
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(5,4));
         boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
@@ -94,8 +93,8 @@ public class TestMonteCarloTreeCreator_5times15grid {
         NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(3,4));
         assertStateIsOnBestPath(tih,State.newState(4,4));
+        assertStateIsOnBestPath(tih,State.newState(5,4));
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {

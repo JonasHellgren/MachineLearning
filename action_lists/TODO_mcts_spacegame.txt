@@ -78,7 +78,7 @@ setStartState buggar  x
 flagga kopppla bort steps  x
 MonteCarloSearchStatistics buggar  x
 koda new5times10Grid - hur få + vid goal x
-simulate(nodeSelected,actionInSelected)
+simulate(nodeSelected,actionInSelected)  x
 testa hyper par
 varför blir vaue fail states positive
 gör om mine så nedre vägen är bättre

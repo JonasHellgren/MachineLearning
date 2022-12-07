@@ -64,26 +64,14 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
 
     @Test
     public void simulatingFromX5Y1NeverFails() {
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(new State(5,1))
-                .monteCarloSettings(settings)
-                .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
-        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
+        SimulationResults results=monteCarloTreeCreator.simulate(new State(5,1));
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertFalse(failList.contains(true));
     }
 
     @Test
     public void simulatingFromX5Y2SomeTimeFails() {
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(new State(5,2))
-                .monteCarloSettings(settings)
-                .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.getNodeRoot();
-        SimulationResults results=monteCarloTreeCreator.simulate(nodeRoot);
+        SimulationResults results=monteCarloTreeCreator.simulate(new State(5,2));
         List<Boolean> failList=results.getResults().stream()
                 .map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertTrue(failList.contains(true));

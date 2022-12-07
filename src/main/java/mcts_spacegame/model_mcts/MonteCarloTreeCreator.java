@@ -74,7 +74,7 @@ public class MonteCarloTreeCreator {
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             StepReturn sr = chooseActionAndExpand(nodeSelected);
-            SimulationResults simulationResults=simulate(nodeSelected);
+            SimulationResults simulationResults=simulate(sr.newPosition);
             backPropagate(sr,simulationResults);
 
             if (cpuTimer.isTimeExceeded()) {
@@ -123,11 +123,13 @@ public class MonteCarloTreeCreator {
         return sr;
     }
 
-    public SimulationResults simulate(NodeInterface nodeSelected) {
+    public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults=new SimulationResults();
-        State pos= nodeSelected.getState().copy();
+        //State pos= nodeSelected.getState().copy();
+
+
         for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
-            List<StepReturn> returns = stepToTerminal(pos.copy(), settings.policy);
+            List<StepReturn> returns = stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.policy);
             StepReturn endReturn = returns.get(returns.size()-1);
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
             double valueInTerminal=memory.read(endReturn.newPosition);
