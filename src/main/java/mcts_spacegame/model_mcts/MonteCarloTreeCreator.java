@@ -20,6 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/***
+ *   This class performs monte carlo tree search
+ *
+ *   Two vectors: List<Double> returnsSteps,List<Double> returnsSimulation, plays a central role
+ *   One of them returnsSteps is derived from chooseActionAndExpand(). The other  returnsSimulation is from simulate().
+ *
+ *   Assume no weighting and the following example settings: returnsSteps=[-2,-1,0], returnsSimulation=[6,6,6]
+ *   The values in the visited nodes will be modified according to the sum of the vectors, i.e. [4,5,6]
+ *
+ */
+
 @Log
 @Setter
 @Getter
@@ -140,22 +151,22 @@ public class MonteCarloTreeCreator {
     }
 
     private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
-        BackupModifierFromSteps bumSteps = BackupModifierFromSteps.builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .settings(settings)
-                .stepReturnOfSelected(sr)
-                .build();
-        Conditionals.executeIfTrue(settings.isBackupFromSteps,
-                bumSteps::backup);
-
         BackupModifierFromSimulations bumSim = BackupModifierFromSimulations.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .settings(settings)
                 .simulationResults(simulationResults)
                 .build();
-        bumSim.backup();
+        List<Double> returnsSimulation=bumSim.backup();
+
+        BackupModifierFromSteps bumSteps = BackupModifierFromSteps.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .settings(settings)
+                .stepReturnOfSelected(sr)
+                .build();
+        //Conditionals.executeIfTrue(settings.isBackupFromSteps,
+                bumSteps.backup(returnsSimulation);
 
     }
 

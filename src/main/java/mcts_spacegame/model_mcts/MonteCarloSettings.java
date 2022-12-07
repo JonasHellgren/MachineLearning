@@ -17,10 +17,8 @@ public class MonteCarloSettings {
     private static final double DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT = 1;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT = 0.1;
     private static final double C_MAX_AVERAGE_RETURN_BACKUP=0;  //1 <=> only max, 0 <=> only average
-    private static final double ALPHA_STEPS_NORMAL_DEFAULT=1;
-    private static final double ALPHA_STEPS_DEFENSIVE_DEFAULT=1;
-    private static final double ALPHA_SIMULATION_NORMAL_DEFAULT=1;
-    private static final double ALPHA_SIMULATION_DEFENSIVE_DEFAULT=0.1;
+    private static final double ALPHA_NORMAL_DEFAULT =1;
+    private static final double ALPHA_DEFENSIVE_DEFAULT =1;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -45,13 +43,9 @@ public class MonteCarloSettings {
     @Builder.Default
     double coefficientMaxAverageReturn=C_MAX_AVERAGE_RETURN_BACKUP;
     @Builder.Default
-    double alphaBackupStepsNormal=ALPHA_STEPS_NORMAL_DEFAULT;
+    double alphaBackupNormal = ALPHA_NORMAL_DEFAULT;
     @Builder.Default
-    double alphaBackupStepsDefensive=ALPHA_STEPS_DEFENSIVE_DEFAULT;
-    @Builder.Default
-    double alphaBackupSimulationNormal=ALPHA_SIMULATION_NORMAL_DEFAULT;
-    @Builder.Default
-    double alphaBackupSimulationDefensive=ALPHA_SIMULATION_DEFENSIVE_DEFAULT;
+    double alphaBackupDefensive = ALPHA_DEFENSIVE_DEFAULT;
 
 
 

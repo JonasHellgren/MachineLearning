@@ -3,6 +3,8 @@ package common;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MathUtils {
 
@@ -97,57 +99,10 @@ public class MathUtils {
         return true;
     }
 
-    public static final double[] interpLinear(double[] x, double[] y, double[] xi) throws IllegalArgumentException {
-
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("X and Y must be the same length");
-        }
-        if (x.length == 1) {
-            throw new IllegalArgumentException("X must contain more than one value");
-        }
-        double[] dx = new double[x.length - 1];
-        double[] dy = new double[x.length - 1];
-        double[] slope = new double[x.length - 1];
-        double[] intercept = new double[x.length - 1];
-
-        // Calculate the line equation (i.e. slope and intercept) between each point
-        for (int i = 0; i < x.length - 1; i++) {
-            dx[i] = x[i + 1] - x[i];
-            if (dx[i] == 0) {
-                throw new IllegalArgumentException("X must be monotonic. A duplicate " + "x-value was found");
-            }
-            if (dx[i] < 0) {
-                throw new IllegalArgumentException("X must be sorted");
-            }
-            dy[i] = y[i + 1] - y[i];
-            slope[i] = dy[i] / dx[i];
-            intercept[i] = y[i] - x[i] * slope[i];
-        }
-
-        // Perform the interpolation here
-        double[] yi = new double[xi.length];
-        for (int i = 0; i < xi.length; i++) {
-            if ((xi[i] > x[x.length - 1])) {
-                yi[i] = y[y.length - 1];
-                logger.warning("Interpolating outside range (higher)");
-            } else if ((xi[i] < x[0])) {
-                yi[i] = y[0];
-                logger.warning("Interpolating outside range (lower)");
-            }
-            else {
-                int loc = Arrays.binarySearch(x, xi[i]);
-                if (loc < -1) {
-                    loc = -loc - 2;
-                    yi[i] = slope[loc] * xi[i] + intercept[loc];
-                }
-                else {
-                    yi[i] = y[loc];
-                }
-            }
-        }
-
-        return yi;
+    public static List<Double> sumListElements(List<Double> listA, List<Double> listB) {
+        return IntStream.range(0, listA.size())
+                .mapToObj(i -> listA.get(i) + listB.get(i))
+                .collect(Collectors.toList());
     }
-
 
 }

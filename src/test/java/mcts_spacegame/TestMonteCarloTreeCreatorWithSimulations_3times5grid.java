@@ -12,7 +12,6 @@ import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -23,9 +22,6 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
 
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 1d;
-    private static final double ALPHA_BACKUP_STEPS = 0.0d;
     private static final int MAX_NOF_ITERATIONS = 50;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 3;
@@ -42,10 +38,8 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new Environment(spaceGrid);
         settings= MonteCarloSettings.builder()
-                .alphaBackupStepsNormal(ALPHA_BACKUP_STEPS_NORMAL)
-                .alphaBackupStepsDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
-                .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
-                .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
+                .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
+                .alphaBackupDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)

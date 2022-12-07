@@ -1,5 +1,6 @@
 package mcts_spacegame.model_mcts;
 
+import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import mcts_spacegame.models_space.State;
@@ -51,7 +52,7 @@ public class SimulationResults {
     public OptionalDouble maxReturn() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
-        return sumListElements(returnList, terminalValueList).stream()
+        return MathUtils.sumListElements(returnList, terminalValueList).stream()
                 .mapToDouble(Double::doubleValue)
                 .max();
     }
@@ -59,7 +60,7 @@ public class SimulationResults {
     public OptionalDouble averageReturn() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
-        return sumListElements(returnList, terminalValueList).stream()
+        return MathUtils.sumListElements(returnList, terminalValueList).stream()
                 .mapToDouble(Double::doubleValue)
                 .average();
     }
@@ -67,7 +68,7 @@ public class SimulationResults {
     public OptionalDouble anyFailingReturn() {
         List<Double> returnList = getReturnsForFailing();
         List<Double> terminalValueList = getTerminalStateValuesForFailing();
-        List<Double> sumList=sumListElements(returnList,terminalValueList);
+        List<Double> sumList=MathUtils.sumListElements(returnList,terminalValueList);
         Random r=new Random();
         return (returnList.size()==0)
                 ? OptionalDouble.empty()
@@ -110,11 +111,7 @@ public class SimulationResults {
         return results.stream().filter(r -> r.isEndingInFail).collect(Collectors.toList());
     }
 
-    private List<Double> sumListElements(List<Double> returnList, List<Double> terminalValueList) {
-        return IntStream.range(0, returnList.size())
-                .mapToObj(i -> returnList.get(i) + terminalValueList.get(i))
-                .collect(Collectors.toList());
-    }
+
 
     @Override
     public String toString() {

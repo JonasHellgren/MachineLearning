@@ -1,7 +1,6 @@
 package mcts_spacegame;
 
 import common.MathUtils;
-import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -24,8 +23,6 @@ public class TestMonteCarloTreeCreator_5times15grid {
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
     private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
     private static final double ALPHA_BACKUP_STEPS_NORMAL = 0.1;
-    private static final double ALPHA_BACKUP_SIMULATION_DEFENSIVE = 0.1d;
-    private static final double ALPHA_BACKUP_SIMULATION_NORMAL = 1.0d;
     private static final int MAX_NOF_ITERATIONS = 1000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 10;
@@ -41,10 +38,8 @@ public class TestMonteCarloTreeCreator_5times15grid {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new Environment(spaceGrid);
         MonteCarloSettings settings= MonteCarloSettings.builder()
-                .alphaBackupStepsNormal(ALPHA_BACKUP_STEPS_NORMAL)
-                .alphaBackupStepsDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
-                .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
-                .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
+                .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
+                .alphaBackupDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)

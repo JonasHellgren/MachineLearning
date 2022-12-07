@@ -1,6 +1,7 @@
 package mcts_spacegame.model_mcts;
 
 import common.Conditionals;
+import common.MathUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
- *   end node in path:
+ *   end node in selection path:
  *   1) terminal-non fail => normal backup
  *   2) non terminal => normal backup
  *   3) terminal-fail => defensive backup (simulations not applicable for case)
@@ -55,18 +56,21 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
 
     }
 
-
     public void backup() {
+        backup(new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d)));
+    }
+
+    public void backup(List<Double> returnsSimulation) {
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                this::backupNormalFromTreeSteps,
+                () -> backupNormalFromTreeSteps(returnsSimulation),
                 this::backupDefensiveFromTreeSteps);
     }
 
-    private void backupNormalFromTreeSteps() {
+    private void backupNormalFromTreeSteps(List<Double> returnsSimulation) {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
-        List<Double> returns = getReturns(rewards);
-        updateNodesFromReturns(returns);
+        List<Double> returnsSteps = getReturns(rewards);
+        updateNodesFromReturns(returnsSteps,returnsSimulation);
     }
 
     private List<Double> getRewards() {
@@ -88,7 +92,7 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
     }
 
     private void defensiveBackupOfSelectedNode() {
-        super.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupStepsDefensive);
+        super.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupDefensive);
     }
 
     private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
@@ -125,13 +129,17 @@ public class BackupModifierFromSteps extends BackupModifierAbstract {
         parentToSelected.get().addChildNode(selectedAsTerminalFail);
     }
 
-    private void updateNodesFromReturns(List<Double> returns) {
-        double singleReturn;
+    private void updateNodesFromReturns(List<Double> returnsSteps,List<Double> returnsSimulation) {
+        if (returnsSteps.size() != returnsSimulation.size()) {
+            throw new IllegalArgumentException("Non equal list lengths");
+        }
+
+        List<Double> returnsSum= MathUtils.sumListElements(returnsSteps,returnsSimulation);
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
-            singleReturn = returns.get(nodesOnPath.indexOf(node));
-            super.updateNode(node, singleReturn, action,settings.alphaBackupStepsNormal);
+            double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
+            super.updateNode(node, singleReturn, action,settings.alphaBackupNormal);
         }
     }
 

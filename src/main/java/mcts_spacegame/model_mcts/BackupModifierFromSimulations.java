@@ -7,6 +7,8 @@ import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /***
@@ -48,33 +50,33 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
                 actionOnSelected,
                 simulationResults,
                 settings);
-
     }
 
-    public void backup() {
+    public List<Double>  backup() {
         if (simulationResults.size()==0) {
-            return;
+            return new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d));
         }
-
-        Conditionals.executeOneOfTwo(!simulationResults.areAllSimulationsTerminalFail(),
-                this::backupNormal,
-                this::backupDefensive);
+        List<Double> returnsSimulation;
+        if(!simulationResults.areAllSimulationsTerminalFail()) {
+            returnsSimulation=backupNormal(); } else {
+                returnsSimulation=backupDefensive(); }
+        return returnsSimulation;
     }
 
-    public void backupNormal() {
+    public List<Double> backupNormal() {
         log.fine("backupNormal");
         double maxReturn=simulationResults.maxReturn().orElseThrow();
         double avgReturn=simulationResults.averageReturn().orElseThrow();
         double c=settings.coefficientMaxAverageReturn;
         double mixReturn=c*maxReturn+(1-c)*avgReturn;
-        updateNodesFromReturn(mixReturn, settings.discountFactorSimulationNormal,settings.alphaBackupSimulationNormal);
+        return updateNodesFromReturn(mixReturn, settings.discountFactorSimulationNormal);
     }
 
 
-    public void backupDefensive() {
+    public List<Double>  backupDefensive() {
         log.fine("backupDefensive");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
-        updateNodesFromReturn(failReturn, settings.discountFactorSimulationDefensive,settings.alphaBackupSimulationDefensive);
+        return  updateNodesFromReturn(failReturn, settings.discountFactorSimulationDefensive);
     }
 
 
@@ -84,16 +86,17 @@ public class BackupModifierFromSimulations extends BackupModifierAbstract {
      *    so for this example with discountFactor=0.9 => discount (r) is 0.9^(5-0-1)=0.9^4 and for (4) it is 0.9^(5-4-1) = 1
      */
 
-    private void updateNodesFromReturn(double singleReturn, double discountFactor, double alpha) {
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
+    private List<Double> updateNodesFromReturn(double singleReturn, double discountFactor) {
+       // List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         int nofNodesOnPath = nodesOnPath.size();
-
+        List<Double> returnsSimulation=new ArrayList<>();
         for (NodeInterface node : nodesOnPath) {
-            Action action = actions.get(nodesOnPath.indexOf(node));
+            //Action action = actions.get(nodesOnPath.indexOf(node));
             int nofNodesRemaining=nofNodesOnPath-nodesOnPath.indexOf(node)-1;
             double discount=Math.pow(discountFactor,nofNodesRemaining);
-            super.updateNode(node, singleReturn*discount, action,alpha);
+            returnsSimulation.add(singleReturn*discount);
         }
+        return returnsSimulation;
     }
 /*
     private void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {

@@ -55,8 +55,6 @@ public class TestBackupModifierFromSimulations {
         treeInfoHelper=new TreeInfoHelper(treeRoot);
         simulationResults = new SimulationResults();
         settings= MonteCarloSettings.builder()
-                .alphaBackupSimulationNormal(ALPHA_BACKUP_SIMULATION_NORMAL)
-                .alphaBackupSimulationDefensive(ALPHA_BACKUP_SIMULATION_DEFENSIVE)
                 .coefficientMaxAverageReturn(1)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();
@@ -74,10 +72,10 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g, false);
 
         BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
-        bms.backup();
+        List<Double> values=bms.backup();
 
-        List<Double> values=getActionValuesOnPath();
-        printNodesOnPath();
+//        List<Double> values=getActionValuesOnPath();
+  //      printNodesOnPath();
         System.out.println("values = " + values);
 
         assertAll(
@@ -94,10 +92,10 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g2, false);
 
         BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
-        bms.backup();
+        List<Double> values=bms.backup();
 
-        List<Double> values=getActionValuesOnPath();
-        printNodesOnPath();
+//        List<Double> values=getActionValuesOnPath();
+  //      printNodesOnPath();
         System.out.println("values = " + values);
 
         assertAll(
@@ -113,10 +111,10 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g2,true);
 
         BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
-        bms.backup();
+        List<Double> values=bms.backup();
 
-        List<Double> values=getActionValuesOnPath();
-        printNodesOnPath();
+       // List<Double> values=getActionValuesOnPath();
+        //printNodesOnPath();
         System.out.println("values = " + values);
 
         assertAll(
@@ -132,18 +130,18 @@ public class TestBackupModifierFromSimulations {
         simulationResults.add(g2, true);
 
         BackupModifierFromSimulations bms = getBackupModifierFromSimulations();
-        bms.backup();
+        List<Double> values=bms.backup();
 
-        List<Double> values=getActionValuesOnPath();
-        printNodesOnPath();
+     //   List<Double> values=getActionValuesOnPath();
+      //  printNodesOnPath();
         System.out.println("values = " + values);
 
         assertAll(
-                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE,
+                () -> assertEquals(g1,
                         values.get(values.size()-1), DELTA),
-                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE*DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,
+                () -> assertEquals(g1*DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,
                         values.get(values.size()-2), DELTA),
-                () -> assertEquals(g1*ALPHA_BACKUP_SIMULATION_DEFENSIVE*Math.pow(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,2),
+                () -> assertEquals(g1*Math.pow(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,2),
                         values.get(values.size()-3), DELTA)
         );
     }
