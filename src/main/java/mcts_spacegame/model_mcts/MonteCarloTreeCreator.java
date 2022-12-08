@@ -80,7 +80,6 @@ public class MonteCarloTreeCreator {
 
     public NodeInterface doMCTSIterations() {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
-        this.cpuTimer.reset();
         int i;
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
@@ -164,7 +163,6 @@ public class MonteCarloTreeCreator {
                 .settings(settings)
                 .stepReturnOfSelected(sr)
                 .build();
-        //Conditionals.executeIfTrue(settings.isBackupFromSteps,
                 bumSteps.backup(returnsSimulation);
 
     }

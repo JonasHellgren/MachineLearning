@@ -92,7 +92,8 @@ kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor
 new5times10Grid redefine memory so lower corridor is choosen
 
-
+kunna speca när tillåtet expandera
+cpuTimer buggar ibland  - nano sec istaället?
 dokumentera - speciellt termer
 
 best path beror bara på value nofVisits kan ju även påverka val

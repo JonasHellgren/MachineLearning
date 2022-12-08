@@ -19,12 +19,8 @@ import org.junit.Test;
 import java.util.Optional;
 
 public class TestMonteCarloTreeCreator_5times15grid {
-    private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
-    private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
-    private static final double ALPHA_BACKUP_STEPS_NORMAL = 1.0;
-    private static final int MAX_NOF_ITERATIONS = 1000;
-    private static final int NOF_SIMULATIONS_PER_NODE = 10;
+    private static final int MAX_NOF_ITERATIONS = 500;
+    private static final int NOF_SIMULATIONS_PER_NODE = 100;  //important
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 2;
 
@@ -37,11 +33,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new Environment(spaceGrid);
         MonteCarloSettings settings= MonteCarloSettings.builder()
-                .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
-                .alphaBackupDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
-                .coefficientMaxAverageReturn(0)  //max return
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
-                .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
+                .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
@@ -87,6 +79,17 @@ public class TestMonteCarloTreeCreator_5times15grid {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         assertStateIsOnBestPath(tih,State.newState(4,4));
         assertStateIsOnBestPath(tih,State.newState(5,4));
+    }
+
+    @Test
+    public void iterateFromX0Y2ManyTimes() {
+        for (int i = 0; i < 10 ; i++) {
+        NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        assertStateIsOnBestPath(tih,State.newState(4,4));
+        assertStateIsOnBestPath(tih,State.newState(5,4));
+        }
+
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {
