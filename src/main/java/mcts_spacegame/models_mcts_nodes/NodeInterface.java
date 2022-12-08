@@ -70,6 +70,9 @@ public interface NodeInterface {
 
     }
 
+    /**
+     * Warning, only copies node, not sub nodes
+     */
     static NodeInterface copy(NodeInterface otherNode) {
         if (otherNode instanceof NodeNotTerminal) {
             return new NodeNotTerminal((NodeNotTerminal) otherNode);

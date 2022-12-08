@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +49,7 @@ public class NodeSelector {
     public NodeSelector(NodeInterface nodeRoot,
                         double coefficientExploitationExploration,
                         boolean isExcludeChildrenThatNeverHaveBeenVisited) {
-        this.nodeRoot = nodeRoot;  //todo copy
+        this.nodeRoot = nodeRoot;  //NodeInterface.copy(nodeRoot) will not work, does not copy entire tree
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
         this.coefficientExploitationExploration = coefficientExploitationExploration;

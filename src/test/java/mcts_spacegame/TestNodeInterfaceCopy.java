@@ -4,6 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
+import mcts_spacegame.models_mcts_nodes.NodeTerminalNotFail;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,10 +20,13 @@ public class TestNodeInterfaceCopy {
         node.increaseNofVisits();
         node.increaseNofActionSelections(Action.up);
         node.saveRewardForAction(Action.up,10);
+        node.addChildNode(new NodeTerminalNotFail(State.newState(1,0), Action.still));
+
         NodeNotTerminal clone= (NodeNotTerminal) NodeInterface.copy(node);
 
         System.out.println("node = " + node);
         System.out.println("clone = " + clone);
+
 
         Assert.assertEquals(node.getNofVisits(),clone.getNofVisits());
         Assert.assertEquals(node.getNofActionSelections(Action.up),clone.getNofActionSelections(Action.up));
