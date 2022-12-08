@@ -13,7 +13,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+/***
+ * Extracts info from monte carlo decision tree
+ */
+
+
 public class TreeInfoHelper {
+
+    private static final int C_FOR_NO_EXPLORATION = 0;
 
     @Setter
     @Getter
@@ -22,7 +29,6 @@ public class TreeInfoHelper {
         public Counter( ) {
             count = 0;
         }
-
     }
 
     NodeInterface rootTree;
@@ -31,27 +37,16 @@ public class TreeInfoHelper {
         this.rootTree = rootTree;
     }
 
-
-    //todo use getNodesVisitedForActions
     public Optional<NodeInterface> getNodeReachedForActions(List<Action> actions) {
-
-        NodeInterface parent;
-        parent = rootTree;
-        for (Action action : actions) {
-            Optional<NodeInterface> child = parent.getChild(action);
-            if (child.isEmpty()) {
-                return Optional.empty();
-            }
-            parent = child.get();
-        }
-
-        return Optional.of(parent);
+        Optional<List<NodeInterface>> nodes=getNodesOnPathForActions(actions);
+        return  (nodes.isEmpty())
+                ?Optional.empty()
+                :Optional.of(nodes.get().get(nodes.get().size()-1));
     }
 
     public Optional<List<NodeInterface>> getNodesOnPathForActions(List<Action> actionsToSelected) {
 
-        NodeInterface parent;
-        parent = rootTree;
+        NodeInterface parent = rootTree;
         List<NodeInterface> nodes = new ArrayList<>();
         for (Action action : actionsToSelected) {
             Optional<NodeInterface> child = parent.getChild(action);
@@ -62,35 +57,27 @@ public class TreeInfoHelper {
             parent = child.get();
         }
         nodes.add(parent);
-
         return Optional.of(nodes);
     }
 
     public Optional<Double> getValueForActionInNode(List<Action> actionsToSelected, Action action) {
         Optional<NodeInterface> node = getNodeReachedForActions(actionsToSelected);
-
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
-
     }
 
     public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
         State state = rootState.copy();
         for (Action a : actionsToSelected) {
-            StepReturn sr = stepAndUpdateState(environment, state, a);
+            StepReturn sr = environment.step(a, state);
+            state.setFromReturn(sr);
         }
         return state;
     }
 
-    private static StepReturn stepAndUpdateState(Environment environment, State pos, Action a) {
-        StepReturn sr = environment.step(a, pos);
-        pos.setFromReturn(sr);
-        return sr;
-    }
-
     public List<NodeInterface> getBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree,0,true);
+        NodeSelector ns = new NodeSelector(rootTree, C_FOR_NO_EXPLORATION,true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }
@@ -131,6 +118,4 @@ public class TreeInfoHelper {
             evalRecursive(child,counter,bif);
         }
     }
-
-
 }

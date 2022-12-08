@@ -1,5 +1,7 @@
 package common;
 
+import org.apache.commons.lang3.RandomUtils;
+
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -10,10 +12,6 @@ public class MathUtils {
 
     private static final Logger logger = Logger.getLogger(MathUtils.class.getName());
 
-
-    public static double calcRandomFromInterval(double minValue, double maxValue) {
-        return minValue+Math.random()*(maxValue-minValue);
-    }
 
     public static double clip(double variable, double minValue, double maxValue) {
         double lowerThanMax= Math.min(variable, maxValue);
@@ -63,16 +61,6 @@ public class MathUtils {
 
     public static double normalize(double x,double xMin,double xMax) {
         return (x-xMin)/(xMax-xMin);
-    }
-
-    public static String getRandomItemFromStringList(List<String> list) {
-        Random random=new Random();  //todo, not new
-        return list.get(random.nextInt(list.size()));
-    }
-
-    public static Integer getRandomItemFromIntegerList(List<Integer> list) {
-        Random random=new Random();
-        return list.get(random.nextInt(list.size()));
     }
 
 
