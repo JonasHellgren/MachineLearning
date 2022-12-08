@@ -14,6 +14,7 @@ import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ import java.util.Objects;
 /***
  *   This class performs monte carlo tree search
  *
- *   Two vectors: List<Double> returnsSteps,List<Double> returnsSimulation, plays a central role
- *   One of them returnsSteps is derived from chooseActionAndExpand(). The other  returnsSimulation is from simulate().
+ *   Two vectors: List<Double> returnsSteps, List<Double> returnsSimulation, plays a central role
+ *   One of them returnsSteps is derived from chooseActionAndExpand(). The other, returnsSimulation, is from simulate().
  *
  *   Assume no weighting and the following example settings: returnsSteps=[-2,-1,0], returnsSimulation=[6,6,6]
- *   The values in the visited nodes will be modified according to the sum of the vectors, i.e. [4,5,6]
+ *   The values in the nodes of the selection path will be modified according to the sum of the vectors, i.e. [4,5,6]
  *
  */
 
@@ -47,7 +48,6 @@ public class MonteCarloTreeCreator {
     int nofIterations;
 
     List<Action> actionsToSelected;
-    Action actionInSelected;
 
     @Builder
     private static MonteCarloTreeCreator newMCTC(@NonNull Environment environment,
@@ -78,14 +78,16 @@ public class MonteCarloTreeCreator {
         mctc.nofIterations=0;
     }
 
-    public NodeInterface doMCTSIterations() {
+    public NodeInterface runIterations() {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
+        ActionSelector actionSelector=new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            StepReturn sr = chooseActionAndExpand(nodeSelected);
+            Action actionInSelected=actionSelector.select(nodeSelected);
+            StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected);
             SimulationResults simulationResults=simulate(sr.newPosition);
-            backPropagate(sr,simulationResults);
+            backPropagate(sr,simulationResults,actionInSelected);
 
             if (cpuTimer.isTimeExceeded()) {
                 log.warning("Time exceeded");
@@ -94,7 +96,7 @@ public class MonteCarloTreeCreator {
         }
         nofIterations=i;
         this.cpuTimer.stop();
-        log.info("time used = " + cpuTimer.getAbsoluteProgress());
+        log.info("time used = " + cpuTimer.getAbsoluteProgress()+", nofIterations = " + nofIterations);
 
         return nodeRoot;
     }
@@ -112,11 +114,8 @@ public class MonteCarloTreeCreator {
         return nodeSelected;
     }
 
-    @NotNull
-    private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
+    private StepReturn applyActionAndExpand(NodeInterface nodeSelected, Action actionInSelected) {
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        ActionSelector as=new ActionSelector(nodeSelected);
-        actionInSelected=as.select();
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
@@ -135,9 +134,6 @@ public class MonteCarloTreeCreator {
 
     public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults=new SimulationResults();
-        //State pos= nodeSelected.getState().copy();
-
-
         for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
             List<StepReturn> returns = stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.policy);
             StepReturn endReturn = returns.get(returns.size()-1);
@@ -149,7 +145,7 @@ public class MonteCarloTreeCreator {
         return simulationResults;
     }
 
-    private void backPropagate(StepReturn sr,SimulationResults simulationResults) {
+    private void backPropagate(StepReturn sr,SimulationResults simulationResults, Action actionInSelected) {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
                 .nofNodesOnPath(actionsToSelected.size()+1)
                 .simulationResults(simulationResults)
@@ -167,7 +163,7 @@ public class MonteCarloTreeCreator {
 
     }
 
-    private List<StepReturn> stepToTerminal(State pos,SimulationPolicyInterface policy) {
+    private List<StepReturn> stepToTerminal(State pos, SimulationPolicyInterface policy) {
         List<StepReturn> returns=new ArrayList<>();
         StepReturn stepReturn;
         do {

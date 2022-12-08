@@ -31,7 +31,7 @@ public class TestMonteCarloTreeCreator_3times5grid {
 
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
         System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
@@ -51,7 +51,7 @@ public class TestMonteCarloTreeCreator_3times5grid {
     @Test
     public void iterateFromX2Y0() {
         monteCarloTreeCreator.setStartState(new State(2,0));
-        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
         doPrinting(tih,nodeRoot);
@@ -70,7 +70,7 @@ public class TestMonteCarloTreeCreator_3times5grid {
                 .startState(new State(0,0))
                 .monteCarloSettings(settings)
                 .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
 
         doPrinting(tih,nodeRoot);

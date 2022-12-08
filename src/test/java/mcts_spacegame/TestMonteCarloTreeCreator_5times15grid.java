@@ -74,7 +74,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
 
     @Test
     public void iterateFromX0Y2() {
-        NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         assertStateIsOnBestPath(tih,State.newState(4,4));
@@ -84,7 +84,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
     @Test
     public void iterateFromX0Y2ManyTimes() {
         for (int i = 0; i < 10 ; i++) {
-        NodeInterface nodeRoot = monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         assertStateIsOnBestPath(tih,State.newState(4,4));
         assertStateIsOnBestPath(tih,State.newState(5,4));

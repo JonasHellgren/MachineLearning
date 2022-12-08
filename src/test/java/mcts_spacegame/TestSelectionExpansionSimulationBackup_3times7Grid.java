@@ -128,8 +128,8 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     @NotNull
     private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        ActionSelector as=new ActionSelector(nodeSelected);
-        actionInSelected=as.select();
+        ActionSelector as=new ActionSelector();
+        actionInSelected=as.select(nodeSelected);
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);

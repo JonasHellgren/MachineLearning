@@ -16,19 +16,16 @@ import java.util.stream.Collectors;
 
 @Log
 public class ActionSelector {
-
-    NodeInterface nodeSelected;
     RandUtils<Action> randUtils;
 
-    public ActionSelector(NodeInterface nodeSelected) {
-        this.nodeSelected = nodeSelected;
+    public ActionSelector() {
         this.randUtils=new RandUtils<>();
     }
 
-    public Action select() {
-        List<Action> nonTestedActions = getNonTestedActions();  //todo if size testedActions is zero, choose according to policy
+    public Action select(NodeInterface nodeSelected) {
+        List<Action> nonTestedActions = getNonTestedActions(nodeSelected);  //todo if size testedActions is zero, choose according to policy
         if(nonTestedActions.size()==0) {
-            return getRandomTestedAction();
+            return getRandomTestedAction(nodeSelected);
         } else {
             return getRandomAction(nonTestedActions);
         }
@@ -38,9 +35,9 @@ public class ActionSelector {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private Action getRandomTestedAction() {
+    private Action getRandomTestedAction(NodeInterface nodeSelected) {
         log.warning("No non-tested actions");
-        List<Action> testedActions = getTestedActions();
+        List<Action> testedActions = getTestedActions(nodeSelected);
         int nofTestedActions=testedActions.size();
         if (nofTestedActions==0) {
             throw new RuntimeException("nofTestedActions=0");
@@ -49,15 +46,15 @@ public class ActionSelector {
     }
 
     @NotNull
-    private List<Action> getNonTestedActions() {
-        List<Action> testedActions = getTestedActions();
+    private List<Action> getNonTestedActions(NodeInterface nodeSelected) {
+        List<Action> testedActions = getTestedActions(nodeSelected);
         List<Action> nonTestedActions=new ArrayList<>(Action.applicableActions());  //must be mutable
         nonTestedActions.removeAll(testedActions);
         return nonTestedActions;
     }
 
     @NotNull
-    private List<Action> getTestedActions() {
+    private List<Action> getTestedActions(NodeInterface nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

@@ -1,8 +1,6 @@
 package mcts_spacegame;
 
 import mcts_spacegame.environment.Environment;
-import mcts_spacegame.helpers.NodeInfoHelper;
-import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSearchStatistics;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
@@ -13,8 +11,6 @@ import mcts_spacegame.models_space.State;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Optional;
 
 public class TestMonteCarloSearchStatistics {
 
@@ -38,7 +34,7 @@ public class TestMonteCarloSearchStatistics {
 
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.doMCTSIterations();
+        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
         MonteCarloSearchStatistics statistics= monteCarloTreeCreator.getStatistics();
 
         System.out.println("statistics = " + statistics);

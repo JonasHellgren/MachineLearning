@@ -3,21 +3,17 @@ package mcts_spacegame;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
-import mcts_spacegame.model_mcts.SimulationPolicyInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
-
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSimulationPolicy {
 
@@ -81,7 +77,7 @@ public class TestSimulationPolicy {
     }
 
     @NotNull
-    private List<StepReturn> stepToTerminal(State pos,SimulationPolicyInterface policy) {
+    private List<StepReturn> stepToTerminal(State pos, SimulationPolicyInterface policy) {
         List<StepReturn> returns=new ArrayList<>();
         StepReturn stepReturn;
         do {

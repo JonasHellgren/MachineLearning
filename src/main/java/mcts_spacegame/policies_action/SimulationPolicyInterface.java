@@ -1,4 +1,4 @@
-package mcts_spacegame.model_mcts;
+package mcts_spacegame.policies_action;
 
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_space.State;
