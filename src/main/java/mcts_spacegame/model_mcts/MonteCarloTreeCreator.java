@@ -120,16 +120,20 @@ public class MonteCarloTreeCreator {
         child.setDepth(nodeSelected.getDepth()+1);  //easy to forget
         boolean isChildAddedEarlier= NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
         boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
-        boolean isChildNotToDeep=child.getDepth()<=settings.maxTreeDepth;
+        boolean isChildToDeep=child.getDepth()>settings.maxTreeDepth;
         boolean isChildNonFailTerminal=child.isTerminalNoFail();
 
-        Conditionals.executeIfTrue(isChildAddedEarlier, () ->
-            log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected));
+        Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->
+            log.fine("Child will not be added, child = "+child+", in node = "+nodeSelected));
 
-        Conditionals.executeIfTrue(isSelectedNotTerminal && !isChildAddedEarlier
-                && isChildNotToDeep && !isChildNonFailTerminal, () ->
+        Conditionals.executeIfTrue(isSelectedNotTerminal &&
+                isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->
             nodeSelected.addChildNode(child));
         return sr;
+    }
+
+    private boolean isChildOkToAdd(boolean isChildAddedEarlier, boolean isChildToDeep, boolean isChildNonFailTerminal) {
+        return !isChildAddedEarlier && !isChildToDeep && !isChildNonFailTerminal;
     }
 
     public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {

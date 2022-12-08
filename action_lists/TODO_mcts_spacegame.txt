@@ -96,7 +96,7 @@ NodeSelector - No valid node selected, all children are terminal-fail lite skaki
 
 new5times10Grid redefine memory so lower corridor is choosen  x
 kan man stega in i non term state med icke noll value - ja genom att uppdatera backupNormalFromTreeSteps x
-inte lägga till node i träd om isChildNonFailTerminal
+inte lägga till node i träd om isChildNonFailTerminal  x
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid
 cpuTimer buggar ibland  - nano sec istaället?
