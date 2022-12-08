@@ -56,20 +56,17 @@ public class NodeSelector {
         this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
-    //todo constructor for setting function that test if node is leaf, i.e. sets maxNofTestedActionsToBeLeaf
-
     public NodeInterface select() {
         nodesFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
         while (currentNodeNotIsLeaf(currentNode)) {
             if (selectChild(currentNode).isEmpty()) {
-                log.warning("No valid node selected,all children are terminal-fail");
+                log.warning("No valid node selected, all children are terminal-fail");
                 break;
             } else {
-                currentNode = selectChild(currentNode).get();  //todo not repeat selectChild
+                currentNode = selectChild(currentNode).get();
             }
-
             actionsFromRootToSelected.add(currentNode.getAction());
             nodesFromRootToSelected.add(currentNode);
         }
@@ -92,7 +89,6 @@ public class NodeSelector {
                 : Optional.ofNullable(pair.get().getFirst());
     }
 
-    @NotNull
     private Optional<Pair<NodeInterface, Double>> getPairWithHighestUct(List<Pair<NodeInterface, Double>> nodeUCTPairs) {
         return nodeUCTPairs.stream().
                 reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
@@ -113,7 +109,6 @@ public class NodeSelector {
         return nodeUCTPairs;
     }
 
-    @NotNull
     private List<NodeInterface> getNonFailChildrenNodes(NodeInterface node) {
         return node.getChildNodes().stream()
                 .filter(n -> !n.isTerminalFail())
