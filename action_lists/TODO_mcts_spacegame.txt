@@ -91,13 +91,16 @@ ta veck NodeAbstract nofOffSpringsRec och Counter  x
 TestNodeInterfaceCopy  x
 this.nodeRoot = NodeInterface.copy(nodeRoot);  //todo copy buggar  x
 clean up  x
-kan man stega in i non term state med icke noll value
-TestSimulationReturnsExtractor
-new5times10Grid redefine memory so lower corridor is choosen
+new3times7Grid starta o x1y1
+NodeSelector - No valid node selected, all children are terminal-fail lite skakigt x
 
+new5times10Grid redefine memory so lower corridor is choosen
+kan man stega in i non term state med icke noll value
 kunna speca när tillåtet expandera
+exempel för ovan, tex endast expandera 3 första stegen spacegrid
 cpuTimer buggar ibland  - nano sec istaället?
 dokumentera - speciellt termer
+
 
 best path beror bara på value nofVisits kan ju även påverka val
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration

@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -71,6 +72,7 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         Assert.assertTrue(failList.contains(true));
     }
 
+    @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
@@ -85,6 +87,7 @@ public class TestMonteCarloTreeCreatorWithSimulations_3times5grid {
         Assert.assertTrue(node.isPresent());
     }
 
+    @SneakyThrows
     @Test
     public void iterateFromX0Y1() {
         monteCarloTreeCreator.setStartState(new State(0,1));

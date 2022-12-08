@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class NodeSelector {
 
     private static final double C_DEFAULT = 1;
-    private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT=false;
+    private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT = false;
     public static final int UCT_MAX = 1000;
     List<NodeInterface> nodesFromRootToSelected;
     List<Action> actionsFromRootToSelected;
@@ -35,15 +35,15 @@ public class NodeSelector {
     final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
 
     public NodeSelector(NodeInterface nodeRoot) {
-        this(nodeRoot,C_DEFAULT,EXCLUDE_NEVER_VISITED_DEFAULT);
+        this(nodeRoot, C_DEFAULT, EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
     public NodeSelector(NodeInterface nodeRoot, boolean isExcludeChildrenThatNeverHaveBeenVisited) {
-        this(nodeRoot,C_DEFAULT, isExcludeChildrenThatNeverHaveBeenVisited);
+        this(nodeRoot, C_DEFAULT, isExcludeChildrenThatNeverHaveBeenVisited);
     }
 
     public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration) {
-        this(nodeRoot, coefficientExploitationExploration,EXCLUDE_NEVER_VISITED_DEFAULT);
+        this(nodeRoot, coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
     public NodeSelector(NodeInterface nodeRoot,
@@ -56,16 +56,22 @@ public class NodeSelector {
         this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
-    public NodeInterface select() {
+    public NodeInterface select() throws InterruptedException {
         nodesFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
         while (currentNodeNotIsLeaf(currentNode)) {
-            if (selectChild(currentNode).isEmpty()) {
-                log.warning("No valid node selected, all children are terminal-fail");
+            Optional<NodeInterface> selectedChild = selectChild(currentNode);
+            if (childSelectionFailedAndIsNotEvaluatingBestPath(selectedChild.isEmpty())) {
+                someFailPrinting();
+                throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+
+                        currentNode.getName() + " " +
+                        "shall have been removed during defensive backup. Probably starting in hopeless state.");
+            } else if (childSelectionFailedAndIsEvaluatingBestPath(selectedChild.isEmpty())) {
+                log.warning("Selection failed, ok when evaluating best path. " + actionsFromRootToSelected);
                 break;
             } else {
-                currentNode = selectChild(currentNode).get();
+                currentNode = selectedChild.orElseThrow();
             }
             actionsFromRootToSelected.add(currentNode.getAction());
             nodesFromRootToSelected.add(currentNode);
@@ -73,11 +79,24 @@ public class NodeSelector {
         return currentNode;
     }
 
+    private void someFailPrinting() {
+        log.warning("actionsFromRootToSelected = " + actionsFromRootToSelected);
+        nodesFromRootToSelected.forEach(System.out::println);
+    }
+
+    private boolean childSelectionFailedAndIsEvaluatingBestPath(boolean failed) {
+        return failed && isExcludeChildrenThatNeverHaveBeenVisited;
+    }
+
+    private boolean childSelectionFailedAndIsNotEvaluatingBestPath(boolean failed) {
+        return failed && !isExcludeChildrenThatNeverHaveBeenVisited;
+    }
+
     private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
-        int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(),1,Integer.MAX_VALUE);  //todo debatable
-        boolean isLeaf=nofTestedActions<maxNofTestedActionsToBeLeaf;
+        int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
+        boolean isLeaf = nofTestedActions < maxNofTestedActionsToBeLeaf;
         return !isLeaf;
     }
 
@@ -96,10 +115,10 @@ public class NodeSelector {
 
     private List<Pair<NodeInterface, Double>> getListOfPairsExcludeFailNodes(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = new ArrayList<>();
-        List<NodeInterface> nonTerminalNodes = getNonFailChildrenNodes(node);
-        List<NodeInterface> nodes=(isExcludeChildrenThatNeverHaveBeenVisited)
-                ? getVisitedNodes(nonTerminalNodes)
-                : nonTerminalNodes;
+        List<NodeInterface> nonFailNodes = getNonFailChildrenNodes(node);
+        List<NodeInterface> nodes = (isExcludeChildrenThatNeverHaveBeenVisited)
+                ? getVisitedNodes(nonFailNodes)
+                : nonFailNodes;
 
         for (NodeInterface childNode : nodes) {
             Action actionToReachChildNode = childNode.getAction();
@@ -116,8 +135,8 @@ public class NodeSelector {
     }
 
     private List<NodeInterface> getVisitedNodes(List<NodeInterface> nodes) {
-        return  nodes.stream()
-                .filter(n -> n.getNofVisits()>0)
+        return nodes.stream()
+                .filter(n -> n.getNofVisits() > 0)
                 .collect(Collectors.toList());
     }
 

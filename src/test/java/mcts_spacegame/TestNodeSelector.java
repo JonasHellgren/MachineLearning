@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -67,6 +68,7 @@ public class TestNodeSelector {
     }
 
 
+    @SneakyThrows
     @Test
     public void upCostsStillFreeDownBad() {
         addExperience(nodeRoot,Action.up,-Environment.MOVE_COST+SIM_RES);

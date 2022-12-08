@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -15,7 +16,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class TestMonteCarloTreeCreator_3times5grid {
+public class TestMonteCarloTreeCreator_3times7grid {
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
 
@@ -29,6 +30,7 @@ public class TestMonteCarloTreeCreator_3times5grid {
                 .build();
     }
 
+    @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
         NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
@@ -48,7 +50,8 @@ public class TestMonteCarloTreeCreator_3times5grid {
 
     }
 
-    @Test
+    @SneakyThrows
+    @Test(expected = InterruptedException.class)
     public void iterateFromX2Y0() {
         monteCarloTreeCreator.setStartState(new State(2,0));
         NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
@@ -62,6 +65,21 @@ public class TestMonteCarloTreeCreator_3times5grid {
         Assert.assertFalse(node52.isPresent());
     }
 
+    @SneakyThrows
+    @Test
+    public void iterateFromX1Y1() {
+        monteCarloTreeCreator.setStartState(new State(1,1));
+        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+
+        doPrinting(tih,nodeRoot);
+
+     //   Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+      //  Assert.assertTrue(node11.isPresent());
+        Assert.assertTrue(tih.isStateInAnyNode(new State(2,0)));
+    }
+
+    @SneakyThrows
     @Test public void maxTreeDepth() {
         MonteCarloSettings settings= MonteCarloSettings.builder().maxTreeDepth(3).build();
 
@@ -83,7 +101,7 @@ public class TestMonteCarloTreeCreator_3times5grid {
     private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         nodeRoot.printTree();
-        tih.getBestPath().forEach(System.out::println);
+       // tih.getBestPath().forEach(System.out::println);
     }
 
 }

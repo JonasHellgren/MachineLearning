@@ -76,7 +76,7 @@ public class MonteCarloTreeCreator {
         mctc.nofIterations=0;
     }
 
-    public NodeInterface runIterations() {
+    public NodeInterface runIterations() throws InterruptedException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
         ActionSelector actionSelector=new ActionSelector();
@@ -105,7 +105,7 @@ public class MonteCarloTreeCreator {
         return statistics;
     }
 
-    private NodeInterface select(NodeInterface nodeRoot) {
+    private NodeInterface select(NodeInterface nodeRoot) throws InterruptedException {
         NodeSelector ns = new NodeSelector(nodeRoot,settings.coefficientExploitationExploration);
         NodeInterface nodeSelected=ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();

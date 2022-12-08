@@ -1,7 +1,10 @@
 package mcts_spacegame.helpers;
 
+import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
@@ -17,7 +20,7 @@ import java.util.function.BiFunction;
  * Extracts info from monte carlo decision tree
  */
 
-
+@Log
 public class TreeInfoHelper {
 
     private static final int C_FOR_NO_EXPLORATION = 0;
@@ -76,6 +79,7 @@ public class TreeInfoHelper {
         return state;
     }
 
+    @SneakyThrows
     public List<NodeInterface> getBestPath() {
         NodeSelector ns = new NodeSelector(rootTree, C_FOR_NO_EXPLORATION,true);
         ns.select();
@@ -110,6 +114,18 @@ public class TreeInfoHelper {
         counter.setCount(nofChilds.apply(counter.getCount(),rootTree)); //don't forget grandma
         evalRecursive(rootTree,counter,nofChilds);
         return counter.getCount();
+    }
+
+    public boolean isStateInAnyNode(State state) {
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface,Integer> nofChildrenThatEqualsState = (a,b) -> a+(b.getState().equals(state)?1:0);
+        counter.setCount(nofChildrenThatEqualsState.apply(counter.getCount(),rootTree)); //don't forget grandma
+        evalRecursive(rootTree,counter,nofChildrenThatEqualsState);
+
+        Conditionals.executeIfTrue(counter.getCount()>1, () ->
+            log.warning("More than one node has state = "+state));
+
+        return counter.getCount()>0;
     }
 
     private void evalRecursive(NodeInterface node, Counter counter, BiFunction<Integer,NodeInterface,Integer> bif) {

@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
@@ -91,7 +92,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         Assert.assertFalse(node52.isEmpty());
     }
 
-    @Test
+    @Test(expected = InterruptedException.class)
     public void iterateFromX2Y0() {
         initTree(new State(2,0));
         doMCTSIterations();
@@ -118,6 +119,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         }
     }
 
+    @SneakyThrows
     private NodeInterface select(NodeInterface nodeRoot) {
         NodeSelector ns = new NodeSelector(nodeRoot,C_FOR_UCT);
         NodeInterface nodeSelected=ns.select();

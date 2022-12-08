@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.model_mcts.MonteCarloSearchStatistics;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
@@ -32,6 +33,7 @@ public class TestMonteCarloSearchStatistics {
                 .build();
     }
 
+    @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
         NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();

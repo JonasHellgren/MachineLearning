@@ -121,6 +121,8 @@ public class BackupModifier {
     }
 
     private void makeSelectedTerminal() {
+        log.info("making node = "+nodeSelected.getName() + " terminal, all its children are fail states");
+
         NodeInterface nodeCurrent = rootTree;
         Optional<NodeInterface> parentToSelected = Optional.empty();
         Action actionToSelected = Action.notApplicable;

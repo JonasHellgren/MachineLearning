@@ -68,6 +68,13 @@ public class TestTreeInfoHelper {
         Assert.assertEquals(actions.size()+1,nofNodes);
     }
 
+    @Test public void testIsStateInAnyNode() {
+
+        Assert.assertTrue(tih.isStateInAnyNode(State.newState(0,0)));
+        Assert.assertFalse(tih.isStateInAnyNode(State.newState(10,0)));
+
+    }
+
     private NodeInterface createMCTSTree(List<Action> actions, State rootState) {
 
         State state = rootState.copy();
