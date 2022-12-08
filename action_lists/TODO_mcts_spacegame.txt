@@ -87,6 +87,7 @@ BackupModifierAbstract ta veck  x
 BackupModifierFromSimulations -> SimulationReturnsExtractor  x
 nodesOnPath onödigt för SimulationReturnsExtractor, tex actionsToSelected eller nof  x
 iterateFromX0Y2 fastnar ibland i sub optimal lösning, nytt test iterateFromX0Y2MultipleTimes  x
+ta veck NodeAbstract nofOffSpringsRec och Counter
 clean up
 kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor

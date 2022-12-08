@@ -63,7 +63,7 @@ public abstract class NodeAbstract implements NodeInterface {
         actionRewardMap.put(action,reward);
     }
 
-    public double loadRewardForAction(Action action) {
+    public double restoreRewardForAction(Action action) {
        return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
     }
 

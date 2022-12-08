@@ -1,7 +1,7 @@
 package mcts_spacegame.model_mcts;
 
 import common.Conditionals;
-import common.MathUtils;
+import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
- *   end node in selection path:
+ *   THe end node in selection path can be (and leads to):
  *   1) terminal-non fail => normal backup
  *   2) non terminal => normal backup
  *   3) terminal-fail => defensive backup (simulations not applicable for case)
@@ -25,13 +25,14 @@ import java.util.stream.Collectors;
  *    defensive backup = backup end node AND set it parent as terminal if parents
  *    all children are fail-terminal
  *
- *  *              (r)
- *  *             /   \
- *  *           (1)    (2)
- *  *          /   \
- *  *        (3)    (4)
- *  *
- *  *      actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
+ *             (r)
+ *            /   \
+ *          (1)    (2)
+ *         /   \
+ *       (3)    (4)
+ *
+ *     actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
+ *     in nodeSelected an action will be applied leading to expansion
  *
  */
 
@@ -72,7 +73,7 @@ public class BackupModifier {
     }
 
     public void backup() {
-        backup(new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d)));
+        backup(ListUtils.listWithZeroElements(nodesOnPath.size()));
     }
 
     public void backup(List<Double> returnsSimulation) {
@@ -93,7 +94,7 @@ public class BackupModifier {
         for (NodeInterface nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {
                 Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
-                rewards.add(nodeOnPath.loadRewardForAction(action));
+                rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
         }
         rewards.add(stepReturnOfSelected.reward);
@@ -133,8 +134,8 @@ public class BackupModifier {
         }
 
         if (parentToSelected.isEmpty()) {
-            rootTree.printTree();
             log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
+            rootTree.printTree();
             return;
         }
 
@@ -149,9 +150,9 @@ public class BackupModifier {
             throw new IllegalArgumentException("Non equal list lengths");
         }
 
-        returnsSteps = MathUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
-        returnsSimulation = MathUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
-        List<Double> returnsSum= MathUtils.sumListElements(returnsSteps,returnsSimulation);
+        returnsSteps = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
+        returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
+        List<Double> returnsSum= ListUtils.sumListElements(returnsSteps,returnsSimulation);
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
@@ -177,6 +178,5 @@ public class BackupModifier {
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action,alpha);
     }
-
 
 }

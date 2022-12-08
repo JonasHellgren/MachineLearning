@@ -1,5 +1,6 @@
 package mcts_spacegame.model_mcts;
 
+import common.ListUtils;
 import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -52,7 +53,7 @@ public class SimulationResults {
     public OptionalDouble maxReturn() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
-        return MathUtils.sumListElements(returnList, terminalValueList).stream()
+        return ListUtils.sumListElements(returnList, terminalValueList).stream()
                 .mapToDouble(Double::doubleValue)
                 .max();
     }
@@ -60,7 +61,7 @@ public class SimulationResults {
     public OptionalDouble averageReturn() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
-        return MathUtils.sumListElements(returnList, terminalValueList).stream()
+        return ListUtils.sumListElements(returnList, terminalValueList).stream()
                 .mapToDouble(Double::doubleValue)
                 .average();
     }
@@ -68,7 +69,7 @@ public class SimulationResults {
     public OptionalDouble anyFailingReturn() {
         List<Double> returnList = getReturnsForFailing();
         List<Double> terminalValueList = getTerminalStateValuesForFailing();
-        List<Double> sumList=MathUtils.sumListElements(returnList,terminalValueList);
+        List<Double> sumList=ListUtils.sumListElements(returnList,terminalValueList);
         Random r=new Random();
         return (returnList.size()==0)
                 ? OptionalDouble.empty()

@@ -49,15 +49,7 @@ public class MathUtils {
         return nf.format(value);
     }
 
-    public static OptionalDouble findMinInList(List<Double> list)  {
-        return  list.stream().mapToDouble(Double::doubleValue)
-                .min();
-    }
 
-    public static OptionalDouble findMaxInList(List<Double> list)  {
-        return  list.stream().mapToDouble(Double::doubleValue)
-                .max();
-    }
 
     public static double normalize(double x,double xMin,double xMax) {
         return (x-xMin)/(xMax-xMin);
@@ -87,17 +79,6 @@ public class MathUtils {
         return true;
     }
 
-    public static List<Double> sumListElements(List<Double> listA, List<Double> listB) {
-        return IntStream.range(0, listA.size())
-                .mapToObj(i -> listA.get(i) + listB.get(i))
-                .collect(Collectors.toList());
-    }
 
-    public static List<Double> multiplyListElements(List<Double> list, double scalar) {
-        return list.stream()
-                .map(num -> num * scalar)
-                .collect(Collectors.toList());
-
-    }
 
 }

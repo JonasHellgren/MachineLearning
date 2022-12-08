@@ -49,7 +49,7 @@ public class TestTreeInfoHelper {
 
     @Test public void rewardOfStillInX2Y0IsBad() {
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
-        Assert.assertEquals(-Environment.CRASH_COST,node.loadRewardForAction(Action.still), DELTA_BIG);
+        Assert.assertEquals(-Environment.CRASH_COST,node.restoreRewardForAction(Action.still), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {

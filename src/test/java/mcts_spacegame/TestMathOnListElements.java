@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import common.ListUtils;
 import common.MathUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class TestMathOnListElements {
     @Test
     public void multiplyListWithScalar () {
 
-        List<Double> listC= MathUtils.multiplyListElements(listA,10);
+        List<Double> listC= ListUtils.multiplyListElements(listA,10);
         System.out.println("listC = " + listC);
 
         Assert.assertTrue(listC.containsAll(Arrays.asList(10d,20d,30d,40d,50d)));
@@ -32,7 +33,7 @@ public class TestMathOnListElements {
     @Test
     public void multiplyListWithNegativeScalar () {
 
-        List<Double> listC= MathUtils.multiplyListElements(listA,-10);
+        List<Double> listC= ListUtils.multiplyListElements(listA,-10);
         System.out.println("listC = " + listC);
 
         Assert.assertTrue(listC.containsAll(Arrays.asList(-10d,-20d,-30d,-40d,-50d)));
@@ -40,14 +41,14 @@ public class TestMathOnListElements {
 
     @Test
     public void sumLists () {
-        List<Double> listC= MathUtils.sumListElements(listA,listB);
+        List<Double> listC= ListUtils.sumListElements(listA,listB);
         System.out.println("listC = " + listC);
         Assert.assertTrue(listC.containsAll(Arrays.asList(12d,14d,16d,18d,20d)));
     }
 
     @Test
     public void sumListsOneIsNegated () {
-        List<Double> listC= MathUtils.sumListElements(listA,MathUtils.multiplyListElements(listB,-1));
+        List<Double> listC= ListUtils.sumListElements(listA,ListUtils.multiplyListElements(listB,-1));
         System.out.println("listC = " + listC);
         Assert.assertTrue(listC.containsAll(Arrays.asList(-10d,-10d,-10d,-10d,-10d)));
     }

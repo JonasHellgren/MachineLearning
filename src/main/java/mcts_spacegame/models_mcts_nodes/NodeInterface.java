@@ -47,7 +47,7 @@ public interface NodeInterface {
     boolean isTerminalNoFail();
 
     void saveRewardForAction(Action action, double reward);
-    double loadRewardForAction(Action action);
+    double restoreRewardForAction(Action action);
 
     static NodeNotTerminal newNotTerminal(State s, Action action) {
         return new NodeNotTerminal(s,action);
