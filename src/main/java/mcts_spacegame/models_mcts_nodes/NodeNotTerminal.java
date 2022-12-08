@@ -30,9 +30,15 @@ public final class NodeNotTerminal extends NodeAbstract {
         for (Action a : Action.applicableActions()) {
             nSA.put(a, INIT_NOF_VISITS);
         }
-
     }
 
+    public NodeNotTerminal(NodeNotTerminal node) {
+        super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
+        this.childNodes=new ArrayList<>(node.childNodes);
+        this.nofVisits=node.nofVisits;
+        this.Qsa = new HashMap<>(node.Qsa);
+        this.nSA = new HashMap<>(node.nSA);
+    }
 
     @Override
     public void addChildNode(NodeInterface node) {

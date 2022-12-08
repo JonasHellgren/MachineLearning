@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Log
 public abstract class NodeAbstract implements NodeInterface {
     private static final double INIT_REWARD_VALUE = 0d;
@@ -27,10 +26,21 @@ public abstract class NodeAbstract implements NodeInterface {
     public NodeAbstract(State state,Action action) {
         this.name = state.toString();
         this.action=action;
-        this.state=state;
-        depth=0;
+        this.state=state.copy();
+        this.depth=0;
         this.actionRewardMap=new HashMap<>();
+    }
 
+    public NodeAbstract(String name,
+                        Action action,
+                        State state,
+                        int depth,
+                        Map<Action, Double> actionRewardMap) {
+        this.name = name;
+        this.action = action;
+        this.state = state;
+        this.depth = depth;
+        this.actionRewardMap = new HashMap<>(actionRewardMap);
     }
 
     String nameAndDepthAsString() {

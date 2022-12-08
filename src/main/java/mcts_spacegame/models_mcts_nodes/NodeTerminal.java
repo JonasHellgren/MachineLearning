@@ -17,6 +17,10 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
         super(state,action);
     }
 
+    public NodeTerminal(NodeTerminal node) {
+        super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
+    }
+
     @Override
     @SneakyThrows
     public void addChildNode(NodeInterface node) {

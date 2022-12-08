@@ -11,6 +11,10 @@ public final class NodeTerminalFail extends NodeTerminal {
         super(state, action);
     }
 
+    public NodeTerminalFail(NodeTerminalFail node) {
+        super(node);
+    }
+
     @Override
     public void printTree() {
         System.out.println(nameAndDepthAsString()+ CLASS_NAME);

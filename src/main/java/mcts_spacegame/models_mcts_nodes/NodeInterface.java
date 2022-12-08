@@ -4,9 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.State;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /***
  * A terminal node has no children and represents a terminal state, for ex reached goal.
@@ -68,6 +66,17 @@ public interface NodeInterface {
             return newTerminalFail(stepReturn.newPosition, action);
         } else {
             return newTerminalNotFail(stepReturn.newPosition, action);
+        }
+
+    }
+
+    static NodeInterface copy(NodeInterface otherNode) {
+        if (otherNode instanceof NodeNotTerminal) {
+            return new NodeNotTerminal((NodeNotTerminal) otherNode);
+        } else if (otherNode instanceof NodeTerminalFail) {
+            return new NodeTerminalFail((NodeTerminalFail) otherNode);
+        } else {
+            return new NodeTerminalNotFail((NodeTerminalNotFail) otherNode);
         }
 
     }

@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /***
+ * This class is for selecting nodes in selection phase, i.e. nodes on on selection path
+ *
  * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  */
 

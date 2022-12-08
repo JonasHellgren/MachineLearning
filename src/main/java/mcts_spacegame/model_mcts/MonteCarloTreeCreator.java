@@ -36,17 +36,15 @@ import java.util.Objects;
 @Setter
 @Getter
 public class MonteCarloTreeCreator {
-
     Environment environment;
     State startState;
-    NodeValueMemory memory;
     MonteCarloSettings settings;
+    NodeValueMemory memory;
 
     NodeInterface nodeRoot;
     TreeInfoHelper tih;
     CpuTimer cpuTimer;
     int nofIterations;
-
     List<Action> actionsToSelected;
 
     @Builder
