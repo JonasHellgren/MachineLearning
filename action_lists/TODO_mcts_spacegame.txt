@@ -91,11 +91,12 @@ ta veck NodeAbstract nofOffSpringsRec och Counter  x
 TestNodeInterfaceCopy  x
 this.nodeRoot = NodeInterface.copy(nodeRoot);  //todo copy buggar  x
 clean up  x
-new3times7Grid starta o x1y1
+new3times7Grid starta o x1y1  x
 NodeSelector - No valid node selected, all children are terminal-fail lite skakigt x
 
-new5times10Grid redefine memory so lower corridor is choosen
-kan man stega in i non term state med icke noll value
+new5times10Grid redefine memory so lower corridor is choosen  x
+kan man stega in i non term state med icke noll value - ja genom att uppdatera backupNormalFromTreeSteps x
+inte lägga till node i träd om isChildNonFailTerminal
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid
 cpuTimer buggar ibland  - nano sec istaället?

@@ -66,7 +66,6 @@ public class BackupModifier {
                 () -> bm.settings = settings);
 
         bm.treeInfoHelper = new TreeInfoHelper(rootTree);
-
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
         return bm;
@@ -77,6 +76,11 @@ public class BackupModifier {
     }
 
     public void backup(List<Double> returnsSimulation) {
+        if (nodeSelected.isTerminalNoFail())  {
+            rootTree.printTree();
+            throw new RuntimeException("nodeSelected.isTerminalNoFail");
+        }
+
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
                 () -> backupNormalFromTreeSteps(returnsSimulation),
                 this::backupDefensiveFromTreeSteps);

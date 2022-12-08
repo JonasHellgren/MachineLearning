@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package quarantine;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;

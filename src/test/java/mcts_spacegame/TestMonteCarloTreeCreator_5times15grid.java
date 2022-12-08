@@ -27,13 +27,14 @@ public class TestMonteCarloTreeCreator_5times15grid {
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
+    MonteCarloSettings settings;
     NodeValueMemory memory;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new Environment(spaceGrid);
-        MonteCarloSettings settings= MonteCarloSettings.builder()
+        settings= MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
@@ -92,7 +93,23 @@ public class TestMonteCarloTreeCreator_5times15grid {
         assertStateIsOnBestPath(tih,State.newState(4,4));
         assertStateIsOnBestPath(tih,State.newState(5,4));
         }
+    }
 
+    @SneakyThrows
+    @Test
+    public void iterateFromX0Y2MemoryFavorsSouthRoute() {
+        memory=NodeValueMemory.newEmpty();
+        memory.write(State.newState(14,0),6);
+        memory.write(State.newState(14,2),3);
+        memory.write(State.newState(14,4),0);
+        monteCarloTreeCreator.setMemory(memory);
+
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        assertStateIsOnBestPath(tih,State.newState(4,0));
+        assertStateIsOnBestPath(tih,State.newState(5,0));
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {
