@@ -8,7 +8,6 @@ import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,7 @@ public class TreeInfoHelper {
 
     @Setter
     @Getter
-    public class Counter {
+    public static class Counter {
         int count;
         public Counter( ) {
             count = 0;

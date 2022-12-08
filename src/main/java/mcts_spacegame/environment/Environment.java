@@ -1,7 +1,5 @@
 package mcts_spacegame.environment;
 
-
-import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_space.SpaceCell;
@@ -11,12 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * This class models space ship environment. Most right column are goal states.
+ */
+
 @Log
 public class Environment implements EnvironmentInterface {
-
     public static final double MOVE_COST = 1d;
-    public static final double STILL_COST=0d;
+    public static final double STILL_COST = 0d;
     public static final double CRASH_COST = 100d;
+
     SpaceGrid spaceGrid;
 
     public Environment(SpaceGrid spaceGrid) {
@@ -27,17 +29,15 @@ public class Environment implements EnvironmentInterface {
     public StepReturn step(Action action, State oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
-        if (cellPresentOpt.isEmpty()) {  //if present position not is defined, assume crash
+        if (cellPresentOpt.isEmpty()) {  //if empty, position not defined, assume crash
             return StepReturn.builder()
                     .newPosition(oldPosition).isTerminal(true).isFail(true).reward(-CRASH_COST)
                     .build();
         }
         State newPosition = getNewPosition(action, oldPosition);
-        SpaceCell cellNew=spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
-          boolean isCrashingIntoWall =
-                cellPresentOpt.get().isOnLowerBorder && action.equals(Action.down) ||
-                        cellPresentOpt.get().isOnUpperBorder && action.equals(Action.up);
-        boolean isCrashingIntoObstacle = cellNew.isObstacle; //if new cell not exists use present
+        SpaceCell cellNew = spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
+        boolean isCrashingIntoWall = isOnLowerBorderAndDownOrUpperBorderAndUp(action, cellPresentOpt.get());
+        boolean isCrashingIntoObstacle = cellNew.isObstacle;
         boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isMovingIntoGoal;
@@ -47,6 +47,11 @@ public class Environment implements EnvironmentInterface {
         return StepReturn.builder()
                 .newPosition(newPosition).isTerminal(isTerminal).isFail(isCrashing).reward(reward)
                 .build();
+    }
+
+    private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(Action action, SpaceCell cell) {
+        return cell.isOnLowerBorder && action.equals(Action.down) ||
+                cell.isOnUpperBorder && action.equals(Action.up);
     }
 
     @NotNull
