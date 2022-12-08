@@ -3,7 +3,6 @@ package mcts_spacegame.models_mcts_nodes;
 import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.model_mcts.Counter;
 import mcts_spacegame.models_space.State;
 
 import java.util.*;
@@ -34,19 +33,9 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     }
 
-    @Override
-    protected void nofOffSpringsRec(NodeInterface node, Counter counter) {
-        for (NodeInterface child : node.getChildNodes()) {
-            counter.increment();
-            nofOffSpringsRec(child, counter);
-        }
-    }
 
     @Override
     public void addChildNode(NodeInterface node) {
-      //  ConditionalUtils.executeOnlyIfConditionIsTrue(childNodes.contains(node),
-       //         () -> log.warning("Node already added"));
-
         childNodes.add(node);
         node.setDepth(depth + 1);
     }
@@ -65,13 +54,6 @@ public final class NodeNotTerminal extends NodeAbstract {
     @Override
     public int nofChildNodes() {
         return childNodes.size();
-    }
-
-    @Override
-    public int nofSubNodes() {
-        counter = new Counter();
-        nofOffSpringsRec(this, counter);
-        return counter.value();
     }
 
     @Override

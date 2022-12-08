@@ -30,7 +30,7 @@ public interface NodeInterface {
     Optional<NodeInterface> getChild(Action action);
     State getState();
     int nofChildNodes();
-    int nofSubNodes();
+  //  int nofSubNodes();
     void printTree();
 
     void setDepth(int depth);

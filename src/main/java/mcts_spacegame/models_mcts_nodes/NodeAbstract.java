@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
-import mcts_spacegame.model_mcts.Counter;
 import mcts_spacegame.models_space.State;
 
 import java.util.HashMap;
@@ -23,7 +22,6 @@ public abstract class NodeAbstract implements NodeInterface {
     Action action;
     State state;
     int depth;
-    Counter counter;
     Map<Action, Double> actionRewardMap;
 
     public NodeAbstract(State state,Action action) {
@@ -32,13 +30,8 @@ public abstract class NodeAbstract implements NodeInterface {
         this.state=state;
         depth=0;
         this.actionRewardMap=new HashMap<>();
-/*        for (Action a : Action.applicableActions()) {
-            actionRewardMap.put(a, INIT_REWARD_VALUE);
-        }  */
 
     }
-
-    protected abstract void nofOffSpringsRec(NodeInterface node, Counter counter);
 
     String nameAndDepthAsString() {
         return BLANK_SPACE.repeat(Math.max(0, depth)) + name+","+action+",";
