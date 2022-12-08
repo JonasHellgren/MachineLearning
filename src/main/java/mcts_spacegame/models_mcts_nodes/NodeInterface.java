@@ -28,9 +28,7 @@ public interface NodeInterface {
     Optional<NodeInterface> getChild(Action action);
     State getState();
     int nofChildNodes();
-  //  int nofSubNodes();
     void printTree();
-
     void setDepth(int depth);
     void increaseNofVisits();
     void increaseNofActionSelections(Action a);
@@ -38,12 +36,9 @@ public interface NodeInterface {
     int getNofVisits();
     int getNofActionSelections(Action a);
     double getActionValue(Action a);
-    Set<Action> getActionSet();
-
     boolean isNotTerminal();
     boolean isTerminalFail();
     boolean isTerminalNoFail();
-
     void saveRewardForAction(Action action, double reward);
     double restoreRewardForAction(Action action);
 

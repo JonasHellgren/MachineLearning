@@ -14,6 +14,4 @@ public interface SimulationPolicyInterface {
     static SimulationPolicyInterface newEqualProbability() {
         return new EqualActionProbabilityPolicy();
     }
-
-
 }

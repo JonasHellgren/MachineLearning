@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/***
+ * Memory for storing state values
+ */
+
 public class NodeValueMemory {
 
     public static final double DEFAULT_VALUE = 0d;

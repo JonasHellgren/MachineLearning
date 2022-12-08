@@ -18,7 +18,7 @@ import java.util.Objects;
  *   These returns are returned from backup() and later used by another class BackupModifier to modify nodes on the tree
  *   selection path.
  *
- *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
+ *   Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
  *   from a set of simulations:
  *   1) at least one simulation is terminal-non fail => normal backup from mix of max and average of non-fail simulations
@@ -32,7 +32,6 @@ import java.util.Objects;
 @Log
 public class SimulationReturnsExtractor {
 
-   // List<NodeInterface> nodesOnPath;
     int nofNodesOnPath;
     SimulationResults simulationResults;
     MonteCarloSettings settings;
@@ -79,7 +78,6 @@ public class SimulationReturnsExtractor {
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
         return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
     }
-
 
     /**
      *    nodesOnPath = (r)  ->  (1) ->  (2) ->  (3) ->  (4)

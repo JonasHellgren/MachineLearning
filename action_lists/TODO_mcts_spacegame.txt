@@ -90,7 +90,7 @@ iterateFromX0Y2 fastnar ibland i sub optimal lösning, nytt test iterateFromX0Y2
 ta veck NodeAbstract nofOffSpringsRec och Counter  x
 TestNodeInterfaceCopy  x
 this.nodeRoot = NodeInterface.copy(nodeRoot);  //todo copy buggar  x
-clean up
+clean up  x
 kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor
 new5times10Grid redefine memory so lower corridor is choosen

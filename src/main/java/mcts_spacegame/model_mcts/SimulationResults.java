@@ -1,19 +1,18 @@
 package mcts_spacegame.model_mcts;
 
 import common.ListUtils;
-import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import mcts_spacegame.models_space.State;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-@ToString
+/**
+ * Data container for the simulate step
+ */
+
 public class SimulationResults {
 
     @AllArgsConstructor
@@ -111,8 +110,6 @@ public class SimulationResults {
     private List<SimulationResult> failingResults() {
         return results.stream().filter(r -> r.isEndingInFail).collect(Collectors.toList());
     }
-
-
 
     @Override
     public String toString() {

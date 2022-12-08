@@ -1,7 +1,6 @@
 package mcts_spacegame.models_mcts_nodes;
 
 import common.Conditionals;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
@@ -77,14 +76,13 @@ public abstract class NodeAbstract implements NodeInterface {
         boolean isSameState = equalsSample.getState().equals(this.getState());
         boolean isSameAction = equalsSample.getAction()==this.getAction();
         boolean isSameDepth = equalsSample.getDepth()==this.getDepth();
-
         return isSameState && isSameAction && isSameDepth;
     }
 
     @Override
     public String toString() {
         return  "name = "+name+
-              //  ", nof ch. = " + 0+
+                ", nof ch. = " + this.nofChildNodes()+
                 ", a = " + action +
                 ", d = " + depth;
     }

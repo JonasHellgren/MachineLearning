@@ -77,11 +77,5 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
         return 0;
     }
 
-    @Override
-    public Set<Action> getActionSet() {
-        return Collections.emptySet();
-    }
-
-
 
 }

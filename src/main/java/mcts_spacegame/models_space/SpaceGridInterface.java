@@ -47,7 +47,6 @@ public interface SpaceGridInterface {
         List<Pair<Integer, Integer>> rowY3 = createRow(3);
         occupiedCells.addAll(rowY1);
         occupiedCells.addAll(rowY3);
-       // occupiedCells.addAll(Arrays.asList(new Pair<>(14, 0), new Pair<>(14, 2), new Pair<>(14, 4)));
         return new SpaceGrid(5, 15, occupiedCells);
     }
 

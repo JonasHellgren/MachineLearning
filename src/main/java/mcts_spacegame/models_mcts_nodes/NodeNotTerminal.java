@@ -111,10 +111,6 @@ public final class NodeNotTerminal extends NodeAbstract {
         return Qsa.get(a);
     }
 
-    @Override
-    public Set<Action> getActionSet() {
-        return Qsa.keySet();
-    }
 
     @Override
     public String toString() {

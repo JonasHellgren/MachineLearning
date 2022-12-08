@@ -64,11 +64,7 @@ public class SpaceGrid implements SpaceGridInterface {
         }
         spaceCellOpt=Optional.of(grid[rc.column][rc.row]);
         return spaceCellOpt;
-
-        //return grid[rc.column][rc.row];
     }
-
-
 
     public void clear() {
         fillGrid(new ArrayList<>());
