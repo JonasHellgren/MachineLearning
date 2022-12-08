@@ -30,8 +30,6 @@ public class MonteCarloSettings {
     int maxTreeDepth = MAX_TREE_DEPTH_DEFAULT;
     @Builder.Default
     long timeBudgetMilliSeconds = TIME_BUDGET_DEFAULT;
-  //  @Builder.Default
-  //  boolean isBackupFromSteps = BACKUP_STEPS_DEFAULT;
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
     @Builder.Default

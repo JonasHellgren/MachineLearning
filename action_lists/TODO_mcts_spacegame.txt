@@ -85,12 +85,14 @@ test multiplyListElements x
 BackupModifierFromSteps -> BackupModifier  x
 BackupModifierAbstract ta veck  x
 BackupModifierFromSimulations -> SimulationReturnsExtractor  x
+nodesOnPath onödigt för SimulationReturnsExtractor, tex actionsToSelected eller nof  x
 iterateFromX0Y2 fastnar ibland i sub optimal lösning, nytt test iterateFromX0Y2MultipleTimes
+clean up
 kan man stega in i non term state med icke noll value
 TestSimulationReturnsExtractor
 new5times10Grid redefine memory so lower corridor is choosen
 
-clean up
+
 dokumentera - speciellt termer
 
 best path beror bara på value nofVisits kan ju även påverka val

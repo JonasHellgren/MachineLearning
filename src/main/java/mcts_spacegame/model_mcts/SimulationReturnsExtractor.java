@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Objects;
 
 /***
+ *   This class analyses a set of simulation results, i.e. simulationResults. The result is a list of returns.
+ *   These returns are returned from backup() and later used by another class BackupModifier to modify nodes on the tree
+ *   selection path.
+ *
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
  *   from a set of simulations:
@@ -28,21 +32,18 @@ import java.util.Objects;
 @Log
 public class SimulationReturnsExtractor {
 
-    List<NodeInterface> nodesOnPath;
+   // List<NodeInterface> nodesOnPath;
+    int nofNodesOnPath;
     SimulationResults simulationResults;
     MonteCarloSettings settings;
 
-
-
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static SimulationReturnsExtractor newBUM(@NonNull NodeInterface rootTree,
-                                                     @NonNull List<Action> actionsToSelected,
+    private static SimulationReturnsExtractor newBUM(@NonNull Integer nofNodesOnPath,
                                                      @NonNull SimulationResults simulationResults,
                                                      MonteCarloSettings settings) {
         SimulationReturnsExtractor bms=new SimulationReturnsExtractor();
-        TreeInfoHelper treeInfoHelper=new TreeInfoHelper(rootTree);
-        bms.nodesOnPath = treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
+        bms.nofNodesOnPath = nofNodesOnPath;
         bms.simulationResults = simulationResults;
 
         Conditionals.executeOneOfTwo(Objects.isNull(settings),
@@ -54,7 +55,7 @@ public class SimulationReturnsExtractor {
 
     public List<Double>  backup() {
         if (simulationResults.size()==0) {
-            return new ArrayList<>(Collections.nCopies(nodesOnPath.size(),0d));  //todo into MathUtils
+            return new ArrayList<>(Collections.nCopies(nofNodesOnPath,0d));  //todo into MathUtils
         }
         List<Double> returnsSimulation;
         if(!simulationResults.areAllSimulationsTerminalFail()) {
@@ -69,14 +70,14 @@ public class SimulationReturnsExtractor {
         double avgReturn=simulationResults.averageReturn().orElseThrow();
         double c=settings.coefficientMaxAverageReturn;
         double mixReturn=c*maxReturn+(1-c)*avgReturn;
-        return updateNodesFromReturn(mixReturn, settings.discountFactorSimulationNormal);
+        return getReturns(mixReturn, settings.discountFactorSimulationNormal);
     }
 
 
     public List<Double>  backupDefensive() {
         log.fine("backupDefensive");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
-        return  updateNodesFromReturn(failReturn, settings.discountFactorSimulationDefensive);
+        return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
     }
 
 
@@ -86,13 +87,10 @@ public class SimulationReturnsExtractor {
      *    so for this example with discountFactor=0.9 => discount (r) is 0.9^(5-0-1)=0.9^4 and for (4) it is 0.9^(5-4-1) = 1
      */
 
-    private List<Double> updateNodesFromReturn(double singleReturn, double discountFactor) {
-       // List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
-        int nofNodesOnPath = nodesOnPath.size();
+    private List<Double> getReturns(double singleReturn, double discountFactor) {
         List<Double> returnsSimulation=new ArrayList<>();
-        for (NodeInterface node : nodesOnPath) {
-            //Action action = actions.get(nodesOnPath.indexOf(node));
-            int nofNodesRemaining=nofNodesOnPath-nodesOnPath.indexOf(node)-1;
+        for (int ni = 0; ni <nofNodesOnPath ; ni++) {
+            int nofNodesRemaining=nofNodesOnPath-ni-1;
             double discount=Math.pow(discountFactor,nofNodesRemaining);
             returnsSimulation.add(singleReturn*discount);
         }
