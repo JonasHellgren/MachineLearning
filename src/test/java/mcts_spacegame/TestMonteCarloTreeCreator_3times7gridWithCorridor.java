@@ -28,7 +28,7 @@ public class TestMonteCarloTreeCreator_3times7gridWithCorridor {
         MonteCarloSettings settings = MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
                 .maxNofIterations(50)
-                .nofSimulationsPerNode(0)
+                .nofSimulationsPerNode(10)
                 .build();
         monteCarloTreeCreator = MonteCarloTreeCreator.builder()
                 .environment(environment)

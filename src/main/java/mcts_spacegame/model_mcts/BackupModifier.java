@@ -48,6 +48,7 @@ public class BackupModifier {
     List<Action> actionsToSelected;
     Action actionOnSelected;
     StepReturn stepReturnOfSelected;
+    Double valueInTerminal;
     MonteCarloSettings settings;
 
     TreeInfoHelper treeInfoHelper;
@@ -60,12 +61,16 @@ public class BackupModifier {
                                          @NonNull List<Action> actionsToSelected,
                                          @NonNull Action actionOnSelected,
                                          @NonNull StepReturn stepReturnOfSelected,
+                                         Double valueInTerminal,
                                          MonteCarloSettings settings)  {
         BackupModifier bm = new BackupModifier();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
         bm.stepReturnOfSelected = stepReturnOfSelected;
+        Conditionals.executeOneOfTwo(Objects.isNull(valueInTerminal),
+                () -> bm.valueInTerminal = 0d,
+                () -> bm.valueInTerminal = valueInTerminal);
         Conditionals.executeOneOfTwo(Objects.isNull(settings),
                 () -> bm.settings = MonteCarloSettings.builder().build(),
                 () -> bm.settings = settings);
@@ -107,6 +112,7 @@ public class BackupModifier {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
+        returnsSteps=ListUtils.addScalarToListElements(returnsSteps,valueInTerminal);
         updateNodesFromReturns(returnsSteps, returnsSimulation);
     }
 

@@ -25,6 +25,11 @@ public class ListUtils {
                 .collect(Collectors.toList());
     }
 
+    public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {
+        return listA.stream().map(num -> num + scalar)
+                .collect(Collectors.toList());
+    }
+
     public static List<Double> multiplyListElements(List<Double> list, double scalar) {
         return list.stream()
                 .map(num -> num * scalar)

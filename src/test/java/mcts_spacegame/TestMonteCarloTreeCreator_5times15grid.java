@@ -2,6 +2,7 @@ package mcts_spacegame;
 
 import common.MathUtils;
 import lombok.SneakyThrows;
+import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -17,6 +18,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public class TestMonteCarloTreeCreator_5times15grid {
@@ -24,6 +27,7 @@ public class TestMonteCarloTreeCreator_5times15grid {
     private static final int NOF_SIMULATIONS_PER_NODE = 100;  //important
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 2;
+    private static final double DELTA = 0.5;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -110,6 +114,40 @@ public class TestMonteCarloTreeCreator_5times15grid {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         assertStateIsOnBestPath(tih,State.newState(4,0));
         assertStateIsOnBestPath(tih,State.newState(5,0));
+    }
+
+    @SneakyThrows
+    @Test
+    public void iterateFromX10Y4WithNoSimulations() {
+
+        settings= MonteCarloSettings.builder()
+                .coefficientMaxAverageReturn(1) //only max
+                .maxTreeDepth(MAX_TREE_DEPTH)
+                .maxNofIterations(100)
+                .nofSimulationsPerNode(0)
+                .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
+                .build();
+        memory=NodeValueMemory.newEmpty();
+        memory.write(State.newState(14,0),0);
+        memory.write(State.newState(14,2),3);
+        memory.write(State.newState(14,4),6);
+        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(State.newState(10,4))
+                .monteCarloSettings(settings)
+                .memory(memory)
+                .build();
+
+        //monteCarloTreeCreator.setStartState(State.newState(10,4));
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        assertStateIsOnBestPath(tih,State.newState(11,4));
+
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Collections.singletonList(Action.still));
+        System.out.println("node = " + node);
+        assertStateIsOnBestPath(tih,State.newState(13,4));
+        Assert.assertEquals(6,node.orElseThrow().getActionValue(Action.still), DELTA);
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {

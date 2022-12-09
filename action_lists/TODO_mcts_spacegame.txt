@@ -101,7 +101,9 @@ new3times7GridWithTrapCorridor  x
 NodeSelector buggar  x
 testMakeSelectedTerminal  x
 clean up  x
-kunna gå in i goal med + med steps
+kunna gå in i goal med + med steps  x
+iterateFromX10Y4WithNoSimulations  x
+fler testerkunna gå in i goal med + med steps
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid
 cpuTimer buggar ibland  - nano sec istaället?

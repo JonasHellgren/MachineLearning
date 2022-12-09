@@ -159,11 +159,16 @@ public class MonteCarloTreeCreator {
                 .build();
         List<Double> returnsSimulation=bumSim.backup();
 
+        double valueInTerminal=(sr.isTerminal)
+                ?memory.read(sr.newPosition)
+                :0;
+
         BackupModifier bumSteps = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
-                .settings(settings)
                 .stepReturnOfSelected(sr)
+                .valueInTerminal(valueInTerminal)
+                .settings(settings)
                 .build();
         bumSteps.backup(returnsSimulation);
 
