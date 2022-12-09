@@ -100,7 +100,7 @@ inte lägga till node i träd om isChildNonFailTerminal  x
 new3times7GridWithTrapCorridor  x
 NodeSelector buggar  x
 testMakeSelectedTerminal  x
-clean up
+clean up  x
 kunna gå in i goal med + med steps
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid

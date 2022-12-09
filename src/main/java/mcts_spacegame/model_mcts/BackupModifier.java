@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /***
+ *  This class updates monte carlo tree, internal node variables can be changed or node(s) can be replaced.
+ *
  *   A special case managed by backup operator is than all children of selected node are fail nodes. These leads
  *   to transforming selected node to terminal fail.
  *
@@ -58,8 +60,7 @@ public class BackupModifier {
                                          @NonNull List<Action> actionsToSelected,
                                          @NonNull Action actionOnSelected,
                                          @NonNull StepReturn stepReturnOfSelected,
-                                         MonteCarloSettings settings,
-                                         NodeInterface nodeSelected) {
+                                         MonteCarloSettings settings)  {
         BackupModifier bm = new BackupModifier();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
@@ -71,11 +72,7 @@ public class BackupModifier {
 
         bm.treeInfoHelper = new TreeInfoHelper(rootTree);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
-
-        //todo fimpa actionsToSelected
-        Conditionals.executeOneOfTwo(Objects.isNull(nodeSelected),
-                () -> bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow(),
-                () -> bm.nodeSelected = nodeSelected);
+        bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
 
         return bm;
     }
@@ -86,7 +83,6 @@ public class BackupModifier {
 
     public void backup(List<Double> returnsSimulation) throws InterruptedException {
         throwExceptionIfMotivated();
-
         if (areAllChildrenToSelectedNodeTerminalFail()) {
             makeSelectedTerminal();
         } else {
@@ -101,7 +97,6 @@ public class BackupModifier {
             rootTree.printTree();
             throw new RuntimeException("Selected node is TerminalNoFail - shall not happen");
         }
-
         if (nodeSelected.equals(rootTree) && areAllChildrenToSelectedNodeTerminalFail()) {
             rootTree.printTree();
             throw new InterruptedException("All children to to root node are terminal - no solution exists");
@@ -118,7 +113,7 @@ public class BackupModifier {
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
-            if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because uts reward is added after for loop
+            if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
                 Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }

@@ -59,7 +59,6 @@ public class TestBackupModifier {
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
-                .nodeSelected(nodeSelected.orElseThrow())
                 .build();
 
         nodeRoot.printTree();
