@@ -76,6 +76,10 @@ public abstract class NodeAbstract implements NodeInterface {
         boolean isSameState = equalsSample.getState().equals(this.getState());
         boolean isSameAction = equalsSample.getAction()==this.getAction();
         boolean isSameDepth = equalsSample.getDepth()==this.getDepth();
+
+    //    System.out.println("isSameState = " + isSameState);
+     //   System.out.println("isSameAction = " + isSameAction);
+    //    System.out.println("isSameDepth = " + isSameDepth);
         return isSameState && isSameAction && isSameDepth;
     }
 

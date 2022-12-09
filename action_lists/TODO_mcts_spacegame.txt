@@ -99,6 +99,7 @@ kan man stega in i non term state med icke noll value - ja genom att uppdatera b
 inte lägga till node i träd om isChildNonFailTerminal  x
 new3times7GridWithTrapCorridor  x
 NodeSelector buggar
+testMakeSelectedTerminal
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid
 cpuTimer buggar ibland  - nano sec istaället?

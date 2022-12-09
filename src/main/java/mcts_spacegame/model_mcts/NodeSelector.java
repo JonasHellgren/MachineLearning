@@ -56,7 +56,7 @@ public class NodeSelector {
         this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
-    public NodeInterface select() throws InterruptedException {
+    public NodeInterface selectOld() throws InterruptedException {
         nodesFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
@@ -84,6 +84,50 @@ public class NodeSelector {
         return currentNode;
     }
 
+    public NodeInterface select() throws InterruptedException {
+        nodesFromRootToSelected.clear();
+        NodeInterface currentNode = nodeRoot;
+        NodeInterface parentToCurrentNode = nodeRoot;
+
+        nodesFromRootToSelected.add(currentNode);
+        while (currentNodeNotIsLeaf(currentNode)) {
+
+            Optional<NodeInterface> selectedChild = selectChild(currentNode);
+           /* if (currentNode.isTerminalFail()) {
+                System.out.println("returning parentToCurrentNode");
+                return parentToCurrentNode;
+            }
+            */
+
+
+            if (selectedChild.isEmpty()) {
+                System.out.println("returning currentNode");
+                return currentNode;
+            }
+
+            if (childSelectionFailedAndIsNotEvaluatingBestPath(selectedChild.isEmpty())) {
+                someFailPrinting();
+                //   throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+ currentNode.getName() + " " + "shall have been removed during defensive backup. Probably starting in hopeless state.");
+
+                // log.warning("Selection failed, all children are terminal-fail, this node = "+
+                //           currentNode.getName() + " " +
+                //         "shall have been removed during defensive backup. Probably starting in hopeless state.");
+                // return nodesFromRootToSelected.get(nodesFromRootToSelected.size()-1);
+                // break;
+                return currentNode;
+            } else if (childSelectionFailedAndIsEvaluatingBestPath(selectedChild.isEmpty())) {
+                log.warning("Selection failed, ok when evaluating best path. " + actionsFromRootToSelected);
+                break;
+            } else {
+                parentToCurrentNode = currentNode;
+                currentNode = selectedChild.orElseThrow();
+            }
+            actionsFromRootToSelected.add(currentNode.getAction());
+            nodesFromRootToSelected.add(currentNode);
+        }
+        return currentNode;
+    }
+
     private void someFailPrinting() {
         log.warning("actionsFromRootToSelected = " + actionsFromRootToSelected);
         nodesFromRootToSelected.forEach(System.out::println);
@@ -97,7 +141,7 @@ public class NodeSelector {
         return failed && !isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
-    private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {
+    private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable

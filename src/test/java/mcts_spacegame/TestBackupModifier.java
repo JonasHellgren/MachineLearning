@@ -6,6 +6,7 @@ import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
@@ -40,6 +41,41 @@ public class TestBackupModifier {
 
         NodeInterface treeRoot = createMCTSTree(actions, rootState, stepReturns);
         treeRoot.printTree();
+
+    }
+
+    @Test public void testMakeSelectedTerminal() {
+        State rootState=new State(0,0);
+        List<Action> actionsToSelected= Arrays.asList(Action.still,Action.still);
+        Action actionInSelected=Action.down;
+        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        Optional<NodeInterface> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
+
+
+        bum = BackupModifier.builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .nodeSelected(nodeSelected.orElseThrow())
+                .build();
+
+        nodeRoot.printTree();
+        tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
+
+        bum.makeSelectedTerminal();
+
+        nodeRoot.printTree();
+        tih.getNodesOnPathForActions(actionsToSelected).get().forEach(System.out::println);
+
+        Optional<NodeInterface> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
+
+        System.out.println("nodeSelected.orElseThrow() = " + nodeSelected.orElseThrow());
+        System.out.println("nodeSelected2.orElseThrow() = " + nodeSelected2.orElseThrow());
+
+        Assert.assertFalse(nodeSelected.orElseThrow() instanceof NodeTerminalFail);
+        Assert.assertTrue(nodeSelected2.orElseThrow() instanceof NodeTerminalFail);
 
     }
 

@@ -89,6 +89,10 @@ public class BackupModifier {
             rootTree.printTree();
             throw new RuntimeException("nodeSelected.isTerminalNoFail");
         }
+        if (isAllChildrenAreTerminal()) {
+            makeSelectedTerminal();
+            return;
+        }
 
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
                 () -> backupNormalFromTreeSteps(returnsSimulation),
@@ -104,16 +108,36 @@ public class BackupModifier {
 
     private List<Double> getRewards() {
 
+/*
         if (actionsToSelected.size() != nodesOnPath.size()) {
             log.warning("non equal lengths");
             System.out.println("actionsToSelected = " + actionsToSelected);
+            System.out.println("actionOnSelected = " + actionOnSelected);
             System.out.println("nodesOnPath = " + nodesOnPath);
+            System.out.println("nodeSelected = " + nodeSelected);
+            nodeSelected.printTree();
             throw new RuntimeException("non equal lengths");
-        }
+        }  */
+
 
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
-            if (!nodeOnPath.equals(nodeSelected)) {
+            if (!nodeOnPath.equals(nodeSelected)) {   //todo behövs?
+
+                if (nodesOnPath.indexOf(nodeOnPath)>= actionsToSelected.size()) {
+                    System.out.println("nodeOnPath = " + nodeOnPath);
+                    System.out.println("nodeOnPath.getClass() = " + nodeOnPath.getClass());
+                    System.out.println("nodeSelected = " + nodeSelected);
+                    System.out.println("nodeSelected.getClass() = " + nodeSelected.getClass());
+                    System.out.println("nodeOnPath.equals(nodeSelected) = " + nodeOnPath.equals(nodeSelected));
+                    System.out.println("actionsToSelected = " + actionsToSelected);
+                    System.out.println("actionOnSelected = " + actionOnSelected);
+                    System.out.println("nodesOnPath");
+                    nodesOnPath.forEach(System.out::println);
+
+                    rootTree.printTree();
+                }
+
                 Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
@@ -133,15 +157,20 @@ public class BackupModifier {
     }
 
     private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
-        Set<Action> children = nodeSelected.getChildNodes().stream()
-                .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
-                .collect(Collectors.toSet());
+        boolean allChildrenAreTerminal = isAllChildrenAreTerminal();
 
-        Conditionals.executeIfTrue(children.size() == Action.applicableActions().size(),
+        Conditionals.executeIfTrue(allChildrenAreTerminal,
                 this::makeSelectedTerminal);
     }
 
-    private void makeSelectedTerminal() {
+    private boolean isAllChildrenAreTerminal() {
+        Set<Action> children = nodeSelected.getChildNodes().stream()
+                .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
+                .collect(Collectors.toSet());
+        return children.size() == Action.applicableActions().size();
+    }
+
+    public void makeSelectedTerminal() {
         log.info("making node = "+nodeSelected.getName() + " terminal, all its children are fail states");
 
         NodeInterface nodeCurrent = rootTree;
@@ -158,17 +187,23 @@ public class BackupModifier {
 
         if (parentToSelected.isEmpty()) {
             log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
-            rootTree.printTree();
+            //rootTree.printTree();
             return;
         } else
         {
             log.warning("Parent to selected is = "+parentToSelected.orElseThrow());
         }
 
-        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState(), actionToSelected);
+        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
         List<NodeInterface> childrenToParent = parentToSelected.get().getChildNodes();
         childrenToParent.remove(nodeSelected);
         parentToSelected.get().addChildNode(selectedAsTerminalFail);
+
+      //  System.out.println("parentToSelected");
+      //  parentToSelected.orElseThrow().printTree();
+      //  System.out.println("rootTree");
+      //  rootTree.printTree();
+
     }
 
     private void updateNodesFromReturns(List<Double> returnsSteps,List<Double> returnsSimulation) {
