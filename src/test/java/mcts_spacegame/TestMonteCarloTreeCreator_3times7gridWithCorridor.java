@@ -25,14 +25,14 @@ public class TestMonteCarloTreeCreator_3times7gridWithCorridor {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7GridWithTrapCorridor();
         environment = new Environment(spaceGrid);
-        MonteCarloSettings settings= MonteCarloSettings.builder()
+        MonteCarloSettings settings = MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
-                .maxNofIterations(40)
+                .maxNofIterations(50)
                 .nofSimulationsPerNode(0)
                 .build();
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+        monteCarloTreeCreator = MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(new State(0,0))
+                .startState(new State(0, 0))
                 .monteCarloSettings(settings)
                 .build();
     }
@@ -40,49 +40,28 @@ public class TestMonteCarloTreeCreator_3times7gridWithCorridor {
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-
-        System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
-
-        System.out.println("tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow() =");
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
+        doPrinting(tih, nodeRoot);
 
-        doPrinting(tih,nodeRoot);
-
-      //  Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
-     //   Assert.assertTrue(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(4,2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(4, 2));
         Assert.assertTrue(node52.isPresent());
     }
 
-    @SneakyThrows
-    @Test
-    public void iterateFromX2Y0() {
-        NodeInterface nodeRoot=null;
-        for (int i = 0; i < 100; i++) {
-        monteCarloTreeCreator.setStartState(new State(2,0));
-        nodeRoot=monteCarloTreeCreator.runIterations();
-            TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-            Assert.assertTrue(tih.isStateInAnyNode(new State(3,0)));
-            Assert.assertFalse(tih.isStateInAnyNode(new State(4,0)));
-        }
+    @Test(expected = InterruptedException.class)
+    public void iterateFromX2Y0() throws InterruptedException {
+        monteCarloTreeCreator.setStartState(new State(2, 0));
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        Assert.assertTrue(tih.isStateInAnyNode(new State(3, 0)));
+        Assert.assertFalse(tih.isStateInAnyNode(new State(4, 0)));
 
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
+        doPrinting(tih, nodeRoot);
 
-        System.out.println("tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow() =");
-        tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
-
-        doPrinting(tih,nodeRoot);
-
-        //Optional<NodeInterface> node11= tih.isStateInAnyNode(new State(4,0));
-
-       // Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,0));
-        //Assert.assertTrue(node52.isPresent());
     }
 
-    private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
+    private void doPrinting(TreeInfoHelper tih, NodeInterface nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         nodeRoot.printTree();
         tih.getBestPath().forEach(System.out::println);

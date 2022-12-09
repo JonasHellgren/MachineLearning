@@ -81,18 +81,11 @@ public class MonteCarloTreeCreator {
         int i;
         ActionSelector actionSelector=new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
-            System.out.println("----------------i = " + i);
-            nodeRoot.printTree();
             NodeInterface nodeSelected = select(nodeRoot);
             Action actionInSelected=actionSelector.select(nodeSelected);
             StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected);
             SimulationResults simulationResults=simulate(sr.newPosition);
             backPropagate(sr,simulationResults,actionInSelected,nodeSelected);
-            System.out.println("nodeSelected = " + nodeSelected);
-            System.out.println("actionInSelected = " + actionInSelected);
-            System.out.println("-----after");
-            nodeRoot.printTree();
-
 
             if (cpuTimer.isTimeExceeded()) {
                 log.warning("Time exceeded");
@@ -157,7 +150,10 @@ public class MonteCarloTreeCreator {
     }
 
     //todo skicka in nodeSelected
-    private void backPropagate(StepReturn sr,SimulationResults simulationResults, Action actionInSelected, NodeInterface nodeSelected) {
+    private void backPropagate(StepReturn sr,
+                               SimulationResults simulationResults,
+                               Action actionInSelected,
+                               NodeInterface nodeSelected) throws InterruptedException {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
                 .nofNodesOnPath(actionsToSelected.size()+1)
                 .simulationResults(simulationResults)
@@ -172,7 +168,7 @@ public class MonteCarloTreeCreator {
                 .stepReturnOfSelected(sr)
                 .nodeSelected(nodeSelected)
                 .build();
-                bumSteps.backup(returnsSimulation);
+        bumSteps.backup(returnsSimulation);
 
     }
 

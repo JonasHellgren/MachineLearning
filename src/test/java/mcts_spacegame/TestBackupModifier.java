@@ -1,5 +1,6 @@
 package mcts_spacegame;
 
+import lombok.SneakyThrows;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
@@ -80,6 +81,7 @@ public class TestBackupModifier {
     }
 
 
+    @SneakyThrows
     @Test
     public void moveDownFromX0Y0ToGetFailState() {
         State rootState = new State(0, 0);
@@ -107,6 +109,7 @@ public class TestBackupModifier {
 
 
 
+    @SneakyThrows
     @Test
     public void moveFromX0Y0Tox6y2GivesTwoMoveCost() {
         State rootState=new State(0,0);
@@ -137,6 +140,7 @@ public class TestBackupModifier {
 
 
 
+    @SneakyThrows
     @Test
     public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
         State rootState=new State(0,0);
@@ -165,6 +169,7 @@ public class TestBackupModifier {
 
 
 
+    @SneakyThrows
     @Test
     public void moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap() {
         State rootState=new State(0,0);
@@ -204,6 +209,7 @@ public class TestBackupModifier {
     }
 
 
+    @SneakyThrows
     @NotNull
     private NodeInterface updateTreeFromActionInState(List<Action> actionsToSelected,
                                                       Action actionInSelected,

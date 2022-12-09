@@ -147,6 +147,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         return sr;
     }
 
+    @SneakyThrows
     private void backPropagate(StepReturn sr) {
         BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)

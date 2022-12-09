@@ -9,13 +9,16 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /***
- *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
+ *   A special case managed by backup operator is than all children of selected node are fail nodes. These leads
+ *   to transforming selected node to terminal fail.
  *
+ *   Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *   The new node in selection path can be (and leads to):
  *   1) terminal-non fail => normal backup
  *   2) non terminal => normal backup
@@ -32,11 +35,8 @@ import java.util.stream.Collectors;
  *       /
  *   (new node)
  *
- *     actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
- *     in nodeSelected an action will be applied leading to expansion
- *
- *
- *
+ *  actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
+ *  in nodeSelected an action will be applied leading to expansion
  */
 
 @Log
@@ -60,11 +60,11 @@ public class BackupModifier {
                                          @NonNull StepReturn stepReturnOfSelected,
                                          MonteCarloSettings settings,
                                          NodeInterface nodeSelected) {
-        BackupModifier bm=new BackupModifier();
+        BackupModifier bm = new BackupModifier();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
-        bm.stepReturnOfSelected=stepReturnOfSelected;
+        bm.stepReturnOfSelected = stepReturnOfSelected;
         Conditionals.executeOneOfTwo(Objects.isNull(settings),
                 () -> bm.settings = MonteCarloSettings.builder().build(),
                 () -> bm.settings = settings);
@@ -80,64 +80,45 @@ public class BackupModifier {
         return bm;
     }
 
-    public void backup() {
+    public void backup() throws InterruptedException {
         backup(ListUtils.listWithZeroElements(nodesOnPath.size()));
     }
 
-    public void backup(List<Double> returnsSimulation) {
-        if (nodeSelected.isTerminalNoFail())  {
-            rootTree.printTree();
-            throw new RuntimeException("nodeSelected.isTerminalNoFail");
-        }
-        if (isAllChildrenAreTerminal()) {
+    public void backup(List<Double> returnsSimulation) throws InterruptedException {
+        throwExceptionIfMotivated();
+
+        if (areAllChildrenToSelectedNodeTerminalFail()) {
             makeSelectedTerminal();
-            return;
+        } else {
+            Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
+                    () -> backupNormalFromTreeSteps(returnsSimulation),
+                    this::backupDefensiveFromTreeSteps);
+        }
+    }
+
+    private void throwExceptionIfMotivated() throws InterruptedException {
+        if (nodeSelected.isTerminalNoFail()) {
+            rootTree.printTree();
+            throw new RuntimeException("Selected node is TerminalNoFail - shall not happen");
         }
 
-        Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                () -> backupNormalFromTreeSteps(returnsSimulation),
-                this::backupDefensiveFromTreeSteps);
+        if (nodeSelected.equals(rootTree) && areAllChildrenToSelectedNodeTerminalFail()) {
+            rootTree.printTree();
+            throw new InterruptedException("All children to to root node are terminal - no solution exists");
+        }
     }
 
     private void backupNormalFromTreeSteps(List<Double> returnsSimulation) {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        updateNodesFromReturns(returnsSteps,returnsSimulation);
+        updateNodesFromReturns(returnsSteps, returnsSimulation);
     }
 
     private List<Double> getRewards() {
-
-/*
-        if (actionsToSelected.size() != nodesOnPath.size()) {
-            log.warning("non equal lengths");
-            System.out.println("actionsToSelected = " + actionsToSelected);
-            System.out.println("actionOnSelected = " + actionOnSelected);
-            System.out.println("nodesOnPath = " + nodesOnPath);
-            System.out.println("nodeSelected = " + nodeSelected);
-            nodeSelected.printTree();
-            throw new RuntimeException("non equal lengths");
-        }  */
-
-
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
-            if (!nodeOnPath.equals(nodeSelected)) {   //todo behövs?
-
-                if (nodesOnPath.indexOf(nodeOnPath)>= actionsToSelected.size()) {
-                    System.out.println("nodeOnPath = " + nodeOnPath);
-                    System.out.println("nodeOnPath.getClass() = " + nodeOnPath.getClass());
-                    System.out.println("nodeSelected = " + nodeSelected);
-                    System.out.println("nodeSelected.getClass() = " + nodeSelected.getClass());
-                    System.out.println("nodeOnPath.equals(nodeSelected) = " + nodeOnPath.equals(nodeSelected));
-                    System.out.println("actionsToSelected = " + actionsToSelected);
-                    System.out.println("actionOnSelected = " + actionOnSelected);
-                    System.out.println("nodesOnPath");
-                    nodesOnPath.forEach(System.out::println);
-
-                    rootTree.printTree();
-                }
-
+            if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because uts reward is added after for loop
                 Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
@@ -149,21 +130,13 @@ public class BackupModifier {
     private void backupDefensiveFromTreeSteps() {
         log.fine("Defensive backup of selected node");
         defensiveBackupOfSelectedNode();
-        setSelectedAsTerminalIfAllItsChildrenAreTerminal();
     }
 
     private void defensiveBackupOfSelectedNode() {
-        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected,settings.alphaBackupDefensive);
+        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensive);
     }
 
-    private void setSelectedAsTerminalIfAllItsChildrenAreTerminal() {
-        boolean allChildrenAreTerminal = isAllChildrenAreTerminal();
-
-        Conditionals.executeIfTrue(allChildrenAreTerminal,
-                this::makeSelectedTerminal);
-    }
-
-    private boolean isAllChildrenAreTerminal() {
+    private boolean areAllChildrenToSelectedNodeTerminalFail() {
         Set<Action> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
@@ -171,10 +144,16 @@ public class BackupModifier {
     }
 
     public void makeSelectedTerminal() {
-        log.info("making node = "+nodeSelected.getName() + " terminal, all its children are fail states");
+        log.info("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
+        Pair<Optional<NodeInterface>, Action> parentActionPair = getParentAndActionToSelected();
+        Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
+                this::someErrorLogging,
+                () -> transformSelectedToTerminalFail(parentActionPair.getFirst().get(), parentActionPair.getSecond()));
+    }
 
-        NodeInterface nodeCurrent = rootTree;
+    private Pair<Optional<NodeInterface>, Action> getParentAndActionToSelected() {
         Optional<NodeInterface> parentToSelected = Optional.empty();
+        NodeInterface nodeCurrent = rootTree;
         Action actionToSelected = Action.notApplicable;
         for (Action action : actionsToSelected) {
             boolean isSelectedChildToCurrent = nodeCurrent.getChildNodes().contains(nodeSelected);
@@ -184,41 +163,35 @@ public class BackupModifier {
             }
             nodeCurrent = nodeCurrent.getChild(action).orElseThrow();
         }
-
-        if (parentToSelected.isEmpty()) {
-            log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
-            //rootTree.printTree();
-            return;
-        } else
-        {
-            log.warning("Parent to selected is = "+parentToSelected.orElseThrow());
-        }
-
-        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
-        List<NodeInterface> childrenToParent = parentToSelected.get().getChildNodes();
-        childrenToParent.remove(nodeSelected);
-        parentToSelected.get().addChildNode(selectedAsTerminalFail);
-
-      //  System.out.println("parentToSelected");
-      //  parentToSelected.orElseThrow().printTree();
-      //  System.out.println("rootTree");
-      //  rootTree.printTree();
-
+        return new Pair<>(parentToSelected, actionToSelected);
     }
 
-    private void updateNodesFromReturns(List<Double> returnsSteps,List<Double> returnsSimulation) {
+    private void someErrorLogging() {
+        rootTree.printTree();
+        log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
+    }
+
+    private void transformSelectedToTerminalFail(NodeInterface parentToSelected, Action actionToSelected) {
+        log.fine("Parent to selected is = " + parentToSelected);
+        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
+        List<NodeInterface> childrenToParent = parentToSelected.getChildNodes();
+        childrenToParent.remove(nodeSelected);
+        parentToSelected.addChildNode(selectedAsTerminalFail);
+    }
+
+    private void updateNodesFromReturns(List<Double> returnsSteps, List<Double> returnsSimulation) {
         if (returnsSteps.size() != returnsSimulation.size()) {
             throw new IllegalArgumentException("Non equal list lengths");
         }
 
         returnsSteps = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
         returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
-        List<Double> returnsSum= ListUtils.sumListElements(returnsSteps,returnsSimulation);
+        List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
             Action action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
-            this.updateNode(node, singleReturn, action,settings.alphaBackupNormal);
+            this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
     }
 
@@ -234,10 +207,10 @@ public class BackupModifier {
         return returns;
     }
 
-     void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
+    void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
-        node.updateActionValue(singleReturn, action,alpha);
+        node.updateActionValue(singleReturn, action, alpha);
     }
 
 }

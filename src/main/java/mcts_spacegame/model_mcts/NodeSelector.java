@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import org.apache.commons.math3.util.Pair;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +13,10 @@ import java.util.stream.Collectors;
 
 /***
  * This class is for selecting nodes in selection phase, i.e. nodes on on selection path
+ * * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  *
- * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
+ * The method selectChild() returns and optional, this is empty if no child is found. Probably due to only children of
+ * type fail state.
  */
 
 @Getter
@@ -56,89 +55,21 @@ public class NodeSelector {
         this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
-    public NodeInterface selectOld() throws InterruptedException {
+    public NodeInterface select()  {
         nodesFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
-        nodesFromRootToSelected.add(currentNode);
-        while (currentNodeNotIsLeaf(currentNode)) {
-            Optional<NodeInterface> selectedChild = selectChild(currentNode);
-            if (childSelectionFailedAndIsNotEvaluatingBestPath(selectedChild.isEmpty())) {
-                someFailPrinting();
-             //   throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+ currentNode.getName() + " " + "shall have been removed during defensive backup. Probably starting in hopeless state.");
-
-               // log.warning("Selection failed, all children are terminal-fail, this node = "+
-               //           currentNode.getName() + " " +
-               //         "shall have been removed during defensive backup. Probably starting in hopeless state.");
-               // return nodesFromRootToSelected.get(nodesFromRootToSelected.size()-1);
-               // break;
-                return currentNode;
-            } else if (childSelectionFailedAndIsEvaluatingBestPath(selectedChild.isEmpty())) {
-                log.warning("Selection failed, ok when evaluating best path. " + actionsFromRootToSelected);
-                break;
-            } else {
-                currentNode = selectedChild.orElseThrow();
-            }
-            actionsFromRootToSelected.add(currentNode.getAction());
-            nodesFromRootToSelected.add(currentNode);
-        }
-        return currentNode;
-    }
-
-    public NodeInterface select() throws InterruptedException {
-        nodesFromRootToSelected.clear();
-        NodeInterface currentNode = nodeRoot;
-        NodeInterface parentToCurrentNode = nodeRoot;
 
         nodesFromRootToSelected.add(currentNode);
-        while (currentNodeNotIsLeaf(currentNode)) {
-
-            Optional<NodeInterface> selectedChild = selectChild(currentNode);
-           /* if (currentNode.isTerminalFail()) {
-                System.out.println("returning parentToCurrentNode");
-                return parentToCurrentNode;
+        Optional<NodeInterface> selectedChild = selectChild(currentNode);
+        while (currentNodeNotIsLeaf(currentNode) && selectedChild.isPresent()) {
+           selectedChild = selectChild(currentNode);
+            if (selectedChild.isPresent()) {
+                currentNode = selectedChild.get();
+                actionsFromRootToSelected.add(currentNode.getAction());
+                nodesFromRootToSelected.add(currentNode);
             }
-            */
-
-
-            if (selectedChild.isEmpty()) {
-                System.out.println("returning currentNode");
-                return currentNode;
-            }
-
-            if (childSelectionFailedAndIsNotEvaluatingBestPath(selectedChild.isEmpty())) {
-                someFailPrinting();
-                //   throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+ currentNode.getName() + " " + "shall have been removed during defensive backup. Probably starting in hopeless state.");
-
-                // log.warning("Selection failed, all children are terminal-fail, this node = "+
-                //           currentNode.getName() + " " +
-                //         "shall have been removed during defensive backup. Probably starting in hopeless state.");
-                // return nodesFromRootToSelected.get(nodesFromRootToSelected.size()-1);
-                // break;
-                return currentNode;
-            } else if (childSelectionFailedAndIsEvaluatingBestPath(selectedChild.isEmpty())) {
-                log.warning("Selection failed, ok when evaluating best path. " + actionsFromRootToSelected);
-                break;
-            } else {
-                parentToCurrentNode = currentNode;
-                currentNode = selectedChild.orElseThrow();
-            }
-            actionsFromRootToSelected.add(currentNode.getAction());
-            nodesFromRootToSelected.add(currentNode);
         }
         return currentNode;
-    }
-
-    private void someFailPrinting() {
-        log.warning("actionsFromRootToSelected = " + actionsFromRootToSelected);
-        nodesFromRootToSelected.forEach(System.out::println);
-    }
-
-    private boolean childSelectionFailedAndIsEvaluatingBestPath(boolean failed) {
-        return failed && isExcludeChildrenThatNeverHaveBeenVisited;
-    }
-
-    private boolean childSelectionFailedAndIsNotEvaluatingBestPath(boolean failed) {
-        return failed && !isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
     private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
@@ -195,7 +126,6 @@ public class NodeSelector {
         int n = node.getNofActionSelections(action);
         return calcUct(v, nParent, n);
     }
-
 
     public double calcUct(double v, int nParent, int n) {  //good for testing => public
         return (MathUtils.isZero(n))
