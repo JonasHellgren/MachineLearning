@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -16,13 +15,14 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class TestMonteCarloTreeCreator_3times7grid {
+public class TestMonteCarloTreeCreator_3times7gridWithCorridor {
+
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
 
     @Before
     public void init() {
-        SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
+        SpaceGrid spaceGrid = SpaceGridInterface.new3times7GridWithTrapCorridor();
         environment = new Environment(spaceGrid);
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
@@ -47,56 +47,7 @@ public class TestMonteCarloTreeCreator_3times7grid {
         Assert.assertTrue(node11.isPresent());
         Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
         Assert.assertTrue(node52.isPresent());
-
     }
-
-    @SneakyThrows
-    @Test(expected = InterruptedException.class)
-    public void iterateFromX2Y0() {
-        monteCarloTreeCreator.setStartState(new State(2,0));
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-
-        doPrinting(tih,nodeRoot);
-
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
-        Assert.assertFalse(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
-        Assert.assertFalse(node52.isPresent());
-    }
-
-    @SneakyThrows
-    @Test
-    public void iterateFromX1Y1() {
-        monteCarloTreeCreator.setStartState(new State(1,1));
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-
-        doPrinting(tih,nodeRoot);
-
-     //   Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
-      //  Assert.assertTrue(node11.isPresent());
-        Assert.assertTrue(tih.isStateInAnyNode(new State(2,0)));
-    }
-
-    @SneakyThrows
-    @Test public void maxTreeDepth() {
-        MonteCarloSettings settings= MonteCarloSettings.builder().maxTreeDepth(3).build();
-
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(new State(0,0))
-                .monteCarloSettings(settings)
-                .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-
-        doPrinting(tih,nodeRoot);
-        System.out.println("tih.maxDepth() = " + tih.maxDepth());
-
-        Assert.assertEquals(3,tih.maxDepth());
-    }
-
 
     private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());

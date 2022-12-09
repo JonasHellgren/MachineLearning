@@ -33,6 +33,20 @@ public interface SpaceGridInterface {
     }
 
     /***
+     *      -----------------------------
+     *      |   |   |   |   |   |   | G |
+     *      |   |   | O | O | O | O | G |
+     *      |   |   |   |   |   | O | G |
+     *      -----------------------------
+     */
+    static SpaceGrid new3times7GridWithTrapCorridor() {
+        List<Pair<Integer, Integer>> occupiedCells = Arrays.asList(
+                new Pair<>(2, 1), new Pair<>(3, 1), new Pair<>(4, 1), new Pair<>(5, 1)
+                , new Pair<>(5, 0));
+        return new SpaceGrid(3, 7, occupiedCells);
+    }
+
+    /***
      *      -------------------------------------------------------------
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   |G+6|   (best, +2)
      *      |   |   |   |   | O | O | O | O | O | O | O | O | O | O | G |

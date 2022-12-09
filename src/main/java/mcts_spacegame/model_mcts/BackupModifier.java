@@ -16,23 +16,26 @@ import java.util.stream.Collectors;
 /***
  *    Fail states normally gives big negative rewards, to avoid destructive backup, measures below are taken
  *
- *   THe end node in selection path can be (and leads to):
+ *   The new node in selection path can be (and leads to):
  *   1) terminal-non fail => normal backup
  *   2) non terminal => normal backup
  *   3) terminal-fail => defensive backup (simulations not applicable for case)
  *
  *    normal backup = backup all nodes in path
- *    defensive backup = backup end node AND set it parent as terminal if parents
- *    all children are fail-terminal
+ *    defensive backup = backup end node (selected) AND set it as terminal if all children are fail-terminal
  *
  *             (r)
  *            /   \
  *          (1)    (2)
  *         /   \
  *       (3)    (4)
+ *       /
+ *   (new node)
  *
  *     actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
  *     in nodeSelected an action will be applied leading to expansion
+ *
+ *
  *
  */
 
@@ -55,7 +58,8 @@ public class BackupModifier {
                                          @NonNull List<Action> actionsToSelected,
                                          @NonNull Action actionOnSelected,
                                          @NonNull StepReturn stepReturnOfSelected,
-                                         MonteCarloSettings settings) {
+                                         MonteCarloSettings settings,
+                                         NodeInterface nodeSelected) {
         BackupModifier bm=new BackupModifier();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
@@ -67,7 +71,12 @@ public class BackupModifier {
 
         bm.treeInfoHelper = new TreeInfoHelper(rootTree);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
-        bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
+
+        //todo fimpa actionsToSelected
+        Conditionals.executeOneOfTwo(Objects.isNull(nodeSelected),
+                () -> bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow(),
+                () -> bm.nodeSelected = nodeSelected);
+
         return bm;
     }
 
@@ -94,6 +103,14 @@ public class BackupModifier {
     }
 
     private List<Double> getRewards() {
+
+        if (actionsToSelected.size() != nodesOnPath.size()) {
+            log.warning("non equal lengths");
+            System.out.println("actionsToSelected = " + actionsToSelected);
+            System.out.println("nodesOnPath = " + nodesOnPath);
+            throw new RuntimeException("non equal lengths");
+        }
+
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {
@@ -143,6 +160,9 @@ public class BackupModifier {
             log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
             rootTree.printTree();
             return;
+        } else
+        {
+            log.warning("Parent to selected is = "+parentToSelected.orElseThrow());
         }
 
         NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState(), actionToSelected);

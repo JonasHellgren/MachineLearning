@@ -64,9 +64,14 @@ public class NodeSelector {
             Optional<NodeInterface> selectedChild = selectChild(currentNode);
             if (childSelectionFailedAndIsNotEvaluatingBestPath(selectedChild.isEmpty())) {
                 someFailPrinting();
-                throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+
-                        currentNode.getName() + " " +
-                        "shall have been removed during defensive backup. Probably starting in hopeless state.");
+             //   throw new InterruptedException("Selection failed, all children are terminal-fail, this node = "+ currentNode.getName() + " " + "shall have been removed during defensive backup. Probably starting in hopeless state.");
+
+               // log.warning("Selection failed, all children are terminal-fail, this node = "+
+               //           currentNode.getName() + " " +
+               //         "shall have been removed during defensive backup. Probably starting in hopeless state.");
+               // return nodesFromRootToSelected.get(nodesFromRootToSelected.size()-1);
+               // break;
+                return currentNode;
             } else if (childSelectionFailedAndIsEvaluatingBestPath(selectedChild.isEmpty())) {
                 log.warning("Selection failed, ok when evaluating best path. " + actionsFromRootToSelected);
                 break;
