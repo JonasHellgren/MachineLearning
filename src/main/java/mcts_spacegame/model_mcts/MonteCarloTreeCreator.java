@@ -147,7 +147,7 @@ public class MonteCarloTreeCreator {
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
             double valueInTerminal=memory.read(endReturn.newPosition);
             boolean isEndingInFail=endReturn.isFail;
-            simulationResults.add(sumOfRewards,valueInTerminal,isEndingInFail);
+            simulationResults.add(sumOfRewards,valueInTerminal*settings.weightMemoryValue,isEndingInFail);
         }
         return simulationResults;
     }

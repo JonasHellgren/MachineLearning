@@ -39,6 +39,13 @@ import java.util.stream.Collectors;
  *
  *  actionsToSelected={left,left} => nodesOnPath={r,1,3}  => nodeSelected=3, nofNodesOnPath=3, nofActionsOnPath=2
  *  in nodeSelected an action will be applied leading to expansion
+ *
+ *
+ *  return(ni)=returnStep(ni)*weightReturnsSteps+returnSimulation(i)*weightReturnsSimulation where ni is a node on a path
+ *  If the end node in a path corresponds to a terminal state, a value memory can affect the result. The memory value
+ *  is simply added to all rewards in the path. The memory value also affects the terminal state in simulations.
+ *  For both steps and simulations, the memory value is multiplied by weightMemoryValue.
+ *
  */
 
 @Log
@@ -96,7 +103,7 @@ public class BackupModifier {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, valueInTerminal);
+        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, valueInTerminal*settings.weightMemoryValue);
         updateNodesFromReturns(returnsSteps, returnsSimulation);
     }
 

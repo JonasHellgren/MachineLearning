@@ -24,6 +24,7 @@ public class MonteCarloSettings {
     private static final double ALPHA_DEFENSIVE_DEFAULT =1;
     private static final double WEIGHT_STEPS_DEFAULT =1;
     private static final double WEIGHT_SIMULATION_DEFAULT =1;
+    private static final double WEIGHT_MEMORY_DEFAULT =1;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -53,7 +54,8 @@ public class MonteCarloSettings {
     double weightReturnsSteps = WEIGHT_STEPS_DEFAULT;
     @Builder.Default
     double weightReturnsSimulation = WEIGHT_SIMULATION_DEFAULT;
-
+    @Builder.Default
+    double weightMemoryValue=WEIGHT_MEMORY_DEFAULT;
 
     public static MonteCarloSettings newDefault() {
         return MonteCarloSettings.builder().build();
