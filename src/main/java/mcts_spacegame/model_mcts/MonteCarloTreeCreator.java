@@ -36,6 +36,7 @@ import java.util.Objects;
 @Setter
 @Getter
 public class MonteCarloTreeCreator {
+    private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
     Environment environment;
     State startState;
     MonteCarloSettings settings;
@@ -161,7 +162,7 @@ public class MonteCarloTreeCreator {
 
         double valueInTerminal=(sr.isTerminal)
                 ?memory.read(sr.newPosition)
-                :0;
+                : VALUE_MEMORY_IF_NOT_TERMINAL;
 
         BackupModifier bumSteps = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)

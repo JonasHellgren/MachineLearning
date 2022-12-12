@@ -57,8 +57,8 @@ public class NodeSelector {
 
     public NodeInterface select()  {
         nodesFromRootToSelected.clear();
+        actionsFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
-
         nodesFromRootToSelected.add(currentNode);
         Optional<NodeInterface> selectedChild = selectChild(currentNode);
         while (currentNodeNotIsLeaf(currentNode) && selectedChild.isPresent()) {

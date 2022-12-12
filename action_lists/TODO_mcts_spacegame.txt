@@ -103,11 +103,18 @@ testMakeSelectedTerminal  x
 clean up  x
 kunna gå in i goal med + med steps  x
 iterateFromX10Y4WithNoSimulations  x
-fler testerkunna gå in i goal med + med steps
+döp om tester TestMonteCarloTreeCreator_3times7grid-> Test_3times7grid x
+fler testerkunna gå in i goal med + med steps  tex new5times15Grid
+fler tester 3times7gridWithCorridor
+Optional isf exception MonteCarloTreeCreator
+weightReturnsStateValue
 kunna speca när tillåtet expandera
-exempel för ovan, tex endast expandera 3 första stegen spacegrid
+exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor
 cpuTimer buggar ibland  - nano sec istaället?
+annan domain - ladda batteri maximalt energi given tid
 dokumentera - speciellt termer
+
+
 
 
 best path beror bara på value nofVisits kan ju även påverka val

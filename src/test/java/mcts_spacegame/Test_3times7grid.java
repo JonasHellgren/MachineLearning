@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class TestMonteCarloTreeCreator_3times7grid {
+public class Test_3times7grid {
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
 

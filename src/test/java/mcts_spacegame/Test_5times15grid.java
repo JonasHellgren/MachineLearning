@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-public class TestMonteCarloTreeCreator_5times15grid {
+public class Test_5times15grid {
     private static final int MAX_NOF_ITERATIONS = 500;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;  //important
     private static final int MAX_TREE_DEPTH = 10;
