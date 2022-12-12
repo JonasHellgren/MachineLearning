@@ -1,10 +1,12 @@
 package mcts_spacegame.model_mcts;
 
 import lombok.Builder;
+import lombok.Setter;
 import lombok.ToString;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
 
 @Builder
+@Setter
 @ToString
 public class MonteCarloSettings {
     private static final int NOF_ITERATIONS_DEFAULT=1000;

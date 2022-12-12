@@ -25,9 +25,12 @@ import java.util.Optional;
 public class Test_5times15grid {
     private static final int MAX_NOF_ITERATIONS = 500;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;  //important
-    private static final int MAX_TREE_DEPTH = 10;
-    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 2;
+    private static final int MAX_TREE_DEPTH = 15;
+    private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 20;
     private static final double DELTA = 0.5;
+    private static final int VALUE_6 = 6;
+    private static final int VALUE_3 = 3;
+    private static final int VALUE_0 = 0;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
@@ -46,9 +49,9 @@ public class Test_5times15grid {
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
         memory=NodeValueMemory.newEmpty();
-        memory.write(State.newState(14,0),0);
-        memory.write(State.newState(14,2),3);
-        memory.write(State.newState(14,4),6);
+        memory.write(State.newState(14,0),VALUE_0);
+        memory.write(State.newState(14,2),VALUE_3);
+        memory.write(State.newState(14,4),VALUE_6);
 
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
@@ -66,14 +69,18 @@ public class Test_5times15grid {
 
     @Test public void moveFromX13Y4IntoGoalWithHighValue() {
         SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(13,4));
-        boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
+        boolean any6 = anySimulationHasValue6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
     }
 
+    private boolean anySimulationHasValue6(SimulationResults simulationResults) {
+        return simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v - VALUE_6));
+    }
+
     @Test public void moveFromX9Y4IntoGoalWithHighValue() {
         SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(5,4));
-        boolean any6 = simulationResults.getResults().stream().map(r -> r.valueInTerminalState).anyMatch(v -> MathUtils.isZero(v-6));
+        boolean any6 = anySimulationHasValue6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
     }
@@ -103,9 +110,9 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX0Y2MemoryFavorsSouthRoute() {
         memory=NodeValueMemory.newEmpty();
-        memory.write(State.newState(14,0),6);
-        memory.write(State.newState(14,2),3);
-        memory.write(State.newState(14,4),0);
+        memory.write(State.newState(14,0),VALUE_6);
+        memory.write(State.newState(14,2), VALUE_3);
+        memory.write(State.newState(14,4), VALUE_0);
         monteCarloTreeCreator.setMemory(memory);
 
 
@@ -120,25 +127,9 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX10Y4WithNoSimulations() {
 
-        settings= MonteCarloSettings.builder()
-                .coefficientMaxAverageReturn(1) //only max
-                .maxTreeDepth(MAX_TREE_DEPTH)
-                .maxNofIterations(100)
-                .nofSimulationsPerNode(0)
-                .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
-                .build();
-        memory=NodeValueMemory.newEmpty();
-        memory.write(State.newState(14,0),0);
-        memory.write(State.newState(14,2),3);
-        memory.write(State.newState(14,4),6);
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
-                .environment(environment)
-                .startState(State.newState(10,4))
-                .monteCarloSettings(settings)
-                .memory(memory)
-                .build();
+        settings=settingsForNoSimulations();
+        monteCarloTreeCreator=treeCreator(State.newState(10,4));
 
-        //monteCarloTreeCreator.setStartState(State.newState(10,4));
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
@@ -147,7 +138,65 @@ public class Test_5times15grid {
         Optional<NodeInterface> node=tih.getNodeReachedForActions(Collections.singletonList(Action.still));
         System.out.println("node = " + node);
         assertStateIsOnBestPath(tih,State.newState(13,4));
-        Assert.assertEquals(6,node.orElseThrow().getActionValue(Action.still), DELTA);
+        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(Action.still), DELTA);
+    }
+
+    @SneakyThrows
+    @Test
+    public void iterateFromX0Y2WithNoSimulations() {
+
+        settings=settingsForNoSimulations();
+        monteCarloTreeCreator=treeCreator(State.newState(0,2));
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        assertStateIsOnBestPath(tih,State.newState(11,4));
+        assertStateIsOnBestPath(tih,State.newState(13,4));
+
+
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(Action.up,Action.up));
+        System.out.println("node = " + node);
+        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(Action.still), DELTA);
+    }
+
+    @SneakyThrows
+    @Test
+    public void iterateFromX0Y2WithNoSimulationsAndLowExplorationGivesSubOptimalPath() {
+
+        settings=settingsForNoSimulations();
+        settings.setCoefficientExploitationExploration(1);
+        monteCarloTreeCreator=treeCreator(State.newState(0,2));
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        assertStateIsOnBestPath(tih,State.newState(11,2));
+        assertStateIsOnBestPath(tih,State.newState(13,2));
+
+
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(Action.still,Action.still));
+        System.out.println("node = " + node);
+        Assert.assertEquals(VALUE_3,node.orElseThrow().getActionValue(Action.still), DELTA);
+    }
+
+    private MonteCarloTreeCreator treeCreator(State state) {
+        return MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(state)
+                .monteCarloSettings(settings)
+                .memory(memory)
+                .build();
+    }
+
+    private MonteCarloSettings settingsForNoSimulations() {
+        return MonteCarloSettings.builder()
+                .coefficientMaxAverageReturn(1) //only max
+                .maxTreeDepth(MAX_TREE_DEPTH)
+                .maxNofIterations(1000)
+                .nofSimulationsPerNode(0)
+                .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
+                .build();
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {
