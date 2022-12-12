@@ -25,7 +25,7 @@ import java.util.Optional;
 @Log
 public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
-    private final double C_FOR_UCT=1;
+    private final double C_FOR_UCT = 1;
 
     private static final int DELTA_BIG = 2;
     private static final int NOF_ITERATIONS = 50;
@@ -33,7 +33,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     Environment environment;
     NodeInterface nodeRoot;
     List<Action> actionsToSelected;
-    Action actionInSelected;
+    Optional<Action> actionInSelected;
     State startState;
     TreeInfoHelper tih;
 
@@ -46,7 +46,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private void initTree(State state) {
         startState = state;
         nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
-        tih=new TreeInfoHelper(nodeRoot);
+        tih = new TreeInfoHelper(nodeRoot);
     }
 
     @Test
@@ -73,9 +73,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,1));
+        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1, 1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -86,20 +86,20 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1,2));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1, 2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
     @Test(expected = InterruptedException.class)
     public void iterateFromX2Y0() {
-        initTree(new State(2,0));
+        initTree(new State(2, 0));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2,0));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2, 0));
         Assert.assertTrue(node12.isPresent());
     }
 
@@ -121,8 +121,8 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     @SneakyThrows
     private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot,C_FOR_UCT);
-        NodeInterface nodeSelected=ns.select();
+        NodeSelector ns = new NodeSelector(nodeRoot, C_FOR_UCT);
+        NodeInterface nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
@@ -130,20 +130,26 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     @NotNull
     private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        ActionSelector as=new ActionSelector();
-        actionInSelected=as.select(nodeSelected);
-        StepReturn sr = environment.step(actionInSelected, state);
-        nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
-        child.setDepth(nodeSelected.getDepth()+1);  //easy to forget
-        boolean isChildAddedEarlier=NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
+        ActionSelector as = new ActionSelector();
+        actionInSelected = as.select(nodeSelected);
+        NodeInterface child = null;
+        StepReturn sr = null;
+        if (actionInSelected.isPresent()) {
+            sr = environment.step(actionInSelected.get(), state);
+            nodeSelected.saveRewardForAction(actionInSelected.get(), sr.reward);
+            child = NodeInterface.newNode(sr, actionInSelected.get());
 
-        if (isChildAddedEarlier) {
-            log.warning("Child has been added earlier, child = "+child+", in node = "+nodeSelected);
+            child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
+            boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
+
+            if (isChildAddedEarlier) {
+                log.warning("Child has been added earlier, child = " + child + ", in node = " + nodeSelected);
+            }
+
+            if (nodeSelected.isNotTerminal() && !isChildAddedEarlier) {
+                nodeSelected.addChildNode(child);
+            }
         }
-
-        if (nodeSelected.isNotTerminal() && !isChildAddedEarlier)  {
-        nodeSelected.addChildNode(child); }
         return sr;
     }
 
@@ -151,7 +157,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private void backPropagate(StepReturn sr) {
         BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
+                .actionOnSelected(actionInSelected.orElseThrow())
                 .stepReturnOfSelected(sr)
                 .build();
         bum.backup();

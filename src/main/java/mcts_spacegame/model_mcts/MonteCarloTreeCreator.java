@@ -15,11 +15,7 @@ import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /***
  *   This class performs monte carlo tree search
@@ -83,10 +79,15 @@ public class MonteCarloTreeCreator {
         ActionSelector actionSelector=new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            Action actionInSelected=actionSelector.select(nodeSelected);
-            StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected);
-            SimulationResults simulationResults=simulate(sr.newPosition);
-            backPropagate(sr,simulationResults,actionInSelected);
+            Optional<Action> actionInSelected=actionSelector.select(nodeSelected);
+            if (actionInSelected.isPresent()) {
+                StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
+                SimulationResults simulationResults = simulate(sr.newPosition);
+                backPropagate(sr, simulationResults, actionInSelected.get());
+            } else {
+                SelectedToTerminalFailConverter sfc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
+                sfc.convertSelectedNodeToFailIfAllItsChildrenAreFail(nodeSelected);
+            }
 
             if (cpuTimer.isTimeExceeded()) {
                 log.warning("Time exceeded");
@@ -106,7 +107,7 @@ public class MonteCarloTreeCreator {
         return statistics;
     }
 
-    private NodeInterface select(NodeInterface nodeRoot) throws InterruptedException {
+    private NodeInterface select(NodeInterface nodeRoot) {
         NodeSelector ns = new NodeSelector(nodeRoot,settings.coefficientExploitationExploration);
         NodeInterface nodeSelected=ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
@@ -152,7 +153,7 @@ public class MonteCarloTreeCreator {
 
     private void backPropagate(StepReturn sr,
                                SimulationResults simulationResults,
-                               Action actionInSelected) throws InterruptedException {
+                               Action actionInSelected)  {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
                 .nofNodesOnPath(actionsToSelected.size()+1)
                 .simulationResults(simulationResults)

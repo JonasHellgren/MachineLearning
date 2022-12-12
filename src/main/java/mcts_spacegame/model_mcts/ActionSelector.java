@@ -7,6 +7,7 @@ import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -22,12 +23,13 @@ public class ActionSelector {
         this.randUtils=new RandUtils<>();
     }
 
-    public Action select(NodeInterface nodeSelected) {
+    public Optional<Action> select(NodeInterface nodeSelected) {
         List<Action> nonTestedActions = getNonTestedActions(nodeSelected);  //todo if size testedActions is zero, choose according to policy
         if(nonTestedActions.size()==0) {
-            return getRandomTestedAction(nodeSelected);
+            return Optional.empty();
+            //return Optional.of(getRandomTestedAction(nodeSelected));
         } else {
-            return getRandomAction(nonTestedActions);
+            return Optional.of(getRandomAction(nonTestedActions));
         }
     }
 

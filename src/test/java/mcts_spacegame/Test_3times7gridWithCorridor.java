@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public class Test_3times7gridWithCorridor {
 
+    private static final int MAX_NOF_ITERATIONS = 500;
     MonteCarloTreeCreator monteCarloTreeCreator;
     Environment environment;
 
@@ -27,7 +28,7 @@ public class Test_3times7gridWithCorridor {
         environment = new Environment(spaceGrid);
         MonteCarloSettings settings = MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
-                .maxNofIterations(50)
+                .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(10)
                 .build();
         monteCarloTreeCreator = MonteCarloTreeCreator.builder()
@@ -66,7 +67,7 @@ public class Test_3times7gridWithCorridor {
 
         MonteCarloSettings settings = MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
-                .maxNofIterations(50)
+                .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(0)
                 .build();
         monteCarloTreeCreator = MonteCarloTreeCreator.builder()

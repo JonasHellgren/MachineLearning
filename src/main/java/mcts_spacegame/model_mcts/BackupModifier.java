@@ -62,7 +62,7 @@ public class BackupModifier {
                                          @NonNull Action actionOnSelected,
                                          @NonNull StepReturn stepReturnOfSelected,
                                          Double valueInTerminal,
-                                         MonteCarloSettings settings)  {
+                                         MonteCarloSettings settings) {
         BackupModifier bm = new BackupModifier();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
@@ -82,37 +82,21 @@ public class BackupModifier {
         return bm;
     }
 
-    public void backup() throws InterruptedException {
+    public void backup() {
         backup(ListUtils.listWithZeroElements(nodesOnPath.size()));
     }
 
-    public void backup(List<Double> returnsSimulation) throws InterruptedException {
-        throwExceptionIfMotivated();
-        if (areAllChildrenToSelectedNodeTerminalFail()) {
-            makeSelectedTerminal();
-        } else {
-            Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                    () -> backupNormalFromTreeSteps(returnsSimulation),
-                    this::backupDefensiveFromTreeSteps);
-        }
-    }
-
-    private void throwExceptionIfMotivated() throws InterruptedException {
-        if (nodeSelected.isTerminalNoFail()) {
-            rootTree.printTree();
-            throw new RuntimeException("Selected node is TerminalNoFail - shall not happen");
-        }
-        if (nodeSelected.equals(rootTree) && areAllChildrenToSelectedNodeTerminalFail()) {
-            rootTree.printTree();
-            throw new InterruptedException("All children to to root node are terminal - no solution exists");
-        }
+    public void backup(List<Double> returnsSimulation) {
+        Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
+                () -> backupNormalFromTreeSteps(returnsSimulation),
+                this::backupDefensiveFromTreeSteps);
     }
 
     private void backupNormalFromTreeSteps(List<Double> returnsSimulation) {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        returnsSteps=ListUtils.addScalarToListElements(returnsSteps,valueInTerminal);
+        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, valueInTerminal);
         updateNodesFromReturns(returnsSteps, returnsSimulation);
     }
 
@@ -135,49 +119,6 @@ public class BackupModifier {
 
     private void defensiveBackupOfSelectedNode() {
         this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensive);
-    }
-
-    private boolean areAllChildrenToSelectedNodeTerminalFail() {
-        Set<Action> children = nodeSelected.getChildNodes().stream()
-                .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
-                .collect(Collectors.toSet());
-        return children.size() == Action.applicableActions().size();
-    }
-
-    public void makeSelectedTerminal() {
-        log.info("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
-        Pair<Optional<NodeInterface>, Action> parentActionPair = getParentAndActionToSelected();
-        Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
-                this::someErrorLogging,
-                () -> transformSelectedToTerminalFail(parentActionPair.getFirst().get(), parentActionPair.getSecond()));
-    }
-
-    private Pair<Optional<NodeInterface>, Action> getParentAndActionToSelected() {
-        Optional<NodeInterface> parentToSelected = Optional.empty();
-        NodeInterface nodeCurrent = rootTree;
-        Action actionToSelected = Action.notApplicable;
-        for (Action action : actionsToSelected) {
-            boolean isSelectedChildToCurrent = nodeCurrent.getChildNodes().contains(nodeSelected);
-            if (isSelectedChildToCurrent) {
-                parentToSelected = Optional.of(nodeCurrent);
-                actionToSelected = action;
-            }
-            nodeCurrent = nodeCurrent.getChild(action).orElseThrow();
-        }
-        return new Pair<>(parentToSelected, actionToSelected);
-    }
-
-    private void someErrorLogging() {
-        rootTree.printTree();
-        log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
-    }
-
-    private void transformSelectedToTerminalFail(NodeInterface parentToSelected, Action actionToSelected) {
-        log.fine("Parent to selected is = " + parentToSelected);
-        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
-        List<NodeInterface> childrenToParent = parentToSelected.getChildNodes();
-        childrenToParent.remove(nodeSelected);
-        parentToSelected.addChildNode(selectedAsTerminalFail);
     }
 
     private void updateNodesFromReturns(List<Double> returnsSteps, List<Double> returnsSimulation) {

@@ -45,39 +45,7 @@ public class TestBackupModifier {
 
     }
 
-    @Test public void testMakeSelectedTerminal() {
-        State rootState=new State(0,0);
-        List<Action> actionsToSelected= Arrays.asList(Action.still,Action.still);
-        Action actionInSelected=Action.down;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
-        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
-        Optional<NodeInterface> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
 
-
-        bum = BackupModifier.builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .build();
-
-        nodeRoot.printTree();
-        tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
-
-        bum.makeSelectedTerminal();
-
-        nodeRoot.printTree();
-        tih.getNodesOnPathForActions(actionsToSelected).get().forEach(System.out::println);
-
-        Optional<NodeInterface> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
-
-        System.out.println("nodeSelected.orElseThrow() = " + nodeSelected.orElseThrow());
-        System.out.println("nodeSelected2.orElseThrow() = " + nodeSelected2.orElseThrow());
-
-        Assert.assertFalse(nodeSelected.orElseThrow() instanceof NodeTerminalFail);
-        Assert.assertTrue(nodeSelected2.orElseThrow() instanceof NodeTerminalFail);
-
-    }
 
 
     @SneakyThrows
