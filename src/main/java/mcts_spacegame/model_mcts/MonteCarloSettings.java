@@ -10,7 +10,7 @@ import mcts_spacegame.policies_action.SimulationPolicyInterface;
 @ToString
 public class MonteCarloSettings {
     private static final int NOF_ITERATIONS_DEFAULT=1000;
-    private static final int C_DEFAULT=1;
+    private static final int C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final boolean BACKUP_STEPS_DEFAULT=true;

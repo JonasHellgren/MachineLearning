@@ -58,7 +58,30 @@ public class Test_3times7gridWithCorridor {
         Assert.assertFalse(tih.isStateInAnyNode(new State(4, 0)));
 
         doPrinting(tih, nodeRoot);
+    }
 
+    @SneakyThrows
+    @Test
+    public void iterateFromX0Y0NoSimulations() {
+
+        MonteCarloSettings settings = MonteCarloSettings.builder()
+                .coefficientMaxAverageReturn(1) //only max
+                .maxNofIterations(50)
+                .nofSimulationsPerNode(0)
+                .build();
+        monteCarloTreeCreator = MonteCarloTreeCreator.builder()
+                .environment(environment)
+                .startState(new State(0, 0))
+                .monteCarloSettings(settings)
+                .build();
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
+        doPrinting(tih, nodeRoot);
+
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(4, 2));
+        Assert.assertTrue(node52.isPresent());
     }
 
     private void doPrinting(TreeInfoHelper tih, NodeInterface nodeRoot) {

@@ -105,9 +105,12 @@ kunna gå in i goal med + med steps  x
 iterateFromX10Y4WithNoSimulations  x
 döp om tester TestMonteCarloTreeCreator_3times7grid-> Test_3times7grid x
 fler testerkunna gå in i goal med + med steps  tex new5times15Grid  x
-fler tester 3times7gridWithCorridor
-Optional isf exception MonteCarloTreeCreator
+fler tester 3times7gridWithCorridor  x
+Optional.empty om No non-tested actions
+Byt exception InterruptedException MonteCarloTreeCreator
 weightReturnsStateValue
+new5times15Grid -> new5times15GridCorridor
+nytt exempel new5times15Grid
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor
 cpuTimer buggar ibland  - nano sec istaället?
