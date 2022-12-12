@@ -106,8 +106,8 @@ iterateFromX10Y4WithNoSimulations  x
 döp om tester TestMonteCarloTreeCreator_3times7grid-> Test_3times7grid x
 fler testerkunna gå in i goal med + med steps  tex new5times15Grid  x
 fler tester 3times7gridWithCorridor  x
-Optional.empty om No non-tested actions
-Byt exception InterruptedException MonteCarloTreeCreator
+Optional.empty om No non-tested actions  x
+Byt exception InterruptedException MonteCarloTreeCreator StartStateIsTrapException  x
 weightReturnsStateValue
 new5times15Grid -> new5times15GridCorridor
 nytt exempel new5times15Grid

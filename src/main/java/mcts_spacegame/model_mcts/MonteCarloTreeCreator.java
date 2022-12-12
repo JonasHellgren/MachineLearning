@@ -10,6 +10,7 @@ import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -73,7 +74,7 @@ public class MonteCarloTreeCreator {
         mctc.nofIterations=0;
     }
 
-    public NodeInterface runIterations() throws InterruptedException {
+    public NodeInterface runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
         ActionSelector actionSelector=new ActionSelector();
@@ -84,7 +85,7 @@ public class MonteCarloTreeCreator {
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
                 backPropagate(sr, simulationResults, actionInSelected.get());
-            } else {
+            } else {  //all tested <=> actionInSelected is empty, needed for all children to be fail
                 SelectedToTerminalFailConverter sfc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
                 sfc.convertSelectedNodeToFailIfAllItsChildrenAreFail(nodeSelected);
             }

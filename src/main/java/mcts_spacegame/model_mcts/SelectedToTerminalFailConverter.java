@@ -4,6 +4,7 @@ import common.Conditionals;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.apache.commons.math3.util.Pair;
 
@@ -23,12 +24,12 @@ public class SelectedToTerminalFailConverter {
         this.actionsToSelected = actionsToSelected;
     }
 
-    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeInterface nodeSelected) throws InterruptedException {
+    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeInterface nodeSelected) throws StartStateIsTrapException {
 
         boolean allChildrenAreFail=areAllChildrenToSelectedNodeTerminalFail(nodeSelected);
         if (nodeSelected.equals(nodeRoot) && allChildrenAreFail) {
             nodeRoot.printTree();
-            throw new InterruptedException("All children to to root node are terminal - no solution exists");
+            throw new StartStateIsTrapException("All children to to root node are terminal - no solution exists");
         }
         if (allChildrenAreFail) {
             makeSelectedTerminal(nodeSelected);

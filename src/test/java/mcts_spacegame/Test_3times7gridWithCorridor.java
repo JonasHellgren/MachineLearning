@@ -2,6 +2,7 @@ package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.environment.Environment;
+import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
@@ -50,8 +51,8 @@ public class Test_3times7gridWithCorridor {
         Assert.assertTrue(node52.isPresent());
     }
 
-    @Test(expected = InterruptedException.class)
-    public void iterateFromX2Y0() throws InterruptedException {
+    @Test(expected = StartStateIsTrapException.class)
+    public void iterateFromX2Y0() throws StartStateIsTrapException {
         monteCarloTreeCreator.setStartState(new State(2, 0));
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
