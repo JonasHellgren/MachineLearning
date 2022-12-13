@@ -76,21 +76,15 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX0Y2NoSimulations() {
         settings= MonteCarloSettings.builder()
-               // .coefficientMaxAverageReturn(1) //only max
-                //.alphaBackupNormal(0.01)
-                .alphaBackupDefensive(0.001)
-                .weightMemoryValue(5)
                 .maxTreeDepth(14)
                 .policy(SimulationPolicyInterface.newMostlyStill())
-                .maxNofIterations(1000)
+                .maxNofIterations(100_000)
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)
-                .coefficientExploitationExploration(100)
+                .coefficientExploitationExploration(10)
                 .build();
         System.out.println("memory = " + memory);
-        //createCreator(State.newState(8, 0));
-
-        createCreator(State.newState(10, 2));  //13,4   - 10,2
+        createCreator(State.newState(0, 2));
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);

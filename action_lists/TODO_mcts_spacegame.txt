@@ -111,10 +111,9 @@ Byt exception InterruptedException MonteCarloTreeCreator StartStateIsTrapExcepti
 weightMemoryValue x
 new5times15Grid -> new5times15GridCorridor  x
 nytt exempel new5times15Grid x
-Test_5times15grid utan simuleringar
+Test_5times15grid utan simuleringar x
+nodeSelector.selectChild() i runIterations  x
 
-nodeSelector.selectChild() i runIterations
-bugg values =[down=-1.0, up=-0.101, still=60.0], visits =[down=45, up=1, still=54]
 kunna speca när tillåtet expandera
 exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor
 cpuTimer buggar ibland  - nano sec istaället?

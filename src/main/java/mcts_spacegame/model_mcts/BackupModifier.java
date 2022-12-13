@@ -130,22 +130,14 @@ public class BackupModifier {
         if (returnsSteps.size() != returnsSimulation.size()) {
             throw new IllegalArgumentException("Non equal list lengths");
         }
-
         returnsSteps = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
         returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
         List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
 
-
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
-
             Action action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
-
-            if (node.getName().equals("State(x=12, y=4)")) {
-                System.out.println("node.getActionValue(Action.still) = " + node.getActionValue(Action.still)+", singleReturn="+singleReturn);
-            }
-
             this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
     }

@@ -90,13 +90,8 @@ public class MonteCarloTreeCreator {
         ActionSelector actionSelector=new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-
-            System.out.println("nodeSelected = " + nodeSelected.getName());
-            nodeSelected.printTree();
-
             Optional<Action> actionInSelected=actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
-                System.out.println("actionInSelected is present, actionInSelected = "+actionInSelected);
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
                 backPropagate(sr, simulationResults, actionInSelected.get());
@@ -104,7 +99,6 @@ public class MonteCarloTreeCreator {
                 SelectedToTerminalFailConverter sfc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
 
                 if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
-                    System.out.println("actionInSelected is empty & AllChildrenInSelectedAreFail");
                     if (nodeSelected.equals(nodeRoot)) {
                         nodeRoot.printTree();
                         throw new StartStateIsTrapException("All children to to root node are terminal - no solution exists");
@@ -112,7 +106,6 @@ public class MonteCarloTreeCreator {
                     sfc.makeSelectedTerminal(nodeSelected);
                 } else
                 {
-                    System.out.println("actionInSelected is empty & not AllChildrenInSelectedAreFail");
                     NodeSelector nodeSelector=new NodeSelector(nodeRoot);
                     Optional<NodeInterface> childToSelected=nodeSelector.selectChild(nodeSelected);
                     Action actionToGetToChild=childToSelected.orElseThrow().getAction();
@@ -157,20 +150,19 @@ public class MonteCarloTreeCreator {
         boolean isChildAddedEarlier= NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
         boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
         boolean isChildToDeep=child.getDepth()>settings.maxTreeDepth;
-        boolean isChildNonFailTerminal=false; //child.isTerminalNoFail();
 
-        Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->
-            log.info("Child will not be added, child = "+child.getName()+", in node = "+nodeSelected.getName()
-                    +", isChildAddedEarlier =" +isChildAddedEarlier+", isChildToDeep =" +isChildToDeep+", isChildNonFailTerminal =" +isChildNonFailTerminal));
+        Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
+            log.fine("Child will not be added, child = "+child.getName()+", in node = "+nodeSelected.getName()
+                    +", isChildAddedEarlier =" +isChildAddedEarlier+", isChildToDeep =" +isChildToDeep));
 
         Conditionals.executeIfTrue(isSelectedNotTerminal &&
-                isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->
+                isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
             nodeSelected.addChildNode(child));
         return sr;
     }
 
-    private boolean isChildOkToAdd(boolean isChildAddedEarlier, boolean isChildToDeep, boolean isChildNonFailTerminal) {
-        return !isChildAddedEarlier && !isChildToDeep && !isChildNonFailTerminal;
+    private boolean isChildOkToAdd(boolean isChildAddedEarlier, boolean isChildToDeep) {
+        return !isChildAddedEarlier && !isChildToDeep;
     }
 
     public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {

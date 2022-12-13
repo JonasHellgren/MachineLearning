@@ -25,8 +25,6 @@ public class ActionSelector {
 
     public Optional<Action> select(NodeInterface nodeSelected) {
         List<Action> nonTestedActions = getNonTestedActions(nodeSelected);  //todo if size testedActions is zero, choose according to policy
-
-       // System.out.println("nonTestedActions = " + nonTestedActions);
         if(nonTestedActions.size()==0) {
             return Optional.empty();
             //return Optional.of(getRandomTestedAction(nodeSelected));
@@ -52,9 +50,6 @@ public class ActionSelector {
     @NotNull
     private List<Action> getNonTestedActions(NodeInterface nodeSelected) {
         List<Action> testedActions = getTestedActions(nodeSelected);
-
-        System.out.println("testedActions = " + testedActions);
-
         List<Action> nonTestedActions=new ArrayList<>(Action.applicableActions());  //must be mutable
         nonTestedActions.removeAll(testedActions);
         return nonTestedActions;

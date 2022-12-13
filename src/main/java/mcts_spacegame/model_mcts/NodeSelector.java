@@ -60,10 +60,10 @@ public class NodeSelector {
         actionsFromRootToSelected.clear();
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-        Optional<NodeInterface> selectedChild = selectChild(currentNode);
-        while (currentNodeNotIsLeaf(currentNode) && selectedChild.isPresent() && !isPresentAndTerminal(selectedChild)) {
-           selectedChild = selectChild(currentNode);
-            if (selectedChild.isPresent() && !isPresentAndTerminal(selectedChild)) {
+
+        while (isNotLeaf(currentNode) && someChildrenIsNotTerminal(currentNode)) {
+            Optional<NodeInterface>  selectedChild = selectChild(currentNode);
+            if (selectedChild.isPresent() && someChildrenIsNotTerminal(currentNode)) {
                 currentNode = selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
@@ -72,11 +72,21 @@ public class NodeSelector {
         return currentNode;
     }
 
-    private boolean isPresentAndTerminal(Optional<NodeInterface> node) {
-        return node.filter(nodeInterface -> nodeInterface.isTerminalFail() || nodeInterface.isTerminalNoFail()).isPresent();
+    private boolean hasChildrenAndSelectedChildrenIsNotTerminal(NodeInterface node) {
+        Optional<NodeInterface> selectedChild = selectChild(node);
+        return selectedChild.isPresent() && !(selectedChild.get().isTerminalFail() || selectedChild.get().isTerminalNoFail());
     }
 
-    private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
+    private boolean someChildrenIsNotTerminal(NodeInterface node) {
+        //List<NodeInterface> childrenTerminal= node.getChildNodes().stream().filter(n -> n.isTerminalNoFail() || n.isTerminalFail()).collect(Collectors.toList());
+        List<NodeInterface> childrenTerminal= node.getChildNodes().stream()
+                .filter(n -> !n.isNotTerminal())
+                .collect(Collectors.toList());
+        return childrenTerminal.size()!= node.getChildNodes().size();
+    }
+
+
+    private boolean isNotLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
