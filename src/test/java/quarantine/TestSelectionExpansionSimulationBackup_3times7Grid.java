@@ -9,6 +9,7 @@ import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.ActionSelector;
 import mcts_spacegame.model_mcts.BackupModifier;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -130,7 +131,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     @NotNull
     private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        ActionSelector as = new ActionSelector();
+        ActionSelector as = new ActionSelector(MonteCarloSettings.builder().build());
         actionInSelected = as.select(nodeSelected);
         NodeInterface child = null;
         StepReturn sr = null;

@@ -11,6 +11,10 @@ public interface SimulationPolicyInterface {
         return new MostlyStillPolicy();
     }
 
+    static SimulationPolicyInterface newAlwaysStill() {
+        return new AlwaysStillPolicy();
+    }
+
     static SimulationPolicyInterface newEqualProbability() {
         return new EqualActionProbabilityPolicy();
     }

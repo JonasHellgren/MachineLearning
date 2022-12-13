@@ -5,9 +5,8 @@ import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -17,20 +16,31 @@ import java.util.stream.Collectors;
 
 @Log
 public class ActionSelector {
+    MonteCarloSettings settings;
     RandUtils<Action> randUtils;
 
-    public ActionSelector() {
+    public ActionSelector(MonteCarloSettings settings) {
         this.randUtils=new RandUtils<>();
+        this.settings=settings;
     }
 
     public Optional<Action> select(NodeInterface nodeSelected) {
-        List<Action> nonTestedActions = getNonTestedActions(nodeSelected);  //todo if size testedActions is zero, choose according to policy
+        int nofTestedActions=getTestedActions(nodeSelected).size();
+
+        List<Action> nonTestedActions = (nofTestedActions==0)
+                ? Collections.singletonList(getActionFromPolicy(nodeSelected))
+                : getNonTestedActions(nodeSelected);
+
         if(nonTestedActions.size()==0) {
             return Optional.empty();
             //return Optional.of(getRandomTestedAction(nodeSelected));
         } else {
             return Optional.of(getRandomAction(nonTestedActions));
         }
+    }
+
+    private Action getActionFromPolicy(NodeInterface nodeSelected) {
+        return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
     private Action getRandomAction(List<Action> actions) {

@@ -15,7 +15,8 @@ public class MonteCarloSettings {
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final boolean BACKUP_STEPS_DEFAULT=true;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
-    private static final SimulationPolicyInterface POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
+    private static final SimulationPolicyInterface FIRST_ACTION_POLICY_DEFAULT = SimulationPolicyInterface.newAlwaysStill();
+    private static final SimulationPolicyInterface SIMULATION_POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
     private static final double DISCOUNT_FACTOR_STEPS_DEFAULT = 1;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT = 1;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT = 0.1;
@@ -37,7 +38,9 @@ public class MonteCarloSettings {
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
     @Builder.Default
-    SimulationPolicyInterface policy=POLICY_DEFAULT;
+    SimulationPolicyInterface firstActionSelectionPolicy = FIRST_ACTION_POLICY_DEFAULT;
+    @Builder.Default
+    SimulationPolicyInterface simulationPolicy = SIMULATION_POLICY_DEFAULT;
     @Builder.Default
     double discountFactorSteps=DISCOUNT_FACTOR_STEPS_DEFAULT;
     @Builder.Default

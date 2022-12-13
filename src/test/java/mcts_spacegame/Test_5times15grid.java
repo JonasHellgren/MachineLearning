@@ -41,7 +41,7 @@ public class Test_5times15grid {
         settings= MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
-                .policy(SimulationPolicyInterface.newMostlyStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .weightReturnsSteps(0)
@@ -75,9 +75,9 @@ public class Test_5times15grid {
     @SneakyThrows
     @Test
     public void iterateFromX0Y2NoSimulations() {
-        settings= MonteCarloSettings.builder()
+        settings = MonteCarloSettings.builder()
                 .maxTreeDepth(14)
-                .policy(SimulationPolicyInterface.newMostlyStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .maxNofIterations(10)
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)

@@ -85,6 +85,9 @@ public class NodeSelector {
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
+
+
+
         boolean isLeaf = nofTestedActions < maxNofTestedActionsToBeLeaf;
         return !isLeaf;
     }

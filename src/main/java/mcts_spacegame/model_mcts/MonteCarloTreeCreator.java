@@ -91,7 +91,7 @@ public class MonteCarloTreeCreator {
     public NodeInterface runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
-        ActionSelector actionSelector = new ActionSelector();
+        ActionSelector actionSelector = new ActionSelector(settings);
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
             Optional<Action> actionInSelected = actionSelector.select(nodeSelected);
@@ -99,7 +99,7 @@ public class MonteCarloTreeCreator {
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
                 backPropagate(sr, simulationResults, actionInSelected.get());
-            } else {  //all tested <=> actionInSelected is empty
+            } else {  // actionInSelected is empty <=> all tested
                 manageCaseWhenAllActionsAreTested(nodeSelected);
             }
 
@@ -113,32 +113,6 @@ public class MonteCarloTreeCreator {
         log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations);
 
         return nodeRoot;
-    }
-
-    private void manageCaseWhenAllActionsAreTested(NodeInterface nodeSelected) throws StartStateIsTrapException {
-        SelectedToTerminalFailConverter sfc = new SelectedToTerminalFailConverter(nodeRoot, actionsToSelected);
-        if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
-            makeSelectedTerminal(nodeSelected, sfc);
-        } else {
-            chooseBestActionAndBackPropagate(nodeSelected);
-        }
-    }
-
-    private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
-        NodeSelector nodeSelector = new NodeSelector(nodeRoot);
-        Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
-        Action actionToGetToChild = childToSelected.orElseThrow().getAction();
-        State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        StepReturn sr = environment.step(actionToGetToChild, state);
-        backPropagate(sr, new SimulationResults(), actionToGetToChild);
-    }
-
-    private void makeSelectedTerminal(NodeInterface nodeSelected, SelectedToTerminalFailConverter sfc) throws StartStateIsTrapException {
-        if (nodeSelected.equals(nodeRoot)) {
-            nodeRoot.printTree();
-            throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
-        }
-        sfc.makeSelectedTerminal(nodeSelected);
     }
 
     public MonteCarloSearchStatistics getStatistics() {
@@ -181,7 +155,7 @@ public class MonteCarloTreeCreator {
     public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
-            List<StepReturn> returns = stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.policy);
+            List<StepReturn> returns = stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
             StepReturn endReturn = returns.get(returns.size() - 1);
             double sumOfRewards = returns.stream().mapToDouble(r -> r.reward).sum();
             double valueInTerminal = memory.read(endReturn.newPosition);
@@ -214,6 +188,32 @@ public class MonteCarloTreeCreator {
                 .build();
         bumSteps.backup(returnsSimulation);
 
+    }
+
+    private void manageCaseWhenAllActionsAreTested(NodeInterface nodeSelected) throws StartStateIsTrapException {
+        SelectedToTerminalFailConverter sfc = new SelectedToTerminalFailConverter(nodeRoot, actionsToSelected);
+        if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
+            makeSelectedTerminal(nodeSelected, sfc);
+        } else {
+            chooseBestActionAndBackPropagate(nodeSelected);
+        }
+    }
+
+    private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
+        NodeSelector nodeSelector = new NodeSelector(nodeRoot);
+        Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
+        Action actionToGetToChild = childToSelected.orElseThrow().getAction();
+        State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturn sr = environment.step(actionToGetToChild, state);
+        backPropagate(sr, new SimulationResults(), actionToGetToChild);
+    }
+
+    private void makeSelectedTerminal(NodeInterface nodeSelected, SelectedToTerminalFailConverter sfc) throws StartStateIsTrapException {
+        if (nodeSelected.equals(nodeRoot)) {
+            nodeRoot.printTree();
+            throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
+        }
+        sfc.makeSelectedTerminal(nodeSelected);
     }
 
     private List<StepReturn> stepToTerminal(State pos, SimulationPolicyInterface policy) {
