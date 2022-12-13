@@ -16,6 +16,7 @@ import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
+
 import java.util.*;
 
 /***
@@ -26,6 +27,15 @@ import java.util.*;
  *
  *   Assume no weighting and the following example settings: returnsSteps=[-2,-1,0], returnsSimulation=[6,6,6]
  *   The values in the nodes of the selection path will be modified according to the sum of the vectors, i.e. [4,5,6]
+ *
+ *   Depending on the properties of the action in selected node following logic is applied
+ *
+ *   actionInSelected is present (there is a valid action)
+ *      => applyActionAndExpand, simulate, backPropagate
+ *   actionInSelected is empty & AllChildrenInSelectedAreFail  (all actions are tested and leads to fail node)
+ *      =>  convertSelectedNodeToFail
+ *   actionInSelected is empty & not AllChildrenInSelectedAreFail  (all actions are tested but some is not fail)
+ *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
  *
  */
 
@@ -50,7 +60,7 @@ public class MonteCarloTreeCreator {
                                                  @NonNull State startState,
                                                  MonteCarloSettings monteCarloSettings,
                                                  NodeValueMemory memory) {
-        MonteCarloTreeCreator mctc=new MonteCarloTreeCreator();
+        MonteCarloTreeCreator mctc = new MonteCarloTreeCreator();
         mctc.environment = environment;
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
@@ -71,49 +81,26 @@ public class MonteCarloTreeCreator {
         mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
         mctc.tih = new TreeInfoHelper(mctc.nodeRoot);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
-        mctc.nofIterations=0;
+        mctc.nofIterations = 0;
     }
 
     /**
-     *   actionInSelected is present
-     *      => applyActionAndExpand, simulate, backPropagate
-     *   actionInSelected is empty & AllChildrenInSelectedAreFail
-     *      =>  convertSelectedNodeToFail
-     *   actionInSelected is empty & not AllChildrenInSelectedAreFail
-     *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
      *
      */
 
     public NodeInterface runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
-        ActionSelector actionSelector=new ActionSelector();
+        ActionSelector actionSelector = new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            Optional<Action> actionInSelected=actionSelector.select(nodeSelected);
+            Optional<Action> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
                 backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  //all tested <=> actionInSelected is empty
-                SelectedToTerminalFailConverter sfc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
-
-                if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
-                    if (nodeSelected.equals(nodeRoot)) {
-                        nodeRoot.printTree();
-                        throw new StartStateIsTrapException("All children to to root node are terminal - no solution exists");
-                    }
-                    sfc.makeSelectedTerminal(nodeSelected);
-                } else
-                {
-                    NodeSelector nodeSelector=new NodeSelector(nodeRoot);
-                    Optional<NodeInterface> childToSelected=nodeSelector.selectChild(nodeSelected);
-                    Action actionToGetToChild=childToSelected.orElseThrow().getAction();
-                    State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-                    StepReturn sr = environment.step(actionToGetToChild, state);
-                    backPropagate(sr, new SimulationResults(), actionToGetToChild);
-                }
-
+                manageCaseWhenAllActionsAreTested(nodeSelected);
             }
 
             if (cpuTimer.isTimeExceeded()) {
@@ -121,22 +108,48 @@ public class MonteCarloTreeCreator {
                 break;
             }
         }
-        nofIterations=i;
+        nofIterations = i;
         this.cpuTimer.stop();
-        log.info("time used = " + cpuTimer.getAbsoluteProgress()+", nofIterations = " + nofIterations);
+        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations);
 
         return nodeRoot;
     }
 
+    private void manageCaseWhenAllActionsAreTested(NodeInterface nodeSelected) throws StartStateIsTrapException {
+        SelectedToTerminalFailConverter sfc = new SelectedToTerminalFailConverter(nodeRoot, actionsToSelected);
+        if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
+            makeSelectedTerminal(nodeSelected, sfc);
+        } else {
+            chooseBestActionAndBackPropagate(nodeSelected);
+        }
+    }
+
+    private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
+        NodeSelector nodeSelector = new NodeSelector(nodeRoot);
+        Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
+        Action actionToGetToChild = childToSelected.orElseThrow().getAction();
+        State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturn sr = environment.step(actionToGetToChild, state);
+        backPropagate(sr, new SimulationResults(), actionToGetToChild);
+    }
+
+    private void makeSelectedTerminal(NodeInterface nodeSelected, SelectedToTerminalFailConverter sfc) throws StartStateIsTrapException {
+        if (nodeSelected.equals(nodeRoot)) {
+            nodeRoot.printTree();
+            throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
+        }
+        sfc.makeSelectedTerminal(nodeSelected);
+    }
+
     public MonteCarloSearchStatistics getStatistics() {
-        MonteCarloSearchStatistics statistics=new MonteCarloSearchStatistics(nodeRoot,cpuTimer,nofIterations);
+        MonteCarloSearchStatistics statistics = new MonteCarloSearchStatistics(nodeRoot, cpuTimer, nofIterations);
         statistics.setStatistics();
         return statistics;
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot,settings.coefficientExploitationExploration);
-        NodeInterface nodeSelected=ns.select();
+        NodeSelector ns = new NodeSelector(nodeRoot, settings.coefficientExploitationExploration);
+        NodeInterface nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
@@ -146,18 +159,18 @@ public class MonteCarloTreeCreator {
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
         NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
-        child.setDepth(nodeSelected.getDepth()+1);  //easy to forget
-        boolean isChildAddedEarlier= NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
-        boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
-        boolean isChildToDeep=child.getDepth()>settings.maxTreeDepth;
+        child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
+        boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
+        boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
+        boolean isChildToDeep = child.getDepth() > settings.maxTreeDepth;
 
         Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
-            log.fine("Child will not be added, child = "+child.getName()+", in node = "+nodeSelected.getName()
-                    +", isChildAddedEarlier =" +isChildAddedEarlier+", isChildToDeep =" +isChildToDeep));
+                log.fine("Child will not be added, child = " + child.getName() + ", in node = " + nodeSelected.getName()
+                        + ", isChildAddedEarlier =" + isChildAddedEarlier + ", isChildToDeep =" + isChildToDeep));
 
         Conditionals.executeIfTrue(isSelectedNotTerminal &&
                 isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
-            nodeSelected.addChildNode(child));
+                nodeSelected.addChildNode(child));
         return sr;
     }
 
@@ -166,30 +179,30 @@ public class MonteCarloTreeCreator {
     }
 
     public SimulationResults simulate(State stateAfterApplyingActionInSelectedNode) {
-        SimulationResults simulationResults=new SimulationResults();
-        for (int i = 0; i <settings.nofSimulationsPerNode ; i++) {
+        SimulationResults simulationResults = new SimulationResults();
+        for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturn> returns = stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.policy);
-            StepReturn endReturn = returns.get(returns.size()-1);
-            double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
-            double valueInTerminal=memory.read(endReturn.newPosition);
-            boolean isEndingInFail=endReturn.isFail;
-            simulationResults.add(sumOfRewards,valueInTerminal*settings.weightMemoryValue,isEndingInFail);
+            StepReturn endReturn = returns.get(returns.size() - 1);
+            double sumOfRewards = returns.stream().mapToDouble(r -> r.reward).sum();
+            double valueInTerminal = memory.read(endReturn.newPosition);
+            boolean isEndingInFail = endReturn.isFail;
+            simulationResults.add(sumOfRewards, valueInTerminal * settings.weightMemoryValue, isEndingInFail);
         }
         return simulationResults;
     }
 
     private void backPropagate(StepReturn sr,
                                SimulationResults simulationResults,
-                               Action actionInSelected)  {
+                               Action actionInSelected) {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
-                .nofNodesOnPath(actionsToSelected.size()+1)
+                .nofNodesOnPath(actionsToSelected.size() + 1)
                 .simulationResults(simulationResults)
                 .settings(settings)
                 .build();
-        List<Double> returnsSimulation=bumSim.backup();
+        List<Double> returnsSimulation = bumSim.backup();
 
-        double valueInTerminal=(sr.isTerminal)
-                ?memory.read(sr.newPosition)
+        double valueInTerminal = (sr.isTerminal)
+                ? memory.read(sr.newPosition)
                 : VALUE_MEMORY_IF_NOT_TERMINAL;
 
         BackupModifier bumSteps = BackupModifier.builder().rootTree(nodeRoot)
@@ -204,10 +217,10 @@ public class MonteCarloTreeCreator {
     }
 
     private List<StepReturn> stepToTerminal(State pos, SimulationPolicyInterface policy) {
-        List<StepReturn> returns=new ArrayList<>();
+        List<StepReturn> returns = new ArrayList<>();
         StepReturn stepReturn;
         do {
-            Action action=policy.chooseAction(pos);
+            Action action = policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);

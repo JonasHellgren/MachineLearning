@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 /***
  * This class is for selecting nodes in selection phase, i.e. nodes on on selection path
- * * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
+ * The selected node must be leaf node and all its children can't be terminal
+ * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  *
  * The method selectChild() returns and optional, this is empty if no child is found. Probably due to only children of
  * type fail state.
@@ -26,6 +27,7 @@ public class NodeSelector {
     private static final double C_DEFAULT = 1;
     private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT = false;
     public static final int UCT_MAX = 1000;
+    private static final int MAX_DEPTH = 10_000;
     List<NodeInterface> nodesFromRootToSelected;
     List<Action> actionsFromRootToSelected;
 
@@ -61,30 +63,23 @@ public class NodeSelector {
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
 
-        while (isNotLeaf(currentNode) && someChildrenIsNotTerminal(currentNode)) {
+        int i=0;
+        while (isNotLeaf(currentNode) && notAllChildrenAreTerminal(currentNode)) {
             Optional<NodeInterface>  selectedChild = selectChild(currentNode);
-            if (selectedChild.isPresent() && someChildrenIsNotTerminal(currentNode)) {
+            if (selectedChild.isPresent() && notAllChildrenAreTerminal(currentNode)) {
                 currentNode = selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
             }
+            i++;
+            if (i> MAX_DEPTH) {
+                log.warning("Escaped from eternal loop for selecting node - can be corner case when" +
+                        " isExcludeChildrenThatNeverHaveBeenVisited is true");
+                break;
+            }
         }
         return currentNode;
     }
-
-    private boolean hasChildrenAndSelectedChildrenIsNotTerminal(NodeInterface node) {
-        Optional<NodeInterface> selectedChild = selectChild(node);
-        return selectedChild.isPresent() && !(selectedChild.get().isTerminalFail() || selectedChild.get().isTerminalNoFail());
-    }
-
-    private boolean someChildrenIsNotTerminal(NodeInterface node) {
-        //List<NodeInterface> childrenTerminal= node.getChildNodes().stream().filter(n -> n.isTerminalNoFail() || n.isTerminalFail()).collect(Collectors.toList());
-        List<NodeInterface> childrenTerminal= node.getChildNodes().stream()
-                .filter(n -> !n.isNotTerminal())
-                .collect(Collectors.toList());
-        return childrenTerminal.size()!= node.getChildNodes().size();
-    }
-
 
     private boolean isNotLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
         List<NodeInterface> childNodes = currentNode.getChildNodes();
@@ -92,6 +87,13 @@ public class NodeSelector {
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
         boolean isLeaf = nofTestedActions < maxNofTestedActionsToBeLeaf;
         return !isLeaf;
+    }
+
+    private boolean notAllChildrenAreTerminal(NodeInterface node) {
+        List<NodeInterface> childrenTerminal= node.getChildNodes().stream()
+                .filter(n -> !n.isNotTerminal())
+                .collect(Collectors.toList());
+        return childrenTerminal.size()!= node.getChildNodes().size();
     }
 
     public  Optional<NodeInterface> selectChild(NodeInterface node) {
