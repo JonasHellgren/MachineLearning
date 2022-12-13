@@ -74,20 +74,53 @@ public class MonteCarloTreeCreator {
         mctc.nofIterations=0;
     }
 
+    /**
+     *   actionInSelected is present
+     *      => applyActionAndExpand, simulate, backPropagate
+     *   actionInSelected is empty & AllChildrenInSelectedAreFail
+     *      =>  convertSelectedNodeToFail
+     *   actionInSelected is empty & not AllChildrenInSelectedAreFail
+     *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
+     *
+     */
+
     public NodeInterface runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
         ActionSelector actionSelector=new ActionSelector();
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
+
+            System.out.println("nodeSelected = " + nodeSelected.getName());
+            nodeSelected.printTree();
+
             Optional<Action> actionInSelected=actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
+                System.out.println("actionInSelected is present, actionInSelected = "+actionInSelected);
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
                 backPropagate(sr, simulationResults, actionInSelected.get());
-            } else {  //all tested <=> actionInSelected is empty, needed for all children to be fail
+            } else {  //all tested <=> actionInSelected is empty
                 SelectedToTerminalFailConverter sfc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
-                sfc.convertSelectedNodeToFailIfAllItsChildrenAreFail(nodeSelected);
+
+                if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
+                    System.out.println("actionInSelected is empty & AllChildrenInSelectedAreFail");
+                    if (nodeSelected.equals(nodeRoot)) {
+                        nodeRoot.printTree();
+                        throw new StartStateIsTrapException("All children to to root node are terminal - no solution exists");
+                    }
+                    sfc.makeSelectedTerminal(nodeSelected);
+                } else
+                {
+                    System.out.println("actionInSelected is empty & not AllChildrenInSelectedAreFail");
+                    NodeSelector nodeSelector=new NodeSelector(nodeRoot);
+                    Optional<NodeInterface> childToSelected=nodeSelector.selectChild(nodeSelected);
+                    Action actionToGetToChild=childToSelected.orElseThrow().getAction();
+                    State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+                    StepReturn sr = environment.step(actionToGetToChild, state);
+                    backPropagate(sr, new SimulationResults(), actionToGetToChild);
+                }
+
             }
 
             if (cpuTimer.isTimeExceeded()) {
@@ -124,10 +157,11 @@ public class MonteCarloTreeCreator {
         boolean isChildAddedEarlier= NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(),child).isPresent();
         boolean isSelectedNotTerminal= nodeSelected.isNotTerminal();
         boolean isChildToDeep=child.getDepth()>settings.maxTreeDepth;
-        boolean isChildNonFailTerminal=child.isTerminalNoFail();
+        boolean isChildNonFailTerminal=false; //child.isTerminalNoFail();
 
         Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->
-            log.fine("Child will not be added, child = "+child+", in node = "+nodeSelected));
+            log.info("Child will not be added, child = "+child.getName()+", in node = "+nodeSelected.getName()
+                    +", isChildAddedEarlier =" +isChildAddedEarlier+", isChildToDeep =" +isChildToDeep+", isChildNonFailTerminal =" +isChildNonFailTerminal));
 
         Conditionals.executeIfTrue(isSelectedNotTerminal &&
                 isChildOkToAdd(isChildAddedEarlier, isChildToDeep, isChildNonFailTerminal), () ->

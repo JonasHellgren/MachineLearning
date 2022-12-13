@@ -61,15 +61,19 @@ public class NodeSelector {
         NodeInterface currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
         Optional<NodeInterface> selectedChild = selectChild(currentNode);
-        while (currentNodeNotIsLeaf(currentNode) && selectedChild.isPresent()) {
+        while (currentNodeNotIsLeaf(currentNode) && selectedChild.isPresent() && !isPresentAndTerminal(selectedChild)) {
            selectedChild = selectChild(currentNode);
-            if (selectedChild.isPresent()) {
+            if (selectedChild.isPresent() && !isPresentAndTerminal(selectedChild)) {
                 currentNode = selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
             }
         }
         return currentNode;
+    }
+
+    private boolean isPresentAndTerminal(Optional<NodeInterface> node) {
+        return node.filter(nodeInterface -> nodeInterface.isTerminalFail() || nodeInterface.isTerminalNoFail()).isPresent();
     }
 
     private boolean currentNodeNotIsLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
@@ -80,7 +84,7 @@ public class NodeSelector {
         return !isLeaf;
     }
 
-    public Optional<NodeInterface> selectChild(NodeInterface node) {
+    public  Optional<NodeInterface> selectChild(NodeInterface node) {
         List<Pair<NodeInterface, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);
         Optional<Pair<NodeInterface, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
         return pair.isEmpty()

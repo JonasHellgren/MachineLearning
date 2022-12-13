@@ -55,7 +55,7 @@ public interface SpaceGridInterface {
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   | G |   (worst, 0)
      *      -------------------------------------------------------------
      */
-    static SpaceGrid new5times15Grid() {
+    static SpaceGrid new5times15GridCorridor() {
         List<Pair<Integer, Integer>> occupiedCells = new ArrayList<>();
         List<Pair<Integer, Integer>> rowY1 = createRow(1);
         List<Pair<Integer, Integer>> rowY3 = createRow(3);
@@ -65,17 +65,22 @@ public interface SpaceGridInterface {
     }
 
 
-    //new5times15Grid
-
     /***
      *      -------------------------------------------------------------
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   |G+6|   (best, +2)
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   | O |   |
-     *      | S |   |   |   |   |   |   |   |   |   |   |   |   |   |G+3|   (second best. +1)
+     *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   |G+3|   (second best. +1)
      *      |   |   |   |   |   |   |   |   |   |   |   |   |   | O |   |
-     *      |   |   |   |   |   |   |   |   |   |   |   |   |   |   | G |   (worst, 0)
+     *      | S |   |   |   |   |   |   |   |   |   |   |   |x12|   | G |   (worst, 0)
      *      -------------------------------------------------------------
      */
+
+    static SpaceGrid new5times15Grid() {
+        List<Pair<Integer, Integer>> occupiedCells = Arrays.asList(
+                new Pair<>(13, 1), new Pair<>(13, 3));
+        return new SpaceGrid(5, 15, occupiedCells);
+
+    }
 
     private static List<Pair<Integer, Integer>> createRow(int ri) {
         List<Pair<Integer, Integer>> row = new ArrayList<>();

@@ -9,10 +9,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import org.apache.commons.math3.util.Pair;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 /***
  *  This class updates monte carlo tree, internal node variables can be changed or node(s) can be replaced.
@@ -45,6 +42,7 @@ import java.util.stream.Collectors;
  *  If the end node in a path corresponds to a terminal state, a value memory can affect the result. The memory value
  *  is simply added to all rewards in the path. The memory value also affects the terminal state in simulations.
  *  For both steps and simulations, the memory value is multiplied by weightMemoryValue.
+ *  The above described weights are handy to cancel out for example step results and/or put less trust in the memory.
  *
  */
 
@@ -136,10 +134,18 @@ public class BackupModifier {
         returnsSteps = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
         returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
         List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
+
+
         List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
+
             Action action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
+
+            if (node.getName().equals("State(x=12, y=4)")) {
+                System.out.println("node.getActionValue(Action.still) = " + node.getActionValue(Action.still)+", singleReturn="+singleReturn);
+            }
+
             this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
     }
@@ -161,5 +167,4 @@ public class BackupModifier {
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);
     }
-
 }

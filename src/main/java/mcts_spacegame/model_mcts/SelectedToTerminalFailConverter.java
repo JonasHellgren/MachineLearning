@@ -36,7 +36,7 @@ public class SelectedToTerminalFailConverter {
         }
     }
 
-    private boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface nodeSelected) {
+    public boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface nodeSelected) {
         Set<Action> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());

@@ -92,6 +92,7 @@ public final class NodeNotTerminal extends NodeAbstract {
             throw new RuntimeException("Zero nof visits for action = " + a);
         }
         double qOld = getActionValue(a);
+       // nofVisitsForAction=1;
         double qNew = qOld + alpha * (G - qOld) / (double) nofVisitsForAction;
         Qsa.put(a, qNew);
     }
