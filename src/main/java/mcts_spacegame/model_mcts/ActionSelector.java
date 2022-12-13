@@ -33,7 +33,6 @@ public class ActionSelector {
 
         if(nonTestedActions.size()==0) {
             return Optional.empty();
-            //return Optional.of(getRandomTestedAction(nodeSelected));
         } else {
             return Optional.of(getRandomAction(nonTestedActions));
         }

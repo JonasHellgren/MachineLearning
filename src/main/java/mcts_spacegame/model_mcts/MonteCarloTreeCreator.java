@@ -122,7 +122,7 @@ public class MonteCarloTreeCreator {
     }
 
     private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot, settings.coefficientExploitationExploration);
+        NodeSelector ns = new NodeSelector(nodeRoot, settings);
         NodeInterface nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
@@ -200,7 +200,7 @@ public class MonteCarloTreeCreator {
     }
 
     private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
-        NodeSelector nodeSelector = new NodeSelector(nodeRoot);
+        NodeSelector nodeSelector = new NodeSelector(nodeRoot,settings);
         Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
         Action actionToGetToChild = childToSelected.orElseThrow().getAction();
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);

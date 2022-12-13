@@ -3,6 +3,7 @@ package mcts_spacegame;
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_space.State;
@@ -33,7 +34,7 @@ public class TestNodeSelector {
     @Test public void sameValueFewVisitsGivesBetterUct() {
         double v=1;
         int nParent=10;
-        NodeSelector ns=new NodeSelector(nodeRoot);
+        NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         double uctFewVisits=ns.calcUct(v,nParent,1);
         double uctManyVisits=ns.calcUct(v,nParent,5);
         System.out.println("uctFewVisits = " + uctFewVisits);
@@ -43,7 +44,7 @@ public class TestNodeSelector {
 
     @Test public void sameNofVisitsHighValueGivesBetterUct() {
         int nParent=10, nofVisits=5;
-        NodeSelector ns=new NodeSelector(nodeRoot);
+        NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         double uctLowValue=ns.calcUct(1,nParent,nofVisits);
         double uctHighValue=ns.calcUct(5,nParent,nofVisits);
         System.out.println("uctLowValue = " + uctLowValue+", uctHighValue = " + uctHighValue);
@@ -52,7 +53,7 @@ public class TestNodeSelector {
 
     @Test public void nofVisitsDoesNotAffectZeroC() {
         int nParent=10, nofVisitsSmall=1, nofVisitsBig= (int) 1e5, C=0;
-        NodeSelector ns=new NodeSelector(nodeRoot,C);
+        NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build(),C,false);
         double uctLowValue=ns.calcUct(1.0,nParent,nofVisitsSmall); //C=0 gives nofVisitsSmall does not matter
         double uctHighValue=ns.calcUct(1.1,nParent,nofVisitsBig);
         System.out.println("uctLowValue = " + uctLowValue+", uctHighValue = " + uctHighValue);
@@ -61,7 +62,7 @@ public class TestNodeSelector {
 
     @Test public void uctZeroVisitsGivesUCTMax() {
         int nParent=10, nofVisits=0;
-        NodeSelector ns=new NodeSelector(nodeRoot);
+        NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         double uctZeroVisits=ns.calcUct(1,nParent,nofVisits);
         System.out.println("uctZeroVisits = " + uctZeroVisits);
         Assert.assertEquals(NodeSelector.UCT_MAX,uctZeroVisits, DELTA);
@@ -75,7 +76,7 @@ public class TestNodeSelector {
         addExperience(nodeRoot,Action.still,-Environment.STILL_COST+SIM_RES);
         addExperience(nodeRoot,Action.down,-Environment.CRASH_COST+SIM_RES);
 
-        NodeSelector ns=new NodeSelector(nodeRoot);
+        NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         NodeInterface nodeFound=ns.select();
 
         System.out.println("nodeFound = " + nodeFound);

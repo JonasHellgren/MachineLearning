@@ -28,33 +28,30 @@ public class NodeSelector {
     private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT = false;
     public static final int UCT_MAX = 1000;
     private static final int MAX_DEPTH = 10_000;
-    List<NodeInterface> nodesFromRootToSelected;
-    List<Action> actionsFromRootToSelected;
+
 
     final NodeInterface nodeRoot;
+    MonteCarloSettings settings;
     private final double coefficientExploitationExploration;  //often called C in literature
     final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
 
-    public NodeSelector(NodeInterface nodeRoot) {
-        this(nodeRoot, C_DEFAULT, EXCLUDE_NEVER_VISITED_DEFAULT);
+    List<NodeInterface> nodesFromRootToSelected;
+    List<Action> actionsFromRootToSelected;
+
+    public NodeSelector(NodeInterface nodeRoot, MonteCarloSettings settings) {
+        this(nodeRoot,settings, settings.coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
-    public NodeSelector(NodeInterface nodeRoot, boolean isExcludeChildrenThatNeverHaveBeenVisited) {
-        this(nodeRoot, C_DEFAULT, isExcludeChildrenThatNeverHaveBeenVisited);
-    }
-
-    public NodeSelector(NodeInterface nodeRoot, double coefficientExploitationExploration) {
-        this(nodeRoot, coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
-    }
-
-    public NodeSelector(NodeInterface nodeRoot,
+    public NodeSelector(NodeInterface nodeRoot, MonteCarloSettings settings,
                         double coefficientExploitationExploration,
                         boolean isExcludeChildrenThatNeverHaveBeenVisited) {
-        this.nodeRoot = nodeRoot;  //NodeInterface.copy(nodeRoot) will not work, does not copy entire tree
+        this.nodeRoot = nodeRoot;
+        this.settings = settings;
+        this.coefficientExploitationExploration= coefficientExploitationExploration;
+        this.isExcludeChildrenThatNeverHaveBeenVisited=isExcludeChildrenThatNeverHaveBeenVisited;
+
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
-        this.coefficientExploitationExploration = coefficientExploitationExploration;
-        this.isExcludeChildrenThatNeverHaveBeenVisited = isExcludeChildrenThatNeverHaveBeenVisited;
     }
 
     public NodeInterface select()  {
@@ -85,8 +82,6 @@ public class NodeSelector {
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
-
-
 
         boolean isLeaf = nofTestedActions < maxNofTestedActionsToBeLeaf;
         return !isLeaf;

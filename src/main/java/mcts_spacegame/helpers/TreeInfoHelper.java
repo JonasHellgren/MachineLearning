@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
@@ -81,7 +82,7 @@ public class TreeInfoHelper {
 
     @SneakyThrows
     public List<NodeInterface> getBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree, C_FOR_NO_EXPLORATION,true);
+        NodeSelector ns = new NodeSelector(rootTree, MonteCarloSettings.builder().build(), C_FOR_NO_EXPLORATION,true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }

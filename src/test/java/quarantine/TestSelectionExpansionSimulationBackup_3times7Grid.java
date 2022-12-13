@@ -122,7 +122,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     @SneakyThrows
     private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot, C_FOR_UCT);
+        NodeSelector ns = new NodeSelector(nodeRoot, MonteCarloSettings.builder().build(), C_FOR_UCT,false);
         NodeInterface nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
