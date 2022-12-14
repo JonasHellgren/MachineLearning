@@ -119,10 +119,16 @@ getActionFromPolicy x
 exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor x
 iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3 x
 getBestPath icke fullstaändig för iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3  x
-prova olika weightReturnsSimulation weightReturnsSteps
-cpuTimer buggar ibland  - nano sec istaället?
+prova olika weightReturnsSimulation weightReturnsSteps  x
+Function<State,Integer> genrisk genom StateInterface
+StateCell  StateShip
+ActionShip
+
+
 annan domain - ladda batteri maximalt energi given tid
 dokumentera - speciellt termer
+averageNofChildrenPerNode verkar fel
+cpuTimer buggar ibland  - nano sec istaället?
 
 best path beror bara på value nofVisits kan ju även påverka val
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration

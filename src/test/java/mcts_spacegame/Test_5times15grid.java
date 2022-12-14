@@ -97,7 +97,7 @@ public class Test_5times15grid {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3() {
+    public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.builder()
                 .maxTreeDepth(14)
                 .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? Action.applicableActions().size():1)
@@ -114,6 +114,45 @@ public class Test_5times15grid {
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
         assertStateIsOnBestPath(tih,State.newState(4,4));
+    }
+
+    @SneakyThrows
+    @Test
+    public void iterateFromX10Y2WithSimulationsAndSteps() {
+        settings = MonteCarloSettings.builder()
+                .maxTreeDepth(14)
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxNofIterations(100)
+                .nofSimulationsPerNode(100)
+                .coefficientExploitationExploration(100)
+                .build();
+        System.out.println("memory = " + memory);
+        createCreator(State.newState(10, 2));
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        assertStateIsOnBestPath(tih,State.newState(13,4));
+    }
+
+    @SneakyThrows
+    @Test
+    public void iterateFromX0Y2WithSimulationsAndSteps() {
+        settings = MonteCarloSettings.builder()
+                .maxTreeDepth(14)
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxNofIterations(10_000)
+                .nofSimulationsPerNode(10)
+                .coefficientExploitationExploration(1)
+                .build();
+        System.out.println("memory = " + memory);
+        createCreator(State.newState(0, 2));
+
+        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        doPrinting(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        assertStateIsOnBestPath(tih,State.newState(10,4));
     }
 
     private void createCreator(State state) {

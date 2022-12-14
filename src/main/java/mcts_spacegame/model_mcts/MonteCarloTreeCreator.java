@@ -173,7 +173,7 @@ public class MonteCarloTreeCreator {
                 .simulationResults(simulationResults)
                 .settings(settings)
                 .build();
-        List<Double> returnsSimulation = bumSim.backup();
+        List<Double> returnsSimulation = bumSim.simulate();
 
         double valueInTerminal = (sr.isTerminal)
                 ? memory.read(sr.newPosition)
@@ -187,7 +187,6 @@ public class MonteCarloTreeCreator {
                 .settings(settings)
                 .build();
         bumSteps.backup(returnsSimulation);
-
     }
 
     private void manageCaseWhenAllActionsAreTested(NodeInterface nodeSelected) throws StartStateIsTrapException {

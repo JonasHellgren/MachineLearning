@@ -4,9 +4,6 @@ import common.Conditionals;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
-import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,21 +46,23 @@ public class SimulationReturnsExtractor {
                 () -> bms.settings = MonteCarloSettings.builder().build(),
                 () -> bms.settings = settings);
         return bms;
-
     }
 
-    public List<Double>  backup() {
-        if (simulationResults.size()==0) {
-            return new ArrayList<>(Collections.nCopies(nofNodesOnPath,0d));  //todo into MathUtils
+    public List<Double> simulate() {
+        if (simulationResults.size() == 0) {
+            return new ArrayList<>(Collections.nCopies(nofNodesOnPath, 0d));  //todo into MathUtils
         }
+
         List<Double> returnsSimulation;
-        if(!simulationResults.areAllSimulationsTerminalFail()) {
-            returnsSimulation=backupNormal(); } else {
-                returnsSimulation=backupDefensive(); }
+        if (!simulationResults.areAllSimulationsTerminalFail()) {
+            returnsSimulation = createReturnsNormal();
+        } else {
+            returnsSimulation = createReturnsDefensive();
+        }
         return returnsSimulation;
     }
 
-    public List<Double> backupNormal() {
+    public List<Double> createReturnsNormal() {
         log.fine("backupNormal");
         double maxReturn=simulationResults.maxReturn().orElseThrow();
         double avgReturn=simulationResults.averageReturn().orElseThrow();
@@ -73,7 +72,7 @@ public class SimulationReturnsExtractor {
     }
 
 
-    public List<Double>  backupDefensive() {
+    public List<Double> createReturnsDefensive() {
         log.fine("backupDefensive");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
         return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
