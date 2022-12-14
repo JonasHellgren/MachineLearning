@@ -5,6 +5,7 @@ import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifier;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SelectedToTerminalFailConverter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
@@ -45,7 +46,7 @@ public class TestSelectedToTerminalFailConverter {
         Action actionInSelected=Action.down;
         List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot, MonteCarloSettings.newDefault());
         Optional<NodeInterface> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
 
         bum = BackupModifier.builder().rootTree(nodeRoot)

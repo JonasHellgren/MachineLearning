@@ -4,6 +4,7 @@ import mcts_spacegame.enums.Action;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
+import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
@@ -35,7 +36,7 @@ public class TestTreeInfoHelper {
         actionInSelected=Action.still;
         actions = Action.getAllActions(actionsToSelected, actionInSelected);
         nodeRoot= createMCTSTree(actions,rootState);
-        tih=new TreeInfoHelper(nodeRoot);
+        tih=new TreeInfoHelper(nodeRoot, MonteCarloSettings.builder().build());
 
     }
 

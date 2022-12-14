@@ -3,7 +3,11 @@ package mcts_spacegame.model_mcts;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.ToString;
+import mcts_spacegame.enums.Action;
+import mcts_spacegame.models_space.State;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
+
+import java.util.function.Function;
 
 @Builder
 @Setter
@@ -15,6 +19,7 @@ public class MonteCarloSettings {
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final boolean BACKUP_STEPS_DEFAULT=true;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
+    private static final Function<State,Integer> MAX_TESTED_ACTIONS_LEAF_DEFAULT = (a) -> Action.applicableActions().size();
     private static final SimulationPolicyInterface FIRST_ACTION_POLICY_DEFAULT = SimulationPolicyInterface.newAlwaysStill();
     private static final SimulationPolicyInterface SIMULATION_POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
     private static final double DISCOUNT_FACTOR_STEPS_DEFAULT = 1;
@@ -37,6 +42,8 @@ public class MonteCarloSettings {
     long timeBudgetMilliSeconds = TIME_BUDGET_DEFAULT;
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
+    @Builder.Default
+    Function<State,Integer> maxNofTestedActionsForBeingLeafFunction = MAX_TESTED_ACTIONS_LEAF_DEFAULT;
     @Builder.Default
     SimulationPolicyInterface firstActionSelectionPolicy = FIRST_ACTION_POLICY_DEFAULT;
     @Builder.Default

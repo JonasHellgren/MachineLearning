@@ -114,9 +114,12 @@ nytt exempel new5times15Grid x
 Test_5times15grid utan simuleringar x
 nodeSelector.selectChild() i runIterations  x
 
-kunna speca när tillåtet expandera
-getActionFromPolicy
-exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor
+kunna speca när tillåtet expandera  x
+getActionFromPolicy x
+exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridNoCorridor x
+iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3 x
+getBestPath icke fullstaändig för iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3  x
+prova olika weightReturnsSimulation weightReturnsSteps
 cpuTimer buggar ibland  - nano sec istaället?
 annan domain - ladda batteri maximalt energi given tid
 dokumentera - speciellt termer

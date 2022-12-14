@@ -200,6 +200,8 @@ public class Test_5times15gridCorridor {
         Assert.assertEquals(VALUE_3,node.orElseThrow().getActionValue(Action.still), DELTA);
     }
 
+
+
     private MonteCarloTreeCreator treeCreator(State state) {
         return MonteCarloTreeCreator.builder()
                 .environment(environment)

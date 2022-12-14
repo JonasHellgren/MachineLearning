@@ -22,15 +22,20 @@ public class MonteCarloSearchStatistics {
     int nofIterations;
     float usedTimeInMilliSeconds;
     float usedRelativeTimeInPercentage;
+    MonteCarloSettings settings;
 
-    public MonteCarloSearchStatistics(@NonNull  NodeInterface nodeRoot, @NonNull CpuTimer cpuTimer, int nofIterations) {
+    public MonteCarloSearchStatistics(@NonNull  NodeInterface nodeRoot,
+                                      @NonNull CpuTimer cpuTimer,
+                                      int nofIterations,
+                                      MonteCarloSettings settings) {
         this.nodeRoot = nodeRoot;
         this.cpuTimer=cpuTimer;
         this.nofIterations=nofIterations;
+        this.settings=settings;
     }
 
     public void setStatistics() {
-        tih=new TreeInfoHelper(nodeRoot);
+        tih=new TreeInfoHelper(nodeRoot,settings);
         nofNodes=tih.nofNodesInTree();
         nofNodesWithNoChildren=tih.nofNodesWithNoChildren();
         maxDepth= tih.maxDepth();

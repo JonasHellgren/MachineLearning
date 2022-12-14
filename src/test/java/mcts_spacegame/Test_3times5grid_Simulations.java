@@ -77,7 +77,7 @@ public class Test_3times5grid_Simulations {
     public void iterateFromX0Y0() {
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
         assertStateIsOnBestPath(tih,new State(1,1));
         assertStateIsOnBestPath(tih,new State(3,2));
     }
@@ -95,14 +95,14 @@ public class Test_3times5grid_Simulations {
 
         doPrinting(nodeRoot);
 
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
         assertStateIsOnBestPath(tih,new State(1,2));
         assertStateIsOnBestPath(tih,new State(3,2));
     }
 
 
     private void doPrinting(NodeInterface nodeRoot) {
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
+        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot,settings);
 
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         nodeRoot.printTree();

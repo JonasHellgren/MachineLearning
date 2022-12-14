@@ -79,7 +79,7 @@ public class MonteCarloTreeCreator {
 
     private static void setSomeFields(@NonNull State startState, MonteCarloTreeCreator mctc) {
         mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
-        mctc.tih = new TreeInfoHelper(mctc.nodeRoot);
+        mctc.tih = new TreeInfoHelper(mctc.nodeRoot,mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
     }
@@ -116,7 +116,7 @@ public class MonteCarloTreeCreator {
     }
 
     public MonteCarloSearchStatistics getStatistics() {
-        MonteCarloSearchStatistics statistics = new MonteCarloSearchStatistics(nodeRoot, cpuTimer, nofIterations);
+        MonteCarloSearchStatistics statistics = new MonteCarloSearchStatistics(nodeRoot, cpuTimer, nofIterations,settings);
         statistics.setStatistics();
         return statistics;
     }

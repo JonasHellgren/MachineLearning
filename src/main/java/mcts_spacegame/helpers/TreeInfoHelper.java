@@ -36,9 +36,15 @@ public class TreeInfoHelper {
     }
 
     NodeInterface rootTree;
+    MonteCarloSettings settings;
 
     public TreeInfoHelper(NodeInterface rootTree) {
+        this(rootTree,MonteCarloSettings.newDefault());
+    }
+
+    public TreeInfoHelper(NodeInterface rootTree, MonteCarloSettings settings) {
         this.rootTree = rootTree;
+        this.settings=settings;
     }
 
     public Optional<NodeInterface> getNodeReachedForActions(List<Action> actions) {
@@ -82,7 +88,7 @@ public class TreeInfoHelper {
 
     @SneakyThrows
     public List<NodeInterface> getBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree, MonteCarloSettings.builder().build(), C_FOR_NO_EXPLORATION,true);
+        NodeSelector ns = new NodeSelector(rootTree, settings, C_FOR_NO_EXPLORATION,true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }

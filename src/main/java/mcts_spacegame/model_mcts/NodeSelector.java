@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.Action;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.State;
 import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /***
@@ -62,12 +65,13 @@ public class NodeSelector {
 
         int i=0;
         while (isNotLeaf(currentNode) && notAllChildrenAreTerminal(currentNode)) {
-            Optional<NodeInterface>  selectedChild = selectChild(currentNode);
+            Optional<NodeInterface> selectedChild = selectChild(currentNode);
             if (selectedChild.isPresent() && notAllChildrenAreTerminal(currentNode)) {
                 currentNode = selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
             }
+
             i++;
             if (i> MAX_DEPTH) {
                 log.warning("Escaped from eternal loop for selecting node - can be corner case when" +
@@ -75,16 +79,15 @@ public class NodeSelector {
                 break;
             }
         }
+
         return currentNode;
     }
 
-    private boolean isNotLeaf(NodeInterface currentNode) {  //leaf <=> non tested actions
+    private boolean isNotLeaf(NodeInterface currentNode) {
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
-        int maxNofTestedActionsToBeLeaf = MathUtils.clip(Action.applicableActions().size(), 1, Integer.MAX_VALUE);  //todo debatable
-
-        boolean isLeaf = nofTestedActions < maxNofTestedActionsToBeLeaf;
-        return !isLeaf;
+        int maxNofTestedActions = settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState());
+        return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
     }
 
     private boolean notAllChildrenAreTerminal(NodeInterface node) {

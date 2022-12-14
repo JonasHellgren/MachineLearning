@@ -80,7 +80,7 @@ public class BackupModifier {
                 () -> bm.settings = MonteCarloSettings.builder().build(),
                 () -> bm.settings = settings);
 
-        bm.treeInfoHelper = new TreeInfoHelper(rootTree);
+        bm.treeInfoHelper = new TreeInfoHelper(rootTree,settings);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
 
