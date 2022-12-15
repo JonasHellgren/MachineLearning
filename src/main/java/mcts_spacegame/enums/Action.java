@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 /**
- * notApplicable for root node
+ * notApplicable: for root node
  */
 
 public enum Action {

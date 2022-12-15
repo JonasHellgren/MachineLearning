@@ -120,9 +120,12 @@ exempel för ovan, tex endast expandera 3 första stegen spacegrid 5times15GridN
 iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3 x
 getBestPath icke fullstaändig för iterateFromX0Y2WithSimulationsAndRestrictedActionSetAfterDepth3  x
 prova olika weightReturnsSimulation weightReturnsSteps  x
-Function<State,Integer> genrisk genom StateInterface
-StateCell  StateShip
-ActionShip
+Function<State,Integer> genrisk genom StateInterface  x
+StateCell  StateShip  x
+ActionShip x
+EnvironmentCell x
+TestEnvironmentCell
+StepReturn<T>
 
 
 annan domain - ladda batteri maximalt energi given tid
