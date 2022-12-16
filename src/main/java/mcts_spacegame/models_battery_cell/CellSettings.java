@@ -1,18 +1,17 @@
-package mcts_cell_charging;
+package mcts_spacegame.models_battery_cell;
 
 import lombok.Builder;
 
 @Builder
 public class CellSettings {
 
-
-    static final double MAX_CURRENT_DEFAULT=100;
+    static final double MAX_CURRENT_DEFAULT=200;
     static final double RESISTANCE_DEFAULT=0.01;
     static final double CAPACITY_DEFAULT=36_000;  //10 Ah
-    static final double MAX_TEMPERATURE=100;   //Celsius
+    static final double MAX_TEMPERATURE=50;   //Celsius
     static final double MAX_VOLTAGE=4;
     //https://www.batterydesign.net/specific-heat-capacity-of-lithium-ion-cells/
-    static final double HEAT_CAPACITY_DEFAULT=1000;  //J/kg
+    static final double HEAT_CAPACITY_DEFAULT=500;  //J/kg
     //https://iopscience.iop.org/article/10.1088/1757-899X/53/1/012014/pdf
     //https://core.ac.uk/download/pdf/199217131.pdf
     static final double HEAT_TRANSFER_DEFAULT=19;  //W/m^K
@@ -22,6 +21,10 @@ public class CellSettings {
     static final double DT_DEFAULT=10;
     static final double TEMP_AMB_DEFAULT=20;
     static final double MAX_TIME_DEFAULT=100;
+
+    public static CellSettings newDefault() {
+        return CellSettings.builder().build();
+    }
 
     @Builder.Default
     double maxCurrent=MAX_CURRENT_DEFAULT;

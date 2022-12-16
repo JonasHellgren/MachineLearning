@@ -124,7 +124,7 @@ Function<State,Integer> genrisk genom StateInterface  x
 StateCell  StateShip  x
 ActionShip x
 EnvironmentCell x
-TestEnvironmentCell
+TestEnvironmentCell x
 StepReturn<T>
 
 

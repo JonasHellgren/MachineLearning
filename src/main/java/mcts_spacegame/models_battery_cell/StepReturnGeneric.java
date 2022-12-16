@@ -1,9 +1,7 @@
-package mcts_cell_charging;
+package mcts_spacegame.models_battery_cell;
 
 import lombok.Builder;
-import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.model_mcts.StateInterface;
-import mcts_spacegame.models_space.State;
 
 @Builder
 public class StepReturnGeneric<TS extends StateInterface> {

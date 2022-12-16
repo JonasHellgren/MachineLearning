@@ -44,6 +44,8 @@ public class Environment implements EnvironmentInterface {
         double costMotion = (action.equals(Action.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;
+
+        //todo för in logic ovan i builder
         return StepReturn.builder()
                 .newPosition(newPosition).isTerminal(isTerminal).isFail(isCrashing).reward(reward)
                 .build();

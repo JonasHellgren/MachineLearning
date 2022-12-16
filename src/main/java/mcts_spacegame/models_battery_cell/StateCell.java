@@ -1,7 +1,5 @@
 package mcts_spacegame.models_battery_cell;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,8 +13,6 @@ public class StateCell implements StateInterface {
     public double SoC;
     public double temperature;
     public double time;
-
-
 
     @Override
     public StateInterface copy() {
