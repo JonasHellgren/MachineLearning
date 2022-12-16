@@ -84,9 +84,6 @@ public class MonteCarloTreeCreator {
         mctc.nofIterations = 0;
     }
 
-    /**
-     *
-     */
 
     public NodeInterface runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise

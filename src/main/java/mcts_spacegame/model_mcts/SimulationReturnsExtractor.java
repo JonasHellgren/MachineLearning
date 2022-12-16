@@ -86,7 +86,7 @@ public class SimulationReturnsExtractor {
 
     private List<Double> getReturns(double singleReturn, double discountFactor) {
         List<Double> returnsSimulation=new ArrayList<>();
-        for (int ni = 0; ni <nofNodesOnPath ; ni++) {
+        for (int ni = 0; ni < nofNodesOnPath ; ni++) {
             int nofNodesRemaining=nofNodesOnPath-ni-1;
             double discount=Math.pow(discountFactor,nofNodesRemaining);
             returnsSimulation.add(singleReturn*discount);

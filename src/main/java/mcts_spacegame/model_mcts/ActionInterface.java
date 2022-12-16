@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ActionInterface {
 
-    List<ActionInterface> applicableActions ();
-    List<ActionInterface> getAllActions(List<ActionInterface> actionsToSelected, ActionInterface actionOnSelected);
+   // List<ActionInterface> applicableActions ();
+   // List<ActionInterface> getAllActions(List<ActionInterface> actionsToSelected, ActionInterface actionOnSelected);
 
 }

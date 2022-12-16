@@ -126,6 +126,19 @@ ActionShip x
 EnvironmentCell x
 TestEnvironmentCell x
 StepReturn<T>
+TestStateCell  copy SetFromReturn
+gör generisk för space:
+- StepReturn
+- StateInterface
+- ActionInterface
+- EnvironmentGenericInterface
+- Environment -> EnvironmentSpace
+- NodeSelector<TA>
+- ActionSelector<TA>
+- BackupModifier
+- NodeValueMemory<TS>
+- SelectedToTerminalFailConverter
+- MonteCarloTreeCreator
 
 
 annan domain - ladda batteri maximalt energi given tid
@@ -140,10 +153,3 @@ Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Explor
 Vad händer selected är terminal not fail - inget speicellt  x
 
 
-https://project.dke.maastrichtuniversity.nl/games/files/phd/Chaslot_thesis.pdf
-
-https://www.researchgate.net/publication/312172859_An_Analysis_of_Monte_Carlo_Tree_Search
-
-https://www.lamsade.dauphine.fr/~cazenave/mcts-gelly-silver.pdf
-
-https://www.cs.helsinki.fi/u/bmmalone/heuristic-search-fall-2013/daniel_draft.pdf

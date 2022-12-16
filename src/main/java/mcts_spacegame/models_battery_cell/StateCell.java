@@ -8,19 +8,23 @@ import mcts_spacegame.model_mcts.StateInterface;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class StateCell implements StateInterface {
+public class StateCell implements StateInterface<StateCell> {
 
     public double SoC;
     public double temperature;
     public double time;
 
     @Override
-    public StateInterface copy() {
-        return null;
+    public StateInterface<StateCell> copy() {
+        return StateCell.builder()
+                .SoC(SoC).temperature(temperature).time(time).build();
     }
 
     @Override
-    public void SetFromReturn() {
-
+    public void setFromReturn(StepReturnGeneric<StateCell> stepReturn) {
+        this.SoC=stepReturn.newState.SoC;
+        this.temperature=stepReturn.newState.temperature;
+        this.time=stepReturn.newState.time;
     }
+
 }

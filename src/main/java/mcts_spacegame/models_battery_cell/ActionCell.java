@@ -48,13 +48,4 @@ public class ActionCell implements ActionInterface {
                 : minRelativeCurrent + (double) level / (double) (nofCurrentLevels - 1);
     }
 
-    @Override
-    public List<ActionInterface> applicableActions() {
-        return null;
-    }
-
-    @Override
-    public List<ActionInterface> getAllActions(List<ActionInterface> actionsToSelected, ActionInterface actionOnSelected) {
-        return null;
-    }
 }

@@ -1,8 +1,10 @@
 package mcts_spacegame.model_mcts;
 
-public interface StateInterface {
+import mcts_spacegame.models_battery_cell.StepReturnGeneric;
 
-    StateInterface copy();
-    void SetFromReturn();
+public interface StateInterface<TS extends StateInterface> {
+
+    StateInterface<TS> copy();
+    void setFromReturn(StepReturnGeneric<TS> stepReturn);
 
 }

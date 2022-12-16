@@ -32,7 +32,6 @@ public class NodeSelector {
     public static final int UCT_MAX = 1000;
     private static final int MAX_DEPTH = 10_000;
 
-
     final NodeInterface nodeRoot;
     MonteCarloSettings settings;
     private final double coefficientExploitationExploration;  //often called C in literature
