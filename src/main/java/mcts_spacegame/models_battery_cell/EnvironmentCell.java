@@ -10,24 +10,25 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
 
     @Override
     public StepReturnGeneric<StateCell> step(ActionCell action, StateCell state) {
+        CellVariables v=state.variables;
 
         double current=s.maxCurrent*action.getRelativeCurrent();
-        double newSoC=state.SoC+current*s.dt/s.capacity;
+        double newSoC=v.SoC+current*s.dt/s.capacity;
         double temperatureTimeDerivative = calculateTemperatureTimeDerivate(state, current);
-        double newTemperature=state.temperature+temperatureTimeDerivative*s.dt;
-        double newTime=state.time+s.dt;
+        double newTemperature=v.temperature+temperatureTimeDerivative*s.dt;
+        double newTime=v.time+s.dt;
 
-        StateCell newState= StateCell.builder()
-                .SoC(newSoC).temperature(newTemperature).time(newTime).build();
+        StateCell newState= new StateCell(CellVariables.builder()
+                .SoC(newSoC).temperature(newTemperature).time(newTime).build());
 
-        double ocv=s.ocv0+state.SoC*(s.ocv1-s.ocv0);
+        double ocv=s.ocv0+v.SoC*(s.ocv1-s.ocv0);
         double voltage=ocv+current*s.resistance;
 
         boolean isToHighVoltage=voltage>s.maxVoltage;
         boolean isToHighTemperature=newTemperature>s.maxTemperature;
         boolean isTimeUp=newTime>=s.maxTime;
 
-        double reward=newSoC-state.SoC;
+        double reward=newSoC-v.SoC;
 
         return StepReturnGeneric.<StateCell>builder()
                 .newState(newState)
@@ -40,7 +41,7 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
 
     private double calculateTemperatureTimeDerivate(StateCell state, double current) {
         double Qgen=Math.pow(current,2)* s.resistance;
-        double Qloss= s.heatTransferCoefficient* s.heatArea*(state.temperature- s.temperatureAmbient);
+        double Qloss= s.heatTransferCoefficient* s.heatArea*(state.variables.temperature- s.temperatureAmbient);
         return (Qgen-Qloss)/s.heatCapacityCoefficient;
     }
 }

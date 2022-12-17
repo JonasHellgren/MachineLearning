@@ -24,7 +24,7 @@ public class TestGenericEnvironment {
     @Test
     public void testStep() {
         EnvironmentInterfaceMock<StateCell, ActionCell> env=new MockCellEnvironment();
-        int stepReturn= env.step(ActionCell.builder().build(), StateCell.builder().build());
+        int stepReturn= env.step(ActionCell.builder().build(), StateCell.newDefault());
         System.out.println("stepReturn = " + stepReturn);
         Assert.assertEquals(0,stepReturn);
     }

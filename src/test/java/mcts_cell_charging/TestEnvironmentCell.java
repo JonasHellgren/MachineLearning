@@ -17,13 +17,15 @@ public class TestEnvironmentCell {
     private static final int DT = 10;
     EnvironmentGenericInterface<StateCell, ActionCell> environment;
     StateCell state;
+    CellVariables variables;
     ActionCell action;
 
     @Before
     public void init() {
         environment=new EnvironmentCell(CellSettings.builder().dt(DT).build());
-        state= StateCell.builder()
-                .time(TIME_INIT).temperature(TEMPERATURE_INIT).SoC(SOC_INIT).build();
+        state= new StateCell(CellVariables.builder()
+                .time(TIME_INIT).temperature(TEMPERATURE_INIT).SoC(SOC_INIT).build());
+        variables=state.getVariables();
         action= ActionCell.builder()
                 .minRelativeCurrent(MIN_RELATIVE_CURRENT).maxRelativeCurrent(MAX_RELATIVE_CURRENT).nofCurrentLevels(5).build();
     }
@@ -47,10 +49,11 @@ public class TestEnvironmentCell {
         action.setLevel(4);
         StepReturnGeneric<StateCell> sr=environment.step(action,state);
         System.out.println("sr.newState = " + sr.newState);
+        CellVariables newVariables=sr.newState.getVariables();
 
-        Assert.assertEquals(DT,sr.newState.time,DELTA);
-        Assert.assertTrue(sr.newState.SoC>state.SoC);
-        Assert.assertTrue(sr.newState.temperature> state.temperature);
+        Assert.assertEquals(DT,newVariables.time,DELTA);
+        Assert.assertTrue(newVariables.SoC>variables.SoC);
+        Assert.assertTrue(newVariables.temperature> variables.temperature);
 
     }
 
@@ -63,9 +66,11 @@ public class TestEnvironmentCell {
         action.setLevel(4);
         StepReturnGeneric<StateCell> sr4=environment.step(action,state);
         System.out.println("sr.newState = " + sr4.newState);
+        CellVariables newVariables0=sr0.newState.getVariables();
+        CellVariables newVariables4=sr4.newState.getVariables();
 
-        Assert.assertTrue(sr4.newState.SoC>sr0.newState.SoC);
-        Assert.assertTrue(sr4.newState.temperature>sr0.newState.temperature);
+        Assert.assertTrue(newVariables4.SoC>newVariables0.SoC);
+        Assert.assertTrue(newVariables4.temperature>newVariables0.temperature);
 
     }
 

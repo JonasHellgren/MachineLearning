@@ -2,21 +2,33 @@ package mcts_spacegame.models_battery_cell;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
+import mcts_spacegame.models_space.State;
 
-@Builder
+
 @ToString
+@Getter
 @EqualsAndHashCode
-public class StateCell implements StateInterface<StateCell> {
+public class StateCell implements StateInterface<CellVariables> {
 
-    public double SoC;
-    public double temperature;
-    public double time;
+    CellVariables variables;
+
+    public StateCell(CellVariables variables) {
+        this.variables = variables;
+    }
+
+    public static StateCell newDefault() {
+        return new StateCell(CellVariables.builder().build());
+    }
+
+    public static StateCell newWithVariables(CellVariables variables) {
+        return new StateCell(variables);
+    }
 
     @Override
-    public StateInterface<StateCell> copy() {
-        return StateCell.builder()
-                .SoC(SoC).temperature(temperature).time(time).build();
+    public StateCell copy() {
+        return new StateCell(variables.copy());
     }
 
     /*
