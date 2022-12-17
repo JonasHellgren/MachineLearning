@@ -125,8 +125,9 @@ StateCell  StateShip  x
 ActionShip x
 EnvironmentCell x
 TestEnvironmentCell x
-StepReturn<T>
+StepReturn<T>  x
 TestStateCell  copy SetFromReturn
+flytta setFromReturn
 gör generisk för space:
 - StepReturn
 - StateInterface

@@ -1,4 +1,4 @@
-package mcts_spacegame.model_mcts;
+package mcts_spacegame.models_battery_cell;
 
 import mcts_spacegame.enums.Action;
 

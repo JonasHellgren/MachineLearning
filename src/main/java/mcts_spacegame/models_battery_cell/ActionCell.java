@@ -5,9 +5,6 @@ import common.MathUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import mcts_spacegame.model_mcts.ActionInterface;
-
-import java.util.List;
 
 /***
  *  nofCurrentLevels=3, minRelativeCurrent=0.5, maxRelativeCurrent=1

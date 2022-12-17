@@ -1,7 +1,7 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.model_mcts.ActionInterface;
-import mcts_spacegame.model_mcts.StateInterface;
+import mcts_spacegame.models_battery_cell.ActionInterface;
+import mcts_spacegame.models_battery_cell.StateInterface;
 import mcts_spacegame.models_battery_cell.ActionCell;
 import mcts_spacegame.models_battery_cell.StateCell;
 import org.junit.Assert;

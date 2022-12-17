@@ -3,7 +3,6 @@ package mcts_spacegame.models_battery_cell;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import mcts_spacegame.model_mcts.StateInterface;
 
 @Builder
 @ToString
@@ -20,11 +19,12 @@ public class StateCell implements StateInterface<StateCell> {
                 .SoC(SoC).temperature(temperature).time(time).build();
     }
 
+    /*
     @Override
     public void setFromReturn(StepReturnGeneric<StateCell> stepReturn) {
         this.SoC=stepReturn.newState.SoC;
         this.temperature=stepReturn.newState.temperature;
         this.time=stepReturn.newState.time;
-    }
+    }  */
 
 }

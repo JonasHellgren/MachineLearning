@@ -1,6 +1,6 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.model_mcts.StateInterface;
+import mcts_spacegame.models_battery_cell.StateInterface;
 import mcts_spacegame.models_battery_cell.StateCell;
 import mcts_spacegame.models_battery_cell.StepReturnGeneric;
 import org.junit.Assert;
@@ -31,9 +31,9 @@ public class TestStateCell {
 
     }
 
-    @Test public void setFromReturn() {
+    @Test public void copyFromReturn() {
 
-        state.setFromReturn(stepReturn);
+        state=stepReturn.copyState();
         System.out.println("state = " + state);
         StateCell castedState=(StateCell) state;
         Assert.assertEquals(castedState.temperature,stepReturn.newState.temperature, DELTA);
