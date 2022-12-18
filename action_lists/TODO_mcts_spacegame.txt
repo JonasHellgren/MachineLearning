@@ -129,6 +129,7 @@ StepReturn<T>  x
 TestStateCell  copy SetFromReturn  x
 VARIABLES -> CV
 ActionInterface
+test ActionCell IllegalArgumentException
 flytta setFromReturn
 gör generisk för space:
 - StepReturn

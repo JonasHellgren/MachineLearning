@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
@@ -18,10 +18,10 @@ public class TestNodeInfoHelper {
     @Before
     public void init() {
         nodes=new ArrayList<>();
-        nodes.add(NodeInterface.newNotTerminal(new State(0,0), Action.notApplicable));
-        nodes.add(NodeInterface.newNotTerminal(new State(1,0), Action.still));
-        nodes.add(NodeInterface.newNotTerminal(new State(2,0), Action.still));
-        nodes.add(NodeInterface.newNotTerminal(new State(3,0), Action.still));
+        nodes.add(NodeInterface.newNotTerminal(new State(0,0), ShipAction.notApplicable));
+        nodes.add(NodeInterface.newNotTerminal(new State(1,0), ShipAction.still));
+        nodes.add(NodeInterface.newNotTerminal(new State(2,0), ShipAction.still));
+        nodes.add(NodeInterface.newNotTerminal(new State(3,0), ShipAction.still));
     }
 
     @Test
@@ -36,25 +36,25 @@ public class TestNodeInfoHelper {
 
     @Test
     public void findNodeMatchingExistingNode() {
-        NodeInterface node=NodeInterface.newNotTerminal(new State(0,0), Action.notApplicable);
+        NodeInterface node=NodeInterface.newNotTerminal(new State(0,0), ShipAction.notApplicable);
         Assert.assertTrue(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherClass() {
-        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), Action.notApplicable);
+        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), ShipAction.notApplicable);
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherAction() {
-        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), Action.still);
+        NodeInterface node=NodeInterface.newTerminalFail(new State(0,0), ShipAction.still);
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherState() {
-        NodeInterface node=NodeInterface.newTerminalFail(new State(10,0), Action.still);
+        NodeInterface node=NodeInterface.newTerminalFail(new State(10,0), ShipAction.still);
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 

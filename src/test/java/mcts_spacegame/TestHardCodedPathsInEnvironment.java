@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -30,7 +30,7 @@ public class TestHardCodedPathsInEnvironment {
     @Test
     public void moveStillFromx0y2GivesZeroReturn() {
         State pos=new State(0,2);
-        List<Action> actions= Arrays.asList(Action.still,Action.still,Action.still,Action.still,Action.still,Action.still);
+        List<ShipAction> actions= Arrays.asList(ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
         Assert.assertEquals(Environment.STILL_COST,G, DELTA);
@@ -40,7 +40,7 @@ public class TestHardCodedPathsInEnvironment {
     @Test
     public void moveFromx0y0Tox6y2GivesTwoMoveCost() {
         State pos=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still);
+        List<ShipAction> actions= Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
         Assert.assertEquals(-Environment.MOVE_COST *2,G, DELTA);
@@ -49,15 +49,15 @@ public class TestHardCodedPathsInEnvironment {
     @Test
     public void moveFromx0y0Tox1y0GivesCrashCost() {
         State pos=new State(0,0);
-        List<Action> actions= Arrays.asList(Action.still,Action.up,Action.still,Action.still,Action.still,Action.still);
+        List<ShipAction> actions= Arrays.asList(ShipAction.still, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
         Assert.assertEquals(-Environment.CRASH_COST *1,G, DELTA);
     }
 
-    private double getReturnForActions(State pos, List<Action> actions) {
+    private double getReturnForActions(State pos, List<ShipAction> actions) {
         double G=0;
-        for (Action action: actions) {
+        for (ShipAction action: actions) {
             System.out.println("pos = " + pos);
             StepReturn stepReturn= environment.step(action, pos);
             pos.setFromReturn(stepReturn);

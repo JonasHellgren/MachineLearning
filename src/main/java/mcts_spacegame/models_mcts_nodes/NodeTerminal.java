@@ -2,18 +2,17 @@ package mcts_spacegame.models_mcts_nodes;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_space.State;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Log
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeTerminal(State state, Action action) {
+    public NodeTerminal(State state, ShipAction action) {
         super(state,action);
     }
 
@@ -33,7 +32,7 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public Optional<NodeInterface> getChild(Action action) {
+    public Optional<NodeInterface> getChild(ShipAction action) {
         return Optional.empty();
     }
 
@@ -53,12 +52,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public void increaseNofActionSelections(Action a) {
+    public void increaseNofActionSelections(ShipAction a) {
 
     }
 
     @Override
-    public void updateActionValue(double G, Action a,double alpha) {
+    public void updateActionValue(double G, ShipAction a, double alpha) {
 
     }
 
@@ -68,12 +67,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public int getNofActionSelections(Action a) {
+    public int getNofActionSelections(ShipAction a) {
         return 0;
     }
 
     @Override
-    public double getActionValue(Action a) {
+    public double getActionValue(ShipAction a) {
         return 0;
     }
 

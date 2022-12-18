@@ -2,7 +2,7 @@ package quarantine;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.NodeInfoHelper;
@@ -33,8 +33,8 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     SpaceGrid spaceGrid;
     Environment environment;
     NodeInterface nodeRoot;
-    List<Action> actionsToSelected;
-    Optional<Action> actionInSelected;
+    List<ShipAction> actionsToSelected;
+    Optional<ShipAction> actionInSelected;
     State startState;
     TreeInfoHelper tih;
 
@@ -46,7 +46,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     private void initTree(State state) {
         startState = state;
-        nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+        nodeRoot = NodeInterface.newNotTerminal(startState, ShipAction.notApplicable);
         tih = new TreeInfoHelper(nodeRoot);
     }
 
@@ -61,7 +61,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         System.out.println("sr = " + sr);
         nodeRoot.printTree();
 
-        double valueUp = nodeRoot.getActionValue(Action.up);
+        double valueUp = nodeRoot.getActionValue(ShipAction.up);
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueUp);
         Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);

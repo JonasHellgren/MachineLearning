@@ -1,13 +1,12 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.State;
@@ -38,7 +37,7 @@ public class TestBackupModifier {
     @Test
     public void testCreatedTree() {
         State rootState = new State(0, 0);
-        List<Action> actions = Arrays.asList(Action.up, Action.up, Action.still, Action.still, Action.still, Action.still, Action.still);
+        List<ShipAction> actions = Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
 
         NodeInterface treeRoot = createMCTSTree(actions, rootState, stepReturns);
         treeRoot.printTree();
@@ -53,9 +52,9 @@ public class TestBackupModifier {
     public void moveDownFromX0Y0ToGetFailState() {
         State rootState = new State(0, 0);
 
-        List<Action> actionsToSelected = Collections.emptyList();
-        Action actionInSelected = Action.down;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        List<ShipAction> actionsToSelected = Collections.emptyList();
+        ShipAction actionInSelected = ShipAction.down;
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
         bum = BackupModifier.builder().rootTree(nodeRoot)
@@ -67,7 +66,7 @@ public class TestBackupModifier {
 
         printLists(actions, stepReturns, nodeRoot);
 
-        double valueDown = nodeRoot.getActionValue(Action.down);
+        double valueDown = nodeRoot.getActionValue(ShipAction.down);
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueDown);
         Assert.assertEquals(-Environment.CRASH_COST, valueDown, DELTA_BIG);
@@ -80,10 +79,10 @@ public class TestBackupModifier {
     @Test
     public void moveFromX0Y0Tox6y2GivesTwoMoveCost() {
         State rootState=new State(0,0);
-        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.up,Action.still,Action.still,Action.still,Action.still);
-        Action actionInSelected=Action.still;
+        List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
+        ShipAction actionInSelected= ShipAction.still;
 
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -95,8 +94,8 @@ public class TestBackupModifier {
         printLists(actions, stepReturns, nodeRoot);
 
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        double upAtRoot=nodeRoot.getActionValue(Action.up);
-        double stillAfterObstacles=tih.getNodesOnPathForActions(actionsToSelected).orElseThrow().get(3).getActionValue(Action.still);
+        double upAtRoot=nodeRoot.getActionValue(ShipAction.up);
+        double stillAfterObstacles=tih.getNodesOnPathForActions(actionsToSelected).orElseThrow().get(3).getActionValue(ShipAction.still);
         System.out.println("upAtRoot = " + upAtRoot);
         System.out.println("stillAfterObstacles = " + stillAfterObstacles);
 
@@ -111,9 +110,9 @@ public class TestBackupModifier {
     @Test
     public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
         State rootState=new State(0,0);
-        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
-        Action actionInSelected=Action.still;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
+        ShipAction actionInSelected= ShipAction.still;
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -125,8 +124,8 @@ public class TestBackupModifier {
         printLists(actions, stepReturns, nodeRoot);
 
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        double valueUpRoot=nodeRoot.getActionValue(Action.up);
-        double valueStillSelected=tih.getValueForActionInNode(actionsToSelected,Action.still).get();
+        double valueUpRoot=nodeRoot.getActionValue(ShipAction.up);
+        double valueStillSelected=tih.getValueForActionInNode(actionsToSelected, ShipAction.still).get();
         System.out.println("valueUpRoot = " + valueUpRoot);
         System.out.println("valueStillSelected = " + valueStillSelected);
         Assert.assertEquals(-0,valueUpRoot, DELTA);
@@ -140,9 +139,9 @@ public class TestBackupModifier {
     @Test
     public void moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap() {
         State rootState=new State(0,0);
-        List<Action> actionsToSelected= Arrays.asList(Action.up,Action.down);
-        Action actionInSelected=Action.still;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
+        ShipAction actionInSelected= ShipAction.still;
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -152,11 +151,11 @@ public class TestBackupModifier {
         bum.backup();
 
         State state = getState(rootState, actionsToSelected);
-        actionInSelected=Action.down;
+        actionInSelected= ShipAction.down;
         updateTreeFromActionInState(actionsToSelected, actionInSelected, nodeRoot, state);
 
         state = getState(rootState, actionsToSelected);
-        actionInSelected=Action.up;
+        actionInSelected= ShipAction.up;
         NodeInterface nodeSelected = updateTreeFromActionInState(actionsToSelected, actionInSelected, nodeRoot, state);
 
 
@@ -164,11 +163,11 @@ public class TestBackupModifier {
         System.out.println("nodeSelected = " + nodeSelected);
 
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        Optional<Double> valueUp=tih.getValueForActionInNode(actionsToSelected,Action.up);
-        Optional<Double> valueStill=tih.getValueForActionInNode(actionsToSelected,Action.still);
-        Optional<Double> valueDown=tih.getValueForActionInNode(actionsToSelected,Action.down);
+        Optional<Double> valueUp=tih.getValueForActionInNode(actionsToSelected, ShipAction.up);
+        Optional<Double> valueStill=tih.getValueForActionInNode(actionsToSelected, ShipAction.still);
+        Optional<Double> valueDown=tih.getValueForActionInNode(actionsToSelected, ShipAction.down);
 
-        Assert.assertEquals(-0,nodeRoot.getActionValue(Action.up), DELTA);
+        Assert.assertEquals(-0,nodeRoot.getActionValue(ShipAction.up), DELTA);
         Assert.assertEquals(-Environment.CRASH_COST,valueUp.get(), DELTA_BIG);
         Assert.assertEquals(-Environment.CRASH_COST,valueStill.get(), DELTA_BIG);
         Assert.assertEquals(-Environment.CRASH_COST,valueDown.get(), DELTA_BIG);
@@ -178,8 +177,8 @@ public class TestBackupModifier {
 
     @SneakyThrows
     @NotNull
-    private NodeInterface updateTreeFromActionInState(List<Action> actionsToSelected,
-                                                      Action actionInSelected,
+    private NodeInterface updateTreeFromActionInState(List<ShipAction> actionsToSelected,
+                                                      ShipAction actionInSelected,
                                                       NodeInterface nodeRoot,
                                                       State state) {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
@@ -195,22 +194,22 @@ public class TestBackupModifier {
         return nodeSelected;
     }
 
-    private State getState(State rootState, List<Action> actionsToSelected) {
+    private State getState(State rootState, List<ShipAction> actionsToSelected) {
         State state = rootState.copy();
-        for (Action a : actionsToSelected) {
+        for (ShipAction a : actionsToSelected) {
             StepReturn sr = stepAndUpdateState(state, a);
         }
         return state;
     }
 
-    private NodeInterface createMCTSTree(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
+    private NodeInterface createMCTSTree(List<ShipAction> actions, State rootState, List<StepReturn> stepReturns) {
 
         stepReturns.clear();
         State state = rootState.copy();
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, Action.notApplicable);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ShipAction.notApplicable);
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
-        for (Action a : actions) {
+        for (ShipAction a : actions) {
             StepReturn sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
@@ -225,11 +224,11 @@ public class TestBackupModifier {
         return nodeRoot;
     }
 
-    private boolean isNotFinalActionInList(List<Action> actions, int addedChilds) {
+    private boolean isNotFinalActionInList(List<ShipAction> actions, int addedChilds) {
         return addedChilds < actions.size();
     }
 
-    private void printLists(List<Action> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
+    private void printLists(List<ShipAction> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
         System.out.println("-----------------------------");
         nodeRoot.printTree();
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
@@ -239,7 +238,7 @@ public class TestBackupModifier {
     }
 
     @NotNull
-    private StepReturn stepAndUpdateState(State pos, Action a) {
+    private StepReturn stepAndUpdateState(State pos, ShipAction a) {
         StepReturn sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;

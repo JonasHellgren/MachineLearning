@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
@@ -47,18 +47,18 @@ public class TreeInfoHelper {
         this.settings=settings;
     }
 
-    public Optional<NodeInterface> getNodeReachedForActions(List<Action> actions) {
+    public Optional<NodeInterface> getNodeReachedForActions(List<ShipAction> actions) {
         Optional<List<NodeInterface>> nodes=getNodesOnPathForActions(actions);
         return  (nodes.isEmpty())
                 ?Optional.empty()
                 :Optional.of(nodes.get().get(nodes.get().size()-1));
     }
 
-    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<Action> actionsToSelected) {
+    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<ShipAction> actionsToSelected) {
 
         NodeInterface parent = rootTree;
         List<NodeInterface> nodes = new ArrayList<>();
-        for (Action action : actionsToSelected) {
+        for (ShipAction action : actionsToSelected) {
             Optional<NodeInterface> child = parent.getChild(action);
             if (child.isEmpty()) {
                 return Optional.empty();
@@ -70,16 +70,16 @@ public class TreeInfoHelper {
         return Optional.of(nodes);
     }
 
-    public Optional<Double> getValueForActionInNode(List<Action> actionsToSelected, Action action) {
+    public Optional<Double> getValueForActionInNode(List<ShipAction> actionsToSelected, ShipAction action) {
         Optional<NodeInterface> node = getNodeReachedForActions(actionsToSelected);
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
     }
 
-    public static State getState(State rootState, Environment environment, List<Action> actionsToSelected) {
+    public static State getState(State rootState, Environment environment, List<ShipAction> actionsToSelected) {
         State state = rootState.copy();
-        for (Action a : actionsToSelected) {
+        for (ShipAction a : actionsToSelected) {
             StepReturn sr = environment.step(a, state);
             state.setFromReturn(sr);
         }

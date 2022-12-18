@@ -1,6 +1,5 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_battery_cell.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +14,7 @@ public class TestEnvironmentCell {
     private static final int TEMPERATURE_INIT = 20;
     private static final int TIME_INIT = 0;
     private static final int DT = 10;
+    private static final int NOF_CURRENT_LEVELS = 5;
     EnvironmentGenericInterface<CellVariables, ActionCell> environment;
     StateCell state;
     CellVariables variables;
@@ -27,26 +27,28 @@ public class TestEnvironmentCell {
                 .time(TIME_INIT).temperature(TEMPERATURE_INIT).SoC(SOC_INIT).build());
         variables=state.getVariables();
         action= ActionCell.builder()
-                .minRelativeCurrent(MIN_RELATIVE_CURRENT).maxRelativeCurrent(MAX_RELATIVE_CURRENT).nofCurrentLevels(5).build();
+                .minRelativeCurrent(MIN_RELATIVE_CURRENT)
+                .maxRelativeCurrent(MAX_RELATIVE_CURRENT)
+                .nofCurrentLevels(NOF_CURRENT_LEVELS).build();
     }
 
     @Test
     public void action4() {
-        action.setLevel(4);
+        action.setAction(NOF_CURRENT_LEVELS-1);
         System.out.println("action.getRelativeCurrent() = " + action.getRelativeCurrent());
         Assert.assertEquals(MAX_RELATIVE_CURRENT,action.getRelativeCurrent(), DELTA);
     }
 
     @Test
     public void action0() {
-        action.setLevel(0);
+        action.setAction(0);
         System.out.println("action.getRelativeCurrent() = " + action.getRelativeCurrent());
         Assert.assertEquals(MIN_RELATIVE_CURRENT,action.getRelativeCurrent(), DELTA);
     }
 
     @Test
     public void chargeShallIncreaseAllStateVariables() {
-        action.setLevel(4);
+        action.setAction(4);
         StepReturnGeneric<CellVariables> sr=environment.step(action,state);
         System.out.println("sr.newState = " + sr.newState);
         CellVariables newVariables=sr.newState.getVariables();
@@ -59,11 +61,11 @@ public class TestEnvironmentCell {
 
     @Test
     public void smallerChargeCurrentShallGiveLessIncreaseInTempAndSoC() {
-        action.setLevel(0);
+        action.setAction(0);
         StepReturnGeneric<CellVariables> sr0=environment.step(action,state);
         System.out.println("sr.newState = " + sr0.newState);
 
-        action.setLevel(4);
+        action.setAction(4);
         StepReturnGeneric<CellVariables> sr4=environment.step(action,state);
         System.out.println("sr.newState = " + sr4.newState);
         CellVariables newVariables0=sr0.newState.getVariables();

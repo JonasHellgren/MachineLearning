@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
@@ -16,11 +16,11 @@ public class TestNodeInterfaceCopy {
 
     @Test
     public void testNodeNotTerminal() {
-        NodeNotTerminal node=new NodeNotTerminal(State.newState(0,0), Action.still);
+        NodeNotTerminal node=new NodeNotTerminal(State.newState(0,0), ShipAction.still);
         node.increaseNofVisits();
-        node.increaseNofActionSelections(Action.up);
-        node.saveRewardForAction(Action.up,10);
-        node.addChildNode(new NodeTerminalNotFail(State.newState(1,0), Action.still));
+        node.increaseNofActionSelections(ShipAction.up);
+        node.saveRewardForAction(ShipAction.up,10);
+        node.addChildNode(new NodeTerminalNotFail(State.newState(1,0), ShipAction.still));
 
         NodeNotTerminal clone= (NodeNotTerminal) NodeInterface.copy(node);
 
@@ -29,18 +29,18 @@ public class TestNodeInterfaceCopy {
 
 
         Assert.assertEquals(node.getNofVisits(),clone.getNofVisits());
-        Assert.assertEquals(node.getNofActionSelections(Action.up),clone.getNofActionSelections(Action.up));
-        Assert.assertEquals(node.restoreRewardForAction(Action.up),clone.restoreRewardForAction(Action.up), DELTA);
+        Assert.assertEquals(node.getNofActionSelections(ShipAction.up),clone.getNofActionSelections(ShipAction.up));
+        Assert.assertEquals(node.restoreRewardForAction(ShipAction.up),clone.restoreRewardForAction(ShipAction.up), DELTA);
         Assert.assertTrue(node.getState().equals(clone.getState()));
     }
 
     @Test
     public void testNodeTerminalFail() {
-        NodeTerminalFail node=new NodeTerminalFail(State.newState(0,0), Action.still);
+        NodeTerminalFail node=new NodeTerminalFail(State.newState(0,0), ShipAction.still);
         node.setDepth(5);
         node.increaseNofVisits();
-        node.increaseNofActionSelections(Action.up);
-        node.saveRewardForAction(Action.up,10);
+        node.increaseNofActionSelections(ShipAction.up);
+        node.saveRewardForAction(ShipAction.up,10);
         NodeTerminalFail clone= (NodeTerminalFail) NodeInterface.copy(node);
 
         System.out.println("node = " + node);

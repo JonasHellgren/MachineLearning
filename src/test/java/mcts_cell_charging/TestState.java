@@ -1,6 +1,6 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_battery_cell.CellVariables;
 import mcts_spacegame.models_battery_cell.StateInterface;
 import mcts_spacegame.models_battery_cell.StateCell;
@@ -26,7 +26,7 @@ public class TestState {
     }
 
     @Test public void testFunction() {
-        Function<CellVariables,Integer> fcn2 = ( a) -> (a.SoC<=0.5) ? Action.applicableActions().size():1;
+        Function<CellVariables,Integer> fcn2 = ( a) -> (a.SoC<=0.5) ? ShipAction.applicableActions().size():1;
         GenericClass<CellVariables> gc= new GenericClass<>();
         CellVariables stateCell=CellVariables.builder()
                 .SoC(0.9).temperature(30).time(0)

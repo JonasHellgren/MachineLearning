@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -22,9 +22,9 @@ public class TestTreeInfoHelper {
     SpaceGrid spaceGrid;
     Environment environment;
     NodeInterface nodeRoot;
-    List<Action> actionsToSelected;
-    Action actionInSelected;
-    List<Action> actions;
+    List<ShipAction> actionsToSelected;
+    ShipAction actionInSelected;
+    List<ShipAction> actions;
     TreeInfoHelper tih;
     @Before
     public void init() {
@@ -32,9 +32,9 @@ public class TestTreeInfoHelper {
         environment = new Environment(spaceGrid);
 
         State rootState=new State(0,0);
-        actionsToSelected= Arrays.asList(Action.up,Action.down);
-        actionInSelected=Action.still;
-        actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
+        actionInSelected= ShipAction.still;
+        actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         nodeRoot= createMCTSTree(actions,rootState);
         tih=new TreeInfoHelper(nodeRoot, MonteCarloSettings.builder().build());
 
@@ -50,7 +50,7 @@ public class TestTreeInfoHelper {
 
     @Test public void rewardOfStillInX2Y0IsBad() {
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
-        Assert.assertEquals(-Environment.CRASH_COST,node.restoreRewardForAction(Action.still), DELTA_BIG);
+        Assert.assertEquals(-Environment.CRASH_COST,node.restoreRewardForAction(ShipAction.still), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {
@@ -76,13 +76,13 @@ public class TestTreeInfoHelper {
 
     }
 
-    private NodeInterface createMCTSTree(List<Action> actions, State rootState) {
+    private NodeInterface createMCTSTree(List<ShipAction> actions, State rootState) {
 
         State state = rootState.copy();
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, Action.notApplicable);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ShipAction.notApplicable);
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
-        for (Action a : actions) {
+        for (ShipAction a : actions) {
             StepReturn sr = stepAndUpdateState(state, a);
 
             parent.saveRewardForAction(a, sr.reward);
@@ -96,12 +96,12 @@ public class TestTreeInfoHelper {
         return nodeRoot;
     }
 
-    private boolean isNotFinalActionInList(List<Action> actions, int addedChilds) {
+    private boolean isNotFinalActionInList(List<ShipAction> actions, int addedChilds) {
         return addedChilds < actions.size();
     }
 
     @NotNull
-    private StepReturn stepAndUpdateState(State pos, Action a) {
+    private StepReturn stepAndUpdateState(State pos, ShipAction a) {
         StepReturn sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;

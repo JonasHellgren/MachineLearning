@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -28,7 +28,7 @@ public class TestEnvironmentWithObstacles {
     @Test
     public void moveStillFromx0y0GivesObstacleCrash() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
@@ -43,7 +43,7 @@ public class TestEnvironmentWithObstacles {
     @Test
     public void moveUpFromx0y0GivesNoObstacleCrash() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.up,pos);
+        StepReturn stepReturn= environment.step(ShipAction.up,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
@@ -75,7 +75,7 @@ public class TestEnvironmentWithObstacles {
         StepReturn stepReturn;
         do {
             System.out.println("pos = " + pos);
-            stepReturn = environment.step(Action.still, pos);
+            stepReturn = environment.step(ShipAction.still, pos);
             pos.setFromReturn(stepReturn);
         } while (!stepReturn.isTerminal);
         return stepReturn;

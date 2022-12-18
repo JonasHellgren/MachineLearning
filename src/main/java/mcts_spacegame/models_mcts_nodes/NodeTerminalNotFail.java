@@ -1,12 +1,12 @@
 package mcts_spacegame.models_mcts_nodes;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_space.State;
 
 public final class NodeTerminalNotFail extends NodeTerminal {
     private static final String CLASS_NAME = "T-NF";
 
-    public NodeTerminalNotFail(State state, Action action) {
+    public NodeTerminalNotFail(State state, ShipAction action) {
         super(state, action);
     }
 

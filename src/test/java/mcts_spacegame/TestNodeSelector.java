@@ -1,7 +1,7 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -22,10 +22,10 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        nodeRoot = NodeInterface.newNotTerminal(new State(0, 0), Action.notApplicable);
-        chUp = NodeInterface.newNotTerminal(new State(1, 1),Action.up);
-        chStill = NodeInterface.newNotTerminal(new State(1, 0),Action.still);
-        chDown = NodeInterface.newTerminalFail(new State(1, 0),Action.down); //terminal
+        nodeRoot = NodeInterface.newNotTerminal(new State(0, 0), ShipAction.notApplicable);
+        chUp = NodeInterface.newNotTerminal(new State(1, 1), ShipAction.up);
+        chStill = NodeInterface.newNotTerminal(new State(1, 0), ShipAction.still);
+        chDown = NodeInterface.newTerminalFail(new State(1, 0), ShipAction.down); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
         nodeRoot.addChildNode(chDown);
@@ -72,9 +72,9 @@ public class TestNodeSelector {
     @SneakyThrows
     @Test
     public void upCostsStillFreeDownBad() {
-        addExperience(nodeRoot,Action.up,-Environment.MOVE_COST+SIM_RES);
-        addExperience(nodeRoot,Action.still,-Environment.STILL_COST+SIM_RES);
-        addExperience(nodeRoot,Action.down,-Environment.CRASH_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.up,-Environment.MOVE_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.still,-Environment.STILL_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.down,-Environment.CRASH_COST+SIM_RES);
 
         NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         NodeInterface nodeFound=ns.select();
@@ -89,7 +89,7 @@ public class TestNodeSelector {
 
     }
 
-    private void addExperience(NodeInterface node, Action action, double G) {
+    private void addExperience(NodeInterface node, ShipAction action, double G) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(G,action,1);

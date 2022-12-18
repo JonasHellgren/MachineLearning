@@ -1,6 +1,6 @@
 package mcts_spacegame.models_mcts_nodes;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.State;
 
@@ -24,37 +24,37 @@ public interface NodeInterface {
     List<NodeInterface> getChildNodes();
     int getDepth();
     String getName();
-    Action getAction();
-    Optional<NodeInterface> getChild(Action action);
+    ShipAction getAction();
+    Optional<NodeInterface> getChild(ShipAction action);
     State getState();
     int nofChildNodes();
     void printTree();
     void setDepth(int depth);
     void increaseNofVisits();
-    void increaseNofActionSelections(Action a);
-    void updateActionValue(double G, Action a, double alpha);
+    void increaseNofActionSelections(ShipAction a);
+    void updateActionValue(double G, ShipAction a, double alpha);
     int getNofVisits();
-    int getNofActionSelections(Action a);
-    double getActionValue(Action a);
+    int getNofActionSelections(ShipAction a);
+    double getActionValue(ShipAction a);
     boolean isNotTerminal();
     boolean isTerminalFail();
     boolean isTerminalNoFail();
-    void saveRewardForAction(Action action, double reward);
-    double restoreRewardForAction(Action action);
+    void saveRewardForAction(ShipAction action, double reward);
+    double restoreRewardForAction(ShipAction action);
 
-    static NodeNotTerminal newNotTerminal(State s, Action action) {
+    static NodeNotTerminal newNotTerminal(State s, ShipAction action) {
         return new NodeNotTerminal(s,action);
     }
 
-    static NodeTerminalFail newTerminalFail(State s, Action action) {
+    static NodeTerminalFail newTerminalFail(State s, ShipAction action) {
         return new NodeTerminalFail(s,action);
     }
 
-    static NodeTerminalNotFail newTerminalNotFail(State s, Action action) {
+    static NodeTerminalNotFail newTerminalNotFail(State s, ShipAction action) {
         return new NodeTerminalNotFail(s,action);
     }
 
-    static NodeInterface newNode(StepReturn stepReturn,Action action) {
+    static NodeInterface newNode(StepReturn stepReturn, ShipAction action) {
         if (!stepReturn.isTerminal) {
             return newNotTerminal(stepReturn.newPosition, action);
         } else if (stepReturn.isFail) {

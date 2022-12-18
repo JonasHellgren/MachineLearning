@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -30,18 +30,18 @@ public class TestSimulationPolicy {
     @Test public void repeatingEqualActionProbManyTimes() {
         SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
         State pos=new State(1,1);
-        List<Action> actionList=new ArrayList<>();
+        List<ShipAction> actionList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
-            Action action=policy.chooseAction(pos.copy());
+            ShipAction action=policy.chooseAction(pos.copy());
             actionList.add(action);
         }
 
         System.out.println("actionList = " + actionList);
 
-        Assert.assertTrue(actionList.contains(Action.up));
-        Assert.assertTrue(actionList.contains(Action.still));
-        Assert.assertTrue(actionList.contains(Action.down));
-        Assert.assertFalse(actionList.contains(Action.notApplicable));
+        Assert.assertTrue(actionList.contains(ShipAction.up));
+        Assert.assertTrue(actionList.contains(ShipAction.still));
+        Assert.assertTrue(actionList.contains(ShipAction.down));
+        Assert.assertFalse(actionList.contains(ShipAction.notApplicable));
 
     }
 
@@ -81,7 +81,7 @@ public class TestSimulationPolicy {
         List<StepReturn> returns=new ArrayList<>();
         StepReturn stepReturn;
         do {
-            Action action=policy.chooseAction(pos);
+            ShipAction action=policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);

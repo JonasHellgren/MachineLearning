@@ -3,15 +3,12 @@ package mcts_spacegame.model_mcts;
 import common.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.State;
 import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /***
@@ -38,7 +35,7 @@ public class NodeSelector {
     final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
 
     List<NodeInterface> nodesFromRootToSelected;
-    List<Action> actionsFromRootToSelected;
+    List<ShipAction> actionsFromRootToSelected;
 
     public NodeSelector(NodeInterface nodeRoot, MonteCarloSettings settings) {
         this(nodeRoot,settings, settings.coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
@@ -117,7 +114,7 @@ public class NodeSelector {
                 : nonFailNodes;
 
         for (NodeInterface childNode : nodes) {
-            Action actionToReachChildNode = childNode.getAction();
+            ShipAction actionToReachChildNode = childNode.getAction();
             double uct = calcUct(node, actionToReachChildNode);
             nodeUCTPairs.add(new Pair<>(childNode, uct));
         }
@@ -136,7 +133,7 @@ public class NodeSelector {
                 .collect(Collectors.toList());
     }
 
-    private double calcUct(NodeInterface node, Action action) {
+    private double calcUct(NodeInterface node, ShipAction action) {
         double v = node.getActionValue(action);
         int nParent = node.getNofVisits();
         int n = node.getNofActionSelections(action);

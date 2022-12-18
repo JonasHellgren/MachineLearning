@@ -2,7 +2,7 @@ package mcts_spacegame.model_mcts;
 
 import common.RandUtils;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,17 +17,17 @@ import java.util.stream.Collectors;
 @Log
 public class ActionSelector {
     MonteCarloSettings settings;
-    RandUtils<Action> randUtils;
+    RandUtils<ShipAction> randUtils;
 
     public ActionSelector(MonteCarloSettings settings) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
     }
 
-    public Optional<Action> select(NodeInterface nodeSelected) {
+    public Optional<ShipAction> select(NodeInterface nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
-        List<Action> nonTestedActions = (nofTestedActions==0)
+        List<ShipAction> nonTestedActions = (nofTestedActions==0)
                 ? Collections.singletonList(getActionFromPolicy(nodeSelected))
                 : getNonTestedActions(nodeSelected);
 
@@ -38,17 +38,17 @@ public class ActionSelector {
         }
     }
 
-    private Action getActionFromPolicy(NodeInterface nodeSelected) {
+    private ShipAction getActionFromPolicy(NodeInterface nodeSelected) {
         return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
-    private Action getRandomAction(List<Action> actions) {
+    private ShipAction getRandomAction(List<ShipAction> actions) {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private Action getRandomTestedAction(NodeInterface nodeSelected) {
+    private ShipAction getRandomTestedAction(NodeInterface nodeSelected) {
         log.warning("No non-tested actions");
-        List<Action> testedActions = getTestedActions(nodeSelected);
+        List<ShipAction> testedActions = getTestedActions(nodeSelected);
         int nofTestedActions=testedActions.size();
         if (nofTestedActions==0) {
             throw new RuntimeException("nofTestedActions=0");
@@ -57,15 +57,15 @@ public class ActionSelector {
     }
 
     @NotNull
-    private List<Action> getNonTestedActions(NodeInterface nodeSelected) {
-        List<Action> testedActions = getTestedActions(nodeSelected);
-        List<Action> nonTestedActions=new ArrayList<>(Action.applicableActions());  //must be mutable
+    private List<ShipAction> getNonTestedActions(NodeInterface nodeSelected) {
+        List<ShipAction> testedActions = getTestedActions(nodeSelected);
+        List<ShipAction> nonTestedActions=new ArrayList<>(ShipAction.applicableActions());  //must be mutable
         nonTestedActions.removeAll(testedActions);
         return nonTestedActions;
     }
 
     @NotNull
-    private List<Action> getTestedActions(NodeInterface nodeSelected) {
+    private List<ShipAction> getTestedActions(NodeInterface nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

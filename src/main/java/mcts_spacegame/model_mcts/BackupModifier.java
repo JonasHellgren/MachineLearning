@@ -5,7 +5,7 @@ import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -50,8 +50,8 @@ import java.util.*;
 public class BackupModifier {
 
     NodeInterface rootTree;
-    List<Action> actionsToSelected;
-    Action actionOnSelected;
+    List<ShipAction> actionsToSelected;
+    ShipAction actionOnSelected;
     StepReturn stepReturnOfSelected;
     Double valueInTerminal;
     MonteCarloSettings settings;
@@ -63,8 +63,8 @@ public class BackupModifier {
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
     private static BackupModifier newBUM(NodeInterface rootTree,
-                                         @NonNull List<Action> actionsToSelected,
-                                         @NonNull Action actionOnSelected,
+                                         @NonNull List<ShipAction> actionsToSelected,
+                                         @NonNull ShipAction actionOnSelected,
                                          @NonNull StepReturn stepReturnOfSelected,
                                          Double valueInTerminal,
                                          MonteCarloSettings settings) {
@@ -109,7 +109,7 @@ public class BackupModifier {
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
-                Action action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
+                ShipAction action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
         }
@@ -134,9 +134,9 @@ public class BackupModifier {
         returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
         List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
 
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionOnSelected);
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
-            Action action = actions.get(nodesOnPath.indexOf(node));
+            ShipAction action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
             this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
@@ -154,7 +154,7 @@ public class BackupModifier {
         return returns;
     }
 
-    void updateNode(NodeInterface node, double singleReturn, Action action, double alpha) {
+    void updateNode(NodeInterface node, double singleReturn, ShipAction action, double alpha) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);

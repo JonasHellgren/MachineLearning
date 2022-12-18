@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
@@ -53,7 +53,7 @@ public class MonteCarloTreeCreator {
     TreeInfoHelper tih;
     CpuTimer cpuTimer;
     int nofIterations;
-    List<Action> actionsToSelected;
+    List<ShipAction> actionsToSelected;
 
     @Builder
     private static MonteCarloTreeCreator newMCTC(@NonNull Environment environment,
@@ -78,7 +78,7 @@ public class MonteCarloTreeCreator {
     }
 
     private static void setSomeFields(@NonNull State startState, MonteCarloTreeCreator mctc) {
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, Action.notApplicable);
+        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, ShipAction.notApplicable);
         mctc.tih = new TreeInfoHelper(mctc.nodeRoot,mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
@@ -91,7 +91,7 @@ public class MonteCarloTreeCreator {
         ActionSelector actionSelector = new ActionSelector(settings);
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            Optional<Action> actionInSelected = actionSelector.select(nodeSelected);
+            Optional<ShipAction> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
                 StepReturn sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newPosition);
@@ -125,7 +125,7 @@ public class MonteCarloTreeCreator {
         return nodeSelected;
     }
 
-    private StepReturn applyActionAndExpand(NodeInterface nodeSelected, Action actionInSelected) {
+    private StepReturn applyActionAndExpand(NodeInterface nodeSelected, ShipAction actionInSelected) {
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturn sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
@@ -164,7 +164,7 @@ public class MonteCarloTreeCreator {
 
     private void backPropagate(StepReturn sr,
                                SimulationResults simulationResults,
-                               Action actionInSelected) {
+                               ShipAction actionInSelected) {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
                 .nofNodesOnPath(actionsToSelected.size() + 1)
                 .simulationResults(simulationResults)
@@ -198,7 +198,7 @@ public class MonteCarloTreeCreator {
     private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
         NodeSelector nodeSelector = new NodeSelector(nodeRoot,settings);
         Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
-        Action actionToGetToChild = childToSelected.orElseThrow().getAction();
+        ShipAction actionToGetToChild = childToSelected.orElseThrow().getAction();
         State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturn sr = environment.step(actionToGetToChild, state);
         backPropagate(sr, new SimulationResults(), actionToGetToChild);
@@ -216,7 +216,7 @@ public class MonteCarloTreeCreator {
         List<StepReturn> returns = new ArrayList<>();
         StepReturn stepReturn;
         do {
-            Action action = policy.chooseAction(pos);
+            ShipAction action = policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);

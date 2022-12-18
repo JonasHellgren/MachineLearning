@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.models_space.SpaceGrid;
@@ -26,7 +26,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromx0y0() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
@@ -40,7 +40,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveDownFromXis0Yis0() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.down,pos);
+        StepReturn stepReturn= environment.step(ShipAction.down,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
@@ -54,7 +54,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis0Yis0() {
         State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
@@ -67,7 +67,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis1YisCrash() {
         State pos=new State(1,1);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
@@ -80,7 +80,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveUpFromXis1Yis1() {
         State pos=new State(1,1);
-        StepReturn stepReturn= environment.step(Action.up,pos);
+        StepReturn stepReturn= environment.step(ShipAction.up,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(2,stepReturn.newPosition.x, DELTA),
@@ -93,7 +93,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis2Yis1() {
         State pos=new State(2,1);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(3,stepReturn.newPosition.x, DELTA),  //new position is outside grid
@@ -106,7 +106,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis3Yis1IsNonValidPosition() {
         State pos=new State(3,1);
-        StepReturn stepReturn= environment.step(Action.still,pos);
+        StepReturn stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(3,stepReturn.newPosition.x, DELTA),

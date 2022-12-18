@@ -2,7 +2,7 @@ package mcts_spacegame.models_mcts_nodes;
 
 import common.MathUtils;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_space.State;
 
 import java.util.*;
@@ -14,20 +14,20 @@ public final class NodeNotTerminal extends NodeAbstract {
     private static final int INIT_NOF_VISITS = 0;
     List<NodeInterface> childNodes;
     int nofVisits;
-    Map<Action, Double> Qsa;
-    Map<Action, Integer> nSA;
+    Map<ShipAction, Double> Qsa;
+    Map<ShipAction, Integer> nSA;
 
-    public NodeNotTerminal(State state, Action action) {
+    public NodeNotTerminal(State state, ShipAction action) {
         super(state,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;
         Qsa = new HashMap<>();
-        for (Action a : Action.applicableActions()) {
+        for (ShipAction a : ShipAction.applicableActions()) {
             Qsa.put(a, INIT_ACTION_VALUE);
         }
 
         nSA = new HashMap<>();
-        for (Action a : Action.applicableActions()) {
+        for (ShipAction a : ShipAction.applicableActions()) {
             nSA.put(a, INIT_NOF_VISITS);
         }
     }
@@ -53,7 +53,7 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public Optional<NodeInterface> getChild(Action action) {
+    public Optional<NodeInterface> getChild(ShipAction action) {
         List<NodeInterface> children= getChildNodes();
         return children.stream().filter(c -> c.getAction().equals(action)).findFirst();
     }
@@ -75,7 +75,7 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public void increaseNofActionSelections(Action a) {
+    public void increaseNofActionSelections(ShipAction a) {
         int n = nSA.get(a);
         nSA.put(a, n + 1);
     }
@@ -86,7 +86,7 @@ public final class NodeNotTerminal extends NodeAbstract {
      */
 
     @Override
-    public void updateActionValue(double G, Action a,double alpha) {
+    public void updateActionValue(double G, ShipAction a, double alpha) {
         int nofVisitsForAction=getNofActionSelections(a);
         if (MathUtils.isZero(nofVisitsForAction)) {
             throw new RuntimeException("Zero nof visits for action = " + a);
@@ -103,12 +103,12 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public int getNofActionSelections(Action a) {
+    public int getNofActionSelections(ShipAction a) {
         return nSA.get(a);
     }
 
     @Override
-    public double getActionValue(Action a) {
+    public double getActionValue(ShipAction a) {
         return Qsa.get(a);
     }
 

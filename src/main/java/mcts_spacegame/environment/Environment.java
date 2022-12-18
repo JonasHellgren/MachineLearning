@@ -1,7 +1,7 @@
 package mcts_spacegame.environment;
 
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_space.SpaceCell;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.State;
@@ -26,7 +26,7 @@ public class Environment implements EnvironmentInterface {
     }
 
     @Override
-    public StepReturn step(Action action, State oldPosition) {
+    public StepReturn step(ShipAction action, State oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
         if (cellPresentOpt.isEmpty()) {  //if empty, position not defined, assume crash
@@ -41,7 +41,7 @@ public class Environment implements EnvironmentInterface {
         boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isMovingIntoGoal;
-        double costMotion = (action.equals(Action.still)) ? STILL_COST : MOVE_COST;
+        double costMotion = (action.equals(ShipAction.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;
 
@@ -51,13 +51,13 @@ public class Environment implements EnvironmentInterface {
                 .build();
     }
 
-    private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(Action action, SpaceCell cell) {
-        return cell.isOnLowerBorder && action.equals(Action.down) ||
-                cell.isOnUpperBorder && action.equals(Action.up);
+    private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(ShipAction action, SpaceCell cell) {
+        return cell.isOnLowerBorder && action.equals(ShipAction.down) ||
+                cell.isOnUpperBorder && action.equals(ShipAction.up);
     }
 
     @NotNull
-    private State getNewPosition(Action action, State state) {
+    private State getNewPosition(ShipAction action, State state) {
         State newPosition = state.copy();
 
         switch (action) {

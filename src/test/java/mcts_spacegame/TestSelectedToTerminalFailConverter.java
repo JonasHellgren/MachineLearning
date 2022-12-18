@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.Environment;
 import mcts_spacegame.environment.StepReturn;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -42,9 +42,9 @@ public class TestSelectedToTerminalFailConverter {
     @Test
     public void testMakeSelectedTerminal() {
         State rootState=new State(0,0);
-        List<Action> actionsToSelected= Arrays.asList(Action.still,Action.still);
-        Action actionInSelected=Action.down;
-        List<Action> actions = Action.getAllActions(actionsToSelected, actionInSelected);
+        List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.still, ShipAction.still);
+        ShipAction actionInSelected= ShipAction.down;
+        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
         NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot, MonteCarloSettings.newDefault());
         Optional<NodeInterface> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
@@ -75,14 +75,14 @@ public class TestSelectedToTerminalFailConverter {
 
     }
 
-    private NodeInterface createMCTSTree(List<Action> actions, State rootState, List<StepReturn> stepReturns) {
+    private NodeInterface createMCTSTree(List<ShipAction> actions, State rootState, List<StepReturn> stepReturns) {
 
         stepReturns.clear();
         State state = rootState.copy();
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, Action.notApplicable);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ShipAction.notApplicable);
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
-        for (Action a : actions) {
+        for (ShipAction a : actions) {
             StepReturn sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
@@ -97,11 +97,11 @@ public class TestSelectedToTerminalFailConverter {
         return nodeRoot;
     }
 
-    private boolean isNotFinalActionInList(List<Action> actions, int addedChilds) {
+    private boolean isNotFinalActionInList(List<ShipAction> actions, int addedChilds) {
         return addedChilds < actions.size();
     }
 
-    private void printLists(List<Action> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
+    private void printLists(List<ShipAction> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
         System.out.println("-----------------------------");
         nodeRoot.printTree();
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
@@ -111,7 +111,7 @@ public class TestSelectedToTerminalFailConverter {
     }
 
     @NotNull
-    private StepReturn stepAndUpdateState(State pos, Action a) {
+    private StepReturn stepAndUpdateState(State pos, ShipAction a) {
         StepReturn sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;

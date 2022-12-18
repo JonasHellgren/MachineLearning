@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.State;
 import org.junit.Assert;
@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TestNode {
 
     private static final double SIM_RES = -1d;
-    Action ACTION_ANY=Action.still;
+    ShipAction ACTION_ANY= ShipAction.still;
 
     @Test public void testTypes() {
         NodeInterface nodeWithChilds=NodeInterface.newNotTerminal(new State(0, 0),ACTION_ANY);
@@ -63,8 +63,8 @@ public class TestNode {
 
     @Test
     public void imitateStillActionFromRootFollowedByExpansion() {
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(new State(0, 0),Action.notApplicable);
-        Action action = Action.still;
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(new State(0, 0), ShipAction.notApplicable);
+        ShipAction action = ShipAction.still;
      //   double treeRewards = Environment.STILL_COST;
       //  double simRewards = SIM_RES;
         NodeInterface chStill1 = NodeInterface.newNotTerminal(new State(1, 0),ACTION_ANY);

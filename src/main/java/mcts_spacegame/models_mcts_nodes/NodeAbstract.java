@@ -4,7 +4,7 @@ import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.Action;
+import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.models_space.State;
 
 import java.util.HashMap;
@@ -17,12 +17,12 @@ public abstract class NodeAbstract implements NodeInterface {
     private static final double INIT_REWARD_VALUE = 0d;
     private static final String BLANK_SPACE = "  ";
     String name;
-    Action action;
+    ShipAction action;
     State state;
     int depth;
-    Map<Action, Double> actionRewardMap;
+    Map<ShipAction, Double> actionRewardMap;
 
-    public NodeAbstract(State state,Action action) {
+    public NodeAbstract(State state, ShipAction action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
@@ -31,10 +31,10 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public NodeAbstract(String name,
-                        Action action,
+                        ShipAction action,
                         State state,
                         int depth,
-                        Map<Action, Double> actionRewardMap) {
+                        Map<ShipAction, Double> actionRewardMap) {
         this.name = name;
         this.action = action;
         this.state = state;
@@ -58,14 +58,14 @@ public abstract class NodeAbstract implements NodeInterface {
         return (this instanceof NodeTerminalNotFail);
     }
 
-    public void saveRewardForAction(Action action, double reward) {
+    public void saveRewardForAction(ShipAction action, double reward) {
         Conditionals.executeIfTrue(actionRewardMap.containsKey(action),
                 () -> log.fine("Reward for action already defined"));
 
         actionRewardMap.put(action,reward);
     }
 
-    public double restoreRewardForAction(Action action) {
+    public double restoreRewardForAction(ShipAction action) {
        return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
     }
 
