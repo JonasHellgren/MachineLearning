@@ -127,6 +127,8 @@ EnvironmentCell x
 TestEnvironmentCell x
 StepReturn<T>  x
 TestStateCell  copy SetFromReturn  x
+VARIABLES -> CV
+ActionInterface
 flytta setFromReturn
 gör generisk för space:
 - StepReturn

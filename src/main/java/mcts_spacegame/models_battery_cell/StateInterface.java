@@ -1,9 +1,9 @@
 package mcts_spacegame.models_battery_cell;
 
-public interface StateInterface<VARIABLES> {
+public interface StateInterface<CV> {
 
-    VARIABLES getVariables();
-    StateInterface<VARIABLES> copy();
-   // void setFromReturn(StepReturnGeneric<TS> stepReturn);
+    CV getVariables();
+    StateInterface<CV> copy();
+    void setFromReturn(StepReturnGeneric<CV> stepReturn);
 
 }

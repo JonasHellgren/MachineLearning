@@ -37,4 +37,15 @@ public class TestStateCell {
                 DELTA);
     }
 
+    @Test public void setFromReturn() {
+        state.setFromReturn(stepReturn);
+        System.out.println("state = " + state);
+        Assert.assertEquals(
+                state.getVariables().temperature,
+                stepReturn.newState.getVariables().temperature,
+                DELTA);
+    }
+
+
+
 }

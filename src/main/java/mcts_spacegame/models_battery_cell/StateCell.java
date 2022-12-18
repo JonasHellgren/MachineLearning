@@ -28,15 +28,11 @@ public class StateCell implements StateInterface<CellVariables> {
 
     @Override
     public StateCell copy() {
-        return new StateCell(variables.copy());
+        return newWithVariables(variables.copy());
     }
 
-    /*
     @Override
-    public void setFromReturn(StepReturnGeneric<StateCell> stepReturn) {
-        this.SoC=stepReturn.newState.SoC;
-        this.temperature=stepReturn.newState.temperature;
-        this.time=stepReturn.newState.time;
-    }  */
-
+    public void setFromReturn(StepReturnGeneric<CellVariables> stepReturn) {
+        variables=stepReturn.copyState().getVariables();
+    }
 }
