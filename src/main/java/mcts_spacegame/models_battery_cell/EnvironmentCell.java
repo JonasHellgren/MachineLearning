@@ -1,6 +1,6 @@
 package mcts_spacegame.models_battery_cell;
 
-public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,ActionCell> {
+public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,ActionCell> {
 
     CellSettings s;
 
@@ -9,8 +9,8 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
     }
 
     @Override
-    public StepReturnGeneric<StateCell> step(ActionCell action, StateCell state) {
-        CellVariables v=state.variables;
+    public StepReturnGeneric<CellVariables> step(ActionCell action, StateInterface<CellVariables> state) {
+        CellVariables v=state.getVariables();
 
         double current=s.maxCurrent*action.getRelativeCurrent();
         double newSoC=v.SoC+current*s.dt/s.capacity;
@@ -18,7 +18,7 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
         double newTemperature=v.temperature+temperatureTimeDerivative*s.dt;
         double newTime=v.time+s.dt;
 
-        StateCell newState= new StateCell(CellVariables.builder()
+        StateInterface<CellVariables> newState= new StateCell(CellVariables.builder()
                 .SoC(newSoC).temperature(newTemperature).time(newTime).build());
 
         double ocv=s.ocv0+v.SoC*(s.ocv1-s.ocv0);
@@ -30,7 +30,7 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
 
         double reward=newSoC-v.SoC;
 
-        return StepReturnGeneric.<StateCell>builder()
+        return StepReturnGeneric.<CellVariables>builder()
                 .newState(newState)
                 .isFail(isToHighVoltage || isToHighTemperature)
                 .isTerminal(isToHighVoltage || isToHighTemperature || isTimeUp)
@@ -39,9 +39,9 @@ public class EnvironmentCell implements EnvironmentGenericInterface<StateCell,Ac
 
     }
 
-    private double calculateTemperatureTimeDerivate(StateCell state, double current) {
+    private double calculateTemperatureTimeDerivate(StateInterface<CellVariables> state, double current) {
         double Qgen=Math.pow(current,2)* s.resistance;
-        double Qloss= s.heatTransferCoefficient* s.heatArea*(state.variables.temperature- s.temperatureAmbient);
+        double Qloss= s.heatTransferCoefficient* s.heatArea*(state.getVariables().temperature- s.temperatureAmbient);
         return (Qgen-Qloss)/s.heatCapacityCoefficient;
     }
 }

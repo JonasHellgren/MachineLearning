@@ -3,14 +3,14 @@ package mcts_spacegame.models_battery_cell;
 import lombok.Builder;
 
 @Builder
-public class StepReturnGeneric<TS extends StateInterface> {
-    public TS newState;
+public class StepReturnGeneric<VARIABLES> {
+    public StateInterface<VARIABLES> newState;
     public boolean isTerminal;
     public boolean isFail;
     public double reward;
 
-    public StepReturnGeneric<TS> copy() {
-        return  StepReturnGeneric.<TS>builder()
+    public StepReturnGeneric<VARIABLES> copy() {
+        return  StepReturnGeneric.<VARIABLES>builder()
                 .newState(copyState())
                 .isTerminal(isTerminal)
                 .isFail(isFail)
@@ -18,8 +18,8 @@ public class StepReturnGeneric<TS extends StateInterface> {
                 .build();
     }
 
-    public TS copyState() {
-        return (TS) this.newState.copy();
+    public StateInterface<VARIABLES>  copyState() {
+        return this.newState.copy();
     }
 
 }

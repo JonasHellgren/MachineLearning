@@ -12,33 +12,29 @@ public class TestStateCell {
 
     private static final double DELTA = 0.1;
     StateInterface<CellVariables> state;
-    StepReturnGeneric<StateCell> stepReturn;
+    StepReturnGeneric<CellVariables> stepReturn;
 
     @Before
     public void init()  {
         state=new StateCell(CellVariables.builder().SoC(0.5).build());
-       // stepReturn=StepReturnGeneric.<StateCell>builder().newState(
-        //        StateCell.builder().temperature(88).build()
-       // ).build();
+        stepReturn=StepReturnGeneric.<CellVariables>builder().newState(
+                StateCell.newWithVariables(CellVariables.builder().temperature(88).build())).build();
     }
 
     @Test
     public void copy() {
         System.out.println("state variables = " + state.getVariables());
 
-      //  System.out.println("state.copy() = " + state.copy());
-      //  StateCell castedState=(StateCell) state.copy();
-        Assert.assertEquals(0.5,((StateCell) state.copy()).getVariables().SoC,DELTA);
-
+        Assert.assertEquals(0.5,state.copy().getVariables().SoC,DELTA);
     }
 
     @Test public void copyFromReturn() {
-
         state=stepReturn.copyState();
         System.out.println("state = " + state);
-     //   StateCell castedState=(StateCell) state;
-     //   Assert.assertEquals(castedState.temperature,stepReturn.newState.temperature, DELTA);
-
+        Assert.assertEquals(
+                state.getVariables().temperature,
+                stepReturn.newState.getVariables().temperature,
+                DELTA);
     }
 
 }

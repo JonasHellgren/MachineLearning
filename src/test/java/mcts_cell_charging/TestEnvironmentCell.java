@@ -15,7 +15,7 @@ public class TestEnvironmentCell {
     private static final int TEMPERATURE_INIT = 20;
     private static final int TIME_INIT = 0;
     private static final int DT = 10;
-    EnvironmentGenericInterface<StateCell, ActionCell> environment;
+    EnvironmentGenericInterface<CellVariables, ActionCell> environment;
     StateCell state;
     CellVariables variables;
     ActionCell action;
@@ -47,7 +47,7 @@ public class TestEnvironmentCell {
     @Test
     public void chargeShallIncreaseAllStateVariables() {
         action.setLevel(4);
-        StepReturnGeneric<StateCell> sr=environment.step(action,state);
+        StepReturnGeneric<CellVariables> sr=environment.step(action,state);
         System.out.println("sr.newState = " + sr.newState);
         CellVariables newVariables=sr.newState.getVariables();
 
@@ -60,11 +60,11 @@ public class TestEnvironmentCell {
     @Test
     public void smallerChargeCurrentShallGiveLessIncreaseInTempAndSoC() {
         action.setLevel(0);
-        StepReturnGeneric<StateCell> sr0=environment.step(action,state);
+        StepReturnGeneric<CellVariables> sr0=environment.step(action,state);
         System.out.println("sr.newState = " + sr0.newState);
 
         action.setLevel(4);
-        StepReturnGeneric<StateCell> sr4=environment.step(action,state);
+        StepReturnGeneric<CellVariables> sr4=environment.step(action,state);
         System.out.println("sr.newState = " + sr4.newState);
         CellVariables newVariables0=sr0.newState.getVariables();
         CellVariables newVariables4=sr4.newState.getVariables();
