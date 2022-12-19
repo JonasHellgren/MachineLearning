@@ -17,19 +17,19 @@ import java.util.stream.Collectors;
  */
 
 @Log
-public class ActionSelector {
+public class ActionSelector<SSV,AV> {
     MonteCarloSettings settings;
-    RandUtils<ActionInterface<ShipActionSet>> randUtils;
+    RandUtils<ActionInterface<AV>> randUtils;
 
     public ActionSelector(MonteCarloSettings settings) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
     }
 
-    public Optional<ActionInterface<ShipActionSet>> select(NodeInterface nodeSelected) {
+    public Optional<ActionInterface<AV>> select(NodeInterface<SSV,AV> nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
-        List<ActionInterface<ShipActionSet>> nonTestedActions = (nofTestedActions==0)
+        List<ActionInterface<AV>> nonTestedActions = (nofTestedActions==0)
                 ? Collections.singletonList(getActionFromPolicy(nodeSelected))
                 : getNonTestedActions(nodeSelected);
 
@@ -40,17 +40,17 @@ public class ActionSelector {
         }
     }
 
-    private ActionInterface<ShipActionSet> getActionFromPolicy(NodeInterface nodeSelected) {
+    private ActionInterface<AV> getActionFromPolicy(NodeInterface<SSV,AV> nodeSelected) {
         return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
-    private ActionInterface<ShipActionSet> getRandomAction(List<ActionInterface<ShipActionSet>> actions) {
+    private ActionInterface<AV> getRandomAction(List<ActionInterface<AV>> actions) {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private ActionInterface<ShipActionSet> getRandomTestedAction(NodeInterface nodeSelected) {
+    private ActionInterface<AV> getRandomTestedAction(NodeInterface<SSV,AV> nodeSelected) {
         log.warning("No non-tested actions");
-        List<ActionInterface<ShipActionSet>> testedActions = getTestedActions(nodeSelected);
+        List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
         int nofTestedActions=testedActions.size();
         if (nofTestedActions==0) {
             throw new RuntimeException("nofTestedActions=0");
@@ -59,22 +59,24 @@ public class ActionSelector {
     }
 
     @NotNull
-    private List<ActionInterface<ShipActionSet>> getNonTestedActions(NodeInterface nodeSelected) {
-        List<ActionInterface<ShipActionSet>> testedActions = getTestedActions(nodeSelected);
-        List<ShipActionSet> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-        List<ShipActionSet> nonTestedActionValues=ShipActionSet.getNonTestedActionValues(testedActionValues);
+    private List<ActionInterface<AV>> getNonTestedActions(NodeInterface<SSV,AV> nodeSelected) {
+        List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
+        List<AV> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
 
-        List<ActionInterface<ShipActionSet>> nonTestedActions=new ArrayList<>();
+        Set<AV> allValues=nodeSelected.getAction().applicableActions();
+        List<AV> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValues);
 
-        for (ShipActionSet value:nonTestedActionValues) {
-            nonTestedActions.add(new ActionShip(value));  //todo base on Interface
+        List<ActionInterface<AV>> nonTestedActions=new ArrayList<>();
+
+        for (AV value:nonTestedActionValues) {
+            nonTestedActions.add(ActionInterface.newAction(value));  //todo base on Interface
         }
 
         return nonTestedActions;
     }
 
     @NotNull
-    private List<ActionInterface<ShipActionSet>> getTestedActions(NodeInterface nodeSelected) {
+    private List<ActionInterface<AV>> getTestedActions(NodeInterface<SSV,AV> nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

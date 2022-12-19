@@ -6,13 +6,13 @@ import mcts_spacegame.models_space.StateShip;
 import java.util.List;
 import java.util.Optional;
 
-public class NodeInfoHelper {
+public class NodeInfoHelper<SSV, AV> {
 
-    public static Optional<NodeInterface> findNodeMatchingStateVariables(List<NodeInterface> nodes, StateShip state)  {
+    public static <SSV, AV> Optional<NodeInterface<SSV, AV>> findNodeMatchingStateVariables(List<NodeInterface<SSV, AV>> nodes, StateShip state)  {
         return nodes.stream().filter(n -> n.getState().getVariables().equals(state.getVariables())).findFirst();
     }
 
-    public static Optional<NodeInterface>  findNodeMatchingNode(List<NodeInterface> nodes, NodeInterface node)  {
+    public static <SSV, AV> Optional<NodeInterface<SSV, AV>>  findNodeMatchingNode(List<NodeInterface<SSV, AV>> nodes, NodeInterface<SSV, AV> node)  {
         return nodes.stream().filter(n -> n.equals(node)).findFirst();
     }
 

@@ -17,7 +17,6 @@ public enum ShipActionSet {
         List<ShipActionSet> nonTestedValues=new ArrayList<>(applicableActions());
         nonTestedValues.removeAll(values);
         return nonTestedValues;
-
     }
 
 }

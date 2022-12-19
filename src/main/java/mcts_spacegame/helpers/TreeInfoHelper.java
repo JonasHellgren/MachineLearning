@@ -1,5 +1,6 @@
 package mcts_spacegame.helpers;
 
+import black_jack.environment.EnvironmentInterface;
 import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import lombok.extern.java.Log;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
+import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -25,7 +28,7 @@ import java.util.function.BiFunction;
 
 @Log
 @Getter
-public class TreeInfoHelper {
+public class TreeInfoHelper<SSV,AV> {
 
     private static final int C_FOR_NO_EXPLORATION = 0;
 
@@ -38,31 +41,31 @@ public class TreeInfoHelper {
         }
     }
 
-    NodeInterface rootTree;
+    NodeInterface<SSV,AV> rootTree;
     MonteCarloSettings settings;
 
-    public TreeInfoHelper(NodeInterface rootTree) {
+    public TreeInfoHelper(NodeInterface <SSV,AV> rootTree) {
         this(rootTree,MonteCarloSettings.newDefault());
     }
 
-    public TreeInfoHelper(NodeInterface rootTree, MonteCarloSettings settings) {
+    public TreeInfoHelper(NodeInterface <SSV,AV> rootTree, MonteCarloSettings settings) {
         this.rootTree = rootTree;
         this.settings=settings;
     }
 
-    public Optional<NodeInterface> getNodeReachedForActions(List<ActionInterface<ShipActionSet>> actions) {
-        Optional<List<NodeInterface>> nodes=getNodesOnPathForActions(actions);
+    public Optional<NodeInterface <SSV,AV>> getNodeReachedForActions(List<ActionInterface<AV>> actions) {
+        Optional<List<NodeInterface <SSV,AV>>> nodes=getNodesOnPathForActions(actions);
         return  (nodes.isEmpty())
                 ?Optional.empty()
                 :Optional.of(nodes.get().get(nodes.get().size()-1));
     }
 
-    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<ActionInterface<ShipActionSet>> actionsToSelected) {
+    public Optional<List<NodeInterface <SSV,AV>>> getNodesOnPathForActions(List<ActionInterface<AV>> actionsToSelected) {
 
-        NodeInterface parent = rootTree;
-        List<NodeInterface> nodes = new ArrayList<>();
-        for (ActionInterface<ShipActionSet> action : actionsToSelected) {
-            Optional<NodeInterface> child = parent.getChild(action);
+        NodeInterface <SSV,AV> parent = rootTree;
+        List<NodeInterface <SSV,AV>> nodes = new ArrayList<>();
+        for (ActionInterface<AV> action : actionsToSelected) {
+            Optional<NodeInterface <SSV,AV>> child = parent.getChild(action);
             if (child.isEmpty()) {
                 return Optional.empty();
             }
@@ -73,34 +76,34 @@ public class TreeInfoHelper {
         return Optional.of(nodes);
     }
 
-    public Optional<Double> getValueForActionInNode(List<ActionInterface<ShipActionSet>> actionsToSelected, ActionInterface<ShipActionSet> action) {
-        Optional<NodeInterface> node = getNodeReachedForActions(actionsToSelected);
+    public Optional<Double> getValueForActionInNode(List<ActionInterface<AV>> actionsToSelected, ActionInterface<AV> action) {
+        Optional<NodeInterface <SSV,AV>> node = getNodeReachedForActions(actionsToSelected);
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
     }
 
-    public static StateShip getState(StateShip rootState,
-                                     EnvironmentShip environment,
-                                     List<ActionInterface<ShipActionSet>> actionsToSelected) {
-        StateShip state = rootState.copy();
-        for (ActionInterface<ShipActionSet> a : actionsToSelected) {
-            StepReturnGeneric<ShipVariables> sr = environment.step(a, state);
+    public static <SSV, AV> StateInterface<SSV> getState(StateInterface<SSV> rootState,
+                              EnvironmentGenericInterface<SSV, AV> environment,
+                              List<ActionInterface<AV>> actionsToSelected) {
+        StateInterface<SSV> state = rootState.copy();
+        for (ActionInterface<AV> a : actionsToSelected) {
+            StepReturnGeneric<SSV> sr = environment.step(a, state);
             state.setFromReturn(sr);
         }
         return state;
     }
 
     @SneakyThrows
-    public List<NodeInterface> getBestPath() {
-        NodeSelector ns = new NodeSelector(rootTree, settings, C_FOR_NO_EXPLORATION,true);
+    public List<NodeInterface <SSV,AV>> getBestPath() {
+        NodeSelector<SSV,AV>  ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
         ns.select();
         return ns.getNodesFromRootToSelected();
     }
 
     public int nofNodesInTree() {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> inc = (a,b) -> a+1;
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> a+1;
         counter.setCount(1);  //don't forget grandma
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
@@ -108,21 +111,21 @@ public class TreeInfoHelper {
 
     public int nofNodesWithNoChildren() {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> inc = (a,b) -> (b.nofChildNodes()==0) ? a+1:a;
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> (b.nofChildNodes()==0) ? a+1:a;
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
     }
 
     public int maxDepth() {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> max = (a,b) -> Math.max(a,b.getDepth());
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> max = (a,b) -> Math.max(a,b.getDepth());
         evalRecursive(rootTree,counter,max);
         return counter.getCount();
     }
 
     public int totalNofChildren() {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> nofChilds = (a,b) -> a+b.nofChildNodes();
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> nofChilds = (a,b) -> a+b.nofChildNodes();
         counter.setCount(nofChilds.apply(counter.getCount(),rootTree)); //don't forget grandma
         evalRecursive(rootTree,counter,nofChilds);
         return counter.getCount();
@@ -130,7 +133,7 @@ public class TreeInfoHelper {
 
     public boolean isStateInAnyNode(StateShip state) {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> nofChildrenThatEqualsState =
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> nofChildrenThatEqualsState =
                 (a,b) -> a+(b.getState().getVariables().equals(state.getVariables())?1:0);
         counter.setCount(nofChildrenThatEqualsState.apply(counter.getCount(),rootTree)); //don't forget grandma
         evalRecursive(rootTree,counter,nofChildrenThatEqualsState);
@@ -141,8 +144,8 @@ public class TreeInfoHelper {
         return counter.getCount()>0;
     }
 
-    private void evalRecursive(NodeInterface node, Counter counter, BiFunction<Integer,NodeInterface,Integer> bif) {
-        for (NodeInterface  child:node.getChildNodes()) {
+    private void evalRecursive(NodeInterface <SSV,AV> node, Counter counter, BiFunction<Integer,NodeInterface <SSV,AV>,Integer> bif) {
+        for (NodeInterface <SSV,AV>  child:node.getChildNodes()) {
             counter.setCount(bif.apply(counter.getCount(),child));
             evalRecursive(child,counter,bif);
         }

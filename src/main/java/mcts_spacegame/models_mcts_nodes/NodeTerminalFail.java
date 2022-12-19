@@ -6,11 +6,11 @@ import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 
-public final class NodeTerminalFail extends NodeTerminal {
+public final class NodeTerminalFail<SSV,AV> extends NodeTerminal<SSV,AV> {
 
     private static final String CLASS_NAME = "T-Fail";
 
-    public NodeTerminalFail(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
+    public NodeTerminalFail(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state, action);
     }
 

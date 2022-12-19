@@ -4,37 +4,36 @@ import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
 
 import java.util.*;
 
 @Log
-public final class NodeNotTerminal extends NodeAbstract {
+public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
 
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
-    List<NodeInterface> childNodes;
+    List<NodeInterface<SSV,AV>> childNodes;
     int nofVisits;
-    Map<ShipActionSet, Double> Qsa;
-    Map<ShipActionSet, Integer> nSA;
+    Map<AV, Double> Qsa;
+    Map<AV, Integer> nSA;
 
-    public NodeNotTerminal(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
+    public NodeNotTerminal(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;
         Qsa = new HashMap<>();
-        for (ShipActionSet av : ShipActionSet.applicableActions()) {
-            Qsa.put(av, INIT_ACTION_VALUE);  //todo generic mha static constructor i ActionInterface
+        Set<AV> actionValues=  action.applicableActions();
+        for (AV av : actionValues) {
+            Qsa.put(av, INIT_ACTION_VALUE);
         }
 
         nSA = new HashMap<>();
-        for (ShipActionSet av : ShipActionSet.applicableActions()) {
+        for (AV av : actionValues) {
             nSA.put(av, INIT_NOF_VISITS);
         }
     }
 
-    public NodeNotTerminal(NodeNotTerminal node) {
+    public NodeNotTerminal(NodeNotTerminal<SSV,AV> node) {
         super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
         this.childNodes=new ArrayList<>(node.childNodes);
         //childNodes.
@@ -44,19 +43,19 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public void addChildNode(NodeInterface node) {
+    public void addChildNode(NodeInterface<SSV,AV> node) {
         childNodes.add(node);
         node.setDepth(depth + 1);
     }
 
     @Override
-    public List<NodeInterface> getChildNodes() {
+    public List<NodeInterface<SSV,AV>> getChildNodes() {
         return childNodes;
     }
 
     @Override
-    public Optional<NodeInterface> getChild(ActionInterface<ShipActionSet> action) {
-        List<NodeInterface> children= getChildNodes();
+    public Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action) {
+        List<NodeInterface<SSV,AV>> children= getChildNodes();
         return children.stream()
                 .filter(c -> c.getAction().getValue().equals(action.getValue()))
                 .findFirst();
@@ -79,7 +78,7 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public void increaseNofActionSelections(ActionInterface<ShipActionSet> a) {
+    public void increaseNofActionSelections(ActionInterface<AV> a) {
         int n = getNofActionSelections(a);
         nSA.put(a.getValue(), n + 1);
     }
@@ -90,7 +89,7 @@ public final class NodeNotTerminal extends NodeAbstract {
      */
 
     @Override
-    public void updateActionValue(double G, ActionInterface<ShipActionSet> a, double alpha) {
+    public void updateActionValue(double G, ActionInterface<AV> a, double alpha) {
         int nofVisitsForAction=getNofActionSelections(a);
         if (MathUtils.isZero(nofVisitsForAction)) {
             throw new RuntimeException("Zero nof visits for action = " + a);
@@ -107,12 +106,12 @@ public final class NodeNotTerminal extends NodeAbstract {
     }
 
     @Override
-    public int getNofActionSelections(ActionInterface<ShipActionSet> a) {
+    public int getNofActionSelections(ActionInterface<AV> a) {
         return nSA.get(a.getValue());
     }
 
     @Override
-    public double getActionValue(ActionInterface<ShipActionSet> a) {
+    public double getActionValue(ActionInterface<AV> a) {
         return Qsa.get(a.getValue());
     }
 

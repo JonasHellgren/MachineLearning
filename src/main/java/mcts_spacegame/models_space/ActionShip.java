@@ -14,7 +14,6 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
 
     private ShipActionSet actionValue;
 
-
     public static ActionShip newStill() {
         return new ActionShip(ShipActionSet.still);
     }
@@ -24,7 +23,6 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
     public static ActionShip newDown() {
         return new ActionShip(ShipActionSet.down);
     }
-
     public static ActionShip newNA() {
         return new ActionShip(ShipActionSet.nonApplicableAction());
     }

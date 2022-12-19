@@ -29,7 +29,8 @@ public class EnvironmentShip implements EnvironmentGenericInterface<ShipVariable
     }
 
     @Override
-    public StepReturnGeneric<ShipVariables> step(ActionInterface<ShipActionSet> action, StateInterface<ShipVariables> oldPosition) {
+    public StepReturnGeneric<ShipVariables> step(ActionInterface<ShipActionSet> action,
+                                                 StateInterface<ShipVariables> oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
         if (cellPresentOpt.isEmpty()) {  //if empty, position not defined, assume crash

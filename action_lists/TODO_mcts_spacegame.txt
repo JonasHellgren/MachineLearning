@@ -138,14 +138,16 @@ gör generisk för space:
 - ActionShip implements ActionInterface<ShipActions>  x
 - ShipAction -> ActionInterface
 - EnvironmentGenericInterface  x
-- static constructor i ActionInterface
-- Environment -> EnvironmentSpace
-- NodeSelector<TA>
+- static constructor i ActionInterface NJA
+- NodeSelector<AV>
+- tänka igenom SimulationPolicy
+NodeInterface>AV>
 - ActionSelector<TA>
 - BackupModifier
 - NodeValueMemory<TS>
 - SelectedToTerminalFailConverter
 - MonteCarloTreeCreator
+- MonteCarloTreeCreator innehåller StateShip and ActionShip - måste veck
 
 
 annan domain - ladda batteri maximalt energi given tid

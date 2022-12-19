@@ -12,14 +12,14 @@ import java.util.Set;
  * Memory for storing state values
  */
 
-public class NodeValueMemory {
+public class NodeValueMemory<SSV> {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
-    Set<StateInterface<ShipVariables>> states;
+    Set<StateInterface<SSV>> states;
 
-    public static NodeValueMemory newEmpty() {
-        return new NodeValueMemory();
+    public static <SSV> NodeValueMemory<SSV> newEmpty() {
+        return new NodeValueMemory<>();
     }
 
     public NodeValueMemory() {
@@ -31,12 +31,12 @@ public class NodeValueMemory {
         memory.clear();
     }
 
-    public void write(StateInterface<ShipVariables> state, double value) {
+    public void write(StateInterface<SSV> state, double value) {
         memory.put(state.getVariables().hashCode(),value);
         states.add(state);
     }
 
-    public double read(StateInterface<ShipVariables> state) {
+    public double read(StateInterface<SSV> state) {
         return memory.getOrDefault(state.getVariables().hashCode(), DEFAULT_VALUE);
     }
 
@@ -45,7 +45,7 @@ public class NodeValueMemory {
 
         StringBuilder sb=new StringBuilder();
         sb.append(System.getProperty("line.separator"));
-        for (StateInterface<ShipVariables> state:states) {
+        for (StateInterface<SSV> state:states) {
             sb.append("State = ").append(state).append(", value = ").append(read(state));
             sb.append(System.getProperty("line.separator"));
         }

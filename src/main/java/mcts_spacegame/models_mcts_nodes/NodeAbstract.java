@@ -15,16 +15,16 @@ import java.util.Map;
 @Getter
 @Setter
 @Log
-public abstract class NodeAbstract implements NodeInterface {
+public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
     private static final double INIT_REWARD_VALUE = 0d;
     private static final String BLANK_SPACE = "  ";
     String name;
-    ActionInterface<ShipActionSet> action;
-    StateInterface<ShipVariables> state;
+    ActionInterface<AV> action;
+    StateInterface<SSV> state;
     int depth;
-    Map<ShipActionSet, Double> actionRewardMap;
+    Map<AV, Double> actionRewardMap;
 
-    public NodeAbstract(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
+    public NodeAbstract(StateInterface<SSV> state, ActionInterface<AV> action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
@@ -33,10 +33,10 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public NodeAbstract(String name,
-                        ActionInterface<ShipActionSet> action,
-                        StateInterface<ShipVariables> state,
+                        ActionInterface<AV> action,
+                        StateInterface<SSV> state,
                         int depth,
-                        Map<ShipActionSet, Double> actionRewardMap) {
+                        Map<AV, Double> actionRewardMap) {
         this.name = name;
         this.action = action;
         this.state = state;
@@ -60,21 +60,21 @@ public abstract class NodeAbstract implements NodeInterface {
         return (this instanceof NodeTerminalNotFail);
     }
 
-    public void saveRewardForAction(ActionInterface<ShipActionSet> action, double reward) {
+    public void saveRewardForAction(ActionInterface<AV> action, double reward) {
         Conditionals.executeIfTrue(actionRewardMap.containsKey(action.getValue()),
                 () -> log.fine("Reward for action already defined"));
 
         actionRewardMap.put(action.getValue(),reward);
     }
 
-    public double restoreRewardForAction(ActionInterface<ShipActionSet> action) {
+    public double restoreRewardForAction(ActionInterface<AV> action) {
        return actionRewardMap.getOrDefault(action.getValue(),INIT_REWARD_VALUE);
     }
 
     @Override
     public boolean equals(Object obj) {
         //For each significant field in the class, check if that field matches the corresponding field of this object
-        NodeAbstract equalsSample = (NodeAbstract) obj;
+        NodeAbstract<SSV,AV> equalsSample = (NodeAbstract) obj;
         boolean isSameState = equalsSample.getState().getVariables().equals(this.getState().getVariables());
         boolean isSameAction = equalsSample.getAction().getValue()==this.getAction().getValue();
         boolean isSameDepth = equalsSample.getDepth()==this.getDepth();

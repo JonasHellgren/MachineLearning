@@ -12,29 +12,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
-public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
+public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //todo TerminalLeaf
 
-    public NodeTerminal(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
+    public NodeTerminal(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state,action);
     }
 
-    public NodeTerminal(NodeTerminal node) {
+    public NodeTerminal(NodeTerminal<SSV,AV> node) {
         super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
     }
 
     @Override
     @SneakyThrows
-    public void addChildNode(NodeInterface node) {
+    public void addChildNode(NodeInterface<SSV,AV> node) {
         log.warning("Can't add child to node without child");
     }
 
     @Override
-    public List<NodeInterface> getChildNodes() {
+    public List<NodeInterface<SSV,AV>> getChildNodes() {
         return Collections.emptyList();
     }
 
     @Override
-    public Optional<NodeInterface> getChild(ActionInterface<ShipActionSet> action) {
+    public Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action) {
         return Optional.empty();
     }
 
@@ -54,12 +54,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public void increaseNofActionSelections(ActionInterface<ShipActionSet> a) {
+    public void increaseNofActionSelections(ActionInterface<AV> a) {
 
     }
 
     @Override
-    public void updateActionValue(double G, ActionInterface<ShipActionSet> a, double alpha) {
+    public void updateActionValue(double G, ActionInterface<AV> a, double alpha) {
 
     }
 
@@ -69,12 +69,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public int getNofActionSelections(ActionInterface<ShipActionSet> a) {
+    public int getNofActionSelections(ActionInterface<AV> a) {
         return 0;
     }
 
     @Override
-    public double getActionValue(ActionInterface<ShipActionSet> a) {
+    public double getActionValue(ActionInterface<AV> a) {
         return 0;
     }
 

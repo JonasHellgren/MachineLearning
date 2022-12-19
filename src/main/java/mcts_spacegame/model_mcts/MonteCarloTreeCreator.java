@@ -11,6 +11,7 @@ import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -46,25 +47,25 @@ import java.util.*;
 @Log
 @Setter
 @Getter
-public class MonteCarloTreeCreator {
+public class MonteCarloTreeCreator<SSV,AV> {
     private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
-    EnvironmentShip environment;
-    StateShip startState;
+    EnvironmentGenericInterface<SSV, AV> environment;
+    StateInterface<SSV> startState;
     MonteCarloSettings settings;
-    NodeValueMemory memory;
+    NodeValueMemory<SSV> memory;
 
-    NodeInterface nodeRoot;
-    TreeInfoHelper tih;
+    NodeInterface<SSV,AV> nodeRoot;
+    TreeInfoHelper<SSV,AV> tih;
     CpuTimer cpuTimer;
     int nofIterations;
-    List<ActionInterface<ShipActionSet>> actionsToSelected;
+    List<ActionInterface<AV>> actionsToSelected;
 
     @Builder
-    private static MonteCarloTreeCreator newMCTC(@NonNull EnvironmentShip environment,
-                                                 @NonNull StateShip startState,
+    private static <SSV,AV> MonteCarloTreeCreator<SSV,AV>  newMCTC(@NonNull EnvironmentGenericInterface<SSV, AV> environment,
+                                                 @NonNull StateInterface<SSV> startState,
                                                  MonteCarloSettings monteCarloSettings,
-                                                 NodeValueMemory memory) {
-        MonteCarloTreeCreator mctc = new MonteCarloTreeCreator();
+                                                 NodeValueMemory<SSV> memory) {
+        MonteCarloTreeCreator<SSV,AV> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
@@ -81,23 +82,23 @@ public class MonteCarloTreeCreator {
         return mctc;
     }
 
-    private static void setSomeFields(@NonNull StateShip startState, MonteCarloTreeCreator mctc) {
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, new ActionShip(ShipActionSet.notApplicable));  //todo generic
-        mctc.tih = new TreeInfoHelper(mctc.nodeRoot,mctc.settings);
+    private static <SSV,AV>  void setSomeFields(@NonNull StateInterface<SSV> startState, MonteCarloTreeCreator<SSV,AV>  mctc) {
+        mctc.nodeRoot = NodeInterface.newNotTerminal(startState,null);  //todo generic not null
+        mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
     }
 
 
-    public NodeInterface runIterations() throws StartStateIsTrapException {
+    public NodeInterface<SSV,AV> runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
-        ActionSelector actionSelector = new ActionSelector(settings);
+        ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings);
         for (i = 0; i < settings.maxNofIterations; i++) {
-            NodeInterface nodeSelected = select(nodeRoot);
-            Optional<ActionInterface<ShipActionSet>> actionInSelected = actionSelector.select(nodeSelected);
+            NodeInterface<SSV,AV> nodeSelected = select(nodeRoot);
+            Optional<ActionInterface<AV>> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
-                StepReturnGeneric<ShipVariables> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
+                StepReturnGeneric<SSV> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState);
                 backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  // actionInSelected is empty <=> all tested
@@ -122,18 +123,18 @@ public class MonteCarloTreeCreator {
         return statistics;
     }
 
-    private NodeInterface select(NodeInterface nodeRoot) {
-        NodeSelector ns = new NodeSelector(nodeRoot, settings);
-        NodeInterface nodeSelected = ns.select();
+    private NodeInterface<SSV,AV> select(NodeInterface<SSV,AV> nodeRoot) {
+        NodeSelector<SSV,AV> ns = new NodeSelector<>(nodeRoot, settings);
+        NodeInterface<SSV,AV> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
 
-    private StepReturnGeneric<ShipVariables> applyActionAndExpand(NodeInterface nodeSelected, ActionInterface<ShipActionSet> actionInSelected) {
-        StateShip state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        StepReturnGeneric<ShipVariables> sr = environment.step(actionInSelected, state);
+    private StepReturnGeneric<SSV> applyActionAndExpand(NodeInterface<SSV,AV> nodeSelected, ActionInterface<AV> actionInSelected) {
+        StateInterface<SSV> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturnGeneric<SSV> sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeInterface child = NodeInterface.newNode(sr, actionInSelected);
+        NodeInterface<SSV,AV> child = NodeInterface.newNode(sr, actionInSelected);
         child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
@@ -153,12 +154,12 @@ public class MonteCarloTreeCreator {
         return !isChildAddedEarlier && !isChildToDeep;
     }
 
-    public SimulationResults simulate(StateInterface<ShipVariables> stateAfterApplyingActionInSelectedNode) {
+    public SimulationResults simulate(StateInterface<SSV> stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
-            List<StepReturnGeneric<ShipVariables>> returns =
+            List<StepReturnGeneric<SSV>> returns =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
-            StepReturnGeneric<ShipVariables> endReturn = returns.get(returns.size() - 1);
+            StepReturnGeneric<SSV> endReturn = returns.get(returns.size() - 1);
             double sumOfRewards = returns.stream().mapToDouble(r -> r.reward).sum();
             double valueInTerminal = memory.read(endReturn.newState);
             boolean isEndingInFail = endReturn.isFail;
@@ -167,9 +168,9 @@ public class MonteCarloTreeCreator {
         return simulationResults;
     }
 
-    private void backPropagate(StepReturnGeneric<ShipVariables> sr,
+    private void backPropagate(StepReturnGeneric<SSV> sr,
                                SimulationResults simulationResults,
-                               ActionInterface<ShipActionSet> actionInSelected) {
+                               ActionInterface<AV> actionInSelected) {
         SimulationReturnsExtractor bumSim = SimulationReturnsExtractor.builder()
                 .nofNodesOnPath(actionsToSelected.size() + 1)
                 .simulationResults(simulationResults)
@@ -178,10 +179,10 @@ public class MonteCarloTreeCreator {
         List<Double> returnsSimulation = bumSim.simulate();
 
         double valueInTerminal = (sr.isTerminal)
-                ? memory.read((StateShip) sr.newState)  //todo StateInterface<TYPE>
+                ? memory.read((StateInterface<SSV>) sr.newState)  //todo StateInterface<TYPE>
                 : VALUE_MEMORY_IF_NOT_TERMINAL;
 
-        BackupModifier bumSteps = BackupModifier.builder().rootTree(nodeRoot)
+        BackupModifier<SSV, AV>  bumSteps = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
@@ -191,8 +192,8 @@ public class MonteCarloTreeCreator {
         bumSteps.backup(returnsSimulation);
     }
 
-    private void manageCaseWhenAllActionsAreTested(NodeInterface nodeSelected) throws StartStateIsTrapException {
-        SelectedToTerminalFailConverter sfc = new SelectedToTerminalFailConverter(nodeRoot, actionsToSelected);
+    private void manageCaseWhenAllActionsAreTested(NodeInterface<SSV, AV>  nodeSelected) throws StartStateIsTrapException {
+        SelectedToTerminalFailConverter<SSV, AV>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
         if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
             makeSelectedTerminal(nodeSelected, sfc);
         } else {
@@ -200,16 +201,16 @@ public class MonteCarloTreeCreator {
         }
     }
 
-    private void chooseBestActionAndBackPropagate(NodeInterface nodeSelected) {
-        NodeSelector nodeSelector = new NodeSelector(nodeRoot,settings);
-        Optional<NodeInterface> childToSelected = nodeSelector.selectChild(nodeSelected);
-        ActionInterface<ShipActionSet> actionToGetToChild = childToSelected.orElseThrow().getAction();
-        StateShip state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        StepReturnGeneric<ShipVariables> sr = environment.step(actionToGetToChild, state);
+    private void chooseBestActionAndBackPropagate(NodeInterface<SSV, AV>  nodeSelected) {
+        NodeSelector<SSV, AV>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
+        Optional<NodeInterface<SSV, AV> > childToSelected = nodeSelector.selectChild(nodeSelected);
+        ActionInterface<AV> actionToGetToChild = childToSelected.orElseThrow().getAction();
+        StateInterface<SSV> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturnGeneric<SSV> sr = environment.step(actionToGetToChild, state);
         backPropagate(sr, new SimulationResults(), actionToGetToChild);
     }
 
-    private void makeSelectedTerminal(NodeInterface nodeSelected, SelectedToTerminalFailConverter sfc) throws StartStateIsTrapException {
+    private void makeSelectedTerminal(NodeInterface<SSV, AV> nodeSelected, SelectedToTerminalFailConverter<SSV, AV> sfc) throws StartStateIsTrapException {
         if (nodeSelected.equals(nodeRoot)) {
             nodeRoot.printTree();
             throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
@@ -217,11 +218,11 @@ public class MonteCarloTreeCreator {
         sfc.makeSelectedTerminal(nodeSelected);
     }
 
-    private List<StepReturnGeneric<ShipVariables>> stepToTerminal(StateInterface<ShipVariables> pos, SimulationPolicyInterface policy) {
-        List<StepReturnGeneric<ShipVariables>> returns = new ArrayList<>();
-        StepReturnGeneric<ShipVariables> stepReturn;
+    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> pos, SimulationPolicyInterface policy) {
+        List<StepReturnGeneric<SSV>> returns = new ArrayList<>();
+        StepReturnGeneric<SSV> stepReturn;
         do {
-            ActionInterface<ShipActionSet> action = policy.chooseAction(pos);
+            ActionInterface<AV> action = policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);

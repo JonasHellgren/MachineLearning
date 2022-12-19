@@ -15,17 +15,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log
-public class SelectedToTerminalFailConverter {
+public class SelectedToTerminalFailConverter<SSV,AV> {
 
-    NodeInterface nodeRoot;
-    List<ActionInterface<ShipActionSet>> actionsToSelected;
+    NodeInterface<SSV,AV> nodeRoot;
+    List<ActionInterface<AV>> actionsToSelected;
 
-    public SelectedToTerminalFailConverter(NodeInterface nodeRoot, List<ActionInterface<ShipActionSet>> actionsToSelected) {
+    public SelectedToTerminalFailConverter(NodeInterface<SSV,AV> nodeRoot, List<ActionInterface<AV>> actionsToSelected) {
         this.nodeRoot = nodeRoot;
         this.actionsToSelected = actionsToSelected;
     }
 
-    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeInterface nodeSelected) throws StartStateIsTrapException {
+    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeInterface<SSV,AV> nodeSelected)
+            throws StartStateIsTrapException {
 
         boolean allChildrenAreFail=areAllChildrenToSelectedNodeTerminalFail(nodeSelected);
         if (nodeSelected.equals(nodeRoot) && allChildrenAreFail) {
@@ -37,26 +38,32 @@ public class SelectedToTerminalFailConverter {
         }
     }
 
-    public boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface nodeSelected) {
-        Set<ActionInterface<ShipActionSet>> children = nodeSelected.getChildNodes().stream()
+    public boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface<SSV,AV> nodeSelected) {
+        Set<ActionInterface<AV>> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
-        return children.size() == ShipActionSet.applicableActions().size();
+        ActionInterface<AV> action=nodeSelected.getAction();
+        return children.size() == action.applicableActions().size();
     }
 
-    public void makeSelectedTerminal(NodeInterface nodeSelected) {
+    public void makeSelectedTerminal(NodeInterface<SSV,AV> nodeSelected) {
         log.info("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
-        Pair<Optional<NodeInterface>, ActionInterface<ShipActionSet>> parentActionPair = getParentAndActionToSelected(nodeSelected);
+        Pair<Optional<NodeInterface<SSV,AV>>, ActionInterface<AV>> parentActionPair = getParentAndActionToSelected(nodeSelected);
         Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
                 this::someErrorLogging,
                 () -> transformSelectedToTerminalFail(parentActionPair.getFirst().get(), parentActionPair.getSecond(),nodeSelected));
     }
 
-    private Pair<Optional<NodeInterface>, ActionInterface<ShipActionSet>> getParentAndActionToSelected(NodeInterface nodeSelected) {
-        Optional<NodeInterface> parentToSelected = Optional.empty();
-        NodeInterface nodeCurrent = nodeRoot;
-        ActionInterface<ShipActionSet> actionToSelected = new ActionShip(ShipActionSet.notApplicable); //todo generic ActionInterface<ShipActionSet>.notApplicable;
-        for (ActionInterface<ShipActionSet> action : actionsToSelected) {
+    private Pair<Optional<NodeInterface<SSV,AV>>, ActionInterface<AV>>
+    getParentAndActionToSelected(NodeInterface<SSV,AV> nodeSelected) {
+        Optional<NodeInterface<SSV,AV>> parentToSelected = Optional.empty();
+        NodeInterface<SSV,AV> nodeCurrent = nodeRoot;
+
+       // AV actionValueNA=actionsToSelected.get(0).nonApplicableAction();
+        ActionInterface<AV> actionToSelected=null; //=new ActionShip(actionValueNA);  //todo NOT NULL
+        // ActionInterface<ShipActionSet> actionToSelected = new ActionShip(action.nonApplicableAction()); //todo generic ActionInterface<ShipActionSet>.notApplicable;
+
+        for (ActionInterface<AV> action : actionsToSelected) {
             boolean isSelectedChildToCurrent = nodeCurrent.getChildNodes().contains(nodeSelected);
             if (isSelectedChildToCurrent) {
                 parentToSelected = Optional.of(nodeCurrent);
@@ -72,10 +79,12 @@ public class SelectedToTerminalFailConverter {
         log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
     }
 
-    private void transformSelectedToTerminalFail(NodeInterface parentToSelected, ActionInterface<ShipActionSet> actionToSelected, NodeInterface nodeSelected) {
+    private void transformSelectedToTerminalFail(NodeInterface<SSV,AV> parentToSelected,
+                                                 ActionInterface<AV> actionToSelected,
+                                                 NodeInterface<SSV,AV> nodeSelected) {
         log.fine("Parent to selected is = " + parentToSelected);
-        NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
-        List<NodeInterface> childrenToParent = parentToSelected.getChildNodes();
+        NodeInterface<SSV,AV> selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
+        List<NodeInterface<SSV,AV>> childrenToParent = parentToSelected.getChildNodes();
         childrenToParent.remove(nodeSelected);
         parentToSelected.addChildNode(selectedAsTerminalFail);
     }

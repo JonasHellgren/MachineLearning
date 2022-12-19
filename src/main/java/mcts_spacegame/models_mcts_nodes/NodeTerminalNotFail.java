@@ -2,17 +2,15 @@ package mcts_spacegame.models_mcts_nodes;
 
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
 
-public final class NodeTerminalNotFail extends NodeTerminal {
+public final class NodeTerminalNotFail<SSV,AV> extends NodeTerminal<SSV,AV> {
     private static final String CLASS_NAME = "T-NF";
 
-    public NodeTerminalNotFail(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
+    public NodeTerminalNotFail(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state, action);
     }
 
-    public NodeTerminalNotFail(NodeTerminalNotFail node) {
+    public NodeTerminalNotFail(NodeTerminalNotFail<SSV,AV> node) {
         super(node);
     }
 
