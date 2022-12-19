@@ -2,11 +2,11 @@ package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
+import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.model_mcts.NodeSelector;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,10 +22,10 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        nodeRoot = NodeInterface.newNotTerminal(new State(0, 0), ShipAction.notApplicable);
-        chUp = NodeInterface.newNotTerminal(new State(1, 1), ShipAction.up);
-        chStill = NodeInterface.newNotTerminal(new State(1, 0), ShipAction.still);
-        chDown = NodeInterface.newTerminalFail(new State(1, 0), ShipAction.down); //terminal
+        nodeRoot = NodeInterface.newNotTerminal(new StateShip(0, 0), ShipAction.notApplicable);
+        chUp = NodeInterface.newNotTerminal(new StateShip(1, 1), ShipAction.up);
+        chStill = NodeInterface.newNotTerminal(new StateShip(1, 0), ShipAction.still);
+        chDown = NodeInterface.newTerminalFail(new StateShip(1, 0), ShipAction.down); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
         nodeRoot.addChildNode(chDown);
@@ -72,9 +72,9 @@ public class TestNodeSelector {
     @SneakyThrows
     @Test
     public void upCostsStillFreeDownBad() {
-        addExperience(nodeRoot, ShipAction.up,-Environment.MOVE_COST+SIM_RES);
-        addExperience(nodeRoot, ShipAction.still,-Environment.STILL_COST+SIM_RES);
-        addExperience(nodeRoot, ShipAction.down,-Environment.CRASH_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.up,-EnvironmentShip.MOVE_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.still,-EnvironmentShip.STILL_COST+SIM_RES);
+        addExperience(nodeRoot, ShipAction.down,-EnvironmentShip.CRASH_COST+SIM_RES);
 
         NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         NodeInterface nodeFound=ns.select();

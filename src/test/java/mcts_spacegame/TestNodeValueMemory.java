@@ -1,7 +1,7 @@
 package mcts_spacegame;
 
 import mcts_spacegame.model_mcts.NodeValueMemory;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,14 +19,14 @@ public class TestNodeValueMemory {
 
     @Test
     public void readNonDefinedState() {
-        double value= nodeValueMemory.read(new State(0,0));
+        double value= nodeValueMemory.read(new StateShip(0,0));
         Assert.assertEquals(NodeValueMemory.DEFAULT_VALUE,value, DELTA);
     }
 
     @Test
     public void readDefinedState() {
-        nodeValueMemory.write(new State(0,0), VALUE);
-        double value= nodeValueMemory.read(new State(0,0));
+        nodeValueMemory.write(new StateShip(0,0), VALUE);
+        double value= nodeValueMemory.read(new StateShip(0,0));
         System.out.println("value = " + value);
         Assert.assertEquals(VALUE,value, DELTA);
     }

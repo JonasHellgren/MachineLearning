@@ -3,7 +3,7 @@ package mcts_spacegame;
 import common.MathUtils;
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
+import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
@@ -13,7 +13,7 @@ import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,14 +33,14 @@ public class Test_5times15gridCorridor {
     private static final double VALUE_0 = 0;
 
     MonteCarloTreeCreator monteCarloTreeCreator;
-    Environment environment;
+    EnvironmentShip environment;
     MonteCarloSettings settings;
     NodeValueMemory memory;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15GridCorridor();
-        environment = new Environment(spaceGrid);
+        environment = new EnvironmentShip(spaceGrid);
         settings= MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
@@ -49,13 +49,13 @@ public class Test_5times15gridCorridor {
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
         memory=NodeValueMemory.newEmpty();
-        memory.write(State.newState(14,0),VALUE_0);
-        memory.write(State.newState(14,2),VALUE_3);
-        memory.write(State.newState(14,4),VALUE_6);
+        memory.write(StateShip.newStateFromXY(14,0),VALUE_0);
+        memory.write(StateShip.newStateFromXY(14,2),VALUE_3);
+        memory.write(StateShip.newStateFromXY(14,4),VALUE_6);
 
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(State.newState(0,2))
+                .startState(StateShip.newStateFromXY(0,2))
                 .monteCarloSettings(settings)
                 .memory(memory)
                 .build();
@@ -68,7 +68,7 @@ public class Test_5times15gridCorridor {
     }
 
     @Test public void moveFromX13Y4IntoGoalWithHighValue() {
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(13,4));
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(13,4));
         boolean any6 = anySimulationHasValue6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
@@ -79,7 +79,7 @@ public class Test_5times15gridCorridor {
     }
 
     @Test public void moveFromX9Y4IntoGoalWithHighValue() {
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(State.newState(5,4));
+        SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,4));
         boolean any6 = anySimulationHasValue6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
@@ -91,8 +91,8 @@ public class Test_5times15gridCorridor {
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(4,4));
-        assertStateIsOnBestPath(tih,State.newState(5,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
     }
 
     @SneakyThrows
@@ -101,8 +101,8 @@ public class Test_5times15gridCorridor {
         for (int i = 0; i < 10 ; i++) {
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(4,4));
-        assertStateIsOnBestPath(tih,State.newState(5,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
         }
     }
 
@@ -110,17 +110,17 @@ public class Test_5times15gridCorridor {
     @Test
     public void iterateFromX0Y2MemoryFavorsSouthRoute() {
         memory=NodeValueMemory.newEmpty();
-        memory.write(State.newState(14,0),VALUE_6);
-        memory.write(State.newState(14,2), VALUE_3);
-        memory.write(State.newState(14,4), VALUE_0);
+        memory.write(StateShip.newStateFromXY(14,0),VALUE_6);
+        memory.write(StateShip.newStateFromXY(14,2), VALUE_3);
+        memory.write(StateShip.newStateFromXY(14,4), VALUE_0);
         monteCarloTreeCreator.setMemory(memory);
 
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(4,0));
-        assertStateIsOnBestPath(tih,State.newState(5,0));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,0));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,0));
     }
 
     @SneakyThrows
@@ -128,16 +128,16 @@ public class Test_5times15gridCorridor {
     public void iterateFromX10Y4WithNoSimulations() {
 
         settings=settingsForNoSimulations();
-        monteCarloTreeCreator=treeCreator(State.newState(10,4));
+        monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(10,4));
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(11,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
 
         Optional<NodeInterface> node=tih.getNodeReachedForActions(Collections.singletonList(ShipAction.still));
         System.out.println("node = " + node);
-        assertStateIsOnBestPath(tih,State.newState(13,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
         Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ShipAction.still), DELTA);
     }
 
@@ -146,13 +146,13 @@ public class Test_5times15gridCorridor {
     public void iterateFromX0Y2WithNoSimulations() {
 
         settings=settingsForNoSimulations();
-        monteCarloTreeCreator=treeCreator(State.newState(0,2));
+        monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(0,2));
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(11,4));
-        assertStateIsOnBestPath(tih,State.newState(13,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
 
 
         Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.up, ShipAction.up));
@@ -166,13 +166,13 @@ public class Test_5times15gridCorridor {
 
         settings=settingsForNoSimulations();
         settings.setWeightMemoryValue(0.5);
-        monteCarloTreeCreator=treeCreator(State.newState(0,2));
+        monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(0,2));
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(11,2));
-        assertStateIsOnBestPath(tih,State.newState(13,2));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,2));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
 
 
         Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.still, ShipAction.still));
@@ -186,13 +186,13 @@ public class Test_5times15gridCorridor {
 
         settings=settingsForNoSimulations();
         settings.setCoefficientExploitationExploration(1);
-        monteCarloTreeCreator=treeCreator(State.newState(0,2));
+        monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(0,2));
 
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-        assertStateIsOnBestPath(tih,State.newState(11,2));
-        assertStateIsOnBestPath(tih,State.newState(13,2));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,2));
+        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
 
 
         Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.still, ShipAction.still));
@@ -202,7 +202,7 @@ public class Test_5times15gridCorridor {
 
 
 
-    private MonteCarloTreeCreator treeCreator(State state) {
+    private MonteCarloTreeCreator treeCreator(StateShip state) {
         return MonteCarloTreeCreator.builder()
                 .environment(environment)
                 .startState(state)
@@ -221,7 +221,7 @@ public class Test_5times15gridCorridor {
                 .build();
     }
 
-    private void assertStateIsOnBestPath(TreeInfoHelper tih, State state) {
+    private void assertStateIsOnBestPath(TreeInfoHelper tih, StateShip state) {
         Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }

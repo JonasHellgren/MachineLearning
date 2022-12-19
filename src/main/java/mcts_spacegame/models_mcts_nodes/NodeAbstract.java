@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.models_space.StateShip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +20,11 @@ public abstract class NodeAbstract implements NodeInterface {
     private static final String BLANK_SPACE = "  ";
     String name;
     ShipAction action;
-    State state;
+    StateInterface<ShipVariables> state;
     int depth;
     Map<ShipAction, Double> actionRewardMap;
 
-    public NodeAbstract(State state, ShipAction action) {
+    public NodeAbstract(StateInterface<ShipVariables> state, ShipAction action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
@@ -32,7 +34,7 @@ public abstract class NodeAbstract implements NodeInterface {
 
     public NodeAbstract(String name,
                         ShipAction action,
-                        State state,
+                        StateInterface<ShipVariables> state,
                         int depth,
                         Map<ShipAction, Double> actionRewardMap) {
         this.name = name;

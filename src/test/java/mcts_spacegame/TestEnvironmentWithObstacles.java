@@ -1,11 +1,13 @@
 package mcts_spacegame;
 
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,62 +19,62 @@ public class TestEnvironmentWithObstacles {
 
     private static final double DELTA = 0.1;
     SpaceGrid spaceGrid;
-    Environment environment;
+    EnvironmentShip environment;
 
     @Before
     public void init() {
         spaceGrid= SpaceGridInterface.new3times7Grid();
-        environment=new Environment(spaceGrid);
+        environment=new EnvironmentShip(spaceGrid);
     }
 
     @Test
     public void moveStillFromx0y0GivesObstacleCrash() {
-        State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(ShipAction.still,pos);
+        StateShip pos=StateShip.newStateFromXY(0,0);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
-                () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
-                () -> assertEquals(0,stepReturn.newPosition.y, DELTA),
+                () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
+                () -> assertEquals(0,stepReturn.newState.getVariables().y, DELTA),
                 () -> assertTrue(stepReturn.isTerminal),
                 () -> assertTrue(stepReturn.isFail),
-                () -> assertEquals(-Environment.CRASH_COST,stepReturn.reward,DELTA)
+                () -> assertEquals(-EnvironmentShip.CRASH_COST,stepReturn.reward,DELTA)
         );
     }
 
 
     @Test
     public void moveUpFromx0y0GivesNoObstacleCrash() {
-        State pos=new State(0,0);
-        StepReturn stepReturn= environment.step(ShipAction.up,pos);
+        StateShip pos=StateShip.newStateFromXY(0,0);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.up,pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
-                () -> assertEquals(1,stepReturn.newPosition.x, DELTA),
-                () -> assertEquals(1,stepReturn.newPosition.y, DELTA),
+                () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
+                () -> assertEquals(1,stepReturn.newState.getVariables().y, DELTA),
                 () -> assertFalse(stepReturn.isTerminal),
-                () -> assertEquals(-Environment.MOVE_COST,stepReturn.reward,DELTA)
+                () -> assertEquals(-EnvironmentShip.MOVE_COST,stepReturn.reward,DELTA)
         );
     }
 
 
     @Test
     public void multipleMovesStillFromx0y2GivesMovingToGoal() {
-        State pos=new State(0,2);
+        StateShip pos=StateShip.newStateFromXY(0,2);
 
         System.out.println("environment = " + environment);
 
-        StepReturn finalStepReturn = stepToTerminal(pos);
+        StepReturnGeneric<ShipVariables> finalStepReturn = stepToTerminal(pos);
         assertAll(
-                () -> assertEquals(6, pos.x, DELTA),  //outside grid
-                () -> assertEquals(2,pos.y, DELTA),
+                () -> assertEquals(6, pos.getX(), DELTA),  //outside grid
+                () -> assertEquals(2,pos.getY(), DELTA),
                 () -> assertTrue(finalStepReturn.isTerminal),
                 () -> assertFalse(finalStepReturn.isFail),
-                () -> assertEquals(-Environment.STILL_COST,finalStepReturn.reward,DELTA)
+                () -> assertEquals(-EnvironmentShip.STILL_COST,finalStepReturn.reward,DELTA)
         );
     }
 
     @NotNull
-    private StepReturn stepToTerminal(State pos) {
-        StepReturn stepReturn;
+    private StepReturnGeneric<ShipVariables> stepToTerminal(StateShip pos) {
+        StepReturnGeneric<ShipVariables> stepReturn;
         do {
             System.out.println("pos = " + pos);
             stepReturn = environment.step(ShipAction.still, pos);
@@ -83,16 +85,16 @@ public class TestEnvironmentWithObstacles {
 
     @Test
     public void multipleMovesStillFromx0y1GivesMovingToObstacle() {
-        State pos=new State(0,1);
+        StateShip pos=StateShip.newStateFromXY(0,1);
 
         System.out.println("environment = " + environment);
 
-        StepReturn finalStepReturn = stepToTerminal(pos);
+        StepReturnGeneric<ShipVariables> finalStepReturn = stepToTerminal(pos);
         assertAll(
-                () -> assertEquals(2, pos.x, DELTA),
-                () -> assertEquals(1,pos.y, DELTA),
+                () -> assertEquals(2, pos.getX(), DELTA),
+                () -> assertEquals(1,pos.getY(), DELTA),
                 () -> assertTrue(finalStepReturn.isTerminal),
-                () -> assertEquals(-Environment.CRASH_COST,finalStepReturn.reward,DELTA)
+                () -> assertEquals(-EnvironmentShip.CRASH_COST,finalStepReturn.reward,DELTA)
         );
     }
 

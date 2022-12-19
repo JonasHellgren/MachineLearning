@@ -3,8 +3,8 @@ package quarantine;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.ActionSelector;
@@ -14,7 +14,7 @@ import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,20 +31,20 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private static final int DELTA_BIG = 2;
     private static final int NOF_ITERATIONS = 50;
     SpaceGrid spaceGrid;
-    Environment environment;
+    EnvironmentShip environment;
     NodeInterface nodeRoot;
     List<ShipAction> actionsToSelected;
     Optional<ShipAction> actionInSelected;
-    State startState;
+    StateShip startState;
     TreeInfoHelper tih;
 
     @Before
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
-        environment = new Environment(spaceGrid);
+        environment = new EnvironmentShip(spaceGrid);
     }
 
-    private void initTree(State state) {
+    private void initTree(StateShip state) {
         startState = state;
         nodeRoot = NodeInterface.newNotTerminal(startState, ShipAction.notApplicable);
         tih = new TreeInfoHelper(nodeRoot);
@@ -52,9 +52,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     @Test
     public void oneIteration() {
-        initTree(new State(0, 0));
+        initTree(new StateShip(0, 0));
         NodeInterface nodeSelected = select(nodeRoot);
-        StepReturn sr = chooseActionAndExpand(nodeSelected);
+        StepReturnREMOVE sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
         backPropagate(sr);
 
@@ -64,43 +64,43 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
         double valueUp = nodeRoot.getActionValue(ShipAction.up);
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueUp);
-        Assert.assertEquals(-Environment.MOVE_COST, valueUp, DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.MOVE_COST, valueUp, DELTA_BIG);
     }
 
     @Test
     public void iterateFromX0Y0() {
-        initTree(new State(0, 0));
+        initTree(new StateShip(0, 0));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1, 1));
+        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(1, 1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
     @Test
     public void iterateFromX0Y2() {
-        initTree(new State(0, 2));
+        initTree(new StateShip(0, 2));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(1, 2));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(1, 2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
     @Test(expected = InterruptedException.class)
     public void iterateFromX2Y0() {
-        initTree(new State(2, 0));
+        initTree(new StateShip(2, 0));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(2, 0));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(2, 0));
         Assert.assertTrue(node12.isPresent());
     }
 
@@ -114,7 +114,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private void doMCTSIterations() {
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            StepReturn sr = chooseActionAndExpand(nodeSelected);
+            StepReturnREMOVE sr = chooseActionAndExpand(nodeSelected);
             //todo simulation
             backPropagate(sr);
         }
@@ -129,12 +129,12 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     @NotNull
-    private StepReturn chooseActionAndExpand(NodeInterface nodeSelected) {
-        State state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+    private StepReturnREMOVE chooseActionAndExpand(NodeInterface nodeSelected) {
+        StateShip state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         ActionSelector as = new ActionSelector(MonteCarloSettings.builder().build());
         actionInSelected = as.select(nodeSelected);
         NodeInterface child = null;
-        StepReturn sr = null;
+        StepReturnREMOVE sr = null;
         if (actionInSelected.isPresent()) {
             sr = environment.step(actionInSelected.get(), state);
             nodeSelected.saveRewardForAction(actionInSelected.get(), sr.reward);
@@ -155,7 +155,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     @SneakyThrows
-    private void backPropagate(StepReturn sr) {
+    private void backPropagate(StepReturnREMOVE sr) {
         BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected.orElseThrow())

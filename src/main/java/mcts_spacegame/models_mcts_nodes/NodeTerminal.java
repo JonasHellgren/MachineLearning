@@ -3,7 +3,9 @@ package mcts_spacegame.models_mcts_nodes;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.models_space.StateShip;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Optional;
 @Log
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeTerminal(State state, ShipAction action) {
+    public NodeTerminal(StateInterface<ShipVariables> state, ShipAction action) {
         super(state,action);
     }
 

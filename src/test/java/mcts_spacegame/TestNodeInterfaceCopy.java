@@ -5,7 +5,7 @@ import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalNotFail;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,11 +16,11 @@ public class TestNodeInterfaceCopy {
 
     @Test
     public void testNodeNotTerminal() {
-        NodeNotTerminal node=new NodeNotTerminal(State.newState(0,0), ShipAction.still);
+        NodeNotTerminal node=new NodeNotTerminal(StateShip.newStateFromXY(0,0), ShipAction.still);
         node.increaseNofVisits();
         node.increaseNofActionSelections(ShipAction.up);
         node.saveRewardForAction(ShipAction.up,10);
-        node.addChildNode(new NodeTerminalNotFail(State.newState(1,0), ShipAction.still));
+        node.addChildNode(new NodeTerminalNotFail(StateShip.newStateFromXY(1,0), ShipAction.still));
 
         NodeNotTerminal clone= (NodeNotTerminal) NodeInterface.copy(node);
 
@@ -36,7 +36,7 @@ public class TestNodeInterfaceCopy {
 
     @Test
     public void testNodeTerminalFail() {
-        NodeTerminalFail node=new NodeTerminalFail(State.newState(0,0), ShipAction.still);
+        NodeTerminalFail node=new NodeTerminalFail(StateShip.newStateFromXY(0,0), ShipAction.still);
         node.setDepth(5);
         node.increaseNofVisits();
         node.increaseNofActionSelections(ShipAction.up);

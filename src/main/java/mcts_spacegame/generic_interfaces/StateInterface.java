@@ -1,6 +1,6 @@
 package mcts_spacegame.generic_interfaces;
 
-import mcts_spacegame.models_battery_cell.StepReturnGeneric;
+import mcts_spacegame.environment.StepReturnGeneric;
 
 /**
  * SSV is generic type for the set of state variables.

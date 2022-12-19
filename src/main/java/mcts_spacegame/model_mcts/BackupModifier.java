@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipVariables;
+
 import java.util.*;
 
 /***
@@ -52,7 +55,7 @@ public class BackupModifier {
     NodeInterface rootTree;
     List<ShipAction> actionsToSelected;
     ShipAction actionOnSelected;
-    StepReturn stepReturnOfSelected;
+    StepReturnGeneric<ShipVariables> stepReturnOfSelected;
     Double valueInTerminal;
     MonteCarloSettings settings;
 
@@ -65,7 +68,7 @@ public class BackupModifier {
     private static BackupModifier newBUM(NodeInterface rootTree,
                                          @NonNull List<ShipAction> actionsToSelected,
                                          @NonNull ShipAction actionOnSelected,
-                                         @NonNull StepReturn stepReturnOfSelected,
+                                         @NonNull StepReturnGeneric<ShipVariables> stepReturnOfSelected,
                                          Double valueInTerminal,
                                          MonteCarloSettings settings) {
         BackupModifier bm = new BackupModifier();

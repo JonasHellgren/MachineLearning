@@ -2,9 +2,11 @@ package mcts_spacegame.environment;
 
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceCell;
 import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -14,27 +16,27 @@ import java.util.Optional;
  */
 
 @Log
-public class Environment implements EnvironmentInterface {
+public class EnvironmentShip implements EnvironmentInterface {
     public static final double MOVE_COST = 1d;
     public static final double STILL_COST = 0d;
     public static final double CRASH_COST = 100d;
 
     SpaceGrid spaceGrid;
 
-    public Environment(SpaceGrid spaceGrid) {
+    public EnvironmentShip(SpaceGrid spaceGrid) {
         this.spaceGrid = spaceGrid;
     }
 
     @Override
-    public StepReturn step(ShipAction action, State oldPosition) {
+    public StepReturnGeneric<ShipVariables> step(ShipAction action, StateInterface<ShipVariables> oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
         if (cellPresentOpt.isEmpty()) {  //if empty, position not defined, assume crash
-            return StepReturn.builder()
-                    .newPosition(oldPosition).isTerminal(true).isFail(true).reward(-CRASH_COST)
+            return StepReturnGeneric.<ShipVariables>builder()
+                    .newState(oldPosition).isTerminal(true).isFail(true).reward(-CRASH_COST)
                     .build();
         }
-        State newPosition = getNewPosition(action, oldPosition);
+        StateInterface<ShipVariables> newPosition = getNewPosition(action, oldPosition);
         SpaceCell cellNew = spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
         boolean isCrashingIntoWall = isOnLowerBorderAndDownOrUpperBorderAndUp(action, cellPresentOpt.get());
         boolean isCrashingIntoObstacle = cellNew.isObstacle;
@@ -46,8 +48,8 @@ public class Environment implements EnvironmentInterface {
         double reward = -costMotion - penaltyCrash;
 
         //todo för in logic ovan i builder
-        return StepReturn.builder()
-                .newPosition(newPosition).isTerminal(isTerminal).isFail(isCrashing).reward(reward)
+        return StepReturnGeneric.<ShipVariables>builder()
+                .newState(newPosition).isTerminal(isTerminal).isFail(isCrashing).reward(reward)
                 .build();
     }
 
@@ -57,20 +59,21 @@ public class Environment implements EnvironmentInterface {
     }
 
     @NotNull
-    private State getNewPosition(ShipAction action, State state) {
-        State newPosition = state.copy();
+    private StateInterface<ShipVariables> getNewPosition(ShipAction action, StateInterface<ShipVariables> state) {
+        StateInterface<ShipVariables> newPosition = state.copy();
+        ShipVariables newVars=newPosition.getVariables();
 
         switch (action) {
             case up:
-                newPosition.y++;
+                newVars.y++;
                 break;
             case down:
-                newPosition.y--;
+                newVars.y--;
                 break;
             case still:
                 break;
         }
-        newPosition.x++;
+        newVars.x++;
         return newPosition;
     }
 

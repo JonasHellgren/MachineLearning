@@ -6,12 +6,12 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,10 +77,10 @@ public class TreeInfoHelper {
                 : Optional.of(node.get().getActionValue(action));
     }
 
-    public static State getState(State rootState, Environment environment, List<ShipAction> actionsToSelected) {
-        State state = rootState.copy();
+    public static StateShip getState(StateShip rootState, EnvironmentShip environment, List<ShipAction> actionsToSelected) {
+        StateShip state = rootState.copy();
         for (ShipAction a : actionsToSelected) {
-            StepReturn sr = environment.step(a, state);
+            StepReturnREMOVE sr = environment.step(a, state);
             state.setFromReturn(sr);
         }
         return state;
@@ -123,7 +123,7 @@ public class TreeInfoHelper {
         return counter.getCount();
     }
 
-    public boolean isStateInAnyNode(State state) {
+    public boolean isStateInAnyNode(StateShip state) {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface,Integer> nofChildrenThatEqualsState = (a,b) -> a+(b.getState().equals(state)?1:0);
         counter.setCount(nofChildrenThatEqualsState.apply(counter.getCount(),rootTree)); //don't forget grandma

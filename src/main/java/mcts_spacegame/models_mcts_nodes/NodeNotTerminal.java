@@ -3,7 +3,9 @@ package mcts_spacegame.models_mcts_nodes;
 import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.models_space.StateShip;
 
 import java.util.*;
 
@@ -17,7 +19,7 @@ public final class NodeNotTerminal extends NodeAbstract {
     Map<ShipAction, Double> Qsa;
     Map<ShipAction, Integer> nSA;
 
-    public NodeNotTerminal(State state, ShipAction action) {
+    public NodeNotTerminal(StateInterface<ShipVariables> state, ShipAction action) {
         super(state,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;

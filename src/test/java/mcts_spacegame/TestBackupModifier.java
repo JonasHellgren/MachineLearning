@@ -2,14 +2,14 @@ package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,21 +22,21 @@ public class TestBackupModifier {
     private static final double DELTA = 0.1;
     private static final int DELTA_BIG = 2;
     SpaceGrid spaceGrid;
-    Environment environment;
+    EnvironmentShip environment;
     BackupModifier bum;
-    List<StepReturn> stepReturns;
-    StepReturn getStepReturnOfSelected;
+    List<StepReturnREMOVE> stepReturns;
+    StepReturnREMOVE getStepReturnOfSelected;
 
     @Before
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
-        environment = new Environment(spaceGrid);
+        environment = new EnvironmentShip(spaceGrid);
         stepReturns = new ArrayList<>();
     }
 
     @Test
     public void testCreatedTree() {
-        State rootState = new State(0, 0);
+        StateShip rootState = new StateShip(0, 0);
         List<ShipAction> actions = Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
 
         NodeInterface treeRoot = createMCTSTree(actions, rootState, stepReturns);
@@ -50,7 +50,7 @@ public class TestBackupModifier {
     @SneakyThrows
     @Test
     public void moveDownFromX0Y0ToGetFailState() {
-        State rootState = new State(0, 0);
+        StateShip rootState = new StateShip(0, 0);
 
         List<ShipAction> actionsToSelected = Collections.emptyList();
         ShipAction actionInSelected = ShipAction.down;
@@ -69,7 +69,7 @@ public class TestBackupModifier {
         double valueDown = nodeRoot.getActionValue(ShipAction.down);
         System.out.println("nodeRoot = " + nodeRoot);
         System.out.println("valueDown = " + valueDown);
-        Assert.assertEquals(-Environment.CRASH_COST, valueDown, DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST, valueDown, DELTA_BIG);
 
     }
 
@@ -78,7 +78,7 @@ public class TestBackupModifier {
     @SneakyThrows
     @Test
     public void moveFromX0Y0Tox6y2GivesTwoMoveCost() {
-        State rootState=new State(0,0);
+        StateShip rootState=new StateShip(0,0);
         List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         ShipAction actionInSelected= ShipAction.still;
 
@@ -99,8 +99,8 @@ public class TestBackupModifier {
         System.out.println("upAtRoot = " + upAtRoot);
         System.out.println("stillAfterObstacles = " + stillAfterObstacles);
 
-        Assert.assertEquals(-Environment.MOVE_COST *2,upAtRoot, DELTA);
-        Assert.assertEquals(-Environment.STILL_COST,stillAfterObstacles, DELTA);
+        Assert.assertEquals(-EnvironmentShip.MOVE_COST *2,upAtRoot, DELTA);
+        Assert.assertEquals(-EnvironmentShip.STILL_COST,stillAfterObstacles, DELTA);
 
     }
 
@@ -109,7 +109,7 @@ public class TestBackupModifier {
     @SneakyThrows
     @Test
     public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
-        State rootState=new State(0,0);
+        StateShip rootState=new StateShip(0,0);
         List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
         ShipAction actionInSelected= ShipAction.still;
         List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
@@ -129,7 +129,7 @@ public class TestBackupModifier {
         System.out.println("valueUpRoot = " + valueUpRoot);
         System.out.println("valueStillSelected = " + valueStillSelected);
         Assert.assertEquals(-0,valueUpRoot, DELTA);
-        Assert.assertEquals(-Environment.CRASH_COST,valueStillSelected, DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueStillSelected, DELTA_BIG);
 
     }
 
@@ -138,7 +138,7 @@ public class TestBackupModifier {
     @SneakyThrows
     @Test
     public void moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap() {
-        State rootState=new State(0,0);
+        StateShip rootState=new StateShip(0,0);
         List<ShipAction> actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
         ShipAction actionInSelected= ShipAction.still;
         List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
@@ -150,7 +150,7 @@ public class TestBackupModifier {
                 .build();
         bum.backup();
 
-        State state = getState(rootState, actionsToSelected);
+        StateShip state = getState(rootState, actionsToSelected);
         actionInSelected= ShipAction.down;
         updateTreeFromActionInState(actionsToSelected, actionInSelected, nodeRoot, state);
 
@@ -168,9 +168,9 @@ public class TestBackupModifier {
         Optional<Double> valueDown=tih.getValueForActionInNode(actionsToSelected, ShipAction.down);
 
         Assert.assertEquals(-0,nodeRoot.getActionValue(ShipAction.up), DELTA);
-        Assert.assertEquals(-Environment.CRASH_COST,valueUp.get(), DELTA_BIG);
-        Assert.assertEquals(-Environment.CRASH_COST,valueStill.get(), DELTA_BIG);
-        Assert.assertEquals(-Environment.CRASH_COST,valueDown.get(), DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueUp.get(), DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueStill.get(), DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueDown.get(), DELTA_BIG);
 
     }
 
@@ -180,7 +180,7 @@ public class TestBackupModifier {
     private NodeInterface updateTreeFromActionInState(List<ShipAction> actionsToSelected,
                                                       ShipAction actionInSelected,
                                                       NodeInterface nodeRoot,
-                                                      State state) {
+                                                      StateShip state) {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         getStepReturnOfSelected= environment.step(actionInSelected, state);
         NodeInterface nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
@@ -194,23 +194,23 @@ public class TestBackupModifier {
         return nodeSelected;
     }
 
-    private State getState(State rootState, List<ShipAction> actionsToSelected) {
-        State state = rootState.copy();
+    private StateShip getState(StateShip rootState, List<ShipAction> actionsToSelected) {
+        StateShip state = rootState.copy();
         for (ShipAction a : actionsToSelected) {
-            StepReturn sr = stepAndUpdateState(state, a);
+            StepReturnREMOVE sr = stepAndUpdateState(state, a);
         }
         return state;
     }
 
-    private NodeInterface createMCTSTree(List<ShipAction> actions, State rootState, List<StepReturn> stepReturns) {
+    private NodeInterface createMCTSTree(List<ShipAction> actions, StateShip rootState, List<StepReturnREMOVE> stepReturns) {
 
         stepReturns.clear();
-        State state = rootState.copy();
+        StateShip state = rootState.copy();
         NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ShipAction.notApplicable);
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ShipAction a : actions) {
-            StepReturn sr = stepAndUpdateState(state, a);
+            StepReturnREMOVE sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
             NodeInterface child = NodeInterface.newNotTerminal(sr.newPosition, a);
@@ -228,7 +228,7 @@ public class TestBackupModifier {
         return addedChilds < actions.size();
     }
 
-    private void printLists(List<ShipAction> actions, List<StepReturn> stepReturns, NodeInterface nodeRoot) {
+    private void printLists(List<ShipAction> actions, List<StepReturnREMOVE> stepReturns, NodeInterface nodeRoot) {
         System.out.println("-----------------------------");
         nodeRoot.printTree();
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
@@ -238,8 +238,8 @@ public class TestBackupModifier {
     }
 
     @NotNull
-    private StepReturn stepAndUpdateState(State pos, ShipAction a) {
-        StepReturn sr = environment.step(a, pos);
+    private StepReturnREMOVE stepAndUpdateState(StateShip pos, ShipAction a) {
+        StepReturnREMOVE sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;
     }

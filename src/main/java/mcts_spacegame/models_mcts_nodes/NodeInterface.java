@@ -1,8 +1,11 @@
 package mcts_spacegame.models_mcts_nodes;
 
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.StepReturn;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.models_space.StateShip;
 
 import java.util.*;
 
@@ -26,7 +29,7 @@ public interface NodeInterface {
     String getName();
     ShipAction getAction();
     Optional<NodeInterface> getChild(ShipAction action);
-    State getState();
+    StateInterface<ShipVariables> getState();
     int nofChildNodes();
     void printTree();
     void setDepth(int depth);
@@ -42,25 +45,25 @@ public interface NodeInterface {
     void saveRewardForAction(ShipAction action, double reward);
     double restoreRewardForAction(ShipAction action);
 
-    static NodeNotTerminal newNotTerminal(State s, ShipAction action) {
+    static NodeNotTerminal newNotTerminal(StateInterface<ShipVariables> s, ShipAction action) {
         return new NodeNotTerminal(s,action);
     }
 
-    static NodeTerminalFail newTerminalFail(State s, ShipAction action) {
+    static NodeTerminalFail newTerminalFail(StateInterface<ShipVariables> s, ShipAction action) {
         return new NodeTerminalFail(s,action);
     }
 
-    static NodeTerminalNotFail newTerminalNotFail(State s, ShipAction action) {
+    static NodeTerminalNotFail newTerminalNotFail(StateInterface<ShipVariables> s, ShipAction action) {
         return new NodeTerminalNotFail(s,action);
     }
 
-    static NodeInterface newNode(StepReturn stepReturn, ShipAction action) {
+    static NodeInterface newNode(StepReturnGeneric<ShipVariables> stepReturn, ShipAction action) {
         if (!stepReturn.isTerminal) {
-            return newNotTerminal(stepReturn.newPosition, action);
+            return newNotTerminal(stepReturn.newState, action);
         } else if (stepReturn.isFail) {
-            return newTerminalFail(stepReturn.newPosition, action);
+            return newTerminalFail(stepReturn.newState, action);
         } else {
-            return newTerminalNotFail(stepReturn.newPosition, action);
+            return newTerminalNotFail(stepReturn.newState, action);
         }
 
     }

@@ -3,7 +3,7 @@ package mcts_cell_charging;
 import mcts_spacegame.models_battery_cell.CellVariables;
 import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.models_battery_cell.StateCell;
-import mcts_spacegame.models_battery_cell.StepReturnGeneric;
+import mcts_spacegame.environment.StepReturnGeneric;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

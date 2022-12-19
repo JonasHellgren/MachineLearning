@@ -1,4 +1,4 @@
-package mcts_spacegame.models_battery_cell;
+package mcts_spacegame.environment;
 
 import lombok.Builder;
 import mcts_spacegame.generic_interfaces.StateInterface;

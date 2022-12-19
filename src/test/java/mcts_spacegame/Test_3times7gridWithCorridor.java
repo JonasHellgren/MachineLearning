@@ -1,7 +1,7 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.environment.Environment;
+import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -10,7 +10,7 @@ import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +21,12 @@ public class Test_3times7gridWithCorridor {
 
     private static final int MAX_NOF_ITERATIONS = 500;
     MonteCarloTreeCreator monteCarloTreeCreator;
-    Environment environment;
+    EnvironmentShip environment;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7GridWithTrapCorridor();
-        environment = new Environment(spaceGrid);
+        environment = new EnvironmentShip(spaceGrid);
         MonteCarloSettings settings = MonteCarloSettings.builder()
                 .coefficientMaxAverageReturn(1) //only max
                 .maxNofIterations(MAX_NOF_ITERATIONS)
@@ -34,7 +34,7 @@ public class Test_3times7gridWithCorridor {
                 .build();
         monteCarloTreeCreator = MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(new State(0, 0))
+                .startState(StateShip.newStateFromXY(0, 0))
                 .monteCarloSettings(settings)
                 .build();
     }
@@ -47,17 +47,17 @@ public class Test_3times7gridWithCorridor {
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);
 
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(4, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
         Assert.assertTrue(node52.isPresent());
     }
 
     @Test(expected = StartStateIsTrapException.class)
     public void iterateFromX2Y0() throws StartStateIsTrapException {
-        monteCarloTreeCreator.setStartState(new State(2, 0));
+        monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2, 0));
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
-        Assert.assertTrue(tih.isStateInAnyNode(new State(3, 0)));
-        Assert.assertFalse(tih.isStateInAnyNode(new State(4, 0)));
+        Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(3, 0)));
+        Assert.assertFalse(tih.isStateInAnyNode(StateShip.newStateFromXY(4, 0)));
 
         doPrinting(tih, nodeRoot);
     }
@@ -73,7 +73,7 @@ public class Test_3times7gridWithCorridor {
                 .build();
         monteCarloTreeCreator = MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(new State(0, 0))
+                .startState(StateShip.newStateFromXY(0, 0))
                 .monteCarloSettings(settings)
                 .build();
 
@@ -82,7 +82,7 @@ public class Test_3times7gridWithCorridor {
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);
 
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(4, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
         Assert.assertTrue(node52.isPresent());
     }
 

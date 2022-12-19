@@ -1,6 +1,8 @@
 package mcts_spacegame.model_mcts;
 
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.models_space.StateShip;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +16,7 @@ public class NodeValueMemory {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
-    Set<State> states;
+    Set<StateShip> states;
 
     public static NodeValueMemory newEmpty() {
         return new NodeValueMemory();
@@ -29,12 +31,12 @@ public class NodeValueMemory {
         memory.clear();
     }
 
-    public void write(State state, double value) {
+    public void write(StateShip state, double value) {
         memory.put(state.hashCode(),value);
         states.add(state);
     }
 
-    public double read(State state) {
+    public double read(StateInterface<ShipVariables> state) {
         return memory.getOrDefault(state.hashCode(), DEFAULT_VALUE);
     }
 
@@ -43,7 +45,7 @@ public class NodeValueMemory {
 
         StringBuilder sb=new StringBuilder();
         sb.append(System.getProperty("line.separator"));
-        for (State state:states) {
+        for (StateShip state:states) {
             sb.append("State = ").append(state).append(", value = ").append(memory.get(state.hashCode()));
             sb.append(System.getProperty("line.separator"));
         }

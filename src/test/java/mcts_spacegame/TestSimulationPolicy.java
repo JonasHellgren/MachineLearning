@@ -1,11 +1,11 @@
 package mcts_spacegame;
 
 import mcts_spacegame.enums.ShipAction;
-import mcts_spacegame.environment.Environment;
-import mcts_spacegame.environment.StepReturn;
+import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.models_space.StateShip;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -19,17 +19,17 @@ public class TestSimulationPolicy {
 
     private static final double DELTA = 0.1;
     SpaceGrid spaceGrid;
-    Environment environment;
+    EnvironmentShip environment;
 
     @Before
     public void init() {
         spaceGrid= SpaceGridInterface.new3times7Grid();
-        environment=new Environment(spaceGrid);
+        environment=new EnvironmentShip(spaceGrid);
     }
 
     @Test public void repeatingEqualActionProbManyTimes() {
         SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
-        State pos=new State(1,1);
+        StateShip pos=new StateShip(1,1);
         List<ShipAction> actionList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
             ShipAction action=policy.chooseAction(pos.copy());
@@ -51,10 +51,10 @@ public class TestSimulationPolicy {
 
         System.out.println("environment = " + environment);
 
-        State pos=new State(1,1);
+        StateShip pos=new StateShip(1,1);
         List<Double> simResultsFromY1=getSumOfRewardsListFromMultipleSimulations(policy, pos);
 
-        pos=new State(1,2);
+        pos=new StateShip(1,2);
         List<Double> simResultsFromY2=getSumOfRewardsListFromMultipleSimulations(policy, pos);
 
         System.out.println("simResultsFromY1 = " + simResultsFromY1);
@@ -66,10 +66,10 @@ public class TestSimulationPolicy {
         Assert.assertTrue(avg1.orElseThrow()<avg2.orElseThrow());
     }
 
-    private List<Double>  getSumOfRewardsListFromMultipleSimulations(SimulationPolicyInterface policy, State pos) {
+    private List<Double>  getSumOfRewardsListFromMultipleSimulations(SimulationPolicyInterface policy, StateShip pos) {
         List<Double> sumOfRewardsList=new ArrayList<>();
         for (int i = 0; i <10 ; i++) {
-            List<StepReturn> returns = stepToTerminal(pos.copy(), policy);
+            List<StepReturnREMOVE> returns = stepToTerminal(pos.copy(), policy);
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
              sumOfRewardsList.add(sumOfRewards);
         }
@@ -77,9 +77,9 @@ public class TestSimulationPolicy {
     }
 
     @NotNull
-    private List<StepReturn> stepToTerminal(State pos, SimulationPolicyInterface policy) {
-        List<StepReturn> returns=new ArrayList<>();
-        StepReturn stepReturn;
+    private List<StepReturnREMOVE> stepToTerminal(StateShip pos, SimulationPolicyInterface policy) {
+        List<StepReturnREMOVE> returns=new ArrayList<>();
+        StepReturnREMOVE stepReturn;
         do {
             ShipAction action=policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);

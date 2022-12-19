@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.java.Log;
+import mcts_spacegame.generic_interfaces.StateInterface;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ public class SpaceGrid implements SpaceGridInterface {
         fillGrid(occupiedCells);
     }
 
-    public Optional<SpaceCell> getCell(State state) {
-        return getCell(state.x,state.y);
+    public Optional<SpaceCell> getCell(StateInterface<ShipVariables> state) {
+        return getCell(state.getVariables().x,state.getVariables().y);
 
     }
     public Optional<SpaceCell> getCell(Integer x, Integer y) {
