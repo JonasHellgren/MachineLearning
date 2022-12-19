@@ -1,21 +1,22 @@
 package mcts_spacegame.models_battery_cell;
-
-import mcts_spacegame.enums.ShipAction;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public interface ActionInterface<AVT> {
-    void setAction(AVT actionValue);
-    AVT getAction();
-    Set<AVT> applicableActions();
-    AVT nonApplicableAction();
+/**
+ * AV is generic type for action variables
+ */
 
-    default List<AVT> mergeActionsWithAction(List<AVT> actionsToSelected, AVT actionOnSelected) {
-        List<AVT> actionOnSelectedList = Collections.singletonList(actionOnSelected);
-        List<AVT> actions = new ArrayList<>();
+public interface ActionInterface<AV> {
+    void setAction(AV actionValue);
+    AV getAction();
+    Set<AV> applicableActions();
+    AV nonApplicableAction();
+
+    default List<AV> mergeActionsWithAction(List<AV> actionsToSelected, AV actionOnSelected) {
+        List<AV> actionOnSelectedList = Collections.singletonList(actionOnSelected);
+        List<AV> actions = new ArrayList<>();
         actions.addAll(actionsToSelected);
         actions.addAll(actionOnSelectedList);
         return actions;

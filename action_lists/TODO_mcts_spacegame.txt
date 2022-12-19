@@ -127,8 +127,9 @@ EnvironmentCell x
 TestEnvironmentCell x
 StepReturn<T>  x
 TestStateCell  copy SetFromReturn  x
-VARIABLES -> CV
-ActionInterface
+VARIABLES -> CV  x
+ActionInterface  x
+nofCurrentLevels must be set in builder x
 test ActionCell IllegalArgumentException
 flytta setFromReturn
 gör generisk för space:

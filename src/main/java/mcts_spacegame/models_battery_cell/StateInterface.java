@@ -1,9 +1,13 @@
 package mcts_spacegame.models_battery_cell;
 
-public interface StateInterface<CV> {
+/**
+ * SSV is generic type for the set of state variables.
+ */
 
-    CV getVariables();
-    StateInterface<CV> copy();
-    void setFromReturn(StepReturnGeneric<CV> stepReturn);
+public interface StateInterface<SSV> {
+
+    SSV getVariables();
+    StateInterface<SSV> copy();
+    void setFromReturn(StepReturnGeneric<SSV> stepReturn);
 
 }

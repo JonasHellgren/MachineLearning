@@ -1,7 +1,5 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.models_battery_cell.ActionInterface;
-import mcts_spacegame.models_battery_cell.StateInterface;
 import mcts_spacegame.models_battery_cell.ActionCell;
 import mcts_spacegame.models_battery_cell.StateCell;
 import org.junit.Assert;
@@ -9,7 +7,7 @@ import org.junit.Test;
 
 public class TestGenericEnvironment {
 
-    public interface EnvironmentInterfaceMock<TS extends StateInterface, TA extends ActionInterface> {
+    public interface EnvironmentInterfaceMock<TS, TA> {
         int step(TA action, TS state);
     }
 

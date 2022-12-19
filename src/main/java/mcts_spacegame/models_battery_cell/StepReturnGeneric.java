@@ -2,15 +2,19 @@ package mcts_spacegame.models_battery_cell;
 
 import lombok.Builder;
 
+/**
+ * This class holds the result of a step in the environment, SSV is the set of state variables.
+ */
+
 @Builder
-public class StepReturnGeneric<CV> {
-    public StateInterface<CV> newState;
+public class StepReturnGeneric<SSV> {
+    public StateInterface<SSV> newState;
     public boolean isTerminal;
     public boolean isFail;
     public double reward;
 
-    public StepReturnGeneric<CV> copy() {
-        return  StepReturnGeneric.<CV>builder()
+    public StepReturnGeneric<SSV> copy() {
+        return  StepReturnGeneric.<SSV>builder()
                 .newState(copyState())
                 .isTerminal(isTerminal)
                 .isFail(isFail)
@@ -18,7 +22,7 @@ public class StepReturnGeneric<CV> {
                 .build();
     }
 
-    public StateInterface<CV>  copyState() {
+    public StateInterface<SSV>  copyState() {
         return this.newState.copy();
     }
 
