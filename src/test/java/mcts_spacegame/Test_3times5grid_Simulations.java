@@ -67,6 +67,7 @@ public class Test_3times5grid_Simulations {
     @Test
     public void simulatingFromX5Y2SomeTimeFails() {
         SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,2));
+
         List<Boolean> failList=results.getResults().stream()
                 .map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertTrue(failList.contains(true));
@@ -83,7 +84,7 @@ public class Test_3times5grid_Simulations {
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, StateShip state) {
-        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), state);
+        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }
 

@@ -10,7 +10,6 @@ import mcts_spacegame.environment.StepReturnGeneric;
 @AllArgsConstructor
 @ToString
 @Getter
-@EqualsAndHashCode
 public class StateShip implements StateInterface<ShipVariables> {
    ShipVariables variables;
 
@@ -37,7 +36,7 @@ public class StateShip implements StateInterface<ShipVariables> {
 
    @Override
    public void setFromReturn(StepReturnGeneric<ShipVariables> stepReturn) {
-      //todo
+      variables=stepReturn.copyState().getVariables();
    }
 
 }

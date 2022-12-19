@@ -37,6 +37,7 @@ public class EnvironmentShip implements EnvironmentInterface {
                     .build();
         }
         StateInterface<ShipVariables> newPosition = getNewPosition(action, oldPosition);
+
         SpaceCell cellNew = spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
         boolean isCrashingIntoWall = isOnLowerBorderAndDownOrUpperBorderAndUp(action, cellPresentOpt.get());
         boolean isCrashingIntoObstacle = cellNew.isObstacle;

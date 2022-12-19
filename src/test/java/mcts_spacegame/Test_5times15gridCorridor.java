@@ -222,7 +222,7 @@ public class Test_5times15gridCorridor {
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, StateShip state) {
-        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), state);
+        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }
 

@@ -47,7 +47,7 @@ public class Test_3times7gridWithCorridor {
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);
 
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
         Assert.assertTrue(node52.isPresent());
     }
 
@@ -82,7 +82,7 @@ public class Test_3times7gridWithCorridor {
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);
 
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(4, 2));
         Assert.assertTrue(node52.isPresent());
     }
 

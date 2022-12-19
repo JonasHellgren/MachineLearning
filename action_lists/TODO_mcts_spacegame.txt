@@ -133,8 +133,8 @@ nofCurrentLevels must be set in builder x
 test ActionCell IllegalArgumentException
 flytta setFromReturn
 gör generisk för space:
-- StepReturn
-- StateInterface
+- StepReturn x
+- StateInterface x
 - ActionInterface
 - EnvironmentGenericInterface
 - Environment -> EnvironmentSpace

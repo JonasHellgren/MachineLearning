@@ -26,12 +26,12 @@ public class TestNodeInfoHelper {
 
     @Test
     public void nodeWithX0Y0IsPresent() {
-        Assert.assertTrue(NodeInfoHelper.findNodeMatchingState(nodes,StateShip.newStateFromXY(0,0)).isPresent());
+        Assert.assertTrue(NodeInfoHelper.findNodeMatchingStateVariables(nodes,StateShip.newStateFromXY(0,0)).isPresent());
     }
 
     @Test
     public void nodeWithX10Y0IsNotPresent() {
-        Assert.assertFalse(NodeInfoHelper.findNodeMatchingState(nodes,StateShip.newStateFromXY(10,0)).isPresent());
+        Assert.assertFalse(NodeInfoHelper.findNodeMatchingStateVariables(nodes,StateShip.newStateFromXY(10,0)).isPresent());
     }
 
     @Test

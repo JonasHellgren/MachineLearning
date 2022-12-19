@@ -5,7 +5,6 @@ import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.ActionSelector;
@@ -76,9 +75,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(1, 1));
+        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(1, 1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -89,9 +88,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(1, 2));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(1, 2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
@@ -102,7 +101,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(2, 0));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(2, 0));
         Assert.assertTrue(node12.isPresent());
     }
 

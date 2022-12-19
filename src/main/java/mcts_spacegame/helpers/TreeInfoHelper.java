@@ -127,7 +127,8 @@ public class TreeInfoHelper {
 
     public boolean isStateInAnyNode(StateShip state) {
         Counter counter = new Counter();
-        BiFunction<Integer,NodeInterface,Integer> nofChildrenThatEqualsState = (a,b) -> a+(b.getState().equals(state)?1:0);
+        BiFunction<Integer,NodeInterface,Integer> nofChildrenThatEqualsState =
+                (a,b) -> a+(b.getState().getVariables().equals(state.getVariables())?1:0);
         counter.setCount(nofChildrenThatEqualsState.apply(counter.getCount(),rootTree)); //don't forget grandma
         evalRecursive(rootTree,counter,nofChildrenThatEqualsState);
 

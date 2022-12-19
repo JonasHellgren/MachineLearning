@@ -44,9 +44,9 @@ public class Test_3times7grid {
 
         doPrinting(tih,nodeRoot);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(),StateShip.newStateFromXY(1,1));
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
         Assert.assertTrue(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(),StateShip.newStateFromXY(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
         Assert.assertTrue(node52.isPresent());
 
     }
@@ -60,9 +60,9 @@ public class Test_3times7grid {
 
         doPrinting(tih,nodeRoot);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(),StateShip.newStateFromXY(1,1));
+        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
         Assert.assertFalse(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(),StateShip.newStateFromXY(5,2));
+        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
         Assert.assertFalse(node52.isPresent());
     }
 

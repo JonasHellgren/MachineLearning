@@ -75,7 +75,7 @@ public abstract class NodeAbstract implements NodeInterface {
     public boolean equals(Object obj) {
         //For each significant field in the class, check if that field matches the corresponding field of this object
         NodeAbstract equalsSample = (NodeAbstract) obj;
-        boolean isSameState = equalsSample.getState().equals(this.getState());
+        boolean isSameState = equalsSample.getState().getVariables().equals(this.getState().getVariables());
         boolean isSameAction = equalsSample.getAction()==this.getAction();
         boolean isSameDepth = equalsSample.getDepth()==this.getDepth();
 

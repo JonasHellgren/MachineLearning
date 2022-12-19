@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class NodeInfoHelper {
 
-    public static Optional<NodeInterface>  findNodeMatchingState(List<NodeInterface> nodes, StateShip state)  {
-        return nodes.stream().filter(n -> n.getState().equals(state)).findFirst();
+    public static Optional<NodeInterface> findNodeMatchingStateVariables(List<NodeInterface> nodes, StateShip state)  {
+        return nodes.stream().filter(n -> n.getState().getVariables().equals(state.getVariables())).findFirst();
     }
 
     public static Optional<NodeInterface>  findNodeMatchingNode(List<NodeInterface> nodes, NodeInterface node)  {

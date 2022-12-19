@@ -75,9 +75,10 @@ public class TestEnvironmentWithObstacles {
     @NotNull
     private StepReturnGeneric<ShipVariables> stepToTerminal(StateShip pos) {
         StepReturnGeneric<ShipVariables> stepReturn;
-        do {
+         do {
             System.out.println("pos = " + pos);
             stepReturn = environment.step(ShipAction.still, pos);
+            System.out.println("stepReturn = " + stepReturn);
             pos.setFromReturn(stepReturn);
         } while (!stepReturn.isTerminal);
         return stepReturn;

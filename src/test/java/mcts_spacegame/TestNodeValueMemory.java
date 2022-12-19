@@ -28,6 +28,7 @@ public class TestNodeValueMemory {
         nodeValueMemory.write(StateShip.newStateFromXY(0,0), VALUE);
         double value= nodeValueMemory.read(StateShip.newStateFromXY(0,0));
         System.out.println("value = " + value);
+        System.out.println("nodeValueMemory = " + nodeValueMemory);
         Assert.assertEquals(VALUE,value, DELTA);
     }
 

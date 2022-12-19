@@ -1,6 +1,7 @@
 package mcts_spacegame.environment;
 
 import lombok.Builder;
+import lombok.ToString;
 import mcts_spacegame.generic_interfaces.StateInterface;
 
 /**
@@ -8,6 +9,7 @@ import mcts_spacegame.generic_interfaces.StateInterface;
  */
 
 @Builder
+@ToString
 public class StepReturnGeneric<SSV> {
     public StateInterface<SSV> newState;
     public boolean isTerminal;

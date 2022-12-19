@@ -16,7 +16,7 @@ public class NodeValueMemory {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
-    Set<StateShip> states;
+    Set<StateInterface<ShipVariables>> states;
 
     public static NodeValueMemory newEmpty() {
         return new NodeValueMemory();
@@ -31,13 +31,13 @@ public class NodeValueMemory {
         memory.clear();
     }
 
-    public void write(StateShip state, double value) {
-        memory.put(state.hashCode(),value);
+    public void write(StateInterface<ShipVariables> state, double value) {
+        memory.put(state.getVariables().hashCode(),value);
         states.add(state);
     }
 
     public double read(StateInterface<ShipVariables> state) {
-        return memory.getOrDefault(state.hashCode(), DEFAULT_VALUE);
+        return memory.getOrDefault(state.getVariables().hashCode(), DEFAULT_VALUE);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class NodeValueMemory {
 
         StringBuilder sb=new StringBuilder();
         sb.append(System.getProperty("line.separator"));
-        for (StateShip state:states) {
-            sb.append("State = ").append(state).append(", value = ").append(memory.get(state.hashCode()));
+        for (StateInterface<ShipVariables> state:states) {
+            sb.append("State = ").append(state).append(", value = ").append(read(state));
             sb.append(System.getProperty("line.separator"));
         }
     return sb.toString();
