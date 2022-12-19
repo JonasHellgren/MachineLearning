@@ -11,10 +11,10 @@ import java.util.Set;
 public interface ActionInterface<AV> {
     void setAction(AV actionValue);
     AV getAction();
-    Set<AV> applicableActions();
+    Set<AV>  applicableActions();
     AV nonApplicableAction();
 
-    default List<AV> mergeActionsWithAction(List<AV> actionsToSelected, AV actionOnSelected) {
+     static <AV> List<AV> mergeActionsWithAction(List<AV> actionsToSelected, AV actionOnSelected) {
         List<AV> actionOnSelectedList = Collections.singletonList(actionOnSelected);
         List<AV> actions = new ArrayList<>();
         actions.addAll(actionsToSelected);

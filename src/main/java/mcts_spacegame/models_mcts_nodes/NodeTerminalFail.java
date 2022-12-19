@@ -1,15 +1,16 @@
 package mcts_spacegame.models_mcts_nodes;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
 
 public final class NodeTerminalFail extends NodeTerminal {
 
     private static final String CLASS_NAME = "T-Fail";
 
-    public NodeTerminalFail(StateInterface<ShipVariables> state, ShipAction action) {
+    public NodeTerminalFail(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
         super(state, action);
     }
 

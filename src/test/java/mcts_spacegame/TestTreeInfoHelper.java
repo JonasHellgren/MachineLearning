@@ -1,16 +1,13 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,9 +21,9 @@ public class TestTreeInfoHelper {
     SpaceGrid spaceGrid;
     EnvironmentShip environment;
     NodeInterface nodeRoot;
-    List<ShipAction> actionsToSelected;
-    ShipAction actionInSelected;
-    List<ShipAction> actions;
+    List<ActionInterface<ShipActionSet>> actionsToSelected;
+    ActionInterface<ShipActionSet> actionInSelected;
+    List<ActionInterface<ShipActionSet>> actions;
     TreeInfoHelper tih;
     @Before
     public void init() {
@@ -34,9 +31,9 @@ public class TestTreeInfoHelper {
         environment = new EnvironmentShip(spaceGrid);
 
         StateShip rootState=StateShip.newStateFromXY(0,0);
-        actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
-        actionInSelected= ShipAction.still;
-        actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
+        actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());
+        actionInSelected=ActionShip.newStill();
+        actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         nodeRoot= createMCTSTree(actions,rootState);
         tih=new TreeInfoHelper(nodeRoot, MonteCarloSettings.builder().build());
 
@@ -52,7 +49,7 @@ public class TestTreeInfoHelper {
 
     @Test public void rewardOfStillInX2Y0IsBad() {
         NodeInterface node=tih.getNodeReachedForActions(actionsToSelected).get();
-        Assert.assertEquals(-EnvironmentShip.CRASH_COST,node.restoreRewardForAction(ShipAction.still), DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,node.restoreRewardForAction(ActionShip.newStill()), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {
@@ -78,13 +75,13 @@ public class TestTreeInfoHelper {
 
     }
 
-    private NodeInterface createMCTSTree(List<ShipAction> actions, StateShip rootState) {
+    private NodeInterface createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState) {
 
         StateShip state = rootState.copy();
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ShipAction.notApplicable);
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ActionShip.newNA());
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
-        for (ShipAction a : actions) {
+        for (ActionInterface<ShipActionSet> a : actions) {
             StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
 
             parent.saveRewardForAction(a, sr.reward);
@@ -98,12 +95,12 @@ public class TestTreeInfoHelper {
         return nodeRoot;
     }
 
-    private boolean isNotFinalActionInList(List<ShipAction> actions, int addedChilds) {
+    private boolean isNotFinalActionInList(List<ActionInterface<ShipActionSet>> actions, int addedChilds) {
         return addedChilds < actions.size();
     }
 
     @NotNull
-    private StepReturnGeneric<ShipVariables> stepAndUpdateState(StateShip pos, ShipAction a) {
+    private StepReturnGeneric<ShipVariables> stepAndUpdateState(StateShip pos, ActionInterface<ShipActionSet> a) {
         StepReturnGeneric<ShipVariables> sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;

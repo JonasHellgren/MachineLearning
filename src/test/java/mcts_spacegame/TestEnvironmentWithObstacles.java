@@ -1,13 +1,9 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +26,7 @@ public class TestEnvironmentWithObstacles {
     @Test
     public void moveStillFromx0y0GivesObstacleCrash() {
         StateShip pos=StateShip.newStateFromXY(0,0);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
@@ -45,7 +41,7 @@ public class TestEnvironmentWithObstacles {
     @Test
     public void moveUpFromx0y0GivesNoObstacleCrash() {
         StateShip pos=StateShip.newStateFromXY(0,0);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.up,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newUp(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
@@ -77,7 +73,7 @@ public class TestEnvironmentWithObstacles {
         StepReturnGeneric<ShipVariables> stepReturn;
          do {
             System.out.println("pos = " + pos);
-            stepReturn = environment.step(ShipAction.still, pos);
+            stepReturn = environment.step(ActionShip.newStill(), pos);
             System.out.println("stepReturn = " + stepReturn);
             pos.setFromReturn(stepReturn);
         } while (!stepReturn.isTerminal);

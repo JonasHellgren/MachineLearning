@@ -5,11 +5,11 @@ import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 
 import java.util.*;
@@ -53,8 +53,8 @@ import java.util.*;
 public class BackupModifier {
 
     NodeInterface rootTree;
-    List<ShipAction> actionsToSelected;
-    ShipAction actionOnSelected;
+    List<ActionInterface<ShipActionSet>> actionsToSelected;
+    ActionInterface<ShipActionSet> actionOnSelected;
     StepReturnGeneric<ShipVariables> stepReturnOfSelected;
     Double valueInTerminal;
     MonteCarloSettings settings;
@@ -66,8 +66,8 @@ public class BackupModifier {
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
     private static BackupModifier newBUM(NodeInterface rootTree,
-                                         @NonNull List<ShipAction> actionsToSelected,
-                                         @NonNull ShipAction actionOnSelected,
+                                         @NonNull List<ActionInterface<ShipActionSet>> actionsToSelected,
+                                         @NonNull ActionInterface<ShipActionSet> actionOnSelected,
                                          @NonNull StepReturnGeneric<ShipVariables> stepReturnOfSelected,
                                          Double valueInTerminal,
                                          MonteCarloSettings settings) {
@@ -112,7 +112,7 @@ public class BackupModifier {
         List<Double> rewards = new ArrayList<>();
         for (NodeInterface nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
-                ShipAction action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
+                ActionInterface<ShipActionSet> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
         }
@@ -137,9 +137,10 @@ public class BackupModifier {
         returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
         List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
 
-        List<ShipAction> actions = ShipAction.getAllActions(actionsToSelected, actionOnSelected);
+        List<ActionInterface<ShipActionSet>> actions =
+                ActionInterface.<ActionInterface<ShipActionSet>>mergeActionsWithAction(actionsToSelected, actionOnSelected);
         for (NodeInterface node : nodesOnPath) {
-            ShipAction action = actions.get(nodesOnPath.indexOf(node));
+            ActionInterface<ShipActionSet> action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
             this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
@@ -157,7 +158,7 @@ public class BackupModifier {
         return returns;
     }
 
-    void updateNode(NodeInterface node, double singleReturn, ShipAction action, double alpha) {
+    void updateNode(NodeInterface node, double singleReturn, ActionInterface<ShipActionSet> action, double alpha) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);

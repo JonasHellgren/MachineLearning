@@ -1,12 +1,12 @@
 package mcts_spacegame.environment;
 
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceCell;
 import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.StateShip;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class EnvironmentShip implements EnvironmentInterface {
     }
 
     @Override
-    public StepReturnGeneric<ShipVariables> step(ShipAction action, StateInterface<ShipVariables> oldPosition) {
+    public StepReturnGeneric<ShipVariables> step(ActionInterface<ShipActionSet> action, StateInterface<ShipVariables> oldPosition) {
         Optional<SpaceCell> cellPresentOpt = spaceGrid.getCell(oldPosition);
 
         if (cellPresentOpt.isEmpty()) {  //if empty, position not defined, assume crash
@@ -44,7 +44,7 @@ public class EnvironmentShip implements EnvironmentInterface {
         boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isMovingIntoGoal;
-        double costMotion = (action.equals(ShipAction.still)) ? STILL_COST : MOVE_COST;
+        double costMotion = (action.getAction().equals(ShipActionSet.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;
 
@@ -54,17 +54,17 @@ public class EnvironmentShip implements EnvironmentInterface {
                 .build();
     }
 
-    private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(ShipAction action, SpaceCell cell) {
-        return cell.isOnLowerBorder && action.equals(ShipAction.down) ||
-                cell.isOnUpperBorder && action.equals(ShipAction.up);
+    private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(ActionInterface<ShipActionSet> action, SpaceCell cell) {
+        return cell.isOnLowerBorder && action.getAction().equals(ShipActionSet.down) ||
+                cell.isOnUpperBorder && action.getAction().equals(ShipActionSet.up);
     }
 
     @NotNull
-    private StateInterface<ShipVariables> getNewPosition(ShipAction action, StateInterface<ShipVariables> state) {
+    private StateInterface<ShipVariables> getNewPosition(ActionInterface<ShipActionSet> action, StateInterface<ShipVariables> state) {
         StateInterface<ShipVariables> newPosition = state.copy();
         ShipVariables newVars=newPosition.getVariables();
 
-        switch (action) {
+        switch (action.getAction()) {
             case up:
                 newVars.y++;
                 break;

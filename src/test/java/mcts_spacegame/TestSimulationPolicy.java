@@ -1,13 +1,10 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.models_space.*;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -32,18 +29,18 @@ public class TestSimulationPolicy {
     @Test public void repeatingEqualActionProbManyTimes() {
         SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
         StateShip pos=StateShip.newStateFromXY(1,1);
-        List<ShipAction> actionList=new ArrayList<>();
+        List<ActionInterface<ShipActionSet>> actionList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
-            ShipAction action=policy.chooseAction(pos.copy());
+            ActionInterface<ShipActionSet> action=policy.chooseAction(pos.copy());
             actionList.add(action);
         }
 
         System.out.println("actionList = " + actionList);
 
-        Assert.assertTrue(actionList.contains(ShipAction.up));
-        Assert.assertTrue(actionList.contains(ShipAction.still));
-        Assert.assertTrue(actionList.contains(ShipAction.down));
-        Assert.assertFalse(actionList.contains(ShipAction.notApplicable));
+        Assert.assertTrue(actionList.contains(ActionShip.newUp()));
+        Assert.assertTrue(actionList.contains(ActionShip.newStill()));
+        Assert.assertTrue(actionList.contains(ActionShip.newDown()));
+        Assert.assertFalse(actionList.contains(ActionShip.newNA()));
 
     }
 
@@ -83,7 +80,7 @@ public class TestSimulationPolicy {
         List<StepReturnGeneric<ShipVariables>> returns=new ArrayList<>();
         StepReturnGeneric<ShipVariables> stepReturn;
         do {
-            ShipAction action=policy.chooseAction(pos);
+            ActionInterface<ShipActionSet> action=policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             returns.add(stepReturn);

@@ -4,10 +4,10 @@ import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +19,12 @@ public abstract class NodeAbstract implements NodeInterface {
     private static final double INIT_REWARD_VALUE = 0d;
     private static final String BLANK_SPACE = "  ";
     String name;
-    ShipAction action;
+    ActionInterface<ShipActionSet> action;
     StateInterface<ShipVariables> state;
     int depth;
-    Map<ShipAction, Double> actionRewardMap;
+    Map<ActionInterface<ShipActionSet>, Double> actionRewardMap;
 
-    public NodeAbstract(StateInterface<ShipVariables> state, ShipAction action) {
+    public NodeAbstract(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
@@ -33,10 +33,10 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public NodeAbstract(String name,
-                        ShipAction action,
+                        ActionInterface<ShipActionSet> action,
                         StateInterface<ShipVariables> state,
                         int depth,
-                        Map<ShipAction, Double> actionRewardMap) {
+                        Map<ActionInterface<ShipActionSet>, Double> actionRewardMap) {
         this.name = name;
         this.action = action;
         this.state = state;
@@ -60,14 +60,14 @@ public abstract class NodeAbstract implements NodeInterface {
         return (this instanceof NodeTerminalNotFail);
     }
 
-    public void saveRewardForAction(ShipAction action, double reward) {
+    public void saveRewardForAction(ActionInterface<ShipActionSet> action, double reward) {
         Conditionals.executeIfTrue(actionRewardMap.containsKey(action),
                 () -> log.fine("Reward for action already defined"));
 
         actionRewardMap.put(action,reward);
     }
 
-    public double restoreRewardForAction(ShipAction action) {
+    public double restoreRewardForAction(ActionInterface<ShipActionSet> action) {
        return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
     }
 

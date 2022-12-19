@@ -1,11 +1,14 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.model_mcts.NodeSelector;
+import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,10 +25,10 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ShipAction.notApplicable);
-        chUp = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 1), ShipAction.up);
-        chStill = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0), ShipAction.still);
-        chDown = NodeInterface.newTerminalFail(StateShip.newStateFromXY(1, 0), ShipAction.down); //terminal
+        nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ActionShip.newNA());
+        chUp = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 1), ActionShip.newUp());
+        chStill = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0), ActionShip.newStill());
+        chDown = NodeInterface.newTerminalFail(StateShip.newStateFromXY(1, 0), ActionShip.newDown()); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
         nodeRoot.addChildNode(chDown);
@@ -72,9 +75,9 @@ public class TestNodeSelector {
     @SneakyThrows
     @Test
     public void upCostsStillFreeDownBad() {
-        addExperience(nodeRoot, ShipAction.up,-EnvironmentShip.MOVE_COST+SIM_RES);
-        addExperience(nodeRoot, ShipAction.still,-EnvironmentShip.STILL_COST+SIM_RES);
-        addExperience(nodeRoot, ShipAction.down,-EnvironmentShip.CRASH_COST+SIM_RES);
+        addExperience(nodeRoot, ActionShip.newUp(),-EnvironmentShip.MOVE_COST+SIM_RES);
+        addExperience(nodeRoot, ActionShip.newStill(),-EnvironmentShip.STILL_COST+SIM_RES);
+        addExperience(nodeRoot, ActionShip.newDown(),-EnvironmentShip.CRASH_COST+SIM_RES);
 
         NodeSelector ns=new NodeSelector(nodeRoot, MonteCarloSettings.builder().build());
         NodeInterface nodeFound=ns.select();
@@ -89,7 +92,7 @@ public class TestNodeSelector {
 
     }
 
-    private void addExperience(NodeInterface node, ShipAction action, double G) {
+    private void addExperience(NodeInterface node, ActionInterface<ShipActionSet> action, double G) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(G,action,1);

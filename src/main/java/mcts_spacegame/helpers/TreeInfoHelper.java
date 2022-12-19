@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.StateShip;
 import java.util.ArrayList;
@@ -49,18 +49,18 @@ public class TreeInfoHelper {
         this.settings=settings;
     }
 
-    public Optional<NodeInterface> getNodeReachedForActions(List<ShipAction> actions) {
+    public Optional<NodeInterface> getNodeReachedForActions(List<ActionInterface<ShipActionSet>> actions) {
         Optional<List<NodeInterface>> nodes=getNodesOnPathForActions(actions);
         return  (nodes.isEmpty())
                 ?Optional.empty()
                 :Optional.of(nodes.get().get(nodes.get().size()-1));
     }
 
-    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<ShipAction> actionsToSelected) {
+    public Optional<List<NodeInterface>> getNodesOnPathForActions(List<ActionInterface<ShipActionSet>> actionsToSelected) {
 
         NodeInterface parent = rootTree;
         List<NodeInterface> nodes = new ArrayList<>();
-        for (ShipAction action : actionsToSelected) {
+        for (ActionInterface<ShipActionSet> action : actionsToSelected) {
             Optional<NodeInterface> child = parent.getChild(action);
             if (child.isEmpty()) {
                 return Optional.empty();
@@ -72,16 +72,18 @@ public class TreeInfoHelper {
         return Optional.of(nodes);
     }
 
-    public Optional<Double> getValueForActionInNode(List<ShipAction> actionsToSelected, ShipAction action) {
+    public Optional<Double> getValueForActionInNode(List<ActionInterface<ShipActionSet>> actionsToSelected, ActionInterface<ShipActionSet> action) {
         Optional<NodeInterface> node = getNodeReachedForActions(actionsToSelected);
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
     }
 
-    public static StateShip getState(StateShip rootState, EnvironmentShip environment, List<ShipAction> actionsToSelected) {
+    public static StateShip getState(StateShip rootState,
+                                     EnvironmentShip environment,
+                                     List<ActionInterface<ShipActionSet>> actionsToSelected) {
         StateShip state = rootState.copy();
-        for (ShipAction a : actionsToSelected) {
+        for (ActionInterface<ShipActionSet> a : actionsToSelected) {
             StepReturnGeneric<ShipVariables> sr = environment.step(a, state);
             state.setFromReturn(sr);
         }

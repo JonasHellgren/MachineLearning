@@ -2,8 +2,10 @@ package mcts_spacegame.model_mcts;
 
 import common.RandUtils;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,17 +19,17 @@ import java.util.stream.Collectors;
 @Log
 public class ActionSelector {
     MonteCarloSettings settings;
-    RandUtils<ShipAction> randUtils;
+    RandUtils<ActionInterface<ShipActionSet>> randUtils;
 
     public ActionSelector(MonteCarloSettings settings) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
     }
 
-    public Optional<ShipAction> select(NodeInterface nodeSelected) {
+    public Optional<ActionInterface<ShipActionSet>> select(NodeInterface nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
-        List<ShipAction> nonTestedActions = (nofTestedActions==0)
+        List<ActionInterface<ShipActionSet>> nonTestedActions = (nofTestedActions==0)
                 ? Collections.singletonList(getActionFromPolicy(nodeSelected))
                 : getNonTestedActions(nodeSelected);
 
@@ -38,17 +40,17 @@ public class ActionSelector {
         }
     }
 
-    private ShipAction getActionFromPolicy(NodeInterface nodeSelected) {
+    private ActionInterface<ShipActionSet> getActionFromPolicy(NodeInterface nodeSelected) {
         return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
-    private ShipAction getRandomAction(List<ShipAction> actions) {
+    private ActionInterface<ShipActionSet> getRandomAction(List<ActionInterface<ShipActionSet>> actions) {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private ShipAction getRandomTestedAction(NodeInterface nodeSelected) {
+    private ActionInterface<ShipActionSet> getRandomTestedAction(NodeInterface nodeSelected) {
         log.warning("No non-tested actions");
-        List<ShipAction> testedActions = getTestedActions(nodeSelected);
+        List<ActionInterface<ShipActionSet>> testedActions = getTestedActions(nodeSelected);
         int nofTestedActions=testedActions.size();
         if (nofTestedActions==0) {
             throw new RuntimeException("nofTestedActions=0");
@@ -57,15 +59,22 @@ public class ActionSelector {
     }
 
     @NotNull
-    private List<ShipAction> getNonTestedActions(NodeInterface nodeSelected) {
-        List<ShipAction> testedActions = getTestedActions(nodeSelected);
-        List<ShipAction> nonTestedActions=new ArrayList<>(ShipAction.applicableActions());  //must be mutable
-        nonTestedActions.removeAll(testedActions);
+    private List<ActionInterface<ShipActionSet>> getNonTestedActions(NodeInterface nodeSelected) {
+        List<ActionInterface<ShipActionSet>> testedActions = getTestedActions(nodeSelected);
+        List<ShipActionSet> testedActionValues=testedActions.stream().map(ActionInterface::getAction).collect(Collectors.toList());
+        List<ShipActionSet> nonTestedActionValues=ShipActionSet.getNonTestedActionValues(testedActionValues);
+
+        List<ActionInterface<ShipActionSet>> nonTestedActions=new ArrayList<>();
+
+        for (ShipActionSet value:nonTestedActionValues) {
+            nonTestedActions.add(new ActionShip(value));  //todo base on Interface
+        }
+
         return nonTestedActions;
     }
 
     @NotNull
-    private List<ShipAction> getTestedActions(NodeInterface nodeSelected) {
+    private List<ActionInterface<ShipActionSet>> getTestedActions(NodeInterface nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

@@ -2,9 +2,11 @@ package mcts_spacegame.model_mcts;
 
 import common.Conditionals;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
@@ -16,9 +18,9 @@ import java.util.stream.Collectors;
 public class SelectedToTerminalFailConverter {
 
     NodeInterface nodeRoot;
-    List<ShipAction> actionsToSelected;
+    List<ActionInterface<ShipActionSet>> actionsToSelected;
 
-    public SelectedToTerminalFailConverter(NodeInterface nodeRoot, List<ShipAction> actionsToSelected) {
+    public SelectedToTerminalFailConverter(NodeInterface nodeRoot, List<ActionInterface<ShipActionSet>> actionsToSelected) {
         this.nodeRoot = nodeRoot;
         this.actionsToSelected = actionsToSelected;
     }
@@ -36,25 +38,25 @@ public class SelectedToTerminalFailConverter {
     }
 
     public boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface nodeSelected) {
-        Set<ShipAction> children = nodeSelected.getChildNodes().stream()
+        Set<ActionInterface<ShipActionSet>> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
-        return children.size() == ShipAction.applicableActions().size();
+        return children.size() == ShipActionSet.applicableActions().size();
     }
 
     public void makeSelectedTerminal(NodeInterface nodeSelected) {
         log.info("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
-        Pair<Optional<NodeInterface>, ShipAction> parentActionPair = getParentAndActionToSelected(nodeSelected);
+        Pair<Optional<NodeInterface>, ActionInterface<ShipActionSet>> parentActionPair = getParentAndActionToSelected(nodeSelected);
         Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
                 this::someErrorLogging,
                 () -> transformSelectedToTerminalFail(parentActionPair.getFirst().get(), parentActionPair.getSecond(),nodeSelected));
     }
 
-    private Pair<Optional<NodeInterface>, ShipAction> getParentAndActionToSelected(NodeInterface nodeSelected) {
+    private Pair<Optional<NodeInterface>, ActionInterface<ShipActionSet>> getParentAndActionToSelected(NodeInterface nodeSelected) {
         Optional<NodeInterface> parentToSelected = Optional.empty();
         NodeInterface nodeCurrent = nodeRoot;
-        ShipAction actionToSelected = ShipAction.notApplicable;
-        for (ShipAction action : actionsToSelected) {
+        ActionInterface<ShipActionSet> actionToSelected = new ActionShip(ShipActionSet.notApplicable); //todo generic ActionInterface<ShipActionSet>.notApplicable;
+        for (ActionInterface<ShipActionSet> action : actionsToSelected) {
             boolean isSelectedChildToCurrent = nodeCurrent.getChildNodes().contains(nodeSelected);
             if (isSelectedChildToCurrent) {
                 parentToSelected = Optional.of(nodeCurrent);
@@ -70,7 +72,7 @@ public class SelectedToTerminalFailConverter {
         log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
     }
 
-    private void transformSelectedToTerminalFail(NodeInterface parentToSelected, ShipAction actionToSelected, NodeInterface nodeSelected) {
+    private void transformSelectedToTerminalFail(NodeInterface parentToSelected, ActionInterface<ShipActionSet> actionToSelected, NodeInterface nodeSelected) {
         log.fine("Parent to selected is = " + parentToSelected);
         NodeInterface selectedAsTerminalFail = NodeInterface.newTerminalFail(nodeSelected.getState().copy(), actionToSelected);
         List<NodeInterface> childrenToParent = parentToSelected.getChildNodes();

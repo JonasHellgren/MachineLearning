@@ -2,10 +2,10 @@ package mcts_spacegame.models_mcts_nodes;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Log
 public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
 
-    public NodeTerminal(StateInterface<ShipVariables> state, ShipAction action) {
+    public NodeTerminal(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
         super(state,action);
     }
 
@@ -34,7 +34,7 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public Optional<NodeInterface> getChild(ShipAction action) {
+    public Optional<NodeInterface> getChild(ActionInterface<ShipActionSet> action) {
         return Optional.empty();
     }
 
@@ -54,12 +54,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public void increaseNofActionSelections(ShipAction a) {
+    public void increaseNofActionSelections(ActionInterface<ShipActionSet> a) {
 
     }
 
     @Override
-    public void updateActionValue(double G, ShipAction a, double alpha) {
+    public void updateActionValue(double G, ActionInterface<ShipActionSet> a, double alpha) {
 
     }
 
@@ -69,12 +69,12 @@ public abstract class NodeTerminal extends NodeAbstract {  //todo TerminalLeaf
     }
 
     @Override
-    public int getNofActionSelections(ShipAction a) {
+    public int getNofActionSelections(ActionInterface<ShipActionSet> a) {
         return 0;
     }
 
     @Override
-    public double getActionValue(ShipAction a) {
+    public double getActionValue(ActionInterface<ShipActionSet> a) {
         return 0;
     }
 

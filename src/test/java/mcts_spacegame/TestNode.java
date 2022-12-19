@@ -1,7 +1,10 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +12,7 @@ import org.junit.Test;
 public class TestNode {
 
     private static final double SIM_RES = -1d;
-    ShipAction ACTION_ANY= ShipAction.still;
+    ActionInterface<ShipActionSet> ACTION_ANY= ActionShip.newStill();
 
     @Test public void testTypes() {
         NodeInterface nodeWithChilds=NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0),ACTION_ANY);
@@ -63,8 +66,8 @@ public class TestNode {
 
     @Test
     public void imitateStillActionFromRootFollowedByExpansion() {
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ShipAction.notApplicable);
-        ShipAction action = ShipAction.still;
+        NodeInterface nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ActionShip.newNA());
+        ShipActionREMOVE action = ShipActionREMOVE.still;
      //   double treeRewards = Environment.STILL_COST;
       //  double simRewards = SIM_RES;
         NodeInterface chStill1 = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0),ACTION_ANY);

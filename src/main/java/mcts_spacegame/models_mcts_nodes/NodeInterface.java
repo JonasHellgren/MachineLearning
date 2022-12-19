@@ -1,11 +1,10 @@
 package mcts_spacegame.models_mcts_nodes;
 
-import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
 
 import java.util.*;
 
@@ -27,37 +26,37 @@ public interface NodeInterface {
     List<NodeInterface> getChildNodes();
     int getDepth();
     String getName();
-    ShipAction getAction();
-    Optional<NodeInterface> getChild(ShipAction action);
+    ActionInterface<ShipActionSet> getAction();
+    Optional<NodeInterface> getChild(ActionInterface<ShipActionSet> action);
     StateInterface<ShipVariables> getState();
     int nofChildNodes();
     void printTree();
     void setDepth(int depth);
     void increaseNofVisits();
-    void increaseNofActionSelections(ShipAction a);
-    void updateActionValue(double G, ShipAction a, double alpha);
+    void increaseNofActionSelections(ActionInterface<ShipActionSet> a);
+    void updateActionValue(double G, ActionInterface<ShipActionSet> a, double alpha);
     int getNofVisits();
-    int getNofActionSelections(ShipAction a);
-    double getActionValue(ShipAction a);
+    int getNofActionSelections(ActionInterface<ShipActionSet> a);
+    double getActionValue(ActionInterface<ShipActionSet> a);
     boolean isNotTerminal();
     boolean isTerminalFail();
     boolean isTerminalNoFail();
-    void saveRewardForAction(ShipAction action, double reward);
-    double restoreRewardForAction(ShipAction action);
+    void saveRewardForAction(ActionInterface<ShipActionSet> action, double reward);
+    double restoreRewardForAction(ActionInterface<ShipActionSet> action);
 
-    static NodeNotTerminal newNotTerminal(StateInterface<ShipVariables> s, ShipAction action) {
+    static NodeNotTerminal newNotTerminal(StateInterface<ShipVariables> s, ActionInterface<ShipActionSet> action) {
         return new NodeNotTerminal(s,action);
     }
 
-    static NodeTerminalFail newTerminalFail(StateInterface<ShipVariables> s, ShipAction action) {
+    static NodeTerminalFail newTerminalFail(StateInterface<ShipVariables> s, ActionInterface<ShipActionSet> action) {
         return new NodeTerminalFail(s,action);
     }
 
-    static NodeTerminalNotFail newTerminalNotFail(StateInterface<ShipVariables> s, ShipAction action) {
+    static NodeTerminalNotFail newTerminalNotFail(StateInterface<ShipVariables> s, ActionInterface<ShipActionSet> action) {
         return new NodeTerminalNotFail(s,action);
     }
 
-    static NodeInterface newNode(StepReturnGeneric<ShipVariables> stepReturn, ShipAction action) {
+    static NodeInterface newNode(StepReturnGeneric<ShipVariables> stepReturn, ActionInterface<ShipActionSet> action) {
         if (!stepReturn.isTerminal) {
             return newNotTerminal(stepReturn.newState, action);
         } else if (stepReturn.isFail) {

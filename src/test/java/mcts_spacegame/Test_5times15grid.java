@@ -1,7 +1,7 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -9,6 +9,7 @@ import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.StateShip;
@@ -99,7 +100,7 @@ public class Test_5times15grid {
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.builder()
                 .maxTreeDepth(14)
-                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipAction.applicableActions().size():1)
+                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipActionSet.applicableActions().size():1)
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .maxNofIterations(100000)
                 .nofSimulationsPerNode(0)

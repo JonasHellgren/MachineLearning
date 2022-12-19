@@ -1,13 +1,9 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.environment.StepReturnREMOVE;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +24,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromx0y0() {
         StateShip pos= StateShip.newStateFromXY(0,0);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
@@ -42,7 +38,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveDownFromXis0Yis0() {
         StateShip pos= StateShip.newStateFromXY(0,0);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.down,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newDown(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
@@ -56,7 +52,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis0Yis0() {
         StateShip pos= StateShip.newStateFromXY(0,0);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(1,stepReturn.newState.getVariables().x, DELTA),
@@ -69,7 +65,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis1YisCrash() {
         StateShip pos= StateShip.newStateFromXY(1,1);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(2,stepReturn.newState.getVariables().x, DELTA),
@@ -82,7 +78,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveUpFromXis1Yis1() {
         StateShip pos= StateShip.newStateFromXY(1,1);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.up,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newUp(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(2,stepReturn.newState.getVariables().x, DELTA),
@@ -95,7 +91,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis2Yis1() {
         StateShip pos= StateShip.newStateFromXY(2,1);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(3,stepReturn.newState.getVariables().x, DELTA),  //new position is outside grid
@@ -108,7 +104,7 @@ public class TestEnvironmentWithNoObstacles {
     @Test
     public void moveStillFromXis3Yis1IsNonValidPosition() {
         StateShip pos= StateShip.newStateFromXY(3,1);
-        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ShipAction.still,pos);
+        StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
         assertAll(
                 () -> assertEquals(3,stepReturn.newState.getVariables().x, DELTA),

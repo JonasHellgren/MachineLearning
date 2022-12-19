@@ -2,7 +2,7 @@ package mcts_spacegame;
 
 import common.MathUtils;
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -11,9 +11,7 @@ import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -135,10 +133,10 @@ public class Test_5times15gridCorridor {
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
 
-        Optional<NodeInterface> node=tih.getNodeReachedForActions(Collections.singletonList(ShipAction.still));
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Collections.singletonList(ActionShip.newStill()));
         System.out.println("node = " + node);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
-        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ShipAction.still), DELTA);
+        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
     @SneakyThrows
@@ -155,9 +153,9 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
 
 
-        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.up, ShipAction.up));
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newUp(), ActionShip.newUp()));
         System.out.println("node = " + node);
-        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ShipAction.still), DELTA);
+        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
     @SneakyThrows
@@ -175,9 +173,9 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
 
 
-        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.still, ShipAction.still));
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newStill(), ActionShip.newStill()));
         System.out.println("node = " + node);
-        Assert.assertEquals(VALUE_3/2,node.orElseThrow().getActionValue(ShipAction.still), DELTA);
+        Assert.assertEquals(VALUE_3/2,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
     @SneakyThrows
@@ -195,9 +193,9 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
 
 
-        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ShipAction.still, ShipAction.still));
+        Optional<NodeInterface> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newStill(),ActionShip.newStill()));
         System.out.println("node = " + node);
-        Assert.assertEquals(VALUE_3,node.orElseThrow().getActionValue(ShipAction.still), DELTA);
+        Assert.assertEquals(VALUE_3,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
 

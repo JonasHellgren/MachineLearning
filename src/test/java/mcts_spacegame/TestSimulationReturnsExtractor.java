@@ -1,6 +1,6 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipAction;
+import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.model_mcts.SimulationReturnsExtractor;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SimulationResults;
@@ -16,7 +16,7 @@ public class TestSimulationReturnsExtractor {
     private static final double DELTA = 0.1;
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 0.9;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    List<ShipAction> actionsOnPath = Arrays.asList(ShipAction.up, ShipAction.up);
+    List<ShipActionREMOVE> actionsOnPath = Arrays.asList(ShipActionREMOVE.up, ShipActionREMOVE.up);
     SimulationResults simulationResults;
     MonteCarloSettings settings;
 

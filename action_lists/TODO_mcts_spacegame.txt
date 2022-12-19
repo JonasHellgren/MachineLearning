@@ -135,8 +135,10 @@ flytta setFromReturn
 gör generisk för space:
 - StepReturn x
 - StateInterface x
-- ActionInterface
+- ActionShip implements ActionInterface<ShipActions>
+- ShipAction -> ActionInterface
 - EnvironmentGenericInterface
+- static constructor i ActionInterface
 - Environment -> EnvironmentSpace
 - NodeSelector<TA>
 - ActionSelector<TA>
