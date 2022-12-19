@@ -1,6 +1,6 @@
 package mcts_spacegame.models_battery_cell;
 
-public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,ActionCell> {
+public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,Integer> {
 
     CellSettings s;
 
@@ -9,10 +9,11 @@ public class EnvironmentCell implements EnvironmentGenericInterface<CellVariable
     }
 
     @Override
-    public StepReturnGeneric<CellVariables> step(ActionCell action, StateInterface<CellVariables> state) {
+    public StepReturnGeneric<CellVariables> step(ActionInterface<Integer> action, StateInterface<CellVariables> state) {
         CellVariables v=state.getVariables();
 
-        double current=s.maxCurrent*action.getRelativeCurrent();
+        ActionCell actionCastedToGetRelativeCurrentMethod=(ActionCell) action;
+        double current=s.maxCurrent*actionCastedToGetRelativeCurrentMethod.getRelativeCurrent();
         double newSoC=v.SoC+current*s.dt/s.capacity;
         double temperatureTimeDerivative = calculateTemperatureTimeDerivate(state, current);
         double newTemperature=v.temperature+temperatureTimeDerivative*s.dt;

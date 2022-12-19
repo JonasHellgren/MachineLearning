@@ -15,7 +15,7 @@ public class TestEnvironmentCell {
     private static final int TIME_INIT = 0;
     private static final int DT = 10;
     private static final int NOF_CURRENT_LEVELS = 5;
-    EnvironmentGenericInterface<CellVariables, ActionCell> environment;
+    EnvironmentGenericInterface<CellVariables, Integer> environment;
     StateCell state;
     CellVariables variables;
     ActionCell action;
