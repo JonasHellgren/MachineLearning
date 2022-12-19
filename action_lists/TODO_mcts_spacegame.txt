@@ -137,7 +137,7 @@ gör generisk för space:
 - StateInterface x
 - ActionShip implements ActionInterface<ShipActions>  x
 - ShipAction -> ActionInterface
-- EnvironmentGenericInterface
+- EnvironmentGenericInterface  x
 - static constructor i ActionInterface
 - Environment -> EnvironmentSpace
 - NodeSelector<TA>

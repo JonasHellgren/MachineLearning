@@ -2,6 +2,7 @@ package mcts_spacegame.environment;
 
 import lombok.extern.java.Log;
 import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
@@ -16,7 +17,7 @@ import java.util.Optional;
  */
 
 @Log
-public class EnvironmentShip implements EnvironmentInterface {
+public class EnvironmentShip implements EnvironmentGenericInterface<ShipVariables,ShipActionSet> {
     public static final double MOVE_COST = 1d;
     public static final double STILL_COST = 0d;
     public static final double CRASH_COST = 100d;
