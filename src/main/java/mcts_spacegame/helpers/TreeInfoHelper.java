@@ -7,10 +7,12 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.StateShip;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +82,7 @@ public class TreeInfoHelper {
     public static StateShip getState(StateShip rootState, EnvironmentShip environment, List<ShipAction> actionsToSelected) {
         StateShip state = rootState.copy();
         for (ShipAction a : actionsToSelected) {
-            StepReturnREMOVE sr = environment.step(a, state);
+            StepReturnGeneric<ShipVariables> sr = environment.step(a, state);
             state.setFromReturn(sr);
         }
         return state;

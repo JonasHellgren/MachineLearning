@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
@@ -12,6 +13,7 @@ import mcts_spacegame.model_mcts.BackupModifier;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.NodeSelector;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.StateShip;
@@ -52,9 +54,9 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     @Test
     public void oneIteration() {
-        initTree(new StateShip(0, 0));
+        initTree(StateShip.newStateFromXY(0, 0));
         NodeInterface nodeSelected = select(nodeRoot);
-        StepReturnREMOVE sr = chooseActionAndExpand(nodeSelected);
+        StepReturnGeneric<ShipVariables> sr = chooseActionAndExpand(nodeSelected);
         //todo simulation
         backPropagate(sr);
 
@@ -69,38 +71,38 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
 
     @Test
     public void iterateFromX0Y0() {
-        initTree(new StateShip(0, 0));
+        initTree(StateShip.newStateFromXY(0, 0));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(1, 1));
+        Optional<NodeInterface> node11 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(1, 1));
         Assert.assertFalse(node11.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
     @Test
     public void iterateFromX0Y2() {
-        initTree(new StateShip(0, 2));
+        initTree(StateShip.newStateFromXY(0, 2));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(1, 2));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(1, 2));
         Assert.assertFalse(node12.isEmpty());
-        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(5, 2));
+        Optional<NodeInterface> node52 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(5, 2));
         Assert.assertFalse(node52.isEmpty());
     }
 
     @Test(expected = InterruptedException.class)
     public void iterateFromX2Y0() {
-        initTree(new StateShip(2, 0));
+        initTree(StateShip.newStateFromXY(2, 0));
         doMCTSIterations();
 
         doPrinting(tih);
 
-        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new StateShip(2, 0));
+        Optional<NodeInterface> node12 = NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), StateShip.newStateFromXY(2, 0));
         Assert.assertTrue(node12.isPresent());
     }
 
@@ -114,7 +116,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     private void doMCTSIterations() {
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             NodeInterface nodeSelected = select(nodeRoot);
-            StepReturnREMOVE sr = chooseActionAndExpand(nodeSelected);
+            StepReturnGeneric<ShipVariables> sr = chooseActionAndExpand(nodeSelected);
             //todo simulation
             backPropagate(sr);
         }
@@ -129,12 +131,12 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     @NotNull
-    private StepReturnREMOVE chooseActionAndExpand(NodeInterface nodeSelected) {
+    private StepReturnGeneric<ShipVariables> chooseActionAndExpand(NodeInterface nodeSelected) {
         StateShip state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         ActionSelector as = new ActionSelector(MonteCarloSettings.builder().build());
         actionInSelected = as.select(nodeSelected);
         NodeInterface child = null;
-        StepReturnREMOVE sr = null;
+        StepReturnGeneric<ShipVariables> sr = null;
         if (actionInSelected.isPresent()) {
             sr = environment.step(actionInSelected.get(), state);
             nodeSelected.saveRewardForAction(actionInSelected.get(), sr.reward);
@@ -155,7 +157,7 @@ public class TestSelectionExpansionSimulationBackup_3times7Grid {
     }
 
     @SneakyThrows
-    private void backPropagate(StepReturnREMOVE sr) {
+    private void backPropagate(StepReturnGeneric<ShipVariables> sr) {
         BackupModifier bum = BackupModifier.builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected.orElseThrow())

@@ -2,7 +2,9 @@ package mcts_spacegame;
 
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.StateShip;
@@ -29,7 +31,7 @@ public class TestSimulationPolicy {
 
     @Test public void repeatingEqualActionProbManyTimes() {
         SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
-        StateShip pos=new StateShip(1,1);
+        StateShip pos=StateShip.newStateFromXY(1,1);
         List<ShipAction> actionList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
             ShipAction action=policy.chooseAction(pos.copy());
@@ -51,10 +53,10 @@ public class TestSimulationPolicy {
 
         System.out.println("environment = " + environment);
 
-        StateShip pos=new StateShip(1,1);
+        StateShip pos=StateShip.newStateFromXY(1,1);
         List<Double> simResultsFromY1=getSumOfRewardsListFromMultipleSimulations(policy, pos);
 
-        pos=new StateShip(1,2);
+        pos=StateShip.newStateFromXY(1,2);
         List<Double> simResultsFromY2=getSumOfRewardsListFromMultipleSimulations(policy, pos);
 
         System.out.println("simResultsFromY1 = " + simResultsFromY1);
@@ -69,7 +71,7 @@ public class TestSimulationPolicy {
     private List<Double>  getSumOfRewardsListFromMultipleSimulations(SimulationPolicyInterface policy, StateShip pos) {
         List<Double> sumOfRewardsList=new ArrayList<>();
         for (int i = 0; i <10 ; i++) {
-            List<StepReturnREMOVE> returns = stepToTerminal(pos.copy(), policy);
+            List<StepReturnGeneric<ShipVariables>> returns = stepToTerminal(pos.copy(), policy);
             double sumOfRewards=returns.stream().mapToDouble(r -> r.reward).sum();
              sumOfRewardsList.add(sumOfRewards);
         }
@@ -77,9 +79,9 @@ public class TestSimulationPolicy {
     }
 
     @NotNull
-    private List<StepReturnREMOVE> stepToTerminal(StateShip pos, SimulationPolicyInterface policy) {
-        List<StepReturnREMOVE> returns=new ArrayList<>();
-        StepReturnREMOVE stepReturn;
+    private List<StepReturnGeneric<ShipVariables>> stepToTerminal(StateShip pos, SimulationPolicyInterface policy) {
+        List<StepReturnGeneric<ShipVariables>> returns=new ArrayList<>();
+        StepReturnGeneric<ShipVariables> stepReturn;
         do {
             ShipAction action=policy.chooseAction(pos);
             stepReturn = environment.step(action, pos);

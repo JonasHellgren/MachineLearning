@@ -22,10 +22,10 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        nodeRoot = NodeInterface.newNotTerminal(new StateShip(0, 0), ShipAction.notApplicable);
-        chUp = NodeInterface.newNotTerminal(new StateShip(1, 1), ShipAction.up);
-        chStill = NodeInterface.newNotTerminal(new StateShip(1, 0), ShipAction.still);
-        chDown = NodeInterface.newTerminalFail(new StateShip(1, 0), ShipAction.down); //terminal
+        nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ShipAction.notApplicable);
+        chUp = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 1), ShipAction.up);
+        chStill = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0), ShipAction.still);
+        chDown = NodeInterface.newTerminalFail(StateShip.newStateFromXY(1, 0), ShipAction.down); //terminal
         nodeRoot.addChildNode(chUp);
         nodeRoot.addChildNode(chStill);
         nodeRoot.addChildNode(chDown);

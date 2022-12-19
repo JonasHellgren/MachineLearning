@@ -82,7 +82,7 @@ public class NodeSelector {
     private boolean isNotLeaf(NodeInterface currentNode) {
         List<NodeInterface> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
-        int maxNofTestedActions = settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState());
+        int maxNofTestedActions = settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState().getVariables());
         return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
     }
 

@@ -2,7 +2,9 @@ package mcts_spacegame;
 
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.environment.StepReturnREMOVE;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.StateShip;
@@ -29,7 +31,7 @@ public class TestHardCodedPathsInEnvironment {
 
     @Test
     public void moveStillFromx0y2GivesZeroReturn() {
-        StateShip pos=new StateShip(0,2);
+        StateShip pos=StateShip.newStateFromXY(0,2);
         List<ShipAction> actions= Arrays.asList(ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
@@ -39,7 +41,7 @@ public class TestHardCodedPathsInEnvironment {
 
     @Test
     public void moveFromx0y0Tox6y2GivesTwoMoveCost() {
-        StateShip pos=new StateShip(0,0);
+        StateShip pos=StateShip.newStateFromXY(0,0);
         List<ShipAction> actions= Arrays.asList(ShipAction.up, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
@@ -48,7 +50,7 @@ public class TestHardCodedPathsInEnvironment {
 
     @Test
     public void moveFromx0y0Tox1y0GivesCrashCost() {
-        StateShip pos=new StateShip(0,0);
+        StateShip pos=StateShip.newStateFromXY(0,0);
         List<ShipAction> actions= Arrays.asList(ShipAction.still, ShipAction.up, ShipAction.still, ShipAction.still, ShipAction.still, ShipAction.still);
         double G = getReturnForActions(pos, actions);
         System.out.println("G = " + G);
@@ -59,7 +61,7 @@ public class TestHardCodedPathsInEnvironment {
         double G=0;
         for (ShipAction action: actions) {
             System.out.println("pos = " + pos);
-            StepReturnREMOVE stepReturn= environment.step(action, pos);
+            StepReturnGeneric<ShipVariables> stepReturn= environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             G=G+stepReturn.reward;
 

@@ -2,10 +2,12 @@ package mcts_spacegame;
 
 import mcts_spacegame.enums.ShipAction;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.environment.StepReturnREMOVE;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.SpaceGrid;
 import mcts_spacegame.models_space.SpaceGridInterface;
 import mcts_spacegame.models_space.StateShip;
@@ -31,7 +33,7 @@ public class TestTreeInfoHelper {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
 
-        StateShip rootState=new StateShip(0,0);
+        StateShip rootState=StateShip.newStateFromXY(0,0);
         actionsToSelected= Arrays.asList(ShipAction.up, ShipAction.down);
         actionInSelected= ShipAction.still;
         actions = ShipAction.getAllActions(actionsToSelected, actionInSelected);
@@ -83,10 +85,10 @@ public class TestTreeInfoHelper {
         NodeInterface parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ShipAction a : actions) {
-            StepReturnREMOVE sr = stepAndUpdateState(state, a);
+            StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
 
             parent.saveRewardForAction(a, sr.reward);
-            NodeInterface child = NodeInterface.newNotTerminal(sr.newPosition, a);
+            NodeInterface child = NodeInterface.newNotTerminal(sr.newState, a);
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }
@@ -101,8 +103,8 @@ public class TestTreeInfoHelper {
     }
 
     @NotNull
-    private StepReturnREMOVE stepAndUpdateState(StateShip pos, ShipAction a) {
-        StepReturnREMOVE sr = environment.step(a, pos);
+    private StepReturnGeneric<ShipVariables> stepAndUpdateState(StateShip pos, ShipAction a) {
+        StepReturnGeneric<ShipVariables> sr = environment.step(a, pos);
         pos.setFromReturn(sr);
         return sr;
     }

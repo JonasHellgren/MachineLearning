@@ -52,21 +52,21 @@ public class Test_3times5grid_Simulations {
                 .build();
         monteCarloTreeCreator=MonteCarloTreeCreator.builder()
                 .environment(environment)
-                .startState(new StateShip(0,0))
+                .startState(StateShip.newStateFromXY(0,0))
                 .monteCarloSettings(settings)
                 .build();
     }
 
     @Test
     public void simulatingFromX5Y1NeverFails() {
-        SimulationResults results=monteCarloTreeCreator.simulate(new StateShip(5,1));
+        SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,1));
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertFalse(failList.contains(true));
     }
 
     @Test
     public void simulatingFromX5Y2SomeTimeFails() {
-        SimulationResults results=monteCarloTreeCreator.simulate(new StateShip(5,2));
+        SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,2));
         List<Boolean> failList=results.getResults().stream()
                 .map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertTrue(failList.contains(true));
@@ -78,8 +78,8 @@ public class Test_3times5grid_Simulations {
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
-        assertStateIsOnBestPath(tih,new StateShip(1,1));
-        assertStateIsOnBestPath(tih,new StateShip(3,2));
+        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,1));
+        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(3,2));
     }
 
     private void assertStateIsOnBestPath(TreeInfoHelper tih, StateShip state) {
@@ -90,14 +90,14 @@ public class Test_3times5grid_Simulations {
     @SneakyThrows
     @Test
     public void iterateFromX0Y1() {
-        monteCarloTreeCreator.setStartState(new StateShip(0,1));
+        monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(0,1));
         NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
 
         doPrinting(nodeRoot);
 
         TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
-        assertStateIsOnBestPath(tih,new StateShip(1,2));
-        assertStateIsOnBestPath(tih,new StateShip(3,2));
+        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,2));
+        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(3,2));
     }
 
 
