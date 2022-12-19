@@ -1,4 +1,4 @@
-package mcts_spacegame.models_battery_cell;
+package mcts_spacegame.generic_interfaces;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

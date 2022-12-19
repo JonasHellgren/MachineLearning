@@ -1,10 +1,9 @@
 package mcts_spacegame.models_battery_cell;
 
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import mcts_spacegame.models_space.State;
+import mcts_spacegame.generic_interfaces.StateInterface;
 
 
 @ToString

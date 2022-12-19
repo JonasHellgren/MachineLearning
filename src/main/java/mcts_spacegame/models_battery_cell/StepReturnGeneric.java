@@ -1,6 +1,7 @@
 package mcts_spacegame.models_battery_cell;
 
 import lombok.Builder;
+import mcts_spacegame.generic_interfaces.StateInterface;
 
 /**
  * This class holds the result of a step in the environment, SSV is the set of state variables.

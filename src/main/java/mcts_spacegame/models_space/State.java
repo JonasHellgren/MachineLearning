@@ -9,18 +9,25 @@ import mcts_spacegame.environment.StepReturn;
 @ToString
 @EqualsAndHashCode
 public class State {
-   public Integer x,y;
+   ShipVariables variables;
+
 
    public static State newState(int x, int y) {
-      return new State(x,y);
+      return new State(ShipVariables.builder().x(x).y(y).build());
    }
 
+   public static State newWithVariables(ShipVariables variables) {
+      return new State(variables);
+   }
+
+
    public State copy () {
-      return new State(x,y);
+      return newWithVariables(variables.copy());
    }
 
    public void setFromReturn(StepReturn sr) {
-      x=sr.newPosition.x;
-      y=sr.newPosition.y;
+      //todo
+ //     x=sr.newPosition.x;
+   //   y=sr.newPosition.y;
    }
 }

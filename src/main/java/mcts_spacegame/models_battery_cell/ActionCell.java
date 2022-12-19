@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 
 import java.util.Set;
 import java.util.stream.Collectors;

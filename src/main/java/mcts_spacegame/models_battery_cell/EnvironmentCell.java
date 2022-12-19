@@ -1,5 +1,9 @@
 package mcts_spacegame.models_battery_cell;
 
+import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
+import mcts_spacegame.generic_interfaces.StateInterface;
+
 public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,Integer> {
 
     CellSettings s;
