@@ -4,7 +4,6 @@ import common.MathUtils;
 import lombok.extern.java.Log;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
-import mcts_spacegame.models_space.ActionShip;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 
@@ -17,8 +16,8 @@ public final class NodeNotTerminal extends NodeAbstract {
     private static final int INIT_NOF_VISITS = 0;
     List<NodeInterface> childNodes;
     int nofVisits;
-    Map<ActionInterface<ShipActionSet>, Double> Qsa;
-    Map<ActionInterface<ShipActionSet>, Integer> nSA;
+    Map<ShipActionSet, Double> Qsa;
+    Map<ShipActionSet, Integer> nSA;
 
     public NodeNotTerminal(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
         super(state,action);
@@ -26,12 +25,12 @@ public final class NodeNotTerminal extends NodeAbstract {
         nofVisits = INIT_NOF_VISITS;
         Qsa = new HashMap<>();
         for (ShipActionSet av : ShipActionSet.applicableActions()) {
-            Qsa.put(new ActionShip(av), INIT_ACTION_VALUE);  //todo generic mha static constructor i ActionInterface
+            Qsa.put(av, INIT_ACTION_VALUE);  //todo generic mha static constructor i ActionInterface
         }
 
         nSA = new HashMap<>();
         for (ShipActionSet av : ShipActionSet.applicableActions()) {
-            nSA.put(new ActionShip(av), INIT_NOF_VISITS);
+            nSA.put(av, INIT_NOF_VISITS);
         }
     }
 
@@ -58,7 +57,9 @@ public final class NodeNotTerminal extends NodeAbstract {
     @Override
     public Optional<NodeInterface> getChild(ActionInterface<ShipActionSet> action) {
         List<NodeInterface> children= getChildNodes();
-        return children.stream().filter(c -> c.getAction().equals(action)).findFirst();
+        return children.stream()
+                .filter(c -> c.getAction().getValue().equals(action.getValue()))
+                .findFirst();
     }
 
     @Override
@@ -79,12 +80,8 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     @Override
     public void increaseNofActionSelections(ActionInterface<ShipActionSet> a) {
-        System.out.println("nSA = " + nSA);
-        System.out.println("nSA.containsKey(a) = " + nSA.containsKey(a));
-        System.out.println("a = " + a);
-        System.out.println("nSA.keySet() = " + nSA.keySet());
-        int n = nSA.get(a);
-        nSA.put(a, n + 1);
+        int n = getNofActionSelections(a);
+        nSA.put(a.getValue(), n + 1);
     }
 
     /***
@@ -101,7 +98,7 @@ public final class NodeNotTerminal extends NodeAbstract {
         double qOld = getActionValue(a);
        // nofVisitsForAction=1;
         double qNew = qOld + alpha * (G - qOld) / (double) nofVisitsForAction;
-        Qsa.put(a, qNew);
+        Qsa.put(a.getValue(), qNew);
     }
 
     @Override
@@ -111,12 +108,12 @@ public final class NodeNotTerminal extends NodeAbstract {
 
     @Override
     public int getNofActionSelections(ActionInterface<ShipActionSet> a) {
-        return nSA.get(a);
+        return nSA.get(a.getValue());
     }
 
     @Override
     public double getActionValue(ActionInterface<ShipActionSet> a) {
-        return Qsa.get(a);
+        return Qsa.get(a.getValue());
     }
 
 

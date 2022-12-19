@@ -44,7 +44,7 @@ public class EnvironmentShip implements EnvironmentInterface {
         boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isMovingIntoGoal;
-        double costMotion = (action.getAction().equals(ShipActionSet.still)) ? STILL_COST : MOVE_COST;
+        double costMotion = (action.getValue().equals(ShipActionSet.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
         double reward = -costMotion - penaltyCrash;
 
@@ -55,8 +55,8 @@ public class EnvironmentShip implements EnvironmentInterface {
     }
 
     private boolean isOnLowerBorderAndDownOrUpperBorderAndUp(ActionInterface<ShipActionSet> action, SpaceCell cell) {
-        return cell.isOnLowerBorder && action.getAction().equals(ShipActionSet.down) ||
-                cell.isOnUpperBorder && action.getAction().equals(ShipActionSet.up);
+        return cell.isOnLowerBorder && action.getValue().equals(ShipActionSet.down) ||
+                cell.isOnUpperBorder && action.getValue().equals(ShipActionSet.up);
     }
 
     @NotNull
@@ -64,7 +64,7 @@ public class EnvironmentShip implements EnvironmentInterface {
         StateInterface<ShipVariables> newPosition = state.copy();
         ShipVariables newVars=newPosition.getVariables();
 
-        switch (action.getAction()) {
+        switch (action.getValue()) {
             case up:
                 newVars.y++;
                 break;

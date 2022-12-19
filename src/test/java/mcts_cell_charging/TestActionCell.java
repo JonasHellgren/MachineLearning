@@ -23,8 +23,8 @@ public class TestActionCell {
 
     @Test
     public void  setAndGetAction() {
-        actionCell.setAction(INTEGER_ACTION_VALUE);
-        Assert.assertEquals(INTEGER_ACTION_VALUE,actionCell.getAction(), DELTA);
+        actionCell.setValue(INTEGER_ACTION_VALUE);
+        Assert.assertEquals(INTEGER_ACTION_VALUE,actionCell.getValue(), DELTA);
     }
 
     @Test

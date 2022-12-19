@@ -58,7 +58,7 @@ public class ActionCell implements ActionInterface<Integer> {
     }
 
     @Override
-   public void setAction(Integer level) {
+   public void setValue(Integer level) {
         Conditionals.executeIfTrue(level < 0 || level >= nofCurrentLevels, () ->
                 log.warning("Non valid level"));
 
@@ -66,7 +66,7 @@ public class ActionCell implements ActionInterface<Integer> {
     }
 
     @Override
-    public Integer getAction() {
+    public Integer getValue() {
         return currentLevel;
     }
 

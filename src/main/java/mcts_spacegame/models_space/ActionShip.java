@@ -30,12 +30,12 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
     }
 
     @Override
-    public void setAction(ShipActionSet actionValue) {
+    public void setValue(ShipActionSet actionValue) {
         this.actionValue=actionValue;
     }
 
     @Override
-    public ShipActionSet getAction() {
+    public ShipActionSet getValue() {
         return actionValue;
     }
 

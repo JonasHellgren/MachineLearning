@@ -22,7 +22,7 @@ public abstract class NodeAbstract implements NodeInterface {
     ActionInterface<ShipActionSet> action;
     StateInterface<ShipVariables> state;
     int depth;
-    Map<ActionInterface<ShipActionSet>, Double> actionRewardMap;
+    Map<ShipActionSet, Double> actionRewardMap;
 
     public NodeAbstract(StateInterface<ShipVariables> state, ActionInterface<ShipActionSet> action) {
         this.name = state.toString();
@@ -36,7 +36,7 @@ public abstract class NodeAbstract implements NodeInterface {
                         ActionInterface<ShipActionSet> action,
                         StateInterface<ShipVariables> state,
                         int depth,
-                        Map<ActionInterface<ShipActionSet>, Double> actionRewardMap) {
+                        Map<ShipActionSet, Double> actionRewardMap) {
         this.name = name;
         this.action = action;
         this.state = state;
@@ -61,14 +61,14 @@ public abstract class NodeAbstract implements NodeInterface {
     }
 
     public void saveRewardForAction(ActionInterface<ShipActionSet> action, double reward) {
-        Conditionals.executeIfTrue(actionRewardMap.containsKey(action),
+        Conditionals.executeIfTrue(actionRewardMap.containsKey(action.getValue()),
                 () -> log.fine("Reward for action already defined"));
 
-        actionRewardMap.put(action,reward);
+        actionRewardMap.put(action.getValue(),reward);
     }
 
     public double restoreRewardForAction(ActionInterface<ShipActionSet> action) {
-       return actionRewardMap.getOrDefault(action,INIT_REWARD_VALUE);
+       return actionRewardMap.getOrDefault(action.getValue(),INIT_REWARD_VALUE);
     }
 
     @Override
@@ -76,12 +76,8 @@ public abstract class NodeAbstract implements NodeInterface {
         //For each significant field in the class, check if that field matches the corresponding field of this object
         NodeAbstract equalsSample = (NodeAbstract) obj;
         boolean isSameState = equalsSample.getState().getVariables().equals(this.getState().getVariables());
-        boolean isSameAction = equalsSample.getAction()==this.getAction();
+        boolean isSameAction = equalsSample.getAction().getValue()==this.getAction().getValue();
         boolean isSameDepth = equalsSample.getDepth()==this.getDepth();
-
-    //    System.out.println("isSameState = " + isSameState);
-     //   System.out.println("isSameAction = " + isSameAction);
-    //    System.out.println("isSameDepth = " + isSameDepth);
         return isSameState && isSameAction && isSameDepth;
     }
 

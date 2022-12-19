@@ -61,7 +61,7 @@ public class ActionSelector {
     @NotNull
     private List<ActionInterface<ShipActionSet>> getNonTestedActions(NodeInterface nodeSelected) {
         List<ActionInterface<ShipActionSet>> testedActions = getTestedActions(nodeSelected);
-        List<ShipActionSet> testedActionValues=testedActions.stream().map(ActionInterface::getAction).collect(Collectors.toList());
+        List<ShipActionSet> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
         List<ShipActionSet> nonTestedActionValues=ShipActionSet.getNonTestedActionValues(testedActionValues);
 
         List<ActionInterface<ShipActionSet>> nonTestedActions=new ArrayList<>();

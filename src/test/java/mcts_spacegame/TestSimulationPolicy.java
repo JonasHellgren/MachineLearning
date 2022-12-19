@@ -1,6 +1,5 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
@@ -29,18 +28,18 @@ public class TestSimulationPolicy {
     @Test public void repeatingEqualActionProbManyTimes() {
         SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
         StateShip pos=StateShip.newStateFromXY(1,1);
-        List<ActionInterface<ShipActionSet>> actionList=new ArrayList<>();
+        List<ShipActionSet> actionValueList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
             ActionInterface<ShipActionSet> action=policy.chooseAction(pos.copy());
-            actionList.add(action);
+            actionValueList.add(action.getValue());
         }
 
-        System.out.println("actionList = " + actionList);
+        System.out.println("actionList = " + actionValueList);
 
-        Assert.assertTrue(actionList.contains(ActionShip.newUp()));
-        Assert.assertTrue(actionList.contains(ActionShip.newStill()));
-        Assert.assertTrue(actionList.contains(ActionShip.newDown()));
-        Assert.assertFalse(actionList.contains(ActionShip.newNA()));
+        Assert.assertTrue(actionValueList.contains(ShipActionSet.up));
+        Assert.assertTrue(actionValueList.contains(ShipActionSet.still));
+        Assert.assertTrue(actionValueList.contains(ShipActionSet.down));
+        Assert.assertFalse(actionValueList.contains(ShipActionSet.notApplicable));
 
     }
 

@@ -24,6 +24,7 @@ import java.util.function.BiFunction;
  */
 
 @Log
+@Getter
 public class TreeInfoHelper {
 
     private static final int C_FOR_NO_EXPLORATION = 0;

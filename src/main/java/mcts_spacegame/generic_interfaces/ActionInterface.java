@@ -9,8 +9,8 @@ import java.util.Set;
  */
 
 public interface ActionInterface<AV> {
-    void setAction(AV actionValue);
-    AV getAction();
+    void setValue(AV actionValue);
+    AV getValue();
     Set<AV>  applicableActions();
     AV nonApplicableAction();
 
