@@ -1,9 +1,11 @@
-package freeze;
+package mcts_classes;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class TestNodeInfoHelper {
 
-    List<NodeInterface> nodes;
+    List<NodeInterface<ShipVariables, ShipActionSet>> nodes;
 
     @Before
     public void init() {
@@ -37,25 +39,25 @@ public class TestNodeInfoHelper {
 
     @Test
     public void findNodeMatchingExistingNode() {
-        NodeInterface node=NodeInterface.newNotTerminal(StateShip.newStateFromXY(0,0), ActionShip.newNA());
+        NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newNotTerminal(StateShip.newStateFromXY(0,0), ActionShip.newNA());
         Assert.assertTrue(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherClass() {
-        NodeInterface node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newNA());
+        NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newNA());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherAction() {
-        NodeInterface node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newStill());
+        NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
     public void findNodeMatchingNodeOfOtherState() {
-        NodeInterface node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(10,0), ActionShip.newStill());
+        NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(10,0), ActionShip.newStill());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 

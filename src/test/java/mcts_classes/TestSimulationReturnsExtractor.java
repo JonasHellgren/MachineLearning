@@ -1,9 +1,12 @@
-package freeze;
+package mcts_classes;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.model_mcts.SimulationReturnsExtractor;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SimulationResults;
+import mcts_spacegame.models_space.ShipActionSet;
+import mcts_spacegame.models_space.ShipVariables;
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -18,12 +21,15 @@ public class TestSimulationReturnsExtractor {
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
     List<ShipActionREMOVE> actionsOnPath = Arrays.asList(ShipActionREMOVE.up, ShipActionREMOVE.up);
     SimulationResults simulationResults;
-    MonteCarloSettings settings;
+    MonteCarloSettings<ShipVariables, ShipActionSet> settings;
 
     @Before
     public void init() {
         simulationResults = new SimulationResults();
-        settings= MonteCarloSettings.builder()
+        settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .coefficientMaxAverageReturn(1)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();

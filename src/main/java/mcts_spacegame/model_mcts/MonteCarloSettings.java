@@ -67,8 +67,10 @@ public class MonteCarloSettings<SSV,AV> {
     @Builder.Default
     double weightMemoryValue=WEIGHT_MEMORY_DEFAULT;
 
+    /*
     public static <SSV,AV> MonteCarloSettings<SSV,AV> newDefault() {
         return MonteCarloSettings.<SSV,AV>builder().build();
     }
+    */
 
 }

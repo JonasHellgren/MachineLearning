@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package mcts_classes;
 
 import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.models_space.ShipVariables;

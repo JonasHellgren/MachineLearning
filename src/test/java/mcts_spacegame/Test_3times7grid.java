@@ -33,7 +33,7 @@ public class Test_3times7grid {
                 .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .build();
-        actionTemplate=new ActionShip(ShipActionSet.up);
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
@@ -86,17 +86,11 @@ public class Test_3times7grid {
 
         doPrinting(tih,nodeRoot);
 
-     //   Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingState(tih.getBestPath(), new State(5,2));
-      //  Assert.assertTrue(node11.isPresent());
         Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(2,0)));
     }
 
     @SneakyThrows
     @Test public void maxTreeDepth() {
-        /*
-        MonteCarloSettings<ShipVariables, ShipActionSet> settings=
-                MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                        .maxTreeDepth(3).build();  */
         settings.setMaxTreeDepth(3);
 
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()

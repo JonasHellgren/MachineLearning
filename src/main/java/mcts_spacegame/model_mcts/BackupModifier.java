@@ -55,7 +55,7 @@ public class BackupModifier<SSV,AV> {
     ActionInterface<AV> actionOnSelected;
     StepReturnGeneric<SSV> stepReturnOfSelected;
     Double valueInTerminal;
-    MonteCarloSettings settings;
+    MonteCarloSettings<SSV,AV> settings;
 
     TreeInfoHelper<SSV,AV> treeInfoHelper;
     NodeInterface<SSV,AV> nodeSelected;
@@ -68,7 +68,7 @@ public class BackupModifier<SSV,AV> {
                                          @NonNull ActionInterface<AV> actionOnSelected,
                                          @NonNull StepReturnGeneric<SSV> stepReturnOfSelected,
                                          Double valueInTerminal,
-                                         MonteCarloSettings settings) {
+                                         @NonNull MonteCarloSettings<SSV,AV> settings) {
         BackupModifier<SSV,AV> bm = new BackupModifier<>();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
@@ -77,9 +77,7 @@ public class BackupModifier<SSV,AV> {
         Conditionals.executeOneOfTwo(Objects.isNull(valueInTerminal),
                 () -> bm.valueInTerminal = 0d,
                 () -> bm.valueInTerminal = valueInTerminal);
-        Conditionals.executeOneOfTwo(Objects.isNull(settings),
-                () -> bm.settings = MonteCarloSettings.builder().build(),
-                () -> bm.settings = settings);
+        bm.settings = settings;
 
         bm.treeInfoHelper = new TreeInfoHelper<SSV,AV>(rootTree,settings);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();

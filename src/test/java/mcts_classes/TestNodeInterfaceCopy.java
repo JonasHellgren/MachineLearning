@@ -1,4 +1,4 @@
-package freeze;
+package mcts_classes;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
@@ -6,6 +6,8 @@ import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalNotFail;
 import mcts_spacegame.models_space.ActionShip;
+import mcts_spacegame.models_space.ShipActionSet;
+import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,13 +19,13 @@ public class TestNodeInterfaceCopy {
 
     @Test
     public void testNodeNotTerminal() {
-        NodeNotTerminal node=new NodeNotTerminal(StateShip.newStateFromXY(0,0), ActionShip.newStill());
+        NodeNotTerminal<ShipVariables, ShipActionSet> node=new NodeNotTerminal<>(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         node.increaseNofVisits();
         node.increaseNofActionSelections(ActionShip.newUp());
         node.saveRewardForAction(ActionShip.newUp(),10);
-        node.addChildNode(new NodeTerminalNotFail(StateShip.newStateFromXY(1,0), ActionShip.newStill()));
+        node.addChildNode(new NodeTerminalNotFail<>(StateShip.newStateFromXY(1, 0), ActionShip.newStill()));
 
-        NodeNotTerminal clone= (NodeNotTerminal) NodeInterface.copy(node);
+        NodeNotTerminal<ShipVariables, ShipActionSet> clone= (NodeNotTerminal<ShipVariables, ShipActionSet>) NodeInterface.copy(node);
 
         System.out.println("node = " + node);
         System.out.println("clone = " + clone);
@@ -37,12 +39,12 @@ public class TestNodeInterfaceCopy {
 
     @Test
     public void testNodeTerminalFail() {
-        NodeTerminalFail node=new NodeTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newStill());
+        NodeTerminalFail<ShipVariables, ShipActionSet> node=new NodeTerminalFail<>(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         node.setDepth(5);
         node.increaseNofVisits();
         node.increaseNofActionSelections(ActionShip.newUp());
         node.saveRewardForAction(ActionShip.newUp(),10);
-        NodeTerminalFail clone= (NodeTerminalFail) NodeInterface.copy(node);
+        NodeTerminalFail<ShipVariables, ShipActionSet> clone= (NodeTerminalFail<ShipVariables, ShipActionSet>) NodeInterface.copy(node);
 
         System.out.println("node = " + node);
         System.out.println("clone = " + clone);

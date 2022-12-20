@@ -1,14 +1,15 @@
-package freeze;
+package mcts_classes;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.model_mcts.MonteCarloSearchStatistics;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,27 +17,32 @@ import org.junit.Test;
 public class TestMonteCarloSearchStatistics {
 
     private static final int MAX_TREE_DEPTH = 3;
-    MonteCarloTreeCreator monteCarloTreeCreator;
-    EnvironmentShip environment;
+    MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
+    EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+        monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
-                .monteCarloSettings(MonteCarloSettings.builder()
+                .monteCarloSettings(MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                        .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                        .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
+                        .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                         .maxTreeDepth(MAX_TREE_DEPTH)
                         .coefficientExploitationExploration(1)
-                        .maxNofIterations(500).build())
+                        .maxNofIterations(500)
+                                .build())
+                .actionTemplate(ActionShip.newNA())
                 .build();
     }
 
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot=monteCarloTreeCreator.runIterations();
         MonteCarloSearchStatistics statistics= monteCarloTreeCreator.getStatistics();
 
         System.out.println("statistics = " + statistics);

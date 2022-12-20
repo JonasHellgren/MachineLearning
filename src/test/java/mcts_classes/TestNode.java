@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package mcts_classes;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.generic_interfaces.ActionInterface;

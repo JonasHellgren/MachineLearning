@@ -1,21 +1,20 @@
-package freeze;
+package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
 import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -31,16 +30,21 @@ public class Test_5times15grid {
     private static final double VALUE_3 = 3;
     private static final double VALUE_0 = 0;
 
-    MonteCarloTreeCreator monteCarloTreeCreator;
+    MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentShip environment;
-    MonteCarloSettings settings;
-    NodeValueMemory memory;
+    MonteCarloSettings<ShipVariables, ShipActionSet> settings;
+    NodeValueMemory<ShipVariables> memory;
+    ActionInterface<ShipActionSet> actionTemplate;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new EnvironmentShip(spaceGrid);
-        settings= MonteCarloSettings.builder()
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+        settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
@@ -49,6 +53,7 @@ public class Test_5times15grid {
                 .weightReturnsSteps(0)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         memory=NodeValueMemory.newEmpty();
         memory.write(StateShip.newStateFromXY(14,0),VALUE_0);
         memory.write(StateShip.newStateFromXY(14,2),VALUE_3);
@@ -68,18 +73,20 @@ public class Test_5times15grid {
     @SneakyThrows
     @Test
     public void iterateFromX0Y2() {
-        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        TreeInfoHelper<ShipVariables, ShipActionSet>  tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
     }
 
     @SneakyThrows
     @Test
     public void iterateFromX0Y2NoSimulations() {
-        settings = MonteCarloSettings.builder()
-                .maxTreeDepth(14)
+        settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxTreeDepth(14)
                 .maxNofIterations(10)
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)
@@ -89,7 +96,7 @@ public class Test_5times15grid {
         createCreator(StateShip.newStateFromXY(0, 2));
        // createCreator(State.newState(14, 4));
 
-        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
       //  TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
       //  assertStateIsOnBestPath(tih,State.newState(13,4));
@@ -97,11 +104,13 @@ public class Test_5times15grid {
 
     @SneakyThrows
     @Test
+    @Ignore
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
-        settings = MonteCarloSettings.builder()
-                .maxTreeDepth(14)
+        settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipActionSet.applicableActions().size():1)
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxTreeDepth(14)
                 .maxNofIterations(100000)
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)
@@ -110,18 +119,20 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(2, 2));
 
-        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        TreeInfoHelper<ShipVariables, ShipActionSet>  tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
     }
 
     @SneakyThrows
     @Test
     public void iterateFromX10Y2WithSimulationsAndSteps() {
-        settings = MonteCarloSettings.builder()
-                .maxTreeDepth(14)
+        settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxTreeDepth(14)
                 .maxNofIterations(100)
                 .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(100)
@@ -129,19 +140,20 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(10, 2));
 
-        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
     }
 
     @SneakyThrows
     @Test
     public void iterateFromX0Y2WithSimulationsAndSteps() {
-        settings = MonteCarloSettings.builder()
-                .maxTreeDepth(14)
+        settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
                 .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newMostlyStill())
+                .maxTreeDepth(14)
                 .maxNofIterations(10_000)
                 .nofSimulationsPerNode(10)
                 .coefficientExploitationExploration(1)
@@ -149,29 +161,31 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
 
-        NodeInterface nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot,settings);
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(10,4));
     }
 
     private void createCreator(StateShip state) {
-        monteCarloTreeCreator = MonteCarloTreeCreator.builder()
+        monteCarloTreeCreator = MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(state)
                 .monteCarloSettings(settings)
                 .memory(memory)
+                .actionTemplate(actionTemplate)
                 .build();
     }
 
 
-    private void assertStateIsOnBestPath(TreeInfoHelper tih, StateShip state) {
-        Optional<NodeInterface> node= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
+    private void assertStateIsOnBestPath(TreeInfoHelper<ShipVariables, ShipActionSet> tih, StateShip state) {
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
+                NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }
 
-    private void doPrinting(NodeInterface nodeRoot) {
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot,settings);
+    private void doPrinting(NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());

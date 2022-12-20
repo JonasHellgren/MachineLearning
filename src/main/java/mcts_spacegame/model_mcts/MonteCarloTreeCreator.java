@@ -42,6 +42,7 @@ import java.util.*;
  *   actionInSelected is empty & not AllChildrenInSelectedAreFail  (all actions are tested but some is not fail)
  *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
  *
+ *  The parameter actionTemplate is needed as a "seed" to create a tree with unknown types.
  */
 
 @Log

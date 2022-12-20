@@ -1,4 +1,4 @@
-package freeze;
+package mcts_classes;
 
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
@@ -26,7 +26,7 @@ public class TestSimulationPolicy {
     }
 
     @Test public void repeatingEqualActionProbManyTimes() {
-        SimulationPolicyInterface policy=SimulationPolicyInterface.newEqualProbability();
+        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=SimulationPolicyInterface.newEqualProbability();
         StateShip pos=StateShip.newStateFromXY(1,1);
         List<ShipActionSet> actionValueList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
@@ -45,7 +45,7 @@ public class TestSimulationPolicy {
 
     @Test
     public void moveWithMostStillSimulationPolicyGivesMostlyBetterSumRewardsFromUpperPositionThenMiddle() {
-        SimulationPolicyInterface policy=SimulationPolicyInterface.newMostlyStill();
+        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=SimulationPolicyInterface.newMostlyStill();
 
         System.out.println("environment = " + environment);
 
@@ -64,7 +64,9 @@ public class TestSimulationPolicy {
         Assert.assertTrue(avg1.orElseThrow()<avg2.orElseThrow());
     }
 
-    private List<Double>  getSumOfRewardsListFromMultipleSimulations(SimulationPolicyInterface policy, StateShip pos) {
+    private List<Double>  getSumOfRewardsListFromMultipleSimulations(
+            SimulationPolicyInterface<ShipVariables,
+            ShipActionSet> policy, StateShip pos) {
         List<Double> sumOfRewardsList=new ArrayList<>();
         for (int i = 0; i <10 ; i++) {
             List<StepReturnGeneric<ShipVariables>> returns = stepToTerminal(pos.copy(), policy);
@@ -75,7 +77,8 @@ public class TestSimulationPolicy {
     }
 
     @NotNull
-    private List<StepReturnGeneric<ShipVariables>> stepToTerminal(StateShip pos, SimulationPolicyInterface policy) {
+    private List<StepReturnGeneric<ShipVariables>> stepToTerminal(StateShip pos,
+                                                                  SimulationPolicyInterface<ShipVariables, ShipActionSet> policy) {
         List<StepReturnGeneric<ShipVariables>> returns=new ArrayList<>();
         StepReturnGeneric<ShipVariables> stepReturn;
         do {

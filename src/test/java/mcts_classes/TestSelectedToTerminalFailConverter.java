@@ -1,4 +1,4 @@
-package freeze;
+package mcts_classes;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
@@ -11,6 +11,7 @@ import mcts_spacegame.model_mcts.SelectedToTerminalFailConverter;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
 import mcts_spacegame.models_space.*;
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,12 +25,18 @@ import java.util.Optional;
 public class TestSelectedToTerminalFailConverter {
     SpaceGrid spaceGrid;
     EnvironmentShip environment;
-    BackupModifier bum;
+    MonteCarloSettings<ShipVariables, ShipActionSet> settings;
+    BackupModifier<ShipVariables, ShipActionSet> bum;
     List<StepReturnGeneric<ShipVariables>> stepReturns;
     StepReturnGeneric<ShipVariables> getStepReturnOfSelected;
 
     @Before
     public void init() {
+        settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .build();
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
         stepReturns = new ArrayList<>();
@@ -41,27 +48,27 @@ public class TestSelectedToTerminalFailConverter {
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newStill(), ActionShip.newStill());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newDown();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
-        NodeInterface nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot, MonteCarloSettings.newDefault());
-        Optional<NodeInterface> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
 
-        bum = BackupModifier.builder().rootTree(nodeRoot)
+        bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
+                .settings(settings)
                 .build();
 
         nodeRoot.printTree();
         tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
 
-        SelectedToTerminalFailConverter stc=new SelectedToTerminalFailConverter(nodeRoot,actionsToSelected);
-        //NodeInterface nodeSelected = tih.getNodeReachedForActions(actionsToSelected).orElseThrow();
+        SelectedToTerminalFailConverter<ShipVariables, ShipActionSet> stc=new SelectedToTerminalFailConverter<>(nodeRoot,actionsToSelected);
         stc.makeSelectedTerminal(nodeSelected.orElseThrow());
 
         nodeRoot.printTree();
         tih.getNodesOnPathForActions(actionsToSelected).get().forEach(System.out::println);
 
-        Optional<NodeInterface> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
 
         System.out.println("nodeSelected.orElseThrow() = " + nodeSelected.orElseThrow());
         System.out.println("nodeSelected2.orElseThrow() = " + nodeSelected2.orElseThrow());
@@ -71,18 +78,18 @@ public class TestSelectedToTerminalFailConverter {
 
     }
 
-    private NodeInterface createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState, List<StepReturnGeneric<ShipVariables>> stepReturns) {
+    private NodeInterface<ShipVariables, ShipActionSet> createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState, List<StepReturnGeneric<ShipVariables>> stepReturns) {
 
         stepReturns.clear();
         StateShip state = rootState.copy();
-        NodeInterface nodeRoot = NodeInterface.newNotTerminal(rootState, ActionShip.newNA());
-        NodeInterface parent = nodeRoot;
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, ActionShip.newNA());
+        NodeInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ActionInterface<ShipActionSet> a : actions) {
             StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
-            NodeInterface child = NodeInterface.newNotTerminal((StateShip) sr.newState, a);  //todo StateInterface
+            NodeInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal((StateShip) sr.newState, a);  //todo StateInterface
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }
@@ -95,15 +102,6 @@ public class TestSelectedToTerminalFailConverter {
 
     private boolean isNotFinalActionInList(List<ActionInterface<ShipActionSet>> actions, int addedChilds) {
         return addedChilds < actions.size();
-    }
-
-    private void printLists(List<ActionInterface<ShipActionSet>> actions, List<StepReturnGeneric<ShipVariables>> stepReturns, NodeInterface nodeRoot) {
-        System.out.println("-----------------------------");
-        nodeRoot.printTree();
-        TreeInfoHelper tih = new TreeInfoHelper(nodeRoot);
-        tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
-
-        System.out.println("-----------------------------");
     }
 
     @NotNull

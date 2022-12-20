@@ -141,14 +141,10 @@ gör generisk för space:
 - static constructor i ActionInterface NJA
 - NodeSelector<AV>
 - tänka igenom SimulationPolicy
-NodeInterface>AV>
-- ActionSelector<TA>
-- BackupModifier
-- NodeValueMemory<TS>
-- SelectedToTerminalFailConverter
-- MonteCarloTreeCreator
-- MonteCarloTreeCreator innehåller StateShip and ActionShip - måste veck
+- MonteCarloTreeCreator x
 
+failade test:
+- iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3
 
 annan domain - ladda batteri maximalt energi given tid
 dokumentera - speciellt termer
