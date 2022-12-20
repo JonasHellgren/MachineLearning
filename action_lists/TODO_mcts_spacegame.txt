@@ -153,7 +153,7 @@ applicableActions både i ActionShip och ShipActionSet, ActionShip bör räcka x
 CellActionSet  x
 TestCellSimulationPolicy  x
 RandomFeasiblePolicy  x
-BestFeasiblePolicy
+BestFeasiblePolicy  x
 MCTS utifrån TestHardCodedCurrentTrajectories
 
 dokumentera - speciellt termer

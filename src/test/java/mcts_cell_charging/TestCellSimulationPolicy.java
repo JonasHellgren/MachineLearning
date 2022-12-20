@@ -62,6 +62,15 @@ public class TestCellSimulationPolicy {
         AssertNoVoltageAndTempViolation(resultsList);
     }
 
+    @Test
+    public void simulateWithBestFeasibleGivesNoViolation() {
+        SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newBestFeasible(action,environment);
+        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
+        resultsList.forEach(System.out::println);
+        Assert.assertTrue(resultsList.size()>0);
+        AssertNoVoltageAndTempViolation(resultsList);
+    }
+
     private void AssertNoVoltageAndTempViolation(List<EnvironmentCell.CellResults> resultsList) {
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getNewTemperature()<cellSettings.getMaxTemperature());
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getVoltage()<cellSettings.getMaxVoltage());

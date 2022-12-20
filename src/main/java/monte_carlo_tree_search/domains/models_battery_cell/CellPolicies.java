@@ -20,4 +20,10 @@ public class CellPolicies {
         return new RandomFeasiblePolicy(actionTemplate,environment);
     }
 
+    public static SimulationPolicyInterface<CellVariables, Integer> newBestFeasible(
+            ActionInterface<Integer> actionTemplate,
+            EnvironmentGenericInterface<CellVariables, Integer> environment) {
+        return new BestFeasiblePolicy(actionTemplate,environment);
+    }
+
 }
