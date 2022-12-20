@@ -144,10 +144,7 @@ gör generisk för space:
 
 ShipPolicies  x
 generics clean up  x
-
-failade test:
-- iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3
-
+iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
 annan domain - ladda batteri maximalt energi given tid
 dokumentera - speciellt termer
 averageNofChildrenPerNode verkar fel

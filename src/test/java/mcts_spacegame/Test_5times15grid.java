@@ -91,17 +91,13 @@ public class Test_5times15grid {
                 .build();
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
-       // createCreator(State.newState(14, 4));
-
         NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
-      //  TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
-      //  assertStateIsOnBestPath(tih,State.newState(13,4));
     }
 
     @SneakyThrows
     @Test
-    @Ignore
+  //  @Ignore
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipActionSet.applicableActions().size():1)

@@ -60,9 +60,9 @@ public class NodeSelector<SSV,AV> {
         nodesFromRootToSelected.add(currentNode);
 
         int i=0;
-        while (isNotLeaf(currentNode) && notAllChildrenAreTerminal(currentNode)) {
+        while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {
             Optional<NodeInterface<SSV,AV>> selectedChild = selectChild(currentNode);
-            if (selectedChild.isPresent() && notAllChildrenAreTerminal(currentNode)) {
+            if (selectedChild.isPresent() && isNotAllChildrenTerminal(currentNode)) {
                 currentNode = selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
@@ -82,12 +82,12 @@ public class NodeSelector<SSV,AV> {
     private boolean isNotLeaf(NodeInterface<SSV,AV> currentNode) {
         List<NodeInterface<SSV,AV>> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
-        int maxNofTestedActions = 3;
-             //   settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState().getVariables());  //todo generic
+        int maxNofTestedActions =
+                settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState().getVariables());
         return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
     }
 
-    private boolean notAllChildrenAreTerminal(NodeInterface<SSV,AV> node) {
+    private boolean isNotAllChildrenTerminal(NodeInterface<SSV,AV> node) {
         List<NodeInterface<SSV,AV>> childrenTerminal= node.getChildNodes().stream()
                 .filter(n -> !n.isNotTerminal())
                 .collect(Collectors.toList());
