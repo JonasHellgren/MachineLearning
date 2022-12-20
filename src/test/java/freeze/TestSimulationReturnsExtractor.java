@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package freeze;
 
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.model_mcts.SimulationReturnsExtractor;

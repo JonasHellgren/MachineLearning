@@ -51,7 +51,8 @@ public class MonteCarloTreeCreator<SSV,AV> {
     private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
     EnvironmentGenericInterface<SSV, AV> environment;
     StateInterface<SSV> startState;
-    MonteCarloSettings settings;
+    MonteCarloSettings<SSV,AV> settings;
+    ActionInterface<AV> actionTemplate;  //todo can we remove and use extend on AV instead?
     NodeValueMemory<SSV> memory;
 
     NodeInterface<SSV,AV> nodeRoot;
@@ -61,19 +62,22 @@ public class MonteCarloTreeCreator<SSV,AV> {
     List<ActionInterface<AV>> actionsToSelected;
 
     @Builder
-    private static <SSV,AV> MonteCarloTreeCreator<SSV,AV>  newMCTC(@NonNull EnvironmentGenericInterface<SSV, AV> environment,
+    private static <SSV,AV> MonteCarloTreeCreator<SSV,AV>  newMCTC(
+                                                 @NonNull EnvironmentGenericInterface<SSV, AV> environment,
                                                  @NonNull StateInterface<SSV> startState,
-                                                 MonteCarloSettings monteCarloSettings,
+                                                 @NonNull MonteCarloSettings<SSV,AV> monteCarloSettings,
+                                                 @NonNull ActionInterface<AV> actionTemplate,
                                                  NodeValueMemory<SSV> memory) {
         MonteCarloTreeCreator<SSV,AV> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
 
-        Conditionals.executeOneOfTwo(Objects.isNull(monteCarloSettings),
-                () -> mctc.settings = MonteCarloSettings.newDefault(),
-                () -> mctc.settings = monteCarloSettings);
+    //    Conditionals.executeOneOfTwo(Objects.isNull(monteCarloSettings),
+     //           () -> mctc.settings = MonteCarloSettings.newDefault(),
+      //          () -> mctc.settings = monteCarloSettings);
 
+        mctc.actionTemplate=actionTemplate;
         Conditionals.executeOneOfTwo(Objects.isNull(memory),
                 () -> mctc.memory = NodeValueMemory.newEmpty(),
                 () -> mctc.memory = memory);
@@ -83,7 +87,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     }
 
     private static <SSV,AV>  void setSomeFields(@NonNull StateInterface<SSV> startState, MonteCarloTreeCreator<SSV,AV>  mctc) {
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState,null);  //todo generic not null
+        mctc.nodeRoot = NodeInterface.newNotTerminal(startState,mctc.actionTemplate);  //todo generic not null
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
@@ -218,7 +222,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
         sfc.makeSelectedTerminal(nodeSelected);
     }
 
-    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> pos, SimulationPolicyInterface policy) {
+    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> pos, SimulationPolicyInterface<SSV, AV> policy) {
         List<StepReturnGeneric<SSV>> returns = new ArrayList<>();
         StepReturnGeneric<SSV> stepReturn;
         do {

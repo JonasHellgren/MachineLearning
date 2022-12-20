@@ -3,22 +3,23 @@ package mcts_spacegame.policies_action;
 import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
+import mcts_spacegame.models_space.ActionShip;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 
-public interface SimulationPolicyInterface {
+public interface SimulationPolicyInterface<SSV,AV> {
 
-    ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state);
+    ActionInterface<AV> chooseAction(StateInterface<SSV> state);
 
-    static SimulationPolicyInterface newMostlyStill() {
+    static SimulationPolicyInterface<ShipVariables, ShipActionSet> newMostlyStill() {
         return new MostlyStillPolicy();
     }
 
-    static SimulationPolicyInterface newAlwaysStill() {
+    static SimulationPolicyInterface<ShipVariables, ShipActionSet> newAlwaysStill() {
         return new AlwaysStillPolicy();
     }
 
-    static SimulationPolicyInterface newEqualProbability() {
+    static SimulationPolicyInterface<ShipVariables, ShipActionSet> newEqualProbability() {
         return new EqualActionProbabilityPolicy();
     }
 }

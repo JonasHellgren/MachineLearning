@@ -3,14 +3,15 @@ package mcts_spacegame;
 import lombok.SneakyThrows;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
+import mcts_spacegame.generic_interfaces.ActionInterface;
+import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.models_space.*;
+import mcts_spacegame.policies_action.SimulationPolicyInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,24 +19,34 @@ import org.junit.Test;
 import java.util.Optional;
 
 public class Test_3times7grid {
-    MonteCarloTreeCreator monteCarloTreeCreator;
-    EnvironmentShip environment;
+    MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
+    EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
+    MonteCarloSettings<ShipVariables, ShipActionSet> settings;
+    ActionInterface<ShipActionSet> actionTemplate;
 
     @Before
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+        settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
+                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .build();
+        actionTemplate=new ActionShip(ShipActionSet.up);
+        monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
+                .monteCarloSettings(settings)
+                .actionTemplate(actionTemplate)
                 .build();
     }
 
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
 
@@ -44,9 +55,9 @@ public class Test_3times7grid {
 
         doPrinting(tih,nodeRoot);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
         Assert.assertTrue(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
         Assert.assertTrue(node52.isPresent());
 
     }
@@ -55,14 +66,14 @@ public class Test_3times7grid {
     @Test(expected = StartStateIsTrapException.class)
     public void iterateFromX2Y0() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2,0));
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
 
-        Optional<NodeInterface> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
         Assert.assertFalse(node11.isPresent());
-        Optional<NodeInterface> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
         Assert.assertFalse(node52.isPresent());
     }
 
@@ -70,8 +81,8 @@ public class Test_3times7grid {
     @Test
     public void iterateFromX1Y1() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(1,1));
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
 
@@ -82,15 +93,20 @@ public class Test_3times7grid {
 
     @SneakyThrows
     @Test public void maxTreeDepth() {
-        MonteCarloSettings settings= MonteCarloSettings.builder().maxTreeDepth(3).build();
+        /*
+        MonteCarloSettings<ShipVariables, ShipActionSet> settings=
+                MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                        .maxTreeDepth(3).build();  */
+        settings.setMaxTreeDepth(3);
 
-        monteCarloTreeCreator=MonteCarloTreeCreator.builder()
+        monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
                 .monteCarloSettings(settings)
+                .actionTemplate(actionTemplate)
                 .build();
-        NodeInterface nodeRoot=monteCarloTreeCreator.runIterations();
-        TreeInfoHelper tih=new TreeInfoHelper(nodeRoot);
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
         System.out.println("tih.maxDepth() = " + tih.maxDepth());
@@ -99,7 +115,7 @@ public class Test_3times7grid {
     }
 
 
-    private void doPrinting(TreeInfoHelper tih,NodeInterface nodeRoot) {
+    private void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
         nodeRoot.printTree();
         tih.getBestPath().forEach(System.out::println);

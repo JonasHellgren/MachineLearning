@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package mcts_cell_charging;
 
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;

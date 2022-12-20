@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EqualActionProbabilityPolicy implements SimulationPolicyInterface {
+public class EqualActionProbabilityPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
     @Override
     public ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state) {
         RandUtils<ShipActionSet> randUtils=new RandUtils<>();

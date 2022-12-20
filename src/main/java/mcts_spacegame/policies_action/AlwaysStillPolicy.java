@@ -7,7 +7,7 @@ import mcts_spacegame.models_space.ActionShip;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 
-public class AlwaysStillPolicy implements SimulationPolicyInterface {
+public class AlwaysStillPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
 
     @Override
     public ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state) {

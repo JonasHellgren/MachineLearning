@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package mcts_cell_charging;
 
 import common.ListUtils;
 import common.MathUtils;

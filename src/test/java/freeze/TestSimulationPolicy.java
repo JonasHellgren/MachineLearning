@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package freeze;
 
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;

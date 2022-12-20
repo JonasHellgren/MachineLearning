@@ -8,7 +8,7 @@ import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 import org.apache.commons.lang3.RandomUtils;
 
-public class MostlyStillPolicy implements SimulationPolicyInterface {
+public class MostlyStillPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
 
     private static final double PROB_STILL = 0.9;
     private static final double PROB_UP_IF_NOT_STILL = 0.5;

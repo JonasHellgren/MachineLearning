@@ -1,6 +1,7 @@
 package mcts_spacegame.model_mcts;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import mcts_spacegame.models_space.ShipActionSet;
@@ -12,15 +13,15 @@ import java.util.function.Function;
 @Builder
 @Setter
 @ToString
-public class MonteCarloSettings {
+public class MonteCarloSettings<SSV,AV> {
     private static final int NOF_ITERATIONS_DEFAULT=1000;
     private static final int C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
-    private static final Function<ShipVariables,Integer> MAX_TESTED_ACTIONS_LEAF_DEFAULT = (a) -> ShipActionSet.applicableActions().size();  //todo generic
-    private static final SimulationPolicyInterface FIRST_ACTION_POLICY_DEFAULT = SimulationPolicyInterface.newAlwaysStill();
-    private static final SimulationPolicyInterface SIMULATION_POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
+  //  private final Function<SSV,Integer> MAX_TESTED_ACTIONS_LEAF_DEFAULT = (a) -> ShipActionSet.applicableActions().size();  //todo generic
+   // private static final SimulationPolicyInterface FIRST_ACTION_POLICY_DEFAULT = SimulationPolicyInterface.newAlwaysStill();
+  //  private static final SimulationPolicyInterface SIMULATION_POLICY_DEFAULT = SimulationPolicyInterface.newMostlyStill();
     private static final double DISCOUNT_FACTOR_STEPS_DEFAULT = 1;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT = 1;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT = 0.1;
@@ -41,12 +42,12 @@ public class MonteCarloSettings {
     long timeBudgetMilliSeconds = TIME_BUDGET_DEFAULT;
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
-    @Builder.Default
-    Function<ShipVariables,Integer> maxNofTestedActionsForBeingLeafFunction = MAX_TESTED_ACTIONS_LEAF_DEFAULT;
-    @Builder.Default
-    SimulationPolicyInterface firstActionSelectionPolicy = FIRST_ACTION_POLICY_DEFAULT;
-    @Builder.Default
-    SimulationPolicyInterface simulationPolicy = SIMULATION_POLICY_DEFAULT;
+    @NonNull
+    Function<SSV,Integer> maxNofTestedActionsForBeingLeafFunction;
+    @NonNull
+    SimulationPolicyInterface<SSV,AV> firstActionSelectionPolicy;
+    @NonNull
+    SimulationPolicyInterface<SSV,AV> simulationPolicy;
     @Builder.Default
     double discountFactorSteps=DISCOUNT_FACTOR_STEPS_DEFAULT;
     @Builder.Default
@@ -66,8 +67,8 @@ public class MonteCarloSettings {
     @Builder.Default
     double weightMemoryValue=WEIGHT_MEMORY_DEFAULT;
 
-    public static MonteCarloSettings newDefault() {
-        return MonteCarloSettings.builder().build();
+    public static <SSV,AV> MonteCarloSettings<SSV,AV> newDefault() {
+        return MonteCarloSettings.<SSV,AV>builder().build();
     }
 
 }

@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package freeze;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.enums.ShipActionREMOVE;

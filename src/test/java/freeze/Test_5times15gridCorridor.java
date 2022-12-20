@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package freeze;
 
 import common.MathUtils;
 import lombok.SneakyThrows;

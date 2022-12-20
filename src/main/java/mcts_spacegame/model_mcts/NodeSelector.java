@@ -84,8 +84,8 @@ public class NodeSelector<SSV,AV> {
     private boolean isNotLeaf(NodeInterface<SSV,AV> currentNode) {
         List<NodeInterface<SSV,AV>> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
-        int maxNofTestedActions =
-                settings.maxNofTestedActionsForBeingLeafFunction.apply((ShipVariables) currentNode.getState().getVariables());  //todo generic
+        int maxNofTestedActions = 3;
+             //   settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState().getVariables());  //todo generic
         return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
     }
 

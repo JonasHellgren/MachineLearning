@@ -1,4 +1,4 @@
-package mcts_spacegame;
+package freeze;
 
 import mcts_spacegame.model_mcts.SimulationResults;
 import org.junit.Assert;
