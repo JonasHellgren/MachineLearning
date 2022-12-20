@@ -1,7 +1,9 @@
 package mcts_cell_charging;
 
 import monte_carlo_tree_search.domains.models_battery_cell.CellVariables;
+import monte_carlo_tree_search.domains.models_space.ActionShip;
 import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.domains.models_battery_cell.StateCell;
 import org.junit.Assert;
@@ -26,7 +28,8 @@ public class TestState {
     }
 
     @Test public void testFunction() {
-        Function<CellVariables,Integer> fcn2 = ( a) -> (a.SoC<=0.5) ? ShipActionSet.applicableActions().size():1;
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+        Function<CellVariables,Integer> fcn2 = ( a) -> (a.SoC<=0.5) ? actionTemplate.applicableActions().size():1;
         GenericClass<CellVariables> gc= new GenericClass<>();
         CellVariables stateCell=CellVariables.builder()
                 .SoC(0.9).temperature(30).time(0)

@@ -3,9 +3,11 @@ package mcts_classes;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.classes.SimulationReturnsExtractor;
+import monte_carlo_tree_search.domains.models_space.ActionShip;
 import monte_carlo_tree_search.domains.models_space.ShipActionSet;
 import monte_carlo_tree_search.domains.models_space.ShipPolicies;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -25,8 +27,10 @@ public class TestSimulationReturnsExtractor {
     @Before
     public void init() {
         simulationResults = new SimulationResults();
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1)  //max return

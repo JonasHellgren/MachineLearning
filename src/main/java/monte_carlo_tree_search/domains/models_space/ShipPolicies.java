@@ -1,6 +1,9 @@
 package monte_carlo_tree_search.domains.models_space;
 
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
+
+import java.util.Set;
 
 public class ShipPolicies {
 
@@ -12,7 +15,8 @@ public class ShipPolicies {
         return new AlwaysStillPolicy();
     }
 
-    public static SimulationPolicyInterface<ShipVariables, ShipActionSet> newEqualProbability() {
-        return new EqualActionProbabilityPolicy();
+    public static SimulationPolicyInterface<ShipVariables, ShipActionSet> newEqualProbability(
+            ActionInterface<ShipActionSet> actionTemplate) {
+        return new EqualActionProbabilityPolicy(actionTemplate.applicableActions());
     }
 }

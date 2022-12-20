@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
         return new ActionShip(ShipActionSet.down);
     }
     public static ActionShip newNA() {
-        return new ActionShip(ShipActionSet.nonApplicableAction());
+        return new ActionShip(ShipActionSet.notApplicable);
     }
 
     @Override
@@ -42,11 +44,13 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
 
     @Override
     public Set<ShipActionSet> applicableActions() {
-        return ShipActionSet.applicableActions();
+        //return ShipActionSet.applicableActions();
+        return new HashSet<>(Arrays.asList(ShipActionSet.up, ShipActionSet.still, ShipActionSet.down));
     }
 
     @Override
     public ShipActionSet nonApplicableAction() {
-        return ShipActionSet.nonApplicableAction();
+        //return ShipActionSet.nonApplicableAction();
+        return ShipActionSet.notApplicable;
     }
 }

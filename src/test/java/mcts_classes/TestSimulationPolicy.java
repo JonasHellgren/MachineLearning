@@ -22,10 +22,12 @@ public class TestSimulationPolicy {
     public void init() {
         spaceGrid= SpaceGridInterface.new3times7Grid();
         environment=new EnvironmentShip(spaceGrid);
+
     }
 
     @Test public void repeatingEqualActionProbManyTimes() {
-        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy= ShipPolicies.newEqualProbability();
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy= ShipPolicies.newEqualProbability(actionTemplate);
         StateShip pos=StateShip.newStateFromXY(1,1);
         List<ShipActionSet> actionValueList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {

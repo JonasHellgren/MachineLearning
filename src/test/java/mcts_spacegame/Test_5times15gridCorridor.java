@@ -40,8 +40,9 @@ public class Test_5times15gridCorridor {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15GridCorridor();
         environment = new EnvironmentShip(spaceGrid);
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
@@ -54,7 +55,7 @@ public class Test_5times15gridCorridor {
         memory.write(StateShip.newStateFromXY(14,0),VALUE_0);
         memory.write(StateShip.newStateFromXY(14,2),VALUE_3);
         memory.write(StateShip.newStateFromXY(14,4),VALUE_6);
-        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,2))
@@ -219,7 +220,7 @@ public class Test_5times15gridCorridor {
 
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForNoSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max

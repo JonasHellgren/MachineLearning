@@ -30,8 +30,9 @@ public class TestBackupModifier {
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
@@ -217,7 +218,8 @@ public class TestBackupModifier {
 
         stepReturns.clear();
         StateShip state = rootState.copy();
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, new ActionShip(ShipActionSet.nonApplicableAction()));
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, new ActionShip(actionTemplate.nonApplicableAction()));
         NodeInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ActionInterface<ShipActionSet> a : actions) {

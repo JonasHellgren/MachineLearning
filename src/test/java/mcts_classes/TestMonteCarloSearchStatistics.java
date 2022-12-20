@@ -2,6 +2,7 @@ package mcts_classes;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_space.*;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
@@ -21,11 +22,12 @@ public class TestMonteCarloSearchStatistics {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
+        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
                 .monteCarloSettings(MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                        .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                        .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                         .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                         .simulationPolicy(ShipPolicies.newMostlyStill())
                         .maxTreeDepth(MAX_TREE_DEPTH)

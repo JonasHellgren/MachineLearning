@@ -39,7 +39,7 @@ public class Test_5times15grid {
         environment = new EnvironmentShip(spaceGrid);
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
@@ -80,7 +80,7 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX0Y2NoSimulations() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
@@ -100,7 +100,7 @@ public class Test_5times15grid {
   //  @Ignore
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipActionSet.applicableActions().size():1)
+                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? actionTemplate.applicableActions().size():1)
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
@@ -122,7 +122,7 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX10Y2WithSimulationsAndSteps() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
@@ -143,7 +143,7 @@ public class Test_5times15grid {
     @Test
     public void iterateFromX0Y2WithSimulationsAndSteps() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)

@@ -38,8 +38,10 @@ public class Test_3times7grid_Simulations {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
@@ -53,7 +55,6 @@ public class Test_3times7grid_Simulations {
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
-        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,0))
