@@ -2,7 +2,6 @@ package mcts_spacegame;
 
 import common.MathUtils;
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
@@ -14,7 +13,7 @@ import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,8 +44,8 @@ public class Test_5times15gridCorridor {
         environment = new EnvironmentShip(spaceGrid);
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
@@ -223,8 +222,8 @@ public class Test_5times15gridCorridor {
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForNoSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(1000)

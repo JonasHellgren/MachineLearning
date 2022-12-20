@@ -6,7 +6,7 @@ import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -28,8 +28,8 @@ public class TestSimulationReturnsExtractor {
         simulationResults = new SimulationResults();
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();

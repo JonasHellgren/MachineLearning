@@ -2,14 +2,13 @@ package mcts_classes;
 
 import lombok.SneakyThrows;
 import mcts_spacegame.environment.EnvironmentShip;
-import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.model_mcts.MonteCarloSearchStatistics;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +28,8 @@ public class TestMonteCarloSearchStatistics {
                 .startState(StateShip.newStateFromXY(0,0))
                 .monteCarloSettings(MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                         .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                        .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                        .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                        .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                        .simulationPolicy(ShipPolicies.newMostlyStill())
                         .maxTreeDepth(MAX_TREE_DEPTH)
                         .coefficientExploitationExploration(1)
                         .maxNofIterations(500)

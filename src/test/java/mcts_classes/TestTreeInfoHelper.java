@@ -1,6 +1,5 @@
 package mcts_classes;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
@@ -9,7 +8,7 @@ import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,8 +33,8 @@ public class TestTreeInfoHelper {
         environment = new EnvironmentShip(spaceGrid);
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
         StateShip rootState=StateShip.newStateFromXY(0,0);
         actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());

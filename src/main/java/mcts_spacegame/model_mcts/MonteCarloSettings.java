@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.function.Function;
 

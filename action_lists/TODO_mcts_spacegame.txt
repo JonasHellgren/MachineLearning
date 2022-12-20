@@ -140,8 +140,9 @@ gör generisk för space:
 - EnvironmentGenericInterface  x
 - static constructor i ActionInterface NJA
 - NodeSelector<AV>
-- tänka igenom SimulationPolicy
 - MonteCarloTreeCreator x
+
+- tänka igenom SimulationPolicy
 
 failade test:
 - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3

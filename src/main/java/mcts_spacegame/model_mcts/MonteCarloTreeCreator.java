@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.exceptions.StartStateIsTrapException;
 import mcts_spacegame.generic_interfaces.ActionInterface;
@@ -16,11 +15,7 @@ import mcts_spacegame.generic_interfaces.StateInterface;
 import mcts_spacegame.helpers.NodeInfoHelper;
 import mcts_spacegame.helpers.TreeInfoHelper;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.ActionShip;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.*;
 

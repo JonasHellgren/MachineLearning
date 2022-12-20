@@ -4,7 +4,8 @@ import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.environment.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.generic_interfaces.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class TestSimulationPolicy {
     }
 
     @Test public void repeatingEqualActionProbManyTimes() {
-        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=SimulationPolicyInterface.newEqualProbability();
+        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy= ShipPolicies.newEqualProbability();
         StateShip pos=StateShip.newStateFromXY(1,1);
         List<ShipActionSet> actionValueList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
@@ -45,7 +46,7 @@ public class TestSimulationPolicy {
 
     @Test
     public void moveWithMostStillSimulationPolicyGivesMostlyBetterSumRewardsFromUpperPositionThenMiddle() {
-        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=SimulationPolicyInterface.newMostlyStill();
+        SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=ShipPolicies.newMostlyStill();
 
         System.out.println("environment = " + environment);
 

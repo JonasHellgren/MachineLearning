@@ -11,7 +11,7 @@ import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.model_mcts.SimulationResults;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +42,8 @@ public class Test_3times7grid_Simulations {
         environment = new EnvironmentShip(spaceGrid);
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
                 .alphaBackupDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return

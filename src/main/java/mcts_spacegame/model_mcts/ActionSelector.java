@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 @Log
 public class ActionSelector<SSV,AV> {
-    MonteCarloSettings settings;
+    MonteCarloSettings<SSV,AV> settings;
     RandUtils<ActionInterface<AV>> randUtils;
 
-    public ActionSelector(MonteCarloSettings settings) {
+    public ActionSelector(MonteCarloSettings<SSV,AV> settings) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
     }

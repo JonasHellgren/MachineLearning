@@ -1,7 +1,6 @@
 package mcts_classes;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.model_mcts.MonteCarloSettings;
@@ -11,7 +10,7 @@ import mcts_spacegame.models_space.ActionShip;
 import mcts_spacegame.models_space.ShipActionSet;
 import mcts_spacegame.models_space.ShipVariables;
 import mcts_spacegame.models_space.StateShip;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,8 +30,8 @@ public class TestNodeSelector {
     public void init() {
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
 
         nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ActionShip.newNA());

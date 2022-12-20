@@ -1,7 +1,6 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.environment.EnvironmentShip;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.helpers.NodeInfoHelper;
@@ -11,7 +10,7 @@ import mcts_spacegame.model_mcts.MonteCarloTreeCreator;
 import mcts_spacegame.model_mcts.NodeValueMemory;
 import mcts_spacegame.models_mcts_nodes.NodeInterface;
 import mcts_spacegame.models_space.*;
-import mcts_spacegame.policies_action.SimulationPolicyInterface;
+import mcts_spacegame.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -43,11 +42,11 @@ public class Test_5times15grid {
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .weightReturnsSteps(0)
@@ -84,8 +83,8 @@ public class Test_5times15grid {
     public void iterateFromX0Y2NoSimulations() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
                 .maxNofIterations(10)
                 .nofSimulationsPerNode(0)
@@ -108,8 +107,8 @@ public class Test_5times15grid {
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? ShipActionSet.applicableActions().size():1)
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
                 .maxNofIterations(100000)
                 .nofSimulationsPerNode(0)
@@ -130,8 +129,8 @@ public class Test_5times15grid {
     public void iterateFromX10Y2WithSimulationsAndSteps() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
                 .maxNofIterations(100)
                 .nofSimulationsPerNode(100)
@@ -151,8 +150,8 @@ public class Test_5times15grid {
     public void iterateFromX0Y2WithSimulationsAndSteps() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> ShipActionSet.applicableActions().size())
-                .firstActionSelectionPolicy(SimulationPolicyInterface.newAlwaysStill())
-                .simulationPolicy(SimulationPolicyInterface.newMostlyStill())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
                 .maxNofIterations(10_000)
                 .nofSimulationsPerNode(10)
