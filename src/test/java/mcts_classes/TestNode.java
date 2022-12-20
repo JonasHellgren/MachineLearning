@@ -1,11 +1,11 @@
 package mcts_classes;
 
-import mcts_spacegame.generic_interfaces.ActionInterface;
-import mcts_spacegame.nodes.NodeInterface;
-import mcts_spacegame.domains.models_space.ActionShip;
-import mcts_spacegame.domains.models_space.ShipActionSet;
-import mcts_spacegame.domains.models_space.ShipVariables;
-import mcts_spacegame.domains.models_space.StateShip;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.domains.models_space.ActionShip;
+import monte_carlo_tree_search.domains.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Test;
 

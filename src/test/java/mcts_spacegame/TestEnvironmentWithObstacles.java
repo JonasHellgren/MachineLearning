@@ -1,8 +1,7 @@
 package mcts_spacegame;
 
-import mcts_spacegame.domains.models_space.EnvironmentShip;
-import mcts_spacegame.classes.StepReturnGeneric;
-import mcts_spacegame.domains.models_space.*;
+import monte_carlo_tree_search.domains.models_space.*;
+import monte_carlo_tree_search.classes.StepReturnGeneric;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;

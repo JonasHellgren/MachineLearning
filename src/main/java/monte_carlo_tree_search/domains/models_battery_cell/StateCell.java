@@ -1,0 +1,38 @@
+package monte_carlo_tree_search.domains.models_battery_cell;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.generic_interfaces.StateInterface;
+
+
+@ToString
+@Getter
+@EqualsAndHashCode
+public class StateCell implements StateInterface<CellVariables> {
+
+    CellVariables variables;
+
+    public StateCell(CellVariables variables) {
+        this.variables = variables;
+    }
+
+    public static StateCell newDefault() {
+        return new StateCell(CellVariables.builder().build());
+    }
+
+    public static StateCell newWithVariables(CellVariables variables) {
+        return new StateCell(variables);
+    }
+
+    @Override
+    public StateCell copy() {
+        return newWithVariables(variables.copy());
+    }
+
+    @Override
+    public void setFromReturn(StepReturnGeneric<CellVariables> stepReturn) {
+        variables=stepReturn.copyState().getVariables();
+    }
+}

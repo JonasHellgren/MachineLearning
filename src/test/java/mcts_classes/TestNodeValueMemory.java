@@ -1,8 +1,8 @@
 package mcts_classes;
 
-import mcts_spacegame.classes.NodeValueMemory;
-import mcts_spacegame.domains.models_space.ShipVariables;
-import mcts_spacegame.domains.models_space.StateShip;
+import monte_carlo_tree_search.classes.NodeValueMemory;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
+import monte_carlo_tree_search.domains.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

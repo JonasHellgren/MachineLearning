@@ -1,11 +1,11 @@
 package mcts_classes;
 
-import mcts_spacegame.classes.SimulationReturnsExtractor;
-import mcts_spacegame.classes.MonteCarloSettings;
-import mcts_spacegame.classes.SimulationResults;
-import mcts_spacegame.domains.models_space.ShipActionSet;
-import mcts_spacegame.domains.models_space.ShipVariables;
-import mcts_spacegame.domains.models_space.ShipPolicies;
+import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.classes.SimulationReturnsExtractor;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipPolicies;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class TestSimulationReturnsExtractor {
         double g=1;
         simulationResults.add(g, false);
 
-        SimulationReturnsExtractor bms = getBackupModifierFromSimulations(simulationResults);
+        SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
         List<Double> values=bms.simulate();
 
         System.out.println("values = " + values);
@@ -57,7 +57,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g1, false);
         simulationResults.add(g2, false);
 
-        SimulationReturnsExtractor bms = getBackupModifierFromSimulations(simulationResults);
+        SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
         List<Double> values=bms.simulate();
 
         System.out.println("values = " + values);
@@ -74,7 +74,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g1,false);
         simulationResults.add(g2,true);
 
-        SimulationReturnsExtractor bms = getBackupModifierFromSimulations(simulationResults);
+        SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
         List<Double> values=bms.simulate();
 
         System.out.println("values = " + values);
@@ -91,7 +91,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g1, true);
         simulationResults.add(g2, true);
 
-        SimulationReturnsExtractor bms = getBackupModifierFromSimulations(simulationResults);
+        SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
         List<Double> values=bms.simulate();
 
         System.out.println("values = " + values);
@@ -105,8 +105,8 @@ public class TestSimulationReturnsExtractor {
                         values.get(values.size()-3), DELTA)
         );
     }
-    private SimulationReturnsExtractor getBackupModifierFromSimulations(SimulationResults simulationResults) {
-        return SimulationReturnsExtractor.builder()
+    private SimulationReturnsExtractor<ShipVariables, ShipActionSet> getBackupModifierFromSimulations(SimulationResults simulationResults) {
+        return SimulationReturnsExtractor.<ShipVariables, ShipActionSet>builder()
                 .nofNodesOnPath(actionsOnPath.size()+1)
                 .simulationResults(simulationResults)
                 .settings(settings).build();

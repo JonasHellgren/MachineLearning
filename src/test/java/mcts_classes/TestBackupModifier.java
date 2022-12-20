@@ -1,15 +1,13 @@
 package mcts_classes;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.domains.models_space.EnvironmentShip;
-import mcts_spacegame.classes.StepReturnGeneric;
-import mcts_spacegame.generic_interfaces.ActionInterface;
-import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.classes.BackupModifier;
-import mcts_spacegame.classes.MonteCarloSettings;
-import mcts_spacegame.nodes.NodeInterface;
-import mcts_spacegame.domains.models_space.*;
-import mcts_spacegame.domains.models_space.ShipPolicies;
+import monte_carlo_tree_search.domains.models_space.*;
+import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.helpers.TreeInfoHelper;
+import monte_carlo_tree_search.classes.BackupModifier;
+import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.node_models.NodeInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;

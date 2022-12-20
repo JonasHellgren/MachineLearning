@@ -1,6 +1,6 @@
 package mcts_classes;
 
-import mcts_spacegame.classes.SimulationResults;
+import monte_carlo_tree_search.classes.SimulationResults;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
