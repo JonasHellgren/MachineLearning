@@ -14,6 +14,7 @@ import java.util.Set;
 public interface ActionInterface<AV> {
     void setValue(AV actionValue);
     AV getValue();
+    ActionInterface<AV> copy();
     Set<AV> applicableActions();
     AV nonApplicableAction();
 
@@ -30,17 +31,5 @@ public interface ActionInterface<AV> {
         nonTestedValues.removeAll(testedValues);
         return nonTestedValues;
     }
-
-    public static <AV> ActionInterface<AV> newAction(AV value) {
-        if (value instanceof ShipActionSet) {
-            ActionInterface<AV> action= (ActionInterface<AV>) new ActionShip(ShipActionSet.still);  //Todo not clean
-            action.setValue(value);
-            return action;
-        } else {
-            throw new IllegalArgumentException("Not known type");
-        }
-    }
-
-
 
 }

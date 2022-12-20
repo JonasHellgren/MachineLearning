@@ -36,6 +36,11 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
     }
 
     @Override
+    public ActionInterface<ShipActionSet> copy() {
+        return new ActionShip(actionValue);
+    }
+
+    @Override
     public Set<ShipActionSet> applicableActions() {
         return ShipActionSet.applicableActions();
     }

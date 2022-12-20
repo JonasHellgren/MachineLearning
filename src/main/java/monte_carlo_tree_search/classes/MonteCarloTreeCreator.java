@@ -47,7 +47,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     EnvironmentGenericInterface<SSV, AV> environment;
     StateInterface<SSV> startState;
     MonteCarloSettings<SSV,AV> settings;
-    ActionInterface<AV> actionTemplate;  //todo can we remove and use extend on AV instead?
+    ActionInterface<AV> actionTemplate;
     NodeValueMemory<SSV> memory;
 
     NodeInterface<SSV,AV> nodeRoot;
@@ -92,7 +92,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     public NodeInterface<SSV,AV> runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
-        ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings);
+        ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface<SSV,AV> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<AV>> actionInSelected = actionSelector.select(nodeSelected);

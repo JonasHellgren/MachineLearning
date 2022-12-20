@@ -71,6 +71,16 @@ public class ActionCell implements ActionInterface<Integer> {
     }
 
     @Override
+    public ActionInterface<Integer> copy() {
+        return ActionCell.builder()
+                .nofCurrentLevels(nofCurrentLevels)
+                .maxRelativeCurrent(maxRelativeCurrent)
+                .minRelativeCurrent(minRelativeCurrent)
+                .currentLevel(currentLevel)
+                .build();
+    }
+
+    @Override
     public Set<Integer> applicableActions() {
         return IntStream.range(0, nofCurrentLevels)  //exclusive end
                 .boxed()

@@ -18,10 +18,12 @@ import java.util.stream.Collectors;
 public class ActionSelector<SSV,AV> {
     MonteCarloSettings<SSV,AV> settings;
     RandUtils<ActionInterface<AV>> randUtils;
+    ActionInterface<AV> actionTemplate;
 
-    public ActionSelector(MonteCarloSettings<SSV,AV> settings) {
+    public ActionSelector(MonteCarloSettings<SSV,AV> settings, ActionInterface<AV> actionTemplate) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
+        this.actionTemplate=actionTemplate;
     }
 
     public Optional<ActionInterface<AV>> select(NodeInterface<SSV,AV> nodeSelected) {
@@ -60,14 +62,14 @@ public class ActionSelector<SSV,AV> {
     private List<ActionInterface<AV>> getNonTestedActions(NodeInterface<SSV,AV> nodeSelected) {
         List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
         List<AV> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-
         Set<AV> allValues=nodeSelected.getAction().applicableActions();
         List<AV> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValues);
-
         List<ActionInterface<AV>> nonTestedActions=new ArrayList<>();
 
         for (AV value:nonTestedActionValues) {
-            nonTestedActions.add(ActionInterface.newAction(value));  //todo base on Interface
+            ActionInterface<AV> action=actionTemplate.copy();
+            action.setValue(value);
+            nonTestedActions.add(action);
         }
 
         return nonTestedActions;

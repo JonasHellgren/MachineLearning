@@ -13,6 +13,8 @@ public enum ShipActionSet {
         return ShipActionSet.notApplicable;
     }
 
+
+
     public static List<ShipActionSet> getNonTestedActionValues(List<ShipActionSet> values) {
         List<ShipActionSet> nonTestedValues=new ArrayList<>(applicableActions());
         nonTestedValues.removeAll(values);
