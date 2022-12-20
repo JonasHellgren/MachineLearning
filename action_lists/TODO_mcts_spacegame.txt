@@ -147,7 +147,8 @@ generics clean up  x
 iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
 få bort ActionInterface<AV> newAction  x
 
-annan domain - ladda batteri maximalt energi given tid
+annan domain - ladda batteri maximalt energi given tid  x
+simularea cell x
 dokumentera - speciellt termer
 averageNofChildrenPerNode verkar fel
 cpuTimer buggar ibland  - nano sec istaället?

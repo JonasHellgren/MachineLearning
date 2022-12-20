@@ -68,10 +68,6 @@ public class MonteCarloTreeCreator<SSV,AV> {
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
 
-    //    Conditionals.executeOneOfTwo(Objects.isNull(monteCarloSettings),
-     //           () -> mctc.settings = MonteCarloSettings.newDefault(),
-      //          () -> mctc.settings = monteCarloSettings);
-
         mctc.actionTemplate=actionTemplate;
         Conditionals.executeOneOfTwo(Objects.isNull(memory),
                 () -> mctc.memory = NodeValueMemory.newEmpty(),

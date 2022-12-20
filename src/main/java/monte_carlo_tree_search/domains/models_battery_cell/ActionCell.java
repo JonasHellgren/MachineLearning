@@ -93,7 +93,6 @@ public class ActionCell implements ActionInterface<Integer> {
     }
 
     public double getRelativeCurrent() {
-        System.out.println("nofCurrentLevels = " + nofCurrentLevels);
         double span=maxRelativeCurrent-minRelativeCurrent;
         return (nofCurrentLevels == 1)
                 ? minRelativeCurrent
