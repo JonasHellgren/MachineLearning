@@ -1,7 +1,6 @@
 package mcts_spacegame.generic_interfaces;
-import mcts_spacegame.models_mcts_nodes.NodeNotTerminal;
-import mcts_spacegame.models_space.ActionShip;
-import mcts_spacegame.models_space.ShipActionSet;
+import mcts_spacegame.domains.models_space.ActionShip;
+import mcts_spacegame.domains.models_space.ShipActionSet;
 
 import java.util.ArrayList;
 import java.util.Collections;

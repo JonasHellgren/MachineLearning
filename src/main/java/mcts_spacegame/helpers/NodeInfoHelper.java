@@ -1,7 +1,7 @@
 package mcts_spacegame.helpers;
 
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.nodes.NodeInterface;
+import mcts_spacegame.domains.models_space.StateShip;
 
 import java.util.List;
 import java.util.Optional;

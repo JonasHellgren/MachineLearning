@@ -1,8 +1,8 @@
 package mcts_spacegame;
 
-import mcts_spacegame.models_space.SpaceCell;
-import mcts_spacegame.models_space.SpaceGrid;
-import mcts_spacegame.models_space.SpaceGridInterface;
+import mcts_spacegame.domains.models_space.SpaceCell;
+import mcts_spacegame.domains.models_space.SpaceGrid;
+import mcts_spacegame.domains.models_space.SpaceGridInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

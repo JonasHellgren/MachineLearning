@@ -1,11 +1,9 @@
 package mcts_classes;
 
-import mcts_spacegame.model_mcts.SimulationResults;
+import mcts_spacegame.classes.SimulationResults;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class TestSimulationResults {
 

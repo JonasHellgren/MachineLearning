@@ -1,11 +1,9 @@
 package mcts_cell_charging;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
-import mcts_spacegame.generic_interfaces.ActionInterface;
-import mcts_spacegame.models_battery_cell.CellVariables;
+import mcts_spacegame.domains.models_battery_cell.CellVariables;
 import mcts_spacegame.generic_interfaces.StateInterface;
-import mcts_spacegame.models_battery_cell.StateCell;
-import mcts_spacegame.models_space.ShipActionSet;
+import mcts_spacegame.domains.models_battery_cell.StateCell;
+import mcts_spacegame.domains.models_space.ShipActionSet;
 import org.junit.Assert;
 import org.junit.Test;
 

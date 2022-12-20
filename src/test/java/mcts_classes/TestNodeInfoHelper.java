@@ -1,12 +1,11 @@
 package mcts_classes;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
 import mcts_spacegame.helpers.NodeInfoHelper;
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.ActionShip;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.nodes.NodeInterface;
+import mcts_spacegame.domains.models_space.ActionShip;
+import mcts_spacegame.domains.models_space.ShipActionSet;
+import mcts_spacegame.domains.models_space.ShipVariables;
+import mcts_spacegame.domains.models_space.StateShip;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

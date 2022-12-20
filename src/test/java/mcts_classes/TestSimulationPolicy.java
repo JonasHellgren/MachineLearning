@@ -1,11 +1,11 @@
 package mcts_classes;
 
-import mcts_spacegame.environment.EnvironmentShip;
-import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.domains.models_space.EnvironmentShip;
+import mcts_spacegame.classes.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
-import mcts_spacegame.models_space.*;
+import mcts_spacegame.domains.models_space.*;
 import mcts_spacegame.generic_interfaces.SimulationPolicyInterface;
-import mcts_spacegame.models_space.ShipPolicies;
+import mcts_spacegame.domains.models_space.ShipPolicies;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;

@@ -142,7 +142,7 @@ gör generisk för space:
 - NodeSelector<AV>
 - MonteCarloTreeCreator x
 
-- tänka igenom SimulationPolicy
+ShipPolicies
 
 failade test:
 - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3

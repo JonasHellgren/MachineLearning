@@ -1,16 +1,16 @@
 package mcts_classes;
 
 import lombok.SneakyThrows;
-import mcts_spacegame.environment.EnvironmentShip;
+import mcts_spacegame.domains.models_space.EnvironmentShip;
 import mcts_spacegame.generic_interfaces.ActionInterface;
-import mcts_spacegame.model_mcts.MonteCarloSettings;
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.model_mcts.NodeSelector;
-import mcts_spacegame.models_space.ActionShip;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
-import mcts_spacegame.models_space.ShipPolicies;
+import mcts_spacegame.classes.MonteCarloSettings;
+import mcts_spacegame.nodes.NodeInterface;
+import mcts_spacegame.classes.NodeSelector;
+import mcts_spacegame.domains.models_space.ActionShip;
+import mcts_spacegame.domains.models_space.ShipActionSet;
+import mcts_spacegame.domains.models_space.ShipVariables;
+import mcts_spacegame.domains.models_space.StateShip;
+import mcts_spacegame.domains.models_space.ShipPolicies;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

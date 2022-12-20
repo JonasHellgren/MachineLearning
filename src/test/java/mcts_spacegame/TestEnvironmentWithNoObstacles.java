@@ -1,9 +1,8 @@
 package mcts_spacegame;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
-import mcts_spacegame.environment.EnvironmentShip;
-import mcts_spacegame.environment.StepReturnGeneric;
-import mcts_spacegame.models_space.*;
+import mcts_spacegame.domains.models_space.EnvironmentShip;
+import mcts_spacegame.classes.StepReturnGeneric;
+import mcts_spacegame.domains.models_space.*;
 import org.junit.Before;
 import org.junit.Test;
 

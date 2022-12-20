@@ -1,16 +1,16 @@
 package mcts_classes;
 
-import mcts_spacegame.environment.EnvironmentShip;
-import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.domains.models_space.EnvironmentShip;
+import mcts_spacegame.classes.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.helpers.TreeInfoHelper;
-import mcts_spacegame.model_mcts.BackupModifier;
-import mcts_spacegame.model_mcts.MonteCarloSettings;
-import mcts_spacegame.model_mcts.SelectedToTerminalFailConverter;
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_mcts_nodes.NodeTerminalFail;
-import mcts_spacegame.models_space.*;
-import mcts_spacegame.models_space.ShipPolicies;
+import mcts_spacegame.classes.BackupModifier;
+import mcts_spacegame.classes.MonteCarloSettings;
+import mcts_spacegame.classes.SelectedToTerminalFailConverter;
+import mcts_spacegame.nodes.NodeInterface;
+import mcts_spacegame.nodes.NodeTerminalFail;
+import mcts_spacegame.domains.models_space.*;
+import mcts_spacegame.domains.models_space.ShipPolicies;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,12 +1,11 @@
 package mcts_classes;
 
-import mcts_spacegame.enums.ShipActionREMOVE;
-import mcts_spacegame.model_mcts.SimulationReturnsExtractor;
-import mcts_spacegame.model_mcts.MonteCarloSettings;
-import mcts_spacegame.model_mcts.SimulationResults;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.ShipPolicies;
+import mcts_spacegame.classes.SimulationReturnsExtractor;
+import mcts_spacegame.classes.MonteCarloSettings;
+import mcts_spacegame.classes.SimulationResults;
+import mcts_spacegame.domains.models_space.ShipActionSet;
+import mcts_spacegame.domains.models_space.ShipVariables;
+import mcts_spacegame.domains.models_space.ShipPolicies;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class TestSimulationReturnsExtractor {
     private static final double DELTA = 0.1;
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 0.9;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    List<ShipActionREMOVE> actionsOnPath = Arrays.asList(ShipActionREMOVE.up, ShipActionREMOVE.up);
+    List<ShipActionSet> actionsOnPath = Arrays.asList(ShipActionSet.up, ShipActionSet.up);
     SimulationResults simulationResults;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
 

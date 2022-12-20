@@ -1,22 +1,18 @@
 package mcts_spacegame.helpers;
 
-import black_jack.environment.EnvironmentInterface;
 import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import mcts_spacegame.environment.EnvironmentShip;
-import mcts_spacegame.environment.StepReturnGeneric;
+import mcts_spacegame.classes.StepReturnGeneric;
 import mcts_spacegame.generic_interfaces.ActionInterface;
 import mcts_spacegame.generic_interfaces.EnvironmentGenericInterface;
 import mcts_spacegame.generic_interfaces.StateInterface;
-import mcts_spacegame.model_mcts.MonteCarloSettings;
-import mcts_spacegame.model_mcts.NodeSelector;
-import mcts_spacegame.models_mcts_nodes.NodeInterface;
-import mcts_spacegame.models_space.ShipActionSet;
-import mcts_spacegame.models_space.ShipVariables;
-import mcts_spacegame.models_space.StateShip;
+import mcts_spacegame.classes.MonteCarloSettings;
+import mcts_spacegame.classes.NodeSelector;
+import mcts_spacegame.nodes.NodeInterface;
+import mcts_spacegame.domains.models_space.StateShip;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
