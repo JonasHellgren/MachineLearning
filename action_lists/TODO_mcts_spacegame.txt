@@ -150,8 +150,10 @@ få bort ActionInterface<AV> newAction  x
 annan domain - ladda batteri maximalt energi given tid  x
 simularea cell x
 applicableActions både i ActionShip och ShipActionSet, ActionShip bör räcka x
-CellActionSet
-TestCellSimulationPolicy
+CellActionSet  x
+TestCellSimulationPolicy  x
+RandomFeasiblePolicy  x
+BestFeasiblePolicy
 MCTS utifrån TestHardCodedCurrentTrajectories
 
 dokumentera - speciellt termer

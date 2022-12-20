@@ -44,13 +44,11 @@ public class ActionShip implements ActionInterface<ShipActionSet> {
 
     @Override
     public Set<ShipActionSet> applicableActions() {
-        //return ShipActionSet.applicableActions();
         return new HashSet<>(Arrays.asList(ShipActionSet.up, ShipActionSet.still, ShipActionSet.down));
     }
 
     @Override
     public ShipActionSet nonApplicableAction() {
-        //return ShipActionSet.nonApplicableAction();
         return ShipActionSet.notApplicable;
     }
 }

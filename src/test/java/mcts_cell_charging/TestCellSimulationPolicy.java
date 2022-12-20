@@ -2,19 +2,22 @@ package mcts_cell_charging;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.models_battery_cell.*;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipPolicies;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import org.apache.arrow.flatbuf.Int;
+import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TestHardCodedCurrentTrajectories {
+public class TestCellSimulationPolicy {
+
     private static final double SOC_INIT = 0.1;
     private static final int TEMPERATURE_INIT = 20;
     private static final int TIME_INIT = 0;
@@ -25,7 +28,7 @@ public class TestHardCodedCurrentTrajectories {
     StateCell state;
     CellSettings cellSettings;
     CellVariables variables;
-    ActionCell action;
+    ActionInterface<Integer> action;
     Integer maxCurrentLevel=NOF_CURRENT_LEVELS-1;
 
     @Before
@@ -38,36 +41,24 @@ public class TestHardCodedCurrentTrajectories {
         variables=state.getVariables();
         action= ActionCell.builder()
                 .nofCurrentLevels(NOF_CURRENT_LEVELS).build();
+
     }
 
     @Test
-    public void maxCurrentTrajectoryGivesToHighVoltage() {
-        List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel);
-        List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
+    public void simulateWithEqualProbEndsInToHighVoltage() {
+        SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newEqualProbability(action);
+        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
         resultsList.forEach(System.out::println);
-
-        Assert.assertTrue(resultsList.size()<currentTraj.size());
+        Assert.assertTrue(resultsList.size()>0);
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getVoltage()>cellSettings.getMaxVoltage());
     }
 
     @Test
-    public void highCurrentTrajectoryGivesToHighTemp() {
-        List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel-2);
-        List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
+    public void simulateWithRandomFeasibleGivesNoViolation() {
+        SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newRandomFeasible(action,environment);
+        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
         resultsList.forEach(System.out::println);
-
-        Assert.assertTrue(resultsList.size()<currentTraj.size());
-        Assert.assertTrue(resultsList.get(resultsList.size()-1).getNewTemperature()>cellSettings.getMaxTemperature());
-    }
-
-    @Test
-    public void moderateCurrentTrajectoryGivesNoViolation() {
-        List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel-3);
-        List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
-        resultsList.forEach(System.out::println);
-
-        int nofResultItems=resultsList.size();
-        Assert.assertTrue(nofResultItems==currentTraj.size());
+        Assert.assertTrue(resultsList.size()>0);
         AssertNoVoltageAndTempViolation(resultsList);
     }
 
@@ -76,10 +67,11 @@ public class TestHardCodedCurrentTrajectories {
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getVoltage()<cellSettings.getMaxVoltage());
     }
 
-    private List<EnvironmentCell.CellResults> simulate(List<Integer> currentTraj) {
+
+    private List<EnvironmentCell.CellResults> simulate(SimulationPolicyInterface<CellVariables, Integer> policy) {
         List<EnvironmentCell.CellResults> resultsList=new ArrayList<>();
-        for (Integer current: currentTraj) {
-            action.setValue(current);
+        for (int i = 0; i < MAX_TIME/DT; i++) {
+            ActionInterface<Integer> action=policy.chooseAction(state.copy());
             StepReturnGeneric<CellVariables> sr=environment.step(action,state);
             state.setFromReturn(sr);
             EnvironmentCell environmentCasted= (EnvironmentCell) environment;
