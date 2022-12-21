@@ -157,7 +157,7 @@ BestFeasiblePolicy  x
 variabel powerCell x
 EnvironmentCell isToHighPowerCell  x
 TestMonteCarloControlledCharging x
-plotta powerCell och SoC sfa tid
+plotta powerCell och SoC sfa tid  x
 
 dokumentera - speciellt termer
 averageNofChildrenPerNode verkar fel

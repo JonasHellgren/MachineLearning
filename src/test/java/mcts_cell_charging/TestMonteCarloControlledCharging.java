@@ -74,6 +74,9 @@ public class TestMonteCarloControlledCharging {
     public void iterateFromX0Y2() {
         NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
+        doPlotting(nodeRoot);
+
+
      //   TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
      //   assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
      //   assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
@@ -81,24 +84,26 @@ public class TestMonteCarloControlledCharging {
 
     private void doPrinting(NodeInterface<CellVariables, Integer> nodeRoot) {
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
+        TreeInfoHelper<CellVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
+        System.out.println("tih.getBestPath() = " + tih.getBestPath());
 
+        // nodeRoot.printTree();
+
+    }
+
+    private void doPlotting(NodeInterface<CellVariables, Integer> nodeRoot) {
         TreeInfoHelper<CellVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
         List<ActionInterface <Integer>> bestActions=tih.getActionsOnBestPath();
 
         System.out.println("bestActions = " + bestActions);
         List<Integer> actionValues=bestActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-        System.out.println("actionValues = " + actionValues);
-
         CellSimulator simulator=new CellSimulator((EnvironmentCell) environment);
         List<EnvironmentCell.CellResults> resultsList=simulator.simulate(actionValues,
                 StateCell.newStateFromSoCTempAndTime(SOC_INIT,TEMPERATURE_INIT,TIME_INIT),
                 (ActionCell) actionTemplate);
-
-        resultsList.forEach(System.out::println);
-
-       // nodeRoot.printTree();
-
+        CellResultsPlotter plotter=new CellResultsPlotter();
+        plotter.plot(resultsList);
     }
 
 
