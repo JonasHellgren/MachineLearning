@@ -78,12 +78,13 @@ public class MonteCarloTreeCreator<SSV,AV> {
     }
 
     private static <SSV,AV>  void setSomeFields(@NonNull StateInterface<SSV> startState, MonteCarloTreeCreator<SSV,AV>  mctc) {
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState,mctc.actionTemplate);  //todo generic not null
+        ActionInterface<AV> actionRoot=mctc.actionTemplate.copy();
+        actionRoot.setValue(actionRoot.nonApplicableAction());
+        mctc.nodeRoot = NodeInterface.newNotTerminal(startState,actionRoot);
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
     }
-
 
     public NodeInterface<SSV,AV> runIterations() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
@@ -113,7 +114,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     }
 
     public MonteCarloSearchStatistics<SSV,AV> getStatistics() {
-        MonteCarloSearchStatistics<SSV,AV> statistics = new MonteCarloSearchStatistics<>(nodeRoot, cpuTimer, nofIterations,settings);
+        MonteCarloSearchStatistics<SSV,AV> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this,settings);
         statistics.setStatistics();
         return statistics;
     }

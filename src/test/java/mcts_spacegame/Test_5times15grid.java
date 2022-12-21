@@ -11,7 +11,6 @@ import monte_carlo_tree_search.classes.NodeValueMemory;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -180,7 +179,7 @@ public class Test_5times15grid {
     private void doPrinting(NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
-        System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
+        System.out.println("nofNodesInTree = " + tih.nofNodes());
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
         nodeRoot.printTree();
         tih.getBestPath().forEach(System.out::println);

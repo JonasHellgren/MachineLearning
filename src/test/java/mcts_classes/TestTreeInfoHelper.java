@@ -68,7 +68,7 @@ public class TestTreeInfoHelper {
     }
 
     @Test public void testNofNodesInTree() {
-        int nofNodes=tih.nofNodesInTree();
+        int nofNodes=tih.nofNodes();
         nodeRoot.printTree();
 
         System.out.println("nofNodes = " + nofNodes);

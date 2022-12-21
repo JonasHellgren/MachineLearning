@@ -93,7 +93,7 @@ public class Test_3times7gridWithCorridor {
 
     private void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,
                             NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
+        System.out.println("nofNodesInTree = " + tih.nofNodes());
         nodeRoot.printTree();
         tih.getBestPath().forEach(System.out::println);
     }

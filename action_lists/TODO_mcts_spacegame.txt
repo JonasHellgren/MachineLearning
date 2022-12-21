@@ -156,7 +156,7 @@ RandomFeasiblePolicy  x
 BestFeasiblePolicy  x
 variabel powerCell x
 EnvironmentCell isToHighPowerCell  x
-MCTS utifrån TestHardCodedCurrentTrajectories
+TestMonteCarloControlledCharging x
 plotta powerCell och SoC sfa tid
 
 dokumentera - speciellt termer

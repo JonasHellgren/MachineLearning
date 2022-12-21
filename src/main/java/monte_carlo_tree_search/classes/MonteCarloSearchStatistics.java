@@ -17,7 +17,11 @@ public class MonteCarloSearchStatistics<SSV,AV> {
     @ToString.Exclude  TreeInfoHelper<SSV,AV> tih;
 
     int nofNodes;
+    int nofNodesNotTerminal;
+    int nofNodesFail;
+    int totalNofChildren;
     int nofNodesWithNoChildren;
+    int nofNodesWithChildren;
     int maxDepth;
     float averageNofChildrenPerNode;
     int nofIterations;
@@ -25,20 +29,24 @@ public class MonteCarloSearchStatistics<SSV,AV> {
     float usedRelativeTimeInPercentage;
     MonteCarloSettings<SSV,AV> settings;
 
-    public MonteCarloSearchStatistics(@NonNull  NodeInterface<SSV,AV> nodeRoot,
-                                      @NonNull CpuTimer cpuTimer,
-                                      int nofIterations,
+    public MonteCarloSearchStatistics(@NonNull NodeInterface<SSV,AV> nodeRoot,
+                                      @NonNull MonteCarloTreeCreator<SSV,AV> monteCarloTreeCreator,
                                       MonteCarloSettings<SSV,AV> settings) {
         this.nodeRoot = nodeRoot;
-        this.cpuTimer=cpuTimer;
-        this.nofIterations=nofIterations;
+        this.cpuTimer=monteCarloTreeCreator.cpuTimer;
+        this.nofIterations=monteCarloTreeCreator.nofIterations;
         this.settings=settings;
+        setStatistics();
     }
 
     public void setStatistics() {
         tih=new TreeInfoHelper<>(nodeRoot,settings);
-        nofNodes=tih.nofNodesInTree();
+        nofNodes=tih.nofNodes();
+        nofNodesNotTerminal =tih.nofNodesNotTerminal();
+        nofNodesFail=tih.nofNodesFail();
+        totalNofChildren=tih.totalNofChildren();
         nofNodesWithNoChildren=tih.nofNodesWithNoChildren();
+        nofNodesWithChildren=nofNodes-nofNodesWithNoChildren;
         maxDepth= tih.maxDepth();
         averageNofChildrenPerNode=calcAverageNofChildrensPerNodeThatHasChildren();
         usedTimeInMilliSeconds=cpuTimer.absoluteProgress();
@@ -46,9 +54,7 @@ public class MonteCarloSearchStatistics<SSV,AV> {
     }
 
     private float calcAverageNofChildrensPerNodeThatHasChildren() {
-        int totalNofChildren=tih.totalNofChildren();
-        int nofNodesWithChildren=nofNodes-nofNodesWithNoChildren;
-        return (totalNofChildren / (float) nofNodesWithChildren);
+        return ((nofNodes-nofNodesFail) / (float) nofNodesWithChildren);
     }
 
 }

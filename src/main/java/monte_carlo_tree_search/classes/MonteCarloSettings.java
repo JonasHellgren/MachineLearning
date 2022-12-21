@@ -13,7 +13,7 @@ import java.util.function.Function;
 @ToString
 public class MonteCarloSettings<SSV,AV> {
     private static final int NOF_ITERATIONS_DEFAULT=1000;
-    private static final int C_DEFAULT=20;
+    private static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
@@ -30,7 +30,7 @@ public class MonteCarloSettings<SSV,AV> {
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
     @Builder.Default
-    int coefficientExploitationExploration =C_DEFAULT;
+    double coefficientExploitationExploration =C_DEFAULT;
     @Builder.Default
     int maxTreeDepth = MAX_TREE_DEPTH_DEFAULT;
     @Builder.Default

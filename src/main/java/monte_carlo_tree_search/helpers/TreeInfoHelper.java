@@ -99,9 +99,34 @@ public class TreeInfoHelper<SSV,AV> {
         return ns.getNodesFromRootToSelected();
     }
 
-    public int nofNodesInTree() {
+    @SneakyThrows
+    public List<ActionInterface <AV>> getActionsOnBestPath() {
+        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
+        ns.select();
+        return ns.getActionsFromRootToSelected();
+    }
+
+    public int nofNodes() {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> a+1;
+        counter.setCount(1);  //don't forget grandma
+        evalRecursive(rootTree,counter,inc);
+        return counter.getCount();
+    }
+
+    public int nofNodesNotTerminal() {
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) ->
+                a+(b.isNotTerminal() ? 1:0);
+        counter.setCount(1);  //don't forget grandma
+        evalRecursive(rootTree,counter,inc);
+        return counter.getCount();
+    }
+
+    public int nofNodesFail() {
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) ->
+                a+(b.isTerminalFail() ? 1:0);
         counter.setCount(1);  //don't forget grandma
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();

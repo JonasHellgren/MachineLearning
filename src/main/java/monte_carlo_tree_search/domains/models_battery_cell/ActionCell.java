@@ -5,6 +5,7 @@ import common.MathUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 
@@ -23,17 +24,22 @@ import java.util.stream.IntStream;
 @Getter
 @Builder
 @Log
+@ToString(includeFieldNames = false)
 public class ActionCell implements ActionInterface<Integer> {
     private static final int NOF_LEVELS_DEFAULT = 3;
     private static final double MAX_RELATIVE_CURRENT_DEFAULT = 1;
     private static final double MIN_RELATIVE_CURRENT_DEFAULT = 0.5;
     private static final int LEVEL_DEFAULT = 0;
+    private static final int NON_APPLIC_VALUE = -1;
     //@Builder.Default  does not work with custom builder
     @NonNull
+    @ToString.Exclude
     private final Integer nofCurrentLevels;
     @Builder.Default
+    @ToString.Exclude
     private final double maxRelativeCurrent = MAX_RELATIVE_CURRENT_DEFAULT;
     @Builder.Default
+    @ToString.Exclude
     private final double minRelativeCurrent = MIN_RELATIVE_CURRENT_DEFAULT;
     @Builder.Default
     private Integer currentLevel = LEVEL_DEFAULT;
@@ -59,10 +65,10 @@ public class ActionCell implements ActionInterface<Integer> {
 
     @Override
    public void setValue(Integer level) {
-        Conditionals.executeIfTrue(level < 0 || level >= nofCurrentLevels, () ->
-                log.warning("Non valid level"));
+        Conditionals.executeIfTrue(level < NON_APPLIC_VALUE || level >= nofCurrentLevels, () ->
+                log.warning("Non valid level = "+currentLevel+", nofCurrentLevels = "+nofCurrentLevels));
 
-        this.currentLevel = MathUtils.clip(level, 0, nofCurrentLevels - 1);
+        this.currentLevel = MathUtils.clip(level, NON_APPLIC_VALUE, nofCurrentLevels - 1);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class ActionCell implements ActionInterface<Integer> {
 
     @Override
     public Integer nonApplicableAction() {
-        return -1;
+        return NON_APPLIC_VALUE;
     }
 
     public double getRelativeCurrent() {

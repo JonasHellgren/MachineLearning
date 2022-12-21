@@ -9,6 +9,9 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,Integer> {
 
     @Builder
@@ -97,4 +100,7 @@ public class EnvironmentCell implements EnvironmentGenericInterface<CellVariable
         double Qloss= s.heatTransferCoefficient* s.heatArea*(state.getVariables().temperature- s.temperatureAmbient);
         return (Qgen-Qloss)/s.heatCapacityCoefficient;
     }
+
+
+
 }

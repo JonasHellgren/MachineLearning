@@ -14,6 +14,11 @@ public class StateCell implements StateInterface<CellVariables> {
 
     CellVariables variables;
 
+    public static StateCell newStateFromSoCTempAndTime(double SoC, double temperature, double time) {
+        return new StateCell(CellVariables.builder()
+                .SoC(SoC).temperature(temperature).time(time).build());
+    }
+
     public StateCell(CellVariables variables) {
         this.variables = variables;
     }

@@ -240,7 +240,7 @@ public class Test_5times15gridCorridor {
     private void doPrinting(NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
-        System.out.println("nofNodesInTree = " + tih.nofNodesInTree());
+        System.out.println("nofNodesInTree = " + tih.nofNodes());
         nodeRoot.printTree();
         tih.getBestPath().forEach(System.out::println);
     }

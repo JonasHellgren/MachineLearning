@@ -81,7 +81,6 @@ public class TestCellSimulationPolicy {
             state.setFromReturn(sr);
             EnvironmentCell environmentCasted= (EnvironmentCell) environment;
             resultsList.add(environmentCasted.getCellResults());
-
             if (sr.isTerminal) {
                 break;
             }
