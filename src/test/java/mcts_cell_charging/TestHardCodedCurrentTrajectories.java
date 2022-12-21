@@ -51,6 +51,17 @@ public class TestHardCodedCurrentTrajectories {
     }
 
     @Test
+    public void maxCurrentTrajectoryLoweredMaxPowerCellGivesToHighPower() {
+        List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel);
+        cellSettings.setPowerCellMax(800);
+        List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
+        resultsList.forEach(System.out::println);
+
+        Assert.assertTrue(resultsList.size()<currentTraj.size());
+        Assert.assertTrue(resultsList.get(resultsList.size()-1).getPower()>cellSettings.getPowerCellMax());
+    }
+
+    @Test
     public void highCurrentTrajectoryGivesToHighTemp() {
         List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel-2);
         List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);

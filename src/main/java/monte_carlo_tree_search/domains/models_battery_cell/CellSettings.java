@@ -2,9 +2,11 @@ package monte_carlo_tree_search.domains.models_battery_cell;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 public class CellSettings {
 
     static final double MAX_CURRENT_DEFAULT=200;
@@ -12,6 +14,9 @@ public class CellSettings {
     static final double CAPACITY_DEFAULT=36_000;  //10 Ah
     static final double MAX_TEMPERATURE=50;   //Celsius
     static final double MAX_VOLTAGE=4.1;
+    static final double MAX_POWER_CHARGER=250_000;
+    static final int NOF_CELLS=250;
+    static final double MAX_POWER_CELL=MAX_POWER_CHARGER/(double) NOF_CELLS;
     //https://www.batterydesign.net/specific-heat-capacity-of-lithium-ion-cells/
     static final double HEAT_CAPACITY_DEFAULT=500;  //J/kg
     //https://iopscience.iop.org/article/10.1088/1757-899X/53/1/012014/pdf
@@ -38,6 +43,8 @@ public class CellSettings {
     double maxTemperature=MAX_TEMPERATURE;
     @Builder.Default
     double maxVoltage=MAX_VOLTAGE;
+    @Builder.Default
+    double powerCellMax=MAX_POWER_CELL;
     @Builder.Default
     double heatCapacityCoefficient=HEAT_CAPACITY_DEFAULT;
     @Builder.Default

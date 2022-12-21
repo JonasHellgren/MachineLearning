@@ -1,6 +1,4 @@
 package monte_carlo_tree_search.domains.models_battery_cell;
-
-import common.RandUtils;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;

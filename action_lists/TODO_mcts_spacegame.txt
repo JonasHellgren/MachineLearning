@@ -154,7 +154,10 @@ CellActionSet  x
 TestCellSimulationPolicy  x
 RandomFeasiblePolicy  x
 BestFeasiblePolicy  x
+variabel powerCell x
+EnvironmentCell isToHighPowerCell  x
 MCTS utifrån TestHardCodedCurrentTrajectories
+plotta powerCell och SoC sfa tid
 
 dokumentera - speciellt termer
 averageNofChildrenPerNode verkar fel

@@ -22,8 +22,10 @@ public class EnvironmentCell implements EnvironmentGenericInterface<CellVariable
         double newTime;
         double ocv;
         double voltage;
+        double power;
         boolean isToHighVoltage;
         boolean isToHighTemperature;
+        boolean isToHighPowerCell;
         boolean isTimeUp;
     }
 
@@ -56,9 +58,12 @@ public class EnvironmentCell implements EnvironmentGenericInterface<CellVariable
 
         double ocv=interpolatorOCV.interpLinear(new double[]{v.SoC})[0];
         double voltage=ocv+current*s.resistance;
+        double power=voltage*current;
 
         boolean isToHighVoltage=voltage>s.maxVoltage;
+        boolean isToHighPowerCell=Math.abs(power)>Math.abs(s.powerCellMax);
         boolean isToHighTemperature=newTemperature>s.maxTemperature;
+        boolean isFail=isToHighVoltage || isToHighTemperature || isToHighPowerCell;
         boolean isTimeUp=newTime>=s.maxTime;
 
         double reward=newSoC-v.SoC;
@@ -71,15 +76,17 @@ public class EnvironmentCell implements EnvironmentGenericInterface<CellVariable
                 .newTime(newTime)
                 .ocv(ocv)
                 .voltage(voltage)
+                .power(power)
                 .isToHighVoltage(isToHighVoltage)
                 .isToHighTemperature(isToHighTemperature)
+                .isToHighPowerCell(isToHighPowerCell)
                 .isTimeUp(isTimeUp)
                 .build();
 
         return StepReturnGeneric.<CellVariables>builder()
                 .newState(newState)
-                .isFail(isToHighVoltage || isToHighTemperature)
-                .isTerminal(isToHighVoltage || isToHighTemperature || isTimeUp)
+                .isFail(isFail)
+                .isTerminal(isFail || isTimeUp)
                 .reward(reward)
                 .build();
 

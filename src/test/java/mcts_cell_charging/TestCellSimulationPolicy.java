@@ -2,9 +2,6 @@ package mcts_cell_charging;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.models_battery_cell.*;
-import monte_carlo_tree_search.domains.models_space.ShipActionSet;
-import monte_carlo_tree_search.domains.models_space.ShipPolicies;
-import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
@@ -13,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TestCellSimulationPolicy {
@@ -59,7 +55,7 @@ public class TestCellSimulationPolicy {
         List<EnvironmentCell.CellResults> resultsList=simulate(policy);
         resultsList.forEach(System.out::println);
         Assert.assertTrue(resultsList.size()>0);
-        AssertNoVoltageAndTempViolation(resultsList);
+        AssertNoVoltageOrTempViolation(resultsList);
     }
 
     @Test
@@ -68,10 +64,10 @@ public class TestCellSimulationPolicy {
         List<EnvironmentCell.CellResults> resultsList=simulate(policy);
         resultsList.forEach(System.out::println);
         Assert.assertTrue(resultsList.size()>0);
-        AssertNoVoltageAndTempViolation(resultsList);
+        AssertNoVoltageOrTempViolation(resultsList);
     }
 
-    private void AssertNoVoltageAndTempViolation(List<EnvironmentCell.CellResults> resultsList) {
+    private void AssertNoVoltageOrTempViolation(List<EnvironmentCell.CellResults> resultsList) {
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getNewTemperature()<cellSettings.getMaxTemperature());
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getVoltage()<cellSettings.getMaxVoltage());
     }
