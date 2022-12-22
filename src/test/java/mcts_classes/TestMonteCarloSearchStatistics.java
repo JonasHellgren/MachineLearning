@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMonteCarloSearchStatistics {
@@ -53,6 +55,7 @@ public class TestMonteCarloSearchStatistics {
                 () -> assertEquals(0,statistics.getNofNodesFail(), DELTA),
                 () -> assertEquals(2,statistics.getNofNodesWithChildren(), DELTA),
                 () -> assertEquals(2,statistics.getMaxDepth(), DELTA),
+                () -> assertTrue(statistics.getNofNodesPerDepthLevel().containsAll(Arrays.asList(1,1,1))),
                 () -> assertEquals(1,statistics.getAverageNofChildrenPerNode(), DELTA)
         );
     }
@@ -69,6 +72,7 @@ public class TestMonteCarloSearchStatistics {
                 () -> assertEquals(0,statistics.getNofNodesFail(), DELTA),
                 () -> assertEquals(3,statistics.getNofNodesWithChildren(), DELTA),
                 () -> assertEquals(2,statistics.getMaxDepth(), DELTA),
+                () -> assertTrue(statistics.getNofNodesPerDepthLevel().containsAll(Arrays.asList(1,2,4))),
                 () -> assertEquals(2,statistics.getAverageNofChildrenPerNode(), DELTA)
         );
     }

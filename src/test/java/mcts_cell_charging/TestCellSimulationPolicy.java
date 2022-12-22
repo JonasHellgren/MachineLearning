@@ -25,7 +25,7 @@ public class TestCellSimulationPolicy {
     CellSettings cellSettings;
     CellVariables variables;
     ActionInterface<Integer> action;
-    Integer maxCurrentLevel=NOF_CURRENT_LEVELS-1;
+    CellSimulator simulator;
 
     @Before
     public void init() {
@@ -37,13 +37,14 @@ public class TestCellSimulationPolicy {
         variables=state.getVariables();
         action= ActionCell.builder()
                 .nofCurrentLevels(NOF_CURRENT_LEVELS).build();
+        simulator=new CellSimulator((EnvironmentCell) environment);
 
     }
 
     @Test
     public void simulateWithEqualProbEndsInToHighVoltage() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newEqualProbability(action);
-        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
+        List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);
         Assert.assertTrue(resultsList.size()>0);
         Assert.assertTrue(resultsList.get(resultsList.size()-1).getVoltage()>cellSettings.getMaxVoltage());
@@ -52,7 +53,7 @@ public class TestCellSimulationPolicy {
     @Test
     public void simulateWithRandomFeasibleGivesNoViolation() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newRandomFeasible(action,environment);
-        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
+        List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);
         Assert.assertTrue(resultsList.size()>0);
         AssertNoVoltageOrTempViolation(resultsList);
@@ -61,7 +62,7 @@ public class TestCellSimulationPolicy {
     @Test
     public void simulateWithBestFeasibleGivesNoViolation() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newBestFeasible(action,environment);
-        List<EnvironmentCell.CellResults> resultsList=simulate(policy);
+        List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);
         Assert.assertTrue(resultsList.size()>0);
         AssertNoVoltageOrTempViolation(resultsList);
@@ -73,19 +74,6 @@ public class TestCellSimulationPolicy {
     }
 
 
-    private List<EnvironmentCell.CellResults> simulate(SimulationPolicyInterface<CellVariables, Integer> policy) {
-        List<EnvironmentCell.CellResults> resultsList=new ArrayList<>();
-        for (int i = 0; i < MAX_TIME/DT; i++) {
-            ActionInterface<Integer> action=policy.chooseAction(state.copy());
-            StepReturnGeneric<CellVariables> sr=environment.step(action,state);
-            state.setFromReturn(sr);
-            EnvironmentCell environmentCasted= (EnvironmentCell) environment;
-            resultsList.add(environmentCasted.getCellResults());
-            if (sr.isTerminal) {
-                break;
-            }
-        }
-        return resultsList;
-    }
+
 
 }

@@ -160,8 +160,8 @@ TestMonteCarloControlledCharging x
 plotta powerCell och SoC sfa tid  x
 dokumentera - speciellt termer  x
 averageNofChildrenPerNode verkar fel - tester runt detta  x
-noder per lager i statisitics
-fler fall BestFeasiblePolicy . main runner
+noder per lager i statisitics  x
+SimulateWithBestFeasibleRunner
 clean up
 annan domain cart pole
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa

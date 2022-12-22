@@ -1,6 +1,8 @@
 package monte_carlo_tree_search.domains.models_battery_cell;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,23 @@ public class CellSimulator {
             state.setFromReturn(sr);
             resultsList.add(environment.getCellResults());
 
+            if (sr.isTerminal) {
+                break;
+            }
+        }
+        return resultsList;
+    }
+
+    public  List<EnvironmentCell.CellResults> simulateWithPolicy(SimulationPolicyInterface<CellVariables, Integer> policy,
+                                                                int nofSteps,
+                                                                StateCell state) {
+        List<EnvironmentCell.CellResults> resultsList=new ArrayList<>();
+        for (int i = 0; i < nofSteps; i++) {
+            ActionInterface<Integer> action=policy.chooseAction(state.copy());
+            StepReturnGeneric<CellVariables> sr=environment.step(action,state);
+            state.setFromReturn(sr);
+            EnvironmentCell environmentCasted= (EnvironmentCell) environment;
+            resultsList.add(environmentCasted.getCellResults());
             if (sr.isTerminal) {
                 break;
             }

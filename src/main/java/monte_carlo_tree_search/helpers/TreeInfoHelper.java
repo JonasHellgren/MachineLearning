@@ -138,6 +138,16 @@ public class TreeInfoHelper<SSV,AV> {
         return counter.getCount();
     }
 
+    public int nofNodesAtDepth(int depth) {
+        if (depth==0) {  //don't forget root
+            return 1;
+        }
+        Counter counter = new Counter();
+        BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> a+((b.getDepth()==depth) ?1:0);
+        evalRecursive(rootTree,counter,inc);
+        return counter.getCount();
+    }
+
     public int maxDepth() {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> max = (a,b) -> Math.max(a,b.getDepth());

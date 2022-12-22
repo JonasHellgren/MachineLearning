@@ -28,6 +28,7 @@ public class TestMonteCarloControlledCharging {
     private static final int NOF_CURRENT_LEVELS = 5;
     private static final int MAX_TIME = 120; //120;
     private static final int MAX_TREE_DEPTH = MAX_TIME/DT;
+    private static final int TIME_OUT = 15_000;
 
     MonteCarloTreeCreator<CellVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CellVariables, Integer> environment;
@@ -71,7 +72,7 @@ public class TestMonteCarloControlledCharging {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y2() {
+    public void doMonteCarloAndPlot() {
         NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         doPlotting(nodeRoot);
@@ -102,7 +103,7 @@ public class TestMonteCarloControlledCharging {
         List<EnvironmentCell.CellResults> resultsList=simulator.simulate(actionValues,
                 StateCell.newStateFromSoCTempAndTime(SOC_INIT,TEMPERATURE_INIT,TIME_INIT),
                 (ActionCell) actionTemplate);
-        CellResultsPlotter plotter=new CellResultsPlotter();
+        CellResultsPlotter plotter=new CellResultsPlotter("Hello", TIME_OUT);
         plotter.plot(resultsList);
     }
 

@@ -10,7 +10,15 @@ import java.util.concurrent.TimeUnit;
 
 public class CellResultsPlotter {
 
-    private static final int TIMEOUT = 20_000;
+    private static final int WIDTH = 550;
+    private static final int HEIGHT = 500;
+    private final int timeOut;
+    private final String frameTitle;
+
+    public CellResultsPlotter(String frameTitle, int timeOut ) {
+        this.frameTitle=frameTitle;
+        this.timeOut=timeOut;
+    }
 
     @SneakyThrows
     public void plot(List<EnvironmentCell.CellResults> resultsList) {
@@ -37,7 +45,8 @@ public class CellResultsPlotter {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(2, 2));
-        frame.setSize(1250, 800);
+        frame.setTitle(frameTitle);
+        frame.setSize(WIDTH, HEIGHT);
         frame.setVisible(true);
         frame.add(plotPanel1);
         frame.add(plotPanel2);
@@ -46,7 +55,7 @@ public class CellResultsPlotter {
 
         frame.setVisible(true);
 
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        TimeUnit.MILLISECONDS.sleep(timeOut);
 
 
     }

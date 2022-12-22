@@ -25,6 +25,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
  *   constraint3:  |power|<powerCellMax
  */
 
+@Getter
 public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,Integer> {
 
     @Builder
