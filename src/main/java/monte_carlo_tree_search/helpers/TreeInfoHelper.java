@@ -109,7 +109,7 @@ public class TreeInfoHelper<SSV,AV> {
     public int nofNodes() {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> a+1;
-        counter.setCount(1);  //don't forget grandma
+        counter.setCount(1);  //don't forget root
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
     }
@@ -118,7 +118,7 @@ public class TreeInfoHelper<SSV,AV> {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) ->
                 a+(b.isNotTerminal() ? 1:0);
-        counter.setCount(1);  //don't forget grandma
+        counter.setCount(1);  //don't forget root
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
     }
@@ -127,7 +127,6 @@ public class TreeInfoHelper<SSV,AV> {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) ->
                 a+(b.isTerminalFail() ? 1:0);
-        counter.setCount(1);  //don't forget grandma
         evalRecursive(rootTree,counter,inc);
         return counter.getCount();
     }

@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class CellResultsPlotter {
 
+    private static final int TIMEOUT = 20_000;
+
     @SneakyThrows
     public void plot(List<EnvironmentCell.CellResults> resultsList) {
 
@@ -44,11 +46,7 @@ public class CellResultsPlotter {
 
         frame.setVisible(true);
 
-      //  plotPanel2.setChartDataFromSeries(series1);
-
-      //  frame.pack();
-      //  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        TimeUnit.MILLISECONDS.sleep(10000);
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
 
     }
@@ -57,7 +55,6 @@ public class CellResultsPlotter {
         XYSeries series = new XYSeries("Current");
         for (EnvironmentCell.CellResults result:resultsList) {
             series.add(result.newTime, result.current);
-
         }
         return series;
     }
@@ -66,7 +63,6 @@ public class CellResultsPlotter {
         XYSeries series = new XYSeries("SOC");
         for (EnvironmentCell.CellResults result:resultsList) {
             series.add(result.newTime, result.newSoC);
-
         }
         return series;
     }
@@ -75,7 +71,6 @@ public class CellResultsPlotter {
         XYSeries series = new XYSeries("Power");
         for (EnvironmentCell.CellResults result:resultsList) {
             series.add(result.newTime, result.power);
-
         }
         return series;
     }
@@ -84,7 +79,6 @@ public class CellResultsPlotter {
         XYSeries series = new XYSeries("Temp");
         for (EnvironmentCell.CellResults result:resultsList) {
             series.add(result.newTime, result.newTemperature);
-
         }
         return series;
     }

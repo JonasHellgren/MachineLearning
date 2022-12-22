@@ -158,11 +158,16 @@ variabel powerCell x
 EnvironmentCell isToHighPowerCell  x
 TestMonteCarloControlledCharging x
 plotta powerCell och SoC sfa tid  x
+dokumentera - speciellt termer  x
+averageNofChildrenPerNode verkar fel - tester runt detta  x
+noder per lager i statisitics
+fler fall BestFeasiblePolicy . main runner
+clean up
+annan domain cart pole
+https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
 
-dokumentera - speciellt termer
-averageNofChildrenPerNode verkar fel
+många iteration få noder
 cpuTimer buggar ibland  - nano sec istaället?
-
 best path beror bara på value nofVisits kan ju även påverka val
 Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Exploration
 . kunna radera noder

@@ -9,8 +9,21 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-import java.util.ArrayList;
-import java.util.List;
+
+/***
+ *  The model used is:
+ *   d/dt SoC = current/capacity
+ *   d/dt temperature = (Qgen-Qloss)/heatCapacityCoefficient
+ *   Qgen=i^2*Ri,  Qloss=h*A*(temperature-temperatureAmbient)
+ *   ocv=f(SoC)
+ *   voltage=ocv+current*Ri
+ *   power=voltage*current
+ *
+ *   with following constraints:
+ *   constraint1:  voltage<maxVoltage
+ *   constraint2:  temperature<maxTemperature
+ *   constraint3:  |power|<powerCellMax
+ */
 
 public class EnvironmentCell implements EnvironmentGenericInterface<CellVariables,Integer> {
 
