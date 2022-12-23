@@ -26,6 +26,7 @@ public class MonteCarloSettings<SSV,AV> {
     private static final double WEIGHT_STEPS_DEFAULT =1;
     private static final double WEIGHT_SIMULATION_DEFAULT =1;
     private static final double WEIGHT_MEMORY_DEFAULT =1;
+    private static final boolean DEFENSIVE_DEFAULT=true;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -61,6 +62,8 @@ public class MonteCarloSettings<SSV,AV> {
     double weightReturnsSimulation = WEIGHT_SIMULATION_DEFAULT;
     @Builder.Default
     double weightMemoryValue=WEIGHT_MEMORY_DEFAULT;
+    @Builder.Default
+    boolean isDefensiveBackup=DEFENSIVE_DEFAULT;
 
     /*
     public static <SSV,AV> MonteCarloSettings<SSV,AV> newDefault() {

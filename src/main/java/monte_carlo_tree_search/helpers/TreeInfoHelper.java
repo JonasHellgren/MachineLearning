@@ -106,6 +106,16 @@ public class TreeInfoHelper<SSV,AV> {
         return ns.getActionsFromRootToSelected();
     }
 
+    public Optional<AV> getValueOfFirstBestAction() {
+        List<ActionInterface <AV>> actionList = getActionsOnBestPath();
+        if (actionList.isEmpty()) {
+            log.warning("Empty action list");
+            return Optional.empty();
+        }
+        return Optional.of(actionList.get(0).getValue());
+
+    }
+
     public int nofNodes() {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> inc = (a,b) -> a+1;

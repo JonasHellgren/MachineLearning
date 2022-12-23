@@ -21,6 +21,8 @@ import java.util.List;
  *    normal backup = use discountFactorSimulationNormal
  *    defensive backup = use discountFactorSimulationDefensive
  *
+ *    To disable above functionality, "standard" MCTS is applied by settings.isDefensiveBackup=false
+ *
  */
 
 @Log
@@ -47,30 +49,45 @@ public class SimulationReturnsExtractor<SSV,AV> {
             return new ArrayList<>(Collections.nCopies(nofNodesOnPath, 0d));  //todo into MathUtils
         }
 
-        List<Double> returnsSimulation;
-        if (simulationResults.areAllSimulationsTerminalFail()) {
-            returnsSimulation = createReturnsDefensive();
-        } else {
-            returnsSimulation = createReturnsNormal();
-        }
-        return returnsSimulation;
+        return (settings.isDefensiveBackup)
+                ? createReturnsDefensive()
+                : createReturnsAll();
     }
 
-    public List<Double> createReturnsNormal() {
-        log.info("backupNormal");
-        double mixReturn = getMixReturn();
+    private List<Double> createReturnsDefensive() {
+        return (simulationResults.areAllSimulationsTerminalFail())
+            ? createReturnFromSomeFailingUseDefensiveDiscount()
+            : createReturnsNonFailing();
+    }
+
+    public List<Double> createReturnsAll() {
+        log.fine("createReturnsAll");
+        double mixReturn = getMixReturnFromAll();
         return getReturns(mixReturn, settings.discountFactorSimulationNormal);
     }
 
-    public List<Double> createReturnsDefensive() {
-        log.info("backupDefensive");
+    public List<Double> createReturnsNonFailing() {
+        log.fine("createReturnsNonFailing");
+        double mixReturn = getMixReturnFromNonFailing();
+        return getReturns(mixReturn, settings.discountFactorSimulationNormal);
+    }
+
+    public List<Double> createReturnFromSomeFailingUseDefensiveDiscount() {
+        log.fine("createReturnFromSomeFailingUseDefensiveDiscount");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
         return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
     }
 
-    private double getMixReturn() {
-        double maxReturn=simulationResults.maxReturn().orElseThrow();
-        double avgReturn=simulationResults.averageReturn().orElseThrow();
+    private double getMixReturnFromNonFailing() {
+        double maxReturn=simulationResults.maxReturnFromNonFailing().orElseThrow();
+        double avgReturn=simulationResults.averageReturnFromNonFailing().orElseThrow();
+        double c=settings.coefficientMaxAverageReturn;
+        return c*maxReturn+(1-c)*avgReturn;
+    }
+
+    private double getMixReturnFromAll() {
+        double maxReturn=simulationResults.maxReturnFromAll().orElseThrow();
+        double avgReturn=simulationResults.averageReturnFromAll().orElseThrow();
         double c=settings.coefficientMaxAverageReturn;
         return c*maxReturn+(1-c)*avgReturn;
     }

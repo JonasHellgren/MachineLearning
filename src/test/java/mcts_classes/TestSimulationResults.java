@@ -33,8 +33,8 @@ public class TestSimulationResults {
 
         simulationResults.getResults().forEach(System.out::println);
 
-        Assert.assertTrue(simulationResults.maxReturn().isPresent());
-        Assert.assertEquals(2, simulationResults.maxReturn().orElseThrow(), DELTA);
+        Assert.assertTrue(simulationResults.maxReturnFromNonFailing().isPresent());
+        Assert.assertEquals(2, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
     }
 
     @Test public void maxReturnWithTerminalValue() {
@@ -44,8 +44,8 @@ public class TestSimulationResults {
 
         simulationResults.getResults().forEach(System.out::println);
 
-        Assert.assertTrue(simulationResults.maxReturn().isPresent());
-        Assert.assertEquals(1, simulationResults.maxReturn().orElseThrow(), DELTA);
+        Assert.assertTrue(simulationResults.maxReturnFromNonFailing().isPresent());
+        Assert.assertEquals(1, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
     }
 
 
@@ -54,8 +54,8 @@ public class TestSimulationResults {
         simulationResults.add(1, false);
         simulationResults.add(2, false);
 
-        Assert.assertTrue(simulationResults.averageReturn().isPresent());
-        Assert.assertEquals(1, simulationResults.averageReturn().orElseThrow(), DELTA);
+        Assert.assertTrue(simulationResults.averageReturnFromNonFailing().isPresent());
+        Assert.assertEquals(1, simulationResults.averageReturnFromNonFailing().orElseThrow(), DELTA);
     }
 
 

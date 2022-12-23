@@ -102,7 +102,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
             }
 
             if (cpuTimer.isTimeExceeded()) {
-                log.warning("Time exceeded");
+                log.fine("Time exceeded");
                 break;
             }
         }

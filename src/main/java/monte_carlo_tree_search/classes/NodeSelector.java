@@ -70,7 +70,7 @@ public class NodeSelector<SSV,AV> {
 
             i++;
             if (i> MAX_DEPTH) {
-                log.warning("Escaped from eternal loop for selecting node - can be corner case when" +
+                log.fine("Escaped from eternal loop for selecting node - can be corner case when" +
                         " isExcludeChildrenThatNeverHaveBeenVisited is true");
                 break;
             }

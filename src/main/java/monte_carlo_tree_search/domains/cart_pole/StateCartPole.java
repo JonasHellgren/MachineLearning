@@ -29,17 +29,22 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
                 .build());
     }
 
-    public static StateCartPole newWithVariables(CartPoleVariables variables) {
+    public static StateCartPole newFromVariables(CartPoleVariables variables) {
         return new StateCartPole(variables);
+    }
+
+    public static StateCartPole newFromState(StateInterface<CartPoleVariables> stateCartPole) {
+        return new StateCartPole(stateCartPole.getVariables());
     }
 
     @Override
     public StateInterface<CartPoleVariables> copy() {
-        return newWithVariables(variables.copy());
+        return newFromVariables(variables.copy());
     }
 
     @Override
     public void setFromReturn(StepReturnGeneric<CartPoleVariables> stepReturn) {
         variables=stepReturn.copyState().getVariables();
     }
+
 }

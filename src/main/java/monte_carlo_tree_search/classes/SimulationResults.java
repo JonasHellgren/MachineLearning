@@ -51,7 +51,7 @@ public class SimulationResults {
         return results.stream().allMatch(r -> r.isEndingInFail);
     }
 
-    public OptionalDouble maxReturn() {
+    public OptionalDouble maxReturnFromNonFailing() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
         return ListUtils.sumListElements(returnList, terminalValueList).stream()
@@ -59,9 +59,25 @@ public class SimulationResults {
                 .max();
     }
 
-    public OptionalDouble averageReturn() {
+    public OptionalDouble maxReturnFromAll() {
+        List<Double> returnList = getReturnListForAll();
+        List<Double> terminalValueList = getTerminalStateValuesForAll();
+        return ListUtils.sumListElements(returnList, terminalValueList).stream()
+                .mapToDouble(Double::doubleValue)
+                .max();
+    }
+
+    public OptionalDouble averageReturnFromNonFailing() {
         List<Double> returnList = getReturnListForNonFailing();
         List<Double> terminalValueList = getTerminalStateValuesForNonFailing();
+        return ListUtils.sumListElements(returnList, terminalValueList).stream()
+                .mapToDouble(Double::doubleValue)
+                .average();
+    }
+
+    public OptionalDouble averageReturnFromAll() {
+        List<Double> returnList = getReturnListForAll();
+        List<Double> terminalValueList = getTerminalStateValuesForAll();
         return ListUtils.sumListElements(returnList, terminalValueList).stream()
                 .mapToDouble(Double::doubleValue)
                 .average();
@@ -82,6 +98,11 @@ public class SimulationResults {
         return getReturns(results);
     }
 
+    public List<Double> getReturnListForAll() {
+        List<SimulationResult> results= allResults();
+        return getReturns(results);
+    }
+
     public List<Double> getReturnsForFailing() {
         List<SimulationResult> results= failingResults();
         return getReturns(results);
@@ -91,6 +112,14 @@ public class SimulationResults {
         List<SimulationResult> results= nonFailingResults();
         return getTerminalStateValues(results);
     }
+
+
+    public List<Double> getTerminalStateValuesForAll() {
+        List<SimulationResult> results= allResults();
+        return getTerminalStateValues(results);
+    }
+
+
 
     public List<Double> getTerminalStateValuesForFailing() {
         List<SimulationResult> results= failingResults();
@@ -103,6 +132,10 @@ public class SimulationResults {
 
     private List<Double> getTerminalStateValues(List<SimulationResult> results) {
         return results.stream().map(r -> r.valueInTerminalState).collect(Collectors.toList());
+    }
+
+    private List<SimulationResult> allResults() {
+        return new ArrayList<>(results);
     }
 
     private List<SimulationResult> nonFailingResults() {
