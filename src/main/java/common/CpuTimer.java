@@ -1,8 +1,6 @@
 package common;
 
 import lombok.Getter;
-import lombok.NonNull;
-
 import java.util.logging.Logger;
 
 @Getter

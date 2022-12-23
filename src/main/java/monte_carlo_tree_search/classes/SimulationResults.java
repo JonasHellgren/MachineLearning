@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class SimulationResults {
 
+    private static final String NEW_LINE = System.getProperty("line.separator");
+
     @AllArgsConstructor
     @ToString
     public static class SimulationResult {
@@ -115,10 +117,10 @@ public class SimulationResults {
     public String toString() {
 
         StringBuilder sb=new StringBuilder();
-        sb.append(System.getProperty("line.separator"));
+        sb.append(NEW_LINE);
         for (SimulationResult res:results) {
             sb.append("Result = ").append(res);
-            sb.append(System.getProperty("line.separator"));
+            sb.append(NEW_LINE);
         }
         return sb.toString();
     }

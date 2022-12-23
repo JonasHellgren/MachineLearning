@@ -48,17 +48,6 @@ public class ActionSelector<SSV,AV> {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private ActionInterface<AV> getRandomTestedAction(NodeInterface<SSV,AV> nodeSelected) {
-        log.warning("No non-tested actions");
-        List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
-        int nofTestedActions=testedActions.size();
-        if (nofTestedActions==0) {
-            throw new RuntimeException("nofTestedActions=0");
-        }
-        return getRandomAction(testedActions);
-    }
-
-    @NotNull
     private List<ActionInterface<AV>> getNonTestedActions(NodeInterface<SSV,AV> nodeSelected) {
         List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
         List<AV> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
@@ -75,7 +64,6 @@ public class ActionSelector<SSV,AV> {
         return nonTestedActions;
     }
 
-    @NotNull
     private List<ActionInterface<AV>> getTestedActions(NodeInterface<SSV,AV> nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());

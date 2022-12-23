@@ -150,6 +150,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
         return !isChildAddedEarlier && !isChildToDeep;
     }
 
+    //todo apply discountFactorSimulation
     public SimulationResults simulate(StateInterface<SSV> stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {

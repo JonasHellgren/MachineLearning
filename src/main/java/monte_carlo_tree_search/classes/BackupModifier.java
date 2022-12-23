@@ -12,7 +12,7 @@ import monte_carlo_tree_search.node_models.NodeInterface;
 import java.util.*;
 
 /***
- *  This class updates monte carlo tree, internal node variables can be changed or node(s) can be replaced.
+ *  This class updates a monte carlo tree, internal node variables can be changed or node(s) can be replaced.
  *
  *   A special case managed by backup operator is than all children of selected node are fail nodes. These leads
  *   to transforming selected node to terminal fail.
@@ -78,7 +78,7 @@ public class BackupModifier<SSV,AV> {
                 () -> bm.valueInTerminal = valueInTerminal);
         bm.settings = settings;
 
-        bm.treeInfoHelper = new TreeInfoHelper<SSV,AV>(rootTree,settings);
+        bm.treeInfoHelper = new TreeInfoHelper<>(rootTree, settings);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
 
