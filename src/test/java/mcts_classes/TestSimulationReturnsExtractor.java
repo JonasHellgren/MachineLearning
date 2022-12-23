@@ -44,7 +44,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g, false);
 
         SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
-        List<Double> values=bms.simulate();
+        List<Double> values=bms.extract();
 
         System.out.println("values = " + values);
 
@@ -62,7 +62,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g2, false);
 
         SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
-        List<Double> values=bms.simulate();
+        List<Double> values=bms.extract();
 
         System.out.println("values = " + values);
 
@@ -79,7 +79,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g2,true);
 
         SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
-        List<Double> values=bms.simulate();
+        List<Double> values=bms.extract();
 
         System.out.println("values = " + values);
 
@@ -96,7 +96,7 @@ public class TestSimulationReturnsExtractor {
         simulationResults.add(g2, true);
 
         SimulationReturnsExtractor<ShipVariables, ShipActionSet> bms = getBackupModifierFromSimulations(simulationResults);
-        List<Double> values=bms.simulate();
+        List<Double> values=bms.extract();
 
         System.out.println("values = " + values);
 

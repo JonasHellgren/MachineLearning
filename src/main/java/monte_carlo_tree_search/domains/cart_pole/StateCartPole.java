@@ -1,11 +1,10 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
+import common.RandUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.domains.models_battery_cell.CellVariables;
-import monte_carlo_tree_search.domains.models_battery_cell.StateCell;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 @ToString
@@ -17,6 +16,17 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
 
     public StateCartPole(CartPoleVariables variables) {
         this.variables = variables;
+    }
+
+    public static StateCartPole newRandom() {
+        double thetaMax=EnvironmentCartPole.THETA_THRESHOLD_RADIANS;
+        double xMax=EnvironmentCartPole.X_TRES_HOLD;
+        return  new StateCartPole(CartPoleVariables.builder()
+                .theta(RandUtils.calcRandomFromInterval(-thetaMax,thetaMax))
+                .thetaDot(RandUtils.calcRandomFromInterval(-thetaMax,thetaMax))
+                .x(RandUtils.calcRandomFromInterval(-xMax,xMax))
+                .xDot(RandUtils.calcRandomFromInterval(-xMax,xMax))
+                .build());
     }
 
     public static StateCartPole newWithVariables(CartPoleVariables variables) {

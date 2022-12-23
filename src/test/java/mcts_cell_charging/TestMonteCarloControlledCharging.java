@@ -76,11 +76,6 @@ public class TestMonteCarloControlledCharging {
         NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.runIterations();
         doPrinting(nodeRoot);
         doPlotting(nodeRoot);
-
-
-     //   TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-     //   assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
-     //   assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
     }
 
     private void doPrinting(NodeInterface<CellVariables, Integer> nodeRoot) {

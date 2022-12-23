@@ -42,34 +42,37 @@ public class SimulationReturnsExtractor<SSV,AV> {
         return bms;
     }
 
-    public List<Double> simulate() {
+    public List<Double> extract() {
         if (simulationResults.size() == 0) {
             return new ArrayList<>(Collections.nCopies(nofNodesOnPath, 0d));  //todo into MathUtils
         }
 
         List<Double> returnsSimulation;
-        if (!simulationResults.areAllSimulationsTerminalFail()) {
-            returnsSimulation = createReturnsNormal();
-        } else {
+        if (simulationResults.areAllSimulationsTerminalFail()) {
             returnsSimulation = createReturnsDefensive();
+        } else {
+            returnsSimulation = createReturnsNormal();
         }
         return returnsSimulation;
     }
 
     public List<Double> createReturnsNormal() {
-        log.fine("backupNormal");
-        double maxReturn=simulationResults.maxReturn().orElseThrow();
-        double avgReturn=simulationResults.averageReturn().orElseThrow();
-        double c=settings.coefficientMaxAverageReturn;
-        double mixReturn=c*maxReturn+(1-c)*avgReturn;
+        log.info("backupNormal");
+        double mixReturn = getMixReturn();
         return getReturns(mixReturn, settings.discountFactorSimulationNormal);
     }
 
-
     public List<Double> createReturnsDefensive() {
-        log.fine("backupDefensive");
+        log.info("backupDefensive");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
         return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
+    }
+
+    private double getMixReturn() {
+        double maxReturn=simulationResults.maxReturn().orElseThrow();
+        double avgReturn=simulationResults.averageReturn().orElseThrow();
+        double c=settings.coefficientMaxAverageReturn;
+        return c*maxReturn+(1-c)*avgReturn;
     }
 
     /**

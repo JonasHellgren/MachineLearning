@@ -8,11 +8,13 @@ import monte_carlo_tree_search.domains.models_battery_cell.CellVariables;
 @ToString
 public class CartPoleVariables {
 
+    private static final int NOF_STEPS_DEFAULT = 0;
     public double theta;
     public double x;
     public double thetaDot;
     public double xDot;
-    public int nofSteps;
+    @Builder.Default
+    public int nofSteps= NOF_STEPS_DEFAULT;
 
     public CartPoleVariables copy() {
         return CartPoleVariables.builder()

@@ -173,7 +173,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 .simulationResults(simulationResults)
                 .settings(settings)
                 .build();
-        List<Double> returnsSimulation = bumSim.simulate();
+        List<Double> returnsSimulation = bumSim.extract();
 
         double valueInTerminal = (sr.isTerminal)
                 ? memory.read(sr.newState)
