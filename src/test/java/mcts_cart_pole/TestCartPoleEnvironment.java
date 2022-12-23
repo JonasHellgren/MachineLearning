@@ -31,7 +31,7 @@ public class TestCartPoleEnvironment {
 
     @Before
     public void init() {
-        environment=new EnvironmentCartPole();
+        environment= EnvironmentCartPole.newDefault();
         stateUpRight = new StateCartPole(CartPoleVariables.builder()
                 .theta(THETA_INIT)
                 .thetaDot(THETA_DOT_INIT)

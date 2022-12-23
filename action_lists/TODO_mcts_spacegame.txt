@@ -164,7 +164,7 @@ noder per lager i statisitics  x
 SimulateWithBestFeasibleRunner  x
 clean up x
 annan domain cart pole x
-
+clean up multipleBestActionShallGiveMultipleSteps
 grafix cart pole
 apply discountFactorSimulation
 

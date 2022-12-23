@@ -73,7 +73,7 @@ public class TestMonteCarloControlledCharging {
     @SneakyThrows
     @Test
     public void doMonteCarloAndPlot() {
-        NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         doPlotting(nodeRoot);
     }

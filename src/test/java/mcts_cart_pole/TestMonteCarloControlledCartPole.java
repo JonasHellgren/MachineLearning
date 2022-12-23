@@ -7,19 +7,20 @@ import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.cart_pole.*;
-import monte_carlo_tree_search.domains.models_battery_cell.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.swing.PanelCartPoleAnimation;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import swing.FrameEnvironment;
+import swing.ScaleLinear;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log
 public class TestMonteCarloControlledCartPole {
@@ -30,12 +31,15 @@ public class TestMonteCarloControlledCartPole {
     private static final int THETA_DOT_INIT = 0;
     private static final int X_DOT_INIT = 0;
 
-    private static final int MAX_NOF_ITERATIONS = 1000;
-    private static final int NOF_SIMULATIONS_PER_NODE = 10;  //important
-    private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 10.1;
-    private static final int MAX_TREE_DEPTH=10;
-    private static final int TIME_BUDGET_MILLI_SECONDS = 100;
-    private static final int NOF_STEPS_IN_TEST = 100;
+    private static final int MAX_NOF_ITERATIONS = 10_000;
+    private static final int NOF_SIMULATIONS_PER_NODE = 100;
+    private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 10.0;
+    private static final int MAX_TREE_DEPTH=100;
+    private static final int TIME_BUDGET_MILLI_SECONDS = 50;
+    private static final int NOF_STEPS_IN_TEST = 500;
+    private static final int FRAME_WEIGHT = 600;
+    private static final int FRAME_HEIGHT = 300;
+    private static final int FRAME_MARGIN = 50;
 
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
@@ -43,10 +47,11 @@ public class TestMonteCarloControlledCartPole {
     ActionInterface<Integer> actionTemplate;
     StateInterface<CartPoleVariables> stateUpRight;
     StateInterface<CartPoleVariables> stateLeaningRight;
+    PanelCartPoleAnimation animationPanel;
 
     @Before
     public void init() {
-        environment = new EnvironmentCartPole();
+        environment = EnvironmentCartPole.newDefault();
         actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
@@ -79,6 +84,7 @@ public class TestMonteCarloControlledCartPole {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
+        setupFrameAndPanel();
     }
 
     @Test
@@ -95,8 +101,7 @@ public class TestMonteCarloControlledCartPole {
     @Test public void bestActionWhenLeaningRightIsForceRight() {
 
         monteCarloTreeCreator.setStartState(stateLeaningRight);
-      //  monteCarloTreeCreator.getSettings().setMaxTreeDepth(2);
-        NodeInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.runIterations();
+        NodeInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.run();
         TreeInfoHelper<CartPoleVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
         doPrinting(tih);
         Assert.assertTrue(tih.getValueOfFirstBestAction().orElseThrow()==VALUE_RIGHT);
@@ -105,19 +110,23 @@ public class TestMonteCarloControlledCartPole {
 
     @SneakyThrows
     @Test public void multipleBestActionShallGiveMultipleSteps() {
+        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
+                EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         StateInterface<CartPoleVariables> state=StateCartPole.newFromState(stateUpRight);
-        monteCarloTreeCreator.setStartState(state);
+
 
         for (int i = 0; i < NOF_STEPS_IN_TEST; i++) {
-            NodeInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.runIterations();
-            TreeInfoHelper<CartPoleVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
-            ActionCartPole actionCartPole=ActionCartPole.builder()
-                    .rawValue(tih.getValueOfFirstBestAction().orElseThrow())
-                    .build();
-            StepReturnGeneric<CartPoleVariables> sr=environment.step(actionCartPole,state);
+            state.getVariables().nofSteps=0;  //reset nof steps
+            monteCarloTreeCreator.setStartState(state);
+            monteCarloTreeCreator.run();
+            ActionInterface<Integer> actionCartPole=monteCarloTreeCreator.getFirstAction();
+            StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
             state.setFromReturn(sr);
 
-            System.out.println("state = " + state);
+            state.getVariables().nofSteps=i;  //set for rendering
+            render(state,0,actionCartPole.getValue());
+
+            System.out.println("i = "+i+", state = " + state);
 
             if (sr.isFail) {
                 log.warning("Fail state");
@@ -126,7 +135,7 @@ public class TestMonteCarloControlledCartPole {
         }
         System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
 
-        Assert.assertEquals(state.getVariables().nofSteps,NOF_STEPS_IN_TEST);
+        Assert.assertEquals(state.getVariables().nofSteps,NOF_STEPS_IN_TEST-1);
 
     }
 
@@ -137,7 +146,29 @@ public class TestMonteCarloControlledCartPole {
         List<ActionInterface <Integer>> bestActions=tih.getActionsOnBestPath();
         System.out.println("bestActions = " + bestActions);
         tih.getBestPath().forEach(System.out::println);
-        //nodeRoot.printTree();
+    }
+
+
+    private void setupFrameAndPanel() {
+        FrameEnvironment animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"CartPole animation");
+        double xMax=EnvironmentCartPole.X_TRESHOLD;
+        double yMin=EnvironmentCartPole.Y_MIN;
+        double yMax=EnvironmentCartPole.Y_MAX;
+        ScaleLinear xScaler=new ScaleLinear(-xMax,xMax,
+                FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
+                false, FRAME_MARGIN);
+        ScaleLinear yScaler=new ScaleLinear(yMin,yMax, FRAME_MARGIN,
+                FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
+
+        animationPanel =new PanelCartPoleAnimation(xScaler,yScaler);
+        animationPanel.setLayout(null);  //to enable tailor made position
+        animationFrame.add(animationPanel);
+        animationFrame.setVisible(true);
+    }
+
+    public void render(StateInterface<CartPoleVariables> state, double maxQ, int actionValue) {
+        animationPanel.setCartPoleStates(state,actionValue,maxQ);
+        animationPanel.repaint();
     }
 
 }

@@ -44,7 +44,7 @@ public class Test_3times7grid {
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
@@ -65,7 +65,7 @@ public class Test_3times7grid {
     @Test(expected = StartStateIsTrapException.class)
     public void iterateFromX2Y0() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2,0));
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
@@ -80,7 +80,7 @@ public class Test_3times7grid {
     @Test
     public void iterateFromX1Y1() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(1,1));
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
@@ -98,7 +98,7 @@ public class Test_3times7grid {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);

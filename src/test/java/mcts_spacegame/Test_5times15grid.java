@@ -69,7 +69,7 @@ public class Test_5times15grid {
     @SneakyThrows
     @Test
     public void iterateFromX0Y2() {
-        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet>  tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
@@ -90,7 +90,7 @@ public class Test_5times15grid {
                 .build();
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
-        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
     }
 
@@ -111,7 +111,7 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(2, 2));
 
-        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet>  tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
@@ -132,7 +132,7 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(10, 2));
 
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
@@ -153,7 +153,7 @@ public class Test_5times15grid {
         System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
 
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(10,4));

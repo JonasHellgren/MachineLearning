@@ -1,5 +1,7 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
+import lombok.Builder;
+import lombok.Setter;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -53,20 +55,31 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
  *
  *     For the interested reader: https://coneural.org/florian/papers/05_cart_pole.pdf
  */
-
+@Builder
 public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPoleVariables,Integer> {
     public final double GRAVITY = 9.8;
     public final double MASS_CART = 1.0;  //1.0
     public final double MASS_POLE = 0.1;
     public final double TOTAL_MASS = MASS_POLE + MASS_CART;
     public final double LENGTH = 0.5;  // actually half the pole's length
+    public static final double Y_MAX = 1;   //domain limit
+    public static final double Y_MIN = -0.5;
     public final double POLE_MASS_TIMES_LENGTH = MASS_POLE * LENGTH;
     public final double FORCE_MAG = 10.0;
     public final double TAU = 0.02;  // seconds between state updates  0.02
     public static final double THETA_THRESHOLD_RADIANS  = 12 * 2 * 3.141592 / 360;
-    public static final double X_TRES_HOLD = 2;
-    public int MAX_NOF_STEPS =200;
-    public double NON_TERMINAL_REWARD = 1.0;
+    public static final double X_TRESHOLD = 2;
+    public static final int MAX_NOF_STEPS = 200;
+    public static final double NON_TERMINAL_REWARD = 1.0;
+
+    @Builder.Default
+    public int maxNofSteps=MAX_NOF_STEPS;
+    @Builder.Default
+    public double nonTerminalReward=NON_TERMINAL_REWARD;
+
+    public static EnvironmentCartPole newDefault() {
+        return EnvironmentCartPole.builder().build();
+    }
 
     @Override
     public StepReturnGeneric<CartPoleVariables> step(ActionInterface<Integer> action, StateInterface<CartPoleVariables> state) {
@@ -93,7 +106,7 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
                 .theta(theta).x(x).thetaDot(thetaDot).xDot(xDot).nofSteps(nofSteps).build());
         boolean isFail=isFailsState(newState);
         boolean isTerminalState=isTerminalState(newState);
-        double reward = (isFailsState(newState))?0:NON_TERMINAL_REWARD;
+        double reward = (isFailsState(newState))?0:nonTerminalReward;
 
         return StepReturnGeneric.<CartPoleVariables>builder()
                 .newState(newState)
@@ -118,13 +131,13 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
 
     public boolean isTerminalState(StateInterface<CartPoleVariables> state) {
         return (isFailsState(state) |
-                state.getVariables().nofSteps >= MAX_NOF_STEPS);
+                state.getVariables().nofSteps >= maxNofSteps);
     }
 
     public boolean isFailsState(StateInterface<CartPoleVariables> state)
     {
-        return (state.getVariables().x >= X_TRES_HOLD |
-                state.getVariables().x <= -X_TRES_HOLD |
+        return (state.getVariables().x >= X_TRESHOLD |
+                state.getVariables().x <= -X_TRESHOLD |
                 state.getVariables().theta >= THETA_THRESHOLD_RADIANS |
                 state.getVariables().theta <=-THETA_THRESHOLD_RADIANS);
     }

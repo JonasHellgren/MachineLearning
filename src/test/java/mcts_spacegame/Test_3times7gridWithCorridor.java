@@ -49,7 +49,7 @@ public class Test_3times7gridWithCorridor {
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);
@@ -61,7 +61,7 @@ public class Test_3times7gridWithCorridor {
     @Test(expected = StartStateIsTrapException.class)
     public void iterateFromX2Y0() throws StartStateIsTrapException {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2, 0));
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
         Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(3, 0)));
         Assert.assertFalse(tih.isStateInAnyNode(StateShip.newStateFromXY(4, 0)));
@@ -81,7 +81,7 @@ public class Test_3times7gridWithCorridor {
                 .actionTemplate(actionTemplate)
                 .build();
 
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
         tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
         doPrinting(tih, nodeRoot);

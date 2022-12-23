@@ -82,7 +82,7 @@ public class Test_3times7grid_Simulations {
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,1));
@@ -99,7 +99,7 @@ public class Test_3times7grid_Simulations {
     @Test
     public void iterateFromX0Y1() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(0,1));
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.runIterations();
+        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
 
         doPrinting(nodeRoot);
 

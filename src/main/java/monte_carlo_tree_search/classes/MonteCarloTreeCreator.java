@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.domains.cart_pole.ActionCartPole;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -86,7 +88,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
         mctc.nofIterations = 0;
     }
 
-    public NodeInterface<SSV,AV> runIterations() throws StartStateIsTrapException {
+    public NodeInterface<SSV,AV> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
         int i;
         ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings,actionTemplate);
@@ -117,6 +119,14 @@ public class MonteCarloTreeCreator<SSV,AV> {
         MonteCarloSearchStatistics<SSV,AV> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this,settings);
         statistics.setStatistics();
         return statistics;
+    }
+
+    public ActionInterface<AV> getFirstAction() {
+        TreeInfoHelper<SSV, AV> tih = new TreeInfoHelper<>(nodeRoot,settings);
+        ActionInterface<AV> actionRoot=actionTemplate.copy();
+        AV actionValue=tih.getValueOfFirstBestAction().orElseThrow();
+        actionRoot.setValue(actionValue);
+        return actionRoot;
     }
 
     private NodeInterface<SSV,AV> select(NodeInterface<SSV,AV> nodeRoot) {

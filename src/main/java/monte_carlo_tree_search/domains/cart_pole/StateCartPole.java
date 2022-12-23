@@ -20,7 +20,7 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
 
     public static StateCartPole newRandom() {
         double thetaMax=EnvironmentCartPole.THETA_THRESHOLD_RADIANS;
-        double xMax=EnvironmentCartPole.X_TRES_HOLD;
+        double xMax=EnvironmentCartPole.X_TRESHOLD;
         return  new StateCartPole(CartPoleVariables.builder()
                 .theta(RandUtils.calcRandomFromInterval(-thetaMax,thetaMax))
                 .thetaDot(RandUtils.calcRandomFromInterval(-thetaMax,thetaMax))
