@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.models_space;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ public interface SpaceGridInterface {
 
     void clear();
 
-    void fillGrid(List<Pair<Integer, Integer>> occupiedCells);
+    void fillGrid(List<Pair<Integer, Integer>> occupiedCells,List<Triple<Integer,Integer,Double>> bonusCells);
 
     static SpaceGrid newWithNoObstacles(int nofRows, int nofColumns) {
         List<Pair<Integer, Integer>> occupiedCells = new ArrayList<>();
@@ -61,7 +62,10 @@ public interface SpaceGridInterface {
         List<Pair<Integer, Integer>> rowY3 = createRow(3);
         occupiedCells.addAll(rowY1);
         occupiedCells.addAll(rowY3);
-        return new SpaceGrid(5, 15, occupiedCells);
+        List<Triple<Integer,Integer,Double>> bonusCells= Arrays.asList(
+                Triple.of(14,2,3d), Triple.of(14,4,6d)
+        );
+        return new SpaceGrid(5, 15, occupiedCells,bonusCells);
     }
 
 
@@ -78,7 +82,10 @@ public interface SpaceGridInterface {
     static SpaceGrid new5times15Grid() {
         List<Pair<Integer, Integer>> occupiedCells = Arrays.asList(
                 new Pair<>(13, 1), new Pair<>(13, 3));
-        return new SpaceGrid(5, 15, occupiedCells);
+        List<Triple<Integer,Integer,Double>> bonusCells= Arrays.asList(
+                Triple.of(14,2,3d), Triple.of(14,4,6d)
+        );
+        return new SpaceGrid(5, 15, occupiedCells,bonusCells);
 
     }
 

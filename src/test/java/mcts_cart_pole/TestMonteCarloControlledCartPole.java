@@ -26,17 +26,17 @@ import java.util.List;
 public class TestMonteCarloControlledCartPole {
     private static final int VALUE_LEFT = 0;
     private static final int VALUE_RIGHT = 1;
-    private static final int X_INIT = 0;
+    private static final double X_INIT = EnvironmentCartPole.X_TRESHOLD*0.75;
     private static final int THETA_INIT = 0;
     private static final int THETA_DOT_INIT = 0;
     private static final int X_DOT_INIT = 0;
 
     private static final int MAX_NOF_ITERATIONS = 10_000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
-    private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 10.0;
+    private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
     private static final int MAX_TREE_DEPTH=100;
-    private static final int TIME_BUDGET_MILLI_SECONDS = 50;
-    private static final int NOF_STEPS_IN_TEST = 500;
+    private static final int TIME_BUDGET_MILLI_SECONDS = 100;
+    private static final int NOF_STEPS_IN_TEST = 600;
     private static final int FRAME_WEIGHT = 600;
     private static final int FRAME_HEIGHT = 300;
     private static final int FRAME_MARGIN = 50;

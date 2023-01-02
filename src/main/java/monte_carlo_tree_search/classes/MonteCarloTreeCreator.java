@@ -124,7 +124,9 @@ public class MonteCarloTreeCreator<SSV,AV> {
     public ActionInterface<AV> getFirstAction() {
         TreeInfoHelper<SSV, AV> tih = new TreeInfoHelper<>(nodeRoot,settings);
         ActionInterface<AV> actionRoot=actionTemplate.copy();
-        AV actionValue=tih.getValueOfFirstBestAction().orElseThrow();
+        Conditionals.executeIfTrue (tih.getValueOfFirstBestAction().isEmpty(), () ->
+            log.warning("No first action present - probably to small time budget"));
+        AV actionValue=tih.getValueOfFirstBestAction().orElse(actionTemplate.getValue());
         actionRoot.setValue(actionValue);
         return actionRoot;
     }
@@ -164,11 +166,12 @@ public class MonteCarloTreeCreator<SSV,AV> {
     public SimulationResults simulate(StateInterface<SSV> stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
-            List<StepReturnGeneric<SSV>> returns =
+            List<StepReturnGeneric<SSV>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
-            StepReturnGeneric<SSV> endReturn = returns.get(returns.size() - 1);
-            double sumOfRewards = returns.stream().mapToDouble(r -> r.reward).sum();
+            StepReturnGeneric<SSV> endReturn = stepResults.get(stepResults.size() - 1);
+            double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
             double valueInTerminal = memory.read(endReturn.newState);
+            valueInTerminal=0;
             boolean isEndingInFail = endReturn.isFail;
             simulationResults.add(sumOfRewards, valueInTerminal * settings.weightMemoryValue, isEndingInFail);
         }
@@ -189,6 +192,9 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 ? memory.read(sr.newState)
                 : VALUE_MEMORY_IF_NOT_TERMINAL;
 
+        valueInTerminal=0;
+        //double memoryValueNewState=memory.read(sr.newState);
+
         BackupModifier<SSV, AV>  bumSteps = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
@@ -196,7 +202,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 .valueInTerminal(valueInTerminal)
                 .settings(settings)
                 .build();
-        bumSteps.backup(returnsSimulation);
+        bumSteps.backup(returnsSimulation);  //memoryValueNewState
     }
 
     private void manageCaseWhenAllActionsAreTested(NodeInterface<SSV, AV>  nodeSelected) throws StartStateIsTrapException {
@@ -225,13 +231,14 @@ public class MonteCarloTreeCreator<SSV,AV> {
         sfc.makeSelectedTerminal(nodeSelected);
     }
 
-    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> pos, SimulationPolicyInterface<SSV, AV> policy) {
+    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> state,
+                                                        SimulationPolicyInterface<SSV, AV> policy) {
         List<StepReturnGeneric<SSV>> returns = new ArrayList<>();
         StepReturnGeneric<SSV> stepReturn;
         do {
-            ActionInterface<AV> action = policy.chooseAction(pos);
-            stepReturn = environment.step(action, pos);
-            pos.setFromReturn(stepReturn);
+            ActionInterface<AV> action = policy.chooseAction(state);
+            stepReturn = environment.step(action, state);
+            state.setFromReturn(stepReturn);
             returns.add(stepReturn);
         } while (!stepReturn.isTerminal);
         return returns;

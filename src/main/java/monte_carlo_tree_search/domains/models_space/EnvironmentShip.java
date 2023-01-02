@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.models_space;
 
+import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -14,6 +15,7 @@ import java.util.Optional;
  */
 
 @Log
+@Getter
 public class EnvironmentShip implements EnvironmentGenericInterface<ShipVariables,ShipActionSet> {
     public static final double MOVE_COST = 1d;
     public static final double STILL_COST = 0d;
@@ -40,12 +42,13 @@ public class EnvironmentShip implements EnvironmentGenericInterface<ShipVariable
         SpaceCell cellNew = spaceGrid.getCell(newPosition).orElse(cellPresentOpt.get());
         boolean isCrashingIntoWall = isOnLowerBorderAndDownOrUpperBorderAndUp(action, cellPresentOpt.get());
         boolean isCrashingIntoObstacle = cellNew.isObstacle;
+        double bonus=cellNew.bonus;
         boolean isMovingIntoGoal = cellNew.isGoal;
         boolean isCrashing = isCrashingIntoWall || isCrashingIntoObstacle;
         boolean isTerminal = isCrashing || isMovingIntoGoal;
         double costMotion = (action.getValue().equals(ShipActionSet.still)) ? STILL_COST : MOVE_COST;
         double penaltyCrash = (isCrashing) ? CRASH_COST : STILL_COST;
-        double reward = -costMotion - penaltyCrash;
+        double reward = -costMotion - penaltyCrash+bonus;
 
         //todo för in logic ovan i builder
         return StepReturnGeneric.<ShipVariables>builder()

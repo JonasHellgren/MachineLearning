@@ -164,11 +164,17 @@ noder per lager i statisitics  x
 SimulateWithBestFeasibleRunner  x
 clean up x
 annan domain cart pole x
-clean up multipleBestActionShallGiveMultipleSteps
-grafix cart pole
+clean up multipleBestActionShallGiveMultipleSteps x
+grafix cart pole x
+värde vig goal state bero på environment inte minne  x
+github token
+cart pole tester som main inte test
 apply discountFactorSimulation
-
+ersätta rollout med minne i cart pole - alphaZero enligt nedan
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
+gör om cart pole reward - stort negative vid fail annars noll
+TestMonteCarloControlledCartPoleModifiedReward
+
 
 många iteration få noder
 cpuTimer buggar ibland  - nano sec istaället?
