@@ -41,4 +41,8 @@ public class ListUtils {
         return new ArrayList<>(Collections.nCopies(len,0d));
     }
 
+    public static List<Double> listWithEqualElementValues(int len, double value) {
+        return new ArrayList<>(Collections.nCopies(len,value));
+    }
+
 }

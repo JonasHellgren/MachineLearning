@@ -14,17 +14,17 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
     private static final int INIT_NOF_VISITS = 0;
     List<NodeInterface<SSV,AV>> childNodes;
     int nofVisits;
-    Map<AV, Double> Qsa;
+    Map<AV, Double> qSA;
     Map<AV, Integer> nSA;
 
     public NodeNotTerminal(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state,action);
         childNodes = new ArrayList<>();
         nofVisits = INIT_NOF_VISITS;
-        Qsa = new HashMap<>();
+        qSA = new HashMap<>();
         Set<AV> actionValues=  action.applicableActions();
         for (AV av : actionValues) {
-            Qsa.put(av, INIT_ACTION_VALUE);
+            qSA.put(av, INIT_ACTION_VALUE);
         }
 
         nSA = new HashMap<>();
@@ -38,7 +38,7 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
         this.childNodes=new ArrayList<>(node.childNodes);
         //childNodes.
         this.nofVisits=node.nofVisits;
-        this.Qsa = new HashMap<>(node.Qsa);
+        this.qSA = new HashMap<>(node.qSA);
         this.nSA = new HashMap<>(node.nSA);
     }
 
@@ -95,9 +95,8 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
             throw new RuntimeException("Zero nof visits for action = " + a);
         }
         double qOld = getActionValue(a);
-       // nofVisitsForAction=1;
         double qNew = qOld + alpha * (G - qOld) / (double) nofVisitsForAction;
-        Qsa.put(a.getValue(), qNew);
+        qSA.put(a.getValue(), qNew);
     }
 
     @Override
@@ -112,7 +111,7 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
 
     @Override
     public double getActionValue(ActionInterface<AV> a) {
-        return Qsa.get(a.getValue());
+        return qSA.get(a.getValue());
     }
 
 
@@ -120,7 +119,7 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
     public String toString() {
         return super.toString() +
                 ", state visits = " + nofVisits +
-                ", values =" + Qsa.entrySet() +
+                ", values =" + qSA.entrySet() +
                 ", visits =" + nSA.entrySet()+
                 ", rewards = "+actionRewardMap.entrySet();
     }

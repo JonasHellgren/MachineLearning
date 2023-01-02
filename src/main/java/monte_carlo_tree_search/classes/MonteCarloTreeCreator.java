@@ -90,6 +90,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
 
     public NodeInterface<SSV,AV> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
+
         int i;
         ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
@@ -187,13 +188,12 @@ public class MonteCarloTreeCreator<SSV,AV> {
         List<Double> returnsSimulation = bumSim.extract();
 
         double memoryValueStateAfterAction=memory.read(sr.newState);
-      //  memoryValueStateAfterAction=0;
+
 
         BackupModifier<SSV, AV>  bum = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
-              //  .valueInTerminal(valueInTerminal)
                 .settings(settings)
                 .build();
         bum.backup(returnsSimulation,memoryValueStateAfterAction);

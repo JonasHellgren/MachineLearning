@@ -38,11 +38,13 @@ import java.util.*;
  *  in nodeSelected an action will be applied leading to expansion
  *
  *
- *  return(ni)=returnStep(ni)*weightReturnsSteps+returnSimulation(i)*weightReturnsSimulation where ni is a node on a path
- *  If the end node in a path corresponds to a terminal state, a value memory can affect the result. The memory value
- *  is simply added to all rewards in the path. The memory value also affects the terminal state in simulations.
- *  For both steps and simulations, the memory value is multiplied by weightMemoryValue.
- *  The above described weights are handy to cancel out for example step results and/or put less trust in the memory.
+ *  return(ni)=returnStep(ni)*weightReturnsSteps+...
+ *              returnSimulation(ni)*weightReturnsSimulation+...
+ *              returnsMemory(ni)*weightMemoryValue
+ *
+ *  where ni is a node on the path. A return(ni) is used to update the expected value of taking a specific
+ *  action in the node pointed out by ni.
+ *  The above weights are handy to cancel out for example step results and/or put less trust in the memory.
  *
  */
 
@@ -94,8 +96,8 @@ public class BackupModifier<SSV,AV> {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, memoryValue*settings.weightMemoryValue);
-        updateNodesFromReturns(returnsSteps, returnsSimulation);
+        List<Double> returnsMemory = ListUtils.listWithEqualElementValues(returnsSteps.size(),memoryValue);
+        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory);
     }
 
     private List<Double> getRewards() {
@@ -119,24 +121,28 @@ public class BackupModifier<SSV,AV> {
         this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensive);
     }
 
-    private void updateNodesFromReturns(List<Double> returnsSteps, List<Double> returnsSimulation) {
+    private void updateNodesFromReturns(final List<Double> returnsSteps,
+                                        final List<Double> returnsSimulation,
+                                        final List<Double> returnsMemory ) {
         if (returnsSteps.size() != returnsSimulation.size()) {
             throw new IllegalArgumentException("Non equal list lengths");
         }
-        returnsSteps = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
-        returnsSimulation = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
-        List<Double> returnsSum = ListUtils.sumListElements(returnsSteps, returnsSimulation);
+        List<Double> returnsStepsWeighted = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
+        List<Double> returnsSimulationWeighted = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
+        List<Double> returnsMemoryWeighted = ListUtils.multiplyListElements(returnsMemory, settings.weightMemoryValue);
+        List<Double> sumTemp = ListUtils.sumListElements(returnsStepsWeighted, returnsSimulationWeighted);
+        List<Double> returnsSum = ListUtils.sumListElements(sumTemp, returnsMemoryWeighted);
 
         List<ActionInterface<AV>> actions =
                 ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
         for (NodeInterface<SSV,AV> node : nodesOnPath) {
             ActionInterface<AV> action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
-            this.updateNode(node, singleReturn, action, settings.alphaBackupNormal);
+            updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
     }
 
-    private List<Double> getReturns(List<Double> rewards) {
+    private List<Double> getReturns(final List<Double> rewards) {
         double singleReturn = 0;
         List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
