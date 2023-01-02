@@ -53,7 +53,6 @@ public class BackupModifier<SSV,AV> {
     List<ActionInterface<AV>> actionsToSelected;
     ActionInterface<AV> actionOnSelected;
     StepReturnGeneric<SSV> stepReturnOfSelected;
-    Double valueInTerminal;
     MonteCarloSettings<SSV,AV> settings;
 
     TreeInfoHelper<SSV,AV> treeInfoHelper;
@@ -66,16 +65,12 @@ public class BackupModifier<SSV,AV> {
                                          @NonNull List<ActionInterface<AV>> actionsToSelected,
                                          @NonNull ActionInterface<AV> actionOnSelected,
                                          @NonNull StepReturnGeneric<SSV> stepReturnOfSelected,
-                                         Double valueInTerminal,
                                          @NonNull MonteCarloSettings<SSV,AV> settings) {
         BackupModifier<SSV,AV> bm = new BackupModifier<>();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
         bm.stepReturnOfSelected = stepReturnOfSelected;
-        Conditionals.executeOneOfTwo(Objects.isNull(valueInTerminal),
-                () -> bm.valueInTerminal = 0d,
-                () -> bm.valueInTerminal = valueInTerminal);
         bm.settings = settings;
 
         bm.treeInfoHelper = new TreeInfoHelper<>(rootTree, settings);
@@ -86,20 +81,20 @@ public class BackupModifier<SSV,AV> {
     }
 
     public void backup() {
-        backup(ListUtils.listWithZeroElements(nodesOnPath.size()));
+        backup(ListUtils.listWithZeroElements(nodesOnPath.size()),0);
     }
 
-    public void backup(List<Double> returnsSimulation) {
+    public void backup(List<Double> returnsSimulation, double memoryValueStateAfterAction) {
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                () -> backupNormalFromTreeSteps(returnsSimulation),
+                () -> backupNormalFromTreeSteps(returnsSimulation,memoryValueStateAfterAction),
                 this::backupDefensiveFromTreeSteps);
     }
 
-    private void backupNormalFromTreeSteps(List<Double> returnsSimulation) {
+    private void backupNormalFromTreeSteps(List<Double> returnsSimulation,double memoryValue) {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, valueInTerminal*settings.weightMemoryValue);
+        returnsSteps = ListUtils.addScalarToListElements(returnsSteps, memoryValue*settings.weightMemoryValue);
         updateNodesFromReturns(returnsSteps, returnsSimulation);
     }
 

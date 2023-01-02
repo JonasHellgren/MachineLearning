@@ -37,6 +37,7 @@ public class TestSimulationResults {
         Assert.assertEquals(2, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
     }
 
+    /*
     @Test public void maxReturnWithTerminalValue() {
         simulationResults.add(0,0, false);  //zero terminal value
         simulationResults.add(1,0, false);  //zero terminal value
@@ -46,7 +47,7 @@ public class TestSimulationResults {
 
         Assert.assertTrue(simulationResults.maxReturnFromNonFailing().isPresent());
         Assert.assertEquals(1, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
-    }
+    } */
 
 
     @Test public void averageReturn() {

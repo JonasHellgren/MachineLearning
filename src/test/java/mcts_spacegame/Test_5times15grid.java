@@ -21,15 +21,11 @@ public class Test_5times15grid {
     private static final int NOF_SIMULATIONS_PER_NODE = 10;  //important
     private static final int MAX_TREE_DEPTH = 5;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 100;
-    private static final double DELTA = 0.5;
-    private static final double VALUE_6 = 6;
-    private static final double VALUE_3 = 3;
-    private static final double VALUE_0 = 0;
+
 
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentShip environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
-    NodeValueMemory<ShipVariables> memory;
     ActionInterface<ShipActionSet> actionTemplate;
 
     @Before
@@ -50,10 +46,6 @@ public class Test_5times15grid {
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
-        memory=NodeValueMemory.newEmpty();
-        memory.write(StateShip.newStateFromXY(14,0),VALUE_0);
-        memory.write(StateShip.newStateFromXY(14,2),VALUE_3);
-        memory.write(StateShip.newStateFromXY(14,4),VALUE_6);
 
         createCreator(StateShip.newStateFromXY(0, 0));
     }
@@ -63,7 +55,6 @@ public class Test_5times15grid {
     @Test
     public void printEnvironment() {
         System.out.println("environment = " + environment);
-        System.out.println("memory = " + memory);
     }
 
     @SneakyThrows
@@ -88,7 +79,6 @@ public class Test_5times15grid {
                 .weightReturnsSteps(1)
                 .coefficientExploitationExploration(100)
                 .build();
-        System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
         NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
@@ -108,7 +98,6 @@ public class Test_5times15grid {
                 .weightReturnsSteps(1)
                 .coefficientExploitationExploration(100)
                 .build();
-        System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(2, 2));
 
         NodeInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
@@ -129,7 +118,6 @@ public class Test_5times15grid {
                 .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(100)
                 .build();
-        System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(10, 2));
 
         NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
@@ -150,7 +138,6 @@ public class Test_5times15grid {
                 .nofSimulationsPerNode(10)
                 .coefficientExploitationExploration(1)
                 .build();
-        System.out.println("memory = " + memory);
         createCreator(StateShip.newStateFromXY(0, 2));
 
         NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
@@ -164,7 +151,6 @@ public class Test_5times15grid {
                 .environment(environment)
                 .startState(state)
                 .monteCarloSettings(settings)
-                .memory(memory)
                 .actionTemplate(actionTemplate)
                 .build();
     }

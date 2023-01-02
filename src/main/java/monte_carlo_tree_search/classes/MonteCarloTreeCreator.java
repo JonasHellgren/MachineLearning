@@ -170,10 +170,8 @@ public class MonteCarloTreeCreator<SSV,AV> {
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
             StepReturnGeneric<SSV> endReturn = stepResults.get(stepResults.size() - 1);
             double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
-            double valueInTerminal = memory.read(endReturn.newState);
-            valueInTerminal=0;
             boolean isEndingInFail = endReturn.isFail;
-            simulationResults.add(sumOfRewards, valueInTerminal * settings.weightMemoryValue, isEndingInFail);
+            simulationResults.add(sumOfRewards, isEndingInFail);
         }
         return simulationResults;
     }
@@ -188,21 +186,17 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 .build();
         List<Double> returnsSimulation = bumSim.extract();
 
-        double valueInTerminal = (sr.isTerminal)
-                ? memory.read(sr.newState)
-                : VALUE_MEMORY_IF_NOT_TERMINAL;
+        double memoryValueStateAfterAction=memory.read(sr.newState);
+      //  memoryValueStateAfterAction=0;
 
-        valueInTerminal=0;
-        //double memoryValueNewState=memory.read(sr.newState);
-
-        BackupModifier<SSV, AV>  bumSteps = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
+        BackupModifier<SSV, AV>  bum = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
-                .valueInTerminal(valueInTerminal)
+              //  .valueInTerminal(valueInTerminal)
                 .settings(settings)
                 .build();
-        bumSteps.backup(returnsSimulation);  //memoryValueNewState
+        bum.backup(returnsSimulation,memoryValueStateAfterAction);
     }
 
     private void manageCaseWhenAllActionsAreTested(NodeInterface<SSV, AV>  nodeSelected) throws StartStateIsTrapException {

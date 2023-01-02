@@ -26,9 +26,8 @@ public class Test_5times15gridCorridor {
     private static final int MAX_TREE_DEPTH = 15;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 20;
     private static final double DELTA = 0.5;
-    private static final double VALUE_6 = 6;
-    private static final double VALUE_3 = 3;
-    private static final double VALUE_0 = 0;
+    private static final double BONUS_6 = 6;
+    private static final double BONUS_3 = 3;
 
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
@@ -51,17 +50,12 @@ public class Test_5times15gridCorridor {
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
-        memory=NodeValueMemory.newEmpty();
-        memory.write(StateShip.newStateFromXY(14,0),VALUE_0);
-        memory.write(StateShip.newStateFromXY(14,2),VALUE_3);
-        memory.write(StateShip.newStateFromXY(14,4),VALUE_6);
 
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)
                 .startState(StateShip.newStateFromXY(0,2))
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
-                .memory(memory)
                 .build();
     }
 
@@ -79,7 +73,7 @@ public class Test_5times15gridCorridor {
     }
 
     private boolean anySimulationHasReturn6(SimulationResults simulationResults) {
-        return simulationResults.getResults().stream().map(r -> r.singleReturn).anyMatch(v -> MathUtils.isZero(v - VALUE_6));
+        return simulationResults.getResults().stream().map(r -> r.singleReturn).anyMatch(v -> MathUtils.isZero(v - BONUS_6));
     }
 
     @Test public void moveFromX9Y4IntoGoalWithHighValue() {
@@ -112,7 +106,7 @@ public class Test_5times15gridCorridor {
 
     @SneakyThrows
     @Test
-    public void HighBonusInX14Y0FavorsSouthRoute() {
+    public void highBonusInX14Y0FavorsSouthRoute() {
         EnvironmentShip env=(EnvironmentShip) monteCarloTreeCreator.getEnvironment();
         SpaceGrid spaceGrid=env.getSpaceGrid();
         SpaceCell cell=spaceGrid.getCell(14,0).orElseThrow();
@@ -140,7 +134,7 @@ public class Test_5times15gridCorridor {
         Optional<NodeInterface<ShipVariables, ShipActionSet> > node=tih.getNodeReachedForActions(Collections.singletonList(ActionShip.newStill()));
         System.out.println("node = " + node);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
-        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
+        Assert.assertEquals(BONUS_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
     @SneakyThrows
@@ -156,10 +150,9 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
 
-
         Optional<NodeInterface<ShipVariables, ShipActionSet>> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newUp(), ActionShip.newUp()));
         System.out.println("node = " + node);
-        Assert.assertEquals(VALUE_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
+        Assert.assertEquals(BONUS_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
 
@@ -181,7 +174,7 @@ public class Test_5times15gridCorridor {
         Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
                 tih.getNodeReachedForActions(Arrays.asList(ActionShip.newStill(),ActionShip.newStill()));
         System.out.println("node = " + node);
-        Assert.assertEquals(VALUE_3,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
+        Assert.assertEquals(BONUS_3,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
 
