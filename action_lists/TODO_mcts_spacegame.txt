@@ -168,7 +168,7 @@ clean up multipleBestActionShallGiveMultipleSteps x
 grafix cart pole x
 värde vig goal state bero på environment inte minne  x
 valueInTerminal veck x
-TestMockedMemoryFor5times15Grid
+TestMockedMemoryFor5times15Grid - depth 3
 github token
 cart pole tester som main inte test
 apply discountFactorSimulation
