@@ -4,6 +4,8 @@ import common.ScalerLinear;
 
 public class StateNormalizerCartPole {
 
+    private static final int RANGE_MIN = -1;
+    private static final int RANGE_MAX = 1;
     ScalerLinear xScaler;
     ScalerLinear xDotScaler;
     ScalerLinear thetaScaler;
@@ -14,10 +16,10 @@ public class StateNormalizerCartPole {
         double thetaDotMax=EnvironmentCartPole.THETA_DOT_THRESHOLD_RADIANS;
         double xMax=EnvironmentCartPole.X_TRESHOLD;
         double xDotMax=EnvironmentCartPole.X_DOT_THRESHOLD;
-        thetaScaler=new ScalerLinear(-thetaMax, thetaMax,0,1);
-        thetaDotScaler=new ScalerLinear(-thetaDotMax, thetaDotMax,0,1);
-        xScaler=new ScalerLinear(-xMax, xMax,0,1);
-        xDotScaler=new ScalerLinear(-xDotMax, xDotMax,0,1);
+        thetaScaler=new ScalerLinear(-thetaMax, thetaMax, RANGE_MIN, RANGE_MAX);
+        thetaDotScaler=new ScalerLinear(-thetaDotMax, thetaDotMax,RANGE_MIN, RANGE_MAX);
+        xScaler=new ScalerLinear(-xMax, xMax,RANGE_MIN, RANGE_MAX);
+        xDotScaler=new ScalerLinear(-xDotMax, xDotMax,RANGE_MIN, RANGE_MAX);
     }
 
    public CartPoleVariables normalize(CartPoleVariables variables) {

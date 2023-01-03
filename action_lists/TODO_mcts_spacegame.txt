@@ -172,8 +172,11 @@ TestMockedMemoryFor5times15Grid - depth 3  x
 github token  x
 cart pole tester som main inte test  x
 TestStateValueMemoryTraining
-hur träna neuroph med epoker - flera minibatcher
+hur träna neuroph med epoker - flera minibatcher  x
+ScalerLinear för value
+default fields Experience builder
 tänka igenom defensive backup
+interface för CartPoleStateValueMemory och NodeValueMemory
 ersätta rollout med minne i cart pole - alphaZero enligt nedan
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
 apply discountFactorSimulation

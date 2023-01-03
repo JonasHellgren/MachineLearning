@@ -26,8 +26,8 @@ public class TestStateValueMemoryTraining {
     private static final int MAX_TREE_DEPTH=100;
     private static final int TIME_BUDGET_MILLI_SECONDS = 100;
     private static final int MAX_SIZE = 100;
-    private static final int NOF_SAMPLES = 100;
-    private static final int MINI_BATCH_SIZE = 10;
+    private static final int NOF_SAMPLES = 1000;
+    private static final int MINI_BATCH_SIZE = 30;
 
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
@@ -75,8 +75,8 @@ public class TestStateValueMemoryTraining {
     @Test public void trainNetwork() {
         CartPoleStateValueMemory memory=new CartPoleStateValueMemory();
         double maxError = 1e-10;
-        int  maxNofEpochs = 50_000;
-        int epoch = 1;
+        int  maxNofEpochs = 20_000;
+        int epoch = 0;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);
             memory.doOneLearningIteration(miniBatch);
@@ -104,7 +104,7 @@ public class TestStateValueMemoryTraining {
         double averageReturn=returns.stream().mapToDouble(val -> val).average().orElse(0.0);
          //   System.out.println("stateRandom = " + stateRandom);
          //   System.out.println("stateNormalizer.normalize(stateRandom) = " + stateNormalizer.normalize(stateRandom));
-          //  System.out.println("averageReturn = " + averageReturn);
+        //    System.out.println("averageReturn = " + averageReturn);
 
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())
@@ -118,7 +118,7 @@ public class TestStateValueMemoryTraining {
     }
 
     private void printProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
-        if (epoch % 1000 == 0) {
+        if (epoch % 1000 == 0 || epoch==0) {
             System.out.println("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
         }
     }

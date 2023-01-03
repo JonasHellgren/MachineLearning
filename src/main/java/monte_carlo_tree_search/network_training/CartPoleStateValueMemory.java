@@ -20,7 +20,7 @@ public class CartPoleStateValueMemory {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = 5;
-    private static final double LEARNING_RATE = 0.1;
+    private static final double LEARNING_RATE = 0.5;
     private static final int NOF_ITERATION_WARMUP = 1;
 
     MultiLayerPerceptron ann;
@@ -29,7 +29,7 @@ public class CartPoleStateValueMemory {
 
     public CartPoleStateValueMemory() {
         ann = new MultiLayerPerceptron(
-                TransferFunctionType.TANH,
+                TransferFunctionType.GAUSSIAN,  //GAUSSIAN
                 INPUT_SIZE,
                 NOF_NEURONS_HIDDEN,
                 NOF_NEURONS_HIDDEN,
@@ -50,6 +50,7 @@ public class CartPoleStateValueMemory {
 
     public double read(CartPoleVariables v) {
         double[] inputVec = getInputVec(v);
+        System.out.println("inputVec = " + Arrays.toString(inputVec));
         ann.setInput(inputVec);
         ann.calculate();
         double[] output = Arrays.copyOf(ann.getOutput(), OUTPUT_SIZE);
