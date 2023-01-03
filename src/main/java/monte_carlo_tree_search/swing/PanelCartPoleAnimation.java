@@ -61,24 +61,19 @@ public class PanelCartPoleAnimation extends JPanel {
         int labelIndex=0;
 
         labelX = new JLabel("x");
-        addLabelToPanel(labelX, labelIndex);
-        labelIndex++;
+        addLabelToPanel(labelX, labelIndex++);
 
         labelTheta = new JLabel("theta");
-        addLabelToPanel(labelTheta, labelIndex);
-        labelIndex++;
+        addLabelToPanel(labelTheta, labelIndex++);
 
         labelXDot = new JLabel("xDot");
-        addLabelToPanel(labelXDot, labelIndex);
-        labelIndex++;
+        addLabelToPanel(labelXDot, labelIndex++);
 
         labelThetaDot = new JLabel("thetaDot");
-        addLabelToPanel(labelThetaDot, labelIndex);
-        labelIndex++;
+        addLabelToPanel(labelThetaDot, labelIndex++);
 
         labelNofSteps = new JLabel("nofSteps");
-        addLabelToPanel(labelNofSteps, labelIndex);
-        labelIndex++;
+        addLabelToPanel(labelNofSteps, labelIndex++);
 
         labelMaxQ = new JLabel("maxQ");
         addLabelToPanel(labelMaxQ, labelIndex);
@@ -100,13 +95,11 @@ public class PanelCartPoleAnimation extends JPanel {
     }
 
     public void setCartPoleStates(StateInterface<CartPoleVariables> state, int action, double maxQ) {
-        //int panelWidth=xScaler.
         cartPosition.x=state.getVariables().x;
         xDot=state.getVariables().xDot;
         cartPosition.y=CART_Y;
         this.theta = state.getVariables().theta;
         this.thetaDot = state.getVariables().thetaDot;
-        this.nofSteps = state.getVariables().nofSteps;
         this.maxQ=maxQ;
 
         switch (action) {
@@ -123,8 +116,11 @@ public class PanelCartPoleAnimation extends JPanel {
         }
     }
 
+    public void setNofSteps(int nofSteps) {
+        this.nofSteps = nofSteps;
+    }
 
-    private void plotCart(Graphics2D g2d,double x,double y) {
+    private void plotCart(Graphics2D g2d, double x, double y) {
 
         /***          CART_WIDTH
          *        ______________. (x1,y1)

@@ -25,7 +25,6 @@ public class RunCartPoleOnlySearch {
                 EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         StateInterface<CartPoleVariables> state=StateCartPole.newAllStatesAsZero();
 
-
         for (int i = 0; i < NOF_STEPS_IN_TEST; i++) {
             state.getVariables().nofSteps=0;  //reset nof steps
             monteCarloTreeCreator.setStartState(state);
@@ -33,12 +32,9 @@ public class RunCartPoleOnlySearch {
             ActionInterface<Integer> actionCartPole=monteCarloTreeCreator.getFirstAction();
             StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
             state.setFromReturn(sr);
-
-            state.getVariables().nofSteps=i;  //set for rendering
-            graphics.render(state,0,actionCartPole.getValue());
+            graphics.render(state,i,0,actionCartPole.getValue());
 
             System.out.println("i = "+i+", state = " + state);
-
             if (sr.isFail) {
                 log.warning("Fail state");
                 break;
@@ -47,8 +43,6 @@ public class RunCartPoleOnlySearch {
         System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
 
         Assert.assertEquals(state.getVariables().nofSteps,NOF_STEPS_IN_TEST-1);
-
-
 
     }
 

@@ -5,20 +5,15 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.swing.PanelCartPoleAnimation;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import swing.FrameEnvironment;
-import swing.ScaleLinear;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,23 +31,17 @@ public class TestMonteCarloControlledCartPole {
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
     private static final int MAX_TREE_DEPTH=100;
     private static final int TIME_BUDGET_MILLI_SECONDS = 100;
-    private static final int NOF_STEPS_IN_TEST = 600;
-    private static final int FRAME_WEIGHT = 600;
-    private static final int FRAME_HEIGHT = 300;
-    private static final int FRAME_MARGIN = 50;
 
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
     MonteCarloSettings<CartPoleVariables, Integer> settings;
-    ActionInterface<Integer> actionTemplate;
     StateInterface<CartPoleVariables> stateUpRight;
     StateInterface<CartPoleVariables> stateLeaningRight;
-    PanelCartPoleAnimation animationPanel;
 
     @Before
     public void init() {
         environment = EnvironmentCartPole.newDefault();
-        actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
+        ActionInterface<Integer>  actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
