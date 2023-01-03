@@ -3,6 +3,8 @@ package monte_carlo_tree_search.network_training;
 import lombok.Getter;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
+import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
+import org.jetbrains.annotations.NotNull;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -17,12 +19,13 @@ import java.util.List;
 public class CartPoleStateValueMemory {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = 10;
-    private static final double LEARNING_RATE = 0.001;
+    private static final int NOF_NEURONS_HIDDEN = 5;
+    private static final double LEARNING_RATE = 0.1;
     private static final int NOF_ITERATION_WARMUP = 1;
 
     MultiLayerPerceptron ann;
     MomentumBackpropagation learningRule;
+    StateNormalizerCartPole normalizer;
 
     public CartPoleStateValueMemory() {
         ann = new MultiLayerPerceptron(
@@ -35,22 +38,29 @@ public class CartPoleStateValueMemory {
         learningRule.setLearningRate(LEARNING_RATE);
         learningRule.setNeuralNetwork(ann);
         learningRule.setMaxIterations(NOF_ITERATION_WARMUP);
+        normalizer = new StateNormalizerCartPole();
         ann.learn(getWarmUpTrainingSet());  //needs warm up - else null pointer exception when calling doOneLearningIteration
     }
 
     public void doOneLearningIteration(List<Experience<CartPoleVariables, Integer>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
-       // System.out.println("trainingSet = " + trainingSet);
+      //  System.out.println("trainingSet = " + trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
     }
 
     public double read(CartPoleVariables v) {
-        double[] inputVec = new double[]{v.theta, v.x, v.thetaDot, v.xDot};
-            ann.setInput(inputVec);
-            ann.calculate();
-            double[] output = Arrays.copyOf(ann.getOutput(), OUTPUT_SIZE);
-            return output[0];
+        double[] inputVec = getInputVec(v);
+        ann.setInput(inputVec);
+        ann.calculate();
+        double[] output = Arrays.copyOf(ann.getOutput(), OUTPUT_SIZE);
+        return output[0];
 
+    }
+
+    @NotNull
+    private double[] getInputVec(CartPoleVariables v) {
+        CartPoleVariables vNorm=normalizer.normalize(v);
+        return new double[]{vNorm.theta, vNorm.x, vNorm.thetaDot, vNorm.xDot};
     }
 
 
@@ -60,9 +70,9 @@ public class CartPoleStateValueMemory {
 
         for (Experience<CartPoleVariables, Integer> e : buffer) {
             CartPoleVariables v = e.stateVariables;
+            double[] inputVec = getInputVec(v);
             trainingSet.add(
-                    new DataSetRow(new double[]{v.theta, v.x, v.thetaDot, v.xDot},
-                    new double[]{e.value}));
+                    new DataSetRow(inputVec,new double[]{e.value}));
 
         }
         return trainingSet;

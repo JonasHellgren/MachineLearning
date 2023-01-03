@@ -20,13 +20,13 @@ public class StateNormalizerCartPole {
         xDotScaler=new ScalerLinear(-xDotMax, xDotMax,0,1);
     }
 
-   public CartPoleVariables normalize(StateCartPole state) {
+   public CartPoleVariables normalize(CartPoleVariables variables) {
 
        return CartPoleVariables.builder()
-               .x(xScaler.calcOutDouble(state.variables.x))
-               .xDot(xDotScaler.calcOutDouble(state.variables.xDot))
-               .theta(thetaScaler.calcOutDouble(state.variables.theta))
-               .thetaDot(thetaDotScaler.calcOutDouble(state.variables.thetaDot))
+               .x(xScaler.calcOutDouble(variables.x))
+               .xDot(xDotScaler.calcOutDouble(variables.xDot))
+               .theta(thetaScaler.calcOutDouble(variables.theta))
+               .thetaDot(thetaDotScaler.calcOutDouble(variables.thetaDot))
                .build();
 
    }

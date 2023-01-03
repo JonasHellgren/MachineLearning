@@ -75,7 +75,7 @@ public class TestStateValueMemoryTraining {
     @Test public void trainNetwork() {
         CartPoleStateValueMemory memory=new CartPoleStateValueMemory();
         double maxError = 1e-10;
-        int  maxNofEpochs = 10_000;
+        int  maxNofEpochs = 50_000;
         int epoch = 1;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);
