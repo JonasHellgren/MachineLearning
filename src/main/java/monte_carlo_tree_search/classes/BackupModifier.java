@@ -83,7 +83,7 @@ public class BackupModifier<SSV,AV> {
     }
 
     public void backup() {
-        backup(ListUtils.listWithZeroElements(nodesOnPath.size()),0);
+        backup(ListUtils.createListWithZeroElements(nodesOnPath.size()),0);
     }
 
     public void backup(List<Double> returnsSimulation, double memoryValueStateAfterAction) {
@@ -96,7 +96,7 @@ public class BackupModifier<SSV,AV> {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
         List<Double> returnsSteps = getReturns(rewards);
-        List<Double> returnsMemory = ListUtils.listWithEqualElementValues(returnsSteps.size(),memoryValue);
+        List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(),memoryValue);
         updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory);
     }
 

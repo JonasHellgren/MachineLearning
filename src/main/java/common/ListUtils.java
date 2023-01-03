@@ -34,14 +34,13 @@ public class ListUtils {
         return list.stream()
                 .map(num -> num * scalar)
                 .collect(Collectors.toList());
-
     }
 
-    public static List<Double> listWithZeroElements(int len) {
-        return new ArrayList<>(Collections.nCopies(len,0d));
+    public static List<Double> createListWithZeroElements(int len) {
+        return createListWithEqualElementValues(len,0);
     }
 
-    public static List<Double> listWithEqualElementValues(int len, double value) {
+    public static List<Double> createListWithEqualElementValues(int len, double value) {
         return new ArrayList<>(Collections.nCopies(len,value));
     }
 
