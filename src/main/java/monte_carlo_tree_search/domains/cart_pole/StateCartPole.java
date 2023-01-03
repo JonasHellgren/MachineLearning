@@ -18,6 +18,15 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
         this.variables = variables;
     }
 
+    public static StateCartPole newAllStatesAsZero() {
+        return  new StateCartPole(CartPoleVariables.builder()
+                .theta(0)
+                .thetaDot(0)
+                .x(0)
+                .xDot(0)
+                .build());
+    }
+
     public static StateCartPole newRandom() {
         double thetaMax=EnvironmentCartPole.THETA_THRESHOLD_RADIANS;
         double xMax=EnvironmentCartPole.X_TRESHOLD;

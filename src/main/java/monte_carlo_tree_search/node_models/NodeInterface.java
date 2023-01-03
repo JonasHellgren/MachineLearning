@@ -21,15 +21,16 @@ import java.util.*;
  *           NodeTerminalFail   NodeTerminalNotFail
  *
  * This interface has many methods, can potentially be improved according to interface segregation principle.
- * Splitting into multiple interfaces does however require mayor refactoring. NodeWithChildrenInterface,
- * implementing NodeInterface, is possible additional interface. Would be like structure below.
+ * Splitting into multiple interfaces does however require mayor refactoring and may give non clean type casts.
+ * NodeWithChildrenInterface, implementing NodeInterface, is possible additional interface.
+ * Would be like structure below.
  *
- *  *                               NodeInterface
+ *                                   NodeInterface
  *                                /        |     \
  *      NodeWithChildrenInterface  NodeAbstract    \
- *  *           /                                    \
- *  *          /                                  /    \
- *  *   NodeNotTerminal            NodeTerminalFail   NodeTerminalNotFail  (all extends NodeAbstract)
+ *            /                                    \
+ *           /                                  /    \
+ *   NodeNotTerminal            NodeTerminalFail   NodeTerminalNotFail  (all extends NodeAbstract)
  *
  */
 

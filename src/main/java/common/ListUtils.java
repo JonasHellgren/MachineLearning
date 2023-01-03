@@ -9,12 +9,12 @@ import java.util.stream.IntStream;
 
 public class ListUtils {
 
-    public static OptionalDouble findMinInList(List<Double> list)  {
+    public static OptionalDouble findMin(List<Double> list)  {
         return  list.stream().mapToDouble(Double::doubleValue)
                 .min();
     }
 
-    public static OptionalDouble findMaxInList(List<Double> list)  {
+    public static OptionalDouble findMax(List<Double> list)  {
         return  list.stream().mapToDouble(Double::doubleValue)
                 .max();
     }

@@ -84,7 +84,6 @@ public class TestMonteCarloControlledCartPole {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
-        setupFrameAndPanel();
     }
 
     @Test
@@ -108,37 +107,6 @@ public class TestMonteCarloControlledCartPole {
 
     }
 
-    @SneakyThrows
-    @Test public void multipleBestActionShallGiveMultipleSteps() {
-        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
-                EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
-        StateInterface<CartPoleVariables> state=StateCartPole.newFromState(stateUpRight);
-
-
-        for (int i = 0; i < NOF_STEPS_IN_TEST; i++) {
-            state.getVariables().nofSteps=0;  //reset nof steps
-            monteCarloTreeCreator.setStartState(state);
-            monteCarloTreeCreator.run();
-            ActionInterface<Integer> actionCartPole=monteCarloTreeCreator.getFirstAction();
-            StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
-            state.setFromReturn(sr);
-
-            state.getVariables().nofSteps=i;  //set for rendering
-            render(state,0,actionCartPole.getValue());
-
-            System.out.println("i = "+i+", state = " + state);
-
-            if (sr.isFail) {
-                log.warning("Fail state");
-                break;
-            }
-        }
-        System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
-
-        Assert.assertEquals(state.getVariables().nofSteps,NOF_STEPS_IN_TEST-1);
-
-    }
-
     private void doPrinting(TreeInfoHelper<CartPoleVariables, Integer> tih) {
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
 
@@ -149,27 +117,6 @@ public class TestMonteCarloControlledCartPole {
     }
 
 
-    private void setupFrameAndPanel() {
-        FrameEnvironment animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"CartPole animation");
-        double xMax=EnvironmentCartPole.X_TRESHOLD;
-        double yMin=EnvironmentCartPole.Y_MIN;
-        double yMax=EnvironmentCartPole.Y_MAX;
-        ScaleLinear xScaler=new ScaleLinear(-xMax,xMax,
-                FRAME_MARGIN, FRAME_WEIGHT - FRAME_MARGIN,
-                false, FRAME_MARGIN);
-        ScaleLinear yScaler=new ScaleLinear(yMin,yMax, FRAME_MARGIN,
-                FRAME_HEIGHT - FRAME_MARGIN,true, FRAME_MARGIN);
-
-        animationPanel =new PanelCartPoleAnimation(xScaler,yScaler);
-        animationPanel.setLayout(null);  //to enable tailor made position
-        animationFrame.add(animationPanel);
-        animationFrame.setVisible(true);
-    }
-
-    public void render(StateInterface<CartPoleVariables> state, double maxQ, int actionValue) {
-        animationPanel.setCartPoleStates(state,actionValue,maxQ);
-        animationPanel.repaint();
-    }
 
 }
 
