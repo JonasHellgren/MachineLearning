@@ -11,5 +11,6 @@ public class Experience<SSV, AV> {
     public AV action;
     public SSV stateVariableNew;
     public double reward;
+    public double value;
 
 }
