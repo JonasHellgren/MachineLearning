@@ -173,10 +173,12 @@ github token  x
 cart pole tester som main inte test  x
 TestStateValueMemoryTraining
 hur träna neuroph med epoker - flera minibatcher  x
+asserts trainNetwork x
 ScalerLinear för value
 default fields Experience builder
-tänka igenom defensive backup
 interface för CartPoleStateValueMemory och NodeValueMemory
+tänka igenom defensive backup
+
 ersätta rollout med minne i cart pole - alphaZero enligt nedan
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
 apply discountFactorSimulation

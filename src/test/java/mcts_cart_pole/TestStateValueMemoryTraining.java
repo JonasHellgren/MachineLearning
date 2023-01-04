@@ -28,6 +28,7 @@ public class TestStateValueMemoryTraining {
     private static final int MAX_SIZE = 100;
     private static final int NOF_SAMPLES = 1000;
     private static final int MINI_BATCH_SIZE = 30;
+    private static final int DELTA = 5;
 
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
@@ -74,15 +75,13 @@ public class TestStateValueMemoryTraining {
 
     @Test public void trainNetwork() {
         CartPoleStateValueMemory memory=new CartPoleStateValueMemory();
-        double maxError = 1e-10;
-        int  maxNofEpochs = 20_000;
+        double maxError = 1e-5;
+        int  maxNofEpochs = 50_000;
         int epoch = 0;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);
             memory.doOneLearningIteration(miniBatch);
-            printProgressSometimes(memory.getLearningRule(), epoch);
-            epoch++;
-
+            printProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
 
 
@@ -91,6 +90,15 @@ public class TestStateValueMemoryTraining {
         StateCartPole stateRandom=StateCartPole.newRandom();
         System.out.println("memory.read(stateRandom.getVariables()) = " + memory.read(stateRandom.getVariables()));
 
+        StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();
+        StateCartPole stateExtreme=StateCartPole.newAllPositiveMax();
+
+        SimulationResults simulationResultsAllZero=monteCarloTreeCreator.simulate(stateAllZero);
+        Assert.assertEquals(getAverageReturn(simulationResultsAllZero), memory.read(stateAllZero.getVariables())*100, DELTA);
+
+        SimulationResults simulationResultsExtreme=monteCarloTreeCreator.simulate(stateExtreme);
+        Assert.assertEquals(getAverageReturn(simulationResultsExtreme), memory.read(stateExtreme.getVariables())*100, DELTA);
+
     }
 
     private ReplayBuffer<CartPoleVariables,Integer>  createExperienceBuffer() {
@@ -98,11 +106,9 @@ public class TestStateValueMemoryTraining {
 
         for (int i = 0; i < NOF_SAMPLES; i++) {
         StateCartPole stateRandom=StateCartPole.newRandom();
-        SimulationResults simulationResults=
-                monteCarloTreeCreator.simulate(stateRandom);
-        List<Double> returns= new ArrayList<>(simulationResults.getReturnListForAll());
-        double averageReturn=returns.stream().mapToDouble(val -> val).average().orElse(0.0);
-         //   System.out.println("stateRandom = " + stateRandom);
+        SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom);
+        double averageReturn = getAverageReturn(simulationResults);
+            //   System.out.println("stateRandom = " + stateRandom);
          //   System.out.println("stateNormalizer.normalize(stateRandom) = " + stateNormalizer.normalize(stateRandom));
         //    System.out.println("averageReturn = " + averageReturn);
 
@@ -115,6 +121,11 @@ public class TestStateValueMemoryTraining {
                     .build());
         }
         return buffer;
+    }
+
+    private double getAverageReturn(SimulationResults simulationResults) {
+        List<Double> returns= new ArrayList<>(simulationResults.getReturnListForAll());
+        return returns.stream().mapToDouble(val -> val).average().orElse(0.0);
     }
 
     private void printProgressSometimes(MomentumBackpropagation learningRule, int epoch) {

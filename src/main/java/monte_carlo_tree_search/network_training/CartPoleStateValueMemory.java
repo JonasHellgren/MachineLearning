@@ -19,8 +19,8 @@ import java.util.List;
 public class CartPoleStateValueMemory {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = 5;
-    private static final double LEARNING_RATE = 0.5;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    private static final double LEARNING_RATE = 0.1;
     private static final int NOF_ITERATION_WARMUP = 1;
 
     MultiLayerPerceptron ann;
