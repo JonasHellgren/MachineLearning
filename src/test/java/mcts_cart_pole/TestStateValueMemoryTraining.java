@@ -77,28 +77,29 @@ public class TestStateValueMemoryTraining {
         CartPoleStateValueMemory memory=new CartPoleStateValueMemory();
         double maxError = 1e-5;
         int  maxNofEpochs = 50_000;
+        trainMemory(memory, maxError, maxNofEpochs);
+
+        StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();
+        StateCartPole stateExtreme=StateCartPole.newAllPositiveMax();
+
+        System.out.println("memory.read(stateAllZero.getVariables()) = " + memory.read(stateAllZero.getVariables()));
+        System.out.println("memory.read(stateExtreme.getVariables()) = " + memory.read(stateExtreme.getVariables()));
+
+        SimulationResults simulationResultsAllZero=monteCarloTreeCreator.simulate(stateAllZero);
+        Assert.assertEquals(getAverageReturn(simulationResultsAllZero), memory.read(stateAllZero.getVariables()), DELTA);
+
+        SimulationResults simulationResultsExtreme=monteCarloTreeCreator.simulate(stateExtreme);
+        Assert.assertEquals(getAverageReturn(simulationResultsExtreme), memory.read(stateExtreme.getVariables()), DELTA);
+
+    }
+
+    private void trainMemory(CartPoleStateValueMemory memory, double maxError, int maxNofEpochs) {
         int epoch = 0;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);
             memory.doOneLearningIteration(miniBatch);
             printProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-
-
-        StateCartPole state=StateCartPole.newAllStatesAsZero();
-        System.out.println("memory.read(state.getVariables()) = " + memory.read(state.getVariables()));
-        StateCartPole stateRandom=StateCartPole.newRandom();
-        System.out.println("memory.read(stateRandom.getVariables()) = " + memory.read(stateRandom.getVariables()));
-
-        StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();
-        StateCartPole stateExtreme=StateCartPole.newAllPositiveMax();
-
-        SimulationResults simulationResultsAllZero=monteCarloTreeCreator.simulate(stateAllZero);
-        Assert.assertEquals(getAverageReturn(simulationResultsAllZero), memory.read(stateAllZero.getVariables())*100, DELTA);
-
-        SimulationResults simulationResultsExtreme=monteCarloTreeCreator.simulate(stateExtreme);
-        Assert.assertEquals(getAverageReturn(simulationResultsExtreme), memory.read(stateExtreme.getVariables())*100, DELTA);
-
     }
 
     private ReplayBuffer<CartPoleVariables,Integer>  createExperienceBuffer() {
@@ -108,16 +109,13 @@ public class TestStateValueMemoryTraining {
         StateCartPole stateRandom=StateCartPole.newRandom();
         SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom);
         double averageReturn = getAverageReturn(simulationResults);
-            //   System.out.println("stateRandom = " + stateRandom);
-         //   System.out.println("stateNormalizer.normalize(stateRandom) = " + stateNormalizer.normalize(stateRandom));
-        //    System.out.println("averageReturn = " + averageReturn);
 
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())
                     .action(0)
                     .stateVariableNew(stateRandom.getVariables())
                     .reward(0)
-                    .value(averageReturn/100)
+                    .value(CartPoleStateValueMemory.normalizeOutput(averageReturn))
                     .build());
         }
         return buffer;

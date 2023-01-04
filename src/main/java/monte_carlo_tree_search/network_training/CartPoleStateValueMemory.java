@@ -1,7 +1,9 @@
 package monte_carlo_tree_search.network_training;
 
+import common.ScalerLinear;
 import lombok.Getter;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
+import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
 import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +24,13 @@ public class CartPoleStateValueMemory {
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
     private static final double LEARNING_RATE = 0.1;
     private static final int NOF_ITERATION_WARMUP = 1;
+    private static final int NET_OUT_MIN = 0;
+    private static final int NET_OUT_MAX = 1;
 
     MultiLayerPerceptron ann;
     MomentumBackpropagation learningRule;
     StateNormalizerCartPole normalizer;
+    ScalerLinear scalerOut;
 
     public CartPoleStateValueMemory() {
         ann = new MultiLayerPerceptron(
@@ -39,6 +44,7 @@ public class CartPoleStateValueMemory {
         learningRule.setNeuralNetwork(ann);
         learningRule.setMaxIterations(NOF_ITERATION_WARMUP);
         normalizer = new StateNormalizerCartPole();
+        scalerOut=new ScalerLinear(NET_OUT_MIN, NET_OUT_MAX,0, EnvironmentCartPole.MAX_NOF_STEPS);
         ann.learn(getWarmUpTrainingSet());  //needs warm up - else null pointer exception when calling doOneLearningIteration
     }
 
@@ -50,12 +56,15 @@ public class CartPoleStateValueMemory {
 
     public double read(CartPoleVariables v) {
         double[] inputVec = getInputVec(v);
-        System.out.println("inputVec = " + Arrays.toString(inputVec));
         ann.setInput(inputVec);
         ann.calculate();
         double[] output = Arrays.copyOf(ann.getOutput(), OUTPUT_SIZE);
-        return output[0];
+        return scalerOut.calcOutDouble(output[0]);
+    }
 
+    public static double normalizeOutput(double value) {
+        ScalerLinear scaler=new ScalerLinear(0, EnvironmentCartPole.MAX_NOF_STEPS, NET_OUT_MIN, NET_OUT_MAX);
+        return scaler.calcOutDouble(value);
     }
 
     @NotNull

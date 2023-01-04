@@ -174,7 +174,7 @@ cart pole tester som main inte test  x
 TestStateValueMemoryTraining
 hur träna neuroph med epoker - flera minibatcher  x
 asserts trainNetwork x
-ScalerLinear för value
+ScalerLinear för value  x
 default fields Experience builder
 interface för CartPoleStateValueMemory och NodeValueMemory
 tänka igenom defensive backup
