@@ -12,7 +12,7 @@ import java.util.function.Function;
 @Setter
 @ToString
 public class MonteCarloSettings<SSV,AV> {
-    private static final int NOF_ITERATIONS_DEFAULT=1000;
+    private static final int NOF_ITERATIONS_DEFAULT=10_000;
     private static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final long TIME_BUDGET_DEFAULT=1000;

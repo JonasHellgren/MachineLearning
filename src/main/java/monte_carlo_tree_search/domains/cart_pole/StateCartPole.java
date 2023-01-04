@@ -27,6 +27,7 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
                 .build());
     }
 
+
     public static StateCartPole newAllPositiveMax() {
         return  StateCartPole.newFromVariables(CartPoleVariables.builder()
                 .theta(EnvironmentCartPole.THETA_THRESHOLD_RADIANS)
