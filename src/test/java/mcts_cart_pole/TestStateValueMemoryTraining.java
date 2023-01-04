@@ -23,8 +23,7 @@ public class TestStateValueMemoryTraining {
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
     private static final int MAX_TREE_DEPTH=100;
     private static final int TIME_BUDGET_MILLI_SECONDS = 100;
-    private static final int MAX_SIZE = 100;
-    private static final int NOF_SAMPLES = 1000;
+    private static final int BUFFER_SIZE = 1000;
     private static final int MINI_BATCH_SIZE = 30;
     private static final int DELTA = 5;
 
@@ -67,7 +66,7 @@ public class TestStateValueMemoryTraining {
         List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);
         System.out.println("buffer = " + buffer);
         System.out.println("buffer.bufferAsString(miniBatch) = " + buffer.bufferAsString(miniBatch));
-        Assert.assertEquals(NOF_SAMPLES,buffer.size());
+        Assert.assertEquals(BUFFER_SIZE,buffer.size());
         Assert.assertEquals(MINI_BATCH_SIZE,miniBatch.size());
     }
 
@@ -101,9 +100,9 @@ public class TestStateValueMemoryTraining {
     }
 
     private ReplayBuffer<CartPoleVariables,Integer>  createExperienceBuffer() {
-        ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(MAX_SIZE);
+        ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(BUFFER_SIZE);
 
-        for (int i = 0; i < NOF_SAMPLES; i++) {
+        for (int i = 0; i < BUFFER_SIZE; i++) {
         StateCartPole stateRandom=StateCartPole.newRandom();
         SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom);
         double averageReturn = getAverageReturn(simulationResults);
