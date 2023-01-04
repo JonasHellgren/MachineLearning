@@ -15,7 +15,8 @@ import org.jcodec.common.Assert;
 @Log
 public class RunCartPoleOnlySearch {
 
-    private static final int NOF_STEPS_IN_TEST = 600;
+    private static final int NOF_STEPS = 600;
+    private static final int MAX_Q = 0;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -25,25 +26,22 @@ public class RunCartPoleOnlySearch {
                 EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         StateInterface<CartPoleVariables> state=StateCartPole.newAllStatesAsZero();
 
-        for (int i = 0; i < NOF_STEPS_IN_TEST; i++) {
+        int i=0;
+        boolean isFail;
+        do {
             state.getVariables().nofSteps=0;  //reset nof steps
             monteCarloTreeCreator.setStartState(state);
             monteCarloTreeCreator.run();
             ActionInterface<Integer> actionCartPole=monteCarloTreeCreator.getFirstAction();
             StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
             state.setFromReturn(sr);
-            graphics.render(state,i,0,actionCartPole.getValue());
-
-            System.out.println("i = "+i+", state = " + state);
-            if (sr.isFail) {
-                log.warning("Fail state");
-                break;
-            }
-        }
+            graphics.render(state,i, MAX_Q,actionCartPole.getValue());
+            isFail=sr.isFail;
+            i++;
+        } while (i < NOF_STEPS && !isFail);
         System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
 
-        Assert.assertEquals(state.getVariables().nofSteps,NOF_STEPS_IN_TEST-1);
-
+        Assert.assertEquals(state.getVariables().nofSteps, NOF_STEPS -1);
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreator() {
@@ -76,7 +74,5 @@ public class RunCartPoleOnlySearch {
                 .actionTemplate(actionTemplate)
                 .build();
     }
-
-
 
 }
