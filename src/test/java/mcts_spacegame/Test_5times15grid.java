@@ -7,7 +7,6 @@ import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.NodeValueMemory;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import org.junit.Assert;
 import org.junit.Before;

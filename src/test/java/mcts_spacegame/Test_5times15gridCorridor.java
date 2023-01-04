@@ -9,7 +9,7 @@ import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.NodeValueMemory;
+import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import org.junit.Assert;
@@ -33,7 +33,7 @@ public class Test_5times15gridCorridor {
     EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
-    NodeValueMemory<ShipVariables> memory;
+    NodeValueMemoryHashMap<ShipVariables> memory;
 
     @Before
     public void init() {

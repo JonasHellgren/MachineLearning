@@ -3,9 +3,10 @@ package mcts_spacegame;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.NodeValueMemory;
+import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
@@ -21,15 +22,13 @@ public class TestMockedMemoryFor5times15Grid {
     private static final int NOF_SIMULATIONS_PER_NODE = 0;  //important
     private static final int MAX_TREE_DEPTH = 3;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 100;
-
     private static final double BONUS_IN_Y4 = 6d;
     private static final double BONUS_IN_Y2 = 3d;
     private static final double BONUS_IN_Y0 = 0d;
 
-
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentShip environment;
-    NodeValueMemory<ShipVariables> nodeValueMemory;
+    NodeValueMemoryInterface<ShipVariables> nodeValueMemory;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
 
@@ -37,7 +36,7 @@ public class TestMockedMemoryFor5times15Grid {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new EnvironmentShip(spaceGrid);
-        nodeValueMemory = NodeValueMemory.newEmpty();
+        nodeValueMemory = NodeValueMemoryHashMap.newEmpty();
         nodeValueMemory.write(StateShip.newStateFromXY(2, 4), BONUS_IN_Y4);
         nodeValueMemory.write(StateShip.newStateFromXY(2, 2), BONUS_IN_Y2);
         nodeValueMemory.write(StateShip.newStateFromXY(2, 0), BONUS_IN_Y0);

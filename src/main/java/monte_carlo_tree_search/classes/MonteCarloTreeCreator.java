@@ -7,16 +7,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.cart_pole.ActionCartPole;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.*;
 
@@ -50,7 +45,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     StateInterface<SSV> startState;
     MonteCarloSettings<SSV,AV> settings;
     ActionInterface<AV> actionTemplate;
-    NodeValueMemory<SSV> memory;
+    NodeValueMemoryInterface<SSV> memory;
 
     NodeInterface<SSV,AV> nodeRoot;
     TreeInfoHelper<SSV,AV> tih;
@@ -64,7 +59,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
                                                  @NonNull StateInterface<SSV> startState,
                                                  @NonNull MonteCarloSettings<SSV,AV> monteCarloSettings,
                                                  @NonNull ActionInterface<AV> actionTemplate,
-                                                 NodeValueMemory<SSV> memory) {
+                                                 NodeValueMemoryInterface<SSV> memory) {
         MonteCarloTreeCreator<SSV,AV> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;
@@ -72,7 +67,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
 
         mctc.actionTemplate=actionTemplate;
         Conditionals.executeOneOfTwo(Objects.isNull(memory),
-                () -> mctc.memory = NodeValueMemory.newEmpty(),
+                () -> mctc.memory = NodeValueMemoryHashMap.newEmpty(),
                 () -> mctc.memory = memory);
 
         setSomeFields(startState, mctc);
@@ -188,8 +183,6 @@ public class MonteCarloTreeCreator<SSV,AV> {
         List<Double> returnsSimulation = bumSim.extract();
 
         double memoryValueStateAfterAction=memory.read(sr.newState);
-
-
         BackupModifier<SSV, AV>  bum = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
