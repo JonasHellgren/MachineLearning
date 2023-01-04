@@ -71,7 +71,7 @@ public class TestStateValueMemoryTraining {
     }
 
     @Test public void trainNetwork() {
-        CartPoleStateValueMemory memory=new CartPoleStateValueMemory();
+        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
         double maxError = 1e-5;
         int  maxNofEpochs = 50_000;
         trainMemory(memory, maxError, maxNofEpochs);
@@ -79,18 +79,18 @@ public class TestStateValueMemoryTraining {
         StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();
         StateCartPole stateExtreme=StateCartPole.newAllPositiveMax();
 
-        System.out.println("memory.read(stateAllZero.getVariables()) = " + memory.read(stateAllZero.getVariables()));
-        System.out.println("memory.read(stateExtreme.getVariables()) = " + memory.read(stateExtreme.getVariables()));
+        System.out.println("memory.read(stateAllZero.getVariables()) = " + memory.read(stateAllZero));
+        System.out.println("memory.read(stateExtreme.getVariables()) = " + memory.read(stateExtreme));
 
         SimulationResults simulationResultsAllZero=monteCarloTreeCreator.simulate(stateAllZero);
-        Assert.assertEquals(getAverageReturn(simulationResultsAllZero), memory.read(stateAllZero.getVariables()), DELTA);
+        Assert.assertEquals(getAverageReturn(simulationResultsAllZero), memory.read(stateAllZero), DELTA);
 
         SimulationResults simulationResultsExtreme=monteCarloTreeCreator.simulate(stateExtreme);
-        Assert.assertEquals(getAverageReturn(simulationResultsExtreme), memory.read(stateExtreme.getVariables()), DELTA);
+        Assert.assertEquals(getAverageReturn(simulationResultsExtreme), memory.read(stateExtreme), DELTA);
 
     }
 
-    private void trainMemory(CartPoleStateValueMemory memory, double maxError, int maxNofEpochs) {
+    private void trainMemory(CartPoleStateValueMemory<CartPoleVariables> memory, double maxError, int maxNofEpochs) {
         int epoch = 0;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(MINI_BATCH_SIZE);

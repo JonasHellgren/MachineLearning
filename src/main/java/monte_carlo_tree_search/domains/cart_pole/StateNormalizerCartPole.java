@@ -1,8 +1,9 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import common.ScalerLinear;
+import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 
-public class StateNormalizerCartPole {
+public class StateNormalizerCartPole<SSV> {
 
     private static final int RANGE_MIN = -1;
     private static final int RANGE_MAX = 1;
@@ -22,13 +23,14 @@ public class StateNormalizerCartPole {
         xDotScaler=new ScalerLinear(-xDotMax, xDotMax,RANGE_MIN, RANGE_MAX);
     }
 
-   public CartPoleVariables normalize(CartPoleVariables variables) {
+   public CartPoleVariables normalize(SSV variables) {
 
+       CartPoleVariables cv=(CartPoleVariables) variables;
        return CartPoleVariables.builder()
-               .x(xScaler.calcOutDouble(variables.x))
-               .xDot(xDotScaler.calcOutDouble(variables.xDot))
-               .theta(thetaScaler.calcOutDouble(variables.theta))
-               .thetaDot(thetaDotScaler.calcOutDouble(variables.thetaDot))
+               .x(xScaler.calcOutDouble(cv.x))
+               .xDot(xDotScaler.calcOutDouble(cv.xDot))
+               .theta(thetaScaler.calcOutDouble(cv.theta))
+               .thetaDot(thetaDotScaler.calcOutDouble(cv.thetaDot))
                .build();
 
    }

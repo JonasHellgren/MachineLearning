@@ -176,7 +176,7 @@ hur träna neuroph med epoker - flera minibatcher  x
 asserts trainNetwork x
 ScalerLinear för value  x
 default fields Experience builder  x
-interface för CartPoleStateValueMemory och NodeValueMemory
+interface för CartPoleStateValueMemory och NodeValueMemory  x
 tänka igenom defensive backup
 
 ersätta rollout med minne i cart pole - alphaZero enligt nedan
