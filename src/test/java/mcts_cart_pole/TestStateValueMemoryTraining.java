@@ -12,9 +12,7 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
-import org.neuroph.util.TransferFunctionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,12 +107,8 @@ public class TestStateValueMemoryTraining {
         StateCartPole stateRandom=StateCartPole.newRandom();
         SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom);
         double averageReturn = getAverageReturn(simulationResults);
-
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())
-                    .action(0)
-                    .stateVariableNew(stateRandom.getVariables())
-                    .reward(0)
                     .value(CartPoleStateValueMemory.normalizeOutput(averageReturn))
                     .build());
         }
