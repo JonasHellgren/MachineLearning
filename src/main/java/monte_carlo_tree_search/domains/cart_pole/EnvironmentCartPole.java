@@ -72,7 +72,7 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
     public static final double X_TRESHOLD = 2;
     public static final double THETA_DOT_THRESHOLD_RADIANS  = PI;  //debatable
     public static final double X_DOT_THRESHOLD = X_TRESHOLD*2;  //debatable
-    public static final int MAX_NOF_STEPS = 100;  //200
+    public static final int MAX_NOF_STEPS = 100;  //100 200
     public static final double NON_TERMINAL_REWARD = 1.0;
 
     @Builder.Default

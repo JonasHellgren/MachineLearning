@@ -185,9 +185,9 @@ https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-du
 
 CartPoleRunnner x
 environmentTraining environmentEvaluation x
-bufferEpisode enligt first visit monte carlo
-clean up
-plotta returns
+bufferEpisode enligt first visit monte carlo x
+clean up x
+plotta returns x
 
 tänka igenom defensive backup
 apply discountFactorSimulation

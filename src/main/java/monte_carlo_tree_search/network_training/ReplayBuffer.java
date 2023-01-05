@@ -31,6 +31,10 @@ public class ReplayBuffer<SSV, AV>  {
         buffer.clear();
     }
 
+    public Experience<SSV, AV> getExperience(int index) {
+        return buffer.get(index);
+    }
+
     public List<Experience<SSV, AV>> getMiniBatch(int batchLength) {
         List<Experience<SSV, AV>> miniBatch = new ArrayList<>();
 
