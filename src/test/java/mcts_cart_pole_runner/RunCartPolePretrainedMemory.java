@@ -68,9 +68,10 @@ public class RunCartPolePretrainedMemory {
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
-                .maxTreeDepth(1000)
+                .maxTreeDepth(50)
                 .alphaBackupNormal(0.9)
                 .alphaBackupDefensive(0.1)
+                .maxTreeDepth(50)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS)
                 .weightReturnsSteps(0)
                 .weightMemoryValue(1)
@@ -93,7 +94,6 @@ public class RunCartPolePretrainedMemory {
         final int VALUE_LEFT = 0;
         final int NOF_SIMULATIONS_PER_NODE = 100;
         final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
-        final int MAX_TREE_DEPTH=100;
         final int TIME_BUDGET_MILLI_SECONDS = 100;
         ActionInterface<Integer> actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
@@ -102,7 +102,7 @@ public class RunCartPolePretrainedMemory {
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0.0) //0 <=> average, 1 <=> max
-                .maxTreeDepth(MAX_TREE_DEPTH)
+                .maxTreeDepth(100)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS)
                 .weightReturnsSteps(0)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)

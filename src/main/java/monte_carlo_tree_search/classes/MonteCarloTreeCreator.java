@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -104,12 +106,11 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 break;
             }
         }
-        nofIterations = i;
-        this.cpuTimer.stop();
-        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations);
-
+        logStatistics(i);
         return nodeRoot;
     }
+
+
 
     public MonteCarloSearchStatistics<SSV,AV> getStatistics() {
         MonteCarloSearchStatistics<SSV,AV> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this,settings);
@@ -125,6 +126,16 @@ public class MonteCarloTreeCreator<SSV,AV> {
         AV actionValue=tih.getValueOfFirstBestAction().orElse(actionTemplate.getValue());
         actionRoot.setValue(actionValue);
         return actionRoot;
+    }
+
+    private void logStatistics(int nofIterations) {
+        this.cpuTimer.stop();
+        TreeInfoHelper<SSV,AV> tih=new TreeInfoHelper<>(nodeRoot,settings);
+        MonteCarloSearchStatistics<SSV,AV> statistics=new MonteCarloSearchStatistics<>(
+                nodeRoot,this,settings);
+        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
+                ", max tree depth = "+tih.maxDepth()+", depth of best path = "+tih.getBestPath().size()
+                +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
 
     private NodeInterface<SSV,AV> select(NodeInterface<SSV,AV> nodeRoot) {
