@@ -31,27 +31,9 @@ public class RunCartPolePretrainedMemory {
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
-
-        CartPoleGraphics graphics=new CartPoleGraphics();
-        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
-                EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         StateInterface<CartPoleVariables> state = getStartState();
-
-        int i=0;
-        boolean isFail;
-        do {
-            state.getVariables().nofSteps=0;  //reset nof steps
-            mcForSearch.setStartState(state);
-            mcForSearch.run();
-            ActionInterface<Integer> actionCartPole=mcForSearch.getFirstAction();
-            StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
-            state.setFromReturn(sr);
-            double value=memory.read(state);
-            graphics.render(state,i, value,actionCartPole.getValue());
-            isFail=sr.isFail;
-            i++;
-        } while (i < NOF_STEPS && !isFail);
-        System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
+        CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,NOF_STEPS);
+        cpr.run(state);
 
     }
 

@@ -32,15 +32,15 @@ public class RunCartPoleAlphaZero {
     private static final double VARIABLE_DECREASE = 0.9;
 
     private static final double MAX_ERROR = Double.MAX_VALUE;
-    private static final int MAX_EPOCHS = 10;
+    private static final int MAX_EPOCHS = 10;      //10
     private static final int MINI_BATCH_SIZE = 30;
-    private static final int NOF_EPISODES = 50;
+    private static final int NOF_EPISODES = 100;    //100
     private static final int NOT_RELEVANT = 0;
     private static final int MAX_NOF_STEPS_IN_TRAINING = EnvironmentCartPole.MAX_NOF_STEPS;
     private static final int MAX_NOF_STEPS_IN_EVALUATION= 10_000;
 
-    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 1;
-    private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 20;
+    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 10;
+    private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -48,7 +48,7 @@ public class RunCartPoleAlphaZero {
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
         ReplayBuffer<CartPoleVariables, Integer> bufferTrainig = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 
-        CartPoleGraphics graphics = new CartPoleGraphics();
+        CartPoleGraphics graphics = new CartPoleGraphics("Training animation");
         EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
                 EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         ReplayBuffer<CartPoleVariables, Integer> bufferEpisode = new ReplayBuffer<>(BUFFER_SIZE_EPISODE);
@@ -57,7 +57,6 @@ public class RunCartPoleAlphaZero {
         List<Double> returns=new ArrayList<>();
 
 
-        mcForSearch.getSettings().setTimeBudgetMilliSeconds(10);
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
             boolean isFail = false;
             StateInterface<CartPoleVariables> state = getStartState();
@@ -101,22 +100,10 @@ public class RunCartPoleAlphaZero {
         System.out.println("learningErrors = " + learningErrors);
         System.out.println("returns = " + returns);
 
-        int i=0;
-        boolean isFail;
+
+        CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,MAX_NOF_STEPS_IN_EVALUATION);
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
-        mcForSearch.getSettings().setTimeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_EVALUATION);
-        do {
-            state.getVariables().nofSteps=0;  //reset nof steps
-            mcForSearch.setStartState(state);
-            mcForSearch.run();
-            ActionInterface<Integer> actionCartPole=mcForSearch.getFirstAction();
-            StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
-            state.setFromReturn(sr);
-            double value=memory.read(state);
-            graphics.render(state,i, value,actionCartPole.getValue());
-            isFail=sr.isFail;
-            i++;
-        } while (i < MAX_NOF_STEPS_IN_EVALUATION && !isFail);
+        cpr.run(state);
 
     }
 

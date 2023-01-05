@@ -183,6 +183,11 @@ RunCartPolePretrainedMemory - använd trainMemory för mc search x
 ersätta rollout med minne i cart pole - alphaZero enligt nedan
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
 
+CartPoleRunnner
+environmentTraining environmentEvaluation
+clean up
+plotta returns
+
 tänka igenom defensive backup
 apply discountFactorSimulation
 gör om cart pole reward - stort negative vid fail annars noll

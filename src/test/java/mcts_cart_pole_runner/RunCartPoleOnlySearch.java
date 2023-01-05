@@ -9,6 +9,7 @@ import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 import monte_carlo_tree_search.swing.CartPoleGraphics;
 import org.jcodec.common.Assert;
 
@@ -16,55 +17,31 @@ import org.jcodec.common.Assert;
 public class RunCartPoleOnlySearch {
 
     private static final int NOF_STEPS = 600;
-    private static final int MAX_Q = 0;
 
     @SneakyThrows
     public static void main(String[] args) {
         MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator= createTreeCreator();
-        CartPoleGraphics graphics=new CartPoleGraphics();
-        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
-                EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         StateInterface<CartPoleVariables> state=StateCartPole.newAllStatesAsZero();
+        CartPoleRunner cpr=new CartPoleRunner(monteCarloTreeCreator,NOF_STEPS);
+        cpr.run(state);
 
-        int i=0;
-        boolean isFail;
-        do {
-            state.getVariables().nofSteps=0;  //reset nof steps
-            monteCarloTreeCreator.setStartState(state);
-            monteCarloTreeCreator.run();
-            ActionInterface<Integer> actionCartPole=monteCarloTreeCreator.getFirstAction();
-            StepReturnGeneric<CartPoleVariables> sr=environmentNotStepLimited.step(actionCartPole,state);
-            state.setFromReturn(sr);
-            graphics.render(state,i, MAX_Q,actionCartPole.getValue());
-            isFail=sr.isFail;
-            i++;
-        } while (i < NOF_STEPS && !isFail);
-        System.out.println("state.getVariables().nofSteps = " + state.getVariables().nofSteps);
-
-        Assert.assertEquals(state.getVariables().nofSteps, NOF_STEPS -1);
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreator() {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
-        final int VALUE_LEFT = 0;
-        final int MAX_NOF_ITERATIONS = 10_000;
-        final int NOF_SIMULATIONS_PER_NODE = 100;
-        final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
-        final int MAX_TREE_DEPTH=100;
-        final int TIME_BUDGET_MILLI_SECONDS = 100;
-        ActionInterface<Integer> actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
+        ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0) //average
-                .maxTreeDepth(MAX_TREE_DEPTH)
-                .maxNofIterations(MAX_NOF_ITERATIONS)
-                .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS)
+                .maxTreeDepth(100)
+                .maxNofIterations(10_000)
+                .timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(0)
-                .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
-                .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
+                .nofSimulationsPerNode(100)
+                .coefficientExploitationExploration(0.1)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()

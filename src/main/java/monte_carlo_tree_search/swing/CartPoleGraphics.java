@@ -10,15 +10,15 @@ public class CartPoleGraphics {
 
     private PanelCartPoleAnimation animationPanel;
 
-    public CartPoleGraphics() {
-        this.setupFrameAndPanel();
+    public CartPoleGraphics(String title) {
+        this.setupFrameAndPanel(title);
     }
 
-    private void setupFrameAndPanel() {
+    private void setupFrameAndPanel(String title) {
         final int FRAME_WEIGHT = 600;
         final int FRAME_HEIGHT = 300;
         final int FRAME_MARGIN = 50;
-        FrameEnvironment animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,"CartPole animation");
+        FrameEnvironment animationFrame =new FrameEnvironment(FRAME_WEIGHT, FRAME_HEIGHT,title);
         double xMax= EnvironmentCartPole.X_TRESHOLD;
         double yMin=EnvironmentCartPole.Y_MIN;
         double yMax=EnvironmentCartPole.Y_MAX;
