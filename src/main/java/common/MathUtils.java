@@ -49,8 +49,6 @@ public class MathUtils {
         return nf.format(value);
     }
 
-
-
     public static double normalize(double x,double xMin,double xMax) {
         return (x-xMin)/(xMax-xMin);
     }

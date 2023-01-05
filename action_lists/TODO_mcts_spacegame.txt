@@ -188,6 +188,7 @@ environmentTraining environmentEvaluation x
 bufferEpisode enligt first visit monte carlo x
 clean up x
 plotta returns x
+prova first visit mc
 
 tänka igenom defensive backup
 apply discountFactorSimulation

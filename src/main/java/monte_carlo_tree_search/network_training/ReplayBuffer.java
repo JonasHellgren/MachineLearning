@@ -48,6 +48,15 @@ public class ReplayBuffer<SSV, AV>  {
         return miniBatch;
     }
 
+    public boolean isExperienceWithStateVariablesPresentBeforeIndex(SSV stateVariables, int iLimit) {
+        for (int i = 0; i < iLimit ; i++) {
+            if (buffer.get(i).stateVariables.equals(stateVariables)) {
+                return  true;
+            }
+        }
+        return  false;
+    }
+
     public void setAllValues(double value) {
         for (Experience<SSV,AV> exp:buffer) {
             exp.value=value;

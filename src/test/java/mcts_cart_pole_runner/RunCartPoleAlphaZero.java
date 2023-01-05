@@ -8,8 +8,6 @@ import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.cart_pole.*;
-import monte_carlo_tree_search.domains.models_battery_cell.CellResultsPlotter;
-import monte_carlo_tree_search.domains.models_battery_cell.EnvironmentCell;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -30,16 +28,16 @@ import java.util.List;
 @Log
 public class RunCartPoleAlphaZero {
 
-    private static final int BUFFER_SIZE_TRAINING = 10_000;
+    private static final int BUFFER_SIZE_TRAINING = 100_000;
     private static final int BUFFER_SIZE_EPISODE = 1_000;
-    private static final double VARIABLE_DECREASE = 0.1;
-
-    private static final double MAX_ERROR = Double.MAX_VALUE;
-    private static final int MAX_EPOCHS = 10;      //10
-    private static final int MINI_BATCH_SIZE = 100;  //30
-    private static final int NOF_EPISODES = 100;    //100
+    private static final double INIT_STATE_VARIABLE_DEVIATION = 0.1;  //small <=> close to zero
+    private static final int NOF_EPISODES = 150;    //100
     private static final int NOT_RELEVANT = 0;
     private static final int MAX_NOF_STEPS_IN_EVALUATION = 10_000;
+
+    private static final double MAX_ERROR = Double.MAX_VALUE;
+    private static final int MAX_EPOCHS = 100;      //10
+    private static final int MINI_BATCH_SIZE = 30;  //30
 
     private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 1;
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
@@ -47,6 +45,7 @@ public class RunCartPoleAlphaZero {
     private static final int BUFFER_SIZE_TRAINING_LIMIT = MINI_BATCH_SIZE;
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.9;
     private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;
+    private static final boolean IS_FIRST_VISIT = true;
 
 
     public static void main(String[] args) {
@@ -123,9 +122,9 @@ public class RunCartPoleAlphaZero {
     private static ReplayBufferValueSetter trainMemoryFromEpisode(CartPoleStateValueMemory<CartPoleVariables> memory,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferTrainig,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
-        ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR);
+        ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         MemoryTrainerHelper memoryTrainerHelper = new MemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
-        bufferTrainig.addAll(rbvs.createBuffer());
+        bufferTrainig.addAll(rbvs.createBufferDifferentReturns());
 
         Conditionals.executeIfTrue(bufferTrainig.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 memoryTrainerHelper.trainMemory(memory, bufferTrainig));
@@ -151,10 +150,10 @@ public class RunCartPoleAlphaZero {
     @NotNull
     private static StateInterface<CartPoleVariables> getStartState() {
         StateInterface<CartPoleVariables> state = StateCartPole.newRandom();
-        state.getVariables().theta = state.getVariables().theta * VARIABLE_DECREASE;
-        state.getVariables().x = state.getVariables().x * VARIABLE_DECREASE;
-        state.getVariables().thetaDot = state.getVariables().thetaDot * VARIABLE_DECREASE;
-        state.getVariables().xDot = state.getVariables().xDot * VARIABLE_DECREASE;
+        state.getVariables().theta = state.getVariables().theta * INIT_STATE_VARIABLE_DEVIATION;
+        state.getVariables().x = state.getVariables().x * INIT_STATE_VARIABLE_DEVIATION;
+        state.getVariables().thetaDot = state.getVariables().thetaDot * INIT_STATE_VARIABLE_DEVIATION;
+        state.getVariables().xDot = state.getVariables().xDot * INIT_STATE_VARIABLE_DEVIATION;
         return state;
     }
 
