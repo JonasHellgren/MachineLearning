@@ -49,8 +49,8 @@ public class RunCartPoleAlphaZero {
         ReplayBuffer<CartPoleVariables, Integer> bufferTrainig = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 
         CartPoleGraphics graphics = new CartPoleGraphics("Training animation");
-        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited =
-                EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
+        EnvironmentGenericInterface<CartPoleVariables, Integer> environmentTraining =
+                EnvironmentCartPole.builder().build();
         ReplayBuffer<CartPoleVariables, Integer> bufferEpisode = new ReplayBuffer<>(BUFFER_SIZE_EPISODE);
         MemoryTrainerHelper memoryTrainerHelper = new MemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
         List<Double> learningErrors=new ArrayList<>();
@@ -58,21 +58,16 @@ public class RunCartPoleAlphaZero {
 
 
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
-            boolean isFail = false;
+            boolean isTerminal = false;
             StateInterface<CartPoleVariables> state = getStartState();
             bufferEpisode.clear();
             double episodeReturn = 0;
             int step = 0;
-            while (!isFail && step < MAX_NOF_STEPS_IN_TRAINING) {
-                state.getVariables().nofSteps = 0;  //reset nof steps
-                mcForSearch.setStartState(state);
-                try {
-                    mcForSearch.run();
-                } catch (StartStateIsTrapException e) {
-                    break;
-                }
-                ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();
-                StepReturnGeneric<CartPoleVariables> sr = environmentNotStepLimited.step(actionCartPole, state);
+            while (!isTerminal) {
+
+                ActionInterface<Integer> actionCartPole = getActionFromSearch(mcForSearch, state);
+
+                StepReturnGeneric<CartPoleVariables> sr = environmentTraining.step(actionCartPole, state);
                 state.setFromReturn(sr);
 
                 bufferEpisode.addExperience(Experience.<CartPoleVariables, Integer>builder()
@@ -80,7 +75,7 @@ public class RunCartPoleAlphaZero {
 
                 double value = memory.read(state);
                 graphics.render(state, step, value, actionCartPole.getValue());
-                isFail = sr.isFail;
+                isTerminal = sr.isTerminal;
                 step++;
                 episodeReturn = episodeReturn + sr.reward;
             }
@@ -100,11 +95,25 @@ public class RunCartPoleAlphaZero {
         System.out.println("learningErrors = " + learningErrors);
         System.out.println("returns = " + returns);
 
-
+        mcForSearch.getSettings().setTimeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_EVALUATION);
         CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,MAX_NOF_STEPS_IN_EVALUATION);
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
         cpr.run(state);
 
+    }
+
+    private static ActionInterface<Integer> getActionFromSearch(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch, StateInterface<CartPoleVariables> state) {
+        StateInterface<CartPoleVariables> stateForSearch= state.copy();
+        stateForSearch.getVariables().nofSteps = 0;  //reset nof steps
+        mcForSearch.setStartState(stateForSearch);
+
+        try {
+            mcForSearch.run();
+        } catch (StartStateIsTrapException ignored) {
+            log.fine("Bad start state");
+        }
+
+        return mcForSearch.getFirstAction();
     }
 
 
