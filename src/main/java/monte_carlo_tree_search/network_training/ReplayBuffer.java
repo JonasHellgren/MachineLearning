@@ -19,7 +19,7 @@ public class ReplayBuffer<SSV, AV>  {
 
     public void addExperience(Experience<SSV, AV> experience) {
         if (buffer.size() >= maxSize)   //remove first/oldest item in set if set is "full"
-            buffer.remove(0);
+            buffer.remove(0);   //todo, remove random instead
         buffer.add(experience);
     }
 

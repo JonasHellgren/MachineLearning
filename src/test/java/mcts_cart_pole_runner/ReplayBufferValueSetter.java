@@ -7,6 +7,7 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 //todo make generic
 public class ReplayBufferValueSetter {
@@ -27,32 +28,31 @@ public class ReplayBufferValueSetter {
         return episodeReturn;
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferDifferentReturns() {
+    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromAllReturns() {
+        BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(idx);
+        return createBuffer(function);
+    }
+
+    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromStartReturn() {
+        BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(0);
+        return createBuffer(function);
+    }
+
+    public ReplayBuffer<CartPoleVariables, Integer> createBuffer(BiFunction<List<Double>,Integer,Double> function) {
         ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated=new ReplayBuffer<>(bufferEpisode.size());
         List<Double> returns= createReturnList();
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
             Experience<CartPoleVariables, Integer> experience= bufferEpisode.getExperience(i);
-            if (isFirstVisitFlagIsTrueAndIsFirstVisit(i, experience)) {
-                double value = returns.get(i);  //todo use function interface
+            if (isFirstVisitFlagTrueAndIsFirstVisit(i, experience)) {
+                double value = function.apply(returns, i);
                 addExperience(bufferEpisodeUpdated, experience, value);
             }
         }
         return bufferEpisodeUpdated;
     }
 
-    private boolean isFirstVisitFlagIsTrueAndIsFirstVisit(int i, Experience<CartPoleVariables, Integer> experience) {
+    private boolean isFirstVisitFlagTrueAndIsFirstVisit(int i, Experience<CartPoleVariables, Integer> experience) {
         return isFirstVisit && !bufferEpisode.isExperienceWithStateVariablesPresentBeforeIndex(experience.stateVariables, i);
-    }
-
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferSameReturns() {
-        ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated=new ReplayBuffer<>(bufferEpisode.size());
-        List<Double> returns= createReturnList();
-        for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
-            Experience<CartPoleVariables, Integer> experience= bufferEpisode.getExperience(i);
-            double value=returns.get(0);
-            addExperience(bufferEpisodeUpdated, experience, value);
-        }
-        return bufferEpisodeUpdated;
     }
 
     private void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated, Experience<CartPoleVariables, Integer> experience, double value) {

@@ -23,23 +23,25 @@ import java.util.List;
 
 /**
  * https://medium.com/@_michelangelo_/alphazero-for-dummies-5bcc713fc9c6
+ *
+ * for ex MINI_BATCH_SIZE is from reference above
  */
 
 @Log
 public class RunCartPoleAlphaZero {
 
-    private static final int BUFFER_SIZE_TRAINING = 100_000;
+    private static final int BUFFER_SIZE_TRAINING = 10_000;  //100_000
     private static final int BUFFER_SIZE_EPISODE = 1_000;
     private static final double INIT_STATE_VARIABLE_DEVIATION = 0.1;  //small <=> close to zero
-    private static final int NOF_EPISODES = 150;    //100
+    private static final int NOF_EPISODES = 100;    //100
     private static final int NOT_RELEVANT = 0;
-    private static final int MAX_NOF_STEPS_IN_EVALUATION = 10_000;
+    private static final int MAX_NOF_STEPS_IN_EVALUATION = Integer.MAX_VALUE;
 
     private static final double MAX_ERROR = Double.MAX_VALUE;
-    private static final int MAX_EPOCHS = 100;      //10
-    private static final int MINI_BATCH_SIZE = 30;  //30
+    private static final int MAX_EPOCHS = 1;      //10
+    private static final int MINI_BATCH_SIZE = 128;  //30
 
-    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 1;
+    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 10;  //1
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
     private static final double DISCOUNT_FACTOR = 1.0;
     private static final int BUFFER_SIZE_TRAINING_LIMIT = MINI_BATCH_SIZE;
@@ -69,15 +71,14 @@ public class RunCartPoleAlphaZero {
             bufferEpisode.clear();
             int step = 0;
             while (!isTerminal) {
-                ActionInterface<Integer> actionCartPole = RandUtils.calcRandomFromInterval(0,1)< probScaler.calcOutDouble(episode)
+                ActionInterface<Integer> actionCartPole = isRandomAction(probScaler, episode)
                         ?ActionCartPole.newRandom()
                         :getActionFromSearch(mcForSearch, state);
 
                 StepReturnGeneric<CartPoleVariables> sr = stepAndUpdateState(environmentTraining, state, actionCartPole);
                 addExperience(bufferEpisode, state, sr);
-                renderGraphics(memory, graphics, state, step, actionCartPole);
+                renderGraphics(memory, graphics, state, step++, actionCartPole);
                 isTerminal = sr.isTerminal;
-                step++;
             }
 
             ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTrainig, bufferEpisode);
@@ -94,6 +95,10 @@ public class RunCartPoleAlphaZero {
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
         cpr.run(state);
 
+    }
+
+    private static boolean isRandomAction(ScalerLinear probScaler, int episode) {
+        return RandUtils.calcRandomFromInterval(0, 1) < probScaler.calcOutDouble(episode);
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {
@@ -124,7 +129,7 @@ public class RunCartPoleAlphaZero {
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
         ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         MemoryTrainerHelper memoryTrainerHelper = new MemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
-        bufferTrainig.addAll(rbvs.createBufferDifferentReturns());
+        bufferTrainig.addAll(rbvs.createBufferFromStartReturn());  //candidate = createBufferFromAllReturns
 
         Conditionals.executeIfTrue(bufferTrainig.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 memoryTrainerHelper.trainMemory(memory, bufferTrainig));

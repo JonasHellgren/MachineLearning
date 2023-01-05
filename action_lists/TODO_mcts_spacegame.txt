@@ -188,7 +188,9 @@ environmentTraining environmentEvaluation x
 bufferEpisode enligt first visit monte carlo x
 clean up x
 plotta returns x
-prova first visit mc
+prova first visit mc  x
+tillåta fler steg
+remove random instead i replaybuffer
 
 tänka igenom defensive backup
 apply discountFactorSimulation
