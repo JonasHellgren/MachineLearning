@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class RunCartPolePretrainedMemory {
     private static final int BUFFER_SIZE = 1000;
-    private static final int MINI_BATCH_SIZE = 30;
+    private static final int BATCH_SIZE = 30;
     private static final double  MAX_ERROR = 5e-5;
-    private static final int MAX_NOF_EPOCHS = 50_000;
+    private static final int MAX_EPOCHS = 50_000;
     private static final int NOF_STEPS = 1000;
     private static final int TIME_BUDGET_MILLI_SECONDS = 50;
 
@@ -25,7 +25,7 @@ public class RunCartPolePretrainedMemory {
     @SneakyThrows
     public static void main(String[] args) {
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForTraining= createTreeCreatorForTraining();
-        MemoryTrainerHelper memoryTrainerHelper=new MemoryTrainerHelper(MINI_BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
+        MemoryTrainerHelper memoryTrainerHelper=new MemoryTrainerHelper(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(mcForTraining);
         CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
         memoryTrainerHelper.trainMemory(memory, buffer);

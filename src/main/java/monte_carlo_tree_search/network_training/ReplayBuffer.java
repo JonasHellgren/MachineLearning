@@ -1,5 +1,7 @@
 package monte_carlo_tree_search.network_training;
 
+import org.apache.commons.math3.analysis.function.Exp;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +42,18 @@ public class ReplayBuffer<SSV, AV>  {
             miniBatch.add(buffer.get(indexes.get(i)));
 
         return miniBatch;
+    }
+
+    public void setAllValues(double value) {
+        for (Experience<SSV,AV> exp:buffer) {
+            exp.value=value;
+        }
+    }
+
+    public void addAll(ReplayBuffer<SSV, AV> otherBuffer) {
+        for (Experience<SSV, AV> experience: otherBuffer.buffer) {
+            addExperience(experience);
+        }
     }
 
     public  String bufferAsString(List<Experience<SSV, AV>> buffer) {

@@ -133,7 +133,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
         TreeInfoHelper<SSV,AV> tih=new TreeInfoHelper<>(nodeRoot,settings);
         MonteCarloSearchStatistics<SSV,AV> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,this,settings);
-        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
+        log.fine("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
                 ", max tree depth = "+tih.maxDepth()+", depth of best path = "+tih.getBestPath().size()
                 +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
@@ -221,9 +221,10 @@ public class MonteCarloTreeCreator<SSV,AV> {
         backPropagate(sr, new SimulationResults(), actionToGetToChild);
     }
 
-    private void makeSelectedTerminal(NodeInterface<SSV, AV> nodeSelected, SelectedToTerminalFailConverter<SSV, AV> sfc) throws StartStateIsTrapException {
+    private void makeSelectedTerminal(NodeInterface<SSV, AV> nodeSelected,
+                                      SelectedToTerminalFailConverter<SSV, AV> sfc) throws StartStateIsTrapException {
         if (nodeSelected.equals(nodeRoot)) {
-            nodeRoot.printTree();
+           // nodeRoot.printTree();
             throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
         }
         sfc.makeSelectedTerminal(nodeSelected);

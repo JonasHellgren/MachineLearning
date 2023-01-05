@@ -1,5 +1,6 @@
 package mcts_cart_pole_runner;
 
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
@@ -12,6 +13,7 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
 public class MemoryTrainerHelper {
     int miniBatchSize;
     int bufferSize;
@@ -47,19 +49,19 @@ public class MemoryTrainerHelper {
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(miniBatchSize);
             memory.learn(miniBatch);
-            printProgressSometimes(memory.getLearningRule(), epoch++);
+            logProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-        printEpoch(memory.getLearningRule(), epoch);
+        logEpoch(memory.getLearningRule(), epoch);
     }
 
-    private void printProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
+    private void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
         if (epoch % 1000 == 0 || epoch==0) {
-            printEpoch(learningRule, epoch);
+            logEpoch(learningRule, epoch);
         }
     }
 
-    private void printEpoch(MomentumBackpropagation learningRule, int epoch) {
-        System.out.println("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
+    private void logEpoch(MomentumBackpropagation learningRule, int epoch) {
+        log.fine("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
     }
 
     public double getAverageReturn(SimulationResults simulationResults) {

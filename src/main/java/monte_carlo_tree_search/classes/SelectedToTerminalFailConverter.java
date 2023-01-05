@@ -46,7 +46,7 @@ public class SelectedToTerminalFailConverter<SSV,AV> {
     }
 
     public void makeSelectedTerminal(NodeInterface<SSV,AV> nodeSelected) {
-        log.info("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
+        log.fine("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
         Pair<Optional<NodeInterface<SSV,AV>>, ActionInterface<AV>> parentActionPair = getParentAndActionToSelected(nodeSelected);
         Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
                 this::someErrorLogging,
