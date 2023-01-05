@@ -179,7 +179,7 @@ default fields Experience builder  x
 interface för CartPoleStateValueMemory och NodeValueMemory  x
 
 även printa träddjup x
-RunCartPolePretrainedMemory - använd trainMemory för mc search
+RunCartPolePretrainedMemory - använd trainMemory för mc search x
 ersätta rollout med minne i cart pole - alphaZero enligt nedan
 https://medium.com/@_michelangelo_/monte-carlo-tree-search-mcts-algorithm-for-dummies-74b2bae53bfa
 
