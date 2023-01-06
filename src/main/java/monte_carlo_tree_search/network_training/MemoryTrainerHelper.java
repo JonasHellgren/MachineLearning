@@ -1,4 +1,4 @@
-package mcts_cart_pole_runner;
+package monte_carlo_tree_search.network_training;
 
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -13,6 +13,12 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Helper class used for training. The method createExperienceBuffer gives buffer later used by
+ *  method trainMemory.
+ */
+
+//todo, make generic
 @Log
 public class MemoryTrainerHelper {
     int miniBatchSize;

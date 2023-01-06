@@ -19,6 +19,10 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 import java.util.List;
 
+/***
+ * This memory is adapted for the cart pole environment, a neural network is used.
+ */
+
 @Getter
 public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<SSV> {
     private static final int INPUT_SIZE = 4;

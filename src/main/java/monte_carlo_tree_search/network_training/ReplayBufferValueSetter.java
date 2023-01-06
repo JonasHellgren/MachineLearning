@@ -1,4 +1,4 @@
-package mcts_cart_pole_runner;
+package monte_carlo_tree_search.network_training;
 
 import common.MathUtils;
 import lombok.extern.java.Log;

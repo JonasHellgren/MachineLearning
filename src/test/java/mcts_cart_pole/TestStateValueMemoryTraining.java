@@ -1,6 +1,6 @@
 package mcts_cart_pole;
 
-import mcts_cart_pole_runner.MemoryTrainerHelper;
+import monte_carlo_tree_search.network_training.MemoryTrainerHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
