@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Data storage of a set of experiences
+ */
+
 @Getter
 public class ReplayBuffer<SSV, AV>  {
 

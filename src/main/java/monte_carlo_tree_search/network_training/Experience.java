@@ -3,6 +3,11 @@ package monte_carlo_tree_search.network_training;
 import lombok.Builder;
 import lombok.ToString;
 
+/**
+ *  An experience is achieved when taking step with specific action in state s and transiting to sNew. The step
+ *  gives a reward and the state s has value value.
+ */
+
 @Builder
 @ToString
 public class Experience<SSV, AV> {

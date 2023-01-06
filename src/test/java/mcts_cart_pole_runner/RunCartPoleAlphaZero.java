@@ -25,6 +25,10 @@ import java.util.List;
  * https://medium.com/@_michelangelo_/alphazero-for-dummies-5bcc713fc9c6
  *
  * for ex MINI_BATCH_SIZE is from reference above
+ *
+ * Fast training but less precise values: NOF_EPISODES=1000, PROBABILITY_RANDOM_ACTION_XXX=0.99, FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE=0.01
+*  Slow training but more precise values: NOF_EPISODES=200, PROBABILITY_RANDOM_ACTION={0.99,0.2}, FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE=0.5
+
  */
 
 @Log
@@ -32,21 +36,21 @@ public class RunCartPoleAlphaZero {
 
     private static final int BUFFER_SIZE_TRAINING = 100_000;  //100_000
     private static final int BUFFER_SIZE_EPISODE = 1_000;
-    private static final double INIT_STATE_VARIABLE_DEVIATION = 0.9;  //small <=> close to zero  0.1
-    private static final int NOF_EPISODES = 200;    //100
+    private static final double INIT_STATE_VARIABLE_DEVIATION = 0.5;  //small <=> close to zero  0.1
+    private static final int NOF_EPISODES = 200;
     private static final int NOT_RELEVANT = 0;
     private static final int MAX_NOF_STEPS_IN_EVALUATION = Integer.MAX_VALUE;
 
     private static final double MAX_ERROR = Double.MAX_VALUE;
-    private static final int MAX_EPOCHS = 1;      //10
-    private static final int MINI_BATCH_SIZE = 128;  //30
+    private static final int MAX_EPOCHS = 10;
+    private static final int MINI_BATCH_SIZE = 128;
 
     private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 10;  //1
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
     private static final double DISCOUNT_FACTOR = 1.0;
     private static final int BUFFER_SIZE_TRAINING_LIMIT = MINI_BATCH_SIZE;
-    private static final double PROBABILITY_RANDOM_ACTION_START = 0.99;
-    private static final double PROBABILITY_RANDOM_ACTION_END = 0.5;
+    private static final double PROBABILITY_RANDOM_ACTION_START = 0.2;
+    private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;  //0.2
     private static final boolean IS_FIRST_VISIT = true;
     private static final int MAX_NOF_STEPS_TRAINING = EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT;
     private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
@@ -140,7 +144,7 @@ public class RunCartPoleAlphaZero {
         ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         MemoryTrainerHelper memoryTrainerHelper = new MemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
         bufferTrainig.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
-      //  bufferTrainig.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));
+       // bufferTrainig.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));
 
         Conditionals.executeIfTrue(bufferTrainig.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 memoryTrainerHelper.trainMemory(memory, bufferTrainig));

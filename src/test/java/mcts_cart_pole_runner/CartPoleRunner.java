@@ -11,6 +11,9 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 import monte_carlo_tree_search.swing.CartPoleGraphics;
 
+/**
+ * Used to run cart pole environment using MCTS and pre-defined memory.
+ */
 
 public class CartPoleRunner {
 
