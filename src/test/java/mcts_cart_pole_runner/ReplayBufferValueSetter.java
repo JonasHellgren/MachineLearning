@@ -1,15 +1,27 @@
 package mcts_cart_pole_runner;
 
+import common.MathUtils;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
+import org.opencv.core.Mat;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * This class has the objective to define the value field in an experience of bufferEpisode
+ * Two variants are present: 1) createBufferFromReturns  2) createBufferFromStartReturn
+ * 1) is like the "traditional" monte carlo updating, 2) pastes the very initial return on all experiences
+ *
+ *
+ */
+
 //todo make generic
+@Log
 public class ReplayBufferValueSetter {
 
     ReplayBuffer<CartPoleVariables, Integer> bufferEpisode;
@@ -28,18 +40,33 @@ public class ReplayBufferValueSetter {
         return episodeReturn;
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromAllReturns() {
+    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromReturns(double fractionToInclude) {
+        int iLimit = getiLimit(fractionToInclude);
+
         BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(idx);
-        return createBuffer(function);
+        return createBuffer(function,iLimit);
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromStartReturn() {
+    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromStartReturn(double fractionToInclude) {
+        int iLimit = getiLimit(fractionToInclude);
         BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(0);
-        return createBuffer(function);
+        return createBuffer(function,iLimit);
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBuffer(BiFunction<List<Double>,Integer,Double> function) {
+    private int getiLimit(double fractionToInclude) {
+        return (int) MathUtils.clip(Math.round(fractionToInclude*bufferEpisode.size()),1,bufferEpisode.size()-1);
+    }
+
+    public ReplayBuffer<CartPoleVariables, Integer> createBuffer(BiFunction<List<Double>,Integer,Double> function,
+                                                                 int iLimit) {
+
         ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated=new ReplayBuffer<>(bufferEpisode.size());
+
+        if (bufferEpisode.size()==0)  {
+            log.warning("Empty episode buffer");
+            return bufferEpisodeUpdated;
+        }
+
         List<Double> returns= createReturnList();
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
             Experience<CartPoleVariables, Integer> experience= bufferEpisode.getExperience(i);
@@ -48,11 +75,21 @@ public class ReplayBufferValueSetter {
                 addExperience(bufferEpisodeUpdated, experience, value);
             }
         }
-        return bufferEpisodeUpdated;
+        Collections.reverse(bufferEpisodeUpdated.getBuffer());
+
+        ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeCut=new ReplayBuffer<>(iLimit);
+        for (int i = 0; i < Math.min(iLimit,bufferEpisodeUpdated.size()-1) ; i++) {
+            bufferEpisodeCut.addExperience(bufferEpisodeUpdated.getExperience(i));
+       }
+        return bufferEpisodeCut;
     }
 
     private boolean isFirstVisitFlagTrueAndIsFirstVisit(int i, Experience<CartPoleVariables, Integer> experience) {
         return isFirstVisit && !bufferEpisode.isExperienceWithStateVariablesPresentBeforeIndex(experience.stateVariables, i);
+    }
+
+    private boolean isInSetOfIncludedExperiences(int i,int iLimit) {
+        return i<iLimit;
     }
 
     private void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated, Experience<CartPoleVariables, Integer> experience, double value) {
@@ -70,7 +107,7 @@ public class ReplayBufferValueSetter {
         this.episodeReturn=0;
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
             Experience<CartPoleVariables, Integer> experience = bufferEpisode.getExperience(i);
-            episodeReturn = episodeReturn + discountFactor * experience.reward;
+            episodeReturn = discountFactor * episodeReturn +  experience.reward;
             returns.add(episodeReturn);
         }
         Collections.reverse(returns);

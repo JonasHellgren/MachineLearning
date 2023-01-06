@@ -189,8 +189,9 @@ bufferEpisode enligt first visit monte carlo x
 clean up x
 plotta returns x
 prova first visit mc  x
-tillåta fler steg
+bara lära sig av första typ 10% i epiosde
 remove random instead i replaybuffer
+RunCartPoleAlphaZeroTD - använda TD state learning
 
 tänka igenom defensive backup
 apply discountFactorSimulation

@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.network_training;
 
+import lombok.Getter;
 import org.apache.commons.math3.analysis.function.Exp;
 
 import java.util.ArrayList;
@@ -8,9 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Getter
 public class ReplayBuffer<SSV, AV>  {
 
-    public final List<Experience<SSV, AV>> buffer = new ArrayList<>();
+    private final List<Experience<SSV, AV>> buffer = new ArrayList<>();
     int maxSize;
 
     public ReplayBuffer(int maxSize) {

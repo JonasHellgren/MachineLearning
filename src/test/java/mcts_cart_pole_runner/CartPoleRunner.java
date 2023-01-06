@@ -23,7 +23,7 @@ public class CartPoleRunner {
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,
                           int nofSteps) {
-        this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps);
+        this(mcForSearch,new CartPoleStateValueMemory<>(nofSteps),nofSteps);
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,
