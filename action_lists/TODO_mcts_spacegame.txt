@@ -194,7 +194,9 @@ tester  x
 getter isf cons EnvironmentCartPole  x
 remove random instead i replaybuffer  x
 mindre BUFFER_SIZE_TRAINING  x
-kunna sparar nn RunCartPoleAlphaZero
+kunna sparar nn RunCartPoleAlphaZero  x
+testa sparat nät x
+CartPoleStateValueMemory(int maxNofSteps)
 RunCartPoleAlphaZeroLearningAndSearch
 plotta felet nn träning
 plotta value convergera

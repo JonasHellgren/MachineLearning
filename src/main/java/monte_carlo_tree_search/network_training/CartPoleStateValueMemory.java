@@ -112,7 +112,7 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
         neuralNetwork.save(fileName);
     }
 
-    public void loadNetwork(String fileName) {
+    public void load(String fileName) {
         neuralNetwork = MultiLayerPerceptron.createFromFile(fileName);
     }
 

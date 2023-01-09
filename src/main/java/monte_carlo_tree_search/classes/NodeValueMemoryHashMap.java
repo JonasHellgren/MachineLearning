@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.classes;
 
+import lombok.SneakyThrows;
 import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
@@ -39,6 +40,19 @@ public class NodeValueMemoryHashMap<SSV> implements NodeValueMemoryInterface<SSV
     @Override
     public double read(StateInterface<SSV> state) {
         return memory.getOrDefault(state.getVariables().hashCode(), DEFAULT_VALUE);
+    }
+
+    @SneakyThrows
+    @Override
+    public void save(String fileName) {
+        throw new NoSuchMethodException();
+    }
+
+    @SneakyThrows
+    @Override
+    public void load(String fileName) {
+        throw new NoSuchMethodException();
+
     }
 
     @Override
