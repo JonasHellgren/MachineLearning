@@ -190,9 +190,15 @@ clean up x
 plotta returns x
 prova first visit mc  x
 bara lära sig av första typ 10% i epiosde x
+tester  x
+getter isf cons EnvironmentCartPole  x
 remove random instead i replaybuffer
 mindre BUFFER_SIZE_TRAINING
+kunna sparar nn RunCartPoleAlphaZero
 RunCartPoleAlphaZeroLearningAndSearch
+plotta felet nn träning
+plotta value convergera
+
 studera state values efter backup när minne används
 kan error baserat stopp criteri fås?
 tänka igenom defensive backup

@@ -43,8 +43,10 @@ public class RunCartPoleAlphaZero {
     private static final int MAX_EPOCHS = 10;
     private static final int MINI_BATCH_SIZE = 128;
 
-    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 10;
+    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 1;  //small => faster training
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
+    private static final int MAX_TREE_DEPTH_SEARCH = 5;  //small => faster training
+    private static final int MAX_TREE_DEPTH_EVALUATION = 50;
     private static final double DISCOUNT_FACTOR = 1.0;
     private static final int BUFFER_SIZE_TRAINING_LIMIT = MINI_BATCH_SIZE;
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
@@ -52,6 +54,7 @@ public class RunCartPoleAlphaZero {
     private static final boolean IS_FIRST_VISIT = true;
     private static final int MAX_NOF_STEPS_TRAINING = EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT;
     private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
+
 
 
     public static void main(String[] args) {
@@ -94,6 +97,7 @@ public class RunCartPoleAlphaZero {
         doPlotting(learningErrors,returns);
 
         mcForSearch.getSettings().setTimeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_EVALUATION);
+        mcForSearch.getSettings().setMaxTreeDepth(MAX_TREE_DEPTH_EVALUATION);
         CartPoleRunner cpr = new CartPoleRunner(mcForSearch, memory, MAX_NOF_STEPS_IN_EVALUATION);
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
         cpr.run(state);
@@ -185,7 +189,7 @@ public class RunCartPoleAlphaZero {
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
-                .maxTreeDepth(50)
+                .maxTreeDepth(MAX_TREE_DEPTH_SEARCH)
                 .alphaBackupNormal(0.9)
                 .alphaBackupDefensive(0.1)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_TRAINING)
