@@ -1,4 +1,4 @@
-package mcts_cart_pole_runner;
+package monte_carlo_tree_search.domains.cart_pole;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -26,7 +26,8 @@ public class CartPoleRunner {
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,
                           int nofSteps) {
-        this(mcForSearch,new CartPoleStateValueMemory<>(nofSteps),nofSteps);
+        this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps);
+        memory.createOutScalers(nofSteps);
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,

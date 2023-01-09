@@ -196,7 +196,7 @@ remove random instead i replaybuffer  x
 mindre BUFFER_SIZE_TRAINING  x
 kunna sparar nn RunCartPoleAlphaZero  x
 testa sparat nät x
-CartPoleStateValueMemory(int maxNofSteps)
+CartPoleStateValueMemory(int maxNofSteps)  x
 RunCartPoleAlphaZeroLearningAndSearch
 plotta felet nn träning
 plotta value convergera

@@ -1,4 +1,4 @@
-package mcts_cart_pole_runner;
+package monte_carlo_tree_search.domains.cart_pole;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_battery_cell.EnvironmentCell;

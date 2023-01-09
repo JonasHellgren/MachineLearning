@@ -72,7 +72,7 @@ public class TestStateValueMemoryTraining {
     }
 
     @Test public void trainNetwork() {
-        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>(EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT);
+        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
 
         memoryTrainerHelper.trainMemory(memory, buffer);
 

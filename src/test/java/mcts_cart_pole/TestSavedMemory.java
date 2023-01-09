@@ -19,7 +19,7 @@ public class TestSavedMemory {
 
     @Before
     public void init() {
-        memory=new CartPoleStateValueMemory<>(100);
+        memory=new CartPoleStateValueMemory<>();
         memory.load(FILE);
     }
 

@@ -52,20 +52,19 @@ public class RunCartPoleAlphaZero {
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
     private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;
     private static final boolean IS_FIRST_VISIT = true;
-    private static final int MAX_NOF_STEPS_TRAINING = EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT;
     private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
 
 
     public static void main(String[] args) {
-        CartPoleStateValueMemory<CartPoleVariables> memory = new CartPoleStateValueMemory<>(MAX_NOF_STEPS_TRAINING);
+        CartPoleStateValueMemory<CartPoleVariables> memory = new CartPoleStateValueMemory<>();
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
         ReplayBuffer<CartPoleVariables, Integer> bufferTrainig = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 
         CartPoleGraphics graphics = new CartPoleGraphics("Training animation");
         EnvironmentGenericInterface<CartPoleVariables, Integer> environmentTraining =
-                EnvironmentCartPole.builder().maxNofSteps(MAX_NOF_STEPS_TRAINING).build();
+                EnvironmentCartPole.newDefault();
         ReplayBuffer<CartPoleVariables, Integer> bufferEpisode = new ReplayBuffer<>(BUFFER_SIZE_EPISODE);
 
         ScalerLinear probScaler=new ScalerLinear(0,NOF_EPISODES,PROBABILITY_RANDOM_ACTION_START,PROBABILITY_RANDOM_ACTION_END);

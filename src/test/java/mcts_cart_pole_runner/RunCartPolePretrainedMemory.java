@@ -26,7 +26,7 @@ public class RunCartPolePretrainedMemory {
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForTraining= createTreeCreatorForTraining();
         MemoryTrainerHelper memoryTrainerHelper=new MemoryTrainerHelper(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(mcForTraining);
-        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>(EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT);
+        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
