@@ -197,9 +197,11 @@ mindre BUFFER_SIZE_TRAINING  x
 kunna sparar nn RunCartPoleAlphaZero  x
 testa sparat nät x
 CartPoleStateValueMemory(int maxNofSteps)  x
-RunCartPoleAlphaZeroLearningAndSearch
+RunCartPoleAlphaZeroLearningAndSearch  x
 plotta felet nn träning
 plotta value convergera
+maxQ animering till memory value
+ytteligare label animering root node value
 
 studera state values efter backup när minne används
 kan error baserat stopp criteri fås?
