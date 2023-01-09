@@ -192,8 +192,8 @@ prova first visit mc  x
 bara lära sig av första typ 10% i epiosde x
 tester  x
 getter isf cons EnvironmentCartPole  x
-remove random instead i replaybuffer
-mindre BUFFER_SIZE_TRAINING
+remove random instead i replaybuffer  x
+mindre BUFFER_SIZE_TRAINING  x
 kunna sparar nn RunCartPoleAlphaZero
 RunCartPoleAlphaZeroLearningAndSearch
 plotta felet nn träning

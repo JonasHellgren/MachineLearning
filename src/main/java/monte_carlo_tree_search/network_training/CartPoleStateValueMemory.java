@@ -10,6 +10,7 @@ import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
 import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.jetbrains.annotations.NotNull;
+import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -33,7 +34,8 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
     private static final int NET_OUT_MIN = 0;
     private static final int NET_OUT_MAX = 1;
 
-    MultiLayerPerceptron neuralNetwork;
+    //MultiLayerPerceptron neuralNetwork;
+    NeuralNetwork neuralNetwork;
     MomentumBackpropagation learningRule;
     StateNormalizerCartPole<SSV> normalizer;
     ScalerLinear scaleOutValueToNormalized;
@@ -104,6 +106,14 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
         }
         return trainingSet;
+    }
+
+    public void save(String fileName)  {
+        neuralNetwork.save(fileName);
+    }
+
+    public void loadNetwork(String fileName) {
+        neuralNetwork = MultiLayerPerceptron.createFromFile(fileName);
     }
 
 }

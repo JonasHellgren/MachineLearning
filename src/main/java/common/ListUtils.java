@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class ListUtils {
@@ -42,6 +43,31 @@ public class ListUtils {
 
     public static List<Double> createListWithEqualElementValues(int len, double value) {
         return new ArrayList<>(Collections.nCopies(len,value));
+    }
+
+    public static List<Double> generateSequenceDoubleStream(double start, double end, double step) {
+        return DoubleStream.iterate(start, d -> d <= end, d -> d + step)
+                .boxed()
+                .collect(Collectors.toList());
+    }
+
+    public static double[] toArray(List<Double> list) {
+        return list.stream().mapToDouble(Number::doubleValue).toArray();
+    }
+
+    public static boolean isDoubleArraysEqual(double[] x, double[] y, double tol)
+    {
+        if (x.length!=y.length) {
+            return false;
+        }
+        for (int i = 0; i < x.length; i += 1)
+        {
+            if (Math.abs((y[i] - x[i])) > tol)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

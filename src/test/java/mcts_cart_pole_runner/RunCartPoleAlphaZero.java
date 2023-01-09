@@ -32,7 +32,7 @@ import java.util.List;
 @Log
 public class RunCartPoleAlphaZero {
 
-    private static final int BUFFER_SIZE_TRAINING = 100_000;
+    private static final int BUFFER_SIZE_TRAINING = 2_000;
     private static final int BUFFER_SIZE_EPISODE = 1_000;
     private static final double INIT_STATE_VARIABLE_DEVIATION = 0.99;  //small <=> close to zero, close to one <=> random
     private static final int NOF_EPISODES = 200;
@@ -54,6 +54,7 @@ public class RunCartPoleAlphaZero {
     private static final boolean IS_FIRST_VISIT = true;
     private static final int MAX_NOF_STEPS_TRAINING = EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT;
     private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
+    private static final String FILE = "networks/cartPoleStateValue.nnet";
 
 
 
@@ -95,6 +96,7 @@ public class RunCartPoleAlphaZero {
         }
 
         doPlotting(learningErrors,returns);
+        memory.save(FILE);
 
         mcForSearch.getSettings().setTimeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_EVALUATION);
         mcForSearch.getSettings().setMaxTreeDepth(MAX_TREE_DEPTH_EVALUATION);

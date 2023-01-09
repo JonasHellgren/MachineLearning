@@ -1,6 +1,9 @@
 package monte_carlo_tree_search.network_training;
 
+import common.MathUtils;
+import common.RandUtils;
 import lombok.Getter;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.analysis.function.Exp;
 
 import java.util.ArrayList;
@@ -24,8 +27,10 @@ public class ReplayBuffer<SSV, AV>  {
     }
 
     public void addExperience(Experience<SSV, AV> experience) {
-        if (buffer.size() >= maxSize)   //remove first/oldest item in set if set is "full"
-            buffer.remove(0);   //todo, remove random instead
+        if (buffer.size() >= maxSize) {
+            int randomIndexExcludingEnd=RandomUtils.nextInt(0,buffer.size());
+            buffer.remove(randomIndexExcludingEnd);
+        }
         buffer.add(experience);
     }
 
