@@ -198,7 +198,7 @@ kunna sparar nn RunCartPoleAlphaZero  x
 testa sparat nät x
 CartPoleStateValueMemory(int maxNofSteps)  x
 RunCartPoleAlphaZeroLearningAndSearch  x
-plotta felet nn träning
+plotta felet nn träning  x
 plotta value convergera
 maxQ animering till memory value
 ytteligare label animering root node value

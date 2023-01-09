@@ -20,6 +20,12 @@ public class ListUtils {
                 .max();
     }
 
+    public OptionalDouble findAverage(List<Double> list) {
+        return list.stream()
+                .mapToDouble(a -> a)
+                .average();
+    }
+
     public static List<Double> sumListElements(List<Double> listA, List<Double> listB) {
         return IntStream.range(0, listA.size())
                 .mapToObj(i -> listA.get(i) + listB.get(i))

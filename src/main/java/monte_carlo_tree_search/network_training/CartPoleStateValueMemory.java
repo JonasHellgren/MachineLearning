@@ -1,6 +1,8 @@
 package monte_carlo_tree_search.network_training;
 
 import common.Conditionals;
+import common.ListUtils;
+import common.MathUtils;
 import common.ScalerLinear;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -17,6 +19,7 @@ import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,6 +75,10 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
     @Override
     public double read(StateInterface<SSV> state) {
         double[] inputVec = getInputVec(state.getVariables());
+        return getNetworkOutputValue(inputVec);
+    }
+
+    private double getNetworkOutputValue(double[] inputVec) {
         neuralNetwork.setInput(inputVec);
         neuralNetwork.calculate();
         double[] output = Arrays.copyOf(neuralNetwork.getOutput(), OUTPUT_SIZE);
@@ -82,6 +89,17 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
     @Override
     public void write(StateInterface<SSV> state, double value) {
         throw new NoSuchMethodException("Not defined/needed - use learn instead");
+    }
+
+    public double getAverageValueError(ReplayBuffer<SSV, Integer> buffer) {
+        List<Double> errors=new ArrayList<>();
+        for (Experience<SSV, Integer> e : buffer.getBuffer()) {
+            double expectedValue= e.value;
+            SSV v = e.stateVariables;
+            double memoryValue=getNetworkOutputValue(getInputVec(v));
+            errors.add(Math.abs(expectedValue-memoryValue));
+        }
+        return ListUtils.findMax(errors).orElseThrow();
     }
 
     @NotNull
@@ -111,6 +129,8 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
         }
         return trainingSet;
     }
+
+
 
     public void save(String fileName)  {
         neuralNetwork.save(fileName);

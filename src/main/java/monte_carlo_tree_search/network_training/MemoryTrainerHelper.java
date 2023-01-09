@@ -67,7 +67,7 @@ public class MemoryTrainerHelper {
     }
 
     private void logEpoch(MomentumBackpropagation learningRule, int epoch) {
-        log.fine("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
+        log.info("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
     }
 
     public double getAverageReturn(SimulationResults simulationResults) {

@@ -52,7 +52,7 @@ public class RunCartPoleAlphaZero {
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
     private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;
     private static final boolean IS_FIRST_VISIT = true;
-    private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
+    private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.3;
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
 
@@ -60,7 +60,7 @@ public class RunCartPoleAlphaZero {
     public static void main(String[] args) {
         CartPoleStateValueMemory<CartPoleVariables> memory = new CartPoleStateValueMemory<>();
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
-        ReplayBuffer<CartPoleVariables, Integer> bufferTrainig = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
+        ReplayBuffer<CartPoleVariables, Integer> bufferTraining = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 
         CartPoleGraphics graphics = new CartPoleGraphics("Training animation");
         EnvironmentGenericInterface<CartPoleVariables, Integer> environmentTraining =
@@ -88,10 +88,10 @@ public class RunCartPoleAlphaZero {
                 isTerminal = sr.isTerminal;
             }
 
-            ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTrainig, bufferEpisode);
+            ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
 
-            someLogging(bufferTrainig, episode, step);
-            someTracking(memory, learningErrors, returns, rbvs);
+            someLogging(bufferTraining, episode, step);
+            someTracking(memory, learningErrors, returns, rbvs, bufferEpisode);
         }
 
         doPlotting(learningErrors,returns);
@@ -109,8 +109,13 @@ public class RunCartPoleAlphaZero {
         log.info("episode = " + episode + ", steps = " + step +", buffersize = " + bufferTrainig.size());
     }
 
-    private static void someTracking(CartPoleStateValueMemory<CartPoleVariables> memory, List<Double> learningErrors, List<Double> returns, ReplayBufferValueSetter rbvs) {
-        learningErrors.add(memory.getLearningRule().getTotalNetworkError());
+    private static void someTracking(CartPoleStateValueMemory<CartPoleVariables> memory,
+                                     List<Double> learningErrors,
+                                     List<Double> returns,
+                                     ReplayBufferValueSetter rbvs,
+                                     ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
+        //learningErrors.add(memory.getLearningRule().getTotalNetworkError());
+        learningErrors.add(memory.getAverageValueError(bufferEpisode));
         returns.add(rbvs.getEpisodeReturn());
     }
 
@@ -123,11 +128,17 @@ public class RunCartPoleAlphaZero {
         plotter.plot(learningErrors,returns);
     }
 
-    private static void renderGraphics(CartPoleStateValueMemory<CartPoleVariables> memory, CartPoleGraphics graphics, StateInterface<CartPoleVariables> state, int step, ActionInterface<Integer> actionCartPole) {
+    private static void renderGraphics(CartPoleStateValueMemory<CartPoleVariables> memory,
+                                       CartPoleGraphics graphics,
+                                       StateInterface<CartPoleVariables> state,
+                                       int step,
+                                       ActionInterface<Integer> actionCartPole) {
         graphics.render(state, step, memory.read(state), actionCartPole.getValue());
     }
 
-    private static void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisode, StateInterface<CartPoleVariables> state, StepReturnGeneric<CartPoleVariables> sr) {
+    private static void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisode,
+                                      StateInterface<CartPoleVariables> state,
+                                      StepReturnGeneric<CartPoleVariables> sr) {
         bufferEpisode.addExperience(Experience.<CartPoleVariables, Integer>builder()
                 .stateVariables(state.getVariables()).reward(sr.reward).build());
     }
@@ -142,15 +153,15 @@ public class RunCartPoleAlphaZero {
 
     @NotNull
     private static ReplayBufferValueSetter trainMemoryFromEpisode(CartPoleStateValueMemory<CartPoleVariables> memory,
-                                                                  ReplayBuffer<CartPoleVariables, Integer> bufferTrainig,
+                                                                  ReplayBuffer<CartPoleVariables, Integer> bufferTraining,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
         ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         MemoryTrainerHelper memoryTrainerHelper = new MemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
-        bufferTrainig.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
+        bufferTraining.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
        // bufferTrainig.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));
 
-        Conditionals.executeIfTrue(bufferTrainig.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
-                memoryTrainerHelper.trainMemory(memory, bufferTrainig));
+        Conditionals.executeIfTrue(bufferTraining.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
+                memoryTrainerHelper.trainMemory(memory, bufferTraining));
         return rbvs;
     }
 
