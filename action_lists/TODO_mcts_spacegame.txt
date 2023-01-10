@@ -207,11 +207,15 @@ plotta value convergera  x
 maxQ animering till memory value  x
 ytteligare label animering root node value  x
 
-SSV,AV -> S, A
-clean up
+SSV,AV -> S, A  x
+clean up   x
 
+plotta nofNodes jämte rootValue
 tänka igenom defensive backup
+- singleReturn = singleReturn + settings.discountFactorSteps * reward  x
+- SimulationReturnsExtractor getReturns
 apply discountFactorSimulation
+TestDiscountFactor
 gör alternativ cart pole reward - stort negative vid fail annars noll
 TestMonteCarloControlledCartPoleModifiedReward
 

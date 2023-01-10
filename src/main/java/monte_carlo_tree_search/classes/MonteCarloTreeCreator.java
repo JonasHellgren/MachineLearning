@@ -15,6 +15,7 @@ import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /***
  *   This class performs monte carlo tree search
@@ -187,7 +188,10 @@ public class MonteCarloTreeCreator<S,A> {
             List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
             StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
-            double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
+          //  double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
+            double sumOfRewards = ListUtils.discountedSum(
+                    stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
+                    settings.discountFactorSimulation);
             boolean isEndingInFail = endReturn.isFail;
             simulationResults.add(sumOfRewards, isEndingInFail);
         }

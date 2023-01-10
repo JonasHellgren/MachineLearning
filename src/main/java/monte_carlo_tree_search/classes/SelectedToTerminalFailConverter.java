@@ -12,6 +12,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class is for, when relevant, converting a selected no to a terminal node. This is done when all children
+ * to a node is terminal-fail.
+ */
 
 @Log
 public class SelectedToTerminalFailConverter<S,A> {

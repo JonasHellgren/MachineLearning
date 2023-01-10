@@ -50,8 +50,6 @@ public class TestBackupModifier {
     }
 
 
-
-
     @SneakyThrows
     @Test
     public void moveDownFromX0Y0ToGetFailState() {

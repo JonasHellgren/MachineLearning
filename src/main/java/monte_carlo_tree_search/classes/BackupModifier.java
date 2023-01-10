@@ -150,7 +150,8 @@ public class BackupModifier<S,A> {
         List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
             double reward = rewards.get(i);
-            singleReturn = singleReturn + settings.discountFactorSteps * reward;
+            //singleReturn = singleReturn + settings.discountFactorSteps * reward;  //todo remove
+            singleReturn = settings.discountFactorSteps*singleReturn +  reward;
             returns.add(singleReturn);
         }
         Collections.reverse(returns);

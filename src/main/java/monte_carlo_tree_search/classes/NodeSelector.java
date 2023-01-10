@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * The selected node must be leaf node and all its children can't be terminal
  * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  *
- * The method selectChild() returns and optional, this is empty if no child is found. Probably due to only children of
+ * The method selectChild() returns an Optional, this is empty if no child is found. Probably due to only children of
  * type fail state.
  */
 
