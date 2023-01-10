@@ -101,8 +101,6 @@ public class TestMonteCarloControlledCartPole {
         tih.getBestPath().forEach(System.out::println);
     }
 
-
-
 }
 
 
