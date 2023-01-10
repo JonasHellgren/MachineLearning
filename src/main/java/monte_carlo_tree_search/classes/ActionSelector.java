@@ -4,8 +4,6 @@ import common.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,21 +13,21 @@ import java.util.stream.Collectors;
  */
 
 @Log
-public class ActionSelector<SSV,AV> {
-    MonteCarloSettings<SSV,AV> settings;
-    RandUtils<ActionInterface<AV>> randUtils;
-    ActionInterface<AV> actionTemplate;
+public class ActionSelector<S,A> {
+    MonteCarloSettings<S,A> settings;
+    RandUtils<ActionInterface<A>> randUtils;
+    ActionInterface<A> actionTemplate;
 
-    public ActionSelector(MonteCarloSettings<SSV,AV> settings, ActionInterface<AV> actionTemplate) {
+    public ActionSelector(MonteCarloSettings<S,A> settings, ActionInterface<A> actionTemplate) {
         this.randUtils=new RandUtils<>();
         this.settings=settings;
         this.actionTemplate=actionTemplate;
     }
 
-    public Optional<ActionInterface<AV>> select(NodeInterface<SSV,AV> nodeSelected) {
+    public Optional<ActionInterface<A>> select(NodeInterface<S,A> nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
-        List<ActionInterface<AV>> nonTestedActions = (nofTestedActions==0)
+        List<ActionInterface<A>> nonTestedActions = (nofTestedActions==0)
                 ? Collections.singletonList(getActionFromPolicy(nodeSelected))
                 : getNonTestedActions(nodeSelected);
 
@@ -40,23 +38,23 @@ public class ActionSelector<SSV,AV> {
         }
     }
 
-    private ActionInterface<AV> getActionFromPolicy(NodeInterface<SSV,AV> nodeSelected) {
+    private ActionInterface<A> getActionFromPolicy(NodeInterface<S,A> nodeSelected) {
         return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
-    private ActionInterface<AV> getRandomAction(List<ActionInterface<AV>> actions) {
+    private ActionInterface<A> getRandomAction(List<ActionInterface<A>> actions) {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private List<ActionInterface<AV>> getNonTestedActions(NodeInterface<SSV,AV> nodeSelected) {
-        List<ActionInterface<AV>> testedActions = getTestedActions(nodeSelected);
-        List<AV> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-        Set<AV> allValues=nodeSelected.getAction().applicableActions();
-        List<AV> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValues);
-        List<ActionInterface<AV>> nonTestedActions=new ArrayList<>();
+    private List<ActionInterface<A>> getNonTestedActions(NodeInterface<S,A> nodeSelected) {
+        List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
+        List<A> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
+        Set<A> allValues=nodeSelected.getAction().applicableActions();
+        List<A> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValues);
+        List<ActionInterface<A>> nonTestedActions=new ArrayList<>();
 
-        for (AV value:nonTestedActionValues) {
-            ActionInterface<AV> action=actionTemplate.copy();
+        for (A value:nonTestedActionValues) {
+            ActionInterface<A> action=actionTemplate.copy();
             action.setValue(value);
             nonTestedActions.add(action);
         }
@@ -64,7 +62,7 @@ public class ActionSelector<SSV,AV> {
         return nonTestedActions;
     }
 
-    private List<ActionInterface<AV>> getTestedActions(NodeInterface<SSV,AV> nodeSelected) {
+    private List<ActionInterface<A>> getTestedActions(NodeInterface<S,A> nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

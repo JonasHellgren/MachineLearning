@@ -4,18 +4,18 @@ import lombok.Getter;
 import lombok.NonNull;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
-
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
-public class MonteCarloSearchStatistics<SSV, AV> {
+public class MonteCarloSearchStatistics<S, A> {
 
     private static final String NEW_LINE = System.lineSeparator();
-    NodeInterface<SSV, AV> nodeRoot;
+    NodeInterface<S, A> nodeRoot;
     CpuTimer cpuTimer;
-    TreeInfoHelper<SSV, AV> tih;
-    MonteCarloSettings<SSV, AV> settings;
+    TreeInfoHelper<S, A> tih;
+    MonteCarloSettings<S, A> settings;
 
     int nofNodes;
     int nofNodesNotTerminal;
@@ -31,9 +31,9 @@ public class MonteCarloSearchStatistics<SSV, AV> {
     float usedRelativeTimeInPercentage;
 
 
-    public MonteCarloSearchStatistics(@NonNull NodeInterface<SSV, AV> nodeRoot,
-                                      @NonNull MonteCarloTreeCreator<SSV, AV> monteCarloTreeCreator,
-                                      MonteCarloSettings<SSV, AV> settings) {
+    public MonteCarloSearchStatistics(@NonNull NodeInterface<S, A> nodeRoot,
+                                      @NonNull MonteCarloTreeCreator<S, A> monteCarloTreeCreator,
+                                      MonteCarloSettings<S, A> settings) {
         this.nodeRoot = nodeRoot;
         this.cpuTimer = monteCarloTreeCreator.cpuTimer;
         this.nofIterations = monteCarloTreeCreator.nofIterations;
@@ -52,13 +52,13 @@ public class MonteCarloSearchStatistics<SSV, AV> {
         nofNodesWithChildren = nofNodes - nofNodesWithNoChildren;
         maxDepth = tih.maxDepth();
         nofNodesPerDepthLevel=setNofNodesPerDepthLevel();
-        averageNofChildrenPerNode = calcAverageNofChildrenPerNodeThatHasChildren();
+        averageNofChildrenPerNode = calcAerageNofChildrenPerNodeThatHasChildren();
         usedTimeInMilliSeconds = cpuTimer.absoluteProgress();
         usedRelativeTimeInPercentage = cpuTimer.getRelativeProgress() * 100;
     }
 
 //https://en.wikipedia.org/wiki/Branching_factor
-    private float calcAverageNofChildrenPerNodeThatHasChildren() {
+    private float calcAerageNofChildrenPerNodeThatHasChildren() {
         int nofBranches = nofNodes - 1;
         return (nofNodesWithChildren == 0)
                 ? 0

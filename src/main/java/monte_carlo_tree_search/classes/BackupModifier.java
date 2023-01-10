@@ -9,7 +9,10 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 /***
  *  This class updates a monte carlo tree, internal node variables can be changed or node(s) can be replaced.
@@ -38,9 +41,9 @@ import java.util.*;
  *  in nodeSelected an action will be applied leading to expansion
  *
  *
- *  return(ni)=returnStep(ni)*weightReturnsSteps+...
- *              returnSimulation(ni)*weightReturnsSimulation+...
- *              returnsMemory(ni)*weightMemoryValue
+ *  return(ni) = returnStep(ni)*weightReturnsSteps+...
+ *               returnSimulation(ni)*weightReturnsSimulation+...
+ *               returnsMemory(ni)*weightMemoryValue
  *
  *  where ni is a node on the path. A return(ni) is used to update the expected value of taking a specific
  *  action in the node pointed out by ni.
@@ -49,26 +52,26 @@ import java.util.*;
  */
 
 @Log
-public class BackupModifier<SSV,AV> {
+public class BackupModifier<S,A> {
 
-    NodeInterface<SSV,AV> rootTree;
-    List<ActionInterface<AV>> actionsToSelected;
-    ActionInterface<AV> actionOnSelected;
-    StepReturnGeneric<SSV> stepReturnOfSelected;
-    MonteCarloSettings<SSV,AV> settings;
+    NodeInterface<S,A> rootTree;
+    List<ActionInterface<A>> actionsToSelected;
+    ActionInterface<A> actionOnSelected;
+    StepReturnGeneric<S> stepReturnOfSelected;
+    MonteCarloSettings<S,A> settings;
 
-    TreeInfoHelper<SSV,AV> treeInfoHelper;
-    NodeInterface<SSV,AV> nodeSelected;
-    List<NodeInterface<SSV,AV>> nodesOnPath;
+    TreeInfoHelper<S,A> treeInfoHelper;
+    NodeInterface<S,A> nodeSelected;
+    List<NodeInterface<S,A>> nodesOnPath;
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static <SSV,AV> BackupModifier<SSV,AV> newBUM(NodeInterface<SSV,AV> rootTree,
-                                         @NonNull List<ActionInterface<AV>> actionsToSelected,
-                                         @NonNull ActionInterface<AV> actionOnSelected,
-                                         @NonNull StepReturnGeneric<SSV> stepReturnOfSelected,
-                                         @NonNull MonteCarloSettings<SSV,AV> settings) {
-        BackupModifier<SSV,AV> bm = new BackupModifier<>();
+    private static <S,A> BackupModifier<S,A> newBUM(NodeInterface<S,A> rootTree,
+                                         @NonNull List<ActionInterface<A>> actionsToSelected,
+                                         @NonNull ActionInterface<A> actionOnSelected,
+                                         @NonNull StepReturnGeneric<S> stepReturnOfSelected,
+                                         @NonNull MonteCarloSettings<S,A> settings) {
+        BackupModifier<S,A> bm = new BackupModifier<>();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
@@ -102,9 +105,9 @@ public class BackupModifier<SSV,AV> {
 
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
-        for (NodeInterface<SSV,AV> nodeOnPath : nodesOnPath) {
+        for (NodeInterface<S,A> nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
-                ActionInterface<AV> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
+                ActionInterface<A> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
                 rewards.add(nodeOnPath.restoreRewardForAction(action));
             }
         }
@@ -133,10 +136,10 @@ public class BackupModifier<SSV,AV> {
         List<Double> sumTemp = ListUtils.sumListElements(returnsStepsWeighted, returnsSimulationWeighted);
         List<Double> returnsSum = ListUtils.sumListElements(sumTemp, returnsMemoryWeighted);
 
-        List<ActionInterface<AV>> actions =
+        List<ActionInterface<A>> actions =
                 ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
-        for (NodeInterface<SSV,AV> node : nodesOnPath) {
-            ActionInterface<AV> action = actions.get(nodesOnPath.indexOf(node));
+        for (NodeInterface<S,A> node : nodesOnPath) {
+            ActionInterface<A> action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
             updateNode(node, singleReturn, action, settings.alphaBackupNormal);
         }
@@ -154,7 +157,7 @@ public class BackupModifier<SSV,AV> {
         return returns;
     }
 
-    void updateNode(NodeInterface<SSV,AV> node, double singleReturn, ActionInterface<AV> action, double alpha) {
+    void updateNode(NodeInterface<S,A> node, double singleReturn, ActionInterface<A> action, double alpha) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);

@@ -11,13 +11,13 @@ import java.util.Set;
  * Memory based on hash map for storing state values
  */
 
-public class NodeValueMemoryHashMap<SSV> implements MemoryInterface<SSV> {
+public class NodeValueMemoryHashMap<S> implements MemoryInterface<S> {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
-    Set<StateInterface<SSV>> states;
+    Set<StateInterface<S>> states;
 
-    public static <SSV> NodeValueMemoryHashMap<SSV> newEmpty() {
+    public static <S> NodeValueMemoryHashMap<S> newEmpty() {
         return new NodeValueMemoryHashMap<>();
     }
 
@@ -31,13 +31,13 @@ public class NodeValueMemoryHashMap<SSV> implements MemoryInterface<SSV> {
     }
 
     @Override
-    public void write(StateInterface<SSV> state, double value) {
+    public void write(StateInterface<S> state, double value) {
         memory.put(state.getVariables().hashCode(),value);
         states.add(state);
     }
 
     @Override
-    public double read(StateInterface<SSV> state) {
+    public double read(StateInterface<S> state) {
         return memory.getOrDefault(state.getVariables().hashCode(), DEFAULT_VALUE);
     }
 
@@ -47,7 +47,7 @@ public class NodeValueMemoryHashMap<SSV> implements MemoryInterface<SSV> {
 
         StringBuilder sb=new StringBuilder();
         sb.append(System.getProperty("line.separator"));
-        for (StateInterface<SSV> state:states) {
+        for (StateInterface<S> state:states) {
             sb.append("State = ").append(state).append(", value = ").append(read(state));
             sb.append(System.getProperty("line.separator"));
         }

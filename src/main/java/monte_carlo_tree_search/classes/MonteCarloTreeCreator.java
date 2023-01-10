@@ -40,29 +40,29 @@ import java.util.*;
 @Log
 @Setter
 @Getter
-public class MonteCarloTreeCreator<SSV,AV> {
+public class MonteCarloTreeCreator<S,A> {
     private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
-    EnvironmentGenericInterface<SSV, AV> environment;
-    StateInterface<SSV> startState;
-    MonteCarloSettings<SSV,AV> settings;
-    ActionInterface<AV> actionTemplate;
-    MemoryInterface<SSV> memory;
+    EnvironmentGenericInterface<S, A> environment;
+    StateInterface<S> startState;
+    MonteCarloSettings<S,A> settings;
+    ActionInterface<A> actionTemplate;
+    MemoryInterface<S> memory;
 
-    NodeInterface<SSV,AV> nodeRoot;
-    TreeInfoHelper<SSV,AV> tih;
+    NodeInterface<S,A> nodeRoot;
+    TreeInfoHelper<S,A> tih;
     CpuTimer cpuTimer;
     int nofIterations;
-    List<ActionInterface<AV>> actionsToSelected;
+    List<ActionInterface<A>> actionsToSelected;
     List<Double> rootValueList;
 
     @Builder
-    private static <SSV,AV> MonteCarloTreeCreator<SSV,AV>  newMCTC(
-                                                 @NonNull EnvironmentGenericInterface<SSV, AV> environment,
-                                                 @NonNull StateInterface<SSV> startState,
-                                                 @NonNull MonteCarloSettings<SSV,AV> monteCarloSettings,
-                                                 @NonNull ActionInterface<AV> actionTemplate,
-                                                 MemoryInterface<SSV> memory) {
-        MonteCarloTreeCreator<SSV,AV> mctc = new MonteCarloTreeCreator<>();
+    private static <S,A> MonteCarloTreeCreator<S,A>  newMCTC(
+                                                 @NonNull EnvironmentGenericInterface<S, A> environment,
+                                                 @NonNull StateInterface<S> startState,
+                                                 @NonNull MonteCarloSettings<S,A> monteCarloSettings,
+                                                 @NonNull ActionInterface<A> actionTemplate,
+                                                 MemoryInterface<S> memory) {
+        MonteCarloTreeCreator<S,A> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;
         mctc.settings = monteCarloSettings;
@@ -76,8 +76,8 @@ public class MonteCarloTreeCreator<SSV,AV> {
         return mctc;
     }
 
-    private static <SSV,AV>  void setSomeFields(@NonNull StateInterface<SSV> startState, MonteCarloTreeCreator<SSV,AV>  mctc) {
-        ActionInterface<AV> actionRoot=mctc.actionTemplate.copy();
+    private static <S,A>  void setSomeFields(@NonNull StateInterface<S> startState, MonteCarloTreeCreator<S,A>  mctc) {
+        ActionInterface<A> actionRoot=mctc.actionTemplate.copy();
         actionRoot.setValue(actionRoot.nonApplicableAction());
         mctc.nodeRoot = NodeInterface.newNotTerminal(startState,actionRoot);
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
@@ -86,17 +86,17 @@ public class MonteCarloTreeCreator<SSV,AV> {
         mctc.rootValueList =new ArrayList<>();
     }
 
-    public NodeInterface<SSV,AV> run() throws StartStateIsTrapException {
+    public NodeInterface<S,A> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
 
         int i;
         rootValueList.clear();
-        ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings,actionTemplate);
+        ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
-            NodeInterface<SSV,AV> nodeSelected = select(nodeRoot);
-            Optional<ActionInterface<AV>> actionInSelected = actionSelector.select(nodeSelected);
+            NodeInterface<S,A> nodeSelected = select(nodeRoot);
+            Optional<ActionInterface<A>> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
-                StepReturnGeneric<SSV> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
+                StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState);
                 backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  // actionInSelected is empty <=> all tested
@@ -115,7 +115,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
 
     private void updateRootvalueList() {
         List<Double> avs=new ArrayList<>();
-        for(AV a:actionTemplate.applicableActions()) {
+        for(A a:actionTemplate.applicableActions()) {
             actionTemplate.setValue(a);
             avs.add(nodeRoot.getActionValue(actionTemplate));
         }
@@ -123,44 +123,44 @@ public class MonteCarloTreeCreator<SSV,AV> {
     }
 
 
-    public MonteCarloSearchStatistics<SSV,AV> getStatistics() {
-        MonteCarloSearchStatistics<SSV,AV> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this,settings);
+    public MonteCarloSearchStatistics<S,A> getStatistics() {
+        MonteCarloSearchStatistics<S,A> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this,settings);
         statistics.setStatistics();
         return statistics;
     }
 
-    public ActionInterface<AV> getFirstAction() {
-        TreeInfoHelper<SSV, AV> tih = new TreeInfoHelper<>(nodeRoot,settings);
-        ActionInterface<AV> actionRoot=actionTemplate.copy();
+    public ActionInterface<A> getFirstAction() {
+        TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot,settings);
+        ActionInterface<A> actionRoot=actionTemplate.copy();
         Conditionals.executeIfTrue (tih.getValueOfFirstBestAction().isEmpty(), () ->
             log.warning("No first action present - probably to small time budget"));
-        AV actionValue=tih.getValueOfFirstBestAction().orElse(actionTemplate.getValue());
+        A actionValue=tih.getValueOfFirstBestAction().orElse(actionTemplate.getValue());
         actionRoot.setValue(actionValue);
         return actionRoot;
     }
 
     private void logStatistics(int nofIterations) {
         this.cpuTimer.stop();
-        TreeInfoHelper<SSV,AV> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        MonteCarloSearchStatistics<SSV,AV> statistics=new MonteCarloSearchStatistics<>(
+        TreeInfoHelper<S,A> tih=new TreeInfoHelper<>(nodeRoot,settings);
+        MonteCarloSearchStatistics<S,A> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,this,settings);
         log.fine("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
                 ", max tree depth = "+tih.maxDepth()+", depth of best path = "+tih.getBestPath().size()
                 +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
 
-    private NodeInterface<SSV,AV> select(NodeInterface<SSV,AV> nodeRoot) {
-        NodeSelector<SSV,AV> ns = new NodeSelector<>(nodeRoot, settings);
-        NodeInterface<SSV,AV> nodeSelected = ns.select();
+    private NodeInterface<S,A> select(NodeInterface<S,A> nodeRoot) {
+        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
+        NodeInterface<S,A> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
 
-    private StepReturnGeneric<SSV> applyActionAndExpand(NodeInterface<SSV,AV> nodeSelected, ActionInterface<AV> actionInSelected) {
-        StateInterface<SSV> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        StepReturnGeneric<SSV> sr = environment.step(actionInSelected, state);
+    private StepReturnGeneric<S> applyActionAndExpand(NodeInterface<S,A> nodeSelected, ActionInterface<A> actionInSelected) {
+        StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturnGeneric<S> sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeInterface<SSV,AV> child = NodeInterface.newNode(sr, actionInSelected);
+        NodeInterface<S,A> child = NodeInterface.newNode(sr, actionInSelected);
         child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
@@ -181,12 +181,12 @@ public class MonteCarloTreeCreator<SSV,AV> {
     }
 
     //todo apply discountFactorSimulation
-    public SimulationResults simulate(StateInterface<SSV> stateAfterApplyingActionInSelectedNode) {
+    public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
-            List<StepReturnGeneric<SSV>> stepResults =
+            List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
-            StepReturnGeneric<SSV> endReturn = stepResults.get(stepResults.size() - 1);
+            StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
             double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
             boolean isEndingInFail = endReturn.isFail;
             simulationResults.add(sumOfRewards, isEndingInFail);
@@ -194,10 +194,10 @@ public class MonteCarloTreeCreator<SSV,AV> {
         return simulationResults;
     }
 
-    private void backPropagate(StepReturnGeneric<SSV> sr,
+    private void backPropagate(StepReturnGeneric<S> sr,
                                SimulationResults simulationResults,
-                               ActionInterface<AV> actionInSelected) {
-        SimulationReturnsExtractor<SSV,AV> bumSim = SimulationReturnsExtractor.<SSV,AV>builder()
+                               ActionInterface<A> actionInSelected) {
+        SimulationReturnsExtractor<S,A> bumSim = SimulationReturnsExtractor.<S,A>builder()
                 .nofNodesOnPath(actionsToSelected.size() + 1)
                 .simulationResults(simulationResults)
                 .settings(settings)
@@ -205,7 +205,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
         List<Double> returnsSimulation = bumSim.extract();
 
         double memoryValueStateAfterAction=memory.read(sr.newState);
-        BackupModifier<SSV, AV>  bum = BackupModifier.<SSV, AV> builder().rootTree(nodeRoot)
+        BackupModifier<S, A>  bum = BackupModifier.<S, A> builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
@@ -214,8 +214,8 @@ public class MonteCarloTreeCreator<SSV,AV> {
         bum.backup(returnsSimulation,memoryValueStateAfterAction);
     }
 
-    private void manageCaseWhenAllActionsAreTested(NodeInterface<SSV, AV>  nodeSelected) throws StartStateIsTrapException {
-        SelectedToTerminalFailConverter<SSV, AV>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
+    private void manageCaseWhenAllActionsAreTested(NodeInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
+        SelectedToTerminalFailConverter<S, A>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
         if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
             makeSelectedTerminal(nodeSelected, sfc);
         } else {
@@ -223,17 +223,17 @@ public class MonteCarloTreeCreator<SSV,AV> {
         }
     }
 
-    private void chooseBestActionAndBackPropagate(NodeInterface<SSV, AV>  nodeSelected) {
-        NodeSelector<SSV, AV>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
-        Optional<NodeInterface<SSV, AV> > childToSelected = nodeSelector.selectChild(nodeSelected);
-        ActionInterface<AV> actionToGetToChild = childToSelected.orElseThrow().getAction();
-        StateInterface<SSV> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        StepReturnGeneric<SSV> sr = environment.step(actionToGetToChild, state);
+    private void chooseBestActionAndBackPropagate(NodeInterface<S, A>  nodeSelected) {
+        NodeSelector<S, A>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
+        Optional<NodeInterface<S, A> > childToSelected = nodeSelector.selectChild(nodeSelected);
+        ActionInterface<A> actionToGetToChild = childToSelected.orElseThrow().getAction();
+        StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
+        StepReturnGeneric<S> sr = environment.step(actionToGetToChild, state);
         backPropagate(sr, new SimulationResults(), actionToGetToChild);
     }
 
-    private void makeSelectedTerminal(NodeInterface<SSV, AV> nodeSelected,
-                                      SelectedToTerminalFailConverter<SSV, AV> sfc) throws StartStateIsTrapException {
+    private void makeSelectedTerminal(NodeInterface<S, A> nodeSelected,
+                                      SelectedToTerminalFailConverter<S, A> sfc) throws StartStateIsTrapException {
         if (nodeSelected.equals(nodeRoot)) {
            // nodeRoot.printTree();
             throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
@@ -241,12 +241,12 @@ public class MonteCarloTreeCreator<SSV,AV> {
         sfc.makeSelectedTerminal(nodeSelected);
     }
 
-    private List<StepReturnGeneric<SSV>> stepToTerminal(StateInterface<SSV> state,
-                                                        SimulationPolicyInterface<SSV, AV> policy) {
-        List<StepReturnGeneric<SSV>> returns = new ArrayList<>();
-        StepReturnGeneric<SSV> stepReturn;
+    private List<StepReturnGeneric<S>> stepToTerminal(StateInterface<S> state,
+                                                        SimulationPolicyInterface<S, A> policy) {
+        List<StepReturnGeneric<S>> returns = new ArrayList<>();
+        StepReturnGeneric<S> stepReturn;
         do {
-            ActionInterface<AV> action = policy.chooseAction(state);
+            ActionInterface<A> action = policy.chooseAction(state);
             stepReturn = environment.step(action, state);
             state.setFromReturn(stepReturn);
             returns.add(stepReturn);

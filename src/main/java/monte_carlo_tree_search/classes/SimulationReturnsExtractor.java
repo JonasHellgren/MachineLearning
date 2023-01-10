@@ -26,18 +26,18 @@ import java.util.List;
  */
 
 @Log
-public class SimulationReturnsExtractor<SSV,AV> {
+public class SimulationReturnsExtractor<S,A> {
 
     int nofNodesOnPath;
     SimulationResults simulationResults;
-    MonteCarloSettings<SSV,AV> settings;
+    MonteCarloSettings<S,A> settings;
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static <SSV,AV> SimulationReturnsExtractor<SSV,AV> newBUM(@NonNull Integer nofNodesOnPath,
+    private static <S,A> SimulationReturnsExtractor<S,A> newBUM(@NonNull Integer nofNodesOnPath,
                                                      @NonNull SimulationResults simulationResults,
-                                                     @NonNull MonteCarloSettings<SSV,AV> settings) {
-        SimulationReturnsExtractor<SSV,AV> bms=new SimulationReturnsExtractor<>();
+                                                     @NonNull MonteCarloSettings<S,A> settings) {
+        SimulationReturnsExtractor<S,A> bms=new SimulationReturnsExtractor<>();
         bms.nofNodesOnPath = nofNodesOnPath;
         bms.simulationResults = simulationResults;
         bms.settings = settings;

@@ -11,7 +11,7 @@ import java.util.function.Function;
 @Builder
 @Setter
 @ToString
-public class MonteCarloSettings<SSV,AV> {
+public class MonteCarloSettings<S,A> {
     private static final int NOF_ITERATIONS_DEFAULT=10_000;
     private static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
@@ -39,11 +39,11 @@ public class MonteCarloSettings<SSV,AV> {
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
     @NonNull
-    Function<SSV,Integer> maxNofTestedActionsForBeingLeafFunction;
+    Function<S,Integer> maxNofTestedActionsForBeingLeafFunction;
     @NonNull
-    SimulationPolicyInterface<SSV,AV> firstActionSelectionPolicy;
+    SimulationPolicyInterface<S,A> firstActionSelectionPolicy;
     @NonNull
-    SimulationPolicyInterface<SSV,AV> simulationPolicy;
+    SimulationPolicyInterface<S,A> simulationPolicy;
     @Builder.Default
     double discountFactorSteps=DISCOUNT_FACTOR_STEPS_DEFAULT;
     @Builder.Default
@@ -65,10 +65,5 @@ public class MonteCarloSettings<SSV,AV> {
     @Builder.Default
     boolean isDefensiveBackup=DEFENSIVE_DEFAULT;
 
-    /*
-    public static <SSV,AV> MonteCarloSettings<SSV,AV> newDefault() {
-        return MonteCarloSettings.<SSV,AV>builder().build();
-    }
-    */
 
 }
