@@ -1,4 +1,5 @@
 package monte_carlo_tree_search.classes;
+import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -93,24 +94,19 @@ public class SimulationReturnsExtractor<S,A> {
     }
 
     /**
-     *    nodesOnPath = (r)  ->  (1) ->  (2) ->  (3) ->  (4)
-     *    node i will have discount of discountFactor^nofNodesRemaining
-     *    so for this example with discountFactor=0.9 => discount (1) is 0.9^(5-0-1)=0.9^4 and for (4) it is 0.9^(5-4-1) = 1
-     *
-     *    TODO fel
+     *    nodesOnPath = (r)  -> (0) -> (1) ->  (2) ->  (3) ->  (4)
+     *    node i will have discount of discountFactor^(nofNodesOnPath-ni-1)
+     *    so for this example with discountFactor=0.9 => discount (4) is 0.9^(5-4-1)=1 and for (0) it is 0.9^(5-0-1) = 0.6
      */
-
-
 
     private List<Double> getReturns(double singleReturn, double discountFactor) {
         List<Double> returnsSimulation=new ArrayList<>();
+        List<Double> discounts=new ArrayList<>();
         for (int ni = 0; ni < nofNodesOnPath ; ni++) {
-            int nofNodesRemaining=nofNodesOnPath-ni-1;  //    TODO fel
-            double discount=Math.pow(discountFactor,nofNodesRemaining);      //TODO ta veck
-            //double discount=Math.pow(discountFactor,ni);
-            returnsSimulation.add(singleReturn*discount);
+            returnsSimulation.add(singleReturn);
+            discounts.add(Math.pow(discountFactor,(nofNodesOnPath-ni-1)));
         }
-        return returnsSimulation;
+        return ListUtils.elementProduct(returnsSimulation,discounts);
     }
 
 }

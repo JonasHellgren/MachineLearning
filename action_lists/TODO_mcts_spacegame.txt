@@ -213,9 +213,9 @@ clean up   x
 plotta nofNodes jämte rootValue
 tänka igenom defensive backup
 - singleReturn = singleReturn + settings.discountFactorSteps * reward  x
-- SimulationReturnsExtractor getReturns
-apply discountFactorSimulation
-TestDiscountFactor
+- SimulationReturnsExtractor getReturns  x
+apply discountFactorSimulation x
+TestDiscountFactor x
 gör alternativ cart pole reward - stort negative vid fail annars noll
 TestMonteCarloControlledCartPoleModifiedReward
 
