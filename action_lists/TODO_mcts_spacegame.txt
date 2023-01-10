@@ -203,12 +203,10 @@ PersistentNodeValueMemoryInterface extends NodeValueMemoryInterface  x
 CartPoleStateValueMemory implements PersistentNodeValueMemoryInterface  x
 RunCartPoleAlphaZero  PersistentNodeValueMemoryInterface memory=... x
 göra om getAverageValueError  x
-plotta value convergera
-maxQ animering till memory value
-ytteligare label animering root node value
-.simulationPolicy(CartPolePolicies.newEqualProbability()) -> newHighestNextStateValue
+plotta value convergera  x
+maxQ animering till memory value  x
+ytteligare label animering root node value  x
 
-studera state values efter backup när minne används
 tänka igenom defensive backup
 apply discountFactorSimulation
 gör alternativ cart pole reward - stort negative vid fail annars noll
@@ -226,5 +224,5 @@ Nya tester med mcts iterator klass.  Tex Påvisa större träd om större Explor
 . kunna radera noder
 - hitta viss node i träd
 Vad händer selected är terminal not fail - inget speicellt  x
-
+.simulationPolicy(CartPolePolicies.newEqualProbability()) -> newHighestNextStateValue
 

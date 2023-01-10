@@ -9,16 +9,14 @@ import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 
 public class RunCartPoleAlphaZeroLearningAndSearch {
     private static final int MAX_NOF_STEPS_IN_EVALUATION = Integer.MAX_VALUE;
-    private static final int TIME_BUDGET_MILLI_SECONDS_SEARCH = 20;  //small => faster training
-    private static final int MAX_TREE_DEPTH_SEARCH = 30;  //small => faster training
+    private static final int TIME_BUDGET_MILLI_SECONDS_SEARCH = 20;  //small => faster search
+    private static final int MAX_TREE_DEPTH_SEARCH = 10;  //small => faster search
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
     public static void main(String[] args) {
         CartPoleStateValueMemory<CartPoleVariables> memory = new CartPoleStateValueMemory<>();
         memory.load(FILE);
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
-
-
 
         TwoPanelsPlotter plotter=new TwoPanelsPlotter("rootValue","not used","Iteration");
         CartPoleRunner cpr = new CartPoleRunner(mcForSearch, memory, MAX_NOF_STEPS_IN_EVALUATION,plotter);
@@ -44,7 +42,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
                 .weightReturnsSteps(0)
                 .weightMemoryValue(1.0)
                 .weightReturnsSimulation(1.0)
-                .nofSimulationsPerNode(10)
+                .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(0.1)
                 .build();
 

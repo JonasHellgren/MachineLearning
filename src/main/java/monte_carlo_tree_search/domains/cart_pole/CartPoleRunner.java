@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
+import common.ListUtils;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
@@ -51,7 +52,6 @@ public class CartPoleRunner {
         environmentNotStepLimited= EnvironmentCartPole.builder().maxNofSteps(Integer.MAX_VALUE).build();
         graphics=new CartPoleGraphics(TITLE);
         this.plotter=plotter;
-       // memory.createOutScalers(nofSteps);
     }
 
     @SneakyThrows
@@ -71,7 +71,8 @@ public class CartPoleRunner {
             StepReturnGeneric<CartPoleVariables> sr = environmentNotStepLimited.step(actionCartPole, state);
             state.setFromReturn(sr);
             double value = memory.read(state);
-            graphics.render(state, i, value, actionCartPole.getValue());
+            double rootNodeValue= ListUtils.findEnd(mcForSearch.getRootValueList());
+            graphics.render(state, i, value,rootNodeValue, actionCartPole.getValue());
             isFail = sr.isFail;
             i++;
         } while (i < nofSteps && !isFail);

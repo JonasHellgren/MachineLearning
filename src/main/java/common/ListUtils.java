@@ -26,6 +26,10 @@ public class ListUtils {
                 .average();
     }
 
+    public static double findEnd(List<Double> list) {
+        return list.get(list.size()-1);
+    }
+
     public static List<Double> sumListElements(List<Double> listA, List<Double> listB) {
         return IntStream.range(0, listA.size())
                 .mapToObj(i -> listA.get(i) + listB.get(i))

@@ -133,7 +133,8 @@ public class RunCartPoleAlphaZero {
                                        StateInterface<CartPoleVariables> state,
                                        int step,
                                        ActionInterface<Integer> actionCartPole) {
-        graphics.render(state, step, memory.read(state), actionCartPole.getValue());
+        double rootNodeValue=0;
+        graphics.render(state, step, memory.read(state), rootNodeValue, actionCartPole.getValue());
     }
 
     private static void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisode,

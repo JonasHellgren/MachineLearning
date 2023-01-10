@@ -34,9 +34,15 @@ public class CartPoleGraphics {
         animationFrame.setVisible(true);
     }
 
-    public  void render(StateInterface<CartPoleVariables> state, int nofSteps, double maxQ, int actionValue) {
-        animationPanel.setCartPoleStates(state,actionValue,maxQ);
+    public  void render(StateInterface<CartPoleVariables> state,
+                        int nofSteps,
+                        double memoryValue,
+                        double rootNodeValue,
+                        int actionValue) {
+        animationPanel.setCartPoleStates(state,actionValue);
         animationPanel.setNofSteps(nofSteps);
+        animationPanel.setMemoryValue(memoryValue);
+        animationPanel.setRootNodeValue(rootNodeValue);
         animationPanel.repaint();
     }
 

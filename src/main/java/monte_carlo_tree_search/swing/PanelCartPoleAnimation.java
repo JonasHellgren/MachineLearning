@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.swing;
 
 
+import lombok.Setter;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import swing.Position2D;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.logging.Logger;
 
+@Setter
 public class PanelCartPoleAnimation extends JPanel {
 
     public final int LABEL_WEIGHT =300;
@@ -29,7 +31,8 @@ public class PanelCartPoleAnimation extends JPanel {
     public double xDot;
     public double thetaDot;
     public int nofSteps;
-    double maxQ;
+    double memoryValue;
+    double rootNodeValue;
 
     Color cartColor;
     Color poleColor;
@@ -38,7 +41,9 @@ public class PanelCartPoleAnimation extends JPanel {
     public JLabel labelXDot;
     public JLabel labelThetaDot;
     public JLabel labelNofSteps;
-    public JLabel labelMaxQ;
+    public JLabel labelMemoryValue;
+    public JLabel labelRootNodeValue;
+
 
     final double CART_WIDTH=0.3;  //in domain
     final double CART_HEIGHT=0.2;
@@ -51,7 +56,7 @@ public class PanelCartPoleAnimation extends JPanel {
         this.yScaler = yScaler;
         cartPosition=new Position2D(0,CART_Y);
 
-        this.theta = 0; this.maxQ=0;
+        this.theta = 0; this.memoryValue =0;
         cartColor = Color.RED;
         poleColor = Color.BLACK;
         addLabelsToAnimationPanel();
@@ -75,8 +80,11 @@ public class PanelCartPoleAnimation extends JPanel {
         labelNofSteps = new JLabel("nofSteps");
         addLabelToPanel(labelNofSteps, labelIndex++);
 
-        labelMaxQ = new JLabel("maxQ");
-        addLabelToPanel(labelMaxQ, labelIndex);
+        labelMemoryValue = new JLabel("memory value");
+        addLabelToPanel(labelMemoryValue, labelIndex++);
+
+        labelRootNodeValue = new JLabel("root node value");
+        addLabelToPanel(labelRootNodeValue, labelIndex);
 
     }
 
@@ -94,13 +102,12 @@ public class PanelCartPoleAnimation extends JPanel {
         plotPole(g2d,cartPosition.x,theta);
     }
 
-    public void setCartPoleStates(StateInterface<CartPoleVariables> state, int action, double maxQ) {
+    public void setCartPoleStates(StateInterface<CartPoleVariables> state, int action) {
         cartPosition.x=state.getVariables().x;
         xDot=state.getVariables().xDot;
         cartPosition.y=CART_Y;
         this.theta = state.getVariables().theta;
         this.thetaDot = state.getVariables().thetaDot;
-        this.maxQ=maxQ;
 
         switch (action) {
             case 0:
@@ -166,7 +173,7 @@ public class PanelCartPoleAnimation extends JPanel {
         labelXDot.setText("xDot:"+new DecimalFormat("#.##").format(xDot));
         labelThetaDot.setText("thetaDot:"+new DecimalFormat("#.##").format(thetaDot));
         labelNofSteps.setText("nofSteps:"+new DecimalFormat("#.##").format(nofSteps));
-        labelMaxQ.setText("maxQ:"+new DecimalFormat("#.##").format(maxQ));
+
     }
 
     @Override
@@ -177,7 +184,9 @@ public class PanelCartPoleAnimation extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         drawPlot(g2d);
-        textCarStates(g2d,cartPosition.x, theta,maxQ);
+        textCarStates(g2d,cartPosition.x, theta, memoryValue);
+        labelMemoryValue.setText("maxQ:"+new DecimalFormat("#.##").format(memoryValue));
+        labelRootNodeValue.setText("rootNodeValue:"+new DecimalFormat("#.##").format(rootNodeValue));
 
     }
 
