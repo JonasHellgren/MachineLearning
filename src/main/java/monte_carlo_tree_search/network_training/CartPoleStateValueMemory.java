@@ -91,15 +91,14 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     }
 
     @Override
-    public double getAverageValueError(ReplayBuffer<SSV, Integer> buffer) {
+    public double getAverageValueError(List<Experience<SSV, Integer>> experienceList) {
         List<Double> errors=new ArrayList<>();
-        for (Experience<SSV, Integer> e : buffer.getBuffer()) {
+        for (Experience<SSV, Integer> e : experienceList) {
             double expectedValue= e.value;
-            SSV v = e.stateVariables;
-            double memoryValue=getNetworkOutputValue(getInputVec(v));
+            double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
             errors.add(Math.abs(expectedValue-memoryValue));
         }
-        return ListUtils.findMax(errors).orElseThrow();
+        return ListUtils.findAverage(errors).orElseThrow();
     }
 
     @NotNull

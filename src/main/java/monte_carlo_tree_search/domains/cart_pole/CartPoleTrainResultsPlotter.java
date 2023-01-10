@@ -1,14 +1,11 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.domains.models_battery_cell.EnvironmentCell;
 import monte_carlo_tree_search.domains.models_battery_cell.PlotPanel;
 import org.jfree.data.xy.XYSeries;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class CartPoleTrainResultsPlotter {
 

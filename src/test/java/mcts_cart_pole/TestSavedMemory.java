@@ -25,7 +25,6 @@ public class TestSavedMemory {
 
     @Test
     public void allZeroGivesValueApprox100() {
-
         StateInterface<CartPoleVariables> stateZero=StateCartPole.newAllStatesAsZero();
         double valueAtAllZero=memory.read(stateZero);
         System.out.println("valueAtAllZero = " + valueAtAllZero);
@@ -35,12 +34,10 @@ public class TestSavedMemory {
 
     @Test
     public void allMaxPositiveGivesValueApprox0() {
-
         StateInterface<CartPoleVariables> allMaxPositive=StateCartPole.newAllPositiveMax();
         double valueAllMaxPositive=memory.read(allMaxPositive);
         System.out.println("valueAllMaxPositive = " + valueAllMaxPositive);
         Assert.assertEquals(EXPECTED_ALL_MAX_POS,valueAllMaxPositive, DELTA);
     }
-
 
 }

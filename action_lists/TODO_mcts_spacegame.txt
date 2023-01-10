@@ -199,9 +199,10 @@ testa sparat nät x
 CartPoleStateValueMemory(int maxNofSteps)  x
 RunCartPoleAlphaZeroLearningAndSearch  x
 plotta felet nn träning  x
-PersistentNodeValueMemoryInterface extends NodeValueMemoryInterface
-CartPoleStateValueMemory implements PersistentNodeValueMemoryInterface
-RunCartPoleAlphaZero  PersistentNodeValueMemoryInterface memory=...
+PersistentNodeValueMemoryInterface extends NodeValueMemoryInterface  x
+CartPoleStateValueMemory implements PersistentNodeValueMemoryInterface  x
+RunCartPoleAlphaZero  PersistentNodeValueMemoryInterface memory=... x
+göra om getAverageValueError  x
 plotta value convergera
 maxQ animering till memory value
 ytteligare label animering root node value

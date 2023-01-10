@@ -33,7 +33,7 @@ import java.util.List;
 @Log
 public class RunCartPoleAlphaZero {
 
-    private static final int BUFFER_SIZE_TRAINING = 3_000;
+    private static final int BUFFER_SIZE_TRAINING = 5_000;
     private static final int BUFFER_SIZE_EPISODE = 1_000;
     private static final double INIT_STATE_VARIABLE_DEVIATION = 0.99;  //small <=> close to zero, close to one <=> random
     private static final int NOF_EPISODES = 200;
@@ -53,10 +53,8 @@ public class RunCartPoleAlphaZero {
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
     private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;
     private static final boolean IS_FIRST_VISIT = true;
-    private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.3;
+    private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
     private static final String FILE = "networks/cartPoleStateValue.nnet";
-
-
 
     public static void main(String[] args) {
         NetworkMemoryInterface<CartPoleVariables> memory = new CartPoleStateValueMemory<>();  //todo interface
@@ -92,7 +90,7 @@ public class RunCartPoleAlphaZero {
             ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
 
             someLogging(bufferTraining, episode, step);
-            someTracking(memory, learningErrors, returns, rbvs, bufferEpisode);
+            someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
         }
 
         doPlotting(learningErrors,returns);
@@ -114,9 +112,10 @@ public class RunCartPoleAlphaZero {
                                      List<Double> learningErrors,
                                      List<Double> returns,
                                      ReplayBufferValueSetter rbvs,
-                                     ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
+                                     ReplayBuffer<CartPoleVariables, Integer> bufferTraining) {
         //learningErrors.add(memory.getLearningRule().getTotalNetworkError());
-        learningErrors.add(memory.getAverageValueError(bufferEpisode));
+        List<Experience<CartPoleVariables, Integer>> miniBatch=bufferTraining.getMiniBatch(MINI_BATCH_SIZE);
+        learningErrors.add(memory.getAverageValueError(miniBatch));
         returns.add(rbvs.getEpisodeReturn());
     }
 

@@ -20,7 +20,7 @@ public class ListUtils {
                 .max();
     }
 
-    public OptionalDouble findAverage(List<Double> list) {
+    public static OptionalDouble findAverage(List<Double> list) {
         return list.stream()
                 .mapToDouble(a -> a)
                 .average();
