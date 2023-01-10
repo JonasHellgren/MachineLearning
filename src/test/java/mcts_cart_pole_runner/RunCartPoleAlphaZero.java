@@ -124,7 +124,7 @@ public class RunCartPoleAlphaZero {
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {
-        CartPoleTrainResultsPlotter plotter=new CartPoleTrainResultsPlotter("Plot");
+        TwoPanelsPlotter plotter=new TwoPanelsPlotter("Error","Return","Step");
         plotter.plot(learningErrors,returns);
     }
 

@@ -2,6 +2,7 @@ package monte_carlo_tree_search.classes;
 
 import common.Conditionals;
 import common.CpuTimer;
+import common.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -52,6 +53,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     CpuTimer cpuTimer;
     int nofIterations;
     List<ActionInterface<AV>> actionsToSelected;
+    List<Double> rootValueList;
 
     @Builder
     private static <SSV,AV> MonteCarloTreeCreator<SSV,AV>  newMCTC(
@@ -81,12 +83,14 @@ public class MonteCarloTreeCreator<SSV,AV> {
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
+        mctc.rootValueList =new ArrayList<>();
     }
 
     public NodeInterface<SSV,AV> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
 
         int i;
+        rootValueList.clear();
         ActionSelector<SSV,AV> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface<SSV,AV> nodeSelected = select(nodeRoot);
@@ -99,6 +103,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
                 manageCaseWhenAllActionsAreTested(nodeSelected);
             }
 
+            updateRootvalueList();
             if (cpuTimer.isTimeExceeded()) {
                 log.fine("Time exceeded");
                 break;
@@ -108,6 +113,14 @@ public class MonteCarloTreeCreator<SSV,AV> {
         return nodeRoot;
     }
 
+    private void updateRootvalueList() {
+        List<Double> avs=new ArrayList<>();
+        for(AV a:actionTemplate.applicableActions()) {
+            actionTemplate.setValue(a);
+            avs.add(nodeRoot.getActionValue(actionTemplate));
+        }
+        rootValueList.add(ListUtils.findMax(avs).orElse(0));
+    }
 
 
     public MonteCarloSearchStatistics<SSV,AV> getStatistics() {
