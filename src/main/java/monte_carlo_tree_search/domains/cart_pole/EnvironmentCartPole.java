@@ -72,12 +72,16 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
     public static final double THETA_DOT_THRESHOLD_RADIANS  = PI;  //debatable
     public static final double X_DOT_THRESHOLD = X_TRESHOLD*2;  //debatable
     public static final int MAX_NOF_STEPS_DEFAULT = 100;  //100 200
-    public static final double NON_TERMINAL_REWARD = 1.0;
+    public static final double NON_FAIL_REWARD_DEFAULT = 1.0;
+    private static final double FAIL_REWARD_DEFAULT = 0.0;
+
 
     @Builder.Default
     public int maxNofSteps= MAX_NOF_STEPS_DEFAULT;
     @Builder.Default
-    public double nonTerminalReward=NON_TERMINAL_REWARD;
+    public double nonFailReward = NON_FAIL_REWARD_DEFAULT;
+    @Builder.Default
+    public double failReward= FAIL_REWARD_DEFAULT;
 
     public static EnvironmentCartPole newDefault() {
         return EnvironmentCartPole.builder().build();
@@ -108,7 +112,7 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
                 .theta(theta).x(x).thetaDot(thetaDot).xDot(xDot).nofSteps(nofSteps).build());
         boolean isFail=isFailsState(newState);
         boolean isTerminalState=isTerminalState(newState);
-        double reward = (isFailsState(newState))?0:nonTerminalReward;
+        double reward = (isFailsState(newState))?failReward: nonFailReward;
 
         return StepReturnGeneric.<CartPoleVariables>builder()
                 .newState(newState)

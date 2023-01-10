@@ -181,7 +181,6 @@ public class MonteCarloTreeCreator<S,A> {
         return !isChildAddedEarlier && !isChildToDeep;
     }
 
-    //todo apply discountFactorSimulation
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {

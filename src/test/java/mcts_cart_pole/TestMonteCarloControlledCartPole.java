@@ -61,12 +61,8 @@ public class TestMonteCarloControlledCartPole {
                 .x(X_INIT)
                 .xDot(X_DOT_INIT)
                 .build());
-        stateLeaningRight = new StateCartPole(CartPoleVariables.builder()
-                .theta(EnvironmentCartPole.THETA_THRESHOLD_RADIANS*0.75)
-                .thetaDot(THETA_DOT_INIT)
-                .x(X_INIT)
-                .xDot(X_DOT_INIT)
-                .build());
+        stateLeaningRight = stateUpRight.copy();
+        stateLeaningRight.getVariables().theta=EnvironmentCartPole.THETA_THRESHOLD_RADIANS*0.75;
         monteCarloTreeCreator=MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()
                 .environment(environment)
                 .startState(stateUpRight)
