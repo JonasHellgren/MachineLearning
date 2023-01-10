@@ -6,7 +6,7 @@ import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
+import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
@@ -28,7 +28,7 @@ public class TestMockedMemoryFor5times15Grid {
 
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentShip environment;
-    NodeValueMemoryInterface<ShipVariables> nodeValueMemory;
+    MemoryInterface<ShipVariables> nodeValueMemory;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
 

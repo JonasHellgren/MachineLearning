@@ -57,7 +57,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
                 .weightMemoryValue(1.0)
                 .weightReturnsSimulation(1.0)
                 .nofSimulationsPerNode(10)
-                .coefficientExploitationExploration(1)
+                .coefficientExploitationExploration(0.1)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()

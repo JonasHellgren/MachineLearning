@@ -3,10 +3,9 @@ package monte_carlo_tree_search.domains.cart_pole;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 import monte_carlo_tree_search.swing.CartPoleGraphics;
@@ -21,7 +20,7 @@ public class CartPoleRunner {
     MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited;
     CartPoleGraphics graphics;
-    CartPoleStateValueMemory<CartPoleVariables> memory;
+    NetworkMemoryInterface<CartPoleVariables> memory;
     int nofSteps;
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,
@@ -31,7 +30,7 @@ public class CartPoleRunner {
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch,
-                          CartPoleStateValueMemory<CartPoleVariables> memory,
+                          NetworkMemoryInterface<CartPoleVariables> memory,
                           int nofSteps) {
         this.mcForSearch = mcForSearch;
         this.memory=memory;

@@ -1,7 +1,6 @@
 package monte_carlo_tree_search.classes;
 
-import lombok.SneakyThrows;
-import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
+import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Set;
  * Memory based on hash map for storing state values
  */
 
-public class NodeValueMemoryHashMap<SSV> implements NodeValueMemoryInterface<SSV> {
+public class NodeValueMemoryHashMap<SSV> implements MemoryInterface<SSV> {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
@@ -42,18 +41,6 @@ public class NodeValueMemoryHashMap<SSV> implements NodeValueMemoryInterface<SSV
         return memory.getOrDefault(state.getVariables().hashCode(), DEFAULT_VALUE);
     }
 
-    @SneakyThrows
-    @Override
-    public void save(String fileName) {
-        throw new NoSuchMethodException();
-    }
-
-    @SneakyThrows
-    @Override
-    public void load(String fileName) {
-        throw new NoSuchMethodException();
-
-    }
 
     @Override
     public String toString() {

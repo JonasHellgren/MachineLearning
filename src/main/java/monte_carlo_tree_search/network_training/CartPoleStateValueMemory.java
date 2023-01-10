@@ -2,14 +2,13 @@ package monte_carlo_tree_search.network_training;
 
 import common.Conditionals;
 import common.ListUtils;
-import common.MathUtils;
 import common.ScalerLinear;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
-import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
+import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.jetbrains.annotations.NotNull;
 import org.neuroph.core.NeuralNetwork;
@@ -28,7 +27,7 @@ import java.util.List;
  */
 
 @Getter
-public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<SSV> {
+public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV> {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
@@ -91,6 +90,7 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
         throw new NoSuchMethodException("Not defined/needed - use learn instead");
     }
 
+    @Override
     public double getAverageValueError(ReplayBuffer<SSV, Integer> buffer) {
         List<Double> errors=new ArrayList<>();
         for (Experience<SSV, Integer> e : buffer.getBuffer()) {
@@ -131,11 +131,12 @@ public class CartPoleStateValueMemory<SSV> implements NodeValueMemoryInterface<S
     }
 
 
-
+    @Override
     public void save(String fileName)  {
         neuralNetwork.save(fileName);
     }
 
+    @Override
     public void load(String fileName) {
         neuralNetwork = MultiLayerPerceptron.createFromFile(fileName);
     }

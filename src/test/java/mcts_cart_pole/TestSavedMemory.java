@@ -2,7 +2,7 @@ package mcts_cart_pole;
 
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
-import monte_carlo_tree_search.generic_interfaces.NodeValueMemoryInterface;
+import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 import org.junit.Assert;
@@ -15,11 +15,11 @@ public class TestSavedMemory {
     private static final int EXPECTED_AT_ALL_ZERO = 100;
     private static final int EXPECTED_ALL_MAX_POS = 0;
 
-    NodeValueMemoryInterface<CartPoleVariables> memory;
+    NetworkMemoryInterface<CartPoleVariables> memory;
 
     @Before
     public void init() {
-        memory=new CartPoleStateValueMemory<>();
+        memory= new CartPoleStateValueMemory<>();
         memory.load(FILE);
     }
 

@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.models_space.ShipActionSet;
-import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -47,7 +45,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
     StateInterface<SSV> startState;
     MonteCarloSettings<SSV,AV> settings;
     ActionInterface<AV> actionTemplate;
-    NodeValueMemoryInterface<SSV> memory;
+    MemoryInterface<SSV> memory;
 
     NodeInterface<SSV,AV> nodeRoot;
     TreeInfoHelper<SSV,AV> tih;
@@ -61,7 +59,7 @@ public class MonteCarloTreeCreator<SSV,AV> {
                                                  @NonNull StateInterface<SSV> startState,
                                                  @NonNull MonteCarloSettings<SSV,AV> monteCarloSettings,
                                                  @NonNull ActionInterface<AV> actionTemplate,
-                                                 NodeValueMemoryInterface<SSV> memory) {
+                                                 MemoryInterface<SSV> memory) {
         MonteCarloTreeCreator<SSV,AV> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;

@@ -199,19 +199,23 @@ testa sparat nät x
 CartPoleStateValueMemory(int maxNofSteps)  x
 RunCartPoleAlphaZeroLearningAndSearch  x
 plotta felet nn träning  x
+PersistentNodeValueMemoryInterface extends NodeValueMemoryInterface
+CartPoleStateValueMemory implements PersistentNodeValueMemoryInterface
+RunCartPoleAlphaZero  PersistentNodeValueMemoryInterface memory=...
 plotta value convergera
 maxQ animering till memory value
 ytteligare label animering root node value
+.simulationPolicy(CartPolePolicies.newEqualProbability()) -> newHighestNextStateValue
 
 studera state values efter backup när minne används
-kan error baserat stopp criteri fås?
 tänka igenom defensive backup
 apply discountFactorSimulation
-gör om cart pole reward - stort negative vid fail annars noll
+gör alternativ cart pole reward - stort negative vid fail annars noll
 TestMonteCarloControlledCartPoleModifiedReward
 
 SSV,AV -> s, A
 RunCartPoleAlphaZeroTD - använda TD state learning
+kan error baserat stopp criteri fås?
 
 NodeInterface har för många metoder - interfgace segregation
 många iteration få noder
