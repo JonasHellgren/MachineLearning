@@ -115,13 +115,11 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     private void updateRootvalueList() {
-        List<Double> avs=new ArrayList<>();
-        for(A a:actionTemplate.applicableActions()) {
-            actionTemplate.setValue(a);
-            avs.add(nodeRoot.getActionValue(actionTemplate));
-        }
-        rootValueList.add(ListUtils.findMax(avs).orElse(0));
+        double maxValue = NodeInfoHelper.valueNode(actionTemplate, nodeRoot);
+        rootValueList.add(maxValue);
     }
+
+
 
 
     public MonteCarloSearchStatistics<S,A> getStatistics() {

@@ -1,5 +1,6 @@
 package mcts_cart_pole_runner;
 
+import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -8,7 +9,8 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class RunCartPoleOnlySearchMinusOneRewardAtFail {
     private static final int NOF_STEPS = 6000;
@@ -23,7 +25,7 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
         state.getVariables().x=EnvironmentCartPole.X_TRESHOLD*0.75;
         state.getVariables().xDot=EnvironmentCartPole.X_DOT_THRESHOLD*0.2;
 
-        TwoPanelsPlotter plotter=new TwoPanelsPlotter("Value","Not used","Step");
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Value","Not used"),"Step");
         CartPoleRunner cpr=new CartPoleRunner(monteCarloTreeCreator,NOF_STEPS,plotter);
         cpr.run(state);
 

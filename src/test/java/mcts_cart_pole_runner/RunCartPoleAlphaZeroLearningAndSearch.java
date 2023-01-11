@@ -1,4 +1,5 @@
 package mcts_cart_pole_runner;
+import common.MultiplePanelsPlotter;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.cart_pole.*;
@@ -6,6 +7,8 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
+
+import java.util.Arrays;
 
 public class RunCartPoleAlphaZeroLearningAndSearch {
     private static final int MAX_NOF_STEPS_IN_EVALUATION = Integer.MAX_VALUE;
@@ -18,7 +21,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
         memory.load(FILE);
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
 
-        TwoPanelsPlotter plotter=new TwoPanelsPlotter("rootValue","not used","Iteration");
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("rootValue","not used"),"Iteration");
         CartPoleRunner cpr = new CartPoleRunner(mcForSearch, memory, MAX_NOF_STEPS_IN_EVALUATION,plotter);
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
         cpr.run(state);

@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import common.ListUtils;
+import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
@@ -12,6 +13,7 @@ import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 import monte_carlo_tree_search.swing.CartPoleGraphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Used to run cart pole environment using MCTS and pre-defined memory.
@@ -25,7 +27,7 @@ public class CartPoleRunner {
     CartPoleGraphics graphics;
     NetworkMemoryInterface<CartPoleVariables> memory;
     int nofSteps;
-    TwoPanelsPlotter plotter;
+    MultiplePanelsPlotter plotter;
 
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
@@ -35,7 +37,7 @@ public class CartPoleRunner {
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           int nofSteps,
-                          TwoPanelsPlotter plotter) {
+                          MultiplePanelsPlotter plotter) {
         this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps,plotter);
     }
 
@@ -49,7 +51,7 @@ public class CartPoleRunner {
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           NetworkMemoryInterface<CartPoleVariables> memory,
                           int nofSteps,
-                          TwoPanelsPlotter plotter) {
+                          MultiplePanelsPlotter plotter) {
         this.mcForSearch = mcForSearch;
         this.memory=memory;
         this.nofSteps = nofSteps;
@@ -69,7 +71,8 @@ public class CartPoleRunner {
             mcForSearch.run();
 
             if (plotter!=null) {
-                plotter.plot(mcForSearch.getRootValueList(), new ArrayList<>());
+                mcForSearch.getStatistics().getNofNodes();
+                plotter.plot(Arrays.asList(mcForSearch.getRootValueList(), new ArrayList<>()));
             }
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();
             StepReturnGeneric<CartPoleVariables> sr = environmentNotStepLimited.step(actionCartPole, state);

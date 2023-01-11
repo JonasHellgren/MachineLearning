@@ -1,6 +1,7 @@
 package mcts_cart_pole_runner;
 
 import common.Conditionals;
+import common.MultiplePanelsPlotter;
 import common.RandUtils;
 import common.ScalerLinear;
 import lombok.extern.java.Log;
@@ -18,6 +19,7 @@ import monte_carlo_tree_search.swing.CartPoleGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -124,8 +126,8 @@ public class RunCartPoleAlphaZero {
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {
-        TwoPanelsPlotter plotter=new TwoPanelsPlotter("Error","Return","Step");
-        plotter.plot(learningErrors,returns);
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Error","Return"),"Step");
+        plotter.plot(Arrays.asList(learningErrors,returns));
     }
 
     private static void renderGraphics(NetworkMemoryInterface<CartPoleVariables> memory,
