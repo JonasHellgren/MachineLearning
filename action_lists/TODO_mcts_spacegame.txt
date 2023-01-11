@@ -223,11 +223,13 @@ plotta root value RunCartPoleOnlySearchMinusOneRewardAtFail  x
 MultiplePanelsPlotter  x
 tar simulate hänsyn till max tree depth  x
 RunCartPolePretrainedMemoryMinusOneRewardAtFail x
-RunCartPoleOnlySearchMinusOneRewardAtFail få stabil
+
+alla tester
+clean up
+
 
 RunCartPoleAlphaZeroTD - använda TD state learning
 kan error baserat stopp criteri fås?
-
 NodeInterface har för många metoder - interfgace segregation
 många iteration få noder
 cpuTimer buggar ibland  - nano sec istaället?

@@ -46,7 +46,6 @@ public class MultiplePanelsPlotter {
             for (int i = 0; i < nofPanels ; i++) {
                 XYSeries series1 = defineDataSeries(listOfTrajectories.get(i));
                 panels.get(i).setChartDataFromSeries(series1);
-
             }
         }
     }
