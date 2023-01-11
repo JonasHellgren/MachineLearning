@@ -95,8 +95,11 @@ public class SimulationReturnsExtractor<S,A> {
 
     /**
      *    nodesOnPath = (r)  -> (0) -> (1) ->  (2) ->  (3) ->  (4)
-     *    node i will have discount of discountFactor^(nofNodesOnPath-ni-1)
+     *    node i will have discount of discountFactor^(nofNodesOnPath-ni-1)  //todo remove
      *    so for this example with discountFactor=0.9 => discount (4) is 0.9^(5-4-1)=1 and for (0) it is 0.9^(5-0-1) = 0.6
+     *
+     *   node i will have discount of discountFactor^ni
+     *   so for this example with discountFactor=0.9 => discount (0) is 0.9^0=1 and for (4) it is 0.9^4 = 0.6
      */
 
     private List<Double> getReturns(double singleReturn, double discountFactor) {
@@ -104,7 +107,8 @@ public class SimulationReturnsExtractor<S,A> {
         List<Double> discounts=new ArrayList<>();
         for (int ni = 0; ni < nofNodesOnPath ; ni++) {
             returnsSimulation.add(singleReturn);
-            discounts.add(Math.pow(discountFactor,(nofNodesOnPath-ni-1)));
+            //discounts.add(Math.pow(discountFactor,(nofNodesOnPath-ni-1)));  //todo remove
+            discounts.add(Math.pow(discountFactor,ni));
         }
         return ListUtils.elementProduct(returnsSimulation,discounts);
     }

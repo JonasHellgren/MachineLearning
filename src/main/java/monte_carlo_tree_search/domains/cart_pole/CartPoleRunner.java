@@ -28,14 +28,18 @@ public class CartPoleRunner {
     TwoPanelsPlotter plotter;
 
 
-    public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,
-                          Integer> mcForSearch,
+    public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           int nofSteps) {
         this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps,null);
     }
 
-    public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,
-            Integer> mcForSearch,
+    public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
+                          int nofSteps,
+                          TwoPanelsPlotter plotter) {
+        this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps,plotter);
+    }
+
+    public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           NetworkMemoryInterface<CartPoleVariables> memory,
                           int nofSteps) {
         this(mcForSearch,memory,nofSteps,null);

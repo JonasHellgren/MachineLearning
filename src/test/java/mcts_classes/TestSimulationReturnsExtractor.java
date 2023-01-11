@@ -20,6 +20,10 @@ public class TestSimulationReturnsExtractor {
     private static final double DELTA = 0.1;
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 0.9;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
+    private static final int INDEX_0 = 0;
+    private static final int INDEX_1 = 1;
+    private static final int INDEX_2 = 2;
+
     List<ShipActionSet> actionsOnPath = Arrays.asList(ShipActionSet.up, ShipActionSet.up);
     SimulationResults simulationResults;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
@@ -48,11 +52,7 @@ public class TestSimulationReturnsExtractor {
 
         System.out.println("values = " + values);
 
-        assertAll(
-                () -> assertEquals(g,values.get(values.size()-1), DELTA),
-                () -> assertEquals(g*DISCOUNT_FACTOR_SIMULATION_NORMAL,values.get(values.size()-2), DELTA),
-                () -> assertEquals(g*Math.pow(DISCOUNT_FACTOR_SIMULATION_NORMAL,2),values.get(values.size()-3), DELTA)
-        );
+        assertValues(g,DISCOUNT_FACTOR_SIMULATION_NORMAL, values);
     }
 
 
@@ -66,12 +66,10 @@ public class TestSimulationReturnsExtractor {
 
         System.out.println("values = " + values);
 
-        assertAll(
-                () -> assertEquals(g1,values.get(values.size()-1), DELTA),
-                () -> assertEquals(g1*DISCOUNT_FACTOR_SIMULATION_NORMAL,values.get(values.size()-2), DELTA),
-                () -> assertEquals(g1*Math.pow(DISCOUNT_FACTOR_SIMULATION_NORMAL,2),values.get(values.size()-3), DELTA)
-        );
+        assertValues(g1,DISCOUNT_FACTOR_SIMULATION_NORMAL, values);
     }
+
+
 
     @Test public void backupTwoSimulationsResultsOneIsFail() {
         double g1=1, g2=11;  //only g1 is backed up due to fail simulation is rejected
@@ -83,11 +81,7 @@ public class TestSimulationReturnsExtractor {
 
         System.out.println("values = " + values);
 
-        assertAll(
-                () -> assertEquals(g1,values.get(values.size()-1), DELTA),
-                () -> assertEquals(g1*DISCOUNT_FACTOR_SIMULATION_NORMAL,values.get(values.size()-2), DELTA),
-                () -> assertEquals(g1*Math.pow(DISCOUNT_FACTOR_SIMULATION_NORMAL,2),values.get(values.size()-3), DELTA)
-        );
+        assertValues(g1,DISCOUNT_FACTOR_SIMULATION_NORMAL, values);
     }
 
     @Test public void backupTwoSimulationsResultsBothAreFail() {
@@ -100,15 +94,17 @@ public class TestSimulationReturnsExtractor {
 
         System.out.println("values = " + values);
 
+        assertValues(g1,DISCOUNT_FACTOR_SIMULATION_DEFENSIVE, values);
+
+    }
+    private void assertValues(double g1, double DF, List<Double> values) {
         assertAll(
-                () -> assertEquals(g1,
-                        values.get(values.size()-1), DELTA),
-                () -> assertEquals(g1*DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,
-                        values.get(values.size()-2), DELTA),
-                () -> assertEquals(g1*Math.pow(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE,2),
-                        values.get(values.size()-3), DELTA)
+                () -> assertEquals(g1,values.get(INDEX_0), DELTA),
+                () -> assertEquals(g1*DF,values.get(INDEX_1), DELTA),
+                () -> assertEquals(g1*Math.pow(DF,2),values.get(INDEX_2), DELTA)
         );
     }
+
     private SimulationReturnsExtractor<ShipVariables, ShipActionSet> getBackupModifierFromSimulations(SimulationResults simulationResults) {
         return SimulationReturnsExtractor.<ShipVariables, ShipActionSet>builder()
                 .nofNodesOnPath(actionsOnPath.size()+1)
