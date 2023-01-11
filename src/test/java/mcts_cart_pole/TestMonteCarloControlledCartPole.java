@@ -31,6 +31,7 @@ public class TestMonteCarloControlledCartPole {
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;
     private static final int MAX_TREE_DEPTH=100;
     private static final int TIME_BUDGET_MILLI_SECONDS = 100;
+    private static final int START_DEPTH = 0;
 
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
@@ -74,7 +75,7 @@ public class TestMonteCarloControlledCartPole {
     @Test
     public void simulateFromUpRightShallInAverageGiveMoreThan10Steps() {
         SimulationResults simulationResults=
-                monteCarloTreeCreator.simulate(stateUpRight.copy());
+                monteCarloTreeCreator.simulate(stateUpRight.copy(), START_DEPTH);
         List<Double> avgList= new ArrayList<>(simulationResults.getReturnsForFailing());
         double averageReturn=avgList.stream().mapToDouble(val -> val).average().orElse(0.0);
         System.out.println("averageReturn = " + averageReturn);

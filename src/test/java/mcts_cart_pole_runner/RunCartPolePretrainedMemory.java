@@ -1,5 +1,6 @@
 package mcts_cart_pole_runner;
 
+import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -12,13 +13,19 @@ import monte_carlo_tree_search.network_training.MemoryTrainerHelper;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
+/**
+ * small alphaBackupDefensive seems to give worse convergence
+ */
+
 public class RunCartPolePretrainedMemory {
     private static final int BUFFER_SIZE = 1000;
     private static final int BATCH_SIZE = 30;
-    private static final double  MAX_ERROR = 5e-5;
+    private static final double MAX_ERROR = 5e-5;
     private static final int MAX_EPOCHS = 50_000;
     private static final int NOF_STEPS = 1000;
-    private static final int TIME_BUDGET_MILLI_SECONDS = 50;
+    private static final int TIME_BUDGET_MILLI_SECONDS = 20;
 
 
     @SneakyThrows
@@ -31,7 +38,9 @@ public class RunCartPolePretrainedMemory {
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
         StateInterface<CartPoleVariables> state = getStartState();
-        CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,NOF_STEPS);
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(
+                Arrays.asList("root value","nofNodes","maxDepth"),"Iteration");
+        CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,NOF_STEPS,plotter);
         cpr.run(state);
 
     }
@@ -56,14 +65,15 @@ public class RunCartPolePretrainedMemory {
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
                 .maxTreeDepth(50)
-                .alphaBackupNormal(0.9)
-                .alphaBackupDefensive(0.1)
+                .alphaBackupNormal(1)
+                .alphaBackupDefensive(0.99)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS)
                 .weightReturnsSteps(0)
                 .weightMemoryValue(1)
                 .weightReturnsSimulation(0)
                 .nofSimulationsPerNode(0)
-                .coefficientExploitationExploration(1)
+                .coefficientExploitationExploration(0.9)
+                .isCreatePlotData(true)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()

@@ -2,10 +2,8 @@ package common;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -28,8 +26,31 @@ public class ListUtils {
                 .average();
     }
 
-    public static double findEnd(List<Double> list) {
-        return list.get(list.size()-1);
+
+    public static <T> Optional<T> findEnd(List<T> list) {
+        if (list.size()==0) {
+            return Optional.empty();
+        }
+        return Optional.of(list.get(list.size()-1));
+    }
+
+//todo fix warning
+    public static <T,V> List<V> getListOfField(List<T> list, String fieldName) throws NoSuchFieldException {
+
+        if (list.size()==0) {
+            return new ArrayList<>();
+        }
+
+        Field field = list.get(0).getClass().getDeclaredField(fieldName);
+        return list.stream().map(e -> {
+            try {
+                return (V) field.get(e);
+            } catch (IllegalAccessException illegalAccessException) {
+                illegalAccessException.printStackTrace();
+            }
+            return null;
+
+        }).collect(Collectors.toList());
     }
 
     public static List<Double> sumListElements(List<Double> listA, List<Double> listB) {

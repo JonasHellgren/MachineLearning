@@ -221,8 +221,9 @@ TestCartPoleEnvironmentMinusOneRewardAtFail x
 SimulationReturnsExtractor getReturns känns fel  x
 plotta root value RunCartPoleOnlySearchMinusOneRewardAtFail  x
 MultiplePanelsPlotter  x
-tar simulate hänsyn till max tree depth
+tar simulate hänsyn till max tree depth  x
 RunCartPolePretrainedMemoryMinusOneRewardAtFail
+RunCartPoleOnlySearchMinusOneRewardAtFail få stabil
 
 RunCartPoleAlphaZeroTD - använda TD state learning
 kan error baserat stopp criteri fås?

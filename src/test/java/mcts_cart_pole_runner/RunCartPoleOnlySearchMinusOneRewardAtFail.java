@@ -25,7 +25,8 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
         state.getVariables().x=EnvironmentCartPole.X_TRESHOLD*0.75;
         state.getVariables().xDot=EnvironmentCartPole.X_DOT_THRESHOLD*0.2;
 
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Value","Not used"),"Step");
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(
+                Arrays.asList("root value","nofNodes","depthBestPath","maxDepth"),"Iteration");
         CartPoleRunner cpr=new CartPoleRunner(monteCarloTreeCreator,NOF_STEPS,plotter);
         cpr.run(state);
 

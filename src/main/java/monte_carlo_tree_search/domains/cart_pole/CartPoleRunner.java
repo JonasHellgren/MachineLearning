@@ -5,6 +5,7 @@ import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.classes.TreePlotData;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
@@ -70,19 +71,27 @@ public class CartPoleRunner {
             mcForSearch.setStartState(state);
             mcForSearch.run();
 
-            if (plotter!=null) {
-                mcForSearch.getStatistics().getNofNodes();
-                plotter.plot(Arrays.asList(mcForSearch.getRootValueList(), new ArrayList<>()));
-            }
+            doPlotting();
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();
             StepReturnGeneric<CartPoleVariables> sr = environmentNotStepLimited.step(actionCartPole, state);
             state.setFromReturn(sr);
             double value = memory.read(state);
-            double rootNodeValue= ListUtils.findEnd(mcForSearch.getRootValueList());
+            double rootNodeValue= ListUtils.findEnd(mcForSearch.getPlotData()).orElse(TreePlotData.builder().build()).maxValue;
             graphics.render(state, i, value,rootNodeValue, actionCartPole.getValue());
             isFail = sr.isFail;
             i++;
         } while (i < nofSteps && !isFail);
+    }
+
+
+    private void doPlotting() throws NoSuchFieldException {
+        if (plotter!=null) {
+            plotter.plot(Arrays.asList(
+                    ListUtils.getListOfField(mcForSearch.getPlotData(),"maxValue"),
+                    ListUtils.getListOfField(mcForSearch.getPlotData(),"nofNodes"),
+                    ListUtils.getListOfField(mcForSearch.getPlotData(),"maxDepth")
+            ));
+        }
     }
 
 }

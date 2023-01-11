@@ -15,6 +15,7 @@ public class MonteCarloSettings<S,A> {
     private static final int NOF_ITERATIONS_DEFAULT=10_000;
     private static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
+    private static final int MAX_SIMULATION_DEPTH_DEFAULT=Integer.MAX_VALUE;
     private static final long TIME_BUDGET_DEFAULT=1000;
     private static final int NOF_SIMULATIONS_DEFAULT=0;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFAULT = 1;  //used in simulation
@@ -28,6 +29,7 @@ public class MonteCarloSettings<S,A> {
     private static final double WEIGHT_SIMULATION_DEFAULT =1;
     private static final double WEIGHT_MEMORY_DEFAULT =1;
     private static final boolean DEFENSIVE_DEFAULT=true;
+    private static final boolean IS_PLOT_DEFAULT = false;
 
     @Builder.Default
     int maxNofIterations =NOF_ITERATIONS_DEFAULT;
@@ -35,6 +37,8 @@ public class MonteCarloSettings<S,A> {
     double coefficientExploitationExploration =C_DEFAULT;
     @Builder.Default
     int maxTreeDepth = MAX_TREE_DEPTH_DEFAULT;
+    @Builder.Default
+    int maxSimulationDepth = MAX_SIMULATION_DEPTH_DEFAULT;
     @Builder.Default
     long timeBudgetMilliSeconds = TIME_BUDGET_DEFAULT;
     @Builder.Default
@@ -67,6 +71,7 @@ public class MonteCarloSettings<S,A> {
     double weightMemoryValue=WEIGHT_MEMORY_DEFAULT;
     @Builder.Default
     boolean isDefensiveBackup=DEFENSIVE_DEFAULT;
-
+    @Builder.Default
+    boolean isCreatePlotData= IS_PLOT_DEFAULT;
 
 }

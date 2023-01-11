@@ -19,6 +19,7 @@ import java.util.List;
 //todo, make generic
 @Log
 public class MemoryTrainerHelper {
+    private static final int START_DEPTH = 0;
     int miniBatchSize;
     int bufferSize;
     double maxError;
@@ -37,7 +38,7 @@ public class MemoryTrainerHelper {
 
         for (int i = 0; i < bufferSize; i++) {
             StateCartPole stateRandom=StateCartPole.newRandom();
-            SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom);
+            SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom, START_DEPTH);
             double averageReturn = getAverageReturn(simulationResults);
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())

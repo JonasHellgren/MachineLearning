@@ -54,7 +54,7 @@ public class MonteCarloTreeCreator<S,A> {
     CpuTimer cpuTimer;
     int nofIterations;
     List<ActionInterface<A>> actionsToSelected;
-    List<Double> rootValueList;
+    List<TreePlotData> plotData;
 
     @Builder
     private static <S,A> MonteCarloTreeCreator<S,A>  newMCTC(
@@ -84,42 +84,48 @@ public class MonteCarloTreeCreator<S,A> {
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
         mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
-        mctc.rootValueList =new ArrayList<>();
+        mctc.plotData =new ArrayList<>();
     }
 
     public NodeInterface<S,A> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
 
         int i;
-        rootValueList.clear();
+        plotData.clear();
         ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeInterface<S,A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
-                SimulationResults simulationResults = simulate(sr.newState);
+                SimulationResults simulationResults = simulate(sr.newState,nodeSelected.getDepth());
                 backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  // actionInSelected is empty <=> all tested
                 manageCaseWhenAllActionsAreTested(nodeSelected);
             }
 
-            updateRootvalueList();
+            updatePlotData();
             if (cpuTimer.isTimeExceeded()) {
                 log.fine("Time exceeded");
                 break;
             }
         }
+
+
         logStatistics(i);
         return nodeRoot;
     }
 
-    private void updateRootvalueList() {
-        double maxValue = NodeInfoHelper.valueNode(actionTemplate, nodeRoot);
-        rootValueList.add(maxValue);
+    private void updatePlotData() {
+        if (settings.isCreatePlotData) {
+            TreePlotData data = TreePlotData.builder()
+                    .maxValue(NodeInfoHelper.valueNode(actionTemplate, nodeRoot))
+                    .nofNodes(tih.nofNodes())
+                    .maxDepth(tih.maxDepth())
+                    .build();
+            plotData.add(data);
+        }
     }
-
-
 
 
     public MonteCarloSearchStatistics<S,A> getStatistics() {
@@ -180,12 +186,16 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
+       return simulate(stateAfterApplyingActionInSelectedNode,0);
+    }
+
+    public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode,
+                                      int startDepth) {
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturnGeneric<S>> stepResults =
-                    stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), settings.simulationPolicy);
+                    stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
             StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
-          //  double sumOfRewards = stepResults.stream().mapToDouble(r -> r.reward).sum();
             double sumOfRewards = ListUtils.discountedSum(
                     stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
                     settings.discountFactorSimulation);
@@ -243,15 +253,21 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     private List<StepReturnGeneric<S>> stepToTerminal(StateInterface<S> state,
-                                                        SimulationPolicyInterface<S, A> policy) {
+                                                      int startDepth) {
         List<StepReturnGeneric<S>> returns = new ArrayList<>();
+        SimulationPolicyInterface<S, A> policy=settings.simulationPolicy;
         StepReturnGeneric<S> stepReturn;
+        int depth=startDepth;
         do {
             ActionInterface<A> action = policy.chooseAction(state);
             stepReturn = environment.step(action, state);
             state.setFromReturn(stepReturn);
             returns.add(stepReturn);
-        } while (!stepReturn.isTerminal);
+            depth++;
+        } while (!stepReturn.isTerminal && depth<settings.maxSimulationDepth);
+      //  } while (!stepReturn.isTerminal);
+
+
         return returns;
     }
 
