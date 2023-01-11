@@ -185,8 +185,8 @@ public class PanelCartPoleAnimation extends JPanel {
 
         drawPlot(g2d);
         textCarStates(g2d,cartPosition.x, theta, memoryValue);
-        labelMemoryValue.setText("maxQ:"+new DecimalFormat("#.##").format(memoryValue));
-        labelRootNodeValue.setText("rootNodeValue:"+new DecimalFormat("#.##").format(rootNodeValue));
+        labelMemoryValue.setText("memory value:"+new DecimalFormat("#.##").format(memoryValue));
+        labelRootNodeValue.setText("root value:"+new DecimalFormat("#.##").format(rootNodeValue));
 
     }
 

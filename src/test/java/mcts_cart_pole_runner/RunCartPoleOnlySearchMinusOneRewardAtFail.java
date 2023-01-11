@@ -46,7 +46,6 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(10)
-               // .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(1000)
                 .weightReturnsSimulation(1)
                 .weightReturnsSteps(0)

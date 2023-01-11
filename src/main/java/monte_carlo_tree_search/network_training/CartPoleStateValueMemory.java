@@ -45,6 +45,9 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     boolean isWarmedUp;
 
     public CartPoleStateValueMemory() {
+        this(0,EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT);
+    }
+    public CartPoleStateValueMemory(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.GAUSSIAN,  //happens to be adequate for this environment
                 INPUT_SIZE,
@@ -56,13 +59,13 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
         learningRule.setNeuralNetwork(neuralNetwork);
         learningRule.setMaxIterations(NOF_ITERATIONS);
         normalizer = new StateNormalizerCartPole<>();
-        createOutScalers(EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT);
+        createOutScalers(minOut, maxOut);
         isWarmedUp=false;
     }
 
-    public void createOutScalers(int maxNofSteps) {
-        scaleOutNormalizedToValue =new ScalerLinear(NET_OUT_MIN, NET_OUT_MAX,0, maxNofSteps);
-        scaleOutValueToNormalized =new ScalerLinear(0, maxNofSteps, NET_OUT_MIN, NET_OUT_MAX);
+    public void createOutScalers(double minOut, double maxOut) {
+        scaleOutNormalizedToValue =new ScalerLinear(NET_OUT_MIN, NET_OUT_MAX,minOut, maxOut);
+        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, NET_OUT_MIN, NET_OUT_MAX);
     }
 
     public void learn(List<Experience<SSV, Integer>> miniBatch) {

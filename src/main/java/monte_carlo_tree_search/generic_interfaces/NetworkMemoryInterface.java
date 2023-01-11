@@ -13,6 +13,6 @@ public interface NetworkMemoryInterface<SSV> extends MemoryInterface<SSV> {
     void learn(List<Experience<SSV, Integer>> miniBatch);
     MomentumBackpropagation getLearningRule();
     double getAverageValueError(List<Experience<SSV, Integer>> experienceList);
-    void createOutScalers(int maxNofSteps);
+    void createOutScalers(double minOut, double maxOut);
 
 }

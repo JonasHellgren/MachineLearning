@@ -222,7 +222,7 @@ SimulationReturnsExtractor getReturns känns fel  x
 plotta root value RunCartPoleOnlySearchMinusOneRewardAtFail  x
 MultiplePanelsPlotter  x
 tar simulate hänsyn till max tree depth  x
-RunCartPolePretrainedMemoryMinusOneRewardAtFail
+RunCartPolePretrainedMemoryMinusOneRewardAtFail x
 RunCartPoleOnlySearchMinusOneRewardAtFail få stabil
 
 RunCartPoleAlphaZeroTD - använda TD state learning
