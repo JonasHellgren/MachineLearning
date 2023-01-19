@@ -1,16 +1,13 @@
 package mcts_cell_charging;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.domains.models_battery_cell.*;
+import monte_carlo_tree_search.domains.battery_cell.*;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import org.apache.arrow.flatbuf.Int;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

@@ -6,7 +6,6 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.models_battery_cell.ActionCell;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 
 import java.util.ArrayList;

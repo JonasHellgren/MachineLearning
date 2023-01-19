@@ -2,7 +2,7 @@ package common;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.models_battery_cell.PlotPanel;
+import monte_carlo_tree_search.domains.battery_cell.PlotPanel;
 import org.jfree.data.xy.XYSeries;
 import javax.swing.*;
 import java.awt.*;
@@ -38,6 +38,8 @@ public class MultiplePanelsPlotter {
 
     @SneakyThrows
     public void plot(List<List<Double>> listOfTrajectories) {
+
+        log.info("Plot");
 
         if (listOfTrajectories.size()!=nofPanels) {
             log.warning("Nof trajectories does not match nof plot titles");

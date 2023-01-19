@@ -3,7 +3,6 @@ package monte_carlo_tree_search.domains.cart_pole;
 import common.MathUtils;
 import lombok.Builder;
 import lombok.ToString;
-import monte_carlo_tree_search.domains.models_battery_cell.CellVariables;
 
 @Builder
 @ToString

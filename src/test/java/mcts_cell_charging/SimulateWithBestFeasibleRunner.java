@@ -1,7 +1,7 @@
 package mcts_cell_charging;
 
 import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.domains.models_battery_cell.*;
+import monte_carlo_tree_search.domains.battery_cell.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
@@ -59,6 +59,7 @@ public class SimulateWithBestFeasibleRunner {
 
     }
 
+    //todo use MultiplePannelPlotter instead of CellResultsPlotter
     private static void doPlotting(List<EnvironmentCell.CellResults> resultsList, String frameTitle) {
         CellResultsPlotter plotter=new CellResultsPlotter(frameTitle, TIME_OUT);
         plotter.plot(resultsList);
