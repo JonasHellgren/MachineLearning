@@ -39,8 +39,6 @@ public class MultiplePanelsPlotter {
     @SneakyThrows
     public void plot(List<List<Double>> listOfTrajectories) {
 
-        log.info("Plot");
-
         if (listOfTrajectories.size()!=nofPanels) {
             log.warning("Nof trajectories does not match nof plot titles");
         } else

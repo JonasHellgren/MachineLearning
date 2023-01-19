@@ -38,6 +38,7 @@ public class RunCartPoleOnlySearch {
                 .weightReturnsSteps(0)
                 .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(0.1)
+                .isCreatePlotData(true)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()

@@ -86,6 +86,7 @@ public class CartPoleRunner {
 
     private void doPlotting() throws NoSuchFieldException {
         if (plotter!=null) {
+
             plotter.plot(Arrays.asList(
                     ListUtils.getListOfField(mcForSearch.getPlotData(),"maxValue"),
                     ListUtils.getListOfField(mcForSearch.getPlotData(),"nofNodes"),

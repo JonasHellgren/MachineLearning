@@ -21,7 +21,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
         memory.load(FILE);
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
 
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("rootValue","not used",""),"Iteration");
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("maxValue","nofNodes","maxDepth"),"Iteration");
         CartPoleRunner cpr = new CartPoleRunner(mcForSearch, memory, MAX_NOF_STEPS_IN_EVALUATION,plotter);
         StateInterface<CartPoleVariables> state = StateCartPole.newAllStatesAsZero();
         cpr.run(state);
@@ -47,6 +47,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
                 .weightReturnsSimulation(1.0)
                 .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(0.1)
+                .isCreatePlotData(true)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()

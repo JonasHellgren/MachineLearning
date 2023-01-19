@@ -26,7 +26,7 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
         state.getVariables().xDot=EnvironmentCartPole.X_DOT_THRESHOLD*0.2;
 
         MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(
-                Arrays.asList("root value","nofNodes","depthBestPath","maxDepth"),"Iteration");
+                Arrays.asList("root value","nofNodes","maxDepth"),"Iteration");
         CartPoleRunner cpr=new CartPoleRunner(monteCarloTreeCreator,NOF_STEPS,plotter);
         cpr.run(state);
 
@@ -55,6 +55,7 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
                 .discountFactorSimulation(DISCOUNT_FACTOR)
                 .discountFactorSimulationDefensive(0.1)
                 .coefficientExploitationExploration(0.1)
+                .isCreatePlotData(true)
                 .build();
 
         return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()
