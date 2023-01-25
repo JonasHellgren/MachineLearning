@@ -1,4 +1,4 @@
-package monte_carlo_tree_search.domains.battery_cell;
+package common;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
