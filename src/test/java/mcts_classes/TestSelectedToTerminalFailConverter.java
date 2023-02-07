@@ -73,8 +73,8 @@ public class TestSelectedToTerminalFailConverter {
         System.out.println("nodeSelected.orElseThrow() = " + nodeSelected.orElseThrow());
         System.out.println("nodeSelected2.orElseThrow() = " + nodeSelected2.orElseThrow());
 
-    //    Assert.assertFalse(nodeSelected.orElseThrow() instanceof NodeTerminalFail);
-     //   Assert.assertTrue(nodeSelected2.orElseThrow() instanceof NodeTerminalFail);  /todo
+        Assert.assertFalse(nodeSelected.orElseThrow() instanceof NodeTerminalFail);
+        Assert.assertTrue(nodeSelected2.orElseThrow() instanceof NodeTerminalFail);
 
     }
 
@@ -89,7 +89,7 @@ public class TestSelectedToTerminalFailConverter {
             StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
-            NodeWithChildrenInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal((StateShip) sr.newState, a);  //todo StateInterface
+            NodeWithChildrenInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal(sr.newState, a);  //todo StateInterface
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }

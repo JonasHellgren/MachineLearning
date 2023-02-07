@@ -56,8 +56,9 @@ public class TestTreeInfoHelper {
     @Test public void rewardOfStillInX2Y0IsBad() {
         NodeInterface<ShipVariables, ShipActionSet> node=tih.getNodeReachedForActions(actionsToSelected).get();
         System.out.println("node = " + node);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeCasted=(NodeWithChildrenInterface<ShipVariables, ShipActionSet>) node;
 
-      //  Assert.assertEquals(-EnvironmentShip.CRASH_COST,node.restoreRewardForAction(ActionShip.newStill()), DELTA_BIG);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,nodeCasted.restoreRewardForAction(ActionShip.newStill()), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {

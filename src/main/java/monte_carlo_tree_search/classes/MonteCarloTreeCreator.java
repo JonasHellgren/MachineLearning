@@ -20,22 +20,21 @@ import java.util.stream.Collectors;
 
 /***
  *   This class performs monte carlo tree search
- *
  *   Two vectors: List<Double> returnsSteps, List<Double> returnsSimulation, plays a central role
  *   One of them returnsSteps is derived from chooseActionAndExpand(). The other, returnsSimulation, is from simulate().
- *
+ * <p>
  *   Assume no weighting and the following example settings: returnsSteps=[-2,-1,0], returnsSimulation=[6,6,6]
  *   The values in the nodes of the selection path will be modified according to the sum of the vectors, i.e. [4,5,6]
- *
+ * <p>
  *   Depending on the properties of the action in selected node following logic is applied
- *
+ * <p>
  *   actionInSelected is present (there is a valid action)
  *      => applyActionAndExpand, simulate, backPropagate
  *   actionInSelected is empty & AllChildrenInSelectedAreFail  (all actions are tested and leads to fail node)
  *      =>  convertSelectedNodeToFail
  *   actionInSelected is empty & not AllChildrenInSelectedAreFail  (all actions are tested but some is not fail)
  *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
- *
+ * <p>
  *  The parameter actionTemplate is needed as a "seed" to create a tree with unknown types.
  */
 
@@ -89,7 +88,7 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     public NodeWithChildrenInterface<S,A> run() throws StartStateIsTrapException {
-        setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
+        setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
 
         int i;
         plotData.clear();
