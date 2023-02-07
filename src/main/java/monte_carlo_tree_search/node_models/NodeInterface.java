@@ -10,21 +10,6 @@ import java.util.*;
  * A terminal node has no children and represents a terminal state, for ex reached goal.
  * A node is expandable if it represents a non-terminal state and if it has unvisited children.
  *
- *              NodeInterface
- *                  |
- *              NodeAbstract
- *               /    \
- *              /      \
- *   NodeNotTerminal    NodeTerminal (abstract)
- *                         /    \
- *                        /      \
- *           NodeTerminalFail   NodeTerminalNotFail
- *
- * This interface has many methods, can potentially be improved according to interface segregation principle.
- * Splitting into multiple interfaces does however require mayor refactoring and may give non clean type casts.
- * NodeWithChildrenInterface, implementing NodeInterface, is possible additional interface.
- * Would be like structure below.
- *
  *                                   NodeInterface
  *                                /        |     \
  *      NodeWithChildrenInterface  NodeAbstract    \
@@ -34,39 +19,60 @@ import java.util.*;
  *
  */
 
-public interface NodeInterface<SSV,AV> {
+public interface NodeInterface<SSV, AV> {
 
     String getName();
+
     ActionInterface<AV> getAction();
+
     StateInterface<SSV> getState();
+
     int getDepth();
+
     void setDepth(int depth);
-    Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
-    int nofChildNodes();
-    int getNofVisits();
-    List<NodeInterface<SSV,AV>> getChildNodes();  //todo NodeInt
-    double getActionValue(ActionInterface<AV> a);
+
+    default Optional<NodeInterface<SSV, AV>> getChild(ActionInterface<AV> action)  {
+        return Optional.empty();
+    }
+
+    default int nofChildNodes() {
+        return 0;
+    }
+
+    default int getNofVisits() {
+        return 0;
+    }
+
+    default List<NodeInterface<SSV, AV>> getChildNodes() {
+        return new ArrayList<>();
+    }
+
+    default double getActionValue(ActionInterface<AV> a) {
+        return 0;
+    }
+
     void printTree();
+
     boolean isNotTerminal();
+
     boolean isTerminalFail();
+
     boolean isTerminalNoFail();
 
 
-
-
-    static <SSV,AV> NodeNotTerminal<SSV,AV> newNotTerminal(StateInterface<SSV> s, ActionInterface<AV> action) {
+    static <SSV, AV> NodeNotTerminal<SSV, AV> newNotTerminal(StateInterface<SSV> s, ActionInterface<AV> action) {
         return new NodeNotTerminal<>(s, action);
     }
 
-    static <SSV,AV> NodeTerminalFail<SSV,AV>  newTerminalFail(StateInterface<SSV> s, ActionInterface<AV> action) {
-        return new NodeTerminalFail<SSV,AV>(s,action);
+    static <SSV, AV> NodeTerminalFail<SSV, AV> newTerminalFail(StateInterface<SSV> s, ActionInterface<AV> action) {
+        return new NodeTerminalFail<>(s, action);
     }
 
-    static <SSV,AV> NodeTerminalNotFail<SSV,AV>  newTerminalNotFail(StateInterface<SSV> s, ActionInterface<AV> action) {
-        return new NodeTerminalNotFail<SSV,AV>(s,action);
+    static <SSV, AV> NodeTerminalNotFail<SSV, AV> newTerminalNotFail(StateInterface<SSV> s, ActionInterface<AV> action) {
+        return new NodeTerminalNotFail<>(s, action);
     }
 
-    static <SSV,AV> NodeInterface<SSV,AV> newNode(StepReturnGeneric<SSV> stepReturn, ActionInterface<AV> action) {
+    static <SSV, AV> NodeInterface<SSV, AV> newNode(StepReturnGeneric<SSV> stepReturn, ActionInterface<AV> action) {
         if (!stepReturn.isTerminal) {
             return newNotTerminal(stepReturn.newState, action);
         } else if (stepReturn.isFail) {
@@ -80,11 +86,11 @@ public interface NodeInterface<SSV,AV> {
     /**
      * Warning, only copies node, not sub nodes
      */
-    static <SSV,AV> NodeInterface<SSV,AV> copy(NodeInterface<SSV,AV>  otherNode) {
+    static <SSV, AV> NodeInterface<SSV, AV> copy(NodeInterface<SSV, AV> otherNode) {
         if (otherNode instanceof NodeNotTerminal) {
             return new NodeNotTerminal<>((NodeNotTerminal<SSV, AV>) otherNode);
         } else if (otherNode instanceof NodeTerminalFail) {
-            return new NodeTerminalFail<>((NodeTerminalFail<SSV,AV> ) otherNode);
+            return new NodeTerminalFail<>((NodeTerminalFail<SSV, AV>) otherNode);
         } else {
             return new NodeTerminalNotFail<>((NodeTerminalNotFail<SSV, AV>) otherNode);
         }

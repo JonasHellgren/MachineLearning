@@ -7,8 +7,7 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -39,6 +38,10 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
         this.depth = depth;
     }
 
+    public NodeAbstract(NodeAbstract<SSV,AV> node) {
+        this(node.name,node.action,node.state,node.depth);
+    }
+
     String nameAndDepthAsString() {
         return BLANK_SPACE.repeat(Math.max(0, depth)) + name+","+action+",";
     }
@@ -54,7 +57,6 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
     public boolean isTerminalNoFail() {
         return (this instanceof NodeTerminalNotFail);
     }
-
 
 
     @Override

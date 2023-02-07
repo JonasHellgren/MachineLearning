@@ -226,8 +226,8 @@ RunCartPolePretrainedMemoryMinusOneRewardAtFail x
 alla tester x
 clean up x
 
-NodeInterface har för många metoder - interface segregation
-
+NodeInterface har för många metoder - interface segregation  x
+NodeTerminal bort
 testMakeSelectedTerminal  bökar
 rewardOfStillInX2Y0IsBad bökar
 elevator miljö
