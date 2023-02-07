@@ -6,6 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.classes.NodeSelector;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import org.junit.Test;
 public class TestNodeSelector {
 
     private static final double DELTA = 0.1;
-    NodeInterface<ShipVariables, ShipActionSet> nodeRoot;
+    NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot;
     NodeInterface<ShipVariables, ShipActionSet> chUp ;
     NodeInterface<ShipVariables, ShipActionSet> chStill;
     NodeInterface<ShipVariables, ShipActionSet> chDown;
@@ -97,7 +98,7 @@ public class TestNodeSelector {
 
     }
 
-    private void addExperience(NodeInterface<ShipVariables, ShipActionSet> node,
+    private void addExperience(NodeWithChildrenInterface<ShipVariables, ShipActionSet> node,
                                ActionInterface<ShipActionSet> action, double G) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);

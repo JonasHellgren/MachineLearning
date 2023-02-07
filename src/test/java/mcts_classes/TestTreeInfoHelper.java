@@ -7,6 +7,7 @@ import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class TestTreeInfoHelper {
     SpaceGrid spaceGrid;
     EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
-    NodeInterface<ShipVariables, ShipActionSet> nodeRoot;
+    NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot;
     List<ActionInterface<ShipActionSet>> actionsToSelected;
     ActionInterface<ShipActionSet> actionInSelected;
     List<ActionInterface<ShipActionSet>> actions;
@@ -53,14 +54,14 @@ public class TestTreeInfoHelper {
     }
 
     @Test public void rewardOfStillInX2Y0IsBad() {
-        NodeInterface<ShipVariables, ShipActionSet> node=tih.getNodeReachedForActions(actionsToSelected).get();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> node=tih.getNodeReachedForActions(actionsToSelected).get();
         System.out.println("node = " + node);
 
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,node.restoreRewardForAction(ActionShip.newStill()), DELTA_BIG);
     }
 
     @Test public void nofNodesToSelectedIs2() {
-        List<NodeInterface<ShipVariables, ShipActionSet>> nodes=tih.getNodesOnPathForActions(actionsToSelected).get();
+        List<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> nodes=tih.getNodesOnPathForActions(actionsToSelected).get();
 
         nodes.forEach(System.out::println);
 
@@ -82,17 +83,17 @@ public class TestTreeInfoHelper {
 
     }
 
-    private NodeInterface<ShipVariables, ShipActionSet> createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState) {
+    private NodeWithChildrenInterface<ShipVariables, ShipActionSet> createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState) {
 
         StateShip state = rootState.copy();
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, ActionShip.newNA());
-        NodeInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, ActionShip.newNA());
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ActionInterface<ShipActionSet> a : actions) {
             StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
 
             parent.saveRewardForAction(a, sr.reward);
-            NodeInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal(sr.newState, a);
+            NodeWithChildrenInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal(sr.newState, a);
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }

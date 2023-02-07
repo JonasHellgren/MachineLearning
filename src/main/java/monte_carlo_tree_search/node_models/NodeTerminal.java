@@ -20,6 +20,7 @@ public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //tod
         super(node.name,node.action,node.state,node.depth);
     }
 
+    /*
     @Override
     @SneakyThrows
     public void addChildNode(NodeInterface<SSV,AV> node) {
@@ -36,6 +37,8 @@ public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //tod
         return Optional.empty();
     }
 
+    */
+
     @Override
     public String getName() {
         return super.getName();
@@ -46,6 +49,7 @@ public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //tod
         return 0;
     }
 
+  /*
     @Override
     public void increaseNofVisits() {
 
@@ -75,6 +79,6 @@ public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //tod
     public double getActionValue(ActionInterface<AV> a) {
         return 0;
     }
-
+*/
 
 }

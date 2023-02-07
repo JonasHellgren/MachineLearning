@@ -4,6 +4,8 @@ import common.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,7 @@ public class ActionSelector<S,A> {
         this.actionTemplate=actionTemplate;
     }
 
-    public Optional<ActionInterface<A>> select(NodeInterface<S,A> nodeSelected) {
+    public Optional<ActionInterface<A>> select(NodeWithChildrenInterface<S,A> nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
         List<ActionInterface<A>> nonTestedActions = (nofTestedActions==0)
@@ -46,7 +48,7 @@ public class ActionSelector<S,A> {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private List<ActionInterface<A>> getNonTestedActions(NodeInterface<S,A> nodeSelected) {
+    private List<ActionInterface<A>> getNonTestedActions(NodeWithChildrenInterface<S,A> nodeSelected) {
         List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
         List<A> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
         Set<A> allValues=nodeSelected.getAction().applicableActions();
@@ -62,7 +64,7 @@ public class ActionSelector<S,A> {
         return nonTestedActions;
     }
 
-    private List<ActionInterface<A>> getTestedActions(NodeInterface<S,A> nodeSelected) {
+    private List<ActionInterface<A>> getTestedActions(NodeWithChildrenInterface<S,A> nodeSelected) {
         return nodeSelected.getChildNodes().stream()
                 .map(NodeInterface::getAction).collect(Collectors.toList());
     }

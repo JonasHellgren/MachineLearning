@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class NodeSelector<S,A> {
     public static final int UCT_MAX = 1000;
     private static final int MAX_DEPTH = 10_000;
 
-    final NodeInterface<S,A> nodeRoot;
+    final NodeWithChildrenInterface<S,A> nodeRoot;
     MonteCarloSettings<S,A> settings;
     private final double coefficientExploitationExploration;  //often called C in literature
     final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
@@ -37,11 +38,11 @@ public class NodeSelector<S,A> {
     List<NodeInterface<S,A>> nodesFromRootToSelected;
     List<ActionInterface<A>> actionsFromRootToSelected;
 
-    public NodeSelector(NodeInterface<S,A> nodeRoot, MonteCarloSettings<S,A> settings) {
+    public NodeSelector(NodeWithChildrenInterface<S,A> nodeRoot, MonteCarloSettings<S,A> settings) {
         this(nodeRoot,settings, settings.coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
     }
 
-    public NodeSelector(NodeInterface<S,A> nodeRoot, MonteCarloSettings<S,A> settings,
+    public NodeSelector(NodeWithChildrenInterface<S,A> nodeRoot, MonteCarloSettings<S,A> settings,
                         double coefficientExploitationExploration,
                         boolean isExcludeChildrenThatNeverHaveBeenVisited) {
         this.nodeRoot = nodeRoot;
@@ -53,17 +54,17 @@ public class NodeSelector<S,A> {
         this.actionsFromRootToSelected = new ArrayList<>();
     }
 
-    public NodeInterface<S,A> select()  {
+    public NodeWithChildrenInterface<S,A> select()  {
         nodesFromRootToSelected.clear();
         actionsFromRootToSelected.clear();
-        NodeInterface<S,A> currentNode = nodeRoot;
+        NodeWithChildrenInterface<S,A> currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
 
         int i=0;
         while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {
             Optional<NodeInterface<S,A>> selectedChild = selectChild(currentNode);
             if (selectedChild.isPresent() && isNotAllChildrenTerminal(currentNode)) {
-                currentNode = selectedChild.get();
+                currentNode = (NodeWithChildrenInterface<S, A>) selectedChild.get();
                 actionsFromRootToSelected.add(currentNode.getAction());
                 nodesFromRootToSelected.add(currentNode);
             }
@@ -79,7 +80,7 @@ public class NodeSelector<S,A> {
         return currentNode;
     }
 
-    private boolean isNotLeaf(NodeInterface<S,A> currentNode) {
+    private boolean isNotLeaf(NodeWithChildrenInterface<S,A> currentNode) {
         List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActions =
@@ -87,14 +88,14 @@ public class NodeSelector<S,A> {
         return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
     }
 
-    private boolean isNotAllChildrenTerminal(NodeInterface<S,A> node) {
+    private boolean isNotAllChildrenTerminal(NodeWithChildrenInterface<S,A> node) {
         List<NodeInterface<S,A>> childrenTerminal= node.getChildNodes().stream()
                 .filter(n -> !n.isNotTerminal())
                 .collect(Collectors.toList());
         return childrenTerminal.size()!= node.getChildNodes().size();
     }
 
-    public  Optional<NodeInterface<S,A>> selectChild(NodeInterface<S,A> node) {
+    public  Optional<NodeInterface<S,A>> selectChild(NodeWithChildrenInterface<S,A> node) {
         List<Pair<NodeInterface<S,A>, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);
         Optional<Pair<NodeInterface<S,A>, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
         return pair.isEmpty()
@@ -107,7 +108,7 @@ public class NodeSelector<S,A> {
                 reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
     }
 
-    private List<Pair<NodeInterface <S,A>, Double>> getListOfPairsExcludeFailNodes(NodeInterface <S,A> node) {
+    private List<Pair<NodeInterface <S,A>, Double>> getListOfPairsExcludeFailNodes(NodeWithChildrenInterface <S,A> node) {
         List<Pair<NodeInterface <S,A>, Double>> nodeUCTPairs = new ArrayList<>();
         List<NodeInterface <S,A>> nonFailNodes = getNonFailChildrenNodes(node);
         List<NodeInterface <S,A>> nodes = (isExcludeChildrenThatNeverHaveBeenVisited)
@@ -122,7 +123,7 @@ public class NodeSelector<S,A> {
         return nodeUCTPairs;
     }
 
-    private List<NodeInterface <S,A>> getNonFailChildrenNodes(NodeInterface <S,A> node) {
+    private List<NodeInterface <S,A>> getNonFailChildrenNodes(NodeWithChildrenInterface <S,A> node) {
         return node.getChildNodes().stream()
                 .filter(n -> !n.isTerminalFail())
                 .collect(Collectors.toList());
@@ -134,7 +135,7 @@ public class NodeSelector<S,A> {
                 .collect(Collectors.toList());
     }
 
-    private double calcUct(NodeInterface <S,A> node, ActionInterface<A> action) {
+    private double calcUct(NodeWithChildrenInterface <S,A> node, ActionInterface<A> action) {
         double v = node.getActionValue(action);
         int nParent = node.getNofVisits();
         int n = node.getNofActionSelections(action);

@@ -10,6 +10,7 @@ import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class TestMockedMemoryFor5times15Grid {
 
     @SneakyThrows
     @Test public void shallGoNorthDueToHighMemoryValueInX2Y4() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         assertStateIsOnBestPath(nodeRoot, StateShip.newStateFromXY(2,4));
     }
@@ -79,14 +80,14 @@ public class TestMockedMemoryFor5times15Grid {
                 .build();
     }
 
-    private void assertStateIsOnBestPath(NodeInterface<ShipVariables, ShipActionSet> nodeRoot, StateShip state) {
+    private void assertStateIsOnBestPath(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot, StateShip state) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
         Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
                 NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
         Assert.assertTrue(node.isPresent());
     }
 
-    private void doPrinting(NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
+    private void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
         System.out.println("nofNodesInTree = " + tih.nofNodes());

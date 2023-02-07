@@ -10,6 +10,7 @@ import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class Test_3times7grid_Simulations {
     @SneakyThrows
     @Test
     public void iterateFromX0Y0() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,1));
@@ -99,7 +100,7 @@ public class Test_3times7grid_Simulations {
     @Test
     public void iterateFromX0Y1() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(0,1));
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
 
         doPrinting(nodeRoot);
 
@@ -109,7 +110,7 @@ public class Test_3times7grid_Simulations {
     }
 
 
-    private void doPrinting(NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
+    private void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
         System.out.println("nofNodesInTree = " + tih.nofNodes());

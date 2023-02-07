@@ -7,6 +7,7 @@ import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class TestMonteCarloSearchStatistics {
 
 
     @Test public void threeNodesStandingGivesBranchingOne() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = create3nodesTree();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = create3nodesTree();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,monteCarloTreeCreator,settings);
 
@@ -58,7 +59,7 @@ public class TestMonteCarloSearchStatistics {
     }
 
     @Test public void twoDeep1FourDeep2GivesBranchingTwo() {
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = createTwoDeep1FourDeep2();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createTwoDeep1FourDeep2();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,monteCarloTreeCreator,settings);
 
@@ -74,10 +75,10 @@ public class TestMonteCarloSearchStatistics {
         );
     }
 
-    private NodeInterface<ShipVariables, ShipActionSet> create3nodesTree() {
-        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot =
+    private NodeWithChildrenInterface<ShipVariables, ShipActionSet> create3nodesTree() {
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet>  nodeRoot =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(0,0),ActionShip.newNA());
-        NodeInterface<ShipVariables, ShipActionSet> ch1 =
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> ch1 =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(1,0),ActionShip.newStill());
         NodeInterface<ShipVariables, ShipActionSet> ch2 =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(2,0),ActionShip.newStill());
@@ -86,12 +87,12 @@ public class TestMonteCarloSearchStatistics {
         return nodeRoot;
     }
 
-    private NodeInterface<ShipVariables, ShipActionSet> createTwoDeep1FourDeep2() {
-        NodeInterface<ShipVariables, ShipActionSet>  nodeRoot =
+    private NodeWithChildrenInterface<ShipVariables, ShipActionSet> createTwoDeep1FourDeep2() {
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet>  nodeRoot =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(0,0),ActionShip.newNA());
-        NodeInterface<ShipVariables, ShipActionSet> ch1Deep1 =
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> ch1Deep1 =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(1,1),ActionShip.newStill());
-        NodeInterface<ShipVariables, ShipActionSet> ch2Deep1 =
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> ch2Deep1 =
                 NodeInterface.newNotTerminal(StateShip.newStateFromXY(1,0),ActionShip.newStill());
         nodeRoot.addChildNode(ch1Deep1);
         nodeRoot.addChildNode(ch2Deep1);

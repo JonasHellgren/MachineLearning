@@ -11,6 +11,7 @@ import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,7 +87,7 @@ public class TestMonteCarloControlledCartPole {
     @Test public void bestActionWhenLeaningRightIsForceRight() {
 
         monteCarloTreeCreator.setStartState(stateLeaningRight);
-        NodeInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.run();
+        NodeWithChildrenInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.run();
         TreeInfoHelper<CartPoleVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
         doPrinting(tih);
         Assert.assertTrue(tih.getValueOfFirstBestAction().orElseThrow()==VALUE_RIGHT);

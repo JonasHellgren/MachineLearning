@@ -9,7 +9,8 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import java.util.*;
 
 @Log
-public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
+public final class NodeNotTerminal<SSV,AV>
+        extends NodeAbstract<SSV,AV> implements NodeWithChildrenInterface<SSV,AV> {
     private static final double INIT_REWARD_VALUE = 0d;
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
@@ -63,13 +64,14 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
         node.setDepth(depth + 1);
     }
 
-    @Override
+ //   @Override
     public List<NodeInterface<SSV,AV>> getChildNodes() {
         return childNodes;
     }
 
-    @Override
-    public Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action) {
+
+   @Override
+    public Optional<NodeInterface<SSV, AV>> getChild(ActionInterface<AV> action) {
         List<NodeInterface<SSV,AV>> children= getChildNodes();
         return children.stream()
                 .filter(c -> c.getAction().getValue().equals(action.getValue()))

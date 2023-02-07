@@ -6,6 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.domains.models_space.ActionShip;
 import monte_carlo_tree_search.domains.models_space.StateShip;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class TestNode {
 
     @Test
     public void rootWithThreeChilds() {
-        NodeInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0),ACTION_ANY);
+        NodeWithChildrenInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0),ACTION_ANY);
         NodeInterface<ShipVariables,ShipActionSet> chUp = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 1),ACTION_ANY);
         NodeInterface<ShipVariables,ShipActionSet> chStill = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0),ACTION_ANY);
         NodeInterface<ShipVariables,ShipActionSet> chDown = NodeInterface.newTerminalFail(StateShip.newStateFromXY(1, 0),ACTION_ANY); //terminal
@@ -47,9 +48,9 @@ public class TestNode {
 
     @Test
     public void rootWithGrandChilds() {
-        NodeInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0),ACTION_ANY);
+        NodeWithChildrenInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0),ACTION_ANY);
         NodeInterface<ShipVariables,ShipActionSet> chUp1 = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 1),ACTION_ANY);
-        NodeInterface<ShipVariables,ShipActionSet> chStill1 = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0),ACTION_ANY);
+        NodeWithChildrenInterface<ShipVariables,ShipActionSet> chStill1 = NodeInterface.newNotTerminal(StateShip.newStateFromXY(1, 0),ACTION_ANY);
         NodeInterface<ShipVariables,ShipActionSet> chDown1 = NodeInterface.newTerminalFail(StateShip.newStateFromXY(1, 0),ACTION_ANY); //terminal
 
         nodeRoot.addChildNode(chUp1);
@@ -66,7 +67,7 @@ public class TestNode {
 
     @Test
     public void imitateStillActionFromRootFollowedByExpansion() {
-        NodeInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ActionShip.newNA());
+        NodeWithChildrenInterface<ShipVariables,ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(StateShip.newStateFromXY(0, 0), ActionShip.newNA());
 //        ShipActionREMOVE action = ShipActionREMOVE.still;
      //   double treeRewards = Environment.STILL_COST;
       //  double simRewards = SIM_RES;

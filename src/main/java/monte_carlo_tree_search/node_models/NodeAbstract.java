@@ -70,7 +70,7 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
     @Override
     public String toString() {
         return  "name = "+name+
-                ", nof ch. = " + this.nofChildNodes()+
+              //  ", nof ch. = " + this.nofChildNodes()+
                 ", a = " + action +
                 ", d = " + depth;
     }

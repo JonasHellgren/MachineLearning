@@ -41,23 +41,16 @@ public interface NodeInterface<SSV,AV> {
     StateInterface<SSV> getState();
     int getDepth();
     void setDepth(int depth);
+    Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
+    int nofChildNodes();
+    int getNofVisits();
+    List<NodeInterface<SSV,AV>> getChildNodes();  //todo NodeInt
+    void printTree();
     boolean isNotTerminal();
     boolean isTerminalFail();
     boolean isTerminalNoFail();
 
-    void addChildNode(NodeInterface<SSV,AV> node);
-    List<NodeInterface<SSV,AV>> getChildNodes();
-    int nofChildNodes();
-    void printTree();
-    void increaseNofVisits();
-    void increaseNofActionSelections(ActionInterface<AV> a);
-    void updateActionValue(double G, ActionInterface<AV> a, double alpha);
-    void saveRewardForAction(ActionInterface<AV> action, double reward);
-    double restoreRewardForAction(ActionInterface<AV> action);
-    Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
-    int getNofVisits();
-    int getNofActionSelections(ActionInterface<AV> a);
-    double getActionValue(ActionInterface<AV> a);
+
 
 
     static <SSV,AV> NodeNotTerminal<SSV,AV> newNotTerminal(StateInterface<SSV> s, ActionInterface<AV> action) {

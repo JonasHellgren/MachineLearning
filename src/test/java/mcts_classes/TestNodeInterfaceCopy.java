@@ -40,9 +40,9 @@ public class TestNodeInterfaceCopy {
     public void testNodeTerminalFail() {
         NodeTerminalFail<ShipVariables, ShipActionSet> node=new NodeTerminalFail<>(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         node.setDepth(5);
-        node.increaseNofVisits();
-        node.increaseNofActionSelections(ActionShip.newUp());
-        node.saveRewardForAction(ActionShip.newUp(),10);
+      //  node.increaseNofVisits();
+      //  node.increaseNofActionSelections(ActionShip.newUp());
+      //  node.saveRewardForAction(ActionShip.newUp(),10);
         NodeTerminalFail<ShipVariables, ShipActionSet> clone= (NodeTerminalFail<ShipVariables, ShipActionSet>) NodeInterface.copy(node);
 
         System.out.println("node = " + node);

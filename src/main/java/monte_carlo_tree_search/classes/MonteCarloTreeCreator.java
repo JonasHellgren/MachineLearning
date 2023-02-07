@@ -13,6 +13,7 @@ import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class MonteCarloTreeCreator<S,A> {
     ActionInterface<A> actionTemplate;
     MemoryInterface<S> memory;
 
-    NodeInterface<S,A> nodeRoot;
+    NodeWithChildrenInterface<S,A> nodeRoot;
     TreeInfoHelper<S,A> tih;
     CpuTimer cpuTimer;
     int nofIterations;
@@ -87,14 +88,14 @@ public class MonteCarloTreeCreator<S,A> {
         mctc.plotData =new ArrayList<>();
     }
 
-    public NodeInterface<S,A> run() throws StartStateIsTrapException {
+    public NodeWithChildrenInterface<S,A> run() throws StartStateIsTrapException {
         setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
 
         int i;
         plotData.clear();
         ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
-            NodeInterface<S,A> nodeSelected = select(nodeRoot);
+            NodeWithChildrenInterface<S,A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
@@ -154,18 +155,19 @@ public class MonteCarloTreeCreator<S,A> {
                 +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
 
-    private NodeInterface<S,A> select(NodeInterface<S,A> nodeRoot) {
+    private NodeWithChildrenInterface<S,A> select(NodeWithChildrenInterface<S,A> nodeRoot) {
         NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
-        NodeInterface<S,A> nodeSelected = ns.select();
+        NodeWithChildrenInterface<S,A> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
 
-    private StepReturnGeneric<S> applyActionAndExpand(NodeInterface<S,A> nodeSelected, ActionInterface<A> actionInSelected) {
+    private StepReturnGeneric<S> applyActionAndExpand(NodeWithChildrenInterface<S,A> nodeSelected,
+                                                      ActionInterface<A> actionInSelected) {
         StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturnGeneric<S> sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeInterface<S,A> child = NodeInterface.newNode(sr, actionInSelected);
+        NodeWithChildrenInterface<S,A> child = (NodeWithChildrenInterface<S,A>) NodeInterface.newNode(sr, actionInSelected);  //todo clean to cast?
         child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
@@ -225,7 +227,7 @@ public class MonteCarloTreeCreator<S,A> {
         bum.backup(returnsSimulation,memoryValueStateAfterAction);
     }
 
-    private void manageCaseWhenAllActionsAreTested(NodeInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
+    private void manageCaseWhenAllActionsAreTested(NodeWithChildrenInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
         SelectedToTerminalFailConverter<S, A>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
         if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
             makeSelectedTerminal(nodeSelected, sfc);
@@ -234,7 +236,7 @@ public class MonteCarloTreeCreator<S,A> {
         }
     }
 
-    private void chooseBestActionAndBackPropagate(NodeInterface<S, A>  nodeSelected) {
+    private void chooseBestActionAndBackPropagate(NodeWithChildrenInterface<S, A>  nodeSelected) {
         NodeSelector<S, A>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
         Optional<NodeInterface<S, A> > childToSelected = nodeSelector.selectChild(nodeSelected);
         ActionInterface<A> actionToGetToChild = childToSelected.orElseThrow().getAction();
