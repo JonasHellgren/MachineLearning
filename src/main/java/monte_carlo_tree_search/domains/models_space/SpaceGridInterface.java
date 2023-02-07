@@ -89,7 +89,7 @@ public interface SpaceGridInterface {
 
     }
 
-    private static List<Pair<Integer, Integer>> createRow(int ri) {
+     static List<Pair<Integer, Integer>> createRow(int ri) {
         List<Pair<Integer, Integer>> row = new ArrayList<>();
         for (int ci = 4; ci < 15; ci++) {
             row.add(new Pair<>(ci, ri));

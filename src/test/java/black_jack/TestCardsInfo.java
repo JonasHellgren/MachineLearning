@@ -80,8 +80,7 @@ public class TestCardsInfo {
         Assert.assertTrue(CardsInfo.isDealerBust(cards));
     }
 
-    @NotNull
-    private StateCards getCards() {
+      private StateCards getCards() {
         List<Card> cardsPlayer = StateCards.newPair(10, 9);
         List<Card> cardsDealer = StateCards.newPair(1, 7);
         return new StateCards(cardsPlayer, cardsDealer);

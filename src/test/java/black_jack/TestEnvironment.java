@@ -6,9 +6,7 @@ import black_jack.models_cards.Card;
 import black_jack.enums.CardAction;
 import black_jack.models_cards.StateCards;
 import black_jack.environment.StepReturnBJ;
-import org.jcodec.common.Assert;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -91,21 +89,19 @@ public class TestEnvironment {
         Assert.assertTrue(nofPlayerWins<NOF_PLAYS-nofPlayerWins);
     }
 
-    @NotNull
     private StateCards getGoodCardsForPlayer() {
         List<Card> cardsPlayer = StateCards.newPair(10, 9);
         List<Card> cardsDealer = StateCards.newPair(10, 7);
         return new StateCards(cardsPlayer, cardsDealer);
     }
 
-    @NotNull
+
     private StateCards getVeryBadCardsForPlayer() {
         List<Card> cardsPlayer = StateCards.newPair(5, 2);
         List<Card> cardsDealer = StateCards.newPair(8, 10);
         return new StateCards(cardsPlayer, cardsDealer);
     }
 
-    @NotNull
     private StateCards getBadCardsForPlayer() {
         List<Card> cardsPlayer = StateCards.newPair(5, 5);
         List<Card> cardsDealer = StateCards.newPair(8, 3);
@@ -113,7 +109,6 @@ public class TestEnvironment {
     }
 
 
-    @NotNull
     private StateCards getGoodCardsForDealerSumIs11() {
         List<Card> cardsPlayer = StateCards.newPair(7, 7);
         List<Card> cardsDealer = StateCards.newPair(5, 6);

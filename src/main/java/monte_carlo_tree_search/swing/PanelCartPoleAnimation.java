@@ -6,7 +6,6 @@ import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import swing.Position2D;
 import swing.ScaleLinear;
-import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_sixrooms.SixRoomsAgentNeuralNetwork;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +20,7 @@ public class PanelCartPoleAnimation extends JPanel {
     public final int LABEL_XPOS =10;
     public final int LABEL_XPOSY_MIN =0;
 
-    private static final Logger logger = Logger.getLogger(SixRoomsAgentNeuralNetwork.class.getName());
+    private static final Logger logger = Logger.getLogger(PanelCartPoleAnimation.class.getName());
 
     ScaleLinear xScaler;
     ScaleLinear yScaler;
