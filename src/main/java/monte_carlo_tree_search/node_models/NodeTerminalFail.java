@@ -20,6 +20,16 @@ public final class NodeTerminalFail<SSV,AV> extends NodeTerminal<SSV,AV> {
         System.out.println(nameAndDepthAsString()+ CLASS_NAME);
     }
 
+    @Override  //todo remove
+    public void saveRewardForAction(ActionInterface<AV> action, double reward) {
+
+    }
+
+    @Override //todo remove
+    public double restoreRewardForAction(ActionInterface<AV> action) {
+        return 0;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

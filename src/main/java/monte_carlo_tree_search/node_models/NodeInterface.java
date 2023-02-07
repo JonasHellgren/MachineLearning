@@ -35,6 +35,16 @@ import java.util.*;
  */
 
 public interface NodeInterface<SSV,AV> {
+
+    String getName();
+    ActionInterface<AV> getAction();
+    StateInterface<SSV> getState();
+    int getDepth();
+    void setDepth(int depth);
+    boolean isNotTerminal();
+    boolean isTerminalFail();
+    boolean isTerminalNoFail();
+
     void addChildNode(NodeInterface<SSV,AV> node);
     List<NodeInterface<SSV,AV>> getChildNodes();
     int nofChildNodes();
@@ -42,21 +52,13 @@ public interface NodeInterface<SSV,AV> {
     void increaseNofVisits();
     void increaseNofActionSelections(ActionInterface<AV> a);
     void updateActionValue(double G, ActionInterface<AV> a, double alpha);
-    boolean isNotTerminal();
-    boolean isTerminalFail();
-    boolean isTerminalNoFail();
     void saveRewardForAction(ActionInterface<AV> action, double reward);
     double restoreRewardForAction(ActionInterface<AV> action);
-
-    int getDepth();
-    String getName();
-    ActionInterface<AV> getAction();
     Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
-    StateInterface<SSV> getState();
     int getNofVisits();
     int getNofActionSelections(ActionInterface<AV> a);
     double getActionValue(ActionInterface<AV> a);
-    void setDepth(int depth);
+
 
     static <SSV,AV> NodeNotTerminal<SSV,AV> newNotTerminal(StateInterface<SSV> s, ActionInterface<AV> action) {
         return new NodeNotTerminal<>(s, action);

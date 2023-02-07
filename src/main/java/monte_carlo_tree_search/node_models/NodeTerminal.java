@@ -17,7 +17,7 @@ public abstract class NodeTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {  //tod
     }
 
     public NodeTerminal(NodeTerminal<SSV,AV> node) {
-        super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
+        super(node.name,node.action,node.state,node.depth);
     }
 
     @Override

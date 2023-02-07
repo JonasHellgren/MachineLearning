@@ -14,32 +14,29 @@ import java.util.Map;
 @Setter
 @Log
 public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
-    private static final double INIT_REWARD_VALUE = 0d;
+
     private static final String BLANK_SPACE = "  ";
     String name;
     ActionInterface<AV> action;
     StateInterface<SSV> state;
     int depth;
-    Map<AV, Double> actionRewardMap;
+
 
     public NodeAbstract(StateInterface<SSV> state, ActionInterface<AV> action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
         this.depth=0;
-        this.actionRewardMap=new HashMap<>();
     }
 
     public NodeAbstract(String name,
                         ActionInterface<AV> action,
                         StateInterface<SSV> state,
-                        int depth,
-                        Map<AV, Double> actionRewardMap) {
+                        int depth) {
         this.name = name;
         this.action = action;
         this.state = state;
         this.depth = depth;
-        this.actionRewardMap = new HashMap<>(actionRewardMap);
     }
 
     String nameAndDepthAsString() {
@@ -58,16 +55,7 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
         return (this instanceof NodeTerminalNotFail);
     }
 
-    public void saveRewardForAction(ActionInterface<AV> action, double reward) {
-        Conditionals.executeIfTrue(actionRewardMap.containsKey(action.getValue()),
-                () -> log.fine("Reward for action already defined"));
 
-        actionRewardMap.put(action.getValue(),reward);
-    }
-
-    public double restoreRewardForAction(ActionInterface<AV> action) {
-       return actionRewardMap.getOrDefault(action.getValue(),INIT_REWARD_VALUE);
-    }
 
     @Override
     public boolean equals(Object obj) {

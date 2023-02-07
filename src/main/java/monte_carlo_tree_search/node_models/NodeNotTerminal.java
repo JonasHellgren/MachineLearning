@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.node_models;
 
+import common.Conditionals;
 import common.MathUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -9,13 +10,14 @@ import java.util.*;
 
 @Log
 public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
-
+    private static final double INIT_REWARD_VALUE = 0d;
     private static final double INIT_ACTION_VALUE = 0d;
     private static final int INIT_NOF_VISITS = 0;
     List<NodeInterface<SSV,AV>> childNodes;
     int nofVisits;
     Map<AV, Double> qSA;
     Map<AV, Integer> nSA;
+    Map<AV, Double> actionRewardMap;
 
     public NodeNotTerminal(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state,action);
@@ -31,15 +33,28 @@ public final class NodeNotTerminal<SSV,AV> extends NodeAbstract<SSV,AV> {
         for (AV av : actionValues) {
             nSA.put(av, INIT_NOF_VISITS);
         }
+        this.actionRewardMap=new HashMap<>();
     }
 
     public NodeNotTerminal(NodeNotTerminal<SSV,AV> node) {
-        super(node.name,node.action,node.state,node.depth,node.actionRewardMap);
+        super(node.name,node.action,node.state,node.depth);
         this.childNodes=new ArrayList<>(node.childNodes);
         //childNodes.
         this.nofVisits=node.nofVisits;
         this.qSA = new HashMap<>(node.qSA);
         this.nSA = new HashMap<>(node.nSA);
+        this.actionRewardMap=node.actionRewardMap;
+    }
+
+    public void saveRewardForAction(ActionInterface<AV> action, double reward) {  //till NodeNotTerminal
+        Conditionals.executeIfTrue(actionRewardMap.containsKey(action.getValue()),
+                () -> log.fine("Reward for action already defined"));
+
+        actionRewardMap.put(action.getValue(),reward);
+    }
+
+    public double restoreRewardForAction(ActionInterface<AV> action) {  //till NodeNotTerminal
+        return actionRewardMap.getOrDefault(action.getValue(),INIT_REWARD_VALUE);
     }
 
     @Override
