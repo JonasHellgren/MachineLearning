@@ -3,6 +3,7 @@ package monte_carlo_tree_search.node_models;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,12 @@ public final class NodeTerminalFail<SSV,AV> extends NodeTerminal<SSV,AV> {
 
     @Override  //todo remove
     public List<NodeInterface<SSV, AV>> getChildNodes() {
-        return null;
+        return new ArrayList<>();
+    }
+
+    @Override
+    public double getActionValue(ActionInterface<AV> a) {
+        return 0;
     }
 
     @Override

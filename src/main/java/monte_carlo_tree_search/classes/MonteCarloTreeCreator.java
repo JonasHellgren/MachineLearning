@@ -167,7 +167,7 @@ public class MonteCarloTreeCreator<S,A> {
         StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturnGeneric<S> sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeWithChildrenInterface<S,A> child = (NodeWithChildrenInterface<S,A>) NodeInterface.newNode(sr, actionInSelected);  //todo clean to cast?
+        NodeInterface<S,A> child =  NodeInterface.newNode(sr, actionInSelected);
         child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();

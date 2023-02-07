@@ -229,6 +229,7 @@ clean up x
 NodeInterface har för många metoder - interface segregation
 
 testMakeSelectedTerminal  bökar
+rewardOfStillInX2Y0IsBad bökar
 elevator miljö
 
 RunCartPoleAlphaZeroTD - använda TD state learning

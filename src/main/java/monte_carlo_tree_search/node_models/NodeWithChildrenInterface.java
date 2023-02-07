@@ -18,6 +18,6 @@ public interface NodeWithChildrenInterface<SSV,AV> extends NodeInterface<SSV,AV>
 
 
     int getNofActionSelections(ActionInterface<AV> a);
-    double getActionValue(ActionInterface<AV> a);
+
 
 }

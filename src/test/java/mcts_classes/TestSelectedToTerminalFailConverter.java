@@ -50,7 +50,7 @@ public class TestSelectedToTerminalFailConverter {
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
-        Optional<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> nodeSelected=tih.getNodeReachedForActions(actionsToSelected);
 
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -68,7 +68,7 @@ public class TestSelectedToTerminalFailConverter {
         nodeRoot.printTree();
         tih.getNodesOnPathForActions(actionsToSelected).get().forEach(System.out::println);
 
-        Optional<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> nodeSelected2=tih.getNodeReachedForActions(actionsToSelected);
 
         System.out.println("nodeSelected.orElseThrow() = " + nodeSelected.orElseThrow());
         System.out.println("nodeSelected2.orElseThrow() = " + nodeSelected2.orElseThrow());

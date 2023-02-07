@@ -132,7 +132,7 @@ public class Test_5times15gridCorridor {
         TreeInfoHelper<ShipVariables, ShipActionSet>  tih=new TreeInfoHelper<>(nodeRoot,settings);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
 
-        Optional<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> node=
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
                 tih.getNodeReachedForActions(Collections.singletonList(ActionShip.newStill()));
         System.out.println("node = " + node);
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
@@ -152,7 +152,7 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
 
-        Optional<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newUp(), ActionShip.newUp()));
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newUp(), ActionShip.newUp()));
         System.out.println("node = " + node);
         Assert.assertEquals(BONUS_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
@@ -173,7 +173,7 @@ public class Test_5times15gridCorridor {
         assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
 
 
-        Optional<NodeWithChildrenInterface<ShipVariables, ShipActionSet>> node=
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
                 tih.getNodeReachedForActions(Arrays.asList(ActionShip.newStill(),ActionShip.newStill()));
         System.out.println("node = " + node);
         Assert.assertEquals(BONUS_3,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);

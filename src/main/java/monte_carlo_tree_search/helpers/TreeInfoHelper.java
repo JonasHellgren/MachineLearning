@@ -52,17 +52,17 @@ public class TreeInfoHelper<SSV,AV> {
         this.settings=settings;
     }
 
-    public Optional<NodeWithChildrenInterface <SSV,AV>> getNodeReachedForActions(List<ActionInterface<AV>> actions) {
-        Optional<List<NodeWithChildrenInterface <SSV,AV>>> nodes=getNodesOnPathForActions(actions);
+    public Optional<NodeInterface <SSV,AV>> getNodeReachedForActions(List<ActionInterface<AV>> actions) {
+        Optional<List<NodeInterface <SSV,AV>>> nodes=getNodesOnPathForActions(actions);
         return  (nodes.isEmpty())
                 ?Optional.empty()
                 :Optional.of(nodes.get().get(nodes.get().size()-1));
     }
 
-    public Optional<List<NodeWithChildrenInterface <SSV,AV>>> getNodesOnPathForActions(List<ActionInterface<AV>> actionsToSelected) {
+    public Optional<List<NodeInterface <SSV,AV>>> getNodesOnPathForActions(List<ActionInterface<AV>> actionsToSelected) {
 
-        NodeWithChildrenInterface<SSV,AV> parent = rootTree;
-        List<NodeWithChildrenInterface <SSV,AV>> nodes = new ArrayList<>();
+        NodeInterface<SSV,AV> parent = rootTree;
+        List<NodeInterface <SSV,AV>> nodes = new ArrayList<>();
         for (ActionInterface<AV> action : actionsToSelected) {
             Optional<NodeInterface <SSV,AV>> child = parent.getChild(action);
             if (child.isEmpty()) {
@@ -76,10 +76,16 @@ public class TreeInfoHelper<SSV,AV> {
     }
 
     public Optional<Double> getValueForActionInNode(List<ActionInterface<AV>> actionsToSelected, ActionInterface<AV> action) {
-        Optional<NodeWithChildrenInterface <SSV,AV>> node = getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface <SSV,AV>> node =  getNodeReachedForActions(actionsToSelected);
+
+
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
+
+       /* return (node.isEmpty())
+                ? Optional.empty()
+                : Optional.of(node.get().getActionValue(action));  */
     }
 
     public static <SSV, AV> StateInterface<SSV> getState(StateInterface<SSV> rootState,

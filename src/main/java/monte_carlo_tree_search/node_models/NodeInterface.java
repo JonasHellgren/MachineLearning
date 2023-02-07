@@ -45,6 +45,7 @@ public interface NodeInterface<SSV,AV> {
     int nofChildNodes();
     int getNofVisits();
     List<NodeInterface<SSV,AV>> getChildNodes();  //todo NodeInt
+    double getActionValue(ActionInterface<AV> a);
     void printTree();
     boolean isNotTerminal();
     boolean isTerminalFail();

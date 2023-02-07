@@ -62,8 +62,8 @@ public class BackupModifier<S,A> {
     MonteCarloSettings<S,A> settings;
 
     TreeInfoHelper<S,A> treeInfoHelper;
-    NodeWithChildrenInterface<S,A> nodeSelected;
-    List<NodeWithChildrenInterface<S,A>> nodesOnPath;
+    NodeInterface<S,A> nodeSelected;
+    List<NodeInterface<S,A>> nodesOnPath;
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
@@ -106,10 +106,11 @@ public class BackupModifier<S,A> {
 
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
-        for (NodeWithChildrenInterface<S,A> nodeOnPath : nodesOnPath) {
+        for (NodeInterface<S,A> nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
                 ActionInterface<A> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
-                rewards.add(nodeOnPath.restoreRewardForAction(action));
+                NodeWithChildrenInterface<S,A> nodeCasted=(NodeWithChildrenInterface<S,A>) nodeOnPath;  //casting
+                rewards.add(nodeCasted.restoreRewardForAction(action));
             }
         }
         rewards.add(stepReturnOfSelected.reward);
@@ -139,7 +140,7 @@ public class BackupModifier<S,A> {
 
         List<ActionInterface<A>> actions =
                 ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
-        for (NodeWithChildrenInterface<S,A> node : nodesOnPath) {
+        for (NodeInterface<S,A> node : nodesOnPath) {
             ActionInterface<A> action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
             updateNode(node, singleReturn, action, settings.alphaBackupNormal);
@@ -159,7 +160,9 @@ public class BackupModifier<S,A> {
         return returns;
     }
 
-    void updateNode(NodeWithChildrenInterface<S,A> node, double singleReturn, ActionInterface<A> action, double alpha) {
+    void updateNode(NodeInterface<S,A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
+
+        NodeWithChildrenInterface<S,A> node=(NodeWithChildrenInterface<S,A>) node0;  //casting
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);

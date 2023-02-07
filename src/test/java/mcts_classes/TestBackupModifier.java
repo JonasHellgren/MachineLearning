@@ -193,8 +193,10 @@ public class TestBackupModifier {
                                                       StateShip state) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         getStepReturnOfSelected= environment.step(actionInSelected, state);
-        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
-        nodeSelected.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
+        NodeInterface<ShipVariables, ShipActionSet> nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeCasted=(NodeWithChildrenInterface<ShipVariables, ShipActionSet>) nodeSelected;  //casting
+
+        nodeCasted.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
@@ -202,7 +204,7 @@ public class TestBackupModifier {
                 .settings(settings)
                 .build();
         bum.backup();
-        return nodeSelected;
+        return nodeSelected;   //nodeCasted??
     }
 
     private StateShip getState(StateShip rootState, List<ActionInterface<ShipActionSet>> actionsToSelected) {
