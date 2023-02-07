@@ -2,7 +2,9 @@ package monte_carlo_tree_search.node_models;
 
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 
-/** Interface for NodeNotTerminal nodes */
+/** Interface for NodeNotTerminal nodes
+ *  Includes methods specific for nodes with children, this to follow interface segregation principle
+ * */
 
 public interface NodeWithChildrenInterface<SSV,AV> extends NodeInterface<SSV,AV>  {
 
