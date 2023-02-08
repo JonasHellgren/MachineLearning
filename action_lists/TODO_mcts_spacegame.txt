@@ -231,9 +231,9 @@ NodeTerminal bort  x
 testMakeSelectedTerminal  bökar  x
 rewardOfStillInX2Y0IsBad bökar  x
 
-kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
-
+planutml nodes  x
 elevator miljö
+kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 
 RunCartPoleAlphaZeroTD - använda TD state learning
 kan error baserat stopp criteri fås?
