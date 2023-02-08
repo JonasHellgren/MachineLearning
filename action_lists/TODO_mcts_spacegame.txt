@@ -233,6 +233,12 @@ rewardOfStillInX2Y0IsBad bökar  x
 
 planutml nodes  x
 elevator miljö
+- ActionElevator  x
+- EnvironmentElevator
+- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
+- TestEnvironmentElevator
+
+
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 
 RunCartPoleAlphaZeroTD - använda TD state learning

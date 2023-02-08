@@ -1,7 +1,5 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.Conditionals;
-import common.MathUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,7 +14,7 @@ import java.util.function.Predicate;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class StateElevator implements StateInterface<ElevatorVariables> {
+public class StateElevator implements StateInterface<VariablesElevator> {
     public static final double SOE_MIN = 0.1;
     public static final double SOE_MAX = 1.0;
     public static final int MAX_POS=30;
@@ -29,19 +27,21 @@ public class StateElevator implements StateInterface<ElevatorVariables> {
     static Predicate<List<Integer>> isValidPersonsWaiting = list -> list.size()==NOF_FLOORS;
     static Predicate<Double> isValidSoE= soe -> soe>=SOE_MIN && soe <= SOE_MAX;
 
-    ElevatorVariables variables;
+    VariablesElevator variables;
 
-    private StateElevator(ElevatorVariables variables) {
+    private StateElevator(VariablesElevator variables) {
         this.variables = variables;
     }
     
-    public static StateElevator newFromVariables(ElevatorVariables variables) {
-        boolean isValid=isVariablesValid(variables);
+    public static StateElevator newFromVariables(VariablesElevator variables) {
+        if (!isVariablesValid(variables)) {
+            throw new IllegalArgumentException(getErrorMessage(variables));
+        }
         return new StateElevator(variables);
     }
     
     public static StateElevator newFullyChargedReadyAtBottomFloorNoPassengers() {
-        return new StateElevator(ElevatorVariables.builder()
+        return new StateElevator(VariablesElevator.builder()
                 .pos(0)
                 .nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(0,0,0))
@@ -49,22 +49,15 @@ public class StateElevator implements StateInterface<ElevatorVariables> {
                 .build());
     }
     
-    public static boolean isVariablesValid(ElevatorVariables variables) {
-
-        boolean isValid = isValidPos.test(variables.pos) &&
+    public static boolean isVariablesValid(VariablesElevator variables) {
+        return isValidPos.test(variables.pos) &&
                 isValidPersonsInElevator.test(variables.nPersonsInElevator) &&
                 isValidPersonsWaiting.test(variables.nPersonsWaiting) &&
                 isValidSoE.test(variables.SoE);
-
-        if (!isValid) {
-            throw new IllegalArgumentException(getErrorMessage(variables));
-        }
-        return isValid;
-        
     }
 
     @NotNull
-    private static String getErrorMessage(ElevatorVariables variables) {
+    private static String getErrorMessage(VariablesElevator variables) {
         return "isValidPos = "+isValidPos.test(variables.pos)+
                 ", isValidPersonsInElevator = "+isValidPersonsInElevator.test(variables.nPersonsInElevator)+
                 ", isValidPersonsWaiting = "+isValidPersonsWaiting.test(variables.nPersonsWaiting)+
@@ -72,12 +65,12 @@ public class StateElevator implements StateInterface<ElevatorVariables> {
     }
 
     @Override
-    public StateInterface<ElevatorVariables> copy() {
+    public StateInterface<VariablesElevator> copy() {
         return newFromVariables(variables.copy());
     }
 
     @Override
-    public void setFromReturn(StepReturnGeneric<ElevatorVariables> stepReturn) {
+    public void setFromReturn(StepReturnGeneric<VariablesElevator> stepReturn) {
         variables=stepReturn.copyState().getVariables();
     }
 

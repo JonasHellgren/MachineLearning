@@ -13,7 +13,7 @@ import java.util.List;
 
 @Builder
 @ToString
-public class ElevatorVariables {
+public class VariablesElevator {
     private static final double DELTA = 0.01;
     public static final int DEFAULT_IN_ELEVATOR = 0;
     public static final ArrayList<Integer> EMPTY_LIST = new ArrayList<>();
@@ -28,8 +28,8 @@ public class ElevatorVariables {
     public double SoE= DEFULT_SOE;
 
 
-    public ElevatorVariables copy() {
-        return ElevatorVariables.builder()
+    public VariablesElevator copy() {
+        return VariablesElevator.builder()
                 .pos(pos)
                 .nPersonsInElevator(nPersonsInElevator)
                 .nPersonsWaiting(new ArrayList<>(nPersonsWaiting))
@@ -44,10 +44,10 @@ public class ElevatorVariables {
         if (obj == this) return true;
 
         //check if the argument has the correct typ
-        if (!(obj instanceof ElevatorVariables)) return false;
+        if (!(obj instanceof VariablesElevator)) return false;
 
         //For each significant field in the class, check if that field matches the corresponding field of this object
-        ElevatorVariables equalsSample = (ElevatorVariables) obj;
+        VariablesElevator equalsSample = (VariablesElevator) obj;
         boolean isSamePos= this.pos == equalsSample.pos;
         boolean isSamePersonsInElevator = this.nPersonsInElevator == equalsSample.nPersonsInElevator;
         boolean isSamePersonsWaiting = this.nPersonsWaiting.equals(equalsSample.nPersonsWaiting);

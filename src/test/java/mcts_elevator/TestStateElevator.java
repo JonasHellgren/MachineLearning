@@ -1,7 +1,6 @@
 package mcts_elevator;
 
-import monte_carlo_tree_search.domains.elevator.ElevatorVariables;
-import monte_carlo_tree_search.domains.elevator.EnvironmentElevator;
+import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.junit.Assert;
@@ -20,7 +19,7 @@ public class TestStateElevator {
 
         StateElevator stateElevator=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
         System.out.println("stateElevator = " + stateElevator);
-        ElevatorVariables variables=stateElevator.getVariables();
+        VariablesElevator variables=stateElevator.getVariables();
 
         assertAll(
                 () -> assertEquals(0,variables.pos),
@@ -34,31 +33,26 @@ public class TestStateElevator {
     @Test(expected = IllegalArgumentException.class)
     public void givenPosIs31_thenThrows()   {
         StateElevator.newFromVariables(
-                ElevatorVariables.builder().pos(31).build()
+                VariablesElevator.builder().pos(31).build()
         );
     }
 
     @Test
     public void whenCopy_thenEqual() {
-        StateInterface<ElevatorVariables> stateElevator=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
-        StateInterface<ElevatorVariables> stateElevatorCopy=stateElevator.copy();
-
-        Assert.assertTrue(stateElevator.getVariables().equals(stateElevatorCopy.getVariables()));
-
+        StateInterface<VariablesElevator> stateElevator=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
+        StateInterface<VariablesElevator> stateElevatorCopy=stateElevator.copy();
+        Assert.assertEquals(stateElevator.getVariables(), stateElevatorCopy.getVariables());
     }
 
 
     @Test
-    public void whenCopyAndModyfing_thenNotEqual() {
-        StateInterface<ElevatorVariables> stateElevator=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
-        StateInterface<ElevatorVariables> stateElevatorCopy=stateElevator.copy();
+    public void whenCopyAndModifying_thenNotEqual() {
+        StateInterface<VariablesElevator> stateElevator=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
+        StateInterface<VariablesElevator> stateElevatorCopy=stateElevator.copy();
         stateElevatorCopy.getVariables().pos=stateElevatorCopy.getVariables().pos+1;
-
         System.out.println("stateElevator = " + stateElevator);
         System.out.println("stateElevatorCopy = " + stateElevatorCopy);
-
-        Assert.assertFalse(stateElevator.getVariables().equals(stateElevatorCopy.getVariables()));
-
+        Assert.assertNotEquals(stateElevator.getVariables(), stateElevatorCopy.getVariables());
     }
 
 }
