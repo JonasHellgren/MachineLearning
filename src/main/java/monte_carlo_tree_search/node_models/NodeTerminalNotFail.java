@@ -3,7 +3,11 @@ package monte_carlo_tree_search.node_models;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-public final class NodeTerminalNotFail<SSV,AV> extends NodeTerminal<SSV,AV> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public final class NodeTerminalNotFail<SSV,AV> extends NodeAbstract<SSV,AV> {
     private static final String CLASS_NAME = "T-NF";
 
     public NodeTerminalNotFail(StateInterface<SSV> state, ActionInterface<AV> action) {
@@ -14,10 +18,12 @@ public final class NodeTerminalNotFail<SSV,AV> extends NodeTerminal<SSV,AV> {
         super(node);
     }
 
+
     @Override
     public void printTree() {
         System.out.println(nameAndDepthAsString()+CLASS_NAME);
     }
+
 
     @Override
     public boolean equals(Object obj) {

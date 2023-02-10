@@ -8,6 +8,7 @@ import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.BackupModifier;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class TestBackupModifier {
         List<ActionInterface<ShipActionSet>> actionsToSelected = Collections.emptyList();
         ActionInterface<ShipActionSet> actionInSelected = ActionShip.newDown();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = createMCTSTree(actions, rootState, stepReturns);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder()
                 .rootTree(nodeRoot)
@@ -88,7 +89,7 @@ public class TestBackupModifier {
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
 
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder()
                 .rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
@@ -120,7 +121,7 @@ public class TestBackupModifier {
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
@@ -150,7 +151,7 @@ public class TestBackupModifier {
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
@@ -188,12 +189,14 @@ public class TestBackupModifier {
     @NotNull
     private NodeInterface<ShipVariables, ShipActionSet> updateTreeFromActionInState(List<ActionInterface<ShipActionSet>> actionsToSelected,
                                                       ActionInterface<ShipActionSet> actionInSelected,
-                                                      NodeInterface<ShipVariables, ShipActionSet> nodeRoot,
+                                                      NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot,
                                                       StateShip state) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
         getStepReturnOfSelected= environment.step(actionInSelected, state);
         NodeInterface<ShipVariables, ShipActionSet> nodeSelected= tih.getNodeReachedForActions(actionsToSelected).get();
-        nodeSelected.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeCasted=(NodeWithChildrenInterface<ShipVariables, ShipActionSet>) nodeSelected;  //casting
+
+        nodeCasted.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
         bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
@@ -201,7 +204,7 @@ public class TestBackupModifier {
                 .settings(settings)
                 .build();
         bum.backup();
-        return nodeSelected;
+        return nodeSelected;   //nodeCasted??
     }
 
     private StateShip getState(StateShip rootState, List<ActionInterface<ShipActionSet>> actionsToSelected) {
@@ -212,19 +215,19 @@ public class TestBackupModifier {
         return state;
     }
 
-    private NodeInterface<ShipVariables, ShipActionSet> createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState, List<StepReturnGeneric<ShipVariables>> stepReturns) {
+    private NodeWithChildrenInterface<ShipVariables, ShipActionSet> createMCTSTree(List<ActionInterface<ShipActionSet>> actions, StateShip rootState, List<StepReturnGeneric<ShipVariables>> stepReturns) {
 
         stepReturns.clear();
         StateShip state = rootState.copy();
         ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
-        NodeInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, new ActionShip(actionTemplate.nonApplicableAction()));
-        NodeInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = NodeInterface.newNotTerminal(rootState, new ActionShip(actionTemplate.nonApplicableAction()));
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> parent = nodeRoot;
         int nofAddedChilds = 0;
         for (ActionInterface<ShipActionSet> a : actions) {
             StepReturnGeneric<ShipVariables> sr = stepAndUpdateState(state, a);
             stepReturns.add(sr.copy());
             parent.saveRewardForAction(a, sr.reward);
-            NodeInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal(sr.newState, a);
+            NodeWithChildrenInterface<ShipVariables, ShipActionSet> child = NodeInterface.newNotTerminal(sr.newState, a);
             if (isNotFinalActionInList(actions, nofAddedChilds)) {
                 parent.addChildNode(child);
             }
@@ -240,7 +243,7 @@ public class TestBackupModifier {
     }
 
     private void printLists(List<ActionInterface<ShipActionSet>> actions,
-                            List<StepReturnGeneric<ShipVariables>> stepReturns, NodeInterface<ShipVariables,
+                            List<StepReturnGeneric<ShipVariables>> stepReturns, NodeWithChildrenInterface<ShipVariables,
             ShipActionSet> nodeRoot) {
         System.out.println("-----------------------------");
         nodeRoot.printTree();

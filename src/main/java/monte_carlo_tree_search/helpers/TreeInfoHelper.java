@@ -13,6 +13,7 @@ import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.NodeSelector;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.domains.models_space.StateShip;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class TreeInfoHelper<SSV,AV> {
         }
     }
 
-    NodeInterface<SSV,AV> rootTree;
+    NodeWithChildrenInterface<SSV,AV> rootTree;
     MonteCarloSettings<SSV,AV> settings;
 
     /*
@@ -46,7 +47,7 @@ public class TreeInfoHelper<SSV,AV> {
         this(rootTree,MonteCarloSettings.newDefault());
     }  */
 
-    public TreeInfoHelper(NodeInterface <SSV,AV> rootTree, MonteCarloSettings<SSV,AV> settings) {
+    public TreeInfoHelper(NodeWithChildrenInterface <SSV,AV> rootTree, MonteCarloSettings<SSV,AV> settings) {
         this.rootTree = rootTree;
         this.settings=settings;
     }
@@ -60,7 +61,7 @@ public class TreeInfoHelper<SSV,AV> {
 
     public Optional<List<NodeInterface <SSV,AV>>> getNodesOnPathForActions(List<ActionInterface<AV>> actionsToSelected) {
 
-        NodeInterface <SSV,AV> parent = rootTree;
+        NodeInterface<SSV,AV> parent = rootTree;
         List<NodeInterface <SSV,AV>> nodes = new ArrayList<>();
         for (ActionInterface<AV> action : actionsToSelected) {
             Optional<NodeInterface <SSV,AV>> child = parent.getChild(action);
@@ -68,17 +69,23 @@ public class TreeInfoHelper<SSV,AV> {
                 return Optional.empty();
             }
             nodes.add(parent);
-            parent = child.get();
+            parent =  child.get();  //todo clean?
         }
         nodes.add(parent);
         return Optional.of(nodes);
     }
 
     public Optional<Double> getValueForActionInNode(List<ActionInterface<AV>> actionsToSelected, ActionInterface<AV> action) {
-        Optional<NodeInterface <SSV,AV>> node = getNodeReachedForActions(actionsToSelected);
+        Optional<NodeInterface <SSV,AV>> node =  getNodeReachedForActions(actionsToSelected);
+
+
         return (node.isEmpty())
                 ? Optional.empty()
                 : Optional.of(node.get().getActionValue(action));
+
+       /* return (node.isEmpty())
+                ? Optional.empty()
+                : Optional.of(node.get().getActionValue(action));  */
     }
 
     public static <SSV, AV> StateInterface<SSV> getState(StateInterface<SSV> rootState,

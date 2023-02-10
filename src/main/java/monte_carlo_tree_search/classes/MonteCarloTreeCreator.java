@@ -13,28 +13,28 @@ import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /***
  *   This class performs monte carlo tree search
- *
  *   Two vectors: List<Double> returnsSteps, List<Double> returnsSimulation, plays a central role
  *   One of them returnsSteps is derived from chooseActionAndExpand(). The other, returnsSimulation, is from simulate().
- *
+ * <p>
  *   Assume no weighting and the following example settings: returnsSteps=[-2,-1,0], returnsSimulation=[6,6,6]
  *   The values in the nodes of the selection path will be modified according to the sum of the vectors, i.e. [4,5,6]
- *
+ * <p>
  *   Depending on the properties of the action in selected node following logic is applied
- *
+ * <p>
  *   actionInSelected is present (there is a valid action)
  *      => applyActionAndExpand, simulate, backPropagate
  *   actionInSelected is empty & AllChildrenInSelectedAreFail  (all actions are tested and leads to fail node)
  *      =>  convertSelectedNodeToFail
  *   actionInSelected is empty & not AllChildrenInSelectedAreFail  (all actions are tested but some is not fail)
  *      => actionInSelected = nodeSelector.selectChild(), stepReturn=applyAction(actionInSelected), backPropagate(stepReturn)
- *
+ * <p>
  *  The parameter actionTemplate is needed as a "seed" to create a tree with unknown types.
  */
 
@@ -49,7 +49,7 @@ public class MonteCarloTreeCreator<S,A> {
     ActionInterface<A> actionTemplate;
     MemoryInterface<S> memory;
 
-    NodeInterface<S,A> nodeRoot;
+    NodeWithChildrenInterface<S,A> nodeRoot;
     TreeInfoHelper<S,A> tih;
     CpuTimer cpuTimer;
     int nofIterations;
@@ -87,14 +87,14 @@ public class MonteCarloTreeCreator<S,A> {
         mctc.plotData =new ArrayList<>();
     }
 
-    public NodeInterface<S,A> run() throws StartStateIsTrapException {
-        setSomeFields(startState, this);  //needed because setStartState will not effect correctly otherwise
+    public NodeWithChildrenInterface<S,A> run() throws StartStateIsTrapException {
+        setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
 
         int i;
         plotData.clear();
         ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
-            NodeInterface<S,A> nodeSelected = select(nodeRoot);
+            NodeWithChildrenInterface<S,A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.select(nodeSelected);
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
@@ -154,18 +154,19 @@ public class MonteCarloTreeCreator<S,A> {
                 +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
 
-    private NodeInterface<S,A> select(NodeInterface<S,A> nodeRoot) {
+    private NodeWithChildrenInterface<S,A> select(NodeWithChildrenInterface<S,A> nodeRoot) {
         NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
-        NodeInterface<S,A> nodeSelected = ns.select();
+        NodeWithChildrenInterface<S,A> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
     }
 
-    private StepReturnGeneric<S> applyActionAndExpand(NodeInterface<S,A> nodeSelected, ActionInterface<A> actionInSelected) {
+    private StepReturnGeneric<S> applyActionAndExpand(NodeWithChildrenInterface<S,A> nodeSelected,
+                                                      ActionInterface<A> actionInSelected) {
         StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturnGeneric<S> sr = environment.step(actionInSelected, state);
         nodeSelected.saveRewardForAction(actionInSelected, sr.reward);
-        NodeInterface<S,A> child = NodeInterface.newNode(sr, actionInSelected);
+        NodeInterface<S,A> child =  NodeInterface.newNode(sr, actionInSelected);
         child.setDepth(nodeSelected.getDepth() + 1);  //easy to forget
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
@@ -225,7 +226,7 @@ public class MonteCarloTreeCreator<S,A> {
         bum.backup(returnsSimulation,memoryValueStateAfterAction);
     }
 
-    private void manageCaseWhenAllActionsAreTested(NodeInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
+    private void manageCaseWhenAllActionsAreTested(NodeWithChildrenInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
         SelectedToTerminalFailConverter<S, A>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
         if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
             makeSelectedTerminal(nodeSelected, sfc);
@@ -234,7 +235,7 @@ public class MonteCarloTreeCreator<S,A> {
         }
     }
 
-    private void chooseBestActionAndBackPropagate(NodeInterface<S, A>  nodeSelected) {
+    private void chooseBestActionAndBackPropagate(NodeWithChildrenInterface<S, A>  nodeSelected) {
         NodeSelector<S, A>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
         Optional<NodeInterface<S, A> > childToSelected = nodeSelector.selectChild(nodeSelected);
         ActionInterface<A> actionToGetToChild = childToSelected.orElseThrow().getAction();

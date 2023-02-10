@@ -38,8 +38,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>14</source>
-                    <target>14</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
 
@@ -131,16 +131,7 @@
             <version>${dl4j-master.version}</version>
         </dependency>
         <!-- Used in the feedforward/classification/MLP* and feedforward/regression/RegressionMathFunctions example -->
-        <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>${jfreechart.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jcommon</artifactId>
-            <version>${jcommon.version}</version>
-        </dependency>
+
         <!-- Used for downloading data in some of the examples -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -207,17 +198,48 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.neuroph</groupId>
             <artifactId>neuroph-core</artifactId>
             <version>2.96</version>
         </dependency>
 
+
         <dependency>
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-stable</artifactId>
             <version>3.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.24</version>
         </dependency>
 
 

@@ -2,7 +2,6 @@ package black_jack.main_runner;
 
 import black_jack.models_cards.StateInterface;
 import black_jack.result_drawer.GridPanel;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,6 @@ import java.util.List;
 
 public class FrameAndPanelCreator {
 
-    @NotNull
     static GridPanel createUsableAceFrameAndPanel(String frameTitle, String xLabel, String yLabel) {
         List<Integer> xSet = StateInterface.getDealerCardList();
         List<Integer> ySet = StateInterface.getHandsSumList();
@@ -21,7 +19,6 @@ public class FrameAndPanelCreator {
         return panelUsableAce;
     }
 
-    @NotNull
     static GridPanel createNoUsableAceFrameAndPanel(String frameTitle, String xLabel, String yLabel) {
         List<Integer> xSet = StateInterface.getDealerCardList();
         List<Integer> ySet = StateInterface.getHandsSumList();

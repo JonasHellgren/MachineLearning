@@ -3,17 +3,20 @@ package monte_carlo_tree_search.node_models;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-public final class NodeTerminalFail<SSV,AV> extends NodeTerminal<SSV,AV> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+public final class NodeTerminalFail<SSV,AV> extends NodeAbstract<SSV,AV> {
     private static final String CLASS_NAME = "T-Fail";
 
     public NodeTerminalFail(StateInterface<SSV> state, ActionInterface<AV> action) {
         super(state, action);
     }
-
-    public NodeTerminalFail(NodeTerminalFail node) {
+    public NodeTerminalFail(NodeAbstract<SSV,AV> node) {
         super(node);
     }
+
 
     @Override
     public void printTree() {

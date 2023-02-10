@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,7 +67,7 @@ public class BackupModifier<S,A> {
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static <S,A> BackupModifier<S,A> newBUM(NodeInterface<S,A> rootTree,
+    private static <S,A> BackupModifier<S,A> newBUM(NodeWithChildrenInterface<S,A> rootTree,
                                          @NonNull List<ActionInterface<A>> actionsToSelected,
                                          @NonNull ActionInterface<A> actionOnSelected,
                                          @NonNull StepReturnGeneric<S> stepReturnOfSelected,
@@ -108,7 +109,8 @@ public class BackupModifier<S,A> {
         for (NodeInterface<S,A> nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
                 ActionInterface<A> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
-                rewards.add(nodeOnPath.restoreRewardForAction(action));
+                NodeWithChildrenInterface<S,A> nodeCasted=(NodeWithChildrenInterface<S,A>) nodeOnPath;  //casting
+                rewards.add(nodeCasted.restoreRewardForAction(action));
             }
         }
         rewards.add(stepReturnOfSelected.reward);
@@ -158,7 +160,9 @@ public class BackupModifier<S,A> {
         return returns;
     }
 
-    void updateNode(NodeInterface<S,A> node, double singleReturn, ActionInterface<A> action, double alpha) {
+    void updateNode(NodeInterface<S,A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
+
+        NodeWithChildrenInterface<S,A> node=(NodeWithChildrenInterface<S,A>) node0;  //casting
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);

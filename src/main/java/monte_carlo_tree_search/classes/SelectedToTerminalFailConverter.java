@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
@@ -20,16 +21,16 @@ import java.util.stream.Collectors;
 @Log
 public class SelectedToTerminalFailConverter<S,A> {
 
-    NodeInterface<S,A> nodeRoot;
+    NodeWithChildrenInterface<S,A> nodeRoot;
     List<ActionInterface<A>> actionsToSelected;
 
-    public SelectedToTerminalFailConverter(NodeInterface<S,A> nodeRoot, List<ActionInterface<A>> actionsToSelected) {
+    public SelectedToTerminalFailConverter(NodeWithChildrenInterface<S,A> nodeRoot, List<ActionInterface<A>> actionsToSelected) {
         this.nodeRoot = nodeRoot;
         this.actionsToSelected = actionsToSelected;
     }
 
     //TODO remove
-    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeInterface<S,A> nodeSelected)
+    public void convertSelectedNodeToFailIfAllItsChildrenAreFail(NodeWithChildrenInterface<S,A> nodeSelected)
             throws StartStateIsTrapException {
 
         boolean allChildrenAreFail=areAllChildrenToSelectedNodeTerminalFail(nodeSelected);
@@ -42,7 +43,7 @@ public class SelectedToTerminalFailConverter<S,A> {
         }
     }
 
-    public boolean areAllChildrenToSelectedNodeTerminalFail(NodeInterface<S,A> nodeSelected) {
+    public boolean areAllChildrenToSelectedNodeTerminalFail(NodeWithChildrenInterface<S,A> nodeSelected) {
         Set<ActionInterface<A>> children = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
@@ -52,16 +53,16 @@ public class SelectedToTerminalFailConverter<S,A> {
 
     public void makeSelectedTerminal(NodeInterface<S,A> nodeSelected) {
         log.fine("Making node = " + nodeSelected.getName() + " terminal, all its children are fail states");
-        Pair<Optional<NodeInterface<S,A>>, ActionInterface<A>> parentActionPair = getParentAndActionToSelected(nodeSelected);
+        Pair<Optional<NodeWithChildrenInterface<S,A>>, ActionInterface<A>> parentActionPair = getParentAndActionToSelected(nodeSelected);
         Conditionals.executeOneOfTwo(parentActionPair.getFirst().isEmpty(),
                 this::someErrorLogging,
                 () -> transformSelectedToTerminalFail(parentActionPair.getFirst().get(), parentActionPair.getSecond(),nodeSelected));
     }
 
-    private Pair<Optional<NodeInterface<S,A>>, ActionInterface<A>>
+    private Pair<Optional<NodeWithChildrenInterface<S,A>>, ActionInterface<A>>
     getParentAndActionToSelected(NodeInterface<S,A> nodeSelected) {
-        Optional<NodeInterface<S,A>> parentToSelected = Optional.empty();
-        NodeInterface<S,A> nodeCurrent = nodeRoot;
+        Optional<NodeWithChildrenInterface<S,A>> parentToSelected = Optional.empty();
+        NodeWithChildrenInterface<S,A> nodeCurrent = nodeRoot;
 
        // A actionValueNA=actionsToSelected.get(0).nonApplicableAction();
         ActionInterface<A> actionToSelected=null; //=new ActionShip(actionValueNA);  //todo NOT NULL
@@ -73,7 +74,7 @@ public class SelectedToTerminalFailConverter<S,A> {
                 parentToSelected = Optional.of(nodeCurrent);
                 actionToSelected = action;
             }
-            nodeCurrent = nodeCurrent.getChild(action).orElseThrow();
+            nodeCurrent = (NodeWithChildrenInterface<S, A>) nodeCurrent.getChild(action).orElseThrow();
         }
         return new Pair<>(parentToSelected, actionToSelected);
     }
@@ -83,7 +84,7 @@ public class SelectedToTerminalFailConverter<S,A> {
         log.warning("Parent to selected not found, probably children of root node are all terminal-fail");
     }
 
-    private void transformSelectedToTerminalFail(NodeInterface<S,A> parentToSelected,
+    private void transformSelectedToTerminalFail(NodeWithChildrenInterface<S,A> parentToSelected,
                                                  ActionInterface<A> actionToSelected,
                                                  NodeInterface<S,A> nodeSelected) {
         log.fine("Parent to selected is = " + parentToSelected);

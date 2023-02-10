@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
 public class MonteCarloSearchStatistics<S, A> {
 
     private static final String NEW_LINE = System.lineSeparator();
-    NodeInterface<S, A> nodeRoot;
+    NodeWithChildrenInterface<S, A> nodeRoot;
     CpuTimer cpuTimer;
     TreeInfoHelper<S, A> tih;
     MonteCarloSettings<S, A> settings;
@@ -31,7 +33,7 @@ public class MonteCarloSearchStatistics<S, A> {
     float usedRelativeTimeInPercentage;
 
 
-    public MonteCarloSearchStatistics(@NonNull NodeInterface<S, A> nodeRoot,
+    public MonteCarloSearchStatistics(@NonNull NodeWithChildrenInterface<S, A> nodeRoot,
                                       @NonNull MonteCarloTreeCreator<S, A> monteCarloTreeCreator,
                                       MonteCarloSettings<S, A> settings) {
         this.nodeRoot = nodeRoot;

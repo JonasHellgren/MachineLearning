@@ -7,6 +7,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
+import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,12 +74,12 @@ public class TestMonteCarloControlledCharging {
     @SneakyThrows
     @Test
     public void doMonteCarloAndPlot() {
-        NodeInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.run();
+        NodeWithChildrenInterface<CellVariables, Integer> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         doPlotting(nodeRoot);
     }
 
-    private void doPrinting(NodeInterface<CellVariables, Integer> nodeRoot) {
+    private void doPrinting(NodeWithChildrenInterface<CellVariables, Integer> nodeRoot) {
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
         TreeInfoHelper<CellVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
         System.out.println("tih.getBestPath() = " + tih.getBestPath());
@@ -87,7 +88,7 @@ public class TestMonteCarloControlledCharging {
 
     }
 
-    private void doPlotting(NodeInterface<CellVariables, Integer> nodeRoot) {
+    private void doPlotting(NodeWithChildrenInterface<CellVariables, Integer> nodeRoot) {
         TreeInfoHelper<CellVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
         List<ActionInterface <Integer>> bestActions=tih.getActionsOnBestPath();

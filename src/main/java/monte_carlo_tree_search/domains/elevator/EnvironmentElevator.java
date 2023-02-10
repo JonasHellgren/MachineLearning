@@ -1,5 +1,10 @@
 package monte_carlo_tree_search.domains.elevator;
 
+import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.generic_interfaces.StateInterface;
+
 /**
  *  Influenced by https://busoniu.net/files/papers/ifac08-elevators.pdf
  *
@@ -41,5 +46,11 @@ package monte_carlo_tree_search.domains.elevator;
  */
 
 
-public class EnvironmentElevator {
+public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, ActionElevator>  {
+
+
+    @Override
+    public StepReturnGeneric<VariablesElevator> step(ActionInterface<ActionElevator> action, StateInterface<VariablesElevator> state) {
+        return null;
+    }
 }

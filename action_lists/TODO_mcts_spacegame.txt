@@ -223,17 +223,28 @@ plotta root value RunCartPoleOnlySearchMinusOneRewardAtFail  x
 MultiplePanelsPlotter  x
 tar simulate hänsyn till max tree depth  x
 RunCartPolePretrainedMemoryMinusOneRewardAtFail x
+alla tester x
+clean up x
 
-alla tester  x
-testa Bird=Bird.newDuck etc i liskov_substitution - static constructor för olika typer - interface bird: static FlyingBird newDuck()  x
-NodeInterface -> NodeInterface + NodeWithChildrenInterface
-clean up
-teststruktur som speglar klassstruktur
+NodeInterface har för många metoder - interface segregation  x
+NodeTerminal bort  x
+testMakeSelectedTerminal  bökar  x
+rewardOfStillInX2Y0IsBad bökar  x
 
+
+planutml nodes  x
+elevator miljö
+- ActionElevator  x
+- EnvironmentElevator
+- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
+- TestEnvironmentElevator
+
+
+kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 
 RunCartPoleAlphaZeroTD - använda TD state learning
 kan error baserat stopp criteri fås?
-NodeInterface har för många metoder - interfgace segregation
+
 många iteration få noder
 cpuTimer buggar ibland  - nano sec istaället?
 best path beror bara på value nofVisits kan ju även påverka val

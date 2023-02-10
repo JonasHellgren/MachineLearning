@@ -1,21 +1,22 @@
 @startuml
-abstract class mcts_spacegame.models_mcts_nodes.NodeAbstract {
+interface monte_carlo_tree_search.node_models.NodeWithChildrenInterface {
 }
-class mcts_spacegame.models_mcts_nodes.NodeWithNoChildren {
+abstract class monte_carlo_tree_search.node_models.NodeAbstract {
 }
-class mcts_spacegame.models_mcts_nodes.NodeWithChildren {
+class monte_carlo_tree_search.node_models.NodeTerminalFail {
 }
-class mcts_spacegame.models_mcts_nodes.NodeTerminalFail {
+interface monte_carlo_tree_search.node_models.NodeInterface {
 }
-interface mcts_spacegame.models_mcts_nodes.NodeInterface {
+class monte_carlo_tree_search.node_models.NodeTerminalNotFail {
 }
-class mcts_spacegame.models_mcts_nodes.NodeTerminalNoFail {
+class monte_carlo_tree_search.node_models.NodeNotTerminal {
 }
 
 
-mcts_spacegame.models_mcts_nodes.NodeInterface <|.. mcts_spacegame.models_mcts_nodes.NodeAbstract
-mcts_spacegame.models_mcts_nodes.NodeAbstract <|-- mcts_spacegame.models_mcts_nodes.NodeWithNoChildren
-mcts_spacegame.models_mcts_nodes.NodeAbstract <|-- mcts_spacegame.models_mcts_nodes.NodeWithChildren
-mcts_spacegame.models_mcts_nodes.NodeWithNoChildren <|-- mcts_spacegame.models_mcts_nodes.NodeTerminalFail
-mcts_spacegame.models_mcts_nodes.NodeWithNoChildren <|-- mcts_spacegame.models_mcts_nodes.NodeTerminalNoFail
+monte_carlo_tree_search.node_models.NodeInterface <|-- monte_carlo_tree_search.node_models.NodeWithChildrenInterface
+monte_carlo_tree_search.node_models.NodeInterface <|.. monte_carlo_tree_search.node_models.NodeAbstract
+monte_carlo_tree_search.node_models.NodeAbstract <|-- monte_carlo_tree_search.node_models.NodeTerminalFail
+monte_carlo_tree_search.node_models.NodeAbstract <|-- monte_carlo_tree_search.node_models.NodeTerminalNotFail
+monte_carlo_tree_search.node_models.NodeWithChildrenInterface <|.. monte_carlo_tree_search.node_models.NodeNotTerminal
+monte_carlo_tree_search.node_models.NodeAbstract <|-- monte_carlo_tree_search.node_models.NodeNotTerminal
 @enduml

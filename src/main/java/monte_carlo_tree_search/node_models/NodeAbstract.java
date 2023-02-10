@@ -7,39 +7,38 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
 @Log
 public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
-    private static final double INIT_REWARD_VALUE = 0d;
+
     private static final String BLANK_SPACE = "  ";
     String name;
     ActionInterface<AV> action;
     StateInterface<SSV> state;
     int depth;
-    Map<AV, Double> actionRewardMap;  //bara för de med children!??
 
     public NodeAbstract(StateInterface<SSV> state, ActionInterface<AV> action) {
         this.name = state.toString();
         this.action=action;
         this.state=state.copy();
         this.depth=0;
-        this.actionRewardMap=new HashMap<>();
     }
 
     public NodeAbstract(String name,
                         ActionInterface<AV> action,
                         StateInterface<SSV> state,
-                        int depth,
-                        Map<AV, Double> actionRewardMap) {
+                        int depth) {
         this.name = name;
         this.action = action;
         this.state = state;
         this.depth = depth;
-        this.actionRewardMap = new HashMap<>(actionRewardMap);
+    }
+
+    public NodeAbstract(NodeAbstract<SSV,AV> node) {
+        this(node.name,node.action,node.state,node.depth);
     }
 
     String nameAndDepthAsString() {
@@ -58,16 +57,6 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
         return (this instanceof NodeTerminalNotFail);
     }
 
-    public void saveRewardForAction(ActionInterface<AV> action, double reward) {
-        Conditionals.executeIfTrue(actionRewardMap.containsKey(action.getValue()),
-                () -> log.fine("Reward for action already defined"));
-
-        actionRewardMap.put(action.getValue(),reward);
-    }
-
-    public double restoreRewardForAction(ActionInterface<AV> action) {
-       return actionRewardMap.getOrDefault(action.getValue(),INIT_REWARD_VALUE);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -82,7 +71,7 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
     @Override
     public String toString() {
         return  "name = "+name+
-                ", nof ch. = " + this.nofChildNodes()+
+              //  ", nof ch. = " + this.nofChildNodes()+
                 ", a = " + action +
                 ", d = " + depth;
     }
