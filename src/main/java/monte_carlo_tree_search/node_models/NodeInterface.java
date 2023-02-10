@@ -35,39 +35,43 @@ import java.util.*;
  */
 
 public interface NodeInterface<SSV,AV> {
-    void addChildNode(NodeInterface<SSV,AV> node);
-    List<NodeInterface<SSV,AV>> getChildNodes();
-    int nofChildNodes();
-    void printTree();
-    void increaseNofVisits();
-    void increaseNofActionSelections(ActionInterface<AV> a);
-    void updateActionValue(double G, ActionInterface<AV> a, double alpha);
-    boolean isNotTerminal();
-    boolean isTerminalFail();
-    boolean isTerminalNoFail();
-    void saveRewardForAction(ActionInterface<AV> action, double reward);
-    double restoreRewardForAction(ActionInterface<AV> action);
 
+   // NodeInterface
     int getDepth();
     String getName();
     ActionInterface<AV> getAction();
-    Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
     StateInterface<SSV> getState();
+    void setDepth(int depth);
+    int nofChildNodes();
+    void printTree();
+    boolean isNotTerminal();
+    boolean isTerminalFail();
+    boolean isTerminalNoFail();
+
+    //move to NodeWithChildrenInterface
+    void increaseNofVisits();
+    void increaseNofActionSelections(ActionInterface<AV> a);
+    void updateActionValue(double G, ActionInterface<AV> a, double alpha);
+    void addChildNode(NodeInterface<SSV,AV> node);
+    List<NodeInterface<SSV,AV>> getChildNodes();
+    void saveRewardForAction(ActionInterface<AV> action, double reward);
+    double restoreRewardForAction(ActionInterface<AV> action);
+    Optional<NodeInterface<SSV,AV>> getChild(ActionInterface<AV> action);
     int getNofVisits();
     int getNofActionSelections(ActionInterface<AV> a);
     double getActionValue(ActionInterface<AV> a);
-    void setDepth(int depth);
+
 
     static <SSV,AV> NodeNotTerminal<SSV,AV> newNotTerminal(StateInterface<SSV> s, ActionInterface<AV> action) {
         return new NodeNotTerminal<>(s, action);
     }
 
     static <SSV,AV> NodeTerminalFail<SSV,AV>  newTerminalFail(StateInterface<SSV> s, ActionInterface<AV> action) {
-        return new NodeTerminalFail<SSV,AV>(s,action);
+        return new NodeTerminalFail<>(s, action);
     }
 
     static <SSV,AV> NodeTerminalNotFail<SSV,AV>  newTerminalNotFail(StateInterface<SSV> s, ActionInterface<AV> action) {
-        return new NodeTerminalNotFail<SSV,AV>(s,action);
+        return new NodeTerminalNotFail<>(s, action);
     }
 
     static <SSV,AV> NodeInterface<SSV,AV> newNode(StepReturnGeneric<SSV> stepReturn, ActionInterface<AV> action) {

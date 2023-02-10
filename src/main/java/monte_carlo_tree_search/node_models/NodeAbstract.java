@@ -20,7 +20,7 @@ public abstract class NodeAbstract<SSV,AV> implements NodeInterface<SSV,AV> {
     ActionInterface<AV> action;
     StateInterface<SSV> state;
     int depth;
-    Map<AV, Double> actionRewardMap;
+    Map<AV, Double> actionRewardMap;  //bara för de med children!??
 
     public NodeAbstract(StateInterface<SSV> state, ActionInterface<AV> action) {
         this.name = state.toString();

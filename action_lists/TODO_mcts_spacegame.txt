@@ -224,8 +224,11 @@ MultiplePanelsPlotter  x
 tar simulate hänsyn till max tree depth  x
 RunCartPolePretrainedMemoryMinusOneRewardAtFail x
 
-alla tester
+alla tester  x
+testa Bird=Bird.newDuck etc i liskov_substitution - static constructor för olika typer - interface bird: static FlyingBird newDuck()  x
+NodeInterface -> NodeInterface + NodeWithChildrenInterface
 clean up
+teststruktur som speglar klassstruktur
 
 
 RunCartPoleAlphaZeroTD - använda TD state learning
