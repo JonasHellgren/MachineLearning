@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class VariablesElevator {
     public static final int DEFAULT_SPEED = 0;
     public static final int DEFAULT_POS = 0;
     public static final int DEFAULT_IN_ELEVATOR = 0;
-    public static final ArrayList<Integer> EMPTY_LIST = new ArrayList<>();
+    public static final List<Integer> EMPTY_LIST = Arrays.asList(0,0,0);
     public static final double DEFULT_SOE = 1.0;
 
     @Builder.Default

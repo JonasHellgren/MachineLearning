@@ -53,9 +53,7 @@ import java.util.function.Predicate;
  */
 
 
-public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, ActionElevator>  {
-
-
+public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, Integer>  {
     private static final int MIN_POS = 0;
     private static final int MAX_POS = 30;
     private static final int NOF_POS_BETWEEN_FLOORS = 10;
@@ -63,22 +61,24 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Double POWER_CHARGE = 3_000d;
     private static final Double POWER_STILL = 0d;
     private static final Double POWER_MOVING_UP = -1000d;
-    private static final Double POWER_MOVING_DOWN = -500d;
+    private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;
     private static final double SOC_LOW = 0.2;
     private static final int REWARD_FAIL = -100;
 
 
-    private double newSoE;
+    public static EnvironmentGenericInterface<VariablesElevator, Integer> newDefault() {
+        return new EnvironmentElevator();
+    }
 
     @Override
-    public StepReturnGeneric<VariablesElevator> step(ActionInterface<ActionElevator> action, StateInterface<VariablesElevator> state) {
+    public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action, StateInterface<VariablesElevator> state) {
 
-        int speed=action.getValue().getValue();
+        int speed=action.getValue();
         int newPos= MathUtils.clip(state.getVariables().pos+speed, MIN_POS, MAX_POS);
         int nPersonsInElevator=calcNofPersonsInElevator(newPos,state);
         List<Integer> nPersonsWaiting=updateNofPersonsWaiting(state);
-        double newSoE= updateSoE(newPos,speed);
+        double newSoE= updateSoE(newPos,speed,state);
 
         StateInterface<VariablesElevator> newState= new StateElevator(VariablesElevator.builder()
                 .speed(speed)
@@ -141,7 +141,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         return nPersonsWaiting;
     }
 
-    double updateSoE(int newPos, int speed) {
+    double updateSoE(int newPos, int speed,StateInterface<VariablesElevator> state) {
         Optional<Integer> floor = getFloor(newPos);
 
         //todo - cleanup by list of Pair<Predicate, Double>
@@ -156,7 +156,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         if (isStandingStillBottomFloor.test(floor,newPos)) {
             power= Optional.of(POWER_CHARGE);
         }
-        if (isStandingStillNotBottomFloor.test(floor,newPos)) {
+        if (isStandingStillNotBottomFloor.test(floor,speed)) {
             power= Optional.of(POWER_STILL);
         }
         if (isMovingUp.test(speed)) {
@@ -167,7 +167,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
             power= Optional.of(POWER_MOVING_DOWN);
         }
 
-        return power.orElseThrow()/CAPACITY_BATTERY;
+        return state.getVariables().SoE+power.orElseThrow()/CAPACITY_BATTERY;
 
     }
 
