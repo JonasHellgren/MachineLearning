@@ -236,9 +236,11 @@ planutml nodes  x
 elevator miljö
 - ActionElevator  x
 - EnvironmentElevator
-- snygga upp StateElevator - predicate chaining/BiPredicate
-- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 - TestEnvironmentElevator
+- snygga upp StateElevator - predicate chaining/BiPredicate
+- updateNofPersonsWaiting
+- TestEnvironmentElevatorUpdateNofPersonsWaiting
+- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 
 
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc

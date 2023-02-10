@@ -87,26 +87,21 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 .nPersonsWaiting(nPersonsWaiting)
                 .SoE(newSoE)
                 .build());
-        boolean isFail=isFailsState(newState);
-        boolean isTerminalState=isFail;
         double nonFailReward=-nPersonsWaiting.stream().mapToInt(Integer::intValue).sum();
-        double reward = (isFailsState(newState))? REWARD_FAIL : nonFailReward;
-
 
         return StepReturnGeneric.<VariablesElevator>builder()
                 .newState(newState)
-                .isFail(isFail)
-                .isTerminal(isTerminalState)
-                .reward(reward)
+                .isFail(isFailsState(newState))
+                .isTerminal(isFailsState(newState))
+                .reward((isFailsState(newState))? REWARD_FAIL : nonFailReward)
                 .build();
     }
 
     @NotNull
     private Optional<Integer> getFloor(int pos) {
-        Optional<Integer> floor=(pos % NOF_POS_BETWEEN_FLOORS == 0)
+        return (pos % NOF_POS_BETWEEN_FLOORS == 0)
                 ? Optional.of(pos / NOF_POS_BETWEEN_FLOORS)
                 : Optional.empty();
-        return floor;
     }
 
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
@@ -118,17 +113,16 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         List<Integer> nPersonsWaiting=state.getVariables().nPersonsWaiting;
         int nPersonsInElevator=state.getVariables().nPersonsInElevator;
         Optional<Integer> floor = getFloor(newPos);
-
         Predicate<Optional<Integer>> isPersonsEnteringElevator= f -> f.isPresent() && f.get()!= BOTTOM_FLOOR;
         Predicate<Optional<Integer>> isPersonsLeavingElevator= f -> f.isPresent() && f.get()== BOTTOM_FLOOR;
 
-        nPersonsInElevator =  (isPersonsEnteringElevator.test(floor))
-                ? nPersonsInElevator+nPersonsWaiting.get(floor.orElseThrow())
-                : nPersonsInElevator;
+        if   (isPersonsEnteringElevator.test(floor)) {
+            return nPersonsInElevator + nPersonsWaiting.get(floor.orElseThrow());
+        }
 
-        nPersonsInElevator = (isPersonsLeavingElevator.test(floor))
-                ? 0
-                : nPersonsInElevator;
+        if (isPersonsLeavingElevator.test(floor)) {
+            return 0;
+        }
 
         return nPersonsInElevator;
     }
