@@ -1,9 +1,6 @@
 package mcts_elevator;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.domains.cart_pole.ActionCartPole;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.domains.elevator.ActionElevator;
 import monte_carlo_tree_search.domains.elevator.EnvironmentElevator;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
@@ -11,6 +8,7 @@ import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +20,7 @@ public class TestEnvironmentElevator {
 
     @Before
     public void init() {
-        //environment = EnvironmentElevator.newDefault();
+        environment = EnvironmentElevator.newDefault();
     }
 
     @Test
@@ -30,6 +28,8 @@ public class TestEnvironmentElevator {
         StateInterface<VariablesElevator> state=StateElevator.newFullyChargedReadyAtBottomFloorNoPassengers();
         ActionInterface<Integer> action= ActionElevator.newValueDefaultRange(ACTION_UP);
         stepReturn=environment.step(action,state);
+        VariablesElevator variables=stepReturn.newState.getVariables();
+        Assert.assertEquals(1,variables.pos);
 
     }
 

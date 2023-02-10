@@ -15,11 +15,16 @@ import java.util.List;
 @ToString
 public class VariablesElevator {
     private static final double DELTA = 0.01;
+    public static final int DEFAULT_SPEED = 0;
+    public static final int DEFAULT_POS = 0;
     public static final int DEFAULT_IN_ELEVATOR = 0;
     public static final ArrayList<Integer> EMPTY_LIST = new ArrayList<>();
     public static final double DEFULT_SOE = 1.0;
 
-    public int pos;
+    @Builder.Default
+    public int speed=DEFAULT_SPEED;
+    @Builder.Default
+    public int pos=DEFAULT_POS;
     @Builder.Default
     public int nPersonsInElevator= DEFAULT_IN_ELEVATOR;
     @Builder.Default
@@ -30,6 +35,7 @@ public class VariablesElevator {
 
     public VariablesElevator copy() {
         return VariablesElevator.builder()
+                .speed(speed)
                 .pos(pos)
                 .nPersonsInElevator(nPersonsInElevator)
                 .nPersonsWaiting(new ArrayList<>(nPersonsWaiting))

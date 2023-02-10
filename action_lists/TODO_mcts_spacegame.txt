@@ -236,6 +236,7 @@ planutml nodes  x
 elevator miljö
 - ActionElevator  x
 - EnvironmentElevator
+- snygga upp StateElevator - predicate chaining/BiPredicate
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 - TestEnvironmentElevator
 
