@@ -86,7 +86,7 @@ public class TestEnvironmentElevator {
     public void givenHalfChargedAtFloor1PassengersWaiting_whenActionStill_thenPassengersInElevator() {
         StateInterface<VariablesElevator> state = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_FULL).pos(POS_FLOOR_1).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(0, 1, 0))
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         Assert.assertEquals(1, getVariablesElevatorAfterStep(state, ACTION_STILL).nPersonsInElevator);
     }

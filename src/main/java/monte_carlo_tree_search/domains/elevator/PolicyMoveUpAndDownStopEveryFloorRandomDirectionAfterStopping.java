@@ -1,7 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
@@ -10,7 +9,6 @@ import org.apache.commons.lang3.RandomUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -52,6 +50,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtBottom).test(s,p),(s, p) -> SPEED_UP);
 
     }
+
     @Override
     public ActionInterface<Integer> chooseAction(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;

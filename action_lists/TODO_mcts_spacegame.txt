@@ -240,7 +240,9 @@ elevator miljö
 - snygga upp StateElevator - predicate chaining/BiPredicate  - går ej x
 - ny klass NofPersonsWaitingUpdater  x
 - TestNofPersonsWaitingUpdater x
-- TestEnvironmentElevatorManyStepsUsingRules
+- TestEnvironmentElevatorManyStepsUsingRules x
+- cleanup by list of Pair<Predicate, Double> x
+-giveRulePolicy_whenManyStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 
 
