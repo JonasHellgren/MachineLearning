@@ -7,6 +7,7 @@ import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
@@ -64,24 +65,43 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;
     private static final double SOC_LOW = 0.2;
-    private static final int REWARD_FAIL = -100;
+    private static final double REWARD_FAIL = -100;
+    private static final Integer NOF_FLOORS=3;
+    private static final int BIG = Integer.MAX_VALUE;
 
+    NofPersonsWaitingUpdater nofPersonsWaitingUpdater;
+
+    public EnvironmentElevator(NofPersonsWaitingUpdater nofPersonsWaitingUpdater) {
+        this.nofPersonsWaitingUpdater = nofPersonsWaitingUpdater;
+    }
 
     public static EnvironmentGenericInterface<VariablesElevator, Integer> newDefault() {
-        return new EnvironmentElevator();
+        NofPersonsWaitingUpdater nofPersonsWaitingUpdater=new NofPersonsWaitingUpdater(Arrays.asList(BIG,BIG,BIG));
+        return new EnvironmentElevator(nofPersonsWaitingUpdater);
+    }
+
+    public static EnvironmentGenericInterface<VariablesElevator, Integer>
+                            newFromStepBetweenAddingNofWaiting(List<Integer> stepList) {
+
+        if (stepList.size()!=NOF_FLOORS) {
+            throw  new IllegalArgumentException("Bad size stepList");
+        }
+
+        NofPersonsWaitingUpdater nofPersonsWaitingUpdater=new NofPersonsWaitingUpdater(stepList);
+        return new EnvironmentElevator(nofPersonsWaitingUpdater);
     }
 
     @Override
     public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action, StateInterface<VariablesElevator> state) {
 
-        int speed=action.getValue();
-        int newPos= MathUtils.clip(state.getVariables().pos+speed, MIN_POS, MAX_POS);
-        int nPersonsInElevator=calcNofPersonsInElevator(newPos,state);
-        List<Integer> nPersonsWaiting=updateNofPersonsWaiting(state);
-        double newSoE= updateSoE(newPos,speed,state);
+        int newSpeed=action.getValue();
+        int newPos= MathUtils.clip(state.getVariables().pos+newSpeed, MIN_POS, MAX_POS);
+        int nPersonsInElevator=calcNofPersonsInElevator(newSpeed,newPos,state);
+        List<Integer> nPersonsWaiting=updateNofPersonsWaiting(newSpeed,newPos,state);
+        double newSoE= updateSoE(newPos,newSpeed,state);
 
         StateInterface<VariablesElevator> newState= new StateElevator(VariablesElevator.builder()
-                .speed(speed)
+                .speed(newSpeed)
                 .pos(newPos)
                 .nPersonsInElevator(nPersonsInElevator)
                 .nPersonsWaiting(nPersonsWaiting)
@@ -109,28 +129,34 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         return newState.getVariables().SoE< SOC_LOW;
     }
 
-    int calcNofPersonsInElevator(int newPos, StateInterface<VariablesElevator> state) {
+    int calcNofPersonsInElevator(int newSpeed,int newPos, StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaiting=state.getVariables().nPersonsWaiting;
         int nPersonsInElevator=state.getVariables().nPersonsInElevator;
         Optional<Integer> floor = getFloor(newPos);
-        Predicate<Optional<Integer>> isPersonsEnteringElevator= f -> f.isPresent() && f.get()!= BOTTOM_FLOOR;
-        Predicate<Optional<Integer>> isPersonsLeavingElevator= f -> f.isPresent() && f.get()== BOTTOM_FLOOR;
+        BiPredicate<Integer,Optional<Integer>> isPersonsEnteringElevator= (s,f) -> s==0 && f.isPresent() && f.get()!= BOTTOM_FLOOR;
+        BiPredicate<Integer,Optional<Integer>> isPersonsLeavingElevator= (s,f) -> s==0 && f.equals(Optional.of(BOTTOM_FLOOR));
 
-        if   (isPersonsEnteringElevator.test(floor)) {
+        if   (isPersonsEnteringElevator.test(newSpeed,floor)) {
             return nPersonsInElevator + nPersonsWaiting.get(floor.orElseThrow());
         }
 
-        if (isPersonsLeavingElevator.test(floor)) {
+        if (isPersonsLeavingElevator.test(newSpeed,floor)) {
             return 0;
         }
 
         return nPersonsInElevator;
     }
 
-    List<Integer>  updateNofPersonsWaiting(StateInterface<VariablesElevator> state) {
-        List<Integer> nPersonsWaiting=state.getVariables().nPersonsWaiting;
+    List<Integer>  updateNofPersonsWaiting(int newSpeed,int newPos,StateInterface<VariablesElevator> state) {
 
-        //TODO - define logic here
+        state=nofPersonsWaitingUpdater.update(state);
+        List<Integer> nPersonsWaiting=state.getVariables().nPersonsWaiting;
+        Optional<Integer> floor = getFloor(newPos);
+        BiPredicate<Integer,Optional<Integer>> isPersonsEnteringElevator= (s,f) -> s==0 && f.isPresent() && f.get()!= BOTTOM_FLOOR;
+
+        if   (isPersonsEnteringElevator.test(newSpeed,floor)) {
+            nPersonsWaiting.set(floor.orElseThrow(),0);
+        }
 
         return nPersonsWaiting;
     }

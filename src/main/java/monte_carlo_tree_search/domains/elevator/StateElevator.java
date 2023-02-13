@@ -58,6 +58,7 @@ public class StateElevator implements StateInterface<VariablesElevator> {
 
     @NotNull
     private static String getErrorMessage(VariablesElevator variables) {
+
         return "isValidPos = "+isValidPos.test(variables.pos)+
                 ", isValidPersonsInElevator = "+isValidPersonsInElevator.test(variables.nPersonsInElevator)+
                 ", isValidPersonsWaiting = "+isValidPersonsWaiting.test(variables.nPersonsWaiting)+
@@ -73,6 +74,7 @@ public class StateElevator implements StateInterface<VariablesElevator> {
     public void setFromReturn(StepReturnGeneric<VariablesElevator> stepReturn) {
         variables=stepReturn.copyState().getVariables();
     }
+
 
     @Override
     public String toString() {

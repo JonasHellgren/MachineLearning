@@ -44,6 +44,10 @@ public class VariablesElevator {
                 .build();
     }
 
+    public int nofWaiting() {
+        return nPersonsWaiting.stream().mapToInt(Integer::intValue).sum();
+    }
+
     @Override
     public boolean equals(Object obj) {
 
