@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         implements SimulationPolicyInterface<VariablesElevator, Integer> {
 
-    private static final int BACKUP = 0;
     private static final int POS_BETWEEN = 10;
     private static final int TOP_POS = 30;
     private static final int BOTTOM_POS = 0;
@@ -55,26 +54,9 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
     public ActionInterface<Integer> chooseAction(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
-        return ActionElevator.newValueDefaultRange(process(speed,pos));
+        DecisionTableReader reader=new DecisionTableReader(decisionTable);
+        return ActionElevator.newValueDefaultRange(reader.process(speed,pos));
     }
 
-    public  Integer process(Integer speed, Integer pos) {
 
-        List<BiFunction<Integer,Integer,Integer>> fcnList=decisionTable.entrySet().stream()
-                .filter(e -> e.getKey().test(speed,pos))
-                .map(e -> e.getValue())
-                .collect(Collectors.toList());
-
-        if (fcnList.size()>1) {
-            log.warning("Multiple matching rules, nof ="+fcnList.size()+". Applying random.");
-            return fcnList.get(RandomUtils.nextInt(0,fcnList.size())).apply(speed,pos);
-        }
-
-        if (fcnList.size()==0) {
-            log.warning("No matching rule, using backup");
-            return BACKUP;
-        }
-
-        return fcnList.get(0).apply(speed,pos);
-    }
 }

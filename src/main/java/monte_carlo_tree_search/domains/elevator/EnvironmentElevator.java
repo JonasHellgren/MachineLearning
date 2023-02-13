@@ -172,7 +172,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     double updateSoE(int newPos, int newSpeed, StateInterface<VariablesElevator> state) {
-        return state.getVariables().SoE + getPower(newPos, newSpeed)/ CAPACITY_BATTERY;
+        return MathUtils.clip(state.getVariables().SoE + getPower(newPos, newSpeed)/ CAPACITY_BATTERY,0,1);
     }
 
     private Double getPower(int newPos, int newSpeed) {
