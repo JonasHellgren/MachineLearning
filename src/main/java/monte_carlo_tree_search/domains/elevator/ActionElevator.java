@@ -31,9 +31,9 @@ public class ActionElevator implements ActionInterface<Integer> {
         return actionElevator;
     }
 
-    public static ActionElevator newValueSpecfictRange(Integer actionValue,
-                                                       Integer minActionValue,
-                                                       Integer maxActionValue) {
+    public static ActionElevator newValueSpecficRange(Integer actionValue,
+                                                      Integer minActionValue,
+                                                      Integer maxActionValue) {
         ActionElevator actionElevator=ActionElevator.builder()
                 .actionValue(actionValue).minActionValue(minActionValue).maxActionValue(maxActionValue)
                 .build();

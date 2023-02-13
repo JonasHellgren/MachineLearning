@@ -17,14 +17,14 @@ public class TestActionElevator {
 
     @Test
     public void givenAction0SpecificRange_thenFine() {
-        ActionInterface<Integer> actionElevator=ActionElevator.newValueSpecfictRange(0,0,1);
+        ActionInterface<Integer> actionElevator=ActionElevator.newValueSpecficRange(0,0,1);
         System.out.println("actionElevator = " + actionElevator);
         Assert.assertEquals(0,actionElevator.getValue().intValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void givenAction10SpecificRange_thenThrows() {
-        ActionElevator.newValueSpecfictRange(10,0,1);
+        ActionElevator.newValueSpecficRange(10,0,1);
     }
 
 }
