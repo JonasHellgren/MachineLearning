@@ -96,7 +96,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     @Override
-    public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action, StateInterface<VariablesElevator> state) {
+    public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action, final StateInterface<VariablesElevator> state) {
 
         int newSpeed = action.getValue();
         int newPos = MathUtils.clip(state.getVariables().pos + newSpeed, MIN_POS, MAX_POS);
@@ -159,15 +159,17 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     List<Integer> updateNofPersonsWaiting(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
-        state = nofPersonsWaitingUpdater.update(state);
+        nofPersonsWaitingUpdater.update(state);
+        removePersonsWaitingAtFloorIfElevatorPass(newSpeed, newPos, state);
+        return state.getVariables().nPersonsWaiting;
+    }
+
+    private void removePersonsWaitingAtFloorIfElevatorPass(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaiting = state.getVariables().nPersonsWaiting;
         Optional<Integer> floor = getFloor(newPos);
-
         if (isPersonsEnteringElevator.test(newSpeed, floor)) {
             nPersonsWaiting.set(floor.orElseThrow() - 1, 0);
         }
-
-        return nPersonsWaiting;
     }
 
     double updateSoE(int newPos, int newSpeed, StateInterface<VariablesElevator> state) {

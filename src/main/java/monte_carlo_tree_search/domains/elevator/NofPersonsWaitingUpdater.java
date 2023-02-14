@@ -1,9 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
-import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import org.apache.arrow.flatbuf.Int;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +18,7 @@ public class NofPersonsWaitingUpdater {
         }
     }
 
-    public StateInterface<VariablesElevator> update(StateInterface<VariablesElevator> state) {
+    public void update(StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaitingList=state.getVariables().nPersonsWaiting;
 
         if (nPersonsWaitingList.size()!=counters.size()) {
@@ -32,16 +29,14 @@ public class NofPersonsWaitingUpdater {
             counter.update();
         }
 
+        int index=0;
         for (Integer nPersonsWaiting:nPersonsWaitingList) {
-            int index=nPersonsWaitingList.indexOf(nPersonsWaiting);
             if (counters.get(index).isNofStepsBetweenReached()) {
-                Integer value=nPersonsWaiting;
-                value++;
-                nPersonsWaitingList.set(index,value);
+                nPersonsWaitingList.set(index,nPersonsWaiting+1);
             }
+            index++;
         }
 
-        return state;
     }
 
     public String toString() {

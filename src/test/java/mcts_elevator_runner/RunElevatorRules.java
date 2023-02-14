@@ -12,26 +12,31 @@ import java.util.Arrays;
 public class RunElevatorRules {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
-    private static final int NOF_STEPS_HALF_RANDOM_POLICY = 100;
+    private static final int NOF_STEPS_HALF_RANDOM_POLICY = 50;
     private static final double DELTA = 0.01;
+    private static final int NSTEPS_BETWEEN = 50;
+    private static final int NOF_CYCLES = 5;
 
     static EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     static StateInterface<VariablesElevator> state;
 
 
     public static void main(String[] args) {
-        environment = EnvironmentElevator.newDefault();
+        environment = EnvironmentElevator.newFromStepBetweenAddingNofWaiting
+                (Arrays.asList(NSTEPS_BETWEEN,NSTEPS_BETWEEN,NSTEPS_BETWEEN));
         state = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
 
 
+       // int nofSteps=0;
+        for (int i = 0; i < NOF_CYCLES; i++) {
         System.out.println("variables start = " + state.getVariables());
         runHalfRandomPolicySimulation();
-
         runChargeSimulation();
         System.out.println("variables end = " + state.getVariables());
+        }
 
     }
 
@@ -40,7 +45,7 @@ public class RunElevatorRules {
         VariablesElevator variables;
         do {
             variables = stepAndUpdateState(policy);
-        } while (variables.SoE < 1);
+        } while (variables.SoE < SOE_FULL);
     }
 
     private static void runHalfRandomPolicySimulation() {
@@ -51,9 +56,9 @@ public class RunElevatorRules {
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
             variables = stepAndUpdateState(policy);
             EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
-            if (environmentCasted.canPersonLeavingOrEnter(state)) {
+         //   if (environmentCasted.canPersonLeavingOrEnter(state)) {
                 System.out.println("variables = " + variables);
-            }
+          //  }
         }
     }
 
