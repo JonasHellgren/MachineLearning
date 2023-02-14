@@ -21,11 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestEnvironmentElevatorFailAndReward {
 
     private static final int SOE_FULL = 1;
-    private static final int POS_FLOOR_0 = 0;
-    private static final int NOF_STEPS_HALF_RANDOM_POLICY = 100;
-    private static final double DELTA = 0.01;
     private static final int ACTION_STILL = 0;
     private static final int SOE_EMPTY = 0;
+    private static final double SOE_SMALL = 0.21;
+    private static final int ACTION_UP = 1;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     StateInterface<VariablesElevator> state;
@@ -33,7 +32,6 @@ public class TestEnvironmentElevatorFailAndReward {
     @Before
     public void init() {
         environment = EnvironmentElevator.newDefault();
-
     }
 
     @Test
@@ -61,6 +59,21 @@ public class TestEnvironmentElevatorFailAndReward {
         StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
         assertFalse(sr.isFail);
         assertEquals(-10,sr.reward);
+    }
+
+    @Test
+    public void givenSmallSoETenWaiting_whenUp_thenFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().SoE(SOE_SMALL).build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_UP);
+        assertTrue(sr.isFail);
+    }
+
+
+    @Test
+    public void givenSmallSoETenWaiting_whenStill_thenNotFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
+        assertFalse(sr.isFail);
     }
 
     private StepReturnGeneric<VariablesElevator> getStepReturnAfterStep(
