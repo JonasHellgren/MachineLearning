@@ -50,8 +50,8 @@ import java.util.stream.Collectors;
 
 
 public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, Integer> {
-    private static final int MIN_POS = 0;
-    private static final int MAX_POS = 30;
+    public static final int MIN_POS = 0;
+    public static final int MAX_POS = 30;
     private static final int NOF_POS_BETWEEN_FLOORS = 10;
     private static final int BOTTOM_FLOOR = 0;
     private static final Double POWER_CHARGE = 3_000d;
@@ -121,8 +121,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 .build();
     }
 
-    @NotNull
-    private Optional<Integer> getFloor(int pos) {
+    public static Optional<Integer> getFloor(int pos) {
         return (pos % NOF_POS_BETWEEN_FLOORS == 0)
                 ? Optional.of(pos / NOF_POS_BETWEEN_FLOORS)
                 : Optional.empty();

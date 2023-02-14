@@ -244,7 +244,8 @@ elevator miljö
 - cleanup by list of Pair<Predicate, Double> x
 -giveRulePolicy_whenManyStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE  x
 - runChargeSimulation till SoC=1  x
-- test som simulerar rules med waiting som poppsar upp ca var 20e steg
+- test som simulerar rules med waiting som poppsar upp ca var 20e steg  x
+- TestEnvironmentElevatorFailAndReward x
 - grafix
 - mcts init baserat på PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
 - mcts smartare - conditional branching

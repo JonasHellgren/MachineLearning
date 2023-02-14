@@ -49,14 +49,6 @@ public class OnPolicyMonteCarloControlRunner {
         MemoryShower<StateObservedAction> ps=new MemoryShower<>();
         ps.showPolicy(panelPolicyNoUsableAce, panelPolicyUsableAce, memory);
 
-
-
-
-
-
     }
-
-
-
 
 }

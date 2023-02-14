@@ -1,5 +1,6 @@
 package mcts_elevator_runner;
 
+import black_jack.result_drawer.GridPanel;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -9,7 +10,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Arrays;
 
-public class RunElevatorRules {
+public class ElevatorRulesRunner {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int NOF_STEPS_HALF_RANDOM_POLICY = 50;
@@ -29,14 +30,17 @@ public class RunElevatorRules {
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
 
+        GridPanel panel=FrameAndPanelCreatorElevator.createPanel("","","");
 
-       // int nofSteps=0;
         for (int i = 0; i < NOF_CYCLES; i++) {
         System.out.println("variables start = " + state.getVariables());
         runHalfRandomPolicySimulation();
         runChargeSimulation();
         System.out.println("variables end = " + state.getVariables());
         }
+
+        StateShowerElevator shower=new StateShowerElevator(state,panel);
+        shower.insertStates();
 
     }
 
@@ -56,9 +60,9 @@ public class RunElevatorRules {
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
             variables = stepAndUpdateState(policy);
             EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
-         //   if (environmentCasted.canPersonLeavingOrEnter(state)) {
+            if (environmentCasted.canPersonLeavingOrEnter(state)) {
                 System.out.println("variables = " + variables);
-          //  }
+            }
         }
     }
 
