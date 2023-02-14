@@ -159,7 +159,6 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     List<Integer> updateNofPersonsWaiting(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
-
         state = nofPersonsWaitingUpdater.update(state);
         List<Integer> nPersonsWaiting = state.getVariables().nPersonsWaiting;
         Optional<Integer> floor = getFloor(newPos);

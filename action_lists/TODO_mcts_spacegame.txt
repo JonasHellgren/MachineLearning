@@ -242,7 +242,12 @@ elevator miljö
 - TestNofPersonsWaitingUpdater x
 - TestEnvironmentElevatorManyStepsUsingRules x
 - cleanup by list of Pair<Predicate, Double> x
--giveRulePolicy_whenManyStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE
+-giveRulePolicy_whenManyStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE  x
+- runChargeSimulation till SoC=1  x
+- test som simulerar rules med waiting som poppsar upp ca var 20e steg
+- grafix
+- mcts init baserat på PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
+- mcts smartare - conditional branching
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 
 

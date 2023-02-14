@@ -17,10 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestEnvironmentElevatorManyStepsUsingRules {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
-    private static final int POS_FLOOR_1 = 10;
     private static final int NOF_STEPS_HALF_RANDOM_POLICY = 100;
     private static final double DELTA = 0.01;
-    private static final int NOF_STEPS_CHARGING = 50;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     StateInterface<VariablesElevator> state;
@@ -36,10 +34,8 @@ public class TestEnvironmentElevatorManyStepsUsingRules {
 
     @Test
     public void givenRulePolicy_whenNoSteps_thenWaiting() {
-
         VariablesElevator variables = state.getVariables();
         assertEquals(1, variables.nofWaiting());
-
     }
 
     @Test
@@ -47,47 +43,49 @@ public class TestEnvironmentElevatorManyStepsUsingRules {
         SimulationPolicyInterface<VariablesElevator, Integer> policy =
                 new PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping();
 
-        VariablesElevator variables=getVariablesElevatorAfterStep(state, policy);
+        VariablesElevator variables = getVariablesElevatorAfterStep(state, policy);
         System.out.println("variables start = " + variables);
-        variables = runHalfRandomPolicySimulation(policy, variables);
+        variables = runHalfRandomPolicySimulation(policy);
 
-        Assert.assertEquals(0,variables.nofWaiting());
+        Assert.assertEquals(0, variables.nofWaiting());
     }
 
 
     @Test
-    public void givenRulePolicy_whenManyHalfRandomStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE() {
+    public void givenRulePolicy_whenManyHalfRandomStepsAfterBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE() {
         SimulationPolicyInterface<VariablesElevator, Integer> policy =
                 new PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping();
 
-        VariablesElevator variables=getVariablesElevatorAfterStep(state, policy);
+        VariablesElevator variables = state.getVariables();
         System.out.println("variables start = " + variables);
-        variables = runHalfRandomPolicySimulation(policy, variables);
+        variables = runHalfRandomPolicySimulation(policy);
 
-        policy =  new PolicyMoveDownStop();
-        variables = runChargeSimulation(policy, variables);
+        policy = new PolicyMoveDownStop();
+        variables = runChargeSimulation(policy);
         System.out.println("variables end = " + variables);
 
-        Assert.assertEquals(0,variables.nofWaiting());
-        Assert.assertEquals(0,variables.nPersonsInElevator);
-        Assert.assertEquals(1,variables.SoE, DELTA);
+        Assert.assertEquals(0, variables.nofWaiting());
+        Assert.assertEquals(0, variables.nPersonsInElevator);
+        Assert.assertEquals(1, variables.SoE, DELTA);
 
     }
 
-    private VariablesElevator runChargeSimulation(SimulationPolicyInterface<VariablesElevator, Integer> policy, VariablesElevator variables) {
-        for (int i = 0; i < NOF_STEPS_CHARGING; i++) {
+    private VariablesElevator runChargeSimulation(SimulationPolicyInterface<VariablesElevator, Integer> policy) {
+        VariablesElevator variables;
+        do {
             variables = getVariablesElevatorAfterStep(state, policy);
-        }
+        } while (variables.SoE < 1);
         return variables;
     }
 
-
-    private VariablesElevator runHalfRandomPolicySimulation(SimulationPolicyInterface<VariablesElevator, Integer> policy, VariablesElevator variables) {
+    private VariablesElevator runHalfRandomPolicySimulation(SimulationPolicyInterface<VariablesElevator, Integer> policy) {
+        VariablesElevator variables = null;
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
             variables = getVariablesElevatorAfterStep(state, policy);
-            EnvironmentElevator environmentCasted=(EnvironmentElevator) environment;
-            if (environmentCasted.canPersonLeavingOrEnter(state))  {
-                System.out.println("variables = " + variables);  }
+            EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
+            if (environmentCasted.canPersonLeavingOrEnter(state)) {
+                System.out.println("variables = " + variables);
+            }
         }
         return variables;
     }
