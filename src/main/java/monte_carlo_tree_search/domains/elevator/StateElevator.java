@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 @Getter
 @EqualsAndHashCode
 public class StateElevator implements StateInterface<VariablesElevator> {
-    public static final double SOE_MIN = 0.1;
+    public static final double SOE_MIN = 0.0;
     public static final double SOE_MAX = 1.0;
     public static final int MAX_POS=30;
     public static final int NOF_FLOORS=3;
