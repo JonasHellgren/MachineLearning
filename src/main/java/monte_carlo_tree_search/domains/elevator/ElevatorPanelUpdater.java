@@ -11,12 +11,10 @@ public class ElevatorPanelUpdater {
     StateInterface<VariablesElevator> state;
     GridPanel panel;
 
-
     public ElevatorPanelUpdater(StateInterface<VariablesElevator> state,
                                 GridPanel panel) {
         this.state = state;
         this.panel = panel;
-
     }
 
     public void insertStates() {

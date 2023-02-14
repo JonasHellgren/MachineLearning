@@ -14,9 +14,9 @@ public class ElevatorRulesRunner {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int NOF_STEPS_HALF_RANDOM_POLICY = 50;
-    private static final double DELTA = 0.01;
     private static final int NSTEPS_BETWEEN = 50;
     private static final int NOF_CYCLES = 5;
+    private static final int SLEEP_TIME = 100;
 
     static EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     static StateInterface<VariablesElevator> state;
@@ -30,7 +30,6 @@ public class ElevatorRulesRunner {
                 .SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
-
         panel=FrameAndPanelCreatorElevator.createPanel("","","");
         panelUpdater =new ElevatorPanelUpdater(state,panel);
 
@@ -40,15 +39,6 @@ public class ElevatorRulesRunner {
         runChargeSimulation();
         System.out.println("variables end = " + state.getVariables());
         }
-    }
-
-    private static void runChargeSimulation() throws InterruptedException {
-        SimulationPolicyInterface<VariablesElevator, Integer> policy = new PolicyMoveDownStop();
-        VariablesElevator variables;
-        do {
-            variables = stepAndUpdateState(policy);
-            updatePanelAndSleep100Millis();
-        } while (variables.SoE < SOE_FULL);
     }
 
     private static void runHalfRandomPolicySimulation() throws InterruptedException {
@@ -65,9 +55,18 @@ public class ElevatorRulesRunner {
         }
     }
 
+    private static void runChargeSimulation() throws InterruptedException {
+        SimulationPolicyInterface<VariablesElevator, Integer> policy = new PolicyMoveDownStop();
+        VariablesElevator variables;
+        do {
+            variables = stepAndUpdateState(policy);
+            updatePanelAndSleep100Millis();
+        } while (variables.SoE < SOE_FULL);
+    }
+
     private static void updatePanelAndSleep100Millis() throws InterruptedException {
         panelUpdater.insertStates();
-        Thread.sleep(100);
+        Thread.sleep(SLEEP_TIME);
     }
 
     private static VariablesElevator stepAndUpdateState(SimulationPolicyInterface<VariablesElevator, Integer> policy) {
