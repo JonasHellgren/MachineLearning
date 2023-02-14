@@ -81,9 +81,6 @@ public class GridPanel extends JPanel {
         this.gridColor = gridColor;
         this.nofDecimals = nofDecimals;
         this.textCellValues = textCellValues;
-        System.out.println("xSet = " + xSet.size());
-        System.out.println("ySet = " + ySet.size());
-
         this.nofRows = ySet.size();
         this.nofColumns = xSet.size();
         this.cellSize = defineAndSetCellSize(relativeFrameSize);
@@ -98,7 +95,6 @@ public class GridPanel extends JPanel {
         double MAX_VALUE_BACKUP = 1d;
         List<Double> doubleList0= Arrays.stream(gridNumbers).flatMap(Arrays::stream).collect(Collectors.toList());
         List<Double> doubleList = doubleList0.stream().filter(n -> !Objects.isNull(n)).collect(Collectors.toList());
-        System.out.println("doubleList = " + doubleList);
         double minValue = doubleList.stream().mapToDouble(Double::doubleValue).min().orElse(MIN_VALUE_BACKUP);
         double maxValue = doubleList.stream().mapToDouble(Double::doubleValue).max().orElse(MAX_VALUE_BACKUP);
 

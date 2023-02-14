@@ -246,7 +246,7 @@ elevator miljö
 - runChargeSimulation till SoC=1  x
 - test som simulerar rules med waiting som poppsar upp ca var 20e steg  x
 - TestEnvironmentElevatorFailAndReward x
-- grafix
+- ElevatorPanelUpdater x
 - mcts init baserat på PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
 - mcts smartare - conditional branching
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner

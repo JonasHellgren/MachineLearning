@@ -20,9 +20,10 @@ public class ElevatorRulesRunner {
 
     static EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     static StateInterface<VariablesElevator> state;
+    static GridPanel panel;
+    static ElevatorPanelUpdater panelUpdater;
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         environment = EnvironmentElevator.newFromStepBetweenAddingNofWaiting
                 (Arrays.asList(NSTEPS_BETWEEN,NSTEPS_BETWEEN,NSTEPS_BETWEEN));
         state = StateElevator.newFromVariables(VariablesElevator.builder()
@@ -30,7 +31,8 @@ public class ElevatorRulesRunner {
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
 
-        GridPanel panel=FrameAndPanelCreatorElevator.createPanel("","","");
+        panel=FrameAndPanelCreatorElevator.createPanel("","","");
+        panelUpdater =new ElevatorPanelUpdater(state,panel);
 
         for (int i = 0; i < NOF_CYCLES; i++) {
         System.out.println("variables start = " + state.getVariables());
@@ -38,32 +40,34 @@ public class ElevatorRulesRunner {
         runChargeSimulation();
         System.out.println("variables end = " + state.getVariables());
         }
-
-        StateShowerElevator shower=new StateShowerElevator(state,panel);
-        shower.insertStates();
-
     }
 
-    private static void runChargeSimulation() {
+    private static void runChargeSimulation() throws InterruptedException {
         SimulationPolicyInterface<VariablesElevator, Integer> policy = new PolicyMoveDownStop();
         VariablesElevator variables;
         do {
             variables = stepAndUpdateState(policy);
+            updatePanelAndSleep100Millis();
         } while (variables.SoE < SOE_FULL);
     }
 
-    private static void runHalfRandomPolicySimulation() {
-        VariablesElevator variables = null;
+    private static void runHalfRandomPolicySimulation() throws InterruptedException {
         SimulationPolicyInterface<VariablesElevator, Integer> policy =
                 new PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping();
 
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
-            variables = stepAndUpdateState(policy);
+            VariablesElevator variables = stepAndUpdateState(policy);
             EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
             if (environmentCasted.canPersonLeavingOrEnter(state)) {
                 System.out.println("variables = " + variables);
             }
+            updatePanelAndSleep100Millis();
         }
+    }
+
+    private static void updatePanelAndSleep100Millis() throws InterruptedException {
+        panelUpdater.insertStates();
+        Thread.sleep(100);
     }
 
     private static VariablesElevator stepAndUpdateState(SimulationPolicyInterface<VariablesElevator, Integer> policy) {
