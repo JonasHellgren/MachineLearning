@@ -47,11 +47,15 @@ public class ElevatorRulesRunner {
 
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
             VariablesElevator variables = stepAndUpdateState(policy);
-            EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
-            if (environmentCasted.canPersonLeavingOrEnter(state)) {
-                System.out.println("variables = " + variables);
-            }
+            doPrintingIfAtFloor(variables);
             updatePanelAndSleep100Millis();
+        }
+    }
+
+    private static void doPrintingIfAtFloor(VariablesElevator variables) {
+        EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
+        if (environmentCasted.canPersonLeavingOrEnter(state)) {
+            System.out.println("variables = " + variables);
         }
     }
 

@@ -44,7 +44,7 @@ public class TestEnvironmentElevatorFailAndReward {
     }
 
     @Test
-    public void givenEmptySoEOneWaiting_whenStill_thenNotFailMinusOneReward() {
+    public void givenEmptySoEOneWaiting_whenStill_thenFail() {
         state = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_EMPTY).nPersonsWaiting(Arrays.asList(1, 0, 0)).build());
         StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
@@ -70,7 +70,7 @@ public class TestEnvironmentElevatorFailAndReward {
 
 
     @Test
-    public void givenSmallSoETenWaiting_whenStill_thenNotFail() {
+    public void givenDefaultVariables_whenStill_thenNotFail() {
         state = StateElevator.newFromVariables(VariablesElevator.builder().build());
         StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
         assertFalse(sr.isFail);

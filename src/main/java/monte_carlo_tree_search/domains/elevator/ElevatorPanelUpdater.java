@@ -31,7 +31,6 @@ public class ElevatorPanelUpdater {
              panel.setNumbersAtCell(0,pos, value);
          }
         panel.setColorsAtCells();
-
      }
 
     void setWaitingPersons() {
