@@ -110,9 +110,7 @@ public class MonteCarloTreeCreator<S,A> {
                 break;
             }
 
-            System.out.println("i = " + i);
         }
-
 
         logStatistics(i);
         return nodeRoot;

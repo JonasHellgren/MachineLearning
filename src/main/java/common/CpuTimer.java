@@ -39,4 +39,8 @@ public class CpuTimer {
         return  (System.currentTimeMillis() - startTimeMillis);
     }
 
+    public String toString() {
+        return "timeBudgetMillis = "+timeBudgetMillis+", relativeProgress = "+relativeProgress;
+    }
+
 }

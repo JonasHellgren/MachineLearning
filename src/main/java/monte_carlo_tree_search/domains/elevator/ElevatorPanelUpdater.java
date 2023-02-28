@@ -2,6 +2,8 @@ package monte_carlo_tree_search.domains.elevator;
 
 import black_jack.result_drawer.GridPanel;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
+
+import java.text.DecimalFormat;
 import java.util.Optional;
 
 public class ElevatorPanelUpdater {
@@ -21,6 +23,8 @@ public class ElevatorPanelUpdater {
         panel.setTextCellValues(false);
         setElevatorPos();
         setWaitingPersons();
+        String str = new DecimalFormat("#.0#").format(state.getVariables().SoE); // rounded to 2 decimal places
+        panel.setXLabel("SoE = "+ str+", n = "+state.getVariables().nPersonsInElevator);
         panel.repaint();
     }
 

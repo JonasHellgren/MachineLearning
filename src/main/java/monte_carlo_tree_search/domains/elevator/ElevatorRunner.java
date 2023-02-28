@@ -50,7 +50,7 @@ public class ElevatorRunner {
             mcForSearch.setStartState(state);
             mcForSearch.run();
 
-            log.info("Search completed");
+            log.info("Search completed, tree size = " +mcForSearch.getStatistics().getNofNodes()+", tree depth = "+mcForSearch.getStatistics().getMaxDepth());
 
             updatePanelAndSleep100Millis(panelUpdater);
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();

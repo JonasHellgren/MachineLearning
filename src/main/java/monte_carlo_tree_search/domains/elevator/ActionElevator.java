@@ -80,8 +80,9 @@ public class ActionElevator implements ActionInterface<Integer> {
     }
 
     public boolean isValid(Integer actionValue) {
-        Predicate<Integer> isValidAction = a -> a>=minActionValue && a <= maxActionValue;
-        return isValidAction.test(actionValue);
+        Predicate<Integer> isApplicAction = a -> a>=minActionValue && a <= maxActionValue;
+        Predicate<Integer> isNonApplicAction = a -> a.equals(nonApplicableAction());
+        return isApplicAction.or(isNonApplicAction).test(actionValue);
     }
 
 }

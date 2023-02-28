@@ -61,6 +61,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;
     private static final double SOC_LOW = 0.2;
+    public static final int MAX_NOF_PERSONS_IN_ELEVATOR=10;
     private static final double REWARD_FAIL = -100;
     private static final Integer NOF_FLOORS = 3;
     private static final int BIG = Integer.MAX_VALUE;
@@ -113,7 +114,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 .nPersonsWaiting(nPersonsWaiting)
                 .SoE(newSoE)
                 .build());
-        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum();
+        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum()-nPersonsInElevator/2;
 
         return StepReturnGeneric.<VariablesElevator>builder()
                 .newState(newState)
@@ -132,26 +133,21 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     public boolean canPersonLeavingOrEnter(StateInterface<VariablesElevator> state) {
         int newSpeed = state.getVariables().speed;
         int newPos = state.getVariables().pos;
-        Optional<Integer> floor = getFloor(newPos);
-
         return isPersonsEnteringElevator.or(isPersonsLeavingElevator).test(newSpeed, newPos);
     }
 
 
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
         //TODO  nPersonsWaiting > 20
-        return newState.getVariables().SoE < SOC_LOW;
+        return newState.getVariables().SoE < SOC_LOW && newState.getVariables().nPersonsInElevator<=MAX_NOF_PERSONS_IN_ELEVATOR;
     }
 
     int calcNofPersonsInElevator(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaiting = state.getVariables().nPersonsWaiting;
         int nPersonsInElevator = state.getVariables().nPersonsInElevator;
-        Optional<Integer> floor = getFloor(newPos);
-
-        System.out.println("newSpeed = " + newSpeed+", newPos = " + newPos);
-        System.out.println("floor = " + floor);
 
         if (isPersonsEnteringElevator.test(newSpeed, newPos)) {
+            Optional<Integer> floor = getFloor(newPos);
             return nPersonsInElevator + nPersonsWaiting.get(floor.orElseThrow() - 1);
         }
 
@@ -170,8 +166,9 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
 
     private void removePersonsWaitingAtFloorIfElevatorPass(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaiting = state.getVariables().nPersonsWaiting;
-        Optional<Integer> floor = getFloor(newPos);
+
         if (isPersonsEnteringElevator.test(newSpeed, newPos)) {
+            Optional<Integer> floor = getFloor(newPos);
             nPersonsWaiting.set(floor.orElseThrow() - 1, 0);
         }
     }

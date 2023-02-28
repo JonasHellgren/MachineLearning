@@ -250,7 +250,7 @@ elevator miljö
 ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
 - firstActionSelectionPolicy fullyRandom  x
-- bugg isPersonsEnteringElevator
+- bugg isPersonsEnteringElevator  x
 - studera space game etc
 
 

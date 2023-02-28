@@ -19,7 +19,7 @@ public class ElevatorOnlySearchRunner {
     private static final int NSTEPS_BETWEEN = 50;
     private static final int NOF_CYCLES = 5;
     private static final int SLEEP_TIME = 100;
-    private static final int NOF_STEPS = 100;
+    private static final int NOF_STEPS = 1000;
 
 
     @SneakyThrows
@@ -39,18 +39,19 @@ public class ElevatorOnlySearchRunner {
 
     public static MonteCarloTreeCreator<VariablesElevator, Integer> createTreeCreator(StateInterface<VariablesElevator> state) {
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newDefault();
-        ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
+        ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
-                .simulationPolicy(ElevatorPolicies.newRandom())
+                .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(100)
                 .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(100)
+                .timeBudgetMilliSeconds(1000)
                 .weightReturnsSteps(0)
-                .nofSimulationsPerNode(100)
+                .nofSimulationsPerNode(10)
+                .maxSimulationDepth(100)
                 .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(true)
                 .build();
