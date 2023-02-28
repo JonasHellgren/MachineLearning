@@ -33,8 +33,9 @@ public class DecisionTableReader {
         }
 
         if (fcnList.size()==0) {
-            log.warning("No matching rule, using backup");
-            return BACKUP;
+            log.warning("No matching rule, using backup. Speed = "+speed+", pos = "+pos);
+            throw  new RuntimeException();
+            //return BACKUP;
         }
 
         return fcnList.get(0).apply(speed,pos);

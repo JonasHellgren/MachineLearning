@@ -47,7 +47,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
         decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtBottom).test(s,p),(s, p) -> SPEED_DOWN);
         decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtBottom).test(s,p),(s, p) -> SPEED_UP);
-
+        decisionTable.put( (s,p) -> isStill.and(isNotAtFloor).test(s,p),(s, p) -> SPEED_UP);
     }
 
     @Override

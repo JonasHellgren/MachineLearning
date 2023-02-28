@@ -44,14 +44,14 @@ public class ElevatorOnlySearchRunner {
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .isDefensiveBackup(false)
+                .isDefensiveBackup(true)
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(100)
                 .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(1000)
                 .weightReturnsSteps(0)
-                .nofSimulationsPerNode(10)
-                .maxSimulationDepth(100)
+                .nofSimulationsPerNode(100)
+                .maxSimulationDepth(20)
                 .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(true)
                 .build();
