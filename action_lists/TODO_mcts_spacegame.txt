@@ -254,7 +254,9 @@ ElevatorMctsOnlySearchRunner
 - studera space game etc  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
 - varför aldrig Defensive backup
 - TestSearchNoActionRestrictionNoSimulation  x
- -TestSearchNoActionRestrictionSimulation
+ -TestSearchNoActionRestrictionSimulation  x
+ - whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1
+  TestSearchActionRestrictionSimulation  - conditional branching
 
 - förstå nodeRoot value = -0.03591087811271311
 - TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching

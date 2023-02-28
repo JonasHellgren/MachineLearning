@@ -8,6 +8,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +16,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestSearchNoActionRestrictionNoSimulation {
+public class TestSearchNoActionRestrictionSimulation {
 
     private static final int SOE_FULL = 1;
+    private static final int POS_FLOOR_0 = 0;
     private static final int POS_FLOOR_1 = 10;
     private static final int POS_FLOOR_3 = 30;
     private static final int NSTEPS_BETWEEN = 50;
@@ -37,15 +39,13 @@ public class TestSearchNoActionRestrictionNoSimulation {
 
     @SneakyThrows
     @Test
-    public void whenAtPos5AndPersonsWaitingFloor1_thenMoveToFloor1() {
+    public void whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(SOE_FULL).pos(5).nPersonsInElevator(0)
+                .SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
-        NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
-
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertTrue(posList.contains(POS_FLOOR_1));
@@ -60,8 +60,7 @@ public class TestSearchNoActionRestrictionNoSimulation {
                 .nPersonsWaiting(Arrays.asList(0, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
-        NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertFalse(posList.contains(POS_FLOOR_1+1));
@@ -76,30 +75,37 @@ public class TestSearchNoActionRestrictionNoSimulation {
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
-        NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertFalse(posList.contains(POS_FLOOR_1));      //to long horizon to handle
     }
 
 
+    @NotNull
+    private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
+        NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot = monteCarloTreeCreator.run();
+        return new ElevatorTestHelper(nodeRoot, monteCarloTreeCreator, settings);
+    }
+
     public  MonteCarloTreeCreator<VariablesElevator, Integer> createTreeCreator(StateInterface<VariablesElevator> startState) {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
-                .simulationPolicy(ElevatorPolicies.newRandom())
+                .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
+                .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
                 .alphaBackupDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
-                .maxTreeDepth(10)
+                .maxTreeDepth(20)
                 .maxNofIterations(20_000)
                 .timeBudgetMilliSeconds(500)
-                .weightReturnsSteps(1.0)
-                .nofSimulationsPerNode(0)
-                .coefficientExploitationExploration(0.1)
+                .weightReturnsSteps(0.0)
+                .weightReturnsSimulation(1.0)
+                .nofSimulationsPerNode(10)
+                .maxSimulationDepth(10)
+                .coefficientExploitationExploration(0.0001)
                 .isCreatePlotData(false)
                 .build();
 
@@ -110,7 +116,6 @@ public class TestSearchNoActionRestrictionNoSimulation {
                 .actionTemplate(actionTemplate)
                 .build();
     }
-
 
 
 }

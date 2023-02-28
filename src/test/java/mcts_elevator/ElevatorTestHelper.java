@@ -29,8 +29,6 @@ public class ElevatorTestHelper {
     }
 
     public void somePrinting() {
-        // nodeRoot.printTree();
-        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
         List<Integer> posList= getVisitedPositions();
         List<Double> soEListList= getSoEList();
         System.out.println("posList = " + posList);
