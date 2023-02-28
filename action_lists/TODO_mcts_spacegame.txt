@@ -249,7 +249,7 @@ elevator miljö
 - ElevatorPanelUpdater x
 ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
-- firstActionSelectionPolicy fullyRandom
+- firstActionSelectionPolicy fullyRandom  x
 - bugg isPersonsEnteringElevator
 - studera space game etc
 

@@ -105,6 +105,14 @@ public class TestEnvironmentElevator {
         Assert.assertTrue(getVariablesElevatorAfterStep(state, ACTION_UP).SoE < SOE_FULL);
     }
 
+    @Test
+    public void givenSpeed0AtPos1_whenActionStill_thenSamePos() {
+        StateInterface<VariablesElevator> state = StateElevator.newFromVariables(
+                VariablesElevator.builder().SoE(HALF_SOE).speed(0).pos(1).build());
+        Assert.assertTrue(getVariablesElevatorAfterStep(state, ACTION_STILL).pos == 1);
+        //Assert.assertTrue(getVariablesElevatorAfterStep(state, ACTION_UP).SoE < SOE_FULL);
+    }
+
     private VariablesElevator getVariablesElevatorAfterStep(StateInterface<VariablesElevator> state, int actionValue) {
         ActionInterface<Integer> action = ActionElevator.newValueDefaultRange(actionValue);
         StepReturnGeneric<VariablesElevator> stepReturn = environment.step(action, state);

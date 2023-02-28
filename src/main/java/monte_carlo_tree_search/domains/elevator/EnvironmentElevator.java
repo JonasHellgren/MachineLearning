@@ -5,6 +5,7 @@ import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import org.apache.arrow.flatbuf.Int;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
 public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, Integer> {
     public static final int MIN_POS = 0;
     public static final int MAX_POS = 30;
-    private static final int NOF_POS_BETWEEN_FLOORS = 10;
+    private static final Integer NOF_POS_BETWEEN_FLOORS = 10;
     private static final int BOTTOM_FLOOR = 0;
     private static final Double POWER_CHARGE = 3_000d;
     private static final Double POWER_STILL = 0d;
@@ -64,14 +65,14 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Integer NOF_FLOORS = 3;
     private static final int BIG = Integer.MAX_VALUE;
 
-    BiPredicate<Integer, Optional<Integer>> isStill = (s, f) -> s == 0;
-    BiPredicate<Integer, Optional<Integer>> isBottomFloor= (s, f) -> f.equals(Optional.of(BOTTOM_FLOOR));
-    BiPredicate<Integer, Optional<Integer>> isNotBottomFloor= isBottomFloor.negate();
-    BiPredicate<Integer, Optional<Integer>> isPersonsEnteringElevator = (s,f) ->  isStill.and(isNotBottomFloor).test(s,f);
-    BiPredicate<Integer, Optional<Integer>> isPersonsLeavingElevator = (s, f) -> isStill.and(isBottomFloor).test(s,f);
-
+    BiPredicate<Integer, Integer> isAtFloor = (s, p) -> (p % NOF_POS_BETWEEN_FLOORS == 0);
+    BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
+    BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
+    BiPredicate<Integer, Integer> isStill = (s, p) -> s == 0;
+    BiPredicate<Integer, Integer> isPersonsEnteringElevator = (s, p) ->  isStill.and(isAtFloor).and(isNotBottomFloor).test(s,p);
+    BiPredicate<Integer, Integer> isPersonsLeavingElevator = (s, p) -> isStill.and(isBottomFloor).test(s,p);
     NofPersonsWaitingUpdater nofPersonsWaitingUpdater;
-    Map<BiPredicate<Integer,Optional<Integer>>, Supplier<Double>> liftingPowerTable;  //speed,floor -> power
+    Map<BiPredicate<Integer,Integer>, Supplier<Double>> liftingPowerTable;  //speed,floor -> power
 
 
     public EnvironmentElevator(NofPersonsWaitingUpdater nofPersonsWaitingUpdater) {
@@ -96,7 +97,8 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     @Override
-    public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action, final StateInterface<VariablesElevator> state) {
+    public StepReturnGeneric<VariablesElevator> step(ActionInterface<Integer> action,
+                                                     final StateInterface<VariablesElevator> state) {
 
         int newSpeed = action.getValue();
         int newPos = MathUtils.clip(state.getVariables().pos + newSpeed, MIN_POS, MAX_POS);
@@ -132,7 +134,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         int newPos = state.getVariables().pos;
         Optional<Integer> floor = getFloor(newPos);
 
-        return isPersonsEnteringElevator.or(isPersonsLeavingElevator).test(newSpeed, floor);
+        return isPersonsEnteringElevator.or(isPersonsLeavingElevator).test(newSpeed, newPos);
     }
 
 
@@ -149,11 +151,11 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         System.out.println("newSpeed = " + newSpeed+", newPos = " + newPos);
         System.out.println("floor = " + floor);
 
-        if (isPersonsEnteringElevator.test(newSpeed, floor)) {
+        if (isPersonsEnteringElevator.test(newSpeed, newPos)) {
             return nPersonsInElevator + nPersonsWaiting.get(floor.orElseThrow() - 1);
         }
 
-        if (isPersonsLeavingElevator.test(newSpeed, floor)) {
+        if (isPersonsLeavingElevator.test(newSpeed, newPos)) {
             return 0;
         }
 
@@ -169,7 +171,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private void removePersonsWaitingAtFloorIfElevatorPass(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {
         List<Integer> nPersonsWaiting = state.getVariables().nPersonsWaiting;
         Optional<Integer> floor = getFloor(newPos);
-        if (isPersonsEnteringElevator.test(newSpeed, floor)) {
+        if (isPersonsEnteringElevator.test(newSpeed, newPos)) {
             nPersonsWaiting.set(floor.orElseThrow() - 1, 0);
         }
     }
@@ -179,9 +181,8 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     }
 
     private Double getPower(int newPos, int newSpeed) {
-        Optional<Integer> floor = getFloor(newPos);
         List<Supplier<Double>> fcnList= liftingPowerTable.entrySet().stream()
-                .filter(e -> e.getKey().test(newSpeed,floor))
+                .filter(e -> e.getKey().test(newSpeed,newPos))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 
@@ -191,15 +192,15 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         return fcnList.get(0).get();
     }
 
-    private Map<BiPredicate<Integer,Optional<Integer>>, Supplier<Double>> constructPowerRules() {
-        BiPredicate<Integer,Optional<Integer>> isStandingStillBottomFloor =
-                (s, f) -> isStill.and(isBottomFloor).test(s,f);
-        BiPredicate<Integer,Optional<Integer>> isStandingStillNotBottomFloor =
-                (s, f) -> isStill.and(isNotBottomFloor).test(s,f);
-        BiPredicate<Integer,Optional<Integer>> isMovingUp = (s,f) -> s > 0;
-        BiPredicate<Integer,Optional<Integer>> isMovingDown = (s,f) -> s < 0;
+    private Map<BiPredicate<Integer,Integer>, Supplier<Double>> constructPowerRules() {
+        BiPredicate<Integer,Integer> isStandingStillBottomFloor =
+                (s, p) -> isStill.and(isBottomFloor).test(s,p);
+        BiPredicate<Integer,Integer> isStandingStillNotBottomFloor =
+                (s, p) -> isStill.and(isNotBottomFloor).test(s,p);
+        BiPredicate<Integer,Integer> isMovingUp = (s,p) -> s > 0;
+        BiPredicate<Integer,Integer> isMovingDown = (s,p) -> s < 0;
 
-        Map<BiPredicate<Integer,Optional<Integer>>, Supplier<Double>> decisionTable = new HashMap<>();
+        Map<BiPredicate<Integer,Integer>, Supplier<Double>> decisionTable = new HashMap<>();
         decisionTable.put(isStandingStillBottomFloor, () -> POWER_CHARGE);
         decisionTable.put(isStandingStillNotBottomFloor, () -> POWER_STILL);
         decisionTable.put(isMovingUp, () -> POWER_MOVING_UP);
