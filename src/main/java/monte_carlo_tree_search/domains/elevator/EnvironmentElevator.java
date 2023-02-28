@@ -56,7 +56,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Integer NOF_POS_BETWEEN_FLOORS = 10;
     private static final int BOTTOM_FLOOR = 0;
     private static final Double POWER_CHARGE = 3_000d;
-    private static final Double POWER_STILL = 0d;
+    private static final Double POWER_STILL = -100d;
     private static final Double POWER_MOVING_UP = -1000d;
     private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;

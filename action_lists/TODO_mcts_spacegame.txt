@@ -251,11 +251,10 @@ ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
 - firstActionSelectionPolicy fullyRandom  x
 - bugg isPersonsEnteringElevator  x
+- förstå nodeRoot value = -0.03591087811271311
 - studera space game etc
-
-
-- mcts init baserat på PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
 - mcts smartare - conditional branching
+- SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 
 

@@ -50,9 +50,9 @@ public class ElevatorOnlySearchRunner {
                 .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(1000)
                 .weightReturnsSteps(0)
-                .nofSimulationsPerNode(100)
-                .maxSimulationDepth(20)
-                .coefficientExploitationExploration(0.1)
+                .nofSimulationsPerNode(10)
+                .maxSimulationDepth(10)
+                .coefficientExploitationExploration(0.01)
                 .isCreatePlotData(true)
                 .build();
 
