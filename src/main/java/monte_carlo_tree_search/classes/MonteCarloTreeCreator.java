@@ -109,6 +109,8 @@ public class MonteCarloTreeCreator<S,A> {
                 log.fine("Time exceeded");
                 break;
             }
+
+            System.out.println("i = " + i);
         }
 
 

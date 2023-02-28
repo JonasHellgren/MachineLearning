@@ -10,4 +10,8 @@ public class ElevatorPolicies {
         return new PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping();
     }
 
+    public static SimulationPolicyInterface<VariablesElevator, Integer> newRandom() {
+        return new PolicyRandom();
+    }
+
 }

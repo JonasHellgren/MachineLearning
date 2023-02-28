@@ -9,9 +9,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestEnvironmentElevatorManyStepsUsingRules {

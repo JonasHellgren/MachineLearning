@@ -146,6 +146,9 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
         int nPersonsInElevator = state.getVariables().nPersonsInElevator;
         Optional<Integer> floor = getFloor(newPos);
 
+        System.out.println("newSpeed = " + newSpeed+", newPos = " + newPos);
+        System.out.println("floor = " + floor);
+
         if (isPersonsEnteringElevator.test(newSpeed, floor)) {
             return nPersonsInElevator + nPersonsWaiting.get(floor.orElseThrow() - 1);
         }

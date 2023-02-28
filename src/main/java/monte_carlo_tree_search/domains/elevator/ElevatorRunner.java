@@ -3,6 +3,7 @@ package monte_carlo_tree_search.domains.elevator;
 import black_jack.result_drawer.GridPanel;
 import common.ListUtils;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.classes.TreePlotData;
@@ -13,6 +14,7 @@ import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
+@Log
 public class ElevatorRunner {
     private static final int SLEEP_TIME = 100;
     private static final String TITLE = "Elevator evaluation animation";
@@ -47,6 +49,8 @@ public class ElevatorRunner {
         do {
             mcForSearch.setStartState(state);
             mcForSearch.run();
+
+            log.info("Search completed");
 
             updatePanelAndSleep100Millis(panelUpdater);
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();

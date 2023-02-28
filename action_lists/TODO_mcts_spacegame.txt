@@ -249,6 +249,9 @@ elevator miljö
 - ElevatorPanelUpdater x
 ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
+- firstActionSelectionPolicy fullyRandom
+- bugg isPersonsEnteringElevator
+- studera space game etc
 
 
 - mcts init baserat på PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping

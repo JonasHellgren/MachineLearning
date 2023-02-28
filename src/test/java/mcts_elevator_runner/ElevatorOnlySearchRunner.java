@@ -42,8 +42,8 @@ public class ElevatorOnlySearchRunner {
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
+                .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
+                .simulationPolicy(ElevatorPolicies.newRandom())
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(100)

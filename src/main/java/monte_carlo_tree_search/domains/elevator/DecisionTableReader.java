@@ -28,7 +28,7 @@ public class DecisionTableReader {
                 .collect(Collectors.toList());
 
         if (fcnList.size()>1) {
-            log.warning("Multiple matching rules, nof ="+fcnList.size()+". Applying random.");
+            log.fine("Multiple matching rules, nof ="+fcnList.size()+". Applying random.");
             return fcnList.get(RandomUtils.nextInt(0,fcnList.size())).apply(speed,pos);
         }
 
