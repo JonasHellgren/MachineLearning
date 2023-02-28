@@ -1,17 +1,12 @@
 package mcts_elevator;
 
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.elevator.*;
-import monte_carlo_tree_search.domains.models_space.ShipActionSet;
-import monte_carlo_tree_search.domains.models_space.ShipVariables;
-import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
-import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
@@ -21,10 +16,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class TestSearchNoActionRestriction {
+public class TestSearchNoActionRestrictionNoSimulation {
 
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
@@ -47,88 +40,72 @@ public class TestSearchNoActionRestriction {
 
     @SneakyThrows
     @Test
-    public void whenAtBottomWaitingFloor1_thenMoveToFloor1() {
+    public void whenAtPos5AndPersonsWaitingFloor1_thenMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
+                .SoE(SOE_FULL).pos(5).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath(nodeRoot);
-        somePrinting(nodesOnPath,nodeRoot);
-        List<Integer> posList= getVisitedPositions(nodesOnPath);
+        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
+
+        helper.somePrinting();
+        List<Integer> posList= helper.getVisitedPositions();
         Assert.assertTrue(posList.contains(POS_FLOOR_1));
 
     }
 
     @SneakyThrows
     @Test
-    public void whenAtPos5AndBadSoE_thenMoveToFloor0() {
+    public void whenAtFloor1AndBadSoE_thenDoNotMoveUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(0.21).pos(5).nPersonsInElevator(0)
+                .SoE(0.21).pos(POS_FLOOR_1).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(0, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath(nodeRoot);
-        somePrinting(nodesOnPath,nodeRoot);
-        List<Integer> posList= getVisitedPositions(nodesOnPath);
-        Assert.assertTrue(posList.contains(POS_FLOOR_0));
+        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
+        helper.somePrinting();
+        List<Integer> posList= helper.getVisitedPositions();
+        Assert.assertFalse(posList.contains(POS_FLOOR_1+1));
 
     }
 
     @SneakyThrows
     @Test
-    public void whenAtFloor3WaitingFloor1_thenMoveToFloor1() {
+    public void whenAtFloor3WaitingFloor1_thenDoesNotManangeMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
-        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath(nodeRoot);
-        somePrinting(nodesOnPath,nodeRoot);
-        List<Integer> posList= getVisitedPositions(nodesOnPath);
+        ElevatorTestHelper helper=new ElevatorTestHelper(nodeRoot,monteCarloTreeCreator,settings);
+        helper.somePrinting();
+        List<Integer> posList= helper.getVisitedPositions();
         Assert.assertFalse(posList.contains(POS_FLOOR_1));      //to long horizon to handle
-
-
     }
 
-    private List<NodeInterface<VariablesElevator, Integer>> getNodesOnPath(NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot) {
-        TreeInfoHelper<VariablesElevator, Integer> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        return tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow();
-    }
 
-    private void somePrinting(List<NodeInterface<VariablesElevator, Integer>> nodesOnPath,NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot) {
-        List<Integer> posList= getVisitedPositions(nodesOnPath);
-        List<Double> soEListList= getSoEList(nodesOnPath);
-        System.out.println("posList = " + posList);
-        System.out.println("soEListList = " + soEListList);
-        MonteCarloSearchStatistics<VariablesElevator,Integer> stats=monteCarloTreeCreator.getStatistics();
-        System.out.println("stats = " + stats);
-        ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
-        System.out.println("nodeRoot value = " + NodeInfoHelper.valueNode(actionTemplate,nodeRoot));
 
-    }
 
     public  MonteCarloTreeCreator<VariablesElevator, Integer> createTreeCreator(StateInterface<VariablesElevator> startState) {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
+                .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
+                .simulationPolicy(ElevatorPolicies.newRandom())
                 .isDefensiveBackup(true)
-            //    .alphaBackupDefensive(0.5)
+                .alphaBackupDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
-                .maxTreeDepth(100)
-                .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(1000)
-                .weightReturnsSteps(0.0)
-                .nofSimulationsPerNode(10)
-                .maxSimulationDepth(10)
-                .coefficientExploitationExploration(0.001)
-                .isCreatePlotData(true)
+                .maxTreeDepth(10)
+                .maxNofIterations(20_000)
+                .timeBudgetMilliSeconds(500)
+                .weightReturnsSteps(1.0)
+                .nofSimulationsPerNode(0)
+                .coefficientExploitationExploration(0.1)
+                .isCreatePlotData(false)
                 .build();
 
         return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()
@@ -139,13 +116,6 @@ public class TestSearchNoActionRestriction {
                 .build();
     }
 
-    List<Integer>  getVisitedPositions(List<NodeInterface <VariablesElevator, Integer>> nodesOnPath) {
-        return nodesOnPath.stream().map(n -> n.getState().getVariables().pos).collect(Collectors.toList());
-    }
 
-
-    List<Double>  getSoEList(List<NodeInterface <VariablesElevator, Integer>> nodesOnPath) {
-        return nodesOnPath.stream().map(n -> n.getState().getVariables().SoE).collect(Collectors.toList());
-    }
 
 }

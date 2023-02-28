@@ -252,11 +252,17 @@ ElevatorMctsOnlySearchRunner
 - firstActionSelectionPolicy fullyRandom  x
 - bugg isPersonsEnteringElevator  x
 - studera space game etc  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
+- varför aldrig Defensive backup
+- TestSearchNoActionRestrictionNoSimulation  x
+ -TestSearchNoActionRestrictionSimulation
+
 - förstå nodeRoot value = -0.03591087811271311
 - TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching
 - SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 
+
+- averageNofChildrenPerNode verkar inte stämma
 
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 

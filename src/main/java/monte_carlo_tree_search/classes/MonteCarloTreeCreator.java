@@ -99,7 +99,17 @@ public class MonteCarloTreeCreator<S,A> {
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState,nodeSelected.getDepth());
+
+             //   System.out.println("nodeSelected = " + nodeSelected);
+                //if (actionsToSelected.size()>1)
+                   // System.out.println("action in root = " + actionsToSelected.get(0).getValue());
+
+                //somePrinting(i, actionInSelected, sr, simulationResults);
+
                 backPropagate(sr, simulationResults, actionInSelected.get());
+
+              //  System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
+
             } else {  // actionInSelected is empty <=> all tested
                 manageCaseWhenAllActionsAreTested(nodeSelected);
             }
@@ -110,10 +120,21 @@ public class MonteCarloTreeCreator<S,A> {
                 break;
             }
 
+
+
         }
 
         logStatistics(i);
         return nodeRoot;
+    }
+
+    private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults) {
+        log.info("i = "+ i);
+        actionsToSelected.forEach(a -> System.out.println(a.getValue()));
+        System.out.println("actionInSelected = " + actionInSelected.orElseThrow());
+        System.out.println("sr.newState = " + sr.newState);
+        System.out.println("sr.isFail = " + sr.isFail);
+        System.out.println("simulationResults = " + simulationResults);
     }
 
     private void updatePlotData() {
@@ -192,10 +213,14 @@ public class MonteCarloTreeCreator<S,A> {
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode,
                                       int startDepth) {
+
         SimulationResults simulationResults = new SimulationResults();
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
+         //   log.info("simulating");
+         //   stepResults.forEach(System.out::println);  //todo remove
+
             StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
             double sumOfRewards = ListUtils.discountedSum(
                     stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
