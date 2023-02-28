@@ -251,9 +251,9 @@ ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
 - firstActionSelectionPolicy fullyRandom  x
 - bugg isPersonsEnteringElevator  x
+- studera space game etc  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
 - förstå nodeRoot value = -0.03591087811271311
-- studera space game etc
-- mcts smartare - conditional branching
+- TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching
 - SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 

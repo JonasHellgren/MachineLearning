@@ -24,11 +24,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TestSearch {
+public class TestSearchNoActionRestriction {
 
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int POS_FLOOR_1 = 10;
+    private static final int POS_FLOOR_3 = 30;
     private static final int NSTEPS_BETWEEN = 50;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
@@ -46,7 +47,7 @@ public class TestSearch {
 
     @SneakyThrows
     @Test
-    public void whenAtBottomWaitingFloor_thenMoveToFloor1() {
+    public void whenAtBottomWaitingFloor1_thenMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
@@ -73,6 +74,23 @@ public class TestSearch {
         somePrinting(nodesOnPath,nodeRoot);
         List<Integer> posList= getVisitedPositions(nodesOnPath);
         Assert.assertTrue(posList.contains(POS_FLOOR_0));
+
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenAtFloor3WaitingFloor1_thenMoveToFloor1() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0)
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot=monteCarloTreeCreator.run();
+        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath(nodeRoot);
+        somePrinting(nodesOnPath,nodeRoot);
+        List<Integer> posList= getVisitedPositions(nodesOnPath);
+        Assert.assertFalse(posList.contains(POS_FLOOR_1));      //to long horizon to handle
+
 
     }
 
