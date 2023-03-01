@@ -48,11 +48,12 @@ public class SelectedToTerminalFailConverter<S,A> {
         }
     }
 
+    //maxNofTestedActionsForBeingLeafFunction should be used but gives error
     public boolean areAllChildrenToSelectedNodeTerminalFail(NodeWithChildrenInterface<S,A> nodeSelected) {
         Set<ActionInterface<A>> failActions = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
-        ActionInterface<A> action=nodeSelected.getAction();  //todo remove
+        ActionInterface<A> action=nodeSelected.getAction();
        // int nofApplicActions=settings.maxNofTestedActionsForBeingLeafFunction.apply(nodeSelected.getState().getVariables());
         return failActions.size() == action.applicableActions().size();
        // return failActions.size() == nofApplicActions; // action.applicableActions().size();

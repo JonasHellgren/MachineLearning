@@ -21,6 +21,10 @@ import java.util.function.Function;
 /***
  * Insights:
  * If action set is restricted and the only action(s) gives fail then actionInSelected is empty -> tree not expanded
+ * maxSimulationDepth not allowed to be to large
+ * coefficientExploitationExploration needs to be very large
+ * small ratio nofNodes/nodIterations
+ * large time budget needed
  */
 
 public class TestSearchActionRestrictionSimulation {
@@ -98,8 +102,6 @@ public class TestSearchActionRestrictionSimulation {
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertTrue(posList.contains(POS_FLOOR_1));
-
-
     }
 
     private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
@@ -124,18 +126,18 @@ public class TestSearchActionRestrictionSimulation {
                 .isDefensiveBackup(true)
                 .alphaBackupDefensive(0.1)
                 .alphaBackupNormal(1.0)
-                .weightReturnsSteps(0.0)
+                .weightReturnsSteps(1.0)
                 .discountFactorSteps(0.99)
                 .weightReturnsSimulation(1.0)
-                .discountFactorSimulation(1.0)
+                .discountFactorSimulation(0.99)
                 .discountFactorSimulationDefensive(0.5)
-                .coefficientMaxAverageReturn(1) //0 <=> average, 1<=>max
-                .maxTreeDepth(50)
-                .maxNofIterations(10_000)  //100_000
-                .timeBudgetMilliSeconds(500)
-                .nofSimulationsPerNode(5)
-                .maxSimulationDepth(30)
-                .coefficientExploitationExploration(1e5)
+                .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
+                .maxTreeDepth(30)
+                .maxNofIterations(100_000)  //100_000
+                .timeBudgetMilliSeconds(1000)
+                .nofSimulationsPerNode(1)
+                .maxSimulationDepth(20)
+                .coefficientExploitationExploration(1e6)
                 .isCreatePlotData(false)
                 .build();
 

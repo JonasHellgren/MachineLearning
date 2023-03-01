@@ -114,10 +114,10 @@ public class TestSearchNoActionRestrictionSimulation {
                 .discountFactorSimulation(1.0)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(20)
-                .maxNofIterations(1000)
+                .maxNofIterations(100_000)
                 .timeBudgetMilliSeconds(500)
                 .nofSimulationsPerNode(1)
-                .maxSimulationDepth(10)
+                .maxSimulationDepth(20)
                 .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(false)
                 .build();
