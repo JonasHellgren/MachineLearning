@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+/***
+ * Insights:
+ * If action set is restricted and the only action(s) gives fail then actionInSelected is empty -> tree not expanded
+ */
+
 public class TestSearchActionRestrictionSimulation {
 
     private static final int SOE_FULL = 1;
@@ -119,17 +124,18 @@ public class TestSearchActionRestrictionSimulation {
                 .isDefensiveBackup(true)
                 .alphaBackupDefensive(0.1)
                 .alphaBackupNormal(1.0)
-                .weightReturnsSteps(1.0)
-                .discountFactorSteps(0.95)
+                .weightReturnsSteps(0.0)
+                .discountFactorSteps(0.99)
                 .weightReturnsSimulation(1.0)
                 .discountFactorSimulation(1.0)
-                .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
+                .discountFactorSimulationDefensive(0.5)
+                .coefficientMaxAverageReturn(1) //0 <=> average, 1<=>max
                 .maxTreeDepth(50)
-                .maxNofIterations(100_000)
+                .maxNofIterations(10_000)  //100_000
                 .timeBudgetMilliSeconds(500)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(30)
-                .coefficientExploitationExploration(1000)
+                .coefficientExploitationExploration(1e5)
                 .isCreatePlotData(false)
                 .build();
 

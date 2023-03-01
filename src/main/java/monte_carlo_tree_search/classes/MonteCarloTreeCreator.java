@@ -107,6 +107,7 @@ public class MonteCarloTreeCreator<S,A> {
               //  System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
 
             } else {  // actionInSelected is empty <=> all tested
+           //     System.out.println("nodeSelected = " + nodeSelected.getState());
                 manageCaseWhenAllActionsAreTested(nodeSelected);
             }
 
@@ -115,10 +116,8 @@ public class MonteCarloTreeCreator<S,A> {
                 log.fine("Time exceeded");
                 break;
             }
-
-
-
         }
+        nofIterations=i;
 
         logStatistics(i);
         return nodeRoot;
@@ -248,10 +247,12 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     private void manageCaseWhenAllActionsAreTested(NodeWithChildrenInterface<S, A>  nodeSelected) throws StartStateIsTrapException {
-        SelectedToTerminalFailConverter<S, A>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected);
+        SelectedToTerminalFailConverter<S, A>  sfc = new SelectedToTerminalFailConverter<>(nodeRoot, actionsToSelected,settings);
         if (sfc.areAllChildrenToSelectedNodeTerminalFail(nodeSelected)) {
+            log.fine("areAllChildrenToSelectedNodeTerminalFail");
             makeSelectedTerminal(nodeSelected, sfc);
         } else {
+            log.fine("chooseBestActionAndBackPropagate");
             chooseBestActionAndBackPropagate(nodeSelected);
         }
     }

@@ -62,7 +62,7 @@ public class TestSelectedToTerminalFailConverter {
         nodeRoot.printTree();
         tih.getNodesOnPathForActions(actions).get().forEach(System.out::println);
 
-        SelectedToTerminalFailConverter<ShipVariables, ShipActionSet> stc=new SelectedToTerminalFailConverter<>(nodeRoot,actionsToSelected);
+        SelectedToTerminalFailConverter<ShipVariables, ShipActionSet> stc=new SelectedToTerminalFailConverter<>(nodeRoot,actionsToSelected,settings);
         stc.makeSelectedTerminal(nodeSelected.orElseThrow());
 
         nodeRoot.printTree();

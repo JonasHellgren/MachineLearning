@@ -2,6 +2,7 @@ package monte_carlo_tree_search.classes;
 
 import common.Conditionals;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * This class is for, when relevant, converting a selected no to a terminal node. This is done when all children
+ * This class is for, when relevant, converting a selected node to a terminal node. This is done when all children
  * to a node is terminal-fail.
  */
 
@@ -23,10 +24,14 @@ public class SelectedToTerminalFailConverter<S,A> {
 
     NodeWithChildrenInterface<S,A> nodeRoot;
     List<ActionInterface<A>> actionsToSelected;
+    MonteCarloSettings<S, A> settings;
 
-    public SelectedToTerminalFailConverter(NodeWithChildrenInterface<S,A> nodeRoot, List<ActionInterface<A>> actionsToSelected) {
+    public SelectedToTerminalFailConverter(NodeWithChildrenInterface<S,A> nodeRoot,
+                                           List<ActionInterface<A>> actionsToSelected,
+                                           MonteCarloSettings<S, A> settings) {
         this.nodeRoot = nodeRoot;
         this.actionsToSelected = actionsToSelected;
+        this.settings=settings;
     }
 
     //TODO remove
@@ -44,11 +49,13 @@ public class SelectedToTerminalFailConverter<S,A> {
     }
 
     public boolean areAllChildrenToSelectedNodeTerminalFail(NodeWithChildrenInterface<S,A> nodeSelected) {
-        Set<ActionInterface<A>> children = nodeSelected.getChildNodes().stream()
+        Set<ActionInterface<A>> failActions = nodeSelected.getChildNodes().stream()
                 .filter(NodeInterface::isTerminalFail).map(NodeInterface::getAction)
                 .collect(Collectors.toSet());
-        ActionInterface<A> action=nodeSelected.getAction();
-        return children.size() == action.applicableActions().size();
+        ActionInterface<A> action=nodeSelected.getAction();  //todo remove
+       // int nofApplicActions=settings.maxNofTestedActionsForBeingLeafFunction.apply(nodeSelected.getState().getVariables());
+        return failActions.size() == action.applicableActions().size();
+       // return failActions.size() == nofApplicActions; // action.applicableActions().size();
     }
 
     public void makeSelectedTerminal(NodeInterface<S,A> nodeSelected) {

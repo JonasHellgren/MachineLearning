@@ -81,6 +81,7 @@ public class MonteCarloSearchStatistics<S, A> {
 
         return "{" + NEW_LINE +
                 "nofNodes = " + nofNodes + NEW_LINE +
+                "nofIterations = " + nofIterations + NEW_LINE +
                 "nofNodesNotTerminal = " + nofNodesNotTerminal + NEW_LINE +
                 "nofNodesFail = " + nofNodesFail + NEW_LINE +
                 "totalNofChildren = " + totalNofChildren + NEW_LINE +

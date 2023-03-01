@@ -261,7 +261,9 @@ ElevatorMctsOnlySearchRunner
   - test låg SoE  x
   ned vid bottom och upp top ger fail x
   - TestEnvironmentElevatorFailAndReward - givenAtBottom_whenActionDown_thenFail  x
-  - BackupDefensive simulation
+  - BackupDefensive simulation  x
+  - skära av hopplös gren restricted action set  - får inte till det x
+
 
 
 - förstå nodeRoot value = -0.03591087811271311
