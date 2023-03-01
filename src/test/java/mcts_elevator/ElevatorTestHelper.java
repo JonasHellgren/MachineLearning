@@ -46,6 +46,8 @@ public class ElevatorTestHelper {
         System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
         System.out.println("bestActionValue = " + NodeInfoHelper.bestActionValue(actionTemplate, nodeRoot));
         System.out.println("monteCarloTreeCreator.getFirstAction() = " + monteCarloTreeCreator.getFirstAction());
+       // TreeInfoHelper<VariablesElevator, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
+      //  tih.getActionsOnBestPath().forEach(a -> System.out.println(a.getValue().intValue()));
 
     }
 
@@ -71,7 +73,8 @@ public class ElevatorTestHelper {
 
     public List<NodeInterface<VariablesElevator, Integer>> getNodesOnPath() {
         TreeInfoHelper<VariablesElevator, Integer> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        return tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow();
+        //return tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow();
+        return tih.getBestPath();
     }
 
 }

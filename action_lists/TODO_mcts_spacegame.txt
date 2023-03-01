@@ -266,7 +266,8 @@ ElevatorMctsOnlySearchRunner
   - krånglande tester  x
   - few branches (averageNofChildrenPerNode is small) -> few iterations needed  x
   - TestSearchActionRestrictionSimulation  bökar
-  -  alphaBackupDefensive -> alphaBackupDefensiveStep alphaBackupDefensiveSimulation
+  -  alphaBackupDefensive -> alphaBackupDefensiveStep alpha BackupDefensiveSimulation  x
+  - ned vid bottom och upp top ger INTE fail  x
 
 
 - ElevatorSearchActionRestrictionRunner
