@@ -29,6 +29,7 @@ public class ElevatorTestHelper {
     }
 
     public void somePrinting() {
+        System.out.println("nodeRoot = " + nodeRoot);
         List<Integer> posList= getVisitedPositions();
         List<Double> soEListList= getSoEList();
         System.out.println("posList = " + posList);

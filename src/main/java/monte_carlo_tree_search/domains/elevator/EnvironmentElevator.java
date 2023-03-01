@@ -66,7 +66,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Integer NOF_FLOORS = 3;
     private static final int BIG = Integer.MAX_VALUE;
 
-    BiPredicate<Integer, Integer> isAtFloor = (s, p) -> (p % NOF_POS_BETWEEN_FLOORS == 0);
+    public static BiPredicate<Integer, Integer> isAtFloor = (s, p) -> (p % NOF_POS_BETWEEN_FLOORS == 0);
     BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
     BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
     BiPredicate<Integer, Integer> isStill = (s, p) -> s == 0;

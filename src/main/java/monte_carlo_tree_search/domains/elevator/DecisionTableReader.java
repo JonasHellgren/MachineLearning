@@ -28,7 +28,7 @@ public class DecisionTableReader {
                 .collect(Collectors.toList());
 
         if (fcnList.size()>1) {
-            log.fine("Multiple matching rules, nof ="+fcnList.size()+". Applying random.");
+           // logging(speed, pos, fcnList);
             return fcnList.get(RandomUtils.nextInt(0,fcnList.size())).apply(speed,pos);
         }
 
@@ -39,5 +39,12 @@ public class DecisionTableReader {
         }
 
         return fcnList.get(0).apply(speed,pos);
+    }
+
+    private void logging(Integer speed, Integer pos, List<BiFunction<Integer, Integer, Integer>> fcnList) {
+        log.info("Multiple matching rules, nof ="+ fcnList.size()+". Applying random.");
+        for (int i = 0; i < fcnList.size() ; i++) {
+            log.info("i = "+i+", a = " + fcnList.get(i).apply(speed, pos));
+        }
     }
 }

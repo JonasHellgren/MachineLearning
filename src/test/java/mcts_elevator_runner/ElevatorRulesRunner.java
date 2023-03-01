@@ -1,6 +1,7 @@
 package mcts_elevator_runner;
 
 import black_jack.result_drawer.GridPanel;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -10,13 +11,14 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Arrays;
 
+@Log
 public class ElevatorRulesRunner {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int NOF_STEPS_HALF_RANDOM_POLICY = 50;
     private static final int NSTEPS_BETWEEN = 50;
     private static final int NOF_CYCLES = 5;
-    private static final int SLEEP_TIME = 100;
+    private static final int SLEEP_TIME = 300;
 
     static EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     static StateInterface<VariablesElevator> state;
@@ -53,13 +55,13 @@ public class ElevatorRulesRunner {
     }
 
     private static void doPrintingIfAtFloor(VariablesElevator variables) {
-        EnvironmentElevator environmentCasted = (EnvironmentElevator) environment;
-        if (environmentCasted.canPersonLeavingOrEnter(state)) {
+        if (EnvironmentElevator.isAtFloor.test(variables.speed, variables.pos)) {
             System.out.println("variables = " + variables);
         }
     }
 
     private static void runChargeSimulation() throws InterruptedException {
+        log.info("Charge simulation starting");
         SimulationPolicyInterface<VariablesElevator, Integer> policy = new PolicyMoveDownStop();
         VariablesElevator variables;
         do {

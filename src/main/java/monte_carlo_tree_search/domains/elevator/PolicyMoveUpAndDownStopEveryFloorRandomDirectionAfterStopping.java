@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         implements SimulationPolicyInterface<VariablesElevator, Integer> {
 
-    private static final int POS_BETWEEN = 10;
+    private static final int POS_BETWEEN = 10;  //todo, importera från env
     private static final int TOP_POS = 30;
     private static final int BOTTOM_POS = 0;
     private static final int SPEED_STILL = 0;
@@ -41,13 +41,17 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         decisionTable = new HashMap<>();
         decisionTable.put( (s,p) -> isMovingUp.and(isNotAtFloor).test(s,p) ,(s, p) -> SPEED_UP);
         decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtTop).test(s,p),(s, p) -> SPEED_UP);
-        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtTop).test(s,p),(s, p) -> SPEED_DOWN);
         decisionTable.put( (s,p) -> isMovingDown.and(isNotAtFloor).test(s,p) ,(s, p) -> SPEED_DOWN);
         decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtBottom).test(s,p),(s, p) -> SPEED_DOWN);
+       // decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtTop).test(s,p),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtTop).test(s,p),(s, p) -> SPEED_DOWN);
+        //decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtBottom).test(s,p),(s, p) -> SPEED_DOWN);
+        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtBottom).and(isNotAtTop).test(s,p),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isNotAtBottom).and(isNotAtTop).test(s,p),(s, p) -> SPEED_DOWN);
         decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtBottom).test(s,p),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p) -> isStill.and(isAtFloor).and(isAtBottom).test(s,p),(s, p) -> SPEED_STILL); //chance to charge
         decisionTable.put( (s,p) -> isStill.and(isNotAtFloor).test(s,p),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p) -> isStill.and(isNotAtFloor).test(s,p),(s, p) -> SPEED_DOWN);
     }
 
     @Override

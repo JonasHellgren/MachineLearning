@@ -251,7 +251,7 @@ ElevatorMctsOnlySearchRunner
 - ElevatorRunner  x
 - firstActionSelectionPolicy fullyRandom  x
 - bugg isPersonsEnteringElevator  x
-- studera space game etc  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
+- studera space game etc - Test_5times15grid  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
 - varför aldrig Defensive backup
 - TestSearchNoActionRestrictionNoSimulation  x
  -TestSearchNoActionRestrictionSimulation  x
