@@ -16,6 +16,16 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *   Insights:
+ *   Setting of discountFactorSteps is critical, if not smaller than one, no good solution.
+ *   One can also have a small weightReturnsSteps.
+ *   The explanation is probably that simulations here is a more reliable signal.
+ *
+ *   maxSimulationDepth must be restricted, probably because high values puts the system in fail state, i.e.
+ *   backup of future big negative numbers.
+ */
+
 public class TestSearchNoActionRestrictionSimulation {
 
     private static final int SOE_FULL = 1;
@@ -81,8 +91,6 @@ public class TestSearchNoActionRestrictionSimulation {
         Assert.assertFalse(posList.contains(POS_FLOOR_1));      //to long horizon to handle
     }
 
-
-    @NotNull
     private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot = monteCarloTreeCreator.run();
         return new ElevatorTestHelper(nodeRoot, monteCarloTreeCreator, settings);
@@ -95,17 +103,20 @@ public class TestSearchNoActionRestrictionSimulation {
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .isDefensiveBackup(true)
-                .alphaBackupDefensive(0.5)
+             //   .isDefensiveBackup(true)  //not crtical
+             //   .alphaBackupDefensive(0.9)  //not crtical
+                .alphaBackupNormal(1.0)
+                .weightReturnsSteps(1.0)
+                .discountFactorSteps(0.95)
+                .weightReturnsSimulation(1.0)
+                .discountFactorSimulation(1.0)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(20)
-                .maxNofIterations(20_000)
+                .maxNofIterations(1000)
                 .timeBudgetMilliSeconds(500)
-                .weightReturnsSteps(0.0)
-                .weightReturnsSimulation(1.0)
-                .nofSimulationsPerNode(10)
+                .nofSimulationsPerNode(1)
                 .maxSimulationDepth(10)
-                .coefficientExploitationExploration(0.0001)
+                .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(false)
                 .build();
 

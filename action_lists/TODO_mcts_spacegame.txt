@@ -255,7 +255,7 @@ ElevatorMctsOnlySearchRunner
 - varför aldrig Defensive backup
 - TestSearchNoActionRestrictionNoSimulation  x
  -TestSearchNoActionRestrictionSimulation  x
- - whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1
+ - whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1 - nodeRoot value = -0.05486583900680832
   TestSearchActionRestrictionSimulation  - conditional branching
 
 - förstå nodeRoot value = -0.03591087811271311

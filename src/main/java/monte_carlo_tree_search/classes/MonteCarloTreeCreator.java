@@ -100,11 +100,7 @@ public class MonteCarloTreeCreator<S,A> {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState,nodeSelected.getDepth());
 
-             //   System.out.println("nodeSelected = " + nodeSelected);
-                //if (actionsToSelected.size()>1)
-                   // System.out.println("action in root = " + actionsToSelected.get(0).getValue());
-
-                //somePrinting(i, actionInSelected, sr, simulationResults);
+               // somePrinting(i, actionInSelected, sr, simulationResults);
 
                 backPropagate(sr, simulationResults, actionInSelected.get());
 
@@ -131,8 +127,8 @@ public class MonteCarloTreeCreator<S,A> {
     private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults) {
         log.info("i = "+ i);
         actionsToSelected.forEach(a -> System.out.println(a.getValue()));
-        System.out.println("actionInSelected = " + actionInSelected.orElseThrow());
         System.out.println("sr.newState = " + sr.newState);
+        System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue());
         System.out.println("sr.isFail = " + sr.isFail);
         System.out.println("simulationResults = " + simulationResults);
     }
