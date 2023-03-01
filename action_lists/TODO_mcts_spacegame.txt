@@ -259,7 +259,10 @@ ElevatorMctsOnlySearchRunner
   TestSearchActionRestrictionSimulation  - conditional branching x
   - publica predicat public  x
   - test låg SoE  x
+  ned vid bottom och upp top ger fail x
+  - TestEnvironmentElevatorFailAndReward - givenAtBottom_whenActionDown_thenFail  x
   - BackupDefensive simulation
+
 
 - förstå nodeRoot value = -0.03591087811271311
 - TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching

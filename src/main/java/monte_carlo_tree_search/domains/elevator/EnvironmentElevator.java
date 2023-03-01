@@ -71,6 +71,8 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     public static BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
     public static BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
     public static BiPredicate<Integer, Integer> isStill = (s, p) -> s == 0;
+    public static BiPredicate<Integer, Integer> isMovingDown = (s, p) -> s < 0;
+    public static BiPredicate<Integer, Integer> isMovingUp = (s, p) -> s > 0;
     public static BiPredicate<Integer, Integer> isPersonsEnteringElevator = (s, p) ->  isStill.and(isAtFloor).and(isNotBottomFloor).test(s,p);
     public static BiPredicate<Integer, Integer> isPersonsLeavingElevator = (s, p) -> isStill.and(isBottomFloor).test(s,p);
 
@@ -135,7 +137,12 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
 
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
         //TODO  nPersonsWaiting > 20
-        return newState.getVariables().SoE < SOC_LOW && newState.getVariables().nPersonsInElevator<=MAX_NOF_PERSONS_IN_ELEVATOR;
+        VariablesElevator vars=newState.getVariables();
+        return vars.SoE < SOC_LOW ||
+                vars.nPersonsInElevator>=MAX_NOF_PERSONS_IN_ELEVATOR ||
+                isAtTop.and(isMovingUp).test(vars.speed,vars.pos) ||
+                isBottomFloor.and(isMovingDown).test(vars.speed,vars.pos);
+
     }
 
     int calcNofPersonsInElevator(int newSpeed, int newPos, StateInterface<VariablesElevator> state) {

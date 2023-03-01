@@ -25,6 +25,10 @@ public class TestEnvironmentElevatorFailAndReward {
     private static final int SOE_EMPTY = 0;
     private static final double SOE_SMALL = 0.21;
     private static final int ACTION_UP = 1;
+    private static final int ACTION_DOWN = -1;
+    private static final int POS_BOTTOM = 0;
+    private static final int POS_TOP = 30;
+
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     StateInterface<VariablesElevator> state;
@@ -75,6 +79,37 @@ public class TestEnvironmentElevatorFailAndReward {
         StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
         assertFalse(sr.isFail);
     }
+
+    @Test
+    public void givenAtBottom_whenActionStill_thenNotFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().pos(POS_BOTTOM).build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
+        assertFalse(sr.isFail);
+    }
+
+    @Test
+    public void givenAtBottom_whenActionDown_thenFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().pos(POS_BOTTOM).build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_DOWN);
+        assertTrue(sr.isFail);
+    }
+
+
+    @Test
+    public void givenAtTop_whenActionStill_thenNotFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().pos(POS_TOP).build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_STILL);
+        assertFalse(sr.isFail);
+    }
+
+    @Test
+    public void givenAtTop_whenActionUp_thenFail() {
+        state = StateElevator.newFromVariables(VariablesElevator.builder().pos(POS_TOP).build());
+        StepReturnGeneric<VariablesElevator> sr= getStepReturnAfterStep(state, ACTION_UP);
+        assertTrue(sr.isFail);
+    }
+
+
 
     private StepReturnGeneric<VariablesElevator> getStepReturnAfterStep(
             StateInterface<VariablesElevator> state,

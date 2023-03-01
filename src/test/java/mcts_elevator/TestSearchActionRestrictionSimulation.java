@@ -123,13 +123,13 @@ public class TestSearchActionRestrictionSimulation {
                 .discountFactorSteps(0.95)
                 .weightReturnsSimulation(1.0)
                 .discountFactorSimulation(1.0)
-                .coefficientMaxAverageReturn(1) //0 <=> average, 1<=>max
+                .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(50)
                 .maxNofIterations(100_000)
                 .timeBudgetMilliSeconds(500)
-                .nofSimulationsPerNode(100)
+                .nofSimulationsPerNode(5)
                 .maxSimulationDepth(30)
-                .coefficientExploitationExploration(0.1)
+                .coefficientExploitationExploration(10000.0)
                 .isCreatePlotData(false)
                 .build();
 
