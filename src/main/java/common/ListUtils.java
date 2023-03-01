@@ -58,6 +58,14 @@ public class ListUtils {
                 .collect(Collectors.toList());
     }
 
+
+
+    public static Integer sumList(List<Integer> list) {
+        return list.stream().mapToInt(Integer::intValue).sum();
+    }
+
+
+
     public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {
         return listA.stream().map(num -> num + scalar)
                 .collect(Collectors.toList());

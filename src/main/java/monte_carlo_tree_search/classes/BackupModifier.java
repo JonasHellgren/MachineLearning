@@ -123,7 +123,7 @@ public class BackupModifier<S,A> {
     }
 
     private void defensiveBackupOfSelectedNode() {
-        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensive);
+        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensiveStep);
     }
 
     private void updateNodesFromReturns(final List<Double> returnsSteps,

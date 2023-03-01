@@ -46,7 +46,7 @@ public class Test_3times7grid_Simulations {
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
-                .alphaBackupDefensive(ALPHA_BACKUP_STEPS_DEFENSIVE)
+                .alphaBackupDefensiveStep(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
                 .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)

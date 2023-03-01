@@ -264,8 +264,12 @@ ElevatorMctsOnlySearchRunner
   - BackupDefensive simulation  x
   - skära av hopplös gren restricted action set  - får inte till det x
   - krånglande tester  x
-  - few branches (averageNofChildrenPerNode is small) -> few iterations needed
+  - few branches (averageNofChildrenPerNode is small) -> few iterations needed  x
+  - TestSearchActionRestrictionSimulation  bökar
+  -  alphaBackupDefensive -> alphaBackupDefensiveStep alphaBackupDefensiveSimulation
 
+
+- ElevatorSearchActionRestrictionRunner
 
 
 

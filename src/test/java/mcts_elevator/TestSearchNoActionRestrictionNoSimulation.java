@@ -92,7 +92,7 @@ public class TestSearchNoActionRestrictionNoSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
                 .simulationPolicy(ElevatorPolicies.newRandom())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensive(0.5)
+                .alphaBackupDefensiveStep(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(10)
                 .maxNofIterations(20_000)

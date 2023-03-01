@@ -40,7 +40,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
                 .isDefensiveBackup(false)
                 .maxTreeDepth(MAX_TREE_DEPTH_SEARCH)
                 .alphaBackupNormal(0.9)
-                .alphaBackupDefensive(0.1)
+                .alphaBackupDefensiveStep(0.1)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS_SEARCH)
                 .weightReturnsSteps(0)
                 .weightMemoryValue(1.0)

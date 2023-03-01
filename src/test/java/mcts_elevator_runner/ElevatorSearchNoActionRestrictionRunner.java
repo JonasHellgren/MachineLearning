@@ -12,13 +12,10 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Arrays;
 
-public class ElevatorOnlySearchRunner {
+public class ElevatorSearchNoActionRestrictionRunner {
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
-    private static final int NOF_STEPS_HALF_RANDOM_POLICY = 50;
     private static final int NSTEPS_BETWEEN = 50;
-    private static final int NOF_CYCLES = 5;
-    private static final int SLEEP_TIME = 100;
     private static final int NOF_STEPS = 1000;
 
 

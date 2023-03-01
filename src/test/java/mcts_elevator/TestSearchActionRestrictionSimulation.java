@@ -56,7 +56,7 @@ public class TestSearchActionRestrictionSimulation {
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertTrue(posList.contains(POS_FLOOR_1));
-
+        Assert.assertEquals(1, (int) monteCarloTreeCreator.getFirstAction().getValue());
     }
 
     @SneakyThrows
@@ -101,6 +101,20 @@ public class TestSearchActionRestrictionSimulation {
         Assert.assertTrue(posList.contains(POS_FLOOR_1));
     }
 
+    @SneakyThrows
+    @Test
+    public void whenAtPos8AndWaitingFloor1_thenPickUp() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(1).SoE(SOE_FULL).pos(9).nPersonsInElevator(0)
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+        List<Integer> nPers= helper.getnPersWaiting();
+        Assert.assertTrue(nPers.contains(0));
+    }
+
     private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot = monteCarloTreeCreator.run();
       //  nodeRoot.printTree();
@@ -121,19 +135,20 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensive(0.9)  //0.1
+                .alphaBackupDefensiveStep(0.1)  //0.1
+                .alphaBackupDefensiveSimulation(0.1)
                 .alphaBackupNormal(1.0)
-                .weightReturnsSteps(1.0)
-                .discountFactorSteps(0.99)
+                .weightReturnsSteps(0.9)
+                .discountFactorSteps(1.0)
                 .weightReturnsSimulation(1.0)
-                .discountFactorSimulation(0.99)
+                .discountFactorSimulation(1.0)
                 .discountFactorSimulationDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
-                .maxTreeDepth(30)
-                .maxNofIterations(1000)  //100_000
+                .maxTreeDepth(3)  //30
+                .maxNofIterations(10)
                 .timeBudgetMilliSeconds(1000)
-                .nofSimulationsPerNode(1)
-                .maxSimulationDepth(20)
+                .nofSimulationsPerNode(10)
+                .maxSimulationDepth(10)
                 .coefficientExploitationExploration(1e6)  //1e6
                 .isCreatePlotData(false)
                 .build();

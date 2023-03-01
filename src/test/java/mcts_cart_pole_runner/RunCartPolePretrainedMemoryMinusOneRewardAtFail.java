@@ -66,7 +66,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
                 .isDefensiveBackup(false)
                 .maxTreeDepth(30)
                 .alphaBackupNormal(1)
-                .alphaBackupDefensive(0.9)
+                .alphaBackupDefensiveStep(0.9)
                 .timeBudgetMilliSeconds(TIME_BUDGET_MILLI_SECONDS)
                 .weightReturnsSteps(0)
                 .weightMemoryValue(1)

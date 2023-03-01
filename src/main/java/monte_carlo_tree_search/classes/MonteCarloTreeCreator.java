@@ -100,11 +100,11 @@ public class MonteCarloTreeCreator<S,A> {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState,nodeSelected.getDepth());
 
-               // somePrinting(i, actionInSelected, sr, simulationResults);
+                somePrinting(i, actionInSelected, sr, simulationResults, nodeSelected);
 
                 backPropagate(sr, simulationResults, actionInSelected.get());
 
-              //  System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
+                System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
 
             } else {  // actionInSelected is empty <=> all tested
            //     System.out.println("nodeSelected = " + nodeSelected.getState());
@@ -123,11 +123,13 @@ public class MonteCarloTreeCreator<S,A> {
         return nodeRoot;
     }
 
-    private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults) {
-        log.info("i = "+ i);
-        actionsToSelected.forEach(a -> System.out.println(a.getValue()));
-        System.out.println("sr.newState = " + sr.newState);
+    private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults, NodeWithChildrenInterface<S,A> nodeSelected) {
+        List<Integer> actionList=new ArrayList<>();
+      //  actionsToSelected.forEach(a -> actionList.add((Integer) a.getValue()));
+        log.info("i = "+ i+", actionsToSelected = "+actionList);
+        System.out.println("nodeSelected.getState() = " + nodeSelected.getState());
         System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue());
+        System.out.println("sr.newState = " + sr.newState);
         System.out.println("sr.isFail = " + sr.isFail);
         System.out.println("simulationResults = " + simulationResults);
     }

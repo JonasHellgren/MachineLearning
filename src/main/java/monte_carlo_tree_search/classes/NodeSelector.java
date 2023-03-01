@@ -80,7 +80,7 @@ public class NodeSelector<S,A> {
         return currentNode;
     }
 
-    private boolean isNotLeaf(NodeWithChildrenInterface<S,A> currentNode) {
+    public boolean isNotLeaf(NodeWithChildrenInterface<S, A> currentNode) {
         List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
         int nofTestedActions = childNodes.size();
         int maxNofTestedActions =

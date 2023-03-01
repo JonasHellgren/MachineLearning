@@ -4,6 +4,7 @@ import black_jack.result_drawer.GridPanel;
 import common.ListUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.classes.TreePlotData;
@@ -16,7 +17,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 @Log
 public class ElevatorRunner {
-    private static final int SLEEP_TIME = 100;
+    private static final int SLEEP_TIME = 1000;
     private static final String TITLE = "Elevator evaluation animation";
     MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch;
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
@@ -50,9 +51,10 @@ public class ElevatorRunner {
             mcForSearch.setStartState(state);
             mcForSearch.run();
 
-            log.info("Search completed, tree size = " +mcForSearch.getStatistics().getNofNodes()+", tree depth = "+mcForSearch.getStatistics().getMaxDepth());
+            MonteCarloSearchStatistics<VariablesElevator, Integer> stats=mcForSearch.getStatistics();
+            log.info("Search completed, tree size = " +stats.getNofNodes()+", tree depth = "+stats.getMaxDepth()+", nof iter = "+stats.getNofIterations());
 
-            updatePanelAndSleep100Millis(panelUpdater);
+            updatePanelAndSleepMillis(panelUpdater);
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();
             StepReturnGeneric<VariablesElevator> sr = environment.step(actionCartPole, state);
             state.setFromReturn(sr);
@@ -64,7 +66,7 @@ public class ElevatorRunner {
 
     }
 
-    private  void updatePanelAndSleep100Millis(ElevatorPanelUpdater panelUpdater) throws InterruptedException {
+    private  void updatePanelAndSleepMillis(ElevatorPanelUpdater panelUpdater) throws InterruptedException {
         panelUpdater.insertStates();
         Thread.sleep(SLEEP_TIME);
     }

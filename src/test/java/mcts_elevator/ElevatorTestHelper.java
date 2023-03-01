@@ -1,5 +1,6 @@
 package mcts_elevator;
 
+import common.ListUtils;
 import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -30,10 +31,14 @@ public class ElevatorTestHelper {
 
     public void somePrinting() {
         System.out.println("nodeRoot = " + nodeRoot);
+        List<Integer> speeds= getSpeeds();
         List<Integer> posList= getVisitedPositions();
+        List<Integer> getnPersWaiting= getnPersWaiting();
         List<Double> soEListList= getSoEList();
+        System.out.println("speeds = " + speeds);
         System.out.println("posList = " + posList);
         System.out.println("soEListList = " + soEListList);
+        System.out.println("getnPersWaiting = " + getnPersWaiting);
         MonteCarloSearchStatistics<VariablesElevator,Integer> stats=monteCarloTreeCreator.getStatistics();
         System.out.println("stats = " + stats);
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
@@ -44,11 +49,20 @@ public class ElevatorTestHelper {
 
     }
 
+    List<Integer>  getnPersWaiting() {
+        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
+        return nodesOnPath.stream().map(n -> ListUtils.sumList(n.getState().getVariables().nPersonsWaiting)).collect(Collectors.toList());
+    }
+
+    List<Integer>  getSpeeds() {
+        List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
+        return nodesOnPath.stream().map(n -> n.getState().getVariables().speed).collect(Collectors.toList());
+    }
+
     List<Integer>  getVisitedPositions() {
         List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
         return nodesOnPath.stream().map(n -> n.getState().getVariables().pos).collect(Collectors.toList());
     }
-
 
     List<Double>  getSoEList() {
         List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
