@@ -129,7 +129,7 @@ public class TestSearchActionRestrictionSimulation {
                 .timeBudgetMilliSeconds(500)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(30)
-                .coefficientExploitationExploration(10000.0)
+                .coefficientExploitationExploration(1000)
                 .isCreatePlotData(false)
                 .build();
 
