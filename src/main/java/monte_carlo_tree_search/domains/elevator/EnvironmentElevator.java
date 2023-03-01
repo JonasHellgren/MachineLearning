@@ -66,12 +66,14 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Integer NOF_FLOORS = 3;
     private static final int BIG = Integer.MAX_VALUE;
 
+    public static  BiPredicate<Integer,Integer> isAtTop = (s, p) -> p == MAX_POS;
     public static BiPredicate<Integer, Integer> isAtFloor = (s, p) -> (p % NOF_POS_BETWEEN_FLOORS == 0);
-    BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
-    BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
-    BiPredicate<Integer, Integer> isStill = (s, p) -> s == 0;
-    BiPredicate<Integer, Integer> isPersonsEnteringElevator = (s, p) ->  isStill.and(isAtFloor).and(isNotBottomFloor).test(s,p);
-    BiPredicate<Integer, Integer> isPersonsLeavingElevator = (s, p) -> isStill.and(isBottomFloor).test(s,p);
+    public static BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
+    public static BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
+    public static BiPredicate<Integer, Integer> isStill = (s, p) -> s == 0;
+    public static BiPredicate<Integer, Integer> isPersonsEnteringElevator = (s, p) ->  isStill.and(isAtFloor).and(isNotBottomFloor).test(s,p);
+    public static BiPredicate<Integer, Integer> isPersonsLeavingElevator = (s, p) -> isStill.and(isBottomFloor).test(s,p);
+
     NofPersonsWaitingUpdater nofPersonsWaitingUpdater;
     Map<BiPredicate<Integer,Integer>, Supplier<Double>> liftingPowerTable;  //speed,floor -> power
 

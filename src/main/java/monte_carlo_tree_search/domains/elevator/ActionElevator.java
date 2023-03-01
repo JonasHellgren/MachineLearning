@@ -16,8 +16,9 @@ import java.util.stream.IntStream;
 public class ActionElevator implements ActionInterface<Integer> {
 
     public static final int MIN_ACTION_DEFAULT = -1;
+    public static final int STILL_ACTION = 0;
     public static final int MAX_ACTION_DEFAULT = 1;
-    public static final int ACTION_DEFAULT = 0;
+    public static final int ACTION_DEFAULT = STILL_ACTION;
     @Builder.Default
     int minActionValue = MIN_ACTION_DEFAULT;
     @Builder.Default

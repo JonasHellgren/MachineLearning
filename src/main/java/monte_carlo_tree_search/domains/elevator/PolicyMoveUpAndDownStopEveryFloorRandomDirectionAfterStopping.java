@@ -17,25 +17,22 @@ import java.util.stream.Collectors;
 public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         implements SimulationPolicyInterface<VariablesElevator, Integer> {
 
-    private static final int POS_BETWEEN = 10;  //todo, importera från env
-    private static final int TOP_POS = 30;
-    private static final int BOTTOM_POS = 0;
-    private static final int SPEED_STILL = 0;
-    private static final int SPEED_UP = 1;
-    private static final int SPEED_DOWN = -1;
+    private static final int SPEED_STILL = ActionElevator.STILL_ACTION;
+    private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
+    private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
 
     Map<BiPredicate<Integer,Integer>, BiFunction<Integer,Integer,Integer>> decisionTable;
 
     public PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping() {
 
-        BiPredicate<Integer,Integer> isAtTop = (s, p) -> p == TOP_POS;
+        BiPredicate<Integer,Integer> isAtTop = EnvironmentElevator.isAtTop;
         BiPredicate<Integer,Integer> isNotAtTop = isAtTop.negate();
-        BiPredicate<Integer,Integer> isAtBottom = (s, p)-> p == BOTTOM_POS;
+        BiPredicate<Integer,Integer> isAtBottom = EnvironmentElevator.isBottomFloor;
         BiPredicate<Integer,Integer> isNotAtBottom = isAtBottom.negate();
-        BiPredicate<Integer,Integer> isStill = (s, p) -> s == SPEED_STILL;
+        BiPredicate<Integer,Integer> isStill = EnvironmentElevator.isStill;
         BiPredicate<Integer,Integer> isMovingUp = (s, p) -> s == SPEED_UP;
         BiPredicate<Integer,Integer> isMovingDown = (s, p) -> s == SPEED_DOWN;
-        BiPredicate<Integer,Integer> isAtFloor = (s, p) ->  p % POS_BETWEEN == 0;
+        BiPredicate<Integer,Integer> isAtFloor = EnvironmentElevator.isAtFloor;
         BiPredicate<Integer,Integer> isNotAtFloor = isAtFloor.negate();
 
         decisionTable = new HashMap<>();

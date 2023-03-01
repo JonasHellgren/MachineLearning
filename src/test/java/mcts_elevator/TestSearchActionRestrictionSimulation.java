@@ -25,7 +25,6 @@ public class TestSearchActionRestrictionSimulation {
     private static final int POS_FLOOR_1 = 10;
     private static final int POS_FLOOR_3 = 30;
     private static final int NSTEPS_BETWEEN = 50;
-    private static final Integer NOF_POS_BETWEEN_FLOORS = 10; //todo use env
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
@@ -56,7 +55,6 @@ public class TestSearchActionRestrictionSimulation {
 
     @SneakyThrows
     @Test
-    @Ignore
     public void whenAtFloor1AndBadSoE_thenDoNotMoveUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(0.21).pos(POS_FLOOR_1).nPersonsInElevator(0)
@@ -67,7 +65,6 @@ public class TestSearchActionRestrictionSimulation {
         helper.somePrinting();
         List<Integer> posList= helper.getVisitedPositions();
         Assert.assertFalse(posList.contains(POS_FLOOR_1+1));
-
     }
 
     @SneakyThrows
