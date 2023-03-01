@@ -10,12 +10,9 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /***
@@ -24,7 +21,7 @@ import java.util.function.Function;
  * maxSimulationDepth not allowed to be to large
  * coefficientExploitationExploration needs to be very large
  * small ratio nofNodes/nodIterations
- * large time budget needed
+ * few branches (averageNofChildrenPerNode is small) -> few iterations needed
  */
 
 public class TestSearchActionRestrictionSimulation {
@@ -124,7 +121,7 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensive(0.1)
+                .alphaBackupDefensive(0.9)  //0.1
                 .alphaBackupNormal(1.0)
                 .weightReturnsSteps(1.0)
                 .discountFactorSteps(0.99)
@@ -133,11 +130,11 @@ public class TestSearchActionRestrictionSimulation {
                 .discountFactorSimulationDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(30)
-                .maxNofIterations(100_000)  //100_000
+                .maxNofIterations(1000)  //100_000
                 .timeBudgetMilliSeconds(1000)
                 .nofSimulationsPerNode(1)
                 .maxSimulationDepth(20)
-                .coefficientExploitationExploration(1e6)
+                .coefficientExploitationExploration(1e6)  //1e6
                 .isCreatePlotData(false)
                 .build();
 

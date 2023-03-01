@@ -263,7 +263,9 @@ ElevatorMctsOnlySearchRunner
   - TestEnvironmentElevatorFailAndReward - givenAtBottom_whenActionDown_thenFail  x
   - BackupDefensive simulation  x
   - skära av hopplös gren restricted action set  - får inte till det x
-  - krånglande tester
+  - krånglande tester  x
+  - few branches (averageNofChildrenPerNode is small) -> few iterations needed
+
 
 
 
