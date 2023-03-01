@@ -81,8 +81,25 @@ public class TestSearchActionRestrictionSimulation {
         Assert.assertTrue(posList.contains(POS_FLOOR_1));      //to long horizon to handle
     }
 
+    @SneakyThrows
+    @Test
+    public void whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .SoE(0.21).pos(POS_FLOOR_0).nPersonsInElevator(0)
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+        List<Integer> posList= helper.getVisitedPositions();
+        Assert.assertTrue(posList.contains(POS_FLOOR_1));
+
+
+    }
+
     private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot = monteCarloTreeCreator.run();
+      //  nodeRoot.printTree();
         return new ElevatorTestHelper(nodeRoot, monteCarloTreeCreator, settings);
     }
 
@@ -90,7 +107,8 @@ public class TestSearchActionRestrictionSimulation {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
 
-        Function<VariablesElevator,Integer> nofActionsFunction  = (a) -> EnvironmentElevator.isAtFloor.test(a.speed,a.pos)
+        Function<VariablesElevator,Integer> nofActionsFunction  =
+                (a) -> EnvironmentElevator.isAtFloor.or(EnvironmentElevator.isBottomFloor).test(a.speed,a.pos)
                 ?actionTemplate.applicableActions().size()
                 :1;
 
@@ -98,20 +116,20 @@ public class TestSearchActionRestrictionSimulation {
                 .maxNofTestedActionsForBeingLeafFunction(nofActionsFunction)
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .isDefensiveBackup(true)  //not crtical
-                .alphaBackupDefensive(0.9)  //not crtical
+                .isDefensiveBackup(true)
+                .alphaBackupDefensive(0.1)
                 .alphaBackupNormal(1.0)
                 .weightReturnsSteps(1.0)
                 .discountFactorSteps(0.95)
                 .weightReturnsSimulation(1.0)
                 .discountFactorSimulation(1.0)
-                .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
+                .coefficientMaxAverageReturn(1) //0 <=> average, 1<=>max
                 .maxTreeDepth(50)
                 .maxNofIterations(100_000)
                 .timeBudgetMilliSeconds(500)
-                .nofSimulationsPerNode(1)
+                .nofSimulationsPerNode(100)
                 .maxSimulationDepth(30)
-                .coefficientExploitationExploration(0.01)
+                .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(false)
                 .build();
 

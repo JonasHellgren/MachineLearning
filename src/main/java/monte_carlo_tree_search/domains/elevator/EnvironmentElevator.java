@@ -132,12 +132,6 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 : Optional.empty();
     }
 
-    public boolean canPersonLeavingOrEnter(StateInterface<VariablesElevator> state) {
-        int newSpeed = state.getVariables().speed;
-        int newPos = state.getVariables().pos;
-        return isPersonsEnteringElevator.or(isPersonsLeavingElevator).test(newSpeed, newPos);
-    }
-
 
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
         //TODO  nPersonsWaiting > 20
@@ -194,6 +188,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private Map<BiPredicate<Integer,Integer>, Supplier<Double>> constructPowerRules() {
         BiPredicate<Integer,Integer> isStandingStillBottomFloor =
                 (s, p) -> isStill.and(isBottomFloor).test(s,p);
+       // (s, p) -> isBottomFloor.test(s,p);
         BiPredicate<Integer,Integer> isStandingStillNotBottomFloor =
                 (s, p) -> isStill.and(isNotBottomFloor).test(s,p);
         BiPredicate<Integer,Integer> isMovingUp = (s,p) -> s > 0;

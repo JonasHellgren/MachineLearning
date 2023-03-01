@@ -258,7 +258,8 @@ ElevatorMctsOnlySearchRunner
  - whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1 - nodeRoot value = -0.05486583900680832 x
   TestSearchActionRestrictionSimulation  - conditional branching x
   - publica predicat public  x
-  - test låg SoE
+  - test låg SoE  x
+  - BackupDefensive simulation
 
 - förstå nodeRoot value = -0.03591087811271311
 - TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching
