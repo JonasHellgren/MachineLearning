@@ -93,7 +93,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(0.35).pos(POS_FLOOR_0).nPersonsInElevator(0)
+                .SoE(0.3).pos(POS_FLOOR_0).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
@@ -120,7 +120,7 @@ public class TestSearchActionRestrictionSimulation {
 
     private ElevatorTestHelper runSearchAndGetElevatorTestHelper() throws monte_carlo_tree_search.exceptions.StartStateIsTrapException {
         NodeWithChildrenInterface<VariablesElevator, Integer> nodeRoot = monteCarloTreeCreator.run();
-       // nodeRoot.printTree();
+      //  nodeRoot.printTree();
         return new ElevatorTestHelper(nodeRoot, monteCarloTreeCreator, settings);
     }
 
@@ -138,20 +138,20 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(0.9)  //0.1
-                .alphaBackupDefensiveSimulation(0.9)
+                .alphaBackupDefensiveStep(0.1)  //0.1
+                .alphaBackupDefensiveSimulation(0.1)
                 .alphaBackupNormal(1.0)
-                .weightReturnsSteps(0.0)
+                .weightReturnsSteps(0.1)  //00
                 .discountFactorSteps(1.0)
                 .weightReturnsSimulation(1.0)
                 .discountFactorSimulation(1.0)
                 .discountFactorSimulationDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(30)  //30
-                .maxNofIterations(10_000)  //100_000
+                .maxNofIterations(1000)  //100_000
                 .timeBudgetMilliSeconds(1_000)
-                .nofSimulationsPerNode(5)
-                .maxSimulationDepth(20)   //20
+                .nofSimulationsPerNode(15)
+                .maxSimulationDepth(50)   //20
                 .coefficientExploitationExploration(1e6)  //1e6
                 .isCreatePlotData(false)
                 .build();

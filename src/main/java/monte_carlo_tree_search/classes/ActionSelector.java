@@ -26,7 +26,7 @@ public class ActionSelector<S,A> {
         this.actionTemplate=actionTemplate;
     }
 
-    public Optional<ActionInterface<A>> select(NodeWithChildrenInterface<S,A> nodeSelected) {
+    public Optional<ActionInterface<A>> selectRandomNonTestedAction(NodeWithChildrenInterface<S,A> nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
         List<ActionInterface<A>> nonTestedActions = (nofTestedActions==0)
@@ -37,6 +37,17 @@ public class ActionSelector<S,A> {
             return Optional.empty();
         } else {
             return Optional.of(getRandomAction(nonTestedActions));
+        }
+    }
+
+
+    public Optional<ActionInterface<A>> selectRandomTestedAction(NodeWithChildrenInterface<S,A> nodeSelected) {
+        int nofTestedActions=getTestedActions(nodeSelected).size();
+
+        if(nofTestedActions==0) {
+            return Optional.empty();
+        } else {
+            return Optional.of(getRandomAction(getTestedActions(nodeSelected)));
         }
     }
 
