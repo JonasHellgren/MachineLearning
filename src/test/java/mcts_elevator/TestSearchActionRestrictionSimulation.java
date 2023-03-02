@@ -18,12 +18,10 @@ import java.util.function.Function;
 /***
  * Insights:
  * If action set is restricted and the only action(s) gives fail then actionInSelected is empty -> tree not expanded
- * maxSimulationDepth not allowed to be to large
- * coefficientExploitationExploration needs to be very large
- * small ratio nofNodes/nodIterations
+ * hence, chooseTestedActionAndBackPropagate will be executed
+ * maxSimulationDepth must be large enough
  * few branches (averageNofChildrenPerNode is small) -> few iterations needed
- *
- *  *   Nodeselector considers firstActionSelectionPolicy
+ * Nodeselector considers firstActionSelectionPolicy
  */
 
 public class TestSearchActionRestrictionSimulation {
@@ -32,6 +30,7 @@ public class TestSearchActionRestrictionSimulation {
     private static final int POS_FLOOR_0 = 0;
     private static final int POS_FLOOR_1 = 10;
     private static final int POS_FLOOR_2 = 20;
+    private static final int POS_FLOOR_3 = 30;
     private static final int NSTEPS_BETWEEN = 50;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
@@ -66,7 +65,21 @@ public class TestSearchActionRestrictionSimulation {
     public void whenAtFloor2WaitingFloor1_thenManageMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_2).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(5, 0, 0))
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+        List<Integer> posList= helper.getVisitedPositions();
+        Assert.assertTrue(posList.contains(POS_FLOOR_1));      //long horizon to handle
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenAtFloor3WaitingFloor1_thenManageMoveToFloor1() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0)
+                .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -138,21 +151,21 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(0.1)  //0.1
-                .alphaBackupDefensiveSimulation(0.1)
+                .alphaBackupDefensiveStep(1.0)  //0.1
+                .alphaBackupDefensiveSimulation(1.0)
                 .alphaBackupNormal(1.0)
-                .weightReturnsSteps(0.1)  //00
-                .discountFactorSteps(1.0)
+                .weightReturnsSteps(1.0)  //00
+                .discountFactorSteps(0.9)
                 .weightReturnsSimulation(1.0)
                 .discountFactorSimulation(1.0)
-                .discountFactorSimulationDefensive(0.5)
+                .discountFactorSimulationDefensive(0.9)
                 .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
                 .maxTreeDepth(30)  //30
                 .maxNofIterations(1000)  //100_000
                 .timeBudgetMilliSeconds(1_000)
-                .nofSimulationsPerNode(15)
-                .maxSimulationDepth(50)   //20
-                .coefficientExploitationExploration(1e6)  //1e6
+                .nofSimulationsPerNode(5)
+                .maxSimulationDepth(30)   //20
+                .coefficientExploitationExploration(1e1)  //1e6
                 .isCreatePlotData(false)
                 .build();
 

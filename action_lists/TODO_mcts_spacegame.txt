@@ -268,8 +268,8 @@ ElevatorMctsOnlySearchRunner
   - TestSearchActionRestrictionSimulation  bökar
   -  alphaBackupDefensive -> alphaBackupDefensiveStep alpha BackupDefensiveSimulation  x
   - ned vid bottom och upp top ger INTE fail  x
-  - förstå whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp
-
+  - förstå whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp x
+ -whenAtFloor3WaitingFloor1_thenManageMoveToFloor1 x
 
 - ElevatorSearchActionRestrictionRunner
 
