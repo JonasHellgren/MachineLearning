@@ -73,7 +73,6 @@ public class ElevatorTestHelper {
 
     public List<NodeInterface<VariablesElevator, Integer>> getNodesOnPath() {
         TreeInfoHelper<VariablesElevator, Integer> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        //return tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow();
         return tih.getBestPath();
     }
 
