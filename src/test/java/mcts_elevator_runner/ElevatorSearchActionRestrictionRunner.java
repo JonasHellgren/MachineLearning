@@ -50,7 +50,7 @@ public class ElevatorSearchActionRestrictionRunner {
                 .discountFactorSimulationDefensive(0.99)
                 .maxTreeDepth(100)
                 .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(500)
+                .timeBudgetMilliSeconds(200)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(50)   //20
                 .coefficientExploitationExploration(1e1)  //1e6

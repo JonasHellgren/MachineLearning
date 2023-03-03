@@ -4,10 +4,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -23,26 +20,26 @@ public class DecisionTableReader {
     }
 
     public  Integer readSingleActionChooseRandomIfMultiple(Integer speed, Integer pos) {
-        List<Integer> actionValues= readAllAvailableActions(speed, pos);
+        List<Integer> actionValues= new ArrayList<>(readAllAvailableActions(speed, pos));
         if (actionValues.size()>1) {
            // logging(speed, pos, fcnList);
             return actionValues.get(RandomUtils.nextInt(0,actionValues.size()));
         }
         if (actionValues.size()==0) {
             log.warning("No matching rule, using backup. Speed = "+speed+", pos = "+pos);
-           // throw  new RuntimeException();
-            return BACKUP;
+            throw  new RuntimeException();
+           // return BACKUP;
         }
         return actionValues.get(0);
     }
 
-    public  List<Integer> readAllAvailableActions(Integer speed, Integer pos) {
+    public Set<Integer> readAllAvailableActions(Integer speed, Integer pos) {
         List<Integer> integerList=new ArrayList<>();
         List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos);
         for (BiFunction<Integer, Integer, Integer> fcn:fcnList) {
             integerList.add(fcn.apply(speed,pos));
         }
-        return integerList;
+        return new HashSet<>(integerList);
     }
 
     @NotNull

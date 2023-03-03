@@ -4,8 +4,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
@@ -34,4 +33,11 @@ public class PolicyMoveDownStop
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
         return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos));
     }
+
+    @Override
+    public Set<Integer> availableActionValues(StateInterface<VariablesElevator> state) {
+        ActionElevator actionElevator=ActionElevator.newValueDefaultRange(0);
+        return actionElevator.applicableActions();
+    }
+
 }

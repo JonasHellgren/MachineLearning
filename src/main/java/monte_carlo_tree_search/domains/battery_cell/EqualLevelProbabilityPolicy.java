@@ -1,12 +1,15 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
 import common.RandUtils;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class EqualLevelProbabilityPolicy implements SimulationPolicyInterface<CellVariables, Integer> {
     ActionInterface<Integer> actionTemplate;
@@ -23,4 +26,11 @@ public class EqualLevelProbabilityPolicy implements SimulationPolicyInterface<Ce
         action.setValue(randUtils.getRandomItemFromList(avList));
         return action;
     }
+
+
+    @Override
+    public Set<Integer> availableActionValues(StateInterface<CellVariables> state) {
+        throw new RuntimeException("Not implemented");
+    }
+
 }

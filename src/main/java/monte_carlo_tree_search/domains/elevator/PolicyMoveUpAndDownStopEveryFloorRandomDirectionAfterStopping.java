@@ -6,10 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.apache.commons.lang3.RandomUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -43,6 +40,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
 
         decisionTable.put( (s,p) -> isMovingDown.and(isNotAtFloor).test(s,p) ,(s, p) -> SPEED_DOWN);
 
+        /*
         decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_UP);
         decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
         decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_DOWN);
@@ -50,6 +48,12 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_UP);
         decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
         decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_DOWN);
+*/
+
+        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_STILL);
+        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_DOWN);
+
 
         decisionTable.put((s,p) -> isStill.and(isAtTop).test(s,p),(s, p) -> SPEED_STILL);
         decisionTable.put((s,p) -> isStill.and(isAtTop).test(s,p),(s, p) -> SPEED_DOWN);
@@ -66,7 +70,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos));
     }
 
-    public List<Integer> availableActionValues(StateInterface<VariablesElevator> state) {
+    public Set<Integer> availableActionValues(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);

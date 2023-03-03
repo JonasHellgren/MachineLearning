@@ -10,6 +10,7 @@ import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Log
 public class ElevatorRunner {
@@ -52,7 +53,7 @@ public class ElevatorRunner {
             MonteCarloSearchStatistics<VariablesElevator, Integer> stats=mcForSearch.getStatistics();
             SimulationPolicyInterface<VariablesElevator, Integer> policy=settings.getSimulationPolicy();
             PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping policyCasted=(PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping) policy;
-            List<Integer> actions=policyCasted.availableActionValues(state);
+            Set<Integer> actions=policyCasted.availableActionValues(state);
             log.info("Search completed, tree size = " +stats.getNofNodes()+", tree depth = "+stats.getMaxDepth()+", nof iter = "+stats.getNofIterations()+", actions = "+actions);
 
             updatePanelAndSleepMillis(panelUpdater);

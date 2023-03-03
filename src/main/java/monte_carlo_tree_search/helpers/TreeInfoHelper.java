@@ -101,14 +101,16 @@ public class TreeInfoHelper<SSV,AV> {
 
     @SneakyThrows
     public List<NodeInterface <SSV,AV>> getBestPath() {
-        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
+//        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
+        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, false);
+
         ns.select();
         return ns.getNodesFromRootToSelected();
     }
 
     @SneakyThrows
     public List<ActionInterface <AV>> getActionsOnBestPath() {
-        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
+        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);  //False??
         ns.select();
         return ns.getActionsFromRootToSelected();
     }

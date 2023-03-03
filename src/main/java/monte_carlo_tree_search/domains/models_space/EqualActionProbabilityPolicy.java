@@ -22,4 +22,10 @@ public class EqualActionProbabilityPolicy implements SimulationPolicyInterface<S
         List<ShipActionSet> avList= new ArrayList<>(applicableActions);
         return new ActionShip(randUtils.getRandomItemFromList(avList));
      }
+
+    @Override
+    public Set<ShipActionSet> availableActionValues(StateInterface<ShipVariables> state) {
+        throw new RuntimeException("Not implemented");
+    }
+
 }

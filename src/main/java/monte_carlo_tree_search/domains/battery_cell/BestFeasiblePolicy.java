@@ -6,6 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class BestFeasiblePolicy implements SimulationPolicyInterface<CellVariables, Integer> {
 
@@ -29,6 +30,11 @@ public class BestFeasiblePolicy implements SimulationPolicyInterface<CellVariabl
                 : Collections.max(feasibleValueList);
         action.setValue(av);
         return action;
+    }
+
+    @Override
+    public Set<Integer> availableActionValues(StateInterface<CellVariables> state) {
+        throw new RuntimeException("Not implemented");
     }
 
 }

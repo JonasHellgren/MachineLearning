@@ -135,9 +135,9 @@ public class TestSearchActionRestrictionSimulation {
 
     @SneakyThrows
     @Test
-    public void whenAtPos18AndPersonInElevatorAndWaitingFloor2And3_thenPickUpBoth() {
+    public void whenAtPos22ndPersonInElevatorAndWaitingFloor2And3_thenPickUpBoth() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(1).SoE(SOE_FULL).pos(18).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 1, 1))
+                .speed(1).SoE(SOE_FULL).pos(22).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 1, 1))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -166,7 +166,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtPos8AndWaitingFloor3AndFullSoE_thenPickUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(1).SoE(SOE_FULL).pos(8).nPersonsInElevator(1)
+                .speed(1).SoE(SOE_FULL).pos(8).nPersonsInElevator(0)
                 .nPersonsWaiting(Arrays.asList(0, 0, 1))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
@@ -213,10 +213,10 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)
-                .discountFactorSimulationDefensive(0.99)
-                .maxTreeDepth(100)
+                .discountFactorSimulationDefensive(0.9)
+                .maxTreeDepth(30)
                 .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(300)
+                .timeBudgetMilliSeconds(200)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(50)   //20
                 .coefficientExploitationExploration(1e1)  //1e6

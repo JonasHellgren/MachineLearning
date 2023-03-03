@@ -96,17 +96,33 @@ public class MonteCarloTreeCreator<S,A> {
         plotData.clear();
         ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
+           // logIterationNr(i);
+
             NodeWithChildrenInterface<S,A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
+
+            if (actionInSelected.isEmpty()) {
+                NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration,false);
+            //    System.out.println("ns.isNotLeaf(nodeSelected) = " + ns.isNotLeaf(nodeSelected));
+
+                List<NodeInterface<S,A>> childNodes = nodeSelected.getChildNodes();
+                int nofTestedActions = childNodes.size();
+                int maxNofTestedActions = settings.firstActionSelectionPolicy.availableActionValues(nodeSelected.getState()).size();
+             //   System.out.println("nofTestedActions = " + nofTestedActions + ", maxNofTestedActions = " + maxNofTestedActions);
+            //    System.out.println("availableActionValues = " + settings.firstActionSelectionPolicy.availableActionValues(nodeSelected.getState()));
+            }
+
+          //  someIterationLogging(i, nodeSelected, actionInSelected);
+
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState,nodeSelected.getDepth());
 
-            //    somePrinting(i, actionInSelected, sr, simulationResults, nodeSelected);
+              //  somePrinting(i, actionInSelected, sr, simulationResults, nodeSelected);
 
                 backPropagate(sr, simulationResults, actionInSelected.get());
 
-           //    System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
+            //   System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
 
             } else {  // actionInSelected is empty <=> all tested
               //  System.out.println("nodeSelected = " + nodeSelected.getState());
@@ -122,23 +138,36 @@ public class MonteCarloTreeCreator<S,A> {
         }
         nofIterations=i;
 
+
+
         logStatistics(i);
         return nodeRoot;
+    }
+
+    private void someIterationLogging(int i, NodeWithChildrenInterface<S, A> nodeSelected, Optional<ActionInterface<A>> actionInSelected) {
+        System.out.println("someIterationLogging, nodeSelected = " + nodeSelected);
+        System.out.println("nodeSelected.getChildNodes().size() = " + nodeSelected.getChildNodes().size());
+        System.out.println("actionInSelected = " + actionInSelected);
+    }
+
+    private void logIterationNr(int i) {
+        log.info("i = "+ i);
     }
 
     private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults, NodeWithChildrenInterface<S,A> nodeSelected) {
 
         List<Integer> actionList=new ArrayList<>();
         actionsToSelected.forEach(a -> actionList.add((Integer) a.getValue()));
-
-        log.info("i = "+ i+", actionsToSelected = "+actionList);
+        System.out.println("actionList = " + actionList);
+        System.out.println("actionTemplate = " + actionTemplate);
         System.out.println("nodeSelected.getState() = " + nodeSelected.getState());
-        System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue());
+        System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue()+", sr.isFail = " + sr.isFail);
         System.out.println("sr.newState = " + sr.newState);
-        System.out.println("sr.isFail = " + sr.isFail);
+        TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot,settings);
+        System.out.println("nofNodes = " + tih.nofNodes());
 
 
-      //  System.out.println("simulationResults = " + simulationResults);
+        //  System.out.println("simulationResults = " + simulationResults);
     }
 
     private void updatePlotData() {
@@ -174,13 +203,13 @@ public class MonteCarloTreeCreator<S,A> {
         TreeInfoHelper<S,A> tih=new TreeInfoHelper<>(nodeRoot,settings);
         MonteCarloSearchStatistics<S,A> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,this,settings);
-        log.fine("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
+        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations+
                 ", max tree depth = "+tih.maxDepth()+", depth of best path = "+tih.getBestPath().size()
                 +", nof nodes = "+statistics.nofNodes+", branching = "+statistics.averageNofChildrenPerNode);
     }
 
     private NodeWithChildrenInterface<S,A> select(NodeWithChildrenInterface<S,A> nodeRoot) {
-        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
+        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration,false);
         NodeWithChildrenInterface<S,A> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;
@@ -219,6 +248,9 @@ public class MonteCarloTreeCreator<S,A> {
                                       int startDepth) {
 
         SimulationResults simulationResults = new SimulationResults();
+
+        //System.out.println("before sim, state = " + stateAfterApplyingActionInSelectedNode);
+
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
