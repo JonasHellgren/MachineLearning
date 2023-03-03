@@ -2,7 +2,9 @@ package monte_carlo_tree_search.domains.elevator;
 
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomUtils;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +22,9 @@ public class DecisionTableReader {
         this.decisionTable=decisionTable;
     }
 
-    public  Integer process(Integer speed, Integer pos) {
+    public  Integer readSingleAction(Integer speed, Integer pos) {
 
-        List<BiFunction<Integer,Integer,Integer>> fcnList=decisionTable.entrySet().stream()
-                .filter(e -> e.getKey().test(speed,pos))
-                .map(e -> e.getValue())
-                .collect(Collectors.toList());
+        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos);
 
         if (fcnList.size()>1) {
            // logging(speed, pos, fcnList);
@@ -40,6 +39,26 @@ public class DecisionTableReader {
 
         return fcnList.get(0).apply(speed,pos);
     }
+
+    public  List<Integer> readAllAvailableActions(Integer speed, Integer pos) {
+        List<Integer> integerList=new ArrayList<>();
+        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos);
+        for (BiFunction<Integer, Integer, Integer> fcn:fcnList) {
+            integerList.add(fcn.apply(speed,pos));
+        }
+        return integerList;
+    }
+
+
+    @NotNull
+    private List<BiFunction<Integer, Integer, Integer>> getBiFunctions(Integer speed, Integer pos) {
+        List<BiFunction<Integer,Integer,Integer>> fcnList=decisionTable.entrySet().stream()
+                .filter(e -> e.getKey().test(speed, pos))
+                .map(e -> e.getValue())
+                .collect(Collectors.toList());
+        return fcnList;
+    }
+
 
     private void logging(Integer speed, Integer pos, List<BiFunction<Integer, Integer, Integer>> fcnList) {
         log.info("Multiple matching rules, nof ="+ fcnList.size()+". Applying random.");

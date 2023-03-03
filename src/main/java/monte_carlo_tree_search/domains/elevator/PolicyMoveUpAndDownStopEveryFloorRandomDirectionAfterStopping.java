@@ -6,6 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +57,18 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        return ActionElevator.newValueDefaultRange(reader.process(speed,pos));
+        return ActionElevator.newValueDefaultRange(reader.readSingleAction(speed,pos));
     }
 
+    public List<ActionInterface<Integer>> availableActions(StateInterface<VariablesElevator> state) {
+        Integer speed=state.getVariables().speed;
+        Integer pos=state.getVariables().pos;
+        DecisionTableReader reader=new DecisionTableReader(decisionTable);
+        List<ActionInterface<Integer>> actionList=new ArrayList<>();
+        for (Integer actionValue:reader.readAllAvailableActions(speed,pos)) {
+            actionList.add(ActionElevator.newValueDefaultRange(actionValue));
+        }
+        return actionList;
+    }
 
 }
