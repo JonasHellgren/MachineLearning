@@ -22,22 +22,18 @@ public class DecisionTableReader {
         this.decisionTable=decisionTable;
     }
 
-    public  Integer readSingleAction(Integer speed, Integer pos) {
-
-        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos);
-
-        if (fcnList.size()>1) {
+    public  Integer readSingleActionChooseRandomIfMultiple(Integer speed, Integer pos) {
+        List<Integer> actionValues= readAllAvailableActions(speed, pos);
+        if (actionValues.size()>1) {
            // logging(speed, pos, fcnList);
-            return fcnList.get(RandomUtils.nextInt(0,fcnList.size())).apply(speed,pos);
+            return actionValues.get(RandomUtils.nextInt(0,actionValues.size()));
         }
-
-        if (fcnList.size()==0) {
+        if (actionValues.size()==0) {
             log.warning("No matching rule, using backup. Speed = "+speed+", pos = "+pos);
-            throw  new RuntimeException();
-            //return BACKUP;
+           // throw  new RuntimeException();
+            return BACKUP;
         }
-
-        return fcnList.get(0).apply(speed,pos);
+        return actionValues.get(0);
     }
 
     public  List<Integer> readAllAvailableActions(Integer speed, Integer pos) {
@@ -49,14 +45,12 @@ public class DecisionTableReader {
         return integerList;
     }
 
-
     @NotNull
     private List<BiFunction<Integer, Integer, Integer>> getBiFunctions(Integer speed, Integer pos) {
-        List<BiFunction<Integer,Integer,Integer>> fcnList=decisionTable.entrySet().stream()
+        return decisionTable.entrySet().stream()
                 .filter(e -> e.getKey().test(speed, pos))
-                .map(e -> e.getValue())
+                .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
-        return fcnList;
     }
 
 

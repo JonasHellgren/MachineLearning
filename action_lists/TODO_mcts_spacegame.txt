@@ -276,6 +276,9 @@ ElevatorMctsOnlySearchRunner
 - färre builder settings i tester  x
 - koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping x
 - logga ovan  x
+- snygga till DecisionTableReader
+- fixa failade tester
+- WARNING: No matching rule, using backup. Speed = 0, pos = 28  BUGG??
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner

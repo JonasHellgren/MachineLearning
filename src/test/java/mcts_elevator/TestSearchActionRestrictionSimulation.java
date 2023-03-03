@@ -24,9 +24,11 @@ import java.util.function.Function;
  * Insights:
  * If action set is restricted and the only action(s) gives fail then actionInSelected is empty -> tree not expanded
  * hence, chooseTestedActionAndBackPropagate will be executed
+ * The faction nofNodes/nofIterations gives hint, if small no good tree build
  * maxSimulationDepth must be large enough
  * few branches (averageNofChildrenPerNode is small) -> few iterations needed
  * Nodeselector considers firstActionSelectionPolicy
+ * discountFactorSimulationDefensive must not be to small - probably to reject dead end action sequences
  */
 
 public class TestSearchActionRestrictionSimulation {
@@ -135,7 +137,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtPos18AndPersonInElevatorAndWaitingFloor2And3_thenPickUpBoth() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(1).SoE(SOE_HALF).pos(18).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 1, 1))
+                .speed(1).SoE(SOE_FULL).pos(18).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 1, 1))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -211,9 +213,10 @@ public class TestSearchActionRestrictionSimulation {
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)
+                .discountFactorSimulationDefensive(0.99)
                 .maxTreeDepth(100)
-                .maxNofIterations(1000)
-                .timeBudgetMilliSeconds(500)
+                .maxNofIterations(10_000)
+                .timeBudgetMilliSeconds(300)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(50)   //20
                 .coefficientExploitationExploration(1e1)  //1e6

@@ -32,6 +32,6 @@ public class PolicyMoveDownStop
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        return ActionElevator.newValueDefaultRange(reader.readSingleAction(speed,pos));
+        return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos));
     }
 }
