@@ -270,8 +270,18 @@ ElevatorMctsOnlySearchRunner
   - ned vid bottom och upp top ger INTE fail  x
   - förstå whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp x
  -whenAtFloor3WaitingFloor1_thenManageMoveToFloor1 x
-
 - ElevatorSearchActionRestrictionRunner
+- nPersonsInElevator x
+- svårare testfall - med wait på floor3
+- färre builder settings i tester  x
+- koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i SimulationPolicyInterface
+- logga ovan
+- träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
+- testa ovan minne
+- använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
+- clean up
+- överväga ta bort makeSelectedTerminal
+- AlphaZero på elevator  ElevatorAlphaZeroRunner
 
 
 

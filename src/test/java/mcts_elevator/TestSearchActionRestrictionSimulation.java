@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.function.Function;
 
 /***
+ * Idea:
+ * By using the function nofActionsFunction, a node is regarded as leaf (expandable) only under the condition that the
+ * elevator is positioned at a floor. At a floor <=> can test all actions. Not at a floor <=> can test only one action '
+ * given by policy.
+ *
  * Insights:
  * If action set is restricted and the only action(s) gives fail then actionInSelected is empty -> tree not expanded
  * hence, chooseTestedActionAndBackPropagate will be executed
@@ -26,7 +31,9 @@ import java.util.function.Function;
 
 public class TestSearchActionRestrictionSimulation {
 
-    private static final int SOE_FULL = 1;
+    private static final double SOE_FULL = 1;
+    private static final double SOE_HALF = 0.5;
+
     private static final int POS_FLOOR_0 = 0;
     private static final int POS_FLOOR_1 = 10;
     private static final int POS_FLOOR_2 = 20;
@@ -49,8 +56,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(0).SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .speed(0).SoE(SOE_FULL).pos(POS_FLOOR_0).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -64,8 +70,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtFloor2WaitingFloor1_thenManageMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_2).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_2).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -78,8 +83,7 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtFloor3WaitingFloor1_thenManageMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .speed(-1).SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -90,24 +94,21 @@ public class TestSearchActionRestrictionSimulation {
 
     @SneakyThrows
     @Test
-    public void whenAtFloor1AndBadSoE_thenDoNotMoveUp() {
+    public void whenAtFloor1AndBadSoE_thenDoNotMoveUpInitially() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(0.21).pos(POS_FLOOR_1).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(0, 0, 0))
+                .SoE(0.21).pos(POS_FLOOR_1).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(0, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
-        List<Integer> posList= helper.getVisitedPositions();
-        Assert.assertFalse(posList.contains(POS_FLOOR_1+1));
+        Assert.assertNotEquals(1, (int) monteCarloTreeCreator.getFirstAction().getValue());
     }
 
     @SneakyThrows
     @Test
     public void whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .SoE(0.3).pos(POS_FLOOR_0).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .SoE(0.3).pos(POS_FLOOR_0).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
@@ -120,14 +121,73 @@ public class TestSearchActionRestrictionSimulation {
     @Test
     public void whenAtPos8AndWaitingFloor1_thenPickUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(1).SoE(SOE_FULL).pos(8).nPersonsInElevator(0)
-                .nPersonsWaiting(Arrays.asList(1, 0, 0))
+                .speed(1).SoE(SOE_FULL).pos(8).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
 
         List<Integer> nPers= helper.getnPersWaiting();
+        Assert.assertTrue(nPers.contains(0));
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenAtPos18AndPersonInElevatorAndWaitingFloor2And3_thenPickUpBoth() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(1).SoE(SOE_HALF).pos(18).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 1, 1))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+
+        List<Integer> nPers= helper.getnPersWaiting();
+        Assert.assertTrue(nPers.contains(0));
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenAtPos8AndWaitingFloor3AndHalfSoE_thenNoPickUp() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(1).SoE(SOE_HALF).pos(8).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 0, 1))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+
+        List<Integer> nPers= helper.getnPersWaiting();
+        Assert.assertFalse(nPers.contains(0));
+    }
+
+
+    @SneakyThrows
+    @Test
+    public void whenAtPos8AndWaitingFloor3AndFullSoE_thenPickUp() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(1).SoE(SOE_FULL).pos(8).nPersonsInElevator(1)
+                .nPersonsWaiting(Arrays.asList(0, 0, 1))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+
+        List<Integer> nPers= helper.getnPersWaiting();
+        Assert.assertTrue(nPers.contains(0));
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenAtFloor1AndPersonInElevatorAndNoWaiting_thenLeaveAtBottomFloor() {
+        StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
+                .speed(0).SoE(SOE_HALF).pos(POS_FLOOR_1).nPersonsInElevator(1).nPersonsWaiting(Arrays.asList(0, 0, 0))
+                .build());
+        monteCarloTreeCreator.setStartState(startState);
+        ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
+        helper.somePrinting();
+
+        List<Integer> nPers= helper.getnPersWaiting();
+        List<Integer> posList= helper.getVisitedPositions();
+        Assert.assertTrue(posList.contains(POS_FLOOR_0));
         Assert.assertTrue(nPers.contains(0));
     }
 
@@ -142,7 +202,7 @@ public class TestSearchActionRestrictionSimulation {
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
 
         Function<VariablesElevator,Integer> nofActionsFunction  =
-                (a) -> EnvironmentElevator.isAtFloor.or(EnvironmentElevator.isBottomFloor).test(a.speed,a.pos)
+                (a) -> EnvironmentElevator.isAtFloor.test(a.speed,a.pos)
                 ?actionTemplate.applicableActions().size()
                 :1;
 
@@ -150,23 +210,13 @@ public class TestSearchActionRestrictionSimulation {
                 .maxNofTestedActionsForBeingLeafFunction(nofActionsFunction)
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(1.0)  //0.1
-                .alphaBackupDefensiveSimulation(1.0)
-                .alphaBackupNormal(1.0)
-                .weightReturnsSteps(1.0)  //00
                 .discountFactorSteps(0.9)
-                .weightReturnsSimulation(1.0)
-                .discountFactorSimulation(1.0)
-                .discountFactorSimulationDefensive(0.9)
-                .coefficientMaxAverageReturn(0) //0 <=> average, 1<=>max
-                .maxTreeDepth(30)  //30
-                .maxNofIterations(1000)  //100_000
-                .timeBudgetMilliSeconds(1_000)
+                .maxTreeDepth(100)
+                .maxNofIterations(1000)
+                .timeBudgetMilliSeconds(500)
                 .nofSimulationsPerNode(5)
-                .maxSimulationDepth(30)   //20
+                .maxSimulationDepth(50)   //20
                 .coefficientExploitationExploration(1e1)  //1e6
-                .isCreatePlotData(false)
                 .build();
 
         return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()

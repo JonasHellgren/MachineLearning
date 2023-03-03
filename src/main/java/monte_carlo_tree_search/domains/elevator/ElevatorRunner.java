@@ -17,7 +17,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 @Log
 public class ElevatorRunner {
-    private static final int SLEEP_TIME = 1000;
+    private static final int SLEEP_TIME = 1;
     private static final String TITLE = "Elevator evaluation animation";
     MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch;
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;

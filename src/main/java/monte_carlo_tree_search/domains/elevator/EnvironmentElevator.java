@@ -118,7 +118,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 .nPersonsWaiting(nPersonsWaiting)
                 .SoE(newSoE)
                 .build());
-        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum(); //-nPersonsInElevator/2;
+        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum()-nPersonsInElevator/2d;
 
         return StepReturnGeneric.<VariablesElevator>builder()
                 .newState(newState)
