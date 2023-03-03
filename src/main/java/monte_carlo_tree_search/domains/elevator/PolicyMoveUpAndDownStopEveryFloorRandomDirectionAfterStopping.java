@@ -60,15 +60,11 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         return ActionElevator.newValueDefaultRange(reader.readSingleAction(speed,pos));
     }
 
-    public List<ActionInterface<Integer>> availableActions(StateInterface<VariablesElevator> state) {
+    public List<Integer> availableActionValues(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        List<ActionInterface<Integer>> actionList=new ArrayList<>();
-        for (Integer actionValue:reader.readAllAvailableActions(speed,pos)) {
-            actionList.add(ActionElevator.newValueDefaultRange(actionValue));
-        }
-        return actionList;
+        return reader.readAllAvailableActions(speed, pos);
     }
 
 }

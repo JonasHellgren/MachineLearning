@@ -1,15 +1,13 @@
 package monte_carlo_tree_search.classes;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.function.Function;
 
 @Builder
 @Setter
+@Getter
 @ToString
 public class MonteCarloSettings<S,A> {
     private static final int NOF_ITERATIONS_DEFAULT=10_000;

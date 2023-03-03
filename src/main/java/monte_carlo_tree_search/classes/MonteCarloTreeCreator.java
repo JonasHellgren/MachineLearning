@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.domains.elevator.PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping;
+import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -125,13 +127,17 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults, NodeWithChildrenInterface<S,A> nodeSelected) {
+
         List<Integer> actionList=new ArrayList<>();
         actionsToSelected.forEach(a -> actionList.add((Integer) a.getValue()));
+
         log.info("i = "+ i+", actionsToSelected = "+actionList);
         System.out.println("nodeSelected.getState() = " + nodeSelected.getState());
         System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue());
         System.out.println("sr.newState = " + sr.newState);
         System.out.println("sr.isFail = " + sr.isFail);
+
+
       //  System.out.println("simulationResults = " + simulationResults);
     }
 

@@ -4,16 +4,12 @@ import black_jack.result_drawer.GridPanel;
 import common.ListUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.classes.TreePlotData;
+import monte_carlo_tree_search.classes.*;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.generic_interfaces.*;
+
+import java.util.List;
 
 @Log
 public class ElevatorRunner {
@@ -21,6 +17,7 @@ public class ElevatorRunner {
     private static final String TITLE = "Elevator evaluation animation";
     MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch;
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
+    MonteCarloSettings<VariablesElevator, Integer> settings;
     NetworkMemoryInterface<VariablesElevator> memory;
     int nofSteps;
 
@@ -36,6 +33,7 @@ public class ElevatorRunner {
                           int nofSteps) {
         this.mcForSearch = mcForSearch;
         this.environment = environment;
+        this.settings=mcForSearch.getSettings();
         this.memory = memory;
         this.nofSteps=nofSteps;
     }
@@ -52,7 +50,10 @@ public class ElevatorRunner {
             mcForSearch.run();
 
             MonteCarloSearchStatistics<VariablesElevator, Integer> stats=mcForSearch.getStatistics();
-            log.info("Search completed, tree size = " +stats.getNofNodes()+", tree depth = "+stats.getMaxDepth()+", nof iter = "+stats.getNofIterations());
+            SimulationPolicyInterface<VariablesElevator, Integer> policy=settings.getSimulationPolicy();
+            PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping policyCasted=(PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping) policy;
+            List<Integer> actions=policyCasted.availableActionValues(state);
+            log.info("Search completed, tree size = " +stats.getNofNodes()+", tree depth = "+stats.getMaxDepth()+", nof iter = "+stats.getNofIterations()+", actions = "+actions);
 
             updatePanelAndSleepMillis(panelUpdater);
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();

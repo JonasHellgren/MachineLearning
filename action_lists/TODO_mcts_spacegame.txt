@@ -274,8 +274,8 @@ ElevatorMctsOnlySearchRunner
 - nPersonsInElevator x
 - svårare testfall - med wait på floor3
 - färre builder settings i tester  x
-- koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
-- logga ovan
+- koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping x
+- logga ovan  x
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
