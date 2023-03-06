@@ -281,6 +281,8 @@ ElevatorMctsOnlySearchRunner
 - WARNING: No matching rule, using backup. Speed = 0, pos = 28  BUGG??  x
 - varför skapas få noder  x
 - tester andra domäner
+- space Policy..
+-  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne

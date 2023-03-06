@@ -17,4 +17,10 @@ public class ShipPolicies {
             ActionInterface<ShipActionSet> actionTemplate) {
         return new EqualActionProbabilityPolicy(actionTemplate.applicableActions());
     }
+
+    public static SimulationPolicyInterface<ShipVariables,ShipActionSet> newOnlyStillAfterDepth3 (
+            ActionInterface<ShipActionSet> actionTemplate) {
+        return new PolicyStillFirstOnlyStillAfterDepth3(actionTemplate);
+    }
+
 }

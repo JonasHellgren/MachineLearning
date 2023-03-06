@@ -118,7 +118,7 @@ public class BackupModifier<S,A> {
     }
 
     private void backupDefensiveFromTreeSteps() {
-        log.fine("Defensive backup of selected node");
+        log.info("Defensive backup of selected node");
         defensiveBackupOfSelectedNode();
     }
 

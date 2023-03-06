@@ -5,11 +5,15 @@ import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class AlwaysStillPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
+public class PolicyStillFirstOnlyStillAfterDepth3 implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
+
+    ActionInterface<ShipActionSet> actionTemplate;
+
+    public PolicyStillFirstOnlyStillAfterDepth3(ActionInterface<ShipActionSet> actionTemplate) {
+        this.actionTemplate = actionTemplate;
+    }
 
     @Override
     public ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state) {
@@ -18,8 +22,9 @@ public class AlwaysStillPolicy implements SimulationPolicyInterface<ShipVariable
 
     @Override
     public Set<ShipActionSet> availableActionValues(StateInterface<ShipVariables> state) {
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable);
-        return actionTemplate.applicableActions();
-    }
 
+        return (state.getVariables().x <= 3)
+                ? actionTemplate.applicableActions()
+                : Collections.singleton(ShipActionSet.still);
+    }
 }

@@ -89,16 +89,16 @@ public class Test_5times15grid {
   //  @Ignore
     public void iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet> builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? actionTemplate.applicableActions().size():1)
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .maxNofTestedActionsForBeingLeafFunction((a) -> (a.x<=3) ? actionTemplate.applicableActions().size():1)  //todo remove
+                .firstActionSelectionPolicy(ShipPolicies.newOnlyStillAfterDepth3(actionTemplate))
                 .simulationPolicy(ShipPolicies.newMostlyStill())
-                .maxTreeDepth(14)
-                .maxNofIterations(100000)
+                .maxTreeDepth(20)
+                .maxNofIterations(40)  //100k
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)
                 .coefficientExploitationExploration(100)
                 .build();
-        createCreator(StateShip.newStateFromXY(2, 2));
+        createCreator(StateShip.newStateFromXY(3, 3));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet>  nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
@@ -117,6 +117,7 @@ public class Test_5times15grid {
                 .maxNofIterations(100)
                 .nofSimulationsPerNode(100)
                 .coefficientExploitationExploration(100)
+                .alphaBackupDefensiveStep(0.5)
                 .build();
         createCreator(StateShip.newStateFromXY(10, 2));
 
