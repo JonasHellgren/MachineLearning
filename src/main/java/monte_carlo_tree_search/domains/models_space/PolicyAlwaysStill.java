@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AlwaysStillPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
+public class PolicyAlwaysStill implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
 
     @Override
     public ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state) {

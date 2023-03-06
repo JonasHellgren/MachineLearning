@@ -109,8 +109,8 @@ public class TestSearchNoActionRestrictionSimulation {
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-             //   .isDefensiveBackup(true)  //not crtical
-             //   .alphaBackupDefensive(0.9)  //not crtical
+             //   .isDefensiveBackup(true)  //not critical
+             //   .alphaBackupDefensive(0.9)  //not critical
                 .alphaBackupNormal(1.0)
                 .weightReturnsSteps(1.0)
                 .discountFactorSteps(0.95)

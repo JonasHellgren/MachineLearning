@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class EqualActionProbabilityPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
+public class PolicyEqualActionProbability implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
     Set<ShipActionSet> applicableActions;
 
-    public EqualActionProbabilityPolicy(Set<ShipActionSet> applicableActions) {
+    public PolicyEqualActionProbability(Set<ShipActionSet> applicableActions) {
         this.applicableActions = applicableActions;
     }
 

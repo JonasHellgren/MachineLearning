@@ -280,14 +280,18 @@ ElevatorMctsOnlySearchRunner
 - fixa failade tester  x
 - WARNING: No matching rule, using backup. Speed = 0, pos = 28  BUGG??  x
 - varför skapas få noder  x
-- tester andra domäner
-- space Policy..
+- tester andra domäner  x
+- space Policy..  x
+- chart pole tester  x
+WARNING: Escaped from eternal loop for selecting node
 -  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas
+- clean up
+- förklara logik action set begränsning
+- ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
-- clean up
 - överväga ta bort makeSelectedTerminal
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
 - förstå nodeRoot value = -0.03591087811271311

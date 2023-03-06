@@ -8,9 +8,9 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import java.util.List;
 import java.util.Set;
 
-public class EqualProbabilityLeftRightForcePolicy implements SimulationPolicyInterface<CartPoleVariables, Integer> {
+public class PolicyEqualProbabilityLeftRightForce implements SimulationPolicyInterface<CartPoleVariables, Integer> {
 
-    public EqualProbabilityLeftRightForcePolicy() {
+    public PolicyEqualProbabilityLeftRightForce() {
     }
 
     @Override
@@ -20,7 +20,8 @@ public class EqualProbabilityLeftRightForcePolicy implements SimulationPolicyInt
 
     @Override
     public Set<Integer> availableActionValues(StateInterface<CartPoleVariables> state) {
-        throw new RuntimeException("Not implemented");
+        ActionInterface<Integer>  actionTemplate=  ActionCartPole.newRandom();
+        return actionTemplate.applicableActions();
     }
 
 }

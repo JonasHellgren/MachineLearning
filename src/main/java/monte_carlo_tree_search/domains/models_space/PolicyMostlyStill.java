@@ -8,7 +8,7 @@ import org.apache.commons.lang3.RandomUtils;
 import java.util.List;
 import java.util.Set;
 
-public class MostlyStillPolicy implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
+public class PolicyMostlyStill implements SimulationPolicyInterface<ShipVariables, ShipActionSet> {
 
     private static final double PROB_STILL = 0.9;
     private static final double PROB_UP_IF_NOT_STILL = 0.5;
