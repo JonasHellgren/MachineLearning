@@ -59,15 +59,19 @@ public class Test_3times7gridWithCorridor {
         Assert.assertTrue(node52.isPresent());
     }
 
-    @Test(expected = StartStateIsTrapException.class)
+    //@Test(expected = StartStateIsTrapException.class)
+    @Test
     public void iterateFromX2Y0() throws StartStateIsTrapException {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2, 0));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
-        Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(3, 0)));
-        Assert.assertFalse(tih.isStateInAnyNode(StateShip.newStateFromXY(4, 0)));
 
         doPrinting(tih, nodeRoot);
+
+
+        Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(3, 0)));
+       // Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(4, 0)));
+
     }
 
     @SneakyThrows

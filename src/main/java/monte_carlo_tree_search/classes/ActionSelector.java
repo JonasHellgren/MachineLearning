@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
  * This class is for determining the action to choose in the selected node, the action that will lead to tree
  * expansion.
  */
+
+//todo TestActionSelector
 
 @Log
 public class ActionSelector<S,A> {
@@ -41,7 +44,7 @@ public class ActionSelector<S,A> {
         }
     }
 
-
+//todo remove
     public Optional<ActionInterface<A>> selectRandomTestedAction(NodeWithChildrenInterface<S,A> nodeSelected) {
         int nofTestedActions=getTestedActions(nodeSelected).size();
 
@@ -50,6 +53,30 @@ public class ActionSelector<S,A> {
         } else {
             return Optional.of(getRandomAction(getTestedActions(nodeSelected)));
         }
+    }
+
+
+    public Optional<ActionInterface<A>> selectBestTestedAction(NodeWithChildrenInterface<S,A> nodeSelected) {
+        List<ActionInterface<A>> actions=getTestedActions(nodeSelected);
+
+        if(actions.size()==0) {
+            log.warning("No actions tested");
+            return Optional.empty();
+        } else {
+
+            List<Pair<ActionInterface<A>, Double>> pairs=new ArrayList<>();
+            for (ActionInterface<A> action:actions) {
+                pairs.add(new Pair<>(action,nodeSelected.getActionValue(action)));
+            }
+            Optional<Pair<ActionInterface<A>, Double>> bestPair=getPairWithHighestValue(pairs);
+
+            return Optional.of(bestPair.orElseThrow().getFirst());
+        }
+    }
+
+    private Optional<Pair<ActionInterface<A>, Double>> getPairWithHighestValue(List<Pair<ActionInterface<A>, Double>> pairs) {
+        return pairs.stream().
+                reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
     }
 
     private ActionInterface<A> getActionFromPolicy(NodeInterface<S,A> nodeSelected) {

@@ -92,17 +92,27 @@ public class BackupModifier<S,A> {
 
     public void backup(List<Double> returnsSimulation, double memoryValueStateAfterAction) {
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                () -> backupNormalFromTreeSteps(returnsSimulation,memoryValueStateAfterAction),
-                this::backupDefensiveFromTreeSteps);
+                () -> backupFromTreeSteps(returnsSimulation,memoryValueStateAfterAction, settings.discountFactorSteps, settings.alphaBackupNormal),  //todo discountFactorStepsDefensive
+                () -> backupFromTreeSteps(returnsSimulation,memoryValueStateAfterAction, settings.discountFactorDefensiveSteps, settings.alphaBackupDefensiveStep));
+                //this::backupDefensiveFromTreeSteps);
     }
 
     private void backupNormalFromTreeSteps(List<Double> returnsSimulation,double memoryValue) {
         log.fine("Normal backup of selected node");
         List<Double> rewards = getRewards();
-        List<Double> returnsSteps = getReturns(rewards);
+        List<Double> returnsSteps = getReturns(rewards,1);
         List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(),memoryValue);
-        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory);
+        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory,1);
     }
+
+    private void backupFromTreeSteps(List<Double> returnsSimulation,double memoryValue, double discountFactor, double alphaBackup) {
+        log.fine("Normal backup of selected node");
+        List<Double> rewards = getRewards();
+        List<Double> returnsSteps = getReturns(rewards,discountFactor);
+        List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(),memoryValue);
+        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory,alphaBackup);
+    }
+
 
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
@@ -126,7 +136,7 @@ public class BackupModifier<S,A> {
         this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensiveStep);
     }
 
-    private void updateNodesFromReturns(final List<Double> returnsSteps,
+    private void updateNodesFromReturnsOld(final List<Double> returnsSteps,
                                         final List<Double> returnsSimulation,
                                         final List<Double> returnsMemory ) {
         if (returnsSteps.size() != returnsSimulation.size()) {
@@ -147,13 +157,35 @@ public class BackupModifier<S,A> {
         }
     }
 
-    private List<Double> getReturns(final List<Double> rewards) {
+    private void updateNodesFromReturns(final List<Double> returnsSteps,
+                                        final List<Double> returnsSimulation,
+                                        final List<Double> returnsMemory,
+                                        double alphaBackup) {
+        if (returnsSteps.size() != returnsSimulation.size()) {
+            throw new IllegalArgumentException("Non equal list lengths");
+        }
+        List<Double> returnsStepsWeighted = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
+        List<Double> returnsSimulationWeighted = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
+        List<Double> returnsMemoryWeighted = ListUtils.multiplyListElements(returnsMemory, settings.weightMemoryValue);
+        List<Double> sumTemp = ListUtils.sumListElements(returnsStepsWeighted, returnsSimulationWeighted);
+        List<Double> returnsSum = ListUtils.sumListElements(sumTemp, returnsMemoryWeighted);
+
+        List<ActionInterface<A>> actions =
+                ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
+        for (NodeInterface<S,A> node : nodesOnPath) {
+            ActionInterface<A> action = actions.get(nodesOnPath.indexOf(node));
+            double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
+            updateNode(node, singleReturn, action, alphaBackup);
+        }
+    }
+
+    private List<Double> getReturns(final List<Double> rewards, double discountFactor) {
         double singleReturn = 0;
         List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
             double reward = rewards.get(i);
             //singleReturn = singleReturn + settings.discountFactorSteps * reward;  //todo remove
-            singleReturn = settings.discountFactorSteps*singleReturn +  reward;
+            singleReturn = discountFactor*singleReturn +  reward;
             returns.add(singleReturn);
         }
         Collections.reverse(returns);

@@ -18,6 +18,7 @@ public class MonteCarloSettings<S,A> {
     private static final int NOF_SIMULATIONS_DEFAULT=0;
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFAULT = 1;  //used in simulation
     private static final double DISCOUNT_FACTOR_STEPS_DEFAULT = 1; //used for backup
+    private static final double DISCOUNT_FACTOR_STEPS_DEFENSIVE_DEFAULT=1; //used for backup
     private static final double DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT = 1;  //used for backup
     private static final double DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT = 0.1; //used for backup
     private static final double C_MAX_AVERAGE_RETURN_BACKUP=0;  //1 <=> only max, 0 <=> only average
@@ -49,6 +50,8 @@ public class MonteCarloSettings<S,A> {
     SimulationPolicyInterface<S,A> simulationPolicy;
     @Builder.Default
     double discountFactorSteps=DISCOUNT_FACTOR_STEPS_DEFAULT;
+    @Builder.Default
+    double discountFactorDefensiveSteps=DISCOUNT_FACTOR_STEPS_DEFENSIVE_DEFAULT;
     @Builder.Default
     double discountFactorSimulation=DISCOUNT_FACTOR_SIMULATIONS_DEFAULT;
     @Builder.Default

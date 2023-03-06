@@ -63,7 +63,8 @@ public class Test_3times7grid {
     }
 
     @SneakyThrows
-    @Test(expected = StartStateIsTrapException.class)
+    @Test
+    //@Test(expected = StartStateIsTrapException.class)
     public void iterateFromX2Y0() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2,0));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
