@@ -29,6 +29,10 @@ import java.util.function.Function;
  * few branches (averageNofChildrenPerNode is small) -> few iterations needed
  * Nodeselector considers firstActionSelectionPolicy
  * discountFactorSimulationDefensive must not be to small - probably to reject dead end action sequences
+ *
+ *
+ * whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp needs small coefficientExploitationExploration
+ *
  */
 
 public class TestSearchActionRestrictionSimulation {
@@ -112,6 +116,7 @@ public class TestSearchActionRestrictionSimulation {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(0.3).pos(POS_FLOOR_0).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
+        settings.setCoefficientExploitationExploration(1);
         monteCarloTreeCreator.setStartState(startState);
         ElevatorTestHelper helper = runSearchAndGetElevatorTestHelper();
         helper.somePrinting();
@@ -219,7 +224,7 @@ public class TestSearchActionRestrictionSimulation {
                 .timeBudgetMilliSeconds(200)
                 .nofSimulationsPerNode(5)
                 .maxSimulationDepth(50)   //20
-                .coefficientExploitationExploration(1e1)  //1e6
+                .coefficientExploitationExploration(100)  //1e6
                 .build();
 
         return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()

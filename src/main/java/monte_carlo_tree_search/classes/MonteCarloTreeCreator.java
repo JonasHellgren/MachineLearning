@@ -96,7 +96,7 @@ public class MonteCarloTreeCreator<S,A> {
         plotData.clear();
         ActionSelector<S,A> actionSelector = new ActionSelector<>(settings,actionTemplate);
         for (i = 0; i < settings.maxNofIterations; i++) {
-            logIterationNr(i);
+        //    logIterationNr(i);
 
             NodeWithChildrenInterface<S,A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
@@ -112,7 +112,7 @@ public class MonteCarloTreeCreator<S,A> {
            //     System.out.println("availableActionValues = " + settings.firstActionSelectionPolicy.availableActionValues(nodeSelected.getState()));
             }
 
-           someIterationLogging(i, nodeSelected, actionInSelected);
+         //  someIterationLogging(i, nodeSelected, actionInSelected);
 
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
@@ -129,7 +129,7 @@ public class MonteCarloTreeCreator<S,A> {
               //  System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
             }
 
-            System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
+          //  System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
 
 
             updatePlotData();

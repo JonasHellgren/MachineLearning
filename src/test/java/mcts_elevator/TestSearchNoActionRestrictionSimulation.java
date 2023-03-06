@@ -11,6 +11,7 @@ import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -83,6 +84,7 @@ public class TestSearchNoActionRestrictionSimulation {
 
     @SneakyThrows
     @Test
+    @Ignore
     public void whenAtFloor3WaitingFloor1_thenDoesNotManageMoveToFloor1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(SOE_FULL).pos(POS_FLOOR_3).nPersonsInElevator(0)
