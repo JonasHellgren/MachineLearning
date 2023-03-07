@@ -284,8 +284,8 @@ ElevatorMctsOnlySearchRunner
 - space Policy..  x
 - fler chart pole tester x
 - TestBackupModifier bökar  x
-- mer test i TestBackupModifier som visar defensive backup
-- TestMonteCarloControlledCharging bökar
+- mer test i TestBackupModifier som visar defensive backup  x
+- TestMonteCarloControlledCharging bökar  x
 -  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc
 - infora tydiga tester runt isLeaf, isNonLeafNoFail, isNonLeafNail etc
 - WARNING: Escaped from eternal loop for selecting node

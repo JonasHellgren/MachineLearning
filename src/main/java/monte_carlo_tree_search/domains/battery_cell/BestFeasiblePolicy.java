@@ -34,7 +34,7 @@ public class BestFeasiblePolicy implements SimulationPolicyInterface<CellVariabl
 
     @Override
     public Set<Integer> availableActionValues(StateInterface<CellVariables> state) {
-        throw new RuntimeException("Not implemented");
+        return actionTemplate.applicableActions();
     }
 
 }
