@@ -30,6 +30,10 @@ public class SimulationResults {
         results=new ArrayList<>();
     }
 
+    public static SimulationResults newEmpty() {
+        return new SimulationResults();
+    }
+
     public void add(double sumOfReturns, boolean isEndingInFail) {
         results.add(new SimulationResult(sumOfReturns,isEndingInFail));
     }

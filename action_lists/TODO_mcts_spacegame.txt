@@ -293,6 +293,8 @@ ElevatorMctsOnlySearchRunner
 - fimpa isExcludeChildrenThatNeverHaveBeenVisited  x
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas  x
 - clean up MonteCarloTreeCreator
+- clean up BackupModifier
+- fimpa SelectedToTerminalFailConverter
 - snyggare testnamn
 - förklara logik action set begränsning
 - ta bort onödiga settings
