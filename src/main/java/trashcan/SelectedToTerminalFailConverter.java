@@ -1,7 +1,8 @@
-package monte_carlo_tree_search.classes;
+package trashcan;
 
 import common.Conditionals;
 import lombok.extern.java.Log;
+import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;

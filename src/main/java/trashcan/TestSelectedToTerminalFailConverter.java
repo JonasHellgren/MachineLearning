@@ -1,4 +1,4 @@
-package mcts_classes;
+package trashcan;
 
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
@@ -6,7 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.BackupModifier;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.SelectedToTerminalFailConverter;
+import trashcan.SelectedToTerminalFailConverter;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeTerminalFail;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;

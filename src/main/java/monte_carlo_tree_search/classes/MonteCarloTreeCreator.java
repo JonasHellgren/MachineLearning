@@ -242,15 +242,6 @@ public class MonteCarloTreeCreator<S, A> {
         backPropagate(sr, simulationResults, actionInSelected.orElseThrow());
     }
 
-
-    private void makeSelectedTerminal(NodeInterface<S, A> nodeSelected,
-                                      SelectedToTerminalFailConverter<S, A> sfc) throws StartStateIsTrapException {
-        if (nodeSelected.equals(nodeRoot)) {
-            throw new StartStateIsTrapException("All children to root node are terminal - no solution exists");
-        }
-        sfc.makeSelectedTerminal(nodeSelected);
-    }
-
     private void backPropagate(StepReturnGeneric<S> sr,
                                SimulationResults simulationResults,
                                ActionInterface<A> actionInSelected) {
@@ -261,14 +252,15 @@ public class MonteCarloTreeCreator<S, A> {
                 .build();
         List<Double> returnsSimulation = bumSim.extract();
 
-        double memoryValueStateAfterAction = memory.read(sr.newState);
         BackupModifier<S, A> bum = BackupModifier.<S, A>builder().rootTree(nodeRoot)
                 .actionsToSelected(actionsToSelected)
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(sr)
                 .settings(settings)
+                .returnsSimulation(returnsSimulation)
+                .memoryValueStateAfterAction(memory.read(sr.newState))
                 .build();
-        bum.backup(returnsSimulation, memoryValueStateAfterAction);
+        bum.backup();
     }
 
     private List<StepReturnGeneric<S>> stepToTerminal(StateInterface<S> state,

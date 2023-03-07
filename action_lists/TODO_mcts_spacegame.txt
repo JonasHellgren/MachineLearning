@@ -292,18 +292,17 @@ ElevatorMctsOnlySearchRunner
 - WARNING: Escaped from eternal loop for selecting node  x
 - fimpa isExcludeChildrenThatNeverHaveBeenVisited  x
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas  x
-- clean up MonteCarloTreeCreator
-- clean up BackupModifier
-- fimpa SelectedToTerminalFailConverter
+- clean up MonteCarloTreeCreator  x
+- fimpa SelectedToTerminalFailConverter  x
+- clean up BackupModifier  x
 - snyggare testnamn
+- ytterligare test som visar hur rooot values sävnger in
 - förklara logik action set begränsning
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
-- överväga ta bort makeSelectedTerminal
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
-- förstå nodeRoot value = -0.03591087811271311
 - TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching
 - SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner

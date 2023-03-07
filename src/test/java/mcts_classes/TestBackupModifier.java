@@ -202,6 +202,7 @@ public class TestBackupModifier {
                 .actionOnSelected(actionInSelected)
                 .stepReturnOfSelected(getStepReturnOfSelected)
                 .settings(settings)
+                .memoryValueStateAfterAction(0)
                 .build();
         bum.backup();
     }

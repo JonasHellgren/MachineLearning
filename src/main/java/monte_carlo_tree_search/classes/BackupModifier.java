@@ -53,108 +53,73 @@ import java.util.List;
  */
 
 @Log
-public class BackupModifier<S,A> {
+public class BackupModifier<S, A> {
 
-    NodeInterface<S,A> rootTree;
+    NodeInterface<S, A> rootTree;
     List<ActionInterface<A>> actionsToSelected;
     ActionInterface<A> actionOnSelected;
     StepReturnGeneric<S> stepReturnOfSelected;
-    MonteCarloSettings<S,A> settings;
+    MonteCarloSettings<S, A> settings;
 
-    TreeInfoHelper<S,A> treeInfoHelper;
-    NodeInterface<S,A> nodeSelected;
-    List<NodeInterface<S,A>> nodesOnPath;
+    TreeInfoHelper<S, A> treeInfoHelper;
+    NodeInterface<S, A> nodeSelected;
+    List<NodeInterface<S, A>> nodesOnPath;
+    List<Double> returnsSimulation;
+    double memoryValueStateAfterAction;
 
     //https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/39920328#39920328
     @Builder
-    private static <S,A> BackupModifier<S,A> newBUM(NodeWithChildrenInterface<S,A> rootTree,
-                                         @NonNull List<ActionInterface<A>> actionsToSelected,
-                                         @NonNull ActionInterface<A> actionOnSelected,
-                                         @NonNull StepReturnGeneric<S> stepReturnOfSelected,
-                                         @NonNull MonteCarloSettings<S,A> settings) {
-        BackupModifier<S,A> bm = new BackupModifier<>();
+    private static <S, A> BackupModifier<S, A> newBUM(NodeWithChildrenInterface<S, A> rootTree,
+                                                      @NonNull List<ActionInterface<A>> actionsToSelected,
+                                                      @NonNull ActionInterface<A> actionOnSelected,
+                                                      @NonNull StepReturnGeneric<S> stepReturnOfSelected,
+                                                      @NonNull MonteCarloSettings<S, A> settings,
+                                                      List<Double> returnsSimulation,
+                                                      double memoryValueStateAfterAction) {
+        BackupModifier<S, A> bm = new BackupModifier<>();
         bm.rootTree = rootTree;
         bm.actionsToSelected = actionsToSelected;
         bm.actionOnSelected = actionOnSelected;
         bm.stepReturnOfSelected = stepReturnOfSelected;
         bm.settings = settings;
-
+        bm.memoryValueStateAfterAction = memoryValueStateAfterAction;
         bm.treeInfoHelper = new TreeInfoHelper<>(rootTree, settings);
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
+
+        Conditionals.executeOneOfTwo(returnsSimulation == null,
+                () -> bm.returnsSimulation = ListUtils.createListWithZeroElements(bm.nodesOnPath.size()),
+                () -> bm.returnsSimulation = returnsSimulation);
 
         return bm;
     }
 
     public void backup() {
-        backup(ListUtils.createListWithZeroElements(nodesOnPath.size()),0);
-    }
-
-    public void backup(List<Double> returnsSimulation, double memoryValueStateAfterAction) {
         Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                () -> backupFromTreeSteps(returnsSimulation,memoryValueStateAfterAction, settings.discountFactorSteps, settings.alphaBackupNormal),  //todo discountFactorStepsDefensive
-                () -> backupFromTreeSteps(returnsSimulation,memoryValueStateAfterAction, settings.discountFactorDefensiveSteps, settings.alphaBackupDefensiveStep));
-                //this::backupDefensiveFromTreeSteps);
+                () -> backupFromTreeSteps(settings.discountFactorSteps, settings.alphaBackupNormal),
+                () -> backupFromTreeSteps(settings.discountFactorDefensiveSteps, settings.alphaBackupDefensiveStep));
+
     }
 
-    private void backupNormalFromTreeSteps(List<Double> returnsSimulation,double memoryValue) {
-        log.fine("Normal backup of selected node");
+    private void backupFromTreeSteps(double discountFactor, double alphaBackup) {
         List<Double> rewards = getRewards();
-        List<Double> returnsSteps = getReturns(rewards,1);
-        List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(),memoryValue);
-        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory,1);
-    }
-
-    private void backupFromTreeSteps(List<Double> returnsSimulation,double memoryValue, double discountFactor, double alphaBackup) {
-        log.fine("Normal backup of selected node");
-        List<Double> rewards = getRewards();
-        List<Double> returnsSteps = getReturns(rewards,discountFactor);
-        List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(),memoryValue);
-        updateNodesFromReturns(returnsSteps, returnsSimulation,returnsMemory,alphaBackup);
+        List<Double> returnsSteps = getReturns(rewards, discountFactor);
+        List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(), memoryValueStateAfterAction);
+        updateNodesFromReturns(returnsSteps, returnsSimulation, returnsMemory, alphaBackup);
     }
 
 
     private List<Double> getRewards() {
         List<Double> rewards = new ArrayList<>();
-        for (NodeInterface<S,A> nodeOnPath : nodesOnPath) {
+        for (NodeInterface<S, A> nodeOnPath : nodesOnPath) {
             if (!nodeOnPath.equals(nodeSelected)) {   //skipping selected because its reward is added after loop
                 ActionInterface<A> action = actionsToSelected.get(nodesOnPath.indexOf(nodeOnPath));
-                NodeWithChildrenInterface<S,A> nodeCasted=(NodeWithChildrenInterface<S,A>) nodeOnPath;  //casting
+                NodeWithChildrenInterface<S, A> nodeCasted = (NodeWithChildrenInterface<S, A>) nodeOnPath;  //casting
                 rewards.add(nodeCasted.restoreRewardForAction(action));
             }
         }
         rewards.add(stepReturnOfSelected.reward);
         return rewards;
-    }
-
-    private void backupDefensiveFromTreeSteps() {
-        log.info("Defensive backup of selected node");
-        defensiveBackupOfSelectedNode();
-    }
-
-    private void defensiveBackupOfSelectedNode() {
-        this.updateNode(nodeSelected, stepReturnOfSelected.reward, actionOnSelected, settings.alphaBackupDefensiveStep);
-    }
-
-    private void updateNodesFromReturnsOld(final List<Double> returnsSteps,
-                                        final List<Double> returnsSimulation,
-                                        final List<Double> returnsMemory ) {
-        if (returnsSteps.size() != returnsSimulation.size()) {
-            throw new IllegalArgumentException("Non equal list lengths");
-        }
-        List<Double> returnsStepsWeighted = ListUtils.multiplyListElements(returnsSteps, settings.weightReturnsSteps);
-        List<Double> returnsSimulationWeighted = ListUtils.multiplyListElements(returnsSimulation, settings.weightReturnsSimulation);
-        List<Double> returnsMemoryWeighted = ListUtils.multiplyListElements(returnsMemory, settings.weightMemoryValue);
-        List<Double> sumTemp = ListUtils.sumListElements(returnsStepsWeighted, returnsSimulationWeighted);
-        List<Double> returnsSum = ListUtils.sumListElements(sumTemp, returnsMemoryWeighted);
-
-        List<ActionInterface<A>> actions =
-                ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
-        for (NodeInterface<S,A> node : nodesOnPath) {
-            ActionInterface<A> action = actions.get(nodesOnPath.indexOf(node));
-            double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
-            updateNode(node, singleReturn, action, settings.alphaBackupNormal);
-        }
     }
 
     private void updateNodesFromReturns(final List<Double> returnsSteps,
@@ -172,29 +137,31 @@ public class BackupModifier<S,A> {
 
         List<ActionInterface<A>> actions =
                 ActionInterface.mergeActionsWithAction(actionsToSelected, actionOnSelected);
-        for (NodeInterface<S,A> node : nodesOnPath) {
+        for (NodeInterface<S, A> node : nodesOnPath) {
             ActionInterface<A> action = actions.get(nodesOnPath.indexOf(node));
             double singleReturn = returnsSum.get(nodesOnPath.indexOf(node));
             updateNode(node, singleReturn, action, alphaBackup);
         }
     }
 
+    /**
+     *  discountFactor=1, rewards=[0,1,1] => returns=[2,2,1]
+     */
+
     private List<Double> getReturns(final List<Double> rewards, double discountFactor) {
         double singleReturn = 0;
         List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
             double reward = rewards.get(i);
-            //singleReturn = singleReturn + settings.discountFactorSteps * reward;  //todo remove
-            singleReturn = discountFactor*singleReturn +  reward;
+            singleReturn = discountFactor * singleReturn + reward;
             returns.add(singleReturn);
         }
         Collections.reverse(returns);
         return returns;
     }
 
-    void updateNode(NodeInterface<S,A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
-
-        NodeWithChildrenInterface<S,A> node=(NodeWithChildrenInterface<S,A>) node0;  //casting
+    void updateNode(NodeInterface<S, A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
+        NodeWithChildrenInterface<S, A> node = (NodeWithChildrenInterface<S, A>) node0;  //casting
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
         node.updateActionValue(singleReturn, action, alpha);
