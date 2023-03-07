@@ -54,7 +54,7 @@ public class TestBackupModifier {
 
     @SneakyThrows
     @Test
-    public void moveDownFromX0Y0ToGetFailState() {
+    public void whenMoveDownFromX0Y0_thenFailState() {
         StateShip rootState = StateShip.newStateFromXY(0, 0);
 
         List<ActionInterface<ShipActionSet>> actionsToSelected = Collections.emptyList();
@@ -77,7 +77,7 @@ public class TestBackupModifier {
 
     @SneakyThrows
     @Test
-    public void moveFromX0Y0Tox6y2GivesTwoMoveCost() {
+    public void whenMoveFromX0Y0Tox6y2_thenTwoMoveCost() {
         StateShip rootState=StateShip.newStateFromXY(0,0);
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newUp(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
@@ -101,7 +101,7 @@ public class TestBackupModifier {
 
     @SneakyThrows
     @Test
-    public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
+    public void whenMoveFromX0Y0ToX3Y0_thenFailStateByObstacleCrash() {
         StateShip rootState=StateShip.newStateFromXY(0,0);
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
@@ -125,7 +125,7 @@ public class TestBackupModifier {
 
     @SneakyThrows
     @Test
-    public void moveFromX0Y0ToX2Y0AndDoAllMovesToShowGetIntoTrap() {
+    public void whenMoveFromX0Y0ToX2Y0AndDoAllMovesT_thenGtIntoTrap() {
         StateShip rootState=StateShip.newStateFromXY(0,0);
         List<ActionInterface<ShipActionSet>> actionsToSelected= Arrays.asList(ActionShip.newUp(), ActionShip.newDown());
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();

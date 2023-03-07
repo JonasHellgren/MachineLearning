@@ -22,7 +22,7 @@ public class TestMathOnListElements {
     }
 
     @Test
-    public void multiplyListWithScalar () {
+    public void whenMultiplyListWithScalar_thenCorrect () {
 
         List<Double> listC= ListUtils.multiplyListElements(listA,10);
         System.out.println("listC = " + listC);
@@ -31,7 +31,7 @@ public class TestMathOnListElements {
     }
 
     @Test
-    public void multiplyListWithNegativeScalar () {
+    public void whenMultiplyListWithNegativeScalar_thenCorrect () {
 
         List<Double> listC= ListUtils.multiplyListElements(listA,-10);
         System.out.println("listC = " + listC);
@@ -40,14 +40,14 @@ public class TestMathOnListElements {
     }
 
     @Test
-    public void sumLists () {
+    public void whenSumLists_thenCorrect () {
         List<Double> listC= ListUtils.sumListElements(listA,listB);
         System.out.println("listC = " + listC);
         Assert.assertTrue(listC.containsAll(Arrays.asList(12d,14d,16d,18d,20d)));
     }
 
     @Test
-    public void sumListsOneIsNegated () {
+    public void whenSumListsOneIsNegated_thenCorrect () {
         List<Double> listC= ListUtils.sumListElements(listA,ListUtils.multiplyListElements(listB,-1));
         System.out.println("listC = " + listC);
         Assert.assertTrue(listC.containsAll(Arrays.asList(-10d,-10d,-10d,-10d,-10d)));

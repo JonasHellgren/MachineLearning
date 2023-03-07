@@ -31,8 +31,6 @@ public class TestSimulationReturnsExtractor {
     @Before
     public void init() {
         simulationResults = new SimulationResults();
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
-
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
@@ -42,7 +40,7 @@ public class TestSimulationReturnsExtractor {
     }
 
 
-    @Test public void backUpOneSimulationResult() {
+    @Test public void whenBackUpOneSimulationResult_thenCorrect() {
         double g=1;
         simulationResults.add(g, false);
 
@@ -55,7 +53,7 @@ public class TestSimulationReturnsExtractor {
     }
 
 
-    @Test public void backUpTwoSimulationsResults() {
+    @Test public void whenBackUpTwoSimulationsResults_thenCorrect() {
         double g1=1, g2=-1;  //only g1 is backed up due to coefficientMaxAverageReturn(1)
         simulationResults.add(g1, false);
         simulationResults.add(g2, false);
@@ -70,7 +68,7 @@ public class TestSimulationReturnsExtractor {
 
 
 
-    @Test public void backupTwoSimulationsResultsOneIsFail() {
+    @Test public void whenBackupTwoSimulationsResults_thenOneIsFail() {
         double g1=1, g2=11;  //only g1 is backed up due to fail simulation is rejected
         simulationResults.add(g1,false);
         simulationResults.add(g2,true);
@@ -83,7 +81,7 @@ public class TestSimulationReturnsExtractor {
         assertValues(g1,DISCOUNT_FACTOR_SIMULATION_NORMAL, values);
     }
 
-    @Test public void backupTwoSimulationsResultsBothAreFail() {
+    @Test public void whenBackupTwoSimulationsResults_thenBothAreFail() {
         double g1=-10, g2=-10;
         simulationResults.add(g1, true);
         simulationResults.add(g2, true);

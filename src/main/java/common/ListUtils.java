@@ -120,6 +120,13 @@ public class ListUtils {
         return elementProduct(list,listDf);
     }
 
+
+    public static List<Double> discountedElementsReverse(List<Double> list, double discountFactor) {
+        List<Double> listDf = getDiscountList(list.size(), discountFactor);
+        Collections.reverse(listDf);
+        return elementProduct(list,listDf);
+    }
+
     public static boolean isDoubleArraysEqual(double[] x, double[] y, double tol)
     {
         if (x.length!=y.length) {

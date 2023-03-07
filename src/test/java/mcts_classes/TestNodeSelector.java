@@ -24,7 +24,6 @@ public class TestNodeSelector {
 
     @Before
     public void init() {
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
@@ -39,7 +38,7 @@ public class TestNodeSelector {
         nodeRoot.addChildNode(chDown);
     }
 
-    @Test public void sameValueFewVisitsGivesBetterUct() {
+    @Test public void whenSameValueFewVisits_thenBetterUct() {
         double v=1;
         int nParent=10;
         NodeSelector<ShipVariables, ShipActionSet> ns=new NodeSelector<>(nodeRoot, settings);
@@ -50,7 +49,7 @@ public class TestNodeSelector {
         Assert.assertTrue(uctFewVisits>uctManyVisits);
     }
 
-    @Test public void sameNofVisitsHighValueGivesBetterUct() {
+    @Test public void whenSameNofVisitsHighValue_thenBetterUct() {
         int nParent=10, nofVisits=5;
         NodeSelector<ShipVariables, ShipActionSet> ns=new NodeSelector<>(nodeRoot, settings);
         double uctLowValue=ns.calcUct(1,nParent,nofVisits);
@@ -59,7 +58,7 @@ public class TestNodeSelector {
         Assert.assertTrue(uctHighValue>uctLowValue);
     }
 
-    @Test public void nofVisitsDoesNotAffectZeroC() {
+    @Test public void whenZeroC_thenNofVisitsNotAffect() {
         int nParent=10, nofVisitsSmall=1, nofVisitsBig= (int) 1e5, C=0;
         NodeSelector<ShipVariables, ShipActionSet> ns=new NodeSelector<>(nodeRoot, settings,C);
         double uctLowValue=ns.calcUct(1.0,nParent,nofVisitsSmall); //C=0 gives nofVisitsSmall does not matter
@@ -68,7 +67,7 @@ public class TestNodeSelector {
         Assert.assertTrue(uctHighValue>uctLowValue); //
     }
 
-    @Test public void uctZeroVisitsGivesUCTMax() {
+    @Test public void whenUctZeroVisits_thenUCTMax() {
         int nParent=10, nofVisits=0;
         NodeSelector<ShipVariables, ShipActionSet> ns=new NodeSelector<>(nodeRoot, settings);
         double uctZeroVisits=ns.calcUct(1,nParent,nofVisits);

@@ -27,35 +27,35 @@ public class TestNodeInfoHelper {
     }
 
     @Test
-    public void nodeWithX0Y0IsPresent() {
+    public void whenFindNodeWithX0Y0_thenIsPresent() {
         Assert.assertTrue(NodeInfoHelper.findNodeMatchingStateVariables(nodes,StateShip.newStateFromXY(0,0)).isPresent());
     }
 
     @Test
-    public void nodeWithX10Y0IsNotPresent() {
+    public void whenFindNodeWithX10Y0_thenIsNotPresent() {
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingStateVariables(nodes,StateShip.newStateFromXY(10,0)).isPresent());
     }
 
     @Test
-    public void findNodeMatchingExistingNode() {
+    public void whenFindNodeMatchingExistingNode_thenIsPresent() {
         NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newNotTerminal(StateShip.newStateFromXY(0,0), ActionShip.newNA());
         Assert.assertTrue(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
-    public void findNodeMatchingNodeOfOtherClass() {
+    public void whenFindNodeMatchingNodeOfOtherClass_thenNotPresent() {
         NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newNA());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
-    public void findNodeMatchingNodeOfOtherAction() {
+    public void whenFindNodeMatchingNodeOfOtherAction_thenNotPresent() {
         NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }
 
     @Test
-    public void findNodeMatchingNodeOfOtherState() {
+    public void whenFindNodeMatchingNodeOfOtherState_thenNotPresent() {
         NodeInterface<ShipVariables, ShipActionSet> node=NodeInterface.newTerminalFail(StateShip.newStateFromXY(10,0), ActionShip.newStill());
         Assert.assertFalse(NodeInfoHelper.findNodeMatchingNode(nodes,node).isPresent());
     }

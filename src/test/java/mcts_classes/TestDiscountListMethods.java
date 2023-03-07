@@ -18,7 +18,7 @@ public class TestDiscountListMethods {
      */
 
     @Test
-    public void discountedSum() {
+    public void whenDiscountedSum_thenCorrectSum() {
         List<Double> list= Arrays.asList(10d,10d,10d);
         double ds= ListUtils.discountedSum(list,0.5);
         System.out.println("ds = " + ds);
@@ -26,13 +26,21 @@ public class TestDiscountListMethods {
     }
 
     @Test
-    public void discountedElements() {
+    public void whenDiscountedElements_thenCorrect() {
         List<Double> list= Arrays.asList(10d,10d,10d);
         List<Double>  ds= ListUtils.discountedElements(list,0.5);
         System.out.println("ds = " + ds);
 
         Assert.assertTrue(ds.containsAll(Arrays.asList(10d,5d,2.5d)));
+    }
 
+    @Test
+    public void whenReverseDiscountedElements_thenCorrect() {
+        List<Double> list= Arrays.asList(1d,10d,10d);
+        List<Double>  ds= ListUtils.discountedElementsReverse(list,0.5);
+        System.out.println("ds = " + ds);
+
+        Assert.assertTrue(ds.containsAll(Arrays.asList(0.25d,5d,10d)));
     }
 
 }

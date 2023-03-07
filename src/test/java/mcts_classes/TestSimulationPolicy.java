@@ -22,10 +22,9 @@ public class TestSimulationPolicy {
     public void init() {
         spaceGrid= SpaceGridInterface.new3times7Grid();
         environment=new EnvironmentShip(spaceGrid);
-
     }
 
-    @Test public void repeatingEqualActionProbManyTimes() {
+    @Test public void whenRepeatingEqualActionProbManyTimes_thenAllPresent() {
         ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         SimulationPolicyInterface<ShipVariables, ShipActionSet> policy= ShipPolicies.newEqualProbability(actionTemplate);
         StateShip pos=StateShip.newStateFromXY(1,1);
@@ -45,7 +44,7 @@ public class TestSimulationPolicy {
     }
 
     @Test
-    public void moveWithMostStillSimulationPolicyGivesMostlyBetterSumRewardsFromUpperPositionThenMiddle() {
+    public void whenMoveWithMostStillSimulationPolicy_thenMostlyBetterSumRewardsFromUpperPositionThenMiddle() {
         SimulationPolicyInterface<ShipVariables, ShipActionSet> policy=ShipPolicies.newMostlyStill();
 
         System.out.println("environment = " + environment);

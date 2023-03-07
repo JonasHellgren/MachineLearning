@@ -25,7 +25,6 @@ public class TestMonteCarloSearchStatistics {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
@@ -40,7 +39,7 @@ public class TestMonteCarloSearchStatistics {
     }
 
 
-    @Test public void threeNodesStandingGivesBranchingOne() {
+    @Test public void whenThreeNodesStanding_thenBranchingOne() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = create3nodesTree();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,monteCarloTreeCreator,settings);
@@ -57,7 +56,7 @@ public class TestMonteCarloSearchStatistics {
         );
     }
 
-    @Test public void twoDeep1FourDeep2GivesBranchingTwo() {
+    @Test public void whenTwoDeep1FourDeep2_thenBranchingTwo() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createTwoDeep1FourDeep2();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
                 nodeRoot,monteCarloTreeCreator,settings);

@@ -17,7 +17,7 @@ public class TestNodeInterfaceCopy {
     private static final double DELTA = 0.1;
 
     @Test
-    public void testNodeNotTerminal() {
+    public void whenCopyNotTerminalNode_thenCorrect() {
         NodeNotTerminal<ShipVariables, ShipActionSet> node=new NodeNotTerminal<>(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         node.increaseNofVisits();
         node.increaseNofActionSelections(ActionShip.newUp());
@@ -37,12 +37,9 @@ public class TestNodeInterfaceCopy {
     }
 
     @Test
-    public void testNodeTerminalFail() {
+    public void whenCopyTerminalNode_thenCorrect() {
         NodeTerminalFail<ShipVariables, ShipActionSet> node=new NodeTerminalFail<>(StateShip.newStateFromXY(0,0), ActionShip.newStill());
         node.setDepth(5);
-      //  node.increaseNofVisits();
-      //  node.increaseNofActionSelections(ActionShip.newUp());
-      //  node.saveRewardForAction(ActionShip.newUp(),10);
         NodeTerminalFail<ShipVariables, ShipActionSet> clone= (NodeTerminalFail<ShipVariables, ShipActionSet>) NodeInterface.copy(node);
 
         System.out.println("node = " + node);

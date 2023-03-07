@@ -9,6 +9,7 @@ public class TestSimulationResults {
 
     private static final double BIG_NEGATIVE_RETURN = -10;
     private static final double DELTA = 0.1;
+    private static final boolean IS_ENDING_IN_FAIL = true;
     SimulationResults simulationResults;
 
     @Before
@@ -17,7 +18,7 @@ public class TestSimulationResults {
     }
 
     @Test
-    public void areAllSimulationsTerminalFail() {
+    public void whenAddingAllSimulationsTerminalFail_thenCorrect() {
         simulationResults.add(BIG_NEGATIVE_RETURN, true);
         simulationResults.add(BIG_NEGATIVE_RETURN, true);
         simulationResults.add(BIG_NEGATIVE_RETURN, true);
@@ -26,7 +27,7 @@ public class TestSimulationResults {
         Assert.assertTrue(simulationResults.areAllSimulationsTerminalFail());
     }
 
-    @Test public void maxReturn() {
+    @Test public void whenAddingThreeReturtns_thenCorrectMaxReturn() {
         simulationResults.add(0, false);
         simulationResults.add(1, false);
         simulationResults.add(2, false);
@@ -37,20 +38,7 @@ public class TestSimulationResults {
         Assert.assertEquals(2, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
     }
 
-    /*
-    @Test public void maxReturnWithTerminalValue() {
-        simulationResults.add(0,0, false);  //zero terminal value
-        simulationResults.add(1,0, false);  //zero terminal value
-        simulationResults.add(3,-3, false);  //non zero terminal value
-
-        simulationResults.getResults().forEach(System.out::println);
-
-        Assert.assertTrue(simulationResults.maxReturnFromNonFailing().isPresent());
-        Assert.assertEquals(1, simulationResults.maxReturnFromNonFailing().orElseThrow(), DELTA);
-    } */
-
-
-    @Test public void averageReturn() {
+    @Test public void whenAverageReturn_thenCorrect() {
         simulationResults.add(0, false);
         simulationResults.add(1, false);
         simulationResults.add(2, false);
@@ -61,10 +49,10 @@ public class TestSimulationResults {
 
 
     @Test
-    public void anyFailingReturn() {
-        simulationResults.add(BIG_NEGATIVE_RETURN+1, true);
-        simulationResults.add(BIG_NEGATIVE_RETURN, true);
-        simulationResults.add(BIG_NEGATIVE_RETURN-1, true);
+    public void whenFials_thenAnyFailingReturnIsTrue() {
+        simulationResults.add(BIG_NEGATIVE_RETURN+1, IS_ENDING_IN_FAIL);
+        simulationResults.add(BIG_NEGATIVE_RETURN, IS_ENDING_IN_FAIL);
+        simulationResults.add(BIG_NEGATIVE_RETURN-1, IS_ENDING_IN_FAIL);
 
         System.out.println("anyFailingReturn = " + simulationResults.anyFailingReturn().orElseThrow());
 
@@ -73,10 +61,10 @@ public class TestSimulationResults {
 
     }
 
-    @Test public void getReturnsForFailing() {
-        simulationResults.add(BIG_NEGATIVE_RETURN+1, true);
-        simulationResults.add(BIG_NEGATIVE_RETURN, true);
-        simulationResults.add(BIG_NEGATIVE_RETURN-1, true);
+    @Test public void whenGetReturnsForFailing_thenCorrect() {
+        simulationResults.add(BIG_NEGATIVE_RETURN+1, IS_ENDING_IN_FAIL);
+        simulationResults.add(BIG_NEGATIVE_RETURN, IS_ENDING_IN_FAIL);
+        simulationResults.add(BIG_NEGATIVE_RETURN-1, IS_ENDING_IN_FAIL);
 
         System.out.println("returnsForFailing = " + simulationResults.getReturnsForFailing());
         Assert.assertTrue(simulationResults.getReturnsForFailing().contains(BIG_NEGATIVE_RETURN+1d));

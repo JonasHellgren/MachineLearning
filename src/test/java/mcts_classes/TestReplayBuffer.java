@@ -8,10 +8,8 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 public class TestReplayBuffer {
     private static final int BUFFER_SIZE = 10;
@@ -36,19 +34,19 @@ public class TestReplayBuffer {
         System.out.println("buffer = " + buffer);
     }
 
-    @Test public void shallBePresent() {
+    @Test public void givenBuffer_whenZeroStates_thenShallBePresent() {
         StateCartPole allZeroState=StateCartPole.newAllStatesAsZero();
         boolean isPresent=buffer.isExperienceWithStateVariablesPresentBeforeIndex(allZeroState.getVariables(),5);
         Assert.assertTrue(isPresent);
     }
 
-    @Test public void shallNoBePresent() {
+    @Test public void givenBuffer_whenMaxValueStates_thenShallNotBePresent() {
         StateCartPole positiveMaxState=StateCartPole.newAllPositiveMax();
         boolean isPresent=buffer.isExperienceWithStateVariablesPresentBeforeIndex(positiveMaxState.getVariables(),5);
         Assert.assertFalse(isPresent);
     }
 
-    @Test public void removeRandomWhenFull() {
+    @Test public void whenRemoveRandomWhenFull_thenRemoved() {
         StateCartPole positiveMaxState=StateCartPole.newAllPositiveMax();
         buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                 .stateVariables(positiveMaxState.getVariables().copy())

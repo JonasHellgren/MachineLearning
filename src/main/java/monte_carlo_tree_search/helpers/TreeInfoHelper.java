@@ -42,11 +42,6 @@ public class TreeInfoHelper<SSV,AV> {
     NodeWithChildrenInterface<SSV,AV> rootTree;
     MonteCarloSettings<SSV,AV> settings;
 
-    /*
-    public TreeInfoHelper(NodeInterface <SSV,AV> rootTree, MonteCarloSettings<SSV,AV> settings) {
-        this(rootTree,MonteCarloSettings.newDefault());
-    }  */
-
     public TreeInfoHelper(NodeWithChildrenInterface <SSV,AV> rootTree, MonteCarloSettings<SSV,AV> settings) {
         this.rootTree = rootTree;
         this.settings=settings;

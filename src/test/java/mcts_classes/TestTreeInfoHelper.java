@@ -44,14 +44,14 @@ public class TestTreeInfoHelper {
     }
 
     @Test
-    public void nodeSelectedIsX2Y0() {
+    public void whenActionsUpAndDown_thenNodeSelectedIsX2Y0() {
         NodeInterface<ShipVariables, ShipActionSet> node=tih.getNodeReachedForActions(actionsToSelected).get();
         System.out.println("node = " + node);
         Assert.assertTrue(node.getName().contains("x=2"));
         Assert.assertTrue(node.getName().contains("y=0"));
     }
 
-    @Test public void rewardOfStillInX2Y0IsBad() {
+    @Test public void whenRestoreRewardOfStillInX2Y0_thenIsBad() {
         NodeInterface<ShipVariables, ShipActionSet> node=tih.getNodeReachedForActions(actionsToSelected).get();
         System.out.println("node = " + node);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeCasted=(NodeWithChildrenInterface<ShipVariables, ShipActionSet>) node;
@@ -59,7 +59,7 @@ public class TestTreeInfoHelper {
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,nodeCasted.restoreRewardForAction(ActionShip.newStill()), DELTA_BIG);
     }
 
-    @Test public void nofNodesToSelectedIs2() {
+    @Test public void whenNofNodesToSelected_thenIs3() {
         List<NodeInterface<ShipVariables, ShipActionSet>> nodes=tih.getNodesOnPathForActions(actionsToSelected).get();
 
         nodes.forEach(System.out::println);
@@ -67,7 +67,7 @@ public class TestTreeInfoHelper {
         Assert.assertEquals(3,nodes.size());
     }
 
-    @Test public void testNofNodesInTree() {
+    @Test public void whenNofNodesInTree_thenNofActionsPlus1() {
         int nofNodes=tih.nofNodes();
         nodeRoot.printTree();
 
@@ -75,7 +75,7 @@ public class TestTreeInfoHelper {
         Assert.assertEquals(actions.size()+1,nofNodes);
     }
 
-    @Test public void testIsStateInAnyNode() {
+    @Test public void whenTestIsStateInAnyNode_thenCorrect() {
 
         Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(0,0)));
         Assert.assertFalse(tih.isStateInAnyNode(StateShip.newStateFromXY(10,0)));

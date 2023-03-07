@@ -20,13 +20,13 @@ public class TestNodeValueMemory {
     }
 
     @Test
-    public void readNonDefinedState() {
+    public void whenReadNonDefinedState_thenDefault() {
         double value= nodeValueMemory.read(StateShip.newStateFromXY(0,0));
         Assert.assertEquals(NodeValueMemoryHashMap.DEFAULT_VALUE,value, DELTA);
     }
 
     @Test
-    public void readDefinedState() {
+    public void whenReadDefinedState_thenCorrect() {
         nodeValueMemory.write(StateShip.newStateFromXY(0,0), VALUE);
         double value= nodeValueMemory.read(StateShip.newStateFromXY(0,0));
         System.out.println("value = " + value);
