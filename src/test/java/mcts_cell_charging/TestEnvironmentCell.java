@@ -35,21 +35,21 @@ public class TestEnvironmentCell {
     }
 
     @Test
-    public void action4() {
+    public void whenAction4_thenMaxRelCurr() {
         action.setValue(NOF_CURRENT_LEVELS-1);
         System.out.println("action.getRelativeCurrent() = " + action.getRelativeCurrent());
         Assert.assertEquals(MAX_RELATIVE_CURRENT,action.getRelativeCurrent(), DELTA);
     }
 
     @Test
-    public void action0() {
+    public void whenAction0_thenMinRelCurr() {
         action.setValue(0);
         System.out.println("action.getRelativeCurrent() = " + action.getRelativeCurrent());
         Assert.assertEquals(MIN_RELATIVE_CURRENT,action.getRelativeCurrent(), DELTA);
     }
 
     @Test
-    public void chargeShallIncreaseAllStateVariables() {
+    public void WHenCharge_thenIncreaseAllStateVariables() {
         action.setValue(4);
         StepReturnGeneric<CellVariables> sr=environment.step(action,state);
         System.out.println("sr.newState = " + sr.newState);
@@ -62,7 +62,7 @@ public class TestEnvironmentCell {
     }
 
     @Test
-    public void smallerChargeCurrentShallGiveLessIncreaseInTempAndSoC() {
+    public void whenSmallerChargeCurrent_thenGiveLessIncreaseInTempAndSoC() {
         action.setValue(0);
         StepReturnGeneric<CellVariables> sr0=environment.step(action,state);
         System.out.println("sr.newState = " + sr0.newState);

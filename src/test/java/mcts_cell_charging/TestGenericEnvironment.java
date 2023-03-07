@@ -20,7 +20,7 @@ public class TestGenericEnvironment {
 
 
     @Test
-    public void testStep() {
+    public void whenMockedCellEnvAndStep_then0StepReturn() {
         EnvironmentInterfaceMock<StateCell, ActionCell> env=new MockCellEnvironment();
         int stepReturn= env.step(ActionCell.newDefault(), StateCell.newDefault());
         System.out.println("stepReturn = " + stepReturn);

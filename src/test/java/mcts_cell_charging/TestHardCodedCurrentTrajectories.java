@@ -38,7 +38,7 @@ public class TestHardCodedCurrentTrajectories {
     }
 
     @Test
-    public void maxCurrentTrajectoryGivesToHighVoltage() {
+    public void whenMaxCurrentTrajectory_thenToHighVoltage() {
         List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel);
         List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
         resultsList.forEach(System.out::println);
@@ -48,7 +48,7 @@ public class TestHardCodedCurrentTrajectories {
     }
 
     @Test
-    public void maxCurrentTrajectoryLoweredMaxPowerCellGivesToHighPower() {
+    public void whenMaxCurrentTrajectoryLoweredMaxPowerCell_thenToHighPower() {
         List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel);
         cellSettings.setPowerCellMax(800);
         List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
@@ -59,7 +59,7 @@ public class TestHardCodedCurrentTrajectories {
     }
 
     @Test
-    public void highCurrentTrajectoryGivesToHighTemp() {
+    public void whenHighCurrentTrajectory_thenToHighTemp() {
         List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel-2);
         List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
         resultsList.forEach(System.out::println);
@@ -69,7 +69,7 @@ public class TestHardCodedCurrentTrajectories {
     }
 
     @Test
-    public void moderateCurrentTrajectoryGivesNoViolation() {
+    public void whenModerateCurrentTrajectory_thenNoViolation() {
         List<Integer> currentTraj=  Collections.nCopies(MAX_TIME/DT, maxCurrentLevel-3);
         List<EnvironmentCell.CellResults> resultsList=simulate(currentTraj);
         resultsList.forEach(System.out::println);

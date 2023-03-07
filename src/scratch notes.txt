@@ -111,3 +111,17 @@ GPU vs CPU för riktigt stor nn/batch
 normalize regression examples
 udemu ai4 bandit example
 Test saving fail states-actions
+
+    //  somePrinting(i, actionInSelected, sr, simulationResults, nodeSelected);
+    private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults, NodeWithChildrenInterface<S, A> nodeSelected) {
+
+        List<Integer> actionList = new ArrayList<>();
+        actionsToSelected.forEach(a -> actionList.add((Integer) a.getValue()));
+        System.out.println("actionList = " + actionList);
+        System.out.println("actionTemplate = " + actionTemplate);
+        System.out.println("nodeSelected.getState() = " + nodeSelected.getState());
+        System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue() + ", sr.isFail = " + sr.isFail);
+        System.out.println("sr.newState = " + sr.newState);
+        TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot, settings);
+        System.out.println("nofNodes = " + tih.nofNodes());
+    }

@@ -297,13 +297,13 @@ ElevatorMctsOnlySearchRunner
 - clean up BackupModifier  x
 - snyggare testnamn
 - ytterligare test som visar hur rooot values sävnger in
+- ytterligare test, kombinera step och sim
 - förklara logik action set begränsning
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
-- TestSearchActionRestrictionBetweenFloors - mcts smartare - conditional branching
 - SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 

@@ -22,13 +22,13 @@ public class TestStateCell {
     }
 
     @Test
-    public void copy() {
+    public void whenCopyState_thenCorrectSoC() {
         System.out.println("state variables = " + state.getVariables());
 
         Assert.assertEquals(0.5,state.copy().getVariables().SoC,DELTA);
     }
 
-    @Test public void copyFromReturn() {
+    @Test public void whenCopyFromReturn_thenCorrectValues() {
         state=stepReturn.copyState();
         System.out.println("state = " + state);
         Assert.assertEquals(
@@ -37,7 +37,7 @@ public class TestStateCell {
                 DELTA);
     }
 
-    @Test public void setFromReturn() {
+    @Test public void whenSetFromReturn_thenCorrectValues() {
         state.setFromReturn(stepReturn);
         System.out.println("state = " + state);
         Assert.assertEquals(

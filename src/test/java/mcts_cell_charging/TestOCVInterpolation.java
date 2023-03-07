@@ -25,31 +25,31 @@ public class TestOCVInterpolation {
     }
 
     @Test
-    public void SoC0GivesOCV1() {
+    public void whenSoC0_thenOCV1() {
         double[] ocv= interpolator.interpLinear(new double[]{0d});
         Assert.assertEquals(OCV_0, ocv[0], DELTA);
     }
 
     @Test
-    public void SoC0d1GivesOCV1d7() {
+    public void whenSoC0d1_thenOCV1d7() {
         double[] ocv= interpolator.interpLinear(new double[]{0.1d});
         Assert.assertEquals((OCV_0+OCV_L)/2, ocv[0], DELTA);
     }
 
     @Test
-    public void SoC0d5GivesOCV1d7() {
+    public void whenSoC0d5_thenOCV1d7() {
         double[] ocv= interpolator.interpLinear(new double[]{0.5d});
         Assert.assertEquals((OCV_L+OCV_H)/2, ocv[0], DELTA);
     }
 
     @Test
-    public void SoCHGivesOCVH() {
+    public void whenSoCH_thenOCVH() {
         double[] ocv= interpolator.interpLinear(new double[]{SOC_H});
         Assert.assertEquals(OCV_H, ocv[0], DELTA);
     }
 
     @Test
-    public void SoC1GivesOCV1() {
+    public void whenSoC1_thenOCV1() {
         double[] ocv= interpolator.interpLinear(new double[]{1});
         Assert.assertEquals(OCV_1, ocv[0], DELTA);
     }

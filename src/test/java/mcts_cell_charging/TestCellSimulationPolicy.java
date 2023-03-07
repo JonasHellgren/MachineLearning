@@ -40,7 +40,7 @@ public class TestCellSimulationPolicy {
     }
 
     @Test
-    public void simulateWithEqualProbEndsInToHighVoltage() {
+    public void whenSimulateWithEqualProb_thenEndsInToHighVoltage() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newEqualProbability(action);
         List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);
@@ -49,7 +49,7 @@ public class TestCellSimulationPolicy {
     }
 
     @Test
-    public void simulateWithRandomFeasibleGivesNoViolation() {
+    public void whensimulateWithRandomFeasible_thenGivesNoViolation() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newRandomFeasible(action,environment);
         List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);
@@ -58,7 +58,7 @@ public class TestCellSimulationPolicy {
     }
 
     @Test
-    public void simulateWithBestFeasibleGivesNoViolation() {
+    public void whenSimulateWithBestFeasible_thenGivesNoViolation() {
         SimulationPolicyInterface<CellVariables, Integer> policy= CellPolicies.newBestFeasible(action,environment);
         List<EnvironmentCell.CellResults> resultsList=simulator.simulateWithPolicy(policy,MAX_TIME/DT,state);
         resultsList.forEach(System.out::println);

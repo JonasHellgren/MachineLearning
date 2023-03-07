@@ -6,11 +6,8 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestHardCodedPathsInEnvironment {
 
@@ -25,7 +22,7 @@ public class TestHardCodedPathsInEnvironment {
     }
 
     @Test
-    public void moveStillFromx0y2GivesZeroReturn() {
+    public void whenMoveStillFromx0y2_thenZeroReturn() {
         StateShip pos=StateShip.newStateFromXY(0,2);
         List<ActionInterface<ShipActionSet>> actions= Arrays.asList(ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill());
         double G = getReturnForActions(pos, actions);
@@ -35,7 +32,7 @@ public class TestHardCodedPathsInEnvironment {
 
 
     @Test
-    public void moveFromx0y0Tox6y2GivesTwoMoveCost() {
+    public void whenMoveFromx0y0Tox6y2_thenTwoMoveCost() {
         StateShip pos=StateShip.newStateFromXY(0,0);
         List<ActionInterface<ShipActionSet>> actions= Arrays.asList(ActionShip.newUp(), ActionShip.newUp(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill());
         double G = getReturnForActions(pos, actions);
@@ -44,7 +41,7 @@ public class TestHardCodedPathsInEnvironment {
     }
 
     @Test
-    public void moveFromx0y0Tox1y0GivesCrashCost() {
+    public void whenMoveFromx0y0Tox1y0_thenCrashCost() {
         StateShip pos=StateShip.newStateFromXY(0,0);
         List<ActionInterface<ShipActionSet>> actions= Arrays.asList(ActionShip.newStill(), ActionShip.newUp(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill(), ActionShip.newStill());
         double G = getReturnForActions(pos, actions);

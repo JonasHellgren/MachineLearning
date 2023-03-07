@@ -22,25 +22,25 @@ public class TestActionCell {
     }
 
     @Test
-    public void  setAndGetAction() {
+    public void whenSetAction_thenCorrectGetAction() {
         actionCell.setValue(INTEGER_ACTION_VALUE);
         Assert.assertEquals(INTEGER_ACTION_VALUE,actionCell.getValue(), DELTA);
     }
 
     @Test
-    public void applicableActions() {
+    public void whenApplicAtions_then012() {
         Set<Integer> actionSet=actionCell.applicableActions();
         Assert.assertTrue(actionSet.containsAll(Arrays.asList(0,1,2)));
     }
 
     @Test
-    public void getRelativeCurrent() {
+    public void whenGetRelativeCurrent_thenGetDefault() {
         ActionCell actionCellCasted=(ActionCell) actionCell;
         Assert.assertEquals(MIN_RELATIVE_CURRENT,actionCellCasted.getRelativeCurrent(),DELTA);
     }
 
     @Test(expected=IllegalArgumentException.class)
-    public void nonValidNofCurrentLevels() {
+    public void whenSettingNonValidNofCurrentLevels_thenException() {
         actionCell= ActionCell.builder().nofCurrentLevels(1).minRelativeCurrent(MIN_RELATIVE_CURRENT).build();
     }
 

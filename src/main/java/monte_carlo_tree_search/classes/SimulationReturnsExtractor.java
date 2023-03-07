@@ -45,7 +45,7 @@ public class SimulationReturnsExtractor<S,A> {
         return bms;
     }
 
-    public List<Double> extract() {
+    public List<Double> getSimulationReturns() {
         if (simulationResults.size() == 0) {
             return new ArrayList<>(Collections.nCopies(nofNodesOnPath, 0d));  //todo into MathUtils
         }
