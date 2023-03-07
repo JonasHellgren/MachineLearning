@@ -296,7 +296,7 @@ ElevatorMctsOnlySearchRunner
 - fimpa SelectedToTerminalFailConverter  x
 - clean up BackupModifier  x
 - snyggare testnamn x
-- använd ListUtils.discountedSum i backup modif
+- använd ListUtils.discountedSum i backup modif  x
 - rename firstActionSelectionPolicy
 - ytterligare test som visar hur rooot values sävnger in
 - ytterligare test, kombinera step och sim

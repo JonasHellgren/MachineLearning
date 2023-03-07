@@ -9,6 +9,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,7 +104,7 @@ public class BackupModifier<S, A> {
 
     private void backupFromTreeSteps(double discountFactor, double alphaBackup) {
         List<Double> rewards = getRewards();
-        List<Double> returnsSteps = getReturns(rewards, discountFactor);
+        List<Double> returnsSteps = getDiscountedReturns(rewards, discountFactor);
         List<Double> returnsMemory = ListUtils.createListWithEqualElementValues(returnsSteps.size(), memoryValueStateAfterAction);
         updateNodesFromReturns(returnsSteps, returnsSimulation, returnsMemory, alphaBackup);
     }
@@ -146,19 +147,25 @@ public class BackupModifier<S, A> {
 
     /**
      *  discountFactor=1, rewards=[0,1,1] => returns=[2,2,1]
+     *  discountFactor=0.5, rewards=[0,1,1] => returns=[0.5^2*2,0.5^1*2,0.5^0*1]=[0.5,1,1]
      */
 
-    private List<Double> getReturns(final List<Double> rewards, double discountFactor) {
+    private List<Double> getDiscountedReturns(final List<Double> rewards, double discountFactor) {
+        List<Double> returns = getReturns(rewards);
+        return ListUtils.discountedElementsReverse(returns,discountFactor);
+    }
+
+    private List<Double> getReturns(List<Double> rewards) {
         double singleReturn = 0;
         List<Double> returns = new ArrayList<>();
         for (int i = rewards.size() - 1; i >= 0; i--) {
-            double reward = rewards.get(i);
-            singleReturn = discountFactor * singleReturn + reward;
+            singleReturn = singleReturn + rewards.get(i);
             returns.add(singleReturn);
         }
         Collections.reverse(returns);
         return returns;
     }
+
 
     void updateNode(NodeInterface<S, A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
         NodeWithChildrenInterface<S, A> node = (NodeWithChildrenInterface<S, A>) node0;  //casting
