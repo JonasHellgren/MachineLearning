@@ -295,7 +295,7 @@ ElevatorMctsOnlySearchRunner
 - clean up MonteCarloTreeCreator  x
 - fimpa SelectedToTerminalFailConverter  x
 - clean up BackupModifier  x
-- snyggare testnamn
+- snyggare testnamn x
 - använd ListUtils.discountedSum i backup modif
 - rename firstActionSelectionPolicy
 - ytterligare test som visar hur rooot values sävnger in

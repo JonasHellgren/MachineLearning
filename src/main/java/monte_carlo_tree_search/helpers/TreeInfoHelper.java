@@ -177,6 +177,7 @@ public class TreeInfoHelper<SSV,AV> {
         return counter.getCount();
     }
 
+    //todo generic
     public boolean isStateInAnyNode(StateShip state) {
         Counter counter = new Counter();
         BiFunction<Integer,NodeInterface <SSV,AV>,Integer> nofChildrenThatEqualsState =
@@ -188,6 +189,12 @@ public class TreeInfoHelper<SSV,AV> {
             log.warning("More than one node has state = "+state));
 
         return counter.getCount()>0;
+    }
+
+    public boolean isOnBestPath(StateInterface<SSV> state) {
+        Optional<NodeInterface<SSV,AV>> node =
+                NodeInfoHelper.findNodeMatchingStateVariables(getBestPath(), state);
+        return node.isPresent();
     }
 
     private void evalRecursive(NodeInterface <SSV,AV> node, Counter counter, BiFunction<Integer,NodeInterface <SSV,AV>,Integer> bif) {

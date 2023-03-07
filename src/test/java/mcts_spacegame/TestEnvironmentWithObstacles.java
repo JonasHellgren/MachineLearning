@@ -22,7 +22,7 @@ public class TestEnvironmentWithObstacles {
     }
 
     @Test
-    public void moveStillFromx0y0GivesObstacleCrash() {
+    public void whenMoveStillFromx0y0_thenObstacleCrash() {
         StateShip pos=StateShip.newStateFromXY(0,0);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -37,7 +37,7 @@ public class TestEnvironmentWithObstacles {
 
 
     @Test
-    public void moveUpFromx0y0GivesNoObstacleCrash() {
+    public void whenMoveUpFromx0y0_thenNoObstacleCrash() {
         StateShip pos=StateShip.newStateFromXY(0,0);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newUp(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -51,7 +51,7 @@ public class TestEnvironmentWithObstacles {
 
 
     @Test
-    public void multipleMovesStillFromx0y2GivesMovingToGoal() {
+    public void whenMultipleMovesStillFromx0y2G_thenMovingToGoal() {
         StateShip pos=StateShip.newStateFromXY(0,2);
 
         System.out.println("environment = " + environment);

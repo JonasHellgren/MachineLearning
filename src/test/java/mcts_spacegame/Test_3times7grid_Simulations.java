@@ -64,14 +64,14 @@ public class Test_3times7grid_Simulations {
     }
 
     @Test
-    public void simulatingFromX5Y1NeverFails() {
+    public void whenSimulatingFromX5Y1_thenNeverFails() {
         SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,1));
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertFalse(failList.contains(true));
     }
 
     @Test
-    public void simulatingFromX5Y2SomeTimeFails() {
+    public void whenSimulatingFromX5Y2_thenSomeTimeFails() {
         SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,2));
 
         List<Boolean> failList=results.getResults().stream()
@@ -81,7 +81,7 @@ public class Test_3times7grid_Simulations {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y0() {
+    public void whenStartingFromX0Y0_then11And32IsOnBestPath() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
@@ -97,7 +97,7 @@ public class Test_3times7grid_Simulations {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y1() {
+    public void whenStartingFromX0Y1_then12And32IsOnBestPath() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(0,1));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
 

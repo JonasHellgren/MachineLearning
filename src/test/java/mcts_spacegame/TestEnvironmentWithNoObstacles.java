@@ -20,7 +20,7 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveStillFromx0y0() {
+    public void whenMoveStillFromx0y0_thenCorrectStepReturn() {
         StateShip pos= StateShip.newStateFromXY(0,0);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -34,7 +34,7 @@ public class TestEnvironmentWithNoObstacles {
 
 
     @Test
-    public void moveDownFromXis0Yis0() {
+    public void whenMoveDownFromX0Y0_thenCorrectStepReturn() {
         StateShip pos= StateShip.newStateFromXY(0,0);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newDown(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -48,7 +48,7 @@ public class TestEnvironmentWithNoObstacles {
 
 
     @Test
-    public void moveStillFromXis0Yis0() {
+    public void whenMoveStillFromXis0Yis0_thenCorrectStepReturn() {
         StateShip pos= StateShip.newStateFromXY(0,0);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -61,7 +61,7 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveStillFromXis1YisCrash() {
+    public void whenMoveStillFromX1Y1_thenTerminal() {
         StateShip pos= StateShip.newStateFromXY(1,1);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -74,7 +74,7 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveUpFromXis1Yis1() {
+    public void whenMoveUpFromX1Y1_thenX2Y2() {
         StateShip pos= StateShip.newStateFromXY(1,1);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newUp(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -87,7 +87,7 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveStillFromXis2Yis1() {
+    public void whenMoveUpFromX2Y1_thenX3Y1() {
         StateShip pos= StateShip.newStateFromXY(2,1);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);
@@ -100,7 +100,7 @@ public class TestEnvironmentWithNoObstacles {
     }
 
     @Test
-    public void moveStillFromXis3Yis1IsNonValidPosition() {
+    public void moveStillFromX3Y1_thenNonValidPosition() {
         StateShip pos= StateShip.newStateFromXY(3,1);
         StepReturnGeneric<ShipVariables> stepReturn= environment.step(ActionShip.newStill(),pos);
         System.out.println("stepReturn = " + stepReturn);

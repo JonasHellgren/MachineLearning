@@ -1,8 +1,11 @@
 package monte_carlo_tree_search.helpers;
 
 import common.ListUtils;
+import monte_carlo_tree_search.domains.models_space.ShipActionSet;
+import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
@@ -17,7 +20,7 @@ public class NodeInfoHelper<S, A> {
 
     public static <S, A> Optional<NodeInterface<S, A>>
     findNodeMatchingStateVariables(List<NodeInterface<S, A>> nodes,
-                                   StateShip state)  {
+                                   StateInterface<S> state)  {
         return nodes.stream().filter(n -> n.getState().getVariables().equals(state.getVariables())).findFirst();
     }
 

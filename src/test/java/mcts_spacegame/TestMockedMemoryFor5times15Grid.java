@@ -63,7 +63,7 @@ public class TestMockedMemoryFor5times15Grid {
     }
 
     @SneakyThrows
-    @Test public void shallGoNorthDueToHighMemoryValueInX2Y4() {
+    @Test public void whenHighMemoryValueInX2Y4_thenNorth() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         assertStateIsOnBestPath(nodeRoot, StateShip.newStateFromXY(2,4));

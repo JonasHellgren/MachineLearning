@@ -11,6 +11,7 @@ import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,43 +44,31 @@ public class Test_3times7grid {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y0() {
+    public void whenStartingFrommX0Y0_then11And52IsOnBestPath() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-
-        System.out.println("monteCarloTreeCreator.getActionsToSelected() = " + monteCarloTreeCreator.getActionsToSelected());
-
-        System.out.println("tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow() =");
-        tih.getNodesOnPathForActions(monteCarloTreeCreator.getActionsToSelected()).orElseThrow().forEach(System.out::println);
-
         doPrinting(tih,nodeRoot);
-
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
-        Assert.assertTrue(node11.isPresent());
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
-        Assert.assertTrue(node52.isPresent());
+        Assert.assertTrue(isOnBestPath(1,1,tih));
+        Assert.assertTrue(isOnBestPath(5,2,tih));
 
     }
 
     @SneakyThrows
     @Test
-    //@Test(expected = StartStateIsTrapException.class)
-    public void iterateFromX2Y0() {
+    public void whenStartingFrommX2Y0_then11And52IsNotOnBestPath() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2,0));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
         doPrinting(tih,nodeRoot);
-
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node11= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(1,1));
-        Assert.assertFalse(node11.isPresent());
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node52= NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(),StateShip.newStateFromXY(5,2));
-        Assert.assertFalse(node52.isPresent());
+        Assert.assertFalse(isOnBestPath(1,1,tih));
+        Assert.assertFalse(isOnBestPath(5,2,tih));
+        Assert.assertEquals(1,tih.getBestPath().size());
     }
 
     @SneakyThrows
     @Test
-    public void iterateFromX1Y1() {
+    public void whenStartingFrommX1Y1_then20IsVisited() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(1,1));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
@@ -90,7 +79,7 @@ public class Test_3times7grid {
     }
 
     @SneakyThrows
-    @Test public void maxTreeDepth() {
+    @Test public void whenMaxTreeDepth_thenDepth3() {
         settings.setMaxTreeDepth(3);
 
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
@@ -101,18 +90,23 @@ public class Test_3times7grid {
                 .build();
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-
         doPrinting(tih,nodeRoot);
         System.out.println("tih.maxDepth() = " + tih.maxDepth());
-
         Assert.assertEquals(3,tih.maxDepth());
     }
 
 
-    private void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
+    private boolean isOnBestPath(int x, int y, TreeInfoHelper<ShipVariables, ShipActionSet> tih) {
+        Optional<NodeInterface<ShipVariables, ShipActionSet>> node11 =
+                NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(x,y));
+        return node11.isPresent();
+    }
+
+    private void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,
+                            NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
         System.out.println("nofNodesInTree = " + tih.nofNodes());
         nodeRoot.printTree();
-        tih.getBestPath().forEach(System.out::println);
+        tih.getBestPath().forEach((n) -> System.out.println(n.getState().getVariables()));
     }
 
 }

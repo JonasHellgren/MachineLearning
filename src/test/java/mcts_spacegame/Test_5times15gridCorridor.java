@@ -57,7 +57,7 @@ public class Test_5times15gridCorridor {
         System.out.println("memory = " + memory);
     }
 
-    @Test public void moveFromX13Y4IntoGoalWithHighValue() {
+    @Test public void whenMoveFromX13Y4IntoGoal_thenReturnWithHighValue() {
         settings=settingsForSimulations();
         SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(13,4));
         boolean any6 = anySimulationHasReturn6(simulationResults);
@@ -69,7 +69,7 @@ public class Test_5times15gridCorridor {
         return simulationResults.getResults().stream().map(r -> r.singleReturn).anyMatch(v -> MathUtils.isZero(v - BONUS_6));
     }
 
-    @Test public void moveFromX9Y4IntoGoalWithHighValue() {
+    @Test public void whenMoveFromX5Y4IntoGoal_thenReturnWithHighValue() {
         settings=settingsForSimulations();
         SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,4));
         boolean any6 = anySimulationHasReturn6(simulationResults);
@@ -79,30 +79,31 @@ public class Test_5times15gridCorridor {
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y2GivesMoveNorth() {
+    public void whenMoveFromX0Y2_thenMovesNorth() {
         settings=settingsForSimulations();
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(4,4)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(5,4)));
     }
 
     @SneakyThrows
     @Test
     @Ignore
-    public void iterateFromX0Y2ManyTimes() {
+    public void whenMoveFromX0Y2ManyTimes_thenAlwaysMovesNorth() {
         for (int i = 0; i < 10 ; i++) {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,4));
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,4));
+
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(4,4)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(5,4)));
         }
     }
 
     @SneakyThrows
     @Test
-    public void highBonusInX14Y0FavorsSouthRoute() {
+    public void givenHighBonusInX14Y0_thenSouthRoute() {
         settings=settingsForSimulations();
         EnvironmentShip env=(EnvironmentShip) monteCarloTreeCreator.getEnvironment();
         SpaceGrid spaceGrid=env.getSpaceGrid();
@@ -112,13 +113,14 @@ public class Test_5times15gridCorridor {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(4,0));
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(5,0));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(4,0)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(5,0)));
+
     }
 
     @SneakyThrows
     @Test
-    public void iterateFromX10Y4WithNoSimulations() {
+    public void whenMoveFromX10Y4_thenBonus6InEndAndX13Y4OnBestPath() {
 
         settings=settingsForNoSimulations();
         monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(10,4));
@@ -131,13 +133,14 @@ public class Test_5times15gridCorridor {
         Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
                 tih.getNodeReachedForActions(Collections.singletonList(ActionShip.newStill()));
         System.out.println("node = " + node);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
+
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(13,4)));
         Assert.assertEquals(BONUS_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y2WithNoSimulations() {
+    public void whenMoveFromX0Y2_thenX13Y4OnBestPath() {
 
         settings=settingsForNoSimulations();
         monteCarloTreeCreator=treeCreator(StateShip.newStateFromXY(0,2));
@@ -145,18 +148,15 @@ public class Test_5times15gridCorridor {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,4));
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,4));
 
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=tih.getNodeReachedForActions(Arrays.asList(ActionShip.newUp(), ActionShip.newUp()));
-        System.out.println("node = " + node);
-//        Assert.assertEquals(BONUS_6,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(11,4)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(13,4)));
     }
 
 
     @SneakyThrows
     @Test
-    public void iterateFromX0Y2WithNoSimulationsAndLowExplorationGivesSubOptimalPath() {
+    public void whenFromX0Y2WithNoSimulationsAndLowExploration_thenSubOptimalPath() {
 
         settings=settingsForNoSimulations();
         settings.setCoefficientExploitationExploration(1);
@@ -165,14 +165,11 @@ public class Test_5times15gridCorridor {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(11,2));
-        assertStateIsOnBestPath(tih, StateShip.newStateFromXY(13,2));
+
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(11,2)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(13,2)));
 
         doPrinting(nodeRoot);
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
-                tih.getNodeReachedForActions(Arrays.asList(ActionShip.newStill(),ActionShip.newStill()));
-        System.out.println("node = " + node);
-     //   Assert.assertEquals(BONUS_3,node.orElseThrow().getActionValue(ActionShip.newStill()), DELTA);
     }
 
 

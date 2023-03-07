@@ -25,7 +25,7 @@ public class TestSpaceGrid {
     }
 
     @Test
-    public void noObstacles() {
+    public void givenGridNoObstacles_thenCorrectCells() {
         spaceGrid= SpaceGridInterface.newWithNoObstacles(3,3);
 
         System.out.println("spaceGrid = " + spaceGrid);
@@ -42,7 +42,7 @@ public class TestSpaceGrid {
     }
 
     @Test
-    public void threeTimes7Grid() {
+    public void whenThreeTimes7Grid_thenCorrectCells() {
         spaceGrid= SpaceGridInterface.new3times7Grid();
 
         System.out.println("spaceGrid = " + spaceGrid);
@@ -58,14 +58,14 @@ public class TestSpaceGrid {
 
     }
 
-    @Test public void triple() {
+    @Test public void whenTriple_thenCorrect() {
         List<Triple<Integer,Integer,Double>> bonusCells= Arrays.asList(
                 Triple.of(14,2,2d), Triple.of(14,4,6d)
         );
         System.out.println("bonusCells = " + bonusCells);
     }
 
-    @Test public void extractBonusCellsWithStreams() {
+    @Test public void whenExtractBonusCellsWithStreams_thenCorrect() {
         List<Triple<Integer,Integer,Double>> bonusCells= Arrays.asList(
                 Triple.of(14,2,2d), Triple.of(14,4,6d)
         );
@@ -76,7 +76,7 @@ public class TestSpaceGrid {
 
     }
 
-    @Test public void new5times15Grid() {
+    @Test public void whenNew5times15Grid_thenCorrectBonus() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
 
         Assert.assertEquals(6,spaceGrid.getCell(14,4).orElseThrow().bonus,DELTA);
