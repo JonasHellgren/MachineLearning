@@ -1,10 +1,8 @@
 package mcts_elevator_runner;
 
-import black_jack.result_drawer.GridPanel;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -38,7 +36,7 @@ public class ElevatorSearchNoActionRestrictionRunner {
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
+                .actionSelectionPolicy(ElevatorPolicies.newRandom())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)
                 .coefficientMaxAverageReturn(0) //average

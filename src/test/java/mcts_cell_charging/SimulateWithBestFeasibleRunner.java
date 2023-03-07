@@ -44,7 +44,7 @@ public class SimulateWithBestFeasibleRunner {
         actionTemplate= ActionCell.builder()
                 .nofCurrentLevels(NOF_CURRENT_LEVELS).build();
         settings= MonteCarloSettings.<CellVariables, Integer>builder()
-                .firstActionSelectionPolicy(CellPolicies.newBestFeasible(actionTemplate,environment))
+                .actionSelectionPolicy(CellPolicies.newBestFeasible(actionTemplate,environment))
                 .simulationPolicy(CellPolicies.newRandomFeasible(actionTemplate,environment))
                     .build();
         cellSettings=CellSettings.builder()

@@ -5,7 +5,6 @@ import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -14,8 +13,6 @@ import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Optional;
 
 public class Test_3times7gridWithCorridor {
 
@@ -32,7 +29,7 @@ public class Test_3times7gridWithCorridor {
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
 
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxNofIterations(MAX_NOF_ITERATIONS)

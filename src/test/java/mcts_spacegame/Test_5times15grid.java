@@ -3,17 +3,13 @@ package mcts_spacegame;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Optional;
 
 public class Test_5times15grid {
 
@@ -34,7 +30,7 @@ public class Test_5times15grid {
         environment = new EnvironmentShip(spaceGrid);
         actionTemplate = new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
@@ -69,7 +65,7 @@ public class Test_5times15grid {
     @Test
     public void givenNoSimFewIterations_whenStartingFromX0Y2_then54IsVisited() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(14)
                 .maxNofIterations(10)
@@ -89,7 +85,7 @@ public class Test_5times15grid {
     //  @Ignore
     public void givenStartX3Y3NoSimulationsAndRestrictedActionSetAfterDepth3_then44isOnBestPath() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newOnlyStillAfterDepth3(actionTemplate))
+                .actionSelectionPolicy(ShipPolicies.newOnlyStillAfterDepth3(actionTemplate))
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(20)
                 .maxNofIterations(40)  //100k
@@ -109,7 +105,7 @@ public class Test_5times15grid {
     @Test
     public void givenStartX10Y2WithNoSimulationDefensiveBackup_thenX13Y4OnBestPath() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .maxTreeDepth(5)
                 .maxNofIterations(100)
@@ -131,7 +127,7 @@ public class Test_5times15grid {
     @Test
     public void givenStartX10Y2Simulations_thenX13Y4OnBestPath() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .weightReturnsSteps(0)
                 .maxTreeDepth(5)
@@ -150,7 +146,7 @@ public class Test_5times15grid {
     @Test
     public void givenStartX0Y2Simulations_thenX4Y4OnBestPath() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .weightReturnsSteps(0)
                 .maxTreeDepth(5)

@@ -31,7 +31,7 @@ public class TestTreeInfoHelper {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
         StateShip rootState=StateShip.newStateFromXY(0,0);

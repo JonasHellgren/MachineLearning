@@ -200,7 +200,7 @@ public class RunCartPoleAlphaZero {
 
         ActionInterface<Integer> actionTemplate = ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings = MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
+                .actionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
                 .maxTreeDepth(MAX_TREE_DEPTH_SEARCH)

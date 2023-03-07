@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -186,7 +185,7 @@ public class Test_5times15gridCorridor {
 
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)
@@ -199,7 +198,7 @@ public class Test_5times15gridCorridor {
 
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForNoSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
                 .maxTreeDepth(MAX_TREE_DEPTH)

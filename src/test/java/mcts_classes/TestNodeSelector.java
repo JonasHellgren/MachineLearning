@@ -25,7 +25,7 @@ public class TestNodeSelector {
     @Before
     public void init() {
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
 

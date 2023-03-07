@@ -42,7 +42,7 @@ public class Test_3times7grid_Simulations {
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
 
         settings= MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
                 .alphaBackupDefensiveStep(ALPHA_BACKUP_STEPS_DEFENSIVE)

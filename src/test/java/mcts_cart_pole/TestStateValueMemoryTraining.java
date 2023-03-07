@@ -38,7 +38,7 @@ public class TestStateValueMemoryTraining {
         int VALUE_LEFT = 0;
         ActionInterface<Integer> actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
+                .actionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
                 .coefficientMaxAverageReturn(0) //average

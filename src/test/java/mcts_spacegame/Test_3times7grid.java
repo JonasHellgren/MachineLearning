@@ -2,7 +2,6 @@ package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_space.*;
-import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -11,7 +10,6 @@ import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +29,7 @@ public class Test_3times7grid {
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
 
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
         monteCarloTreeCreator=MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
@@ -50,7 +48,6 @@ public class Test_3times7grid {
         doPrinting(tih,nodeRoot);
         Assert.assertTrue(isOnBestPath(1,1,tih));
         Assert.assertTrue(isOnBestPath(5,2,tih));
-
     }
 
     @SneakyThrows

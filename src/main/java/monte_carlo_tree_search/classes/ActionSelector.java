@@ -80,7 +80,7 @@ public class ActionSelector<S,A> {
     }
 
     private ActionInterface<A> getActionFromPolicy(NodeInterface<S,A> nodeSelected) {
-        return settings.firstActionSelectionPolicy.chooseAction(nodeSelected.getState());
+        return settings.actionSelectionPolicy.chooseAction(nodeSelected.getState());
     }
 
     private ActionInterface<A> getRandomAction(List<ActionInterface<A>> actions) {
@@ -100,7 +100,7 @@ public class ActionSelector<S,A> {
     private List<ActionInterface<A>> getNonTestedActionsInPolicy(NodeWithChildrenInterface<S,A> nodeSelected) {
         List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
         List<A> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-        Set<A> allValues=settings.firstActionSelectionPolicy.availableActionValues(nodeSelected.getState());
+        Set<A> allValues=settings.actionSelectionPolicy.availableActionValues(nodeSelected.getState());
         Set<A> allValuesSet=new HashSet<>(allValues);
         List<A> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValuesSet);
 

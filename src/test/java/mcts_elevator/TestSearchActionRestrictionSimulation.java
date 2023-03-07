@@ -214,7 +214,7 @@ public class TestSearchActionRestrictionSimulation {
                 :1;
 
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
+                .actionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)
                 .discountFactorSimulationDefensive(0.9)

@@ -3,7 +3,6 @@ package mcts_classes;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
@@ -20,7 +19,7 @@ public class TestNode {
     @Before
     public void init() {
         settings= MonteCarloSettings.<ShipVariables,ShipActionSet>builder()
-                .firstActionSelectionPolicy(new PolicyAlwaysStill())
+                .actionSelectionPolicy(new PolicyAlwaysStill())
                 .simulationPolicy(new PolicyAlwaysStill())
                 .build();
     }

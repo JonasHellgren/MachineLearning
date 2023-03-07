@@ -42,10 +42,8 @@ public class MonteCarloSettings<S,A> {
     long timeBudgetMilliSeconds = TIME_BUDGET_DEFAULT;
     @Builder.Default
     int nofSimulationsPerNode = NOF_SIMULATIONS_DEFAULT;
-  //  @NonNull
- //   Function<S,Integer> maxNofTestedActionsForBeingLeafFunction;
     @NonNull
-    SimulationPolicyInterface<S,A> firstActionSelectionPolicy;
+    SimulationPolicyInterface<S,A> actionSelectionPolicy;
     @NonNull
     SimulationPolicyInterface<S,A> simulationPolicy;
     @Builder.Default

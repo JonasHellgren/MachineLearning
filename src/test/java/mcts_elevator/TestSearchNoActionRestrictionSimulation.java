@@ -8,7 +8,6 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -106,7 +105,7 @@ public class TestSearchNoActionRestrictionSimulation {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
+                .actionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
              //   .isDefensiveBackup(true)  //not critical
              //   .alphaBackupDefensive(0.9)  //not critical
