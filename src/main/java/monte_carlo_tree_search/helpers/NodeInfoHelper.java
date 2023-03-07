@@ -2,6 +2,7 @@ package monte_carlo_tree_search.helpers;
 
 import common.ListUtils;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
@@ -10,6 +11,7 @@ import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class NodeInfoHelper<S, A> {
 
@@ -37,6 +39,25 @@ public class NodeInfoHelper<S, A> {
             avs.add(node.getActionValue(actionTemplate));
         }
         return avs;
+    }
+
+    /**
+     * leaf node = node that  can/shall be expanded, i.e. not tried "all" actions
+     * selected node shall be leaf node =>  isLeaf(selectedNode) = true
+     */
+
+    public static <S, A> boolean isLeaf(NodeWithChildrenInterface<S, A> currentNode, SimulationPolicyInterface<S,A> actionSelectionPolicy) {
+        List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
+        int nofTestedActions = childNodes.size();
+        int maxNofTestedActions = actionSelectionPolicy.availableActionValues(currentNode.getState()).size();
+        return nofTestedActions < maxNofTestedActions;  //leaf <=> not tried all actions
+    }
+
+    public static <S, A> boolean isAllChildrenTerminal(NodeWithChildrenInterface<S,A> node) {
+        List<NodeInterface<S,A>> childrenTerminal= node.getChildNodes().stream()
+                .filter(n -> !n.isNotTerminal())
+                .collect(Collectors.toList());
+        return childrenTerminal.size()== node.getChildNodes().size();
     }
 
     //todo remove, valueNode does the same

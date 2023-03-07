@@ -4,6 +4,8 @@ import common.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
@@ -61,23 +63,29 @@ public class NodeSelector<S,A> {
         actionsFromRootToSelected.clear();
         NodeWithChildrenInterface<S,A> currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-        int i=0;
+        Counter counter=new Counter(MAX_DEPTH);
+
+        SimulationPolicyInterface<S,A> actionSelectionPolicy=settings.firstActionSelectionPolicy;
         while (true) {
 
-            if (isLeaf(currentNode) || isAllChildrenTerminal(currentNode)) {
+            if (isLeafOrAllChildrenAreFail(currentNode, actionSelectionPolicy)) {
                 break;
             }
 
-            if (i> MAX_DEPTH) {
+            if (counter.isExceeded()) {
                 log.warning(ETERNAL_LOOP_MESSAGE);
                 break;
             }
 
             currentNode = ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(currentNode);
-            i++;
+            counter.increase();
         }
 
         return currentNode;
+    }
+
+    private boolean isLeafOrAllChildrenAreFail(NodeWithChildrenInterface<S, A> currentNode, SimulationPolicyInterface<S, A> actionSelectionPolicy) {
+        return NodeInfoHelper.isLeaf(currentNode, actionSelectionPolicy) || NodeInfoHelper.isAllChildrenTerminal(currentNode);
     }
 
     private NodeWithChildrenInterface<S, A> ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
@@ -88,25 +96,6 @@ public class NodeSelector<S,A> {
             nodesFromRootToSelected.add(currentNode);
         }
         return currentNode;
-    }
-
-    /**
-     * leaf node = node that  can/shall be expanded, i.e. not tried "all" actions
-     * selected node shall be leaf node =>  isLeaf(selectedNode) = true
-     */
-
-    public boolean isLeaf(NodeWithChildrenInterface<S, A> currentNode) {
-        List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
-        int nofTestedActions = childNodes.size();
-        int maxNofTestedActions = settings.firstActionSelectionPolicy.availableActionValues(currentNode.getState()).size();
-        return nofTestedActions < maxNofTestedActions;  //leaf <=> not tried all actions
-    }
-
-    private boolean isAllChildrenTerminal(NodeWithChildrenInterface<S,A> node) {
-        List<NodeInterface<S,A>> childrenTerminal= node.getChildNodes().stream()
-                .filter(n -> !n.isNotTerminal())
-                .collect(Collectors.toList());
-        return childrenTerminal.size()== node.getChildNodes().size();
     }
 
     public  Optional<NodeInterface<S,A>> selectNonFailChildWithHighestUCT(NodeWithChildrenInterface<S,A> node) {
