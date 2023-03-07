@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
  * The selected node must be leaf node and all its children can't be terminal
  * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  *
- * The method selectChild() returns an Optional, this is empty if no child is found. Probably due to only children of
- * type fail state.
+ * The method selectNonFailChildWithHighestUCT() returns an Optional, this is empty if no child is found.
+ * Probably due to only children of type fail state.
  */
 
 @Getter
@@ -29,6 +29,8 @@ public class NodeSelector<S,A> {
     private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT = false;
     public static final int UCT_MAX = 1000;
     private static final int MAX_DEPTH = 10000;
+    private static final String ETERNAL_LOOP_MESSAGE = "Escaped from eternal loop for selecting node - can be corner case when" +
+            " isExcludeChildrenThatNeverHaveBeenVisited is true";
 
     final NodeWithChildrenInterface<S,A> nodeRoot;
     MonteCarloSettings<S,A> settings;
@@ -50,8 +52,6 @@ public class NodeSelector<S,A> {
         this.settings = settings;
         this.coefficientExploitationExploration= coefficientExploitationExploration;
         this.isExcludeChildrenThatNeverHaveBeenVisited=isExcludeChildrenThatNeverHaveBeenVisited;
-      //  System.out.println("isExcludeChildrenThatNeverHaveBeenVisited in constructor = " + isExcludeChildrenThatNeverHaveBeenVisited);
-
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
     }
@@ -61,62 +61,56 @@ public class NodeSelector<S,A> {
         actionsFromRootToSelected.clear();
         NodeWithChildrenInterface<S,A> currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-
-     //   System.out.println("select, isNotLeaf root="+isNotLeaf(currentNode));
         int i=0;
-        while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {
-            Optional<NodeInterface<S,A>> selectedChild = selectChild(currentNode);
-         //   System.out.println("i = "+i+", selectedChild = " + selectedChild);
-            if (selectedChild.isPresent() && isNotAllChildrenTerminal(currentNode)) {
-                currentNode = (NodeWithChildrenInterface<S, A>) selectedChild.get();
-                actionsFromRootToSelected.add(currentNode.getAction());
-                nodesFromRootToSelected.add(currentNode);
-            }
+        while (true) {
 
-            i++;
-            if (i> MAX_DEPTH) {
-                log.warning("Escaped from eternal loop for selecting node - can be corner case when" +
-                        " isExcludeChildrenThatNeverHaveBeenVisited is true");
+            if (isLeaf(currentNode) || isAllChildrenTerminal(currentNode)) {
                 break;
             }
+
+            if (i> MAX_DEPTH) {
+                log.warning(ETERNAL_LOOP_MESSAGE);
+                break;
+            }
+
+            currentNode = ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(currentNode);
+            i++;
         }
 
         return currentNode;
     }
 
-    /**
-     * not leaf node = node that not can/shall be expanded, i.e. tried "all" actions
-     * selected node shall be leaf node => isNotLeaf(selectedNode) = false,  isLeaf(selectedNode) = true
-     */
-    public boolean isNotLeaf(NodeWithChildrenInterface<S, A> currentNode) {
-        List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
-        int nofTestedActions = childNodes.size();
-        //int maxNofTestedActions =
-          //      settings.maxNofTestedActionsForBeingLeafFunction.apply(currentNode.getState().getVariables());
-
-        int maxNofTestedActions = settings.firstActionSelectionPolicy.availableActionValues(currentNode.getState()).size();
-       // System.out.println("isNotLeaf nofTestedActions = " + nofTestedActions+", maxNofTestedActions = "+maxNofTestedActions);
-     //   System.out.println("isNotLeaf availableActionValues = " + settings.firstActionSelectionPolicy.availableActionValues(currentNode.getState()));
-        return nofTestedActions == maxNofTestedActions;  //not leaf <=> tried all actions
+    private NodeWithChildrenInterface<S, A> ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
+        Optional<NodeInterface<S,A>> selectedChild = selectNonFailChildWithHighestUCT(currentNode);
+        if (selectedChild.isPresent()) {
+            currentNode = (NodeWithChildrenInterface<S, A>) selectedChild.get();
+            actionsFromRootToSelected.add(currentNode.getAction());
+            nodesFromRootToSelected.add(currentNode);
+        }
+        return currentNode;
     }
 
-    private boolean isNotAllChildrenTerminal(NodeWithChildrenInterface<S,A> node) {
+    /**
+     * leaf node = node that  can/shall be expanded, i.e. not tried "all" actions
+     * selected node shall be leaf node =>  isLeaf(selectedNode) = true
+     */
+
+    public boolean isLeaf(NodeWithChildrenInterface<S, A> currentNode) {
+        List<NodeInterface<S,A>> childNodes = currentNode.getChildNodes();
+        int nofTestedActions = childNodes.size();
+        int maxNofTestedActions = settings.firstActionSelectionPolicy.availableActionValues(currentNode.getState()).size();
+        return nofTestedActions < maxNofTestedActions;  //leaf <=> not tried all actions
+    }
+
+    private boolean isAllChildrenTerminal(NodeWithChildrenInterface<S,A> node) {
         List<NodeInterface<S,A>> childrenTerminal= node.getChildNodes().stream()
                 .filter(n -> !n.isNotTerminal())
                 .collect(Collectors.toList());
-        return childrenTerminal.size()!= node.getChildNodes().size();
+        return childrenTerminal.size()== node.getChildNodes().size();
     }
 
-    public  Optional<NodeInterface<S,A>> selectChild(NodeWithChildrenInterface<S,A> node) {
+    public  Optional<NodeInterface<S,A>> selectNonFailChildWithHighestUCT(NodeWithChildrenInterface<S,A> node) {
         List<Pair<NodeInterface<S,A>, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);
-
-        /*
-        System.out.println("isExcludeChildrenThatNeverHaveBeenVisited = " + isExcludeChildrenThatNeverHaveBeenVisited);
-        List<NodeInterface<S,A>> nonFailsChilds=getNonFailChildrenNodes(node);
-        System.out.println("node.getChildNodes().size() = " + node.getChildNodes().size()+", nof nonFailsChilds = "+nonFailsChilds.size());
-        System.out.println("nodeUCTPairs.size() = " + nodeUCTPairs.size());
-         */
-
         Optional<Pair<NodeInterface<S,A>, Double>> pair = getPairWithHighestUct(nodeUCTPairs);
         return pair.isEmpty()
                 ? Optional.empty()

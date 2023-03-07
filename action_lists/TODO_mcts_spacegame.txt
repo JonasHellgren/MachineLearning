@@ -291,6 +291,7 @@ ElevatorMctsOnlySearchRunner
 - WARNING: Escaped from eternal loop for selecting node
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas
 - clean up
+- snyggare testnamn
 - förklara logik action set begränsning
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda

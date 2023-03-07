@@ -83,7 +83,6 @@ public class BackupModifier<S,A> {
         bm.nodesOnPath = bm.treeInfoHelper.getNodesOnPathForActions(actionsToSelected).orElseThrow();
         bm.nodeSelected = bm.treeInfoHelper.getNodeReachedForActions(actionsToSelected).orElseThrow();
 
-
         return bm;
     }
 

@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.elevator.PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping;
-import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -297,7 +295,7 @@ public class MonteCarloTreeCreator<S,A> {
 
     private void chooseBestActionAndBackPropagateOld(NodeWithChildrenInterface<S, A>  nodeSelected) {
         NodeSelector<S, A>  nodeSelector = new NodeSelector<>(nodeRoot,settings);
-        Optional<NodeInterface<S, A> > childToSelected = nodeSelector.selectChild(nodeSelected);
+        Optional<NodeInterface<S, A> > childToSelected = nodeSelector.selectNonFailChildWithHighestUCT(nodeSelected);
         ActionInterface<A> actionToGetToChild = childToSelected.orElseThrow().getAction();
         StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
         StepReturnGeneric<S> sr = environment.step(actionToGetToChild, state);
