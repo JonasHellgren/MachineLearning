@@ -282,9 +282,13 @@ ElevatorMctsOnlySearchRunner
 - varför skapas få noder  x
 - tester andra domäner  x
 - space Policy..  x
-- chart pole tester  x
-WARNING: Escaped from eternal loop for selecting node
+- fler chart pole tester x
+- TestBackupModifier bökar  x
+- mer test i TestBackupModifier som visar defensive backup
+- TestMonteCarloControlledCharging bökar
 -  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc
+- infora tydiga tester runt isLeaf, isNonLeafNoFail, isNonLeafNail etc
+- WARNING: Escaped from eternal loop for selecting node
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas
 - clean up
 - förklara logik action set begränsning

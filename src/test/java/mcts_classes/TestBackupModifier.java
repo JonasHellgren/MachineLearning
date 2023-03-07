@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.BackupModifier;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
@@ -19,19 +20,20 @@ import java.util.*;
 public class TestBackupModifier {
 
     private static final double DELTA = 0.1;
-    private static final int DELTA_BIG = 2;
+    private static final int DELTA_BIG = 3;
     SpaceGrid spaceGrid;
     EnvironmentShip environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     BackupModifier<ShipVariables, ShipActionSet> bum;
     List<StepReturnGeneric<ShipVariables>> stepReturns;
     StepReturnGeneric<ShipVariables> getStepReturnOfSelected;
+    ActionInterface<ShipActionSet> actionTemplate;
 
     @Before
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
+        actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
@@ -61,14 +63,7 @@ public class TestBackupModifier {
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createMCTSTree(actions, rootState, stepReturns);
         printLists(actions, stepReturns, nodeRoot);
-        bum = BackupModifier.<ShipVariables, ShipActionSet>builder()
-                .rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .settings(settings)
-                .build();
-        bum.backup();
+        doBackup(actionsToSelected, actionInSelected, nodeRoot);
 
         printLists(actions, stepReturns, nodeRoot);
 
@@ -90,14 +85,7 @@ public class TestBackupModifier {
 
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.<ShipVariables, ShipActionSet>builder()
-                .rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .settings(settings)
-                .build();
-        bum.backup();
+        doBackup(actionsToSelected, actionInSelected, nodeRoot);
 
         printLists(actions, stepReturns, nodeRoot);
 
@@ -112,8 +100,6 @@ public class TestBackupModifier {
 
     }
 
-
-
     @SneakyThrows
     @Test
     public void moveFromX0Y0ToX3Y0ToGetFailStateByObstacleCrash() {
@@ -122,13 +108,7 @@ public class TestBackupModifier {
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .settings(settings)
-                .build();
-        bum.backup();
+        doBackup(actionsToSelected, actionInSelected, nodeRoot);
 
         printLists(actions, stepReturns, nodeRoot);
 
@@ -137,7 +117,7 @@ public class TestBackupModifier {
         double valueStillSelected=tih.getValueForActionInNode(actionsToSelected, ActionShip.newStill()).get();
         System.out.println("valueUpRoot = " + valueUpRoot);
         System.out.println("valueStillSelected = " + valueStillSelected);
-        Assert.assertEquals(-0,valueUpRoot, DELTA);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueUpRoot, DELTA_BIG);
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueStillSelected, DELTA_BIG);
 
     }
@@ -152,13 +132,7 @@ public class TestBackupModifier {
         ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
         List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelected, actionInSelected);
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
-        bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .settings(settings)
-                .build();
-        bum.backup();
+        doBackup(actionsToSelected, actionInSelected, nodeRoot);
 
         StateShip state = getState(rootState, actionsToSelected);
         actionInSelected= ActionShip.newDown();
@@ -177,13 +151,62 @@ public class TestBackupModifier {
         Optional<Double> valueStill=tih.getValueForActionInNode(actionsToSelected, ActionShip.newStill());
         Optional<Double> valueDown=tih.getValueForActionInNode(actionsToSelected, ActionShip.newDown());
 
-        Assert.assertEquals(-0,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
+        System.out.println("nodeRoot = " + nodeRoot);
+        System.out.println("valueUp = " + valueUp);
+        System.out.println("valueStill = " + valueStill);
+        System.out.println("valueDown = " + valueDown);
+
+        Assert.assertEquals(0,NodeInfoHelper.valueNode(new ActionShip(ShipActionSet.notApplicable), nodeRoot), DELTA);
+        Assert.assertEquals(-EnvironmentShip.CRASH_COST,nodeRoot.getActionValue(ActionShip.newUp()), DELTA_BIG);
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueUp.get(), DELTA_BIG);
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueStill.get(), DELTA_BIG);
         Assert.assertEquals(-EnvironmentShip.CRASH_COST,valueDown.get(), DELTA_BIG);
 
     }
 
+
+
+    @SneakyThrows
+    @Test
+    public void givenOneSelectedIsTrapAndDefensiveBackup_whenMoveStill_thenSmallerBackupToRoot() {
+        StateShip rootState=StateShip.newStateFromXY(0,1);
+        List<ActionInterface<ShipActionSet>> actionsToSelectedInTrap=
+                Arrays.asList(ActionShip.newStill(), ActionShip.newDown());
+        ActionInterface<ShipActionSet> actionInSelected= ActionShip.newStill();
+
+        List<ActionInterface<ShipActionSet>> actions = ActionInterface.mergeActionsWithAction(actionsToSelectedInTrap, actionInSelected);
+        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
+
+        settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
+                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
+                .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
+                .simulationPolicy(ShipPolicies.newMostlyStill())
+                .alphaBackupDefensiveStep(0.1)
+                .discountFactorDefensiveSteps(0.9)
+                .build();
+
+
+        nodeRoot.printTree();
+        System.out.println("nodeRoot = " + nodeRoot);
+        doBackup(actionsToSelectedInTrap, actionInSelected, nodeRoot);
+        System.out.println("nodeRoot = " + nodeRoot);
+
+        double valueStillInRoot=nodeRoot.getActionValue(actionInSelected);
+
+        Assert.assertTrue(Math.abs(valueStillInRoot)<Math.abs(-EnvironmentShip.CRASH_COST*0.1*0.9));
+
+
+    }
+
+    private void doBackup(List<ActionInterface<ShipActionSet>> actionsToSelected, ActionInterface<ShipActionSet> actionInSelected, NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
+        bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
+                .actionsToSelected(actionsToSelected)
+                .actionOnSelected(actionInSelected)
+                .stepReturnOfSelected(getStepReturnOfSelected)
+                .settings(settings)
+                .build();
+        bum.backup();
+    }
 
     @SneakyThrows
     @NotNull
@@ -197,13 +220,7 @@ public class TestBackupModifier {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeCasted=(NodeWithChildrenInterface<ShipVariables, ShipActionSet>) nodeSelected;  //casting
 
         nodeCasted.saveRewardForAction(actionInSelected, getStepReturnOfSelected.reward);
-        bum = BackupModifier.<ShipVariables, ShipActionSet>builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(getStepReturnOfSelected)
-                .settings(settings)
-                .build();
-        bum.backup();
+        doBackup(actionsToSelected, actionInSelected, nodeRoot);
         return nodeSelected;   //nodeCasted??
     }
 

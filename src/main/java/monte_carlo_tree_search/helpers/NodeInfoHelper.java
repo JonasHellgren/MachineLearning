@@ -39,6 +39,7 @@ public class NodeInfoHelper<S, A> {
         return avs;
     }
 
+    //todo remove, valueNode does the same
     public static <S, A> A bestActionValue(ActionInterface<A> actionTemplate, NodeWithChildrenInterface<S,A> node ) {
         List<Pair<A, Double>> actionValuePairs = new ArrayList<>();
         for(A a:actionTemplate.applicableActions()) {
