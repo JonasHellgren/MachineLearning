@@ -43,7 +43,6 @@ public class TestMockedMemoryFor5times15Grid {
         nodeValueMemory.write(StateShip.newStateFromXY(2, 0), BONUS_IN_Y0);
 
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())  //not relevant but needs to be defined
                 .maxTreeDepth(MAX_TREE_DEPTH)

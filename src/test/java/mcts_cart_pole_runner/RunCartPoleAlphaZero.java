@@ -200,7 +200,6 @@ public class RunCartPoleAlphaZero {
 
         ActionInterface<Integer> actionTemplate = ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings = MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)

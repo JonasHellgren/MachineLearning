@@ -6,7 +6,6 @@ import monte_carlo_tree_search.domains.battery_cell.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +44,6 @@ public class TestMonteCarloControlledCharging {
         actionTemplate= ActionCell.builder()
                 .nofCurrentLevels(NOF_CURRENT_LEVELS).build();
         settings= MonteCarloSettings.<CellVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CellPolicies.newBestFeasible(actionTemplate,environment))
                 .simulationPolicy(CellPolicies.newRandomFeasible(actionTemplate,environment))
                 .coefficientMaxAverageReturn(1) //only max

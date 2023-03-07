@@ -60,7 +60,6 @@ public class RunCartPolePretrainedMemory {
 
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
@@ -91,7 +90,6 @@ public class RunCartPolePretrainedMemory {
         final int TIME_BUDGET_MILLI_SECONDS = 100;
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)

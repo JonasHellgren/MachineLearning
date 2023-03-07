@@ -42,7 +42,6 @@ public class TestCartPoleEnvironmentMinusOneRewardAtFail {
         action= ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)

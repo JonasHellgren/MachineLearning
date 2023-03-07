@@ -291,8 +291,8 @@ ElevatorMctsOnlySearchRunner
 - ersätt i med räknare  x
 - WARNING: Escaped from eternal loop for selecting node  x
 - fimpa isExcludeChildrenThatNeverHaveBeenVisited  x
-- maxNofTestedActionsForBeingLeafFunction skall inte behövas
-- clean up
+- maxNofTestedActionsForBeingLeafFunction skall inte behövas  x
+- clean up MonteCarloTreeCreator
 - snyggare testnamn
 - förklara logik action set begränsning
 - ta bort onödiga settings

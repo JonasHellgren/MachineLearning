@@ -70,7 +70,7 @@ public class NodeSelector<S,A> {
                 break;
             }
             throwExceptionIfMotivated(currentNode, counter);
-            currentNode = ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(currentNode);
+            currentNode = selectNonFailHighestUCTChildAsCurrent(currentNode);
             counter.increase();
         }
 
@@ -92,7 +92,7 @@ public class NodeSelector<S,A> {
                 NodeInfoHelper.isAllChildrenTerminal(currentNode);
     }
 
-    private NodeWithChildrenInterface<S, A> ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
+    private NodeWithChildrenInterface<S, A> selectNonFailHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
         Optional<NodeInterface<S,A>> selectedChild = selectNonFailChildWithHighestUCT(currentNode);
         if (selectedChild.isPresent()) {
             currentNode = (NodeWithChildrenInterface<S, A>) selectedChild.get();

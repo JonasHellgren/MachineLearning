@@ -32,7 +32,6 @@ public class Test_3times7gridWithCorridor {
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
 
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max

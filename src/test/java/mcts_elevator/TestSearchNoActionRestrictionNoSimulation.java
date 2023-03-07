@@ -88,7 +88,6 @@ public class TestSearchNoActionRestrictionNoSimulation {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
                 .simulationPolicy(ElevatorPolicies.newRandom())
                 .isDefensiveBackup(true)

@@ -38,7 +38,6 @@ public class ElevatorSearchNoActionRestrictionRunner {
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandom())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .isDefensiveBackup(true)

@@ -31,7 +31,6 @@ public class RunCartPoleOnlySearch {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)

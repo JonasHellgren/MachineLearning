@@ -189,7 +189,6 @@ public class Test_5times15gridCorridor {
 
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max
@@ -203,7 +202,6 @@ public class Test_5times15gridCorridor {
 
     private MonteCarloSettings<ShipVariables, ShipActionSet> settingsForNoSimulations() {
         return MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1) //only max

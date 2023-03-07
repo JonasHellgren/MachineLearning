@@ -43,7 +43,6 @@ public class ElevatorSearchActionRestrictionRunner {
                         : 1;
 
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction(nofActionsFunction)
                 .firstActionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)

@@ -30,9 +30,7 @@ public class TestTreeInfoHelper {
     public void init() {
         spaceGrid = SpaceGridInterface.new3times7Grid();
         environment = new EnvironmentShip(spaceGrid);
-        ActionInterface<ShipActionSet> actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();

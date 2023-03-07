@@ -35,7 +35,6 @@ public class TestBackupModifier {
         environment = new EnvironmentShip(spaceGrid);
         actionTemplate=new ActionShip(ShipActionSet.notApplicable); //whatever action
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .build();
@@ -178,7 +177,6 @@ public class TestBackupModifier {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot= createMCTSTree(actions,rootState,stepReturns);
 
         settings=MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .alphaBackupDefensiveStep(0.1)

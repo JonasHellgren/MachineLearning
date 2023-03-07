@@ -60,7 +60,6 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
 
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
@@ -91,7 +90,6 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = createEnvironment();
         ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
         MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
-                .maxNofTestedActionsForBeingLeafFunction((a) -> actionTemplate.applicableActions().size())
                 .firstActionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
