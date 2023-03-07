@@ -9,6 +9,10 @@ public class Counter {
         this.maxCount = maxCount;
     }
 
+    public int getCount() {
+        return count;
+    }
+
     public void increase() {
         count++;
     }

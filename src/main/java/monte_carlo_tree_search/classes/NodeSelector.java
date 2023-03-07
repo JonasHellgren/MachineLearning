@@ -27,33 +27,31 @@ import java.util.stream.Collectors;
 @Log
 public class NodeSelector<S,A> {
 
-    private static final double C_DEFAULT = 1;
+    private static final double C_DEFAULT = MonteCarloSettings.C_DEFAULT;
     private static final boolean EXCLUDE_NEVER_VISITED_DEFAULT = false;
     public static final int UCT_MAX = 1000;
-    private static final int MAX_DEPTH = 10000;
-    private static final String ETERNAL_LOOP_MESSAGE = "Escaped from eternal loop for selecting node - can be corner case when" +
-            " isExcludeChildrenThatNeverHaveBeenVisited is true";
+    private static final int MAX_DEPTH = 1000;
+    private static final String ETERNAL_LOOP_MESSAGE = "Escaped from eternal loop for selecting node";
+    private static final String TREE_DEPTH_EXCEEDED_MESSAGE = "Tree depth exceeded";
 
     final NodeWithChildrenInterface<S,A> nodeRoot;
     MonteCarloSettings<S,A> settings;
-    private final double coefficientExploitationExploration;  //often called C in literature
-    final boolean isExcludeChildrenThatNeverHaveBeenVisited;  //true when best path is desired
+    private final double coefficientExploitationExploration;  //often called C in literature, 0 when best path is desired
 
     List<NodeInterface<S,A>> nodesFromRootToSelected;
     List<ActionInterface<A>> actionsFromRootToSelected;
 
-    public NodeSelector(NodeWithChildrenInterface<S,A> nodeRoot, MonteCarloSettings<S,A> settings) {
-        this(nodeRoot,settings, settings.coefficientExploitationExploration, EXCLUDE_NEVER_VISITED_DEFAULT);
+    public NodeSelector(NodeWithChildrenInterface<S,A> nodeRoot,
+                        MonteCarloSettings<S,A> settings) {
+        this(nodeRoot,settings,C_DEFAULT);
     }
 
     public NodeSelector(NodeWithChildrenInterface<S,A> nodeRoot,
                         MonteCarloSettings<S,A> settings,
-                        double coefficientExploitationExploration,
-                        boolean isExcludeChildrenThatNeverHaveBeenVisited) {
+                        double coefficientExploitationExploration) {
         this.nodeRoot = nodeRoot;
         this.settings = settings;
         this.coefficientExploitationExploration= coefficientExploitationExploration;
-        this.isExcludeChildrenThatNeverHaveBeenVisited=isExcludeChildrenThatNeverHaveBeenVisited;
         this.nodesFromRootToSelected = new ArrayList<>();
         this.actionsFromRootToSelected = new ArrayList<>();
     }
@@ -71,12 +69,7 @@ public class NodeSelector<S,A> {
             if (isLeafOrAllChildrenAreFail(currentNode, actionSelectionPolicy)) {
                 break;
             }
-
-            if (counter.isExceeded()) {
-                log.warning(ETERNAL_LOOP_MESSAGE);
-                break;
-            }
-
+            throwExceptionIfMotivated(currentNode, counter);
             currentNode = ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(currentNode);
             counter.increase();
         }
@@ -84,8 +77,19 @@ public class NodeSelector<S,A> {
         return currentNode;
     }
 
+    private void throwExceptionIfMotivated(NodeWithChildrenInterface<S, A> currentNode, Counter counter) {
+        if (counter.isExceeded()) {
+            throw new RuntimeException(ETERNAL_LOOP_MESSAGE);
+        }
+
+        if (NodeInfoHelper.isAtMaxDepth(currentNode,settings.maxTreeDepth)) {
+            throw new RuntimeException(TREE_DEPTH_EXCEEDED_MESSAGE);
+        }
+    }
+
     private boolean isLeafOrAllChildrenAreFail(NodeWithChildrenInterface<S, A> currentNode, SimulationPolicyInterface<S, A> actionSelectionPolicy) {
-        return NodeInfoHelper.isLeaf(currentNode, actionSelectionPolicy) || NodeInfoHelper.isAllChildrenTerminal(currentNode);
+        return NodeInfoHelper.isLeaf(currentNode, actionSelectionPolicy) ||
+                NodeInfoHelper.isAllChildrenTerminal(currentNode);
     }
 
     private NodeWithChildrenInterface<S, A> ifNotAllChildNodesAreFailSelectHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
@@ -114,11 +118,8 @@ public class NodeSelector<S,A> {
     private List<Pair<NodeInterface <S,A>, Double>> getListOfPairsExcludeFailNodes(NodeWithChildrenInterface <S,A> node) {
         List<Pair<NodeInterface <S,A>, Double>> nodeUCTPairs = new ArrayList<>();
         List<NodeInterface <S,A>> nonFailNodes = getNonFailChildrenNodes(node);
-        List<NodeInterface <S,A>> nodes = (isExcludeChildrenThatNeverHaveBeenVisited)
-                ? getVisitedNodes(nonFailNodes)
-                : nonFailNodes;
 
-        for (NodeInterface <S,A> childNode : nodes) {
+        for (NodeInterface <S,A> childNode : nonFailNodes) {
             ActionInterface<A> actionToReachChildNode = childNode.getAction();
             double uct = calcUct(node, actionToReachChildNode);
             nodeUCTPairs.add(new Pair<>(childNode, uct));
@@ -129,12 +130,6 @@ public class NodeSelector<S,A> {
     private List<NodeInterface <S,A>> getNonFailChildrenNodes(NodeWithChildrenInterface <S,A> node) {
         return node.getChildNodes().stream()
                 .filter(n -> !n.isTerminalFail())
-                .collect(Collectors.toList());
-    }
-
-    private List<NodeInterface <S,A>> getVisitedNodes(List<NodeInterface <S,A>> nodes) {
-        return nodes.stream()
-                .filter(n -> n.getNofVisits() > 0)
                 .collect(Collectors.toList());
     }
 
@@ -150,6 +145,5 @@ public class NodeSelector<S,A> {
                 ? UCT_MAX
                 : v + coefficientExploitationExploration * Math.sqrt(Math.log(nParent) / n);
     }
-
 
 }

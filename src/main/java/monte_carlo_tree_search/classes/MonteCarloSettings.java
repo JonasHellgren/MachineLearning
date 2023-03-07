@@ -11,7 +11,7 @@ import java.util.function.Function;
 @ToString
 public class MonteCarloSettings<S,A> {
     private static final int NOF_ITERATIONS_DEFAULT=10_000;
-    private static final double C_DEFAULT=20;
+    public static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final int MAX_SIMULATION_DEPTH_DEFAULT=Integer.MAX_VALUE;
     private static final long TIME_BUDGET_DEFAULT=1000;

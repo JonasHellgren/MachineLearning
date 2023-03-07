@@ -289,7 +289,8 @@ ElevatorMctsOnlySearchRunner
 -  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc  x
 - infora tydiga tester runt isLeaf, isNonLeafNoFail, isNonLeafNail etc  x
 - ersätt i med räknare  x
-- WARNING: Escaped from eternal loop for selecting node
+- WARNING: Escaped from eternal loop for selecting node  x
+- fimpa isExcludeChildrenThatNeverHaveBeenVisited  x
 - maxNofTestedActionsForBeingLeafFunction skall inte behövas
 - clean up
 - snyggare testnamn

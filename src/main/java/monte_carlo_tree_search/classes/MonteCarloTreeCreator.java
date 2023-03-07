@@ -100,7 +100,7 @@ public class MonteCarloTreeCreator<S,A> {
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
 
             if (actionInSelected.isEmpty()) {
-                NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration,false);
+                NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration);
            //    System.out.println("ns.isNotLeaf(nodeSelected) = " + ns.isNotLeaf(nodeSelected));
 
                 List<NodeInterface<S,A>> childNodes = nodeSelected.getChildNodes();
@@ -209,7 +209,7 @@ public class MonteCarloTreeCreator<S,A> {
     }
 
     private NodeWithChildrenInterface<S,A> select(NodeWithChildrenInterface<S,A> nodeRoot) {
-        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration,false);
+        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings,settings.coefficientExploitationExploration);
         NodeWithChildrenInterface<S,A> nodeSelected = ns.select();
         actionsToSelected = ns.getActionsFromRootToSelected();
         return nodeSelected;

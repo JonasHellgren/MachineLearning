@@ -60,6 +60,11 @@ public class NodeInfoHelper<S, A> {
         return childrenTerminal.size()== node.getChildNodes().size();
     }
 
+    public static <S, A> boolean isAtMaxDepth(NodeWithChildrenInterface<S,A> node, int maxTreeDepth) {
+        return  node.getDepth()==maxTreeDepth;
+    }
+
+
     //todo remove, valueNode does the same
     public static <S, A> A bestActionValue(ActionInterface<A> actionTemplate, NodeWithChildrenInterface<S,A> node ) {
         List<Pair<A, Double>> actionValuePairs = new ArrayList<>();
