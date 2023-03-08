@@ -148,25 +148,13 @@ public class MonteCarloTreeCreator<S, A> {
         boolean isChildAddedEarlier = NodeInfoHelper.findNodeMatchingNode(nodeSelected.getChildNodes(), child).isPresent();
         boolean isSelectedNotTerminal = nodeSelected.isNotTerminal();
         boolean isChildToDeep = child.getDepth() > settings.maxTreeDepth;
-        maybeLogg(nodeSelected, child, isChildAddedEarlier, isChildToDeep);
+        MonteCarloTreeCreatorHelper.maybeLogg(nodeSelected, child, isChildAddedEarlier, isChildToDeep);
         Conditionals.executeIfTrue(isSelectedNotTerminal &&
-                isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
+                MonteCarloTreeCreatorHelper.isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
                 nodeSelected.addChildNode(child));
         return sr;
     }
 
-    private void maybeLogg(NodeWithChildrenInterface<S, A> nodeSelected,
-                           NodeInterface<S, A> child,
-                           boolean isChildAddedEarlier,
-                           boolean isChildToDeep) {
-        Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
-                log.fine("Child will not be added, child = " + child.getName() + ", in node = " + nodeSelected.getName()
-                        + ", isChildAddedEarlier =" + isChildAddedEarlier + ", isChildToDeep =" + isChildToDeep));
-    }
-
-    private boolean isChildOkToAdd(boolean isChildAddedEarlier, boolean isChildToDeep) {
-        return !isChildAddedEarlier && !isChildToDeep;
-    }
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
         return simulate(stateAfterApplyingActionInSelectedNode, 0);

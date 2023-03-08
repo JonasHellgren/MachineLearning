@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.classes;
 
+import common.Conditionals;
 import common.CpuTimer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -89,6 +90,19 @@ public class MonteCarloTreeCreatorHelper<S, A> {
         log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations +
                 ", max tree depth = " + tih.maxDepth() + ", depth of best path = " + tih.getBestPath().size()
                 + ", nof nodes = " + statistics.nofNodes + ", branching = " + statistics.averageNofChildrenPerNode);
+    }
+
+    static <S, A> void  maybeLogg(NodeWithChildrenInterface<S, A> nodeSelected,
+                           NodeInterface<S, A> child,
+                           boolean isChildAddedEarlier,
+                           boolean isChildToDeep) {
+        Conditionals.executeIfTrue(!isChildOkToAdd(isChildAddedEarlier, isChildToDeep), () ->
+                log.fine("Child will not be added, child = " + child.getName() + ", in node = " + nodeSelected.getName()
+                        + ", isChildAddedEarlier =" + isChildAddedEarlier + ", isChildToDeep =" + isChildToDeep));
+    }
+
+    static boolean isChildOkToAdd(boolean isChildAddedEarlier, boolean isChildToDeep) {
+        return !isChildAddedEarlier && !isChildToDeep;
     }
 
 }

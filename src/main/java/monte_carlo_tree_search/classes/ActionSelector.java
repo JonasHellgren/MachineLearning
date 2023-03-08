@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 /**
  * This class is for determining the action to choose in the selected node, the action that will lead to tree
  * expansion.
+ *
+ * The most critical method is selectRandomNonTestedAction. The selected action is determined by the action
+ * selection policy. This policy can, for a specific state, provide an action set smaller than the set according
+ * to the environment of the domain. The elevator domain is a clear example, if moving between two floors, only
+ * one action is available, the present speed. This "trick" can lead no enormous search tree branching factor decrease.
+ *
  */
 
 //todo TestActionSelector
@@ -41,17 +47,6 @@ public class ActionSelector<S,A> {
             return Optional.empty();
         } else {
             return Optional.of(getRandomAction(nonTestedActions));
-        }
-    }
-
-//todo remove
-    public Optional<ActionInterface<A>> selectRandomTestedAction(NodeWithChildrenInterface<S,A> nodeSelected) {
-        int nofTestedActions=getTestedActions(nodeSelected).size();
-
-        if(nofTestedActions==0) {
-            return Optional.empty();
-        } else {
-            return Optional.of(getRandomAction(getTestedActions(nodeSelected)));
         }
     }
 
@@ -87,15 +82,6 @@ public class ActionSelector<S,A> {
         return randUtils.getRandomItemFromList(actions);
     }
 
-    private List<ActionInterface<A>> getNonTestedActions(NodeWithChildrenInterface<S,A> nodeSelected) {
-        List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
-        List<A> testedActionValues=testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
-        Set<A> allValues=nodeSelected.getAction().applicableActions();
-        List<A> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValues);
-        return getActionsFromValues(nonTestedActionValues);
-    }
-
-
 
     private List<ActionInterface<A>> getNonTestedActionsInPolicy(NodeWithChildrenInterface<S,A> nodeSelected) {
         List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
@@ -103,11 +89,6 @@ public class ActionSelector<S,A> {
         Set<A> allValues=settings.actionSelectionPolicy.availableActionValues(nodeSelected.getState());
         Set<A> allValuesSet=new HashSet<>(allValues);
         List<A> nonTestedActionValues=ActionInterface.getNonTestedActionValues(testedActionValues,allValuesSet);
-
-     /*   System.out.println("allValuesSet = " + allValuesSet);
-        System.out.println("testedActionValues = " + testedActionValues);
-        System.out.println("nonTestedActionValues = " + nonTestedActionValues);  */
-
         return getActionsFromValues(nonTestedActionValues);
     }
 

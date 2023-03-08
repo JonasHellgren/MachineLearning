@@ -307,8 +307,8 @@ ElevatorMctsOnlySearchRunner
 - doPrinting till samma klass  x
 - alphaBackupDefensiveSimulation skall veck  x
 - exception i mctCreator run x
-- MonteCarloTreeCreatorHelper
-- förklara logik action set begränsning
+- MonteCarloTreeCreatorHelper  x
+- ActionSelector - förklara logik action set begränsning x
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
@@ -316,7 +316,7 @@ ElevatorMctsOnlySearchRunner
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
 - SoC minne
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
-
+- Ny miljö energy trading
 
 - averageNofChildrenPerNode verkar inte stämma
 
