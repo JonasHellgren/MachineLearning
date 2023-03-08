@@ -106,13 +106,15 @@ public final class NodeNotTerminal<SSV,AV>
      */
 
     @Override
-    public void updateActionValue(double G, ActionInterface<AV> a, double alpha) {
+    public void updateActionValue(double G, ActionInterface<AV> a, double alpha, double nofVisitsExponent) {
         int nofVisitsForAction=getNofActionSelections(a);
         if (MathUtils.isZero(nofVisitsForAction)) {
             throw new RuntimeException("Zero nof visits for action = " + a);
         }
         double qOld = getActionValue(a);
-        double qNew = qOld + alpha * (G - qOld) / (double) nofVisitsForAction;
+
+       // System.out.println("qOld = " + qOld+", G = " + G);
+        double qNew = qOld + alpha * (G - qOld) / (double) Math.pow(nofVisitsForAction,nofVisitsExponent);
         qSA.put(a.getValue(), qNew);
     }
 

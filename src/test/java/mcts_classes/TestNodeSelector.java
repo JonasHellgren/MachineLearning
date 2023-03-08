@@ -100,7 +100,7 @@ public class TestNodeSelector {
                                ActionInterface<ShipActionSet> action, double G) {
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
-        node.updateActionValue(G,action,1);
+        node.updateActionValue(G,action,1,1);
     }
 
 }

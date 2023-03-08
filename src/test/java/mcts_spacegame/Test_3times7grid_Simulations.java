@@ -51,7 +51,6 @@ public class Test_3times7grid_Simulations {
                 .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
-                //.isBackupFromSteps(false)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)
                 .build();
@@ -85,15 +84,11 @@ public class Test_3times7grid_Simulations {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,1));
-        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(3,2));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(1,1)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(3,2)));
     }
 
-    private void assertStateIsOnBestPath(TreeInfoHelper<ShipVariables, ShipActionSet> tih, StateShip state) {
-        Optional<NodeInterface<ShipVariables, ShipActionSet>> node=
-                NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), state);
-        Assert.assertTrue(node.isPresent());
-    }
+
 
     @SneakyThrows
     @Test
@@ -104,8 +99,9 @@ public class Test_3times7grid_Simulations {
         doPrinting(nodeRoot);
 
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(1,2));
-        assertStateIsOnBestPath(tih,StateShip.newStateFromXY(3,2));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(1,2)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(3,2)));
+
     }
 
 

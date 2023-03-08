@@ -76,7 +76,7 @@ public class SimulationReturnsExtractor<S,A> {
     public List<Double> createReturnFromSomeFailingUseDefensiveDiscount() {
         log.fine("createReturnFromSomeFailingUseDefensiveDiscount");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
-        return  getReturns(failReturn*settings.alphaBackupDefensiveSimulation, settings.discountFactorSimulationDefensive);
+        return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
     }
 
     private double getMixReturnFromNonFailing() {

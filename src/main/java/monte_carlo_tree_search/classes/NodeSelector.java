@@ -21,6 +21,12 @@ import java.util.stream.Collectors;
  *
  * The method selectNonFailChildWithHighestUCT() returns an Optional, this is empty if no child is found.
  * Probably due to only children of type fail state.
+ *
+ * 1. Leaf Node. At least one non tested action. Can therefore be expanded.
+ * 2. Non leaf node. Non fail. All actions tested and not all fail. Can not be expanded.
+ * 3. Non leaf node. Fail. All actions tested and all fail. Can not be expanded.
+ *
+ * 1 or 3 -> stop loop in select
  */
 
 @Getter

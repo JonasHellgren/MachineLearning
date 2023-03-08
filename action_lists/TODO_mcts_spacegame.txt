@@ -298,8 +298,15 @@ ElevatorMctsOnlySearchRunner
 - snyggare testnamn x
 - använd ListUtils.discountedSum i backup modif  x
 - rename firstActionSelectionPolicy x
-- ytterligare test som visar hur root values sävnger in
-- ytterligare test, kombinera step och sim
+- ytterligare test som visar hur root values sävnger in  x
+- ytterligare test, kombinera step och sim  x
+- bör inte alpha isf weifht ändras vid defensive  x
+-  discountFactor på samma sätt i sim och steps
+- Math.pow(nofVisitsForAction,nofVisitsExponent)
+- alphaBackupDefensiveSimulation skall veck
+- Test_3times7grid_RootValuesFromSimulationsAndSteps börja i x=3,y=2
+- givenWeightSteps0WeightSim1whenStartingFromX0Y0_then11And32IsOnBestPath ger ej valueUp=-2
+- exception i mctCreator run
 - förklara logik action set begränsning
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda

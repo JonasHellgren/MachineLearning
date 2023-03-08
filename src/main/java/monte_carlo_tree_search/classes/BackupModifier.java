@@ -171,6 +171,6 @@ public class BackupModifier<S, A> {
         NodeWithChildrenInterface<S, A> node = (NodeWithChildrenInterface<S, A>) node0;  //casting
         node.increaseNofVisits();
         node.increaseNofActionSelections(action);
-        node.updateActionValue(singleReturn, action, alpha);
+        node.updateActionValue(singleReturn, action, alpha,settings.nofVisitsExponent);
     }
 }
