@@ -65,7 +65,7 @@ public class TestMockedMemoryFor5times15Grid {
     @SneakyThrows
     @Test public void whenHighMemoryValueInX2Y4_thenNorth() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         assertStateIsOnBestPath(nodeRoot, StateShip.newStateFromXY(2,4));
     }
 
@@ -86,12 +86,6 @@ public class TestMockedMemoryFor5times15Grid {
         Assert.assertTrue(node.isPresent());
     }
 
-    private void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot,settings);
 
-        System.out.println("nofNodesInTree = " + tih.nofNodes());
-        nodeRoot.printTree();
-        tih.getBestPath().forEach(System.out::println);
-    }
 
 }

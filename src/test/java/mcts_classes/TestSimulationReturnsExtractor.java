@@ -94,9 +94,9 @@ public class TestSimulationReturnsExtractor {
     }
     private void assertValues(double g1, double DF, List<Double> values) {
         assertAll(
-                () -> assertEquals(g1,values.get(INDEX_0), DELTA),
+                () -> assertEquals(g1*Math.pow(DF,2),values.get(INDEX_0), DELTA),
                 () -> assertEquals(g1*DF,values.get(INDEX_1), DELTA),
-                () -> assertEquals(g1*Math.pow(DF,2),values.get(INDEX_2), DELTA)
+                () -> assertEquals(g1,values.get(INDEX_2), DELTA)
         );
     }
 

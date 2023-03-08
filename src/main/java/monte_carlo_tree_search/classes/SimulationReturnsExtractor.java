@@ -94,7 +94,7 @@ public class SimulationReturnsExtractor<S,A> {
     }
 
     /**
-     *   nodesOnPath = (r)  -> (0) -> (1) ->  (2)
+     *  nodesOnPath = (r)  -> (0) -> (1) ->  (2)
      *  discountFactor=1, singleReturn=1 => returns=[1,1,1] => discountedReturns=[1,1,1]
      *  discountFactor=0.5, singleReturn=1 => returns=[1,1,1] => discountedReturns=[0.5^2*1,0.5^1*1,0.5^0*1]=[0.25,0.5,1]
      */

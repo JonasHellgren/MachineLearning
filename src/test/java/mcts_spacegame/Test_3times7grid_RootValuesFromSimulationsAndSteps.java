@@ -66,7 +66,7 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
         settings.setWeightReturnsSimulation(0.0);
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);
         Assert.assertEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
     }
@@ -82,7 +82,7 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
 
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);
         Assert.assertNotEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
     }
@@ -96,7 +96,7 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
         settings.setDiscountFactorSimulationDefensive(0.001);
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);
         Assert.assertEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
     }
@@ -110,7 +110,7 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
         settings.setDiscountFactorSimulationDefensive(0.001);
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);
         Assert.assertEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
 
@@ -124,14 +124,7 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
     }
 
 
-    public void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        double valueUp= nodeRoot.getActionValue(ActionShip.newUp());
-        double valueStill= nodeRoot.getActionValue(ActionShip.newStill());
-        double valueDown= nodeRoot.getActionValue(ActionShip.newDown());
 
-        System.out.println("valueUp = " + valueUp+", valueStill = " + valueStill+", valueDown = " + valueDown);
-
-    }
 
 
 }

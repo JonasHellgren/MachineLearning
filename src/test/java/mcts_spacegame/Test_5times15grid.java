@@ -55,7 +55,7 @@ public class Test_5times15grid {
     @Test
     public void whenStartingFromX0Y0_then54IsVisited() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
 
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(5,4)));
@@ -75,7 +75,7 @@ public class Test_5times15grid {
                 .build();
         createCreator(StateShip.newStateFromXY(0, 2));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(2,2)));
     }
@@ -96,7 +96,7 @@ public class Test_5times15grid {
         createCreator(StateShip.newStateFromXY(3, 3));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(4,4)));
     }
@@ -118,7 +118,7 @@ public class Test_5times15grid {
         createCreator(StateShip.newStateFromXY(10, 2));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(13,4)));
     }
@@ -137,7 +137,7 @@ public class Test_5times15grid {
         createCreator(StateShip.newStateFromXY(5, 2));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(10,4)) ||
                 tih.isOnBestPath(StateShip.newStateFromXY(9,4)));
@@ -157,7 +157,7 @@ public class Test_5times15grid {
         createCreator(StateShip.newStateFromXY(0, 2));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        doPrinting(nodeRoot);
+        SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(4,4)));
     }
@@ -172,14 +172,6 @@ public class Test_5times15grid {
     }
 
 
-    private void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
 
-        System.out.println("nofNodesInTree = " + tih.nofNodes());
-        System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
-       // nodeRoot.printTree();
-        System.out.println("nodeRoot = " + nodeRoot);
-        tih.getBestPath().forEach(n -> System.out.println(n.getState().getVariables()));
-    }
 
 }

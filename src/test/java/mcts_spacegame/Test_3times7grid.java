@@ -45,7 +45,7 @@ public class Test_3times7grid {
     public void whenStartingFrommX0Y0_then11And52IsOnBestPath() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        doPrinting(tih,nodeRoot);
+        SpaceGameTestHelper.doPrinting(tih,nodeRoot);
         Assert.assertTrue(isOnBestPath(1,1,tih));
         Assert.assertTrue(isOnBestPath(5,2,tih));
     }
@@ -57,7 +57,7 @@ public class Test_3times7grid {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
-        doPrinting(tih,nodeRoot);
+        SpaceGameTestHelper.doPrinting(tih,nodeRoot);
         Assert.assertFalse(isOnBestPath(1,1,tih));
         Assert.assertFalse(isOnBestPath(5,2,tih));
         Assert.assertEquals(1,tih.getBestPath().size());
@@ -70,7 +70,7 @@ public class Test_3times7grid {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
 
-        doPrinting(tih,nodeRoot);
+        SpaceGameTestHelper.doPrinting(tih,nodeRoot);
 
         Assert.assertTrue(tih.isStateInAnyNode(StateShip.newStateFromXY(2,0)));
     }
@@ -87,7 +87,7 @@ public class Test_3times7grid {
                 .build();
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        doPrinting(tih,nodeRoot);
+        SpaceGameTestHelper.doPrinting(tih,nodeRoot);
         System.out.println("tih.maxDepth() = " + tih.maxDepth());
         Assert.assertEquals(3,tih.maxDepth());
     }
@@ -99,11 +99,6 @@ public class Test_3times7grid {
         return node11.isPresent();
     }
 
-    private void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,
-                            NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        System.out.println("nofNodesInTree = " + tih.nofNodes());
-        nodeRoot.printTree();
-        tih.getBestPath().forEach((n) -> System.out.println(n.getState().getVariables()));
-    }
+
 
 }
