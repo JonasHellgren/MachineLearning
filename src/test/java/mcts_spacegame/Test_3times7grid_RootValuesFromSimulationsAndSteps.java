@@ -84,7 +84,6 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
         settings.setWeightReturnsSteps(0.0);
         settings.setWeightReturnsSimulation(1.0);
 
-
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);

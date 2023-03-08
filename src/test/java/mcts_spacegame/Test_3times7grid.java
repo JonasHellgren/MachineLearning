@@ -2,6 +2,7 @@ package mcts_spacegame;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.domains.models_space.*;
+import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -51,7 +52,7 @@ public class Test_3times7grid {
     }
 
     @SneakyThrows
-    @Test
+    @Test(expected = StartStateIsTrapException.class)
     public void whenStartingFrommX2Y0_then11And52IsNotOnBestPath() {
         monteCarloTreeCreator.setStartState(StateShip.newStateFromXY(2,0));
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot=monteCarloTreeCreator.run();

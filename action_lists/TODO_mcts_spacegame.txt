@@ -306,7 +306,8 @@ ElevatorMctsOnlySearchRunner
 - TestSimulationReturnsExtractor  x
 - doPrinting till samma klass  x
 - alphaBackupDefensiveSimulation skall veck  x
-- exception i mctCreator run
+- exception i mctCreator run x
+- MonteCarloTreeCreatorHelper
 - förklara logik action set begränsning
 - ta bort onödiga settings
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda

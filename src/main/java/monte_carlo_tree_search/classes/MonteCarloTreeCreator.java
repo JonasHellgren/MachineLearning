@@ -38,11 +38,14 @@ import java.util.stream.Collectors;
  *  The parameter actionTemplate is needed as a "seed" to create a tree with unknown types.
  */
 
-@Log
+
 @Setter
 @Getter
+@Log
 public class MonteCarloTreeCreator<S, A> {
     private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
+    private static final String START_GIVE_FAIL_MESSAGE = "All actions in start start give fail";
+    private static final String NO_FIRST_ACTION_MESSAGE = "No first action present - probably to small time budget";
     EnvironmentGenericInterface<S, A> environment;
     StateInterface<S> startState;
     MonteCarloSettings<S, A> settings;
@@ -73,18 +76,8 @@ public class MonteCarloTreeCreator<S, A> {
                 () -> mctc.memory = NodeValueMemoryHashMap.newEmpty(),
                 () -> mctc.memory = memory);
 
-        setSomeFields(startState, mctc);
+        MonteCarloTreeCreatorHelper.setSomeFields(startState, mctc);
         return mctc;
-    }
-
-    private static <S, A> void setSomeFields(@NonNull StateInterface<S> startState, MonteCarloTreeCreator<S, A> mctc) {
-        ActionInterface<A> actionRoot = mctc.actionTemplate.copy();
-        actionRoot.setValue(actionRoot.nonApplicableAction());
-        mctc.nodeRoot = NodeInterface.newNotTerminal(startState, actionRoot);
-        mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
-        mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
-        mctc.nofIterations = 0;
-        mctc.plotData = new ArrayList<>();
     }
 
     public MonteCarloSearchStatistics<S, A> getStatistics() {
@@ -97,14 +90,19 @@ public class MonteCarloTreeCreator<S, A> {
         TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot, settings);
         ActionInterface<A> actionRoot = actionTemplate.copy();
         Conditionals.executeIfTrue(tih.getValueOfFirstBestAction().isEmpty(), () ->
-                log.warning("No first action present - probably to small time budget"));
+                log.warning(NO_FIRST_ACTION_MESSAGE));
         A actionValue = tih.getValueOfFirstBestAction().orElse(actionTemplate.getValue());
         actionRoot.setValue(actionValue);
         return actionRoot;
     }
 
     public NodeWithChildrenInterface<S, A> run() throws StartStateIsTrapException {
-        setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
+        MonteCarloTreeCreatorHelper.setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
+        MonteCarloTreeCreatorHelper<S, A> helper=new MonteCarloTreeCreatorHelper<>(
+                environment,settings,actionTemplate,startState,nodeRoot,cpuTimer);
+        if (helper.startStateIsTrap()) {
+            throw new StartStateIsTrapException(START_GIVE_FAIL_MESSAGE);
+        }
 
         int i;
         plotData.clear();
@@ -112,7 +110,7 @@ public class MonteCarloTreeCreator<S, A> {
         for (i = 0; i < settings.maxNofIterations; i++) {
             NodeWithChildrenInterface<S, A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
-            someLogging(i, nodeSelected, actionInSelected);
+            helper.someLogging(i, nodeSelected, actionInSelected);
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulate(sr.newState, nodeSelected.getDepth());
@@ -121,44 +119,17 @@ public class MonteCarloTreeCreator<S, A> {
                 chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
             }
 
-            updatePlotData();
+            helper.updatePlotData(plotData);
             if (cpuTimer.isTimeExceeded()) {
                 log.fine("Time exceeded");
                 break;
             }
         }
         nofIterations = i;
-        logStatistics(i);
+        helper.logStatistics(i, new MonteCarloSearchStatistics<>(nodeRoot, this, settings));
         return nodeRoot;
     }
 
-    private void someLogging(int i, NodeWithChildrenInterface<S, A> nodeSelected, Optional<ActionInterface<A>> actionInSelected) {
-        log.fine("i = " + i);
-        log.fine("nodeSelected = " + nodeSelected + ", nof child nodes = " + nodeSelected.getChildNodes().size());
-        log.fine("actionInSelected = " + actionInSelected);
-        log.fine("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
-    }
-
-
-    private void updatePlotData() {
-        if (settings.isCreatePlotData) {
-            TreePlotData data = TreePlotData.builder()
-                    .maxValue(NodeInfoHelper.valueNode(actionTemplate, nodeRoot)).nofNodes(tih.nofNodes())
-                    .maxDepth(tih.maxDepth()).build();
-            plotData.add(data);
-        }
-    }
-
-
-    private void logStatistics(int nofIterations) {
-        this.cpuTimer.stop();
-        TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot, settings);
-        MonteCarloSearchStatistics<S, A> statistics = new MonteCarloSearchStatistics<>(
-                nodeRoot, this, settings);
-        log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations +
-                ", max tree depth = " + tih.maxDepth() + ", depth of best path = " + tih.getBestPath().size()
-                + ", nof nodes = " + statistics.nofNodes + ", branching = " + statistics.averageNofChildrenPerNode);
-    }
 
     private NodeWithChildrenInterface<S, A> select(NodeWithChildrenInterface<S, A> nodeRoot) {
         NodeSelector<S, A> ns = new NodeSelector<>(nodeRoot, settings, settings.coefficientExploitationExploration);
