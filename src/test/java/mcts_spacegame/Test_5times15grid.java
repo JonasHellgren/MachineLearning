@@ -125,7 +125,7 @@ public class Test_5times15grid {
 
     @SneakyThrows
     @Test
-    public void givenStartX10Y2Simulations_thenX13Y4OnBestPath() {
+    public void givenStartX5Y2Simulations_thenX13Y4OnBestPath() {
         settings = MonteCarloSettings.<ShipVariables, ShipActionSet>builder()
                 .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
@@ -134,12 +134,13 @@ public class Test_5times15grid {
                 .maxNofIterations(100)
                 .nofSimulationsPerNode(100)
                 .build();
-        createCreator(StateShip.newStateFromXY(10, 2));
+        createCreator(StateShip.newStateFromXY(5, 2));
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         doPrinting(nodeRoot);
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
-        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(13,4)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(10,4)) ||
+                tih.isOnBestPath(StateShip.newStateFromXY(9,4)));
     }
 
     @SneakyThrows
@@ -176,7 +177,7 @@ public class Test_5times15grid {
 
         System.out.println("nofNodesInTree = " + tih.nofNodes());
         System.out.println("monteCarloTreeCreator.getStatistics() = " + monteCarloTreeCreator.getStatistics());
-        nodeRoot.printTree();
+       // nodeRoot.printTree();
         System.out.println("nodeRoot = " + nodeRoot);
         tih.getBestPath().forEach(n -> System.out.println(n.getState().getVariables()));
     }

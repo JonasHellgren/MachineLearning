@@ -64,19 +64,19 @@ public class SimulationReturnsExtractor<S,A> {
     public List<Double> createReturnsAll() {
         log.fine("createReturnsAll");
         double mixReturn = getMixReturnFromAll();
-        return getReturns(mixReturn, settings.discountFactorSimulationNormal);
+        return getDiscountedReturns(mixReturn, settings.discountFactorSimulationNormal);
     }
 
     public List<Double> createReturnsNonFailing() {
         log.fine("createReturnsNonFailing");
         double mixReturn = getMixReturnFromNonFailing();
-        return getReturns(mixReturn, settings.discountFactorSimulationNormal);
+        return getDiscountedReturns(mixReturn, settings.discountFactorSimulationNormal);
     }
 
     public List<Double> createReturnFromSomeFailingUseDefensiveDiscount() {
         log.fine("createReturnFromSomeFailingUseDefensiveDiscount");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
-        return  getReturns(failReturn, settings.discountFactorSimulationDefensive);
+        return  getDiscountedReturns(failReturn, settings.discountFactorSimulationDefensive);
     }
 
     private double getMixReturnFromNonFailing() {
@@ -94,23 +94,15 @@ public class SimulationReturnsExtractor<S,A> {
     }
 
     /**
-     *    nodesOnPath = (r)  -> (0) -> (1) ->  (2) ->  (3) ->  (4)
-     *    node i will have discount of discountFactor^(nofNodesOnPath-ni-1)  //todo remove
-     *    so for this example with discountFactor=0.9 => discount (4) is 0.9^(5-4-1)=1 and for (0) it is 0.9^(5-0-1) = 0.6
-     *
-     *   node i will have discount of discountFactor^ni
-     *   so for this example with discountFactor=0.9 => discount (0) is 0.9^0=1 and for (4) it is 0.9^4 = 0.6
+     *   nodesOnPath = (r)  -> (0) -> (1) ->  (2)
+     *  discountFactor=1, singleReturn=1 => returns=[1,1,1] => discountedReturns=[1,1,1]
+     *  discountFactor=0.5, singleReturn=1 => returns=[1,1,1] => discountedReturns=[0.5^2*1,0.5^1*1,0.5^0*1]=[0.25,0.5,1]
      */
 
-    private List<Double> getReturns(double singleReturn, double discountFactor) {
-        List<Double> returnsSimulation=new ArrayList<>();
-        List<Double> discounts=new ArrayList<>();
-        for (int ni = 0; ni < nofNodesOnPath ; ni++) {
-            returnsSimulation.add(singleReturn);
-            //discounts.add(Math.pow(discountFactor,(nofNodesOnPath-ni-1)));  //todo remove
-            discounts.add(Math.pow(discountFactor,ni));
-        }
-        return ListUtils.elementProduct(returnsSimulation,discounts);
+    private List<Double> getDiscountedReturns(double singleReturn, double discountFactor) {
+        List<Double> returns = ListUtils.createListWithEqualElementValues(nofNodesOnPath,singleReturn);
+        return ListUtils.discountedElementsReverse(returns,discountFactor);
     }
+
 
 }

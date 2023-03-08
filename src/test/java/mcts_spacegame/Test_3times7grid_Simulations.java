@@ -99,7 +99,7 @@ public class Test_3times7grid_Simulations {
         doPrinting(nodeRoot);
 
         TreeInfoHelper<ShipVariables, ShipActionSet> tih=new TreeInfoHelper<>(nodeRoot,settings);
-        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(1,2)));
+        Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(1,1)));
         Assert.assertTrue(tih.isOnBestPath(StateShip.newStateFromXY(3,2)));
 
     }
@@ -110,7 +110,7 @@ public class Test_3times7grid_Simulations {
 
         System.out.println("nofNodesInTree = " + tih.nofNodes());
         nodeRoot.printTree();
-        tih.getBestPath().forEach(System.out::println);
+        tih.getBestPath().forEach((n) -> System.out.println(n.getState().getVariables()));
     }
 
 
