@@ -64,8 +64,6 @@ public class MonteCarloSettings<S,A> {
     @Builder.Default
     double alphaBackupDefensiveStep = ALPHA_DEFENSIVE_DEFAULT;
     @Builder.Default
-    double alphaBackupDefensiveSimulation = ALPHA_DEFENSIVE_DEFAULT;
-    @Builder.Default
     double nofVisitsExponent = NOF_VISITS_EXP_DEFAULT;
     @Builder.Default
     double weightReturnsSteps = WEIGHT_STEPS_DEFAULT;

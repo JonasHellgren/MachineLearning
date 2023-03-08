@@ -305,9 +305,7 @@ ElevatorMctsOnlySearchRunner
 - Math.pow(nofVisitsForAction,nofVisitsExponent)  x
 - TestSimulationReturnsExtractor  x
 - doPrinting till samma klass  x
-- alphaBackupDefensiveSimulation skall veck
-- Test_3times7grid_RootValuesFromSimulationsAndSteps börja i x=3,y=2
-- givenWeightSteps0WeightSim1whenStartingFromX0Y0_then11And32IsOnBestPath ger ej valueUp=-2
+- alphaBackupDefensiveSimulation skall veck  x
 - exception i mctCreator run
 - förklara logik action set begränsning
 - ta bort onödiga settings

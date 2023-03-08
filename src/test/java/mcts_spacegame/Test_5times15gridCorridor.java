@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class Test_5times15gridCorridor {
     private static final int MAX_NOF_ITERATIONS = 1500;
-    private static final int NOF_SIMULATIONS_PER_NODE = 100;  //important
+    private static final int NOF_SIMULATIONS_PER_NODE = 1000;  //important
     private static final int MAX_TREE_DEPTH = 15;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 100;
     private static final double DELTA = 0.5;

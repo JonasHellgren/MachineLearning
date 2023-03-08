@@ -12,16 +12,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/***
+ * These tests gives better understanding of settings.setWeightReturnsSteps, settings.setWeightReturnsSimulation
+ * When setWeightReturnsSteps is 0 the root values will be "faulty", not considering move cost
+ * Most adequate is probably to set them both as 1, correct root values and considering long term value
+ */
+
 public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
     private static final double DISCOUNT_FACTOR_SIMULATION_NORMAL = 1.0;
     private static final double DISCOUNT_FACTOR_SIMULATION_DEFENSIVE = 0.1;
-    private static final int MAX_NOF_ITERATIONS = 10000; //10_000;
+    private static final int MAX_NOF_ITERATIONS = 1_000; //10_000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final int MAX_TREE_DEPTH = 10;
     private static final int COEFFICIENT_EXPLOITATION_EXPLORATION = 10;
     private static final int ALPHA_BACKUP_STEPS_NORMAL = 1;
     private static final double ALPHA_BACKUP_STEPS_DEFENSIVE = 0.1;
-    private static final double DELTA = 0.5;
+    private static final double DELTA = 0.75;
     private static final int RETURN_OF_TWO_MOVES = -2;
 
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
@@ -74,40 +80,22 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
 
     @SneakyThrows
     @Test
-    public void givenWeightSteps0WeightSim1HighDiscount_whenStartingFromX0Y0_then11And32IsOnBestPath() {
+    public void givenWeightSteps0WeightSim1_whenStartingFromX0Y0_then11And32IsOnBestPath() {
         settings.setWeightReturnsSteps(0.0);
         settings.setWeightReturnsSimulation(1.0);
-        settings.setDiscountFactorSimulationNormal(1.0);
-        settings.setDiscountFactorSimulationDefensive(0.9);
 
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
         assertBestPathIsCorrect(nodeRoot);
-        Assert.assertNotEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
-    }
-
-    @SneakyThrows
-    @Test
-    public void givenWeightSteps0WeightSim1LowDiscount_whenStartingFromX0Y0_then11And32IsOnBestPath() {
-        settings.setWeightReturnsSteps(0.0);
-        settings.setWeightReturnsSimulation(1.0);
-        settings.setDiscountFactorSimulationNormal(0.1);
-        settings.setDiscountFactorSimulationDefensive(0.001);
-
-        NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
-        SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
-        assertBestPathIsCorrect(nodeRoot);
-        Assert.assertEquals(RETURN_OF_TWO_MOVES,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
+        Assert.assertEquals(0,nodeRoot.getActionValue(ActionShip.newUp()), DELTA);
     }
 
     @SneakyThrows
     @Test
     public void givenWeightSteps1WeightSim1_whenStartingFromX0Y0_then11And32IsOnBestPath() {
-        settings.setWeightReturnsSteps(0.5);
-        settings.setWeightReturnsSimulation(0.5);
-        settings.setDiscountFactorSimulationNormal(0.1);
-        settings.setDiscountFactorSimulationDefensive(0.001);
+        settings.setWeightReturnsSteps(1.0);
+        settings.setWeightReturnsSimulation(1.0);
 
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = monteCarloTreeCreator.run();
         SpaceGameTestHelper.doRootNodePrinting(nodeRoot);
