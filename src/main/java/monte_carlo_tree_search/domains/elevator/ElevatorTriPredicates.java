@@ -24,7 +24,7 @@ public class ElevatorTriPredicates {
     public static TriPredicate<Integer,Integer, Double> isMovingDown  = (s, p,soe) -> s < 0;
     public static TriPredicate<Integer,Integer, Double> isAtFloor  = (s, p,soe) -> (p % EnvironmentElevator.NOF_POS_BETWEEN_FLOORS == 0);
     public static TriPredicate<Integer,Integer, Double> isNotAtFloor  =  isAtFloor.negate();
-    public static TriPredicate<Integer,Integer, Double> isSoEOk  = (s, p,soe) -> soe>EnvironmentElevator.SOC_LOW*2;
+    public static TriPredicate<Integer,Integer, Double> isSoEOk  = (s, p,soe) -> soe>EnvironmentElevator.SOE_LOW *2;
     public static TriPredicate<Integer,Integer, Double> isSoENotOk  = isSoEOk.negate();
 
 }

@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.domains.elevator;
 
 import common.MathUtils;
+import common.RandUtils;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -21,6 +22,9 @@ public class VariablesElevator {
     public static final int DEFAULT_IN_ELEVATOR = 0;
     public static final List<Integer> EMPTY_LIST = Arrays.asList(0,0,0);
     public static final double DEFULT_SOE = 1.0;
+    private static final int SPEED_STILL = ActionElevator.STILL_ACTION;
+    private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
+    private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
 
     @Builder.Default
     public int speed=DEFAULT_SPEED;
@@ -33,8 +37,28 @@ public class VariablesElevator {
     @Builder.Default
     public double SoE= DEFULT_SOE;
 
+    public static VariablesElevator newRandom(int maxNPersonsInElevator, int maxNPersonsWaitingEachFloor) {
 
-    public VariablesElevator copy() {
+        RandUtils<Integer> speedRand=new RandUtils<>();
+        int nw1=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
+        int nw2=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
+        int nw3=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
+
+        return VariablesElevator.builder()
+                .speed(speedRand.getRandomItemFromList(Arrays.asList(SPEED_UP,SPEED_STILL,SPEED_DOWN)))
+                .pos(RandUtils.getRandomIntNumber(EnvironmentElevator.MIN_POS,EnvironmentElevator.MAX_POS+1))
+                .nPersonsInElevator(RandUtils.getRandomIntNumber(0,maxNPersonsInElevator+1))
+                .nPersonsWaiting(Arrays.asList(nw1,nw2,nw3))
+                .SoE(RandUtils.getRandomDouble(EnvironmentElevator.SOE_LOW,EnvironmentElevator.SoE_HIGH))
+                .build();
+    }
+
+    public static VariablesElevator newDefault() {
+        return VariablesElevator.builder().build();
+    }
+
+
+        public VariablesElevator copy() {
         return VariablesElevator.builder()
                 .speed(speed)
                 .pos(pos)

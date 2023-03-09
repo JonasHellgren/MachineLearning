@@ -5,8 +5,6 @@ import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class PolicyMoveDownStop
@@ -29,7 +27,7 @@ public class PolicyMoveDownStop
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         Double SoE=state.getVariables().SoE;
-        DecisionTableReader reader=new DecisionTableReader(decisionTable);
+        ElevatorDecisionTableReader reader=new ElevatorDecisionTableReader(decisionTable);
         return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos, SoE));
     }
 

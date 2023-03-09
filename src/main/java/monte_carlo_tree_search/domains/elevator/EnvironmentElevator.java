@@ -5,8 +5,6 @@ import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
-import org.apache.arrow.flatbuf.Int;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.*;
@@ -60,7 +58,8 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     private static final Double POWER_MOVING_UP = -1000d;
     private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;
-    public static final double SOC_LOW = 0.2;
+    public static final double SOE_LOW = 0.2;
+    public static final double SoE_HIGH=1;
     public static final int MAX_NOF_PERSONS_IN_ELEVATOR=10;
     private static final double REWARD_FAIL = -1000;
     private static final Integer NOF_FLOORS = 3;
@@ -140,7 +139,7 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
         //TODO  nPersonsWaiting > 20
         VariablesElevator vars=newState.getVariables();
-        return vars.SoE < SOC_LOW ||
+        return vars.SoE < SOE_LOW ||
                 vars.nPersonsInElevator>=MAX_NOF_PERSONS_IN_ELEVATOR; // ||
           //      isAtTop.and(isMovingUp).test(vars.speed,vars.pos) ||
           //      isBottomFloor.and(isMovingDown).test(vars.speed,vars.pos);

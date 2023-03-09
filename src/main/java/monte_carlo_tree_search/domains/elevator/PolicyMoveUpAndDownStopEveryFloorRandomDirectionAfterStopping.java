@@ -4,13 +4,8 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
-import org.apache.commons.lang3.RandomUtils;
-
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * multiple equal conditions means branching
@@ -31,8 +26,10 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
 
         decisionTable = new HashMap<>();
         decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isMovingUp.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_UP);
-
         decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isMovingDown.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_DOWN);
+
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_UP);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_DOWN);
 
         decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isAtFloor.test(s,p,soe),() -> SPEED_UP);
         decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isAtFloor.test(s,p,soe),() -> SPEED_STILL);
@@ -50,7 +47,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         Double SoE=state.getVariables().SoE;
-        DecisionTableReader reader=new DecisionTableReader(decisionTable);
+        ElevatorDecisionTableReader reader=new ElevatorDecisionTableReader(decisionTable);
         return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos, SoE));
     }
 
@@ -58,7 +55,7 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
         Double SoE=state.getVariables().SoE;
-        DecisionTableReader reader=new DecisionTableReader(decisionTable);
+        ElevatorDecisionTableReader reader=new ElevatorDecisionTableReader(decisionTable);
         return reader.readAllAvailableActions(speed, pos, SoE);
     }
 

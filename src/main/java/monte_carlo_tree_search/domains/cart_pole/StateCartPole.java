@@ -43,10 +43,10 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
         double xMax=EnvironmentCartPole.X_TRESHOLD;
         double xDotMax=EnvironmentCartPole.X_DOT_THRESHOLD;
         return  new StateCartPole(CartPoleVariables.builder()
-                .theta(RandUtils.calcRandomFromInterval(-thetaMax,thetaMax))
-                .thetaDot(RandUtils.calcRandomFromInterval(-thetaDotMax,thetaDotMax))
-                .x(RandUtils.calcRandomFromInterval(-xMax,xMax))
-                .xDot(RandUtils.calcRandomFromInterval(-xDotMax,xDotMax))
+                .theta(RandUtils.getRandomDouble(-thetaMax,thetaMax))
+                .thetaDot(RandUtils.getRandomDouble(-thetaDotMax,thetaDotMax))
+                .x(RandUtils.getRandomDouble(-xMax,xMax))
+                .xDot(RandUtils.getRandomDouble(-xDotMax,xDotMax))
                 .build());
     }
 

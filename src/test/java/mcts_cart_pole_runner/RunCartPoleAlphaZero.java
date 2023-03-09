@@ -122,7 +122,7 @@ public class RunCartPoleAlphaZero {
     }
 
     private static boolean isRandomAction(ScalerLinear probScaler, int episode) {
-        return RandUtils.calcRandomFromInterval(0, 1) < probScaler.calcOutDouble(episode);
+        return RandUtils.getRandomDouble(0, 1) < probScaler.calcOutDouble(episode);
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {

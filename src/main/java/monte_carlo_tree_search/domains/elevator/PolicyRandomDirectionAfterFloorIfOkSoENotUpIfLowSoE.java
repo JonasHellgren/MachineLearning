@@ -6,10 +6,7 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
@@ -24,8 +21,10 @@ public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
 
         decisionTable = new HashMap<>();
         decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingUp.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), () -> SPEED_UP);
-
         decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingDown.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), () -> SPEED_DOWN);
+
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_UP);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,() -> SPEED_DOWN);
 
         decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_UP);
         decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_STILL);
@@ -46,7 +45,7 @@ public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
         Integer speed = state.getVariables().speed;
         Integer pos = state.getVariables().pos;
         Double SoE = state.getVariables().SoE;
-        DecisionTableReader reader = new DecisionTableReader(decisionTable);
+        ElevatorDecisionTableReader reader = new ElevatorDecisionTableReader(decisionTable);
         return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed, pos, SoE));
     }
 
@@ -54,7 +53,7 @@ public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
         Integer speed = state.getVariables().speed;
         Integer pos = state.getVariables().pos;
         Double SoE = state.getVariables().SoE;
-        DecisionTableReader reader = new DecisionTableReader(decisionTable);
+        ElevatorDecisionTableReader reader = new ElevatorDecisionTableReader(decisionTable);
         return reader.readAllAvailableActions(speed, pos, SoE);
     }
 

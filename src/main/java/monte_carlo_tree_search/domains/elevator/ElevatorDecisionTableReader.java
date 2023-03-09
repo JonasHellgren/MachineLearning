@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
+import common.RandUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
@@ -11,12 +12,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log
-public class DecisionTableReader {
+public class ElevatorDecisionTableReader {
     private static final int BACKUP = 0;
 
+    private static final int SPEED_STILL = ActionElevator.STILL_ACTION;
+    private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
+    private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
     Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable;
 
-    public DecisionTableReader(Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable) {
+    public ElevatorDecisionTableReader(Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable) {
         this.decisionTable=decisionTable;
     }
 
@@ -27,9 +31,12 @@ public class DecisionTableReader {
             return actionValues.get(RandomUtils.nextInt(0,actionValues.size()));
         }
         if (actionValues.size()==0) {
-            log.warning("No matching rule, using backup. Speed = "+speed+", pos = "+pos);
-            throw  new RuntimeException();
-           // return BACKUP;
+            log.warning("No matching rule. Speed = "+speed+", pos = "+pos);
+            throw new RuntimeException("No matching rule. Speed = "+speed+", pos = "+pos);
+            //RandUtils<Integer> speedRand=new RandUtils<>();
+            //ActionElevator actionElevatorDummy=ActionElevator.newValueDefaultRange(0);
+            //List<Integer> actionList=new ArrayList<>(actionElevatorDummy.applicableActions());
+            //return speedRand.getRandomItemFromList(actionList);
         }
         return actionValues.get(0);
     }

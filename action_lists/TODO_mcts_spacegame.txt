@@ -313,7 +313,7 @@ ElevatorMctsOnlySearchRunner
 
 - PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE x
 - TestSoELongValue x
-- BiFunction -> supplier i elevator policies
+- BiFunction -> supplier i elevator policies  x
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 

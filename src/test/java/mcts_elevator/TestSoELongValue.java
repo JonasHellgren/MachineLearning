@@ -29,6 +29,7 @@ public class TestSoELongValue {
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
     MonteCarloSettings<VariablesElevator, Integer> settings;
     StateInterface<VariablesElevator> stateOneWaitingAtEachFloor;
+    StateInterface<VariablesElevator> stateRandom;
 
     @Before
     public void init() {
@@ -41,22 +42,38 @@ public class TestSoELongValue {
 
     @Test
     public void givenStartAtBottomWaitingEveryFloor_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue() {
-
-        stateOneWaitingAtEachFloor.getVariables().SoE=1.0;
-        SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
-        double valueHighSoE=simulationResults.averageReturnFromAll().orElseThrow();
-        System.out.println("simulationResults = " + simulationResults);
-
-        stateOneWaitingAtEachFloor.getVariables().SoE=0.7;
-        simulationResults=monteCarloTreeCreator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
-        double valueLowSoE=simulationResults.averageReturnFromAll().orElseThrow();
-        System.out.println("simulationResults = " + simulationResults);
-
-
+        double valueHighSoE = getValueOfSoE(1.0);
+        double valueLowSoE = getValueOfSoE(0.5);
         System.out.println("valueHighSoE = " + valueHighSoE+", valueLowSoE = " + valueLowSoE );
-
         Assert.assertTrue(valueLowSoE<valueHighSoE);
+    }
 
+    @Test
+    public void givenRandomStartState_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue() {
+        double valueHighSoE = getValueOfSoERandomStartState(1.0);
+        double valueLowSoE = getValueOfSoERandomStartState(0.5);
+        System.out.println("valueHighSoE = " + valueHighSoE+", valueLowSoE = " + valueLowSoE );
+        Assert.assertTrue(valueLowSoE<valueHighSoE);
+    }
+
+    private double getValueOfSoE(double SoE) {
+        stateOneWaitingAtEachFloor.getVariables().SoE=SoE;
+        SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
+        double valueSoE=simulationResults.averageReturnFromAll().orElseThrow();
+        System.out.println("simulationResults = " + simulationResults);
+        return valueSoE;
+    }
+
+    private double getValueOfSoERandomStartState(double SoE) {
+
+        stateRandom= StateElevator.newFromVariables(
+                VariablesElevator.builder().nPersonsWaiting(Arrays.asList(1,1,1)).build());
+
+        stateRandom.getVariables().SoE=SoE;
+        SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom, START_DEPTH);
+        double valueSoE=simulationResults.averageReturnFromAll().orElseThrow();
+        System.out.println("simulationResults = " + simulationResults);
+        return valueSoE;
     }
 
 
@@ -68,7 +85,7 @@ public class TestSoELongValue {
                 .actionSelectionPolicy(ElevatorPolicies.newNotUpIfLowSoE())
                 .simulationPolicy(ElevatorPolicies.newNotUpIfLowSoE())
                 .discountFactorSimulation(1.0)
-                .nofSimulationsPerNode(1)
+                .nofSimulationsPerNode(10)
                 .maxSimulationDepth(1000)   //20
                 .build();
 
