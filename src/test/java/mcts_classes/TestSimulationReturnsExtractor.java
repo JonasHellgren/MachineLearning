@@ -33,8 +33,8 @@ public class TestSimulationReturnsExtractor {
                 .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .coefficientMaxAverageReturn(1)  //max return
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
-                .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
+                .discountFactorBackupSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE).build();
     }
 
 

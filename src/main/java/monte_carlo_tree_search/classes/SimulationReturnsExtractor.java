@@ -64,19 +64,19 @@ public class SimulationReturnsExtractor<S,A> {
     public List<Double> createReturnsAll() {
         log.fine("createReturnsAll");
         double mixReturn = getMixReturnFromAll();
-        return getDiscountedReturns(mixReturn, settings.discountFactorSimulationNormal);
+        return getDiscountedReturns(mixReturn, settings.discountFactorBackupSimulationNormal);
     }
 
     public List<Double> createReturnsNonFailing() {
         log.fine("createReturnsNonFailing");
         double mixReturn = getMixReturnFromNonFailing();
-        return getDiscountedReturns(mixReturn, settings.discountFactorSimulationNormal);
+        return getDiscountedReturns(mixReturn, settings.discountFactorBackupSimulationNormal);
     }
 
     public List<Double> createReturnFromSomeFailingUseDefensiveDiscount() {
         log.fine("createReturnFromSomeFailingUseDefensiveDiscount");
         double failReturn=simulationResults.anyFailingReturn().orElseThrow();
-        return  getDiscountedReturns(failReturn, settings.discountFactorSimulationDefensive);
+        return  getDiscountedReturns(failReturn, settings.discountFactorBackupSimulationDefensive);
     }
 
     private double getMixReturnFromNonFailing() {

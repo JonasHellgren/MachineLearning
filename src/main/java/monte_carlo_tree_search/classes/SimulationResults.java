@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.classes;
 
+import common.Conditionals;
 import common.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -49,6 +50,12 @@ public class SimulationResults {
 
     public boolean areAllSimulationsTerminalFail() {
         return results.stream().allMatch(r -> r.isEndingInFail);
+    }
+
+    public double averageReturn() {
+        return (areAllSimulationsTerminalFail())
+            ? anyFailingReturn().orElseThrow()
+            : averageReturnFromNonFailing().orElseThrow();
     }
 
     public OptionalDouble maxReturnFromNonFailing() {

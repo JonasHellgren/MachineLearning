@@ -309,9 +309,16 @@ ElevatorMctsOnlySearchRunner
 - exception i mctCreator run x
 - MonteCarloTreeCreatorHelper  x
 - ActionSelector - förklara logik action set begränsning x
-- ta bort onödiga settings
+- ta bort onödiga settings  x
+
+- PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE x
+- TestSoELongValue x
+- BiFunction -> supplier i elevator policies
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
+
+- whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
+- låga värden roout values whenMoveFromX0Y2_thenX13Y4OnBestPath
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
 - SoC minne

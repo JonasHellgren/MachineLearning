@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
 
 public class PolicyMoveDownStop
     implements SimulationPolicyInterface<VariablesElevator, Integer>  {
-    Map<BiPredicate<Integer,Integer>, BiFunction<Integer,Integer,Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable;
 
     private static final int BOTTOM_POS = 0;
     private static final int SPEED_DOWN = -1;
@@ -18,20 +18,18 @@ public class PolicyMoveDownStop
 
     public PolicyMoveDownStop() {
 
-        BiPredicate<Integer,Integer> isAtBottom = (s, p)-> p == BOTTOM_POS;
-        BiPredicate<Integer,Integer> isNotAtBottom = isAtBottom.negate();
-
         decisionTable = new HashMap<>();
-        decisionTable.put(isNotAtBottom,(s, p) -> SPEED_DOWN);
-        decisionTable.put(isAtBottom,(s, p) -> SPEED_STILL);
+        decisionTable.put(ElevatorTriPredicates.isNotAtBottom,(s, p) -> SPEED_DOWN);
+        decisionTable.put(ElevatorTriPredicates.isAtBottom,(s, p) -> SPEED_STILL);
     }
 
     @Override
     public ActionInterface<Integer> chooseAction(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
+        Double SoE=state.getVariables().SoE;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos));
+        return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos, SoE));
     }
 
     @Override

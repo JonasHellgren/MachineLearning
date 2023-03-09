@@ -24,57 +24,41 @@ public class PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping
     private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
     private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
 
-    Map<BiPredicate<Integer,Integer>, BiFunction<Integer,Integer,Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable;
 
     public PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping() {
 
-        BiPredicate<Integer,Integer> isAtTop = EnvironmentElevator.isAtTop;
-        BiPredicate<Integer,Integer> isStill = EnvironmentElevator.isStill;
-        BiPredicate<Integer,Integer> isMovingUp = (s, p) -> s == SPEED_UP;
-        BiPredicate<Integer,Integer> isMovingDown = (s, p) -> s == SPEED_DOWN;
-        BiPredicate<Integer,Integer> isAtFloor = EnvironmentElevator.isAtFloor;
-        BiPredicate<Integer,Integer> isNotAtFloor = isAtFloor.negate();
-
         decisionTable = new HashMap<>();
-        decisionTable.put( (s,p) -> isMovingUp.and(isNotAtFloor).test(s,p) ,(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isMovingUp.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,(s, p) -> SPEED_UP);
 
-        decisionTable.put( (s,p) -> isMovingDown.and(isNotAtFloor).test(s,p) ,(s, p) -> SPEED_DOWN);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isMovingDown.and(ElevatorTriPredicates.isNotAtFloor).test(s,p,soe) ,(s, p) -> SPEED_DOWN);
 
-        /*
-        decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_UP);
-        decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put( (s,p) -> isMovingUp.and(isAtFloor).test(s,p),(s, p) -> SPEED_DOWN);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isAtFloor.test(s,p,soe),(s, p) -> SPEED_UP);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isAtFloor.test(s,p,soe),(s, p) -> SPEED_STILL);
+        decisionTable.put( (s,p,soe) -> ElevatorTriPredicates.isAtFloor.test(s,p,soe),(s, p) -> SPEED_DOWN);
 
-        decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_UP);
-        decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put( (s,p) -> isMovingDown.and(isAtFloor).test(s,p),(s, p) -> SPEED_DOWN);
-*/
+        decisionTable.put((s,p,soe)-> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s,p,soe),(s, p) -> SPEED_STILL);
+        decisionTable.put((s,p,soe)-> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s,p,soe),(s, p) -> SPEED_DOWN);
 
-        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_UP);
-        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put( (s,p) -> isAtFloor.test(s,p),(s, p) -> SPEED_DOWN);
-
-
-        decisionTable.put((s,p) -> isStill.and(isAtTop).test(s,p),(s, p) -> SPEED_STILL);
-        decisionTable.put((s,p) -> isStill.and(isAtTop).test(s,p),(s, p) -> SPEED_DOWN);
-
-        decisionTable.put((s,p) -> isStill.and(isAtFloor).test(s,p),(s, p) -> SPEED_UP);
-        decisionTable.put((s,p) -> isStill.and(isAtFloor).test(s,p),(s, p) -> SPEED_STILL);
+        decisionTable.put((s,p,soe)-> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtBottom).test(s,p,soe),(s, p) -> SPEED_UP);
+        decisionTable.put((s,p,soe)-> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtBottom).test(s,p,soe),(s, p) -> SPEED_STILL);
     }
 
     @Override
     public ActionInterface<Integer> chooseAction(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
+        Double SoE=state.getVariables().SoE;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos));
+        return ActionElevator.newValueDefaultRange(reader.readSingleActionChooseRandomIfMultiple(speed,pos, SoE));
     }
 
     public Set<Integer> availableActionValues(StateInterface<VariablesElevator> state) {
         Integer speed=state.getVariables().speed;
         Integer pos=state.getVariables().pos;
+        Double SoE=state.getVariables().SoE;
         DecisionTableReader reader=new DecisionTableReader(decisionTable);
-        return reader.readAllAvailableActions(speed, pos);
+        return reader.readAllAvailableActions(speed, pos, SoE);
     }
 
 }

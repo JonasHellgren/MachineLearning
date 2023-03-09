@@ -208,16 +208,11 @@ public class TestSearchActionRestrictionSimulation {
         environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
 
-        Function<VariablesElevator,Integer> nofActionsFunction  =
-                (a) -> EnvironmentElevator.isAtFloor.test(a.speed,a.pos)
-                ?actionTemplate.applicableActions().size()
-                :1;
-
         settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .actionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)
-                .discountFactorSimulationDefensive(0.9)
+                .discountFactorBackupSimulationDefensive(0.9)
                 .maxTreeDepth(30)
                 .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(200)

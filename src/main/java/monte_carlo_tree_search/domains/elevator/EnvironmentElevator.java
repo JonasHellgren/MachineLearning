@@ -53,20 +53,21 @@ import java.util.stream.Collectors;
 public class EnvironmentElevator implements EnvironmentGenericInterface<VariablesElevator, Integer> {
     public static final int MIN_POS = 0;
     public static final int MAX_POS = 30;
-    private static final Integer NOF_POS_BETWEEN_FLOORS = 10;
+    public static final Integer NOF_POS_BETWEEN_FLOORS = 10;
     private static final int BOTTOM_FLOOR = 0;
     private static final Double POWER_CHARGE = 3_000d;
     private static final Double POWER_STILL = -100d;
     private static final Double POWER_MOVING_UP = -1000d;
     private static final Double POWER_MOVING_DOWN = 500d;
     private static final Double CAPACITY_BATTERY = 1000d * 60d;
-    private static final double SOC_LOW = 0.2;
+    public static final double SOC_LOW = 0.2;
     public static final int MAX_NOF_PERSONS_IN_ELEVATOR=10;
-    private static final double REWARD_FAIL = -100;
+    private static final double REWARD_FAIL = -1000;
     private static final Integer NOF_FLOORS = 3;
     private static final int BIG = Integer.MAX_VALUE;
+    private static final double PENALTY_PERSONS_IN_ELEVATOR = 0.5;
 
-    public static  BiPredicate<Integer,Integer> isAtTop = (s, p) -> p == MAX_POS;
+    public static BiPredicate<Integer,Integer> isAtTop = (s, p) -> p == MAX_POS;
     public static BiPredicate<Integer, Integer> isAtFloor = (s, p) -> (p % NOF_POS_BETWEEN_FLOORS == 0);
     public static BiPredicate<Integer, Integer> isBottomFloor = (s, p) -> p.equals(BOTTOM_FLOOR);
     public static BiPredicate<Integer, Integer> isNotBottomFloor = isBottomFloor.negate();
@@ -118,7 +119,8 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
                 .nPersonsWaiting(nPersonsWaiting)
                 .SoE(newSoE)
                 .build());
-        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum()-nPersonsInElevator/2d;
+        double nonFailReward = -nPersonsWaiting.stream().mapToInt(Integer::intValue).sum()-
+                PENALTY_PERSONS_IN_ELEVATOR *nPersonsInElevator;
 
         return StepReturnGeneric.<VariablesElevator>builder()
                 .newState(newState)

@@ -46,7 +46,7 @@ public class ElevatorSearchActionRestrictionRunner {
                 .actionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .discountFactorSteps(0.9)
-                .discountFactorSimulationDefensive(0.99)
+                .discountFactorBackupSimulationDefensive(0.99)
                 .maxTreeDepth(100)
                 .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(200)

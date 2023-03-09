@@ -92,7 +92,6 @@ public class ActionSelector<S,A> {
         return getActionsFromValues(nonTestedActionValues);
     }
 
-    @NotNull
     private List<ActionInterface<A>> getActionsFromValues(List<A> nonTestedActionValues) {
         List<ActionInterface<A>> nonTestedActions = new ArrayList<>();
         for (A value : nonTestedActionValues) {

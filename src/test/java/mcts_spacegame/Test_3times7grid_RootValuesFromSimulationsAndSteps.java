@@ -48,8 +48,8 @@ public class Test_3times7grid_RootValuesFromSimulationsAndSteps {
                 .alphaBackupDefensiveStep(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
                 .discountFactorSteps(1.0)
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
-                .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
+                .discountFactorBackupSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)

@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 public class DecisionTableReader {
     private static final int BACKUP = 0;
 
-    Map<BiPredicate<Integer,Integer>, BiFunction<Integer,Integer,Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable;
 
-    public DecisionTableReader(Map<BiPredicate<Integer,Integer>, BiFunction<Integer,Integer,Integer>> decisionTable) {
+    public DecisionTableReader(Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable) {
         this.decisionTable=decisionTable;
     }
 
-    public  Integer readSingleActionChooseRandomIfMultiple(Integer speed, Integer pos) {
-        List<Integer> actionValues= new ArrayList<>(readAllAvailableActions(speed, pos));
+    public  Integer readSingleActionChooseRandomIfMultiple(Integer speed, Integer pos, Double SoE) {
+        List<Integer> actionValues= new ArrayList<>(readAllAvailableActions(speed, pos, SoE));
         if (actionValues.size()>1) {
            // logging(speed, pos, fcnList);
             return actionValues.get(RandomUtils.nextInt(0,actionValues.size()));
@@ -33,9 +33,9 @@ public class DecisionTableReader {
         return actionValues.get(0);
     }
 
-    public Set<Integer> readAllAvailableActions(Integer speed, Integer pos) {
+    public Set<Integer> readAllAvailableActions(Integer speed, Integer pos, Double SoE) {
         List<Integer> integerList=new ArrayList<>();
-        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos);
+        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos, SoE);
         for (BiFunction<Integer, Integer, Integer> fcn:fcnList) {
             integerList.add(fcn.apply(speed,pos));
         }
@@ -43,9 +43,9 @@ public class DecisionTableReader {
     }
 
     @NotNull
-    private List<BiFunction<Integer, Integer, Integer>> getBiFunctions(Integer speed, Integer pos) {
+    private List<BiFunction<Integer, Integer, Integer>> getBiFunctions(Integer speed, Integer pos, Double SoE) {
         return decisionTable.entrySet().stream()
-                .filter(e -> e.getKey().test(speed, pos))
+                .filter(e -> e.getKey().test(speed, pos, SoE))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }

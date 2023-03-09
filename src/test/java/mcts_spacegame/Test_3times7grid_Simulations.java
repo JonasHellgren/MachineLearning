@@ -5,18 +5,15 @@ import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Test_3times7grid_Simulations {
@@ -47,8 +44,8 @@ public class Test_3times7grid_Simulations {
                 .alphaBackupNormal(ALPHA_BACKUP_STEPS_NORMAL)
                 .alphaBackupDefensiveStep(ALPHA_BACKUP_STEPS_DEFENSIVE)
                 .coefficientMaxAverageReturn(0)  //max return
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
-                .discountFactorSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR_SIMULATION_NORMAL)
+                .discountFactorBackupSimulationDefensive(DISCOUNT_FACTOR_SIMULATION_DEFENSIVE)
                 .maxTreeDepth(MAX_TREE_DEPTH)
                 .maxNofIterations(MAX_NOF_ITERATIONS)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)

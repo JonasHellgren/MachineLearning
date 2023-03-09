@@ -71,7 +71,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
                 .weightMemoryValue(1)
                 .weightReturnsSimulation(0)
                 .nofSimulationsPerNode(0)
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR)
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR)
                 .discountFactorSimulation(DISCOUNT_FACTOR)
                 .coefficientExploitationExploration(0.3)
                 .isCreatePlotData(true)
@@ -97,7 +97,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
                 .maxTreeDepth(100)
                 .timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(0)
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR)
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR)
                 .discountFactorSimulation(DISCOUNT_FACTOR)
                 .nofSimulationsPerNode(100)
                 .build();

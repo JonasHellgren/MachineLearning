@@ -49,9 +49,9 @@ public class RunCartPoleOnlySearchMinusOneRewardAtFail {
                 .weightReturnsSteps(0)
                 .weightMemoryValue(0)
                 .nofSimulationsPerNode(10)
-                .discountFactorSimulationNormal(DISCOUNT_FACTOR)
+                .discountFactorBackupSimulationNormal(DISCOUNT_FACTOR)
                 .discountFactorSimulation(DISCOUNT_FACTOR)
-                .discountFactorSimulationDefensive(0.1)
+                .discountFactorBackupSimulationDefensive(0.1)
                 .coefficientExploitationExploration(0.1)
                 .isCreatePlotData(true)
                 .build();

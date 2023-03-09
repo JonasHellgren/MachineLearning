@@ -5,6 +5,12 @@ import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
 
 import java.util.function.Function;
 
+/***
+ * discountFactorSimulation, when generating reward sums after simulation
+ * discountFactorBackupSimulationNormal, discountFactorBackupSimulationDefensive, when backing up returns on visited nodes
+ *
+ */
+
 @Builder
 @Setter
 @Getter
@@ -54,9 +60,9 @@ public class MonteCarloSettings<S,A> {
     @Builder.Default
     double discountFactorSimulation=DISCOUNT_FACTOR_SIMULATIONS_DEFAULT;
     @Builder.Default
-    double discountFactorSimulationNormal=DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT;
+    double discountFactorBackupSimulationNormal =DISCOUNT_FACTOR_SIMULATIONS_NORMAL_DEFAULT;
     @Builder.Default
-    double discountFactorSimulationDefensive=DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT;
+    double discountFactorBackupSimulationDefensive =DISCOUNT_FACTOR_SIMULATIONS_DEFENSIVE_DEFAULT;
     @Builder.Default
     double coefficientMaxAverageReturn=C_MAX_AVERAGE_RETURN_BACKUP;
     @Builder.Default
