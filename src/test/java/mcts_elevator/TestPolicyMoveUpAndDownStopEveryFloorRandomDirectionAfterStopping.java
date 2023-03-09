@@ -15,9 +15,6 @@ import java.util.Arrays;
 import java.util.Set;
 
 public class TestPolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping {
-    private static final int MAX_N_PERSONS_IN_ELEVATOR = 5;
-    private static final int MAX_N_PERSONS_WAITING_EACH_FLOOR = 5;
-
     StateInterface<VariablesElevator> state;
 
     @Before

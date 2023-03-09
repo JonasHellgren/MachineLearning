@@ -314,6 +314,8 @@ ElevatorMctsOnlySearchRunner
 - PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE x
 - TestSoELongValue x
 - BiFunction -> supplier i elevator policies  x
+- givenMultipleRandomStartState_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue x
+- TestElevatorStateValueMemory
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 
@@ -321,7 +323,7 @@ ElevatorMctsOnlySearchRunner
 - låga värden roout values whenMoveFromX0Y2_thenX13Y4OnBestPath
 - använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
 - AlphaZero på elevator  ElevatorAlphaZeroRunner
-- SoC minne
+- SoC minne  x
 - Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
 - Ny miljö energy trading
 

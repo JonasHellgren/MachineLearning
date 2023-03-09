@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
+import common.ListUtils;
 import common.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class VariablesElevator {
     public static final int DEFAULT_POS = 0;
     public static final int DEFAULT_IN_ELEVATOR = 0;
     public static final List<Integer> EMPTY_LIST = Arrays.asList(0,0,0);
-    public static final double DEFULT_SOE = 1.0;
+    public static final double DEFAULT_SOE = 1.0;
     private static final int SPEED_STILL = ActionElevator.STILL_ACTION;
     private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
     private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
@@ -35,22 +36,31 @@ public class VariablesElevator {
     @Builder.Default
     public List<Integer> nPersonsWaiting= EMPTY_LIST;
     @Builder.Default
-    public double SoE= DEFULT_SOE;
+    public double SoE= DEFAULT_SOE;
 
-    public static VariablesElevator newRandom(int maxNPersonsInElevator, int maxNPersonsWaitingEachFloor) {
+    public static VariablesElevator newRandom(int maxNPersonsInElevator, int maxNPersonsWaitingTotal) {
 
         RandUtils<Integer> speedRand=new RandUtils<>();
-        int nw1=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
-        int nw2=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
-        int nw3=RandUtils.getRandomIntNumber(0,maxNPersonsWaitingEachFloor+1);
+        List<Integer> waitingList=createWaitingList(maxNPersonsWaitingTotal);
 
         return VariablesElevator.builder()
                 .speed(speedRand.getRandomItemFromList(Arrays.asList(SPEED_UP,SPEED_STILL,SPEED_DOWN)))
                 .pos(RandUtils.getRandomIntNumber(EnvironmentElevator.MIN_POS,EnvironmentElevator.MAX_POS+1))
                 .nPersonsInElevator(RandUtils.getRandomIntNumber(0,maxNPersonsInElevator+1))
-                .nPersonsWaiting(Arrays.asList(nw1,nw2,nw3))
+                .nPersonsWaiting(waitingList)
                 .SoE(RandUtils.getRandomDouble(EnvironmentElevator.SOE_LOW,EnvironmentElevator.SoE_HIGH))
                 .build();
+    }
+
+    private static List<Integer> createWaitingList(int maxNPersonsWaitingTotal) {
+        List<Integer> waitingList;
+        do {
+            int nw1 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            int nw2 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            int nw3 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            waitingList = Arrays.asList(nw1, nw2, nw3);
+        } while (ListUtils.sumList(waitingList)!= maxNPersonsWaitingTotal);
+        return waitingList;
     }
 
     public static VariablesElevator newDefault() {
