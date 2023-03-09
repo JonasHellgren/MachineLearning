@@ -7,15 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log
 public class DecisionTableReader {
     private static final int BACKUP = 0;
 
-    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable;
 
-    public DecisionTableReader(Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable) {
+    public DecisionTableReader(Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable) {
         this.decisionTable=decisionTable;
     }
 
@@ -35,15 +36,15 @@ public class DecisionTableReader {
 
     public Set<Integer> readAllAvailableActions(Integer speed, Integer pos, Double SoE) {
         List<Integer> integerList=new ArrayList<>();
-        List<BiFunction<Integer, Integer, Integer>> fcnList = getBiFunctions(speed, pos, SoE);
-        for (BiFunction<Integer, Integer, Integer> fcn:fcnList) {
-            integerList.add(fcn.apply(speed,pos));
+        List<Supplier<Integer>> suppliers = getBiFunctions(speed, pos, SoE);
+        for (Supplier<Integer> fcn:suppliers) {
+            integerList.add(fcn.get());
         }
         return new HashSet<>(integerList);
     }
 
     @NotNull
-    private List<BiFunction<Integer, Integer, Integer>> getBiFunctions(Integer speed, Integer pos, Double SoE) {
+    private List<Supplier<Integer>> getBiFunctions(Integer speed, Integer pos, Double SoE) {
         return decisionTable.entrySet().stream()
                 .filter(e -> e.getKey().test(speed, pos, SoE))
                 .map(Map.Entry::getValue)
@@ -51,10 +52,10 @@ public class DecisionTableReader {
     }
 
 
-    private void logging(Integer speed, Integer pos, List<BiFunction<Integer, Integer, Integer>> fcnList) {
+    private void logging(List<Supplier<Integer>> fcnList) {
         log.info("Multiple matching rules, nof ="+ fcnList.size()+". Applying random.");
         for (int i = 0; i < fcnList.size() ; i++) {
-            log.info("i = "+i+", a = " + fcnList.get(i).apply(speed, pos));
+            log.info("i = "+i+", a = " + fcnList.get(i).get());
         }
     }
 }

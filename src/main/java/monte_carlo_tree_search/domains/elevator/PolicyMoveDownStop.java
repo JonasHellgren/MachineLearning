@@ -7,10 +7,11 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 
 public class PolicyMoveDownStop
     implements SimulationPolicyInterface<VariablesElevator, Integer>  {
-    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, BiFunction<Integer,Integer,Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer,Integer, Double>, Supplier<Integer>> decisionTable;
 
     private static final int BOTTOM_POS = 0;
     private static final int SPEED_DOWN = -1;
@@ -19,8 +20,8 @@ public class PolicyMoveDownStop
     public PolicyMoveDownStop() {
 
         decisionTable = new HashMap<>();
-        decisionTable.put(ElevatorTriPredicates.isNotAtBottom,(s, p) -> SPEED_DOWN);
-        decisionTable.put(ElevatorTriPredicates.isAtBottom,(s, p) -> SPEED_STILL);
+        decisionTable.put(ElevatorTriPredicates.isNotAtBottom,() -> SPEED_DOWN);
+        decisionTable.put(ElevatorTriPredicates.isAtBottom,() -> SPEED_STILL);
     }
 
     @Override

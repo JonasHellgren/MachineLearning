@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 
 public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
         implements SimulationPolicyInterface<VariablesElevator, Integer> {
@@ -17,27 +18,27 @@ public class PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE
     private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
     private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
 
-    Map<ElevatorTriPredicates.TriPredicate<Integer, Integer, Double>, BiFunction<Integer, Integer, Integer>> decisionTable;
+    Map<ElevatorTriPredicates.TriPredicate<Integer, Integer, Double>, Supplier<Integer>> decisionTable;
 
     public PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE() {
 
         decisionTable = new HashMap<>();
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingUp.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), (s, p) -> SPEED_UP);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingUp.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), () -> SPEED_UP);
 
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingDown.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), (s, p) -> SPEED_DOWN);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isMovingDown.and(ElevatorTriPredicates.isNotAtFloor).test(s, p, soe), () -> SPEED_DOWN);
 
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), (s, p) -> SPEED_UP);
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), (s, p) -> SPEED_STILL);
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), (s, p) -> SPEED_DOWN);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_UP);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_STILL);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_DOWN);
 
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoENotOk).test(s, p, soe), (s, p) -> SPEED_STILL);
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoENotOk).test(s, p, soe), (s, p) -> SPEED_DOWN);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoENotOk).test(s, p, soe), () -> SPEED_STILL);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isAtFloor.and(ElevatorTriPredicates.isSoENotOk).test(s, p, soe), () -> SPEED_DOWN);
 
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s, p, soe), (s, p) -> SPEED_STILL);
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s, p, soe), (s, p) -> SPEED_DOWN);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s, p, soe), () -> SPEED_STILL);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtTop).test(s, p, soe), () -> SPEED_DOWN);
 
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtFloor).and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), (s, p) -> SPEED_UP);
-        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtFloor).test(s, p, soe), (s, p) -> SPEED_STILL);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtFloor).and(ElevatorTriPredicates.isSoEOk).test(s, p, soe), () -> SPEED_UP);
+        decisionTable.put((s, p, soe) -> ElevatorTriPredicates.isStill.and(ElevatorTriPredicates.isAtFloor).test(s, p, soe), () -> SPEED_STILL);
     }
 
     @Override
