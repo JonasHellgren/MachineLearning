@@ -9,9 +9,9 @@ import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
-public class ElevatorSearchActionRestrictionRunner {
+public class ElevatorSoEMemoryRunner {
+
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int NSTEPS_BETWEEN = 50;
@@ -28,9 +28,13 @@ public class ElevatorSearchActionRestrictionRunner {
                 .nPersonsWaiting(Arrays.asList(1, 0, 0))
                 .build());
 
-        MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator= createTreeCreator(state);
-        ElevatorRunner er=new ElevatorRunner(monteCarloTreeCreator,environment, NOF_STEPS);
-        er.run(state);
+
+
+
+
+      //  MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator= createTreeCreator(state);
+      //  ElevatorRunner er=new ElevatorRunner(monteCarloTreeCreator,environment, NOF_STEPS);
+      //  er.run(state);
 
     }
 

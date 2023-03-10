@@ -24,6 +24,7 @@ public class TestSoELongValue {
     private static final int NOF_SIMULATIONS_PER_NODE = 10;
     private static final double SOE_LOW = 0.5;
     private static final double SOE_HIGH = 1.0;
+    private static final int MAX_SIMULATION_DEPTH = 1000;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
@@ -96,7 +97,7 @@ public class TestSoELongValue {
                 .simulationPolicy(ElevatorPolicies.newNotUpIfLowSoE())
                 .discountFactorSimulation(1.0)
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
-                .maxSimulationDepth(1000)   //20
+                .maxSimulationDepth(MAX_SIMULATION_DEPTH)   //20
                 .build();
 
         return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()

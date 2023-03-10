@@ -20,8 +20,8 @@ public class TestElevatorStateValueMemory {
 
     private static final int MINI_BATCH_SIZE = 10;
     private static final double DELTA = 1;
-    private static final int MIN_OUT = 0;
-    private static final int MAX_OUT = 10;
+    private static final double MIN_OUT = 0;
+    private static final double MAX_OUT = 10;
     ElevatorStateValueMemory<VariablesElevator> memory;
     @Before
     public void init() {

@@ -3,6 +3,7 @@ package monte_carlo_tree_search.domains.elevator;
 import common.Conditionals;
 import common.ScalerLinear;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
@@ -16,14 +17,15 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 import java.util.List;
 
+@Log
 public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV> {
     private static final int INPUT_SIZE = 1;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
-    private static final double LEARNING_RATE = 0.1;
+    private static final int NOF_NEURONS_HIDDEN = 1;
+    private static final double LEARNING_RATE = 0.01;  //0.1
     private static final int NOF_ITERATIONS = 1;
-    private static final int NET_OUT_MIN = 0;
-    private static final int NET_OUT_MAX = 1;
+    private static final double NET_OUT_MIN = 0;
+    private static final double NET_OUT_MAX = 1;
 
     //MultiLayerPerceptron neuralNetwork;
     NeuralNetwork neuralNetwork;
@@ -35,7 +37,7 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
 
     public ElevatorStateValueMemory(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(
-                TransferFunctionType.GAUSSIAN,  //happens to be adequate for this environment
+                TransferFunctionType.SIGMOID,  //happens to be adequate for this environment
                 INPUT_SIZE,
                 NOF_NEURONS_HIDDEN,
                 NOF_NEURONS_HIDDEN,
@@ -81,15 +83,19 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     @Override
     public void learn(List<Experience<SSV, Integer>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
+        log.info("trainingSet = " + trainingSet);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
     }
 
+
     @SneakyThrows
     @Override
     public MomentumBackpropagation getLearningRule() {
-        throw new NoSuchMethodException("Not defined");
+    return (MomentumBackpropagation) neuralNetwork.getLearningRule();
     }
+
+
 
     @Override
     public double getAverageValueError(List<Experience<SSV, Integer>> experiences) {
@@ -116,11 +122,13 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
      */
     private void doWarmUpIfNotDone(DataSet trainingSet) {
         Conditionals.executeIfTrue(!isWarmedUp, () -> {
+            log.info("Warming up");
+            System.out.println("trainingSet = " + trainingSet);
             neuralNetwork.learn(trainingSet);
+            log.info("after learn");
             isWarmedUp=true;
         });
     }
-
 
     private DataSet getDataSet(List<Experience<SSV, Integer>> buffer) {
         DataSet trainingSet = new DataSet(INPUT_SIZE, OUTPUT_SIZE);

@@ -18,14 +18,14 @@ import java.util.List;
 
 //todo, make generic
 @Log
-public class MemoryTrainerHelper {
+public class CartPoleMemoryTrainerHelper {
     private static final int START_DEPTH = 0;
     int miniBatchSize;
     int bufferSize;
     double maxError;
     int maxNofEpochs;
 
-    public MemoryTrainerHelper(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
+    public CartPoleMemoryTrainerHelper(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
         this.miniBatchSize = miniBatchSize;
         this.bufferSize = bufferSize;
         this.maxError = maxError;
