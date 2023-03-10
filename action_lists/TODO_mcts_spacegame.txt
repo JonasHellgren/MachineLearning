@@ -315,7 +315,7 @@ ElevatorMctsOnlySearchRunner
 - TestSoELongValue x
 - BiFunction -> supplier i elevator policies  x
 - givenMultipleRandomStartState_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue x
-- TestElevatorStateValueMemory
+- fler tester TestElevatorStateValueMemory  x
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
 - testa ovan minne
 
