@@ -23,8 +23,8 @@ import java.util.List;
 public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV> {
     private static final int INPUT_SIZE = 1;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = 10;
-    private static final double LEARNING_RATE = 0.1;  //0.1
+    private static final int NOF_NEURONS_HIDDEN = 2;
+    private static final double LEARNING_RATE = 0.01;  //0.1
     private static final int NOF_ITERATIONS = 1;
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;
@@ -43,14 +43,12 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
                 TransferFunctionType.TANH,  //happens to be adequate for this environment
                 INPUT_SIZE,
                 NOF_NEURONS_HIDDEN,
-             //   NOF_NEURONS_HIDDEN,
+                NOF_NEURONS_HIDDEN,
                 OUTPUT_SIZE);
         learningRule = new MomentumBackpropagation();
         learningRule.setLearningRate(LEARNING_RATE);
         learningRule.setNeuralNetwork(neuralNetwork);
         learningRule.setMaxIterations(NOF_ITERATIONS);
-       //learningRule.setMaxError(MAX_ERROR);
-     //   neuralNetwork.setLearningRule(learningRule);
         normalizer = new StateNormalizerElevator<>();
         createOutScalers(minOut, maxOut);
         isWarmedUp=false;
@@ -88,7 +86,6 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     @Override
     public void learn(List<Experience<SSV, Integer>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
-      //  log.info("trainingSet = " + trainingSet);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
     }
@@ -102,9 +99,10 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
 
 
 
+    @SneakyThrows
     @Override
     public double getAverageValueError(List<Experience<SSV, Integer>> experiences) {
-        return 0;
+        throw new NoSuchMethodException("Not defined");
     }
 
     @Override

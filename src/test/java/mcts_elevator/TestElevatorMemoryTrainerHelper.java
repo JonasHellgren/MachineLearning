@@ -63,7 +63,7 @@ public class TestElevatorMemoryTrainerHelper {
     }
 
     @Test public void givenTrainedMemory_thenCorrectSoEValueMapping() {
-        final int bufferSize = 20;
+        final int bufferSize = 50;
         trainer=ElevatorMemoryTrainerHelper.builder()
                 .bufferSize(bufferSize)
                 .build();
@@ -73,9 +73,16 @@ public class TestElevatorMemoryTrainerHelper {
 
         NetworkMemoryInterface<VariablesElevator> memory=trainer.createMemory(replayBuffer);
 
-        System.out.println("memory.read(getState(0.3)) = " + memory.read(getState(0.3)));
+        List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);
 
-        System.out.println("memory.read(getState(0.9)) = " + memory.read(getState(0.9)));
+        for (double SoE:soEList) {
+            System.out.println("SoE = " + SoE+", value= " + memory.read(getState(SoE)));
+        }
+
+        Assert.assertTrue(memory.read(getState(soEList.get(1)))<memory.read(getState(soEList.get(0))));
+        Assert.assertTrue(memory.read(getState(soEList.get(2)))<memory.read(getState(soEList.get(1))));
+        Assert.assertTrue(memory.read(getState(soEList.get(3)))<memory.read(getState(soEList.get(2))));
+
 
 
     }

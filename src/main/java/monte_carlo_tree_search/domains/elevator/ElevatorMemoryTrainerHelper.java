@@ -30,16 +30,15 @@ public class ElevatorMemoryTrainerHelper
     private static final int MINI_BATCH_SIZE=10;
     private static final int BUFFER_SIZE=10;
     private static final int MAX_N_NOF_SOE_VALUES = 2;
-    private static final double MAX_ERROR=5e-5;
+    private static final double MAX_ERROR=1e-5;
     private static final int MAX_EPOCHS=10_000;
     private static final int MAX_N_PERSONS_IN_ELEVATOR = 0;
     private static final int MAX_N_PERSONS_WAITING_TOTAL = 1;
     private static final int START_DEPTH = 0;
-    private static final double MIN_MEMORY_OUT = 0;
-    private static final double MAX_MEMORY_OUT = 10.0;
-    private static final double MIN_NET_OUTPUT = 0.00;
-    private static final double MAX_NET_OUTPUT = 0.99;
-
+    private static final double MIN_MEMORY_OUT = 0.0;
+    private static final double MAX_MEMORY_OUT = 10.0;  //large means smaller out reference for net
+    private static final double MIN_NET_OUTPUT = 0.00;  //for clipping
+    private static final double MAX_NET_OUTPUT = 1.0;
 
     @Builder.Default
     int miniBatchSize=MINI_BATCH_SIZE;
@@ -102,18 +101,12 @@ public class ElevatorMemoryTrainerHelper
 
         NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(outMemoryMin,outMemoryMax);
         do {
-          //  log.info("epoch = "+epoch);
             List<Experience<VariablesElevator, Integer>> miniBatch = buffer.getMiniBatch(miniBatchSize);
-
-         //   List<Experience<VariablesElevator, Integer>> miniBatch=createMiniBatch();
-
-            //miniBatch.forEach(System.out::println);
             memory.learn(miniBatch);
             logProgressSometimes(memory.getLearningRule(), epoch++);
             epoch++;
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-    // while ( epoch < maxNofEpochs);
-      //  logEpoch(memory.getLearningRule(), epoch);
+        logEpoch(memory.getLearningRule(), epoch);
         return memory;
     }
 
