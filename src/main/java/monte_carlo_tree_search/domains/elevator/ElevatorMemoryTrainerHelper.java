@@ -17,6 +17,11 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Learning does not start if MAX_MEMORY_OUT is small
+ *
+ */
+
 @Builder
 @Log
 public class ElevatorMemoryTrainerHelper
@@ -26,14 +31,14 @@ public class ElevatorMemoryTrainerHelper
     private static final int BUFFER_SIZE=10;
     private static final int MAX_N_NOF_SOE_VALUES = 2;
     private static final double MAX_ERROR=5e-5;
-    private static final int MAX_EPOCHS=2_0;
+    private static final int MAX_EPOCHS=10_000;
     private static final int MAX_N_PERSONS_IN_ELEVATOR = 0;
     private static final int MAX_N_PERSONS_WAITING_TOTAL = 1;
     private static final int START_DEPTH = 0;
     private static final double MIN_MEMORY_OUT = 0;
-    private static final double MAX_MEMORY_OUT = 1;
+    private static final double MAX_MEMORY_OUT = 10.0;
     private static final double MIN_NET_OUTPUT = 0.00;
-    private static final double MAX_NET_OUTPUT = 0.7;
+    private static final double MAX_NET_OUTPUT = 0.99;
 
 
     @Builder.Default
@@ -97,7 +102,7 @@ public class ElevatorMemoryTrainerHelper
 
         NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(outMemoryMin,outMemoryMax);
         do {
-            log.info("epoch = "+epoch);
+          //  log.info("epoch = "+epoch);
             List<Experience<VariablesElevator, Integer>> miniBatch = buffer.getMiniBatch(miniBatchSize);
 
          //   List<Experience<VariablesElevator, Integer>> miniBatch=createMiniBatch();
@@ -114,7 +119,7 @@ public class ElevatorMemoryTrainerHelper
 
 
     private void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
-        if (epoch % 100 == 0 || epoch == 0) {
+        if (epoch % 1000 == 0 || epoch == 0) {
             logEpoch(learningRule, epoch);
         }
     }

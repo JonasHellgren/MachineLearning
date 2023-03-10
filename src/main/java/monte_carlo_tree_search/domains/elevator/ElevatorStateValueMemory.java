@@ -2,6 +2,7 @@ package monte_carlo_tree_search.domains.elevator;
 
 import common.Conditionals;
 import common.ScalerLinear;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
@@ -18,17 +19,19 @@ import java.util.Arrays;
 import java.util.List;
 
 @Log
+@Getter
 public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV> {
     private static final int INPUT_SIZE = 1;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = 1;
-    private static final double LEARNING_RATE = 0.01;  //0.1
+    private static final int NOF_NEURONS_HIDDEN = 10;
+    private static final double LEARNING_RATE = 0.1;  //0.1
     private static final int NOF_ITERATIONS = 1;
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;
+    private static final double MAX_ERROR = 0.00001;
 
-    //MultiLayerPerceptron neuralNetwork;
-    NeuralNetwork neuralNetwork;
+    MultiLayerPerceptron neuralNetwork;
+   // NeuralNetwork neuralNetwork;
     MomentumBackpropagation learningRule;
     StateNormalizerElevator<SSV> normalizer;
     ScalerLinear scaleOutValueToNormalized;
@@ -37,15 +40,17 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
 
     public ElevatorStateValueMemory(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(
-                TransferFunctionType.SIGMOID,  //happens to be adequate for this environment
+                TransferFunctionType.TANH,  //happens to be adequate for this environment
                 INPUT_SIZE,
                 NOF_NEURONS_HIDDEN,
-                NOF_NEURONS_HIDDEN,
+             //   NOF_NEURONS_HIDDEN,
                 OUTPUT_SIZE);
         learningRule = new MomentumBackpropagation();
         learningRule.setLearningRate(LEARNING_RATE);
         learningRule.setNeuralNetwork(neuralNetwork);
         learningRule.setMaxIterations(NOF_ITERATIONS);
+       //learningRule.setMaxError(MAX_ERROR);
+     //   neuralNetwork.setLearningRule(learningRule);
         normalizer = new StateNormalizerElevator<>();
         createOutScalers(minOut, maxOut);
         isWarmedUp=false;
@@ -77,13 +82,13 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
 
     @Override
     public void load(String fileName) {
-        neuralNetwork = MultiLayerPerceptron.createFromFile(fileName);
+        neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
     }
 
     @Override
     public void learn(List<Experience<SSV, Integer>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
-        log.info("trainingSet = " + trainingSet);
+      //  log.info("trainingSet = " + trainingSet);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
     }
@@ -92,7 +97,7 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     @SneakyThrows
     @Override
     public MomentumBackpropagation getLearningRule() {
-    return (MomentumBackpropagation) neuralNetwork.getLearningRule();
+    return learningRule;
     }
 
 
@@ -114,7 +119,7 @@ public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     @NotNull
     private double[] getInputVec(SSV v) {
         VariablesElevator vNorm=normalizer.normalize(v);
-        return new double[]{vNorm.SoE};
+        return new double[]{vNorm.SoE};  //todo, one input
     }
 
     /**

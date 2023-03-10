@@ -1,78 +1,33 @@
-package neuroph;
+package mcts_training;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.nnet.learning.BackPropagation;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
 
-
 import java.util.Arrays;
 
-public class TestTwoInputsNet {
-    public static final double DELTA = 0.1;
+public class TestXORMemoryOld {
+
+    double DELTA = 0.1;
     int inputSize = 2, nofNeuronsHiddenLayer = 10, outputSize = 1, nofIterations = 10000;
     double learningRate = 0.1, maxError = 0.00001;
     double refNetworkOutput00 = 0, refNetworkOutput01 = 0.5, refNetworkOutput10 = 0.5, refNetworkOutput11 = 1;
+    int nofIterationsForWamUp = 1, maxNofEpochs = 1000;
 
     MultiLayerPerceptron ann;
+    MomentumBackpropagation learningRule;
 
-    @Test
-    public void learnTraditional() {
-        DataSet trainingSet = getDataSet();
+    @Before
+    public void init() {
 
-        ann = new MultiLayerPerceptron(inputSize, nofNeuronsHiddenLayer, outputSize);
-        BackPropagation backPropagation = new BackPropagation();
-        backPropagation.setMaxIterations(nofIterations);
-        backPropagation.setMaxError(maxError);
-        backPropagation.setLearningRate(learningRate);
-        ann.learn(trainingSet, backPropagation);
 
-        printOutPut();
-        assertOutPut();
-    }
-
-    @Test
-    @Ignore //does not work - seems like learn does some kind of resetting
-    public void learnAnnWithBatches() {
-        int nofIterations = 100, nofBatches = 100;
-        DataSet trainingSet = getDataSet();
-
-        ann = new MultiLayerPerceptron(
-                TransferFunctionType.TANH,
-                inputSize,
-                nofNeuronsHiddenLayer,
-                nofNeuronsHiddenLayer,
-                outputSize);
-
-        MomentumBackpropagation learningRule = new MomentumBackpropagation(); //(MomentumBackpropagation) ann.getLearningRule();
-        learningRule.setLearningRate(learningRate);
-        learningRule.setMaxIterations(nofIterations);
-        learningRule.setMaxError(maxError);
-        ann.setLearningRule(learningRule);
-        for (int i = 0; i < nofBatches; i++) {
-            ann.learn(trainingSet);
-            ann.resumeLearning();
-        }
-
-        printOutPut();
-        assertOutPut();
-    }
-
-    /***
-     * inspired by
-     * https://www.codeproject.com/Articles/85385/Comparing-Neural-Networks-in-Neuroph-Encog-and-JOO
-     */
-
-    @Test
-    public void learnWithEpochs() {
         int nofIterationsForWamUp = 1, maxNofEpochs = 1000;
-        DataSet trainingSet = getDataSet();
+
         ann = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 inputSize,
@@ -80,10 +35,15 @@ public class TestTwoInputsNet {
                 nofNeuronsHiddenLayer,
                 outputSize);
 
-        MomentumBackpropagation learningRule = new MomentumBackpropagation(); //(MomentumBackpropagation) ann.getLearningRule();
+        learningRule = new MomentumBackpropagation(); //(MomentumBackpropagation) ann.getLearningRule();
         learningRule.setLearningRate(learningRate);
         learningRule.setNeuralNetwork(ann);
         learningRule.setMaxIterations(nofIterationsForWamUp);
+    }
+
+    @Test
+    public void aa() {
+        DataSet trainingSet = getDataSet();
         ann.learn(trainingSet);  //needs warm up - else null pointer exception when calling doOneLearningIteration
         int epoch = 1;
         System.out.println("trainingSet = " + trainingSet);
@@ -96,6 +56,7 @@ public class TestTwoInputsNet {
 
         printOutPut();
         assertOutPut();
+
     }
 
     private void printProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
