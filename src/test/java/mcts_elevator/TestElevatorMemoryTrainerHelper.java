@@ -37,8 +37,6 @@ public class TestElevatorMemoryTrainerHelper {
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
     MonteCarloSettings<VariablesElevator, Integer> settings;
-   // MemoryTrainerHelperInterface<VariablesElevator,Integer> trainer;
-
     ElevatorMemoryTrainerHelper trainer;
 
 
@@ -68,9 +66,6 @@ public class TestElevatorMemoryTrainerHelper {
                 .bufferSize(bufferSize)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
-
-        log.info("Buffer created");
-
         NetworkMemoryInterface<VariablesElevator> memory=trainer.createMemory(replayBuffer);
 
         List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);
@@ -79,11 +74,9 @@ public class TestElevatorMemoryTrainerHelper {
             System.out.println("SoE = " + SoE+", value= " + memory.read(getState(SoE)));
         }
 
-        Assert.assertTrue(memory.read(getState(soEList.get(1)))<memory.read(getState(soEList.get(0))));
-        Assert.assertTrue(memory.read(getState(soEList.get(2)))<memory.read(getState(soEList.get(1))));
-        Assert.assertTrue(memory.read(getState(soEList.get(3)))<memory.read(getState(soEList.get(2))));
-
-
+        Assert.assertTrue(memory.read(getState(soEList.get(0)))<memory.read(getState(soEList.get(1))));
+        Assert.assertTrue(memory.read(getState(soEList.get(1)))<memory.read(getState(soEList.get(2))));
+        Assert.assertTrue(memory.read(getState(soEList.get(2)))<memory.read(getState(soEList.get(3))));
 
     }
 

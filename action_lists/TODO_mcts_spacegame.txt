@@ -316,9 +316,11 @@ ElevatorMctsOnlySearchRunner
 - BiFunction -> supplier i elevator policies  x
 - givenMultipleRandomStartState_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue x
 - fler tester TestElevatorStateValueMemory  x
-- TestElevatorMemoryTrainerHelper
-- träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda
-- testa ovan minne
+- TestElevatorMemoryTrainerHelper  x
+- träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda x
+- testa ovan minne x
+- ElevatorSearchWithMemoryRunner funkar - jippi
+
 - snygga up Memory klasser - fixa kodduplicering
 
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland

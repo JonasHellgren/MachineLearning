@@ -20,6 +20,7 @@ import java.util.List;
 /***
  * Learning does not start if MAX_MEMORY_OUT is small
  *
+ *
  */
 
 @Builder
@@ -35,8 +36,8 @@ public class ElevatorMemoryTrainerHelper
     private static final int MAX_N_PERSONS_IN_ELEVATOR = 0;
     private static final int MAX_N_PERSONS_WAITING_TOTAL = 1;
     private static final int START_DEPTH = 0;
-    private static final double MIN_MEMORY_OUT = 0.0;
-    private static final double MAX_MEMORY_OUT = 10.0;  //large means smaller out reference for net
+    private static final double MIN_MEMORY_OUT = -10.0; //large (abs) means smaller out reference for net
+    private static final double MAX_MEMORY_OUT = 10.0;
     private static final double MIN_NET_OUTPUT = 0.00;  //for clipping
     private static final double MAX_NET_OUTPUT = 1.0;
 
@@ -73,8 +74,9 @@ public class ElevatorMemoryTrainerHelper
 
             for (int j = 0; j < nofSoEValuesPerStateValues; j++) {
                 StateInterface<VariablesElevator> stateRandomCopy=stateRandom.copy();
-                double value= MathUtils.clip(Math.abs(getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy)),
-                        MIN_NET_OUTPUT, MAX_NET_OUTPUT);
+               // double value= MathUtils.clip(Math.abs(getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy)),
+                //        MIN_NET_OUTPUT, MAX_NET_OUTPUT);
+                double value=getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy);
                 buffer.addExperience(Experience.<VariablesElevator, Integer>builder()
                         .stateVariables(stateRandomCopy.getVariables())
                         .value(value)

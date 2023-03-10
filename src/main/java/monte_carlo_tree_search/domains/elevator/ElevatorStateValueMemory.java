@@ -18,6 +18,10 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The memory gives the total nof expected persons waiting per step
+ */
+
 @Log
 @Getter
 public class ElevatorStateValueMemory<SSV> implements NetworkMemoryInterface<SSV> {

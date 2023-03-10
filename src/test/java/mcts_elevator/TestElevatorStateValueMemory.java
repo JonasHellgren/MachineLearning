@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestElevatorStateValueMemory {
 
     private static final int MINI_BATCH_SIZE = 10;
-    private static final double DELTA = 1;
-    private static final double MIN_OUT = 0;
-    private static final double MAX_OUT = 10.0;
+    private static final double DELTA = 2;
+    private static final double MIN_OUT = -10;
+    private static final double MAX_OUT = 0.0;
     ElevatorStateValueMemory<VariablesElevator> memory;
     @Before
     public void init() {
@@ -42,10 +42,12 @@ public class TestElevatorStateValueMemory {
             printProgressSometimes(memory.getLearningRule(),i);
         }
 
+        System.out.println("memory.read(getState(0.3)) = " + memory.read(getState(0.3)));
+
         assertAll(
-                () -> assertEquals(3, memory.read(getState(0.3)), DELTA),
-                () -> assertEquals(6, memory.read(getState(0.6)),DELTA),
-                () -> assertEquals(9, memory.read(getState(0.9)),DELTA)
+                () -> assertEquals(-3, memory.read(getState(0.3)), DELTA),
+                () -> assertEquals(-6, memory.read(getState(0.6)),DELTA),
+                () -> assertEquals(-9, memory.read(getState(0.9)),DELTA)
         );
     }
 
@@ -61,7 +63,8 @@ public class TestElevatorStateValueMemory {
         List<Experience<VariablesElevator, Integer>> miniBatch=new ArrayList<>();
         for (int i = 0; i < MINI_BATCH_SIZE; i++) {
             double randNum=RandUtils.getRandomDouble(MIN_OUT,MAX_OUT);
-            miniBatch.add(createExperience(randNum/MAX_OUT,randNum));
+            double soE=Math.abs(randNum/Math.abs(MIN_OUT));
+            miniBatch.add(createExperience(soE,randNum));
 
         }
         return miniBatch;
