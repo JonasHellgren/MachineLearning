@@ -5,17 +5,14 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.domains.elevator.ElevatorStateValueMemory;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
 import monte_carlo_tree_search.domains.elevator.VariablesElevator;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
-import org.neuroph.core.data.DataSet;
-import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

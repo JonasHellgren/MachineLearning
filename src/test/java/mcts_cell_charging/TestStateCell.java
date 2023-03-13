@@ -1,7 +1,7 @@
 package mcts_cell_charging;
 
 import monte_carlo_tree_search.domains.battery_cell.CellVariables;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.domains.battery_cell.StateCell;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import org.junit.Assert;

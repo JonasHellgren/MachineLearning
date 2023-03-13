@@ -4,10 +4,10 @@ import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.elevator.*;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.util.Arrays;
 

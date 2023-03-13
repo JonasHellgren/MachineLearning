@@ -1,10 +1,13 @@
 package mcts_cart_pole;
 
 import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
+import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.cart_pole.*;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

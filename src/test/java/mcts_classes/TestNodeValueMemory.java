@@ -3,7 +3,7 @@ package mcts_classes;
 import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.domains.models_space.StateShip;
-import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
+import monte_carlo_tree_search.interfaces.MemoryInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

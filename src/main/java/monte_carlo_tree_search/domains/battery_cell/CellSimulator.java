@@ -1,8 +1,8 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 
 import java.util.ArrayList;
 import java.util.List;

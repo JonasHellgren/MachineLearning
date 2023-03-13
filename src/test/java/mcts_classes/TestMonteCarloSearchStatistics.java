@@ -2,10 +2,10 @@ package mcts_classes;
 
 import common.CpuTimer;
 import monte_carlo_tree_search.domains.models_space.*;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Before;

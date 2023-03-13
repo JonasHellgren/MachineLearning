@@ -1,8 +1,8 @@
 package mcts_classes;
 
-import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.classes.SimulationResults;
-import monte_carlo_tree_search.classes.SimulationReturnsExtractor;
+import monte_carlo_tree_search.create_tree.SimulationReturnsExtractor;
 import monte_carlo_tree_search.domains.models_space.ShipActionSet;
 import monte_carlo_tree_search.domains.models_space.ShipPolicies;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;

@@ -1,12 +1,12 @@
 package mcts_elevator;
 
 import common.ListUtils;
-import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.elevator.ActionElevator;
 import monte_carlo_tree_search.domains.elevator.VariablesElevator;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;

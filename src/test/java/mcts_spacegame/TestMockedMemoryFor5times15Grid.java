@@ -1,12 +1,12 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.MemoryInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;

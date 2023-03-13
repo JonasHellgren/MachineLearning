@@ -1,7 +1,7 @@
 package mcts_spacegame;
 
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.create_tree.MonteCarloSettings;
+import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.models_space.ActionShip;
 import monte_carlo_tree_search.domains.models_space.ShipActionSet;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;

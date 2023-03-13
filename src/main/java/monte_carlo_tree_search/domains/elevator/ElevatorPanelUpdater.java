@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.domains.elevator;
 
 import black_jack.result_drawer.GridPanel;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.text.DecimalFormat;
 import java.util.Optional;

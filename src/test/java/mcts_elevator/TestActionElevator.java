@@ -1,7 +1,7 @@
 package mcts_elevator;
 
 import monte_carlo_tree_search.domains.elevator.ActionElevator;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 import org.junit.Assert;
 import org.junit.Test;
 

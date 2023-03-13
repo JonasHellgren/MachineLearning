@@ -3,7 +3,7 @@ package monte_carlo_tree_search.domains.models_space;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 
 @AllArgsConstructor

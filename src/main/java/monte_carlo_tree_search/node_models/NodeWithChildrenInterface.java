@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.node_models;
 
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 
 /** Interface for NodeNotTerminal nodes
  *  Includes methods specific for nodes with children, this to follow interface segregation principle

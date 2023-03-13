@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.classes;
 
-import monte_carlo_tree_search.generic_interfaces.MemoryInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.MemoryInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.util.HashMap;
 import java.util.HashSet;

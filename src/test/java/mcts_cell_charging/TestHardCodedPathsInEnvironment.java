@@ -2,7 +2,7 @@ package mcts_cell_charging;
 
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

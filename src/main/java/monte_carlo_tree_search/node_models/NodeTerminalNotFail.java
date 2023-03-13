@@ -1,11 +1,7 @@
 package monte_carlo_tree_search.node_models;
 
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 public final class NodeTerminalNotFail<SSV,AV> extends NodeAbstract<SSV,AV> {
     private static final String CLASS_NAME = "T-NF";

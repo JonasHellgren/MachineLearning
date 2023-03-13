@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

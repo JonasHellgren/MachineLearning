@@ -2,8 +2,8 @@ package mcts_cart_pole;
 
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
-import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
 import org.junit.Assert;
 import org.junit.Before;

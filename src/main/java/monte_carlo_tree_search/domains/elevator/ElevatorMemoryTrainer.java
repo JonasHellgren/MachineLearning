@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.*;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
+import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
-import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
+import monte_carlo_tree_search.interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 
 /***

@@ -1,16 +1,13 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import monte_carlo_tree_search.classes.MemoryTrainerHelper;
-import monte_carlo_tree_search.classes.MonteCarloSimulator;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.SimulationResults;
-import monte_carlo_tree_search.domains.elevator.VariablesElevator;
-import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
-import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
+import monte_carlo_tree_search.interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
-import java.util.List;
 
 /**
  *  Helper class used for training. The method createExperienceBuffer gives buffer later used by

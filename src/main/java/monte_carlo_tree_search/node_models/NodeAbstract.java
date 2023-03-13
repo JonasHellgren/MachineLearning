@@ -1,13 +1,10 @@
 package monte_carlo_tree_search.node_models;
 
-import common.Conditionals;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
-
-import java.util.*;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 @Getter
 @Setter

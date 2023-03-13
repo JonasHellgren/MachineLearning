@@ -1,13 +1,10 @@
 package monte_carlo_tree_search.helpers;
 
 import common.ListUtils;
-import monte_carlo_tree_search.domains.models_space.ShipActionSet;
-import monte_carlo_tree_search.domains.models_space.ShipVariables;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
 

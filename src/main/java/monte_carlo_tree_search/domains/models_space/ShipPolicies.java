@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.domains.models_space;
 
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 
 public class ShipPolicies {
 

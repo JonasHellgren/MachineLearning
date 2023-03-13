@@ -3,7 +3,7 @@ package monte_carlo_tree_search.domains.elevator;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 
 import java.util.Set;
 import java.util.function.Predicate;

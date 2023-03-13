@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.classes;
 
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
+import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.neuroph.nnet.learning.MomentumBackpropagation;

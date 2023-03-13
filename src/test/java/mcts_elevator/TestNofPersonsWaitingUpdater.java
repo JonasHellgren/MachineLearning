@@ -3,7 +3,7 @@ package mcts_elevator;
 import monte_carlo_tree_search.domains.elevator.NofPersonsWaitingUpdater;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
 import monte_carlo_tree_search.domains.elevator.VariablesElevator;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;

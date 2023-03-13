@@ -3,8 +3,8 @@ package monte_carlo_tree_search.node_models;
 import common.Conditionals;
 import common.MathUtils;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.util.*;
 

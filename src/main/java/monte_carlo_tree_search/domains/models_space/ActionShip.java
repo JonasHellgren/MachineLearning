@@ -2,7 +2,7 @@ package monte_carlo_tree_search.domains.models_space;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 
 import java.util.Arrays;
 import java.util.HashSet;
