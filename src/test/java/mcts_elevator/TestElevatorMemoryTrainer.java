@@ -2,7 +2,9 @@ package mcts_elevator;
 
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -27,6 +29,7 @@ public class TestElevatorMemoryTrainer {
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
     MonteCarloSettings<VariablesElevator, Integer> settings;
     ElevatorMemoryTrainer trainer;
+    MonteCarloSimulator<VariablesElevator, Integer> simulator;
 
 
     @Before
@@ -34,6 +37,7 @@ public class TestElevatorMemoryTrainer {
         environment = EnvironmentElevator.newDefault();
         StateInterface<VariablesElevator> startStateDummy = StateElevator.newFromVariables(VariablesElevator.builder().build());
         monteCarloTreeCreator = createTreeCreator(startStateDummy);
+        simulator=   new MonteCarloSimulator<>(environment,settings);
 
     }
 
@@ -44,7 +48,7 @@ public class TestElevatorMemoryTrainer {
         trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(bufferSize)
                 .build();
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
         replayBuffer.getBuffer().forEach(System.out::println);
         Assert.assertEquals(bufferSize,replayBuffer.size());
     }
@@ -54,7 +58,7 @@ public class TestElevatorMemoryTrainer {
         trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(bufferSize)
                 .build();
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
         NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
 

@@ -75,8 +75,7 @@ public class TestMonteCarloControlledCartPole {
     @Test
     public void simulateFromUpRightShallInAverageGiveMoreThan10Steps() {
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+                environment,settings);
         SimulationResults simulationResults=
                 simulator.simulate(stateUpRight.copy(), START_DEPTH);
         List<Double> avgList= new ArrayList<>(simulationResults.getReturnsForFailing());

@@ -64,9 +64,7 @@ public class TestMonteCarloControlledCharging {
 
     @Test
     public void whenManySimulation_thenSomeShouldGiveFailingResults() {
-        MonteCarloSimulator<CellVariables, Integer> simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+        MonteCarloSimulator<CellVariables, Integer> simulator=new MonteCarloSimulator<>(environment,settings);
         SimulationResults simulationResults=
                 simulator.simulate(StateCell.newStateFromSoCTempAndTime(SOC_INIT,TEMPERATURE_INIT,TIME_INIT));
 

@@ -3,6 +3,7 @@ package mcts_cart_pole_runner;
 import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -30,9 +31,11 @@ public class RunCartPolePretrainedMemory {
 
     @SneakyThrows
     public static void main(String[] args) {
-        MonteCarloTreeCreator<CartPoleVariables, Integer> mcForTraining= createTreeCreatorForTraining();
+        MonteCarloSettings<CartPoleVariables, Integer> settings= createTreeCreatorForTraining();
         CartPoleMemoryTrainer memoryTrainerHelper=new CartPoleMemoryTrainer(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
-        ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(mcForTraining);
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=
+                new MonteCarloSimulator<>(EnvironmentCartPole.newDefault(),settings);
+        ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(simulator);
         CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
         memoryTrainerHelper.trainMemory(memory, buffer);
 
@@ -42,7 +45,6 @@ public class RunCartPolePretrainedMemory {
                 Arrays.asList("root value","nofNodes","maxDepth"),"Iteration");
         CartPoleRunner cpr=new CartPoleRunner(mcForSearch,memory,NOF_STEPS,plotter);
         cpr.run(state);
-
     }
 
     @NotNull
@@ -84,12 +86,10 @@ public class RunCartPolePretrainedMemory {
                 .build();
     }
 
-    public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForTraining() {
-        EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
+    public static MonteCarloSettings<CartPoleVariables, Integer> createTreeCreatorForTraining() {
         final int NOF_SIMULATIONS_PER_NODE = 100;
         final int TIME_BUDGET_MILLI_SECONDS = 100;
-        ActionInterface<Integer> actionTemplate=  ActionCartPole.newRandom();
-        MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
+        return MonteCarloSettings.<CartPoleVariables, Integer>builder()
                 .actionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
@@ -100,11 +100,5 @@ public class RunCartPolePretrainedMemory {
                 .nofSimulationsPerNode(NOF_SIMULATIONS_PER_NODE)
                 .build();
 
-        return MonteCarloTreeCreator.<CartPoleVariables, Integer>builder()
-                .environment(environment)
-                .startState(StateCartPole.newAllStatesAsZero())
-                .monteCarloSettings(settings)
-                .actionTemplate(actionTemplate)
-                .build();
     }
 }

@@ -34,12 +34,14 @@ public class TestStateValueMemoryTraining {
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
     ReplayBuffer<CartPoleVariables,Integer> buffer;
     CartPoleMemoryTrainer memoryTrainerHelper;
+    MonteCarloSettings<CartPoleVariables, Integer> settings;
+
     @Before
     public void init() {
         environment = EnvironmentCartPole.newDefault();
         int VALUE_LEFT = 0;
         ActionInterface<Integer> actionTemplate=  ActionCartPole.builder().rawValue(VALUE_LEFT).build();
-        MonteCarloSettings<CartPoleVariables, Integer> settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
+        settings= MonteCarloSettings.<CartPoleVariables, Integer>builder()
                 .actionSelectionPolicy(CartPolePolicies.newEqualProbability())
                 .simulationPolicy(CartPolePolicies.newEqualProbability())
                 .isDefensiveBackup(false)
@@ -60,7 +62,9 @@ public class TestStateValueMemoryTraining {
                 .build();
 
         memoryTrainerHelper=new CartPoleMemoryTrainer(MINI_BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
-        buffer=memoryTrainerHelper.createExperienceBuffer(monteCarloTreeCreator);
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=
+                new MonteCarloSimulator<>(environment,settings);
+        buffer=memoryTrainerHelper.createExperienceBuffer(simulator);
          }
 
     @Test
@@ -76,8 +80,7 @@ public class TestStateValueMemoryTraining {
     @Test public void trainNetwork() {
         CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+                environment,settings);
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();

@@ -42,9 +42,7 @@ public class TestSoELongValue {
         monteCarloTreeCreator = createTreeCreator(startStateDummy);
         stateOneWaitingAtEachFloor = StateElevator.newFromVariables(
                 VariablesElevator.builder().nPersonsWaiting(Arrays.asList(1, 1, 1)).build());
-        simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());;
+        simulator=new MonteCarloSimulator<>(environment,settings);
     }
 
     @Test

@@ -2,6 +2,7 @@ package mcts_elevator_runner;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
@@ -27,15 +28,19 @@ public class ElevatorSearchWithMemoryRunner {
 
     @SneakyThrows
     public static void main(String[] args) throws InterruptedException {
+
+        MonteCarloSettings<VariablesElevator, Integer> settingsMemoryCreation= createSimulatorSettings
+                (StateElevator.newFromVariables(VariablesElevator.newDefault()));
+        MonteCarloSimulator<VariablesElevator,Integer> simulator=
+                new MonteCarloSimulator<>(EnvironmentElevator.newDefault(),settingsMemoryCreation);
+
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newFromStepBetweenAddingNofWaiting
                 (Arrays.asList(NSTEPS_BETWEEN,NSTEPS_BETWEEN,NSTEPS_BETWEEN_LARGER));
-
-        MonteCarloTreeCreator<VariablesElevator, Integer> memoryCreator= createMemoryCreator
-                (StateElevator.newFromVariables(VariablesElevator.newDefault()));
         ElevatorMemoryTrainer trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(BUFFER_SIZE)
                 .build();
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(memoryCreator);
+
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
         NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(
                 trainer.getOutMemoryMin(), trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
@@ -62,11 +67,9 @@ public class ElevatorSearchWithMemoryRunner {
         return StateElevator.newFromVariables(VariablesElevator.builder().SoE(SoE).build());
     }
 
-    public static MonteCarloTreeCreator<VariablesElevator, Integer> createMemoryCreator(StateInterface<VariablesElevator> startState) {
-        EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newDefault();
-        ActionInterface<Integer> actionTemplate = ActionElevator.newValueDefaultRange(0);
+    public static MonteCarloSettings<VariablesElevator, Integer> createSimulatorSettings(StateInterface<VariablesElevator> startState) {
 
-        MonteCarloSettings<VariablesElevator, Integer> settings = MonteCarloSettings.<VariablesElevator, Integer>builder()
+        return MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .actionSelectionPolicy(ElevatorPolicies.newNotUpIfLowSoE())
                 .simulationPolicy(ElevatorPolicies.newNotUpIfLowSoE())
                 .discountFactorSimulation(1.0)
@@ -74,12 +77,6 @@ public class ElevatorSearchWithMemoryRunner {
                 .maxSimulationDepth(MAX_SIMULATION_DEPTH)   //20
                 .build();
 
-        return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()
-                .environment(environment)
-                .startState(startState)
-                .monteCarloSettings(settings)
-                .actionTemplate(actionTemplate)
-                .build();
     }
 
     public static MonteCarloTreeCreator<VariablesElevator, Integer> createSearchTree(StateInterface<VariablesElevator> startState,

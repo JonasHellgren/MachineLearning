@@ -326,6 +326,7 @@ ElevatorMctsOnlySearchRunner
 - CartPoleMemoryTrainerHelper använda interface   x
 - Extrahera Simulator  x
 - createExperienceBuffer skall använda Simulator
+- RunCartPolePretrainedMemory settings  x
 - Extrahera Backuper
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
 

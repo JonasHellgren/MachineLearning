@@ -47,9 +47,7 @@ public class Test_5times15gridCorridor {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
-        simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+        simulator=new MonteCarloSimulator<>(environment,settings);
     }
 
     @Test

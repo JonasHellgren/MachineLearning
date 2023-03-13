@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.classes;
 
 import common.ListUtils;
+import lombok.Getter;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class MonteCarloSimulator<S, A> {
 
     EnvironmentGenericInterface<S, A> environment;

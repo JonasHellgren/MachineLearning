@@ -60,9 +60,7 @@ public class Test_3times7grid_Simulations {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
-        simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+        simulator=new MonteCarloSimulator<>(environment,settings);
     }
 
     @Test

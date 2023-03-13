@@ -88,8 +88,7 @@ public class TestCartPoleEnvironmentMinusOneRewardAtFail {
 
     private double getAverageReturn(StateInterface<CartPoleVariables> state ) {
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
+                environment,settings);
 
         SimulationResults simulationResults=
                 simulator.simulate(state.copy());

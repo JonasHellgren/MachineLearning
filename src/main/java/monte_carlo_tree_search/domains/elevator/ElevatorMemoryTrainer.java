@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
@@ -57,7 +58,7 @@ public class ElevatorMemoryTrainer
 
     @Override
     public ReplayBuffer<VariablesElevator, Integer> createExperienceBuffer
-            (MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator) {
+            (MonteCarloSimulator<VariablesElevator, Integer> simulator) {
         ReplayBuffer<VariablesElevator, Integer> buffer = new ReplayBuffer<>(bufferSize);
         Counter counter = new Counter(bufferSize);
 
@@ -67,7 +68,7 @@ public class ElevatorMemoryTrainer
 
             for (int j = 0; j < nofSoEValuesPerStateValues; j++) {
                 StateInterface<VariablesElevator> stateRandomCopy=stateRandom.copy();
-                double value=getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy);
+                double value=getAverageReturnPerStep(simulator, stateRandomCopy);
                 buffer.addExperience(Experience.<VariablesElevator, Integer>builder()
                         .stateVariables(stateRandomCopy.getVariables())
                         .value(value)
@@ -79,14 +80,12 @@ public class ElevatorMemoryTrainer
         return buffer;
     }
 
-    private double getAverageReturnPerStep(MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator, StateInterface<VariablesElevator> stateRandomCopy) {
+    private double getAverageReturnPerStep(MonteCarloSimulator<VariablesElevator, Integer> simulator, StateInterface<VariablesElevator> stateRandomCopy) {
         stateRandomCopy.getVariables().SoE = RandUtils.getRandomDouble
                 (EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH);
-        MonteCarloSimulator<VariablesElevator, Integer> simulator=new MonteCarloSimulator<>(monteCarloTreeCreator.getEnvironment(),monteCarloTreeCreator.getSettings());
-
         SimulationResults simulationResults = simulator.simulate(stateRandomCopy, START_DEPTH);
         return getAverageReturn(simulationResults)/(double)
-        monteCarloTreeCreator.getSettings().getMaxSimulationDepth();
+        simulator.getSettings().getMaxSimulationDepth();
     }
 
 

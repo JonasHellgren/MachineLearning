@@ -37,11 +37,8 @@ public class CartPoleMemoryTrainer
 
     @Override
     public ReplayBuffer<CartPoleVariables,Integer> createExperienceBuffer(
-            MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator) {
+            MonteCarloSimulator<CartPoleVariables, Integer> simulator) {
         ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(bufferSize);
-        MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
-                monteCarloTreeCreator.getEnvironment(),
-                monteCarloTreeCreator.getSettings());
 
         for (int i = 0; i < bufferSize; i++) {
             StateInterface<CartPoleVariables> stateRandom=StateCartPole.newRandom();
