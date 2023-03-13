@@ -327,7 +327,7 @@ ElevatorMctsOnlySearchRunner
 - Extrahera Simulator  x
 - createExperienceBuffer skall använda Simulator
 - RunCartPolePretrainedMemory settings  x
-- Extrahera Backuper
+- Extrahera Backuper  x
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
 
 - Ny miljö energy trading

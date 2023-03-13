@@ -2,7 +2,6 @@ package monte_carlo_tree_search.classes;
 
 import common.Conditionals;
 import common.CpuTimer;
-import common.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,7 +15,6 @@ import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /***
  *   This class performs monte carlo tree search
@@ -105,19 +103,21 @@ public class MonteCarloTreeCreator<S, A> {
         }
 
         MonteCarloSimulator<S, A> simulator=new MonteCarloSimulator<>(environment,settings);
-        int i;
+        Counter counter=new Counter(settings.maxNofIterations);
         plotData.clear();
         ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
-        for (i = 0; i < settings.maxNofIterations; i++) {
+
+        while (!counter.isExceeded()) {
             NodeWithChildrenInterface<S, A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
-            helper.someLogging(i, nodeSelected, actionInSelected);
+            helper.someLogging(counter.getCount(), nodeSelected, actionInSelected);
+            BackPropagator<S, A> backPropagator = createBackPropagator();
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulator.simulate(sr.newState, nodeSelected.getDepth());
-                backPropagate(sr, simulationResults, actionInSelected.get());
+                backPropagator.backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  // actionInSelected is empty <=> all actions tested
-                chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
+                backPropagator.chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
             }
 
             helper.updatePlotData(plotData);
@@ -125,10 +125,18 @@ public class MonteCarloTreeCreator<S, A> {
                 log.fine("Time exceeded");
                 break;
             }
+            counter.increase();
         }
-        nofIterations = i;
-        helper.logStatistics(i, new MonteCarloSearchStatistics<>(nodeRoot, this, settings));
+        nofIterations = counter.getCount();
+        helper.logStatistics(counter.getCount(), new MonteCarloSearchStatistics<>(nodeRoot, this, settings));
         return nodeRoot;
+    }
+
+    private BackPropagator<S, A> createBackPropagator() {
+        return BackPropagator.<S, A>builder()
+                .environment(environment).startState(startState).settings(settings).nodeRoot(nodeRoot)
+                .actionsToSelected(actionsToSelected).memory(memory)
+                .build();
     }
 
 
@@ -158,35 +166,6 @@ public class MonteCarloTreeCreator<S, A> {
 
 
 
-    private void chooseTestedActionAndBackPropagate(NodeWithChildrenInterface<S, A> nodeSelected, ActionSelector<S, A> actionSelector) {
-        log.fine("The selected node has either all children as fails or is at max depth");
-        StateInterface<S> state = TreeInfoHelper.getState(startState, environment, actionsToSelected);
-        Optional<ActionInterface<A>> actionInSelected = actionSelector.selectBestTestedAction(nodeSelected);
-        StepReturnGeneric<S> sr = environment.step(actionInSelected.orElseThrow(), state);
-        SimulationResults simulationResults = SimulationResults.newEmpty();
-        backPropagate(sr, simulationResults, actionInSelected.orElseThrow());
-    }
-
-    private void backPropagate(StepReturnGeneric<S> sr,
-                               SimulationResults simulationResults,
-                               ActionInterface<A> actionInSelected) {
-        SimulationReturnsExtractor<S, A> bumSim = SimulationReturnsExtractor.<S, A>builder()
-                .nofNodesOnPath(actionsToSelected.size() + 1)
-                .simulationResults(simulationResults)
-                .settings(settings)
-                .build();
-
-
-        BackupModifier<S, A> bum = BackupModifier.<S, A>builder().rootTree(nodeRoot)
-                .actionsToSelected(actionsToSelected)
-                .actionOnSelected(actionInSelected)
-                .stepReturnOfSelected(sr)
-                .settings(settings)
-                .returnsSimulation(bumSim.getSimulationReturns())
-                .memoryValueStateAfterAction(memory.read(sr.newState))
-                .build();
-        bum.backup();
-    }
 
 
 }
