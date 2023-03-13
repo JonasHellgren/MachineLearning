@@ -13,6 +13,10 @@ public class CpuTimer {
     long absoluteProgress;
     float relativeProgress;
 
+    public static CpuTimer newTimer(long timeBudgetMillis) {
+        return new CpuTimer(timeBudgetMillis);
+    }
+
     public CpuTimer(long timeBudgetMillis) {
         this.timeBudgetMillis = timeBudgetMillis;
         reset();

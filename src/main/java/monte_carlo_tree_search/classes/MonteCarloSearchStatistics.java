@@ -35,9 +35,10 @@ public class MonteCarloSearchStatistics<S, A> {
 
     public MonteCarloSearchStatistics(@NonNull NodeWithChildrenInterface<S, A> nodeRoot,
                                       @NonNull MonteCarloTreeCreator<S, A> monteCarloTreeCreator,
+                                      @NonNull CpuTimer cpuTimer,
                                       MonteCarloSettings<S, A> settings) {
         this.nodeRoot = nodeRoot;
-        this.cpuTimer = monteCarloTreeCreator.cpuTimer;
+        this.cpuTimer = cpuTimer;
         this.nofIterations = monteCarloTreeCreator.nofIterations;
         this.settings = settings;
         this.nofNodesPerDepthLevel=new ArrayList<>();

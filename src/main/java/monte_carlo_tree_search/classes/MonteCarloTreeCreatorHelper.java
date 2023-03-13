@@ -49,7 +49,6 @@ public class MonteCarloTreeCreatorHelper<S, A> {
         actionRoot.setValue(actionRoot.nonApplicableAction());
         mctc.nodeRoot = NodeInterface.newNotTerminal(startState, actionRoot);
         mctc.tih = new TreeInfoHelper<>(mctc.nodeRoot, mctc.settings);
-        mctc.cpuTimer = new CpuTimer(mctc.settings.timeBudgetMilliSeconds);
         mctc.nofIterations = 0;
         mctc.plotData = new ArrayList<>();
     }

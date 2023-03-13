@@ -52,10 +52,11 @@ public class MonteCarloTreeCreator<S, A> {
 
     NodeWithChildrenInterface<S, A> nodeRoot;
     TreeInfoHelper<S, A> tih;
-    CpuTimer cpuTimer;
+
     int nofIterations;
     List<ActionInterface<A>> actionsToSelected;
     List<TreePlotData> plotData;
+    MonteCarloSearchStatistics<S, A> statistics;
 
     @Builder
     private static <S, A> MonteCarloTreeCreator<S, A> newMCTC(
@@ -79,7 +80,9 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public MonteCarloSearchStatistics<S, A> getStatistics() {
-        MonteCarloSearchStatistics<S, A> statistics = new MonteCarloSearchStatistics<>(nodeRoot, this, settings);
+        if (statistics==null) {
+            throw new RuntimeException("No statistics set, need to first call run()");
+        }
         statistics.setStatistics();
         return statistics;
     }
@@ -95,6 +98,7 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public NodeWithChildrenInterface<S, A> run() throws StartStateIsTrapException {
+        CpuTimer cpuTimer = new CpuTimer(settings.timeBudgetMilliSeconds);
         MonteCarloTreeCreatorHelper.setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
         MonteCarloTreeCreatorHelper<S, A> helper=new MonteCarloTreeCreatorHelper<>(
                 environment,settings,actionTemplate,startState,nodeRoot,cpuTimer);
@@ -107,7 +111,7 @@ public class MonteCarloTreeCreator<S, A> {
         plotData.clear();
         ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
 
-        while (!counter.isExceeded()) {
+        while (isCounterAndTimeValid(counter, cpuTimer)) {
             NodeWithChildrenInterface<S, A> nodeSelected = select(nodeRoot);
             Optional<ActionInterface<A>> actionInSelected = actionSelector.selectRandomNonTestedAction(nodeSelected);
             helper.someLogging(counter.getCount(), nodeSelected, actionInSelected);
@@ -121,15 +125,16 @@ public class MonteCarloTreeCreator<S, A> {
             }
 
             helper.updatePlotData(plotData);
-            if (cpuTimer.isTimeExceeded()) {
-                log.fine("Time exceeded");
-                break;
-            }
             counter.increase();
         }
         nofIterations = counter.getCount();
-        helper.logStatistics(counter.getCount(), new MonteCarloSearchStatistics<>(nodeRoot, this, settings));
+        statistics= new MonteCarloSearchStatistics<>(nodeRoot, this, cpuTimer, settings);
+        helper.logStatistics(counter.getCount(),statistics);
         return nodeRoot;
+    }
+
+    private boolean isCounterAndTimeValid(Counter counter,CpuTimer cpuTimer) {
+        return !counter.isExceeded() && !cpuTimer.isTimeExceeded();
     }
 
     private BackPropagator<S, A> createBackPropagator() {

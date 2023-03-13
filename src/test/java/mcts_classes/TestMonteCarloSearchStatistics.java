@@ -1,5 +1,6 @@
 package mcts_classes;
 
+import common.CpuTimer;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.classes.MonteCarloSearchStatistics;
@@ -41,7 +42,7 @@ public class TestMonteCarloSearchStatistics {
     @Test public void whenThreeNodesStanding_thenBranchingOne() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = create3nodesTree();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
-                nodeRoot,monteCarloTreeCreator,settings);
+                nodeRoot,monteCarloTreeCreator,CpuTimer.newTimer(0),settings);
 
         nodeRoot.printTree();
         System.out.println("statistics = " + statistics);
@@ -58,7 +59,7 @@ public class TestMonteCarloSearchStatistics {
     @Test public void whenTwoDeep1FourDeep2_thenBranchingTwo() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createTwoDeep1FourDeep2();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
-                nodeRoot,monteCarloTreeCreator,settings);
+                nodeRoot,monteCarloTreeCreator,CpuTimer.newTimer(0),settings);
 
         nodeRoot.printTree();
         System.out.println("statistics = " + statistics);
