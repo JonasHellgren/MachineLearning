@@ -1,6 +1,5 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
-import monte_carlo_tree_search.network_training.MemoryTrainerHelperInterface;
+import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 
@@ -27,8 +26,8 @@ import java.util.List;
 @Getter
 @Builder
 @Log
-public class ElevatorMemoryTrainerHelper
-    implements MemoryTrainerHelperInterface<VariablesElevator, Integer> {
+public class ElevatorMemoryTrainer
+    implements MemoryTrainerInterface<VariablesElevator, Integer> {
 
     private static final int MINI_BATCH_SIZE=10;
     private static final int BUFFER_SIZE=10;

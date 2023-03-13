@@ -32,7 +32,7 @@ public class ElevatorSearchWithMemoryRunner {
 
         MonteCarloTreeCreator<VariablesElevator, Integer> memoryCreator= createMemoryCreator
                 (StateElevator.newFromVariables(VariablesElevator.newDefault()));
-        ElevatorMemoryTrainerHelper trainer=ElevatorMemoryTrainerHelper.builder()
+        ElevatorMemoryTrainer trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(BUFFER_SIZE)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(memoryCreator);

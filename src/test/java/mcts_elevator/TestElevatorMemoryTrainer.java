@@ -1,6 +1,5 @@
 package mcts_elevator;
 
-import common.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -9,20 +8,17 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
-import monte_carlo_tree_search.network_training.Experience;
-import monte_carlo_tree_search.network_training.MemoryTrainerHelperInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Log
-public class TestElevatorMemoryTrainerHelper {
+public class TestElevatorMemoryTrainer {
 
     private static final int NOF_SIMULATIONS_PER_NODE = 10;
     private static final int MAX_SIMULATION_DEPTH = 1000;
@@ -30,7 +26,7 @@ public class TestElevatorMemoryTrainerHelper {
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
     MonteCarloSettings<VariablesElevator, Integer> settings;
-    ElevatorMemoryTrainerHelper trainer;
+    ElevatorMemoryTrainer trainer;
 
 
     @Before
@@ -45,7 +41,7 @@ public class TestElevatorMemoryTrainerHelper {
     @Ignore
     public void givenTrainer_whenCreatedExpBuffer_thenSizeCorrect() {
         final int bufferSize = 10;
-        trainer=ElevatorMemoryTrainerHelper.builder()
+        trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(bufferSize)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
@@ -55,7 +51,7 @@ public class TestElevatorMemoryTrainerHelper {
 
     @Test public void givenTrainedMemory_thenCorrectSoEValueMapping() {
         final int bufferSize = 50;
-        trainer=ElevatorMemoryTrainerHelper.builder()
+        trainer= ElevatorMemoryTrainer.builder()
                 .bufferSize(bufferSize)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);

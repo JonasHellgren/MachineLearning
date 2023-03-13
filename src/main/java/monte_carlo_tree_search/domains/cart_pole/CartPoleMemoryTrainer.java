@@ -1,18 +1,12 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import lombok.extern.java.Log;
+import monte_carlo_tree_search.classes.MemoryTrainerHelper;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
-import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.network_training.Experience;
-import monte_carlo_tree_search.network_training.MemoryTrainerHelperInterface;
+import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
-import org.neuroph.nnet.learning.MomentumBackpropagation;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,22 +14,25 @@ import java.util.List;
  *  method trainMemory.
  */
 
-@Log
-public class CartPoleMemoryTrainerHelper //{
-        implements MemoryTrainerHelperInterface<CartPoleVariables, Integer> {
+
+public class CartPoleMemoryTrainer
+        implements MemoryTrainerInterface<CartPoleVariables, Integer> {
     private static final int START_DEPTH = 0;
     int miniBatchSize;
     int bufferSize;
     double maxError;
     int maxNofEpochs;
+    MemoryTrainerHelper<CartPoleVariables, Integer> helper;
 
-    public CartPoleMemoryTrainerHelper(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
+    public CartPoleMemoryTrainer(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
         this.miniBatchSize = miniBatchSize;
         this.bufferSize = bufferSize;
         this.maxError = maxError;
         this.maxNofEpochs = maxNofEpochs;
+        this.helper=new MemoryTrainerHelper<>();
     }
 
+    @Override
     public ReplayBuffer<CartPoleVariables,Integer> createExperienceBuffer(
             MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator) {
         ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(bufferSize);
@@ -43,7 +40,7 @@ public class CartPoleMemoryTrainerHelper //{
         for (int i = 0; i < bufferSize; i++) {
             StateCartPole stateRandom=StateCartPole.newRandom();
             SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom, START_DEPTH);
-            double averageReturn = getAverageReturn(simulationResults);
+            double averageReturn = helper.getAverageReturn(simulationResults);
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())
                     .value(averageReturn)
@@ -52,31 +49,20 @@ public class CartPoleMemoryTrainerHelper //{
         return buffer;
     }
 
+    @Override
     public void trainMemory(NetworkMemoryInterface<CartPoleVariables> memory,
                             ReplayBuffer<CartPoleVariables, Integer> buffer) {
         int epoch = 0;
         do {
             List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(miniBatchSize);
             memory.learn(miniBatch);
-            logProgressSometimes(memory.getLearningRule(), epoch++);
+            helper.logProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-        logEpoch(memory.getLearningRule(), epoch);
-    }
-
-    private void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
-        if (epoch % 1000 == 0 || epoch==0) {
-            logEpoch(learningRule, epoch);
-        }
-    }
-
-    private void logEpoch(MomentumBackpropagation learningRule, int epoch) {
-        log.info("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
+        helper.logEpoch(memory.getLearningRule(), epoch);
     }
 
     public double getAverageReturn(SimulationResults simulationResults) {
-        List<Double> returns= new ArrayList<>(simulationResults.getReturnListForAll());
-        return returns.stream().mapToDouble(val -> val).average().orElse(0.0);
+        return helper.getAverageReturn(simulationResults);
     }
-
 
 }

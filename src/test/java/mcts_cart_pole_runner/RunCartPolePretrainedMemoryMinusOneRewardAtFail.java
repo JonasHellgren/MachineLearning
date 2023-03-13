@@ -9,7 +9,7 @@ import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainerHelper;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
     @SneakyThrows
     public static void main(String[] args) {
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForTraining= createTreeCreatorForTraining();
-        CartPoleMemoryTrainerHelper memoryTrainerHelper=new CartPoleMemoryTrainerHelper(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
+        CartPoleMemoryTrainer memoryTrainerHelper=new CartPoleMemoryTrainer(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(mcForTraining);
         CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>(FAIL_REWARD,NON_FAIL_REWARD);
         memoryTrainerHelper.trainMemory(memory, buffer);

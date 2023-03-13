@@ -1,6 +1,6 @@
 package mcts_cart_pole;
 
-import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainerHelper;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
@@ -32,7 +32,7 @@ public class TestStateValueMemoryTraining {
     MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environment;
     ReplayBuffer<CartPoleVariables,Integer> buffer;
-    CartPoleMemoryTrainerHelper memoryTrainerHelper;
+    CartPoleMemoryTrainer memoryTrainerHelper;
     @Before
     public void init() {
         environment = EnvironmentCartPole.newDefault();
@@ -58,7 +58,7 @@ public class TestStateValueMemoryTraining {
                 .actionTemplate(actionTemplate)
                 .build();
 
-        memoryTrainerHelper=new CartPoleMemoryTrainerHelper(MINI_BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
+        memoryTrainerHelper=new CartPoleMemoryTrainer(MINI_BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
         buffer=memoryTrainerHelper.createExperienceBuffer(monteCarloTreeCreator);
          }
 

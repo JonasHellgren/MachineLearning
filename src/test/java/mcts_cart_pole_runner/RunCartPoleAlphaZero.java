@@ -159,7 +159,7 @@ public class RunCartPoleAlphaZero {
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferTraining,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
         ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
-        CartPoleMemoryTrainerHelper memoryTrainerHelper = new CartPoleMemoryTrainerHelper(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
+        CartPoleMemoryTrainer memoryTrainerHelper = new CartPoleMemoryTrainer(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
         bufferTraining.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
        // bufferTrainig.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));
 
