@@ -42,8 +42,8 @@ public class XORMemory <SSV> implements NetworkMemoryInterface<SSV> {
 
     @Override
     public void write(StateInterface<SSV> state, double value) {
-
     }
+
 
     @Override
     public double read(StateInterface<SSV> state) {

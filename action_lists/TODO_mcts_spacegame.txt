@@ -320,8 +320,9 @@ ElevatorMctsOnlySearchRunner
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda x
 - testa ovan minne x
 - ElevatorSearchWithMemoryRunner funkar - jippi x
-- par tuning
+- par tuning  x
 - snygga up Memory klasser - fixa kodduplicering
+- CartPoleMemoryTrainerHelper använda interface
 - Extrahera Simulator
 - Extrahera Backuper
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland

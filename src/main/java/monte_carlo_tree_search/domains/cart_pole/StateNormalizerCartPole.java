@@ -1,7 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import common.ScalerLinear;
-import monte_carlo_tree_search.network_training.CartPoleStateValueMemory;
 
 public class StateNormalizerCartPole<SSV> {
 

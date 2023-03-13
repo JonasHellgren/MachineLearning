@@ -1,4 +1,4 @@
-package monte_carlo_tree_search.network_training;
+package monte_carlo_tree_search.domains.cart_pole;
 
 import common.Conditionals;
 import common.ListUtils;
@@ -10,6 +10,7 @@ import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
@@ -36,8 +37,8 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
     private static final int NET_OUT_MIN = 0;
     private static final int NET_OUT_MAX = 1;
 
-    //MultiLayerPerceptron neuralNetwork;
-    NeuralNetwork neuralNetwork;
+    MultiLayerPerceptron neuralNetwork;
+   // NeuralNetwork neuralNetwork;
     MomentumBackpropagation learningRule;
     StateNormalizerCartPole<SSV> normalizer;
     ScalerLinear scaleOutValueToNormalized;
@@ -63,22 +64,21 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
         isWarmedUp=false;
     }
 
-    public void createOutScalers(double minOut, double maxOut) {
-        scaleOutNormalizedToValue =new ScalerLinear(NET_OUT_MIN, NET_OUT_MAX,minOut, maxOut);
-        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, NET_OUT_MIN, NET_OUT_MAX);
+
+
+    @SneakyThrows
+    @Override
+    public void write(StateInterface<SSV> state, double value) {
+        throw new NoSuchMethodException("Not defined/needed - use learn instead");
     }
 
-    public void learn(List<Experience<SSV, Integer>> miniBatch) {
-        DataSet trainingSet = getDataSet(miniBatch);
-        doWarmUpIfNotDone(trainingSet);
-        learningRule.doOneLearningIteration(trainingSet);
-    }
 
     @Override
     public double read(StateInterface<SSV> state) {
         double[] inputVec = getInputVec(state.getVariables());
         return getNetworkOutputValue(inputVec);
     }
+
 
     private double getNetworkOutputValue(double[] inputVec) {
         neuralNetwork.setInput(inputVec);
@@ -87,11 +87,30 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
         return scaleOutNormalizedToValue.calcOutDouble(output[0]);
     }
 
-    @SneakyThrows
+
     @Override
-    public void write(StateInterface<SSV> state, double value) {
-        throw new NoSuchMethodException("Not defined/needed - use learn instead");
+    public void save(String fileName)  {
+        neuralNetwork.save(fileName);
     }
+
+    @Override
+    public void load(String fileName) {
+        neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
+    }
+
+
+    public void learn(List<Experience<SSV, Integer>> miniBatch) {
+        DataSet trainingSet = getDataSet(miniBatch);
+        doWarmUpIfNotDone(trainingSet);
+        learningRule.doOneLearningIteration(trainingSet);
+    }
+
+
+    public void createOutScalers(double minOut, double maxOut) {
+        scaleOutNormalizedToValue =new ScalerLinear(NET_OUT_MIN, NET_OUT_MAX,minOut, maxOut);
+        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, NET_OUT_MIN, NET_OUT_MAX);
+    }
+
 
     @Override
     public double getAverageValueError(List<Experience<SSV, Integer>> experienceList) {
@@ -132,15 +151,5 @@ public class CartPoleStateValueMemory<SSV> implements NetworkMemoryInterface<SSV
         return trainingSet;
     }
 
-
-    @Override
-    public void save(String fileName)  {
-        neuralNetwork.save(fileName);
-    }
-
-    @Override
-    public void load(String fileName) {
-        neuralNetwork = MultiLayerPerceptron.createFromFile(fileName);
-    }
 
 }
