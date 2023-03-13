@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The memory gives the total nof expected persons waiting per step
+ * The memory gives the total nof expected persons waiting per step - negated
+ * memory.read(SoE=0.9)=-0.1  <=>  0.1 persons expected to wait at SoE 0.9
  */
 
 @Log

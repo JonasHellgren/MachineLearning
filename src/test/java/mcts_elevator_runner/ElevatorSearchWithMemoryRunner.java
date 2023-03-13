@@ -16,17 +16,14 @@ import java.util.List;
 public class ElevatorSearchWithMemoryRunner {
 
     private static final int NOF_SIMULATIONS_PER_NODE = 10;
-    private static final double SOE_LOW = 0.5;
-    private static final double SOE_HIGH = 1.0;
     private static final int MAX_SIMULATION_DEPTH = 1000;
 
     private static final int SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int NSTEPS_BETWEEN = 50;
     private static final int NSTEPS_BETWEEN_LARGER = 100;
-    private static final int NSTEPS_BETWEEN_LARGE = 50_000;
     private static final int NOF_STEPS = 1000;
-    private static final int BUFFER_SIZE = 50;
+    private static final int BUFFER_SIZE = 100;
 
     @SneakyThrows
     public static void main(String[] args) throws InterruptedException {
@@ -91,15 +88,15 @@ public class ElevatorSearchWithMemoryRunner {
         MonteCarloSettings<VariablesElevator, Integer> settings= MonteCarloSettings.<VariablesElevator, Integer>builder()
                 .actionSelectionPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
                 .simulationPolicy(ElevatorPolicies.newRandomDirectionAfterStopping())
-                .weightMemoryValue(100)  //todo fix
+                .weightMemoryValue(50)
                 .discountFactorSteps(0.9)
                 .discountFactorBackupSimulationDefensive(0.99)
                 .maxTreeDepth(100)
                 .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(200)
-                .nofSimulationsPerNode(5)
+                .timeBudgetMilliSeconds(300)
+                .nofSimulationsPerNode(10)
                 .maxSimulationDepth(50)   //20
-                .coefficientExploitationExploration(1e1)  //1e6
+                .coefficientExploitationExploration(1e0)  //1e1
                 .build();
 
         return MonteCarloTreeCreator.<VariablesElevator, Integer>builder()

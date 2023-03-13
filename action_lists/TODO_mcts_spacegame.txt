@@ -319,17 +319,15 @@ ElevatorMctsOnlySearchRunner
 - TestElevatorMemoryTrainerHelper  x
 - träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda x
 - testa ovan minne x
-- ElevatorSearchWithMemoryRunner funkar - jippi
-
+- ElevatorSearchWithMemoryRunner funkar - jippi x
+- par tuning
 - snygga up Memory klasser - fixa kodduplicering
-
+- Extrahera Simulator
+- Extrahera Backuper
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
-- låga värden roout values whenMoveFromX0Y2_thenX13Y4OnBestPath
-- använda ovan minne - ElevatorSearchActionRestrictionAndSoEMemoryRunner
-- AlphaZero på elevator  ElevatorAlphaZeroRunner
-- SoC minne  x
-- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
+
 - Ny miljö energy trading
+- AlphaZero på elevator  EnergyTrading
 
 - averageNofChildrenPerNode verkar inte stämma
 

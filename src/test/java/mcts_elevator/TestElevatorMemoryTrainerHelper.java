@@ -81,7 +81,6 @@ public class TestElevatorMemoryTrainerHelper {
     }
 
 
-
     private StateInterface<VariablesElevator> getState(double SoE) {
         return StateElevator.newFromVariables(VariablesElevator.builder().SoE(SoE).build());
     }
