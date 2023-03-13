@@ -323,8 +323,7 @@ ElevatorMctsOnlySearchRunner
 - par tuning  x
 - snygga up Memory klasser - fixa kodduplicering  x
 - StateValueMemoryAbstract -  x
-
-- CartPoleMemoryTrainerHelper använda interface
+- CartPoleMemoryTrainerHelper använda interface   x
 - Extrahera Simulator
 - Extrahera Backuper
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland

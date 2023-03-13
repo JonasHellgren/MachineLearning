@@ -3,6 +3,7 @@ package monte_carlo_tree_search.domains.elevator;
 import common.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.Counter;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -23,6 +24,7 @@ import java.util.List;
  *
  */
 
+@Getter
 @Builder
 @Log
 public class ElevatorMemoryTrainerHelper
@@ -71,11 +73,8 @@ public class ElevatorMemoryTrainerHelper
             StateInterface<VariablesElevator> stateRandom = StateElevator.newFromVariables(
                     VariablesElevator.newRandom(nPersonsMaxElevator, nPersonsMaxTotalWaiting));
 
-
             for (int j = 0; j < nofSoEValuesPerStateValues; j++) {
                 StateInterface<VariablesElevator> stateRandomCopy=stateRandom.copy();
-               // double value= MathUtils.clip(Math.abs(getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy)),
-                //        MIN_NET_OUTPUT, MAX_NET_OUTPUT);
                 double value=getAverageReturnPerStep(monteCarloTreeCreator, stateRandomCopy);
                 buffer.addExperience(Experience.<VariablesElevator, Integer>builder()
                         .stateVariables(stateRandomCopy.getVariables())
@@ -98,10 +97,9 @@ public class ElevatorMemoryTrainerHelper
 
 
     @Override
-    public NetworkMemoryInterface<VariablesElevator>  createMemory(ReplayBuffer<VariablesElevator, Integer> buffer) {
+    public void trainMemory(NetworkMemoryInterface<VariablesElevator> memory,
+                            ReplayBuffer<VariablesElevator, Integer> buffer) {
         int epoch = 0;
-
-        NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(outMemoryMin,outMemoryMax);
         do {
             List<Experience<VariablesElevator, Integer>> miniBatch = buffer.getMiniBatch(miniBatchSize);
             memory.learn(miniBatch);
@@ -109,7 +107,7 @@ public class ElevatorMemoryTrainerHelper
             epoch++;
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
         logEpoch(memory.getLearningRule(), epoch);
-        return memory;
+
     }
 
 

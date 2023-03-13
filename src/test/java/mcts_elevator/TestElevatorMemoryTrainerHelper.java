@@ -24,15 +24,8 @@ import java.util.List;
 @Log
 public class TestElevatorMemoryTrainerHelper {
 
-    private static final int START_DEPTH = 0;
-    private static final int MAX_N_PERSONS_IN_ELEVATOR = 0;
-    private static final int MAX_N_PERSONS_WAITING_TOTAL = 1;
-    private static final int NOF_RANDOM_STATES = 100;
     private static final int NOF_SIMULATIONS_PER_NODE = 10;
-    private static final double SOE_LOW = 0.5;
-    private static final double SOE_HIGH = 1.0;
     private static final int MAX_SIMULATION_DEPTH = 1000;
-    private static final int BUFFER_SIZE = 10;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator;
@@ -66,7 +59,8 @@ public class TestElevatorMemoryTrainerHelper {
                 .bufferSize(bufferSize)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
-        NetworkMemoryInterface<VariablesElevator> memory=trainer.createMemory(replayBuffer);
+        NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
+        trainer.trainMemory(memory,replayBuffer);
 
         List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);
 

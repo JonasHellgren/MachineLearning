@@ -36,7 +36,9 @@ public class ElevatorSearchWithMemoryRunner {
                 .bufferSize(BUFFER_SIZE)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(memoryCreator);
-        NetworkMemoryInterface<VariablesElevator> memory=trainer.createMemory(replayBuffer);
+        NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(
+                trainer.getOutMemoryMin(), trainer.getOutMemoryMax());
+        trainer.trainMemory(memory,replayBuffer);
         printMemory(memory);
 
         StateInterface<VariablesElevator> state = StateElevator.newFromVariables(VariablesElevator.builder()

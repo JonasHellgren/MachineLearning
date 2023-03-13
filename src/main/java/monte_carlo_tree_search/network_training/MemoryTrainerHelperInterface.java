@@ -7,6 +7,6 @@ import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 public interface MemoryTrainerHelperInterface<SSV, AV> {
 
     ReplayBuffer<SSV,AV> createExperienceBuffer(MonteCarloTreeCreator<SSV, AV> monteCarloTreeCreator);
-    NetworkMemoryInterface<SSV>  createMemory(ReplayBuffer<SSV, AV> buffer);
+    void trainMemory(NetworkMemoryInterface<SSV> memory, ReplayBuffer<SSV, AV> buffer);
 
 }

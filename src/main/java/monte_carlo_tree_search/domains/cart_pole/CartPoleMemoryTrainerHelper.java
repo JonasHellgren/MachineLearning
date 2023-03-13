@@ -5,8 +5,10 @@ import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
+import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.network_training.Experience;
+import monte_carlo_tree_search.network_training.MemoryTrainerHelperInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 
@@ -18,9 +20,9 @@ import java.util.List;
  *  method trainMemory.
  */
 
-//todo, make generic
 @Log
-public class CartPoleMemoryTrainerHelper {
+public class CartPoleMemoryTrainerHelper //{
+        implements MemoryTrainerHelperInterface<CartPoleVariables, Integer> {
     private static final int START_DEPTH = 0;
     int miniBatchSize;
     int bufferSize;
@@ -75,7 +77,6 @@ public class CartPoleMemoryTrainerHelper {
         List<Double> returns= new ArrayList<>(simulationResults.getReturnListForAll());
         return returns.stream().mapToDouble(val -> val).average().orElse(0.0);
     }
-
 
 
 }
