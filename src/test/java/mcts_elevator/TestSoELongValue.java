@@ -2,8 +2,10 @@ package mcts_elevator;
 
 import common.ListUtils;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -31,6 +33,7 @@ public class TestSoELongValue {
     MonteCarloSettings<VariablesElevator, Integer> settings;
     StateInterface<VariablesElevator> stateOneWaitingAtEachFloor;
     StateInterface<VariablesElevator> stateRandom;
+    MonteCarloSimulator<VariablesElevator, Integer> simulator;
 
     @Before
     public void init() {
@@ -39,6 +42,9 @@ public class TestSoELongValue {
         monteCarloTreeCreator = createTreeCreator(startStateDummy);
         stateOneWaitingAtEachFloor = StateElevator.newFromVariables(
                 VariablesElevator.builder().nPersonsWaiting(Arrays.asList(1, 1, 1)).build());
+        simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());;
     }
 
     @Test
@@ -73,7 +79,7 @@ public class TestSoELongValue {
 
     private double getValueOfSoE(double SoE) {
         stateOneWaitingAtEachFloor.getVariables().SoE = SoE;
-        SimulationResults simulationResults = monteCarloTreeCreator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
+        SimulationResults simulationResults = simulator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
         double valueSoE = simulationResults.averageReturnFromAll().orElseThrow();
         System.out.println("simulationResults = " + simulationResults);
         return valueSoE;
@@ -81,7 +87,7 @@ public class TestSoELongValue {
 
     private double getValueOfSoERandomStartStates(double SoE, StateInterface<VariablesElevator> stateRandom) {
         stateRandom.getVariables().SoE = SoE;
-        SimulationResults simulationResults = monteCarloTreeCreator.simulate(stateRandom, START_DEPTH);
+        SimulationResults simulationResults = simulator.simulate(stateRandom, START_DEPTH);
         //  System.out.println("simulationResults = " + simulationResults);
         return simulationResults.averageReturnFromAll().orElseThrow();
 

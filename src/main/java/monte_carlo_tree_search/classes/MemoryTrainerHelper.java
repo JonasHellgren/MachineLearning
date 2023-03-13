@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/** This class is for avoiding code duplication
- *
+/**
+ * This class is for avoiding code duplication
  */
 
 @Log
 public class MemoryTrainerHelper<SSV, AV>  {
 
+    private static final int NOF_EPOCHS_BETWEEN_LOGS = 1000;
     int miniBatchSize;
     double maxError;
     int maxNofEpochs;
@@ -28,7 +29,7 @@ public class MemoryTrainerHelper<SSV, AV>  {
     }
 
     public void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
-        if (epoch % 1000 == 0 || epoch==0) {
+        if (epoch % NOF_EPOCHS_BETWEEN_LOGS == 0 || epoch==0) {
             logEpoch(learningRule, epoch);
         }
     }

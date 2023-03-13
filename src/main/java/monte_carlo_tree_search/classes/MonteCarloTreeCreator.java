@@ -104,6 +104,7 @@ public class MonteCarloTreeCreator<S, A> {
             throw new StartStateIsTrapException(START_GIVE_FAIL_MESSAGE);
         }
 
+        MonteCarloSimulator<S, A> simulator=new MonteCarloSimulator<>(environment,settings);
         int i;
         plotData.clear();
         ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
@@ -113,7 +114,7 @@ public class MonteCarloTreeCreator<S, A> {
             helper.someLogging(i, nodeSelected, actionInSelected);
             if (actionInSelected.isPresent()) {
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
-                SimulationResults simulationResults = simulate(sr.newState, nodeSelected.getDepth());
+                SimulationResults simulationResults = simulator.simulate(sr.newState, nodeSelected.getDepth());
                 backPropagate(sr, simulationResults, actionInSelected.get());
             } else {  // actionInSelected is empty <=> all actions tested
                 chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
@@ -156,41 +157,6 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
 
-    public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
-        return simulate(stateAfterApplyingActionInSelectedNode, 0);
-    }
-
-    public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode,
-                                      int startDepth) {
-        SimulationResults simulationResults = SimulationResults.newEmpty();
-        for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
-            List<StepReturnGeneric<S>> stepResults =
-                    stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
-            StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
-            double sumOfRewards = ListUtils.discountedSum(
-                    stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
-                    settings.discountFactorSimulation);
-            boolean isEndingInFail = endReturn.isFail;
-            simulationResults.add(sumOfRewards, isEndingInFail);
-        }
-        return simulationResults;
-    }
-
-    private List<StepReturnGeneric<S>> stepToTerminal(StateInterface<S> state,
-                                                      int startDepth) {
-        List<StepReturnGeneric<S>> returns = new ArrayList<>();
-        SimulationPolicyInterface<S, A> policy = settings.simulationPolicy;
-        StepReturnGeneric<S> stepReturn;
-        int depth = startDepth;
-        do {
-            ActionInterface<A> action = policy.chooseAction(state);
-            stepReturn = environment.step(action, state);
-            state.setFromReturn(stepReturn);
-            returns.add(stepReturn);
-            depth++;
-        } while (!stepReturn.isTerminal && depth < settings.maxSimulationDepth);
-        return returns;
-    }
 
     private void chooseTestedActionAndBackPropagate(NodeWithChildrenInterface<S, A> nodeSelected, ActionSelector<S, A> actionSelector) {
         log.fine("The selected node has either all children as fails or is at max depth");

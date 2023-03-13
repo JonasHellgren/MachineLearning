@@ -1,5 +1,6 @@
 package mcts_cart_pole;
 
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
@@ -74,7 +75,9 @@ public class TestStateValueMemoryTraining {
 
     @Test public void trainNetwork() {
         CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
-
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         StateCartPole stateAllZero=StateCartPole.newAllStatesAsZero();
@@ -83,13 +86,13 @@ public class TestStateValueMemoryTraining {
         System.out.println("memory.read(stateAllZero.getVariables()) = " + memory.read(stateAllZero));
         System.out.println("memory.read(stateExtreme.getVariables()) = " + memory.read(stateExtreme));
 
-        SimulationResults simulationResultsAllZero=monteCarloTreeCreator.simulate(stateAllZero);
+        SimulationResults simulationResultsAllZero=simulator.simulate(stateAllZero);
         Assert.assertEquals(
                 memoryTrainerHelper.getAverageReturn(simulationResultsAllZero),
                 memory.read(stateAllZero),
                 DELTA);
 
-        SimulationResults simulationResultsExtreme=monteCarloTreeCreator.simulate(stateExtreme);
+        SimulationResults simulationResultsExtreme=simulator.simulate(stateExtreme);
         Assert.assertEquals(
                 memoryTrainerHelper.getAverageReturn(simulationResultsExtreme),
                 memory.read(stateExtreme),

@@ -4,10 +4,7 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.Counter;
-import monte_carlo_tree_search.classes.MemoryTrainerHelper;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.classes.*;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
@@ -16,8 +13,6 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 
 /***
  * Learning does not start if MAX_MEMORY_OUT is small
- *
- *
  */
 
 @Getter
@@ -87,7 +82,9 @@ public class ElevatorMemoryTrainer
     private double getAverageReturnPerStep(MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator, StateInterface<VariablesElevator> stateRandomCopy) {
         stateRandomCopy.getVariables().SoE = RandUtils.getRandomDouble
                 (EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH);
-        SimulationResults simulationResults = monteCarloTreeCreator.simulate(stateRandomCopy, START_DEPTH);
+        MonteCarloSimulator<VariablesElevator, Integer> simulator=new MonteCarloSimulator<>(monteCarloTreeCreator.getEnvironment(),monteCarloTreeCreator.getSettings());
+
+        SimulationResults simulationResults = simulator.simulate(stateRandomCopy, START_DEPTH);
         return getAverageReturn(simulationResults)/(double)
         monteCarloTreeCreator.getSettings().getMaxSimulationDepth();
     }

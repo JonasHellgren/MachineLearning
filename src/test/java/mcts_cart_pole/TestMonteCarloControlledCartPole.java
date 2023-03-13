@@ -3,6 +3,7 @@ package mcts_cart_pole;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.MonteCarloSettings;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.domains.cart_pole.*;
@@ -73,8 +74,11 @@ public class TestMonteCarloControlledCartPole {
 
     @Test
     public void simulateFromUpRightShallInAverageGiveMoreThan10Steps() {
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
         SimulationResults simulationResults=
-                monteCarloTreeCreator.simulate(stateUpRight.copy(), START_DEPTH);
+                simulator.simulate(stateUpRight.copy(), START_DEPTH);
         List<Double> avgList= new ArrayList<>(simulationResults.getReturnsForFailing());
         double averageReturn=avgList.stream().mapToDouble(val -> val).average().orElse(0.0);
         System.out.println("averageReturn = " + averageReturn);

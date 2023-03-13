@@ -1,9 +1,12 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import monte_carlo_tree_search.classes.MemoryTrainerHelper;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
+import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
@@ -36,10 +39,13 @@ public class CartPoleMemoryTrainer
     public ReplayBuffer<CartPoleVariables,Integer> createExperienceBuffer(
             MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator) {
         ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(bufferSize);
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
 
         for (int i = 0; i < bufferSize; i++) {
-            StateCartPole stateRandom=StateCartPole.newRandom();
-            SimulationResults simulationResults=monteCarloTreeCreator.simulate(stateRandom, START_DEPTH);
+            StateInterface<CartPoleVariables> stateRandom=StateCartPole.newRandom();
+            SimulationResults simulationResults=simulator.simulate(stateRandom, START_DEPTH);
             double averageReturn = helper.getAverageReturn(simulationResults);
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())

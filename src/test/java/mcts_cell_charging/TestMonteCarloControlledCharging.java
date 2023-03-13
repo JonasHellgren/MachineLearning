@@ -3,6 +3,7 @@ package mcts_cell_charging;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.*;
 import monte_carlo_tree_search.domains.battery_cell.*;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
@@ -63,8 +64,11 @@ public class TestMonteCarloControlledCharging {
 
     @Test
     public void whenManySimulation_thenSomeShouldGiveFailingResults() {
+        MonteCarloSimulator<CellVariables, Integer> simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
         SimulationResults simulationResults=
-                monteCarloTreeCreator.simulate(StateCell.newStateFromSoCTempAndTime(SOC_INIT,TEMPERATURE_INIT,TIME_INIT));
+                simulator.simulate(StateCell.newStateFromSoCTempAndTime(SOC_INIT,TEMPERATURE_INIT,TIME_INIT));
 
         Assert.assertFalse(simulationResults.areAllSimulationsTerminalFail());
     }

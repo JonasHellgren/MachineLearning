@@ -2,15 +2,13 @@ package mcts_spacegame;
 
 import common.MathUtils;
 import lombok.SneakyThrows;
+import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
-import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
@@ -35,6 +33,7 @@ public class Test_5times15gridCorridor {
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
     NodeValueMemoryHashMap<ShipVariables> memory;
+    MonteCarloSimulator<ShipVariables, ShipActionSet> simulator;
 
     @Before
     public void init() {
@@ -48,6 +47,9 @@ public class Test_5times15gridCorridor {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
+        simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
     }
 
     @Test
@@ -58,7 +60,7 @@ public class Test_5times15gridCorridor {
 
     @Test public void whenMoveFromX13Y4IntoGoal_thenReturnWithHighValue() {
         settings=settingsForSimulations();
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(13,4));
+        SimulationResults simulationResults= simulator.simulate(StateShip.newStateFromXY(13,4));
         boolean any6 = anySimulationHasReturn6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
@@ -70,7 +72,7 @@ public class Test_5times15gridCorridor {
 
     @Test public void whenMoveFromX5Y4IntoGoal_thenReturnWithHighValue() {
         settings=settingsForSimulations();
-        SimulationResults simulationResults= monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,4));
+        SimulationResults simulationResults= simulator.simulate(StateShip.newStateFromXY(5,4));
         boolean any6 = anySimulationHasReturn6(simulationResults);
         System.out.println("simulationResults = " + simulationResults);
         Assert.assertTrue(any6);
@@ -170,8 +172,6 @@ public class Test_5times15gridCorridor {
 
         SpaceGameTestHelper.doPrinting(nodeRoot,settings,monteCarloTreeCreator);
     }
-
-
 
     private MonteCarloTreeCreator<ShipVariables, ShipActionSet> treeCreator(StateShip state) {
         return MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()

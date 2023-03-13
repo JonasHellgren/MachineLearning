@@ -1,7 +1,9 @@
 package mcts_spacegame;
 
 import lombok.SneakyThrows;
+import monte_carlo_tree_search.classes.MonteCarloSimulator;
 import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -31,6 +33,7 @@ public class Test_3times7grid_Simulations {
     EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
+    MonteCarloSimulator<ShipVariables, ShipActionSet> simulator;
 
     @Before
     public void init() {
@@ -57,18 +60,22 @@ public class Test_3times7grid_Simulations {
                 .monteCarloSettings(settings)
                 .actionTemplate(actionTemplate)
                 .build();
+        simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
     }
 
     @Test
     public void whenSimulatingFromX5Y1_thenNeverFails() {
-        SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,1));
+
+        SimulationResults results=simulator.simulate(StateShip.newStateFromXY(5,1));
         List<Boolean> failList=results.getResults().stream().map(r -> r.isEndingInFail).collect(Collectors.toList());
         Assert.assertFalse(failList.contains(true));
     }
 
     @Test
     public void whenSimulatingFromX5Y2_thenSomeTimeFails() {
-        SimulationResults results=monteCarloTreeCreator.simulate(StateShip.newStateFromXY(5,2));
+        SimulationResults results=simulator.simulate(StateShip.newStateFromXY(5,2));
 
         List<Boolean> failList=results.getResults().stream()
                 .map(r -> r.isEndingInFail).collect(Collectors.toList());

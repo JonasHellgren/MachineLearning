@@ -1,9 +1,6 @@
 package mcts_cart_pole;
 
-import monte_carlo_tree_search.classes.MonteCarloSettings;
-import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.SimulationResults;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.classes.*;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.generic_interfaces.ActionInterface;
 import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
@@ -90,8 +87,12 @@ public class TestCartPoleEnvironmentMinusOneRewardAtFail {
     }
 
     private double getAverageReturn(StateInterface<CartPoleVariables> state ) {
+        MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
+                monteCarloTreeCreator.getEnvironment(),
+                monteCarloTreeCreator.getSettings());
+
         SimulationResults simulationResults=
-                monteCarloTreeCreator.simulate(state.copy());
+                simulator.simulate(state.copy());
         List<Double> avgList= new ArrayList<>(simulationResults.getReturnsForFailing());
         return avgList.stream().mapToDouble(val -> val).average().orElse(0.0);
     }
