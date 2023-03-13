@@ -33,7 +33,7 @@ public class RunCartPolePretrainedMemory {
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForTraining= createTreeCreatorForTraining();
         CartPoleMemoryTrainer memoryTrainerHelper=new CartPoleMemoryTrainer(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(mcForTraining);
-        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
+        CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
@@ -54,7 +54,7 @@ public class RunCartPolePretrainedMemory {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            CartPoleStateValueMemory<CartPoleVariables> memory)
+            CartPoleStateValueMemory<CartPoleVariables,Integer> memory)
     {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
 

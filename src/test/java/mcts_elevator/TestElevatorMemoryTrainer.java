@@ -55,7 +55,7 @@ public class TestElevatorMemoryTrainer {
                 .bufferSize(bufferSize)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(monteCarloTreeCreator);
-        NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
+        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
 
         List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);

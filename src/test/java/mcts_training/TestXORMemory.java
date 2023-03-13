@@ -15,7 +15,7 @@ public class TestXORMemory {
 
     int inputSize = 2, outputSize = 1;
     double refNetworkOutput00 = 0, refNetworkOutput01 = 0.5, refNetworkOutput10 = 0.5, refNetworkOutput11 = 1;
-    XORMemory<Integer> memory;
+    XORMemory<Integer,Integer> memory;
 
     @Before
     public void init() {

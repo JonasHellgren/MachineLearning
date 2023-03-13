@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.Counter;
+import monte_carlo_tree_search.classes.MemoryTrainerHelper;
 import monte_carlo_tree_search.classes.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
@@ -12,10 +13,6 @@ import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.generic_interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
-import org.neuroph.nnet.learning.MomentumBackpropagation;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /***
  * Learning does not start if MAX_MEMORY_OUT is small
@@ -62,6 +59,7 @@ public class ElevatorMemoryTrainer
     double outMemoryMax = MAX_MEMORY_OUT;
 
 
+
     @Override
     public ReplayBuffer<VariablesElevator, Integer> createExperienceBuffer
             (MonteCarloTreeCreator<VariablesElevator, Integer> monteCarloTreeCreator) {
@@ -96,37 +94,17 @@ public class ElevatorMemoryTrainer
 
 
     @Override
-    public void trainMemory(NetworkMemoryInterface<VariablesElevator> memory,
+    public void trainMemory(NetworkMemoryInterface<VariablesElevator,Integer> memory,
                             ReplayBuffer<VariablesElevator, Integer> buffer) {
-        int epoch = 0;
-        do {
-            List<Experience<VariablesElevator, Integer>> miniBatch = buffer.getMiniBatch(miniBatchSize);
-            memory.learn(miniBatch);
-            logProgressSometimes(memory.getLearningRule(), epoch++);
-            epoch++;
-        } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-        logEpoch(memory.getLearningRule(), epoch);
 
+        MemoryTrainerHelper<VariablesElevator,Integer> helper=new MemoryTrainerHelper<>(miniBatchSize,maxError,maxNofEpochs);
+        helper.trainMemory(memory,buffer);
     }
 
-
-    private void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
-        if (epoch % 1000 == 0 || epoch == 0) {
-            logEpoch(learningRule, epoch);
-        }
-    }
-
-    private void logEpoch(MomentumBackpropagation learningRule, int epoch) {
-        log.info("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
-    }
 
     public double getAverageReturn(SimulationResults simulationResults) {
-        List<Double> returns = new ArrayList<>(simulationResults.getReturnListForAll());
-        return returns.stream().mapToDouble(val -> val).average().orElse(0.0);
+        MemoryTrainerHelper<VariablesElevator,Integer> helper=new MemoryTrainerHelper<>(miniBatchSize,maxError,maxNofEpochs);
+        return  helper.getAverageReturn(simulationResults);
     }
-
-
-
-
 
 }

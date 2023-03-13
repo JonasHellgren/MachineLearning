@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 @Getter
-public class CartPoleStateValueMemory<SSV> extends StateValueMemoryAbstract<SSV> {
+public class CartPoleStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<SSV,AV> {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
@@ -66,9 +66,9 @@ public class CartPoleStateValueMemory<SSV> extends StateValueMemoryAbstract<SSV>
     }
 
     @Override
-    public double getAverageValueError(List<Experience<SSV, Integer>> experienceList) {
+    public double getAverageValueError(List<Experience<SSV, AV>> experienceList) {
         List<Double> errors=new ArrayList<>();
-        for (Experience<SSV, Integer> e : experienceList) {
+        for (Experience<SSV, AV> e : experienceList) {
             double expectedValue= e.value;
             double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
             errors.add(Math.abs(expectedValue-memoryValue));

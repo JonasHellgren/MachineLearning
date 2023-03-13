@@ -19,7 +19,7 @@ public class ElevatorRunner {
     MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch;
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloSettings<VariablesElevator, Integer> settings;
-    NetworkMemoryInterface<VariablesElevator> memory;
+    NetworkMemoryInterface<VariablesElevator,Integer> memory;
     int nofSteps;
 
     public ElevatorRunner(MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch,
@@ -30,7 +30,7 @@ public class ElevatorRunner {
 
     public ElevatorRunner(MonteCarloTreeCreator<VariablesElevator, Integer> mcForSearch,
                           EnvironmentGenericInterface<VariablesElevator, Integer> environment,
-                          NetworkMemoryInterface<VariablesElevator> memory,
+                          NetworkMemoryInterface<VariablesElevator,Integer> memory,
                           int nofSteps) {
         this.mcForSearch = mcForSearch;
         this.environment = environment;

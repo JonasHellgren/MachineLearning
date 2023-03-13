@@ -15,7 +15,7 @@ public class TestSavedMemory {
     private static final int EXPECTED_AT_ALL_ZERO = 100;
     private static final int EXPECTED_ALL_MAX_POS = 0;
 
-    NetworkMemoryInterface<CartPoleVariables> memory;
+    NetworkMemoryInterface<CartPoleVariables,Integer> memory;
 
     @Before
     public void init() {

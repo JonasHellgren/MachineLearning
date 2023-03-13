@@ -36,7 +36,7 @@ public class ElevatorSearchWithMemoryRunner {
                 .bufferSize(BUFFER_SIZE)
                 .build();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(memoryCreator);
-        NetworkMemoryInterface<VariablesElevator> memory=new ElevatorStateValueMemory<>(
+        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(
                 trainer.getOutMemoryMin(), trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
         printMemory(memory);
@@ -51,7 +51,7 @@ public class ElevatorSearchWithMemoryRunner {
 
     }
 
-    private static void printMemory(NetworkMemoryInterface<VariablesElevator> memory) {
+    private static void printMemory(NetworkMemoryInterface<VariablesElevator, Integer> memory) {
         List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);
         for (double SoE:soEList) {
             System.out.println("SoE = " + SoE+", value= " + memory.read(getState(SoE)));
@@ -83,7 +83,7 @@ public class ElevatorSearchWithMemoryRunner {
     }
 
     public static MonteCarloTreeCreator<VariablesElevator, Integer> createSearchTree(StateInterface<VariablesElevator> startState,
-                                                                                     NetworkMemoryInterface<VariablesElevator> memory) {
+                                                                                     NetworkMemoryInterface<VariablesElevator,Integer> memory) {
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newDefault();
         ActionInterface<Integer> actionTemplate = ActionElevator.newValueDefaultRange(0);
 

@@ -1,7 +1,6 @@
 package monte_carlo_tree_search.classes;
 
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
@@ -10,9 +9,23 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/** This class is for avoiding code duplication
+ *
+ */
+
 @Log
 public class MemoryTrainerHelper<SSV, AV>  {
 
+    int miniBatchSize;
+    double maxError;
+    int maxNofEpochs;
+
+    public MemoryTrainerHelper(int miniBatchSize, double maxError, int maxNofEpochs) {
+        this.miniBatchSize = miniBatchSize;
+        this.maxError = maxError;
+        this.maxNofEpochs = maxNofEpochs;
+    }
 
     public void logProgressSometimes(MomentumBackpropagation learningRule, int epoch) {
         if (epoch % 1000 == 0 || epoch==0) {
@@ -29,18 +42,18 @@ public class MemoryTrainerHelper<SSV, AV>  {
         return returns.stream().mapToDouble(val -> val).average().orElse(0.0);
     }
 
-    /*
-    public void trainMemory(NetworkMemoryInterface<SSV> memory,
+
+    public void trainMemory(NetworkMemoryInterface<SSV, AV> memory,
                             ReplayBuffer<SSV, AV> buffer) {
         int epoch = 0;
         do {
             List<Experience<SSV, AV>> miniBatch=buffer.getMiniBatch(miniBatchSize);
             memory.learn(miniBatch);
-            helper.logProgressSometimes(memory.getLearningRule(), epoch++);
+            logProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-        helper.logEpoch(memory.getLearningRule(), epoch);
+        logEpoch(memory.getLearningRule(), epoch);
     }
 
-    */
+
 
 }

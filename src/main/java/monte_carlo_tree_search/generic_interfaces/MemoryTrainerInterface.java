@@ -11,7 +11,7 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 public interface MemoryTrainerInterface<SSV, AV> {
 
     ReplayBuffer<SSV,AV> createExperienceBuffer(MonteCarloTreeCreator<SSV, AV> monteCarloTreeCreator);
-    void trainMemory(NetworkMemoryInterface<SSV> memory, ReplayBuffer<SSV, AV> buffer);
+    void trainMemory(NetworkMemoryInterface<SSV, AV> memory, ReplayBuffer<SSV, AV> buffer);
 
 
 

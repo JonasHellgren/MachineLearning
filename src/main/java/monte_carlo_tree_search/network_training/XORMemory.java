@@ -10,7 +10,7 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.List;
 
 @Getter
-public class XORMemory <SSV> implements NetworkMemoryInterface<SSV> {
+public class XORMemory <SSV,AV> implements NetworkMemoryInterface<SSV,AV> {
 
     double DELTA = 0.1;
     int inputSize = 2, nofNeuronsHiddenLayer = 10, outputSize = 1, nofIterations = 10000;
@@ -61,7 +61,7 @@ public class XORMemory <SSV> implements NetworkMemoryInterface<SSV> {
     }
 
     @Override
-    public void learn(List<Experience<SSV, Integer>> miniBatch) {
+    public void learn(List<Experience<SSV, AV>> miniBatch) {
 
     }
 
@@ -71,7 +71,7 @@ public class XORMemory <SSV> implements NetworkMemoryInterface<SSV> {
     }
 
     @Override
-    public double getAverageValueError(List<Experience<SSV, Integer>> experiences) {
+    public double getAverageValueError(List<Experience<SSV, AV>> experiences) {
         return 0;
     }
 

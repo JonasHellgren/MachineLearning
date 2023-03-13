@@ -29,7 +29,7 @@ public class CartPoleMemoryTrainer
         this.bufferSize = bufferSize;
         this.maxError = maxError;
         this.maxNofEpochs = maxNofEpochs;
-        this.helper=new MemoryTrainerHelper<>();
+        this.helper=new MemoryTrainerHelper<>(miniBatchSize,maxError,maxNofEpochs);
     }
 
     @Override
@@ -50,15 +50,9 @@ public class CartPoleMemoryTrainer
     }
 
     @Override
-    public void trainMemory(NetworkMemoryInterface<CartPoleVariables> memory,
+    public void trainMemory(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                             ReplayBuffer<CartPoleVariables, Integer> buffer) {
-        int epoch = 0;
-        do {
-            List<Experience<CartPoleVariables, Integer>> miniBatch=buffer.getMiniBatch(miniBatchSize);
-            memory.learn(miniBatch);
-            helper.logProgressSometimes(memory.getLearningRule(), epoch++);
-        } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);
-        helper.logEpoch(memory.getLearningRule(), epoch);
+        helper.trainMemory(memory,buffer);
     }
 
     public double getAverageReturn(SimulationResults simulationResults) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Log
 
-public class ElevatorStateValueMemory<SSV> extends StateValueMemoryAbstract<SSV> {
+public class ElevatorStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<SSV,AV> {
     private static final int INPUT_SIZE = 1;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = 2;
@@ -54,7 +54,7 @@ public class ElevatorStateValueMemory<SSV> extends StateValueMemoryAbstract<SSV>
 
     @SneakyThrows
     @Override
-    public double getAverageValueError(List<Experience<SSV, Integer>> experiences) {
+    public double getAverageValueError(List<Experience<SSV, AV>> experiences) {
         throw new NoSuchMethodException("Not defined");
     }
 

@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInterface<SSV> {
+public abstract class StateValueMemoryAbstract <SSV,AV> implements NetworkMemoryInterface<SSV,AV> {
 
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;
@@ -72,7 +72,7 @@ public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInt
     }
 
     @Override
-    public void learn(List<Experience<SSV, Integer>> miniBatch) {
+    public void learn(List<Experience<SSV, AV>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
@@ -95,9 +95,9 @@ public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInt
         });
     }
 
-    private DataSet getDataSet(List<Experience<SSV, Integer>> buffer) {
+    private DataSet getDataSet(List<Experience<SSV, AV>> buffer) {
         DataSet trainingSet = new DataSet(settings.inputSize, settings.outPutSize);
-        for (Experience<SSV, Integer> e : buffer) {
+        for (Experience<SSV, AV> e : buffer) {
             SSV v = e.stateVariables;
             double[] inputVec = getInputVec(v);
             double normalizedValue= scaleOutValueToNormalized.calcOutDouble(e.value);

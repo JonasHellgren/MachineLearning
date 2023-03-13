@@ -73,7 +73,7 @@ public class TestStateValueMemoryTraining {
     }
 
     @Test public void trainNetwork() {
-        CartPoleStateValueMemory<CartPoleVariables> memory=new CartPoleStateValueMemory<>();
+        CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
 
         memoryTrainerHelper.trainMemory(memory, buffer);
 

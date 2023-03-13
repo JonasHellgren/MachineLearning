@@ -17,7 +17,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
     public static void main(String[] args) {
-        CartPoleStateValueMemory<CartPoleVariables> memory = new CartPoleStateValueMemory<>();
+        CartPoleStateValueMemory<CartPoleVariables,Integer> memory = new CartPoleStateValueMemory<>();
         memory.load(FILE);
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
 
@@ -29,7 +29,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            CartPoleStateValueMemory<CartPoleVariables> memory) {
+            CartPoleStateValueMemory<CartPoleVariables,Integer> memory) {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
 
         ActionInterface<Integer> actionTemplate = ActionCartPole.newRandom();

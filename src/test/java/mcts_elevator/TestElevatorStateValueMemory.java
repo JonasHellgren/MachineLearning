@@ -28,7 +28,7 @@ public class TestElevatorStateValueMemory {
     private static final double DELTA = 2;
     private static final double MIN_OUT = -10;
     private static final double MAX_OUT = 0.0;
-    ElevatorStateValueMemory<VariablesElevator> memory;
+    ElevatorStateValueMemory<VariablesElevator,Integer> memory;
     @Before
     public void init() {
         memory=new ElevatorStateValueMemory<>(MIN_OUT, MAX_OUT);

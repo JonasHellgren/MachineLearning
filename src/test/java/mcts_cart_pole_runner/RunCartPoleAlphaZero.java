@@ -59,7 +59,7 @@ public class RunCartPoleAlphaZero {
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
     public static void main(String[] args) {
-        NetworkMemoryInterface<CartPoleVariables> memory = new CartPoleStateValueMemory<>();  //todo interface
+        NetworkMemoryInterface<CartPoleVariables,Integer> memory = new CartPoleStateValueMemory<>();  //todo interface
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
         ReplayBuffer<CartPoleVariables, Integer> bufferTraining = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 
@@ -110,7 +110,7 @@ public class RunCartPoleAlphaZero {
         log.info("episode = " + episode + ", steps = " + step +", buffersize = " + bufferTrainig.size());
     }
 
-    private static void someTracking(NetworkMemoryInterface<CartPoleVariables> memory,
+    private static void someTracking(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                                      List<Double> learningErrors,
                                      List<Double> returns,
                                      ReplayBufferValueSetter rbvs,
@@ -130,7 +130,7 @@ public class RunCartPoleAlphaZero {
         plotter.plot(Arrays.asList(learningErrors,returns));
     }
 
-    private static void renderGraphics(NetworkMemoryInterface<CartPoleVariables> memory,
+    private static void renderGraphics(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                                        CartPoleGraphics graphics,
                                        StateInterface<CartPoleVariables> state,
                                        int step,
@@ -155,7 +155,7 @@ public class RunCartPoleAlphaZero {
     }
 
     @NotNull
-    private static ReplayBufferValueSetter trainMemoryFromEpisode(NetworkMemoryInterface<CartPoleVariables> memory,
+    private static ReplayBufferValueSetter trainMemoryFromEpisode(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferTraining,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
         ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
@@ -195,7 +195,7 @@ public class RunCartPoleAlphaZero {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            NetworkMemoryInterface<CartPoleVariables> memory) {
+            NetworkMemoryInterface<CartPoleVariables,Integer> memory) {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
 
         ActionInterface<Integer> actionTemplate = ActionCartPole.newRandom();

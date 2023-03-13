@@ -24,7 +24,7 @@ public class CartPoleRunner {
     MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch;
     EnvironmentGenericInterface<CartPoleVariables, Integer> environmentNotStepLimited;
     CartPoleGraphics graphics;
-    NetworkMemoryInterface<CartPoleVariables> memory;
+    NetworkMemoryInterface<CartPoleVariables,Integer> memory;
     int nofSteps;
     MultiplePanelsPlotter plotter;
 
@@ -41,14 +41,14 @@ public class CartPoleRunner {
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
-                          NetworkMemoryInterface<CartPoleVariables> memory,
+                          NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                           int nofSteps) {
         this(mcForSearch,memory,nofSteps,null);
     }
 
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
-                          NetworkMemoryInterface<CartPoleVariables> memory,
+                          NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                           int nofSteps,
                           MultiplePanelsPlotter plotter) {
         this.mcForSearch = mcForSearch;
