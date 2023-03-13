@@ -4,7 +4,6 @@ import common.Conditionals;
 import common.ScalerLinear;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import monte_carlo_tree_search.generic_interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.generic_interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
@@ -22,11 +21,13 @@ public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInt
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;
     private static final double MAX_ERROR = 0.00001;
+    private static final int NOF_ITERATIONS = 1;
+
 
     @Builder
     public static class NetSettings {
-        public int inputSize, outPutSize, nofNeuronsHidden,  nofIterations;
-        double learningRate;
+        public int inputSize, outPutSize, nofNeuronsHidden;
+        public double learningRate;
     }
 
     public MultiLayerPerceptron neuralNetwork;
@@ -39,13 +40,21 @@ public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInt
 
     public abstract double[] getInputVec(SSV v);
 
+
+    public void createLearningRule(MultiLayerPerceptron neuralNetwork, NetSettings settings) {
+        learningRule = new MomentumBackpropagation();
+        learningRule.setLearningRate(settings.learningRate);
+        learningRule.setNeuralNetwork(neuralNetwork);
+        learningRule.setMaxIterations(NOF_ITERATIONS);
+    }
+
     @Override
     public double read(StateInterface<SSV> state) {
         double[] inputVec = getInputVec(state.getVariables());
         return getNetworkOutputValue(inputVec);
     }
 
-    private double getNetworkOutputValue(double[] inputVec) {
+    protected double getNetworkOutputValue(double[] inputVec) {
         neuralNetwork.setInput(inputVec);
         neuralNetwork.calculate();
         double[] output = Arrays.copyOf(neuralNetwork.getOutput(), settings.outPutSize);
@@ -87,7 +96,7 @@ public abstract class StateValueMemoryAbstract <SSV> implements NetworkMemoryInt
     }
 
     private DataSet getDataSet(List<Experience<SSV, Integer>> buffer) {
-        DataSet trainingSet = new DataSet(settings.outPutSize, settings.outPutSize);
+        DataSet trainingSet = new DataSet(settings.inputSize, settings.outPutSize);
         for (Experience<SSV, Integer> e : buffer) {
             SSV v = e.stateVariables;
             double[] inputVec = getInputVec(v);

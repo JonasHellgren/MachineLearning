@@ -321,7 +321,9 @@ ElevatorMctsOnlySearchRunner
 - testa ovan minne x
 - ElevatorSearchWithMemoryRunner funkar - jippi x
 - par tuning  x
-- snygga up Memory klasser - fixa kodduplicering
+- snygga up Memory klasser - fixa kodduplicering  x
+- StateValueMemoryAbstract -  x
+
 - CartPoleMemoryTrainerHelper använda interface
 - Extrahera Simulator
 - Extrahera Backuper
