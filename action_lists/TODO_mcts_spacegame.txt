@@ -333,7 +333,7 @@ ElevatorMctsOnlySearchRunner
 - Ny miljö energy trading  x
 - StateEnergyTrading x
 - step x
-- test VariablesEnergyTrading
+- test VariablesEnergyTrading  x
 - test EnvironmentEnergyTrading
 
 - AlphaZero på elevator  EnergyTrading

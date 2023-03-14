@@ -13,7 +13,7 @@ public class VariablesEnergyTrading {
 
     public static final int DEFAULT_TIME = 0;
 //    public static final double DEFAULT_PRICE = 1.0;
-    public static final double DEFAULT_SOE = 0.0;
+    public static final double DEFAULT_SOE = 0.5;
     private static final double DELTA = 0.01;
 
     @Builder.Default
