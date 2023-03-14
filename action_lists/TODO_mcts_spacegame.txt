@@ -331,6 +331,11 @@ ElevatorMctsOnlySearchRunner
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
 
 - Ny miljö energy trading  x
+- StateEnergyTrading
+- step
+- test VariablesEnergyTrading
+- test EnvironmentEnergyTrading
+
 - AlphaZero på elevator  EnergyTrading
 
 - averageNofChildrenPerNode verkar inte stämma
