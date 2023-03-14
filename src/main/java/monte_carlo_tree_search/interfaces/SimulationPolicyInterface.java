@@ -2,11 +2,11 @@ package monte_carlo_tree_search.interfaces;
 
 import java.util.Set;
 
-public interface SimulationPolicyInterface<SSV,AV> {
+public interface SimulationPolicyInterface<S, A> {
 
-    ActionInterface<AV> chooseAction(StateInterface<SSV> state);
+    ActionInterface<A> chooseAction(StateInterface<S> state);
 
-    Set<AV> availableActionValues(StateInterface<SSV> state);  //todo set
+    Set<A> availableActionValues(StateInterface<S> state);  //todo set
 
     /*
     static SimulationPolicyInterface<ShipVariables, ShipActionSet> newMostlyStill() {

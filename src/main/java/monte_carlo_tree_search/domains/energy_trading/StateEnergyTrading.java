@@ -19,6 +19,10 @@ public class StateEnergyTrading implements StateInterface<VariablesEnergyTrading
         this.variables = variables;
     }
 
+    public static StateEnergyTrading newFromTimeAndSoE(int time, double SoE) {
+        return newFromVariables(VariablesEnergyTrading.builder().time(time).SoE(SoE).build());
+    }
+
     public static StateEnergyTrading newFromVariables(VariablesEnergyTrading variables) {
         if (!isVariablesValid(variables)) {
             System.out.println("variables = " + variables);

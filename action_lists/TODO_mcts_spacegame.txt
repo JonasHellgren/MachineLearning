@@ -335,8 +335,10 @@ ElevatorMctsOnlySearchRunner
 - step x
 - test VariablesEnergyTrading  x
 - test EnvironmentEnergyTrading  x
-
-- AlphaZero på elevator  EnergyTrading
+- PolicyRandom  x
+- TestSimulate  x
+- EnergyTradingSearchRunner
+- EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma

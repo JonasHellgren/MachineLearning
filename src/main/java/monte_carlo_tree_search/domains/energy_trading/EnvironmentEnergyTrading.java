@@ -19,12 +19,10 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
     public static final int MAX_TIME = 7;
     public static final int AFTER_MAX_TIME = 7+1;
     public static final int TIME_STEP_IN_HOUR_DURATION = 3;
-
     public static final double SOE_MIN = 0.2;
     public static final double SOE_MAX = 0.8;
     public static final double SOE_MIN_END = 0.5;
     private static final double REWARD_FAIL = -100;
-
 
     private static final List<Double> PRICE_DEFAULT = Arrays.asList(0.5, 1d, 1d, 1d, 1d, 1d, 1.5, 1d);
     private static final Map<Integer, Double> ACTION_POWER_IN_KW_MAP = Map.of(
@@ -59,7 +57,6 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
 
         StateInterface<VariablesEnergyTrading> stateNew = StateEnergyTrading.newFromVariables(
                 VariablesEnergyTrading.builder().time(timeNew).SoE(soENew).build());
-
         boolean isFail=isFail(stateNew);
         boolean isTerminal=isTerminal(stateNew);
         double energySold=- (powerPresent * TIME_STEP_IN_HOUR_DURATION); //negative <=> bought energy
@@ -69,7 +66,6 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
                 .isTerminal(isTerminal || isFail)
                 .reward( (isFail) ? REWARD_FAIL :pricePres * energySold)
                 .build();
-
     }
 
     private boolean isFail(StateInterface<VariablesEnergyTrading> state) {

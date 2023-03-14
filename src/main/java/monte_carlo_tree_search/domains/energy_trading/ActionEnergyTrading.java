@@ -15,4 +15,8 @@ public class ActionEnergyTrading extends ActionIntegerAbstract {
          return new ActionEnergyTrading(value);
     }
 
+    public String toString() {
+         return "value = "+getValue();
+    }
+
 }
