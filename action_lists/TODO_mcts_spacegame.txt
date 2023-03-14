@@ -334,10 +334,11 @@ ElevatorMctsOnlySearchRunner
 - StateEnergyTrading x
 - step x
 - test VariablesEnergyTrading  x
-- test EnvironmentEnergyTrading
+- test EnvironmentEnergyTrading  x
 
 - AlphaZero på elevator  EnergyTrading
 
+- ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
 
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc

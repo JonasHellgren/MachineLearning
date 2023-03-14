@@ -13,9 +13,7 @@ public class StateEnergyTrading implements StateInterface<VariablesEnergyTrading
 
     static Predicate<Integer> isValidTime =
             time -> time>=EnvironmentEnergyTrading.MIN_TIME &&
-            time <= EnvironmentEnergyTrading.MAX_TIME;
-    static Predicate<Double> isValidSoE= soe -> soe>=0 && soe <= 1;
-
+            time <= EnvironmentEnergyTrading.AFTER_MAX_TIME;
 
     StateEnergyTrading(VariablesEnergyTrading variables) {
         this.variables = variables;
@@ -23,9 +21,14 @@ public class StateEnergyTrading implements StateInterface<VariablesEnergyTrading
 
     public static StateEnergyTrading newFromVariables(VariablesEnergyTrading variables) {
         if (!isVariablesValid(variables)) {
+            System.out.println("variables = " + variables);
             throw new IllegalArgumentException(getErrorMessage(variables));
         }
         return new StateEnergyTrading(variables);
+    }
+
+    public static StateEnergyTrading newDefault() {
+        return StateEnergyTrading.newFromVariables(VariablesEnergyTrading.newDefault());
     }
 
     @Override
@@ -43,14 +46,12 @@ public class StateEnergyTrading implements StateInterface<VariablesEnergyTrading
     }
 
     public static boolean isVariablesValid(VariablesEnergyTrading variables) {
-        return isValidTime.test(variables.time) &&
-                isValidSoE.test(variables.SoE);
+        return isValidTime.test(variables.time);
     }
 
     @NotNull
     private static String getErrorMessage(VariablesEnergyTrading variables) {
-        return "isValidTime = "+isValidTime.test(variables.time)+
-                ", isValidSoE = "+isValidSoE.test(variables.SoE);
+        return "isValidTime = "+isValidTime.test(variables.time);
     }
 
 }

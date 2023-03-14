@@ -9,15 +9,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/***
+ *  time = 0 <=> hour in (00-03), time = 1 <=> hour in (03-06), time = 7 <=> hour in (21-00)
+ */
+
 public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<VariablesEnergyTrading, Integer> {
 
     public static final int MIN_TIME = 0;
     public static final int MAX_TIME = 7;
+    public static final int AFTER_MAX_TIME = 7+1;
     public static final int TIME_STEP_IN_HOUR_DURATION = 3;
 
     public static final double SOE_MIN = 0.2;
     public static final double SOE_MAX = 0.8;
     public static final double SOE_MIN_END = 0.5;
+    private static final double REWARD_FAIL = -100;
+
 
     private static final List<Double> PRICE_DEFAULT = Arrays.asList(0.5, 1d, 1d, 1d, 1d, 1d, 1.5, 1d);
     private static final Map<Integer, Double> ACTION_POWER_IN_KW_MAP = Map.of(
@@ -26,7 +33,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
 
     private final List<Double> priceVsTime;
 
-    public EnvironmentEnergyTrading(List<Double> priceVsTime) {
+    EnvironmentEnergyTrading(List<Double> priceVsTime) {
         this.priceVsTime = priceVsTime;
     }
 
@@ -46,18 +53,21 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
         int timePres = state.getVariables().time;
         double pricePres = priceVsTime.get(timePres);
         double soEPres = state.getVariables().SoE;
-        double powerPresent = ACTION_POWER_IN_KW_MAP.get(action.getValue());
+        double powerPresent = ACTION_POWER_IN_KW_MAP.get(action.getValue());  //positive <=> increased SoE
         int timeNew = timePres + 1;
         double soENew = soEPres + powerPresent * (double) TIME_STEP_IN_HOUR_DURATION / BATTERY_ENERGY;
 
         StateInterface<VariablesEnergyTrading> stateNew = StateEnergyTrading.newFromVariables(
                 VariablesEnergyTrading.builder().time(timeNew).SoE(soENew).build());
 
+        boolean isFail=isFail(stateNew);
+        boolean isTerminal=isTerminal(stateNew);
+        double energySold=- (powerPresent * TIME_STEP_IN_HOUR_DURATION); //negative <=> bought energy
         return StepReturnGeneric.<VariablesEnergyTrading>builder()
                 .newState(stateNew)
-                .isFail(isFail(stateNew))
-                .isTerminal(isTerminal(stateNew))
-                .reward(pricePres * powerPresent * TIME_STEP_IN_HOUR_DURATION)
+                .isFail(isFail)
+                .isTerminal(isTerminal || isFail)
+                .reward( (isFail) ? REWARD_FAIL :pricePres * energySold)
                 .build();
 
     }
@@ -66,13 +76,12 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
         VariablesEnergyTrading vars = state.getVariables();
         return  vars.SoE < SOE_MIN ||
                 vars.SoE > SOE_MAX ||
-                vars.time > MAX_TIME ||
-                vars.time == MAX_TIME && vars.SoE < SOE_MIN_END;
+                vars.time == AFTER_MAX_TIME && vars.SoE < SOE_MIN_END;
     }
 
     private boolean isTerminal(StateInterface<VariablesEnergyTrading> state) {
         VariablesEnergyTrading vars = state.getVariables();
-        return vars.time == MAX_TIME;
+        return vars.time > MAX_TIME;
     }
 
 
