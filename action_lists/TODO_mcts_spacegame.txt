@@ -330,7 +330,7 @@ ElevatorMctsOnlySearchRunner
 - Extrahera Backuper  x
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
 
-- Ny miljö energy trading
+- Ny miljö energy trading  x
 - AlphaZero på elevator  EnergyTrading
 
 - averageNofChildrenPerNode verkar inte stämma

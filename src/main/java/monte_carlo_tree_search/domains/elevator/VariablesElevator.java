@@ -21,34 +21,34 @@ public class VariablesElevator {
     public static final int DEFAULT_SPEED = 0;
     public static final int DEFAULT_POS = 0;
     public static final int DEFAULT_IN_ELEVATOR = 0;
-    public static final List<Integer> EMPTY_LIST = Arrays.asList(0,0,0);
+    public static final List<Integer> EMPTY_LIST = Arrays.asList(0, 0, 0);
     public static final double DEFAULT_SOE = 1.0;
     private static final int SPEED_STILL = ActionElevator.STILL_ACTION;
     private static final int SPEED_UP = ActionElevator.MAX_ACTION_DEFAULT;
     private static final int SPEED_DOWN = ActionElevator.MIN_ACTION_DEFAULT;
 
     @Builder.Default
-    public int speed=DEFAULT_SPEED;
+    public int speed = DEFAULT_SPEED;
     @Builder.Default
-    public int pos=DEFAULT_POS;
+    public int pos = DEFAULT_POS;
     @Builder.Default
-    public int nPersonsInElevator= DEFAULT_IN_ELEVATOR;
+    public int nPersonsInElevator = DEFAULT_IN_ELEVATOR;
     @Builder.Default
-    public List<Integer> nPersonsWaiting= EMPTY_LIST;
+    public List<Integer> nPersonsWaiting = EMPTY_LIST;
     @Builder.Default
-    public double SoE= DEFAULT_SOE;
+    public double SoE = DEFAULT_SOE;
 
     public static VariablesElevator newRandom(int maxNPersonsInElevator, int maxNPersonsWaitingTotal) {
 
-        RandUtils<Integer> speedRand=new RandUtils<>();
-        List<Integer> waitingList=createWaitingList(maxNPersonsWaitingTotal);
+        RandUtils<Integer> speedRand = new RandUtils<>();
+        List<Integer> waitingList = createWaitingList(maxNPersonsWaitingTotal);
 
         return VariablesElevator.builder()
-                .speed(speedRand.getRandomItemFromList(Arrays.asList(SPEED_UP,SPEED_STILL,SPEED_DOWN)))
-                .pos(RandUtils.getRandomIntNumber(EnvironmentElevator.MIN_POS,EnvironmentElevator.MAX_POS+1))
-                .nPersonsInElevator(RandUtils.getRandomIntNumber(0,maxNPersonsInElevator+1))
+                .speed(speedRand.getRandomItemFromList(Arrays.asList(SPEED_UP, SPEED_STILL, SPEED_DOWN)))
+                .pos(RandUtils.getRandomIntNumber(EnvironmentElevator.MIN_POS, EnvironmentElevator.MAX_POS + 1))
+                .nPersonsInElevator(RandUtils.getRandomIntNumber(0, maxNPersonsInElevator + 1))
                 .nPersonsWaiting(waitingList)
-                .SoE(RandUtils.getRandomDouble(EnvironmentElevator.SOE_LOW,EnvironmentElevator.SoE_HIGH))
+                .SoE(RandUtils.getRandomDouble(EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH))
                 .build();
     }
 
@@ -59,7 +59,7 @@ public class VariablesElevator {
             int nw2 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
             int nw3 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
             waitingList = Arrays.asList(nw1, nw2, nw3);
-        } while (ListUtils.sumList(waitingList)!= maxNPersonsWaitingTotal);
+        } while (ListUtils.sumList(waitingList) != maxNPersonsWaitingTotal);
         return waitingList;
     }
 
@@ -68,7 +68,7 @@ public class VariablesElevator {
     }
 
 
-        public VariablesElevator copy() {
+    public VariablesElevator copy() {
         return VariablesElevator.builder()
                 .speed(speed)
                 .pos(pos)
@@ -93,10 +93,10 @@ public class VariablesElevator {
 
         //For each significant field in the class, check if that field matches the corresponding field of this object
         VariablesElevator equalsSample = (VariablesElevator) obj;
-        boolean isSamePos= this.pos == equalsSample.pos;
+        boolean isSamePos = this.pos == equalsSample.pos;
         boolean isSamePersonsInElevator = this.nPersonsInElevator == equalsSample.nPersonsInElevator;
         boolean isSamePersonsWaiting = this.nPersonsWaiting.equals(equalsSample.nPersonsWaiting);
-        boolean isSameSoE= MathUtils.compareDoubleScalars(this.SoE,equalsSample.SoE, DELTA);
+        boolean isSameSoE = MathUtils.compareDoubleScalars(this.SoE, equalsSample.SoE, DELTA);
         return isSamePos && isSamePersonsInElevator && isSamePersonsWaiting && isSameSoE;
     }
 

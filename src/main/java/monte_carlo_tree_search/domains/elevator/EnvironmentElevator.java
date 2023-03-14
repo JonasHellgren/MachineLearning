@@ -137,12 +137,9 @@ public class EnvironmentElevator implements EnvironmentGenericInterface<Variable
 
 
     boolean isFailsState(StateInterface<VariablesElevator> newState) {
-        //TODO  nPersonsWaiting > 20
         VariablesElevator vars=newState.getVariables();
         return vars.SoE < SOE_LOW ||
-                vars.nPersonsInElevator>=MAX_NOF_PERSONS_IN_ELEVATOR; // ||
-          //      isAtTop.and(isMovingUp).test(vars.speed,vars.pos) ||
-          //      isBottomFloor.and(isMovingDown).test(vars.speed,vars.pos);
+                vars.nPersonsInElevator>=MAX_NOF_PERSONS_IN_ELEVATOR;
 
     }
 
