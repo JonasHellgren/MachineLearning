@@ -331,8 +331,8 @@ ElevatorMctsOnlySearchRunner
 - whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
 
 - Ny miljö energy trading  x
-- StateEnergyTrading
-- step
+- StateEnergyTrading x
+- step x
 - test VariablesEnergyTrading
 - test EnvironmentEnergyTrading
 
