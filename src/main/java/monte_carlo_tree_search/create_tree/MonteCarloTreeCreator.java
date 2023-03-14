@@ -118,6 +118,7 @@ public class MonteCarloTreeCreator<S, A> {
             helper.someLogging(counter.getCount(), nodeSelected, actionInSelected);
             BackPropagator<S, A> backPropagator = createBackPropagator();
             if (actionInSelected.isPresent()) {
+                System.out.println("nodeSelected = " + nodeSelected);
                 StepReturnGeneric<S> sr = applyActionAndExpand(nodeSelected, actionInSelected.get());
                 SimulationResults simulationResults = simulator.simulate(sr.newState, nodeSelected.getDepth());
                 backPropagator.backPropagate(sr, simulationResults, actionInSelected.get());

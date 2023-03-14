@@ -68,8 +68,8 @@ public class MonteCarloTreeCreatorHelper<S, A> {
     }
 
      void someLogging(int i, NodeWithChildrenInterface<S, A> nodeSelected, Optional<ActionInterface<A>> actionInSelected) {
-        log.fine("i = " + i);
-        log.fine("nodeSelected = " + nodeSelected + ", nof child nodes = " + nodeSelected.getChildNodes().size());
+        log.info("i = " + i);
+        log.info("nodeSelected = " + nodeSelected + ", nof child nodes = " + nodeSelected.getChildNodes().size());
         log.fine("actionInSelected = " + actionInSelected);
         log.fine("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
     }

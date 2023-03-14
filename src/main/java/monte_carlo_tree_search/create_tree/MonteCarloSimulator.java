@@ -50,9 +50,14 @@ public class MonteCarloSimulator<S, A> {
         SimulationPolicyInterface<S, A> policy = settings.simulationPolicy;
         StepReturnGeneric<S> stepReturn;
         int depth = startDepth;
+        System.out.println("state start = " + state);
         do {
+            System.out.println("state = " + state);
             ActionInterface<A> action = policy.chooseAction(state);
             stepReturn = environment.step(action, state);
+
+            System.out.println("stepReturn = " + stepReturn);
+
             state.setFromReturn(stepReturn);
             returns.add(stepReturn);
             depth++;

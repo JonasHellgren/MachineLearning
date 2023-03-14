@@ -18,8 +18,8 @@ public class PolicyRandom
 
     public PolicyRandom() {
         randGenerator = new RandUtils<>();
-        ActionEnergyTrading actionElevator = getDummyAction();
-        actionList = new ArrayList<>(actionElevator.applicableActions());
+        ActionEnergyTrading action = getDummyAction();
+        actionList = new ArrayList<>(action.applicableActions());
     }
 
     @Override
@@ -31,8 +31,8 @@ public class PolicyRandom
 
     @Override
     public Set<Integer> availableActionValues(StateInterface<VariablesEnergyTrading> state) {
-        ActionEnergyTrading actionElevator = getDummyAction();
-        return actionElevator.applicableActions();
+        ActionEnergyTrading action = getDummyAction();
+        return action.applicableActions();
     }
 
     @NotNull

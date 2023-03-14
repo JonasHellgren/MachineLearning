@@ -28,6 +28,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
     private static final Map<Integer, Double> ACTION_POWER_IN_KW_MAP = Map.of(
             -2, -2d, -1, -1d, 0, -0d, 1, 1d, 2, 2d);
     private static final Double BATTERY_ENERGY = 30d;  //kWh
+    private static final double BACKUP_PRICE = 1d;
 
     private final List<Double> priceVsTime;
 
@@ -49,7 +50,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
                                                           StateInterface<VariablesEnergyTrading> state) {
 
         int timePres = state.getVariables().time;
-        double pricePres = priceVsTime.get(timePres);
+        double pricePres = (timePres >= priceVsTime.size()) ? BACKUP_PRICE :  priceVsTime.get(timePres);
         double soEPres = state.getVariables().SoE;
         double powerPresent = ACTION_POWER_IN_KW_MAP.get(action.getValue());  //positive <=> increased SoE
         int timeNew = timePres + 1;

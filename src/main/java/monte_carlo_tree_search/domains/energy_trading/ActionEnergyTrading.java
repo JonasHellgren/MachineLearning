@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
 import monte_carlo_tree_search.interfaces.ActionIntegerAbstract;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 
 public class ActionEnergyTrading extends ActionIntegerAbstract {
 
@@ -19,4 +20,8 @@ public class ActionEnergyTrading extends ActionIntegerAbstract {
          return "value = "+getValue();
     }
 
+    @Override
+    public ActionInterface<Integer> copy() {
+        return new ActionEnergyTrading(super.actionValue);
+    }
 }

@@ -1,6 +1,8 @@
 package monte_carlo_tree_search.interfaces;
 
 import monte_carlo_tree_search.domains.elevator.ActionElevator;
+import monte_carlo_tree_search.domains.energy_trading.ActionEnergyTrading;
+
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -8,9 +10,9 @@ import java.util.stream.IntStream;
 
 public abstract class ActionIntegerAbstract implements ActionInterface<Integer> {
 
-    int minActionValue;
-    int maxActionValue;
-    private Integer actionValue;
+    protected int minActionValue;
+    protected int maxActionValue;
+    protected Integer actionValue;
 
     public ActionIntegerAbstract(int minAction, int maxAction, int value) {
         this.minActionValue=minAction;
@@ -36,14 +38,7 @@ public abstract class ActionIntegerAbstract implements ActionInterface<Integer> 
         return actionValue;
     }
 
-    @Override
-    public ActionInterface<Integer> copy() {
-        return ActionElevator.builder()
-                .minActionValue(minActionValue)
-                .maxActionValue(maxActionValue)
-                .actionValue(actionValue)
-                .build();
-    }
+
 
     @Override
     public Set<Integer> applicableActions() {
