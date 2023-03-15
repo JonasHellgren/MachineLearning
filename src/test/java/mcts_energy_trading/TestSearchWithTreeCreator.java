@@ -66,13 +66,14 @@ public class TestSearchWithTreeCreator {
         monteCarloTreeCreator.run();
 
         TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
-                new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(),getSettings());
+                new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSettings());
 
         List<ActionInterface<Integer>> actions=tih.getActionsOnBestPath();
-        MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator=new MonteCarloSimulator<>(environment,getSettings());
+        MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator=new MonteCarloSimulator<>(environment, createSettings());
         List<Double> rewards=simulator.stepWithActions(state,actions);
         int actionFirstValue=monteCarloTreeCreator.getFirstAction().getValue();
         double sumOfRewards= ListUtils.sumDoubleList(rewards);
+
 
         System.out.println("actions = " + actions);
         System.out.println("rewards = " + rewards);
@@ -87,7 +88,7 @@ public class TestSearchWithTreeCreator {
     public static MonteCarloTreeCreator<VariablesEnergyTrading, Integer> createTreeCreator(StateInterface<VariablesEnergyTrading> state) {
         EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment = EnvironmentEnergyTrading.newDefault();
         ActionInterface<Integer> actionTemplate=  ActionEnergyTrading.newValue(0);
-        MonteCarloSettings<VariablesEnergyTrading, Integer> settings = getSettings();
+        MonteCarloSettings<VariablesEnergyTrading, Integer> settings = createSettings();
 
         return MonteCarloTreeCreator.<VariablesEnergyTrading, Integer>builder()
                 .environment(environment)
@@ -97,22 +98,22 @@ public class TestSearchWithTreeCreator {
                 .build();
     }
 
-    private static MonteCarloSettings<VariablesEnergyTrading, Integer> getSettings() {
+    private static MonteCarloSettings<VariablesEnergyTrading, Integer> createSettings() {
         return MonteCarloSettings.<VariablesEnergyTrading, Integer>builder()
                 .actionSelectionPolicy(PoliciesEnergyTrading.newRandom())
                 .simulationPolicy(PoliciesEnergyTrading.newRandom())
-                .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(0.5)
-                .discountFactorBackupSimulationDefensive(0.5)
-                .coefficientMaxAverageReturn(0) //average
+             //   .isDefensiveBackup(false)
+              //  .alphaBackupDefensiveStep(0.5)
+               // .discountFactorBackupSimulationDefensive(0.5)
+                .coefficientMaxAverageReturn(0) //0 => average
                 .maxTreeDepth(8)
                 .maxNofIterations(10_000)
                 .timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(1.0)
-                .weightReturnsSimulation(0.0)
-                .nofSimulationsPerNode(0)
+                .weightReturnsSimulation(1.0)
+                .nofSimulationsPerNode(10)
                 .maxSimulationDepth(10)
-                .coefficientExploitationExploration(1e3)
+                .coefficientExploitationExploration(1e2)
                 .isCreatePlotData(false)
                 .build();
     }

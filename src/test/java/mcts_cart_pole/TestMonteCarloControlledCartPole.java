@@ -6,17 +6,21 @@ import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.create_tree.NodeSelector;
 import monte_carlo_tree_search.domains.cart_pole.*;
+import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
+import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log
 public class TestMonteCarloControlledCartPole {
@@ -89,9 +93,13 @@ public class TestMonteCarloControlledCartPole {
 
         monteCarloTreeCreator.setStartState(stateLeaningRight);
         NodeWithChildrenInterface<CartPoleVariables, Integer> nodeRoot =monteCarloTreeCreator.run();
+
+        NodeSelector<CartPoleVariables, Integer> ns = new NodeSelector<>(nodeRoot, settings);
+        Optional<NodeInterface<CartPoleVariables, Integer>> bestChild= ns.selectBestNonFailChild(nodeRoot);
+        Assert.assertTrue(bestChild.orElseThrow().getAction().getValue()==VALUE_RIGHT);
+
         TreeInfoHelper<CartPoleVariables, Integer> tih = new TreeInfoHelper<>(nodeRoot,settings);
         doPrinting(tih);
-        Assert.assertTrue(tih.getValueOfFirstBestAction().orElseThrow()==VALUE_RIGHT);
 
     }
 

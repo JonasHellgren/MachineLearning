@@ -43,7 +43,7 @@ public class NodeSelector<S,A> {
 
     final NodeWithChildrenInterface<S,A> nodeRoot;
     MonteCarloSettings<S,A> settings;
-    private final double coefficientExploitationExploration;  //often called C in literature, 0 when best path is desired
+    private  double coefficientExploitationExploration;  //often called C in literature, 0 when best path is desired
 
     List<NodeInterface<S,A>> nodesFromRootToSelected;
     List<ActionInterface<A>> actionsFromRootToSelected;
@@ -99,6 +99,11 @@ public class NodeSelector<S,A> {
                 NodeInfoHelper.isAllChildrenTerminal(currentNode);
     }
 
+    public  Optional<NodeInterface<S,A>> selectBestNonFailChild(NodeWithChildrenInterface<S,A> node) {
+        this.coefficientExploitationExploration= 0;
+        return selectNonFailChildWithHighestUCT(node);
+    }
+
     private NodeWithChildrenInterface<S, A> selectNonFailHighestUCTChildAsCurrent(NodeWithChildrenInterface<S, A> currentNode) {
         Optional<NodeInterface<S,A>> selectedChild = selectNonFailChildWithHighestUCT(currentNode);
         if (selectedChild.isPresent()) {
@@ -108,6 +113,7 @@ public class NodeSelector<S,A> {
         }
         return currentNode;
     }
+
 
     public  Optional<NodeInterface<S,A>> selectNonFailChildWithHighestUCT(NodeWithChildrenInterface<S,A> node) {
         List<Pair<NodeInterface<S,A>, Double>> nodeUCTPairs = getListOfPairsExcludeFailNodes(node);

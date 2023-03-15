@@ -89,9 +89,8 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public ActionInterface<A> getFirstAction() {
-        final int C_FOR_NO_EXPLORATION = 0;
-        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings, C_FOR_NO_EXPLORATION);
-        Optional<NodeInterface<S,A>> bestChild= ns.selectNonFailChildWithHighestUCT(nodeRoot);
+        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
+        Optional<NodeInterface<S,A>> bestChild= ns.selectBestNonFailChild(nodeRoot);
         return bestChild.orElseThrow().getAction();
     }
 

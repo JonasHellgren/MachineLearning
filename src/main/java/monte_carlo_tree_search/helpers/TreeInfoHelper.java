@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.helpers;
 
 import common.Conditionals;
+import common.ListUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -15,9 +16,7 @@ import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /***
@@ -103,12 +102,17 @@ public class TreeInfoHelper<SSV,AV> {
 
     @SneakyThrows
     public List<ActionInterface <AV>> getActionsOnBestPath() {
-        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION);  //False??
-        ns.select();
-        return ns.getActionsFromRootToSelected();
+        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION);
+        NodeWithChildrenInterface<SSV,AV> nodeSelected= ns.select();
+        List<ActionInterface <AV>> actionsToSelected=ns.getActionsFromRootToSelected();
+        Optional<NodeInterface<SSV,AV>> bestChild= ns.selectNonFailChildWithHighestUCT(nodeSelected);
+        return  (bestChild.isEmpty())
+                ? actionsToSelected
+                : ListUtils.merge(actionsToSelected, Collections.singletonList(bestChild.orElseThrow().getAction()));
     }
 
-    public Optional<AV> getValueOfFirstBestAction() {
+
+    public Optional<AV> getValueOfFirstBestAction() {  //todo remove - use NodeInfo instead
         List<ActionInterface <AV>> actionList = getActionsOnBestPath();
         if (actionList.isEmpty()) {
             throw new RuntimeException("Empty action list");
