@@ -17,6 +17,12 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+
+/***
+ * By a search horizon of 4 (givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy) the search is feasible
+ * approx 5^4=625 nodes needed.
+ */
+
 public class TestSearchWithTreeCreator {
 
     EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment;

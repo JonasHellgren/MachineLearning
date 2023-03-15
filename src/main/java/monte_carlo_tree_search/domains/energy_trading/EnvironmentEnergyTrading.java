@@ -27,6 +27,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
     public static final double SOE_MIN_END = 0.5;
     private static final double REWARD_FAIL = -100;
 
+    public static final double RETURN_MAX_ESTIMATE=2*2*TIME_STEP_IN_HOUR_DURATION*AFTER_MAX_TIME/2d;
     private static final List<Double> PRICE_DEFAULT = Arrays.asList(0.5, 1d, 1d, 1d, 1d, 1d, 1.5, 1d);
     private static final Map<Integer, Double> ACTION_POWER_IN_KW_MAP = Map.of(
             -2, -2d, -1, -1d, 0, -0d, 1, 1d, 2, 2d);

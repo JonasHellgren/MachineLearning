@@ -342,6 +342,9 @@ ElevatorMctsOnlySearchRunner
 - givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSell strular  x
 - givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy  x
 - misssar sista action  x
+- EnergyTraderMemoryTrainer  x
+- EnergyTraderValueMemory x
+- TestEnergyTraderMemory  x
 - EnergyTradingSearchWithPresetMemoryRunner
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
 
