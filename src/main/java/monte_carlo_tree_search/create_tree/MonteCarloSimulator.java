@@ -25,12 +25,19 @@ public class MonteCarloSimulator<S, A> {
     }
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
-        return simulate(stateAfterApplyingActionInSelectedNode, 0);
+        return simulate(stateAfterApplyingActionInSelectedNode,false, 0);
     }
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode,
+                                      boolean isTerminal,
                                       int startDepth) {
+
+        if (isTerminal) {
+            return SimulationResults.newEmpty();
+        }
+
         SimulationResults simulationResults = SimulationResults.newEmpty();
+
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
@@ -50,13 +57,13 @@ public class MonteCarloSimulator<S, A> {
         SimulationPolicyInterface<S, A> policy = settings.simulationPolicy;
         StepReturnGeneric<S> stepReturn;
         int depth = startDepth;
-        System.out.println("state start = " + state);
+      //  System.out.println("state start = " + state);
         do {
-            System.out.println("state = " + state);
+           // System.out.println("state = " + state);
             ActionInterface<A> action = policy.chooseAction(state);
             stepReturn = environment.step(action, state);
 
-            System.out.println("stepReturn = " + stepReturn);
+         //   System.out.println("stepReturn = " + stepReturn);
 
             state.setFromReturn(stepReturn);
             returns.add(stepReturn);

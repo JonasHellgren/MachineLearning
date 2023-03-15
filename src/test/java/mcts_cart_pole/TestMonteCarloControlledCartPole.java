@@ -77,7 +77,7 @@ public class TestMonteCarloControlledCartPole {
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
                 environment,settings);
         SimulationResults simulationResults=
-                simulator.simulate(stateUpRight.copy(), START_DEPTH);
+                simulator.simulate(stateUpRight.copy(), false, START_DEPTH);
         List<Double> avgList= new ArrayList<>(simulationResults.getReturnsForFailing());
         double averageReturn=avgList.stream().mapToDouble(val -> val).average().orElse(0.0);
         System.out.println("averageReturn = " + averageReturn);

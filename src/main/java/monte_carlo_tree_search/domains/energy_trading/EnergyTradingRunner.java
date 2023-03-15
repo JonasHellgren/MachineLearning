@@ -28,8 +28,12 @@ public class EnergyTradingRunner {
         int i = 0;
         StepReturnGeneric<VariablesEnergyTrading> sr;
         do {
+
             mcForSearch.setStartState(state);
             mcForSearch.run();
+
+            System.out.println("state = " + state);
+            System.out.println("mcForSearch.getFirstAction() = " + mcForSearch.getFirstAction());
 
             MonteCarloSearchStatistics<VariablesEnergyTrading, Integer> stats=mcForSearch.getStatistics();
           //  SimulationPolicyInterface<VariablesEnergyTrading, Integer> policy=settings.getSimulationPolicy();

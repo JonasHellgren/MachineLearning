@@ -11,6 +11,9 @@ import java.util.Map;
 
 /***
  *  time = 0 <=> hour in (00-03), time = 1 <=> hour in (03-06), time = 7 <=> hour in (21-00)
+ *
+ *
+ *  positive power <=> SoE increase is smaller than dSoE, negative power <=> SoE decrease is larger than dSoE
  */
 
 public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<VariablesEnergyTrading, Integer> {
@@ -29,6 +32,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
             -2, -2d, -1, -1d, 0, -0d, 1, 1d, 2, 2d);
     private static final Double BATTERY_ENERGY = 30d;  //kWh
     private static final double BACKUP_PRICE = 1d;
+    private static final double EFFICIENCY = 0.9;
 
     private final List<Double> priceVsTime;
 
@@ -54,7 +58,8 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
         double soEPres = state.getVariables().SoE;
         double powerPresent = ACTION_POWER_IN_KW_MAP.get(action.getValue());  //positive <=> increased SoE
         int timeNew = timePres + 1;
-        double soENew = soEPres + powerPresent * (double) TIME_STEP_IN_HOUR_DURATION / BATTERY_ENERGY;
+        double eta=(powerPresent>0) ? 1.0/EFFICIENCY : EFFICIENCY;
+        double soENew = soEPres + eta*powerPresent * (double) TIME_STEP_IN_HOUR_DURATION / BATTERY_ENERGY;
 
         StateInterface<VariablesEnergyTrading> stateNew = StateEnergyTrading.newFromVariables(
                 VariablesEnergyTrading.builder().time(timeNew).SoE(soENew).build());

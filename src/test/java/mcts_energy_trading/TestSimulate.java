@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestSimulate {
-    private static final int NOF_SIMULATIONS = 10;
+    private static final int NOF_SIMULATIONS = 100;
     private static final int MAX_SIMULATION_DEPTH = 10;
     EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment;
     StateInterface<VariablesEnergyTrading> state;

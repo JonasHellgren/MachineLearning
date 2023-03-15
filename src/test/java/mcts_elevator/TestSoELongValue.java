@@ -76,7 +76,7 @@ public class TestSoELongValue {
 
     private double getValueOfSoE(double SoE) {
         stateOneWaitingAtEachFloor.getVariables().SoE = SoE;
-        SimulationResults simulationResults = simulator.simulate(stateOneWaitingAtEachFloor, START_DEPTH);
+        SimulationResults simulationResults = simulator.simulate(stateOneWaitingAtEachFloor, false, START_DEPTH);
         double valueSoE = simulationResults.averageReturnFromAll().orElseThrow();
         System.out.println("simulationResults = " + simulationResults);
         return valueSoE;
@@ -84,7 +84,7 @@ public class TestSoELongValue {
 
     private double getValueOfSoERandomStartStates(double SoE, StateInterface<VariablesElevator> stateRandom) {
         stateRandom.getVariables().SoE = SoE;
-        SimulationResults simulationResults = simulator.simulate(stateRandom, START_DEPTH);
+        SimulationResults simulationResults = simulator.simulate(stateRandom, false, START_DEPTH);
         //  System.out.println("simulationResults = " + simulationResults);
         return simulationResults.averageReturnFromAll().orElseThrow();
 

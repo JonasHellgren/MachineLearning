@@ -39,7 +39,7 @@ public class CartPoleMemoryTrainer
 
         for (int i = 0; i < bufferSize; i++) {
             StateInterface<CartPoleVariables> stateRandom=StateCartPole.newRandom();
-            SimulationResults simulationResults=simulator.simulate(stateRandom, START_DEPTH);
+            SimulationResults simulationResults=simulator.simulate(stateRandom, false, START_DEPTH);
             double averageReturn = helper.getAverageReturn(simulationResults);
             buffer.addExperience(Experience.<CartPoleVariables, Integer>builder()
                     .stateVariables(stateRandom.getVariables())

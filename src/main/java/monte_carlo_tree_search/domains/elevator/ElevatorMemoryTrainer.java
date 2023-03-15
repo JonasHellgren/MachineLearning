@@ -83,7 +83,7 @@ public class ElevatorMemoryTrainer
     private double getAverageReturnPerStep(MonteCarloSimulator<VariablesElevator, Integer> simulator, StateInterface<VariablesElevator> stateRandomCopy) {
         stateRandomCopy.getVariables().SoE = RandUtils.getRandomDouble
                 (EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH);
-        SimulationResults simulationResults = simulator.simulate(stateRandomCopy, START_DEPTH);
+        SimulationResults simulationResults = simulator.simulate(stateRandomCopy, false, START_DEPTH);
         return getAverageReturn(simulationResults)/(double)
         simulator.getSettings().getMaxSimulationDepth();
     }

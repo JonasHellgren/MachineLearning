@@ -337,8 +337,10 @@ ElevatorMctsOnlySearchRunner
 - test EnvironmentEnergyTrading  x
 - PolicyRandom  x
 - TestSimulate  x
-- EnergyTradingRunner
-- EnergyTradingSearchRunner
+- EnergyTradingRunner  x
+- EnergyTradingSearchRunner x
+- givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSell strular  x
+- moded EnvTrading bilig el tid 4 - test från tid 4
 - EnergyTradingSearchWithPresetMemoryRunner
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
 

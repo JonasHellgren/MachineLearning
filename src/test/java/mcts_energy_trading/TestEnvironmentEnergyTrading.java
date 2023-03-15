@@ -108,4 +108,34 @@ public class TestEnvironmentEnergyTrading {
         Assert.assertTrue(sr.isTerminal);
     }
 
+    @Test
+    public void givenTimeEndHighSoE_whenStepNegPower_thenTerminalAndNoFailAndPositiveReward() {
+        state= StateEnergyTrading.newFromTimeAndSoE(EnvironmentEnergyTrading.MAX_TIME,0.7);
+        StepReturnGeneric<VariablesEnergyTrading> sr = environment.step(ActionEnergyTrading.newValue(-2), state);
+        System.out.println("sr = " + sr);
+        Assert.assertFalse(sr.isFail);
+        Assert.assertTrue(sr.isTerminal);
+        Assert.assertTrue(sr.reward>0);
+    }
+
+    @Test
+    public void givenTimeEndHighSoE_whenSte_thenBestIsSellMuch() {
+        state= StateEnergyTrading.newFromTimeAndSoE(EnvironmentEnergyTrading.MAX_TIME,0.7);
+        StepReturnGeneric<VariablesEnergyTrading> srSell2 = environment.step(ActionEnergyTrading.newValue(-2), state);
+        StepReturnGeneric<VariablesEnergyTrading> srSell1 = environment.step(ActionEnergyTrading.newValue(-1), state);
+        StepReturnGeneric<VariablesEnergyTrading> srBuy2 = environment.step(ActionEnergyTrading.newValue(2), state);
+        StepReturnGeneric<VariablesEnergyTrading> srBuy1 = environment.step(ActionEnergyTrading.newValue(1), state);
+
+
+        System.out.println("srSell2 = " + srSell2);
+        System.out.println("srSell1 = " + srSell1);
+        System.out.println("srBuy2 = " + srBuy2);
+        System.out.println("srBuy1 = " + srBuy1);
+
+        Assert.assertTrue(srSell2.reward>srBuy2.reward);
+        Assert.assertTrue(srSell2.reward>srSell1.reward);
+        Assert.assertTrue(srSell2.reward>srBuy1.reward);
+
+    }
+
 }

@@ -1,32 +1,58 @@
-package mcts_runners.energy_trading;
+package mcts_energy_trading;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.domains.elevator.ActionElevator;
-import monte_carlo_tree_search.domains.elevator.ElevatorPolicies;
-import monte_carlo_tree_search.domains.elevator.EnvironmentElevator;
-import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.domains.energy_trading.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-public class EnergyTradingSearchRunner {
+public class TestSearchWithTreeCreator {
 
+    EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment;
+    MonteCarloTreeCreator<VariablesEnergyTrading, Integer> monteCarloTreeCreator;
+
+    @Before
+    public void init() {
+        environment=EnvironmentEnergyTrading.newDefault();
+        monteCarloTreeCreator=createTreeCreator(StateEnergyTrading.newDefault());
+    }
 
     @SneakyThrows
-    public static void main(String[] args) {
+    @Test
+    public void givenDefaultEnv_whenTimeIs6SoE0d7_thenBestActionIsSell() {
+        StateInterface<VariablesEnergyTrading> state=StateEnergyTrading.newFromTimeAndSoE(6,0.70);
+        monteCarloTreeCreator.setStartState(state);
+        monteCarloTreeCreator.run();
 
-        StateInterface<VariablesEnergyTrading> state= StateEnergyTrading.newDefault();
-        EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment = EnvironmentEnergyTrading.newDefault();
-        MonteCarloTreeCreator<VariablesEnergyTrading, Integer> monteCarloTreeCreator= createTreeCreator(state);
+        monteCarloTreeCreator.getNodeRoot().printTree();
 
-        EnergyTradingRunner runner=new EnergyTradingRunner(monteCarloTreeCreator,environment);
-        runner.run(state);
+        int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
+        System.out.println("actionValue = " + actionValue);
+        Assert.assertEquals(-2,actionValue);
+    }
 
+    @SneakyThrows
+    @Test
+    public void givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSell() {
+        StateInterface<VariablesEnergyTrading> state=StateEnergyTrading.newFromTimeAndSoE(7,0.70);
+        monteCarloTreeCreator.setStartState(state);
+        monteCarloTreeCreator.run();
+
+        monteCarloTreeCreator.getNodeRoot().printTree();
+
+        int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
+        System.out.println("actionValue = " + actionValue);
+        Assert.assertEquals(-2,actionValue);
 
     }
+
+
+
 
     public static MonteCarloTreeCreator<VariablesEnergyTrading, Integer> createTreeCreator(StateInterface<VariablesEnergyTrading> state) {
         EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment = EnvironmentEnergyTrading.newDefault();
@@ -40,7 +66,7 @@ public class EnergyTradingSearchRunner {
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(8)
                 .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(1000)
+                .timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(1.0)
                 .weightReturnsSimulation(0.0)
                 .nofSimulationsPerNode(0)
@@ -56,6 +82,7 @@ public class EnergyTradingSearchRunner {
                 .actionTemplate(actionTemplate)
                 .build();
     }
+
 
 
 }

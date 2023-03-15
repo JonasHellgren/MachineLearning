@@ -113,8 +113,9 @@ public class TreeInfoHelper<SSV,AV> {
     public Optional<AV> getValueOfFirstBestAction() {
         List<ActionInterface <AV>> actionList = getActionsOnBestPath();
         if (actionList.isEmpty()) {
-            log.warning("Empty action list");
-            return Optional.empty();
+            throw new RuntimeException("Empty action list");
+         //   log.warning("Empty action list");
+         //   return Optional.empty();
         }
         return Optional.of(actionList.get(0).getValue());
 
