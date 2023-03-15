@@ -2,6 +2,7 @@ package monte_carlo_tree_search.create_tree;
 
 import common.ListUtils;
 import lombok.Getter;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.SimulationResults;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.ActionInterface;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Log
 public class MonteCarloSimulator<S, A> {
 
     EnvironmentGenericInterface<S, A> environment;
@@ -57,14 +59,9 @@ public class MonteCarloSimulator<S, A> {
         SimulationPolicyInterface<S, A> policy = settings.simulationPolicy;
         StepReturnGeneric<S> stepReturn;
         int depth = startDepth;
-      //  System.out.println("state start = " + state);
         do {
-           // System.out.println("state = " + state);
             ActionInterface<A> action = policy.chooseAction(state);
             stepReturn = environment.step(action, state);
-
-         //   System.out.println("stepReturn = " + stepReturn);
-
             state.setFromReturn(stepReturn);
             returns.add(stepReturn);
             depth++;
@@ -72,5 +69,27 @@ public class MonteCarloSimulator<S, A> {
         return returns;
     }
 
+
+    public List<Double> stepWithActions(StateInterface<S> state,List<ActionInterface<A>> actions) {
+
+        List<Double> rewards=new ArrayList<>();
+        for (ActionInterface<A> action: actions) {
+            StepReturnGeneric<S> stepReturn = environment.step(action, state);
+            rewards.add(stepReturn.reward);
+
+            if (stepReturn.isFail) {
+                log.warning("Stepped into fail state");
+                break;
+            }
+
+            if (stepReturn.isTerminal) {
+                log.info("Stepped into terminal state");
+                break;
+            }
+
+            state.setFromReturn(stepReturn);
+        }
+        return rewards;
+    }
 
 }

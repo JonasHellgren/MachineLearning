@@ -59,7 +59,7 @@ public class VariablesElevator {
             int nw2 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
             int nw3 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
             waitingList = Arrays.asList(nw1, nw2, nw3);
-        } while (ListUtils.sumList(waitingList) != maxNPersonsWaitingTotal);
+        } while (ListUtils.sumIntegerList(waitingList) != maxNPersonsWaitingTotal);
         return waitingList;
     }
 

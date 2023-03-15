@@ -96,9 +96,7 @@ public class TreeInfoHelper<SSV,AV> {
 
     @SneakyThrows
     public List<NodeInterface <SSV,AV>> getBestPath() {
-//        NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION, true);
         NodeSelector<SSV,AV> ns = new NodeSelector<>(rootTree, settings, C_FOR_NO_EXPLORATION);
-
         ns.select();
         return ns.getNodesFromRootToSelected();
     }

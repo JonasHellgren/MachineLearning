@@ -60,10 +60,14 @@ public class ListUtils {
 
 
 
-    public static Integer sumList(List<Integer> list) {
+    public static Integer sumIntegerList(List<Integer> list) {
         return list.stream().mapToInt(Integer::intValue).sum();
     }
 
+
+    public static Double sumDoubleList(List<Double> list) {
+        return list.stream().mapToDouble(Double::doubleValue).sum();
+    }
 
 
     public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {

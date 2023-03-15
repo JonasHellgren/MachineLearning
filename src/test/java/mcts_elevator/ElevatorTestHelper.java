@@ -51,7 +51,7 @@ public class ElevatorTestHelper {
 
     List<Integer>  getnPersWaiting() {
         List<NodeInterface<VariablesElevator, Integer>> nodesOnPath = getNodesOnPath();
-        return nodesOnPath.stream().map(n -> ListUtils.sumList(n.getState().getVariables().nPersonsWaiting)).collect(Collectors.toList());
+        return nodesOnPath.stream().map(n -> ListUtils.sumIntegerList(n.getState().getVariables().nPersonsWaiting)).collect(Collectors.toList());
     }
 
     List<Integer>  getSpeeds() {
