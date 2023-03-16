@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
+import common.RandUtils;
 import monte_carlo_tree_search.interfaces.ActionIntegerAbstract;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 
@@ -15,6 +16,12 @@ public class ActionEnergyTrading extends ActionIntegerAbstract {
     public static ActionEnergyTrading newValue(int value) {
          return new ActionEnergyTrading(value);
     }
+
+
+    public static ActionEnergyTrading newRandom() {
+        return new ActionEnergyTrading(RandUtils.getRandomIntNumber(MIN_ACTION_DEFAULT,MAX_ACTION_DEFAULT+1));
+    }
+
 
     public String toString() {
          return "value = "+getValue();

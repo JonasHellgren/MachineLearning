@@ -72,6 +72,7 @@ public class ReplayBufferValueSetter<S,A> {
         }
 
         List<Double> returns= createReturnList();
+        System.out.println("returns = " + returns);
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
             Experience<S,A> experience= bufferEpisode.getExperience(i);
             if (isFirstVisitFlagTrueAndIsFirstVisit(i, experience)) {
