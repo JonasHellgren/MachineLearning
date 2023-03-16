@@ -17,7 +17,7 @@ public class EnergyTraderValueMemory <SSV,AV> extends StateValueMemoryAbstract<S
     StateNormalizerEnergyTrader<SSV> normalizer;
 
     public EnergyTraderValueMemory() {
-        this(-EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE, EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE);
+        this(-EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*2, EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*2);
     }
     public EnergyTraderValueMemory(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(

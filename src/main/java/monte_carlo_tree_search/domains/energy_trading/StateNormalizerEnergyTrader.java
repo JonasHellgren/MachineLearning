@@ -12,8 +12,8 @@ public class StateNormalizerEnergyTrader<S> {
         double SoE;
     }
 
-    private static final int RANGE_MIN = -1;
-    private static final int RANGE_MAX = 1;
+    private static final double RANGE_MIN = -1.0;
+    private static final double RANGE_MAX = 1.0;
     ScalerLinear timeScaler;
     ScalerLinear SoEScaler;
 

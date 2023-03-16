@@ -15,7 +15,7 @@ import java.util.List;
 
 /*** memory guides search, if weightMemoryValue is zero, higher prob sub optimal solution
  *
- *
+ *  sumOfRewards shall be 3
  */
 
 @Log
@@ -106,7 +106,7 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
                 .weightReturnsSimulation(0.0)
                 .weightMemoryValue(0.5)
                 .nofSimulationsPerNode(0)
-                .coefficientExploitationExploration(0.1)  //0.1
+                .coefficientExploitationExploration(1e-2)  //0.1
                 .isCreatePlotData(false)
                 .build();
     }
