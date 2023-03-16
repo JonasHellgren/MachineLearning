@@ -345,6 +345,7 @@ ElevatorMctsOnlySearchRunner
 - EnergyTraderMemoryTrainer  x
 - EnergyTraderValueMemory x
 - TestEnergyTraderMemory  x
+- givenBuffer_whenTrainingMemory_thenCorrectExpectedValues  x
 - EnergyTradingSearchWithPresetMemoryRunner
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
 

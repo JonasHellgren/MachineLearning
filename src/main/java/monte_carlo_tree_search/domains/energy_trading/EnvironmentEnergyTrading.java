@@ -12,7 +12,6 @@ import java.util.Map;
 /***
  *  time = 0 <=> hour in (00-03), time = 1 <=> hour in (03-06), time = 7 <=> hour in (21-00)
  *
- *
  *  positive power <=> SoE increase is smaller than dSoE, negative power <=> SoE decrease is larger than dSoE
  */
 
@@ -25,7 +24,7 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
     public static final double SOE_MIN = 0.2;
     public static final double SOE_MAX = 0.8;
     public static final double SOE_MIN_END = 0.5;
-    private static final double REWARD_FAIL = -100;
+    public static final double REWARD_FAIL = -20;
 
     public static final double RETURN_MAX_ESTIMATE=2*2*TIME_STEP_IN_HOUR_DURATION*AFTER_MAX_TIME/2d;
     private static final List<Double> PRICE_DEFAULT = Arrays.asList(0.5, 1d, 1d, 1d, 1d, 1d, 1.5, 1d);

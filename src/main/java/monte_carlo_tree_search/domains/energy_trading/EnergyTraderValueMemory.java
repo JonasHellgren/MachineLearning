@@ -3,9 +3,6 @@ package monte_carlo_tree_search.domains.energy_trading;
 import common.ListUtils;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.StateValueMemoryAbstract;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
-import monte_carlo_tree_search.domains.cart_pole.StateNormalizerCartPole;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +16,7 @@ public class EnergyTraderValueMemory <SSV,AV> extends StateValueMemoryAbstract<S
 
     private static final int INPUT_SIZE = 2;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE*2;
     private static final double LEARNING_RATE = 0.01;
 
     StateNormalizerEnergyTrader<SSV> normalizer;
