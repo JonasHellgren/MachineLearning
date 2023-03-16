@@ -72,7 +72,6 @@ public class RunCartPoleAlphaZero {
         List<Double> learningErrors = new ArrayList<>();
         List<Double> returns = new ArrayList<>();
 
-
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
             boolean isTerminal = false;
             StateInterface<CartPoleVariables> state = getStartState();

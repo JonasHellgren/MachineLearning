@@ -350,7 +350,7 @@ ElevatorMctsOnlySearchRunner
 - getAverageValueError to abstract x
 - städa foldrar  x
 - varför fel trainmemory trader x
-- EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
+- EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading  x
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
