@@ -85,7 +85,7 @@ public class EnergyTradingAlphaZeroRunner {
                 isTerminal = sr.isTerminal;
             }
 
-            ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
+         //   ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
 
            // someLogging(bufferTraining, episode, step);
            // someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
@@ -132,6 +132,7 @@ public class EnergyTradingAlphaZeroRunner {
                 .stateVariables(state.getVariables()).reward(sr.reward).build());
     }
 
+    /*
     private static ReplayBufferValueSetter trainMemoryFromEpisode(NetworkMemoryInterface<VariablesEnergyTrading,Integer> memory,
                                                                   ReplayBuffer<VariablesEnergyTrading, Integer> bufferTraining,
                                                                   ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode) {
@@ -139,8 +140,8 @@ public class EnergyTradingAlphaZeroRunner {
         bufferTraining.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
         Conditionals.executeIfTrue(bufferTraining.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 trainer.trainMemory(memory, bufferTraining));
-        return rbvs;
-    }
+       return rbvs;
+    }  */
 
     private static void warnIfBadSolution() {
         TreeInfoHelper<VariablesEnergyTrading,Integer> tih=

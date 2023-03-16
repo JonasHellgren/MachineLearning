@@ -351,6 +351,9 @@ ElevatorMctsOnlySearchRunner
 - städa foldrar  x
 - varför fel trainmemory trader x
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading  x
+- fixa RunCartPoleAlphaZero
+- ReplayBufferValueSetter generic
+
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma

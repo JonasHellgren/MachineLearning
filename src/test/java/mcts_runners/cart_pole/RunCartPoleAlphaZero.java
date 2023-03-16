@@ -46,7 +46,7 @@ public class RunCartPoleAlphaZero {
     private static final int MAX_EPOCHS = 10;
     private static final int MINI_BATCH_SIZE = 128;
 
-    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 1;  //small => faster training
+    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 5;  //small => faster training
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
     private static final int MAX_TREE_DEPTH_SEARCH = 5;  //small => faster training
     private static final int MAX_TREE_DEPTH_EVALUATION = 50;
