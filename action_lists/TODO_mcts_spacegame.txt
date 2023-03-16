@@ -351,8 +351,10 @@ ElevatorMctsOnlySearchRunner
 - städa foldrar  x
 - varför fel trainmemory trader x
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading  x
-- fixa RunCartPoleAlphaZero
-- ReplayBufferValueSetter generic
+- fixa RunCartPoleAlphaZero  x
+- ReplayBufferValueSetter generic x
+- TestReplayBufferValueSetter  x
+- RunCartPoleAlphaZero vill inte komma igång ibland  x
 
 
 - ActionAbstract  -> ActionElevator

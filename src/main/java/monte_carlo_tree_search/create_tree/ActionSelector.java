@@ -68,7 +68,15 @@ public class ActionSelector<S,A> {
         }
     }
 
-    private Optional<Pair<ActionInterface<A>, Double>> getPairWithHighestValue(List<Pair<ActionInterface<A>, Double>> pairs) {
+    public ActionInterface<A> getRandomAction() {
+        Set<A> actions = actionTemplate.applicableActions();
+        RandUtils<A> randUtils = new RandUtils<>();
+        actionTemplate.setValue(randUtils.getRandomItemFromList(new ArrayList<>(actions)));
+        return actionTemplate;
+    }
+
+
+        private Optional<Pair<ActionInterface<A>, Double>> getPairWithHighestValue(List<Pair<ActionInterface<A>, Double>> pairs) {
         return pairs.stream().
                 reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
     }

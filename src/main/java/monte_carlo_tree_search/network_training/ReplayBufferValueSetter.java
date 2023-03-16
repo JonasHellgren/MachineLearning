@@ -23,14 +23,14 @@ import java.util.function.BiFunction;
 
 //todo make generic
 @Log
-public class ReplayBufferValueSetter {
+public class ReplayBufferValueSetter<S,A> {
 
-    ReplayBuffer<CartPoleVariables, Integer> bufferEpisode;
+    ReplayBuffer<S,A> bufferEpisode;
     double discountFactor;
     double episodeReturn;
     boolean isFirstVisit;
 
-    public ReplayBufferValueSetter(ReplayBuffer<CartPoleVariables, Integer> bufferEpisode, double discountFactor, boolean isFirstVisit) {
+    public ReplayBufferValueSetter(ReplayBuffer<S,A> bufferEpisode, double discountFactor, boolean isFirstVisit) {
         this.bufferEpisode = bufferEpisode;
         this.discountFactor = discountFactor;
         this.isFirstVisit = isFirstVisit;
@@ -41,27 +41,30 @@ public class ReplayBufferValueSetter {
         return episodeReturn;
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromReturns(double fractionToInclude) {
+    public ReplayBuffer<S,A> createBufferFromReturns(double fractionToInclude) {
         int iLimit = getiLimit(fractionToInclude);
 
         BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(idx);
         return createBuffer(function,iLimit);
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBufferFromStartReturn(double fractionToInclude) {
+    public ReplayBuffer<S,A> createBufferFromStartReturn(double fractionToInclude) {
         int iLimit = getiLimit(fractionToInclude);
         BiFunction<List<Double>,Integer,Double> function=(list,idx) -> list.get(0);
         return createBuffer(function,iLimit);
     }
 
     private int getiLimit(double fractionToInclude) {
-        return (int) MathUtils.clip(Math.round(fractionToInclude*bufferEpisode.size()),1,bufferEpisode.size()-1);
+
+        return (int) MathUtils.clip(Math.round(fractionToInclude*bufferEpisode.size()),1,bufferEpisode.size());
+
+        //return (int) MathUtils.clip(Math.round(fractionToInclude*bufferEpisode.size()),1,bufferEpisode.size()-1);
     }
 
-    public ReplayBuffer<CartPoleVariables, Integer> createBuffer(BiFunction<List<Double>,Integer,Double> function,
+    public ReplayBuffer<S,A> createBuffer(BiFunction<List<Double>,Integer,Double> function,
                                                                  int iLimit) {
 
-        ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated=new ReplayBuffer<>(bufferEpisode.size());
+        ReplayBuffer<S,A> bufferEpisodeUpdated=new ReplayBuffer<>(bufferEpisode.size());
 
         if (bufferEpisode.size()==0)  {
             log.warning("Empty episode buffer");
@@ -70,7 +73,7 @@ public class ReplayBufferValueSetter {
 
         List<Double> returns= createReturnList();
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
-            Experience<CartPoleVariables, Integer> experience= bufferEpisode.getExperience(i);
+            Experience<S,A> experience= bufferEpisode.getExperience(i);
             if (isFirstVisitFlagTrueAndIsFirstVisit(i, experience)) {
                 double value = function.apply(returns, i);
                 addExperience(bufferEpisodeUpdated, experience, value);
@@ -78,14 +81,16 @@ public class ReplayBufferValueSetter {
         }
         Collections.reverse(bufferEpisodeUpdated.getBuffer());
 
-        ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeCut=new ReplayBuffer<>(iLimit);
-        for (int i = 0; i < Math.min(iLimit,bufferEpisodeUpdated.size()-1) ; i++) {
+        ReplayBuffer<S,A> bufferEpisodeCut=new ReplayBuffer<>(iLimit);
+//        for (int i = 0; i < Math.min(iLimit,bufferEpisodeUpdated.size()-1) ; i++) {
+          for (int i = 0; i < Math.min(iLimit,bufferEpisodeUpdated.size()) ; i++) {
+
             bufferEpisodeCut.addExperience(bufferEpisodeUpdated.getExperience(i));
        }
         return bufferEpisodeCut;
     }
 
-    private boolean isFirstVisitFlagTrueAndIsFirstVisit(int i, Experience<CartPoleVariables, Integer> experience) {
+    private boolean isFirstVisitFlagTrueAndIsFirstVisit(int i, Experience<S,A> experience) {
         return isFirstVisit && !bufferEpisode.isExperienceWithStateVariablesPresentBeforeIndex(experience.stateVariables, i);
     }
 
@@ -93,8 +98,8 @@ public class ReplayBufferValueSetter {
         return i<iLimit;
     }
 
-    private void addExperience(ReplayBuffer<CartPoleVariables, Integer> bufferEpisodeUpdated, Experience<CartPoleVariables, Integer> experience, double value) {
-        bufferEpisodeUpdated.addExperience(Experience.<CartPoleVariables, Integer>builder()
+    private void addExperience(ReplayBuffer<S,A> bufferEpisodeUpdated, Experience<S,A> experience, double value) {
+        bufferEpisodeUpdated.addExperience(Experience.<S,A>builder()
                 .stateVariables(experience.stateVariables)
                 .value(value)
                 .reward(experience.reward)
@@ -107,7 +112,7 @@ public class ReplayBufferValueSetter {
         List<Double> returns=new ArrayList<>();
         this.episodeReturn=0;
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
-            Experience<CartPoleVariables, Integer> experience = bufferEpisode.getExperience(i);
+            Experience<S,A> experience = bufferEpisode.getExperience(i);
             episodeReturn = discountFactor * episodeReturn +  experience.reward;
             returns.add(episodeReturn);
         }

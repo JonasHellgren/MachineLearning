@@ -1,4 +1,4 @@
-package monte_carlo_search.mcts_classes;
+package monte_carlo_search.network_training;
 
 import common.ListUtils;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;

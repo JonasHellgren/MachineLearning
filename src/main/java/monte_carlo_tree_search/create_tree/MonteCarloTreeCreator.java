@@ -2,6 +2,7 @@ package monte_carlo_tree_search.create_tree;
 
 import common.Conditionals;
 import common.CpuTimer;
+import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -89,8 +90,14 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public ActionInterface<A> getFirstAction() {
-        NodeSelector<S,A> ns = new NodeSelector<>(nodeRoot, settings);
-        Optional<NodeInterface<S,A>> bestChild= ns.selectBestNonFailChild(nodeRoot);
+        NodeSelector<S, A> ns = new NodeSelector<>(nodeRoot, settings);
+        Optional<NodeInterface<S, A>> bestChild = ns.selectBestNonFailChild(nodeRoot);
+
+        if (bestChild.isEmpty()) {
+            log.warning("No best first action present, selecting random action");
+            ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
+            return actionSelector.getRandomAction();
+        }
         return bestChild.orElseThrow().getAction();
     }
 

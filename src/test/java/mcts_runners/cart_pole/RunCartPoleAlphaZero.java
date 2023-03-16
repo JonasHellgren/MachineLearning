@@ -46,7 +46,7 @@ public class RunCartPoleAlphaZero {
     private static final int MAX_EPOCHS = 10;
     private static final int MINI_BATCH_SIZE = 128;
 
-    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 5;  //small => faster training
+    private static final int TIME_BUDGET_MILLI_SECONDS_TRAINING = 10;  //small => faster training
     private static final int TIME_BUDGET_MILLI_SECONDS_EVALUATION = 50;
     private static final int MAX_TREE_DEPTH_SEARCH = 5;  //small => faster training
     private static final int MAX_TREE_DEPTH_EVALUATION = 50;
@@ -88,7 +88,7 @@ public class RunCartPoleAlphaZero {
                 isTerminal = sr.isTerminal;
             }
 
-            ReplayBufferValueSetter rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
+            ReplayBufferValueSetter<CartPoleVariables,Integer> rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
 
             someLogging(bufferTraining, episode, step);
             someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
@@ -112,7 +112,7 @@ public class RunCartPoleAlphaZero {
     private static void someTracking(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                                      List<Double> learningErrors,
                                      List<Double> returns,
-                                     ReplayBufferValueSetter rbvs,
+                                     ReplayBufferValueSetter<CartPoleVariables,Integer> rbvs,
                                      ReplayBuffer<CartPoleVariables, Integer> bufferTraining) {
         //learningErrors.add(memory.getLearningRule().getTotalNetworkError());
         List<Experience<CartPoleVariables, Integer>> miniBatch=bufferTraining.getMiniBatch(MINI_BATCH_SIZE);
@@ -154,10 +154,10 @@ public class RunCartPoleAlphaZero {
     }
 
     @NotNull
-    private static ReplayBufferValueSetter trainMemoryFromEpisode(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
+    private static ReplayBufferValueSetter<CartPoleVariables,Integer> trainMemoryFromEpisode(NetworkMemoryInterface<CartPoleVariables,Integer> memory,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferTraining,
                                                                   ReplayBuffer<CartPoleVariables, Integer> bufferEpisode) {
-        ReplayBufferValueSetter rbvs = new ReplayBufferValueSetter(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
+        ReplayBufferValueSetter<CartPoleVariables,Integer> rbvs = new ReplayBufferValueSetter<>(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         CartPoleMemoryTrainer memoryTrainerHelper = new CartPoleMemoryTrainer(MINI_BATCH_SIZE, NOT_RELEVANT, MAX_ERROR, MAX_EPOCHS);
         bufferTraining.addAll(rbvs.createBufferFromStartReturn(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
        // bufferTrainig.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));
