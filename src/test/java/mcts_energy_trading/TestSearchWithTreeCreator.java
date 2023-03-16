@@ -50,7 +50,7 @@ public class TestSearchWithTreeCreator {
 
     @SneakyThrows
     @Test
-    public void givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSell() {
+    public void givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSellLittle() {
         StateInterface<VariablesEnergyTrading> state=StateEnergyTrading.newFromTimeAndSoE(7,0.70);
         monteCarloTreeCreator.setStartState(state);
         monteCarloTreeCreator.run();
@@ -59,8 +59,21 @@ public class TestSearchWithTreeCreator {
 
         int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
         System.out.println("actionValue = " + actionValue);
-        Assert.assertEquals(-2,actionValue);
+        Assert.assertEquals(-1,actionValue);
+    }
 
+    @SneakyThrows
+    @Test
+    public void givenDefaultEnv_whenTimeIs7SoE0d9_thenBestActionIsSellMuch() {
+        StateInterface<VariablesEnergyTrading> state=StateEnergyTrading.newFromTimeAndSoE(7,0.90);
+        monteCarloTreeCreator.setStartState(state);
+        monteCarloTreeCreator.run();
+
+        monteCarloTreeCreator.getNodeRoot().printTree();
+
+        int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
+        System.out.println("actionValue = " + actionValue);
+        Assert.assertEquals(-2,actionValue);
     }
 
     @SneakyThrows

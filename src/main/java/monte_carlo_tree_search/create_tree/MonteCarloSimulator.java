@@ -20,10 +20,12 @@ public class MonteCarloSimulator<S, A> {
 
     EnvironmentGenericInterface<S, A> environment;
     MonteCarloSettings<S, A> settings;
+    List<StateInterface<S>> states;
 
     public MonteCarloSimulator(EnvironmentGenericInterface<S, A> environment, MonteCarloSettings<S, A> settings) {
         this.environment = environment;
         this.settings = settings;
+        this.states=new ArrayList<>();
     }
 
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode) {
@@ -73,8 +75,10 @@ public class MonteCarloSimulator<S, A> {
     public List<Double> stepWithActions(StateInterface<S> state,List<ActionInterface<A>> actions) {
 
         List<Double> rewards=new ArrayList<>();
+        StepReturnGeneric<S> stepReturn = null;
         for (ActionInterface<A> action: actions) {
-            StepReturnGeneric<S> stepReturn = environment.step(action, state);
+            states.add(state.copy());
+            stepReturn = environment.step(action, state);
             rewards.add(stepReturn.reward);
 
             if (stepReturn.isFail) {
@@ -89,6 +93,9 @@ public class MonteCarloSimulator<S, A> {
 
             state.setFromReturn(stepReturn);
         }
+        if (stepReturn != null) {
+            states.add(stepReturn.newState.copy()); }
+
         return rewards;
     }
 
