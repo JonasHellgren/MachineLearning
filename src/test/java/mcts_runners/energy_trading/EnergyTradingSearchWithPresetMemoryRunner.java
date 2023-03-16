@@ -96,9 +96,9 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
                 .actionSelectionPolicy(PoliciesEnergyTrading.newRandom())
                 .simulationPolicy(PoliciesEnergyTrading.newRandom())
                 .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(0.5)
-                .discountFactorBackupSimulationDefensive(0.5)
-                .coefficientMaxAverageReturn(0) //average
+                .alphaBackupDefensiveStep(0.1)
+                .discountFactorBackupSimulationDefensive(0.1)
+                .coefficientMaxAverageReturn(0.0) //average
                 .maxTreeDepth(8)
                 .maxNofIterations(100_000)  //100_000
                 .timeBudgetMilliSeconds(1000)
