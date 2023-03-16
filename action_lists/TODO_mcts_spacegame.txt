@@ -356,7 +356,7 @@ ElevatorMctsOnlySearchRunner
 - TestReplayBufferValueSetter  x
 - RunCartPoleAlphaZero vill inte komma igång ibland  x
 - få igång EnergyTradingAlphaZeroRunner x
--
+- fixa EnergyTradingAlphaZeroRunner
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
