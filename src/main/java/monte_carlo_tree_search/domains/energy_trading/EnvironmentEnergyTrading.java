@@ -59,7 +59,6 @@ public class EnvironmentEnergyTrading implements EnvironmentGenericInterface<Var
         double soEPres = state.getVariables().SoE;
         double powerPresent = ACTION_POWER_IN_KW_MAP.get(action.getValue());  //positive <=> increased SoE
         int timeNew = timePres + 1;
-       // double eta=(powerPresent>0) ? 1.0/EFFICIENCY : EFFICIENCY;
         double eta=(powerPresent>0) ? EFFICIENCY : 1.0/EFFICIENCY;
 
         double soENew = soEPres + eta*powerPresent * (double) TIME_STEP_IN_HOUR_DURATION / BATTERY_ENERGY;

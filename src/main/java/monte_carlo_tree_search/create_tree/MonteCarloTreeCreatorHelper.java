@@ -89,7 +89,7 @@ public class MonteCarloTreeCreatorHelper<S, A> {
         TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot, settings);
 
         log.info("time used = " + cpuTimer.getAbsoluteProgress() + ", nofIterations = " + nofIterations +
-                ", max tree depth = " + tih.maxDepth() + ", depth of best path = " + tih.getBestPath().size()
+                ", max tree depth = " + tih.maxDepth() + ", depth of best path = " + tih.getActionsOnBestPath().size()
                 + ", nof nodes = " + statistics.nofNodes + ", branching = " + statistics.averageNofChildrenPerNode);
     }
 

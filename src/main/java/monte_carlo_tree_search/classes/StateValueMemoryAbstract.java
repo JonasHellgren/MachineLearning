@@ -1,6 +1,7 @@
 package monte_carlo_tree_search.classes;
 
 import common.Conditionals;
+import common.ListUtils;
 import common.ScalerLinear;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,6 +106,17 @@ public abstract class StateValueMemoryAbstract <SSV,AV> implements NetworkMemory
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
         }
         return trainingSet;
+    }
+
+    @Override
+    public double getAverageValueError(List<Experience<SSV, AV>> experienceList) {  //todo - to abstract
+        List<Double> errors=new ArrayList<>();
+        for (Experience<SSV, AV> e : experienceList) {
+            double expectedValue= e.value;
+            double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
+            errors.add(Math.abs(expectedValue-memoryValue));
+        }
+        return ListUtils.findAverage(errors).orElseThrow();
     }
 
 }

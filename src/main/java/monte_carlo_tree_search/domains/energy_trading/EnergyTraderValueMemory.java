@@ -1,16 +1,11 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.ListUtils;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.classes.StateValueMemoryAbstract;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.util.TransferFunctionType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EnergyTraderValueMemory <SSV,AV> extends StateValueMemoryAbstract<SSV,AV> {
 
@@ -49,24 +44,11 @@ public class EnergyTraderValueMemory <SSV,AV> extends StateValueMemoryAbstract<S
         throw new NoSuchMethodException("Not defined/needed - use learn instead");
     }
 
-    @Override
-    public double getAverageValueError(List<Experience<SSV, AV>> experienceList) {  //todo - to abstract
-        List<Double> errors=new ArrayList<>();
-        for (Experience<SSV, AV> e : experienceList) {
-            double expectedValue= e.value;
-            double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
-            errors.add(Math.abs(expectedValue-memoryValue));
-        }
-        return ListUtils.findAverage(errors).orElseThrow();
-    }
 
     @NotNull
     public double[] getInputVec(SSV v) {
         StateNormalizerEnergyTrader.VariablesEnergyTradingDouble vNorm=normalizer.normalize(v);
         return new double[]{vNorm.time, vNorm.SoE};
     }
-
-
-
 
 }

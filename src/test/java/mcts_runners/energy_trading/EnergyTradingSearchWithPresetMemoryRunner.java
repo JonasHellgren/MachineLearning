@@ -2,6 +2,7 @@ package mcts_runners.energy_trading;
 
 import common.ListUtils;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
@@ -12,6 +13,12 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 
 import java.util.List;
 
+/*** memory guides search, if weightMemoryValue is zero, higher prob sub optimal solution
+ *
+ *
+ */
+
+@Log
 public class EnergyTradingSearchWithPresetMemoryRunner {
 
     private static final int NOF_SIMULATIONS = 100;
@@ -37,29 +44,35 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
         memory=new EnergyTraderValueMemory<>();
         buffer=trainer.createExperienceBuffer(simulator);
         trainer.trainMemory(memory,buffer);
-        double avgError=memory.getAverageValueError(buffer.getBuffer());
-        System.out.println("avgError = " + avgError);
-
-
-       // StateInterface<VariablesEnergyTrading> stateStart= StateEnergyTrading.newFromTimeAndSoE(0,0.5);
-        //monteCarloTreeCreator=createTreeCreator(stateStart,memory);
-        //EnergyTradingRunner runner=new EnergyTradingRunner(monteCarloTreeCreator,environment);
-        //runner.run(stateStart);
 
         StateInterface<VariablesEnergyTrading> stateStart= StateEnergyTrading.newFromTimeAndSoE(0,0.5);
         monteCarloTreeCreator=createTreeCreator(stateStart,memory);
         monteCarloTreeCreator.run();
+
+        warnIfBadSolution();
+        doPrinting(stateStart);
+    }
+
+    private static void warnIfBadSolution() {
         TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
                 new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSearchSettings());
+        if (tih.getActionsOnBestPath().size()!=EnvironmentEnergyTrading.AFTER_MAX_TIME) {
+            log.warning("No adequate solution found, tree not deep enough");
+        }
+    }
 
-        List<ActionInterface<Integer>> actions=tih.getActionsOnBestPath();
+    private static void doPrinting(StateInterface<VariablesEnergyTrading> stateStart) {
+        TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
+                new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSearchSettings());
+        List<ActionInterface<Integer>> actions= tih.getActionsOnBestPath();
         List<Double> rewards=simulator.stepWithActions(stateStart,actions);
         double sumOfRewards= ListUtils.sumDoubleList(rewards);
+        double avgError=memory.getAverageValueError(buffer.getBuffer());
+        System.out.println("avgError = " + avgError);
         System.out.println("actions = " + actions);
         System.out.println("rewards = " + rewards);
         simulator.getStates().forEach(System.out::println);
         System.out.println("sumOfRewards = " + sumOfRewards);
-
     }
 
     public static MonteCarloTreeCreator<VariablesEnergyTrading, Integer> createTreeCreator(
@@ -87,14 +100,13 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
                 .discountFactorBackupSimulationDefensive(0.5)
                 .coefficientMaxAverageReturn(0) //average
                 .maxTreeDepth(8)
-                .maxNofIterations(50_000)
+                .maxNofIterations(100_000)  //100_000
                 .timeBudgetMilliSeconds(1000)
                 .weightReturnsSteps(1.0)
                 .weightReturnsSimulation(0.0)
                 .weightMemoryValue(0.5)
                 .nofSimulationsPerNode(0)
-                //.maxSimulationDepth(10)
-                .coefficientExploitationExploration(1)
+                .coefficientExploitationExploration(0.1)  //0.1
                 .isCreatePlotData(false)
                 .build();
     }
