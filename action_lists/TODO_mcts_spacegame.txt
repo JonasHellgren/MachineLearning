@@ -347,8 +347,9 @@ ElevatorMctsOnlySearchRunner
 - TestEnergyTraderMemory  x
 - givenBuffer_whenTrainingMemory_thenCorrectExpectedValues  x
 - EnergyTradingSearchWithPresetMemoryRunner  x
-- getAverageValueError to abstract
-- varför fel trainmemory elevator
+- getAverageValueError to abstract x
+- städa foldrar  x
+- varför fel trainmemory trader
 - EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading
 
 - ActionAbstract  -> ActionElevator
