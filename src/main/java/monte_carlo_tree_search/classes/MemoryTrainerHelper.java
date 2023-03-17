@@ -35,7 +35,7 @@ public class MemoryTrainerHelper<SSV, AV>  {
     }
 
      public  void logEpoch(MomentumBackpropagation learningRule, int epoch) {
-        log.info("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
+        log.fine("Epoch " + epoch + ", error=" + learningRule.getTotalNetworkError());
     }
 
      public double getAverageReturn(SimulationResults simulationResults) {
