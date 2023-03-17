@@ -364,6 +364,8 @@ ElevatorMctsOnlySearchRunner
 - varför påverkar coefficientExploitationExploration branchning marginellt
 - fixa EnergyTradingAlphaZeroRunner
 
+- bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor
+
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
 

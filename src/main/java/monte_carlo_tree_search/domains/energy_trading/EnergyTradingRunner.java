@@ -22,6 +22,7 @@ public class EnergyTradingRunner {
     MonteCarloTreeCreator<VariablesEnergyTrading, Integer> mcForSearch;
     EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment;
     List<Integer> actions;
+    List<Integer> times;
     List<Double> SoElist;
     List<Double> rewards;
 
@@ -33,6 +34,7 @@ public class EnergyTradingRunner {
         this.actions = new ArrayList<>();
         this.SoElist = new ArrayList<>();
         this.rewards = new ArrayList<>();
+        this.times=new ArrayList<>();
     }
 
     public void run(StateInterface<VariablesEnergyTrading> state) {
@@ -46,30 +48,32 @@ public class EnergyTradingRunner {
             } catch (StartStateIsTrapException e) {
                 log.warning("State is trap = "+state);
                 sr = environment.step(mcForSearch.getFirstAction(), state);
-                setLists(state, sr);
+                setLists(state, mcForSearch.getFirstAction().getValue(), sr.reward);
                 break;
             }
             MonteCarloSearchStatistics<VariablesEnergyTrading, Integer> stats = mcForSearch.getStatistics();
             log.info("Search completed, tree size = " + stats.getNofNodes() + ", tree depth = " + stats.getMaxDepth() + ", nof iter = " + stats.getNofIterations()); //+", actions = "+actions);
 
             sr = environment.step(mcForSearch.getFirstAction(), state);
-            setLists(state, sr);
+            setLists(state,mcForSearch.getFirstAction().getValue(), sr.reward);
             state.setFromReturn(sr);
             //double rootNodeValue= ListUtils.findEnd(mcForSearch.getPlotData()).orElse(TreePlotData.builder().build()).maxValue;
             i++;
         } while (!sr.isTerminal && !sr.isFail);
-        setLists(state, sr);
+        setLists(state, 0,0);
     }
 
-    private void setLists(StateInterface<VariablesEnergyTrading> state, StepReturnGeneric<VariablesEnergyTrading> sr) {
-        actions.add(mcForSearch.getFirstAction().getValue());
+    private void setLists(StateInterface<VariablesEnergyTrading> state, int action, double reward) {
         SoElist.add(state.getVariables().SoE);
-        rewards.add(sr.reward);
+        times.add(state.getVariables().time);
+        actions.add(action);
+        rewards.add(reward);   //sr.isTerminal?0:
     }
 
     public String toString() {
 
         return          "actions = " + actions.toString() + NEW_LINE +
+                        "times = " + times.toString() + NEW_LINE +
                         "SoElist = "+ SoElist.toString() + NEW_LINE +
                         "rewards = "+rewards.toString() + NEW_LINE +
                         "sumRewards = "+ListUtils.sumDoubleList(rewards);

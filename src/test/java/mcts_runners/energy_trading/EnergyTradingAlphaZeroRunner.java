@@ -19,16 +19,18 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import monte_carlo_tree_search.network_training.ReplayBufferValueSetter;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log
 public class EnergyTradingAlphaZeroRunner {
 
     private static final int NOF_SIMULATIONS = 100;
     private static final int MAX_SIMULATION_DEPTH = 10;
-    private static final int NOF_EPISODES = 100;
+    private static final int NOF_EPISODES = 50;
     private static final int NOF_EPISODES_BETWEEN_LOGGING = 10;
-    private static final int BUFFER_SIZE = 1_000;
+ //   private static final int BUFFER_SIZE = 1_000;
     private static final int MINI_BATCH_SIZE = 20;
     private static final double MAX_ERROR = 1e-8;  //1e-5;
     private static final int MAX_NOF_EPOCHS = 1000;
@@ -45,20 +47,19 @@ public class EnergyTradingAlphaZeroRunner {
     private static final List<Double> WEIGHTS_MEM= Arrays.asList(0.0,0.25,0.5,0.75,1.0,1.25,1.5);
     private static final int MAX_TREE_DEPTH =3;
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 1e0;
-    private static final int START_TIME = 5;
+    private static final int START_TIME = 4;
     private static final double START_SOE = 0.8;
 
 
     static ActionInterface<Integer> actionTemplate;
     static EnvironmentGenericInterface<VariablesEnergyTrading, Integer> environment;
     static MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator;
-    static MemoryTrainerInterface<VariablesEnergyTrading, Integer> trainer;
+  //  static MemoryTrainerInterface<VariablesEnergyTrading, Integer> trainer;
     static NetworkMemoryInterface<VariablesEnergyTrading, Integer> memory;
     static MonteCarloTreeCreator<VariablesEnergyTrading, Integer> searcherTraining;
     static ReplayBuffer<VariablesEnergyTrading, Integer> bufferTraining;
     static ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode;
     static ScalerLinear probScaler;
-    static EnergyTradingRunner runner;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -67,7 +68,7 @@ public class EnergyTradingAlphaZeroRunner {
         environment = EnvironmentEnergyTrading.newDefault();
         simulator= new MonteCarloSimulator<>(environment,createSimulatorSettings());
         memory=new EnergyTraderValueMemory<>();
-        trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
+       // trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, BUFFER_SIZE_TRAINING, MAX_ERROR, MAX_NOF_EPOCHS);
         searcherTraining = createSearcherTraining(stateStart,memory);
         bufferTraining = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
         bufferEpisode = new ReplayBuffer<>(BUFFER_SIZE_EPISODE);
@@ -110,29 +111,27 @@ public class EnergyTradingAlphaZeroRunner {
             // someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
         }
 
-        System.out.println("bufferTraining = " + bufferTraining);
+       // System.out.println("bufferTraining = " + bufferTraining);
 
         printMemory();
 
 
         for (Double weightMem:WEIGHTS_MEM) {
-            runner = new EnergyTradingRunner(createSearcherRunner(stateStart, memory, weightMem), environment);
+            EnergyTradingRunner runner = new EnergyTradingRunner(createSearcherRunner(stateStart, memory, weightMem), environment);
             runner.run(StateEnergyTrading.newFromTimeAndSoE(START_TIME, START_SOE));
-            System.out.println("weightMem = "+weightMem+", runner.toString() = " + runner.toString());
+            System.out.println("weightMem = "+weightMem+System.lineSeparator()+", runner.toString() = " + runner.toString());
         }
     }
 
     private static void printMemory() {
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(5,0.5)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(5, 0.5)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(6,0.8)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(6, 0.8)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(6,0.5)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(6, 0.5)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(6,0.3)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(6, 0.3)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(7,0.8)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(7, 0.8)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(7,0.5)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(7, 0.5)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(7,0.3)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(7, 0.3)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(8,0.7)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(8, 0.7)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(8,0.5)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(8, 0.5)));
-        System.out.println("memory.read(StateEnergyTrading.newFromTimeAndSoE(8,0.3)) = " + memory.read(StateEnergyTrading.newFromTimeAndSoE(8, 0.3)));
+        Map<Double, Double> soEValueMap=new HashMap<>();
+        for (int time=START_TIME;time<EnvironmentEnergyTrading.AFTER_MAX_TIME;time++) {
+            soEValueMap.clear();
+            for (double SoE:Arrays.asList(0.8,0.5,0.3))  {
+                soEValueMap.put(SoE,memory.read(StateEnergyTrading.newFromTimeAndSoE(time,SoE)));
+            }
+            System.out.println("time = " + time+", soEValueMap= "+soEValueMap);
+        }
 
     }
 
@@ -203,6 +202,9 @@ public class EnergyTradingAlphaZeroRunner {
         ReplayBufferValueSetter<VariablesEnergyTrading, Integer> rbvs =
                 new ReplayBufferValueSetter<>(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         bufferTraining.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
+        MemoryTrainerInterface<VariablesEnergyTrading, Integer> trainer=
+                new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, BUFFER_SIZE_TRAINING, MAX_ERROR, MAX_NOF_EPOCHS);
+
         Conditionals.executeIfTrue(bufferTraining.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 trainer.trainMemory(memory, bufferTraining));
     }
