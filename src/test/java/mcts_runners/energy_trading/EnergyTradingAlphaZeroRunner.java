@@ -26,16 +26,16 @@ import java.util.Map;
 @Log
 public class EnergyTradingAlphaZeroRunner {
 
-    private static final int NOF_SIMULATIONS = 100;
+    private static final int NOF_SIMULATIONS = 100;  //todo skall inte behövas
     private static final int MAX_SIMULATION_DEPTH = 10;
-    private static final int NOF_EPISODES = 50;
+    private static final int NOF_EPISODES = 500;
     private static final int NOF_EPISODES_BETWEEN_LOGGING = 10;
  //   private static final int BUFFER_SIZE = 1_000;
     private static final int MINI_BATCH_SIZE = 20;
     private static final double MAX_ERROR = 1e-8;  //1e-5;
-    private static final int MAX_NOF_EPOCHS = 1000;
-    private static final int BUFFER_SIZE_TRAINING = 5_000;
-    private static final int BUFFER_SIZE_EPISODE = 1_000;
+    private static final int MAX_NOF_EPOCHS = 10;
+    private static final int BUFFER_SIZE_TRAINING = 5_000;  //todo skall inte behövas
+    private static final int BUFFER_SIZE_EPISODE = 1_000;  //todo skall inte behövas
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
     private static final double PROBABILITY_RANDOM_ACTION_END = 0.1;
     private static final double DISCOUNT_FACTOR = 1.0;
@@ -47,8 +47,8 @@ public class EnergyTradingAlphaZeroRunner {
     private static final List<Double> WEIGHTS_MEM= Arrays.asList(0.0,0.25,0.5,0.75,1.0,1.25,1.5);
     private static final int MAX_TREE_DEPTH =3;
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 1e0;
-    private static final int START_TIME = 4;
-    private static final double START_SOE = 0.8;
+    private static final int START_TIME = 0;
+    private static final double START_SOE = 0.5;
 
 
     static ActionInterface<Integer> actionTemplate;
@@ -284,8 +284,8 @@ public class EnergyTradingAlphaZeroRunner {
                 .alphaBackupDefensiveStep(0.1)
                 .discountFactorBackupSimulationDefensive(0.1)
                 .coefficientMaxAverageReturn(0.0) //average
-                .maxTreeDepth(MAX_TREE_DEPTH)
-                .minNofIterations(100).maxNofIterations(1_000).timeBudgetMilliSeconds(100)
+                .maxTreeDepth(5)  //MAX_TREE_DEPTH
+                .minNofIterations(100).maxNofIterations(10_000).timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(1.0).weightReturnsSimulation(0.0).weightMemoryValue(weightMem)
                 .nofSimulationsPerNode(0)
                 .coefficientExploitationExploration(COEFFICIENT_EXPLOITATION_EXPLORATION)  //0.1

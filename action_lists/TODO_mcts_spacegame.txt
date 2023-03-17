@@ -358,13 +358,11 @@ ElevatorMctsOnlySearchRunner
 - få igång EnergyTradingAlphaZeroRunner x
 - EnergyTradingSearchRunner - hittar ej lösning  x
 - givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy funkar ej själv  x
-- EnergyTradingAlphaZeroRunner
-
-
-- varför påverkar coefficientExploitationExploration branchning marginellt
-- fixa EnergyTradingAlphaZeroRunner
-
+- EnergyTradingAlphaZeroRunner konvergerar oftast x
+- städa EnergyTradingAlphaZeroRunner
 - bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor
+- varför påverkar coefficientExploitationExploration branchning marginellt
+- städa klasser
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
