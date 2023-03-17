@@ -14,7 +14,7 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import java.util.List;
 
 /**
- * Pure search fails to find solution for this domain, high branching factor requires big tree
+ * Pure search mostly fails to find optimal solution for this domain, high branching factor requires big tree
  */
 
 @Log
@@ -80,7 +80,7 @@ public class EnergyTradingSearchRunner {
                 .actionSelectionPolicy(PoliciesEnergyTrading.newRandom())
                 .simulationPolicy(PoliciesEnergyTrading.newRandom())
                 .isDefensiveBackup(true)
-                .alphaBackupNormal(0.5)
+                .alphaBackupNormal(1.0)
                 .alphaBackupDefensiveStep(0.1)
                 .discountFactorBackupSimulationDefensive(0.99)
                 .coefficientMaxAverageReturn(0.0) //average
@@ -88,11 +88,11 @@ public class EnergyTradingSearchRunner {
                 .discountFactorSimulation(0.99)
                 .maxNofIterations(100_000)  //100_000
                 .timeBudgetMilliSeconds(2000)
-                .weightReturnsSteps(0.0)
-                .weightReturnsSimulation(0.0)
+                .weightReturnsSteps(1.0)
+                .weightReturnsSimulation(1.0)
                 .weightMemoryValue(0.0)
                 .nofSimulationsPerNode(5)
-                .coefficientExploitationExploration(1e-1)  //0.1
+                .coefficientExploitationExploration(1e-2)  //0.1
                 .isCreatePlotData(false)
                 .build();
     }

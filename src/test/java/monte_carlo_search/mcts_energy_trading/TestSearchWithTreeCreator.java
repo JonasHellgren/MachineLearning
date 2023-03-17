@@ -6,21 +6,26 @@ import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.energy_trading.*;
+import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 /***
  * By a search horizon of 4 (givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy) the search is feasible
  * approx 5^4=625 nodes needed.
+ *
+ *  weightReturnsSteps = 0 does not work
  */
 
 public class TestSearchWithTreeCreator {
@@ -42,6 +47,8 @@ public class TestSearchWithTreeCreator {
         monteCarloTreeCreator.run();
 
         monteCarloTreeCreator.getNodeRoot().printTree();
+
+        extractAndPrint(state);
 
         int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
         System.out.println("actionValue = " + actionValue);
@@ -71,9 +78,20 @@ public class TestSearchWithTreeCreator {
 
         monteCarloTreeCreator.getNodeRoot().printTree();
 
+        extractAndPrint(state);
+
         int actionValue=monteCarloTreeCreator.getFirstAction().getValue();
         System.out.println("actionValue = " + actionValue);
         Assert.assertEquals(-2,actionValue);
+    }
+
+    private void extractAndPrint(StateInterface<VariablesEnergyTrading> state) {
+        List<ActionInterface<Integer>> actions = getActions();
+        List<Double> rewards = getRewards(state, actions);
+        double sumOfRewards= ListUtils.sumDoubleList(rewards);
+        int bestFirstAction=monteCarloTreeCreator.getFirstAction().getValue();
+        Map<Integer, Double> actionValueMap = getAVMap();
+        doPrinting(actions, rewards, sumOfRewards, bestFirstAction, actionValueMap);
     }
 
     @SneakyThrows
@@ -84,23 +102,40 @@ public class TestSearchWithTreeCreator {
         monteCarloTreeCreator.setStartState(state);
         monteCarloTreeCreator.run();
 
-        TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
-                new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSettings());
-
-        List<ActionInterface<Integer>> actions=tih.getActionsOnBestPath();
-        MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator=new MonteCarloSimulator<>(environment, createSettings());
-        List<Double> rewards=simulator.stepWithActions(state,actions);
-        int actionFirstValue=monteCarloTreeCreator.getFirstAction().getValue();
+        List<ActionInterface<Integer>> actions = getActions();
+        List<Double> rewards = getRewards(state, actions);
         double sumOfRewards= ListUtils.sumDoubleList(rewards);
+        int bestFirstAction=monteCarloTreeCreator.getFirstAction().getValue();
+        Map<Integer, Double> actionValueMap = getAVMap();
+        doPrinting(actions, rewards, sumOfRewards, bestFirstAction, actionValueMap);
+
+        Assert.assertEquals(2,bestFirstAction);
+        Assert.assertTrue(sumOfRewards>0);
+    }
 
 
+    private void doPrinting(List<ActionInterface<Integer>> actions, List<Double> rewards, double sumOfRewards, int bestFirstAction, Map<Integer, Double> actionValueMap) {
         System.out.println("actions = " + actions);
         System.out.println("rewards = " + rewards);
-        System.out.println("actionValue = " + actionFirstValue);
         System.out.println("sumOfRewards = " + sumOfRewards);
+        System.out.println("bestFirstAction = " + bestFirstAction);
+        System.out.println("actionValueMap = " + actionValueMap);
+    }
 
-        Assert.assertEquals(2,actionFirstValue);
-        Assert.assertTrue(sumOfRewards>0);
+    @NotNull
+    private Map<Integer, Double> getAVMap() {
+        return NodeInfoHelper.actionValueMap(ActionEnergyTrading.newValue(0),monteCarloTreeCreator.getNodeRoot());
+    }
+
+    private List<Double> getRewards(StateInterface<VariablesEnergyTrading> state, List<ActionInterface<Integer>> actions) {
+        MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator=new MonteCarloSimulator<>(environment, createSettings());
+        return simulator.stepWithActions(state, actions);
+    }
+
+    private List<ActionInterface<Integer>> getActions() {
+        TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
+                new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSettings());
+        return tih.getActionsOnBestPath();
     }
 
 
@@ -121,13 +156,15 @@ public class TestSearchWithTreeCreator {
         return MonteCarloSettings.<VariablesEnergyTrading, Integer>builder()
                 .actionSelectionPolicy(PoliciesEnergyTrading.newRandom())
                 .simulationPolicy(PoliciesEnergyTrading.newRandom())
-             //   .isDefensiveBackup(false)
-              //  .alphaBackupDefensiveStep(0.5)
-               // .discountFactorBackupSimulationDefensive(0.5)
-                .coefficientMaxAverageReturn(0) //0 => average
+                .isDefensiveBackup(true)
+                .alphaBackupDefensiveStep(0.1)
+                .discountFactorSteps(1.0)
+                .discountFactorBackupSimulationDefensive(0.1)
+                .coefficientMaxAverageReturn(0.0) //0 => average
                 .maxTreeDepth(8)
-                .maxNofIterations(10_000)
-                .timeBudgetMilliSeconds(100)
+                .minNofIterations(1000)
+                .maxNofIterations(100_000)
+                .timeBudgetMilliSeconds(200)
                 .weightReturnsSteps(1.0)
                 .weightReturnsSimulation(1.0)
                 .nofSimulationsPerNode(10)

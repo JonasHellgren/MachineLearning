@@ -10,7 +10,6 @@ import monte_carlo_tree_search.classes.StepReturnGeneric;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.domains.cart_pole.ActionCartPole;
 import monte_carlo_tree_search.domains.energy_trading.*;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
@@ -30,7 +29,7 @@ public class EnergyTradingAlphaZeroRunner {
     private static final int BUFFER_SIZE = 1_000;
     private static final int MINI_BATCH_SIZE = 20;
     private static final double MAX_ERROR = 1e-5;
-    private static final int MAX_NOF_EPOCHS = 10_000;
+    private static final int MAX_NOF_EPOCHS = 10;
     private static final int BUFFER_SIZE_TRAINING = 5_000;
     private static final int BUFFER_SIZE_EPISODE = 1_000;
     private static final double PROBABILITY_RANDOM_ACTION_START = 0.1;
@@ -53,6 +52,7 @@ public class EnergyTradingAlphaZeroRunner {
     static ReplayBuffer<VariablesEnergyTrading, Integer> bufferTraining;
     static ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode;
     static ScalerLinear probScaler;
+    static EnergyTradingRunner runner;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -65,39 +65,38 @@ public class EnergyTradingAlphaZeroRunner {
         bufferTraining = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
         bufferEpisode = new ReplayBuffer<>(BUFFER_SIZE_EPISODE);
         probScaler=new ScalerLinear(0,NOF_EPISODES,PROBABILITY_RANDOM_ACTION_START,PROBABILITY_RANDOM_ACTION_END);
+        runner = new EnergyTradingRunner(createTreeCreator(stateStart,memory),environment);
 
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
             boolean isTerminal = false;
-            StateInterface<VariablesEnergyTrading> state = StateEnergyTrading.newFromTimeAndSoE(TIME_START, SOE_START);
+            StateInterface<VariablesEnergyTrading> state = StateEnergyTrading.newRandom();
             bufferEpisode.clear();
             int step = 0;
             while (!isTerminal) {
 
-                ActionInterface<Integer> actionCartPole = isRandomAction(probScaler, episode)
-                        ? ActionCartPole.newRandom()
+                ActionInterface<Integer> action = isRandomAction(probScaler, episode)
+                        ? ActionEnergyTrading.newRandom()
                         : getActionFromSearch(monteCarloTreeCreator, state);
 
                 StateInterface<VariablesEnergyTrading> stateBefore=state.copy();
-                StepReturnGeneric<VariablesEnergyTrading> sr = stepAndUpdateState(environment, state, actionCartPole);
-                addExperience(bufferEpisode, stateBefore, sr);
+                System.out.println("action.getValue() = " + action.getValue());
+                StepReturnGeneric<VariablesEnergyTrading> sr = stepAndUpdateState(environment, state, action);
+                addExperience(bufferEpisode, stateBefore, action, sr);
                 isTerminal = sr.isTerminal;
             }
 
             ReplayBufferValueSetter<VariablesEnergyTrading, Integer> rbvs = trainMemory(memory, bufferTraining, bufferEpisode);
 
-            someLogging(bufferTraining, episode, step);
             System.out.println("bufferEpisode = " + bufferEpisode);
             System.out.println("bufferTraining = " + bufferTraining);
+            someLogging(bufferTraining, episode, step);
 
             // someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
         }
 
+        runner.run(StateEnergyTrading.newFromTimeAndSoE(0,0.5));
+        System.out.println("runner.toString() = " + runner.toString());
 
-        monteCarloTreeCreator=createTreeCreator(stateStart,memory);
-        monteCarloTreeCreator.run();
-
-        warnIfBadSolution();
-        //doPrinting(stateStart);
     }
 
     private static void someLogging(ReplayBuffer<VariablesEnergyTrading, Integer> bufferTrainig, int episode, int step) {
@@ -133,16 +132,19 @@ public class EnergyTradingAlphaZeroRunner {
 
     private static void addExperience(ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode,
                                       StateInterface<VariablesEnergyTrading> state,
+                                      ActionInterface<Integer> action,
                                       StepReturnGeneric<VariablesEnergyTrading> sr) {
         bufferEpisode.addExperience(Experience.<VariablesEnergyTrading, Integer>builder()
-                .stateVariables(state.getVariables()).reward(sr.reward).build());
+                .stateVariables(state.getVariables()).action(action.getValue()).reward(sr.reward).build());
     }
 
 
-    private static ReplayBufferValueSetter<VariablesEnergyTrading, Integer> trainMemory(NetworkMemoryInterface<VariablesEnergyTrading,Integer> memory,
-                                                                                        ReplayBuffer<VariablesEnergyTrading, Integer> bufferTraining,
-                                                                                        ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode) {
-        ReplayBufferValueSetter<VariablesEnergyTrading, Integer> rbvs = new ReplayBufferValueSetter<>(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
+    private static ReplayBufferValueSetter<VariablesEnergyTrading, Integer> trainMemory(
+            NetworkMemoryInterface<VariablesEnergyTrading,Integer> memory,
+            ReplayBuffer<VariablesEnergyTrading, Integer> bufferTraining,
+            ReplayBuffer<VariablesEnergyTrading, Integer> bufferEpisode) {
+        ReplayBufferValueSetter<VariablesEnergyTrading, Integer> rbvs =
+                new ReplayBufferValueSetter<>(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         bufferTraining.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
         Conditionals.executeIfTrue(bufferTraining.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 trainer.trainMemory(memory, bufferTraining));
@@ -198,12 +200,13 @@ public class EnergyTradingAlphaZeroRunner {
                 .maxTreeDepth(8)
                 .maxNofIterations(1_000)  //100_000
                 .timeBudgetMilliSeconds(10)
-                .weightReturnsSteps(1.0)
+                .weightReturnsSteps(0.0)
                 .weightReturnsSimulation(0.0)
                 .weightMemoryValue(1.0)
                 .nofSimulationsPerNode(0)
                 .coefficientExploitationExploration(1e0)  //0.1
                 .isCreatePlotData(false)
+                .isDoLogging(false)
                 .build();
     }
 

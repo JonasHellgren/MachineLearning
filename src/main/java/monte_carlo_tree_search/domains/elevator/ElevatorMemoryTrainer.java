@@ -60,7 +60,7 @@ public class ElevatorMemoryTrainer
     public ReplayBuffer<VariablesElevator, Integer> createExperienceBuffer
             (MonteCarloSimulator<VariablesElevator, Integer> simulator) {
         ReplayBuffer<VariablesElevator, Integer> buffer = new ReplayBuffer<>(bufferSize);
-        Counter counter = new Counter(bufferSize);
+        Counter counter = new Counter(0,bufferSize);
 
         while (!counter.isExceeded()) {
             StateInterface<VariablesElevator> stateRandom = StateElevator.newFromVariables(

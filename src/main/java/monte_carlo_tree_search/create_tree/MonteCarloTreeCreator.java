@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.domains.energy_trading.ActionEnergyTrading;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -111,7 +112,7 @@ public class MonteCarloTreeCreator<S, A> {
         }
 
         MonteCarloSimulator<S, A> simulator=new MonteCarloSimulator<>(environment,settings);
-        Counter counter=new Counter(settings.maxNofIterations);
+        Counter counter=new Counter(settings.minNofIterations,settings.maxNofIterations);
         plotData.clear();
         ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
 
@@ -128,17 +129,24 @@ public class MonteCarloTreeCreator<S, A> {
                 backPropagator.chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
             }
 
+        //    System.out.println("NodeInfoHelper.actionValueMap(actionTemplate,nodeRoot) = " + NodeInfoHelper.actionValueMap(actionTemplate, nodeRoot));
+
             helper.updatePlotData(plotData);
             counter.increase();
         }
         nofIterations = counter.getCount();
         statistics= new MonteCarloSearchStatistics<>(nodeRoot, this, cpuTimer, settings);
-        helper.logStatistics(counter.getCount(),statistics);
+        Conditionals.executeIfTrue(settings.isDoLogging, () ->
+        helper.logStatistics(counter.getCount(),statistics));
         return nodeRoot;
     }
 
     private boolean isCounterAndTimeValid(Counter counter,CpuTimer cpuTimer) {
-        return !counter.isExceeded() && !cpuTimer.isTimeExceeded();
+        if (counter.isBelowMinCount()) {
+            return true;
+        }
+        boolean notValid=counter.isExceeded() || cpuTimer.isTimeExceeded();
+        return !notValid;
     }
 
     private BackPropagator<S, A> createBackPropagator() {

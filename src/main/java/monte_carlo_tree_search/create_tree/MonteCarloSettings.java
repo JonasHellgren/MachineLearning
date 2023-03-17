@@ -14,7 +14,8 @@ import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 @Getter
 @ToString
 public class MonteCarloSettings<S,A> {
-    private static final int NOF_ITERATIONS_DEFAULT=10_000;
+    private static final int MIN_NOF_ITERATIONS_DEFAULT=10;
+    private static final int MAX_NOF_ITERATIONS_DEFAULT =10_000;
     public static final double C_DEFAULT=20;
     private static final int MAX_TREE_DEPTH_DEFAULT=5;
     private static final int MAX_SIMULATION_DEPTH_DEFAULT=Integer.MAX_VALUE;
@@ -34,9 +35,12 @@ public class MonteCarloSettings<S,A> {
     private static final double WEIGHT_MEMORY_DEFAULT =1;
     private static final boolean DEFENSIVE_DEFAULT=true;
     private static final boolean IS_PLOT_DEFAULT = false;
+    private static final boolean IS_LOG_DEFAULT = true;
 
     @Builder.Default
-    int maxNofIterations =NOF_ITERATIONS_DEFAULT;
+    int minNofIterations =MIN_NOF_ITERATIONS_DEFAULT;
+    @Builder.Default
+    int maxNofIterations = MAX_NOF_ITERATIONS_DEFAULT;
     @Builder.Default
     double coefficientExploitationExploration =C_DEFAULT;
     @Builder.Default
@@ -79,5 +83,7 @@ public class MonteCarloSettings<S,A> {
     boolean isDefensiveBackup=DEFENSIVE_DEFAULT;
     @Builder.Default
     boolean isCreatePlotData= IS_PLOT_DEFAULT;
+    @Builder.Default
+    boolean isDoLogging= IS_LOG_DEFAULT;
 
 }

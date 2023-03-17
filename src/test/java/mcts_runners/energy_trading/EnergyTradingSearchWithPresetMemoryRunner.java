@@ -14,8 +14,8 @@ import monte_carlo_tree_search.network_training.ReplayBuffer;
 import java.util.List;
 
 /*** memory guides search, if weightMemoryValue is zero, higher prob sub optimal solution
- *
- *  sumOfRewards shall be 3
+  *  sumOfRewards shall be 3
+ *  mostly finds best value
  */
 
 @Log

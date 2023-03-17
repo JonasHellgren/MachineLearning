@@ -68,7 +68,7 @@ public class NodeSelector<S,A> {
         actionsFromRootToSelected.clear();
         NodeWithChildrenInterface<S,A> currentNode = nodeRoot;
         nodesFromRootToSelected.add(currentNode);
-        Counter counter=new Counter(MAX_DEPTH);
+        Counter counter=new Counter(0,MAX_DEPTH);
 
         SimulationPolicyInterface<S,A> actionSelectionPolicy=settings.actionSelectionPolicy;
         while (true) {

@@ -72,7 +72,6 @@ public class ReplayBufferValueSetter<S,A> {
         }
 
         List<Double> returns= createReturnList();
-        System.out.println("returns = " + returns);
         for (int i = bufferEpisode.size()-1; i >=0 ; i--) {
             Experience<S,A> experience= bufferEpisode.getExperience(i);
             if (isFirstVisitFlagTrueAndIsFirstVisit(i, experience)) {
@@ -102,6 +101,7 @@ public class ReplayBufferValueSetter<S,A> {
     private void addExperience(ReplayBuffer<S,A> bufferEpisodeUpdated, Experience<S,A> experience, double value) {
         bufferEpisodeUpdated.addExperience(Experience.<S,A>builder()
                 .stateVariables(experience.stateVariables)
+                .action(experience.action)
                 .value(value)
                 .reward(experience.reward)
                 .build());

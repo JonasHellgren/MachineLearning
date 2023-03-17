@@ -8,9 +8,7 @@ import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NodeInfoHelper<S, A> {
@@ -40,6 +38,16 @@ public class NodeInfoHelper<S, A> {
         }
         return avs;
     }
+
+    public static <S, A> Map<A,Double> actionValueMap(ActionInterface<A> actionTemplate, NodeWithChildrenInterface<S,A> node ) {
+        Map<A,Double> avMap=new HashMap<>();
+        for(A a:actionTemplate.applicableActions()) {
+            actionTemplate.setValue(a);
+            avMap.put(a,node.getActionValue(actionTemplate));
+        }
+        return avMap;
+    }
+
 
     /**
      * leaf node = node that  can/shall be expanded, i.e. not tried "all" actions
