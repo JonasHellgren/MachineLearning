@@ -58,7 +58,7 @@ public class EnergyTradingRunner {
             //double rootNodeValue= ListUtils.findEnd(mcForSearch.getPlotData()).orElse(TreePlotData.builder().build()).maxValue;
             i++;
         } while (!sr.isTerminal && !sr.isFail);
-
+        setLists(state, sr);
     }
 
     private void setLists(StateInterface<VariablesEnergyTrading> state, StepReturnGeneric<VariablesEnergyTrading> sr) {

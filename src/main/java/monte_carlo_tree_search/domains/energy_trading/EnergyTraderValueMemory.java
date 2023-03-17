@@ -11,13 +11,13 @@ public class EnergyTraderValueMemory <SSV,AV> extends StateValueMemoryAbstract<S
 
     private static final int INPUT_SIZE = 2;
     private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE*2;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE*2;  //2
     private static final double LEARNING_RATE = 0.01;
 
     StateNormalizerEnergyTrader<SSV> normalizer;
 
     public EnergyTraderValueMemory() {
-        this(-EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*2, EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*2);
+        this(-EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*1, EnvironmentEnergyTrading.RETURN_MAX_ESTIMATE*1); //2
     }
     public EnergyTraderValueMemory(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(
