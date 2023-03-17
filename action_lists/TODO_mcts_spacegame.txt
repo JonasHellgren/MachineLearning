@@ -356,6 +356,8 @@ ElevatorMctsOnlySearchRunner
 - TestReplayBufferValueSetter  x
 - RunCartPoleAlphaZero vill inte komma igång ibland  x
 - få igång EnergyTradingAlphaZeroRunner x
+- EnergyTradingSearchRunner - hittar ej lösning
+- varför påverkar coefficientExploitationExploration branchning marginellt
 - fixa EnergyTradingAlphaZeroRunner
 
 - ActionAbstract  -> ActionElevator

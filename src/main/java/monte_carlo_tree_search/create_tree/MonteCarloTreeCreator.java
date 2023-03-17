@@ -133,7 +133,7 @@ public class MonteCarloTreeCreator<S, A> {
         }
         nofIterations = counter.getCount();
         statistics= new MonteCarloSearchStatistics<>(nodeRoot, this, cpuTimer, settings);
-     //   helper.logStatistics(counter.getCount(),statistics);
+        helper.logStatistics(counter.getCount(),statistics);
         return nodeRoot;
     }
 
