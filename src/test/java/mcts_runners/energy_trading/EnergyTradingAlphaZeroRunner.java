@@ -1,9 +1,7 @@
 package mcts_runners.energy_trading;
 
-import common.Conditionals;
-import common.ListUtils;
-import common.RandUtils;
-import common.ScalerLinear;
+import common.*;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.classes.StepReturnGeneric;
@@ -16,10 +14,7 @@ import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import monte_carlo_tree_search.network_training.ReplayBufferValueSetter;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /***
  *   The parameter weightMemoryValue is critical
@@ -28,6 +23,31 @@ import java.util.Map;
 
 @Log
 public class EnergyTradingAlphaZeroRunner {
+
+    @Getter
+    public static class  SumRewardsTracker{
+        List<Double> sumOfRewardsList;
+        double sumOfRewards;
+
+        public SumRewardsTracker() {
+            sumOfRewardsList=new ArrayList<>();
+            reset();
+        }
+
+        void reset() {
+            sumOfRewards=0;
+        }
+
+        void increaseSumOfRewards(double reward) {
+            sumOfRewards=sumOfRewards+reward;
+        }
+
+        public void addSumOfRewardsToListAndResetSumOfRewards() {
+            sumOfRewardsList.add(sumOfRewards);
+            reset();
+        }
+
+    }
 
     private static final int NOF_EPISODES = 300;
     private static final int NOF_EPISODES_BETWEEN_LOGGING = 100;
@@ -60,6 +80,7 @@ public class EnergyTradingAlphaZeroRunner {
         setupFields();
         resetMemory(memory);
         printMemory();
+        SumRewardsTracker tracker=new SumRewardsTracker();
 
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
             StateInterface<VariablesEnergyTrading> startState = StateEnergyTrading.newRandom();
@@ -72,12 +93,16 @@ public class EnergyTradingAlphaZeroRunner {
                 StateInterface<VariablesEnergyTrading> stateBefore = startState.copy();
                 sr = stepAndUpdateState(environment, startState, action);
                 addExperience(bufferEpisode, stateBefore, action, sr);
+                tracker.increaseSumOfRewards(sr.reward);
             } while (!sr.isTerminal);
             addExperienceOfTerminal(sr);
             trainMemory(memory, bufferTraining, bufferEpisode);
             someLogging(bufferTraining, episode);
+            tracker.addSumOfRewardsToListAndResetSumOfRewards();
         }
 
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Collections.singletonList("return"),"Iteration");
+        plotter.plot(Collections.singletonList(tracker.getSumOfRewardsList()));
         printMemory();
         runWithMultipleMemoryWeights();
     }
