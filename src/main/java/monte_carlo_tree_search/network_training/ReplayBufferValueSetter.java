@@ -21,7 +21,6 @@ import java.util.function.BiFunction;
  *
  */
 
-//todo make generic
 @Log
 public class ReplayBufferValueSetter<S,A> {
 
