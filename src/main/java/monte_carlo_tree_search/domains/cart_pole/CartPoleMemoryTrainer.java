@@ -19,14 +19,12 @@ public class CartPoleMemoryTrainer
         implements MemoryTrainerInterface<CartPoleVariables, Integer> {
     private static final int START_DEPTH = 0;
     int miniBatchSize;
-    int bufferSize;
     double maxError;
     int maxNofEpochs;
     MemoryTrainerHelper<CartPoleVariables, Integer> helper;
 
-    public CartPoleMemoryTrainer(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
+    public CartPoleMemoryTrainer(int miniBatchSize, double maxError, int maxNofEpochs) {
         this.miniBatchSize = miniBatchSize;
-        this.bufferSize = bufferSize;
         this.maxError = maxError;
         this.maxNofEpochs = maxNofEpochs;
         this.helper=new MemoryTrainerHelper<>(miniBatchSize,maxError,maxNofEpochs);
@@ -34,7 +32,8 @@ public class CartPoleMemoryTrainer
 
     @Override
     public ReplayBuffer<CartPoleVariables,Integer> createExperienceBuffer(
-            MonteCarloSimulator<CartPoleVariables, Integer> simulator) {
+            MonteCarloSimulator<CartPoleVariables, Integer> simulator,
+            int bufferSize) {
         ReplayBuffer<CartPoleVariables,Integer>  buffer=new ReplayBuffer<>(bufferSize);
 
         for (int i = 0; i < bufferSize; i++) {

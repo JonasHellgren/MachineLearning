@@ -37,10 +37,9 @@ public class ElevatorSearchWithMemoryRunner {
         EnvironmentGenericInterface<VariablesElevator, Integer> environment = EnvironmentElevator.newFromStepBetweenAddingNofWaiting
                 (Arrays.asList(NSTEPS_BETWEEN,NSTEPS_BETWEEN,NSTEPS_BETWEEN_LARGER));
         ElevatorMemoryTrainer trainer= ElevatorMemoryTrainer.builder()
-                .bufferSize(BUFFER_SIZE)
                 .build();
 
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator,BUFFER_SIZE);
         NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(
                 trainer.getOutMemoryMin(), trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);

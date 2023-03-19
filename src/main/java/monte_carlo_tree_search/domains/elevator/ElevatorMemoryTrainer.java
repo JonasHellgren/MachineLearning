@@ -23,7 +23,6 @@ public class ElevatorMemoryTrainer
     implements MemoryTrainerInterface<VariablesElevator, Integer> {
 
     private static final int MINI_BATCH_SIZE=10;
-    private static final int BUFFER_SIZE=10;
     private static final int MAX_N_NOF_SOE_VALUES = 2;
     private static final double MAX_ERROR=1e-5;
     private static final int MAX_EPOCHS=10_000;
@@ -37,8 +36,6 @@ public class ElevatorMemoryTrainer
 
     @Builder.Default
     int miniBatchSize=MINI_BATCH_SIZE;
-    @Builder.Default
-    int bufferSize=BUFFER_SIZE;
     @Builder.Default
     int nofSoEValuesPerStateValues = MAX_N_NOF_SOE_VALUES;
     @Builder.Default
@@ -54,11 +51,14 @@ public class ElevatorMemoryTrainer
     @Builder.Default
     double outMemoryMax = MAX_MEMORY_OUT;
 
-
+    public static ElevatorMemoryTrainer newDefault() {
+        return ElevatorMemoryTrainer.builder().build();
+    }
 
     @Override
     public ReplayBuffer<VariablesElevator, Integer> createExperienceBuffer
-            (MonteCarloSimulator<VariablesElevator, Integer> simulator) {
+            (MonteCarloSimulator<VariablesElevator, Integer> simulator,
+             int bufferSize) {
         ReplayBuffer<VariablesElevator, Integer> buffer = new ReplayBuffer<>(bufferSize);
         Counter counter = new Counter(0,bufferSize);
 

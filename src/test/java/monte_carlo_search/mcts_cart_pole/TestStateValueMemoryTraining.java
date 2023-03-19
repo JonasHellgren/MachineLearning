@@ -61,10 +61,10 @@ public class TestStateValueMemoryTraining {
                 .actionTemplate(actionTemplate)
                 .build();
 
-        memoryTrainerHelper=new CartPoleMemoryTrainer(MINI_BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
+        memoryTrainerHelper=new CartPoleMemoryTrainer(MINI_BATCH_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=
                 new MonteCarloSimulator<>(environment,settings);
-        buffer=memoryTrainerHelper.createExperienceBuffer(simulator);
+        buffer=memoryTrainerHelper.createExperienceBuffer(simulator,BUFFER_SIZE);
          }
 
     @Test

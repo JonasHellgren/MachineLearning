@@ -16,14 +16,12 @@ public class EnergyTraderMemoryTrainer
 
     private static final int START_DEPTH = 0;
     int miniBatchSize;
-    int bufferSize;
     double maxError;
     int maxNofEpochs;
     MemoryTrainerHelper<VariablesEnergyTrading, Integer> helper;
 
-    public EnergyTraderMemoryTrainer(int miniBatchSize, int bufferSize, double maxError, int maxNofEpochs) {
+    public EnergyTraderMemoryTrainer(int miniBatchSize, double maxError, int maxNofEpochs) {
         this.miniBatchSize = miniBatchSize;
-        this.bufferSize = bufferSize;
         this.maxError = maxError;
         this.maxNofEpochs = maxNofEpochs;
         this.helper = new MemoryTrainerHelper<>(miniBatchSize, maxError, maxNofEpochs);
@@ -31,7 +29,8 @@ public class EnergyTraderMemoryTrainer
 
     @Override
     public ReplayBuffer<VariablesEnergyTrading, Integer> createExperienceBuffer(
-            MonteCarloSimulator<VariablesEnergyTrading, Integer> simulator) {
+            MonteCarloSimulator<VariablesEnergyTrading, Integer> simulator,
+            int bufferSize) {
 
         ReplayBuffer<VariablesEnergyTrading, Integer> buffer = new ReplayBuffer<>(bufferSize);
         for (int i = 0; i < bufferSize; i++) {

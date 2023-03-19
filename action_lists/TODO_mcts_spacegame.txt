@@ -359,8 +359,10 @@ ElevatorMctsOnlySearchRunner
 - EnergyTradingSearchRunner - hittar ej lösning  x
 - givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy funkar ej själv  x
 - EnergyTradingAlphaZeroRunner konvergerar oftast x
+- bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor  x
 - städa EnergyTradingAlphaZeroRunner
-- bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor
+- lära mig grad av log visa
+- ny space bana för att testa defensive backup - 2+2 förgreningar
 - varför påverkar coefficientExploitationExploration branchning marginellt
 - städa klasser
 

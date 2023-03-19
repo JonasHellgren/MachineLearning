@@ -32,9 +32,9 @@ public class TestEnergyTraderMemory {
         environment= EnvironmentEnergyTrading.newDefault();
         MonteCarloSettings<VariablesEnergyTrading, Integer> settingsMemoryCreation= createSimulatorSettings();
         simulator= new MonteCarloSimulator<>(environment,settingsMemoryCreation);
-        trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, BUFFER_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
+        trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
         memory=new EnergyTraderValueMemory<>();
-        buffer=trainer.createExperienceBuffer(simulator);
+        buffer=trainer.createExperienceBuffer(simulator, BUFFER_SIZE);
     }
 
     @Test

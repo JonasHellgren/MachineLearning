@@ -44,20 +44,16 @@ public class TestElevatorMemoryTrainer {
     @Ignore
     public void givenTrainer_whenCreatedExpBuffer_thenSizeCorrect() {
         final int bufferSize = 10;
-        trainer= ElevatorMemoryTrainer.builder()
-                .bufferSize(bufferSize)
-                .build();
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
+        trainer= ElevatorMemoryTrainer.newDefault();
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator,bufferSize);
         replayBuffer.getBuffer().forEach(System.out::println);
         Assert.assertEquals(bufferSize,replayBuffer.size());
     }
 
     @Test public void givenTrainedMemory_thenCorrectSoEValueMapping() {
         final int bufferSize = 50;
-        trainer= ElevatorMemoryTrainer.builder()
-                .bufferSize(bufferSize)
-                .build();
-        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator);
+        trainer= ElevatorMemoryTrainer.newDefault();
+        ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator,bufferSize);
         NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
 

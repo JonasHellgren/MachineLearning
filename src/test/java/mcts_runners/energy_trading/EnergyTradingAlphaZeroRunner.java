@@ -190,7 +190,7 @@ public class EnergyTradingAlphaZeroRunner {
                     .stateVariables(state.getVariables()).value(ZERO_VALUE).build());
         }
         MemoryTrainerInterface<VariablesEnergyTrading, Integer> trainer=
-                new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, buffer.size(), 1e-8, 10_000);
+                new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, 1e-8, 10_000);
         Conditionals.executeIfTrue(buffer.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 trainer.trainMemory(memory, buffer));
     }
@@ -203,7 +203,7 @@ public class EnergyTradingAlphaZeroRunner {
                 new ReplayBufferValueSetter<>(bufferEpisode, DISCOUNT_FACTOR, IS_FIRST_VISIT);
         bufferTraining.addAll(rbvs.createBufferFromReturns(FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE));  //candidate = createBufferFromAllReturns
         MemoryTrainerInterface<VariablesEnergyTrading, Integer> trainer=
-                new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, BUFFER_SIZE_TRAINING, MAX_ERROR, MAX_NOF_EPOCHS);
+                new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
 
         Conditionals.executeIfTrue(bufferTraining.size() > BUFFER_SIZE_TRAINING_LIMIT, () ->
                 trainer.trainMemory(memory, bufferTraining));

@@ -31,10 +31,10 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
 
     @SneakyThrows
     public static void main(String[] args) {
-        CartPoleMemoryTrainer memoryTrainerHelper=new CartPoleMemoryTrainer(BATCH_SIZE,BUFFER_SIZE, MAX_ERROR, MAX_EPOCHS);
+        CartPoleMemoryTrainer memoryTrainerHelper=new CartPoleMemoryTrainer(BATCH_SIZE, MAX_ERROR, MAX_EPOCHS);
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=
                 new MonteCarloSimulator<>(createEnvironment(), createSettings());
-        ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(simulator);
+        ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(simulator,BUFFER_SIZE);
         CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>(FAIL_REWARD,NON_FAIL_REWARD);
         memoryTrainerHelper.trainMemory(memory, buffer);
 
