@@ -131,6 +131,20 @@ public class ListUtils {
         return elementProduct(list,listDf);
     }
 
+    /*
+    rewards=[0,1,1] => returns=[2,2,1]
+    */
+    public static List<Double> getReturns(List<Double> rewards) {
+        double singleReturn = 0;
+        List<Double> returns = new ArrayList<>();
+        for (int i = rewards.size() - 1; i >= 0; i--) {
+            singleReturn = singleReturn + rewards.get(i);
+            returns.add(singleReturn);
+        }
+        Collections.reverse(returns);
+        return returns;
+    }
+
     public static boolean isDoubleArraysEqual(double[] x, double[] y, double tol)
     {
         if (x.length!=y.length) {

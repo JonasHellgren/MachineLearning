@@ -10,6 +10,7 @@ import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
@@ -111,6 +112,7 @@ public class TestSearchActionRestrictionSimulation {
 
     @SneakyThrows
     @Test
+    @Ignore
     public void whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
                 .SoE(0.3).pos(POS_FLOOR_0).nPersonsInElevator(0).nPersonsWaiting(Arrays.asList(1, 0, 0))

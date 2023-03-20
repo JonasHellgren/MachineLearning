@@ -96,9 +96,10 @@ public class BackupModifier<S, A> {
     }
 
     public void backup() {
-        Conditionals.executeOneOfTwo(!stepReturnOfSelected.isFail,
-                () -> backupFromTreeSteps(settings.discountFactorSteps, settings.alphaBackupNormal),
-                () -> backupFromTreeSteps(settings.discountFactorDefensiveSteps, settings.alphaBackupDefensiveStep));
+        Conditionals.executeOneOfTwo(stepReturnOfSelected.isFail && settings.isDefensiveBackup,
+                () -> backupFromTreeSteps(settings.discountFactorDefensiveSteps, settings.alphaBackupDefensiveStep),
+                () -> backupFromTreeSteps(settings.discountFactorSteps, settings.alphaBackupNormal)
+                );
 
     }
 
@@ -151,21 +152,9 @@ public class BackupModifier<S, A> {
      */
 
     private List<Double> getDiscountedReturns(final List<Double> rewards, double discountFactor) {
-        List<Double> returns = getReturns(rewards);
+        List<Double> returns = ListUtils.getReturns(rewards);
         return ListUtils.discountedElementsReverse(returns,discountFactor);
     }
-
-    private List<Double> getReturns(List<Double> rewards) {
-        double singleReturn = 0;
-        List<Double> returns = new ArrayList<>();
-        for (int i = rewards.size() - 1; i >= 0; i--) {
-            singleReturn = singleReturn + rewards.get(i);
-            returns.add(singleReturn);
-        }
-        Collections.reverse(returns);
-        return returns;
-    }
-
 
     void updateNode(NodeInterface<S, A> node0, double singleReturn, ActionInterface<A> action, double alpha) {
         NodeWithChildrenInterface<S, A> node = (NodeWithChildrenInterface<S, A>) node0;  //casting

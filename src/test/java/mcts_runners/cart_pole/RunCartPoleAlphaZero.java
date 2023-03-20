@@ -117,7 +117,7 @@ public class RunCartPoleAlphaZero {
         //learningErrors.add(memory.getLearningRule().getTotalNetworkError());
         List<Experience<CartPoleVariables, Integer>> miniBatch=bufferTraining.getMiniBatch(MINI_BATCH_SIZE);
         learningErrors.add(memory.getAverageValueError(miniBatch));
-        returns.add(rbvs.getEpisodeReturn());
+        returns.add(rbvs.getReturns().get(0));
     }
 
     private static boolean isRandomAction(ScalerLinear probScaler, int episode) {

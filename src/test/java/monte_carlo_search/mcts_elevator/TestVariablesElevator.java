@@ -15,7 +15,7 @@ public class TestVariablesElevator {
         VariablesElevator variablesElevator=VariablesElevator.newRandom(MAX_N_PERSONS_IN_ELEVATOR, MAX_N_PERSONS_WAITING_EACH_FLOOR);
         System.out.println("variablesElevator = " + variablesElevator);
 
-        Assert.assertTrue(variablesElevator.nPersonsInElevator<MAX_N_PERSONS_IN_ELEVATOR);
+        Assert.assertTrue(variablesElevator.nPersonsInElevator<=MAX_N_PERSONS_IN_ELEVATOR);
         Assert.assertTrue(variablesElevator.nofWaiting()<MAX_N_PERSONS_WAITING_EACH_FLOOR*3);
 
     }

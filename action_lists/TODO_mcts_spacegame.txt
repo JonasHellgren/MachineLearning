@@ -363,10 +363,14 @@ ElevatorMctsOnlySearchRunner
 - städa EnergyTradingAlphaZeroRunner  x
 - plotta return vs episode EnergyTradingAlphaZeroRunner  x
 
-- ny space bana för att testa defensive backup - 2+2 förgreningar
+- ny space bana för att testa defensive backup - 2+2 förgreningar  x
+- isDefensiveBackup påverkar ej  x
 - varför påverkar coefficientExploitationExploration branchning marginellt
-- snygga upp ReplayBufferValueSetter
-- städa klasser
+- snygga upp ReplayBufferValueSetter  x
+- städa klasser - classes
+- städa klasser - create tree
+- städa klasser - network training
+- städa klasser -
 - lära mig grad av log visa
 
 - ActionAbstract  -> ActionElevator

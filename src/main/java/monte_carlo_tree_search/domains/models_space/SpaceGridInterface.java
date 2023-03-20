@@ -101,8 +101,8 @@ public interface SpaceGridInterface {
      *      -------------------------------
      *      |   |   |   |   |   |   | G+5 |
      *      |   |   | O | O | O | O | G   |
-     *      | S | O |   |   |   |   | G+10|
-     *      |   |   | O | O | O | O | G   |
+     *      | S | O | O |   |   |   | G+10|
+     *      |   |   |   | O | O | O | G   |
      *      |   |   |   |   | O | O | G   |
      *      ------------------------------
      */
@@ -110,8 +110,8 @@ public interface SpaceGridInterface {
     static SpaceGrid new5times7GridWithTrapCorridor() {
         List<Pair<Integer, Integer>> occupiedCells = Arrays.asList(
                 new Pair<>(2, 3), new Pair<>(3, 3), new Pair<>(4, 3), new Pair<>(5, 3),
-        new Pair<>(1, 2),
-                new Pair<>(2, 1), new Pair<>(3, 1), new Pair<>(4, 1), new Pair<>(5, 1),
+        new Pair<>(1, 2), new Pair<>(2, 2),
+                                  new Pair<>(3, 1), new Pair<>(4, 1), new Pair<>(5, 1),
                                                     new Pair<>(4, 0), new Pair<>(5, 0));
         List<Triple<Integer,Integer,Double>> bonusCells = Arrays.asList(
                 Triple.of(6,4,5d), Triple.of(6,2,10d)
