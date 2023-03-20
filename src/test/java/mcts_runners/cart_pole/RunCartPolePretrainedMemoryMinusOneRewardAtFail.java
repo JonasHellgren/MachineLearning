@@ -9,7 +9,7 @@ import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=
                 new MonteCarloSimulator<>(createEnvironment(), createSettings());
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(simulator,BUFFER_SIZE);
-        CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>(FAIL_REWARD,NON_FAIL_REWARD);
+        CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory=new CartPoleValueMemoryNetwork<>(FAIL_REWARD,NON_FAIL_REWARD);
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
@@ -56,7 +56,7 @@ public class RunCartPolePretrainedMemoryMinusOneRewardAtFail {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            CartPoleStateValueMemory<CartPoleVariables,Integer> memory)
+            CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory)
     {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = createEnvironment();
 

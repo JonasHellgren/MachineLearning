@@ -4,7 +4,7 @@ import common.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.energy_trading.*;
@@ -110,7 +110,7 @@ public class EnergyTradingAlphaZeroRunner {
     private static void setupFields() {
         actionTemplate = ActionEnergyTrading.newValue(0);
         environment = EnvironmentEnergyTrading.newDefault();
-        memory = new EnergyTraderValueMemory<>();
+        memory = new EnergyTraderValueMemoryNetwork<>();
         searcherTraining = createSearcherTraining(memory);
         bufferTraining = new ReplayBuffer<>(MAX_BUFFER_SIZE_TRAINING);
         bufferEpisode = new ReplayBuffer<>(MAX_BUFFER_SIZE_EPISODE);

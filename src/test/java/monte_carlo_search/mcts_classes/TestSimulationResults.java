@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_classes;
 
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

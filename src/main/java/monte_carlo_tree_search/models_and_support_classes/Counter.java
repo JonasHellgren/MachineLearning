@@ -1,11 +1,10 @@
-package monte_carlo_tree_search.classes;
+package monte_carlo_tree_search.models_and_support_classes;
 
 public class Counter {
 
     private int count;
     private final int minCount;
     private final int maxCount;
-
 
     public Counter(int minCount,int maxCount) {
 

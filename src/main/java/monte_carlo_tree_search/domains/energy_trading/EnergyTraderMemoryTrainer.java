@@ -1,10 +1,8 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import monte_carlo_tree_search.classes.MemoryTrainerHelper;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.MemoryTrainerHelper;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
 import monte_carlo_tree_search.interfaces.MemoryTrainerInterface;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -36,7 +34,7 @@ public class EnergyTraderMemoryTrainer
         for (int i = 0; i < bufferSize; i++) {
             StateInterface<VariablesEnergyTrading> stateRandom = StateEnergyTrading.newRandom();
             SimulationResults simulationResults = simulator.simulate(stateRandom, false, START_DEPTH);
-            double averageReturn = simulationResults.averageReturn();
+            double averageReturn = simulationResults.averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails();
             buffer.addExperience(Experience.<VariablesEnergyTrading, Integer>builder()
                     .stateVariables(stateRandom.getVariables())
                     .value(averageReturn)

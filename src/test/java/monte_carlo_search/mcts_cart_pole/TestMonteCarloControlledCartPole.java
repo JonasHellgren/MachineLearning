@@ -5,7 +5,7 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.create_tree.NodeSelector;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;

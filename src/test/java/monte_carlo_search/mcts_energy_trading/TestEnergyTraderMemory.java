@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_energy_trading;
 
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.domains.energy_trading.*;
@@ -33,7 +33,7 @@ public class TestEnergyTraderMemory {
         MonteCarloSettings<VariablesEnergyTrading, Integer> settingsMemoryCreation= createSimulatorSettings();
         simulator= new MonteCarloSimulator<>(environment,settingsMemoryCreation);
         trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
-        memory=new EnergyTraderValueMemory<>();
+        memory=new EnergyTraderValueMemoryNetwork<>();
         buffer=trainer.createExperienceBuffer(simulator, BUFFER_SIZE);
     }
 
@@ -60,8 +60,8 @@ public class TestEnergyTraderMemory {
         double avgError=memory.getAverageValueError(buffer.getBuffer());
         SimulationResults resultsSimT7s70=simulator.simulate(stateT7s70);
         SimulationResults resultsSimT7s30=simulator.simulate(stateT7s30);
-        double valueT7s70Sim=resultsSimT7s70.averageReturn();
-        double valueT7s30Sim=resultsSimT7s30.averageReturn();
+        double valueT7s70Sim=resultsSimT7s70.averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails();
+        double valueT7s30Sim=resultsSimT7s30.averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails();
 
         final StateEnergyTrading stateT0s70 = StateEnergyTrading.newFromTimeAndSoE(0, 0.70);
         double valueT0s70=memory.read(stateT0s70);
@@ -69,8 +69,8 @@ public class TestEnergyTraderMemory {
         double valueT0s30=memory.read(stateT0s30);
         SimulationResults resultsSimT0s70=simulator.simulate(stateT0s70);
         SimulationResults resultsSimT0s30=simulator.simulate(stateT0s30);
-        double valueT0s70Sim=resultsSimT0s70.averageReturn();
-        double valueT0s30Sim=resultsSimT0s30.averageReturn();
+        double valueT0s70Sim=resultsSimT0s70.averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails();
+        double valueT0s30Sim=resultsSimT0s30.averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails();
 
         System.out.println("avgError = " + avgError);
         System.out.println("valuet7s70 = " + valueT7s70+", valuet7s70Sim = " + valueT7s70Sim);

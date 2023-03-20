@@ -1,8 +1,8 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import monte_carlo_tree_search.classes.MemoryTrainerHelper;
+import monte_carlo_tree_search.models_and_support_classes.MemoryTrainerHelper;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;

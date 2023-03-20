@@ -41,7 +41,7 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
         environment = EnvironmentEnergyTrading.newDefault();
         simulator= new MonteCarloSimulator<>(environment,createSimulatorSettings());
         trainer=new EnergyTraderMemoryTrainer(MINI_BATCH_SIZE, MAX_ERROR, MAX_NOF_EPOCHS);
-        memory=new EnergyTraderValueMemory<>();
+        memory=new EnergyTraderValueMemoryNetwork<>();
         buffer=trainer.createExperienceBuffer(simulator, BUFFER_SIZE);
         trainer.trainMemory(memory,buffer);
 

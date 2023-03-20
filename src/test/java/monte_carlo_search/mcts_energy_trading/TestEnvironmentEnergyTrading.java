@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_energy_trading;
 
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.energy_trading.ActionEnergyTrading;
 import monte_carlo_tree_search.domains.energy_trading.EnvironmentEnergyTrading;
 import monte_carlo_tree_search.domains.energy_trading.StateEnergyTrading;

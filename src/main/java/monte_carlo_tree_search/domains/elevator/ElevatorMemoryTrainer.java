@@ -4,7 +4,7 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;

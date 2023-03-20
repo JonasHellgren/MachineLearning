@@ -1,4 +1,4 @@
-package monte_carlo_tree_search.classes;
+package monte_carlo_tree_search.models_and_support_classes;
 
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;

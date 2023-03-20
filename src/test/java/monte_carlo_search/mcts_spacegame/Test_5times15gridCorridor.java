@@ -2,7 +2,7 @@ package monte_carlo_search.mcts_spacegame;
 
 import common.MathUtils;
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
@@ -34,7 +34,7 @@ public class Test_5times15gridCorridor {
     EnvironmentGenericInterface<ShipVariables, ShipActionSet> environment;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
-    NodeValueMemoryHashMap<ShipVariables> memory;
+    ValueMemoryHashMap<ShipVariables> memory;
     MonteCarloSimulator<ShipVariables, ShipActionSet> simulator;
 
     @Before

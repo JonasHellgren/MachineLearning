@@ -4,11 +4,11 @@ import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.junit.Assert;
@@ -78,7 +78,7 @@ public class TestStateValueMemoryTraining {
     }
 
     @Test public void trainNetwork() {
-        CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
+        CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory=new CartPoleValueMemoryNetwork<>();
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=new MonteCarloSimulator<>(
                 environment,settings);
         memoryTrainerHelper.trainMemory(memory, buffer);

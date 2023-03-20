@@ -2,7 +2,7 @@ package monte_carlo_tree_search.domains.elevator;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.StateValueMemoryAbstract;
+import monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Log
 
-public class ElevatorStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<SSV,AV> {
+public class ElevatorValueMemoryNetwork<SSV,AV> extends ValueMemoryNetworkAbstract<SSV,AV> {
     private static final int INPUT_SIZE = 1;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = 2;
@@ -25,7 +25,7 @@ public class ElevatorStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<S
 
     StateNormalizerElevator<SSV> normalizer;
 
-    public ElevatorStateValueMemory(double minOut, double maxOut) {
+    public ElevatorValueMemoryNetwork(double minOut, double maxOut) {
         super.neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,  //happens to be adequate for this environment
                 INPUT_SIZE,

@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.BackupModifier;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;

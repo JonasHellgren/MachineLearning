@@ -3,7 +3,7 @@ package monte_carlo_search.mcts_spacegame;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
+import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.MemoryInterface;
@@ -37,7 +37,7 @@ public class TestMockedMemoryFor5times15Grid {
     public void init() {
         SpaceGrid spaceGrid = SpaceGridInterface.new5times15Grid();
         environment = new EnvironmentShip(spaceGrid);
-        nodeValueMemory = NodeValueMemoryHashMap.newEmpty();
+        nodeValueMemory = ValueMemoryHashMap.newEmpty();
         nodeValueMemory.write(StateShip.newStateFromXY(2, 4), BONUS_IN_Y4);
         nodeValueMemory.write(StateShip.newStateFromXY(2, 2), BONUS_IN_Y2);
         nodeValueMemory.write(StateShip.newStateFromXY(2, 0), BONUS_IN_Y0);

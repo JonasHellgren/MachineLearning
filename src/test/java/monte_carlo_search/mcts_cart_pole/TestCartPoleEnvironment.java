@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_cart_pole;
 
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.cart_pole.ActionCartPole;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;

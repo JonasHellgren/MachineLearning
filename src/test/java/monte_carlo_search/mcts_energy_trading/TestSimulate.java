@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_energy_trading;
 
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.domains.energy_trading.EnvironmentEnergyTrading;

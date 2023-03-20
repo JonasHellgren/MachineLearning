@@ -7,7 +7,7 @@ import common.ScalerLinear;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.interfaces.ActionInterface;
@@ -59,7 +59,7 @@ public class RunCartPoleAlphaZero {
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
     public static void main(String[] args) {
-        NetworkMemoryInterface<CartPoleVariables,Integer> memory = new CartPoleStateValueMemory<>();  //todo interface
+        NetworkMemoryInterface<CartPoleVariables,Integer> memory = new CartPoleValueMemoryNetwork<>();  //todo interface
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
         ReplayBuffer<CartPoleVariables, Integer> bufferTraining = new ReplayBuffer<>(BUFFER_SIZE_TRAINING);
 

@@ -367,7 +367,8 @@ ElevatorMctsOnlySearchRunner
 - isDefensiveBackup påverkar ej  x
 - varför påverkar coefficientExploitationExploration branchning marginellt
 - snygga upp ReplayBufferValueSetter  x
-- städa klasser - classes
+- städa klasser - classes  x
+- flytta write från MemoryInterface till NodeValueMemoryHashMap
 - städa klasser - create tree
 - städa klasser - network training
 - städa klasser -

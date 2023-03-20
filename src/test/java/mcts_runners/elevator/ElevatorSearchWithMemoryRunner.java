@@ -40,7 +40,7 @@ public class ElevatorSearchWithMemoryRunner {
                 .build();
 
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator,BUFFER_SIZE);
-        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(
+        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorValueMemoryNetwork<>(
                 trainer.getOutMemoryMin(), trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
         printMemory(memory);

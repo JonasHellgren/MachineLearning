@@ -2,14 +2,12 @@ package monte_carlo_tree_search.create_tree;
 
 import common.Conditionals;
 import common.CpuTimer;
-import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.*;
-import monte_carlo_tree_search.domains.energy_trading.ActionEnergyTrading;
+import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
 import monte_carlo_tree_search.interfaces.*;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
@@ -75,7 +73,7 @@ public class MonteCarloTreeCreator<S, A> {
 
         mctc.actionTemplate = actionTemplate;
         Conditionals.executeOneOfTwo(Objects.isNull(memory),
-                () -> mctc.memory = NodeValueMemoryHashMap.newEmpty(),
+                () -> mctc.memory = ValueMemoryHashMap.newEmpty(),
                 () -> mctc.memory = memory);
 
         MonteCarloTreeCreatorHelper.setSomeFields(startState, mctc);

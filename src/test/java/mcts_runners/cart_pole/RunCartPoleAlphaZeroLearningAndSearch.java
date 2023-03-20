@@ -6,7 +6,7 @@ import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
     public static void main(String[] args) {
-        CartPoleStateValueMemory<CartPoleVariables,Integer> memory = new CartPoleStateValueMemory<>();
+        CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory = new CartPoleValueMemoryNetwork<>();
         memory.load(FILE);
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
 
@@ -29,7 +29,7 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            CartPoleStateValueMemory<CartPoleVariables,Integer> memory) {
+            CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory) {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
 
         ActionInterface<Integer> actionTemplate = ActionCartPole.newRandom();

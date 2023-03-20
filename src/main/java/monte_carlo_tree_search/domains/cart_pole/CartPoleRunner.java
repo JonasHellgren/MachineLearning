@@ -4,8 +4,8 @@ import common.ListUtils;
 import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.classes.TreePlotData;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.TreePlotData;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
@@ -31,13 +31,13 @@ public class CartPoleRunner {
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           int nofSteps) {
-        this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps,null);
+        this(mcForSearch,new CartPoleValueMemoryNetwork<>(),nofSteps,null);
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,
                           int nofSteps,
                           MultiplePanelsPlotter plotter) {
-        this(mcForSearch,new CartPoleStateValueMemory<>(),nofSteps,plotter);
+        this(mcForSearch,new CartPoleValueMemoryNetwork<>(),nofSteps,plotter);
     }
 
     public CartPoleRunner(MonteCarloTreeCreator<CartPoleVariables,Integer> mcForSearch,

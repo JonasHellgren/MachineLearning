@@ -1,7 +1,5 @@
-package monte_carlo_tree_search.classes;
+package monte_carlo_tree_search.models_and_support_classes;
 
-import common.Conditionals;
-import common.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
- * Data container for the simulate step
+ * Data container for the simulation step
  */
 
 public class SimulationResults {
@@ -52,7 +50,7 @@ public class SimulationResults {
         return results.stream().allMatch(r -> r.isEndingInFail);
     }
 
-    public double averageReturn() {
+    public double averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails() {
         return (areAllSimulationsTerminalFail())
             ? anyFailingReturn().orElseThrow()
             : averageReturnFromNonFailing().orElseThrow();

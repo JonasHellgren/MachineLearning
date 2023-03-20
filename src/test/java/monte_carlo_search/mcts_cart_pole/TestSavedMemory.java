@@ -4,7 +4,7 @@ import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class TestSavedMemory {
 
     @Before
     public void init() {
-        memory= new CartPoleStateValueMemory<>();
+        memory= new CartPoleValueMemoryNetwork<>();
         memory.load(FILE);
     }
 

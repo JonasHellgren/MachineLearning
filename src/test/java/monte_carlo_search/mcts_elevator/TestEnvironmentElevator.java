@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_elevator;
 
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.elevator.ActionElevator;
 import monte_carlo_tree_search.domains.elevator.EnvironmentElevator;
 import monte_carlo_tree_search.domains.elevator.StateElevator;

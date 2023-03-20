@@ -3,7 +3,7 @@ package monte_carlo_tree_search.domains.cart_pole;
 import common.ListUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.classes.StateValueMemoryAbstract;
+import monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.network_training.Experience;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @Getter
-public class CartPoleStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<SSV,AV> {
+public class CartPoleValueMemoryNetwork<SSV,AV> extends ValueMemoryNetworkAbstract<SSV,AV> {
     private static final int INPUT_SIZE = 4;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
@@ -26,10 +26,10 @@ public class CartPoleStateValueMemory<SSV,AV> extends StateValueMemoryAbstract<S
 
     StateNormalizerCartPole<SSV> normalizer;
 
-    public CartPoleStateValueMemory() {
+    public CartPoleValueMemoryNetwork() {
         this(0,EnvironmentCartPole.MAX_NOF_STEPS_DEFAULT);
     }
-    public CartPoleStateValueMemory(double minOut, double maxOut) {
+    public CartPoleValueMemoryNetwork(double minOut, double maxOut) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.GAUSSIAN,  //happens to be adequate for this environment
                 INPUT_SIZE,

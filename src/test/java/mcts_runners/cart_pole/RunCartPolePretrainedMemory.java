@@ -9,7 +9,7 @@ import monte_carlo_tree_search.domains.cart_pole.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleStateValueMemory;
+import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleMemoryTrainer;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class RunCartPolePretrainedMemory {
         MonteCarloSimulator<CartPoleVariables, Integer> simulator=
                 new MonteCarloSimulator<>(EnvironmentCartPole.newDefault(),settings);
         ReplayBuffer<CartPoleVariables,Integer> buffer=memoryTrainerHelper.createExperienceBuffer(simulator,BUFFER_SIZE);
-        CartPoleStateValueMemory<CartPoleVariables,Integer> memory=new CartPoleStateValueMemory<>();
+        CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory=new CartPoleValueMemoryNetwork<>();
         memoryTrainerHelper.trainMemory(memory, buffer);
 
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch= createTreeCreatorForSearch(memory);
@@ -56,7 +56,7 @@ public class RunCartPolePretrainedMemory {
     }
 
     public static MonteCarloTreeCreator<CartPoleVariables, Integer> createTreeCreatorForSearch(
-            CartPoleStateValueMemory<CartPoleVariables,Integer> memory)
+            CartPoleValueMemoryNetwork<CartPoleVariables,Integer> memory)
     {
         EnvironmentGenericInterface<CartPoleVariables, Integer> environment = EnvironmentCartPole.newDefault();
 

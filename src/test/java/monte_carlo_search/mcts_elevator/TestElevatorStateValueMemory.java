@@ -2,7 +2,7 @@ package monte_carlo_search.mcts_elevator;
 
 import common.RandUtils;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.elevator.ElevatorStateValueMemory;
+import monte_carlo_tree_search.domains.elevator.ElevatorValueMemoryNetwork;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
 import monte_carlo_tree_search.domains.elevator.VariablesElevator;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -25,10 +25,10 @@ public class TestElevatorStateValueMemory {
     private static final double DELTA = 2;
     private static final double MIN_OUT = -10;
     private static final double MAX_OUT = 0.0;
-    ElevatorStateValueMemory<VariablesElevator,Integer> memory;
+    ElevatorValueMemoryNetwork<VariablesElevator,Integer> memory;
     @Before
     public void init() {
-        memory=new ElevatorStateValueMemory<>(MIN_OUT, MAX_OUT);
+        memory=new ElevatorValueMemoryNetwork<>(MIN_OUT, MAX_OUT);
     }
 
     @Test

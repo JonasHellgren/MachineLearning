@@ -2,7 +2,7 @@ package monte_carlo_tree_search.domains.energy_trading;
 
 import common.RandUtils;
 import lombok.Getter;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Predicate;

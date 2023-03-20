@@ -3,7 +3,7 @@ import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 
 import java.util.ArrayList;
 import java.util.Collections;

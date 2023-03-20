@@ -1,7 +1,7 @@
 package monte_carlo_search.mcts_spacegame;
 
 import monte_carlo_tree_search.domains.models_space.*;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;

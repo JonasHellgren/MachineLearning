@@ -1,4 +1,4 @@
-package monte_carlo_tree_search.classes;
+package monte_carlo_tree_search.models_and_support_classes;
 
 import common.Conditionals;
 import common.ListUtils;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public abstract class StateValueMemoryAbstract <SSV,AV> implements NetworkMemoryInterface<SSV,AV> {
+public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemoryInterface<SSV,AV> {
 
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;

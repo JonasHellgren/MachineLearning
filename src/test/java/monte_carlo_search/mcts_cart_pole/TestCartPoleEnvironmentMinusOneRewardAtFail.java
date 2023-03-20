@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_cart_pole;
 
-import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;

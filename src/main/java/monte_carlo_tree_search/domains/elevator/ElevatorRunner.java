@@ -4,7 +4,7 @@ import black_jack.result_drawer.GridPanel;
 import common.ListUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.*;
+import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;

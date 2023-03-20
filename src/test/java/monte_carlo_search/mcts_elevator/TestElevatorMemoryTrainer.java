@@ -54,7 +54,7 @@ public class TestElevatorMemoryTrainer {
         final int bufferSize = 50;
         trainer= ElevatorMemoryTrainer.newDefault();
         ReplayBuffer<VariablesElevator, Integer> replayBuffer=trainer.createExperienceBuffer(simulator,bufferSize);
-        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorStateValueMemory<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
+        NetworkMemoryInterface<VariablesElevator,Integer> memory=new ElevatorValueMemoryNetwork<>(trainer.getOutMemoryMin(),trainer.getOutMemoryMax());
         trainer.trainMemory(memory,replayBuffer);
 
         List<Double> soEList= Arrays.asList(0.3,0.5,0.7,0.9);

@@ -3,7 +3,7 @@ package monte_carlo_tree_search.create_tree;
 import common.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.Counter;
+import monte_carlo_tree_search.models_and_support_classes.Counter;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;

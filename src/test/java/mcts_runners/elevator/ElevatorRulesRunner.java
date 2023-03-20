@@ -2,7 +2,7 @@ package mcts_runners.elevator;
 
 import black_jack.result_drawer.GridPanel;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;

@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_classes;
 
-import monte_carlo_tree_search.classes.NodeValueMemoryHashMap;
+import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.interfaces.MemoryInterface;
@@ -16,13 +16,13 @@ public class TestNodeValueMemory {
 
     @Before
     public void init() {
-        nodeValueMemory= new NodeValueMemoryHashMap<>();
+        nodeValueMemory= new ValueMemoryHashMap<>();
     }
 
     @Test
     public void whenReadNonDefinedState_thenDefault() {
         double value= nodeValueMemory.read(StateShip.newStateFromXY(0,0));
-        Assert.assertEquals(NodeValueMemoryHashMap.DEFAULT_VALUE,value, DELTA);
+        Assert.assertEquals(ValueMemoryHashMap.DEFAULT_VALUE,value, DELTA);
     }
 
     @Test

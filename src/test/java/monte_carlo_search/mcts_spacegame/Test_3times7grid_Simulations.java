@@ -2,7 +2,7 @@ package monte_carlo_search.mcts_spacegame;
 
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
-import monte_carlo_tree_search.classes.SimulationResults;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
