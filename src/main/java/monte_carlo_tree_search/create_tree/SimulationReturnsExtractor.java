@@ -98,6 +98,7 @@ public class SimulationReturnsExtractor<S,A> {
         double c = settings.coefficientMaxAverageReturn;
         return settings.coefficientMaxAverageReturn * maxReturn + (1 - c) * avgReturn;
     }
+
     /**
      *  nodesOnPath = (r)  -> (0) -> (1) ->  (2)
      *  discountFactor=1, singleReturn=1 => returns=[1,1,1] => discountedReturns=[1,1,1]

@@ -371,7 +371,7 @@ ElevatorMctsOnlySearchRunner
 - flytta write från MemoryInterface till NodeValueMemoryHashMap  x
 - <S> i classes  x
 - städa klasser - create tree  x
-- TestActionSelector
+- TestActionSelector  x
 - städa klasser - network training
 - städa klasser -
 - plant uml dioagram

@@ -16,8 +16,7 @@ import java.util.Optional;
 public class SpaceGameTestHelper {
 
     public static void doPrinting(TreeInfoHelper<ShipVariables, ShipActionSet> tih,
-                            NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
-
+                                  NodeInterface<ShipVariables, ShipActionSet> nodeRoot) {
 
         System.out.println("nofNodesInTree = " + tih.nofNodes());
         nodeRoot.printTree();
@@ -25,14 +24,14 @@ public class SpaceGameTestHelper {
     }
 
     public static void doRootNodePrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot) {
-        double valueUp= nodeRoot.getActionValue(ActionShip.newUp());
-        double valueStill= nodeRoot.getActionValue(ActionShip.newStill());
-        double valueDown= nodeRoot.getActionValue(ActionShip.newDown());
-        System.out.println("valueUp = " + valueUp+", valueStill = " + valueStill+", valueDown = " + valueDown);
+        double valueUp = nodeRoot.getActionValue(ActionShip.newUp());
+        double valueStill = nodeRoot.getActionValue(ActionShip.newStill());
+        double valueDown = nodeRoot.getActionValue(ActionShip.newDown());
+        System.out.println("valueUp = " + valueUp + ", valueStill = " + valueStill + ", valueDown = " + valueDown);
     }
 
     public static void doPrinting(NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot,
-                            MonteCarloSettings<ShipVariables, ShipActionSet> settings,
+                                  MonteCarloSettings<ShipVariables, ShipActionSet> settings,
                                   MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator) {
         TreeInfoHelper<ShipVariables, ShipActionSet> tih = new TreeInfoHelper<>(nodeRoot, settings);
 
@@ -44,7 +43,7 @@ public class SpaceGameTestHelper {
 
     public static boolean isOnBestPath(int x, int y, TreeInfoHelper<ShipVariables, ShipActionSet> tih) {
         Optional<NodeInterface<ShipVariables, ShipActionSet>> node11 =
-                NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(x,y));
+                NodeInfoHelper.findNodeMatchingStateVariables(tih.getBestPath(), StateShip.newStateFromXY(x, y));
         return node11.isPresent();
     }
 

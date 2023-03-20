@@ -34,7 +34,6 @@ public class ActionSelector<S, A> {
 
     public Optional<ActionInterface<A>> selectRandomNonTestedAction(NodeWithChildrenInterface<S, A> nodeSelected) {
         int nofTestedActions = getTestedActions(nodeSelected).size();
-
         List<ActionInterface<A>> nonTestedActions = (nofTestedActions == 0)
                 ? Collections.singletonList(getActionFromPolicy(nodeSelected))
                 : getNonTestedActionsInPolicy(nodeSelected);
@@ -68,27 +67,27 @@ public class ActionSelector<S, A> {
         return actionTemplate;
     }
 
-    private Optional<Pair<ActionInterface<A>, Double>> getPairWithHighestValue(List<Pair<ActionInterface<A>, Double>> pairs) {
-        return pairs.stream().
-                reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
-    }
-
-    private ActionInterface<A> getActionFromPolicy(NodeInterface<S, A> nodeSelected) {
-        return settings.actionSelectionPolicy.chooseAction(nodeSelected.getState());
-    }
-
-    private ActionInterface<A> getRandom(List<ActionInterface<A>> actions) {
-        return randUtils.getRandomItemFromList(actions);
-    }
-
-
-    private List<ActionInterface<A>> getNonTestedActionsInPolicy(NodeWithChildrenInterface<S, A> nodeSelected) {
+    public List<ActionInterface<A>> getNonTestedActionsInPolicy(NodeWithChildrenInterface<S, A> nodeSelected) {
         List<ActionInterface<A>> testedActions = getTestedActions(nodeSelected);
         List<A> testedActionValues = testedActions.stream().map(ActionInterface::getValue).collect(Collectors.toList());
         Set<A> allValues = settings.actionSelectionPolicy.availableActionValues(nodeSelected.getState());
         Set<A> allValuesSet = new HashSet<>(allValues);
         List<A> nonTestedActionValues = ActionInterface.getNonTestedActionValues(testedActionValues, allValuesSet);
         return getActionsFromValues(nonTestedActionValues);
+    }
+
+    private ActionInterface<A> getActionFromPolicy(NodeInterface<S, A> nodeSelected) {
+        return settings.actionSelectionPolicy.chooseAction(nodeSelected.getState());
+    }
+
+    private Optional<Pair<ActionInterface<A>, Double>> getPairWithHighestValue(List<Pair<ActionInterface<A>, Double>> pairs) {
+        return pairs.stream().
+                reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
+    }
+
+
+    private ActionInterface<A> getRandom(List<ActionInterface<A>> actions) {
+        return randUtils.getRandomItemFromList(actions);
     }
 
     private List<ActionInterface<A>> getActionsFromValues(List<A> nonTestedActionValues) {
