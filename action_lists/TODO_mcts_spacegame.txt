@@ -368,10 +368,12 @@ ElevatorMctsOnlySearchRunner
 - varför påverkar coefficientExploitationExploration branchning marginellt
 - snygga upp ReplayBufferValueSetter  x
 - städa klasser - classes  x
-- flytta write från MemoryInterface till NodeValueMemoryHashMap
+- flytta write från MemoryInterface till NodeValueMemoryHashMap  x
+- <S> i classes
 - städa klasser - create tree
 - städa klasser - network training
 - städa klasser -
+- plant uml dioagram
 - lära mig grad av log visa
 
 - ActionAbstract  -> ActionElevator

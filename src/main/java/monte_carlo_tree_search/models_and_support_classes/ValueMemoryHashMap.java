@@ -1,5 +1,6 @@
 package monte_carlo_tree_search.models_and_support_classes;
 
+import monte_carlo_tree_search.interfaces.MapMemoryInterface;
 import monte_carlo_tree_search.interfaces.MemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * Memory based on hash map for storing state values
  */
 
-public class ValueMemoryHashMap<S> implements MemoryInterface<S> {
+public class ValueMemoryHashMap<S> implements MapMemoryInterface<S> {
 
     public static final double DEFAULT_VALUE = 0d;
     HashMap<Integer,Double> memory;
@@ -30,7 +31,6 @@ public class ValueMemoryHashMap<S> implements MemoryInterface<S> {
         memory.clear();
     }
 
-    @Override
     public void write(StateInterface<S> state, double value) {
         memory.put(state.getVariables().hashCode(),value);
         states.add(state);

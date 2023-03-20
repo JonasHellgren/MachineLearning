@@ -38,13 +38,6 @@ public class EnergyTraderValueMemoryNetwork<SSV,AV> extends ValueMemoryNetworkAb
         isWarmedUp=false;
     }
 
-    @SneakyThrows
-    @Override
-    public void write(StateInterface<SSV> state, double value) {
-        throw new NoSuchMethodException("Not defined/needed - use learn instead");
-    }
-
-
     @NotNull
     public double[] getInputVec(SSV v) {
         StateNormalizerEnergyTrader.VariablesEnergyTradingDouble vNorm=normalizer.normalize(v);

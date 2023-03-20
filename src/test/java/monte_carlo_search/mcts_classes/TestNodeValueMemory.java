@@ -1,5 +1,6 @@
 package monte_carlo_search.mcts_classes;
 
+import monte_carlo_tree_search.interfaces.MapMemoryInterface;
 import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.domains.models_space.StateShip;
@@ -12,7 +13,7 @@ public class TestNodeValueMemory {
 
     private static final double DELTA = 0.1;
     private static final int VALUE = 10;
-    MemoryInterface<ShipVariables> nodeValueMemory;
+    MapMemoryInterface<ShipVariables> nodeValueMemory;
 
     @Before
     public void init() {

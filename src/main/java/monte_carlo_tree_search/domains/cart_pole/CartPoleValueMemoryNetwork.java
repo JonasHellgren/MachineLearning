@@ -48,11 +48,6 @@ public class CartPoleValueMemoryNetwork<SSV,AV> extends ValueMemoryNetworkAbstra
         isWarmedUp=false;
     }
 
-    @SneakyThrows
-    @Override
-    public void write(StateInterface<SSV> state, double value) {
-        throw new NoSuchMethodException("Not defined/needed - use learn instead");
-    }
 
     @Override
     public double getAverageValueError(List<Experience<SSV, AV>> experienceList) {

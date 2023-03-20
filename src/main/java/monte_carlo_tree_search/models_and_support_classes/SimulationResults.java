@@ -37,7 +37,6 @@ public class SimulationResults {
         results.add(new SimulationResult(sumOfReturns,isEndingInFail));
     }
 
-
     public List<SimulationResult> getResults() {
         return results;
     }

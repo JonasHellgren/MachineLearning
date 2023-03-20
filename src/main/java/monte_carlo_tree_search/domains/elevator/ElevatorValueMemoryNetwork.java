@@ -47,12 +47,6 @@ public class ElevatorValueMemoryNetwork<SSV,AV> extends ValueMemoryNetworkAbstra
 
     @SneakyThrows
     @Override
-    public void write(StateInterface<SSV> state, double value) {
-        throw new NoSuchMethodException("Not defined/needed - use learn instead");
-    }
-
-    @SneakyThrows
-    @Override
     public double getAverageValueError(List<Experience<SSV, AV>> experiences) {
         throw new NoSuchMethodException("Not defined");
     }

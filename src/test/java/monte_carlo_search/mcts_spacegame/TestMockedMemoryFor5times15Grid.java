@@ -3,6 +3,7 @@ package monte_carlo_search.mcts_spacegame;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
+import monte_carlo_tree_search.interfaces.MapMemoryInterface;
 import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
@@ -29,7 +30,7 @@ public class TestMockedMemoryFor5times15Grid {
 
     MonteCarloTreeCreator<ShipVariables, ShipActionSet> monteCarloTreeCreator;
     EnvironmentShip environment;
-    MemoryInterface<ShipVariables> nodeValueMemory;
+    MapMemoryInterface<ShipVariables> nodeValueMemory;
     MonteCarloSettings<ShipVariables, ShipActionSet> settings;
     ActionInterface<ShipActionSet> actionTemplate;
 
