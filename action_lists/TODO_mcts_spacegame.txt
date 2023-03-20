@@ -362,11 +362,12 @@ ElevatorMctsOnlySearchRunner
 - bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor  x
 - städa EnergyTradingAlphaZeroRunner  x
 - plotta return vs episode EnergyTradingAlphaZeroRunner  x
-- lära mig grad av log visa
+
 - ny space bana för att testa defensive backup - 2+2 förgreningar
 - varför påverkar coefficientExploitationExploration branchning marginellt
 - snygga upp ReplayBufferValueSetter
 - städa klasser
+- lära mig grad av log visa
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma

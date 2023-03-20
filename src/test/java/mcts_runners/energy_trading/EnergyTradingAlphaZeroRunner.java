@@ -261,7 +261,7 @@ public class EnergyTradingAlphaZeroRunner {
                 .simulationPolicy(PoliciesEnergyTrading.newRandom())
                 .isDefensiveBackup(true).alphaBackupDefensiveStep(0.1).discountFactorBackupSimulationDefensive(0.1)
                 .coefficientMaxAverageReturn(0.0) //average
-                .maxTreeDepth(5)  //MAX_TREE_DEPTH
+                .maxTreeDepth(5)
                 .minNofIterations(100).maxNofIterations(10_000).timeBudgetMilliSeconds(100)
                 .weightReturnsSteps(1.0).weightReturnsSimulation(0.0).weightMemoryValue(weightMem)
                 .nofSimulationsPerNode(0)
