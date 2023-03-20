@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Log
-public class MemoryTrainerHelper<SSV, AV>  {
+public class MemoryTrainerHelper<S, A>  {
 
     private static final int NOF_EPOCHS_BETWEEN_LOGS = 1000;
     int miniBatchSize;
@@ -44,11 +44,11 @@ public class MemoryTrainerHelper<SSV, AV>  {
     }
 
 
-    public void trainMemory(NetworkMemoryInterface<SSV, AV> memory,
-                            ReplayBuffer<SSV, AV> buffer) {
+    public void trainMemory(NetworkMemoryInterface<S, A> memory,
+                            ReplayBuffer<S, A> buffer) {
         int epoch = 0;
         do {
-            List<Experience<SSV, AV>> miniBatch=buffer.getMiniBatch(miniBatchSize);
+            List<Experience<S, A>> miniBatch=buffer.getMiniBatch(miniBatchSize);
             memory.learn(miniBatch);
             logProgressSometimes(memory.getLearningRule(), epoch++);
         } while (memory.getLearningRule().getTotalNetworkError() > maxError && epoch < maxNofEpochs);

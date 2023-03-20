@@ -7,7 +7,6 @@ import monte_carlo_tree_search.interfaces.MapMemoryInterface;
 import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
-import monte_carlo_tree_search.interfaces.MemoryInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeInterface;

@@ -18,13 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemoryInterface<SSV,AV> {
+public abstract class ValueMemoryNetworkAbstract<S, A> implements NetworkMemoryInterface<S, A> {
 
     private static final double NET_OUT_MIN = 0;
     private static final double NET_OUT_MAX = 1;
     private static final double MAX_ERROR = 0.00001;
     private static final int NOF_ITERATIONS = 1;
-
 
     @Builder
     public static class NetSettings {
@@ -33,14 +32,13 @@ public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemor
     }
 
     public MultiLayerPerceptron neuralNetwork;
-    // NeuralNetwork neuralNetwork;
     public MomentumBackpropagation learningRule;
     public ScalerLinear scaleOutValueToNormalized;
     public ScalerLinear scaleOutNormalizedToValue;
     public boolean isWarmedUp;
     public NetSettings settings;
 
-    public abstract double[] getInputVec(SSV v);
+    public abstract double[] getInputVec(S v);
 
 
     public void createLearningRule(MultiLayerPerceptron neuralNetwork, NetSettings settings) {
@@ -51,7 +49,7 @@ public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemor
     }
 
     @Override
-    public double read(StateInterface<SSV> state) {
+    public double read(StateInterface<S> state) {
         double[] inputVec = getInputVec(state.getVariables());
         return getNetworkOutputValue(inputVec);
     }
@@ -74,7 +72,7 @@ public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemor
     }
 
     @Override
-    public void learn(List<Experience<SSV, AV>> miniBatch) {
+    public void learn(List<Experience<S, A>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
@@ -97,10 +95,10 @@ public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemor
         });
     }
 
-    private DataSet getDataSet(List<Experience<SSV, AV>> buffer) {
+    private DataSet getDataSet(List<Experience<S, A>> buffer) {
         DataSet trainingSet = new DataSet(settings.inputSize, settings.outPutSize);
-        for (Experience<SSV, AV> e : buffer) {
-            SSV v = e.stateVariables;
+        for (Experience<S, A> e : buffer) {
+            S v = e.stateVariables;
             double[] inputVec = getInputVec(v);
             double normalizedValue= scaleOutValueToNormalized.calcOutDouble(e.value);
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
@@ -109,9 +107,9 @@ public abstract class ValueMemoryNetworkAbstract<SSV,AV> implements NetworkMemor
     }
 
     @Override
-    public double getAverageValueError(List<Experience<SSV, AV>> experienceList) {  //todo - to abstract
+    public double getAverageValueError(List<Experience<S, A>> experienceList) {  //todo - to abstract
         List<Double> errors=new ArrayList<>();
-        for (Experience<SSV, AV> e : experienceList) {
+        for (Experience<S, A> e : experienceList) {
             double expectedValue= e.value;
             double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
             errors.add(Math.abs(expectedValue-memoryValue));
