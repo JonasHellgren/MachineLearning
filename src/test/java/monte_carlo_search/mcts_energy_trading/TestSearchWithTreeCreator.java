@@ -129,7 +129,7 @@ public class TestSearchWithTreeCreator {
 
     private List<Double> getRewards(StateInterface<VariablesEnergyTrading> state, List<ActionInterface<Integer>> actions) {
         MonteCarloSimulator<VariablesEnergyTrading,Integer> simulator=new MonteCarloSimulator<>(environment, createSettings());
-        return simulator.stepWithActions(state, actions);
+        return simulator.stepWithPresetActions(state, actions);
     }
 
     private List<ActionInterface<Integer>> getActions() {

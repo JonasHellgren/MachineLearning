@@ -4,6 +4,9 @@ import lombok.*;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 
 /***
+ *
+ * All settings related to MCTS
+ *
  * discountFactorSimulation, when generating reward sums after simulation
  * discountFactorBackupSimulationNormal, discountFactorBackupSimulationDefensive, when backing up returns on visited nodes
  *

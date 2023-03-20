@@ -9,7 +9,6 @@ import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.energy_trading.*;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.interfaces.*;
-import monte_carlo_tree_search.network_training.ReplayBuffer;
 
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class EnergyTradingSearchRunner {
 
         simulator= new MonteCarloSimulator<>(environment,createSimulatorSettings());
 
-        List<Double> rewards=simulator.stepWithActions(stateStart,actions);
+        List<Double> rewards=simulator.stepWithPresetActions(stateStart,actions);
         double sumOfRewards= ListUtils.sumDoubleList(rewards);
         System.out.println("actions = " + actions);
         System.out.println("rewards = " + rewards);

@@ -30,6 +30,7 @@ import java.util.List;
 @Log
 public class SimulationReturnsExtractor<S,A> {
 
+    private static final double SIMULATION_RETURN_BACKUP = 0d;
     int nofNodesOnPath;
     SimulationResults simulationResults;
     MonteCarloSettings<S,A> settings;
@@ -48,7 +49,8 @@ public class SimulationReturnsExtractor<S,A> {
 
     public List<Double> getSimulationReturns() {
         if (simulationResults.size() == 0) {
-            return new ArrayList<>(Collections.nCopies(nofNodesOnPath, 0d));  //todo into MathUtils
+            log.fine("No simulation results present");
+            return new ArrayList<>(Collections.nCopies(nofNodesOnPath, SIMULATION_RETURN_BACKUP));
         }
 
         return (settings.isDefensiveBackup)
@@ -83,17 +85,19 @@ public class SimulationReturnsExtractor<S,A> {
     private double getMixReturnFromNonFailing() {
         double maxReturn=simulationResults.maxReturnFromNonFailing().orElseThrow();
         double avgReturn=simulationResults.averageReturnFromNonFailing().orElseThrow();
-        double c=settings.coefficientMaxAverageReturn;
-        return c*maxReturn+(1-c)*avgReturn;
+        return calculateMixReturn(maxReturn, avgReturn);
     }
 
     private double getMixReturnFromAll() {
         double maxReturn=simulationResults.maxReturnFromAll().orElseThrow();
         double avgReturn=simulationResults.averageReturnFromAll().orElseThrow();
-        double c=settings.coefficientMaxAverageReturn;
-        return c*maxReturn+(1-c)*avgReturn;
+        return calculateMixReturn(maxReturn, avgReturn);
     }
 
+    private double calculateMixReturn(double maxReturn, double avgReturn) {
+        double c = settings.coefficientMaxAverageReturn;
+        return settings.coefficientMaxAverageReturn * maxReturn + (1 - c) * avgReturn;
+    }
     /**
      *  nodesOnPath = (r)  -> (0) -> (1) ->  (2)
      *  discountFactor=1, singleReturn=1 => returns=[1,1,1] => discountedReturns=[1,1,1]

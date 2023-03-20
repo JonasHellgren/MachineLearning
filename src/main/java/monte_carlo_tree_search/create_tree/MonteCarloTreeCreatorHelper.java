@@ -67,7 +67,9 @@ public class MonteCarloTreeCreatorHelper<S, A> {
         return failList.stream().allMatch(f -> f==true);
     }
 
-     void someLogging(int i, NodeWithChildrenInterface<S, A> nodeSelected, Optional<ActionInterface<A>> actionInSelected) {
+    void someLogging(int i,
+                     NodeWithChildrenInterface<S, A> nodeSelected,
+                     Optional<ActionInterface<A>> actionInSelected) {  //generally avoid optional as parameter but exception here, just logging
         log.fine("i = " + i);
         log.fine("nodeSelected = " + nodeSelected + ", nof child nodes = " + nodeSelected.getChildNodes().size());
         log.fine("actionInSelected = " + actionInSelected);

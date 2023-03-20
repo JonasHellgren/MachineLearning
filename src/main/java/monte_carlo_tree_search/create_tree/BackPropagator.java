@@ -14,6 +14,11 @@ import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  This class executes the last step in MCTS, back propagation
+ *  Both step return and/or simulation from previous step are used.
+ */
+
 @Log
 @Builder
 public class BackPropagator<S, A> {

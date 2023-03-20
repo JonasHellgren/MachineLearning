@@ -65,7 +65,7 @@ public class EnergyTradingSearchWithPresetMemoryRunner {
         TreeInfoHelper<VariablesEnergyTrading,Integer> tih=
                 new TreeInfoHelper<>(monteCarloTreeCreator.getNodeRoot(), createSearchSettings());
         List<ActionInterface<Integer>> actions= tih.getActionsOnBestPath();
-        List<Double> rewards=simulator.stepWithActions(stateStart,actions);
+        List<Double> rewards=simulator.stepWithPresetActions(stateStart,actions);
         double sumOfRewards= ListUtils.sumDoubleList(rewards);
         double avgError=memory.getAverageValueError(buffer.getBuffer());
         System.out.println("avgError = " + avgError);

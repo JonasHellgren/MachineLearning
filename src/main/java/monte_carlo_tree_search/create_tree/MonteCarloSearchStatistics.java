@@ -8,6 +8,9 @@ import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *   A fairly dumb class, just keeping track of data related to a monte carlo search
+ */
 
 @Getter
 public class MonteCarloSearchStatistics<S, A> {

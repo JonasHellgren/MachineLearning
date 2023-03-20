@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * For performing the simulation step
+ *
+ */
+
 @Getter
 @Log
 public class MonteCarloSimulator<S, A> {
@@ -35,20 +40,16 @@ public class MonteCarloSimulator<S, A> {
     public SimulationResults simulate(StateInterface<S> stateAfterApplyingActionInSelectedNode,
                                       boolean isTerminal,
                                       int startDepth) {
-
         if (isTerminal) {
             return SimulationResults.newEmpty();
         }
 
         SimulationResults simulationResults = SimulationResults.newEmpty();
-
         for (int i = 0; i < settings.nofSimulationsPerNode; i++) {
             List<StepReturnGeneric<S>> stepResults =
                     stepToTerminal(stateAfterApplyingActionInSelectedNode.copy(), startDepth);
             StepReturnGeneric<S> endReturn = stepResults.get(stepResults.size() - 1);
-            double sumOfRewards = ListUtils.discountedSum(
-                    stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
-                    settings.discountFactorSimulation);
+            double sumOfRewards = getSumOfRewards(stepResults);
             boolean isEndingInFail = endReturn.isFail;
             simulationResults.add(sumOfRewards, isEndingInFail);
         }
@@ -62,17 +63,14 @@ public class MonteCarloSimulator<S, A> {
         StepReturnGeneric<S> stepReturn;
         int depth = startDepth;
         do {
-            ActionInterface<A> action = policy.chooseAction(state);
-            stepReturn = environment.step(action, state);
-            state.setFromReturn(stepReturn);
+            stepReturn = chooseActionStepAndUpdateState(state, policy);
             returns.add(stepReturn);
             depth++;
         } while (!stepReturn.isTerminal && depth < settings.maxSimulationDepth);
         return returns;
     }
 
-
-    public List<Double> stepWithActions(StateInterface<S> state,List<ActionInterface<A>> actions) {
+    public List<Double> stepWithPresetActions(StateInterface<S> state, List<ActionInterface<A>> actions) {
 
         List<Double> rewards=new ArrayList<>();
         StepReturnGeneric<S> stepReturn = null;
@@ -98,5 +96,22 @@ public class MonteCarloSimulator<S, A> {
 
         return rewards;
     }
+
+
+    private double getSumOfRewards(List<StepReturnGeneric<S>> stepResults) {
+        return ListUtils.discountedSum(
+                stepResults.stream().map(r -> r.reward).collect(Collectors.toList()),
+                settings.discountFactorSimulation);
+    }
+
+    private StepReturnGeneric<S> chooseActionStepAndUpdateState(StateInterface<S> state,
+                                                                SimulationPolicyInterface<S, A> policy) {
+        StepReturnGeneric<S> stepReturn;
+        ActionInterface<A> action = policy.chooseAction(state);
+        stepReturn = environment.step(action, state);
+        state.setFromReturn(stepReturn);
+        return stepReturn;
+    }
+
 
 }

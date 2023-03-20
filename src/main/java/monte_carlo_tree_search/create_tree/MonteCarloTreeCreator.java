@@ -45,6 +45,8 @@ public class MonteCarloTreeCreator<S, A> {
     private static final double VALUE_MEMORY_IF_NOT_TERMINAL = 0d;
     private static final String START_GIVE_FAIL_MESSAGE = "All actions in start start give fail";
     private static final String NO_FIRST_ACTION_MESSAGE = "No first action present - probably to small time budget";
+    private static final String NO_STATISTICS_MESSAGE = "No statistics set, need to first call run()";
+    private static final String NO_BEST_FIRST_ACTION_MESSAGE = "No best first action present, selecting random action";
     EnvironmentGenericInterface<S, A> environment;
     StateInterface<S> startState;
     MonteCarloSettings<S, A> settings;
@@ -81,8 +83,8 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public MonteCarloSearchStatistics<S, A> getStatistics() {
-        if (statistics==null) {
-            throw new RuntimeException("No statistics set, need to first call run()");
+        if (statistics == null) {
+            throw new RuntimeException(NO_STATISTICS_MESSAGE);
         }
         statistics.setStatistics();
         return statistics;
@@ -93,7 +95,7 @@ public class MonteCarloTreeCreator<S, A> {
         Optional<NodeInterface<S, A>> bestChild = ns.selectBestNonFailChild(nodeRoot);
 
         if (bestChild.isEmpty()) {
-            log.warning("No best first action present, selecting random action");
+            log.warning(NO_BEST_FIRST_ACTION_MESSAGE);
             ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
             return actionSelector.getRandomAction();
         }
@@ -103,14 +105,14 @@ public class MonteCarloTreeCreator<S, A> {
     public NodeWithChildrenInterface<S, A> run() throws StartStateIsTrapException {
         CpuTimer cpuTimer = new CpuTimer(settings.timeBudgetMilliSeconds);
         MonteCarloTreeCreatorHelper.setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
-        MonteCarloTreeCreatorHelper<S, A> helper=new MonteCarloTreeCreatorHelper<>(
-                environment,settings,actionTemplate,startState,nodeRoot,cpuTimer);
+        MonteCarloTreeCreatorHelper<S, A> helper = new MonteCarloTreeCreatorHelper<>(
+                environment, settings, actionTemplate, startState, nodeRoot, cpuTimer);
         if (helper.startStateIsTrap()) {
             throw new StartStateIsTrapException(START_GIVE_FAIL_MESSAGE);
         }
 
-        MonteCarloSimulator<S, A> simulator=new MonteCarloSimulator<>(environment,settings);
-        Counter counter=new Counter(settings.minNofIterations,settings.maxNofIterations);
+        MonteCarloSimulator<S, A> simulator = new MonteCarloSimulator<>(environment, settings);
+        Counter counter = new Counter(settings.minNofIterations, settings.maxNofIterations);
         plotData.clear();
         ActionSelector<S, A> actionSelector = new ActionSelector<>(settings, actionTemplate);
 
@@ -127,23 +129,22 @@ public class MonteCarloTreeCreator<S, A> {
                 backPropagator.chooseTestedActionAndBackPropagate(nodeSelected, actionSelector);
             }
 
-        //    System.out.println("NodeInfoHelper.actionValueMap(actionTemplate,nodeRoot) = " + NodeInfoHelper.actionValueMap(actionTemplate, nodeRoot));
-
+            log.fine("valueMap nodeRoot = " + NodeInfoHelper.actionValueMap(actionTemplate, nodeRoot));
             helper.updatePlotData(plotData);
             counter.increase();
         }
         nofIterations = counter.getCount();
-        statistics= new MonteCarloSearchStatistics<>(nodeRoot, this, cpuTimer, settings);
+        statistics = new MonteCarloSearchStatistics<>(nodeRoot, this, cpuTimer, settings);
         Conditionals.executeIfTrue(settings.isDoLogging, () ->
-        helper.logStatistics(counter.getCount(),statistics));
+                helper.logStatistics(counter.getCount(), statistics));
         return nodeRoot;
     }
 
-    private boolean isCounterAndTimeValid(Counter counter,CpuTimer cpuTimer) {
+    private boolean isCounterAndTimeValid(Counter counter, CpuTimer cpuTimer) {
         if (counter.isBelowMinCount()) {
             return true;
         }
-        boolean notValid=counter.isExceeded() || cpuTimer.isTimeExceeded();
+        boolean notValid = counter.isExceeded() || cpuTimer.isTimeExceeded();
         return !notValid;
     }
 
@@ -178,9 +179,6 @@ public class MonteCarloTreeCreator<S, A> {
                 nodeSelected.addChildNode(child));
         return sr;
     }
-
-
-
 
 
 }

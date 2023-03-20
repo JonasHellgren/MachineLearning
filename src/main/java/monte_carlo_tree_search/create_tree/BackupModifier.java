@@ -17,6 +17,7 @@ import java.util.List;
 
 /***
  *  This class updates a monte carlo tree, internal node variables can be changed or node(s) can be replaced.
+ *  It performs the heavy work in BackPropagator
  *
  *   A special case managed by backup operator is than all children of selected node are fail nodes. These leads
  *   to transforming selected node to terminal fail.
