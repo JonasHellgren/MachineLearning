@@ -4,13 +4,12 @@ import org.neuroph.nnet.learning.MomentumBackpropagation;
 
 import java.util.List;
 
-public interface NetworkMemoryInterface<SSV, AV>  extends MemoryInterface<SSV> {
+public interface NetworkMemoryInterface<S, A>  extends ReadableMemoryInterface<S> {
     void save(String fileName);
     void load(String fileName);
-    double read(StateInterface<SSV> state);
-    void learn(List<Experience<SSV, AV>> miniBatch);
+    double read(StateInterface<S> state);
+    void learn(List<Experience<S, A>> miniBatch);
     MomentumBackpropagation getLearningRule();
-    double getAverageValueError(List<Experience<SSV, AV>> experienceList);
+    double getAverageValueError(List<Experience<S, A>> experienceList);
     void createOutScalers(double minOut, double maxOut);
-
 }

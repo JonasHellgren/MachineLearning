@@ -6,8 +6,8 @@ import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
  * SSV is set of state variables. AV is type for action variable
  */
 
-public interface EnvironmentGenericInterface<SSV, AV> {
+public interface EnvironmentGenericInterface<S, A> {
 
-    StepReturnGeneric<SSV> step(ActionInterface<AV> action, StateInterface<SSV> state);
+    StepReturnGeneric<S> step(ActionInterface<A> action, StateInterface<S> state);
 
 }

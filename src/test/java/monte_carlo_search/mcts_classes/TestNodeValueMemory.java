@@ -4,7 +4,6 @@ import monte_carlo_tree_search.interfaces.MapMemoryInterface;
 import monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.domains.models_space.StateShip;
-import monte_carlo_tree_search.interfaces.MemoryInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

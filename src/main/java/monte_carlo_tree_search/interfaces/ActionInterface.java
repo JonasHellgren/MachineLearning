@@ -9,23 +9,23 @@ import java.util.Set;
  * AV is generic type for action variables
  */
 
-public interface ActionInterface<AV> {
-    void setValue(AV actionValue);
-    AV getValue();
-    ActionInterface<AV> copy();
-    Set<AV> applicableActions();
-    AV nonApplicableAction();
+public interface ActionInterface<A> {
+    void setValue(A actionValue);
+    A getValue();
+    ActionInterface<A> copy();
+    Set<A> applicableActions();
+    A nonApplicableAction();
 
-     static <AV> List<AV> mergeActionsWithAction(List<AV> actionsToSelected, AV actionOnSelected) {
-        List<AV> actionOnSelectedList = Collections.singletonList(actionOnSelected);
-        List<AV> actions = new ArrayList<>();
+     static <A> List<A> mergeActionsWithAction(List<A> actionsToSelected, A actionOnSelected) {
+        List<A> actionOnSelectedList = Collections.singletonList(actionOnSelected);
+        List<A> actions = new ArrayList<>();
         actions.addAll(actionsToSelected);
         actions.addAll(actionOnSelectedList);
         return actions;
     }
 
-    static <AV>  List<AV> getNonTestedActionValues(List<AV> testedValues,Set<AV> allValues) {
-        List<AV> nonTestedValues=new ArrayList<>(allValues);
+    static <A>  List<A> getNonTestedActionValues(List<A> testedValues, Set<A> allValues) {
+        List<A> nonTestedValues=new ArrayList<>(allValues);
         nonTestedValues.removeAll(testedValues);
         return nonTestedValues;
     }

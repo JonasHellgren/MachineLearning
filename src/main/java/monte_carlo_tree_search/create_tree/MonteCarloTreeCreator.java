@@ -51,7 +51,7 @@ public class MonteCarloTreeCreator<S, A> {
     StateInterface<S> startState;
     MonteCarloSettings<S, A> settings;
     ActionInterface<A> actionTemplate;
-    MemoryInterface<S> memory;
+    ReadableMemoryInterface<S> memory;
 
     NodeWithChildrenInterface<S, A> nodeRoot;
     TreeInfoHelper<S, A> tih;
@@ -67,7 +67,7 @@ public class MonteCarloTreeCreator<S, A> {
             @NonNull StateInterface<S> startState,
             @NonNull MonteCarloSettings<S, A> monteCarloSettings,
             @NonNull ActionInterface<A> actionTemplate,
-            MemoryInterface<S> memory) {
+            ReadableMemoryInterface<S> memory) {
         MonteCarloTreeCreator<S, A> mctc = new MonteCarloTreeCreator<>();
         mctc.environment = environment;
         mctc.startState = startState;

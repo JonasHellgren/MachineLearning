@@ -6,7 +6,7 @@ import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
 import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.interfaces.MemoryInterface;
+import monte_carlo_tree_search.interfaces.ReadableMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
@@ -28,7 +28,7 @@ public class BackPropagator<S, A> {
     MonteCarloSettings<S, A> settings;
     NodeWithChildrenInterface<S, A> nodeRoot;
     List<ActionInterface<A>> actionsToSelected;
-    MemoryInterface<S> memory;
+    ReadableMemoryInterface<S> memory;
 
 
     void chooseTestedActionAndBackPropagate(NodeWithChildrenInterface<S, A> nodeSelected, ActionSelector<S, A> actionSelector) {

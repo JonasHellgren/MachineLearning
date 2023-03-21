@@ -1,8 +1,5 @@
 package monte_carlo_tree_search.interfaces;
 
-import monte_carlo_tree_search.domains.elevator.ActionElevator;
-import monte_carlo_tree_search.domains.energy_trading.ActionEnergyTrading;
-
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -38,8 +35,6 @@ public abstract class ActionIntegerAbstract implements ActionInterface<Integer> 
         return actionValue;
     }
 
-
-
     @Override
     public Set<Integer> applicableActions() {
         return IntStream.rangeClosed(minActionValue, maxActionValue)  //inclusive end
@@ -57,8 +52,4 @@ public abstract class ActionIntegerAbstract implements ActionInterface<Integer> 
         Predicate<Integer> isNonApplicAction = a -> a.equals(nonApplicableAction());
         return isApplicAction.or(isNonApplicAction).test(actionValue);
     }
-
-
-
-
 }
