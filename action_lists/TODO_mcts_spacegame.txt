@@ -375,7 +375,7 @@ ElevatorMctsOnlySearchRunner
 - städa klasser - network training  x
 - städa klasser - helpers  x
 städa klasser - interfaces  x
-- plant uml dioagram
+- plant uml dioagram  x
 - lära mig grad av log visa
 
 - ActionAbstract  -> ActionElevator

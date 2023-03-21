@@ -1,0 +1,83 @@
+@startuml
+class monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric {
++ StateInterface<S> newState
++ boolean isTerminal
++ boolean isFail
++ double reward
++ StepReturnGeneric<S> copy()
++ StateInterface<S> copyState()
+}
+abstract class monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract {
++ MultiLayerPerceptron neuralNetwork
++ MomentumBackpropagation learningRule
++ ScalerLinear scaleOutValueToNormalized
++ ScalerLinear scaleOutNormalizedToValue
++ boolean isWarmedUp
++ NetSettings settings
++ {abstract}double[] getInputVec(S)
++ void createLearningRule(MultiLayerPerceptron,NetSettings)
++ double read(StateInterface<S>)
++ void save(String)
++ void load(String)
++ void learn(List<Experience<S,A>>)
++ void createOutScalers(double,double)
++ double getAverageValueError(List<Experience<S,A>>)
+}
+class monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract.NetSettings {
++ int inputSize
++ double learningRate
+}
+class monte_carlo_tree_search.models_and_support_classes.TreePlotData {
++ double maxValue
++ double nofNodes
++ double maxDepth
+}
+class monte_carlo_tree_search.models_and_support_classes.Counter {
++ int getCount()
++ void increase()
++ boolean isExceeded()
++ boolean isBelowMinCount()
++ void reset()
+}
+class monte_carlo_tree_search.models_and_support_classes.MemoryTrainerHelper {
++ void logProgressSometimes(MomentumBackpropagation,int)
++ void logEpoch(MomentumBackpropagation,int)
++ double getAverageReturn(SimulationResults)
++ void trainMemory(NetworkMemoryInterface<S,A>,ReplayBuffer<S,A>)
+}
+class monte_carlo_tree_search.models_and_support_classes.SimulationResults {
++ {static} SimulationResults newEmpty()
++ void add(double,boolean)
++ List<SimulationResult> getResults()
++ int size()
++ boolean areAllSimulationsTerminalFail()
++ double averageReturnFromNonFailingsOrAnyFailingReturnIfAllFails()
++ OptionalDouble maxReturnFromNonFailing()
++ OptionalDouble maxReturnFromAll()
++ OptionalDouble averageReturnFromNonFailing()
++ OptionalDouble averageReturnFromAll()
++ OptionalDouble anyFailingReturn()
++ List<Double> getReturnListForNonFailing()
++ List<Double> getReturnListForAll()
++ List<Double> getReturnsForFailing()
++ String toString()
+}
+class monte_carlo_tree_search.models_and_support_classes.SimulationResults.SimulationResult {
++ double singleReturn
++ boolean isEndingInFail
+}
+class monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap {
++ {static} double DEFAULT_VALUE
++ {static} ValueMemoryHashMap<S> newEmpty()
++ void clear()
++ void write(StateInterface<S>,double)
++ double read(StateInterface<S>)
++ String toString()
+}
+
+
+monte_carlo_tree_search.interfaces.NetworkMemoryInterface <|.. monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract
+monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract +.. monte_carlo_tree_search.models_and_support_classes.ValueMemoryNetworkAbstract.NetSettings
+monte_carlo_tree_search.models_and_support_classes.SimulationResults +.. monte_carlo_tree_search.models_and_support_classes.SimulationResults.SimulationResult
+monte_carlo_tree_search.interfaces.MapMemoryInterface <|.. monte_carlo_tree_search.models_and_support_classes.ValueMemoryHashMap
+@enduml
