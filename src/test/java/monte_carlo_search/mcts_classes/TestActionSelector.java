@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class TestActionSelector {
-    private static final int NSTEPS_BETWEEN = 50;
     private static final double SOE_FULL = 1;
     private static final int POS_FLOOR_0 = 0;
     private static final int ALPHA = 1;
@@ -28,7 +27,7 @@ public class TestActionSelector {
     private static final int VALUE_1 = 10;
     private static final int VALUE_MINUS1 = -10;
     private static final int ZERO_SPEED = 0;
-
+    private static final int POS_BETWEEN_FLOORS = 5;
 
     EnvironmentGenericInterface<VariablesElevator, Integer> environment;
     MonteCarloSettings<VariablesElevator, Integer> settings;
@@ -49,8 +48,6 @@ public class TestActionSelector {
                 .build());
         addTwoNodesToRootNodeOneForActionMinusOneAndOneForActionOne(startState);
         System.out.println("nodeRoot = " + nodeRoot);
-
-
     }
 
     private void addTwoNodesToRootNodeOneForActionMinusOneAndOneForActionOne(StateInterface<VariablesElevator> startState) {
@@ -88,7 +85,8 @@ public class TestActionSelector {
     public void givenBottomFloorWithAction1AndMinus1Tested_thenRandomActionIsMinus1Or0Or1() {
         ActionInterface<Integer> selectedAction = actionSelector.getRandomAction();
         System.out.println("selectedAction = " + selectedAction);
-        Assert.assertTrue(-1 == selectedAction.getValue() || 0 == selectedAction.getValue() || 1 == selectedAction.getValue());
+        List<Integer> actionValues=Arrays.asList(-1,0,1);
+        Assert.assertTrue(actionValues.contains(selectedAction.getValue()));
     }
 
     @SneakyThrows
@@ -107,7 +105,7 @@ public class TestActionSelector {
     @Test
     public void givenStateBetweenFloorsMovingUpNoTestedAction_thenNonTestedActionsInPolicyIs1() {
         StateInterface<VariablesElevator> startState = StateElevator.newFromVariables(VariablesElevator.builder()
-                .speed(1).SoE(SOE_FULL).pos(5)
+                .speed(1).SoE(SOE_FULL).pos(POS_BETWEEN_FLOORS)
                 .build());
         nodeRoot = NodeInterface.newNotTerminal(startState, ActionElevator.newValueDefaultRange(0));
         List<ActionInterface<Integer>> selectedActions = actionSelector.getNonTestedActionsInPolicy(nodeRoot);

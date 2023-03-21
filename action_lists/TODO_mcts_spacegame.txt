@@ -372,8 +372,8 @@ ElevatorMctsOnlySearchRunner
 - <S> i classes  x
 - städa klasser - create tree  x
 - TestActionSelector  x
-- städa klasser - network training
-- städa klasser -
+- städa klasser - network training  x
+- städa klasser - helpers
 - plant uml dioagram
 - lära mig grad av log visa
 
