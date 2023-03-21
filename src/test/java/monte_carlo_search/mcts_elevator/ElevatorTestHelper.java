@@ -44,7 +44,7 @@ public class ElevatorTestHelper {
         ActionInterface<Integer> actionTemplate=  ActionElevator.newValueDefaultRange(0);
         System.out.println("nodeRoot value = " + NodeInfoHelper.valueNode(actionTemplate,nodeRoot));
         System.out.println("nodeRoot action values = " + NodeInfoHelper.actionValuesNode(actionTemplate, nodeRoot));
-        System.out.println("bestActionValue = " + NodeInfoHelper.bestActionValue(actionTemplate, nodeRoot));
+        System.out.println("valueNode = " + NodeInfoHelper.valueNode(actionTemplate, nodeRoot));
         System.out.println("monteCarloTreeCreator.getFirstAction() = " + monteCarloTreeCreator.getFirstAction());
 
     }

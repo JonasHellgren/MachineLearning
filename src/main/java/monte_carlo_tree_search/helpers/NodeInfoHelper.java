@@ -6,12 +6,10 @@ import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.node_models.NodeInterface;
 import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
-import org.apache.commons.math3.util.Pair;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NodeInfoHelper<S, A> {
+public class NodeInfoHelper {
 
     public static <S, A> Optional<NodeInterface<S, A>>
     findNodeMatchingStateVariables(List<NodeInterface<S, A>> nodes,
@@ -48,7 +46,6 @@ public class NodeInfoHelper<S, A> {
         return avMap;
     }
 
-
     /**
      * leaf node = node that  can/shall be expanded, i.e. not tried "all" actions
      * selected node shall be leaf node =>  isLeaf(selectedNode) = true
@@ -72,19 +69,5 @@ public class NodeInfoHelper<S, A> {
         return  node.getDepth()==maxTreeDepth;
     }
 
-
-    //todo remove, valueNode does the same
-    public static <S, A> A bestActionValue(ActionInterface<A> actionTemplate, NodeWithChildrenInterface<S,A> node ) {
-        List<Pair<A, Double>> actionValuePairs = new ArrayList<>();
-        for(A a:actionTemplate.applicableActions()) {
-            actionTemplate.setValue(a);
-            actionValuePairs.add(new Pair<>(a, node.getActionValue(actionTemplate)));
-        }
-
-        Optional<Pair<A, Double>> bestPair=actionValuePairs.stream().
-                reduce((res, item) -> res.getSecond() > item.getSecond() ? res : item);
-
-        return bestPair.orElseThrow().getFirst();
-    }
 
 }
