@@ -7,7 +7,7 @@ import monte_carlo_tree_search.domains.elevator.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;

@@ -2,10 +2,10 @@ package monte_carlo_search.mcts_classes;
 
 import monte_carlo_tree_search.domains.models_space.ShipActionSet;
 import monte_carlo_tree_search.domains.models_space.ShipVariables;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeNotTerminal;
-import monte_carlo_tree_search.node_models.NodeTerminalFail;
-import monte_carlo_tree_search.node_models.NodeTerminalNotFail;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeNotTerminal;
+import monte_carlo_tree_search.search_tree_node_models.NodeTerminalFail;
+import monte_carlo_tree_search.search_tree_node_models.NodeTerminalNotFail;
 import monte_carlo_tree_search.domains.models_space.ActionShip;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import org.junit.Assert;

@@ -8,14 +8,12 @@ import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * This tests shows the power of defensive backup
@@ -44,8 +42,9 @@ public class Test_5times7GridWithTrapCorridor {
                 .actionSelectionPolicy(ShipPolicies.newAlwaysStill())
                 .simulationPolicy(ShipPolicies.newMostlyStill())
                 .minNofIterations(1_000).maxNofIterations(2_000).timeBudgetMilliSeconds(200)
-                .coefficientExploitationExploration(1e3)
-                .isDefensiveBackup(true).alphaBackupDefensiveStep(0.1).discountFactorDefensiveSteps(0.1)
+                .coefficientExploitationExploration(1e2)
+                .alphaBackupNormal(1.0).discountFactorSteps(1.0)
+                .isDefensiveBackup(true).alphaBackupDefensiveStep(0.01).discountFactorDefensiveSteps(0.1)
                 .build();
         monteCarloTreeCreator= MonteCarloTreeCreator.<ShipVariables, ShipActionSet>builder()
                 .environment(environment)

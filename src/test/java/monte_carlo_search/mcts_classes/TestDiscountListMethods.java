@@ -42,4 +42,27 @@ public class TestDiscountListMethods {
         Assert.assertTrue(ds.containsAll(Arrays.asList(0.25d,5d,10d)));
     }
 
+    /**
+     * rewards = 1d,10d,10d , df=0.5-> rewardsDiscounted =  0.25d,5d,10d -> returns = 15.25, 15, 10
+     */
+
+    @Test
+    public void givenRewardsAnd0d5Discount_thenCorrectReturns() {
+        List<Double> rewards= Arrays.asList(1d,10d,10d);
+        List<Double>  returns= getDiscountedReturns(rewards,0.5);
+        System.out.println("returns = " + returns);
+        Assert.assertTrue(returns.containsAll(Arrays.asList(15.25,15d,10d)));
+    }
+
+
+    private List<Double> getDiscountedReturns(final List<Double> rewards, double discountFactor) {
+        List<Double> rewardsDiscounted  = ListUtils.discountedElementsReverse(rewards,discountFactor);
+        return ListUtils.getReturns(rewardsDiscounted);
+    }
+
+    private List<Double> getDiscountedReturnsOld(final List<Double> rewards, double discountFactor) {
+        List<Double> returns = ListUtils.getReturns(rewards);
+        return ListUtils.discountedElementsReverse(returns,discountFactor);
+    }
+
 }

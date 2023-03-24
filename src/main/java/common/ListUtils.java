@@ -119,11 +119,18 @@ public class ListUtils {
         return dotProduct(list,listDf);
     }
 
+    /**
+     * 1d,10d,10d , df=0.5->  10d,5d,2.5d
+     */
+
     public static List<Double> discountedElements(List<Double> list, double discountFactor) {
         List<Double> listDf = getDiscountList(list.size(), discountFactor);
         return elementProduct(list,listDf);
     }
 
+    /**
+     * 1d,10d,10d , df=0.5->  0.25d,5d,10d
+     */
 
     public static List<Double> discountedElementsReverse(List<Double> list, double discountFactor) {
         List<Double> listDf = getDiscountList(list.size(), discountFactor);
@@ -131,9 +138,10 @@ public class ListUtils {
         return elementProduct(list,listDf);
     }
 
-    /*
+    /**
     rewards=[0,1,1] => returns=[2,2,1]
     */
+
     public static List<Double> getReturns(List<Double> rewards) {
         double singleReturn = 0;
         List<Double> returns = new ArrayList<>();

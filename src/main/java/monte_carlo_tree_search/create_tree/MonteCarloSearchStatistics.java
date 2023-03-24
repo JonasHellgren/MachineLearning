@@ -3,7 +3,7 @@ import common.CpuTimer;
 import lombok.Getter;
 import lombok.NonNull;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.ArrayList;
 import java.util.List;

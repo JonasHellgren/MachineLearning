@@ -8,8 +8,8 @@ import monte_carlo_tree_search.domains.models_space.ShipVariables;
 import monte_carlo_tree_search.domains.models_space.StateShip;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.Optional;
 

@@ -6,7 +6,7 @@ import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,8 +112,8 @@ public class Test_5times15grid {
                 .nofSimulationsPerNode(0)
                 .weightReturnsSteps(1)
                 .isDefensiveBackup(true)
-                .alphaBackupDefensiveStep(0.5)  //important
-                .discountFactorDefensiveSteps(0.5)  //important
+                .alphaBackupDefensiveStep(0.01)  //important
+                .discountFactorDefensiveSteps(0.1)
                 .build();
         createCreator(StateShip.newStateFromXY(10, 2));
 

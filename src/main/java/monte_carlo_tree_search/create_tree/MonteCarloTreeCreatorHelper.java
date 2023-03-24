@@ -11,8 +11,8 @@ import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.NodeInfoHelper;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.ArrayList;
 import java.util.List;

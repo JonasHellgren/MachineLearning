@@ -12,9 +12,8 @@ import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.NodeSelector;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.domains.models_space.StateShip;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.*;
 import java.util.function.BiFunction;

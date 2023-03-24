@@ -4,8 +4,8 @@ import common.ListUtils;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import java.util.*;
 import java.util.stream.Collectors;
 

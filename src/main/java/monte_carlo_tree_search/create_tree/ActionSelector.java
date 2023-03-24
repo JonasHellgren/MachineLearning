@@ -3,8 +3,8 @@ package monte_carlo_tree_search.create_tree;
 import common.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.interfaces.ActionInterface;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.*;

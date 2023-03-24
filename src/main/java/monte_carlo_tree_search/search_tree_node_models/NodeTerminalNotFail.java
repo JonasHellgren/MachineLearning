@@ -1,4 +1,4 @@
-package monte_carlo_tree_search.node_models;
+package monte_carlo_tree_search.search_tree_node_models;
 
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;

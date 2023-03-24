@@ -378,6 +378,9 @@ städa klasser - interfaces  x
 - plant uml dioagram  x
 - lära mig grad av log visa
 
+uppdateringa location planner:
+- applicableActionsInNewNode
+
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma
 

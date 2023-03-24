@@ -8,8 +8,8 @@ import lombok.extern.java.Log;
 import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeInterface;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,11 +147,15 @@ public class BackupModifier<S, A> {
     }
 
     /**
-     *  discountFactor=1, rewards=[0,1,1] => returns=[2,2,1]
-     *  discountFactor=0.5, rewards=[0,1,1] => returns=[0.5^2*2,0.5^1*2,0.5^0*1]=[0.5,1,1]
+     * rewards = 1d,10d,10d , df=0.5-> rewardsDiscounted =  0.25d,5d,10d -> returns = 15.25, 15, 10
      */
 
     private List<Double> getDiscountedReturns(final List<Double> rewards, double discountFactor) {
+        List<Double> rewardsDiscounted  = ListUtils.discountedElementsReverse(rewards,discountFactor);
+        return ListUtils.getReturns(rewardsDiscounted);
+    }
+
+    private List<Double> getDiscountedReturnsOld(final List<Double> rewards, double discountFactor) {
         List<Double> returns = ListUtils.getReturns(rewards);
         return ListUtils.discountedElementsReverse(returns,discountFactor);
     }

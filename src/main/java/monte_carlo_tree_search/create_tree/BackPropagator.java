@@ -9,7 +9,7 @@ import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.ReadableMemoryInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 
 import java.util.List;
 import java.util.Optional;
