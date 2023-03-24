@@ -23,6 +23,10 @@ import java.util.List;
  *    normal backup = use discountFactorSimulationNormal
  *    defensive backup = use discountFactorSimulationDefensive
  *
+ *    One can debate "but shall not discountFactorSimulation be reduced instead?". The problem is that when doing
+ *    simulations, it is not known if they all will give fail states (require defensive backup). So even if not
+ *    perfectly clean, the concept discountedReturns is used.
+ *
  *    To disable above functionality, "standard" MCTS is applied by settings.isDefensiveBackup=false
  *
  */

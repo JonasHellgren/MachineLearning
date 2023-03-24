@@ -99,15 +99,16 @@ public class ReplayBufferValueSetter<S,A> {
                 .reward(experience.reward)
                 .build());
     }
-    /***
-     * rewards=[1 1 1], discountFactor=1 => returns = [1 2 3]  => returns = [3 2 1] (after reversed)
-     * discountFactor=0.5, rewards=[0,1,1] => (discountedElementsReverse) returns=[0.5^2*2,0.5^1*2,0.5^0*1]=[0.5,1,1]
+
+    /**
+     * rewards = 1d,10d,10d , df=0.5-> rewardsDiscounted =  0.25d,5d,10d -> returns = 15.25, 15, 10
      */
 
     private List<Double> createReturns() {
         List<Double> rewards=bufferEpisode.getBuffer().stream().map(e -> e.reward).collect(Collectors.toList());
-        List<Double> returns = ListUtils.getReturns(rewards);
-        return ListUtils.discountedElementsReverse(returns,discountFactor);
+        List<Double> rewardsDiscounted  = ListUtils.discountedElementsReverse(rewards,discountFactor);
+        return ListUtils.getReturns(rewardsDiscounted);
     }
+
 
 }
