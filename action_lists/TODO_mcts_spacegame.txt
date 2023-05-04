@@ -380,6 +380,9 @@ städa klasser - interfaces  x
 
 uppdateringa location planner:
 - applicableActionsInNewNode
+-  NodeInterface.newNotTerminal
+- loop i NodeSelector select() är långsam - fixa genom att node minns availableActions
+- ReplayBufferValueSetter fel i createReturns - skall vara discount på returns
 
 - ActionAbstract  -> ActionElevator
 - averageNofChildrenPerNode verkar inte stämma

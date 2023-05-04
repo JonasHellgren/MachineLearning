@@ -1,0 +1,17 @@
+package multi_step_temp_diff.interfaces;
+
+import multi_step_temp_diff.models.StepReturn;
+import udemy_Java_AI_courses.AI4refined.qlearning_objoriented.models_common.State;
+
+import java.util.List;
+
+//https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
+
+public interface AgentInterface {
+    int getState();
+    int chooseAction(int state);
+    void updateState(StepReturn stepReturn);
+    double readValue(int state);
+  //  void writeMemory(State oldState, Integer Action, Double value);
+  //  double readMemory(State state, int Action);
+}

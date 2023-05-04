@@ -61,5 +61,4 @@ public class BackPropagator<S, A> {
         bum.backup();
     }
 
-
 }
