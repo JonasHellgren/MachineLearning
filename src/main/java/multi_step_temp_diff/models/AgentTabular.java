@@ -1,11 +1,13 @@
 package multi_step_temp_diff.models;
 
 import common.Conditionals;
+import common.ListUtils;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
+import org.apache.arrow.flatbuf.Int;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
@@ -16,21 +18,41 @@ public class AgentTabular implements AgentInterface {
     static final double DISCOUNT_FACTOR=1;
     static final Map<Integer,Double> MEMORY=new HashMap<>();
     private static final double VALUE_IF_NOT_PRESENT = 0;
+    private static final int START_STATE = 0;
 
     @NonNull  EnvironmentInterface environment;
-    int state;
+    @Builder.Default
+    int state= START_STATE;
     @Builder.Default
     Map<Integer,Double> memory=MEMORY;
     @Builder.Default
     final double discountFactor=DISCOUNT_FACTOR;
+
+    public static AgentTabular newDefault() {
+        return AgentTabular.builder()
+                .environment(new ForkEnvironment())
+                .build();
+    }
 
     @Override
     public int getState() {
         return state;
     }
 
+
     @Override
-    public int chooseAction(int state, double probRandom) {
+    public double getDiscountFactor() {
+        return discountFactor;
+    }
+
+    @Override
+    public void setState(int state) {
+        this.state=state;
+    }
+
+    @Override
+    public int chooseAction(double probRandom) {
+        int state=getState();
         return (RandUtils.getRandomDouble(0,1)<probRandom)
                 ? chooseRandomAction()
                 : chooseBestAction(state);
@@ -38,7 +60,7 @@ public class AgentTabular implements AgentInterface {
 
     @Override
     public int chooseRandomAction() {
-        return environment.actionSet().stream().findAny().orElseThrow();
+        return RandUtils.getRandomIntNumber(0,ForkEnvironment.NOF_ACTIONS);
     }
 
     @Override
@@ -67,6 +89,7 @@ public class AgentTabular implements AgentInterface {
     public double readValue(int state) {
         return memory.getOrDefault(state, VALUE_IF_NOT_PRESENT);
     }
+
 
     public void writeValue(int state, double value) {
         memory.put(state,value);

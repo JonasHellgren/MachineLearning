@@ -3,8 +3,11 @@ package multi_step_temp_diff.models;
 import common.Conditionals;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ForkEnvironment implements EnvironmentInterface {
 
@@ -41,6 +44,11 @@ public class ForkEnvironment implements EnvironmentInterface {
     }
 
     private int getNewState(int state, int action) {
+
+        if (state==6) {
+            return 11;
+        }
+
         boolean isSplit = (state == 5);
         return (isSplit)
                 ? (action == 0) ? 6 : 7
@@ -59,7 +67,12 @@ public class ForkEnvironment implements EnvironmentInterface {
     }
 
     @Override
-    public Set<Integer> actionSet(int state) {
-        return Set.of(0,1);
+    public Set<Integer> actionSet() {
+        return IntStream.range(0, NOF_ACTIONS - 1).boxed().collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Integer> stateSet() {
+        return IntStream.range(0, NOF_STATES - 1).boxed().collect(Collectors.toSet());
     }
 }

@@ -9,5 +9,6 @@ public interface EnvironmentInterface {
     StepReturn step(int state,int action);
     boolean isTerminalState(int state);
     Set<Integer> actionSet();
+    Set<Integer> stateSet();
 
 }

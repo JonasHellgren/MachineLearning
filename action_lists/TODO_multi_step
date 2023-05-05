@@ -1,6 +1,9 @@
 
 TestForkEnvironment x
 AgentTabular  x
-TestAgentTabular
+TestAgentTabular  x
+TestNstepTD
+NStepTDHelper
+
 AgentNetwork
 TestAgentNetwork
