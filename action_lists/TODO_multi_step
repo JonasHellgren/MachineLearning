@@ -1,6 +1,6 @@
 
 TestForkEnvironment x
-AgentTabular
+AgentTabular  x
 TestAgentTabular
 AgentNetwork
 TestAgentNetwork

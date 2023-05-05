@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public class StepReturn {
-    public int state;
+    public int newState;
     public double reward;
     public boolean isNewStateTerminal;
 }

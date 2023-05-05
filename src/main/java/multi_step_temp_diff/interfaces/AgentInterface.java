@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface AgentInterface {
     int getState();
-    int chooseAction(int state);
+    int chooseAction(int state, double probRandom);
+    int chooseRandomAction();
+    int chooseBestAction(int state);
     void updateState(StepReturn stepReturn);
     double readValue(int state);
   //  void writeMemory(State oldState, Integer Action, Double value);

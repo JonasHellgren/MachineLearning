@@ -3,6 +3,7 @@ package multi_step_temp_diff.models;
 import common.Conditionals;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class ForkEnvironment implements EnvironmentInterface {
@@ -19,7 +20,7 @@ public class ForkEnvironment implements EnvironmentInterface {
         final int newState = getNewState(state, action);
         return StepReturn.builder()
                 .isNewStateTerminal(isTerminalState(newState))
-                .state(newState)
+                .newState(newState)
                 .reward(getReward(newState))
                 .build();
     }
@@ -55,5 +56,10 @@ public class ForkEnvironment implements EnvironmentInterface {
     @Override
     public boolean isTerminalState(int state) {
         return (state == 15 || state == 10);
+    }
+
+    @Override
+    public Set<Integer> actionSet(int state) {
+        return Set.of(0,1);
     }
 }
