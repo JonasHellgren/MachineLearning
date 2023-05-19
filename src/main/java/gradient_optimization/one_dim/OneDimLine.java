@@ -4,21 +4,18 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 
 public class OneDimLine  {
-
+    public static final double A = 1;
+    public static final double B = 1;
     public static final double PEN_COEFF = Math.pow(10,6);
 
     static class Variables {
         public double x1;
     }
 
-    public static final double A = 1;
-    public static final double B = 1;
-
     public ObjectiveFunction getObjectiveFunction() {
         return new ObjectiveFunction(point -> {
             Variables var= new Variables();
             var.x1=point[0];
-
             return getObjective(var)+getPenalty(var);
         });
     }
@@ -40,7 +37,7 @@ public class OneDimLine  {
 
     public ObjectiveFunctionGradient getGradient() {
         return new ObjectiveFunctionGradient(point -> {
-            return new double[]{   A  }; // Gradient: [A]
+            return new double[]{A}; // Gradient: [A]
         });
     }
 }

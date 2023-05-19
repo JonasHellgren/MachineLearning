@@ -58,6 +58,10 @@ public class ListUtils {
                 .collect(Collectors.toList());
     }
 
+    public static double sumList(List<Double> doubleList) {
+        return doubleList.stream().mapToDouble(f -> f).sum();
+    }
+
     public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {
         return listA.stream().map(num -> num + scalar)
                 .collect(Collectors.toList());

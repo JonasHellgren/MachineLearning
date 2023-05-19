@@ -1,10 +1,7 @@
 package gradient_optimization;
 
-import gradient_optimization.one_dim.Bowl;
 import gradient_optimization.one_dim.OneDimLine;
-import gradient_optimization.one_dim.ObjectiveFunctionOneDim;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
 import org.apache.commons.math3.optim.PointValuePair;
@@ -27,7 +24,7 @@ public class TestOneDimLine {
     double[] initialGuess = {1.0};
 
     @Test
-    public void givenBowl_thenOrigoIsOptimim () {
+    public void givenLine_thenZeroIsOptimum() {
         MultivariateOptimizer optimizer = getMultivariateOptimizer();
         OneDimLine line=new OneDimLine();
         PointValuePair optimum =
