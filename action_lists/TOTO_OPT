@@ -1,0 +1,8 @@
+
+
+nytt problem där bounds blir relevant
+bounds NonLinearConjugateGradientOptimizer med penalty
+andra updateFormula NonLinearConjugateGradientOptimizer
+clean up
+speed test
+svårare målfunktion
