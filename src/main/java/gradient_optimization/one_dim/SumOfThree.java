@@ -1,18 +1,22 @@
 package gradient_optimization.one_dim;
 
+import common.ArrayUtil;
 import common.ListUtils;
 import common.MathUtils;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class SumOfThree {
-    public static final double A0 = 10, A1=10, A2=10;
+    public static final double A0 = -0, A1=-1, A2=-2;
     public static final double PEN_COEFF = Math.pow(10,5);
-    public static final double LB = 0;
+    public static final double LB = 0, UB = 1;
+    public static final double SUM_MAX = 1;
 
     static class Variables {
         public double[] xList;
@@ -37,22 +41,51 @@ public class SumOfThree {
     private static double getPenalty(Variables vars) {
         int nofVars=vars.xList.length;
 
-        double[] lowerBoundsConstrValues=new double[nofVars];
-        for (int i = 0; i < nofVars ; i++) {
-            lowerBoundsConstrValues[i]= LB -vars.xList[i];
-        }
-
+        double[] lowerBoundsConstrValues = getLowerBoundConstraintValues(vars, nofVars);
+        double[] upperBoundsConstrValues = getUpperBoundConstraintValues(vars, nofVars);
         List<Double> penalties=new ArrayList<>();
         for (int i = 0; i < nofVars ; i++) {
-            double constraintValue=lowerBoundsConstrValues[i];
-            double penalty=(constraintValue>0)
-                    ? PEN_COEFF *Math.pow(constraintValue,2)
-                    : 0d;
-
-            penalties.add(penalty);
+            penalties.add(getPenalty(lowerBoundsConstrValues[i]));
+            penalties.add(getPenalty(upperBoundsConstrValues[i]));
         }
 
+        penalties.add(getPenalty(getSumOfVarsConstraintValue(vars, nofVars)));
+      //  System.out.println("penalties = " + penalties);
+
+
         return ListUtils.sumList(penalties);
+    }
+
+    private static double getPenalty(double constraintValue) {
+        return (constraintValue >0)
+                ? PEN_COEFF *Math.pow(constraintValue,2)
+                : 0d;
+    }
+
+    @NotNull
+    private static double[] getLowerBoundConstraintValues(Variables vars, int nofVars) {
+        double[] lowerBoundsConstrValues=new double[nofVars];
+        for (int i = 0; i < nofVars; i++) {
+            lowerBoundsConstrValues[i]= LB - vars.xList[i];
+        }
+        return lowerBoundsConstrValues;
+    }
+
+    @NotNull
+    private static double[] getUpperBoundConstraintValues(Variables vars, int nofVars) {
+        double[] lowerBoundsConstrValues = new double[nofVars];
+        for (int i = 0; i < nofVars; i++) {
+            lowerBoundsConstrValues[i] = vars.xList[i] - UB;
+        }
+        return lowerBoundsConstrValues;
+    }
+
+    @NotNull
+    private static double getSumOfVarsConstraintValue(Variables vars, int nofVars) {
+        double sum= ArrayUtil.sum(vars.xList);
+      //  List<Double> list = DoubleStream.of(vars.xList).boxed().collect(Collectors.toList());
+       // double sum=ListUtils.sumList(list);
+        return sum-SUM_MAX;
     }
 
     public ObjectiveFunctionGradient getGradient() {

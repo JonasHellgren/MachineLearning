@@ -1,7 +1,12 @@
 
 
-nytt problem där bounds blir relevant
-bounds NonLinearConjugateGradientOptimizer med penalty
+nytt problem där bounds blir relevant  x
+bounds NonLinearConjugateGradientOptimizer med penalty x
+TestSumOfThree funkar x
+assertions på TestSumOfThree
+getFiniteDiffGradient gör egen klass och återanvänd
+
+
 andra updateFormula NonLinearConjugateGradientOptimizer
 clean up
 speed test

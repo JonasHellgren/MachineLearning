@@ -15,8 +15,8 @@ public class TestSumOfThree {
 
     public static final double DELTA = 1.0e-1;
     public static final int NOF_EVAL_MAX = 10_000;
-    public static final double RELATIVE_THRESHOLD = 1e-5;
-    public static final double ABSOLUTE_THRESHOLD = 1e-5;
+    public static final double RELATIVE_THRESHOLD = 1e-10;
+    public static final double ABSOLUTE_THRESHOLD = 1e-10;
     public static final double EPS = 1e-10;
     double[] initialGuess = {0.5,0.5,0.5};
 
@@ -26,11 +26,11 @@ public class TestSumOfThree {
         System.out.println("value(new double[] {0,0,0}) = "
                 + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{0, 0, 0}));
 
-        System.out.println("value(new double[] {.66, 0.33, 0}) = "
-                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.66, 0.33, 0}));
+        System.out.println("value(new double[] {.45, 0.45, 0}) = "
+                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.45, 0.45, 0}));
 
-        System.out.println("value(new double[] {.66, -0.33, 0}) = "
-                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.66, -0.33, 0}));
+        System.out.println("value(new double[] {.77, 0.33, 0}) = "
+                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.77, 0.33, 0}));
 
     }
 
@@ -46,7 +46,6 @@ public class TestSumOfThree {
                         GoalType.MINIMIZE,
                         new InitialGuess(initialGuess));
         printAndAssert(optimum);
-
         printOptimizerStats(optimizer);
     }
 
