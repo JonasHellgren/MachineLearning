@@ -6,8 +6,9 @@ TestSumOfThree funkar x
 assertions på TestSumOfThree  x
 mindre styve barriär funktion x
 speed test x
-getFiniteDiffGradient gör egen klass och återanvänd
-andra ex problem
+getFiniteDiffGradient gör egen klass och återanvänd  x
+annat ex problem  x
 clean up
+getLowerBoundConstraintValues etc till helper klass
 andra updateFormula NonLinearConjugateGradientOptimizer
 
