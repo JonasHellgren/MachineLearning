@@ -1,12 +1,13 @@
 package gradient_optimization;
 
-import gradient_optimization.one_dim.OneDimLine;
 import gradient_optimization.one_dim.SumOfThree;
 import org.apache.commons.math3.optim.*;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,27 +16,25 @@ public class TestSumOfThree {
 
     public static final double DELTA = 1.0e-1;
     public static final int NOF_EVAL_MAX = 10_000;
-    public static final double RELATIVE_THRESHOLD = 1e-10;
-    public static final double ABSOLUTE_THRESHOLD = 1e-10;
-    public static final double EPS = 1e-10;
+    public static final double EPS = 1e-7;
+    public static final double RELATIVE_THRESHOLD = EPS;
+    public static final double ABSOLUTE_THRESHOLD = EPS;
+    public static final double[] OPT_POINT = {0, 0, 1.0};
+
     double[] initialGuess = {0.5,0.5,0.5};
 
+
     @Test
-    public void givenPoint000_thenZeroObj() {
+    public void givenPoint001_thenMinuesTwoObj() {
         SumOfThree sumOfThree=new SumOfThree();
-        System.out.println("value(new double[] {0,0,0}) = "
-                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{0, 0, 0}));
+        double value = sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{0, 0, 1});
+        System.out.println("value(new double[] {0,0,1}) = " + value);
 
-        System.out.println("value(new double[] {.45, 0.45, 0}) = "
-                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.45, 0.45, 0}));
-
-        System.out.println("value(new double[] {.77, 0.33, 0}) = "
-                + sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{.77, 0.33, 0}));
-
+        Assert.assertEquals(-2,value,DELTA);
     }
 
     @Test
-    public void givenLine_thenZeroIsOptimum() {
+    public void givenNonCorrectGradient_thenWrongOptimum() {
         MultivariateOptimizer optimizer = getMultivariateOptimizer();
         SumOfThree sumOfThree=new SumOfThree();
 
@@ -45,10 +44,10 @@ public class TestSumOfThree {
                         sumOfThree.getGradient(),
                         GoalType.MINIMIZE,
                         new InitialGuess(initialGuess));
-        printAndAssert(optimum);
+        printFoundPoint(optimum);
         printOptimizerStats(optimizer);
+        Assert.assertFalse(Arrays.equals(OPT_POINT, optimum.getPointRef()));
     }
-
 
 
     @Test
@@ -61,13 +60,14 @@ public class TestSumOfThree {
                         sumOfThree.getFiniteDiffGradient(EPS),
                         GoalType.MINIMIZE,
                         new InitialGuess(initialGuess));
-        printAndAssert(optimum);
+        printFoundPoint(optimum);
         printOptimizerStats(optimizer);
-
+        Assert.assertArrayEquals(OPT_POINT, optimum.getPointRef(), DELTA);
     }
 
 
     @Test
+    @Ignore("Bound does not work")
     public void givenLineFiniteDiffGradientBounds_thenZeroIsOptimum() {
         MultivariateOptimizer optimizer = getMultivariateOptimizer();
         SumOfThree sumOfThree=new SumOfThree();
@@ -82,7 +82,7 @@ public class TestSumOfThree {
                         GoalType.MINIMIZE,
                       //  bounds,  //gives MathUnsupportedOperationException
                         new InitialGuess(initialGuess));
-        printAndAssert(optimum);
+        printFoundPoint(optimum);
         printOptimizerStats(optimizer);
 
     }
@@ -99,10 +99,8 @@ public class TestSumOfThree {
                 new SimpleValueChecker(RELATIVE_THRESHOLD, ABSOLUTE_THRESHOLD));
     }
 
-    private static void printAndAssert(PointValuePair optimum) {
+    private static void printFoundPoint(PointValuePair optimum) {
         System.out.println("optimum.getPointRef() = " + Arrays.toString(optimum.getPointRef()));
-        double x=optimum.getPointRef()[0];
-        System.out.println("x = " + x);
     }
 
 }

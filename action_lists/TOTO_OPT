@@ -3,11 +3,11 @@
 nytt problem där bounds blir relevant  x
 bounds NonLinearConjugateGradientOptimizer med penalty x
 TestSumOfThree funkar x
-assertions på TestSumOfThree
+assertions på TestSumOfThree  x
+mindre styve barriär funktion
 getFiniteDiffGradient gör egen klass och återanvänd
-
-
-andra updateFormula NonLinearConjugateGradientOptimizer
+andra ex problem
 clean up
 speed test
-svårare målfunktion
+andra updateFormula NonLinearConjugateGradientOptimizer
+

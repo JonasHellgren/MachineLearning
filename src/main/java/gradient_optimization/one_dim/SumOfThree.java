@@ -2,19 +2,15 @@ package gradient_optimization.one_dim;
 
 import common.ArrayUtil;
 import common.ListUtils;
-import common.MathUtils;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 public class SumOfThree {
     public static final double A0 = -0, A1=-1, A2=-2;
-    public static final double PEN_COEFF = Math.pow(10,5);
+    public static final double PEN_COEFF = Math.pow(10,3);
     public static final double LB = 0, UB = 1;
     public static final double SUM_MAX = 1;
 
