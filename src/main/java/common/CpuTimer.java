@@ -13,6 +13,10 @@ public class CpuTimer {
     long absoluteProgress;
     float relativeProgress;
 
+    public CpuTimer() {
+        this(Long.MAX_VALUE);
+    }
+
     public CpuTimer(long timeBudgetMillis) {
         this.timeBudgetMillis = timeBudgetMillis;
         reset();

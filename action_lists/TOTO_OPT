@@ -4,10 +4,10 @@ nytt problem där bounds blir relevant  x
 bounds NonLinearConjugateGradientOptimizer med penalty x
 TestSumOfThree funkar x
 assertions på TestSumOfThree  x
-mindre styve barriär funktion
+mindre styve barriär funktion x
+speed test x
 getFiniteDiffGradient gör egen klass och återanvänd
 andra ex problem
 clean up
-speed test
 andra updateFormula NonLinearConjugateGradientOptimizer
 

@@ -10,12 +10,17 @@ import java.util.List;
 
 public class SumOfThree {
     public static final double A0 = -0, A1=-1, A2=-2;
-    public static final double PEN_COEFF = Math.pow(10,3);
     public static final double LB = 0, UB = 1;
     public static final double SUM_MAX = 1;
 
-    static class Variables {
+        static class Variables {
         public double[] xList;
+    }
+
+    public  double penCoeff = 1.0e1;
+
+    public SumOfThree(double penCoeff) {
+        this.penCoeff = penCoeff;
     }
 
     public ObjectiveFunction getObjectiveFunction() {
@@ -34,7 +39,7 @@ public class SumOfThree {
      * the constraint is violated (i.e., ci(vars) > 0)
      */
 
-    private static double getPenalty(Variables vars) {
+    private  double getPenalty(Variables vars) {
         int nofVars=vars.xList.length;
 
         double[] lowerBoundsConstrValues = getLowerBoundConstraintValues(vars, nofVars);
@@ -52,9 +57,9 @@ public class SumOfThree {
         return ListUtils.sumList(penalties);
     }
 
-    private static double getPenalty(double constraintValue) {
+    private  double getPenalty(double constraintValue) {
         return (constraintValue >0)
-                ? PEN_COEFF *Math.pow(constraintValue,2)
+                ? penCoeff *Math.pow(constraintValue,2)
                 : 0d;
     }
 
