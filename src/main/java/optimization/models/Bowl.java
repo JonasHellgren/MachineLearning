@@ -1,5 +1,6 @@
 package optimization.models;
 
+import optimization.helpers.FiniteDiffGradientFactory;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 
@@ -21,29 +22,9 @@ public class Bowl {
         });
     }
 
-    /**
-     * https://en.wikipedia.org/wiki/Finite_difference
-     */
     public ObjectiveFunctionGradient getFiniteDiffGradient(double eps) {
-        return new ObjectiveFunctionGradient(point -> {
-            double[] gradient = new double[point.length];
-            double[] forwardPerturbedPoints = new double[point.length];
-            double[] backwardPerturbedPoints = new double[point.length];
-            ObjectiveFunction function=getObjectiveFunction();
-            System.arraycopy(point, 0, forwardPerturbedPoints, 0, point.length);
-            System.arraycopy(point, 0, backwardPerturbedPoints, 0, point.length);
-
-            for (int i = 0; i < point.length; i++) {
-                backwardPerturbedPoints[i] -= eps;
-                forwardPerturbedPoints[i] += eps;
-                double fBackward = function.getObjectiveFunction().value(backwardPerturbedPoints);
-                double fCenter = function.getObjectiveFunction().value(point);
-                double fForward = function.getObjectiveFunction().value(forwardPerturbedPoints);
-                gradient[i] = 0.5*(fForward - fCenter) / eps+0.5*(fCenter-fBackward) / eps;
-            }
-
-            return gradient;
-        });
+        FiniteDiffGradientFactory finiteDiffGradient = new FiniteDiffGradientFactory(getObjectiveFunction(), eps);
+        return finiteDiffGradient.getFiniteDiffGradient();
     }
 
 }

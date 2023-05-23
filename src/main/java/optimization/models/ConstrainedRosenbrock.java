@@ -2,6 +2,7 @@ package optimization.models;
 
 import common.ListUtils;
 import optimization.helpers.BarrierFunctions;
+import optimization.helpers.BoundConstraints;
 import optimization.helpers.FiniteDiffGradientFactory;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
@@ -24,9 +25,11 @@ public class ConstrainedRosenbrock {
     }
 
     BarrierFunctions barrier;
+    FiniteDiffGradientFactory finiteDiffGradient;
 
-    public ConstrainedRosenbrock(double penCoeff) {
+    public ConstrainedRosenbrock(double penCoeff, double eps) {
         this.barrier = new BarrierFunctions(penCoeff, "quad");
+        this.finiteDiffGradient = new FiniteDiffGradientFactory(getObjectiveFunction(), eps);
     }
 
     public ObjectiveFunction getObjectiveFunction() {
@@ -48,8 +51,8 @@ public class ConstrainedRosenbrock {
 
     private double getPenalty(Variables vars) {
         int nofVars = vars.xList.length;
-        double[] lowerBoundsConstrValues = getLowerBoundConstraintValues(vars, nofVars);
-        double[] upperBoundsConstrValues = getUpperBoundConstraintValues(vars, nofVars);
+        double[] lowerBoundsConstrValues = BoundConstraints.getLowerBoundConstraintValues(vars.xList, LB_ARR);
+        double[] upperBoundsConstrValues = BoundConstraints.getUpperBoundConstraintValues(vars.xList, UB_ARR);
         List<Double> penalties = new ArrayList<>();
         for (int i = 0; i < nofVars; i++) {
             penalties.add(barrier.process(lowerBoundsConstrValues[i]));
@@ -59,21 +62,7 @@ public class ConstrainedRosenbrock {
         return ListUtils.sumList(penalties);
     }
 
-    private static double[] getLowerBoundConstraintValues(Variables vars, int nofVars) {
-        double[] lowerBoundsConstrValues = new double[nofVars];
-        for (int i = 0; i < nofVars; i++) {
-            lowerBoundsConstrValues[i] = LB_ARR[i] - vars.xList[i];
-        }
-        return lowerBoundsConstrValues;
-    }
 
-    private static double[] getUpperBoundConstraintValues(Variables vars, int nofVars) {
-        double[] lowerBoundsConstrValues = new double[nofVars];
-        for (int i = 0; i < nofVars; i++) {
-            lowerBoundsConstrValues[i] = vars.xList[i] - UB_ARR[i];
-        }
-        return lowerBoundsConstrValues;
-    }
 
     private static double getSumOfVarsSquaredConstraintValue(Variables vars) {
         double x = vars.xList[0], y = vars.xList[1];
@@ -81,8 +70,7 @@ public class ConstrainedRosenbrock {
         return sumSquares - 2;
     }
 
-    public ObjectiveFunctionGradient getFiniteDiffGradient(double eps) {
-        FiniteDiffGradientFactory finiteDiffGradient = new FiniteDiffGradientFactory(getObjectiveFunction(), eps);
+    public ObjectiveFunctionGradient getFiniteDiffGradient() {
         return finiteDiffGradient.getFiniteDiffGradient();
     }
 

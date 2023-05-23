@@ -17,7 +17,6 @@ import java.util.Arrays;
 public class TestOneDimLine {
 
     public static final double DELTA = 1.0e-1;
-    public static final double EPSILON = 1e-10;
     public static final int NOF_EVAL_MAX = 1000;
     public static final double RELATIVE_THRESHOLD = 1e-1;
     public static final double ABSOLUTE_THRESHOLD = 1e-2;
@@ -25,22 +24,14 @@ public class TestOneDimLine {
 
     @Test
     public void givenLine_thenZeroIsOptimum() {
-        MultivariateOptimizer optimizer = getMultivariateOptimizer();
         OneDimLine line=new OneDimLine();
-        PointValuePair optimum =
-                optimizer.optimize(new MaxEval(NOF_EVAL_MAX),
-                        line.getObjectiveFunction(),
-                        line.getGradient(),
-                        GoalType.MINIMIZE,
-                        new InitialGuess(initialGuess));
-        printAndAssert(optimum);
-    }
+        MultivariateOptimizer optimizer =
+                TestHelper.getConjugateGradientOptimizer(RELATIVE_THRESHOLD,ABSOLUTE_THRESHOLD);
+        PointValuePair optimum = TestHelper.gradientOptimize(
+                optimizer,line.getObjectiveFunction(),line.getGradient(),
+                initialGuess, NOF_EVAL_MAX);
 
-    @NotNull
-    private static MultivariateOptimizer getMultivariateOptimizer() {
-        return new NonLinearConjugateGradientOptimizer(
-                NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
-                new SimpleValueChecker(RELATIVE_THRESHOLD, ABSOLUTE_THRESHOLD));
+        printAndAssert(optimum);
     }
 
     private static void printAndAssert(PointValuePair optimum) {

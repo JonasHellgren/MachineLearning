@@ -8,7 +8,7 @@ mindre styve barriär funktion x
 speed test x
 getFiniteDiffGradient gör egen klass och återanvänd  x
 annat ex problem  x
-clean up
-getLowerBoundConstraintValues etc till helper klass
+TestHelper x
+clean up  x
 andra updateFormula NonLinearConjugateGradientOptimizer
 

@@ -3,8 +3,13 @@ package optimization.helpers;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 
+/**
+ * https://en.wikipedia.org/wiki/Finite_difference
+ */
+
 public class FiniteDiffGradientFactory {
 
+    public static final double ONE_DIV_TWO = 0.5;
     ObjectiveFunction objectiveFunction;
     double eps;
 
@@ -28,7 +33,7 @@ public class FiniteDiffGradientFactory {
                 double fBackward = function.getObjectiveFunction().value(backwardPerturbedPoints);
                 double fCenter = function.getObjectiveFunction().value(point);
                 double fForward = function.getObjectiveFunction().value(forwardPerturbedPoints);
-                gradient[i] = 0.5*(fForward - fCenter) / eps+0.5*(fCenter-fBackward) / eps;
+                gradient[i] = ONE_DIV_TWO*(fForward - fCenter) / eps+ ONE_DIV_TWO *(fCenter-fBackward) / eps;
             }
 
             return gradient;

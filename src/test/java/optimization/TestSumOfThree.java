@@ -35,7 +35,7 @@ public class TestSumOfThree {
 
     @Test
     public void givenPoint001_thenMinuesTwoObj() {
-        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF);
+        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF,EPS);
         double value = sumOfThree.getObjectiveFunction().getObjectiveFunction().value(new double[]{0, 0, 1});
         System.out.println("value(new double[] {0,0,1}) = " + value);
 
@@ -44,75 +44,60 @@ public class TestSumOfThree {
 
     @Test
     public void givenNonCorrectGradient_thenWrongOptimum() {
-        MultivariateOptimizer optimizer = getMultivariateOptimizer();
-        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF);
-        PointValuePair optimum = gradientOptimize(optimizer, sumOfThree.getObjectiveFunction(), sumOfThree.getWrongGradient());
-        printFoundPoint(optimum);
-        printOptimizerStats(optimizer);
+        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF,EPS);
+        MultivariateOptimizer optimizer =
+                TestHelper.getConjugateGradientOptimizer(RELATIVE_THRESHOLD,ABSOLUTE_THRESHOLD);
+        PointValuePair optimum = TestHelper.gradientOptimize(
+                optimizer,sumOfThree.getObjectiveFunction(),sumOfThree.getWrongGradient(),
+                initialGuess, NOF_EVAL_MAX);
+
+        TestHelper.printPointValuePair(optimum);
+        TestHelper.printOptimizerStats(optimizer);
         Assert.assertFalse(Arrays.equals(OPT_POINT, optimum.getPointRef()));
     }
 
 
     @Test
     public void givenCorrectGradient_thenCorrectOptimum() {
-        MultivariateOptimizer optimizer = getMultivariateOptimizer();
-        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF);
+        MultivariateOptimizer optimizer =
+                TestHelper.getConjugateGradientOptimizer(RELATIVE_THRESHOLD,ABSOLUTE_THRESHOLD);
+        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF,EPS);
         PointValuePair optimum = null;
         CpuTimer timer=new CpuTimer();
         int nofCalls = 1000;
         for (int i = 0; i < nofCalls; i++) {
-            optimum = gradientOptimize(optimizer, sumOfThree.getObjectiveFunction(), sumOfThree.getFiniteDiffGradient(EPS));
+            optimum = TestHelper.gradientOptimize(
+                    optimizer,sumOfThree.getObjectiveFunction(),sumOfThree.getFiniteDiffGradient(),
+                    initialGuess, NOF_EVAL_MAX);
         }
 
         System.out.println("time per optimize (ms) = " + (double) timer.absoluteProgress()/(double) nofCalls);
-        printFoundPoint(optimum);
-        printOptimizerStats(optimizer);
-        Assert.assertArrayEquals(OPT_POINT, optimum.getPointRef(), DELTA);
-    }
+        TestHelper.printPointValuePair(optimum);
 
-    private PointValuePair gradientOptimize(MultivariateOptimizer optimizer,
-                                            ObjectiveFunction objFunction,
-                                            ObjectiveFunctionGradient gradientFunction) {
-        return optimizer.optimize(new MaxEval(NOF_EVAL_MAX),
-                objFunction, gradientFunction,
-                GoalType.MINIMIZE,
-                new InitialGuess(initialGuess));
+        TestHelper.printOptimizerStats(optimizer);
+        Assert.assertArrayEquals(OPT_POINT, optimum.getPointRef(), DELTA);
     }
 
 
     @Test
     @Ignore("Bound does not work")
     public void givenLineFiniteDiffGradientBounds_thenZeroIsOptimum() {
-        MultivariateOptimizer optimizer = getMultivariateOptimizer();
-        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF);
+        MultivariateOptimizer optimizer =
+                TestHelper.getConjugateGradientOptimizer(RELATIVE_THRESHOLD,ABSOLUTE_THRESHOLD);
+        SumOfThree sumOfThree=new SumOfThree(PEN_COEFF,EPS);
         double[] lowerBounds = {-1.0, -1.0,-1.0};
         double[] upperBounds = {10.0, 10.0,10.0};
         PointValuePair optimum =
                 optimizer.optimize(new MaxEval(NOF_EVAL_MAX),
                         sumOfThree.getObjectiveFunction(),
-                        sumOfThree.getFiniteDiffGradient(EPS),
+                        sumOfThree.getFiniteDiffGradient(),
                         GoalType.MINIMIZE,
                         new SimpleBounds(lowerBounds, upperBounds),  //gives MathUnsupportedOperationException
                         new InitialGuess(initialGuess));
-        printFoundPoint(optimum);
-        printOptimizerStats(optimizer);
+        TestHelper.printPointValuePair(optimum);
+        TestHelper.printOptimizerStats(optimizer);
 
     }
 
-    private static void printOptimizerStats(MultivariateOptimizer optimizer) {
-        System.out.println("optimizer.getEvaluations() = " + optimizer.getEvaluations());
-        System.out.println("optimizer.getIterations() = " + optimizer.getIterations());
-    }
-
-    @NotNull
-    private static MultivariateOptimizer getMultivariateOptimizer() {
-        return new NonLinearConjugateGradientOptimizer(
-                NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
-                new SimpleValueChecker(RELATIVE_THRESHOLD, ABSOLUTE_THRESHOLD));
-    }
-
-    private static void printFoundPoint(PointValuePair optimum) {
-        System.out.println("optimum.getPointRef() = " + Arrays.toString(optimum.getPointRef()));
-    }
 
 }

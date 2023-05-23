@@ -10,6 +10,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Easy to extend thanks to functionTable
+ */
+
 @Log
 public class BarrierFunctions {
 
@@ -57,7 +61,7 @@ public class BarrierFunctions {
         }
 
         if (fcnList.size()==0) {
-            throw  new RuntimeException("No matching rule, using backup");
+            throw  new RuntimeException("No matching rule");
         }
     }
 

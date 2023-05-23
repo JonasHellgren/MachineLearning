@@ -2,12 +2,15 @@ package optimization.models;
 
 import common.ArrayUtil;
 import common.ListUtils;
+import optimization.helpers.BoundConstraints;
 import optimization.helpers.FiniteDiffGradientFactory;
 import optimization.helpers.BarrierFunctions;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,9 +33,11 @@ public class SumOfThree {
     }
 
     BarrierFunctions barrier;
+    FiniteDiffGradientFactory finiteDiffGradient;
 
-    public SumOfThree(double penCoeff) {
+    public SumOfThree(double penCoeff, double eps) {
         this.barrier = new BarrierFunctions(penCoeff, "quad");
+        this.finiteDiffGradient = new FiniteDiffGradientFactory(getObjectiveFunction(), eps);
     }
 
     public ObjectiveFunction getObjectiveFunction() {
@@ -53,8 +58,8 @@ public class SumOfThree {
 
     private double getPenalty(Variables vars) {
         int nofVars = vars.xList.length;
-        double[] lowerBoundsConstrValues = getLowerBoundConstraintValues(vars, nofVars);
-        double[] upperBoundsConstrValues = getUpperBoundConstraintValues(vars, nofVars);
+        double[] lowerBoundsConstrValues = BoundConstraints.getLowerBoundConstraintValues(vars.xList, LB);
+        double[] upperBoundsConstrValues = BoundConstraints.getUpperBoundConstraintValues(vars.xList, UB);
         List<Double> penalties = new ArrayList<>();
         for (int i = 0; i < nofVars; i++) {
             penalties.add(barrier.process(lowerBoundsConstrValues[i]));
@@ -62,22 +67,6 @@ public class SumOfThree {
         }
         penalties.add(barrier.process(getSumOfVarsConstraintValue(vars)));
         return ListUtils.sumList(penalties);
-    }
-
-    private static double[] getLowerBoundConstraintValues(Variables vars, int nofVars) {
-        double[] lowerBoundsConstrValues = new double[nofVars];
-        for (int i = 0; i < nofVars; i++) {
-            lowerBoundsConstrValues[i] = LB - vars.xList[i];
-        }
-        return lowerBoundsConstrValues;
-    }
-
-    private static double[] getUpperBoundConstraintValues(Variables vars, int nofVars) {
-        double[] lowerBoundsConstrValues = new double[nofVars];
-        for (int i = 0; i < nofVars; i++) {
-            lowerBoundsConstrValues[i] = vars.xList[i] - UB;
-        }
-        return lowerBoundsConstrValues;
     }
 
     private static double getSumOfVarsConstraintValue(Variables vars) {
@@ -89,8 +78,7 @@ public class SumOfThree {
         return new ObjectiveFunctionGradient(point -> new double[]{A0, A1, A2});
     }
 
-    public ObjectiveFunctionGradient getFiniteDiffGradient(double eps) {
-        FiniteDiffGradientFactory finiteDiffGradient = new FiniteDiffGradientFactory(getObjectiveFunction(), eps);
+    public ObjectiveFunctionGradient getFiniteDiffGradient() {
         return finiteDiffGradient.getFiniteDiffGradient();
     }
 

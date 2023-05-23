@@ -21,6 +21,12 @@ import java.util.Arrays;
 public class TestCircleFitting {
 
 
+    public static final double REL_TRES_HOLD = 1e-10;
+    public static final double ABS_TRES_HOLD = 1e-10;
+    public static final double[] INITIAL_GUESS = {98.680, 47.345};
+    public static final int NOF_EVAL_MAX = 1000;
+    public static final double DELTA = 1.0e-1;
+
     @Test
     public void testCircleFitting2() {
 
@@ -31,22 +37,18 @@ public class TestCircleFitting {
         circle.addPoint(110.0, -20.0);
         circle.addPoint(35.0, 15.0);
         circle.addPoint(45.0, 97.0);
-        MultivariateOptimizer optimizer = new NonLinearConjugateGradientOptimizer(
-                NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
-                new SimpleValueChecker(1e-10, 1e-10));
-        PointValuePair optimum =
-                optimizer.optimize(new MaxEval(1000),
-                        circle.getObjectiveFunction(),
-                        circle.getObjectiveFunctionGradient(),
-                        GoalType.MINIMIZE,
-                        new InitialGuess(new double[]{98.680, 47.345}));
-        System.out.println("optimum = " + Arrays.toString(optimum.getPoint()));
+        MultivariateOptimizer optimizer=TestHelper.getConjugateGradientOptimizer(REL_TRES_HOLD, ABS_TRES_HOLD);
+        PointValuePair optimum = TestHelper.gradientOptimize(
+                optimizer,circle.getObjectiveFunction(),circle.getObjectiveFunctionGradient(),
+                INITIAL_GUESS, NOF_EVAL_MAX);
 
+        TestHelper.printPointValuePair(optimum);
+        TestHelper.printOptimizerStats(optimizer);
 
         Vector2D center = new Vector2D(optimum.getPointRef()[0], optimum.getPointRef()[1]);
-        Assert.assertEquals(69.960161753, circle.getRadius(center), 1.0e-1);
-        Assert.assertEquals(96.075902096, center.getX(), 1.0e-1);
-        Assert.assertEquals(48.135167894, center.getY(), 1.0e-1);
+        Assert.assertEquals(69.960161753, circle.getRadius(center), DELTA);
+        Assert.assertEquals(96.075902096, center.getX(), DELTA);
+        Assert.assertEquals(48.135167894, center.getY(), DELTA);
     }
 
 }
