@@ -21,19 +21,19 @@ public class NStepTDHelper {
     private static final int TAU = 0;
 
     @Builder.Default
-    public double alpha= ALPHA;
+    public double alpha= ALPHA;  //learning rate
     @Builder.Default
-    public int n= N;
+    public int n= N;   //nof steps between state being updated and state bootstrapped
     @Builder.Default
-    public int T= MAX_VALUE;
+    public int T= MAX_VALUE;  //time for termination
     @Builder.Default
-    public int tau= TAU;
+    public int tau= TAU;  //the state visited at this time gets updated
     @Builder.Default
-    public Map<Integer,StepReturn> timeReturnMap= TIME_RETURN_MAP;
+    public Map<Integer,StepReturn> timeReturnMap= TIME_RETURN_MAP; //in episode experienced retures
     @Builder.Default
-    public Map<Integer,Integer> statesMap= TIME_STATE_MAP;
+    public Map<Integer,Integer> statesMap= TIME_STATE_MAP; //in episode visited states
     @NonNull  public Counter episodeCounter;
-    @NonNull  public Counter timeCounter;
+    @NonNull  public Counter timeCounter;  //time step
 
     @Override
     public String toString () {

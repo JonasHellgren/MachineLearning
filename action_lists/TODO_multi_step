@@ -5,7 +5,8 @@ TestAgentTabular  x
 TestNstepTD x
 NStepTDHelper x
 låta PROB_RANDOM minska med episod x
-snygga upp TestNstepTD
+snygga upp TestNstepTD  x
+ScalerLogarithmic   x
 klass NStepEpisodeRunner
 påvisa större n ger snabbare konvergens
 
