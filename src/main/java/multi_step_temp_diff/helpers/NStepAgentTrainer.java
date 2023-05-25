@@ -2,6 +2,8 @@ package multi_step_temp_diff.helpers;
 
 import common.*;
 import lombok.Builder;
+import lombok.NonNull;
+import lombok.Setter;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.models.AgentTabular;
@@ -21,6 +23,7 @@ import java.util.function.Predicate;
  */
 
 @Builder
+@Setter
 public class NStepAgentTrainer {
 
     private static final double ALPHA = 0.5;
@@ -28,8 +31,8 @@ public class NStepAgentTrainer {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
 
-    static EnvironmentInterface environment;
-    static AgentInterface agent;
+    @NonNull EnvironmentInterface environment;
+    @NonNull AgentInterface agent;
 
     @Builder.Default
     double alpha= ALPHA;
@@ -75,7 +78,7 @@ public class NStepAgentTrainer {
 
     }
 
-    private Map<Integer,Double> getStateValueMap() {
+    public Map<Integer,Double> getStateValueMap() {
         AgentInfo agentInfo=new AgentInfo(agent);
         return agentInfo.stateValueMap(environment.stateSet());
     }

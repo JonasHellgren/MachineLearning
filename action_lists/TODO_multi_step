@@ -8,7 +8,8 @@ låta PROB_RANDOM minska med episod x
 snygga upp TestNstepTD  x
 ScalerLogarithmic   x
 klass NStepEpisodeRunner  x
-påvisa större n ger snabbare konvergens
+TestNStepEpisodeRunner  x
+påvisa större n ger snabbare konvergens  x
 
 
 AgentNetwork
