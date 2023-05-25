@@ -23,7 +23,7 @@ import java.util.List;
 @Log
 public class TestNstepTD {
     private static final double DELTA = 0.1;
-    private static final double PROB_RANDOM = 1.0;
+    private static final double PROB_RANDOM = 0.2;
     private static final int START_STATE = 0;
     EnvironmentInterface environment;
     AgentInterface agent;
@@ -36,7 +36,7 @@ public class TestNstepTD {
         environment = new ForkEnvironment();
         agent = AgentTabular.newDefault();
         agentCasted = (AgentTabular) agent;       //to access class specific methods
-        int nofEpisodes = 5;
+        int nofEpisodes = 1000;
 
         helper = NStepTDHelper.builder()
                 .n(3)
@@ -54,13 +54,13 @@ public class TestNstepTD {
             h.reset();
             do {
                 if (h.timeCounter.getCount() < h.T) {
-                 //   log.info("Stepping");
                     final int action = agent.chooseAction(PROB_RANDOM);
                     stepReturn = environment.step(agent.getState(), action);
 
                     if (agent.getState()==5) {
                         System.out.println("action = " + action);
                         System.out.println("stepReturn = " + stepReturn);
+                        System.out.println("agentCasted.getPairs() = " + agentCasted.getPairs());
                     }
 
                     h.statesMap.put(h.timeCounter.getCount(),agent.getState());
@@ -70,7 +70,6 @@ public class TestNstepTD {
                 }
 
                 h.tau = h.timeCounter.getCount() - h.n + 1;
-               // System.out.println("h A: " + h);
 
                 if (h.tau >= 0) {
                     double G = sumOfRewards(h);
@@ -78,10 +77,7 @@ public class TestNstepTD {
                     final int stateToUpdate = h.statesMap.get(h.tau);
                     double valuePresent = agent.readValue(stateToUpdate);
                     agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
-
-                   // System.out.println("stateToUpdate = " + stateToUpdate);
                 }
-             //   System.out.println("h B: " + h);
                 h.timeCounter.increase();
             } while (h.tau != h.T - 1);
             System.out.println("h after episode = " + h);

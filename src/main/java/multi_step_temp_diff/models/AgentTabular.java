@@ -4,6 +4,7 @@ import common.Conditionals;
 import common.ListUtils;
 import common.RandUtils;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
@@ -13,6 +14,7 @@ import org.apache.commons.math3.util.Pair;
 import java.util.*;
 
 @Builder
+@Getter
 public class AgentTabular implements AgentInterface {
 
     static final double DISCOUNT_FACTOR=1;
@@ -27,6 +29,8 @@ public class AgentTabular implements AgentInterface {
     Map<Integer,Double> memory=MEMORY;
     @Builder.Default
     final double discountFactor=DISCOUNT_FACTOR;
+    @Builder.Default
+    private List<Pair<Integer, Double>> pairs=new ArrayList<>();
 
     public static AgentTabular newDefault() {
         return AgentTabular.builder()
@@ -65,7 +69,7 @@ public class AgentTabular implements AgentInterface {
 
     @Override
     public int chooseBestAction(int state) {
-        List<Pair<Integer, Double>> pairs=new ArrayList<>();
+        pairs.clear();
         for (int a:environment.actionSet()) {
             StepReturn sr=environment.step(state,a);
             double value=sr.reward+discountFactor*readValue(sr.newState);

@@ -68,11 +68,11 @@ public class ForkEnvironment implements EnvironmentInterface {
 
     @Override
     public Set<Integer> actionSet() {
-        return IntStream.range(0, NOF_ACTIONS - 1).boxed().collect(Collectors.toSet());
+        return IntStream.range(0, NOF_ACTIONS).boxed().collect(Collectors.toSet());
     }
 
     @Override
     public Set<Integer> stateSet() {
-        return IntStream.range(0, NOF_STATES - 1).boxed().collect(Collectors.toSet());
+        return IntStream.range(0, NOF_STATES).boxed().collect(Collectors.toSet());
     }
 }

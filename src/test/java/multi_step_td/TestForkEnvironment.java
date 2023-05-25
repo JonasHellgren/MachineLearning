@@ -38,6 +38,12 @@ public class TestForkEnvironment {
     }
 
     @Test
+    public void whenActionIs0Or1InState6_thenState11() {
+        stepReturn=environment.step(6, RandUtils.getRandomIntNumber(0,2));
+        Assert.assertEquals(11,stepReturn.newState);
+    }
+
+    @Test
     public void whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell() {
         stepReturn=environment.step(14, RandUtils.getRandomIntNumber(0,2));
         Assert.assertEquals(15,stepReturn.newState);
