@@ -43,7 +43,6 @@ public class AgentTabular implements AgentInterface {
         return state;
     }
 
-
     @Override
     public double getDiscountFactor() {
         return discountFactor;

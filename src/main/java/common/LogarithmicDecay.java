@@ -15,23 +15,18 @@ import lombok.ToString;
 public class LogarithmicDecay {
 
     private final double outStart, outEnd, timeEnd;
-
     private double C, gamma;
-
 
     public LogarithmicDecay(double outStart, double outEnd, double timeEnd) {
         this.outStart = outStart;
         this.outEnd = outEnd;
         this.timeEnd = timeEnd;
-
-        defineParameters(outStart, outEnd);
+        defineParameters();
     }
 
-    private void defineParameters(double outStart, double outEnd) {
+    private void defineParameters() {
         this.C=Math.log(outStart);
-        System.out.println("Math.max(Double.MIN_VALUE, outEnd)/Math.exp(C) = " + Math.max(Double.MIN_VALUE, outEnd) / Math.exp(C));
         double minusGammaTime=Math.log(Math.max(1e-20, outEnd)/Math.exp(C));
-        System.out.println("minusGammaTime = " + minusGammaTime);
         this.gamma=-minusGammaTime/this.timeEnd;
     }
 
