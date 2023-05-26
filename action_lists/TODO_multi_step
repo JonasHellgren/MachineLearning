@@ -11,7 +11,14 @@ klass NStepEpisodeRunner  x
 TestNStepEpisodeRunner  x
 påvisa större n ger snabbare konvergens  x
 
-input vec length = antal states
+input vec length = antal states  x
+
 AgentNetwork
+AgentHelper  x
+AgentForkNeural learn
+NStepNeuralAgentTrainer - getMiniBatch
+NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch
+NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch
+
 TestAgentNetwork
 Annan miljö - tex Maze

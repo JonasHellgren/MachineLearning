@@ -2,7 +2,7 @@ package multi_step_td;
 
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
-import multi_step_temp_diff.models.AgentTabular;
+import multi_step_temp_diff.models.AgentForkTabular;
 import multi_step_temp_diff.models.ForkEnvironment;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;
@@ -16,13 +16,13 @@ public class TestTestAgentTabular {
     private static final double PROB_RANDOM1 = 0.1;
     EnvironmentInterface environment;
     AgentInterface agent;
-    AgentTabular agentCasted;
+    AgentForkTabular agentCasted;
 
     @Before
     public void init() {
         environment=new ForkEnvironment();
-        agent= AgentTabular.newDefault();
-        agentCasted=(AgentTabular) agent;       //to access class specific methods
+        agent= AgentForkTabular.newDefault();
+        agentCasted=(AgentForkTabular) agent;       //to access class specific methods
     }
 
     @Test
@@ -37,32 +37,35 @@ public class TestTestAgentTabular {
 
     @Test
     public void givenDefaultAgent_whenRandomAction_then0or1() {
-        Assert.assertTrue(agent.chooseRandomAction()==0 || agent.chooseRandomAction()==1);
+        final int action = agent.chooseRandomAction();
+        Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState14_whenBestAction_then0or1() {
-        agent=AgentTabular.builder().environment(environment).state(14).build();
-        Assert.assertTrue(agent.chooseRandomAction()==0 || agent.chooseRandomAction()==1);
+        agent= AgentForkTabular.builder().environment(environment).state(14).build();
+        final int action = agent.chooseRandomAction();
+        Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState9_whenBestAction_then1() {
-        agent=AgentTabular.builder().environment(environment).state(9).build();
-        Assert.assertTrue(agent.chooseRandomAction()==0 || agent.chooseRandomAction()==1);
+        agent= AgentForkTabular.builder().environment(environment).state(9).build();
+        final int action = agent.chooseRandomAction();
+        Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState5ValueIn7Is10_whenBestAction_then1() {
-        agent=AgentTabular.builder().environment(environment).state(5).build();
-        AgentTabular agentCasted=(AgentTabular) agent;
+        agent= AgentForkTabular.builder().environment(environment).state(5).build();
+        AgentForkTabular agentCasted=(AgentForkTabular) agent;
         agentCasted.writeValue(7,1d);
         Assert.assertEquals(1,agent.chooseBestAction(agent.getState()));
     }
 
     @Test
     public void givenState5ValueIn7Is10_whenActionZeroRandProb_then1() {
-        agent=AgentTabular.builder().environment(environment).state(5).build();
+        agent= AgentForkTabular.builder().environment(environment).state(5).build();
         agentCasted.writeValue(7,1d);
         Assert.assertEquals(1,agent.chooseAction(PROB_RANDOM));
     }

@@ -1,7 +1,8 @@
 package multi_step_td;
 
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
-import multi_step_temp_diff.models.AgentTabular;
+import multi_step_temp_diff.models.AgentForkNeural;
+import multi_step_temp_diff.models.AgentForkTabular;
 import multi_step_temp_diff.models.ForkEnvironment;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +13,10 @@ public class TestNStepNeuralAgentTrainer {
 
     @Before
     public void init() {
+        AgentForkNeural agent= AgentForkNeural.newDefault();
         trainer= NStepNeuralAgentTrainer.builder()
-                .nofEpisodes(5)
-                .environment(new ForkEnvironment()).agent(AgentTabular.newDefault())
+                .nofEpisodes(5).agentNeural(agent)
+                .environment(new ForkEnvironment()).agent(AgentForkTabular.newDefault())
                 .build();
     }
 

@@ -2,7 +2,7 @@ package multi_step_td;
 
 import common.ListUtils;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.models.AgentTabular;
+import multi_step_temp_diff.models.AgentForkTabular;
 import multi_step_temp_diff.models.ForkEnvironment;
 import org.jcodec.common.Assert;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class TestNStepTabularAgentTrainer {
     public void init() {
         trainer= NStepTabularAgentTrainer.builder()
                 .nofEpisodes(50)
-                .environment(new ForkEnvironment()).agent(AgentTabular.newDefault())
+                .environment(new ForkEnvironment()).agent(AgentForkTabular.newDefault())
                 .build();
     }
 

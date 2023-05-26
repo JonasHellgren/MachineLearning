@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
-import multi_step_temp_diff.models.AgentTabular;
+import multi_step_temp_diff.models.AgentForkTabular;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 
@@ -95,7 +95,7 @@ public class NStepTabularAgentTrainer {
         }
         final int stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
-        AgentTabular agentCasted = (AgentTabular) agent;       //to access class specific methods
+        AgentForkTabular agentCasted = (AgentForkTabular) agent;       //to access class specific methods
         agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
     }
 
