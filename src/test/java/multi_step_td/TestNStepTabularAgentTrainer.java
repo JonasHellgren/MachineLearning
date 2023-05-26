@@ -31,12 +31,12 @@ public class TestNStepTabularAgentTrainer {
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         trainer.train();
         Map<Integer,Double> mapOneStep= trainer.getStateValueMap();
-        double avgErrOne=avgError(mapOneStep);
+        double avgErrOne=TestHelper.avgError(mapOneStep);
 
         trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
         trainer.train();
         Map<Integer,Double> mapTreeSteps= trainer.getStateValueMap();
-        double avgErrThree=avgError(mapTreeSteps);
+        double avgErrThree=TestHelper.avgError(mapTreeSteps);
 
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);
 
@@ -44,14 +44,7 @@ public class TestNStepTabularAgentTrainer {
 
     }
 
-    private double avgError(Map<Integer, Double> mapOneStep) {
-        List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(mapOneStep.get(0)-ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(mapOneStep.get(7)-ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(mapOneStep.get(6)-ForkEnvironment.R_HELL));
-        errors.add(Math.abs(mapOneStep.get(11)-ForkEnvironment.R_HELL));
-        return ListUtils.findAverage(errors).orElseThrow();
-    }
+
 
 
 }

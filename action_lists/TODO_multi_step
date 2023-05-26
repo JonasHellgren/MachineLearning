@@ -19,6 +19,9 @@ AgentForkNeural learn  x
 NStepNeuralAgentTrainer - getMiniBatch  x
 NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch  x
 NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch x
+studera några episoder så verkligen korrekt experience
+ev target network
+setValuesInExperiencesInMiniBatch - discount hänsyn
 
 clean up
 generisc state

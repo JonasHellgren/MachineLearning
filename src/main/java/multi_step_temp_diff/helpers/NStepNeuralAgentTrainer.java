@@ -5,15 +5,13 @@ import common.Counter;
 import common.ListUtils;
 import common.LogarithmicDecay;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.AgentNeuralInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.interfaces.ReplayBufferInterface;
-import multi_step_temp_diff.models.AgentForkTabular;
-import multi_step_temp_diff.models.NstepExperience;
-import multi_step_temp_diff.models.ReplayBufferNStep;
-import multi_step_temp_diff.models.StepReturn;
+import multi_step_temp_diff.models.*;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -25,6 +23,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 @Builder
+@Getter
 public class NStepNeuralAgentTrainer {
 
 
@@ -33,11 +32,12 @@ public class NStepNeuralAgentTrainer {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
     private static final int BATCH_SIZE = 30;
-    private static final int NOF_ITERATIONS = 10;
+    private static final int NOF_ITERATIONS = 1;
+    private static final double PROB_START = 0.9;
+    private static final double PROB_END = 0.01;
 
     @NonNull
     EnvironmentInterface environment;
-    @NonNull AgentInterface agent;
     @NonNull AgentNeuralInterface agentNeural;
 
     @Builder.Default
@@ -47,9 +47,9 @@ public class NStepNeuralAgentTrainer {
     @Builder.Default
     int nofEpisodes= NOF_EPIS;
     @Builder.Default
-    double probStart=0.5;
+    double probStart= PROB_START;
     @Builder.Default
-    double probEnd=0.01;
+    double probEnd= PROB_END;
     @Builder.Default
     int startState= START_STATE;
     @Builder.Default
@@ -75,7 +75,7 @@ public class NStepNeuralAgentTrainer {
         BiPredicate<Integer,Integer> isAtTimeJustBeforeTermination = (tau,tTerm) -> tau == tTerm-1;
 
         while (!h.episodeCounter.isExceeded()) {
-            agent.setState(startState);
+            agentNeural.setState(startState);
             h.reset();
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
@@ -86,10 +86,7 @@ public class NStepNeuralAgentTrainer {
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             List<NstepExperience> miniBatch=getMiniBatch(buffer);
-            System.out.println("h.episodeCounter.getCount() = " + h.episodeCounter.getCount());
-            miniBatch.forEach(System.out::println);
             trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
-
             h.episodeCounter.increase();
         }
     }
@@ -109,7 +106,7 @@ public class NStepNeuralAgentTrainer {
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
         for (NstepExperience exp: miniBatch) {
             exp.value= (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards+ agentNeural.readValue(exp.stateToBackupFrom)
+                    ? exp.sumOfRewards+ agentNeural.readValue(exp.stateToBackupFrom)  //todo ta hänsyn till discount
                     : exp.sumOfRewards;
         }
     }
@@ -118,7 +115,7 @@ public class NStepNeuralAgentTrainer {
         return buffer;
     }
 
-    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t, tTerm) -> t<=tTerm;
+    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t, tTerm) -> t<tTerm; //<=
 
     private NstepExperience getExperienceAtTimeTau(NStepTDHelper h) {
         double sumOfRewards = sumOfRewardsFromTimeToUpdatePlusOne(h);
@@ -127,14 +124,14 @@ public class NStepNeuralAgentTrainer {
         Optional<Integer> stateAheadToBackupFrom=Optional.empty();
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
             stateAheadToBackupFrom = Optional.of(h.timeReturnMap.get(h.tau + h.n).newState);
-            backupValue=Optional.of( Math.pow(agent.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom.get()));
+           // backupValue=Optional.of( Math.pow(agentNeural.getDiscountFactor(), h.n) * agentNeural.readValue(stateAheadToBackupFrom.get()));
         }
 
         final int stateToUpdate = h.statesMap.get(h.tau);
-        double valuePresent = agent.readValue(stateToUpdate);
-        AgentForkTabular agentCasted = (AgentForkTabular) agent;       //to access class specific methods
-        double sumOfRewardsPlusBackupValue=sumOfRewards+backupValue.orElse(0d);
-        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (sumOfRewardsPlusBackupValue - valuePresent));
+       // double valuePresent = agentNeural.readValue(stateToUpdate);
+       // AgentForkNeural agentCasted = (AgentForkNeural) agentNeural;       //to access class specific methods
+        //double sumOfRewardsPlusBackupValue=sumOfRewards+backupValue.orElse(0d);
+       // agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (sumOfRewardsPlusBackupValue - valuePresent));
 
         return  NstepExperience.builder()
                 .stateToUpdate(stateToUpdate).sumOfRewards(sumOfRewards)
@@ -146,10 +143,10 @@ public class NStepNeuralAgentTrainer {
 
 
     private void chooseActionStepAndStoreExperience(NStepTDHelper h, LogarithmicDecay scaler) {
-        final int action = agent.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
-        StepReturn stepReturn = environment.step(agent.getState(), action);
-        h.statesMap.put(h.timeCounter.getCount(),agent.getState());
-        agent.updateState(stepReturn);
+        final int action = agentNeural.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
+        StepReturn stepReturn = environment.step(agentNeural.getState(), action);
+        h.statesMap.put(h.timeCounter.getCount(),agentNeural.getState());
+        agentNeural.updateState(stepReturn);
         h.timeReturnMap.put(h.timeCounter.getCount()+1, stepReturn);
         h.T = (stepReturn.isNewStateTerminal) ? h.timeCounter.getCount() + 1 : h.T;
     }
@@ -158,7 +155,7 @@ public class NStepNeuralAgentTrainer {
         Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + h.n, h.T));
         List<Double> returnTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            returnTerms.add(Math.pow(agent.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
+            returnTerms.add(Math.pow(agentNeural.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(returnTerms);
     }
