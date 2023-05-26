@@ -18,7 +18,8 @@ TestAgentForkNeural  x
 AgentForkNeural learn  x
 NStepNeuralAgentTrainer - getMiniBatch  x
 NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch  x
-NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch
+NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch x
+
 clean up
 generisc state
 

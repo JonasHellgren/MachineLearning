@@ -15,7 +15,7 @@ public class ForkEnvironment implements EnvironmentInterface {
     public static final double R_HELL = -10;
     public static final double R_MOVE = 0;
     public static final int NOF_ACTIONS = 2;
-    public static final int NOF_STATES = 15;
+    public static final int NOF_STATES = 16;
 
     @Override
     public StepReturn step(int state,int action) {

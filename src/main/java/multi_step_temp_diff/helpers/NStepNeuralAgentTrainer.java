@@ -7,6 +7,7 @@ import common.LogarithmicDecay;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.AgentInterface;
+import multi_step_temp_diff.interfaces.AgentNeuralInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.interfaces.ReplayBufferInterface;
 import multi_step_temp_diff.models.AgentForkTabular;
@@ -32,11 +33,12 @@ public class NStepNeuralAgentTrainer {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
     private static final int BATCH_SIZE = 30;
+    private static final int NOF_ITERATIONS = 10;
 
     @NonNull
     EnvironmentInterface environment;
     @NonNull AgentInterface agent;
-    @NonNull AgentInterface agentNeural;
+    @NonNull AgentNeuralInterface agentNeural;
 
     @Builder.Default
     double alpha= ALPHA;
@@ -52,6 +54,8 @@ public class NStepNeuralAgentTrainer {
     int startState= START_STATE;
     @Builder.Default
     int batchSize= BATCH_SIZE;
+    @Builder.Default
+    int nofTrainingIterations= NOF_ITERATIONS;
 
     ReplayBufferInterface buffer;
 
@@ -82,9 +86,17 @@ public class NStepNeuralAgentTrainer {
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             List<NstepExperience> miniBatch=getMiniBatch(buffer);
-
+            System.out.println("h.episodeCounter.getCount() = " + h.episodeCounter.getCount());
+            miniBatch.forEach(System.out::println);
+            trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
 
             h.episodeCounter.increase();
+        }
+    }
+
+    private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
+        for (int i = 0; i < nofTrainingIterations ; i++) {
+            agentNeural.learn(miniBatch);
         }
     }
 
@@ -97,7 +109,7 @@ public class NStepNeuralAgentTrainer {
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
         for (NstepExperience exp: miniBatch) {
             exp.value= (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards+ agent.readValue(exp.stateToBackupFrom)
+                    ? exp.sumOfRewards+ agentNeural.readValue(exp.stateToBackupFrom)
                     : exp.sumOfRewards;
         }
     }
