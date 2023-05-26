@@ -4,8 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.helpers.AgentHelper;
-import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
+import multi_step_temp_diff.interfaces.AgentNeuralInterface;
+import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 
 import java.util.*;
@@ -20,10 +21,10 @@ import java.util.*;
 
 @Builder
 @Getter
-public class AgentForkNeural implements AgentInterface {
+public class AgentForkNeural implements AgentNeuralInterface {
 
     static final double DISCOUNT_FACTOR=1;
-    static final ForkNeuralValueMemory<Integer> MEMORY=
+    static final NetworkMemoryInterface<Integer> MEMORY=
             new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN);
     private static final double VALUE_IF_NOT_PRESENT = 0;
     private static final int START_STATE = 0;
@@ -33,7 +34,7 @@ public class AgentForkNeural implements AgentInterface {
     @Builder.Default
     int state= START_STATE;
     @Builder.Default
-    ForkNeuralValueMemory<Integer>  memory=MEMORY;
+    NetworkMemoryInterface<Integer>  memory=MEMORY;
     @Builder.Default
     final double discountFactor=DISCOUNT_FACTOR;
     AgentHelper helper;
@@ -77,6 +78,9 @@ public class AgentForkNeural implements AgentInterface {
         return memory.read(state);
     }
 
+    public void learn(List<NstepExperience> miniBatch) {
+        memory.learn(miniBatch);
+    }
 
     private void lazyInitHelper() {
         if (Objects.isNull(helper)) {

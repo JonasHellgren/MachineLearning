@@ -18,14 +18,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class TestForkNeuralValueMemory {
-
-
     private static final double DELTA = 2;
-    private static final int NOF_ITERATIONS = 100;
+    private static final int NOF_ITERATIONS = 1000;
     private static final int BATCH_LENGTH = 30;
     private static final int BUFFER_SIZE = 100;
     NetworkMemoryInterface<Integer> memory;
-
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
     @Before
@@ -40,8 +37,8 @@ public class TestForkNeuralValueMemory {
         ReplayBufferNStep buffer=ReplayBufferNStep.builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        printStateValues();
-        assertAllStates(value);
+        TestHelper.printStateValues(memory);
+        TestHelper.assertAllStates(memory,value,DELTA);
     }
 
     @Test
@@ -50,8 +47,8 @@ public class TestForkNeuralValueMemory {
         ReplayBufferNStep buffer=ReplayBufferNStep.builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        printStateValues();
-        assertAllStates(value);
+        TestHelper.printStateValues(memory);
+        TestHelper.assertAllStates(memory,value,DELTA);
     }
 
     @Test
@@ -60,8 +57,8 @@ public class TestForkNeuralValueMemory {
         ReplayBufferNStep buffer=ReplayBufferNStep.builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        printStateValues();
-        assertAllStates(value);
+        TestHelper.printStateValues(memory);
+        TestHelper.assertAllStates(memory,value,DELTA);
     }
 
     @Test
@@ -70,7 +67,7 @@ public class TestForkNeuralValueMemory {
         ReplayBufferNStep buffer=ReplayBufferNStep.builder()
                 .buffer(createBatchOddEven(valueOdd,valueEven)).build();
         train(buffer);
-        printStateValues();
+        TestHelper.printStateValues(memory);
         assertAllStatesOddEven(valueOdd,valueEven);
     }
 
@@ -80,12 +77,6 @@ public class TestForkNeuralValueMemory {
         }
     }
 
-
-    private void assertAllStates(double value) {
-        for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
-            Assert.assertEquals(value, memory.read(si), DELTA);
-        }
-    }
 
     private void assertAllStatesOddEven(double valueOdd, double valueEven) {
         for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
@@ -123,12 +114,6 @@ public class TestForkNeuralValueMemory {
         return batch;
     }
 
-    private void printStateValues() {
-        Map<Integer,Double> stateValues=new HashMap<>();
-        for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
-            stateValues.put(si,memory.read(si));
-        }
-        System.out.println("stateValues = " + stateValues);
-    }
+
 
 }

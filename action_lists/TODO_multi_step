@@ -12,13 +12,13 @@ TestNStepEpisodeRunner  x
 påvisa större n ger snabbare konvergens  x
 
 input vec length = antal states  x
-
-AgentNetwork
 AgentHelper  x
-AgentForkNeural learn
+AgentNetwork x
+TestAgentForkNeural  x
+AgentForkNeural learn  x
 NStepNeuralAgentTrainer - getMiniBatch
 NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch
 NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch
 
-TestAgentNetwork
+
 Annan miljö - tex Maze

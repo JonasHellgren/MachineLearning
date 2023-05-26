@@ -24,9 +24,9 @@ public class TestNStepNeuralAgentTrainer {
     public void when_then() {
         trainer.train();
 
-        System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
+       // System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
 
-        System.out.println("trainer.getStateValueMap() = " + trainer.getStateValueMap());
+       // System.out.println("trainer.getStateValueMap() = " + trainer.getStateValueMap());
 
     }
 }
