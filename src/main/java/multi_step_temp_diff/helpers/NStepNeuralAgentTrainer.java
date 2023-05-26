@@ -8,13 +8,17 @@ import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
+import multi_step_temp_diff.interfaces.ReplayBufferInterface;
 import multi_step_temp_diff.models.AgentTabular;
+import multi_step_temp_diff.models.NstepExperience;
+import multi_step_temp_diff.models.ReplayBufferNStep;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -45,6 +49,8 @@ public class NStepNeuralAgentTrainer {
     @Builder.Default
     int startState= START_STATE;
 
+    ReplayBufferInterface buffer;
+
     public void train() {
 
         NStepTDHelper h= NStepTDHelper.builder()
@@ -52,6 +58,7 @@ public class NStepNeuralAgentTrainer {
                 .episodeCounter(new Counter(0, nofEpisodes))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
+        buffer=ReplayBufferNStep.newDefault();
 
         LogarithmicDecay decayProb=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
         BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
@@ -71,11 +78,8 @@ public class NStepNeuralAgentTrainer {
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
 
-            System.out.println("h = " + h);
-
             h.episodeCounter.increase();
         }
-
 
     }
 
@@ -84,20 +88,34 @@ public class NStepNeuralAgentTrainer {
         return agentInfo.stateValueMap(environment.stateSet());
     }
 
+    public ReplayBufferInterface getBuffer() {
+        return buffer;
+    }
 
-    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t,tTerm) -> t<=tTerm;
+    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t, tTerm) -> t<=tTerm;
 
     private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper h) {
-        double G = sumOfRewardsFromTimeToUpdatePlusOne(h);
+        double sumOfRewards = sumOfRewardsFromTimeToUpdatePlusOne(h);
+        Optional<Double> backupValue=Optional.empty();
         int tBackUpFrom=h.tau + h.n;
+        Optional<Integer> stateAheadToBackupFrom=Optional.empty();
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
-            int stateAheadToBackupFrom = h.timeReturnMap.get(h.tau + h.n).newState;
-            G = G + Math.pow(agent.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
+            stateAheadToBackupFrom = Optional.of(h.timeReturnMap.get(h.tau + h.n).newState);
+            backupValue=Optional.of( Math.pow(agent.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom.get()));
         }
+
         final int stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
         AgentTabular agentCasted = (AgentTabular) agent;       //to access class specific methods
-        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
+        double sumOfRewardsPlusBackupValue=sumOfRewards+backupValue.orElse(0d);
+        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (sumOfRewardsPlusBackupValue - valuePresent));
+
+        buffer.addExperience(NstepExperience.builder()
+                .stateToUpdate(stateToUpdate).sumOfRewards(sumOfRewards)
+                .stateToBackupFrom(stateAheadToBackupFrom.orElse(NstepExperience.STATE_IF_NOT_PRESENT))
+                .isBackupStatePresent(stateAheadToBackupFrom.isPresent())
+                .build());
+
     }
 
 

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TestReplayBuffer {
 
@@ -23,7 +24,8 @@ public class TestReplayBuffer {
 
     @Test
     public void whenAddingOneExperience_thenExists() {
-        buffer.addExperience(NstepExperience.builder().stateToUpdate(0).sumOfRewards(0d).stateToBackupFrom(3).build());
+        buffer.addExperience(NstepExperience.builder().stateToUpdate(0).sumOfRewards(0d)
+                .stateToBackupFrom(3).isBackupStatePresent(true).build());
         System.out.println("buffer = " + buffer);
         Assert.assertEquals(1,buffer.size());
     }
@@ -34,7 +36,7 @@ public class TestReplayBuffer {
         for (int i = 0; i < 10 ; i++) {
             double sumOfRewards= RandUtils.getRandomDouble(0,10);
             buffer.addExperience(NstepExperience.builder()
-                    .stateToUpdate(i).sumOfRewards(sumOfRewards).stateToBackupFrom(i+ n)
+                    .stateToUpdate(i).sumOfRewards(sumOfRewards).stateToBackupFrom(i + n).isBackupStatePresent(true)
                     .build());
         }
 
