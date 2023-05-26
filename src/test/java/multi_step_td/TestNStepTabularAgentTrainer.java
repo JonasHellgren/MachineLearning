@@ -1,8 +1,7 @@
 package multi_step_td;
 
 import common.ListUtils;
-import common.MathUtils;
-import multi_step_temp_diff.helpers.NStepAgentTrainer;
+import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.models.AgentTabular;
 import multi_step_temp_diff.models.ForkEnvironment;
 import org.jcodec.common.Assert;
@@ -13,16 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TestNStepAgentTrainer {
+public class TestNStepTabularAgentTrainer {
 
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 3;
-    NStepAgentTrainer trainer;
+    NStepTabularAgentTrainer trainer;
 
     @Before
     public void init() {
-
-        trainer= NStepAgentTrainer.builder()
+        trainer= NStepTabularAgentTrainer.builder()
                 .nofEpisodes(50)
                 .environment(new ForkEnvironment()).agent(AgentTabular.newDefault())
                 .build();

@@ -11,6 +11,6 @@ klass NStepEpisodeRunner  x
 TestNStepEpisodeRunner  x
 påvisa större n ger snabbare konvergens  x
 
-
 AgentNetwork
 TestAgentNetwork
+Annan miljö - tex Maze

@@ -1,9 +1,11 @@
 package multi_step_temp_diff.helpers;
 
-import common.*;
+import common.Conditionals;
+import common.Counter;
+import common.ListUtils;
+import common.LogarithmicDecay;
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.Setter;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.models.AgentTabular;
@@ -17,21 +19,17 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-/**
- * https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
- * https://lcalem.github.io/blog/2018/11/19/sutton-chap07-nstep
- */
-
 @Builder
-@Setter
-public class NStepAgentTrainer {
+public class NStepNeuralAgentTrainer {
+
 
     private static final double ALPHA = 0.5;
     private static final int N = 3;
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
 
-    @NonNull EnvironmentInterface environment;
+    @NonNull
+    EnvironmentInterface environment;
     @NonNull AgentInterface agent;
 
     @Builder.Default
@@ -55,7 +53,7 @@ public class NStepAgentTrainer {
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
 
-        LogarithmicDecay scaler=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
+        LogarithmicDecay decayProb=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
         BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
         BiFunction<Integer,Integer,Integer> timeForUpdate = (t, n) -> t-n+1;
         Predicate<Integer> isUpdatePossible = (tau) -> tau>=0;
@@ -66,12 +64,15 @@ public class NStepAgentTrainer {
             h.reset();
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
-                        chooseActionStepAndStoreExperience(h, scaler));
+                        chooseActionStepAndStoreExperience(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
                         updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
+
+            System.out.println("h = " + h);
+
             h.episodeCounter.increase();
         }
 
@@ -117,8 +118,6 @@ public class NStepAgentTrainer {
         }
         return ListUtils.sumDoubleList(returnTerms);
     }
-
-
 
 
 }

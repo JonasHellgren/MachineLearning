@@ -1,20 +1,18 @@
-package multi_step_td;
+package multi_step_temp_diff.helpers;
 
 import common.*;
-import lombok.extern.java.Log;
-import multi_step_temp_diff.helpers.AgentInfo;
-import multi_step_temp_diff.helpers.NStepTDHelper;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Setter;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.models.AgentTabular;
-import multi_step_temp_diff.models.ForkEnvironment;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -24,56 +22,69 @@ import java.util.function.Predicate;
  * https://lcalem.github.io/blog/2018/11/19/sutton-chap07-nstep
  */
 
-@Log
-public class TestNstepTD {
-    private static final int START_STATE = 0;
-    private static final int NOF_EPISODES = 20;
-    private static final double P_RAND_START = 0.99d,P_RAND_END = 0.05d;
-    private static final double ALPHA = 0.9;
+@Builder
+@Setter
+public class NStepTabularAgentTrainer {
+
+    private static final double ALPHA = 0.5;
     private static final int N = 3;
-    EnvironmentInterface environment;
-    AgentInterface agent;
+    private static final int NOF_EPIS = 100;
+    private static final int START_STATE = 0;
 
-    @Before
-    public void init() {
-        environment = new ForkEnvironment();
-        agent = AgentTabular.newDefault();
-    }
+    @NonNull EnvironmentInterface environment;
+    @NonNull AgentInterface agent;
 
-    @Test
-    public void fewEpisodesThreeStepper() {
-        NStepTDHelper h = NStepTDHelper.builder()
-                .alpha(ALPHA).n(N)
-                .episodeCounter(new Counter(0, NOF_EPISODES))
+    @Builder.Default
+    double alpha= ALPHA;
+    @Builder.Default
+    int nofStepsBetweenUpdatedAndBackuped= N;
+    @Builder.Default
+    int nofEpisodes= NOF_EPIS;
+    @Builder.Default
+    double probStart=0.5;
+    @Builder.Default
+    double probEnd=0.01;
+    @Builder.Default
+    int startState= START_STATE;
+
+    public void train() {
+
+        NStepTDHelper h= NStepTDHelper.builder()
+                .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
+                .episodeCounter(new Counter(0, nofEpisodes))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
 
-        LogarithmicDecay scaler=new LogarithmicDecay(P_RAND_START, P_RAND_END,NOF_EPISODES);
-        BiPredicate<Integer,Integer> isNotAtTerminationTime = (t,tTerm) -> t<tTerm;
-        BiFunction<Integer,Integer,Integer> timeForUpdate = (t,n) -> t-n+1;
+        LogarithmicDecay decayProb=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
+        BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
+        BiFunction<Integer,Integer,Integer> timeForUpdate = (t, n) -> t-n+1;
         Predicate<Integer> isUpdatePossible = (tau) -> tau>=0;
         BiPredicate<Integer,Integer> isAtTimeJustBeforeTermination = (tau,tTerm) -> tau == tTerm-1;
 
         while (!h.episodeCounter.isExceeded()) {
-            agent.setState(START_STATE);
+            agent.setState(startState);
             h.reset();
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
-                    chooseActionStepAndStoreExperience(h, scaler));
+                        chooseActionStepAndStoreExperience(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
-                    updateStateValueForStatePresentAtTimeTau(h));
+                        updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             h.episodeCounter.increase();
         }
 
-        AgentInfo agentInfo=new AgentInfo(agent);
-        System.out.println("stateValueMap = " + agentInfo.stateValueMap(environment.stateSet()));
 
     }
 
-    BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t,tTerm) -> t<=tTerm;
+    public Map<Integer,Double> getStateValueMap() {
+        AgentInfo agentInfo=new AgentInfo(agent);
+        return agentInfo.stateValueMap(environment.stateSet());
+    }
+
+
+    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t,tTerm) -> t<=tTerm;
 
     private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper h) {
         double G = sumOfRewardsFromTimeToUpdatePlusOne(h);
@@ -84,7 +95,6 @@ public class TestNstepTD {
         }
         final int stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
-
         AgentTabular agentCasted = (AgentTabular) agent;       //to access class specific methods
         agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
     }
@@ -107,5 +117,8 @@ public class TestNstepTD {
         }
         return ListUtils.sumDoubleList(returnTerms);
     }
+
+
+
 
 }
