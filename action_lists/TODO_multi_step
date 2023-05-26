@@ -16,9 +16,11 @@ AgentHelper  x
 AgentNetwork x
 TestAgentForkNeural  x
 AgentForkNeural learn  x
-NStepNeuralAgentTrainer - getMiniBatch
-NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch
+NStepNeuralAgentTrainer - getMiniBatch  x
+NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch  x
 NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch
+clean up
+generisc state
 
 
 Annan miljö - tex Maze

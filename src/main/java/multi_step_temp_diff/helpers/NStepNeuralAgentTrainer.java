@@ -31,6 +31,7 @@ public class NStepNeuralAgentTrainer {
     private static final int N = 3;
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
+    private static final int BATCH_SIZE = 30;
 
     @NonNull
     EnvironmentInterface environment;
@@ -49,6 +50,8 @@ public class NStepNeuralAgentTrainer {
     double probEnd=0.01;
     @Builder.Default
     int startState= START_STATE;
+    @Builder.Default
+    int batchSize= BATCH_SIZE;
 
     ReplayBufferInterface buffer;
 
@@ -78,14 +81,25 @@ public class NStepNeuralAgentTrainer {
                         buffer.addExperience(getExperienceAtTimeTau(h)));
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
+            List<NstepExperience> miniBatch=getMiniBatch(buffer);
+
 
             h.episodeCounter.increase();
         }
     }
 
-    public Map<Integer,Double> getStateValueMap() {
-        AgentInfo agentInfo=new AgentInfo(agent);
-        return agentInfo.stateValueMap(environment.stateSet());
+    private List<NstepExperience> getMiniBatch(ReplayBufferInterface buffer) {
+        List<NstepExperience> miniBatch=buffer.getMiniBatch(batchSize);
+        setValuesInExperiencesInMiniBatch(miniBatch);
+        return miniBatch;
+    }
+
+    private void setValuesInExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
+        for (NstepExperience exp: miniBatch) {
+            exp.value= (exp.isBackupStatePresent)
+                    ? exp.sumOfRewards+ agent.readValue(exp.stateToBackupFrom)
+                    : exp.sumOfRewards;
+        }
     }
 
     public ReplayBufferInterface getBuffer() {
