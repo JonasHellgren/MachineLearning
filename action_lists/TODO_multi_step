@@ -11,6 +11,7 @@ klass NStepEpisodeRunner  x
 TestNStepEpisodeRunner  x
 påvisa större n ger snabbare konvergens  x
 
+input vec length = antal states
 AgentNetwork
 TestAgentNetwork
 Annan miljö - tex Maze

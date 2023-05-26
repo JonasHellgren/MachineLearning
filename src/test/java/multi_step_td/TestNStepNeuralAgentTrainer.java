@@ -13,7 +13,7 @@ public class TestNStepNeuralAgentTrainer {
     @Before
     public void init() {
         trainer= NStepNeuralAgentTrainer.builder()
-                .nofEpisodes(50)
+                .nofEpisodes(5)
                 .environment(new ForkEnvironment()).agent(AgentTabular.newDefault())
                 .build();
     }
@@ -22,7 +22,7 @@ public class TestNStepNeuralAgentTrainer {
     public void when_then() {
         trainer.train();
 
-       // System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
+        System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
 
         System.out.println("trainer.getStateValueMap() = " + trainer.getStateValueMap());
 

@@ -17,6 +17,6 @@ public interface AgentInterface {
     double readValue(int state);
     double getDiscountFactor();
 
-  //  void writeMemory(State oldState, Integer Action, Double value);
-  //  double readMemory(State state, int Action);
+  //  void writeMemory(State oldState, Double value);
+  //  double readMemory(State state);
 }

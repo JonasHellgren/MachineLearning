@@ -35,6 +35,7 @@ public class NStepNeuralAgentTrainer {
     @NonNull
     EnvironmentInterface environment;
     @NonNull AgentInterface agent;
+    @NonNull AgentInterface agentNeural;
 
     @Builder.Default
     double alpha= ALPHA;
@@ -63,7 +64,7 @@ public class NStepNeuralAgentTrainer {
         LogarithmicDecay decayProb=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
         BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
         BiFunction<Integer,Integer,Integer> timeForUpdate = (t, n) -> t-n+1;
-        Predicate<Integer> isUpdatePossible = (tau) -> tau>=0;
+        Predicate<Integer> isPossibleToGetExperience = (tau) -> tau>=0;
         BiPredicate<Integer,Integer> isAtTimeJustBeforeTermination = (tau,tTerm) -> tau == tTerm-1;
 
         while (!h.episodeCounter.isExceeded()) {
@@ -73,14 +74,13 @@ public class NStepNeuralAgentTrainer {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
                         chooseActionStepAndStoreExperience(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
-                Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
-                        updateStateValueForStatePresentAtTimeTau(h));
+                Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
+                        buffer.addExperience(getExperienceAtTimeTau(h)));
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
 
             h.episodeCounter.increase();
         }
-
     }
 
     public Map<Integer,Double> getStateValueMap() {
@@ -94,7 +94,7 @@ public class NStepNeuralAgentTrainer {
 
     static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t, tTerm) -> t<=tTerm;
 
-    private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper h) {
+    private NstepExperience getExperienceAtTimeTau(NStepTDHelper h) {
         double sumOfRewards = sumOfRewardsFromTimeToUpdatePlusOne(h);
         Optional<Double> backupValue=Optional.empty();
         int tBackUpFrom=h.tau + h.n;
@@ -110,11 +110,11 @@ public class NStepNeuralAgentTrainer {
         double sumOfRewardsPlusBackupValue=sumOfRewards+backupValue.orElse(0d);
         agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (sumOfRewardsPlusBackupValue - valuePresent));
 
-        buffer.addExperience(NstepExperience.builder()
+        return  NstepExperience.builder()
                 .stateToUpdate(stateToUpdate).sumOfRewards(sumOfRewards)
                 .stateToBackupFrom(stateAheadToBackupFrom.orElse(NstepExperience.STATE_IF_NOT_PRESENT))
                 .isBackupStatePresent(stateAheadToBackupFrom.isPresent())
-                .build());
+                .build();
 
     }
 
