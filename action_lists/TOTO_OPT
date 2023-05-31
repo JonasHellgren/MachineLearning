@@ -10,5 +10,6 @@ getFiniteDiffGradient gör egen klass och återanvänd  x
 annat ex problem  x
 TestHelper x
 clean up  x
+getFiniteDiffGradient System.arraycopy skall vara inne i loop
 andra updateFormula NonLinearConjugateGradientOptimizer
 
