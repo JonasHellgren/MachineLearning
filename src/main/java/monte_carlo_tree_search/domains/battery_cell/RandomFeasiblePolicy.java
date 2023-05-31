@@ -1,12 +1,13 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
 import common.RandUtils;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.SimulationPolicyInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.util.List;
+import java.util.Set;
 
 public class RandomFeasiblePolicy  implements SimulationPolicyInterface<CellVariables, Integer> {
 
@@ -31,6 +32,11 @@ public class RandomFeasiblePolicy  implements SimulationPolicyInterface<CellVari
                 :randUtils.getRandomItemFromList(feasibleValueList);
         action.setValue(av);
         return action;
+    }
+
+    @Override
+    public Set<Integer> availableActionValues(StateInterface<CellVariables> state) {
+        throw new RuntimeException("Not implemented");
     }
 
 

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Setter
@@ -50,6 +51,7 @@ public class GridPanel extends JPanel {
                      List<Integer> ySet,
                      String xLabel,
                      String yLabel) {
+
         this(xSet,
                 ySet,
                 xLabel,
@@ -79,7 +81,6 @@ public class GridPanel extends JPanel {
         this.gridColor = gridColor;
         this.nofDecimals = nofDecimals;
         this.textCellValues = textCellValues;
-
         this.nofRows = ySet.size();
         this.nofColumns = xSet.size();
         this.cellSize = defineAndSetCellSize(relativeFrameSize);
@@ -92,13 +93,16 @@ public class GridPanel extends JPanel {
     public void setColorsAtCells() {
         double MIN_VALUE_BACKUP = -1d;
         double MAX_VALUE_BACKUP = 1d;
-        List<Double> doubleList = Arrays.stream(gridNumbers).flatMap(Arrays::stream).collect(Collectors.toList());
+        List<Double> doubleList0= Arrays.stream(gridNumbers).flatMap(Arrays::stream).collect(Collectors.toList());
+        List<Double> doubleList = doubleList0.stream().filter(n -> !Objects.isNull(n)).collect(Collectors.toList());
         double minValue = doubleList.stream().mapToDouble(Double::doubleValue).min().orElse(MIN_VALUE_BACKUP);
         double maxValue = doubleList.stream().mapToDouble(Double::doubleValue).max().orElse(MAX_VALUE_BACKUP);
 
         for (int y : ySet) {
             for (int x : xSet) {
-                double value = gridNumbers[getRowIdx(y)][getColIdx(x)];
+                double value = (Objects.isNull(gridNumbers[getRowIdx(y)][getColIdx(x)]))
+                                ? minValue
+                                : gridNumbers[getRowIdx(y)][getColIdx(x)];
                 double strength = (value - minValue) / (maxValue - minValue); //normalization
                 int rgb = Math.min((int) (strength * RBG_MAX), RBG_MAX);
                 setColorAtCell(x, y, new Color(rgb, rgb, rgb));

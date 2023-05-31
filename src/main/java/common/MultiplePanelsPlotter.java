@@ -2,7 +2,6 @@ package common;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.domains.battery_cell.PlotPanel;
 import org.jfree.data.xy.XYSeries;
 
 import javax.swing.*;

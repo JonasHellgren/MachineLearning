@@ -3,7 +3,7 @@ package monte_carlo_tree_search.swing;
 
 import lombok.Setter;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import swing.Position2D;
 import swing.ScaleLinear;
 

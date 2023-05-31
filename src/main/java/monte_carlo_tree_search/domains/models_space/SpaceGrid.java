@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.util.Pair;
 

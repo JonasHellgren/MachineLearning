@@ -231,13 +231,161 @@ NodeTerminal bort  x
 testMakeSelectedTerminal  bökar  x
 rewardOfStillInX2Y0IsBad bökar  x
 
+
 planutml nodes  x
 elevator miljö
 - ActionElevator  x
-- EnvironmentElevator
-- Få till olika antal tillgängliga actions beror på state - 2 om längst upp eller ner
-- TestEnvironmentElevator
+- EnvironmentElevator  x
+- TestEnvironmentElevator x
+- snygga upp StateElevator - predicate chaining/BiPredicate  - går ej x
+- ny klass NofPersonsWaitingUpdater  x
+- TestNofPersonsWaitingUpdater x
+- TestEnvironmentElevatorManyStepsUsingRules x
+- cleanup by list of Pair<Predicate, Double> x
+-giveRulePolicy_whenManyStepsWhenBottomAndStay_thenNoWaitingAndNoInElevatorAndFullSoE  x
+- runChargeSimulation till SoC=1  x
+- test som simulerar rules med waiting som poppsar upp ca var 20e steg  x
+- TestEnvironmentElevatorFailAndReward x
+- ElevatorPanelUpdater x
+ElevatorMctsOnlySearchRunner
+- ElevatorRunner  x
+- firstActionSelectionPolicy fullyRandom  x
+- bugg isPersonsEnteringElevator  x
+- studera space game etc - Test_5times15grid  - iterateFromX0Y2WithNoSimulationsAndRestrictedActionSetAfterDepth3 x
+- varför aldrig Defensive backup
+- TestSearchNoActionRestrictionNoSimulation  x
+ -TestSearchNoActionRestrictionSimulation  x
+ - whenAtBottomFloorAndPersonsWaitingFloor1_thenMoveToFloor1 - nodeRoot value = -0.05486583900680832 x
+  TestSearchActionRestrictionSimulation  - conditional branching x
+  - publica predicat public  x
+  - test låg SoE  x
+  ned vid bottom och upp top ger fail x
+  - TestEnvironmentElevatorFailAndReward - givenAtBottom_whenActionDown_thenFail  x
+  - BackupDefensive simulation  x
+  - skära av hopplös gren restricted action set  - får inte till det x
+  - krånglande tester  x
+  - few branches (averageNofChildrenPerNode is small) -> few iterations needed  x
+  - TestSearchActionRestrictionSimulation  bökar
+  -  alphaBackupDefensive -> alphaBackupDefensiveStep alpha BackupDefensiveSimulation  x
+  - ned vid bottom och upp top ger INTE fail  x
+  - förstå whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp x
+ -whenAtFloor3WaitingFloor1_thenManageMoveToFloor1 x
+- ElevatorSearchActionRestrictionRunner
+- nPersonsInElevator x
+- svårare testfall - med wait på floor3
+- färre builder settings i tester  x
+- koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping x
+- logga ovan  x
+- snygga till DecisionTableReader  x
+- fixa failade tester  x
+- WARNING: No matching rule, using backup. Speed = 0, pos = 28  BUGG??  x
+- varför skapas få noder  x
+- tester andra domäner  x
+- space Policy..  x
+- fler chart pole tester x
+- TestBackupModifier bökar  x
+- mer test i TestBackupModifier som visar defensive backup  x
+- TestMonteCarloControlledCharging bökar  x
+-  while (isNotLeaf(currentNode) && isNotAllChildrenTerminal(currentNode)) {  - > while true etc  x
+- infora tydiga tester runt isLeaf, isNonLeafNoFail, isNonLeafNail etc  x
+- ersätt i med räknare  x
+- WARNING: Escaped from eternal loop for selecting node  x
+- fimpa isExcludeChildrenThatNeverHaveBeenVisited  x
+- maxNofTestedActionsForBeingLeafFunction skall inte behövas  x
+- clean up MonteCarloTreeCreator  x
+- fimpa SelectedToTerminalFailConverter  x
+- clean up BackupModifier  x
+- snyggare testnamn x
+- använd ListUtils.discountedSum i backup modif  x
+- rename firstActionSelectionPolicy x
+- ytterligare test som visar hur root values sävnger in  x
+- ytterligare test, kombinera step och sim  x
+- bör inte alpha isf weifht ändras vid defensive  x
+-  discountFactor på samma sätt i sim och steps  x
+- Math.pow(nofVisitsForAction,nofVisitsExponent)  x
+- TestSimulationReturnsExtractor  x
+- doPrinting till samma klass  x
+- alphaBackupDefensiveSimulation skall veck  x
+- exception i mctCreator run x
+- MonteCarloTreeCreatorHelper  x
+- ActionSelector - förklara logik action set begränsning x
+- ta bort onödiga settings  x
 
+- PolicyRandomDirectionAfterFloorIfOkSoENotUpIfLowSoE x
+- TestSoELongValue x
+- BiFunction -> supplier i elevator policies  x
+- givenMultipleRandomStartState_whenSimulatingLowAndHighSoE_thenHighSoEShallGiveHigherValue x
+- fler tester TestElevatorStateValueMemory  x
+- TestElevatorMemoryTrainerHelper  x
+- träna minne sfa SoE - olika komb pos, nWait etc -  sämre låg SoE pga tvingas ladda x
+- testa ovan minne x
+- ElevatorSearchWithMemoryRunner funkar - jippi x
+- par tuning  x
+- snygga up Memory klasser - fixa kodduplicering  x
+- StateValueMemoryAbstract -  x
+- CartPoleMemoryTrainerHelper använda interface   x
+- Extrahera Simulator  x
+- createExperienceBuffer skall använda Simulator
+- RunCartPolePretrainedMemory settings  x
+- Extrahera Backuper  x
+- whenAtBottomFloorAndBadSoEAndWaitingFloor1_thenChargeAndMoveUp failar ibland
+
+- Ny miljö energy trading  x
+- StateEnergyTrading x
+- step x
+- test VariablesEnergyTrading  x
+- test EnvironmentEnergyTrading  x
+- PolicyRandom  x
+- TestSimulate  x
+- EnergyTradingRunner  x
+- EnergyTradingSearchRunner x
+- givenDefaultEnv_whenTimeIs7SoE0d7_thenBestActionIsSell strular  x
+- givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy  x
+- misssar sista action  x
+- EnergyTraderMemoryTrainer  x
+- EnergyTraderValueMemory x
+- TestEnergyTraderMemory  x
+- givenBuffer_whenTrainingMemory_thenCorrectExpectedValues  x
+- EnergyTradingSearchWithPresetMemoryRunner  x
+- getAverageValueError to abstract x
+- städa foldrar  x
+- varför fel trainmemory trader x
+- EnergyTradingAlphaZeroRunner - AlphaZero på EnergyTrading  x
+- fixa RunCartPoleAlphaZero  x
+- ReplayBufferValueSetter generic x
+- TestReplayBufferValueSetter  x
+- RunCartPoleAlphaZero vill inte komma igång ibland  x
+- få igång EnergyTradingAlphaZeroRunner x
+- EnergyTradingSearchRunner - hittar ej lösning  x
+- givenEnvWithCheapEnergyAtTime4_whenTimeIs4SoE0d5_thenBestActionIsBuy funkar ej själv  x
+- EnergyTradingAlphaZeroRunner konvergerar oftast x
+- bufferSize i EnergyTraderMemoryTrainer - inte i konstruktor  x
+- städa EnergyTradingAlphaZeroRunner  x
+- plotta return vs episode EnergyTradingAlphaZeroRunner  x
+
+- ny space bana för att testa defensive backup - 2+2 förgreningar  x
+- isDefensiveBackup påverkar ej  x
+- varför påverkar coefficientExploitationExploration branchning marginellt
+- snygga upp ReplayBufferValueSetter  x
+- städa klasser - classes  x
+- flytta write från MemoryInterface till NodeValueMemoryHashMap  x
+- <S> i classes  x
+- städa klasser - create tree  x
+- TestActionSelector  x
+- städa klasser - network training  x
+- städa klasser - helpers  x
+städa klasser - interfaces  x
+- plant uml dioagram  x
+- lära mig grad av log visa
+
+uppdateringa location planner:
+- applicableActionsInNewNode
+-  NodeInterface.newNotTerminal
+- loop i NodeSelector select() är långsam - fixa genom att node minns availableActions
+- ReplayBufferValueSetter fel i createReturns - skall vara discount på returns
+
+- ActionAbstract  -> ActionElevator
+- averageNofChildrenPerNode verkar inte stämma
 
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 

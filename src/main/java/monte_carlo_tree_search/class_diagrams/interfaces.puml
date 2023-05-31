@@ -1,0 +1,57 @@
+@startuml
+interface monte_carlo_tree_search.interfaces.MemoryTrainerInterface {
+~ ReplayBuffer<S,A> createExperienceBuffer(MonteCarloSimulator<S,A>,int)
+~ void trainMemory(NetworkMemoryInterface<S,A>,ReplayBuffer<S,A>)
+}
+abstract class monte_carlo_tree_search.interfaces.ActionIntegerAbstract {
++ void setValue(Integer)
++ Integer getValue()
++ Set<Integer> applicableActions()
++ Integer nonApplicableAction()
++ boolean isValid(Integer)
+}
+interface monte_carlo_tree_search.interfaces.SimulationPolicyInterface {
+~ ActionInterface<A> chooseAction(StateInterface<S>)
+~ Set<A> availableActionValues(StateInterface<S>)
+}
+interface monte_carlo_tree_search.interfaces.EnvironmentGenericInterface {
+~ StepReturnGeneric<S> step(ActionInterface<A>,StateInterface<S>)
+}
+interface monte_carlo_tree_search.interfaces.ReadableMemoryInterface {
+~ double read(StateInterface<S>)
+}
+interface monte_carlo_tree_search.interfaces.MapMemoryInterface {
+}
+interface monte_carlo_tree_search.interfaces.StateInterface {
+~ S getVariables()
+~ StateInterface<S> copy()
+~ void setFromReturn(StepReturnGeneric<S>)
+}
+interface monte_carlo_tree_search.interfaces.ActionInterface {
+~ void setValue(A)
+~ A getValue()
+~ ActionInterface<A> copy()
+~ Set<A> applicableActions()
+~ A nonApplicableAction()
+~ {static} List<A> mergeActionsWithAction(List<A>,A)
+~ {static} List<A> getNonTestedActionValues(List<A>,Set<A>)
+}
+interface monte_carlo_tree_search.interfaces.WritableMemoryInterface {
+~ void write(StateInterface<S>,double)
+}
+interface monte_carlo_tree_search.interfaces.NetworkMemoryInterface {
+~ void save(String)
+~ void load(String)
+~ double read(StateInterface<S>)
+~ void learn(List<Experience<S,A>>)
+~ MomentumBackpropagation getLearningRule()
+~ double getAverageValueError(List<Experience<S,A>>)
+~ void createOutScalers(double,double)
+}
+
+
+monte_carlo_tree_search.interfaces.ActionInterface <|.. monte_carlo_tree_search.interfaces.ActionIntegerAbstract
+monte_carlo_tree_search.interfaces.ReadableMemoryInterface <|-- monte_carlo_tree_search.interfaces.MapMemoryInterface
+monte_carlo_tree_search.interfaces.WritableMemoryInterface <|-- monte_carlo_tree_search.interfaces.MapMemoryInterface
+monte_carlo_tree_search.interfaces.ReadableMemoryInterface <|-- monte_carlo_tree_search.interfaces.NetworkMemoryInterface
+@enduml

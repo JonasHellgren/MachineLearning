@@ -86,6 +86,7 @@ public class TestTwoInputsNet {
         learningRule.setMaxIterations(nofIterationsForWamUp);
         ann.learn(trainingSet);  //needs warm up - else null pointer exception when calling doOneLearningIteration
         int epoch = 1;
+        System.out.println("trainingSet = " + trainingSet);
         do {
             learningRule.doOneLearningIteration(trainingSet);
             printProgressSometimes(learningRule, epoch);

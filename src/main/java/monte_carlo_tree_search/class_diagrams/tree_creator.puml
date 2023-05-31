@@ -1,0 +1,44 @@
+@startuml
+class monte_carlo_tree_search.create_tree.BackPropagator {
+}
+class monte_carlo_tree_search.create_tree.ActionSelector {
++ Optional<ActionInterface<A>> selectRandomNonTestedAction(NodeWithChildrenInterface<S,A>)
++ Optional<ActionInterface<A>> selectBestTestedAction(NodeWithChildrenInterface<S,A>)
++ ActionInterface<A> getRandomAction()
++ List<ActionInterface<A>> getNonTestedActionsInPolicy(NodeWithChildrenInterface<S,A>)
+}
+class monte_carlo_tree_search.create_tree.MonteCarloSimulator {
++ SimulationResults simulate(StateInterface<S>)
++ SimulationResults simulate(StateInterface<S>,boolean,int)
++ List<StepReturnGeneric<S>> stepToTerminal(StateInterface<S>,int)
++ List<Double> stepWithPresetActions(StateInterface<S>,List<ActionInterface<A>>)
+}
+class monte_carlo_tree_search.create_tree.NodeSelector {
++ NodeWithChildrenInterface<S,A> select()
++ Optional<NodeInterface<S,A>> selectBestNonFailChild(NodeWithChildrenInterface<S,A>)
++ Optional<NodeInterface<S,A>> selectNonFailChildWithHighestUCT(NodeWithChildrenInterface<S,A>)
++ double calcUct(double,int,int)
+}
+class monte_carlo_tree_search.create_tree.MonteCarloTreeCreator {
++ MonteCarloSearchStatistics<S,A> getStatistics()
++ ActionInterface<A> getFirstAction()
++ NodeWithChildrenInterface<S,A> run()
+}
+class monte_carlo_tree_search.create_tree.MonteCarloSettings {
+}
+class monte_carlo_tree_search.create_tree.MonteCarloTreeCreatorHelper {
+}
+class monte_carlo_tree_search.create_tree.BackupModifier {
++ void backup()
+}
+class monte_carlo_tree_search.create_tree.SimulationReturnsExtractor {
++ List<Double> getSimulationReturns()
++ List<Double> createReturnsAll()
++ List<Double> createReturnsNonFailing()
++ List<Double> createReturnFromSomeFailingUseDefensiveDiscount()
+}
+class monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics {
++ void setStatistics()
++ String toString()
+}
+@enduml

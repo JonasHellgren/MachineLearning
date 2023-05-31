@@ -1,10 +1,7 @@
 package monte_carlo_tree_search.network_training;
 
-import common.MathUtils;
-import common.RandUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.math3.analysis.function.Exp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,20 +10,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Data storage of a set of experiences
+ * Data storage of a set of experiences, typically used for neural network training
  */
 
 @Getter
-public class ReplayBuffer<SSV, AV>  {
+public class ReplayBuffer<S, A>  {
 
-    private final List<Experience<SSV, AV>> buffer = new ArrayList<>();
+    private final List<Experience<S, A>> buffer = new ArrayList<>();
     int maxSize;
 
     public ReplayBuffer(int maxSize) {
         this.maxSize = maxSize;
     }
 
-    public void addExperience(Experience<SSV, AV> experience) {
+    public void addExperience(Experience<S, A> experience) {
         if (buffer.size() >= maxSize) {
             int randomIndexExcludingEnd=RandomUtils.nextInt(0,buffer.size());
             buffer.remove(randomIndexExcludingEnd);
@@ -42,12 +39,12 @@ public class ReplayBuffer<SSV, AV>  {
         buffer.clear();
     }
 
-    public Experience<SSV, AV> getExperience(int index) {
+    public Experience<S, A> getExperience(int index) {
         return buffer.get(index);
     }
 
-    public List<Experience<SSV, AV>> getMiniBatch(int batchLength) {
-        List<Experience<SSV, AV>> miniBatch = new ArrayList<>();
+    public List<Experience<S, A>> getMiniBatch(int batchLength) {
+        List<Experience<S, A>> miniBatch = new ArrayList<>();
 
         List<Integer> indexes = IntStream.rangeClosed(0, buffer.size() - 1)
                 .boxed().collect(Collectors.toList());
@@ -59,7 +56,7 @@ public class ReplayBuffer<SSV, AV>  {
         return miniBatch;
     }
 
-    public boolean isExperienceWithStateVariablesPresentBeforeIndex(SSV stateVariables, int iLimit) {
+    public boolean isExperienceWithStateVariablesPresentBeforeIndex(S stateVariables, int iLimit) {
         for (int i = 0; i < iLimit ; i++) {
             if (buffer.get(i).stateVariables.equals(stateVariables)) {
                 return  true;
@@ -69,21 +66,21 @@ public class ReplayBuffer<SSV, AV>  {
     }
 
     public void setAllValues(double value) {
-        for (Experience<SSV,AV> exp:buffer) {
+        for (Experience<S, A> exp:buffer) {
             exp.value=value;
         }
     }
 
-    public void addAll(ReplayBuffer<SSV, AV> otherBuffer) {
-        for (Experience<SSV, AV> experience: otherBuffer.buffer) {
+    public void addAll(ReplayBuffer<S, A> otherBuffer) {
+        for (Experience<S, A> experience: otherBuffer.buffer) {
             addExperience(experience);
         }
     }
 
-    public  String bufferAsString(List<Experience<SSV, AV>> buffer) {
+    public  String bufferAsString(List<Experience<S, A>> buffer) {
         StringBuilder sb=new StringBuilder();
         sb.append(System.lineSeparator());
-        for (Experience<SSV,AV> e:buffer) {
+        for (Experience<S, A> e:buffer) {
             sb.append(e.toString());
             sb.append(System.lineSeparator());
         }

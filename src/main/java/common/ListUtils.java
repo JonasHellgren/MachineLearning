@@ -25,6 +25,11 @@ public class ListUtils {
                 .average();
     }
 
+    public static double sumList(List<Double> list) {
+        return list.stream()
+                .mapToDouble(a -> a)
+                .sum();
+    }
 
     public static <T> Optional<T> findEnd(List<T> list) {
         if (list.size()==0) {
@@ -58,8 +63,13 @@ public class ListUtils {
                 .collect(Collectors.toList());
     }
 
-    public static double sumList(List<Double> doubleList) {
-        return doubleList.stream().mapToDouble(f -> f).sum();
+    public static Integer sumIntegerList(List<Integer> list) {
+        return list.stream().mapToInt(Integer::intValue).sum();
+    }
+
+
+    public static Double sumDoubleList(List<Double> list) {
+        return list.stream().mapToDouble(Double::doubleValue).sum();
     }
 
     public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {
@@ -111,9 +121,38 @@ public class ListUtils {
         return dotProduct(list,listDf);
     }
 
+    /**
+     * 1d,10d,10d , df=0.5->  10d,5d,2.5d
+     */
+
     public static List<Double> discountedElements(List<Double> list, double discountFactor) {
         List<Double> listDf = getDiscountList(list.size(), discountFactor);
         return elementProduct(list,listDf);
+    }
+
+    /**
+     * 1d,10d,10d , df=0.5->  0.25d,5d,10d
+     */
+
+    public static List<Double> discountedElementsReverse(List<Double> list, double discountFactor) {
+        List<Double> listDf = getDiscountList(list.size(), discountFactor);
+        Collections.reverse(listDf);
+        return elementProduct(list,listDf);
+    }
+
+    /**
+    rewards=[0,1,1] => returns=[2,2,1]
+    */
+
+    public static List<Double> getReturns(List<Double> rewards) {
+        double singleReturn = 0;
+        List<Double> returns = new ArrayList<>();
+        for (int i = rewards.size() - 1; i >= 0; i--) {
+            singleReturn = singleReturn + rewards.get(i);
+            returns.add(singleReturn);
+        }
+        Collections.reverse(returns);
+        return returns;
     }
 
     public static boolean isDoubleArraysEqual(double[] x, double[] y, double tol)
@@ -139,6 +178,14 @@ public class ListUtils {
             df = df * discountFactor;
         }
         return listDf;
+    }
+
+    public static<T> List<T> merge(List<T> list1, List<T> list2)
+    {
+        List<T> list = new ArrayList<>(list1);
+        list.addAll(list2);
+
+        return list;
     }
 
 }

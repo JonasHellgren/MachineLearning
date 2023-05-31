@@ -13,8 +13,14 @@ public class CpuTimer {
     long absoluteProgress;
     float relativeProgress;
 
+
     public CpuTimer() {
         this(Long.MAX_VALUE);
+    }
+
+    public static CpuTimer newTimer(long timeBudgetMillis) {
+        return new CpuTimer(timeBudgetMillis);
+
     }
 
     public CpuTimer(long timeBudgetMillis) {
@@ -41,6 +47,10 @@ public class CpuTimer {
 
     public long absoluteProgress() {
         return  (System.currentTimeMillis() - startTimeMillis);
+    }
+
+    public String toString() {
+        return "timeBudgetMillis = "+timeBudgetMillis+", relativeProgress = "+relativeProgress;
     }
 
 }

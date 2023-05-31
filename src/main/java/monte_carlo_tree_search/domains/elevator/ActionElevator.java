@@ -3,7 +3,7 @@ package monte_carlo_tree_search.domains.elevator;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.ActionInterface;
 
 import java.util.Set;
 import java.util.function.Predicate;
@@ -16,8 +16,9 @@ import java.util.stream.IntStream;
 public class ActionElevator implements ActionInterface<Integer> {
 
     public static final int MIN_ACTION_DEFAULT = -1;
+    public static final int STILL_ACTION = 0;
     public static final int MAX_ACTION_DEFAULT = 1;
-    public static final int ACTION_DEFAULT = 0;
+    public static final int ACTION_DEFAULT = STILL_ACTION;
     @Builder.Default
     int minActionValue = MIN_ACTION_DEFAULT;
     @Builder.Default
@@ -31,7 +32,7 @@ public class ActionElevator implements ActionInterface<Integer> {
         return actionElevator;
     }
 
-    public static ActionElevator newValueSpecfictRange(Integer actionValue,
+    public static ActionElevator newValueSpecificRange(Integer actionValue,
                                                        Integer minActionValue,
                                                        Integer maxActionValue) {
         ActionElevator actionElevator=ActionElevator.builder()
@@ -80,8 +81,9 @@ public class ActionElevator implements ActionInterface<Integer> {
     }
 
     public boolean isValid(Integer actionValue) {
-        Predicate<Integer> isValidAction = a -> a>=minActionValue && a <= maxActionValue;
-        return isValidAction.test(actionValue);
+        Predicate<Integer> isApplicAction = a -> a>=minActionValue && a <= maxActionValue;
+        Predicate<Integer> isNonApplicAction = a -> a.equals(nonApplicableAction());
+        return isApplicAction.or(isNonApplicAction).test(actionValue);
     }
 
 }

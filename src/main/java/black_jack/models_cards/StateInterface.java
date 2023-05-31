@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /***
- * StateInterface and it sub classes is not the same as StateCards. StateCards is the raw full information.
+ * StateInterface and it sub-classes is not the same as StateCards. StateCards is the raw full information.
  * StateInterface expresses the information given to the player.
  */
 

@@ -67,7 +67,7 @@ public class TestConstrainedRosenbrock {
     }
 
     private static double getSingleRandom() {
-        return RandUtils.calcRandomFromInterval(ConstrainedRosenbrock.LB, ConstrainedRosenbrock.UB);
+        return RandUtils.getRandomDouble(ConstrainedRosenbrock.LB, ConstrainedRosenbrock.UB);
     }
 
 }

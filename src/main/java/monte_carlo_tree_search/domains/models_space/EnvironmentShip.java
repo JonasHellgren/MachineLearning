@@ -2,10 +2,10 @@ package monte_carlo_tree_search.domains.models_space;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.classes.StepReturnGeneric;
-import monte_carlo_tree_search.generic_interfaces.ActionInterface;
-import monte_carlo_tree_search.generic_interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.generic_interfaces.StateInterface;
+import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
+import monte_carlo_tree_search.interfaces.ActionInterface;
+import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
+import monte_carlo_tree_search.interfaces.StateInterface;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
