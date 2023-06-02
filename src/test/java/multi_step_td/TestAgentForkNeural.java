@@ -19,13 +19,12 @@ public class TestAgentForkNeural {
     private static final int NOF_ITERATIONS = 1000;
     private static final int BATCH_LENGTH = 30;
     private static final int DELTA = 2;
-    private static final double LEARNING_RATE = 0.1;
     AgentNeuralInterface agent;
     AgentForkNeural agentCasted;
 
     @Before
     public void init () {
-        agent= AgentForkNeural.newDefault(LEARNING_RATE);
+        agent= AgentForkNeural.newDefault();
         agentCasted=(AgentForkNeural) agent;
     }
 

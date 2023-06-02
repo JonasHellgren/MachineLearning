@@ -20,13 +20,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     private static final double MAX_ERROR = 0.00001;
     private static final int NOF_ITERATIONS = 1;
 
-    @Builder
-    public static class NetSettings {
-        public int inputSize, outPutSize, nofNeuronsHidden;
-        public double minOut, maxOut, netOutMin, netOutMax;
-        public double learningRate;
-    }
-
     public MultiLayerPerceptron neuralNetwork;
     public MomentumBackpropagation learningRule;
     public ScalerLinear scaleOutValueToNormalized;

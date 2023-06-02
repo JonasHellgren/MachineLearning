@@ -3,10 +3,7 @@ package multi_step_td;
 import common.RandUtils;
 import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
-import multi_step_temp_diff.models.ForkEnvironment;
-import multi_step_temp_diff.models.NstepExperience;
-import multi_step_temp_diff.models.ReplayBufferNStep;
-import multi_step_temp_diff.models.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.models.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +20,6 @@ public class TestForkNeuralValueMemory {
     private static final int NOF_ITERATIONS = 1000;
     private static final int BATCH_LENGTH = 30;
     private static final int BUFFER_SIZE = 100;
-    private static final double LEARNING_RATE = 0.1;
     NetworkMemoryInterface<Integer> memory;
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
@@ -31,14 +27,13 @@ public class TestForkNeuralValueMemory {
     private static final int INPUT_SIZE = NOF_STATES;
     private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
-    private static final double MARGIN = 1.0;
 
     @Before
     public void init() {
-        ValueMemoryNetworkAbstract.NetSettings netSettings = ValueMemoryNetworkAbstract.NetSettings.builder()
-                .inputSize(INPUT_SIZE).outPutSize(OUTPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).netOutMin(0.0).netOutMax(1.0)
-                .learningRate(0.01).build();
+
+        NetSettings netSettings = NetSettings.builder()
+                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build();
 
         memory=new ForkNeuralValueMemory<>(netSettings);
     }
