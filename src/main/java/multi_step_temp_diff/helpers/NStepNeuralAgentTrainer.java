@@ -22,6 +22,10 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+/**
+ * Inspired by DQN - https://stackoverflow.com/questions/39848984/what-is-phi-in-deep-q-learning-algorithm
+ */
+
 @Builder
 @Getter
 public class NStepNeuralAgentTrainer {
@@ -32,7 +36,7 @@ public class NStepNeuralAgentTrainer {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
     private static final int BATCH_SIZE = 50;
-    private static final int NOF_ITERATIONS = 3;
+    private static final int NOF_ITERATIONS = 1;
     private static final double PROB_START = 0.9;
     private static final double PROB_END = 0.01;
 
@@ -83,11 +87,14 @@ public class NStepNeuralAgentTrainer {
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
                 Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
                         buffer.addExperience(getExperienceAtTimeTau(h)));
+                Conditionals.executeIfTrue(buffer.size()>batchSize, () -> {
+                    List<NstepExperience> miniBatch=getMiniBatch(buffer);
+                    trainAgentMemoryFromExperiencesInMiniBatch(miniBatch); });
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
-            List<NstepExperience> miniBatch=getMiniBatch(buffer);
-            trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
+
             h.episodeCounter.increase();
+            
         }
     }
 

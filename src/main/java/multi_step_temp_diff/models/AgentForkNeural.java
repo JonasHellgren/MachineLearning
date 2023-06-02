@@ -24,7 +24,7 @@ import java.util.*;
 public class AgentForkNeural implements AgentNeuralInterface {
 
     static final double DISCOUNT_FACTOR=1;
-    private static final double LEARNING_RATE = 0.1;
+    private static final double LEARNING_RATE = 0.01;
     static final NetworkMemoryInterface<Integer> MEMORY=
             new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN, LEARNING_RATE);
     private static final double VALUE_IF_NOT_PRESENT = 0;

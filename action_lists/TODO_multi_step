@@ -20,7 +20,8 @@ NStepNeuralAgentTrainer - getMiniBatch  x
 NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch  x
 NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch x
 TestNStepNeuralAgentTrainer x
-Uppdatera nn varje steg
+Uppdatera nn varje steg  x
+cvarför låser sig ibland  - behöver clip, learningRate viktigt x
 studera några episoder så verkligen korrekt experience
 ev target network
 setValuesInExperiencesInMiniBatch - discount hänsyn
