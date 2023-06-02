@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestNStepNeuralAgentTrainer {
-    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 4;
+    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 1;
     private static final double MAX_ERROR = 2;
     NStepNeuralAgentTrainer trainer;
     AgentNeuralInterface agent;
@@ -25,7 +25,7 @@ public class TestNStepNeuralAgentTrainer {
         environment = new ForkEnvironment();
         trainer= NStepNeuralAgentTrainer.builder()
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .nofEpisodes(100).batchSize(10).agentNeural(agent)
+                .nofEpisodes(10).batchSize(10).agentNeural(agent)
                 .probStart(0.5).probEnd(0.01)
                 .environment(environment)
                 .agentNeural(agent)
@@ -33,8 +33,10 @@ public class TestNStepNeuralAgentTrainer {
     }
 
     @Test
-    public void when_then() {
-            trainer.train();
+    public void whenTrained_thenCorrectStateValues() {
+        trainer.train();
+
+      //  System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
 
         TestHelper.printStateValues(agentCasted.getMemory());
         AgentInfo agentInfo=new AgentInfo(agent);

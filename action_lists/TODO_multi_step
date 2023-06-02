@@ -23,7 +23,9 @@ TestNStepNeuralAgentTrainer x
 Uppdatera nn varje steg  x
 cvarför låser sig ibland  - behöver clip, learningRate viktigt x
 ForkNeuralValueMemory konstruktor  x
-studera några episoder så verkligen korrekt experience
+studera några episoder så verkligen korrekt experience  x
+ändra steps - studera epis
+value = 0 ibland  x
 ev target network
 setValuesInExperiencesInMiniBatch - discount hänsyn
 
@@ -34,3 +36,14 @@ ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät
 
 Annan miljö - tex Maze
+
+
+NstepExperience(stateToUpdate=5, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=10.0)
+NstepExperience(stateToUpdate=7, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=10.0)
+NstepExperience(stateToUpdate=8, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=0.0)
+NstepExperience(stateToUpdate=9, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=10.0)
+
+NstepExperience(stateToUpdate=5, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=0.0)
+NstepExperience(stateToUpdate=7, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=0.0)
+NstepExperience(stateToUpdate=8, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=0.0)
+NstepExperience(stateToUpdate=9, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=0.0)
