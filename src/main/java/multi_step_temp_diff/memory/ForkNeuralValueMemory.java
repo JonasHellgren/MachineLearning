@@ -15,6 +15,12 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> {
 
     private static final double MARGIN = 1.0;
 
+    public ForkNeuralValueMemory() {
+        this(NetSettings.builder()
+                .inputSize(ForkEnvironment.NOF_STATES).nofNeuronsHidden(ForkEnvironment.NOF_STATES)
+                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build());
+    }
+
     public ForkNeuralValueMemory(NetSettings settings) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,

@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestNStepNeuralAgentTrainer {
-    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 1;
+    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final double MAX_ERROR = 2;
     NStepNeuralAgentTrainer trainer;
     AgentNeuralInterface agent;
@@ -20,13 +20,13 @@ public class TestNStepNeuralAgentTrainer {
 
     @Before
     public void init() {
-        agent= AgentForkNeural.newDefault();
+        agent= AgentForkNeural.builder().discountFactor(1.0).build();
         agentCasted=(AgentForkNeural) agent;
         environment = new ForkEnvironment();
         trainer= NStepNeuralAgentTrainer.builder()
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .nofEpisodes(10).batchSize(10).agentNeural(agent)
-                .probStart(0.5).probEnd(0.01)
+                .nofEpisodes(200).batchSize(10).agentNeural(agent)
+                .probStart(0.5).probEnd(0.01).nofTrainingIterations(1)
                 .environment(environment)
                 .agentNeural(agent)
                 .build();

@@ -24,10 +24,12 @@ Uppdatera nn varje steg  x
 cvarför låser sig ibland  - behöver clip, learningRate viktigt x
 ForkNeuralValueMemory konstruktor  x
 studera några episoder så verkligen korrekt experience  x
-ändra steps - studera epis
+ändra steps - studera epis x
 value = 0 ibland  x
-ev target network
+newDefault snyggare x
 setValuesInExperiencesInMiniBatch - discount hänsyn
+ev target network
+
 
 clean up
 generisc state

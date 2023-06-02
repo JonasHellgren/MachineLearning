@@ -94,7 +94,7 @@ public class NStepNeuralAgentTrainer {
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
 
             h.episodeCounter.increase();
-            
+
         }
     }
 
@@ -111,9 +111,10 @@ public class NStepNeuralAgentTrainer {
     }
 
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
+        double discPowNofSteps=Math.pow(agentNeural.getDiscountFactor(),nofStepsBetweenUpdatedAndBackuped);
         for (NstepExperience exp: miniBatch) {
             exp.value= (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards+ agentNeural.readValue(exp.stateToBackupFrom)  //todo ta hänsyn till discount
+                    ? exp.sumOfRewards+ discPowNofSteps*agentNeural.readValue(exp.stateToBackupFrom)  //todo ta hänsyn till discount
                     : exp.sumOfRewards;
         }
     }
@@ -126,20 +127,13 @@ public class NStepNeuralAgentTrainer {
 
     private NstepExperience getExperienceAtTimeTau(NStepTDHelper h) {
         double sumOfRewards = sumOfRewardsFromTimeToUpdatePlusOne(h);
-        Optional<Double> backupValue=Optional.empty();
         int tBackUpFrom=h.tau + h.n;
         Optional<Integer> stateAheadToBackupFrom=Optional.empty();
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
             stateAheadToBackupFrom = Optional.of(h.timeReturnMap.get(h.tau + h.n).newState);
-           // backupValue=Optional.of( Math.pow(agentNeural.getDiscountFactor(), h.n) * agentNeural.readValue(stateAheadToBackupFrom.get()));
         }
 
         final int stateToUpdate = h.statesMap.get(h.tau);
-       // double valuePresent = agentNeural.readValue(stateToUpdate);
-       // AgentForkNeural agentCasted = (AgentForkNeural) agentNeural;       //to access class specific methods
-        //double sumOfRewardsPlusBackupValue=sumOfRewards+backupValue.orElse(0d);
-       // agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (sumOfRewardsPlusBackupValue - valuePresent));
-
         return  NstepExperience.builder()
                 .stateToUpdate(stateToUpdate).sumOfRewards(sumOfRewards)
                 .stateToBackupFrom(stateAheadToBackupFrom.orElse(NstepExperience.STATE_IF_NOT_PRESENT))
