@@ -6,6 +6,7 @@ import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 import multi_step_temp_diff.models.ForkEnvironment;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
+import multi_step_temp_diff.models.ValueMemoryNetworkAbstract;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,9 +27,20 @@ public class TestForkNeuralValueMemory {
     NetworkMemoryInterface<Integer> memory;
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
+    private static final int NOF_STATES = ForkEnvironment.NOF_STATES;
+    private static final int INPUT_SIZE = NOF_STATES;
+    private static final int OUTPUT_SIZE = 1;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    private static final double MARGIN = 1.0;
+
     @Before
     public void init() {
-        memory=new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN, LEARNING_RATE);
+        ValueMemoryNetworkAbstract.NetSettings netSettings = ValueMemoryNetworkAbstract.NetSettings.builder()
+                .inputSize(INPUT_SIZE).outPutSize(OUTPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).netOutMin(0.0).netOutMax(1.0)
+                .learningRate(0.01).build();
+
+        memory=new ForkNeuralValueMemory<>(netSettings);
     }
 
 

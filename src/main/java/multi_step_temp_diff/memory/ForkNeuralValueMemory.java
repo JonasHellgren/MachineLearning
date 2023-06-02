@@ -19,18 +19,15 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> {
     private static final double MARGIN = 1.0;
 
     //todo snyggare constuktor
-    public ForkNeuralValueMemory(double minOut, double maxOut,double learningRate) {
+    public ForkNeuralValueMemory(NetSettings settings) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 INPUT_SIZE,
                 NOF_NEURONS_HIDDEN, //NOF_NEURONS_HIDDEN,
                 OUTPUT_SIZE);
-        super.settings = NetSettings.builder()
-                .inputSize(INPUT_SIZE).outPutSize(OUTPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(minOut).maxOut(maxOut).netOutMin(0.0).netOutMax(1.0)
-                .learningRate(learningRate).build();
+        super.settings = settings;
         super.createLearningRule(neuralNetwork, settings);
-        createOutScalers(minOut * MARGIN, maxOut * MARGIN);
+        createOutScalers(settings.minOut * MARGIN, settings.maxOut * MARGIN);
         isWarmedUp = false;
     }
 

@@ -26,9 +26,15 @@ public class AgentForkNeural implements AgentNeuralInterface {
     static final double DISCOUNT_FACTOR=1;
     private static final double LEARNING_RATE = 0.01;
     static final NetworkMemoryInterface<Integer> MEMORY=
-            new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN, LEARNING_RATE);
+            new ForkNeuralValueMemory<>(ValueMemoryNetworkAbstract.NetSettings.builder().build());
     private static final double VALUE_IF_NOT_PRESENT = 0;
     private static final int START_STATE = 0;
+
+    private static final int NOF_STATES = ForkEnvironment.NOF_STATES;
+    private static final int INPUT_SIZE = NOF_STATES;
+    private static final int OUTPUT_SIZE = 1;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    private static final double MARGIN = 1.0;
 
     @NonNull
     EnvironmentInterface environment;
@@ -41,9 +47,15 @@ public class AgentForkNeural implements AgentNeuralInterface {
     AgentHelper helper;
 
     public static AgentForkNeural newDefault(double learningRate) {
+
+        ValueMemoryNetworkAbstract.NetSettings netSettings = ValueMemoryNetworkAbstract.NetSettings.builder()
+                .inputSize(INPUT_SIZE).outPutSize(OUTPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).netOutMin(0.0).netOutMax(1.0)
+                .learningRate(learningRate).build();
+
         return AgentForkNeural.builder()
                 .environment(new ForkEnvironment())
-                .memory(new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN,learningRate))
+                .memory(new ForkNeuralValueMemory<>(netSettings))
                 .build();
     }
 
