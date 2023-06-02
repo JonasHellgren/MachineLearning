@@ -114,7 +114,7 @@ public class NStepNeuralAgentTrainer {
         double discPowNofSteps=Math.pow(agentNeural.getDiscountFactor(),nofStepsBetweenUpdatedAndBackuped);
         for (NstepExperience exp: miniBatch) {
             exp.value= (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards+ discPowNofSteps*agentNeural.readValue(exp.stateToBackupFrom)  //todo ta hänsyn till discount
+                    ? exp.sumOfRewards+ discPowNofSteps*agentNeural.readValue(exp.stateToBackupFrom)
                     : exp.sumOfRewards;
         }
     }
@@ -139,7 +139,6 @@ public class NStepNeuralAgentTrainer {
                 .stateToBackupFrom(stateAheadToBackupFrom.orElse(NstepExperience.STATE_IF_NOT_PRESENT))
                 .isBackupStatePresent(stateAheadToBackupFrom.isPresent())
                 .build();
-
     }
 
 
@@ -154,11 +153,11 @@ public class NStepNeuralAgentTrainer {
 
     private double sumOfRewardsFromTimeToUpdatePlusOne(NStepTDHelper h) {
         Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + h.n, h.T));
-        List<Double> returnTerms = new ArrayList<>();
+        List<Double> rewardTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            returnTerms.add(Math.pow(agentNeural.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
+            rewardTerms.add(Math.pow(agentNeural.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
         }
-        return ListUtils.sumDoubleList(returnTerms);
+        return ListUtils.sumDoubleList(rewardTerms);
     }
 
 

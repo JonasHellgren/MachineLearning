@@ -27,17 +27,18 @@ studera några episoder så verkligen korrekt experience  x
 ändra steps - studera epis x
 value = 0 ibland  x
 newDefault snyggare x
-setValuesInExperiencesInMiniBatch - discount hänsyn
-ev target network
-
+setValuesInExperiencesInMiniBatch - discount hänsyn  x
+testa olika discount TestNStepNeuralAgentTrainer  x
 
 clean up
 generisc state
+Annan miljö - tex Maze
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät
 
-Annan miljö - tex Maze
+
+ev target network
 
 
 NstepExperience(stateToUpdate=5, sumOfRewards=10.0, stateToBackupFrom=-1, isBackupStatePresent=false, value=10.0)
