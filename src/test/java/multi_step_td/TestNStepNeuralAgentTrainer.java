@@ -4,11 +4,8 @@ import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces.AgentNeuralInterface;
 import multi_step_temp_diff.models.AgentForkNeural;
-import multi_step_temp_diff.models.AgentForkTabular;
 import multi_step_temp_diff.models.ForkEnvironment;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -17,12 +14,12 @@ import org.junit.Test;
 
 public class TestNStepNeuralAgentTrainer {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
+    private static final int BATCH_SIZE = 10;
+    private static final int ONE_STEP = 1;
     NStepNeuralAgentTrainer trainer;
     AgentNeuralInterface agent;
     AgentForkNeural agentCasted;
     ForkEnvironment environment;
-
-
 
 
     @Test
@@ -36,10 +33,12 @@ public class TestNStepNeuralAgentTrainer {
         AgentInfo agentInfo=new AgentInfo(agent);
         double avgErrThree=TestHelper.avgError(agentInfo.stateValueMap(environment.stateSet()));
         System.out.println("avgErrThree = " + avgErrThree);
-        System.out.println("trainer.getBuffer().size() = " + trainer.getBuffer().size());
+        printBufferSize();
         final double maxError = 2d;
         Assert.assertTrue(avgErrThree < maxError);
     }
+
+
 
     @Test
     public void givenDiscountFactorDot9_whenTrained_thenCorrectStateValues() {
@@ -58,7 +57,44 @@ public class TestNStepNeuralAgentTrainer {
 
         Assert.assertEquals(Math.pow(discountFactor,15-13)*rHell,agentCasted.getMemory().read(13), delta);
         Assert.assertEquals(Math.pow(discountFactor,5)*rHell,agentCasted.getMemory().read(6), delta);
+    }
 
+    @Test
+    public void givenDiscountFactorDot5SStartAtBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
+        final double discountFactor = 0.5;
+        final int startState = 9;
+        agent= AgentForkNeural.newWithDiscountFactor(discountFactor);
+        init();
+        setTrainer(startState);
+        trainer.train();
+        printBufferSize();
+        TestHelper.printStateValues(agentCasted.getMemory());
+        final double delta = 1d;
+        Assert.assertEquals(ForkEnvironment.R_HEAVEN,agentCasted.getMemory().read(startState), delta);
+    }
+
+    @Test
+    public void givenDiscountFactorDot5SStartAtTwoStepsBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
+        final double discountFactor = 0.5;
+        final int startState = 8;
+        agent= AgentForkNeural.newWithDiscountFactor(discountFactor);
+        init();
+        setTrainer(startState);
+        trainer.train();
+        printBufferSize();
+        TestHelper.printStateValues(agentCasted.getMemory());
+        final double delta = 1d;
+        Assert.assertEquals(ForkEnvironment.R_HEAVEN*discountFactor,agentCasted.getMemory().read(startState), delta);
+    }
+
+    private void setTrainer(int startState) {
+        trainer.setNofEpisodes(BATCH_SIZE*10);
+        trainer.setStartState(startState);
+        trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
+    }
+
+    private void printBufferSize() {
+        System.out.println("buffer size = " + trainer.getBuffer().size());
     }
 
     public void init() {
@@ -66,7 +102,7 @@ public class TestNStepNeuralAgentTrainer {
         environment = new ForkEnvironment();
         trainer= NStepNeuralAgentTrainer.builder()
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .nofEpisodes(300).batchSize(10).agentNeural(agent)
+                .nofEpisodes(300).batchSize(BATCH_SIZE).agentNeural(agent)
                 .probStart(0.5).probEnd(0.01).nofTrainingIterations(1)
                 .environment(environment)
                 .agentNeural(agent)

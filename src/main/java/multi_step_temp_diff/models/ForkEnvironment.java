@@ -16,6 +16,8 @@ public class ForkEnvironment implements EnvironmentInterface {
     public static final double R_MOVE = 0;
     public static final int NOF_ACTIONS = 2;
     public static final int NOF_STATES = 16;
+    private static final int STATE_HEAVEN = 10;
+    private static final int STATE_HELL = 15;
 
     @Override
     public StepReturn step(int state,int action) {
@@ -55,15 +57,15 @@ public class ForkEnvironment implements EnvironmentInterface {
                 : state + 1;
     }
 
-    private double getReward(int state) {
-        return (isTerminalState(state))
-                ? (state == 10) ? R_HEAVEN : R_HELL
+    private double getReward(int newState) {
+        return (isTerminalState(newState))
+                ? (newState == STATE_HEAVEN) ? R_HEAVEN : R_HELL
                 : R_MOVE;
     }
 
     @Override
     public boolean isTerminalState(int state) {
-        return (state == 15 || state == 10);
+        return (state == STATE_HELL || state == STATE_HEAVEN);
     }
 
     @Override

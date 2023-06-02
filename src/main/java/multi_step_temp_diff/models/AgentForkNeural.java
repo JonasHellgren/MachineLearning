@@ -34,9 +34,7 @@ public class AgentForkNeural implements AgentNeuralInterface {
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
     private static final double MARGIN = 1.0;
 
-  //  @NonNull
-   @Builder.Default
-    EnvironmentInterface environment=new ForkEnvironment();
+    final EnvironmentInterface environment=new ForkEnvironment();
     @Builder.Default
     int state= START_STATE;
     @Builder.Default
@@ -47,6 +45,10 @@ public class AgentForkNeural implements AgentNeuralInterface {
 
     public static AgentForkNeural newDefault() {
         return AgentForkNeural.builder().build();
+    }
+
+    public static AgentForkNeural newWithDiscountFactor(double discountFactor) {
+        return AgentForkNeural.builder().discountFactor(discountFactor).build();
     }
 
     @Override

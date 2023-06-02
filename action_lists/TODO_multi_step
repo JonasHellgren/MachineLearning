@@ -29,6 +29,9 @@ value = 0 ibland  x
 newDefault snyggare x
 setValuesInExperiencesInMiniBatch - discount hänsyn  x
 testa olika discount TestNStepNeuralAgentTrainer  x
+test - innan terminal state skall discúnt ej påverka  x
+givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning
+
 
 clean up
 generisc state

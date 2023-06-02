@@ -1,5 +1,7 @@
 package common;
 
+import lombok.NoArgsConstructor;
+
 public class Conditionals {
 
     /**

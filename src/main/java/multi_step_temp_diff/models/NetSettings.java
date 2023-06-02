@@ -14,5 +14,5 @@ public class NetSettings {
     @Builder.Default
     public double netOutMax = 1d;
     @Builder.Default
-    public double learningRate=0.01;
+    public double learningRate=0.05;
 }
