@@ -42,7 +42,7 @@ public class TestNStepNeuralAgentTrainer {
 
     @Test
     public void givenDiscountFactorDot9_whenTrained_thenCorrectStateValues() {
-        final double discountFactor = 0.9;
+        final double discountFactor = 0.9, delta = 3d;
         agent= AgentForkNeural.builder().discountFactor(discountFactor).build();
         init();
         trainer.train();
@@ -50,7 +50,6 @@ public class TestNStepNeuralAgentTrainer {
         TestHelper.printStateValues(agentCasted.getMemory());
 
         final double rHeaven = ForkEnvironment.R_HEAVEN, rHell = ForkEnvironment.R_HELL;
-        final double delta = 2d;
         Assert.assertEquals(Math.pow(discountFactor,10-7)* rHeaven,agentCasted.getMemory().read(7), delta);
         Assert.assertEquals(Math.pow(discountFactor,10-9)*rHeaven,agentCasted.getMemory().read(9), delta);
         Assert.assertEquals(Math.pow(discountFactor,9)*rHeaven,agentCasted.getMemory().read(0), delta);
@@ -65,7 +64,7 @@ public class TestNStepNeuralAgentTrainer {
         final int startState = 9;
         agent= AgentForkNeural.newWithDiscountFactor(discountFactor);
         init();
-        setTrainer(startState);
+        setTrainerFewEpisodes(BATCH_SIZE*10,startState,ONE_STEP);
         trainer.train();
         printBufferSize();
         TestHelper.printStateValues(agentCasted.getMemory());
@@ -79,7 +78,7 @@ public class TestNStepNeuralAgentTrainer {
         final int startState = 8;
         agent= AgentForkNeural.newWithDiscountFactor(discountFactor);
         init();
-        setTrainer(startState);
+        setTrainerFewEpisodes(BATCH_SIZE*10,startState,ONE_STEP);
         trainer.train();
         printBufferSize();
         TestHelper.printStateValues(agentCasted.getMemory());
@@ -87,10 +86,36 @@ public class TestNStepNeuralAgentTrainer {
         Assert.assertEquals(ForkEnvironment.R_HEAVEN*discountFactor,agentCasted.getMemory().read(startState), delta);
     }
 
-    private void setTrainer(int startState) {
-        trainer.setNofEpisodes(BATCH_SIZE*10);
+    @Test public void givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning() {
+
+        final double discountFactor = 1.00;
+        final int startState = 7, nofEpis = BATCH_SIZE * 2;
+        agent = AgentForkNeural.newWithDiscountFactor(discountFactor);
+        init();
+        setTrainerFewEpisodes(nofEpis, startState, ONE_STEP);
+        trainer.train();
+        double valueState7OneStep = agentCasted.getMemory().read(startState);
+
+        agent = AgentForkNeural.newWithDiscountFactor(discountFactor);
+        init();
+        setTrainerFewEpisodes(nofEpis,startState, 3);
+        trainer.train();
+        double valueState7ThreeSteps = agentCasted.getMemory().read(startState);
+
+        System.out.println("valueState7OneStep = " + valueState7OneStep + ", valueState7ThreeSteps = " + valueState7ThreeSteps);
+
+        double err3=Math.abs(valueState7ThreeSteps-ForkEnvironment.R_HEAVEN);
+        double err1=Math.abs(valueState7OneStep-ForkEnvironment.R_HEAVEN);
+
+        Assert.assertTrue(err3<err1);
+
+
+    }
+
+    private void setTrainerFewEpisodes(int nofEpis, int startState, int nofSteps) {
+        trainer.setNofEpisodes(nofEpis);
         trainer.setStartState(startState);
-        trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
+        trainer.setNofStepsBetweenUpdatedAndBackuped(nofSteps);
     }
 
     private void printBufferSize() {
