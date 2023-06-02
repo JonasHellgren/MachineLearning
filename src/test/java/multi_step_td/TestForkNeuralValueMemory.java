@@ -22,12 +22,13 @@ public class TestForkNeuralValueMemory {
     private static final int NOF_ITERATIONS = 1000;
     private static final int BATCH_LENGTH = 30;
     private static final int BUFFER_SIZE = 100;
+    private static final double LEARNING_RATE = 0.1;
     NetworkMemoryInterface<Integer> memory;
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
     @Before
     public void init() {
-        memory=new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN);
+        memory=new ForkNeuralValueMemory<>(ForkEnvironment.R_HELL,ForkEnvironment.R_HEAVEN, LEARNING_RATE);
     }
 
 

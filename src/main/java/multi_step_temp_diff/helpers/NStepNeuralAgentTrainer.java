@@ -31,8 +31,8 @@ public class NStepNeuralAgentTrainer {
     private static final int N = 3;
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
-    private static final int BATCH_SIZE = 30;
-    private static final int NOF_ITERATIONS = 1;
+    private static final int BATCH_SIZE = 50;
+    private static final int NOF_ITERATIONS = 3;
     private static final double PROB_START = 0.9;
     private static final double PROB_END = 0.01;
 
