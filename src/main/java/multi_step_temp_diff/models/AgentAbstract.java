@@ -12,43 +12,46 @@ import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class AgentAbstract implements AgentNeuralInterface {
+public abstract class AgentAbstract implements AgentNeuralInterface {
     EnvironmentInterface environment;
     int state;
     double discountFactor;
     AgentHelper helper;
 
+    public AgentAbstract(EnvironmentInterface environment, int state, double discountFactor) {
+        this.environment = environment;
+        this.state = state;
+        this.discountFactor = discountFactor;
+        this.helper = AgentHelper.builder()
+                .nofActions(environment.actionSet().size())
+                .environment(environment).discountFactor(discountFactor)
+                .readFunction(this::readValue)
+                .build();
+    }
 
     @Override
     public int chooseAction(double probRandom) {
-        return 0;
+        return helper.chooseAction(probRandom,getState());
     }
 
     @Override
     public int chooseRandomAction() {
-        return 0;
+        return helper.chooseRandomAction();
     }
 
     @Override
     public int chooseBestAction(int state) {
-        return 0;
+        return helper.chooseBestAction(state);
     }
 
     @Override
-    public void updateState(StepReturn stepReturn) {}
-
-    @Override
-    public double readValue(int state) {
-        return 0;
+    public void updateState(StepReturn stepReturn) {
+        setState(stepReturn.newState);
     }
 
 
-
-    @Override
-    public void learn(List<NstepExperience> miniBatch) {
-
-    }
+    public abstract double readValue(int state);
+    public abstract  void learn(List<NstepExperience> miniBatch);
 }

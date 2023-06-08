@@ -42,7 +42,6 @@ public class TestNStepNeuralAgentTrainer {
 
 
     @Test
-    @Ignore
     public void givenDiscountFactorDot9_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 0.9, delta = 3d;
         setAgentAndTrain(discountFactor, NOF_EPIS, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
@@ -59,7 +58,6 @@ public class TestNStepNeuralAgentTrainer {
     }
 
     @Test
-    @Ignore
     public void givenDiscountFactorDot5SStartAtBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
         final double discountFactor = 0.5;
         final int nofEpisodes=BATCH_SIZE*10, startState = 9;
@@ -77,7 +75,6 @@ public class TestNStepNeuralAgentTrainer {
     }
 
     @Test
-    @Ignore
     public void givenDiscountFactorDot5SStartAtTwoStepsBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
         final double discountFactor = 0.5;
         final int startState = 8;
@@ -90,7 +87,6 @@ public class TestNStepNeuralAgentTrainer {
     }
 
     @Test
-    @Ignore
     public void givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning() {
         final double discountFactor = 1.00;
         final int startState = 7, nofEpis = BATCH_SIZE * 2;
