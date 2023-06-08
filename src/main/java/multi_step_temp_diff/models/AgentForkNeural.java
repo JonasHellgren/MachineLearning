@@ -19,30 +19,29 @@ import java.util.*;
  * https://arxiv.org/pdf/1602.04621.pdf
  */
 
-@Builder
 @Getter
-public class AgentForkNeural implements AgentNeuralInterface {
+public class AgentForkNeural extends AgentAbstract {
 
     static final NetworkMemoryInterface<Integer> MEMORY=
             new ForkNeuralValueMemory<>();
     private static final int START_STATE = 0;
     static final double DISCOUNT_FACTOR=1;
 
-    final EnvironmentInterface environment=new ForkEnvironment();
-    @Builder.Default
-    int state= START_STATE;
-    @Builder.Default
     NetworkMemoryInterface<Integer>  memory=MEMORY;
-    @Builder.Default
-    final double discountFactor=DISCOUNT_FACTOR;
-    AgentHelper helper;
 
-    public static AgentForkNeural newDefault() {
-        return AgentForkNeural.builder().build();
+
+    @Builder
+    public AgentForkNeural(EnvironmentInterface environment, int state, double discountFactor, NetworkMemoryInterface<Integer> memory) {
+        super(environment,state,discountFactor,null);
+        this.memory = MEMORY;
     }
 
-    public static AgentForkNeural newWithDiscountFactor(double discountFactor) {
-        return AgentForkNeural.builder().discountFactor(discountFactor).build();
+    public static AgentForkNeural newDefault(EnvironmentInterface environment) {
+        return AgentForkNeural.builder().environment(environment).build();
+    }
+
+    public static AgentForkNeural newWithDiscountFactor(EnvironmentInterface environment,double discountFactor) {
+        return AgentForkNeural.builder().environment(environment).discountFactor(discountFactor).build();
     }
 
     @Override
@@ -70,7 +69,7 @@ public class AgentForkNeural implements AgentNeuralInterface {
 
     @Override
     public void updateState(StepReturn stepReturn) {
-        state = stepReturn.newState;
+        setState(stepReturn.newState);
     }
 
     @Override

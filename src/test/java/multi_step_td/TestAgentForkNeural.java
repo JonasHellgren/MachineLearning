@@ -24,7 +24,7 @@ public class TestAgentForkNeural {
 
     @Before
     public void init () {
-        agent= AgentForkNeural.newDefault();
+        agent= AgentForkNeural.newDefault(new ForkEnvironment());
         agentCasted=(AgentForkNeural) agent;
     }
 

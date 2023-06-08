@@ -40,8 +40,7 @@ public class NStepNeuralAgentTrainer {
     private static final double PROB_START = 0.9;
     private static final double PROB_END = 0.01;
 
-    @NonNull
-    EnvironmentInterface environment;
+    @NonNull EnvironmentInterface environment;
     @NonNull AgentNeuralInterface agentNeural;
 
     @Builder.Default
@@ -89,8 +88,8 @@ public class NStepNeuralAgentTrainer {
                 Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
                         buffer.addExperience(getExperienceAtTimeTau(h)));
                 Conditionals.executeIfTrue(buffer.size() > batchSize, () -> {
-                        List<NstepExperience> miniBatch = getMiniBatch(buffer);
-                        trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
+                    List<NstepExperience> miniBatch = getMiniBatch(buffer);
+                    trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
                 });
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau, h.T));

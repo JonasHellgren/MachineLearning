@@ -17,9 +17,10 @@ public class TestNStepTabularAgentTrainer {
 
     @Before
     public void init() {
+        final ForkEnvironment environment = new ForkEnvironment();
         trainer= NStepTabularAgentTrainer.builder()
                 .nofEpisodes(50)
-                .environment(new ForkEnvironment()).agent(AgentForkTabular.newDefault())
+                .environment(environment).agent(AgentForkTabular.builder().environment(environment).build())
                 .build();
     }
 
