@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface AgentInterface {
++ int chooseAction(double probRandom)
++ updateState(StepReturn stepReturn);
++ double readValue(int state);
+}
+
+interface AgentNeuralInterface {
++ learn(List<NstepExperience> miniBatch);
+}
+
+interface EnvironmentInterface {
++  StepReturn step(int state,int action);
++  boolean isTerminalState(int state);
+}
+
+interface NetworkMemoryInterface {
++   double read(S state);
++   void learn(List<NstepExperience> miniBatch);
+}
+
+abstract class ValueMemoryNetworkAbstract
+
+class AgentForkNeural
+class AgentForkTabular
+class ForkEnvironment
+class MazeEnvironment
+class ForkNeuralValueMemory
+
+AgentInterface <|-- AgentNeuralInterface
+AgentNeuralInterface <|-- AgentForkNeural
+AgentInterface <|-- AgentForkTabular
+
+
+
+EnvironmentInterface <|-- ForkEnvironment
+EnvironmentInterface <|-- MazeEnvironment
+
+AgentForkNeural  o-- ForkEnvironment
+AgentForkNeural  o-- ForkNeuralValueMemory
+
+AgentForkTabular  o-- ForkEnvironment
+
+NetworkMemoryInterface <|-- ValueMemoryNetworkAbstract
+ValueMemoryNetworkAbstract  <|-- ForkNeuralValueMemory
+
+
+@enduml

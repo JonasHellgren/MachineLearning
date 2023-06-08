@@ -4,7 +4,6 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
-import multi_step_temp_diff.models.ForkEnvironment;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 
@@ -17,8 +16,7 @@ import java.util.function.Function;
 public class AgentHelper {
 
     int nofActions;
-    @NonNull
-    EnvironmentInterface environment;
+    @NonNull  EnvironmentInterface environment;
     final double discountFactor;
     Function<Integer,Double> readFunction;
 

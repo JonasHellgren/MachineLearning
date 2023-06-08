@@ -3,7 +3,7 @@ package multi_step_td;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.models.AgentForkTabular;
-import multi_step_temp_diff.models.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;
 import org.junit.Before;

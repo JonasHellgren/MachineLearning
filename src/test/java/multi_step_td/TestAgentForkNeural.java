@@ -3,7 +3,7 @@ package multi_step_td;
 import common.RandUtils;
 import multi_step_temp_diff.interfaces.AgentNeuralInterface;
 import multi_step_temp_diff.models.AgentForkNeural;
-import multi_step_temp_diff.models.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.jetbrains.annotations.NotNull;

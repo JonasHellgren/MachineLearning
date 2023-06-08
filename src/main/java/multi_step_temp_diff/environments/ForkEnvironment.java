@@ -1,9 +1,9 @@
-package multi_step_temp_diff.models;
+package multi_step_temp_diff.environments;
 
 import common.Conditionals;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
+import multi_step_temp_diff.models.StepReturn;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class ForkEnvironment implements EnvironmentInterface {
     private static final int STATE_HELL = 15;
 
     @Override
-    public StepReturn step(int state,int action) {
+    public StepReturn step(int state, int action) {
         throwIfBadArgument(state,action);
         final int newState = getNewState(state, action);
         return StepReturn.builder()

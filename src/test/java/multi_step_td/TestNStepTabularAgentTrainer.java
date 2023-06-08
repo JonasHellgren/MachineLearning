@@ -1,15 +1,12 @@
 package multi_step_td;
 
-import common.ListUtils;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.models.AgentForkTabular;
-import multi_step_temp_diff.models.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class TestNStepTabularAgentTrainer {

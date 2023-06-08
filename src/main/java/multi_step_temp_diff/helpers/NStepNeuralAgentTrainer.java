@@ -31,8 +31,6 @@ import java.util.function.Predicate;
 @Getter
 @Setter
 public class NStepNeuralAgentTrainer {
-
-
     private static final double ALPHA = 0.5;
     private static final int N = 3;
     private static final int NOF_EPIS = 100;

@@ -3,14 +3,12 @@ package multi_step_temp_diff.models;
 import common.Conditionals;
 import common.MathUtils;
 import common.ScalerLinear;
-import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
-
 import java.util.Arrays;
 import java.util.List;
 

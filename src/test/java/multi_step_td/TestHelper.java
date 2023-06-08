@@ -2,7 +2,7 @@ package multi_step_td;
 
 import common.ListUtils;
 import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
-import multi_step_temp_diff.models.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import org.junit.Assert;
 
 import java.util.ArrayList;

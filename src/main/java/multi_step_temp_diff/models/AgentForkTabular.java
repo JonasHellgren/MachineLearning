@@ -3,6 +3,7 @@ package multi_step_temp_diff.models;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.helpers.AgentHelper;
 import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;

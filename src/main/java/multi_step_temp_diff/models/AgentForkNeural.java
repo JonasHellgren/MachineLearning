@@ -2,7 +2,7 @@ package multi_step_temp_diff.models;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.helpers.AgentHelper;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.interfaces.AgentNeuralInterface;
@@ -23,16 +23,10 @@ import java.util.*;
 @Getter
 public class AgentForkNeural implements AgentNeuralInterface {
 
-    static final double DISCOUNT_FACTOR=1;
     static final NetworkMemoryInterface<Integer> MEMORY=
             new ForkNeuralValueMemory<>();
-    private static final double VALUE_IF_NOT_PRESENT = 0;
     private static final int START_STATE = 0;
-    private static final int NOF_STATES = ForkEnvironment.NOF_STATES;
-    private static final int INPUT_SIZE = NOF_STATES;
-    private static final int OUTPUT_SIZE = 1;
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
-    private static final double MARGIN = 1.0;
+    static final double DISCOUNT_FACTOR=1;
 
     final EnvironmentInterface environment=new ForkEnvironment();
     @Builder.Default
@@ -84,6 +78,7 @@ public class AgentForkNeural implements AgentNeuralInterface {
         return memory.read(state);
     }
 
+    @Override
     public void learn(List<NstepExperience> miniBatch) {
         memory.learn(miniBatch);
     }

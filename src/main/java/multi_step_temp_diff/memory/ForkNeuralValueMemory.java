@@ -1,6 +1,6 @@
 package multi_step_temp_diff.memory;
 
-import multi_step_temp_diff.models.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.models.ValueMemoryNetworkAbstract;
 import org.neuroph.nnet.MultiLayerPerceptron;

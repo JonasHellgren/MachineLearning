@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NetworkMemoryInterface<S>  {
     void save(String fileName);
-    void load(String fileName);
+    void load(String fileName);  //Todo delete
     double read(S state);
     void learn(List<NstepExperience> miniBatch);
     MomentumBackpropagation getLearningRule();

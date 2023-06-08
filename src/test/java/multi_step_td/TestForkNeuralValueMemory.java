@@ -1,6 +1,7 @@
 package multi_step_td;
 
 import common.RandUtils;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 import multi_step_temp_diff.models.*;
@@ -10,9 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class TestForkNeuralValueMemory {

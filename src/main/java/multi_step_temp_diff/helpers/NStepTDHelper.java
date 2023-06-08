@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Builder
-@ToString
 public class NStepTDHelper {
 
     private static final double ALPHA = 0.1;
@@ -37,13 +36,11 @@ public class NStepTDHelper {
 
     @Override
     public String toString () {
-        StringBuilder sb=new StringBuilder();
-        sb.append("T = ").append(T).append(" tau =").append(tau)
-                .append(", statesMap = ").append(statesMap)
-                .append(", timeReturnMap = ").append(timeReturnMap.keySet())
-                .append(" episodeCounter = ").append(episodeCounter.getCount())
-                .append(" timeCounter = ").append(timeCounter.getCount());
-        return sb.toString();
+        return "T = " + T + " tau =" + tau +
+                ", statesMap = " + statesMap +
+                ", timeReturnMap = " + timeReturnMap.keySet() +
+                " episodeCounter = " + episodeCounter.getCount() +
+                " timeCounter = " + timeCounter.getCount();
     }
 
     public void reset() {
