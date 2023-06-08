@@ -1,7 +1,6 @@
 package multi_step_temp_diff.helpers;
 
-import multi_step_temp_diff.interfaces.AgentInterface;
-import org.apache.arrow.flatbuf.Int;
+import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 
 import java.util.HashMap;
 import java.util.Map;

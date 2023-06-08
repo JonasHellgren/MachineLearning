@@ -1,4 +1,4 @@
-package multi_step_temp_diff.interfaces;
+package multi_step_temp_diff.interfaces_and_abstract;
 import multi_step_temp_diff.models.NstepExperience;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 

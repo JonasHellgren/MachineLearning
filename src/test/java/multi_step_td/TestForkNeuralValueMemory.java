@@ -2,7 +2,7 @@ package multi_step_td;
 
 import common.RandUtils;
 import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
+import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 import multi_step_temp_diff.models.*;
 import org.jetbrains.annotations.NotNull;

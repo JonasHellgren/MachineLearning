@@ -36,9 +36,11 @@ plantuml multi step  x
 AgentAbstract  x
 AgentForkTabular extends AgentAbstract  x
 ta veck chooseRandomAction etc i AgentIterface  x
-rita om planutml med AgentAbstract
+rita om planutml med AgentAbstract x
 clean up
 generisc state
+planutml med generisc state
+
 Annan miljö - tex Maze
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus

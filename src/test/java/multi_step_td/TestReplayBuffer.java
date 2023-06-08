@@ -1,8 +1,7 @@
 package multi_step_td;
 
-import common.MathUtils;
 import common.RandUtils;
-import multi_step_temp_diff.interfaces.ReplayBufferInterface;
+import multi_step_temp_diff.interfaces_and_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.junit.Assert;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TestReplayBuffer {
 

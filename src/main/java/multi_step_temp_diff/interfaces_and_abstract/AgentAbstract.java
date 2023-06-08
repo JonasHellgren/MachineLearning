@@ -1,16 +1,12 @@
-package multi_step_temp_diff.models;
+package multi_step_temp_diff.interfaces_and_abstract;
 
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.helpers.AgentHelper;
-import multi_step_temp_diff.interfaces.AgentInterface;
-import multi_step_temp_diff.interfaces.AgentNeuralInterface;
-import multi_step_temp_diff.interfaces.EnvironmentInterface;
-import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
-
-import java.util.List;
+import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.models.StepReturn;
 
 @Getter
 @Setter

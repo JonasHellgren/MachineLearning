@@ -16,35 +16,39 @@ interface EnvironmentInterface {
 +  boolean isTerminalState(int state);
 }
 
-interface NetworkMemoryInterface {
-+   double read(S state);
-+   void learn(List<NstepExperience> miniBatch);
+
+abstract class AgentAbstract {
+    EnvironmentInterface environment;
+    int state;
 }
 
-abstract class ValueMemoryNetworkAbstract
 
-class AgentForkNeural
-class AgentForkTabular
+class AgentForkNeural {
+NetworkMemoryInterface memory;
+}
+class AgentForkTabular  {
+Map<Integer, Double> memory;
+}
 class ForkEnvironment
 class MazeEnvironment
-class ForkNeuralValueMemory
+
 
 AgentInterface <|-- AgentNeuralInterface
+
+AgentInterface <|-- AgentAbstract
 AgentNeuralInterface <|-- AgentForkNeural
 AgentInterface <|-- AgentForkTabular
-
-
+AgentAbstract <|-- AgentForkNeural
+AgentAbstract <|-- AgentForkTabular
 
 EnvironmentInterface <|-- ForkEnvironment
 EnvironmentInterface <|-- MazeEnvironment
 
-AgentForkNeural  o-- ForkEnvironment
-AgentForkNeural  o-- ForkNeuralValueMemory
+AgentAbstract  o-- ForkEnvironment
+AgentAbstract  o-- MazeEnvironment
 
-AgentForkTabular  o-- ForkEnvironment
 
-NetworkMemoryInterface <|-- ValueMemoryNetworkAbstract
-ValueMemoryNetworkAbstract  <|-- ForkNeuralValueMemory
+
 
 
 @enduml

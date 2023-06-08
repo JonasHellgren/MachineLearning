@@ -3,7 +3,7 @@ package multi_step_temp_diff.helpers;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
-import multi_step_temp_diff.interfaces.EnvironmentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 

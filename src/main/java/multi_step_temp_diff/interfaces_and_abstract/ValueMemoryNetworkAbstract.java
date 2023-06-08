@@ -1,10 +1,12 @@
-package multi_step_temp_diff.models;
+package multi_step_temp_diff.interfaces_and_abstract;
 
 import common.Conditionals;
 import common.MathUtils;
 import common.ScalerLinear;
 import lombok.Getter;
-import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
+import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.models.NetSettings;
+import multi_step_temp_diff.models.NstepExperience;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
