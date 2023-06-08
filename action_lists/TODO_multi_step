@@ -31,7 +31,7 @@ setValuesInExperiencesInMiniBatch - discount hänsyn  x
 testa olika discount TestNStepNeuralAgentTrainer  x
 test - innan terminal state skall discúnt ej påverka  x
 givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning  x
-clean up TestNStepNeuralAgentTrainer
+clean up TestNStepNeuralAgentTrainer x
 clean up
 generisc state
 Annan miljö - tex Maze
