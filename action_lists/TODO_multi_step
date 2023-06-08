@@ -33,8 +33,8 @@ test - innan terminal state skall discúnt ej påverka  x
 givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning  x
 clean up TestNStepNeuralAgentTrainer x
 plantuml multi step  x
-AgentAbstract
-AgentForkTabular extends AgentAbstract
+AgentAbstract  x
+AgentForkTabular extends AgentAbstract  x
 ta veck chooseRandomAction etc i AgentIterface
 clean up
 generisc state

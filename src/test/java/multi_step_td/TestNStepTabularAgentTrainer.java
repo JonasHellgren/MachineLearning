@@ -13,14 +13,15 @@ public class TestNStepTabularAgentTrainer {
 
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 3;
+    private static final int NOF_EPISODES = 50;
     NStepTabularAgentTrainer trainer;
 
     @Before
     public void init() {
         final ForkEnvironment environment = new ForkEnvironment();
         trainer= NStepTabularAgentTrainer.builder()
-                .nofEpisodes(50)
-                .environment(environment).agent(AgentForkTabular.builder().environment(environment).build())
+                .nofEpisodes(NOF_EPISODES)
+                .environment(environment).agent(AgentForkTabular.newDefault(environment))
                 .build();
     }
 
@@ -36,6 +37,7 @@ public class TestNStepTabularAgentTrainer {
         Map<Integer,Double> mapTreeSteps= trainer.getStateValueMap();
         double avgErrThree=TestHelper.avgError(mapTreeSteps);
 
+        System.out.println("mapTreeSteps = " + mapTreeSteps);
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);
 
         Assert.assertTrue(avgErrOne>avgErrThree);

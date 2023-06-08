@@ -71,6 +71,8 @@ public class NStepTabularAgentTrainer {
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
                         updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
+
+
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             h.episodeCounter.increase();
         }

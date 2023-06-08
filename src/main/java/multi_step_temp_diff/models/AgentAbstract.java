@@ -1,11 +1,11 @@
 package multi_step_temp_diff.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import common.MathUtils;
+import lombok.*;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.helpers.AgentHelper;
+import multi_step_temp_diff.interfaces.AgentInterface;
 import multi_step_temp_diff.interfaces.AgentNeuralInterface;
 import multi_step_temp_diff.interfaces.EnvironmentInterface;
 import multi_step_temp_diff.interfaces.NetworkMemoryInterface;
@@ -14,13 +14,18 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class AgentAbstract implements AgentNeuralInterface {
+@Log
+public abstract class AgentAbstract implements AgentInterface {
     EnvironmentInterface environment;
     int state;
     double discountFactor;
     AgentHelper helper;
 
-    public AgentAbstract(EnvironmentInterface environment, int state, double discountFactor) {
+    public AgentAbstract(@NonNull  EnvironmentInterface environment, int state, double discountFactor) {
+        if (MathUtils.isZero(discountFactor)) {
+            log.warning("Zero discountFactor");
+        }
+
         this.environment = environment;
         this.state = state;
         this.discountFactor = discountFactor;
@@ -51,7 +56,6 @@ public abstract class AgentAbstract implements AgentNeuralInterface {
         setState(stepReturn.newState);
     }
 
-
     public abstract double readValue(int state);
-    public abstract  void learn(List<NstepExperience> miniBatch);
+
 }

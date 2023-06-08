@@ -21,7 +21,7 @@ public class TestTestAgentTabular {
     @Before
     public void init() {
         environment=new ForkEnvironment();
-        agent= AgentForkTabular.newDefault();
+        agent= AgentForkTabular.newDefault(environment);
         agentCasted=(AgentForkTabular) agent;       //to access class specific methods
     }
 

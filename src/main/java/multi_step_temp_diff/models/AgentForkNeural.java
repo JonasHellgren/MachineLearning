@@ -23,7 +23,7 @@ import java.util.*;
  */
 
 @Getter
-public class AgentForkNeural extends AgentAbstract {
+public class AgentForkNeural extends AgentAbstract implements AgentNeuralInterface {
 
     static final NetworkMemoryInterface<Integer> MEMORY=new ForkNeuralValueMemory<>();
     private static final int START_STATE = 0;
