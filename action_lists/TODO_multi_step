@@ -35,7 +35,8 @@ clean up TestNStepNeuralAgentTrainer x
 plantuml multi step  x
 AgentAbstract  x
 AgentForkTabular extends AgentAbstract  x
-ta veck chooseRandomAction etc i AgentIterface
+ta veck chooseRandomAction etc i AgentIterface  x
+rita om planutml med AgentAbstract
 clean up
 generisc state
 Annan miljö - tex Maze

@@ -38,6 +38,11 @@ public class AgentForkTabular extends AgentAbstract implements AgentInterface {
                 .environment(environment).state(START_STATE).discountFactor(discountFactor).build();
     }
 
+    public static AgentForkTabular newWithStartState(EnvironmentInterface environment,int startState) {
+        return AgentForkTabular.builder()
+                .environment(environment).state(startState).discountFactor(DISCOUNT_FACTOR).build();
+    }
+
     @Override
     public double readValue(int state) {
         return memory.getOrDefault(state, VALUE_IF_NOT_PRESENT);

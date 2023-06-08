@@ -41,12 +41,10 @@ public abstract class AgentAbstract implements AgentInterface {
         return helper.chooseAction(probRandom,getState());
     }
 
-    @Override
     public int chooseRandomAction() {
         return helper.chooseRandomAction();
     }
 
-    @Override
     public int chooseBestAction(int state) {
         return helper.chooseBestAction(state);
     }

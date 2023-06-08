@@ -11,9 +11,7 @@ import org.junit.Test;
 
 public class TestTestAgentTabular {
 
-    private static final double DELTA = 0.1;
-    private static final int PROB_RANDOM = 0;
-    private static final double PROB_RANDOM1 = 0.1;
+    private static final double DELTA = 0.1, PROB_RANDOM = 0, PROB_RANDOM1 = 0.1;
     EnvironmentInterface environment;
     AgentInterface agent;
     AgentForkTabular agentCasted;
@@ -37,35 +35,35 @@ public class TestTestAgentTabular {
 
     @Test
     public void givenDefaultAgent_whenRandomAction_then0or1() {
-        final int action = agent.chooseRandomAction();
+        final int action = agentCasted.chooseRandomAction();
         Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState14_whenBestAction_then0or1() {
-        agent= AgentForkTabular.builder().environment(environment).state(14).build();
-        final int action = agent.chooseRandomAction();
+        agent= AgentForkTabular.newWithStartState(environment,14);
+        final int action = agentCasted.chooseRandomAction();
         Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState9_whenBestAction_then1() {
-        agent= AgentForkTabular.builder().environment(environment).state(9).build();
-        final int action = agent.chooseRandomAction();
+       agent= AgentForkTabular.newWithStartState(environment,9);
+        final int action = agentCasted.chooseRandomAction();
         Assert.assertTrue(action ==0 || action ==1);
     }
 
     @Test
     public void givenState5ValueIn7Is10_whenBestAction_then1() {
-        agent= AgentForkTabular.builder().environment(environment).state(5).build();
+        agent= AgentForkTabular.newWithStartState(environment,5);
         AgentForkTabular agentCasted=(AgentForkTabular) agent;
         agentCasted.writeValue(7,1d);
-        Assert.assertEquals(1,agent.chooseBestAction(agent.getState()));
+        Assert.assertEquals(1,agentCasted.chooseBestAction(agent.getState()));
     }
 
     @Test
     public void givenState5ValueIn7Is10_whenActionZeroRandProb_then1() {
-        agent= AgentForkTabular.builder().environment(environment).state(5).build();
+        agent= AgentForkTabular.newWithStartState(environment,5);
         agentCasted.writeValue(7,1d);
         Assert.assertEquals(1,agent.chooseAction(PROB_RANDOM));
     }
