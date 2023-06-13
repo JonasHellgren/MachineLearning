@@ -36,7 +36,7 @@ public class TestNStepNeuralAgentTrainer {
         TestHelper.printStateValues(agentCasted.getMemory());
         AgentInfo agentInfo=new AgentInfo(agent);
         printBufferSize();
-    //    Assert.assertTrue(TestHelper.avgError(agentInfo.stateValueMap(environment.stateSet())) < delta); //todo
+        Assert.assertTrue(TestHelper.avgError(agentInfo.stateValueMap(environment.stateSet())) < delta);
     }
 
 

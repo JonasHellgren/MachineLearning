@@ -36,9 +36,9 @@ public class AgentInfo {
         return agentCasted.getNofSteps();
     }
 
-    public List<Double> getTemporalDifferenceList(int lengthFreeze) {
+    public List<Double> getFilteredTemporalDifferenceList(int lengthWindow) {
         List<Double> diffList=agentCasted.getTemporalDifferenceTracker().getTemporalDifferenceList();
-        MovingAverage movingAverage=new MovingAverage(lengthFreeze,diffList);
+        MovingAverage movingAverage=new MovingAverage(lengthWindow,diffList);
         return movingAverage.getFiltered();
 
     }

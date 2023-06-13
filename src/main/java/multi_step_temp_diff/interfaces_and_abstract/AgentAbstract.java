@@ -41,6 +41,12 @@ public abstract class AgentAbstract implements AgentInterface {
         return actionSelector.chooseAction(probRandom,getState());
     }
 
+    @Override
+    public void clear() {
+        nofSteps=0;
+        temporalDifferenceTracker.reset();
+    }
+
     public int chooseRandomAction() {
         return actionSelector.chooseRandomAction();
     }

@@ -50,5 +50,10 @@ public class AgentForkTabular extends AgentAbstract implements AgentInterface {
         memory.put(state, value);
     }
 
+    public void clear() {
+        super.clear();
+        memory.clear();
+    }
+
 
 }

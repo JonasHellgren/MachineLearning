@@ -98,8 +98,9 @@ public class NStepTabularAgentTrainer {
         final int stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
         AgentForkTabular agentCasted = (AgentForkTabular) agent;       //to access class specific methods
-        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
-        agentCasted.addTemporalDifference((G - valuePresent));
+        final double difference = G - valuePresent;
+        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * difference);
+        agentCasted.addTemporalDifference(difference);
     }
 
 

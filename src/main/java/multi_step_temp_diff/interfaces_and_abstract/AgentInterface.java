@@ -10,5 +10,5 @@ public interface AgentInterface {
     int chooseAction(double probRandom);
     void updateState(StepReturn stepReturn);
     double readValue(int state);
-  //  double getDiscountFactor();
+    void clear();
 }

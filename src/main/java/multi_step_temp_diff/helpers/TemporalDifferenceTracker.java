@@ -18,6 +18,11 @@ public class TemporalDifferenceTracker {
         temporalDifferenceList.add(difference);
     }
 
+    public void reset() {
+        temporalDifferenceList.clear();
+    }
+
+
 
 
 }
