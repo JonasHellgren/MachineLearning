@@ -1,9 +1,6 @@
 package multi_step_temp_diff.helpers;
 
-import common.Conditionals;
-import common.Counter;
-import common.ListUtils;
-import common.LogarithmicDecay;
+import common.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -86,11 +83,11 @@ public class NStepNeuralAgentTrainer {
                         chooseActionStepAndStoreExperience(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(), h.n);
                 Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
-                        buffer.addExperience(getExperienceAtTimeTau(h)));
+                    buffer.addExperience(getExperienceAtTimeTau(h)));
                 Conditionals.executeIfTrue(buffer.size() > batchSize, () -> {
                     List<NstepExperience> miniBatch = getMiniBatch(buffer);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
-                //trackTempDifferenceErrors(miniBatch);  //todo
+                    trackTempDifferenceError(miniBatch);
                 });
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau, h.T));
@@ -139,6 +136,14 @@ public class NStepNeuralAgentTrainer {
                 .stateToBackupFrom(stateAheadToBackupFrom.orElse(NstepExperience.STATE_IF_NOT_PRESENT))
                 .isBackupStatePresent(stateAheadToBackupFrom.isPresent())
                 .build();
+    }
+
+    private void trackTempDifferenceError(List<NstepExperience> miniBatch) {
+        NstepExperience experience=miniBatch.get(RandUtils.getRandomIntNumber(0,miniBatch.size()));
+        double valueMemory=agentNeural.readValue(experience.stateToUpdate);
+        double valueTarget=experience.value;
+        AgentForkTabular agentCasted = (AgentForkTabular) agentNeural;
+        agentCasted.addTemporalDifference(valueMemory-valueTarget);
     }
 
 

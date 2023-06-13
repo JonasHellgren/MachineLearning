@@ -46,9 +46,10 @@ AgentInfo - kom åt nofSteps  x
 Test för nofSteps  x
 ny klass i AgentAbstract TemporalDifferenceTracker  x
 AgentInfo - kom åt TemporalDifferenceTracker med olika filter tidsfönster  x
-trackTempDifferenceErrors i NStepNeuralAgentTrainer x
 TestTemporalDifferenceTracker  x
 plott ex trackTempDifferenceErrors x
+trackTempDifferenceErrors i NStepNeuralAgentTrainer x
+plotta ovan
 generisc state
 planutml med generisc state
 
