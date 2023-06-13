@@ -38,11 +38,12 @@ AgentForkTabular extends AgentAbstract  x
 ta veck chooseRandomAction etc i AgentIterface  x
 rita om planutml med AgentAbstract x
 clean up
-EnvironmentInterface - ta bort Set<Integer> stateSet()
-AgentInfo - lägg till getDiscountFactor
-AgentInterface - ta bort getDiscountFactor
-AgentAbstract - lägg till fält nofSteps
-AgentInfo - kom åt nofSteps
+EnvironmentInterface - ta bort Set<Integer> stateSet()   - EnvironmentDiscreteStatesInterface blir för bökigt x
+AgentInfo - lägg till getDiscountFactor   x
+AgentInterface - ta bort getDiscountFactor  x
+AgentAbstract - lägg till fält nofSteps  x
+AgentInfo - kom åt nofSteps  x
+Test för nofSteps  x
 ny klass i AgentAbstract TemporalDifferenceTracker
 AgentInfo - kom åt TemporalDifferenceTracker med olika tidsfönster
 plott ovan

@@ -47,8 +47,10 @@ public class NStepTabularAgentTrainer {
     @Builder.Default
     int startState= START_STATE;
 
-    public void train() {
+    AgentInfo agentInfo;
 
+    public void train() {
+        agentInfo=new AgentInfo(agent);
         NStepTDHelper h= NStepTDHelper.builder()
                 .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
                 .episodeCounter(new Counter(0, nofEpisodes))
@@ -93,7 +95,7 @@ public class NStepTabularAgentTrainer {
         int tBackUpFrom=h.tau + h.n;
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
             int stateAheadToBackupFrom = h.timeReturnMap.get(h.tau + h.n).newState;
-            G = G + Math.pow(agent.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
+            G = G + Math.pow(agentInfo.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
         }
         final int stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
@@ -115,7 +117,7 @@ public class NStepTabularAgentTrainer {
         Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + h.n, h.T));
         List<Double> returnTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            returnTerms.add(Math.pow(agent.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
+            returnTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(returnTerms);
     }

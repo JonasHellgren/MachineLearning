@@ -25,6 +25,11 @@ public class ListUtils {
                 .average();
     }
 
+    public static double sumList(List<Double> list) {
+        return list.stream()
+                .mapToDouble(a -> a)
+                .sum();
+    }
 
     public static <T> Optional<T> findEnd(List<T> list) {
         if (list.size()==0) {
@@ -58,8 +63,6 @@ public class ListUtils {
                 .collect(Collectors.toList());
     }
 
-
-
     public static Integer sumIntegerList(List<Integer> list) {
         return list.stream().mapToInt(Integer::intValue).sum();
     }
@@ -68,7 +71,6 @@ public class ListUtils {
     public static Double sumDoubleList(List<Double> list) {
         return list.stream().mapToDouble(Double::doubleValue).sum();
     }
-
 
     public static List<Double> addScalarToListElements(List<Double> listA, Double scalar) {
         return listA.stream().map(num -> num + scalar)

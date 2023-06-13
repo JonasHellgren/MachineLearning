@@ -13,6 +13,7 @@ public abstract class AgentAbstract implements AgentInterface {
     EnvironmentInterface environment;
     int state;
     double discountFactor;
+    int nofSteps;
     AgentActionSelector actionSelector;
 
     public AgentAbstract(@NonNull  EnvironmentInterface environment, int state, double discountFactor) {
@@ -23,6 +24,7 @@ public abstract class AgentAbstract implements AgentInterface {
         this.environment = environment;
         this.state = state;
         this.discountFactor = discountFactor;
+        this.nofSteps=0;
         this.actionSelector = AgentActionSelector.builder()
                 .nofActions(environment.actionSet().size())
                 .environment(environment).discountFactor(discountFactor)
@@ -32,6 +34,7 @@ public abstract class AgentAbstract implements AgentInterface {
 
     @Override
     public int chooseAction(double probRandom) {
+        nofSteps++;
         return actionSelector.chooseAction(probRandom,getState());
     }
 

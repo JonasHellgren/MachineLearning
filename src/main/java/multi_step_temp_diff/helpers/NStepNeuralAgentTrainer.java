@@ -58,9 +58,11 @@ public class NStepNeuralAgentTrainer {
     @Builder.Default
     int nofTrainingIterations = NOF_ITERATIONS;
 
+    AgentInfo agentInfo;
     ReplayBufferInterface buffer;
 
     public void train() {
+        agentInfo=new AgentInfo(agentNeural);
 
         NStepTDHelper h = NStepTDHelper.builder()
                 .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
@@ -108,7 +110,7 @@ public class NStepNeuralAgentTrainer {
     }
 
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience> miniBatch) {
-        double discPowNofSteps = Math.pow(agentNeural.getDiscountFactor(), nofStepsBetweenUpdatedAndBackuped);
+        double discPowNofSteps = Math.pow(agentInfo.getDiscountFactor(), nofStepsBetweenUpdatedAndBackuped);
         for (NstepExperience exp : miniBatch) {
             exp.value = (exp.isBackupStatePresent)
                     ? exp.sumOfRewards + discPowNofSteps * agentNeural.readValue(exp.stateToBackupFrom)
@@ -152,7 +154,7 @@ public class NStepNeuralAgentTrainer {
         Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + h.n, h.T));
         List<Double> rewardTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            rewardTerms.add(Math.pow(agentNeural.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
+            rewardTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(rewardTerms);
     }

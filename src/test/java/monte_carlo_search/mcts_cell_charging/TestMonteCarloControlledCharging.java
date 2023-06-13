@@ -1,7 +1,6 @@
 package monte_carlo_search.mcts_cell_charging;
 
 import lombok.SneakyThrows;
-import monte_carlo_tree_search.classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
@@ -9,7 +8,8 @@ import monte_carlo_tree_search.domains.battery_cell.*;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;
-import monte_carlo_tree_search.node_models.NodeWithChildrenInterface;
+import monte_carlo_tree_search.models_and_support_classes.SimulationResults;
+import monte_carlo_tree_search.search_tree_node_models.NodeWithChildrenInterface;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

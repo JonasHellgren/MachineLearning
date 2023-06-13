@@ -1,0 +1,15 @@
+
+
+nytt problem där bounds blir relevant  x
+bounds NonLinearConjugateGradientOptimizer med penalty x
+TestSumOfThree funkar x
+assertions på TestSumOfThree  x
+mindre styve barriär funktion x
+speed test x
+getFiniteDiffGradient gör egen klass och återanvänd  x
+annat ex problem  x
+TestHelper x
+clean up  x
+getFiniteDiffGradient System.arraycopy skall vara inne i loop
+andra updateFormula NonLinearConjugateGradientOptimizer
+

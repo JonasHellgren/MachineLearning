@@ -1,5 +1,6 @@
 package multi_step_td;
 
+import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.models.AgentForkTabular;
@@ -15,12 +16,14 @@ public class TestTestAgentTabular {
     EnvironmentInterface environment;
     AgentInterface agent;
     AgentForkTabular agentCasted;
+    AgentInfo agentInfo;
 
     @Before
     public void init() {
         environment=new ForkEnvironment();
         agent= AgentForkTabular.newDefault(environment);
         agentCasted=(AgentForkTabular) agent;       //to access class specific methods
+        agentInfo=new AgentInfo(agent);
     }
 
     @Test
@@ -77,6 +80,14 @@ public class TestTestAgentTabular {
     public void givenDefaultAgent_whenWriting10inState9_thenCorrectRead() {
         agentCasted.writeValue(9,10d);
         Assert.assertEquals(10d,agent.readValue(9),DELTA);
+    }
+
+    @Test
+    public void givenState_whenAction_thenNofStepsIsIncreased() {
+        Assert.assertEquals(0,agentInfo.getNofSteps());
+        agent.chooseAction(PROB_RANDOM);
+        Assert.assertEquals(1,agentInfo.getNofSteps());
+
     }
 
 }

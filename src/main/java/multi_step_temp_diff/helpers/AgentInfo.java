@@ -1,5 +1,6 @@
 package multi_step_temp_diff.helpers;
 
+import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 
 import java.util.HashMap;
@@ -9,9 +10,12 @@ import java.util.Set;
 public class AgentInfo {
 
     AgentInterface agent;
+    AgentAbstract agentCasted;
 
     public AgentInfo(AgentInterface agent) {
         this.agent = agent;
+        this.agentCasted=(AgentAbstract) agent;
+
     }
 
     public Map<Integer,Double> stateValueMap(Set<Integer> stateSet) {
@@ -20,6 +24,14 @@ public class AgentInfo {
             map.put(state, agent.readValue(state));
         }
         return map;
+    }
+
+    public double getDiscountFactor() {
+        return agentCasted.getDiscountFactor();
+    }
+
+    public int getNofSteps() {
+        return agentCasted.getNofSteps();
     }
 
 }
