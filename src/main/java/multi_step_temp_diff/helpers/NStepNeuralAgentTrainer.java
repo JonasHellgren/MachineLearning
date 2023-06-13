@@ -90,6 +90,7 @@ public class NStepNeuralAgentTrainer {
                 Conditionals.executeIfTrue(buffer.size() > batchSize, () -> {
                     List<NstepExperience> miniBatch = getMiniBatch(buffer);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
+                //trackTempDifferenceErrors(miniBatch);  //todo
                 });
                 h.timeCounter.increase();
             } while (!isAtTimeJustBeforeTermination.test(h.tau, h.T));

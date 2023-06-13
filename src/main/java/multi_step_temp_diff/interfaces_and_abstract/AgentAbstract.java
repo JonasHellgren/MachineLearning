@@ -4,6 +4,7 @@ import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.helpers.AgentActionSelector;
+import multi_step_temp_diff.helpers.TemporalDifferenceTracker;
 import multi_step_temp_diff.models.StepReturn;
 
 @Getter
@@ -15,6 +16,7 @@ public abstract class AgentAbstract implements AgentInterface {
     double discountFactor;
     int nofSteps;
     AgentActionSelector actionSelector;
+    TemporalDifferenceTracker temporalDifferenceTracker;
 
     public AgentAbstract(@NonNull  EnvironmentInterface environment, int state, double discountFactor) {
         if (MathUtils.isZero(discountFactor)) {
@@ -30,6 +32,7 @@ public abstract class AgentAbstract implements AgentInterface {
                 .environment(environment).discountFactor(discountFactor)
                 .readFunction(this::readValue)
                 .build();
+        this.temporalDifferenceTracker=new TemporalDifferenceTracker();
     }
 
     @Override
@@ -49,6 +52,10 @@ public abstract class AgentAbstract implements AgentInterface {
     @Override
     public void updateState(StepReturn stepReturn) {
         setState(stepReturn.newState);
+    }
+
+    public void addTemporalDifference(double difference) {
+        temporalDifferenceTracker.addDifference(Math.abs(difference));
     }
 
     public abstract double readValue(int state);

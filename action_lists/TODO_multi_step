@@ -44,9 +44,11 @@ AgentInterface - ta bort getDiscountFactor  x
 AgentAbstract - lägg till fält nofSteps  x
 AgentInfo - kom åt nofSteps  x
 Test för nofSteps  x
-ny klass i AgentAbstract TemporalDifferenceTracker
-AgentInfo - kom åt TemporalDifferenceTracker med olika tidsfönster
-plott ovan
+ny klass i AgentAbstract TemporalDifferenceTracker  x
+AgentInfo - kom åt TemporalDifferenceTracker med olika filter tidsfönster  x
+trackTempDifferenceErrors i NStepNeuralAgentTrainer
+TestTemporalDifferenceTracker
+plott ex trackTempDifferenceErrors
 generisc state
 planutml med generisc state
 

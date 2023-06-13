@@ -73,8 +73,6 @@ public class NStepTabularAgentTrainer {
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
                         updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
-
-
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             h.episodeCounter.increase();
         }
@@ -101,6 +99,7 @@ public class NStepTabularAgentTrainer {
         double valuePresent = agent.readValue(stateToUpdate);
         AgentForkTabular agentCasted = (AgentForkTabular) agent;       //to access class specific methods
         agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * (G - valuePresent));
+        agentCasted.addTemporalDifference((G - valuePresent));
     }
 
 

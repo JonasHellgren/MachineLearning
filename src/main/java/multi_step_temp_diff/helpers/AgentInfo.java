@@ -1,9 +1,11 @@
 package multi_step_temp_diff.helpers;
 
+import common.MovingAverage;
 import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +34,13 @@ public class AgentInfo {
 
     public int getNofSteps() {
         return agentCasted.getNofSteps();
+    }
+
+    public List<Double> getTemporalDifferenceList(int lengthFreeze) {
+        List<Double> diffList=agentCasted.getTemporalDifferenceTracker().getTemporalDifferenceList();
+        MovingAverage movingAverage=new MovingAverage(lengthFreeze,diffList);
+        return movingAverage.getFiltered();
+
     }
 
 }
