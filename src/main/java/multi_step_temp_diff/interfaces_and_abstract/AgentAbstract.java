@@ -3,9 +3,7 @@ package multi_step_temp_diff.interfaces_and_abstract;
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.helpers.AgentHelper;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.helpers.AgentActionSelector;
 import multi_step_temp_diff.models.StepReturn;
 
 @Getter
@@ -15,7 +13,7 @@ public abstract class AgentAbstract implements AgentInterface {
     EnvironmentInterface environment;
     int state;
     double discountFactor;
-    AgentHelper helper;
+    AgentActionSelector actionSelector;
 
     public AgentAbstract(@NonNull  EnvironmentInterface environment, int state, double discountFactor) {
         if (MathUtils.isZero(discountFactor)) {
@@ -25,7 +23,7 @@ public abstract class AgentAbstract implements AgentInterface {
         this.environment = environment;
         this.state = state;
         this.discountFactor = discountFactor;
-        this.helper = AgentHelper.builder()
+        this.actionSelector = AgentActionSelector.builder()
                 .nofActions(environment.actionSet().size())
                 .environment(environment).discountFactor(discountFactor)
                 .readFunction(this::readValue)
@@ -34,15 +32,15 @@ public abstract class AgentAbstract implements AgentInterface {
 
     @Override
     public int chooseAction(double probRandom) {
-        return helper.chooseAction(probRandom,getState());
+        return actionSelector.chooseAction(probRandom,getState());
     }
 
     public int chooseRandomAction() {
-        return helper.chooseRandomAction();
+        return actionSelector.chooseRandomAction();
     }
 
     public int chooseBestAction(int state) {
-        return helper.chooseBestAction(state);
+        return actionSelector.chooseBestAction(state);
     }
 
     @Override

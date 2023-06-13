@@ -4,7 +4,6 @@ import common.Conditionals;
 import common.MathUtils;
 import common.ScalerLinear;
 import lombok.Getter;
-import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.models.NstepExperience;
 import org.neuroph.core.data.DataSet;

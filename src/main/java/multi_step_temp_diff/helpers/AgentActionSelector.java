@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Builder
-public class AgentHelper {
+public class AgentActionSelector {
 
     int nofActions;
     @NonNull  EnvironmentInterface environment;

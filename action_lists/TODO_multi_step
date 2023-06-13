@@ -38,6 +38,14 @@ AgentForkTabular extends AgentAbstract  x
 ta veck chooseRandomAction etc i AgentIterface  x
 rita om planutml med AgentAbstract x
 clean up
+EnvironmentInterface - ta bort Set<Integer> stateSet()
+AgentInfo - lägg till getDiscountFactor
+AgentInterface - ta bort getDiscountFactor
+AgentAbstract - lägg till fält nofSteps
+AgentInfo - kom åt nofSteps
+ny klass i AgentAbstract TemporalDifferenceTracker
+AgentInfo - kom åt TemporalDifferenceTracker med olika tidsfönster
+plott ovan
 generisc state
 planutml med generisc state
 

@@ -10,5 +10,4 @@ public interface EnvironmentInterface {
     boolean isTerminalState(int state);
     Set<Integer> actionSet();
     Set<Integer> stateSet();
-
 }
