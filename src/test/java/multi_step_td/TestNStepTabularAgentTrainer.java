@@ -21,8 +21,6 @@ public class TestNStepTabularAgentTrainer {
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 3;
     private static final int NOF_EPISODES = 100;
-    private static final int LENGTH_WINDOW = 50;
-    private static final int SLEEP_TIME_MILLIS = 1_000;
     NStepTabularAgentTrainer trainer;
     AgentForkTabular agent;
 
@@ -39,18 +37,10 @@ public class TestNStepTabularAgentTrainer {
 
     @SneakyThrows
     @Test public void whenIncreasingNofSteps_thenBetterStateValues() {
-        AgentInfo agentInfo=new AgentInfo(agent);
-        List<List<Double>> listOfTrajectories=new ArrayList<>();
-
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         trainer.train();
         Map<Integer,Double> mapOneStep= trainer.getStateValueMap();
         double avgErrOne= TestHelper.avgError(mapOneStep);
-
-        List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_WINDOW);
-        listOfTrajectories.add(filtered1);
-
-        System.out.println("agentInfo.getNofSteps()  1= " + agentInfo.getNofSteps());
 
         agent.clear();
         trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
@@ -58,23 +48,10 @@ public class TestNStepTabularAgentTrainer {
         Map<Integer,Double> mapTreeSteps= trainer.getStateValueMap();
         double avgErrThree=TestHelper.avgError(mapTreeSteps);
 
-        System.out.println("agentInfo.getNofSteps() 3 = " + agentInfo.getNofSteps());
-
-        List<Double> filtered3 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_WINDOW);
-        listOfTrajectories.add(filtered3);
-
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);
-        System.out.println("ListUtils.findAverage(filtered1) = " + ListUtils.findAverage(filtered1));
-        System.out.println("ListUtils.findAverage(filtered3) = " + ListUtils.findAverage(filtered3));
 
         Assert.assertTrue(avgErrOne>avgErrThree);
-
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("ONE","THREE_STEPS"), "Step");
-        plotter.plot(listOfTrajectories);
-        Thread.sleep(SLEEP_TIME_MILLIS);
-
-
     }
 
 

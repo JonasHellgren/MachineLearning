@@ -1,17 +1,17 @@
 package multi_step_temp_diff.runners;
 
-import common.ListUtils;
 import common.MultiplePanelsPlotter;
 import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.models.AgentForkTabular;
-import org.jcodec.common.Assert;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
+/***
+ * This runner shows that td error decreases more rapidly with many steps learning
+ */
 
 public class RunnerNStepTabularAgentTrainer {
     private static final int ONE_STEP = 1;

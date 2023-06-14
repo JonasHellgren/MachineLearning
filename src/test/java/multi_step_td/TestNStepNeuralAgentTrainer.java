@@ -25,8 +25,6 @@ public class TestNStepNeuralAgentTrainer {
     private static final int ONE_STEP = 1;
     private static final int NOF_EPIS = 300;
     private static final int START_STATE = 0;
-    private static final int LENGTH_WINDOW = 500;
-    private static final int SLEEP_TIME_MILLIS = 10_000;
 
     NStepNeuralAgentTrainer trainer;
     AgentNeuralInterface agent;
