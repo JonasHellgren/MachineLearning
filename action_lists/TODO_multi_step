@@ -49,7 +49,7 @@ AgentInfo - kom åt TemporalDifferenceTracker med olika filter tidsfönster  x
 TestTemporalDifferenceTracker  x
 plott ex trackTempDifferenceErrors x
 trackTempDifferenceErrors i NStepNeuralAgentTrainer x
-plotta ovan
+plotta ovan  x
 generisc state
 planutml med generisc state
 

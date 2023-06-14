@@ -1,8 +1,11 @@
 package multi_step_temp_diff.helpers;
 
 import common.MovingAverage;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
+import org.apache.arrow.flatbuf.Int;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +43,19 @@ public class AgentInfo {
         List<Double> diffList=agentCasted.getTemporalDifferenceTracker().getTemporalDifferenceList();
         MovingAverage movingAverage=new MovingAverage(lengthWindow,diffList);
         return movingAverage.getFiltered();
+    }
 
+    public TemporalDifferenceTracker getTemporalDifferenceTracker() {
+        return agentCasted.getTemporalDifferenceTracker();
+    }
+
+
+    public static Map<Integer,Double> getStateValues(NetworkMemoryInterface<Integer> memory, Set<Integer> stateSet) {
+        Map<Integer,Double> stateValues=new HashMap<>();
+        for (Integer state:stateSet) {
+            stateValues.put(state,memory.read(state));
+        }
+        return stateValues;
     }
 
 }

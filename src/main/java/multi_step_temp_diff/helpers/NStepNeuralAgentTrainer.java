@@ -142,8 +142,8 @@ public class NStepNeuralAgentTrainer {
         NstepExperience experience=miniBatch.get(RandUtils.getRandomIntNumber(0,miniBatch.size()));
         double valueMemory=agentNeural.readValue(experience.stateToUpdate);
         double valueTarget=experience.value;
-        AgentForkTabular agentCasted = (AgentForkTabular) agentNeural;
-        agentCasted.addTemporalDifference(valueMemory-valueTarget);
+        TemporalDifferenceTracker tracker=agentInfo.getTemporalDifferenceTracker();
+        tracker.addDifference(Math.abs(valueMemory-valueTarget));
     }
 
 

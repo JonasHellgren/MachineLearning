@@ -17,7 +17,6 @@ public class TestHelper {
         for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
             stateValues.put(si,memory.read(si));
         }
-        ;
         stateValues.forEach((s,v) -> System.out.println("s="+s+", v="+v));
     }
 

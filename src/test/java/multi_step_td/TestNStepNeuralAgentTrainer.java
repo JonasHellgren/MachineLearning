@@ -1,5 +1,7 @@
 package multi_step_td;
 
+import common.MultiplePanelsPlotter;
+import lombok.SneakyThrows;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
@@ -8,6 +10,10 @@ import multi_step_temp_diff.environments.ForkEnvironment;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Big batch seems to destabilize
@@ -19,6 +25,9 @@ public class TestNStepNeuralAgentTrainer {
     private static final int ONE_STEP = 1;
     private static final int NOF_EPIS = 300;
     private static final int START_STATE = 0;
+    private static final int LENGTH_WINDOW = 500;
+    private static final int SLEEP_TIME_MILLIS = 10_000;
+
     NStepNeuralAgentTrainer trainer;
     AgentNeuralInterface agent;
     AgentForkNeural agentCasted;
@@ -29,13 +38,15 @@ public class TestNStepNeuralAgentTrainer {
         environment=new ForkEnvironment();
     }
 
+    @SneakyThrows
     @Test
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 1.0, delta = 2d;
-        setAgentAndTrain(discountFactor, NOF_EPIS, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
+        setAgentAndTrain(discountFactor, NOF_EPIS*2, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
         TestHelper.printStateValues(agentCasted.getMemory());
         AgentInfo agentInfo=new AgentInfo(agent);
         printBufferSize();
+
         Assert.assertTrue(TestHelper.avgError(agentInfo.stateValueMap(environment.stateSet())) < delta);
     }
 
@@ -115,8 +126,9 @@ public class TestNStepNeuralAgentTrainer {
         trainer= NStepNeuralAgentTrainer.builder()
                 .nofStepsBetweenUpdatedAndBackuped(nofSteps)
                 .startState(startState)
+                .alpha(0.1)
                 .nofEpisodes(nofEpis).batchSize(BATCH_SIZE).agentNeural(agent)
-                .probStart(0.5).probEnd(0.01).nofTrainingIterations(1)
+                .probStart(0.25).probEnd(1e-5).nofTrainingIterations(1)
                 .environment(environment)
                 .agentNeural(agent)
                 .build();
