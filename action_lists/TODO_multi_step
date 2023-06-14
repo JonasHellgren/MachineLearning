@@ -51,7 +51,8 @@ plott ex trackTempDifferenceErrors x
 trackTempDifferenceErrors i NStepNeuralAgentTrainer x
 plotta ovan  x
 
-generisc state
+generisc state x
+ForkEnvironment implements EnvironmentInterface<ForkVariables>
 planutml med generisc state
 
 Annan miljö - tex Maze

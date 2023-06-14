@@ -47,7 +47,6 @@ public class RunnerNStepTabularAgentTrainer {
         MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Error - 1","Error - 3"), "Step");
         plotter.plot(listOfTrajectories);
 
-
     }
 
 }

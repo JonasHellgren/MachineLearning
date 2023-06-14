@@ -2,6 +2,7 @@ package multi_step_temp_diff.environments;
 
 import common.Conditionals;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ForkEnvironment implements EnvironmentInterface {
+public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
     public static final double R_HEAVEN = 10;
     public static final double R_HELL = -10;
@@ -20,19 +21,19 @@ public class ForkEnvironment implements EnvironmentInterface {
     private static final int STATE_HELL = 15;
 
     @Override
-    public StepReturn step(int state, int action) {
+    public StepReturn<ForkVariables> step(StateInterface<ForkVariables> state, int action) {
         throwIfBadArgument(state,action);
-        final int newState = getNewState(state, action);
-        return StepReturn.builder()
+        final StateInterface<ForkVariables> newState = getNewState(state, action);
+        return StepReturn.<ForkVariables>builder()
                 .isNewStateTerminal(isTerminalState(newState))
                 .newState(newState)
                 .reward(getReward(newState))
                 .build();
     }
 
-    private void throwIfBadArgument(int state, int action) {
+    private void throwIfBadArgument(StateInterface<ForkVariables> state, int action) {
         Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
-        Predicate<Integer> isNonValidState = (a) -> a > NOF_STATES - 1;
+        Predicate<StateInterface<ForkVariables> > isNonValidState = (s) -> s.getVariables().position > NOF_STATES - 1;
 
         Conditionals.executeIfTrue(isNonValidAction.test(action), () ->
         {
@@ -45,27 +46,29 @@ public class ForkEnvironment implements EnvironmentInterface {
         });
     }
 
-    private int getNewState(int state, int action) {
+    private StateInterface<ForkVariables> getNewState(StateInterface<ForkVariables>  state, int action) {
 
-        if (state==6) {
-            return 11;
+        int pos=state.getVariables().position;
+        if (pos==6) {
+            new ForkState(new ForkVariables(11));
         }
 
-        boolean isSplit = (state == 5);
-        return (isSplit)
+        boolean isSplit = (pos == 5);
+        int newPos= (isSplit)
                 ? (action == 0) ? 6 : 7
-                : state + 1;
+                : pos + 1;
+        return new ForkState(new ForkVariables(newPos));
     }
 
-    private double getReward(int newState) {
+    private double getReward(StateInterface<ForkVariables> newState) {
         return (isTerminalState(newState))
-                ? (newState == STATE_HEAVEN) ? R_HEAVEN : R_HELL
+                ? (newState.getVariables().position == STATE_HEAVEN) ? R_HEAVEN : R_HELL
                 : R_MOVE;
     }
 
     @Override
-    public boolean isTerminalState(int state) {
-        return (state == STATE_HELL || state == STATE_HEAVEN);
+    public boolean isTerminalState(StateInterface<ForkVariables>  state) {
+        return false; //(state == STATE_HELL || state == STATE_HEAVEN);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ForkEnvironment implements EnvironmentInterface {
     }
 
     @Override
-    public Set<Integer> stateSet() {
-        return IntStream.range(0, NOF_STATES).boxed().collect(Collectors.toSet());
+    public Set<ForkVariables> stateSet() {
+        return IntStream.range(0, NOF_STATES).boxed().map(ForkVariables::new).collect(Collectors.toSet());
     }
 }
