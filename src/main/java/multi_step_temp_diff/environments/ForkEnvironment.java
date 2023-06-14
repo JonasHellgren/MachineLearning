@@ -77,7 +77,7 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     }
 
     @Override
-    public Set<ForkVariables> stateSet() {
-        return IntStream.range(0, NOF_STATES).boxed().map(ForkVariables::new).collect(Collectors.toSet());
+    public  Set<StateInterface<ForkVariables>> stateSet() {
+        return IntStream.range(0, NOF_STATES).boxed().map(ForkState::newFromPos).collect(Collectors.toSet());
     }
 }

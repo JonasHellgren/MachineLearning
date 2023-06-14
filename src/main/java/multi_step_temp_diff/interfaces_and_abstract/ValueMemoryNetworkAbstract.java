@@ -26,7 +26,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     public boolean isWarmedUp;
     public NetSettings settings;
 
-    public abstract double[] getInputVec(Integer v);
+    public abstract double[] getInputVec(StateInterface<S> state);
 
 
     public void createLearningRule(MultiLayerPerceptron neuralNetwork, NetSettings settings) {
@@ -37,8 +37,8 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     }
 
     @Override
-    public double read(S state) {
-        double[] inputVec = getInputVec((Integer) state);  //todo S
+    public double read(StateInterface<S> state) {
+        double[] inputVec = getInputVec(state);
         return getNetworkOutputValue(inputVec);
     }
 
@@ -60,7 +60,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     }
 
     @Override
-    public void learn(List<NstepExperience> miniBatch) {
+    public void learn(List<NstepExperience<S>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
@@ -83,10 +83,10 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         });
     }
 
-    private DataSet getDataSet(List<NstepExperience> buffer) {
+    private DataSet getDataSet(List<NstepExperience<S>> buffer) {
         DataSet trainingSet = new DataSet(settings.inputSize, settings.outPutSize);
-        for (NstepExperience e : buffer) {
-            double[] inputVec = getInputVec(e.stateToUpdate);  //todo cottect?
+        for (NstepExperience<S> e : buffer) {
+            double[] inputVec = getInputVec(e.stateToUpdate);
             double valueClipped= MathUtils.clip(e.value,settings.minOut,settings.maxOut);
             double normalizedValue= scaleOutValueToNormalized.calcOutDouble(valueClipped);
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
@@ -96,7 +96,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
 
     @Override
-    public double getAverageValueError(List<NstepExperience> experienceList) {  //todo - to abstract
+    public double getAverageValueError(List<NstepExperience<S>> experienceList) {  //todo - to abstract
 
       /*  List<Double> errors=new ArrayList<>();
         for (NstepExperience e : experienceList) {

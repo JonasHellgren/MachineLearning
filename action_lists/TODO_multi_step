@@ -52,8 +52,14 @@ trackTempDifferenceErrors i NStepNeuralAgentTrainer x
 plotta ovan  x
 
 generisc state x
+whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell
+
 ForkEnvironment implements EnvironmentInterface<ForkVariables>
 planutml med generisc state
+
+NetworkMemoryInterface mer clean ISP
+
+
 
 Annan miljö - tex Maze
 

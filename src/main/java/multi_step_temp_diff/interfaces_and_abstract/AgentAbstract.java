@@ -3,6 +3,7 @@ package multi_step_temp_diff.interfaces_and_abstract;
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
+import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentActionSelector;
 import multi_step_temp_diff.helpers.TemporalDifferenceTracker;
 import multi_step_temp_diff.models.StepReturn;
@@ -10,15 +11,15 @@ import multi_step_temp_diff.models.StepReturn;
 @Getter
 @Setter
 @Log
-public abstract class AgentAbstract implements AgentInterface {
-    EnvironmentInterface environment;
-    int state;
+public abstract class AgentAbstract<S> implements AgentInterface<S> {
+    EnvironmentInterface<S> environment;
+    StateInterface<S> state;
     double discountFactor;
     int nofSteps;
-    AgentActionSelector actionSelector;
+    AgentActionSelector<S> actionSelector;
     TemporalDifferenceTracker temporalDifferenceTracker;
 
-    public AgentAbstract(@NonNull  EnvironmentInterface environment, int state, double discountFactor) {
+    public AgentAbstract(@NonNull  EnvironmentInterface<S> environment, StateInterface<S> state, double discountFactor) {
         if (MathUtils.isZero(discountFactor)) {
             log.warning("Zero discountFactor");
         }
@@ -27,7 +28,7 @@ public abstract class AgentAbstract implements AgentInterface {
         this.state = state;
         this.discountFactor = discountFactor;
         this.nofSteps=0;
-        this.actionSelector = AgentActionSelector.builder()
+        this.actionSelector = AgentActionSelector.<S>builder()
                 .nofActions(environment.actionSet().size())
                 .environment(environment).discountFactor(discountFactor)
                 .readFunction(this::readValue)
@@ -38,6 +39,7 @@ public abstract class AgentAbstract implements AgentInterface {
     @Override
     public int chooseAction(double probRandom) {
         nofSteps++;
+        System.out.println("getState() = " + getState().getVariables());
         return actionSelector.chooseAction(probRandom,getState());
     }
 
@@ -51,12 +53,12 @@ public abstract class AgentAbstract implements AgentInterface {
         return actionSelector.chooseRandomAction();
     }
 
-    public int chooseBestAction(int state) {
+    public int chooseBestAction(StateInterface<S> state) {
         return actionSelector.chooseBestAction(state);
     }
 
     @Override
-    public void updateState(StepReturn stepReturn) {
+    public void updateState(StepReturn<S> stepReturn) {
         setState(stepReturn.newState);
     }
 
@@ -64,6 +66,8 @@ public abstract class AgentAbstract implements AgentInterface {
         temporalDifferenceTracker.addDifference(Math.abs(difference));
     }
 
-    public abstract double readValue(int state);
+    public abstract double readValue(StateInterface<S> state);
+
+    public abstract void writeValue(StateInterface<S>  state, double value);
 
 }

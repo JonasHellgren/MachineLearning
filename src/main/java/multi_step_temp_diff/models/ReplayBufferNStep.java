@@ -11,27 +11,27 @@ import java.util.stream.IntStream;
 
 
 @Builder
-public class ReplayBufferNStep implements ReplayBufferInterface {
+public class ReplayBufferNStep<S> implements ReplayBufferInterface<S> {
 
     private static final int BUFFER_SIZE = 10000;
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default
-    public final List<NstepExperience> buffer = new ArrayList<>();
+    public final List<NstepExperience<S>> buffer = new ArrayList<>();
 
-    public static ReplayBufferNStep newDefault() {
+    public static ReplayBufferNStep newDefault() {  //todo remove?
         return ReplayBufferNStep.builder().build();
     }
 
     @Override
-    public void addExperience(NstepExperience experience) {
+    public void addExperience(NstepExperience<S> experience) {
         removeRandomItemIfFull();
         buffer.add(experience);
     }
 
     @Override
-    public List<NstepExperience> getMiniBatch(int batchLength) {
-        List<NstepExperience> miniBatch = new ArrayList<>();
+    public List<NstepExperience<S>> getMiniBatch(int batchLength) {
+        List<NstepExperience<S>> miniBatch = new ArrayList<>();
 
         List<Integer> indexes = IntStream.rangeClosed(0, size() - 1)
                 .boxed().collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class ReplayBufferNStep implements ReplayBufferInterface {
     @Override
     public String toString() {
         StringBuilder sb=new StringBuilder();
-        for (NstepExperience exp:buffer) {
+        for (NstepExperience<S> exp:buffer) {
             sb.append(exp.toString());
             sb.append(System.lineSeparator());
         }

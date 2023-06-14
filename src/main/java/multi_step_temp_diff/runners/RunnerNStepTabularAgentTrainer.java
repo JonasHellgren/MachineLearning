@@ -2,6 +2,7 @@ package multi_step_temp_diff.runners;
 
 import common.MultiplePanelsPlotter;
 import multi_step_temp_diff.environments.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.models.AgentForkTabular;
@@ -18,19 +19,19 @@ public class RunnerNStepTabularAgentTrainer {
     private static final int THREE_STEPS = 3;
     private static final int NOF_EPISODES = 100;
     private static final int LENGTH_WINDOW = 50;
-    static NStepTabularAgentTrainer trainer;
+    static NStepTabularAgentTrainer<ForkVariables> trainer;
     static AgentForkTabular agent;
 
     public static void main(String[] args) {
         final ForkEnvironment environment = new ForkEnvironment();
         agent = AgentForkTabular.newDefault(environment);
-        trainer= NStepTabularAgentTrainer.builder()
+        trainer= NStepTabularAgentTrainer.<ForkVariables>builder()
                 .nofEpisodes(NOF_EPISODES)
                 .alpha(0.2).probStart(0.25).probEnd(1e-5)
                 .environment(environment).agent(agent)
                 .build();
 
-        AgentInfo agentInfo=new AgentInfo(agent);
+        AgentInfo<ForkVariables> agentInfo=new AgentInfo<>(agent);
         List<List<Double>> listOfTrajectories=new ArrayList<>();
 
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);

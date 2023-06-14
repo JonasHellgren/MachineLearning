@@ -1,18 +1,29 @@
 package multi_step_td;
 
 import common.RandUtils;
+import multi_step_temp_diff.environments.ForkState;
+import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.environments.ForkEnvironment;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Function;
+
 public class TestForkEnvironment {
 
     private static final double DELTA = 0.1;
-    EnvironmentInterface environment;
-    StepReturn stepReturn;
+    private static final StateInterface<ForkVariables> POS0 =ForkState.newFromPos(0);
+    private static final StateInterface<ForkVariables> POS5 =ForkState.newFromPos(5) ;
+    private static final StateInterface<ForkVariables> POS6 =ForkState.newFromPos(6) ;
+    private static final StateInterface<ForkVariables> POS14 =ForkState.newFromPos(14) ;
+
+    Function<StateInterface<ForkVariables>,Integer> getPos=(s) -> s.getVariables().position;
+    EnvironmentInterface<ForkVariables> environment;
+    StepReturn<ForkVariables> stepReturn;
 
     @Before
     public void init() {
@@ -21,39 +32,39 @@ public class TestForkEnvironment {
 
     @Test
     public void whenActionIs0InState0_thenState1() {
-        stepReturn=environment.step(0,0);
-        Assert.assertEquals(1,stepReturn.newState);
+        stepReturn=environment.step(POS0,0);
+        Assert.assertEquals(1,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0InState5_thenState6() {
-        stepReturn=environment.step(5,0);
-        Assert.assertEquals(6,stepReturn.newState);
+        stepReturn=environment.step(POS5,0);
+        Assert.assertEquals(6,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0Or1InState0_thenState1() {
-        stepReturn=environment.step(0, RandUtils.getRandomIntNumber(0,2));
-        Assert.assertEquals(1,stepReturn.newState);
+        stepReturn=environment.step(POS0, RandUtils.getRandomIntNumber(0,2));
+        Assert.assertEquals(1,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0Or1InState6_thenState11() {
-        stepReturn=environment.step(6, RandUtils.getRandomIntNumber(0,2));
-        Assert.assertEquals(11,stepReturn.newState);
+        stepReturn=environment.step(POS6, RandUtils.getRandomIntNumber(0,2));
+        Assert.assertEquals(11,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell() {
-        stepReturn=environment.step(14, RandUtils.getRandomIntNumber(0,2));
-        Assert.assertEquals(15,stepReturn.newState);
+        stepReturn=environment.step(POS14, RandUtils.getRandomIntNumber(0,2));
+        Assert.assertEquals(15,(int) getPos.apply(stepReturn.newState));
         Assert.assertTrue(stepReturn.isNewStateTerminal);
         Assert.assertEquals(ForkEnvironment.R_HELL,stepReturn.reward, DELTA);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenActionIs100InState5_thenThrow() {
-        stepReturn=environment.step(100,0);
+        stepReturn=environment.step(ForkState.newFromPos(100),0);
     }
 
 }

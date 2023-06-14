@@ -1,6 +1,8 @@
 package multi_step_temp_diff.memory;
 
 import multi_step_temp_diff.environments.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkState;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.interfaces_and_abstract.ValueMemoryNetworkAbstract;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -34,10 +36,11 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> {
     }
 
     @Override
-    public double[] getInputVec(Integer s) {
+    public double[] getInputVec(StateInterface<S> s) {
         double[] inArray = new double[settings.inputSize];
         Arrays.fill(inArray, 0);
-        inArray[s] = 1d;
+        ForkState stateCasted=(ForkState) s;
+        inArray[stateCasted.getVariables().position] = 1d;
         return inArray;
     }
 }

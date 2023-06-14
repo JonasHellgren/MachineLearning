@@ -7,9 +7,9 @@ import java.util.List;
 public interface NetworkMemoryInterface<S>  {
     void save(String fileName);
     void load(String fileName);  //Todo delete
-    double read(S state);
-    void learn(List<NstepExperience> miniBatch);
+    double read(StateInterface<S> state);
+    void learn(List<NstepExperience<S>> miniBatch);
     MomentumBackpropagation getLearningRule();
-    double getAverageValueError(List<NstepExperience> experienceList);
+    double getAverageValueError(List<NstepExperience<S>> experienceList);
     void createOutScalers(double minOut, double maxOut);
 }

@@ -5,6 +5,7 @@ import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.apache.arrow.flatbuf.Int;
 
 import java.util.HashMap;
@@ -12,20 +13,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AgentInfo {
+public class AgentInfo<S> {
 
-    AgentInterface agent;
-    AgentAbstract agentCasted;
+    AgentInterface<S> agent;
+    AgentAbstract<S> agentCasted;
 
-    public AgentInfo(AgentInterface agent) {
+    public AgentInfo(AgentInterface<S> agent) {
         this.agent = agent;
-        this.agentCasted=(AgentAbstract) agent;
+        this.agentCasted=(AgentAbstract<S>) agent;
 
     }
 
-    public Map<Integer,Double> stateValueMap(Set<Integer> stateSet) {
-        Map<Integer,Double> map=new HashMap<>();
-        for (Integer state:stateSet) {
+    public Map<StateInterface<S>,Double> stateValueMap(Set<StateInterface<S>> stateSet) {
+        Map<StateInterface<S>,Double> map=new HashMap<>();
+        for (StateInterface<S> state:stateSet) {
             map.put(state, agent.readValue(state));
         }
         return map;
@@ -50,9 +51,10 @@ public class AgentInfo {
     }
 
 
-    public static Map<Integer,Double> getStateValues(NetworkMemoryInterface<Integer> memory, Set<Integer> stateSet) {
-        Map<Integer,Double> stateValues=new HashMap<>();
-        for (Integer state:stateSet) {
+    public Map<StateInterface<S>,Double> getStateValues(NetworkMemoryInterface<S> memory,
+                                                        Set<StateInterface<S>> stateSet) {
+        Map<StateInterface<S>,Double> stateValues=new HashMap<>();
+        for (StateInterface<S> state:stateSet) {
             stateValues.put(state,memory.read(state));
         }
         return stateValues;

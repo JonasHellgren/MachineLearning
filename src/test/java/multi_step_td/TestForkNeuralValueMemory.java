@@ -2,7 +2,11 @@ package multi_step_td;
 
 import common.RandUtils;
 import multi_step_temp_diff.environments.ForkEnvironment;
+import multi_step_temp_diff.environments.ForkState;
+import multi_step_temp_diff.environments.ForkVariables;
+import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 import multi_step_temp_diff.models.*;
 import org.jetbrains.annotations.NotNull;
@@ -19,66 +23,72 @@ public class TestForkNeuralValueMemory {
     private static final int NOF_ITERATIONS = 1000;
     private static final int BATCH_LENGTH = 30;
     private static final int BUFFER_SIZE = 100;
-    NetworkMemoryInterface<Integer> memory;
+
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
     private static final int NOF_STATES = ForkEnvironment.NOF_STATES;
     private static final int INPUT_SIZE = NOF_STATES;
-    private static final int OUTPUT_SIZE = 1;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+
+    NetworkMemoryInterface<ForkVariables> memory;
+    EnvironmentInterface<ForkVariables> environment;
+    TestHelper<ForkVariables> helper;
+
 
     @Before
     public void init() {
-
         NetSettings netSettings = NetSettings.builder()
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
                 .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build();
 
         memory=new ForkNeuralValueMemory<>(netSettings);
+        environment = new ForkEnvironment();
+        helper=new TestHelper<>(memory, environment);
     }
 
 
     @Test
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect() {
         final double value = 0d;
-        ReplayBufferNStep buffer=ReplayBufferNStep.builder()
+        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        TestHelper.printStateValues(memory);
-        TestHelper.assertAllStates(memory,value,DELTA);
+        helper.printStateValues();
+        helper.assertAllStates(value,DELTA);
     }
 
     @Test
     public void givenMockedDataAllStatesTen_whenTrain_thenCorrect() {
         final double value = 10d;
-        ReplayBufferNStep buffer=ReplayBufferNStep.builder()
+        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        TestHelper.printStateValues(memory);
-        TestHelper.assertAllStates(memory,value,DELTA);
+        helper.printStateValues();
+        helper.assertAllStates(value,DELTA);
     }
 
     @Test
     public void givenMockedDataAllStatesMinusTen_whenTrain_thenCorrect() {
         final double value = -10d;
-        ReplayBufferNStep buffer=ReplayBufferNStep.builder()
+        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
-        TestHelper.printStateValues(memory);
-        TestHelper.assertAllStates(memory,value,DELTA);
+        helper.printStateValues();
+        helper.assertAllStates(value,DELTA);
     }
 
     @Test
     public void givenMockedDataAllOddStatesMinusTenEvenPlusTen_whenTrain_thenCorrect() {
         final double valueOdd = -10d, valueEven = 10d;
-        ReplayBufferNStep buffer=ReplayBufferNStep.builder()
+        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
                 .buffer(createBatchOddEven(valueOdd,valueEven)).build();
         train(buffer);
-        TestHelper.printStateValues(memory);
+
+        helper.printStateValues();
         assertAllStatesOddEven(valueOdd,valueEven);
     }
 
-    private void train(ReplayBufferNStep buffer) {
+    private void train(ReplayBufferNStep<ForkVariables> buffer) {
         for (int i = 0; i < NOF_ITERATIONS ; i++) {
             memory.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
@@ -86,18 +96,19 @@ public class TestForkNeuralValueMemory {
 
 
     private void assertAllStatesOddEven(double valueOdd, double valueEven) {
-        for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
-            final double value = isEven.test(si) ? valueEven : valueOdd;
+        //for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
+        for (StateInterface<ForkVariables> si:environment.stateSet()) {
+            final double value = isEven.test(si.getVariables().position) ? valueEven : valueOdd;
             Assert.assertEquals(value, memory.read(si), DELTA);
         }
     }
 
     @NotNull
-    private List<NstepExperience> createBatch(double value) {
-        List<NstepExperience> batch=new ArrayList<>();
+    private List<NstepExperience<ForkVariables>> createBatch(double value) {
+        List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            NstepExperience exp= NstepExperience.builder()
-                    .stateToUpdate(RandUtils.getRandomIntNumber(0,ForkEnvironment.NOF_STATES))
+            NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
+                    .stateToUpdate(ForkState.newFromRandomPos())
                     .value(value)
                     .build();
             batch.add(exp);
@@ -106,13 +117,13 @@ public class TestForkNeuralValueMemory {
     }
 
     @NotNull
-    private List<NstepExperience> createBatchOddEven(double valueOdd, double valueEven) {
-        List<NstepExperience> batch=new ArrayList<>();
+    private List<NstepExperience<ForkVariables>> createBatchOddEven(double valueOdd, double valueEven) {
+        List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
             final int randomIntNumber = RandUtils.getRandomIntNumber(0, ForkEnvironment.NOF_STATES);
             final double value = isEven.test(randomIntNumber) ? valueEven : valueOdd;
-            NstepExperience exp= NstepExperience.builder()
-                    .stateToUpdate(randomIntNumber)
+            NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
+                    .stateToUpdate(ForkState.newFromPos(randomIntNumber))
                     .value(value)
                     .build();
             batch.add(exp);

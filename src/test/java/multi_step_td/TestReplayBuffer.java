@@ -1,6 +1,8 @@
 package multi_step_td;
 
 import common.RandUtils;
+import multi_step_temp_diff.environments.ForkState;
+import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.interfaces_and_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
@@ -13,7 +15,7 @@ import java.util.List;
 public class TestReplayBuffer {
 
     private static final int n = 4;
-    ReplayBufferInterface buffer;
+    ReplayBufferInterface<ForkVariables> buffer;
 
     @Before
     public void init() {
@@ -22,8 +24,8 @@ public class TestReplayBuffer {
 
     @Test
     public void whenAddingOneExperience_thenExists() {
-        buffer.addExperience(NstepExperience.builder().stateToUpdate(0).sumOfRewards(0d)
-                .stateToBackupFrom(3).isBackupStatePresent(true).build());
+        buffer.addExperience(NstepExperience.<ForkVariables>builder().stateToUpdate(ForkState.newFromPos(0)).sumOfRewards(0d)
+                .stateToBackupFrom(ForkState.newFromPos(3)).isBackupStatePresent(true).build());
         System.out.println("buffer = " + buffer);
         Assert.assertEquals(1,buffer.size());
     }
@@ -33,12 +35,13 @@ public class TestReplayBuffer {
 
         for (int i = 0; i < 10 ; i++) {
             double sumOfRewards= RandUtils.getRandomDouble(0,10);
-            buffer.addExperience(NstepExperience.builder()
-                    .stateToUpdate(i).sumOfRewards(sumOfRewards).stateToBackupFrom(i + n).isBackupStatePresent(true)
+            buffer.addExperience(NstepExperience.<ForkVariables>builder()
+                    .stateToUpdate(ForkState.newFromPos(i)).sumOfRewards(sumOfRewards)
+                    .stateToBackupFrom(ForkState.newFromPos(i + n)).isBackupStatePresent(true)
                     .build());
         }
 
-        List<NstepExperience> miniBuffer=buffer.getMiniBatch(5);
+        List<NstepExperience<ForkVariables>> miniBuffer=buffer.getMiniBatch(5);
         System.out.println("buffer = " + buffer);
         miniBuffer.forEach(System.out::println);
 
