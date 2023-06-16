@@ -12,17 +12,10 @@ import java.util.stream.IntStream;
 
 public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
-    public static final double R_HEAVEN = 10;
-    public static final double R_HELL = -10;
-    public static final double R_MOVE = 0;
-    public static final int NOF_ACTIONS = 2;
-    public static final int NOF_STATES = 16;
-    private static final int STATE_HEAVEN = 10;
-    private static final int STATE_HELL = 15;
-    public static final int SPLIT_POSITION = 5;
-    public static final int START_TO_HELL = 6;
-    public static final int START_TO_HEAVEN = 7;
-    public static final int POSITION_AFTER_START_TO_HELL = 11;
+    public static final double R_HEAVEN = 10, R_HELL = -10, R_MOVE = 0;
+    public static final int NOF_ACTIONS = 2, NOF_STATES = 16;
+    private static final int HEAVEN = 10, HELL = 15, SPLIT = 5, START_TO_HELL = 6;
+    public static final int START_TO_HEAVEN = 7, AFTER_START_TO_HELL = 11;
 
     @Override
     public StepReturn<ForkVariables> step(StateInterface<ForkVariables> state, int action) {
@@ -54,10 +47,10 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
         int pos=state.getVariables().position;
         if (pos==START_TO_HELL) {
-            return new ForkState(new ForkVariables(POSITION_AFTER_START_TO_HELL));
+            return new ForkState(new ForkVariables(AFTER_START_TO_HELL));
         }
 
-        boolean isSplit = (pos == SPLIT_POSITION);
+        boolean isSplit = (pos == SPLIT);
         int newPos= (isSplit)
                 ? (action == 0) ? START_TO_HELL : START_TO_HEAVEN
                 : pos + 1;
@@ -66,13 +59,13 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
     private double getReward(StateInterface<ForkVariables> newState) {
         return (isTerminalState(newState))
-                ? (ForkState.getPos.apply(newState) == STATE_HEAVEN) ? R_HEAVEN : R_HELL
+                ? (ForkState.getPos.apply(newState) == HEAVEN) ? R_HEAVEN : R_HELL
                 : R_MOVE;
     }
 
     @Override
     public boolean isTerminalState(StateInterface<ForkVariables>  state) {
-        return (ForkState.getPos.apply(state) == STATE_HELL || ForkState.getPos.apply(state) == STATE_HEAVEN);
+        return (ForkState.getPos.apply(state) == HELL || ForkState.getPos.apply(state) == HEAVEN);
     }
 
     @Override

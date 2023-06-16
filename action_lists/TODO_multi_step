@@ -56,7 +56,9 @@ whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell x
 planutml med generisc state  x
 NetworkMemoryInterface mer clean ISP  x
 
-Annan miljö - tex Mazeny miljö slideInCharge
+Annan miljö - tex Maze
+
+ny miljö slideInCharge
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät
