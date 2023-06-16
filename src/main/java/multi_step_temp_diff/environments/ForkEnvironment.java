@@ -19,6 +19,10 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     public static final int NOF_STATES = 16;
     private static final int STATE_HEAVEN = 10;
     private static final int STATE_HELL = 15;
+    public static final int SPLIT_POSITION = 5;
+    public static final int START_TO_HELL = 6;
+    public static final int START_TO_HEAVEN = 7;
+    public static final int POSITION_AFTER_START_TO_HELL = 11;
 
     @Override
     public StepReturn<ForkVariables> step(StateInterface<ForkVariables> state, int action) {
@@ -49,13 +53,13 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     private StateInterface<ForkVariables> getNewState(StateInterface<ForkVariables>  state, int action) {
 
         int pos=state.getVariables().position;
-        if (pos==6) {
-            return  new ForkState(new ForkVariables(11));
+        if (pos==START_TO_HELL) {
+            return new ForkState(new ForkVariables(POSITION_AFTER_START_TO_HELL));
         }
 
-        boolean isSplit = (pos == 5);
+        boolean isSplit = (pos == SPLIT_POSITION);
         int newPos= (isSplit)
-                ? (action == 0) ? 6 : 7
+                ? (action == 0) ? START_TO_HELL : START_TO_HEAVEN
                 : pos + 1;
         return new ForkState(new ForkVariables(newPos));
     }
