@@ -28,7 +28,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     public abstract double[] getInputVec(StateInterface<S> state);
 
-
     public void createLearningRule(MultiLayerPerceptron neuralNetwork, NetSettings settings) {
         learningRule = new MomentumBackpropagation();
         learningRule.setLearningRate(settings.learningRate);
@@ -49,15 +48,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         return scaleOutNormalizedToValue.calcOutDouble(output[0]);
     }
 
-    @Override
-    public void save(String fileName) {
-        neuralNetwork.save(fileName);
-    }
-
-    @Override
-    public void load(String fileName) {
-        neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
-    }
 
     @Override
     public void learn(List<NstepExperience<S>> miniBatch) {
@@ -66,8 +56,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         learningRule.doOneLearningIteration(trainingSet);
     }
 
-
-    @Override
     public void createOutScalers(double minOut, double maxOut) {
         scaleOutNormalizedToValue =new ScalerLinear(settings.netOutMin, settings.netOutMax,minOut, maxOut);
         scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, settings.netOutMin, settings.netOutMax);
@@ -94,20 +82,12 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         return trainingSet;
     }
 
+    public void save(String fileName) {
+        neuralNetwork.save(fileName);
+    }
 
-    @Override
-    public double getAverageValueError(List<NstepExperience<S>> experienceList) {  //todo - to abstract
-
-      /*  List<Double> errors=new ArrayList<>();
-        for (NstepExperience e : experienceList) {
-            double expectedValue= e.value;
-            double memoryValue=getNetworkOutputValue(getInputVec(e.stateVariables));
-            errors.add(Math.abs(expectedValue-memoryValue));
-        }
-        return ListUtils.findAverage(errors).orElseThrow();
-
-        */
-        return 0;
+    public void load(String fileName) {
+        neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
     }
 
 

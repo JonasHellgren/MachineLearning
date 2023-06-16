@@ -54,8 +54,7 @@ plotta ovan  x
 generisc state x
 whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell x
 planutml med generisc state  x
-
-NetworkMemoryInterface mer clean ISP
+NetworkMemoryInterface mer clean ISP  x
 
 Annan miljö - tex Mazeny miljö slideInCharge
 
