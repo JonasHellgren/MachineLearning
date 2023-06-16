@@ -19,17 +19,17 @@ import static java.util.Arrays.*;
  * actions: 0=up, 1=right, 2=down, 3=left
  *
  * -------------------------------------
- * |  S  |       |       |       |       |
+ * |     |       |       |       |G=(4,5) |
  * -------------------------------------
- * |     |       |  X    |       |       |
+ * |     |       |  X    |       |        |
  * -------------------------------------
- * |     |  X    |  X    |  X    |       |
+ * |     |  X    |  X    |  X    |        |
  * -------------------------------------
- * |     |       |       |       |       |
+ * |     |       |       |       |        |
  * -------------------------------------
- * |     |  X    |  X    |  X    |       |
+ * |     |  X    |  X    |  X    |        |
  * -------------------------------------
- * |     |       |       |       |  G    |
+ * |(0,0)|       |       |       |        |
  * -------------------------------------
  *
  */
@@ -38,17 +38,19 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
 
     public static final int NOF_COLS = 5, NOF_ROWS = 6;
     public static final int NOF_ACTIONS = 4;
+    public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
+    public static final double REWARD_CRASH = -10, REWARD_GOAL = 100, REWARD_MOVE = -1;
 
-    enum StepState {
+    public enum StepState {
         otherCell, wall, obstacle, goal
     }
 
-    Map<BiPredicate<Integer,Integer>, Supplier<StepState>> stateTable;
+    Map<BiPredicate<Integer,Integer>, Supplier<StepState>> stateAfterStepTable;
     BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=NOF_COLS  || y<0 || y>=NOF_ROWS;
     Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
-             Pair.create(2,1)
-            ,Pair.create(1,2),Pair.create(2,2),Pair.create(3,2)
-            ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)));
+             Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
+            ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)
+            ,Pair.create(2,4)));
     BiPredicate<Integer,Integer> isObstacle= (x, y) ->
             obstaclePositions.stream().anyMatch(p -> Pair.create(x,y).equals(p));
     BiPredicate<Integer,Integer> isGoal= (x, y) -> Pair.create(4,5).equals(Pair.create(x,y));
@@ -58,10 +60,10 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     BiFunction<Integer,Integer,Integer> newY=(y,a) -> y+actionDeltaYmap.getOrDefault(a,y);
 
     public MazeEnvironment() {
-        stateTable = new HashMap<>();
-        stateTable.put( (s,p) -> isWall.test(s,p) ,() -> StepState.wall);
-        stateTable.put( (s,p) -> isObstacle.test(s,p) ,() -> StepState.obstacle);
-        stateTable.put( (s,p) -> isGoal.test(s,p) ,() -> StepState.goal);
+        stateAfterStepTable = new HashMap<>();
+        stateAfterStepTable.put( (s, p) -> isWall.test(s,p) ,() -> StepState.wall);
+        stateAfterStepTable.put( (s, p) -> isObstacle.test(s,p) ,() -> StepState.obstacle);
+        stateAfterStepTable.put( (s, p) -> isGoal.test(s,p) ,() -> StepState.goal);
     }
 
     @Override
@@ -92,27 +94,27 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         int yNew = newY.apply(y,action);
         StepState stateAfterStep = getStepState(xNew, yNew);
         StateInterface<MazeVariables> stateAfter=stateAfterStep.equals(StepState.wall) || stateAfterStep.equals(StepState.obstacle)
-                ? MazeState.newFromXY(x,y)   //no motion if entering eg wall
+                ? MazeState.newFromXY(x,y)   //no motion if entering e.g. wall
                 : MazeState.newFromXY(xNew,yNew);  //otherCell or goal
         return Pair.create(stateAfter,stateAfterStep);
     }
 
     private double getReward(StepState stateAfterStep) {
         if (stateAfterStep.equals(StepState.wall) || stateAfterStep.equals(StepState.obstacle)) {
-            return  -1;
+            return REWARD_CRASH;
         } else if (stateAfterStep.equals(StepState.goal)) {
-            return  100;
+            return REWARD_GOAL;
         } else {
-            return 0;
+            return REWARD_MOVE;
         }
     }
 
     public StepState getStepState(Integer x, Integer y) {
-        List<Supplier<StepState>> fcnList=stateTable.entrySet().stream()
+        List<Supplier<StepState>> fcnList= stateAfterStepTable.entrySet().stream()
                 .filter(e -> e.getKey().test(x,y)).map(Map.Entry::getValue)
                 .collect(Collectors.toList());
         if (fcnList.size()>1) {
-            throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size()+". Applying random.");
+            throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size());
         }
         if (fcnList.size()==0) {
             return StepState.otherCell;

@@ -7,6 +7,7 @@ import lombok.Getter;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 
@@ -47,6 +48,20 @@ public class MazeState implements StateInterface<MazeVariables> {
         return  variables.toString();
     }
 
+    @Override
+    public boolean equals(Object otherState) {
+
+        //check if the argument is a reference to this object
+        if (otherState == this) return true;
+
+        //check if the argument has the correct typ
+        if (!(otherState instanceof MazeState)) return false;
+
+        MazeState otherCasted = (MazeState) otherState;
+        return Objects.equals(getX.apply(this), getX.apply(otherCasted))
+                && Objects.equals(getY.apply(this), getY.apply(otherCasted));
+
+    }
 
 
 

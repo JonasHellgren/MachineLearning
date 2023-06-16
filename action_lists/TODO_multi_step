@@ -57,6 +57,8 @@ planutml med generisc state  x
 NetworkMemoryInterface mer clean ISP  x
 
 Annan miljö - tex Maze
+MazeEnvironment x
+TestMazeEnvironment  x
 
 ny miljö slideInCharge
 
