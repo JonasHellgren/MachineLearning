@@ -50,7 +50,7 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
         int pos=state.getVariables().position;
         if (pos==6) {
-            new ForkState(new ForkVariables(11));
+            return  new ForkState(new ForkVariables(11));
         }
 
         boolean isSplit = (pos == 5);
@@ -62,13 +62,13 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
     private double getReward(StateInterface<ForkVariables> newState) {
         return (isTerminalState(newState))
-                ? (newState.getVariables().position == STATE_HEAVEN) ? R_HEAVEN : R_HELL
+                ? (ForkState.getPos.apply(newState) == STATE_HEAVEN) ? R_HEAVEN : R_HELL
                 : R_MOVE;
     }
 
     @Override
     public boolean isTerminalState(StateInterface<ForkVariables>  state) {
-        return false; //(state == STATE_HELL || state == STATE_HEAVEN);
+        return (ForkState.getPos.apply(state) == STATE_HELL || ForkState.getPos.apply(state) == STATE_HEAVEN);
     }
 
     @Override

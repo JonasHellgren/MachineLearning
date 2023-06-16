@@ -1,14 +1,25 @@
 package multi_step_temp_diff.environments;
 
 import common.RandUtils;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
+import java.util.function.Function;
+
+/**
+ * To enable get when put in hashmap
+ * https://www.baeldung.com/java-custom-class-map-key
+ */
+
 @Getter
+@EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)
 public class ForkState implements StateInterface<ForkVariables> {
 
     ForkVariables variables;
+
+    public static Function<StateInterface<ForkVariables>,Integer> getPos=(s) -> s.getVariables().position;
 
     public ForkState(ForkVariables variables) {
         this.variables = variables;
@@ -28,8 +39,14 @@ public class ForkState implements StateInterface<ForkVariables> {
         return new ForkState(variables.copy());
     }
 
-//    @Override
+    @Override
     public void setFromReturn(StepReturn<ForkVariables> stepReturn) {
-
+        variables.position=ForkState.getPos.apply(stepReturn.newState);
     }
+
+    @Override
+    public String toString() {
+        return  variables.toString();
+    }
+
 }

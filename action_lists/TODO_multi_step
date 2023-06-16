@@ -52,7 +52,7 @@ trackTempDifferenceErrors i NStepNeuralAgentTrainer x
 plotta ovan  x
 
 generisc state x
-whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell
+whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell x
 
 ForkEnvironment implements EnvironmentInterface<ForkVariables>
 planutml med generisc state
@@ -61,7 +61,7 @@ NetworkMemoryInterface mer clean ISP
 
 
 
-Annan miljö - tex Maze
+Annan miljö - tex Mazeny miljö slideInCharge
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät

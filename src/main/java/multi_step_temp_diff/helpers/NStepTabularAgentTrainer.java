@@ -46,8 +46,8 @@ public class NStepTabularAgentTrainer<S> {
     double probStart=0.5;
     @Builder.Default
     double probEnd=0.01;
-    @Builder.Default
-    StateInterface<S> startState=null; // START_STATE;  todo
+
+    @NonNull StateInterface<S> startState;
 
     AgentInfo<S> agentInfo;
 
@@ -67,6 +67,7 @@ public class NStepTabularAgentTrainer<S> {
 
         while (!h.episodeCounter.isExceeded()) {
             agent.setState(startState);
+
             h.reset();
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->

@@ -57,6 +57,7 @@ public class TestForkEnvironment {
     @Test
     public void whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell() {
         stepReturn=environment.step(POS14, RandUtils.getRandomIntNumber(0,2));
+        System.out.println("stepReturn = " + stepReturn);
         Assert.assertEquals(15,(int) getPos.apply(stepReturn.newState));
         Assert.assertTrue(stepReturn.isNewStateTerminal);
         Assert.assertEquals(ForkEnvironment.R_HELL,stepReturn.reward, DELTA);

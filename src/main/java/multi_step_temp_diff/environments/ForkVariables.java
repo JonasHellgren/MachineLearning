@@ -1,8 +1,10 @@
 package multi_step_temp_diff.environments;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
+@EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)
 public class ForkVariables {
 
     public int position;

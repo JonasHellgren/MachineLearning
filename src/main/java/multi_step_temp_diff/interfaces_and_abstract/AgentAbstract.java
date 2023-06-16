@@ -39,7 +39,6 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
     @Override
     public int chooseAction(double probRandom) {
         nofSteps++;
-        System.out.println("getState() = " + getState().getVariables());
         return actionSelector.chooseAction(probRandom,getState());
     }
 

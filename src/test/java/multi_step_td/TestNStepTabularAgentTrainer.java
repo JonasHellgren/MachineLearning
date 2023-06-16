@@ -3,6 +3,7 @@ package multi_step_td;
 import common.ListUtils;
 import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
+import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
@@ -34,6 +35,7 @@ public class TestNStepTabularAgentTrainer {
                 .nofEpisodes(NOF_EPISODES)
                 .alpha(0.2).probStart(0.25).probEnd(1e-5)
                 .environment(environment).agent(agent)
+                .startState(ForkState.newFromPos(0))
                 .build();
     }
 
