@@ -1,21 +1,19 @@
-package multi_step_td;
+package multi_step_td.maze;
 
 import multi_step_temp_diff.environments.MazeEnvironment;
 import multi_step_temp_diff.environments.MazeState;
+import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import qlearning_objoriented_class_sceleton.models.FiveRooms;
 
 public class TestMazeEnvironment {
 
     public static final double DELTA = 0.01;
     EnvironmentInterface<MazeVariables> environment;
-    StateInterface<MazeVariables> state;
     StepReturn<MazeVariables> stepReturn;
 
     @Before
@@ -29,6 +27,8 @@ public class TestMazeEnvironment {
         printStepReturn();
         Assert.assertEquals(MazeState.newFromXY(0,1),stepReturn.newState);
         Assert.assertEquals(MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
+        Assert.assertFalse(stepReturn.isNewStateTerminal);
+
     }
 
     @Test
@@ -69,6 +69,7 @@ public class TestMazeEnvironment {
         printStepReturn();
         Assert.assertEquals(MazeState.newFromXY(4,5),stepReturn.newState);
         Assert.assertEquals(MazeEnvironment.REWARD_GOAL,stepReturn.reward, DELTA);
+        Assert.assertTrue(stepReturn.isNewStateTerminal);
     }
 
     private void printStepReturn() {

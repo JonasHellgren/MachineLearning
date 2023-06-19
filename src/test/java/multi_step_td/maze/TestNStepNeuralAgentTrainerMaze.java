@@ -1,27 +1,23 @@
-package multi_step_td;
+package multi_step_td.maze;
 
-import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
+import multi_step_td.TestHelper;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.models.AgentForkNeural;
+import multi_step_temp_diff.agents.AgentForkNeural;
 import multi_step_temp_diff.environments.ForkEnvironment;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Big batch seems to destabilize
  */
 
-public class TestNStepNeuralAgentTrainer {
+public class TestNStepNeuralAgentTrainerMaze {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 10;
     private static final int ONE_STEP = 1;
@@ -41,7 +37,6 @@ public class TestNStepNeuralAgentTrainer {
         agent= AgentForkNeural.newDefault(environment);
         AgentForkNeural agentCasted=(AgentForkNeural) agent;
         helper=new TestHelper<>(agentCasted.getMemory(), environment);
-
     }
 
     @SneakyThrows

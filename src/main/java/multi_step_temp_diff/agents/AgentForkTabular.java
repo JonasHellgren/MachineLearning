@@ -1,4 +1,4 @@
-package multi_step_temp_diff.models;
+package multi_step_temp_diff.agents;
 
 import lombok.Builder;
 import lombok.Getter;

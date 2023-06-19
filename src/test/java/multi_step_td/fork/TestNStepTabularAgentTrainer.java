@@ -1,22 +1,17 @@
-package multi_step_td;
+package multi_step_td.fork;
 
-import common.ListUtils;
-import common.MultiplePanelsPlotter;
 import lombok.SneakyThrows;
+import multi_step_td.TestHelper;
+import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.models.AgentForkTabular;
-import multi_step_temp_diff.environments.ForkEnvironment;
+import multi_step_temp_diff.agents.AgentForkTabular;
 import org.jcodec.common.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class TestNStepTabularAgentTrainer {

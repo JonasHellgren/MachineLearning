@@ -7,7 +7,7 @@ import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.models.AgentForkNeural;
+import multi_step_temp_diff.agents.AgentForkNeural;
 
 import java.util.*;
 

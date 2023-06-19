@@ -5,7 +5,7 @@ import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.models.AgentForkTabular;
+import multi_step_temp_diff.agents.AgentForkTabular;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

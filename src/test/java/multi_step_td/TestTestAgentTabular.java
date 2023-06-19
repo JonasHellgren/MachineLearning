@@ -6,7 +6,7 @@ import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.models.AgentForkTabular;
+import multi_step_temp_diff.agents.AgentForkTabular;
 import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;

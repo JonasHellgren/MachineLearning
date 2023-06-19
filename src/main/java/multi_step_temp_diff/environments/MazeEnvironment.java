@@ -1,23 +1,22 @@
 package multi_step_temp_diff.environments;
 
-import common.Conditionals;
+import common.SetUtils;
+import lombok.SneakyThrows;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
 import static java.util.Arrays.*;
 
 /**
  * actions: 0=up, 1=right, 2=down, 3=left
- *
+
  * -------------------------------------
  * |     |       |       |       |G=(4,5) |
  * -------------------------------------
@@ -81,10 +80,9 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
         Predicate<StateInterface<MazeVariables> > isNonValidX = (s) -> MazeState.getX.apply(s) > NOF_COLS - 1;
         Predicate<StateInterface<MazeVariables> > isNonValidY = (s) -> MazeState.getX.apply(s) > NOF_ROWS - 1;
-        Conditionals.executeIfTrue(isNonValidAction.test(action) || isNonValidX.or(isNonValidY).test(state), () ->
-        {
+        if (isNonValidAction.test(action) || isNonValidX.or(isNonValidY).test(state)) {
             throw new IllegalArgumentException("Non valid action or state. State = " + state+ ", action = " + action);
-        });
+        }
     }
 
     private Pair<StateInterface<MazeVariables>,StepState> getNewPosAndState(StateInterface<MazeVariables>  state, int action) {
@@ -123,18 +121,21 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     }
 
 
+    @SneakyThrows
     @Override
     public boolean isTerminalState(StateInterface<MazeVariables> state) {
-        return false;
+        return isGoal.test(MazeState.getX.apply(state),MazeState.getY.apply(state));
     }
 
+    @SneakyThrows
     @Override
     public Set<Integer> actionSet() {
-        return null;
+        return SetUtils.getSetFromRange(0,NOF_ACTIONS);
     }
 
+    @SneakyThrows
     @Override
     public Set<StateInterface<MazeVariables>> stateSet() {
-        return null;
+        throw new NoSuchMethodException();
     }
 }
