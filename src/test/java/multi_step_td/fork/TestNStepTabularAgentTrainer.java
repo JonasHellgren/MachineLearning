@@ -30,7 +30,7 @@ public class TestNStepTabularAgentTrainer {
                 .nofEpisodes(NOF_EPISODES)
                 .alpha(0.2).probStart(0.25).probEnd(1e-5)
                 .environment(environment).agent(agent)
-                .startState(ForkState.newFromPos(0))
+                .startStateSupplier(() -> ForkState.newFromPos(0))
                 .build();
     }
 

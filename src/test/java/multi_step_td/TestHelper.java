@@ -1,6 +1,7 @@
 package multi_step_td;
 
 import common.ListUtils;
+import multi_step_temp_diff.agents.AgentMazeTabular;
 import multi_step_temp_diff.environments.*;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
@@ -46,19 +47,35 @@ public class TestHelper<S> {
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 
-    public static double avgErrorMaze(Map<StateInterface<MazeVariables>, Double> valueMap) {
+    public static double avgErrorMaze(Map<StateInterface<MazeVariables>, Double> valueMap,List<MazeState> states) {
         List<Double> errors=new ArrayList<>();
+
+        Map<StateInterface<MazeVariables>, Double> valueMapCorrect=new HashMap<>();
         double rg = MazeEnvironment.REWARD_GOAL;
         double rm = MazeEnvironment.REWARD_MOVE;
-        errors.add(valueMap.get(MazeState.newFromXY(3, 5))- (rg+rm));
-        errors.add(valueMap.get(MazeState.newFromXY(2, 5))- (rg+2*rm));
-        errors.add(valueMap.get(MazeState.newFromXY(1, 5))- (rg+3*rm));
 
-     //   errors.add(valueMap.get(MazeState.newFromXY(4, 4))- (rg- rm));
-     //   errors.add(valueMap.get(MazeState.newFromXY(4, 3))- (rg- 2*rm));
-     //   errors.add(valueMap.get(MazeState.newFromXY(4, 2))- (rg- 3*rm));
+        valueMapCorrect.put(MazeState.newFromXY(3, 5),rg+rm);
+        valueMapCorrect.put(MazeState.newFromXY(2, 5),rg+2*rm);
+        valueMapCorrect.put(MazeState.newFromXY(1, 5),rg+3*rm);
+        valueMapCorrect.put(MazeState.newFromXY(0, 5),rg+4*rm);
 
-        System.out.println("errors = " + errors);
+        valueMapCorrect.put(MazeState.newFromXY(0, 3),rg+6*rm);
+        valueMapCorrect.put(MazeState.newFromXY(1, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(2, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(3, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(4, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(5, 3),rg+2*rm);
+
+        valueMapCorrect.put(MazeState.newFromXY(4, 0),rg+5*rm);
+        valueMapCorrect.put(MazeState.newFromXY(3, 0),rg+6*rm);
+        valueMapCorrect.put(MazeState.newFromXY(2, 0),rg+7*rm);
+        valueMapCorrect.put(MazeState.newFromXY(1, 0),rg+8*rm);
+        valueMapCorrect.put(MazeState.newFromXY(0, 0),rg+9*rm);
+
+
+        for (MazeState state:states) {
+            errors.add(valueMapCorrect.get(state)-valueMap.get(state));
+        }
 
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }

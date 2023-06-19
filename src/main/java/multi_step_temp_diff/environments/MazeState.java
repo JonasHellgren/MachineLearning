@@ -34,8 +34,12 @@ public class MazeState implements StateInterface<MazeVariables> {
     }
 
     public static MazeState newFromRandomPos() {
-        final int randomX = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_COLS);
-        final int randomY = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_ROWS);
+        int randomX, randomY;
+        do {
+            randomX = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_COLS);
+            randomY = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_ROWS);
+        } while (!MazeEnvironment.isValidStartPosition.apply(randomX,randomY));
+
         return new MazeState(MazeVariables.newFromXY(randomX,randomY));
     }
 
@@ -58,7 +62,6 @@ public class MazeState implements StateInterface<MazeVariables> {
 
     @Override
     public boolean equals(Object otherState) {
-
         //check if the argument is a reference to this object
         if (otherState == this) return true;
 

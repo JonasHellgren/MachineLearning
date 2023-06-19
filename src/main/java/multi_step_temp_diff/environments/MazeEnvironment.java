@@ -40,11 +40,11 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
     public static final double REWARD_CRASH = -10, REWARD_GOAL = 100, REWARD_MOVE = -1;
 
-    public enum StepState {
+    public enum PositionType {
         otherCell, wall, obstacle, goal
     }
 
-    Map<BiPredicate<Integer,Integer>, Supplier<StepState>> stateAfterStepTable;
+    static Map<BiPredicate<Integer,Integer>, Supplier<PositionType>> stateAfterStepTable;
     BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=NOF_COLS  || y<0 || y>=NOF_ROWS;
     Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
              Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
@@ -57,20 +57,22 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     Map<Integer, Integer> actionDeltaYmap = Map.of(0,1,1,0,2,-1,3,0);
     BiFunction<Integer,Integer,Integer> newX=(x,a) -> x+actionDeltaXmap.getOrDefault(a,x);
     BiFunction<Integer,Integer,Integer> newY=(y,a) -> y+actionDeltaYmap.getOrDefault(a,y);
+    public static BiFunction<Integer,Integer,Boolean> isValidStartPosition=(x,y) ->
+            getPositionType(x,y).equals(MazeEnvironment.PositionType.otherCell);
 
     public MazeEnvironment() {
         stateAfterStepTable = new HashMap<>();
-        stateAfterStepTable.put( (s, p) -> isWall.test(s,p) ,() -> StepState.wall);
-        stateAfterStepTable.put( (s, p) -> isObstacle.test(s,p) ,() -> StepState.obstacle);
-        stateAfterStepTable.put( (s, p) -> isGoal.test(s,p) ,() -> StepState.goal);
+        stateAfterStepTable.put( (s, p) -> isWall.test(s,p) ,() -> PositionType.wall);
+        stateAfterStepTable.put( (s, p) -> isObstacle.test(s,p) ,() -> PositionType.obstacle);
+        stateAfterStepTable.put( (s, p) -> isGoal.test(s,p) ,() -> PositionType.goal);
     }
 
     @Override
     public StepReturn<MazeVariables> step(StateInterface<MazeVariables> state, int action) {
         throwIfBadArgument(state,action);
-        final Pair<StateInterface<MazeVariables>,StepState> pair = getNewPosAndState(state, action);
+        final Pair<StateInterface<MazeVariables>, PositionType> pair = getNewPosAndState(state, action);
         return StepReturn.<MazeVariables>builder()
-                .isNewStateTerminal(pair.getSecond().equals(StepState.goal))
+                .isNewStateTerminal(pair.getSecond().equals(PositionType.goal))
                 .newState(pair.getFirst())
                 .reward(getReward(pair.getSecond()))
                 .build();
@@ -85,37 +87,37 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         }
     }
 
-    private Pair<StateInterface<MazeVariables>,StepState> getNewPosAndState(StateInterface<MazeVariables>  state, int action) {
+    private Pair<StateInterface<MazeVariables>, PositionType> getNewPosAndState(StateInterface<MazeVariables>  state, int action) {
         int x = MazeState.getX.apply(state);
         int xNew = newX.apply(x,action);
         int y = MazeState.getY.apply(state);
         int yNew = newY.apply(y,action);
-        StepState stateAfterStep = getStepState(xNew, yNew);
-        StateInterface<MazeVariables> stateAfter=stateAfterStep.equals(StepState.wall) || stateAfterStep.equals(StepState.obstacle)
+        PositionType stateAfterStep = getPositionType(xNew, yNew);
+        StateInterface<MazeVariables> stateAfter=stateAfterStep.equals(PositionType.wall) || stateAfterStep.equals(PositionType.obstacle)
                 ? MazeState.newFromXY(x,y)   //no motion if entering e.g. wall
                 : MazeState.newFromXY(xNew,yNew);  //otherCell or goal
         return Pair.create(stateAfter,stateAfterStep);
     }
 
-    private double getReward(StepState stateAfterStep) {
-        if (stateAfterStep.equals(StepState.wall) || stateAfterStep.equals(StepState.obstacle)) {
+    private double getReward(PositionType stateAfterStep) {
+        if (stateAfterStep.equals(PositionType.wall) || stateAfterStep.equals(PositionType.obstacle)) {
             return REWARD_CRASH;
-        } else if (stateAfterStep.equals(StepState.goal)) {
+        } else if (stateAfterStep.equals(PositionType.goal)) {
             return REWARD_GOAL+REWARD_MOVE;
         } else {
             return REWARD_MOVE;
         }
     }
 
-    public StepState getStepState(Integer x, Integer y) {
-        List<Supplier<StepState>> fcnList= stateAfterStepTable.entrySet().stream()
+    public static PositionType getPositionType(Integer x, Integer y) {
+        List<Supplier<PositionType>> fcnList= stateAfterStepTable.entrySet().stream()
                 .filter(e -> e.getKey().test(x,y)).map(Map.Entry::getValue)
                 .collect(Collectors.toList());
         if (fcnList.size()>1) {
             throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size());
         }
         if (fcnList.size()==0) {
-            return StepState.otherCell;
+            return PositionType.otherCell;
         }
         return fcnList.get(0).get();
     }

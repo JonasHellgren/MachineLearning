@@ -60,7 +60,8 @@ Annan miljö - tex Maze
 MazeEnvironment x
 TestMazeEnvironment  x
 TestNStepTabularAgentTrainerMaze  x
-function för start state
+function för start state  x
+State = MazeVariables(x=1, y=5), value = 115.90638230139263  x
 TestNStepNeuralAgentTrainerMaze
 
 ny miljö slideInCharge

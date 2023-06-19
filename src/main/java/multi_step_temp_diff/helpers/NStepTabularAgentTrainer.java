@@ -17,10 +17,13 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
  * https://lcalem.github.io/blog/2018/11/19/sutton-chap07-nstep
+ *
+ * a potential improvement is to check that start state is valid
  */
 
 @Builder
@@ -46,7 +49,10 @@ public class NStepTabularAgentTrainer<S> {
     @Builder.Default
     double probEnd=0.01;
 
-    @NonNull StateInterface<S> startState;
+//    @NonNull StateInterface<S> startState;
+
+    @NonNull Supplier<StateInterface<S>> startStateSupplier;
+
 
     AgentInfo<S> agentInfo;
 
@@ -65,7 +71,7 @@ public class NStepTabularAgentTrainer<S> {
         BiPredicate<Integer,Integer> isAtTimeJustBeforeTermination = (tau,tTerm) -> tau == tTerm-1;
 
         while (!h.episodeCounter.isExceeded()) {
-            agent.setState(startState);
+            agent.setState(startStateSupplier.get());
 
             h.reset();
             do {
