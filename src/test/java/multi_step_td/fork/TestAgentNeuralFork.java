@@ -16,7 +16,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestAgentForkNeural {
+public class TestAgentNeuralFork {
 
     private static final int BUFFER_SIZE = 100;
     private static final int NOF_ITERATIONS = 1000;

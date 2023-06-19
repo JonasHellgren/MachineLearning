@@ -64,6 +64,10 @@ function för start state  x
 State = MazeVariables(x=1, y=5), value = 115.90638230139263  x
 TestNStepNeuralAgentTrainerMaze
 
+writeValue skall ej behövas i agentAbstract
+
+printMaze i TestHelper
+
 ny miljö slideInCharge
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus

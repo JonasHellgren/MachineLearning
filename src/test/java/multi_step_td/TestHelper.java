@@ -10,6 +10,7 @@ import org.junit.Assert;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class TestHelper<S> {
 
@@ -30,11 +31,17 @@ public class TestHelper<S> {
     }
 
     public void assertAllStates(double value, double delta) {
-        //for (int si = 0; si < ForkEnvironment.NOF_STATES ; si++) {
         for (StateInterface<S> state:environment.stateSet()) {
             Assert.assertEquals(value, memoryNeural.read(state), delta);
         }
     }
+
+    public void assertAllStates(Function<StateInterface<S>,Double> function, double delta) {
+        for (StateInterface<S> state:environment.stateSet()) {
+            Assert.assertEquals(function.apply(state), memoryNeural.read(state), delta);
+        }
+    }
+
 
     static BiFunction<Map<StateInterface<ForkVariables>, Double>,Integer,Double> getPos=(m, p) -> m.get(ForkState.newFromPos(p));
 

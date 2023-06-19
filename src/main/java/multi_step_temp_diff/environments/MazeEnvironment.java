@@ -87,7 +87,8 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         }
     }
 
-    private Pair<StateInterface<MazeVariables>, PositionType> getNewPosAndState(StateInterface<MazeVariables>  state, int action) {
+    private Pair<StateInterface<MazeVariables>, PositionType> getNewPosAndState(StateInterface<MazeVariables>  state,
+                                                                                int action) {
         int x = MazeState.getX.apply(state);
         int xNew = newX.apply(x,action);
         int y = MazeState.getY.apply(state);
