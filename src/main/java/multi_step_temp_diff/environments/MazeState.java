@@ -6,20 +6,28 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * https://www.baeldung.com/java-custom-class-map-key
+ */
+
 
 @Getter
-@AllArgsConstructor
-@EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)
 public class MazeState implements StateInterface<MazeVariables> {
     MazeVariables variables;
+    private final int hashCode;
 
     public static Function<StateInterface<MazeVariables>,Integer> getX=(s) -> s.getVariables().x;
     public static Function<StateInterface<MazeVariables>,Integer> getY=(s) -> s.getVariables().y;
 
+    public MazeState(MazeVariables variables) {
+        this.variables = variables;
+        this.hashCode=Objects.hash(variables.x,variables.y);
+    }
 
     public static MazeState newFromXY(int x, int y) {
         return new MazeState(MazeVariables.newFromXY(x,y));
@@ -63,6 +71,10 @@ public class MazeState implements StateInterface<MazeVariables> {
 
     }
 
+    @Override
+    public int hashCode() {
+        return this.hashCode;
+    }
 
 
 }

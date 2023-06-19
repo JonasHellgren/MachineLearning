@@ -25,6 +25,12 @@ public class ListUtils {
                 .average();
     }
 
+    public static OptionalDouble findAverageOfAbsolute(List<Double> list) {
+        return list.stream()
+                .mapToDouble(a -> Math.abs(a))
+                .average();
+    }
+
     public static double sumList(List<Double> list) {
         return list.stream()
                 .mapToDouble(a -> a)

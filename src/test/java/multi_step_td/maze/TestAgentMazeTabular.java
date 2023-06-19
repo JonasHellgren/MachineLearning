@@ -27,10 +27,10 @@ public class TestAgentMazeTabular {
 
     @Test
     public void whenNoWriting_thenRead0() {
-        int valueDefault = 0;
-        Assert.assertEquals(valueDefault,agentCasted.readValue(MazeState.newFromXY(0,0)), DELTA);
+        agent.clear();
+        Assert.assertEquals(AgentMazeTabular.VALUE_IF_NOT_PRESENT,
+                agentCasted.readValue(MazeState.newFromXY(0,0)), DELTA);
     }
-
 
     @Test
     public void whenWritingValueX0XYAs0_thenRead0() {
@@ -45,5 +45,17 @@ public class TestAgentMazeTabular {
         agentCasted.writeValue(MazeState.newFromXY(0,0), value);
         Assert.assertEquals(value,agentCasted.readValue(MazeState.newFromXY(0,0)), DELTA);
     }
+
+    @Test
+    public void whenWritingValueX0XYAs10AndWritingValueX1XY1As20_thenCorrectRead() {
+        int value00 = 10, value11=20;
+        agentCasted.writeValue(MazeState.newFromXY(0,0), value00);
+        agentCasted.writeValue(MazeState.newFromXY(1,1), value11);
+
+        Assert.assertEquals(value00,agentCasted.readValue(MazeState.newFromXY(0,0)), DELTA);
+        Assert.assertEquals(value11,agentCasted.readValue(MazeState.newFromXY(1,1)), DELTA);
+
+    }
+
 
 }

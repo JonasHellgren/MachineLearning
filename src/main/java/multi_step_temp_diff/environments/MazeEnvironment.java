@@ -101,7 +101,7 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         if (stateAfterStep.equals(StepState.wall) || stateAfterStep.equals(StepState.obstacle)) {
             return REWARD_CRASH;
         } else if (stateAfterStep.equals(StepState.goal)) {
-            return REWARD_GOAL;
+            return REWARD_GOAL+REWARD_MOVE;
         } else {
             return REWARD_MOVE;
         }
@@ -136,6 +136,13 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     @SneakyThrows
     @Override
     public Set<StateInterface<MazeVariables>> stateSet() {
-        throw new NoSuchMethodException();
+        Set<StateInterface<MazeVariables>> stateSet = new HashSet<>();
+        for (int x : SetUtils.getSetFromRange(0, NOF_COLS)) {
+            for (int y : SetUtils.getSetFromRange(0, NOF_ROWS)) {
+                stateSet.add(MazeState.newFromXY(x, y));
+            }
+        }
+        return stateSet;
     }
+
 }

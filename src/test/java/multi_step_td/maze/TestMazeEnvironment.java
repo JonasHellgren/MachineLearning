@@ -5,10 +5,13 @@ import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Set;
 
 public class TestMazeEnvironment {
 
@@ -68,8 +71,14 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(4,4),MazeEnvironment.ACTION_UP);
         printStepReturn();
         Assert.assertEquals(MazeState.newFromXY(4,5),stepReturn.newState);
-        Assert.assertEquals(MazeEnvironment.REWARD_GOAL,stepReturn.reward, DELTA);
+        Assert.assertEquals(MazeEnvironment.REWARD_GOAL+MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
         Assert.assertTrue(stepReturn.isNewStateTerminal);
+    }
+
+    @Test
+    public void okStateSet() {
+        Set<StateInterface<MazeVariables>>  stateSet=environment.stateSet();
+        Assert.assertEquals(MazeEnvironment.NOF_COLS*MazeEnvironment.NOF_ROWS,stateSet.size());
     }
 
     private void printStepReturn() {

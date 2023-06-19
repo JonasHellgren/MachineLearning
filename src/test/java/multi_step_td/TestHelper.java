@@ -1,11 +1,9 @@
 package multi_step_td;
 
 import common.ListUtils;
-import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.environments.ForkVariables;
+import multi_step_temp_diff.environments.*;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
-import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.junit.Assert;
 
@@ -39,13 +37,32 @@ public class TestHelper<S> {
 
     static BiFunction<Map<StateInterface<ForkVariables>, Double>,Integer,Double> getPos=(m, p) -> m.get(ForkState.newFromPos(p));
 
-    public static double avgError(Map<StateInterface<ForkVariables>, Double> mapOneStep) {
+    public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(getPos.apply(mapOneStep,0)-ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(getPos.apply(mapOneStep,7)-ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(getPos.apply(mapOneStep,6)-ForkEnvironment.R_HELL));
-        errors.add(Math.abs(getPos.apply(mapOneStep,11)-ForkEnvironment.R_HELL));
-        return ListUtils.findAverage(errors).orElseThrow();
+        errors.add(Math.abs(getPos.apply(valueMap,0)-ForkEnvironment.R_HEAVEN));
+        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.R_HEAVEN));
+        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.R_HELL));
+        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.R_HELL));
+        return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
+
+    public static double avgErrorMaze(Map<StateInterface<MazeVariables>, Double> valueMap) {
+        List<Double> errors=new ArrayList<>();
+        double rg = MazeEnvironment.REWARD_GOAL;
+        double rm = MazeEnvironment.REWARD_MOVE;
+        errors.add(valueMap.get(MazeState.newFromXY(3, 5))- (rg+rm));
+        errors.add(valueMap.get(MazeState.newFromXY(2, 5))- (rg+2*rm));
+        errors.add(valueMap.get(MazeState.newFromXY(1, 5))- (rg+3*rm));
+
+     //   errors.add(valueMap.get(MazeState.newFromXY(4, 4))- (rg- rm));
+     //   errors.add(valueMap.get(MazeState.newFromXY(4, 3))- (rg- 2*rm));
+     //   errors.add(valueMap.get(MazeState.newFromXY(4, 2))- (rg- 3*rm));
+
+        System.out.println("errors = " + errors);
+
+        return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
+    }
+
+
 
 }

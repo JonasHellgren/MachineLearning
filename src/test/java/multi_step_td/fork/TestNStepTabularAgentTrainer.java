@@ -39,13 +39,13 @@ public class TestNStepTabularAgentTrainer {
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        double avgErrOne= TestHelper.avgError(mapOneStep);
+        double avgErrOne= TestHelper.avgErrorFork(mapOneStep);
 
         agent.clear();
         trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
-        double avgErrThree=TestHelper.avgError(mapTreeSteps);
+        double avgErrThree=TestHelper.avgErrorFork(mapTreeSteps);
 
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);

@@ -16,11 +16,11 @@ import java.util.Map;
 public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements AgentInterface<MazeVariables> {
 
     static final double DISCOUNT_FACTOR = 1;
-    static final Map<StateInterface<MazeVariables>, Double> MEMORY = new HashMap<>();
-    private static final double VALUE_IF_NOT_PRESENT = 0;
+    static final Map<MazeState, Double> MEMORY = new HashMap<>();
+    public static final double VALUE_IF_NOT_PRESENT = 0;
     private static final int START_X=0, START_Y = 0;
 
-    Map<StateInterface<MazeVariables>, Double> memory;
+    Map<MazeState, Double> memory;
 
     @Builder
     private AgentMazeTabular(EnvironmentInterface<MazeVariables> environment,
@@ -49,12 +49,12 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
 
     @Override
     public double readValue(StateInterface<MazeVariables>  state) {
-        return memory.getOrDefault(state, VALUE_IF_NOT_PRESENT);
+        return memory.getOrDefault((MazeState) state, VALUE_IF_NOT_PRESENT);
     }
 
     @Override
     public void writeValue(StateInterface<MazeVariables>  state, double value) {
-        memory.put(state, value);
+        memory.put((MazeState) state, value);
     }
 
     public void clear() {

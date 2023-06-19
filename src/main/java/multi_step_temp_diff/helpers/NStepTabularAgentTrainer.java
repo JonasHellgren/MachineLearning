@@ -70,11 +70,13 @@ public class NStepTabularAgentTrainer<S> {
             h.reset();
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
-                        chooseActionStepAndStoreExperience(h, decayProb));
+                        chooseActionAndStep(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
                         updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
+
+            //    System.out.println("h = " + h);
             } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
             h.episodeCounter.increase();
         }
@@ -91,22 +93,23 @@ public class NStepTabularAgentTrainer<S> {
     static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t,tTerm) -> t<=tTerm;
 
     private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper<S> h) {
-        double G = sumOfRewardsFromTimeToUpdatePlusOne(h);
+        double sumRewards = sumOfRewardsFromTimeToUpdatePlusOne(h), G=sumRewards;
         int tBackUpFrom=h.tau + h.n;
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
             StateInterface<S> stateAheadToBackupFrom = h.timeReturnMap.get(h.tau + h.n).newState;
-            G = G + Math.pow(agentInfo.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
+            G = sumRewards + Math.pow(agentInfo.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
         }
         final StateInterface<S> stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
         AgentAbstract<S> agentCasted = (AgentAbstract<S>) agent;       //to access class specific methods
         final double difference = G - valuePresent;
+
         agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * difference);
         agentCasted.addTemporalDifference(difference);
     }
 
 
-    private void chooseActionStepAndStoreExperience(NStepTDHelper<S> h, LogarithmicDecay scaler) {
+    private void chooseActionAndStep(NStepTDHelper<S> h, LogarithmicDecay scaler) {
         final int action = agent.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
         StepReturn<S> stepReturn = environment.step(agent.getState(), action);
         h.statesMap.put(h.timeCounter.getCount(),agent.getState());

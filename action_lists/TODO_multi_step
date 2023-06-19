@@ -59,7 +59,8 @@ NetworkMemoryInterface mer clean ISP  x
 Annan miljö - tex Maze
 MazeEnvironment x
 TestMazeEnvironment  x
-TestNStepTabularAgentTrainerMaze
+TestNStepTabularAgentTrainerMaze  x
+function för start state
 TestNStepNeuralAgentTrainerMaze
 
 ny miljö slideInCharge
