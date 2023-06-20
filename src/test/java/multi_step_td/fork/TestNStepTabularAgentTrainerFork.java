@@ -14,11 +14,11 @@ import org.junit.Test;
 
 import java.util.Map;
 
-public class TestNStepTabularAgentTrainer {
+public class TestNStepTabularAgentTrainerFork {
 
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 3;
-    private static final int NOF_EPISODES = 100;
+    private static final int NOF_EPISODES = 2000;
     NStepTabularAgentTrainer<ForkVariables> trainer;
     AgentForkTabular agent;
 

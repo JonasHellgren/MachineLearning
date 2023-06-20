@@ -22,9 +22,11 @@ import java.util.function.Predicate;
 
 public class TestForkNeuralValueMemory {
     private static final double DELTA = 2;
-    private static final int NOF_ITERATIONS = 1000;
+    private static final int NOF_ITERATIONS = 2000;
     private static final int BATCH_LENGTH = 30;
     private static final int BUFFER_SIZE = 100;
+    public static final double LEARNING_RATE = 1e-1;
+    public static final int DISCOUNT_FACTOR = 1;
 
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
@@ -40,12 +42,16 @@ public class TestForkNeuralValueMemory {
     @Before
     public void init() {
         NetSettings netSettings = NetSettings.builder()
+                .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
                 .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build();
 
-        memory=new ForkNeuralValueMemory<>(netSettings);
         environment = new ForkEnvironment();
-        AgentForkNeural agent=AgentForkNeural.newDefault(environment);
+        AgentForkNeural agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
+                environment,
+                DISCOUNT_FACTOR,
+                netSettings);
+        memory=agent.getMemory();
         helper=new TestHelper<>(agent, environment);
     }
 

@@ -44,23 +44,14 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
     public static final double REWARD_CRASH = -2, REWARD_GOAL = 100, REWARD_MOVE = -1;
 
- //   public static final double REWARD_CRASH = 0, REWARD_GOAL = 100, REWARD_MOVE = 0;
-
     static Map<BiPredicate<Integer,Integer>, Supplier<PositionType>> stateAfterStepTable;
     BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=NOF_COLS  || y<0 || y>=NOF_ROWS;
-  /*  Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
+    Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
              Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
             ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)
-            ,Pair.create(2,4)));  */
+            ,Pair.create(2,4)));
 
-    Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
-            Pair.create(0,0),Pair.create(1,0),Pair.create(2,0),Pair.create(3,0), Pair.create(4,0),
-            Pair.create(0,1),Pair.create(1,1),Pair.create(2,1),Pair.create(3,1), Pair.create(4,1),
-            Pair.create(0,2),Pair.create(1,2),Pair.create(2,2),Pair.create(3,2), Pair.create(4,2),
-            Pair.create(0,3),Pair.create(1,3),Pair.create(2,3),Pair.create(3,3), Pair.create(4,3)
-          //  Pair.create(0,4),Pair.create(1,4),Pair.create(2,4),
-          //  Pair.create(0,5),Pair.create(1,5),Pair.create(2,5)
-            ));
+
 
     BiPredicate<Integer,Integer> isObstacle= (x, y) ->
             obstaclePositions.stream().anyMatch(p -> Pair.create(x,y).equals(p));
@@ -159,5 +150,17 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         }
         return stateSet;
     }
+
+    /**
+     * trash
+     *     Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
+     *             Pair.create(0,0),Pair.create(1,0),Pair.create(2,0),Pair.create(3,0), Pair.create(4,0),
+     *             Pair.create(0,1),Pair.create(1,1),Pair.create(2,1),Pair.create(3,1), Pair.create(4,1),
+     *             Pair.create(0,2),Pair.create(1,2),Pair.create(2,2),Pair.create(3,2), Pair.create(4,2),
+     *             Pair.create(0,3),Pair.create(1,3),Pair.create(2,3),Pair.create(3,3), Pair.create(4,3)
+     *           //  Pair.create(0,4),Pair.create(1,4),Pair.create(2,4),
+     *           //  Pair.create(0,5),Pair.create(1,5),Pair.create(2,5)
+     *             ));
+     */
 
 }

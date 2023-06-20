@@ -61,7 +61,7 @@ public class TestNStepNeuralAgentTrainerMaze {
 
         helper=new TestHelper<>(agent, environment);
         helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_UPPER));
-        helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_NEXT_UPPER));
+        helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_MIDDLE));
 
 
         double avgError=TestHelper.avgErrorMaze(helper.getStateValueMap(STATE_SET),STATES_LIST);

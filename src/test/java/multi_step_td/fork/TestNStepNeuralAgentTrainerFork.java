@@ -9,6 +9,7 @@ import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.agents.AgentForkNeural;
+import multi_step_temp_diff.models.NetSettings;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +22,11 @@ public class TestNStepNeuralAgentTrainerFork {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 10;
     private static final int ONE_STEP = 1;
-    private static final int NOF_EPIS = 300;
+    private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
+    public static final double LEARNING_RATE = 1e-1;
+    private static final int INPUT_SIZE = ForkEnvironment.NOF_STATES;
+    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
 
     NStepNeuralAgentTrainer<ForkVariables> trainer;
     AgentNeuralInterface<ForkVariables> agent;
@@ -33,11 +37,7 @@ public class TestNStepNeuralAgentTrainerFork {
 
     @Before
     public void init() {
-        environment=new ForkEnvironment();
-        agent= AgentForkNeural.newDefault(environment);
-        AgentForkNeural agentCasted=(AgentForkNeural) agent;
-        helper=new TestHelper<>(agent, environment);
-
+        environment = new ForkEnvironment();
     }
 
     @SneakyThrows
@@ -82,7 +82,15 @@ public class TestNStepNeuralAgentTrainerFork {
     }
 
     private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
-        agent = AgentForkNeural.newWithDiscountFactor(environment,discountFactor);
+        NetSettings netSettings = NetSettings.builder()
+                .learningRate(LEARNING_RATE)
+                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build();
+        agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
+                environment,
+                discountFactor,
+                netSettings);
+        helper=new TestHelper<>(agent, environment);
         buildTrainer(nofEpisodes, startState, nofStepsBetween);
         trainer.train();
     }
@@ -130,9 +138,9 @@ public class TestNStepNeuralAgentTrainerFork {
         trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
                 .nofStepsBetweenUpdatedAndBackuped(nofSteps)
                 .startStateSupplier(() -> ForkState.newFromPos(startPos))
-                .alpha(0.1)
+                //.alpha(0.1)
                 .nofEpisodes(nofEpis).batchSize(BATCH_SIZE).agentNeural(agent)
-                .probStart(0.25).probEnd(1e-5).nofTrainingIterations(1)
+                .probStart(0.9).probEnd(1e-5).nofTrainingIterations(1)
                 .environment(environment)
                 .agentNeural(agent)
                 .build();

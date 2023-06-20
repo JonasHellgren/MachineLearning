@@ -7,6 +7,7 @@ import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.interfaces_and_abstract.*;
 import multi_step_temp_diff.memory.ForkNeuralValueMemory;
+import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.models.NstepExperience;
 
 import java.util.*;
@@ -50,6 +51,15 @@ public class AgentForkNeural extends AgentAbstract<ForkVariables> implements Age
                 .environment(environment)
                 .state(new ForkState(ForkVariables.newFromPos(START_STATE))).discountFactor(discountFactor)
                 .memory(MEMORY).build();
+    }
+
+    public static AgentForkNeural newWithDiscountFactorAndMemorySettings(EnvironmentInterface<ForkVariables> environment,
+                                                        double discountFactor,
+                                                        NetSettings netSettings) {
+        return AgentForkNeural.builder()
+                .environment(environment)
+                .state(new ForkState(ForkVariables.newFromPos(START_STATE))).discountFactor(discountFactor)
+                .memory(new ForkNeuralValueMemory<>(netSettings)).build();
     }
 
 
