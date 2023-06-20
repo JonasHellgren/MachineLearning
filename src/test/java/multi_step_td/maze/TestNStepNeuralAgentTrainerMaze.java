@@ -25,12 +25,12 @@ import java.util.function.BiFunction;
 
 public class TestNStepNeuralAgentTrainerMaze {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 3;
-    private static final int BATCH_SIZE = 10, BUFFER_SIZE_MAX = 100;
-    private static final int NOF_EPIS = 100;
+    private static final int BATCH_SIZE = 50, BUFFER_SIZE_MAX = 100;
+    private static final int NOF_EPIS = 500;
     public static final List<MazeState> STATES_LIST = TestHelper.STATES_MAZE_UPPER;
     public static final HashSet<StateInterface<MazeVariables>> STATE_SET = new HashSet<>(STATES_LIST);
     public static final double LEARNING_RATE =1e-1;
-    public static final double PROB_START = 0.2, PROB_END = 1e-5;
+    public static final double PROB_START = 0.1, PROB_END = 1e-5;
 
     NStepNeuralAgentTrainer<MazeVariables> trainer;
     AgentNeuralInterface<MazeVariables> agent;
@@ -57,7 +57,7 @@ public class TestNStepNeuralAgentTrainerMaze {
        // AgentInfo<MazeVariables> agentInfo=new AgentInfo<>(agent);
         printBufferSize();
 
-       System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
+     //  System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
 
         helper=new TestHelper<>(agent, environment);
         helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_UPPER));

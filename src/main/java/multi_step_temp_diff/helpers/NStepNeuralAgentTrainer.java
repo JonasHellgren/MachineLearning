@@ -89,7 +89,7 @@ public class NStepNeuralAgentTrainer<S> {
             StateInterface<S> state = startStateSupplier.get();
             agentNeural.setState(state);
 
-            System.out.println("state = " + state);
+       //     System.out.println("state = " + state);
           //  System.out.println("agentNeural.getState() = " + agentNeural.getState());
 
            // System.out.println("h.episodeCounter.getCount() = " + h.episodeCounter.getCount());
@@ -110,17 +110,9 @@ public class NStepNeuralAgentTrainer<S> {
             } while (!isAtTimeJustBeforeTermination.test(h.tau, h.T) && isNotToManySteps.test(h.timeCounter));
             h.episodeCounter.increase();
         }
-
-
-
-
     }
 
     private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-
-        System.out.println("miniBatch");
-        miniBatch.forEach(System.out::println);
-
         for (int i = 0; i < nofTrainingIterations; i++) {
             agentNeural.learn(miniBatch);
         }

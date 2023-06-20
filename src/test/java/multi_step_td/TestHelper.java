@@ -16,9 +16,9 @@ public class TestHelper<S> {
     EnvironmentInterface<S> environment;
 
     public static final List<MazeState> STATES_MAZE_UPPER = List.of(
-            MazeState.newFromXY(0, 5), MazeState.newFromXY(1, 5), MazeState.newFromXY(2, 5), MazeState.newFromXY(3, 5), MazeState.newFromXY(4, 5));
+            MazeState.newFromXY(0, 5), MazeState.newFromXY(1, 5), MazeState.newFromXY(2, 5), MazeState.newFromXY(3, 5));
     public static final List<MazeState> STATES_MAZE_NEXT_UPPER = List.of(
-            MazeState.newFromXY(0, 4), MazeState.newFromXY(1, 4), MazeState.newFromXY(2,4), MazeState.newFromXY(3, 4), MazeState.newFromXY(4, 4));
+            MazeState.newFromXY(0, 4), MazeState.newFromXY(1, 4), MazeState.newFromXY(2,4), MazeState.newFromXY(3, 4));
 
     public static final List<MazeState> STATES_MAZE_MIDDLE = List.of(
             MazeState.newFromXY(0, 3), MazeState.newFromXY(1, 3), MazeState.newFromXY(2, 3), MazeState.newFromXY(3, 3));
