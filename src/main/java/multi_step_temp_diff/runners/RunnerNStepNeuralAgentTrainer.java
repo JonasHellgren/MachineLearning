@@ -44,7 +44,7 @@ public class RunnerNStepNeuralAgentTrainer {
         agentCasted=(AgentForkNeural) agent;
         trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
                 .nofStepsBetweenUpdatedAndBackuped(nofSteps)
-                .startState(ForkState.newFromPos(startPos))
+                .startStateSupplier(() -> ForkState.newFromPos(startPos))
                 .alpha(0.1)
                 .nofEpisodes(nofEpis).batchSize(BATCH_SIZE).agentNeural(agent)
                 .probStart(0.25).probEnd(1e-5).nofTrainingIterations(1)

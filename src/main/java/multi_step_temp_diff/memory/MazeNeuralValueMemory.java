@@ -1,8 +1,5 @@
 package multi_step_temp_diff.memory;
 
-import multi_step_temp_diff.agents.AgentMazeNeural;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.MazeEnvironment;
 import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.interfaces_and_abstract.PersistentMemoryInterface;
@@ -23,14 +20,13 @@ public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> imp
 
     private static final double MARGIN = 1.0;
 
-    public MazeNeuralValueMemory() {
+    public MazeNeuralValueMemory(double learningRate) {
         this(NetSettings.builder()
                 .inputSize(MazeEnvironment.NOF_COLS+MazeEnvironment.NOF_ROWS)
-                .nofNeuronsHidden(MazeEnvironment.NOF_COLS+MazeEnvironment.NOF_ROWS)
+                .nofNeuronsHidden((int) ((MazeEnvironment.NOF_COLS+MazeEnvironment.NOF_ROWS)*1.0))
                 .outPutSize(1)
-                .learningRate(AgentMazeNeural.LEARNING_RATE)
-                .minOut(-MazeEnvironment.REWARD_GOAL)
-                .maxOut(MazeEnvironment.REWARD_GOAL)
+                .learningRate(learningRate)
+                .minOut(MazeEnvironment.REWARD_GOAL*0.50).maxOut(MazeEnvironment.REWARD_GOAL*1)
                 .build());
     }
 
@@ -38,7 +34,7 @@ public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> imp
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 settings.inputSize,
-                settings.nofNeuronsHidden, settings.nofNeuronsHidden,
+                settings.nofNeuronsHidden, //  settings.nofNeuronsHidden,   settings.nofNeuronsHidden,
                 settings.outPutSize);
         super.settings = settings;
         super.createLearningRule(neuralNetwork, settings);

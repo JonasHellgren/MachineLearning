@@ -1,6 +1,5 @@
 package multi_step_td.maze;
 
-import common.ListUtils;
 import common.MathUtils;
 import    lombok.SneakyThrows;
 import multi_step_td.TestHelper;
@@ -10,10 +9,8 @@ import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.jcodec.common.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,15 +19,6 @@ public class TestNStepTabularAgentTrainerMaze {
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 5;
     private static final int NOF_EPISODES = 100;
-    public static final List<MazeState> STATES_UPPER = List.of(
-            MazeState.newFromXY(0, 5), MazeState.newFromXY(1, 5), MazeState.newFromXY(2, 5), MazeState.newFromXY(3, 5));
-    public static final List<MazeState> STATES_MIDDLE = List.of(
-            MazeState.newFromXY(0, 3), MazeState.newFromXY(1, 3), MazeState.newFromXY(2, 3), MazeState.newFromXY(3, 3));
-    public static final List<MazeState> STATES_BOTTOM = List.of(
-            MazeState.newFromXY(0, 0), MazeState.newFromXY(1, 0), MazeState.newFromXY(2, 0), MazeState.newFromXY(3, 0));
-    public static final List<MazeState> STATES_MERGED =
-            ListUtils.merge(ListUtils.merge(STATES_UPPER, STATES_MIDDLE), STATES_BOTTOM);
-
 
     NStepTabularAgentTrainer<MazeVariables> trainer;
     AgentMazeTabular agent;
@@ -54,17 +42,17 @@ public class TestNStepTabularAgentTrainerMaze {
         agent.clear();
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        printStateValues(STATES_UPPER,mapOneStep );
+        printStateValues(TestHelper.STATES_MAZE_UPPER,mapOneStep );
         System.out.println("---------------------------");
 
-        double avgErrOne= TestHelper.avgErrorMaze(mapOneStep,STATES_UPPER);
+        double avgErrOne= TestHelper.avgErrorMaze(mapOneStep,TestHelper.STATES_MAZE_UPPER);
         agent.clear();
         trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
-        printStateValues(STATES_UPPER,mapTreeSteps );
+        printStateValues(TestHelper.STATES_MAZE_UPPER,mapTreeSteps );
 
-        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,STATES_UPPER);
+        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,TestHelper.STATES_MAZE_UPPER);
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         printErrors(avgErrOne, avgErrThree);
         Assert.assertTrue(avgErrOne>avgErrThree || MathUtils.compareDoubleScalars(avgErrOne,avgErrThree,0.001));
@@ -79,7 +67,7 @@ public class TestNStepTabularAgentTrainerMaze {
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneSteps= trainer.getStateValueMap();
         printManyStateValues(mapOneSteps);
-        double avgErrOne=TestHelper.avgErrorMaze(mapOneSteps,STATES_MERGED);
+        double avgErrOne=TestHelper.avgErrorMaze(mapOneSteps,TestHelper.STATES_MAZE_MERGED);
         System.out.println("---------------------------");
 
         agent.clear();
@@ -87,7 +75,7 @@ public class TestNStepTabularAgentTrainerMaze {
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
         printManyStateValues(mapTreeSteps);
-        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,STATES_MERGED);
+        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,TestHelper.STATES_MAZE_MERGED);
 
         printErrors(avgErrOne, avgErrThree);
         Assert.assertTrue(avgErrOne>avgErrThree);
@@ -95,9 +83,9 @@ public class TestNStepTabularAgentTrainerMaze {
     }
 
     private void printManyStateValues(Map<StateInterface<MazeVariables>, Double> mapTreeSteps) {
-        printStateValues(STATES_UPPER, mapTreeSteps);
-        printStateValues(STATES_MIDDLE, mapTreeSteps);
-        printStateValues(STATES_BOTTOM, mapTreeSteps);
+        printStateValues(TestHelper.STATES_MAZE_UPPER, mapTreeSteps);
+        printStateValues(TestHelper.STATES_MAZE_MIDDLE, mapTreeSteps);
+        printStateValues(TestHelper.STATES_MAZE_BOTTOM, mapTreeSteps);
     }
 
 

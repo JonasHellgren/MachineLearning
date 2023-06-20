@@ -3,19 +3,21 @@ package multi_step_temp_diff.agents;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import multi_step_temp_diff.environments.MazeEnvironment;
 import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.interfaces_and_abstract.*;
 import multi_step_temp_diff.memory.MazeNeuralValueMemory;
+import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.models.NstepExperience;
 import java.util.List;
 
 @Getter
 public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements AgentNeuralInterface<MazeVariables> {
 
-    static final NetworkMemoryInterface<MazeVariables> MEMORY=new MazeNeuralValueMemory<>();
     private static final int START_X = 0, START_Y=0;
     public  static final double DISCOUNT_FACTOR=1, LEARNING_RATE=0.5;
+    static final NetworkMemoryInterface<MazeVariables> MEMORY=new MazeNeuralValueMemory<>(LEARNING_RATE);
 
     NetworkMemoryInterface<MazeVariables>  memory;
 
@@ -38,6 +40,14 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
                 .environment(environment)
                 .state(MazeState.newFromXY(START_X,START_Y)).discountFactor(discountFactor)
                 .memory(MEMORY).build();
+    }
+
+    public static AgentMazeNeural newWithDiscountFactorAndLearningRate(EnvironmentInterface<MazeVariables> environment,
+                                                        double discountFactor,double learningRate) {
+        return AgentMazeNeural.builder()
+                .environment(environment)
+                .state(MazeState.newFromXY(START_X,START_Y)).discountFactor(discountFactor)
+                .memory(new MazeNeuralValueMemory<>(learningRate)).build();
     }
 
 

@@ -38,7 +38,7 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public static final int NOF_COLS = 5, NOF_ROWS = 6;
     public static final int NOF_ACTIONS = 4;
     public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
-    public static final double REWARD_CRASH = -10, REWARD_GOAL = 100, REWARD_MOVE = -1;
+    public static final double REWARD_CRASH = -2, REWARD_GOAL = 100, REWARD_MOVE = -1;
 
     public enum PositionType {
         otherCell, wall, obstacle, goal

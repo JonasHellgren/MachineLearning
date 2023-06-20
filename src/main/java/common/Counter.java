@@ -36,4 +36,10 @@ public class Counter {
         count=0;
     }
 
+    @Override
+    public String toString() {
+        return Integer.toString(count);
+    }
+
+
 }

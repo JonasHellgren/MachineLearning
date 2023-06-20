@@ -21,22 +21,24 @@ import java.util.function.Function;
 public class TestAgentNeuralMaze {
 
 
-    private static final int BUFFER_SIZE = 100;
-    private static final int NOF_ITERATIONS = 3_000;
-    private static final int BATCH_LENGTH = 30;
+    private static final int NOF_ITERATIONS = 1000;
+    private static final int BUFFER_SIZE = NOF_ITERATIONS;
+
+    private static final int BATCH_LENGTH = 100;
     private static final int DELTA = 2;
+    public static final double LEARNING_RATE = 5e-1;
     AgentNeuralInterface<MazeVariables> agent;
     AgentMazeNeural agentCasted;
     TestHelper<MazeVariables> helper;
     MazeEnvironment environment;
 
     Function<StateInterface<MazeVariables>,Double>  sumXy=(s) ->
-            (double) MazeState.getX.apply(s)+MazeState.getY.apply(s);
+            (double) 80+MazeState.getX.apply(s)+MazeState.getY.apply(s);
 
     @Before
     public void init () {
         environment = new MazeEnvironment();
-        agent= AgentMazeNeural.newDefault(environment);
+        agent= AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,1, LEARNING_RATE);
         agentCasted=(AgentMazeNeural) agent;
         helper=new TestHelper<>(agentCasted.getMemory(), environment);
     }

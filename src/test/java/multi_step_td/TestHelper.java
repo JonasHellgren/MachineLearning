@@ -17,18 +17,38 @@ public class TestHelper<S> {
     NetworkMemoryInterface<S> memoryNeural;  //todo use AgentInfo instead
     EnvironmentInterface<S> environment;
 
+    public static final List<MazeState> STATES_MAZE_UPPER = List.of(
+            MazeState.newFromXY(0, 5), MazeState.newFromXY(1, 5), MazeState.newFromXY(2, 5), MazeState.newFromXY(3, 5));
+    public static final List<MazeState> STATES_MAZE_MIDDLE = List.of(
+            MazeState.newFromXY(0, 3), MazeState.newFromXY(1, 3), MazeState.newFromXY(2, 3), MazeState.newFromXY(3, 3));
+    public static final List<MazeState> STATES_MAZE_BOTTOM = List.of(
+            MazeState.newFromXY(0, 0), MazeState.newFromXY(1, 0), MazeState.newFromXY(2, 0), MazeState.newFromXY(3, 0));
+    public static final List<MazeState> STATES_MAZE_MERGED =
+            ListUtils.merge(ListUtils.merge(STATES_MAZE_UPPER, STATES_MAZE_MIDDLE), STATES_MAZE_BOTTOM);
+
+
     public TestHelper(NetworkMemoryInterface<S> memory, EnvironmentInterface<S> environment) {
         this.memoryNeural = memory;
         this.environment=environment;
     }
 
     public  void printStateValues() {
-        Map<StateInterface<S>,Double> stateValues=new HashMap<>();
-        for (StateInterface<S> state: environment.stateSet()) {
-            stateValues.put(state, memoryNeural.read(state));
-        }
+        printStateValues(environment.stateSet());
+    }
+
+    public  void printStateValues(Set<StateInterface<S>> stateSet) {
+        Map<StateInterface<S>, Double> stateValues = getStateValueMap(stateSet);
         stateValues.forEach((s,v) -> System.out.println("s="+s+", v="+v));
     }
+
+    public  Map<StateInterface<S>, Double> getStateValueMap(Set<StateInterface<S>> stateSet) {
+        Map<StateInterface<S>,Double> stateValues=new HashMap<>();
+        for (StateInterface<S> state: stateSet) {
+            stateValues.put(state, memoryNeural.read(state));
+        }
+        return stateValues;
+    }
+
 
     public void assertAllStates(double value, double delta) {
         for (StateInterface<S> state:environment.stateSet()) {
@@ -84,9 +104,16 @@ public class TestHelper<S> {
             errors.add(valueMapCorrect.get(state)-valueMap.get(state));
         }
 
+        System.out.println("errors = " + errors);
+
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 
+    public static void printStateValuesMaze(List<MazeState> states, Map<StateInterface<MazeVariables>, Double> stateMap ) {
+        for (MazeState state:states) {
+            System.out.println("State = "+state+", value = "+stateMap.get(state));
+        }
+    }
 
 
 }
