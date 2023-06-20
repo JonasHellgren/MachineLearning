@@ -32,7 +32,7 @@ public class TestAgentNeuralFork {
         environment = new ForkEnvironment();
         agent= AgentForkNeural.newDefault(environment);
         agentCasted=(AgentForkNeural) agent;
-        helper=new TestHelper<>(agentCasted.getMemory(), environment);
+        helper=new TestHelper<>(agent, environment);
     }
 
     @Test

@@ -40,7 +40,7 @@ public class TestAgentNeuralMaze {
         environment = new MazeEnvironment();
         agent= AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,1, LEARNING_RATE);
         agentCasted=(AgentMazeNeural) agent;
-        helper=new TestHelper<>(agentCasted.getMemory(), environment);
+        helper=new TestHelper<>(agent, environment);
     }
 
     @Test

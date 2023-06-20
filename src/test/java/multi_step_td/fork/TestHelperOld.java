@@ -1,18 +1,20 @@
-package multi_step_td;
+package multi_step_td.fork;
 
 import common.ListUtils;
 import multi_step_temp_diff.agents.AgentMazeTabular;
 import multi_step_temp_diff.environments.*;
-import multi_step_temp_diff.interfaces_and_abstract.*;
+import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.junit.Assert;
 
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class TestHelper<S> {
+public class TestHelperOld<S> {
 
-    AgentInterface<S> agent;
+    NetworkMemoryInterface<S> memoryNeural;  //todo use AgentInfo instead
     EnvironmentInterface<S> environment;
 
     public static final List<MazeState> STATES_MAZE_UPPER = List.of(
@@ -28,8 +30,8 @@ public class TestHelper<S> {
             ListUtils.merge(ListUtils.merge(STATES_MAZE_UPPER, STATES_MAZE_MIDDLE), STATES_MAZE_BOTTOM);
 
 
-    public TestHelper(AgentInterface<S> agentNeural, EnvironmentInterface<S> environment) {
-        this.agent = agentNeural;
+    public TestHelperOld(NetworkMemoryInterface<S> memory, EnvironmentInterface<S> environment) {
+        this.memoryNeural = memory;
         this.environment=environment;
     }
 
@@ -45,7 +47,7 @@ public class TestHelper<S> {
     public  Map<StateInterface<S>, Double> getStateValueMap(Set<StateInterface<S>> stateSet) {
         Map<StateInterface<S>,Double> stateValues=new HashMap<>();
         for (StateInterface<S> state: stateSet) {
-              stateValues.put(state, agent.readValue(state));
+              stateValues.put(state, memoryNeural.read(state));
         }
         return stateValues;
     }
@@ -53,13 +55,13 @@ public class TestHelper<S> {
 
     public void assertAllStates(double value, double delta) {
         for (StateInterface<S> state:environment.stateSet()) {
-            Assert.assertEquals(value, agent.readValue(state), delta);
+            Assert.assertEquals(value, memoryNeural.read(state), delta);
         }
     }
 
     public void assertAllStates(Function<StateInterface<S>,Double> function, double delta) {
         for (StateInterface<S> state:environment.stateSet()) {
-            Assert.assertEquals(function.apply(state), agent.readValue(state), delta);
+            Assert.assertEquals(function.apply(state), memoryNeural.read(state), delta);
         }
     }
 

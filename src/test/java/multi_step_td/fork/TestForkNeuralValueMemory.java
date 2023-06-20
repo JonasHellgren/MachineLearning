@@ -2,6 +2,7 @@ package multi_step_td.fork;
 
 import common.RandUtils;
 import multi_step_td.TestHelper;
+import multi_step_temp_diff.agents.AgentForkNeural;
 import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
@@ -44,7 +45,8 @@ public class TestForkNeuralValueMemory {
 
         memory=new ForkNeuralValueMemory<>(netSettings);
         environment = new ForkEnvironment();
-        helper=new TestHelper<>(memory, environment);
+        AgentForkNeural agent=AgentForkNeural.newDefault(environment);
+        helper=new TestHelper<>(agent, environment);
     }
 
 

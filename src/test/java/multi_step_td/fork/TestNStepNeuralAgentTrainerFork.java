@@ -36,7 +36,7 @@ public class TestNStepNeuralAgentTrainerFork {
         environment=new ForkEnvironment();
         agent= AgentForkNeural.newDefault(environment);
         AgentForkNeural agentCasted=(AgentForkNeural) agent;
-        helper=new TestHelper<>(agentCasted.getMemory(), environment);
+        helper=new TestHelper<>(agent, environment);
 
     }
 

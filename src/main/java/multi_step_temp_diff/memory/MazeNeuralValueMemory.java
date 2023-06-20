@@ -26,7 +26,7 @@ public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> imp
                 .nofNeuronsHidden((int) ((MazeEnvironment.NOF_COLS+MazeEnvironment.NOF_ROWS)*1.0))
                 .outPutSize(1)
                 .learningRate(learningRate)
-                .minOut(MazeEnvironment.REWARD_GOAL*0.50).maxOut(MazeEnvironment.REWARD_GOAL*1)
+                .minOut(MazeEnvironment.REWARD_GOAL*0.80).maxOut(MazeEnvironment.REWARD_GOAL*1)
                 .build());
     }
 
