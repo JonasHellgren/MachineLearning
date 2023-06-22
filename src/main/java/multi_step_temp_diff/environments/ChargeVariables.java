@@ -1,14 +1,16 @@
 package multi_step_temp_diff.environments;
 
 import lombok.Builder;
-
-import java.util.function.Function;
+import lombok.ToString;
 
 @Builder
+@ToString
 public class ChargeVariables {
 
+    public static final double SOC = 1.0;
     public int posA, posB;
-    public double socA, socB;
+    @Builder.Default
+    public double socA=SOC, socB= SOC;
     @Builder.Default
     public int time=0;
 

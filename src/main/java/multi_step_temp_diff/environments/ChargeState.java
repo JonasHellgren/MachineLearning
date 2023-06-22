@@ -3,6 +3,7 @@ package multi_step_temp_diff.environments;
 import common.MathUtils;
 import common.RandUtils;
 import lombok.Getter;
+import lombok.ToString;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
@@ -17,8 +18,8 @@ public class ChargeState implements StateInterface<ChargeVariables> {
 
     public static Function<StateInterface<ChargeVariables>,Integer> posA=(s) -> s.getVariables().posA;
     public static Function<StateInterface<ChargeVariables>,Integer> posB=(s) -> s.getVariables().posB;
-    public static Function<StateInterface<ChargeVariables>,Integer> socA=(s) -> s.getVariables().socA;
-    public static Function<StateInterface<ChargeVariables>,Integer> socB=(s) -> s.getVariables().socB;
+    public static Function<StateInterface<ChargeVariables>,Double> socA=(s) -> s.getVariables().socA;
+    public static Function<StateInterface<ChargeVariables>,Double> socB=(s) -> s.getVariables().socB;
     public static Function<StateInterface<ChargeVariables>,Integer> time=(s) -> s.getVariables().time;
 
 
@@ -57,10 +58,6 @@ public class ChargeState implements StateInterface<ChargeVariables> {
         variables.time=time.apply(stepReturn.newState);
     }
 
-    @Override
-    public String toString() {
-        return  variables.toString();
-    }
 
     @Override
     public boolean equals(Object otherState) {
@@ -81,6 +78,11 @@ public class ChargeState implements StateInterface<ChargeVariables> {
     @Override
     public int hashCode() {
         return this.hashCode;
+    }
+
+    @Override
+    public String toString() {
+        return variables.toString();
     }
 
 }

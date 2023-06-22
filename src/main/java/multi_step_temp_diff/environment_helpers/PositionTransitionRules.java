@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class PositionTransitionRules {
 
      Map<BiPredicate<Integer,Boolean>, Function<Integer,Integer>> transitionTable;  //pos, isObstacle -> posNew(command)
-
     Predicate<Pair<Integer,Integer>> isAtPos=(p) -> p.getFirst().equals(p.getSecond());
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosNoObstacle=(p,o) -> isAtPos.test(p) && !o;
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosObstacle=(p,o) -> isAtPos.test(p) && o;

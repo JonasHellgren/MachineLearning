@@ -1,7 +1,9 @@
 package multi_step_temp_diff.environments;
 
 
+import common.MathUtils;
 import common.SetUtils;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.environment_helpers.PositionTransitionRules;
 import multi_step_temp_diff.environment_helpers.SiteStateRules;
@@ -27,13 +29,15 @@ import java.util.function.Predicate;
  *    »| »| »| »| »| »| »| »| »| v |
  *    ^| <| <| «| «| «| «| «| «| <v|
  *  t|^| «| «| «| «| «| «| «| «| < |
+ * <p>
  * There are two vehicles, A and B. If any of these initially are located in trap (pos 30). Only
  * one vehicle is active.
  * states={pos A, soC A, pos B, soC B,time}
  * action            0       1       2       3
  * commands(A,B)     [0,0]   [0,1]  [1,0]   [1,1]
- * Command is action for specific vehicle, for cells with option to stay (<,>) when command 0 is stay, For other cells
+ * Command is action for specific vehicle, for cells with option to stay (<,>) when command 0 is stay. For other cells
  * command does not influence transition.
+ * <p>
  *  position transition model:
  *  pos    new pos (command=0)      new pos (command=1)
  *  -------------------------------------------------------
@@ -73,16 +77,16 @@ import java.util.function.Predicate;
  *  |B| | | | |A| | | | |         | | | | |B| | | | |A|         | | | | | |B| | | |         | | | | | | | | | |
 
  B is trapped, A free          A needs to wait until         A can choose to charge      B is blocked by obstacle,
- B leaves CHARGE_NODES         or not to charge            gap between A-B decreases
+ B leaves CHARGE_NODES         or not to charge                                         gap between A-B decreases
  *
  */
 
-
+@Setter
 public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
 
     public static final int POS_MIN = 0, POS_MAX = 30;
     public static final int NOF_ACTIONS = 4;
-    public static final int SOC_MIN = 0, SOC_MAX = 0;
+    public static final int SOC_MIN = 0, SOC_MAX = 1;
     public static final boolean IS_OBSTACLE = false;
     static final Map<Integer, Pair<Integer, Integer>> commandPairs =
             Map.of(0, new Pair<>(0, 0), 1, new Pair<>(0, 1), 2, new Pair<>(1, 0), 3, new Pair<>(1, 1));
@@ -98,13 +102,14 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         isAnySoCBad, isTwoAtSamePos, isTwoCharging, isTimeUp, isAllFine
     }
 
-    PositionTransitionRules positionTransitionRules;
-    SiteStateRules siteStateRules;
-
+    final PositionTransitionRules positionTransitionRules;
+    final SiteStateRules siteStateRules;
+    boolean isObstacle;
 
     public ChargeEnvironment() {
         positionTransitionRules = new PositionTransitionRules();
         siteStateRules = new SiteStateRules();
+        isObstacle = IS_OBSTACLE;
     }
 
     @Override
@@ -125,8 +130,6 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                         .build()))
                 .reward(getReward(state, posAposBNew, siteState))
                 .build();
-
-
     }
 
     @Override
@@ -136,7 +139,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
     @Override
     public Set<Integer> actionSet() {
-        return  SetUtils.getSetFromRange(0,NOF_ACTIONS);
+        return SetUtils.getSetFromRange(0, NOF_ACTIONS);
     }
 
     @SneakyThrows
@@ -149,7 +152,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     private void throwIfBadArgument(StateInterface<ChargeVariables> state, int action) {
         Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
         Predicate<Integer> isNonValidPos = (p) -> p < POS_MIN || p > POS_MAX;
-        Predicate<Integer> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
+        Predicate<Double> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
         Predicate<Integer> isNonValidTime = (t) -> t < 0;
         if (isNonValidAction.test(action) ||
                 isNonValidPos.test(ChargeState.posA.apply(state)) || isNonValidPos.test(ChargeState.posB.apply(state)) ||
@@ -163,17 +166,19 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     private Pair<Integer, Integer> getNewPositions(StateInterface<ChargeVariables> state, int action) {
         Pair<Integer, Integer> commandPair = commandPairs.get(action);
         int posANew = positionTransitionRules.getNewPos(
-                ChargeState.posA.apply(state), IS_OBSTACLE, commandPair.getFirst());
+                ChargeState.posA.apply(state), isObstacle, commandPair.getFirst());
         int posBNew = positionTransitionRules.getNewPos(
-                ChargeState.posA.apply(state), IS_OBSTACLE, commandPair.getSecond());
+                ChargeState.posB.apply(state), isObstacle, commandPair.getSecond());
         return Pair.create(posANew, posBNew);
     }
 
     private Pair<Double, Double> getNewSoCLevels(StateInterface<ChargeVariables> state,
                                                  Pair<Integer, Integer> posAposBNew) {
+        double deltaSoCA = getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getFirst());
+        double deltaSoCB = getDeltaSoC(ChargeState.posB.apply(state), posAposBNew.getSecond());
         return Pair.create(
-                ChargeState.socA.apply(state) + getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getFirst()),
-                ChargeState.socB.apply(state) + getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getSecond()));
+                MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA,SOC_MIN,SOC_MAX),
+                MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB,SOC_MIN,SOC_MAX));
     }
 
     private double getDeltaSoC(int pos, int posNew) {
@@ -200,15 +205,15 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
         BiFunction<Boolean, Boolean, Double> costQue = (isA, isB) -> (isA || isB) ? -COST_QUE : 0d;
         BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -COST_CHARGE : 0d;
-        Function<SiteState, Double> failPenalty = (ss) ->
-                ss.equals(SiteState.isAnySoCBad) ||
-                        ss.equals(SiteState.isTwoAtSamePos) ||
-                        ss.equals(SiteState.isTwoCharging)
-                        ? R_BAD : 0;
+        Function<SiteState, Double> failPenalty = (ss) -> isAnyConstraintFailed(ss) ? R_BAD : 0;
 
         return costQue.apply(isAInChargeQue, isBInChargeQue) +
                 costCharge.apply(isAInChargeArea, isBInChargeArea) +
                 failPenalty.apply(siteState);
+    }
+
+    private static boolean isAnyConstraintFailed(SiteState ss) {
+        return ss.equals(SiteState.isAnySoCBad) || ss.equals(SiteState.isTwoAtSamePos) || ss.equals(SiteState.isTwoCharging);
     }
 
 }
