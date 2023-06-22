@@ -3,6 +3,7 @@ package multi_step_temp_diff.environments;
 
 import common.MathUtils;
 import common.SetUtils;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.environment_helpers.PositionTransitionRules;
@@ -42,6 +43,7 @@ import java.util.function.Predicate;
  *  pos    new pos (command=0)      new pos (command=1)
  *  -------------------------------------------------------
  *  10      11                      20
+ *  19      0                       0
  *  18      18                      19 (18 if isObstacleAt19)
  *  20      20                      21
  *  29      29                      19 (29 if isObstacleAt19)
@@ -82,6 +84,7 @@ import java.util.function.Predicate;
  */
 
 @Setter
+@Getter
 public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
 
     public static final int POS_MIN = 0, POS_MAX = 30;

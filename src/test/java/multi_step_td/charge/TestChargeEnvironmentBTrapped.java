@@ -23,6 +23,7 @@ public class TestChargeEnvironmentBTrapped {
     public static final double SOC_DELTA = 0.0001;
     public static final double DELTA_REWARD = 0.001;
     EnvironmentInterface<ChargeVariables> environment;
+    ChargeEnvironment environmentCasted;
     StateInterface<ChargeVariables> state;
     ChargeState stateCasted;
     StepReturn<ChargeVariables> stepReturn;
@@ -30,6 +31,7 @@ public class TestChargeEnvironmentBTrapped {
     @Before
     public void init() {
         environment = new ChargeEnvironment();
+        environmentCasted=(ChargeEnvironment) environment;
         state = new ChargeState(ChargeVariables.builder()
                 .posA(0).posB(POS_TRAP)
                 .socA(SOC_INIT).socB(SOC_INIT)
@@ -40,7 +42,7 @@ public class TestChargeEnvironmentBTrapped {
     @Test
     public void given0_thenAction0_thenBNotChangedAndTimeIncreased() {
         stepReturn = environment.step(state, 0);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(POS_TRAP, (int) TestChargeHelper.posNewB.apply(stepReturn));
         Assert.assertEquals(SOC_INIT,TestChargeHelper.socNewB.apply(stepReturn),SOC_DELTA);
         Assert.assertFalse(stepReturn.isNewStateTerminal);
@@ -50,7 +52,7 @@ public class TestChargeEnvironmentBTrapped {
     @Test
     public void givenAPos0_thenAction0_thenNewPos1AndSoCDecreasedAndNotTerminal() {
         stepReturn = environment.step(state, 0);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(1, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
         Assert.assertFalse(stepReturn.isNewStateTerminal);
@@ -61,7 +63,7 @@ public class TestChargeEnvironmentBTrapped {
         TestChargeHelper.setPosA.accept(state,9);
         System.out.println("state = " + state);
         stepReturn = environment.step(state, 0);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(10, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
@@ -70,7 +72,7 @@ public class TestChargeEnvironmentBTrapped {
     public void givenAPos9_thenAction2_thenNewPos10AndSoCDecreased() {
         TestChargeHelper.setPosA.accept(state,9);
         stepReturn = environment.step(state, 2);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(10, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
@@ -79,7 +81,7 @@ public class TestChargeEnvironmentBTrapped {
     public void givenAPos10_thenAction0_thenNewPos11AndSoCDecreased() {
         TestChargeHelper.setPosA.accept(state,10);
         stepReturn = environment.step(state, 0);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(11, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
@@ -88,7 +90,7 @@ public class TestChargeEnvironmentBTrapped {
     public void givenAPos10_thenAction2_thenNewPos20AndSoCDecreased() {
         TestChargeHelper.setPosA.accept(state,10);
         stepReturn = environment.step(state, 2);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(20, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
@@ -98,7 +100,7 @@ public class TestChargeEnvironmentBTrapped {
     public void givenAPos20_thenAction0_thenNewPos20AndSoCNoChangeAndSoCEqCostQue() {
         TestChargeHelper.setPosA.accept(state,20);
         stepReturn = environment.step(state, 0);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(20, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertEquals(SOC_INIT,TestChargeHelper.socNewA.apply(stepReturn),SOC_DELTA);
         Assert.assertEquals(-ChargeEnvironment.COST_QUE,stepReturn.reward, DELTA_REWARD);
@@ -109,16 +111,25 @@ public class TestChargeEnvironmentBTrapped {
     public void givenAPos20_thenAction2_thenNewPos21AndSoCDecreased() {
         TestChargeHelper.setPosA.accept(state,20);
         stepReturn = environment.step(state, 2);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(21, (int) TestChargeHelper.posNewA.apply(stepReturn));
+        Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
+    }
+
+    @Test
+    public void givenAPos19_thenAction2_thenNewPos0AndSoCDecreased() {
+        TestChargeHelper.setPosA.accept(state,19);
+        stepReturn = environment.step(state, 2);
+        TestChargeHelper.printStepReturn(stepReturn);
+        Assert.assertEquals(0, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
 
     @Test
     public void givenAPos25_thenAction0Or1_thenNewPos26AndSoCIncreased() {
         TestChargeHelper.setPosA.accept(state,25);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(26, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) > SOC_INIT);
     }
@@ -126,8 +137,8 @@ public class TestChargeEnvironmentBTrapped {
     @Test
     public void givenAPos15_thenAction0Or1_thenNewPos16AndSoCDecreased() {
         TestChargeHelper.setPosA.accept(state,15);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(16, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
@@ -135,44 +146,41 @@ public class TestChargeEnvironmentBTrapped {
 
     @Test
     public void givenAPos18AndNoObstacle_thenAction2_thenNewPos19AndSoCDecreased() {
-        ChargeEnvironment environmentCasted=(ChargeEnvironment) environment;
         environmentCasted.setObstacle(false);
         TestChargeHelper.setPosA.accept(state,18);
         stepReturn = environment.step(state, 2);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(19, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
     }
 
     @Test
     public void givenAPos18AndObstacle_thenAction01Or2_thenNewPos18AndSoCSame() {
-        ChargeEnvironment environmentCasted=(ChargeEnvironment) environment;
         environmentCasted.setObstacle(true);
         TestChargeHelper.setPosA.accept(state,18);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(18, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertEquals(SOC_INIT,TestChargeHelper.socNewA.apply(stepReturn),SOC_DELTA);
     }
 
     @Test
-    public void givenAPos29AndNoObstacle_thenAction2_thenNewPos19AndSoCIncreased() {
-        ChargeEnvironment environmentCasted=(ChargeEnvironment) environment;
+    public void givenAPos29AndNoObstacle_thenAction2_thenNewPos19AndSoCIncreasedRewardIsCostCharge() {
         environmentCasted.setObstacle(false);
         TestChargeHelper.setPosA.accept(state,29);
         stepReturn = environment.step(state, 2);
-        printStepReturn();
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(19, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) > SOC_INIT);
+        Assert.assertEquals(-ChargeEnvironment.COST_CHARGE,stepReturn.reward,DELTA_REWARD);
     }
 
     @Test
     public void givenAPos29AndObstacle_thenAction01Or2_thenNewPos29AndSoCIncreased() {
-        ChargeEnvironment environmentCasted=(ChargeEnvironment) environment;
         environmentCasted.setObstacle(true);
         TestChargeHelper.setPosA.accept(state,29);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(29, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertTrue(TestChargeHelper.socNewA.apply(stepReturn) > SOC_INIT);
     }
@@ -183,8 +191,8 @@ public class TestChargeEnvironmentBTrapped {
         TestChargeHelper.setPosA.accept(state,25);
         double socInit = 1;
         TestChargeHelper.setSocA.accept(state, socInit);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertEquals(26, (int) TestChargeHelper.posNewA.apply(stepReturn));
         Assert.assertEquals(socInit,TestChargeHelper.socNewA.apply(stepReturn),SOC_DELTA);
     }
@@ -192,16 +200,14 @@ public class TestChargeEnvironmentBTrapped {
     @Test
     public void given0PoorSoC_thenTwoSteps_thenFailState() {
         TestChargeHelper.setSocA.accept(state, SiteStateRules.SOC_BAD+SOC_DELTA);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
         state.setFromReturn(stepReturn);
-        stepReturn = environment.step(state, RandUtils.getRandomIntNumber(0,4));
-        printStepReturn();
+        stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
+         TestChargeHelper.printStepReturn(stepReturn);
         Assert.assertTrue(stepReturn.isNewStateTerminal);
         Assert.assertEquals(ChargeEnvironment.R_BAD,stepReturn.reward,DELTA_REWARD);
     }
 
-    private void printStepReturn() {
-        System.out.println("stepReturn = " + stepReturn);
-    }
+  
 
 }

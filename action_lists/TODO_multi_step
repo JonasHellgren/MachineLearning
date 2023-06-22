@@ -72,7 +72,15 @@ writeValue skall ej behövas i agentAbstract  x
 plantuml AgentTabularInterface  x
 
 ny miljö slideInCharge x
-TestChargeEnvironment
+TestChargeEnvironmentBTrapped x
+TestChargeEnvironmentBRunning  x
+
+AgentChargeGreedy
+TestAgentChargeGreedy
+RunnerAgentChargeGreedy
+grafix för ovan
+
+AgentChargeNeural
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät
