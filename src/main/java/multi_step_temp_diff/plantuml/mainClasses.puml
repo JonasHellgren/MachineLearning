@@ -11,6 +11,11 @@ interface AgentNeuralInterface {
 + learn(List<NstepExperience> miniBatch);
 }
 
+interface AgentTabularInterface {
++writeValue(StateInterface<<S>>  state, double value)
+}
+
+
 interface EnvironmentInterface<S=generic state variables> {
 +  StepReturn step(StateInterface<<S>> state,int action);
 +  boolean isTerminalState(StateInterface<<S>> state);
@@ -37,7 +42,7 @@ AgentInterface <|-- AgentNeuralInterface
 
 AgentInterface <|-- AgentAbstract
 AgentNeuralInterface <|-- AgentForkNeural
-AgentInterface <|-- AgentForkTabular
+AgentTabularInterface <|-- AgentForkTabular
 AgentAbstract <|-- AgentForkNeural
 AgentAbstract <|-- AgentForkTabular
 

@@ -69,6 +69,7 @@ printa G isf  x
 
 skapa AgentTabularInterface med writeValue  x
 writeValue skall ej behövas i agentAbstract  x
+plantuml AgentTabularInterface  x
 
 ny miljö slideInCharge
 

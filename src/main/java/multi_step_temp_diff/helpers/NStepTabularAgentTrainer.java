@@ -45,11 +45,7 @@ public class NStepTabularAgentTrainer<S> {
     double probStart=0.5;
     @Builder.Default
     double probEnd=0.01;
-
-//    @NonNull StateInterface<S> startState;
-
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
-
 
     AgentInfo<S> agentInfo;
 
