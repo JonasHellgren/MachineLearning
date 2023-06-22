@@ -46,16 +46,14 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
 
     static Map<BiPredicate<Integer,Integer>, Supplier<PositionType>> stateAfterStepTable;
     BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=NOF_COLS  || y<0 || y>=NOF_ROWS;
-    Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
+    static Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
              Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
             ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)
             ,Pair.create(2,4)));
 
-
-
-    BiPredicate<Integer,Integer> isObstacle= (x, y) ->
+    public static BiPredicate<Integer,Integer> isObstacle= (x, y) ->
             obstaclePositions.stream().anyMatch(p -> Pair.create(x,y).equals(p));
-    BiPredicate<Integer,Integer> isGoal= (x, y) -> Pair.create(4,5).equals(Pair.create(x,y));
+    public static BiPredicate<Integer,Integer> isGoal= (x, y) -> Pair.create(4,5).equals(Pair.create(x,y));
     Map<Integer, Integer> actionDeltaXmap = Map.of(0,0,1,1,2,0,3,-1);
     Map<Integer, Integer> actionDeltaYmap = Map.of(0,1,1,0,2,-1,3,0);
     BiFunction<Integer,Integer,Integer> newX=(x,a) -> x+actionDeltaXmap.getOrDefault(a,x);

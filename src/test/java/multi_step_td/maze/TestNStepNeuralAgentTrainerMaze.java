@@ -7,6 +7,7 @@ import multi_step_temp_diff.agents.AgentMazeNeural;
 import multi_step_temp_diff.environments.*;
 import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
+import multi_step_temp_diff.helpers.StateValuePrinter;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.junit.Assert;
@@ -69,6 +70,10 @@ public class TestNStepNeuralAgentTrainerMaze {
         System.out.println("avgError = " + avgError);
 
 //        double avgError = TestHelper.avgErrorMaze(agentInfo.stateValueMap(environment.stateSet()));
+
+        StateValuePrinter<MazeVariables> printer=new StateValuePrinter<>(agent,environment);
+        printer.printMazeNeuralAgent();
+
         Assert.assertTrue(avgError < delta);
         Assert.assertTrue(value.apply(3,5)>value.apply(2,5));
         Assert.assertTrue(value.apply(2,5)>value.apply(1,5));

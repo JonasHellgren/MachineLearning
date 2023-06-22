@@ -62,11 +62,13 @@ TestMazeEnvironment  x
 TestNStepTabularAgentTrainerMaze  x
 function för start state  x
 State = MazeVariables(x=1, y=5), value = 115.90638230139263  x
-TestNStepNeuralAgentTrainerMaze
+TestNStepNeuralAgentTrainerMaze  x
+pusha  x
+printMaze i TestHelper  x
+printa G isf  x
 
+skapa AgentTabularInterface med writeValue
 writeValue skall ej behövas i agentAbstract
-
-printMaze i TestHelper
 
 ny miljö slideInCharge
 

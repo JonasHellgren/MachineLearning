@@ -21,7 +21,6 @@ public class AgentInfo<S> {
     public AgentInfo(AgentInterface<S> agent) {
         this.agent = agent;
         this.agentCasted=(AgentAbstract<S>) agent;
-
     }
 
     public Map<StateInterface<S>,Double> stateValueMap(Set<StateInterface<S>> stateSet) {
