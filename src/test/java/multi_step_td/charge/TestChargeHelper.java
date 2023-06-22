@@ -37,4 +37,8 @@ public class TestChargeHelper {
         System.out.println("stepReturn = " + stepReturn);
     }
 
+    public static void printAction(int action) {
+        System.out.println("action = " + action);
+    }
+
 }

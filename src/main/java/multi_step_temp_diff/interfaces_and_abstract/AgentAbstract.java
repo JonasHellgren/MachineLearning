@@ -70,5 +70,4 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
         return actionSelector.chooseBestAction(state);
     }
 
-
 }

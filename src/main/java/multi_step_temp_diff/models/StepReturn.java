@@ -10,4 +10,6 @@ public class StepReturn<S> {
     public StateInterface<S> newState;
     public double reward;
     public boolean isNewStateTerminal;
+    @Builder.Default
+    public boolean isNewStateFail=false;
 }

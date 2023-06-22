@@ -44,6 +44,7 @@ import java.util.function.Predicate;
  *  -------------------------------------------------------
  *  10      11                      20
  *  19      0                       0
+ *  17      17                      18
  *  18      18                      19 (18 if isObstacleAt19)
  *  20      20                      21
  *  29      29                      19 (29 if isObstacleAt19)
@@ -69,6 +70,8 @@ import java.util.function.Predicate;
  *                      | 0     (else)
  * A state is terminal according to following logic
  * isTerminalState=isAnySoCBad or isTwoAtSamePosition or isTwoCharging or isTimeUp
+ * Terms in isTerminalState consider the state AFTER transition. So action leading to for example collision can be
+ * excluded directly
  * isAnySoCBad is true if any soC is below 0.1, isTwoCharging ís true if both vehicles are at CHARGE_NODES
  * isTimeUp is true if time>TIME_MAX
  * The collisionPenalty gives for example that a vehicle at pos 20 needs to wait
@@ -122,16 +125,22 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         Pair<Integer, Integer> posAposBNew = getNewPositions(state, action);
         Pair<Double, Double> socAsocB = getNewSoCLevels(state, posAposBNew);
         int timeNew = ChargeState.time.apply(state) + 1;
-        SiteState siteState = siteStateRules.getSiteState(state);
+
+        ChargeState newState = new ChargeState(ChargeVariables.builder()
+                .posA(posAposBNew.getFirst()).posB(posAposBNew.getSecond())
+                .socA(socAsocB.getFirst()).socB(socAsocB.getSecond())
+                .time(timeNew)
+                .build());
+        SiteState siteState = siteStateRules.getSiteState(newState);
 
         return StepReturn.<ChargeVariables>builder()
-                .isNewStateTerminal(siteState != SiteState.isAllFine)
-                .newState(new ChargeState(ChargeVariables.builder()
-                        .posA(posAposBNew.getFirst()).posB(posAposBNew.getSecond())
-                        .socA(socAsocB.getFirst()).socB(socAsocB.getSecond())
-                        .time(timeNew)
-                        .build()))
+                .newState(newState)
                 .reward(getReward(state, posAposBNew, siteState))
+                .isNewStateTerminal(siteState != SiteState.isAllFine)
+                .isNewStateFail(
+                        siteState.equals(SiteState.isTwoCharging) ||
+                        siteState.equals(SiteState.isAnySoCBad) || siteState.
+                        equals(SiteState.isTwoAtSamePos))
                 .build();
     }
 
@@ -180,8 +189,8 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         double deltaSoCA = getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getFirst());
         double deltaSoCB = getDeltaSoC(ChargeState.posB.apply(state), posAposBNew.getSecond());
         return Pair.create(
-                MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA,SOC_MIN,SOC_MAX),
-                MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB,SOC_MIN,SOC_MAX));
+                MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA, SOC_MIN, SOC_MAX),
+                MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB, SOC_MIN, SOC_MAX));
     }
 
     private double getDeltaSoC(int pos, int posNew) {

@@ -75,12 +75,17 @@ ny miljö slideInCharge x
 TestChargeEnvironmentBTrapped x
 TestChargeEnvironmentBRunning  x
 
-AgentChargeGreedy
-TestAgentChargeGreedy
+AgentChargeGreedy  x
+TestAgentChargeGreedy  x
 RunnerAgentChargeGreedy
 grafix för ovan
+AgentChargeGreedyRuleForChargeDecisionPoint
 
 AgentChargeNeural
+TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
+plotta value sfa pos olika soc
+TestAgentChargeNeuralBFree
+
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät

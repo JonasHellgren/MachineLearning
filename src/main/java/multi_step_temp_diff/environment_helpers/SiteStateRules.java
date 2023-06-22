@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class SiteStateRules {
 
+    public static final int MAX_NOF_STEPS = 100;
     static Range<Integer> CHARGE_POSITIONS = Range.between(21, 29);  //todo from env, test inclusive
     public static final double SOC_BAD = 0.1;
 
@@ -26,7 +27,7 @@ public class SiteStateRules {
             ChargeState.posA.apply(s).equals(ChargeState.posB.apply(s));
     Predicate<StateInterface<ChargeVariables>> isTwoCharging = (s) ->
             isChargePos.test(ChargeState.posA.apply(s)) && isChargePos.test(ChargeState.posB.apply(s));
-    Predicate<StateInterface<ChargeVariables>> isTimeUp = (s) -> ChargeState.time.apply(s)>100;  //todo from env
+    Predicate<StateInterface<ChargeVariables>> isTimeUp = (s) -> ChargeState.time.apply(s)> MAX_NOF_STEPS;  //todo from env
 
 
     public SiteStateRules() {

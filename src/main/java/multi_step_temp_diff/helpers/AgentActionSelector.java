@@ -33,6 +33,7 @@ public class AgentActionSelector<S> {
             double value=sr.reward+discountFactor*readFunction.apply(sr.newState);
             pairs.add(new Pair<>(a,value));
         }
+
         Optional<Pair<Integer, Double>> bestPair=getPairWithHighestValue(pairs);
         return bestPair.orElseThrow().getFirst();
     }

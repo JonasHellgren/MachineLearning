@@ -21,6 +21,7 @@ public class PositionTransitionRules {
         this.transitionTable = new HashMap<>();
         transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,10)), (c) -> (c==0) ? 11 : 20 );
         transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,19)), (c) -> 0);
+        transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,17)), (c) -> (c==0) ? 17 : 18);
         transitionTable.put((p,o) -> isAtPosNoObstacle.test(new Pair<>(p,18),o), (c) -> (c==0) ? 18 : 19 );
         transitionTable.put((p,o) -> isAtPosObstacle.test(new Pair<>(p,18),o), (c) -> 18 );
         transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,20)), (c) -> (c==0) ? 20 : 21 );
