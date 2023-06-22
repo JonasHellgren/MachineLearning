@@ -5,15 +5,12 @@ import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.interfaces_and_abstract.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements AgentInterface<MazeVariables> {
+public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements AgentTabularInterface<MazeVariables> {
 
     static final double DISCOUNT_FACTOR = 1;
     static final Map<MazeState, Double> MEMORY = new HashMap<>();

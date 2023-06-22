@@ -19,7 +19,9 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
     AgentActionSelector<S> actionSelector;
     TemporalDifferenceTracker temporalDifferenceTracker;
 
-    public AgentAbstract(@NonNull  EnvironmentInterface<S> environment, StateInterface<S> state, double discountFactor) {
+    public AgentAbstract(@NonNull  EnvironmentInterface<S> environment,
+                         StateInterface<S> state,
+                         double discountFactor) {
         if (MathUtils.isZero(discountFactor)) {
             log.warning("Zero discountFactor");
         }
@@ -48,25 +50,25 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
         temporalDifferenceTracker.reset();
     }
 
-    public int chooseRandomAction() {
-        return actionSelector.chooseRandomAction();
-    }
-
-    public int chooseBestAction(StateInterface<S> state) {
-        return actionSelector.chooseBestAction(state);
-    }
-
     @Override
     public void updateState(StepReturn<S> stepReturn) {
         setState(stepReturn.newState);
     }
 
-    public void addTemporalDifference(double difference) {
+    @Override
+    public void storeTemporalDifference(double difference) {
         temporalDifferenceTracker.addDifference(Math.abs(difference));
     }
 
+    @Override
     public abstract double readValue(StateInterface<S> state);
 
-    public abstract void writeValue(StateInterface<S>  state, double value);
+    public int chooseRandomAction() {
+        return actionSelector.chooseRandomAction();
+    }
+    public int chooseBestAction(StateInterface<S> state) {
+        return actionSelector.chooseBestAction(state);
+    }
+
 
 }

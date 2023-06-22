@@ -56,12 +56,6 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
         return memory.read(state);
     }
 
-    @SneakyThrows
-    @Override
-    public void writeValue(StateInterface<MazeVariables> state, double value) {
-        throw new NoSuchMethodException();  //todo ISP
-    }
-
     @Override
     public void learn(List<NstepExperience<MazeVariables>> miniBatch) {
         memory.learn(miniBatch);

@@ -68,12 +68,6 @@ public class AgentForkNeural extends AgentAbstract<ForkVariables> implements Age
         return memory.read(state);
     }
 
-    @SneakyThrows
-    @Override
-    public void writeValue(StateInterface<ForkVariables> state, double value) {
-        throw new NoSuchMethodException();  //todo ISP
-    }
-
     @Override
     public void learn(List<NstepExperience<ForkVariables>> miniBatch) {
         memory.learn(miniBatch);

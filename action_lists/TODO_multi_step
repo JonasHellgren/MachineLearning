@@ -67,8 +67,8 @@ pusha  x
 printMaze i TestHelper  x
 printa G isf  x
 
-skapa AgentTabularInterface med writeValue
-writeValue skall ej behövas i agentAbstract
+skapa AgentTabularInterface med writeValue  x
+writeValue skall ej behövas i agentAbstract  x
 
 ny miljö slideInCharge
 

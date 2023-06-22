@@ -4,10 +4,7 @@ import common.*;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Setter;
-import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.interfaces_and_abstract.*;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 
@@ -36,7 +33,7 @@ public class NStepTabularAgentTrainer<S> {
     private static final int START_STATE = 0;
 
     @NonNull EnvironmentInterface<S> environment;
-    @NonNull AgentInterface<S> agent;
+    @NonNull AgentTabularInterface<S> agent;
 
     @Builder.Default
     double alpha= ALPHA;
@@ -107,11 +104,10 @@ public class NStepTabularAgentTrainer<S> {
         }
         final StateInterface<S> stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
-        AgentAbstract<S> agentCasted = (AgentAbstract<S>) agent;       //to access class specific methods
         final double difference = G - valuePresent;
 
-        agentCasted.writeValue(stateToUpdate, valuePresent + h.alpha * difference);
-        agentCasted.addTemporalDifference(difference);
+        agent.writeValue(stateToUpdate, valuePresent + h.alpha * difference);
+        agent.storeTemporalDifference(difference);
     }
 
 

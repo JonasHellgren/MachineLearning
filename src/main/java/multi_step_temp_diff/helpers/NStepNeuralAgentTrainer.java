@@ -51,8 +51,6 @@ public class NStepNeuralAgentTrainer<S> {
     double probStart = PROB_START;
     @Builder.Default
     double probEnd = PROB_END;
- //   @Builder.Default
-//    StateInterface<S> startState = null; // START_STATE;
 
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
     @Builder.Default
@@ -174,7 +172,6 @@ public class NStepNeuralAgentTrainer<S> {
     private void chooseActionStepAndStoreExperience(NStepTDHelper<S> h, LogarithmicDecay scaler) {
         final int action = agentNeural.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
         StepReturn<S> stepReturn = environment.step(agentNeural.getState(), action);
-
         h.statesMap.put(h.timeCounter.getCount(), agentNeural.getState());
         agentNeural.updateState(stepReturn);
         h.timeReturnMap.put(h.timeCounter.getCount() + 1, stepReturn);

@@ -4,15 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.interfaces_and_abstract.*;
 
 import java.util.*;
 
 @Getter
-public class AgentForkTabular extends AgentAbstract<ForkVariables> implements AgentInterface<ForkVariables> {
+public class AgentForkTabular extends AgentAbstract<ForkVariables> implements AgentTabularInterface<ForkVariables> {
 
     static final double DISCOUNT_FACTOR = 1;
     static final Map<Integer, Double> MEMORY = new HashMap<>();

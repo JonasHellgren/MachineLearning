@@ -11,4 +11,5 @@ public interface AgentInterface<S> {
     void updateState(StepReturn<S> stepReturn);
     double readValue(StateInterface<S> state);
     void clear();
+    void storeTemporalDifference(double difference);
 }
