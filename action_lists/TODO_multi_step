@@ -77,6 +77,7 @@ TestChargeEnvironmentBRunning  x
 
 AgentChargeGreedy  x
 TestAgentChargeGreedy  x
+StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy
 grafix för ovan
 AgentChargeGreedyRuleForChargeDecisionPoint
