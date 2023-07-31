@@ -2,8 +2,10 @@ package multi_step_td;
 
 import common.ListUtils;
 import multi_step_temp_diff.agents.AgentMazeTabular;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.environments.*;
-import multi_step_temp_diff.interfaces_and_abstract.*;
 import org.junit.Assert;
 
 import java.util.*;

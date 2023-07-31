@@ -3,7 +3,7 @@ package multi_step_td;
 import common.RandUtils;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.interfaces_and_abstract.ReplayBufferInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.junit.Assert;

@@ -2,9 +2,12 @@ package multi_step_temp_diff.agents;
 
 import lombok.Builder;
 import lombok.Getter;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentTabularInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.interfaces_and_abstract.*;
 
 import java.util.*;
 
@@ -21,7 +24,7 @@ public class AgentForkTabular extends AgentAbstract<ForkVariables> implements Ag
     @Builder
     private AgentForkTabular(EnvironmentInterface<ForkVariables> environment,
                              StateInterface<ForkVariables> state,
-                           double discountFactor) {
+                             double discountFactor) {
         super(environment,state,discountFactor);
         this.memory = MEMORY;
     }

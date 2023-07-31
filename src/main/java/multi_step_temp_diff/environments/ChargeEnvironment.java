@@ -8,8 +8,8 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.environment_helpers.PositionTransitionRulesCharge;
 import multi_step_temp_diff.environment_helpers.SiteStateRules;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.math3.util.Pair;
 

@@ -2,9 +2,9 @@ package multi_step_temp_diff.memory;
 
 import multi_step_temp_diff.environments.MazeEnvironment;
 import multi_step_temp_diff.environments.MazeState;
-import multi_step_temp_diff.interfaces_and_abstract.PersistentMemoryInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.interfaces_and_abstract.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.PersistentMemoryInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.ValueMemoryNetworkAbstract;
 import multi_step_temp_diff.models.NetSettings;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.util.TransferFunctionType;

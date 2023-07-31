@@ -6,7 +6,7 @@ import multi_step_td.TestHelper;
 import multi_step_temp_diff.agents.AgentMazeTabular;
 import multi_step_temp_diff.environments.*;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import org.jcodec.common.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

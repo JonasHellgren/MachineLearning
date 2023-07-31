@@ -1,12 +1,11 @@
 package multi_step_td.charge;
 
-import common.RandUtils;
 import multi_step_temp_diff.environment_helpers.SiteStateRules;
 import multi_step_temp_diff.environments.ChargeEnvironment;
 import multi_step_temp_diff.environments.ChargeState;
 import multi_step_temp_diff.environments.ChargeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

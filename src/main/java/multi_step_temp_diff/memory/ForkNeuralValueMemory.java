@@ -2,10 +2,10 @@ package multi_step_temp_diff.memory;
 
 import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.interfaces_and_abstract.PersistentMemoryInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.PersistentMemoryInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.NetSettings;
-import multi_step_temp_diff.interfaces_and_abstract.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.ValueMemoryNetworkAbstract;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;

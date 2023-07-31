@@ -4,8 +4,8 @@ import multi_step_temp_diff.agents.AgentMazeTabular;
 import multi_step_temp_diff.environments.MazeEnvironment;
 import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.AgentTabularInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentTabularInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

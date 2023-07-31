@@ -4,13 +4,12 @@ import multi_step_temp_diff.agents.AgentChargeGreedy;
 import multi_step_temp_diff.environments.ChargeEnvironment;
 import multi_step_temp_diff.environments.ChargeState;
 import multi_step_temp_diff.environments.ChargeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.lang3.Range;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

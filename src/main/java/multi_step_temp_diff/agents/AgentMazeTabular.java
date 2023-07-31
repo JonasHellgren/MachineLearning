@@ -1,11 +1,12 @@
 package multi_step_temp_diff.agents;
 
 import lombok.Builder;
-import multi_step_temp_diff.environments.ForkState;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentTabularInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.environments.MazeState;
-import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.*;
 
 import java.util.HashMap;
 import java.util.Map;

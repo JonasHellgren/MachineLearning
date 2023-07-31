@@ -2,7 +2,7 @@ package multi_step_temp_diff.models;
 
 import common.RandUtils;
 import lombok.Builder;
-import multi_step_temp_diff.interfaces_and_abstract.ReplayBufferInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.ReplayBufferInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

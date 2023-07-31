@@ -1,9 +1,8 @@
-package multi_step_temp_diff.interfaces_and_abstract;
+package multi_step_temp_diff.domain.interfaces_and_abstract;
 
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.AgentActionSelector;
 import multi_step_temp_diff.helpers.TemporalDifferenceTracker;
 import multi_step_temp_diff.models.StepReturn;

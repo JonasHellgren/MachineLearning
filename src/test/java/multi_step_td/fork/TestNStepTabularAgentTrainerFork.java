@@ -7,7 +7,7 @@ import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.environments.ForkState;
 import multi_step_temp_diff.environments.ForkVariables;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.agents.AgentForkTabular;
 import org.jcodec.common.Assert;
 import org.junit.jupiter.api.BeforeEach;

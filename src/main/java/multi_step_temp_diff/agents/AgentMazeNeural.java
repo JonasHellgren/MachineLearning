@@ -2,13 +2,10 @@ package multi_step_temp_diff.agents;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.SneakyThrows;
-import multi_step_temp_diff.environments.MazeEnvironment;
+import multi_step_temp_diff.domain.interfaces_and_abstract.*;
 import multi_step_temp_diff.environments.MazeState;
 import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.*;
 import multi_step_temp_diff.memory.MazeNeuralValueMemory;
-import multi_step_temp_diff.models.NetSettings;
 import multi_step_temp_diff.models.NstepExperience;
 import java.util.List;
 
@@ -23,9 +20,9 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
 
     @Builder
     private AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
-                           StateInterface<MazeVariables> state,
-                           double discountFactor,
-                           NetworkMemoryInterface<MazeVariables> memory) {
+                            StateInterface<MazeVariables> state,
+                            double discountFactor,
+                            NetworkMemoryInterface<MazeVariables> memory) {
         super(environment,state,discountFactor);
         this.memory = memory;
     }

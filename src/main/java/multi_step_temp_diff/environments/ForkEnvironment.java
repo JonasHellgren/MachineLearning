@@ -2,8 +2,8 @@ package multi_step_temp_diff.environments;
 
 import common.Conditionals;
 import common.SetUtils;
-import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
 import java.util.Set;

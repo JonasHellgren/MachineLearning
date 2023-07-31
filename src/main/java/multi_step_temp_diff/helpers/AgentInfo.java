@@ -1,12 +1,10 @@
 package multi_step_temp_diff.helpers;
 
 import common.MovingAverage;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.interfaces_and_abstract.AgentAbstract;
-import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.interfaces_and_abstract.NetworkMemoryInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
-import org.apache.arrow.flatbuf.Int;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 
 import java.util.HashMap;
 import java.util.List;

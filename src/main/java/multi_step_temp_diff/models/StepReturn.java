@@ -1,8 +1,7 @@
 package multi_step_temp_diff.models;
 import lombok.Builder;
 import lombok.ToString;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 
 @Builder
 @ToString

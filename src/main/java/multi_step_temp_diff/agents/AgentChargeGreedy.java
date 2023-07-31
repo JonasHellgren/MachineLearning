@@ -1,9 +1,11 @@
 package multi_step_temp_diff.agents;
 
 import lombok.NonNull;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentAbstract;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.environments.ChargeVariables;
-import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.interfaces_and_abstract.*;
 
 public class AgentChargeGreedy extends AgentAbstract<ChargeVariables> implements AgentInterface<ChargeVariables> {
 

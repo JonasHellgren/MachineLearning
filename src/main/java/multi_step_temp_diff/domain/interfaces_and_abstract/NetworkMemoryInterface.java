@@ -1,6 +1,5 @@
-package multi_step_temp_diff.interfaces_and_abstract;
+package multi_step_temp_diff.domain.interfaces_and_abstract;
 import multi_step_temp_diff.models.NstepExperience;
-import org.neuroph.nnet.learning.MomentumBackpropagation;
 
 import java.util.List;
 

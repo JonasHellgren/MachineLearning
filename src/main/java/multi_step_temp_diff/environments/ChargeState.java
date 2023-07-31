@@ -1,10 +1,8 @@
 package multi_step_temp_diff.environments;
 
 import common.MathUtils;
-import common.RandUtils;
 import lombok.Getter;
-import lombok.ToString;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 
 import java.util.Objects;

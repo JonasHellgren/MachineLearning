@@ -1,12 +1,9 @@
 package multi_step_temp_diff.environments;
 
 import common.RandUtils;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
-import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.Objects;
 import java.util.function.Function;

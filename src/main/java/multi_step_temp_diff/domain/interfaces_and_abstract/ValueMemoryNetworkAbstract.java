@@ -1,4 +1,4 @@
-package multi_step_temp_diff.interfaces_and_abstract;
+package multi_step_temp_diff.domain.interfaces_and_abstract;
 
 import common.Conditionals;
 import common.MathUtils;

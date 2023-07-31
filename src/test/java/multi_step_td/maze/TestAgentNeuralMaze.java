@@ -2,11 +2,10 @@ package multi_step_td.maze;
 
 import common.RandUtils;
 import multi_step_td.TestHelper;
-import multi_step_temp_diff.agents.AgentForkNeural;
 import multi_step_temp_diff.agents.AgentMazeNeural;
 import multi_step_temp_diff.environments.*;
-import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.jetbrains.annotations.NotNull;
