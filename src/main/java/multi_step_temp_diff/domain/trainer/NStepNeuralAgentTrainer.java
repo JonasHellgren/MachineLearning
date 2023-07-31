@@ -24,6 +24,8 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static common.Conditionals.executeIfTrue;
+
 /**
  * Inspired by DQN - https://stackoverflow.com/questions/39848984/what-is-phi-in-deep-q-learning-algorithm
  */
@@ -45,14 +47,14 @@ public class NStepNeuralAgentTrainer<S> {
     public void train() {
         agentInfo= new AgentInfo<>(agentNeural);
 
-        NStepTDHelper<S> h = NStepTDHelper.<S>builder()
+        var h = NStepTDHelper.<S>builder()
                 .n(settings.nofStepsBetweenUpdatedAndBackuped())
                 .episodeCounter(new Counter(0, settings.nofEpis()))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
         buffer = ReplayBufferNStep.<S>builder().maxSize(settings.maxBufferSize()).build();
 
-        LogarithmicDecay decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
+        var decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
         BiPredicate<Integer, Integer> isNotAtTerminationTime = (t, tTerm) -> t < tTerm;
         BiFunction<Integer, Integer, Integer> timeForUpdate = (t, n) -> t - n + 1;
         Predicate<Integer> isPossibleToGetExperience = (tau) -> tau >= 0;
@@ -60,7 +62,7 @@ public class NStepNeuralAgentTrainer<S> {
         Predicate<Counter> isNotToManySteps = (c) ->  c.getCount()< settings.maxStepsInEpisode();
 
         while (!h.episodeCounter.isExceeded()) {
-            StateInterface<S> state = startStateSupplier.get();
+            var state = startStateSupplier.get();
             agentNeural.setState(state);
 
        //     System.out.println("state = " + state);
@@ -70,12 +72,12 @@ public class NStepNeuralAgentTrainer<S> {
 
             h.reset();
             do {
-                Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(), h.T), () ->
+                executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(), h.T), () ->
                         chooseActionStepAndStoreExperience(h, decayProb));
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(), h.n);
-                Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
+                executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
                     buffer.addExperience(getExperienceAtTimeTau(h)));
-                Conditionals.executeIfTrue(buffer.size() > settings.batchSize(), () -> {
+                executeIfTrue(buffer.size() > settings.batchSize(), () -> {
                     List<NstepExperience<S>> miniBatch = getMiniBatch(buffer);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
                     trackTempDifferenceError(miniBatch);
@@ -93,7 +95,7 @@ public class NStepNeuralAgentTrainer<S> {
     }
 
     private List<NstepExperience<S>> getMiniBatch(ReplayBufferInterface<S> buffer) {
-        List<NstepExperience<S>> miniBatch = buffer.getMiniBatch(settings.batchSize());
+        var miniBatch = buffer.getMiniBatch(settings.batchSize());
         setValuesInExperiencesInMiniBatch(miniBatch);
         return miniBatch;
     }
@@ -137,17 +139,17 @@ public class NStepNeuralAgentTrainer<S> {
     }
 
     private void trackTempDifferenceError(List<NstepExperience<S>> miniBatch) {
-        NstepExperience<S> experience=miniBatch.get(RandUtils.getRandomIntNumber(0,miniBatch.size()));
+        var experience=miniBatch.get(RandUtils.getRandomIntNumber(0,miniBatch.size()));
         double valueMemory=agentNeural.readValue(experience.stateToUpdate);
         double valueTarget=experience.value;
-        TemporalDifferenceTracker tracker=agentInfo.getTemporalDifferenceTracker();
+        var tracker=agentInfo.getTemporalDifferenceTracker();
         tracker.addDifference(Math.abs(valueMemory-valueTarget));
     }
 
 
     private void chooseActionStepAndStoreExperience(NStepTDHelper<S> h, LogarithmicDecay scaler) {
         final int action = agentNeural.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
-        StepReturn<S> stepReturn = environment.step(agentNeural.getState(), action);
+        var stepReturn = environment.step(agentNeural.getState(), action);
         h.statesMap.put(h.timeCounter.getCount(), agentNeural.getState());
         agentNeural.updateState(stepReturn);
         h.timeReturnMap.put(h.timeCounter.getCount() + 1, stepReturn);
