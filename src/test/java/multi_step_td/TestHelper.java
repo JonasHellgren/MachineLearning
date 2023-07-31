@@ -1,11 +1,16 @@
 package multi_step_td;
 
 import common.ListUtils;
-import multi_step_temp_diff.agents.AgentMazeTabular;
-import multi_step_temp_diff.domain.interfaces_and_abstract.AgentInterface;
-import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.environments.*;
+import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
+import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
+import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
+import multi_step_temp_diff.domain.environments.maze.MazeState;
+import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import org.junit.Assert;
 
 import java.util.*;
@@ -70,14 +75,14 @@ public class TestHelper<S> {
 
     public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(getPos.apply(valueMap,0)-ForkEnvironment.R_HEAVEN));
+        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.R_HEAVEN));
         errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.R_HEAVEN));
         errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.R_HELL));
         errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.R_HELL));
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 
-    public static double avgErrorMaze(Map<StateInterface<MazeVariables>, Double> valueMap,List<MazeState> states) {
+    public static double avgErrorMaze(Map<StateInterface<MazeVariables>, Double> valueMap, List<MazeState> states) {
         List<Double> errors=new ArrayList<>();
 
         Map<StateInterface<MazeVariables>, Double> valueMapCorrect=new HashMap<>();

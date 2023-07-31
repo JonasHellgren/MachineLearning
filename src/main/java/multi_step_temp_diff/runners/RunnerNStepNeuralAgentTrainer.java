@@ -1,13 +1,13 @@
 package multi_step_temp_diff.runners;
 
 import common.MultiplePanelsPlotter;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.helpers.AgentInfo;
-import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
-import multi_step_temp_diff.domain.interfaces_and_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.agents.AgentForkNeural;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.helpers.AgentInfo;
+import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
+import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 
 import java.util.*;
 

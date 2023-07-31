@@ -2,12 +2,14 @@ package multi_step_td.maze;
 
 import common.RandUtils;
 import multi_step_td.TestHelper;
-import multi_step_temp_diff.agents.AgentMazeNeural;
-import multi_step_temp_diff.environments.*;
-import multi_step_temp_diff.domain.interfaces_and_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.models.NstepExperience;
-import multi_step_temp_diff.models.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
+import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
+import multi_step_temp_diff.domain.environments.maze.MazeState;
+import multi_step_temp_diff.domain.environments.maze.MazeVariables;
+import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ public class TestAgentNeuralMaze {
     MazeEnvironment environment;
 
     Function<StateInterface<MazeVariables>,Double>  sumXy=(s) ->
-            (double) 80+MazeState.getX.apply(s)+MazeState.getY.apply(s);
+            (double) 80+ MazeState.getX.apply(s)+MazeState.getY.apply(s);
 
     @BeforeEach
     public void init () {

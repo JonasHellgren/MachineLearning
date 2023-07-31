@@ -1,11 +1,11 @@
 package multi_step_temp_diff.runners;
 
 import common.MultiplePanelsPlotter;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.helpers.AgentInfo;
-import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.agents.AgentForkTabular;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.helpers.AgentInfo;
+import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
+import multi_step_temp_diff.domain.agents.fork.AgentForkTabular;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

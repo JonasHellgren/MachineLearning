@@ -1,11 +1,11 @@
 package multi_step_td.maze;
 
-import multi_step_temp_diff.environments.MazeEnvironment;
-import multi_step_temp_diff.environments.MazeState;
-import multi_step_temp_diff.environments.MazeVariables;
-import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.models.StepReturn;
+import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
+import multi_step_temp_diff.domain.environments.maze.MazeState;
+import multi_step_temp_diff.domain.environments.maze.MazeVariables;
+import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

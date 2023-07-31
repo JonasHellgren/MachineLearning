@@ -2,9 +2,9 @@ jupiter test  x
 tagga test - basic, nettrain x
 test suite x
 
-domain folder - tex agent_abstract, agent_parts, agent_valueobj, env_abstract, agents, envs
-klasser i env_helpers flytta
-helpers folder - subs = env, agent
+domain folder - tex agent_abstract, agent_parts, agent_valueobj, env_abstract, agents, envs  x
+klasser i env_helpers flytta x
+helpers folder - subs = env, agent x
 settings (final) i agenter med record i folder agent_valueobj
 settings (final) i envs med record i folder envs_valueobj
 sub foldrar i envrionments - charge, fork, maze

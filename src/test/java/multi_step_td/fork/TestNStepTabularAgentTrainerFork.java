@@ -3,12 +3,12 @@ package multi_step_td.fork;
 
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
-import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.agents.AgentForkTabular;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agents.fork.AgentForkTabular;
 import org.jcodec.common.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

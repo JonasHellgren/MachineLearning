@@ -1,11 +1,11 @@
 package multi_step_td;
 
 import common.RandUtils;
-import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.domain.interfaces_and_abstract.ReplayBufferInterface;
-import multi_step_temp_diff.models.NstepExperience;
-import multi_step_temp_diff.models.ReplayBufferNStep;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
+import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

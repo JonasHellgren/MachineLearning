@@ -1,12 +1,12 @@
 package multi_step_td.fork;
 
 import common.RandUtils;
-import multi_step_temp_diff.environments.ForkState;
-import multi_step_temp_diff.environments.ForkVariables;
-import multi_step_temp_diff.domain.interfaces_and_abstract.EnvironmentInterface;
-import multi_step_temp_diff.environments.ForkEnvironment;
-import multi_step_temp_diff.domain.interfaces_and_abstract.StateInterface;
-import multi_step_temp_diff.models.StepReturn;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
+import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
