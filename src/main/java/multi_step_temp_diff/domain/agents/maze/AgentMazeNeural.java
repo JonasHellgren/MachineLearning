@@ -15,14 +15,6 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
     AgentMazeNeuralSettings settings;
     NetworkMemoryInterface<MazeVariables>  memory;
 
-    private AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
-                            AgentMazeNeuralSettings settings) {
-        super(environment,
-                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
-                settings.discountFactor());
-        this.settings= AgentMazeNeuralSettings.getDefault();
-        this.memory = settings.memory();
-    }
 
     public static AgentMazeNeural newDefault(EnvironmentInterface<MazeVariables> environment) {
         return new AgentMazeNeural(environment, AgentMazeNeuralSettings.getDefault());
@@ -38,6 +30,15 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
 
         var settingsAdapted=AgentMazeNeuralSettings.getWithDiscountAndLearningRate(discountFactor,learningRate);
         return new AgentMazeNeural(environment, settingsAdapted);
+    }
+
+    private AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
+                            AgentMazeNeuralSettings settings) {
+        super(environment,
+                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
+                settings.discountFactor());
+        this.settings= AgentMazeNeuralSettings.getDefault();
+        this.memory = settings.memory();
     }
 
     @Override

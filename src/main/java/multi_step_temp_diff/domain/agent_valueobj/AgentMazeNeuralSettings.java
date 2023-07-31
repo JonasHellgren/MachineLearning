@@ -18,6 +18,15 @@ public record AgentMazeNeuralSettings(
     public static final double LEARNING_RATE=0.5;
     public static final int START_X = 0, START_Y = 0;
 
+    public static AgentMazeNeuralSettings getWithDiscountAndLearningRate(double discountFactor,double learningRate) {
+        return AgentMazeNeuralSettings.builder()
+                .discountFactor(discountFactor)
+                .learningRate(learningRate)
+                .memory(new MazeNeuralValueMemory<>(learningRate))
+                .startX(START_X).startY(START_Y)
+                .build();
+    }
+
     public static AgentMazeNeuralSettings getDefault() {
         return AgentMazeNeuralSettings.builder()
                 .discountFactor(1)
@@ -27,13 +36,5 @@ public record AgentMazeNeuralSettings(
                 .build();
     }
 
-    public static AgentMazeNeuralSettings getWithDiscountAndLearningRate(double discountFactor,double learningRate) {
-        return AgentMazeNeuralSettings.builder()
-                .discountFactor(discountFactor)
-                .learningRate(learningRate)
-                .memory(new MazeNeuralValueMemory<>(learningRate))
-                .startX(START_X).startY(START_Y)
-                .build();
-    }
 
 }

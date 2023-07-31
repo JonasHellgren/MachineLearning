@@ -14,15 +14,6 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
     AgentMazeTabularSettings settings;
     Map<MazeState, Double> memory;
 
-    private AgentMazeTabular(EnvironmentInterface<MazeVariables> environment,
-                             AgentMazeTabularSettings settings) {
-        super(environment,
-                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
-                settings.discountFactor());
-        this.settings=AgentMazeTabularSettings.getDefault();
-        this.memory = settings.memory();
-    }
-
     public static AgentMazeTabular newDefault(EnvironmentInterface<MazeVariables> environment) {
         return new AgentMazeTabular(environment,AgentMazeTabularSettings.getDefault());
     }
@@ -30,6 +21,15 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
     public static AgentMazeTabular newFromSettings(EnvironmentInterface<MazeVariables> environment,
                                             AgentMazeTabularSettings settings) {
         return new AgentMazeTabular(environment,settings);
+    }
+
+    private AgentMazeTabular(EnvironmentInterface<MazeVariables> environment,
+                             AgentMazeTabularSettings settings) {
+        super(environment,
+                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
+                settings.discountFactor());
+        this.settings=AgentMazeTabularSettings.getDefault();
+        this.memory = settings.memory();
     }
 
     @Override
