@@ -6,7 +6,8 @@ domain folder - tex agent_abstract, agent_parts, agent_valueobj, env_abstract, a
 klasser i env_helpers flytta x
 helpers folder - subs = env, agent x
 pblic const first  x
-settings (final) i agenter med record i folder agent_valueobj
+settings (final) i agenter med record i folder agent_valueobj  x
+NetSettings som record  x
 settings (final) i envs med record i folder envs_valueobj
 sub foldrar i envrionments - charge, fork, maze
 

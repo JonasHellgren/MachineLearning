@@ -30,7 +30,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     public void createLearningRule(MultiLayerPerceptron neuralNetwork, NetSettings settings) {
         learningRule = new MomentumBackpropagation();
-        learningRule.setLearningRate(settings.learningRate);
+        learningRule.setLearningRate(settings.learningRate());
         learningRule.setNeuralNetwork(neuralNetwork);
         learningRule.setMaxIterations(NOF_ITERATIONS);
     }
@@ -44,7 +44,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     protected double getNetworkOutputValue(double[] inputVec) {
         neuralNetwork.setInput(inputVec);
         neuralNetwork.calculate();
-        double[] output = Arrays.copyOf(neuralNetwork.getOutput(), settings.outPutSize);
+        double[] output = Arrays.copyOf(neuralNetwork.getOutput(), settings.outPutSize());
         return scaleOutNormalizedToValue.calcOutDouble(output[0]);
     }
 
@@ -63,8 +63,8 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     }
 
     public void createOutScalers(double minOut, double maxOut) {
-        scaleOutNormalizedToValue =new ScalerLinear(settings.netOutMin, settings.netOutMax,minOut, maxOut);
-        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, settings.netOutMin, settings.netOutMax);
+        scaleOutNormalizedToValue =new ScalerLinear(settings.netOutMin(), settings.netOutMax(),minOut, maxOut);
+        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, settings.netOutMin(), settings.netOutMax());
     }
 
     /**
@@ -78,10 +78,10 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     }
 
     private DataSet getDataSet(List<NstepExperience<S>> buffer) {
-        DataSet trainingSet = new DataSet(settings.inputSize, settings.outPutSize);
+        DataSet trainingSet = new DataSet(settings.inputSize(), settings.outPutSize());
         for (NstepExperience<S> e : buffer) {
             double[] inputVec = getInputVec(e.stateToUpdate);
-            double valueClipped= MathUtils.clip(e.value,settings.minOut,settings.maxOut);
+            double valueClipped= MathUtils.clip(e.value,settings.minOut(),settings.maxOut());
             double normalizedValue= scaleOutValueToNormalized.calcOutDouble(valueClipped);
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
         }

@@ -33,18 +33,18 @@ public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> imp
     public MazeNeuralValueMemory(NetSettings settings) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
-                settings.inputSize,
-                settings.nofNeuronsHidden, //  settings.nofNeuronsHidden,   settings.nofNeuronsHidden,
-                settings.outPutSize);
+                settings.inputSize(),
+                settings.nofNeuronsHidden(), //  settings.nofNeuronsHidden,   settings.nofNeuronsHidden,
+                settings.outPutSize());
         super.settings = settings;
         super.createLearningRule(neuralNetwork, settings);
-        super.createOutScalers(settings.minOut * MARGIN, settings.maxOut * MARGIN);
+        super.createOutScalers(settings.minOut() * MARGIN, settings.maxOut() * MARGIN);
         isWarmedUp = false;
     }
 
     @Override
     public double[] getInputVec(StateInterface<S> s) {
-        double[] inArray = new double[settings.inputSize];
+        double[] inArray = new double[settings.inputSize()];
         Arrays.fill(inArray, 0);
         MazeState stateCasted=(MazeState) s;
         inArray[MazeState.getX.apply(stateCasted)] = 1d;
