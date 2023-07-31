@@ -15,7 +15,7 @@ AgentActionSelector - byt Pair mot record ActionValue  x
 
 NStepNeuralAgentTrainer
 - settings som value obj (om smidigt)  x
-- todo remove alpha
+- todo remove alpha  x
 - import Conditionals
 - korta ned med var
 

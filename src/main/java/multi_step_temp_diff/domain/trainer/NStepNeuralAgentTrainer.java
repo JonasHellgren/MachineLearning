@@ -46,7 +46,6 @@ public class NStepNeuralAgentTrainer<S> {
         agentInfo= new AgentInfo<>(agentNeural);
 
         NStepTDHelper<S> h = NStepTDHelper.<S>builder()
-                .alpha(settings.alpha()) //todo remove
                 .n(settings.nofStepsBetweenUpdatedAndBackuped())
                 .episodeCounter(new Counter(0, settings.nofEpis()))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))

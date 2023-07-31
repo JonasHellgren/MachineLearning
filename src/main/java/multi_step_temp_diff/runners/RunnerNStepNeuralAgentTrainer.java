@@ -44,7 +44,6 @@ public class RunnerNStepNeuralAgentTrainer {
     public static void buildTrainer(int nofEpis, int startPos, int nofSteps) {
         agentCasted=(AgentForkNeural) agent;
         NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
-                .alpha(0.1)
                 .probStart(0.25).probEnd(1e-5).nofIterations(1)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(nofEpis)

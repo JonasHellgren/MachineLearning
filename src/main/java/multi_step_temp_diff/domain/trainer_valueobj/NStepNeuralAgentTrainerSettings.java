@@ -6,7 +6,6 @@ import static common.DefaultPredicates.defaultIfNullDouble;
 import static common.DefaultPredicates.defaultIfNullInteger;
 
 public record NStepNeuralAgentTrainerSettings(
-        Double alpha,
         Integer nofStepsBetweenUpdatedAndBackuped,  //todo better name
         Integer nofEpis,
         Integer batchSize,
@@ -18,7 +17,7 @@ public record NStepNeuralAgentTrainerSettings(
         Integer maxStepsInEpisode
 ) {
 
-    private static final Double ALPHA = 0.5;
+  //  private static final Double ALPHA = 0.5;
     private static final Integer N_DEFAULT = 3;
     private static final Integer NOF_EPIS = 100;
     private static final Integer BATCH_SIZE = 50;
@@ -33,8 +32,7 @@ public record NStepNeuralAgentTrainerSettings(
         return NStepNeuralAgentTrainerSettings.builder().build();
     }
     @Builder
-    public NStepNeuralAgentTrainerSettings(Double alpha,
-                                           Integer nofStepsBetweenUpdatedAndBackuped,
+    public NStepNeuralAgentTrainerSettings(Integer nofStepsBetweenUpdatedAndBackuped,
                                            Integer nofEpis,
                                            Integer batchSize,
                                            Integer nofIterations,
@@ -43,7 +41,6 @@ public record NStepNeuralAgentTrainerSettings(
                                            Double initValue,
                                            Integer maxBufferSize,
                                            Integer maxStepsInEpisode) {
-        this.alpha= defaultIfNullDouble.apply(alpha,ALPHA);
         this.nofStepsBetweenUpdatedAndBackuped = defaultIfNullInteger.apply(nofStepsBetweenUpdatedAndBackuped,N_DEFAULT);
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
         this.batchSize = defaultIfNullInteger.apply(batchSize,BATCH_SIZE);

@@ -83,7 +83,6 @@ public class TestNStepNeuralAgentTrainerMaze {
         agent = AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,discountFactor,learningRate);
 
         var settings= NStepNeuralAgentTrainerSettings.builder()
-                .alpha(0.1)
                 .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE).maxBufferSize(BUFFER_SIZE_MAX)

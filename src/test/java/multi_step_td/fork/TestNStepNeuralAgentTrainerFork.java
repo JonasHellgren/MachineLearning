@@ -144,7 +144,6 @@ public class TestNStepNeuralAgentTrainerFork {
         agentCasted=(AgentForkNeural) agent;
 
         NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
-                .alpha(0.1)
                 .probStart(0.9).probEnd(1e-5).nofIterations(1)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(nofEpis)
