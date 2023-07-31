@@ -1,6 +1,7 @@
 package multi_step_td;
 
 import common.ListUtils;
+import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -96,10 +97,10 @@ public class TestHelper<S> {
         valueMapCorrect.put(MazeState.newFromXY(0, 5),rg+4*rm);
 
         valueMapCorrect.put(MazeState.newFromXY(0, 3),rg+6*rm);
-        valueMapCorrect.put(MazeState.newFromXY(1, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
-        valueMapCorrect.put(MazeState.newFromXY(2, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
-        valueMapCorrect.put(MazeState.newFromXY(3, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
-        valueMapCorrect.put(MazeState.newFromXY(4, 3), AgentMazeTabular.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(1, 3), AgentMazeTabularSettings.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(2, 3), AgentMazeTabularSettings.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(3, 3), AgentMazeTabularSettings.VALUE_IF_NOT_PRESENT);
+        valueMapCorrect.put(MazeState.newFromXY(4, 3), AgentMazeTabularSettings.VALUE_IF_NOT_PRESENT);
 
         valueMapCorrect.put(MazeState.newFromXY(5, 3),rg+2*rm);
 

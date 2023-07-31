@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class TestAgentMazeTabularDefaultSettings {
 
     @Test
-    public void givenDefaultAgentValues_thenExcected() {
+    public void givenDefaultAgentValues_thenExpected() {
         var settings= AgentMazeTabularSettings.getDefault();
 
         Assertions.assertEquals(1,settings.discountFactor());

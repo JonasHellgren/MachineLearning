@@ -1,5 +1,6 @@
 package multi_step_td.maze;
 
+import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
@@ -28,7 +29,7 @@ public class TestAgentMazeTabular {
     @Test
     public void whenNoWriting_thenRead0() {
         agent.clear();
-        assertEquals(AgentMazeTabular.VALUE_IF_NOT_PRESENT,
+        assertEquals(AgentMazeTabularSettings.VALUE_IF_NOT_PRESENT,
                 agent.readValue(MazeState.newFromXY(0,0)), DELTA);
     }
 
