@@ -8,8 +8,9 @@ import multi_step_temp_diff.environments.*;
 import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import org.jcodec.common.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class TestNStepTabularAgentTrainerMaze {
     NStepTabularAgentTrainer<MazeVariables> trainer;
     AgentMazeTabular agent;
 
-    @Before
+    @BeforeEach
     public void init() {
         final MazeEnvironment environment = new MazeEnvironment();
         agent = AgentMazeTabular.newDefault(environment);
@@ -36,7 +37,9 @@ public class TestNStepTabularAgentTrainerMaze {
     }
 
     @SneakyThrows
-    @Test public void whenStartingAtX0Y5_thenGoodStateValuesAtUpperRow() {
+    @Test
+    @Tag("nettrain")
+    public void whenStartingAtX0Y5_thenGoodStateValuesAtUpperRow() {
         trainer.setStartStateSupplier(() -> MazeState.newFromXY(0,5));
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         agent.clear();
@@ -59,7 +62,9 @@ public class TestNStepTabularAgentTrainerMaze {
     }
 
 
-    @Test public void whenStartingAtRandom_thenGoodStateValuesAtAllCells() {
+    @Test
+    @Tag("nettrain")
+    public void whenStartingAtRandom_thenGoodStateValuesAtAllCells() {
         trainer.setStartStateSupplier(MazeState::newFromRandomPos);
 
         agent.clear();

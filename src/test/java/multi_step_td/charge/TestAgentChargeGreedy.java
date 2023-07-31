@@ -1,19 +1,20 @@
 package multi_step_td.charge;
 
-import multi_step_td.TestHelper;
 import multi_step_temp_diff.agents.AgentChargeGreedy;
 import multi_step_temp_diff.environments.ChargeEnvironment;
 import multi_step_temp_diff.environments.ChargeState;
 import multi_step_temp_diff.environments.ChargeVariables;
-import multi_step_temp_diff.environments.MazeVariables;
 import multi_step_temp_diff.interfaces_and_abstract.AgentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
 import org.apache.commons.lang3.Range;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class TestAgentChargeGreedy {
     public static final double SOC_INIT = 0.9;
@@ -26,7 +27,7 @@ public class TestAgentChargeGreedy {
 
     StepReturn<ChargeVariables> stepReturn;
 
-    @Before
+    @BeforeEach
     public void init() {
         environment = new ChargeEnvironment();
         environmentCasted = (ChargeEnvironment) environment;
@@ -44,8 +45,8 @@ public class TestAgentChargeGreedy {
         TestChargeHelper.setPosB.accept(state, 25);
         int action = getActionStepAndPrint();
         Range<Integer> actionFeasible = Range.between(0, 1);  //actions not moving A
-        Assert.assertTrue(actionFeasible.contains(action));
-        Assert.assertTrue(TestChargeHelper.samePosA.test(state, stepReturn.newState));
+        assertTrue(actionFeasible.contains(action));
+        assertTrue(TestChargeHelper.samePosA.test(state, stepReturn.newState));
     }
 
     @Test
@@ -53,8 +54,8 @@ public class TestAgentChargeGreedy {
         TestChargeHelper.setPosA.accept(state, 18);
         TestChargeHelper.setPosB.accept(state, 29);
         int action = getActionStepAndPrint();
-        Assert.assertTrue(action!=3);
-        Assert.assertNotEquals(TestChargeHelper.posNewA.apply(stepReturn),TestChargeHelper.posNewB.apply(stepReturn));
+        assertTrue(action!=3);
+        assertNotEquals(TestChargeHelper.posNewA.apply(stepReturn),TestChargeHelper.posNewB.apply(stepReturn));
     }
 
     @Test
@@ -64,9 +65,9 @@ public class TestAgentChargeGreedy {
         TestChargeHelper.setPosA.accept(state, 17);
         int action = getActionStepAndPrint();
         Range<Integer> actionFeasible = Range.between(0, 1);  //actions not moving A
-        Assert.assertTrue(actionFeasible.contains(action));
-        Assert.assertTrue(TestChargeHelper.samePosA.test(state,stepReturn.newState));
-        Assert.assertTrue(TestChargeHelper.samePosB.test(state,stepReturn.newState));
+        assertTrue(actionFeasible.contains(action));
+        assertTrue(TestChargeHelper.samePosA.test(state,stepReturn.newState));
+        assertTrue(TestChargeHelper.samePosB.test(state,stepReturn.newState));
     }
 
     @Test
@@ -75,9 +76,9 @@ public class TestAgentChargeGreedy {
         TestChargeHelper.setPosB.accept(state, 11);
         int action = getActionStepAndPrint();
         Range<Integer> actionFeasible = Range.between(2, 3);  //actions moving A
-        Assert.assertTrue(actionFeasible.contains(action));
-        Assert.assertFalse(TestChargeHelper.samePosA.test(state,stepReturn.newState));
-        Assert.assertFalse(TestChargeHelper.samePosB.test(state,stepReturn.newState));
+        assertTrue(actionFeasible.contains(action));
+        assertFalse(TestChargeHelper.samePosA.test(state,stepReturn.newState));
+        assertFalse(TestChargeHelper.samePosB.test(state,stepReturn.newState));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class TestAgentChargeGreedy {
             }
         }
         System.out.println("stepReturn.newState = " + stepReturn.newState);
-        Assert.assertFalse(stepReturn.isNewStateFail);
+        assertFalse(stepReturn.isNewStateFail);
 
     }
 

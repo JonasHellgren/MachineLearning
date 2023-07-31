@@ -1,0 +1,24 @@
+jupiter test  x
+tagga test - basic, nettrain x
+test suite x
+settings (final) i agenter med record i folder agent_valueobj
+
+domain folder - tex agent_abstract, agent_parts, agent_valueobj, env_abstract, agents, envs
+klasser i env_helpers flytta
+helpers folder - subs = env, agent
+settings (final) i envs med record i folder envs_valueobj
+sub foldrar i envrionments - charge, fork, maze
+
+AgentActionSelector - byt Pair mot record ActionValue
+
+NStepNeuralAgentTrainer
+- settings som value obj (om smidigt)
+- todo remove alpha
+- import Conditionals
+- korta ned med var
+
+NStepTabularAgentTrainer se NStepNeuralAgentTrainer
+
+NetSettings som record
+ReplayBufferNStep - raw use...
+StepReturn som record

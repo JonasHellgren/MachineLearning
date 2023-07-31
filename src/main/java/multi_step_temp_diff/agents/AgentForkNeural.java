@@ -32,7 +32,6 @@ public class AgentForkNeural extends AgentAbstract<ForkVariables> implements Age
 
     NetworkMemoryInterface<ForkVariables>  memory;
 
-
     @Builder
     public AgentForkNeural(EnvironmentInterface<ForkVariables> environment,
                            StateInterface<ForkVariables> state,

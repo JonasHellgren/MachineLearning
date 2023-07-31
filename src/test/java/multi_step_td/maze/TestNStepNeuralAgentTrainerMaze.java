@@ -1,24 +1,22 @@
 package multi_step_td.maze;
 
-import common.ListUtils;
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.agents.AgentMazeNeural;
 import multi_step_temp_diff.environments.*;
-import multi_step_temp_diff.helpers.AgentInfo;
 import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.helpers.StateValuePrinter;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Big batch seems to destabilize
@@ -39,7 +37,7 @@ public class TestNStepNeuralAgentTrainerMaze {
     MazeEnvironment environment;
     TestHelper<MazeVariables> helper;
 
-    @Before
+    @BeforeEach
     public void init() {
         environment=new MazeEnvironment();
         agent= AgentMazeNeural.newDefault(environment);
@@ -51,33 +49,26 @@ public class TestNStepNeuralAgentTrainerMaze {
 
     @SneakyThrows
     @Test
+    @Tag("nettrain")
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 1.0, delta = 10d;
         setAgentAndTrain(discountFactor,LEARNING_RATE);
-     //   helper.printStateValues();
-       // AgentInfo<MazeVariables> agentInfo=new AgentInfo<>(agent);
         printBufferSize();
-
-     //  System.out.println("trainer.getBuffer() = " + trainer.getBuffer());
 
         helper=new TestHelper<>(agent, environment);
         helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_UPPER));
         helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_MIDDLE));
-
-
         double avgError=TestHelper.avgErrorMaze(helper.getStateValueMap(STATE_SET),STATES_LIST);
 
         System.out.println("avgError = " + avgError);
 
-//        double avgError = TestHelper.avgErrorMaze(agentInfo.stateValueMap(environment.stateSet()));
-
         StateValuePrinter<MazeVariables> printer=new StateValuePrinter<>(agent,environment);
         printer.printMazeNeuralAgent();
 
-        Assert.assertTrue(avgError < delta);
-        Assert.assertTrue(value.apply(3,5)>value.apply(2,5));
-        Assert.assertTrue(value.apply(2,5)>value.apply(1,5));
-        Assert.assertTrue(value.apply(1,5)>value.apply(0,5));
+        assertTrue(avgError < delta);
+        assertTrue(value.apply(3,5)>value.apply(2,5));
+        assertTrue(value.apply(2,5)>value.apply(1,5));
+        assertTrue(value.apply(1,5)>value.apply(0,5));
 
 
     }

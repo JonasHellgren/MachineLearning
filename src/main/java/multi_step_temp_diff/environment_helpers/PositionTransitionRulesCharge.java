@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class PositionTransitionRules {
+public class PositionTransitionRulesCharge {
 
     Map<BiPredicate<Integer,Boolean>, Function<Integer,Integer>> transitionTable;  //pos, isObstacle -> posNew(command)
     Predicate<Pair<Integer,Integer>> isAtPos=(p) -> p.getFirst().equals(p.getSecond());
@@ -17,7 +17,7 @@ public class PositionTransitionRules {
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosObstacle=(p,o) -> isAtPos.test(p) && o;
 
 
-    public PositionTransitionRules() {
+    public PositionTransitionRulesCharge() {
         this.transitionTable = new HashMap<>();
         transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,10)), (c) -> (c==0) ? 11 : 20 );
         transitionTable.put((p,o) -> isAtPos.test(new Pair<>(p,19)), (c) -> 0);

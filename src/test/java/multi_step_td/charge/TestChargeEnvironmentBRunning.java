@@ -6,9 +6,10 @@ import multi_step_temp_diff.environments.ChargeVariables;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.StepReturn;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestChargeEnvironmentBRunning {
     public static final double SOC_INIT = 0.9;
@@ -18,7 +19,7 @@ public class TestChargeEnvironmentBRunning {
     ChargeState stateCasted;
     StepReturn<ChargeVariables> stepReturn;
 
-    @Before
+    @BeforeEach
     public void init() {
         environment = new ChargeEnvironment();
         environmentCasted = (ChargeEnvironment) environment;
@@ -36,10 +37,10 @@ public class TestChargeEnvironmentBRunning {
         TestChargeHelper.setPosB.accept(state, 25);
         stepReturn = environment.step(state, 0);
         TestChargeHelper.printStepReturn(stepReturn);
-        Assert.assertTrue(TestChargeHelper.samePosA.test(state, stepReturn.newState));
-        Assert.assertFalse(TestChargeHelper.samePosB.test(state, stepReturn.newState));
-        Assert.assertTrue(TestChargeHelper.sameSoCA.test(state, stepReturn.newState));
-        Assert.assertFalse(TestChargeHelper.sameSoCB.test(state, stepReturn.newState));
+        assertTrue(TestChargeHelper.samePosA.test(state, stepReturn.newState));
+        assertFalse(TestChargeHelper.samePosB.test(state, stepReturn.newState));
+        assertTrue(TestChargeHelper.sameSoCA.test(state, stepReturn.newState));
+        assertFalse(TestChargeHelper.sameSoCB.test(state, stepReturn.newState));
     }
 
     @Test
@@ -49,8 +50,8 @@ public class TestChargeEnvironmentBRunning {
         stepReturn = environment.step(state, 2);
         oneMoreStep();
         TestChargeHelper.printStepReturn(stepReturn);
-        Assert.assertTrue(stepReturn.isNewStateTerminal);
-        Assert.assertEquals(ChargeEnvironment.SiteState.isTwoCharging,
+        assertTrue(stepReturn.isNewStateTerminal);
+        assertEquals(ChargeEnvironment.SiteState.isTwoCharging,
                 environmentCasted.getSiteStateRules().getSiteState(state));
     }
 
@@ -63,8 +64,8 @@ public class TestChargeEnvironmentBRunning {
         TestChargeHelper.printStepReturn(stepReturn);
         oneMoreStep();
         TestChargeHelper.printStepReturn(stepReturn);
-        Assert.assertTrue(stepReturn.isNewStateTerminal);
-        Assert.assertEquals(ChargeEnvironment.SiteState.isTwoAtSamePos,
+        assertTrue(stepReturn.isNewStateTerminal);
+        assertEquals(ChargeEnvironment.SiteState.isTwoAtSamePos,
                 environmentCasted.getSiteStateRules().getSiteState(state));
     }
 
@@ -75,8 +76,8 @@ public class TestChargeEnvironmentBRunning {
         TestChargeHelper.setPosA.accept(state, 12);
         stepReturn = environment.step(state, 2);
 
-        Assert.assertFalse(TestChargeHelper.samePosA.test(state, stepReturn.newState));
-        Assert.assertTrue(TestChargeHelper.samePosB.test(state, stepReturn.newState));
+        assertFalse(TestChargeHelper.samePosA.test(state, stepReturn.newState));
+        assertTrue(TestChargeHelper.samePosB.test(state, stepReturn.newState));
     }
 
     private void oneMoreStep() {

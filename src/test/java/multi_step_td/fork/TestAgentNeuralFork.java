@@ -10,11 +10,13 @@ import multi_step_temp_diff.environments.ForkEnvironment;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class TestAgentNeuralFork {
 
@@ -27,7 +29,7 @@ public class TestAgentNeuralFork {
     TestHelper<ForkVariables> helper;
     ForkEnvironment environment;
 
-    @Before
+    @BeforeEach
     public void init () {
         environment = new ForkEnvironment();
         agent= AgentForkNeural.newDefault(environment);
@@ -36,6 +38,7 @@ public class TestAgentNeuralFork {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect () {
         final double value = 0d;
         ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()

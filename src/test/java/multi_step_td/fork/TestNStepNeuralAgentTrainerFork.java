@@ -10,9 +10,12 @@ import multi_step_temp_diff.helpers.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.agents.AgentForkNeural;
 import multi_step_temp_diff.models.NetSettings;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Big batch seems to destabilize
@@ -35,13 +38,14 @@ public class TestNStepNeuralAgentTrainerFork {
     TestHelper<ForkVariables> helper;
 
 
-    @Before
+    @BeforeEach
     public void init() {
         environment = new ForkEnvironment();
     }
 
     @SneakyThrows
     @Test
+    @Tag("nettrain")
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 1.0, delta = 2d;
         setAgentAndTrain(discountFactor, NOF_EPIS*2, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
@@ -50,11 +54,12 @@ public class TestNStepNeuralAgentTrainerFork {
         printBufferSize();
 
         double avgError = TestHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
-        Assert.assertTrue(avgError < delta);
+        assertTrue(avgError < delta);
     }
 
 
     @Test
+    @Tag("nettrain")
     public void givenDiscountFactorDot9_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 0.9, delta = 3d;
         setAgentAndTrain(discountFactor, NOF_EPIS, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
@@ -62,15 +67,16 @@ public class TestNStepNeuralAgentTrainerFork {
         helper.printStateValues();
 
         final double rHeaven = ForkEnvironment.R_HEAVEN, rHell = ForkEnvironment.R_HELL;
-        Assert.assertEquals(Math.pow(discountFactor,10-7)* rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(7)), delta);
-        Assert.assertEquals(Math.pow(discountFactor,10-9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(9)), delta);
-        Assert.assertEquals(Math.pow(discountFactor,9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(0)), delta);
+        assertEquals(Math.pow(discountFactor,10-7)* rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(7)), delta);
+        assertEquals(Math.pow(discountFactor,10-9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(9)), delta);
+        assertEquals(Math.pow(discountFactor,9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(0)), delta);
 
-        Assert.assertEquals(Math.pow(discountFactor,15-13)*rHell,agentCasted.getMemory().read(ForkState.newFromPos(13)), delta);
-        Assert.assertEquals(Math.pow(discountFactor,5)*rHell,agentCasted.getMemory().read(ForkState.newFromPos(6)), delta);
+        assertEquals(Math.pow(discountFactor,15-13)*rHell,agentCasted.getMemory().read(ForkState.newFromPos(13)), delta);
+        assertEquals(Math.pow(discountFactor,5)*rHell,agentCasted.getMemory().read(ForkState.newFromPos(6)), delta);
     }
 
     @Test
+    @Tag("nettrain")
     public void givenDiscountFactorDot5SStartAtBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
         final double discountFactor = 0.5;
         final int nofEpisodes=BATCH_SIZE*10, startPos = 9;
@@ -78,7 +84,7 @@ public class TestNStepNeuralAgentTrainerFork {
         printBufferSize();
         helper.printStateValues();
         final double delta = 1d;
-        Assert.assertEquals(ForkEnvironment.R_HEAVEN,agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
+        assertEquals(ForkEnvironment.R_HEAVEN,agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
 
     private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
@@ -96,6 +102,7 @@ public class TestNStepNeuralAgentTrainerFork {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenDiscountFactorDot5SStartAtTwoStepsBeforeHeaven_whenTrained_thenDiscountNotEffectStateValue() {
         final double discountFactor = 0.5;
         final int startPos = 8;
@@ -104,11 +111,12 @@ public class TestNStepNeuralAgentTrainerFork {
         printBufferSize();
         helper.printStateValues();
         final double delta = 1d;
-        Assert.assertEquals(ForkEnvironment.R_HEAVEN*discountFactor,
+        assertEquals(ForkEnvironment.R_HEAVEN*discountFactor,
                 agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
 
     @Test
+    @Tag("nettrain")
     public void givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning() {
         final double discountFactor = 1.00;
         final int startPos = 7, nofEpis = BATCH_SIZE * 2;
@@ -123,8 +131,7 @@ public class TestNStepNeuralAgentTrainerFork {
         double err3=Math.abs(valueState7ThreeSteps-ForkEnvironment.R_HEAVEN);
         double err1=Math.abs(valueState7OneStep-ForkEnvironment.R_HEAVEN);
 
-        Assert.assertTrue(err3<err1);
-
+        assertTrue(err3<err1);
 
     }
 

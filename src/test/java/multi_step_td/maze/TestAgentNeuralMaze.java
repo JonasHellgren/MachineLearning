@@ -10,17 +10,16 @@ import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.models.NstepExperience;
 import multi_step_temp_diff.models.ReplayBufferNStep;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 
 public class TestAgentNeuralMaze {
-
-
     private static final int NOF_ITERATIONS = 1000;
     private static final int BUFFER_SIZE = NOF_ITERATIONS;
 
@@ -35,7 +34,7 @@ public class TestAgentNeuralMaze {
     Function<StateInterface<MazeVariables>,Double>  sumXy=(s) ->
             (double) 80+MazeState.getX.apply(s)+MazeState.getY.apply(s);
 
-    @Before
+    @BeforeEach
     public void init () {
         environment = new MazeEnvironment();
         agent= AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,1, LEARNING_RATE);
@@ -44,6 +43,7 @@ public class TestAgentNeuralMaze {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect () {
         ReplayBufferNStep<MazeVariables> buffer=ReplayBufferNStep.<MazeVariables>builder()
                 .buffer(createBatch()).build();

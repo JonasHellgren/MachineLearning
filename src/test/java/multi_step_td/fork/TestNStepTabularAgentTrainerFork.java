@@ -1,5 +1,6 @@
 package multi_step_td.fork;
 
+
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.environments.ForkEnvironment;
@@ -9,10 +10,12 @@ import multi_step_temp_diff.helpers.NStepTabularAgentTrainer;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
 import multi_step_temp_diff.agents.AgentForkTabular;
 import org.jcodec.common.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+
 
 public class TestNStepTabularAgentTrainerFork {
 
@@ -22,7 +25,7 @@ public class TestNStepTabularAgentTrainerFork {
     NStepTabularAgentTrainer<ForkVariables> trainer;
     AgentForkTabular agent;
 
-    @Before
+    @BeforeEach
     public void init() {
         final ForkEnvironment environment = new ForkEnvironment();
         agent = AgentForkTabular.newDefault(environment);
@@ -35,7 +38,9 @@ public class TestNStepTabularAgentTrainerFork {
     }
 
     @SneakyThrows
-    @Test public void whenIncreasingNofSteps_thenBetterStateValues() {
+    @Test
+    @Tag("nettrain")
+    public void whenIncreasingNofSteps_thenBetterStateValues() {
         trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapOneStep= trainer.getStateValueMap();

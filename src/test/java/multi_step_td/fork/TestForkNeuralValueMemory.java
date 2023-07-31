@@ -13,8 +13,9 @@ import multi_step_temp_diff.memory.ForkNeuralValueMemory;
 import multi_step_temp_diff.models.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class TestForkNeuralValueMemory {
     TestHelper<ForkVariables> helper;
 
 
-    @Before
+    @BeforeEach
     public void init() {
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
@@ -57,6 +58,7 @@ public class TestForkNeuralValueMemory {
 
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect() {
         final double value = 0d;
         ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
@@ -67,6 +69,7 @@ public class TestForkNeuralValueMemory {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllStatesTen_whenTrain_thenCorrect() {
         final double value = 10d;
         ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
@@ -77,6 +80,7 @@ public class TestForkNeuralValueMemory {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllStatesMinusTen_whenTrain_thenCorrect() {
         final double value = -10d;
         ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
@@ -87,6 +91,7 @@ public class TestForkNeuralValueMemory {
     }
 
     @Test
+    @Tag("nettrain")
     public void givenMockedDataAllOddStatesMinusTenEvenPlusTen_whenTrain_thenCorrect() {
         final double valueOdd = -10d, valueEven = 10d;
         ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()

@@ -6,7 +6,7 @@ import common.SetUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import multi_step_temp_diff.environment_helpers.PositionTransitionRules;
+import multi_step_temp_diff.environment_helpers.PositionTransitionRulesCharge;
 import multi_step_temp_diff.environment_helpers.SiteStateRules;
 import multi_step_temp_diff.interfaces_and_abstract.EnvironmentInterface;
 import multi_step_temp_diff.interfaces_and_abstract.StateInterface;
@@ -108,12 +108,12 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         isAnySoCBad, isTwoAtSamePos, isTwoCharging, isTimeUp, isAllFine
     }
 
-    final PositionTransitionRules positionTransitionRules;
+    final PositionTransitionRulesCharge positionTransitionRules;
     final SiteStateRules siteStateRules;
     boolean isObstacle;
 
     public ChargeEnvironment() {
-        positionTransitionRules = new PositionTransitionRules();
+        positionTransitionRules = new PositionTransitionRulesCharge();
         siteStateRules = new SiteStateRules();
         isObstacle = IS_OBSTACLE;
     }
