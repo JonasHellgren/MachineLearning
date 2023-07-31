@@ -10,6 +10,7 @@ import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
+import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -141,15 +142,20 @@ public class TestNStepNeuralAgentTrainerFork {
 
     public void buildTrainer(int nofEpis, int startPos, int nofSteps) {
         agentCasted=(AgentForkNeural) agent;
-      //  environment = new ForkEnvironment();
-        trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
+
+        NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
+                .alpha(0.1)
+                .probStart(0.9).probEnd(1e-5).nofIterations(1)
+                .batchSize(BATCH_SIZE)
+                .nofEpis(nofEpis)
                 .nofStepsBetweenUpdatedAndBackuped(nofSteps)
+                .build();
+
+        trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
+                .settings(settings)
                 .startStateSupplier(() -> ForkState.newFromPos(startPos))
-                //.alpha(0.1)
-                .nofEpisodes(nofEpis).batchSize(BATCH_SIZE).agentNeural(agent)
-                .probStart(0.9).probEnd(1e-5).nofTrainingIterations(1)
-                .environment(environment)
                 .agentNeural(agent)
+                .environment(environment)
                 .build();
 
         System.out.println("buildTrainer");

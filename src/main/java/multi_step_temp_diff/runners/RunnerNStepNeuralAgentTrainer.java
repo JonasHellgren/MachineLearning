@@ -8,6 +8,7 @@ import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
+import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 
 import java.util.*;
 
@@ -42,14 +43,19 @@ public class RunnerNStepNeuralAgentTrainer {
 
     public static void buildTrainer(int nofEpis, int startPos, int nofSteps) {
         agentCasted=(AgentForkNeural) agent;
-        trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
-                .nofStepsBetweenUpdatedAndBackuped(nofSteps)
-                .startStateSupplier(() -> ForkState.newFromPos(startPos))
+        NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
                 .alpha(0.1)
-                .nofEpisodes(nofEpis).batchSize(BATCH_SIZE).agentNeural(agent)
-                .probStart(0.25).probEnd(1e-5).nofTrainingIterations(1)
-                .environment(environment)
+                .probStart(0.25).probEnd(1e-5).nofIterations(1)
+                .batchSize(BATCH_SIZE)
+                .nofEpis(nofEpis)
+                .nofStepsBetweenUpdatedAndBackuped(nofSteps)
+                .build();
+
+        trainer= NStepNeuralAgentTrainer.<ForkVariables>builder()
+                .settings(settings)
+                .startStateSupplier(() -> ForkState.newFromPos(startPos))
                 .agentNeural(agent)
+                .environment(environment)
                 .build();
 
         System.out.println("buildTrainer");

@@ -3,6 +3,8 @@ package multi_step_td.maze;
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
+import multi_step_temp_diff.domain.environments.fork.ForkState;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
@@ -10,6 +12,7 @@ import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.helpers.StateValuePrinter;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -78,20 +81,24 @@ public class TestNStepNeuralAgentTrainerMaze {
 
     private void setAgentAndTrain(double discountFactor,double learningRate) {
         agent = AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,discountFactor,learningRate);
-        trainer= NStepNeuralAgentTrainer.<MazeVariables>builder()
-                .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .startStateSupplier(MazeState::newFromRandomPos)
 
-                //.startStateSupplier(() -> MazeState.newFromXY(2,5))
-                //.alpha(ALPHA)
-                .nofEpisodes(NOF_EPIS).batchSize(BATCH_SIZE).bufferSizeMax(BUFFER_SIZE_MAX)
-                .agentNeural(agent)
-                .probStart(PROB_START).probEnd(PROB_END).nofTrainingIterations(1)
-                .environment(environment)
-                .maxStepsInEpisode(10)
-                .agentNeural(agent)
+        var settings= NStepNeuralAgentTrainerSettings.builder()
+                .alpha(0.1)
+                .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
+                .batchSize(BATCH_SIZE)
+                .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE).maxBufferSize(BUFFER_SIZE_MAX)
+                .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .build();
+
+        trainer= NStepNeuralAgentTrainer.<MazeVariables>builder()
+                .settings(settings)
+                .startStateSupplier(MazeState::newFromRandomPos)
+                .agentNeural(agent)
+                .environment(environment)
+                .build();
+
         trainer.train();
+
     }
 
 

@@ -14,7 +14,7 @@ ForkEnvironmentSettings  x
 AgentActionSelector - byt Pair mot record ActionValue  x
 
 NStepNeuralAgentTrainer
-- settings som value obj (om smidigt)
+- settings som value obj (om smidigt)  x
 - todo remove alpha
 - import Conditionals
 - korta ned med var

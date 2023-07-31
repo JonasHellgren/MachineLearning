@@ -15,6 +15,7 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.helpers.NStepTDHelper;
 import multi_step_temp_diff.domain.agent_parts.TemporalDifferenceTracker;
+import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
@@ -31,40 +32,12 @@ import java.util.function.Supplier;
 @Getter
 @Setter
 public class NStepNeuralAgentTrainer<S> {
-    private static final double ALPHA = 0.5;
-    private static final int N = 3;
-    private static final int NOF_EPIS = 100;
-    private static final int START_STATE = 0;
-    private static final int BATCH_SIZE = 50;
-    private static final int NOF_ITERATIONS = 1;
-    private static final double PROB_START = 0.9;
-    private static final double PROB_END = 0.01;
-    public static final double INIT_VALUE = 0d;
-    public static final int MAX_BUFFER_SIZE = 1_000;
 
+    @Builder.Default
+    NStepNeuralAgentTrainerSettings settings=NStepNeuralAgentTrainerSettings.getDefault();
     @NonNull EnvironmentInterface<S> environment;
     @NonNull AgentNeuralInterface<S> agentNeural;
-
-    @Builder.Default
-    double alpha = ALPHA;
-    @Builder.Default
-    int nofStepsBetweenUpdatedAndBackuped = N;
-    @Builder.Default
-    int nofEpisodes = NOF_EPIS;
-    @Builder.Default
-    double probStart = PROB_START;
-    @Builder.Default
-    double probEnd = PROB_END;
-
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
-    @Builder.Default
-    int batchSize = BATCH_SIZE;
-    @Builder.Default
-    int bufferSizeMax=MAX_BUFFER_SIZE;
-    @Builder.Default
-    int nofTrainingIterations = NOF_ITERATIONS;
-    @Builder.Default
-    int maxStepsInEpisode = Integer.MAX_VALUE;
 
     AgentInfo<S> agentInfo;
     ReplayBufferInterface<S> buffer;
@@ -73,19 +46,19 @@ public class NStepNeuralAgentTrainer<S> {
         agentInfo= new AgentInfo<>(agentNeural);
 
         NStepTDHelper<S> h = NStepTDHelper.<S>builder()
-                .alpha(alpha) //todo remove
-                .n(nofStepsBetweenUpdatedAndBackuped)
-                .episodeCounter(new Counter(0, nofEpisodes))
+                .alpha(settings.alpha()) //todo remove
+                .n(settings.nofStepsBetweenUpdatedAndBackuped())
+                .episodeCounter(new Counter(0, settings.nofEpis()))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
-        buffer = ReplayBufferNStep.<S>builder().maxSize(bufferSizeMax).build();
+        buffer = ReplayBufferNStep.<S>builder().maxSize(settings.maxBufferSize()).build();
 
-        LogarithmicDecay decayProb = new LogarithmicDecay(probStart, probEnd, nofEpisodes);
+        LogarithmicDecay decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
         BiPredicate<Integer, Integer> isNotAtTerminationTime = (t, tTerm) -> t < tTerm;
         BiFunction<Integer, Integer, Integer> timeForUpdate = (t, n) -> t - n + 1;
         Predicate<Integer> isPossibleToGetExperience = (tau) -> tau >= 0;
         BiPredicate<Integer, Integer> isAtTimeJustBeforeTermination = (tau, tTerm) -> tau == tTerm - 1;
-        Predicate<Counter> isNotToManySteps = (c) ->  c.getCount()< maxStepsInEpisode;
+        Predicate<Counter> isNotToManySteps = (c) ->  c.getCount()< settings.maxStepsInEpisode();
 
         while (!h.episodeCounter.isExceeded()) {
             StateInterface<S> state = startStateSupplier.get();
@@ -103,7 +76,7 @@ public class NStepNeuralAgentTrainer<S> {
                 h.tau = timeForUpdate.apply(h.timeCounter.getCount(), h.n);
                 Conditionals.executeIfTrue(isPossibleToGetExperience.test(h.tau), () ->
                     buffer.addExperience(getExperienceAtTimeTau(h)));
-                Conditionals.executeIfTrue(buffer.size() > batchSize, () -> {
+                Conditionals.executeIfTrue(buffer.size() > settings.batchSize(), () -> {
                     List<NstepExperience<S>> miniBatch = getMiniBatch(buffer);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
                     trackTempDifferenceError(miniBatch);
@@ -115,19 +88,19 @@ public class NStepNeuralAgentTrainer<S> {
     }
 
     private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-        for (int i = 0; i < nofTrainingIterations; i++) {
+        for (int i = 0; i < settings.nofIterations(); i++) {
             agentNeural.learn(miniBatch);
         }
     }
 
     private List<NstepExperience<S>> getMiniBatch(ReplayBufferInterface<S> buffer) {
-        List<NstepExperience<S>> miniBatch = buffer.getMiniBatch(batchSize);
+        List<NstepExperience<S>> miniBatch = buffer.getMiniBatch(settings.batchSize());
         setValuesInExperiencesInMiniBatch(miniBatch);
         return miniBatch;
     }
 
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-        double discPowNofSteps = Math.pow(agentInfo.getDiscountFactor(), nofStepsBetweenUpdatedAndBackuped);
+        double discPowNofSteps = Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
         for (NstepExperience<S> exp : miniBatch) {
 
          //   System.out.println("exp.stateToBackupFrom = " + exp.stateToBackupFrom+", value = "+agentNeural.readValue(exp.stateToBackupFrom));
@@ -160,7 +133,7 @@ public class NStepNeuralAgentTrainer<S> {
                 .stateToUpdate(stateToUpdate).sumOfRewards(sumOfRewards)
                 .stateToBackupFrom(stateAheadToBackupFrom.orElse(stateToUpdate))  //todo good use stateToUpdate?
                 .isBackupStatePresent(stateAheadToBackupFrom.isPresent())
-                .value(INIT_VALUE)
+                .value(settings.initValue())
                 .build();
     }
 
