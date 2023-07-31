@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
+import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
 import org.apache.commons.math3.util.Pair;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -38,22 +39,25 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public enum PositionType {
         otherCell, wall, obstacle, goal
     }
-
+/*
     public static final int NOF_COLS = 5, NOF_ROWS = 6;
     public static final int NOF_ACTIONS = 4;
-    public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
     public static final double REWARD_CRASH = -2, REWARD_GOAL = 100, REWARD_MOVE = -1;
-
-    static Map<BiPredicate<Integer,Integer>, Supplier<PositionType>> stateAfterStepTable;
-    BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=NOF_COLS  || y<0 || y>=NOF_ROWS;
     static Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
-             Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
+            Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
             ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)
             ,Pair.create(2,4)));
+    public static final Pair<Integer, Integer> GOAL_POS = Pair.create(4, 5);  */
+
+    public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
+    public static final MazeEnvironmentSettings settings=MazeEnvironmentSettings.getDefault();
+
+    static Map<BiPredicate<Integer,Integer>, Supplier<PositionType>> stateAfterStepTable;
+    BiPredicate<Integer,Integer> isWall = (x, y) ->  x<0 || x>=settings.nofCols()  || y<0 || y>= settings.nofRows();
 
     public static BiPredicate<Integer,Integer> isObstacle= (x, y) ->
-            obstaclePositions.stream().anyMatch(p -> Pair.create(x,y).equals(p));
-    public static BiPredicate<Integer,Integer> isGoal= (x, y) -> Pair.create(4,5).equals(Pair.create(x,y));
+            settings.obstaclePositions().stream().anyMatch(p -> Pair.create(x,y).equals(p));
+    public static BiPredicate<Integer,Integer> isGoal= (x, y) -> settings.goalPos().equals(Pair.create(x,y));
     Map<Integer, Integer> actionDeltaXmap = Map.of(0,0,1,1,2,0,3,-1);
     Map<Integer, Integer> actionDeltaYmap = Map.of(0,1,1,0,2,-1,3,0);
     BiFunction<Integer,Integer,Integer> newX=(x,a) -> x+actionDeltaXmap.getOrDefault(a,x);
@@ -80,9 +84,9 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     }
 
     private void throwIfBadArgument(StateInterface<MazeVariables> state, int action) {
-        Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
-        Predicate<StateInterface<MazeVariables> > isNonValidX = (s) -> MazeState.getX.apply(s) > NOF_COLS - 1;
-        Predicate<StateInterface<MazeVariables> > isNonValidY = (s) -> MazeState.getX.apply(s) > NOF_ROWS - 1;
+        Predicate<Integer> isNonValidAction = (a) -> a > settings.nofActions() - 1;
+        Predicate<StateInterface<MazeVariables> > isNonValidX = (s) -> MazeState.getX.apply(s) > settings.nofCols() - 1;
+        Predicate<StateInterface<MazeVariables> > isNonValidY = (s) -> MazeState.getX.apply(s) > settings.nofRows() - 1;
         if (isNonValidAction.test(action) || isNonValidX.or(isNonValidY).test(state)) {
             throw new IllegalArgumentException("Non valid action or state. State = " + state+ ", action = " + action);
         }
@@ -103,11 +107,11 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
 
     private double getReward(PositionType stateAfterStep) {
         if (stateAfterStep.equals(PositionType.wall) || stateAfterStep.equals(PositionType.obstacle)) {
-            return REWARD_CRASH;
+            return settings.rewardCrash();
         } else if (stateAfterStep.equals(PositionType.goal)) {
-            return REWARD_GOAL+REWARD_MOVE;
+            return settings.rewardGoal()+settings.rewardMove();
         } else {
-            return REWARD_MOVE;
+            return settings.rewardMove();
         }
     }
 
@@ -134,15 +138,15 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     @SneakyThrows
     @Override
     public Set<Integer> actionSet() {
-        return SetUtils.getSetFromRange(0,NOF_ACTIONS);
+        return SetUtils.getSetFromRange(0,settings.nofActions());
     }
 
     @SneakyThrows
     @Override
     public Set<StateInterface<MazeVariables>> stateSet() {
         Set<StateInterface<MazeVariables>> stateSet = new HashSet<>();
-        for (int x : SetUtils.getSetFromRange(0, NOF_COLS)) {
-            for (int y : SetUtils.getSetFromRange(0, NOF_ROWS)) {
+        for (int x : SetUtils.getSetFromRange(0, settings.nofCols())) {
+            for (int y : SetUtils.getSetFromRange(0, settings.nofRows())) {
                 stateSet.add(MazeState.newFromXY(x, y));
             }
         }

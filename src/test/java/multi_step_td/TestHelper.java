@@ -87,8 +87,8 @@ public class TestHelper<S> {
         List<Double> errors=new ArrayList<>();
 
         Map<StateInterface<MazeVariables>, Double> valueMapCorrect=new HashMap<>();
-        double rg = MazeEnvironment.REWARD_GOAL;
-        double rm = MazeEnvironment.REWARD_MOVE;
+        double rg = MazeEnvironment.settings.rewardGoal();
+        double rm = MazeEnvironment.settings.rewardMove();
 
         valueMapCorrect.put(MazeState.newFromXY(4, 5),rg+0*rm);
         valueMapCorrect.put(MazeState.newFromXY(3, 5),rg+rm);

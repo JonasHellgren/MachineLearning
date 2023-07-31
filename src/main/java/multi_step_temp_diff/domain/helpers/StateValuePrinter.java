@@ -25,10 +25,10 @@ public class StateValuePrinter<S> {
                 String.format("%.1f", a.readValue(MazeState.newFromXY(p.getFirst(),p.getSecond() )));
 
         AgentMazeNeural agentMazeNeural=(AgentMazeNeural) agent;
-        for (int y = MazeEnvironment.NOF_ROWS-1; y >=0 ; y--) {
+        for (int y = MazeEnvironment.settings.nofRows()-1; y >=0 ; y--) {
             StringBuilder sb=new StringBuilder();
             //for (int y : SetUtils.getSetFromRange(0, MazeEnvironment.NOF_ROWS)) {
-            for (int x : SetUtils.getSetFromRange(0, MazeEnvironment.NOF_COLS)) {
+            for (int x : SetUtils.getSetFromRange(0, MazeEnvironment.settings.nofCols())) {
                 String str=MazeEnvironment.isObstacle.or(MazeEnvironment.isGoal).test(x,y)
                         ? getObjectForCell.apply(new Pair<>(x,y))
                         : getValueForCell.apply(agentMazeNeural, new Pair<>(x,y));

@@ -29,7 +29,7 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(0,0),MazeEnvironment.ACTION_UP);
         printStepReturn();
         assertEquals(MazeState.newFromXY(0,1),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardMove(),stepReturn.reward, DELTA);
         assertFalse(stepReturn.isNewStateTerminal);
 
     }
@@ -39,7 +39,7 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(0,0),MazeEnvironment.ACTION_R);
         printStepReturn();
         assertEquals(MazeState.newFromXY(1,0),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardMove(),stepReturn.reward, DELTA);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(0,0),MazeEnvironment.ACTION_DOWN);
         printStepReturn();
         assertEquals(MazeState.newFromXY(0,0),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_CRASH,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardCrash(),stepReturn.reward, DELTA);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(0,0),MazeEnvironment.ACTION_L);
         printStepReturn();
         assertEquals(MazeState.newFromXY(0,0),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_CRASH,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardCrash(),stepReturn.reward, DELTA);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(4,4),MazeEnvironment.ACTION_L);
         printStepReturn();
         assertEquals(MazeState.newFromXY(3,4),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardMove(),stepReturn.reward, DELTA);
     }
 
     @Test
@@ -71,14 +71,14 @@ public class TestMazeEnvironment {
         stepReturn=environment.step(MazeState.newFromXY(4,4),MazeEnvironment.ACTION_UP);
         printStepReturn();
         assertEquals(MazeState.newFromXY(4,5),stepReturn.newState);
-        assertEquals(MazeEnvironment.REWARD_GOAL+MazeEnvironment.REWARD_MOVE,stepReturn.reward, DELTA);
+        assertEquals(MazeEnvironment.settings.rewardGoal()+MazeEnvironment.settings.rewardMove(),stepReturn.reward, DELTA);
         assertTrue(stepReturn.isNewStateTerminal);
     }
 
     @Test
     public void okStateSet() {
         Set<StateInterface<MazeVariables>>  stateSet=environment.stateSet();
-        assertEquals(MazeEnvironment.NOF_COLS*MazeEnvironment.NOF_ROWS,stateSet.size());
+        assertEquals(MazeEnvironment.settings.nofCols()*MazeEnvironment.settings.nofRows(),stateSet.size());
     }
 
     private void printStepReturn() {

@@ -30,7 +30,7 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> impl
                 settings.inputSize(),
                 settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
                 settings.outPutSize());
-        super.settings = settings;
+        super.netSettings = settings;
         super.createLearningRule(neuralNetwork, settings);
         super.createOutScalers(settings.minOut() * MARGIN, settings.maxOut() * MARGIN);
         isWarmedUp = false;
@@ -38,7 +38,7 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> impl
 
     @Override
     public double[] getInputVec(StateInterface<S> s) {
-        double[] inArray = new double[settings.inputSize()];
+        double[] inArray = new double[netSettings.inputSize()];
         Arrays.fill(inArray, 0);
         ForkState stateCasted=(ForkState) s;
         inArray[stateCasted.getVariables().position] = 1d;
