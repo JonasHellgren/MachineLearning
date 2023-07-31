@@ -1,8 +1,8 @@
 package multi_step_temp_diff.domain.agents.maze;
 
-import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.*;
+import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
@@ -12,41 +12,33 @@ import java.util.List;
 @Getter
 public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements AgentNeuralInterface<MazeVariables> {
 
-    private static final int START_X = 0, START_Y=0;
-    public  static final double DISCOUNT_FACTOR=1, LEARNING_RATE=0.5;
-    static final NetworkMemoryInterface<MazeVariables> MEMORY=new MazeNeuralValueMemory<>(LEARNING_RATE);
-
+    AgentMazeNeuralSettings settings;
     NetworkMemoryInterface<MazeVariables>  memory;
 
-    @Builder
     private AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
-                            StateInterface<MazeVariables> state,
-                            double discountFactor,
-                            NetworkMemoryInterface<MazeVariables> memory) {
-        super(environment,state,discountFactor);
-        this.memory = memory;
+                            AgentMazeNeuralSettings settings) {
+        super(environment,
+                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
+                settings.discountFactor());
+        this.settings= AgentMazeNeuralSettings.getDefault();
+        this.memory = settings.memory();
     }
 
     public static AgentMazeNeural newDefault(EnvironmentInterface<MazeVariables> environment) {
-        return AgentMazeNeural.newWithDiscountFactor(environment,DISCOUNT_FACTOR);
+        return new AgentMazeNeural(environment, AgentMazeNeuralSettings.getDefault());
     }
 
-    public static AgentMazeNeural newWithDiscountFactor(EnvironmentInterface<MazeVariables> environment,
-                                                        double discountFactor) {
-        return AgentMazeNeural.builder()
-                .environment(environment)
-                .state(MazeState.newFromXY(START_X,START_Y)).discountFactor(discountFactor)
-                .memory(MEMORY).build();
+    public static AgentMazeNeural newFromSettings(EnvironmentInterface<MazeVariables> environment,
+                                                  AgentMazeNeuralSettings settings) {
+        return new AgentMazeNeural(environment, settings);
     }
 
     public static AgentMazeNeural newWithDiscountFactorAndLearningRate(EnvironmentInterface<MazeVariables> environment,
                                                         double discountFactor,double learningRate) {
-        return AgentMazeNeural.builder()
-                .environment(environment)
-                .state(MazeState.newFromXY(START_X,START_Y)).discountFactor(discountFactor)
-                .memory(new MazeNeuralValueMemory<>(learningRate)).build();
-    }
 
+        var settingsAdapted=AgentMazeNeuralSettings.getWithDiscountAndLearningRate(discountFactor,learningRate);
+        return new AgentMazeNeural(environment, settingsAdapted);
+    }
 
     @Override
     public double readValue(StateInterface<MazeVariables> state) {
