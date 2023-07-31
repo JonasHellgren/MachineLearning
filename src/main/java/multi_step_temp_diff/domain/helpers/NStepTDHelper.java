@@ -19,10 +19,12 @@ public class NStepTDHelper<S> {
   //  private static final HashMap<Integer, Integer> TIME_STATE_MAP = new HashMap<>();
     private static final int TAU = 0;
 
+    /*
     @Builder.Default
     public double alpha= ALPHA;  //learning rate
     @Builder.Default
     public int n= N;   //nof steps between state being updated and state bootstrapped
+     */
     @Builder.Default
     public int T= MAX_VALUE;  //time for termination
     @Builder.Default

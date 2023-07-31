@@ -56,7 +56,7 @@ public class NStepTabularAgentTrainer<S> {
     public void train() {
         agentInfo=new AgentInfo<>(agent);
         NStepTDHelper<S> h= NStepTDHelper.<S>builder()
-                .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
+              //  .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
                 .episodeCounter(new Counter(0, nofEpisodes))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();
@@ -74,7 +74,7 @@ public class NStepTabularAgentTrainer<S> {
             do {
                 Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
                         chooseActionAndStep(h, decayProb));
-                h.tau = timeForUpdate.apply(h.timeCounter.getCount(),h.n);
+                h.tau = timeForUpdate.apply(h.timeCounter.getCount(),nofStepsBetweenUpdatedAndBackuped);
                 Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
                         updateStateValueForStatePresentAtTimeTau(h));
                 h.timeCounter.increase();
@@ -97,16 +97,16 @@ public class NStepTabularAgentTrainer<S> {
 
     private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper<S> h) {
         double sumRewards = sumOfRewardsFromTimeToUpdatePlusOne(h), G=sumRewards;
-        int tBackUpFrom=h.tau + h.n;
+        int tBackUpFrom=h.tau + nofStepsBetweenUpdatedAndBackuped;
         if (isTimeToBackUpFromAtOrBeforeTermination.test(tBackUpFrom,h.T)) {
-            StateInterface<S> stateAheadToBackupFrom = h.timeReturnMap.get(h.tau + h.n).newState;
-            G = sumRewards + Math.pow(agentInfo.getDiscountFactor(), h.n) * agent.readValue(stateAheadToBackupFrom);
+            StateInterface<S> stateAheadToBackupFrom = h.timeReturnMap.get(h.tau + nofStepsBetweenUpdatedAndBackuped).newState;
+            G = sumRewards + Math.pow(agentInfo.getDiscountFactor(), nofStepsBetweenUpdatedAndBackuped) * agent.readValue(stateAheadToBackupFrom);
         }
         final StateInterface<S> stateToUpdate = h.statesMap.get(h.tau);
         double valuePresent = agent.readValue(stateToUpdate);
         final double difference = G - valuePresent;
 
-        agent.writeValue(stateToUpdate, valuePresent + h.alpha * difference);
+        agent.writeValue(stateToUpdate, valuePresent + alpha * difference);
         agent.storeTemporalDifference(difference);
     }
 
@@ -121,7 +121,7 @@ public class NStepTabularAgentTrainer<S> {
     }
 
     private double sumOfRewardsFromTimeToUpdatePlusOne(NStepTDHelper<S> h) {
-        Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + h.n, h.T));
+        Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + nofStepsBetweenUpdatedAndBackuped, h.T));
         List<Double> returnTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
             returnTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);

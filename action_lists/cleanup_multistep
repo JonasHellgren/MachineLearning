@@ -19,6 +19,7 @@ NStepNeuralAgentTrainer
 - import Conditionals x
 - korta ned med var x
 - helper som field  x
+- NStepTDFunctionsAndPredicates
 
 NStepTabularAgentTrainer se NStepNeuralAgentTrainer
 
