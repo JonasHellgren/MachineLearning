@@ -76,10 +76,10 @@ public class TestHelper<S> {
 
     public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.R_HEAVEN));
-        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.R_HELL));
-        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.R_HELL));
+        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.settings.rewardHeaven()));
+        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.settings.rewardHeaven()));
+        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.settings.rewardHell()));
+        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.settings.rewardHell()));
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 

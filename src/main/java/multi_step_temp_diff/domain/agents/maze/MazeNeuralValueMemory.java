@@ -1,7 +1,5 @@
 package multi_step_temp_diff.domain.agents.maze;
 
-import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
-import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.agent_abstract.PersistentMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -12,6 +10,8 @@ import org.neuroph.util.TransferFunctionType;
 
 import java.util.Arrays;
 
+import static multi_step_temp_diff.domain.environments.maze.MazeEnvironment.settings;
+
 /***
  * For every dimension there is one hot encoded vector. Example x=1, y=1: in=[inx iny]=[0,1,0,0,0, 0,1,0,0,0,0]
  *
@@ -20,7 +20,6 @@ import java.util.Arrays;
 public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
 
     private static final double MARGIN = 1.0;
-    static final MazeEnvironmentSettings settings=MazeEnvironmentSettings.getDefault();
 
     public MazeNeuralValueMemory(double learningRate) {
         this(NetSettings.builder()

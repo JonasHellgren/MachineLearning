@@ -63,7 +63,7 @@ public class TestForkEnvironment {
         System.out.println("stepReturn = " + stepReturn);
         assertEquals(15,(int) getPos.apply(stepReturn.newState));
         assertTrue(stepReturn.isNewStateTerminal);
-        assertEquals(ForkEnvironment.R_HELL,stepReturn.reward, DELTA);
+        assertEquals(ForkEnvironment.settings.rewardHell(),stepReturn.reward, DELTA);
     }
 
     @Test

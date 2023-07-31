@@ -10,6 +10,8 @@ import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 
+import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.settings;
+
 /**
  * Input is a binary vector with zeros except at active state. Much more stable than one double input.
  */
@@ -20,8 +22,8 @@ public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> impl
 
     public ForkNeuralValueMemory() {
         this(NetSettings.builder()
-                .inputSize(ForkEnvironment.NOF_STATES).nofNeuronsHidden(ForkEnvironment.NOF_STATES)
-                .minOut(ForkEnvironment.R_HELL).maxOut(ForkEnvironment.R_HEAVEN).build());
+                .inputSize(settings.nofStates()).nofNeuronsHidden(settings.nofStates())
+                .minOut(settings.rewardHell()).maxOut(settings.rewardHeaven()).build());
     }
 
     public ForkNeuralValueMemory(NetSettings settings) {

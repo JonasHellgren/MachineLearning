@@ -55,7 +55,7 @@ public class TestAgentNeuralFork {
     private List<NstepExperience<ForkVariables>> createBatch(double value) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomPos = RandUtils.getRandomIntNumber(0, ForkEnvironment.NOF_STATES);
+            final int randomPos = RandUtils.getRandomIntNumber(0, ForkEnvironment.settings.nofStates());
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomPos))
                     .value(value)

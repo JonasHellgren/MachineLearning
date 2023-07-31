@@ -8,6 +8,8 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 
 import java.util.function.Function;
 
+import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.settings;
+
 /**
  * To enable get when put in hashmap
  * https://www.baeldung.com/java-custom-class-map-key
@@ -30,7 +32,7 @@ public class ForkState implements StateInterface<ForkVariables> {
     }
 
     public static ForkState newFromRandomPos() {
-        final int randomPos = RandUtils.getRandomIntNumber(0, ForkEnvironment.NOF_STATES);
+        final int randomPos = RandUtils.getRandomIntNumber(0, settings.nofStates());
         return new ForkState(ForkVariables.newFromPos(randomPos));
     }
 
