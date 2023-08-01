@@ -4,11 +4,14 @@ import common.MathUtils;
 import    lombok.SneakyThrows;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
+import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
 import org.jcodec.common.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class TestNStepTabularAgentTrainerMaze {
 
@@ -25,25 +29,22 @@ public class TestNStepTabularAgentTrainerMaze {
 
     NStepTabularAgentTrainer<MazeVariables> trainer;
     AgentMazeTabular agent;
+    MazeEnvironment environment;
 
     @BeforeEach
     public void init() {
-        final MazeEnvironment environment = new MazeEnvironment();
+        environment = new MazeEnvironment();
         agent = AgentMazeTabular.newDefault(environment);
-        trainer= NStepTabularAgentTrainer.<MazeVariables>builder()
-                .nofEpisodes(NOF_EPISODES)
-                .alpha(0.5).probStart(0.9).probEnd(1e-5)
-                .environment(environment).agent(agent)
-                .startStateSupplier(() -> MazeState.newFromXY(0,0))
-                .build();
     }
 
     @SneakyThrows
     @Test
-    @Tag("nettrain")
+    @Tag("tabtrain")
     public void whenStartingAtX0Y5_thenGoodStateValuesAtUpperRow() {
+        Supplier<StateInterface<MazeVariables>> startStateSup=() -> MazeState.newFromXY(0,5);
+        NStepTabularAgentTrainerSettings settings = getnStepTabularAgentTrainerSettings(ONE_STEP);
+        trainer= createTrainer(environment, settings,startStateSup);
         trainer.setStartStateSupplier(() -> MazeState.newFromXY(0,5));
-        trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
         agent.clear();
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneStep= trainer.getStateValueMap();
@@ -52,7 +53,10 @@ public class TestNStepTabularAgentTrainerMaze {
 
         double avgErrOne= TestHelper.avgErrorMaze(mapOneStep,TestHelper.STATES_MAZE_UPPER);
         agent.clear();
-        trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
+
+        settings = getnStepTabularAgentTrainerSettings(THREE_STEPS);
+        trainer= createTrainer(environment, settings,startStateSup);
+        trainer.setStartStateSupplier(() -> MazeState.newFromXY(0,5));
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
         printStateValues(TestHelper.STATES_MAZE_UPPER,mapTreeSteps );
@@ -65,12 +69,14 @@ public class TestNStepTabularAgentTrainerMaze {
 
 
     @Test
-    @Tag("nettrain")
+    @Tag("tabtrain")
     public void whenStartingAtRandom_thenGoodStateValuesAtAllCells() {
-        trainer.setStartStateSupplier(MazeState::newFromRandomPos);
+        Supplier<StateInterface<MazeVariables>> startStateSup=MazeState::newFromRandomPos;
 
         agent.clear();
-        trainer.setNofStepsBetweenUpdatedAndBackuped(ONE_STEP);
+        NStepTabularAgentTrainerSettings settings = getnStepTabularAgentTrainerSettings(ONE_STEP);
+        trainer= createTrainer(environment, settings,startStateSup);
+
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneSteps= trainer.getStateValueMap();
         printManyStateValues(mapOneSteps);
@@ -78,7 +84,11 @@ public class TestNStepTabularAgentTrainerMaze {
         System.out.println("---------------------------");
 
         agent.clear();
-        trainer.setNofStepsBetweenUpdatedAndBackuped(THREE_STEPS);
+        settings = getnStepTabularAgentTrainerSettings(THREE_STEPS);
+        trainer= createTrainer(environment, settings,startStateSup);
+        trainer.setStartStateSupplier(MazeState::newFromRandomPos);
+
+
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
         printManyStateValues(mapTreeSteps);
@@ -104,6 +114,22 @@ public class TestNStepTabularAgentTrainerMaze {
         for (MazeState state:states) {
             System.out.println("State = "+state+", value = "+stateMap.get(state));
         }
+    }
+
+    private  NStepTabularAgentTrainerSettings getnStepTabularAgentTrainerSettings(int nofStepsBetweenUpdatedAndBackuped) {
+        return NStepTabularAgentTrainerSettings.builder()
+                .nofEpis(NOF_EPISODES)
+                .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
+                .alpha(0.5).probStart(0.9).probEnd(1e-5).build();
+    }
+
+    private  NStepTabularAgentTrainer<MazeVariables> createTrainer(MazeEnvironment environment,
+                                                                   NStepTabularAgentTrainerSettings settings,
+                                                                   Supplier<StateInterface<MazeVariables>> startStateSup) {
+        return NStepTabularAgentTrainer.<MazeVariables>builder()
+                .settings(settings).environment(environment).agent(agent)
+                .startStateSupplier(startStateSup)
+                .build();
     }
 
 

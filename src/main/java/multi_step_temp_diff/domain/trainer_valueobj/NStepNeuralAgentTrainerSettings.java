@@ -2,8 +2,7 @@ package multi_step_temp_diff.domain.trainer_valueobj;
 
 import lombok.Builder;
 
-import static common.DefaultPredicates.defaultIfNullDouble;
-import static common.DefaultPredicates.defaultIfNullInteger;
+import static common.DefaultPredicates.*;
 
 public record NStepNeuralAgentTrainerSettings(
         Integer nofStepsBetweenUpdatedAndBackuped,  //todo better name
@@ -50,6 +49,5 @@ public record NStepNeuralAgentTrainerSettings(
         this.initValue = defaultIfNullDouble.apply(initValue,INIT_VALUE);
         this.maxBufferSize = defaultIfNullInteger.apply(maxBufferSize,MAX_BUFFER_SIZE);
         this.maxStepsInEpisode = defaultIfNullInteger.apply(maxStepsInEpisode,Integer.MAX_VALUE);
-
     }
 }

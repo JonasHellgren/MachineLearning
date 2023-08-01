@@ -22,7 +22,7 @@ NStepNeuralAgentTrainer
 - NStepTDFunctionsAndPredicates  x
 - minor clean up x
 
-NStepTabularAgentTrainer se NStepNeuralAgentTrainer
+NStepTabularAgentTrainer se NStepNeuralAgentTrainer  x
 
 NetSettings som record
 ReplayBufferNStep - raw use...
