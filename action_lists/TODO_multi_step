@@ -78,6 +78,8 @@ TestChargeEnvironmentBRunning  x
 AgentChargeGreedy  x
 TestAgentChargeGreedy  x
 ändra charge miljö till mer som P
+- P charge started
+ChargeEnvironmentSettings
 StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy
 grafix för ovan

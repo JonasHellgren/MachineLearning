@@ -17,7 +17,7 @@ public class SiteStateRules {
     static Range<Integer> CHARGE_POSITIONS = Range.between(21, 29);  //todo from env, test inclusive
     public static final double SOC_BAD = 0.1;
 
-    static Map<Predicate<StateInterface<ChargeVariables>>, Supplier<ChargeEnvironment.SiteState>> siteStateTable;
+    static Map<Predicate<StateInterface<ChargeVariables>>, Supplier<SiteState>> siteStateTable;
 
     public static Predicate<Integer> isChargePos = (p) -> CHARGE_POSITIONS.contains(p);
 
@@ -32,21 +32,21 @@ public class SiteStateRules {
 
     public SiteStateRules() {
         siteStateTable = new HashMap<>();
-        siteStateTable.put( (s) -> isAnySoCBad.test(s) ,() -> ChargeEnvironment.SiteState.isAnySoCBad);
-        siteStateTable.put( (s) -> isTwoAtSamePos.test(s) ,() -> ChargeEnvironment.SiteState.isTwoAtSamePos);
-        siteStateTable.put( (s) -> isTwoCharging.test(s) ,() -> ChargeEnvironment.SiteState.isTwoCharging);
-        siteStateTable.put( (s) -> isTimeUp.test(s) ,() -> ChargeEnvironment.SiteState.isTimeUp);
+        siteStateTable.put( (s) -> isAnySoCBad.test(s) ,() -> SiteState.isAnySoCBad);
+        siteStateTable.put( (s) -> isTwoAtSamePos.test(s) ,() -> SiteState.isTwoAtSamePos);
+        siteStateTable.put( (s) -> isTwoCharging.test(s) ,() -> SiteState.isTwoCharging);
+        siteStateTable.put( (s) -> isTimeUp.test(s) ,() -> SiteState.isTimeUp);
     }
 
-    public  ChargeEnvironment.SiteState getSiteState(StateInterface<ChargeVariables> state) {
-        List<Supplier<ChargeEnvironment.SiteState>> fcnList= siteStateTable.entrySet().stream()
+    public  SiteState getSiteState(StateInterface<ChargeVariables> state) {
+        List<Supplier<SiteState>> fcnList= siteStateTable.entrySet().stream()
                 .filter(e -> e.getKey().test(state)).map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+                .toList();
         if (fcnList.size()>1) {
             throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size());
         }
         if (fcnList.size()==0) {
-            return ChargeEnvironment.SiteState.isAllFine;
+            return SiteState.isAllFine;
         }
         return fcnList.get(0).get();
     }

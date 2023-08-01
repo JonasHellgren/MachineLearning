@@ -6,6 +6,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
+import multi_step_temp_diff.domain.environments.charge.SiteState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ public class TestChargeEnvironmentBRunning {
         oneMoreStep();
         TestChargeHelper.printStepReturn(stepReturn);
         assertTrue(stepReturn.isNewStateTerminal);
-        assertEquals(ChargeEnvironment.SiteState.isTwoCharging,
+        assertEquals(SiteState.isTwoCharging,
                 environmentCasted.getSiteStateRules().getSiteState(state));
     }
 
@@ -65,7 +66,7 @@ public class TestChargeEnvironmentBRunning {
         oneMoreStep();
         TestChargeHelper.printStepReturn(stepReturn);
         assertTrue(stepReturn.isNewStateTerminal);
-        assertEquals(ChargeEnvironment.SiteState.isTwoAtSamePos,
+        assertEquals(SiteState.isTwoAtSamePos,
                 environmentCasted.getSiteStateRules().getSiteState(state));
     }
 

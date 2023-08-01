@@ -1,6 +1,5 @@
 package multi_step_temp_diff.domain.environments.charge;
 
-
 import common.MathUtils;
 import common.SetUtils;
 import lombok.Getter;
@@ -20,47 +19,46 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /***
- *     >> = always right, .> = stay or right, << = always left, .< = stay or left
- *     vv = always down, .v = stay or down, ^^ = always up, .^ = stay or up
- *     no marker = always stay
- *
- *     0 >>|  1>>| 2 >>| 3 >>| 4 >>| 5 >>| 6 >>| 7 .>| 8 >>|  9vv|
- *     19^^| 18<<| 17<<| 16<<| 15<<| 14<<| 13<<| 12<<| 11<<| 10<v|
- *     29  | 28  | 27  | 26  | 25  | 24  | 23  | 22.^| 21  | 20.v|
- *     39  | 38  | 37  | 36  | 35  | 34  | 33  | 32^^| 31  | 30vv|
- *     49  | 48  | 47  | 46  | 45  | 44  | 43  | 42^^| 41  | 40vv|
- *     59  | 58  | 57  | 56  | 55  | 54  | 53  | 52^^| 51<<| 50<<|
- *
+ *     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+ *     19| 18| 17| 16| 15| 14| 13| 12| 11| 10|
+ * 30| 29| 28| 27| 26| 25| 24| 23| 22| 21| 20|
+ *   « = left,  » = right,  < = left or stay, > = right or stay
+ *   v = down, ^ = up, t = trap (always stay)
+ *    »| »| »| »| »| »| »| »| »| v |
+ *    ^| <| <| «| «| «| «| «| «| <v|
+ *  t|^| «| «| «| «| «| «| «| «| < |
  * <p>
- * There are two vehicles, A and B. If any of these initially are located in a trap (for ex pos 29). Only
+ * There are two vehicles, A and B. If any of these initially are located in trap (pos 30). Only
  * one vehicle is active.
  * states={pos A, soC A, pos B, soC B,time}
  * action            0       1       2       3
  * commands(A,B)     [0,0]   [0,1]  [1,0]   [1,1]
- * Command is action for specific vehicle, for cells with option to stay (with .) when command 0 is stay. For other cells
+ * Command is action for specific vehicle, for cells with option to stay (<,>) when command 0 is stay. For other cells
  * command does not influence transition.
  * <p>
  *  position transition model:
- *  pos             new pos (command=0)      new pos (command=1)
+ *  pos    new pos (command=0)      new pos (command=1)
  *  -------------------------------------------------------
- *  10             11                       20
-
-    else(trap)
- *  else(no trap)  pos+1                   pos+1
- *
+ *  10      11                      20
+ *  19      0                       0
+ *  17      17                      18
+ *  18      18                      19 (18 if isObstacleAt19)
+ *  20      20                      21
+ *  29      29                      19 (29 if isObstacleAt19)
+ *  30      30                      30
+ *  else    pos+1                   pos+1
  * time transition model
  * time <- time+1
  * soC transition model:
  * delta soC = | -1/40  (pos not in CHARGE_NODES and move)
- *             |  1/10  (pos in CHARGE_NODES)
+ *             |  1/20  (pos in CHARGE_NODES
  *             |  0     (pos not in CHARGE_NODES and not move)
  *  there move is true if new pos differs from pos
- *  CHARGE_NODES=(30,40,50,51,52,42,32,22)
- *  TRAP_NODES={21,23-29,31,33-39,....}
+ *  CHARGE_NODES=(21,..,29)
  *  reward model:
  *  reward =  COST_QUE*nofQueuing + costCharge + socPenalty + collisionPenalty
- *  nofQueuing: vehicle in pos 20 that not are moving, i.e. queuing for charge
- *  costCharge = | COST_CHARGE  (any vehicle in CHARGE_NODES)
+ *  nofQueuing: vehicle in pos 10 that not are moving, i.e. queuing for charge
+ *  costCharge = | COST_CHARGE  (any vehicle in CHARGE_NODES
  *               | 0
  *  socPenalty = | R_BAD  (isAnySoCBad)
  *               | 0     (else)
@@ -76,20 +74,18 @@ import java.util.function.Predicate;
  * The collisionPenalty gives for example that a vehicle at pos 20 needs to wait
  * if the other vehicle is in any of CHARGE_NODES. R_BAD can be -100.
  * Still cost shall be higher than charge cost, for example COST_QUE=-1, COST_CHARGE=-0.01
- *    | | | | |A| | | | |           | | | | | | | | | |         | | | | | | | | |B|         | |A| | | | |B|O | |
- *    | | | | | | | | | |           | | | | | | | | | |         | | | | | | | | |A|         | | | | | | | | | |
- *    |B| | | | | | | | |             | | | | | | | |A|         | | | | | | | | | |         | | | | | | | | | |
-                                                    |B|
+ *    | | | | | | | | | |           | | | | | | | | | |         | | | | | | | | | |         | | | | | | | | | |
+ *    | | | | | | | | | |           | | | | | | | | | |         | | | | | | | | |A|         |O|B| | | | | |A| |
+ *  |B| | | | |A| | | | |         | | | | |B| | | | |A|         | | | | | |B| | | |         | | | | | | | | | |
 
  B is trapped, A free          A needs to wait until         A can choose to charge      B is blocked by obstacle,
-                               B ends charging               or not to charge            gap between A-B decreases
- *                                                           B might soon need to wait
- *                                                           for charging
+ B leaves CHARGE_NODES         or not to charge                                         gap between A-B decreases
+ *
  */
 
 @Setter
 @Getter
-public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
+public class ChargeEnvironmentOld implements EnvironmentInterface<ChargeVariables> {
 
     public static final int POS_MIN = 0, POS_MAX = 30;
     public static final int NOF_ACTIONS = 4;
@@ -105,11 +101,11 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     BiPredicate<Integer, Integer> isMoving = (p, pNew) -> !Objects.equals(p, pNew);
     Predicate<Integer> isAtChargeQuePos = (p) -> p == CHARGE_QUE_POS;
 
-    final PositionTransitionRules positionTransitionRules;
+     final PositionTransitionRules positionTransitionRules;
     final SiteStateRules siteStateRules;
     boolean isObstacle;
 
-    public ChargeEnvironment() {
+    public ChargeEnvironmentOld() {
         positionTransitionRules = new PositionTransitionRules();
         siteStateRules = new SiteStateRules();
         isObstacle = IS_OBSTACLE;
@@ -136,8 +132,8 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                 .isNewStateTerminal(siteState != SiteState.isAllFine)
                 .isNewStateFail(
                         siteState.equals(SiteState.isTwoCharging) ||
-                        siteState.equals(SiteState.isAnySoCBad) || siteState.
-                        equals(SiteState.isTwoAtSamePos))
+                                siteState.equals(SiteState.isAnySoCBad) || siteState.
+                                equals(SiteState.isTwoAtSamePos))
                 .build();
     }
 
