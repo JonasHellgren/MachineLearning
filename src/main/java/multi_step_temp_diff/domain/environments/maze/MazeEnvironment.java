@@ -39,15 +39,6 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public enum PositionType {
         otherCell, wall, obstacle, goal
     }
-/*
-    public static final int NOF_COLS = 5, NOF_ROWS = 6;
-    public static final int NOF_ACTIONS = 4;
-    public static final double REWARD_CRASH = -2, REWARD_GOAL = 100, REWARD_MOVE = -1;
-    static Set<Pair<Integer,Integer>> obstaclePositions=new HashSet<>(asList(
-            Pair.create(1,1),Pair.create(2,1),Pair.create(3,1)
-            ,Pair.create(1,3),Pair.create(2,3),Pair.create(3,3)
-            ,Pair.create(2,4)));
-    public static final Pair<Integer, Integer> GOAL_POS = Pair.create(4, 5);  */
 
     public static final int ACTION_UP=0, ACTION_R=1,ACTION_DOWN=2,ACTION_L=3;
     public static final MazeEnvironmentSettings settings=MazeEnvironmentSettings.getDefault();

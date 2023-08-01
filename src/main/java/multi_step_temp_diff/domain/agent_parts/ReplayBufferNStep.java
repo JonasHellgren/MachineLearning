@@ -19,8 +19,12 @@ public class ReplayBufferNStep<S> implements ReplayBufferInterface<S> {
     @Builder.Default
     public final List<NstepExperience<S>> buffer = new ArrayList<>();
 
-    public static ReplayBufferNStep newDefault() {  //todo remove?
-        return ReplayBufferNStep.builder().build();
+    public static <S> ReplayBufferNStep<S> newDefault() {  //todo remove?
+        return ReplayBufferNStep.<S>builder().build();
+    }
+
+    public static <S> ReplayBufferNStep<S> newFromMaxSize(int maxSize) {
+        return ReplayBufferNStep.<S>builder().maxSize(maxSize).build();
     }
 
     @Override

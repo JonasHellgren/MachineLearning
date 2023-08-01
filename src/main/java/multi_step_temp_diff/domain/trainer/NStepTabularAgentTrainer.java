@@ -55,11 +55,7 @@ public class NStepTabularAgentTrainer<S> {
 
     public void train() {
         agentInfo=new AgentInfo<>(agent);
-        NStepTDHelper<S> h= NStepTDHelper.<S>builder()
-              //  .alpha(alpha).n(nofStepsBetweenUpdatedAndBackuped)
-                .episodeCounter(new Counter(0, nofEpisodes))
-                .timeCounter(new Counter(0, Integer.MAX_VALUE))
-                .build();
+        NStepTDHelper<S> h= NStepTDHelper.newFromNofEpisodesAndNofStepsBetween(nofEpisodes,nofStepsBetweenUpdatedAndBackuped);
 
         LogarithmicDecay decayProb=new LogarithmicDecay(probStart, probEnd,nofEpisodes);
         BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
