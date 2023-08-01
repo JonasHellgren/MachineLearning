@@ -36,7 +36,7 @@ public class TestNStepTabularAgentTrainerFork {
 
     @SneakyThrows
     @Test
-    @Tag("nettrain")
+    @Tag("tabtrain")
     public void whenIncreasingNofSteps_thenBetterStateValues() {
         NStepTabularAgentTrainerSettings settings = getnStepTabularAgentTrainerSettings(ONE_STEP);
         trainer= createTrainer(environment, settings);

@@ -74,8 +74,6 @@ public class TestNStepNeuralAgentTrainerMaze {
         assertTrue(value.apply(3,5)>value.apply(2,5));
         assertTrue(value.apply(2,5)>value.apply(1,5));
         assertTrue(value.apply(1,5)>value.apply(0,5));
-
-
     }
 
 

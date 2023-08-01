@@ -16,15 +16,15 @@ import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static common.Conditionals.executeIfTrue;
+import static multi_step_temp_diff.domain.helpers.NStepTDFunctionsAndPredicates.*;
 
 /**
  * https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
  * https://lcalem.github.io/blog/2018/11/19/sutton-chap07-nstep
- *
+ * <p>
  * a potential improvement is to check that start state is valid
  */
 
@@ -32,107 +32,71 @@ import java.util.function.Supplier;
 @Setter
 public class NStepTabularAgentTrainer<S> {
 
-    /*
-    private static final double ALPHA = 0.5;
-    private static final int N = 3;
-    private static final int NOF_EPIS = 100;
-    private static final int START_STATE = 0;
-
 
     @Builder.Default
-    double alpha= ALPHA;
-    @Builder.Default
-    int nofStepsBetweenUpdatedAndBackuped= N;
-    @Builder.Default
-    int nofEpisodes= NOF_EPIS;
-    @Builder.Default
-    double probStart=0.5;
-    @Builder.Default
-    double probEnd=0.01;
-*/
-
-    @Builder.Default
-    NStepTabularAgentTrainerSettings settings=NStepTabularAgentTrainerSettings.getDefault();
+    NStepTabularAgentTrainerSettings settings = NStepTabularAgentTrainerSettings.getDefault();
     @NonNull EnvironmentInterface<S> environment;
     @NonNull AgentTabularInterface<S> agent;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
 
     AgentInfo<S> agentInfo;
+    NStepTDHelper<S> helper;
+    LogarithmicDecay decayProb;
 
     public void train() {
-        agentInfo=new AgentInfo<>(agent);
-        NStepTDHelper<S> h= NStepTDHelper.newFromNofEpisodesAndNofStepsBetween(settings.nofEpis(),
+        agentInfo = new AgentInfo<>(agent);
+        helper = NStepTDHelper.newFromNofEpisodesAndNofStepsBetween(settings.nofEpis(),
                 settings.nofStepsBetweenUpdatedAndBackuped());
+        decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
 
-        LogarithmicDecay decayProb=new LogarithmicDecay(settings.probStart(), settings.probEnd(),settings.nofEpis());
-        BiPredicate<Integer,Integer> isNotAtTerminationTime = (t, tTerm) -> t<tTerm;
-        BiFunction<Integer,Integer,Integer> timeForUpdate = (t, n) -> t-n+1;
-        Predicate<Integer> isUpdatePossible = (tau) -> tau>=0;
-        BiPredicate<Integer,Integer> isAtTimeJustBeforeTermination = (tau,tTerm) -> tau == tTerm-1;
-
-        while (!h.episodeCounter.isExceeded()) {
+        while (!helper.episodeCounter.isExceeded()) {
             agent.setState(startStateSupplier.get());
-
-            h.reset();
+            helper.reset();
             do {
-                Conditionals.executeIfTrue(isNotAtTerminationTime.test(h.timeCounter.getCount(),h.T), () ->
-                        chooseActionAndStep(h, decayProb));
-                h.tau = timeForUpdate.apply(h.timeCounter.getCount(),settings.nofStepsBetweenUpdatedAndBackuped());
-                Conditionals.executeIfTrue(isUpdatePossible.test(h.tau), () ->
-                        updateStateValueForStatePresentAtTimeTau(h));
-                h.timeCounter.increase();
-
-            //    System.out.println("h = " + h);
-            } while (!isAtTimeJustBeforeTermination.test(h.tau,h.T));
-            h.episodeCounter.increase();
+                executeIfTrue(isNotAtTerminationTime.test(helper.getTime(), helper.T), () -> {
+                    var stateBeforeUpdate = agent.getState();
+                    var stepReturn = helper.chooseActionStepAndUpdateAgent(agent, environment, decayProb);
+                    helper.storeExperience(stateBeforeUpdate, stepReturn);
+                });
+                helper.tau = timeForUpdate.apply(helper.getTime(), settings.nofStepsBetweenUpdatedAndBackuped());
+                executeIfTrue(isUpdatePossible.test(helper.tau), () -> {
+                    var difference = updateStateValueForStatePresentAtTimeTau();
+                    agent.storeTemporalDifference(difference);
+                });
+                helper.increaseTime();
+            } while (!isAtTimeJustBeforeTermination.test(helper.tau, helper.T));
+            helper.increaseEpisode();
         }
-
-
     }
 
-    public Map<StateInterface<S>,Double> getStateValueMap() {
-        AgentInfo<S> agentInfo=new AgentInfo<>(agent);
+    public Map<StateInterface<S>, Double> getStateValueMap() {
+        AgentInfo<S> agentInfo = new AgentInfo<>(agent);
         return agentInfo.stateValueMap(environment.stateSet());
     }
 
-
-    static  BiPredicate<Integer,Integer> isTimeToBackUpFromAtOrBeforeTermination = (t,tTerm) -> t<=tTerm;
-
-    private void updateStateValueForStatePresentAtTimeTau(NStepTDHelper<S> h) {
-        double sumRewards = sumOfRewardsFromTimeToUpdatePlusOne(h), G=sumRewards;
-        int timeBackUpFrom = h.getTimeBackUpFrom();
-        if (isTimeToBackUpFromAtOrBeforeTermination.test(timeBackUpFrom,h.T)) {
-            StateInterface<S> stateAheadToBackupFrom = h.stateAheadToBackupFrom();
-            G = sumRewards + Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped()) * agent.readValue(stateAheadToBackupFrom);
+    private double updateStateValueForStatePresentAtTimeTau() {
+        double sumRewards = sumOfRewardsFromTimeToUpdatePlusOne(helper), G = sumRewards;
+        int timeBackUpFrom = helper.getTimeBackUpFrom();
+        if (isTimeToBackUpFromAtOrBeforeTermination.test(timeBackUpFrom, helper.T)) {
+            StateInterface<S> stateAheadToBackupFrom = helper.stateAheadToBackupFrom();
+            double discount = Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
+            G = sumRewards + discount * agent.readValue(stateAheadToBackupFrom);
         }
-        final StateInterface<S> stateToUpdate = h.statesMap.get(h.tau);
+        final StateInterface<S> stateToUpdate = helper.statesMap.get(helper.tau);
         double valuePresent = agent.readValue(stateToUpdate);
-        final double difference = G - valuePresent;
-
+        double difference = G - valuePresent;
         agent.writeValue(stateToUpdate, valuePresent + settings.alpha() * difference);
-        agent.storeTemporalDifference(difference);
-    }
-
-
-    private void chooseActionAndStep(NStepTDHelper<S> h, LogarithmicDecay scaler) {
-        final int action = agent.chooseAction(scaler.calcOut(h.episodeCounter.getCount()));
-        StepReturn<S> stepReturn = environment.step(agent.getState(), action);
-        h.statesMap.put(h.timeCounter.getCount(),agent.getState());
-        agent.updateState(stepReturn);
-        h.timeReturnMap.put(h.timeCounter.getCount()+1, stepReturn);
-        h.T = (stepReturn.isNewStateTerminal) ? h.timeCounter.getCount() + 1 : h.T;
+        return difference;
     }
 
     private double sumOfRewardsFromTimeToUpdatePlusOne(NStepTDHelper<S> h) {
-        Pair<Integer, Integer> iMinMax = new Pair<>(h.tau + 1, Math.min(h.tau + settings.nofStepsBetweenUpdatedAndBackuped(), h.T));
+        Pair<Integer, Integer> iMinMax =
+                new Pair<>(h.tau + 1, Math.min(h.tau + settings.nofStepsBetweenUpdatedAndBackuped(), h.T));
         List<Double> returnTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
             returnTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(returnTerms);
     }
-
-
-
 
 }

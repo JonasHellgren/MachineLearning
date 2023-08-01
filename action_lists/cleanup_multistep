@@ -22,8 +22,8 @@ NStepNeuralAgentTrainer
 - NStepTDFunctionsAndPredicates  x
 - minor clean up x
 
-NStepTabularAgentTrainer se NStepNeuralAgentTrainer  x
-
-NetSettings som record
-ReplayBufferNStep - raw use...
+NStepTabularAgentTrainer se NStepNeuralAgentTrainer x
+chooseActionStepAndStoreExperience till helper x
+NetSettings som record x
+ReplayBufferNStep - raw use... x
 StepReturn som record
