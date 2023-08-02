@@ -51,10 +51,10 @@ public class TestChargeEnvironmentBTrapped {
             "0,0.9,0, false,1,false","0,0.9,2, false,1,false",
             "7,0.9,0, false,7,false","7,0.9,2, false,8,false",
             "10,0.9,0, false,11,false","10,0.9,2, false,20,false","10,0.2,1, true,11,false",
-            "20,0.9,0, false,20,false","20,0.9,2, false,30,false",
+            "20,0.9,0, false,20,false","20,0.9,2, false,30,true",  //moving to charge node <=> soc increase
             "30,0.9,0, false,40,true","30,0.9,2, false,40,true",
-            "32,0.9,0, false,22,true","32,0.9,2, false,22,true",
-            "22,0.9,0, false,22,true", "22,0.9,2, false,12,true"
+            "32,0.9,0, false,22,false","32,0.9,2, false,22,false",  //moving from charge node <=> no soc increase
+            "22,0.9,0, false,22,false", "22,0.9,2, false,12,false"
     })
 
     public void whenNoObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {

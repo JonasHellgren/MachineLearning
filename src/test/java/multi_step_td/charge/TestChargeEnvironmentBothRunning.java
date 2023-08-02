@@ -58,7 +58,6 @@ public class TestChargeEnvironmentBothRunning {
         StateInterface<ChargeVariables> state = setState(reader);
         environmentCasted.setObstacle(false);
         StepReturn<ChargeVariables> stepReturn=environment.step(state,reader.action);
-        System.out.println("stepReturn.newState = " + stepReturn.newState);
         assertStepReturn(reader, stepReturn);
     }
 
@@ -73,7 +72,6 @@ public class TestChargeEnvironmentBothRunning {
         StateInterface<ChargeVariables> state = setState(reader);
         environmentCasted.setObstacle(true);
         StepReturn<ChargeVariables> stepReturn=environment.step(state,reader.action);
-        System.out.println("stepReturn.newState = " + stepReturn.newState);
         assertStepReturn(reader, stepReturn);
     }
 

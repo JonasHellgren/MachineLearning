@@ -1,5 +1,7 @@
 package multi_step_temp_diff.domain.environments.charge;
 
+import common.RandUtils;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
@@ -13,6 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("Convert2MethodRef")
+@Log
 public class SiteStateRules {
 
     ChargeEnvironmentSettings settings;
@@ -41,7 +44,10 @@ public class SiteStateRules {
                 .filter(e -> e.getKey().test(state)).map(Map.Entry::getValue)
                 .toList();
         if (fcnList.size()>1) {
-            throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size());
+            log.warning("state = " + state);
+            log.warning("Multiple matching rules, nof ="+fcnList.size());
+            int randRuleIndex= RandUtils.getRandomIntNumber(0,fcnList.size());
+            return fcnList.get(randRuleIndex).get();
         }
         if (fcnList.size()==0) {
             return SiteState.isAllFine;

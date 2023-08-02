@@ -34,7 +34,7 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
  *
  *     , where
  *     NOD_WHERE_OBSTACLE_CAN_BE=8
- *     CHARGE_NODES=(30,40,50,51,52,42,32,22), TRAP_NODES={21,23-29,31,33-39,....},
+ *     CHARGE_NODES=(30,40,50,51,52,42,32), TRAP_NODES={21,23-29,31,33-39,....},
  *
  * <p>
  * There are two vehicles, A and B. If any of these initially are located in a trap (for ex pos 29). Only
@@ -194,7 +194,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     }
 
     private double getDeltaSoC(int pos, int posNew) {
-        boolean isInCharge = lambdas.isChargePos.test(pos);
+        boolean isInCharge = lambdas.isChargePos.test(posNew);
         if (isInCharge) {
             return settings.deltaSocInChargeArea();
         } else {

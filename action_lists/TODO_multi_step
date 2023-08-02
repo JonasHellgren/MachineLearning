@@ -90,8 +90,11 @@ TestAgentChargeGreedy  x
 - TestSiteStateRules  x
 - ChargeEnvironment: Pair<Integer, Integer> ->  Positions  x
 - ChargeEnvironment: Pair<Double, Double> -> SoCLevels x
-- TestCharge ..
-- clean up , tex and or i lampda expr
+- TestCharge ..  x
+- TestAgentChargeGreedy x
+- fler tester TestAgentChargeGreedy
+- clean up , tex and or i lampda expr,
+- snyggare print state - soc många decimaler
 
 ChargeEnvironmentSettings
 StepReturn isNewStateFail andra miljör
