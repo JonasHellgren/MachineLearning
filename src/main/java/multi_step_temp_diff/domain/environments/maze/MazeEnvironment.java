@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.maze;
 
-import common.SetUtils;
+import common.MySetUtils;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -13,7 +13,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import static java.util.Arrays.*;
 
 /**
  * actions: 0=up, 1=right, 2=down, 3=left
@@ -129,15 +128,15 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     @SneakyThrows
     @Override
     public Set<Integer> actionSet() {
-        return SetUtils.getSetFromRange(0,settings.nofActions());
+        return MySetUtils.getSetFromRange(0,settings.nofActions());
     }
 
     @SneakyThrows
     @Override
     public Set<StateInterface<MazeVariables>> stateSet() {
         Set<StateInterface<MazeVariables>> stateSet = new HashSet<>();
-        for (int x : SetUtils.getSetFromRange(0, settings.nofCols())) {
-            for (int y : SetUtils.getSetFromRange(0, settings.nofRows())) {
+        for (int x : MySetUtils.getSetFromRange(0, settings.nofCols())) {
+            for (int y : MySetUtils.getSetFromRange(0, settings.nofRows())) {
                 stateSet.add(MazeState.newFromXY(x, y));
             }
         }

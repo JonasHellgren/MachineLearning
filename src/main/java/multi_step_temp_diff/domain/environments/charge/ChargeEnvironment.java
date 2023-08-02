@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.environments.charge;
 
 
 import common.MathUtils;
-import common.SetUtils;
+import common.MySetUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -12,13 +12,10 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isMoving;
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isNonValidTime;
@@ -36,8 +33,8 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
  *     59  | 58  | 57  | 56  | 55  | 54  | 53  | 52^^| 51<<| 50<<|
  *
  *     , where
+ *     NOD_WHERE_OBSTACLE_CAN_BE=8
  *     CHARGE_NODES=(30,40,50,51,52,42,32,22), TRAP_NODES={21,23-29,31,33-39,....},
- *     NOT_ONE_INCREASE={7,10,20,22,30,40,52,42,32}
  *
  * <p>
  * There are two vehicles, A and B. If any of these initially are located in a trap (for ex pos 29). Only
@@ -57,11 +54,13 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
     22              22                          12
     30              40                          40
     40              50                          50
+    51              52                          52
     52              42                          42
     42              32                          32
     32              22                          22
+    19              0                           0
     trap           pos                          pos
- *  one increase   pos+1                        pos+1                no trap node and not NOT_ONE_INCREASE
+ *  else           pos+1                        pos+1
  *
  * time transition model
  * time <- time+1
@@ -105,22 +104,6 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
 @Getter
 public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
 
-    /*
-    public static final int POS_MIN = 0, POS_MAX = 30;
-    public static final int NOF_ACTIONS = 4;
-    public static final int SOC_MIN = 0, SOC_MAX = 1;
-    public static final boolean IS_OBSTACLE = false;
-    static final Map<Integer, Pair<Integer, Integer>> commandPairs =
-            Map.of(0, new Pair<>(0, 0), 1, new Pair<>(0, 1), 2, new Pair<>(1, 0), 3, new Pair<>(1, 1));
-    public static final double DELTA_SOC_MOVING_NOT_IN_CHARGEAREA = -1 / 40d, DELTA_SOC_STILL_NOT_IN_CHARGEAREA = 0;
-    public static final double DELTA_SOC_IN_CHARGE_AREA = 1 / 20d;
-    public static final int CHARGE_QUE_POS = 20;
-    public static final double COST_QUE = 1, COST_CHARGE = 0.01d, R_BAD = -100;
-*/
-
-//    BiPredicate<Integer, Integer> isMoving = (p, pNew) -> !Objects.equals(p, pNew);
-//    Predicate<Integer> isAtChargeQuePos = (p) -> p == CHARGE_QUE_POS;
-
     ChargeEnvironmentSettings settings;
     ChargeEnvironmentLambdas lambdas;
     final PositionTransitionRules positionTransitionRules;
@@ -130,7 +113,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     public ChargeEnvironment() {
         settings=ChargeEnvironmentSettings.newDefault();
         lambdas=new ChargeEnvironmentLambdas(settings);
-        positionTransitionRules = new PositionTransitionRules();
+        positionTransitionRules = new PositionTransitionRules(settings);
         siteStateRules = new SiteStateRules();
         isObstacle = settings.isObstacleStart();
     }
@@ -168,7 +151,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
     @Override
     public Set<Integer> actionSet() {
-        return SetUtils.getSetFromRange(0, settings.nofActions());
+        return MySetUtils.getSetFromRange(0, settings.nofActions());
     }
 
     @SneakyThrows
@@ -179,10 +162,6 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
 
     private void throwIfBadArgument(StateInterface<ChargeVariables> state, int action) {
-/*            Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
-            Predicate<Integer> isNonValidPos = (p) -> p < POS_MIN || p > POS_MAX;
-            Predicate<Double> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
-            Predicate<Integer> isNonValidTime = (t) -> t < 0;  */
             if (lambdas.isNonValidAction.test(action) ||
                     lambdas.isNonValidPos.test(ChargeState.posA.apply(state)) || lambdas.isNonValidPos.test(ChargeState.posB.apply(state)) ||
                     lambdas.isNonValidSoC.test(ChargeState.socA.apply(state)) || lambdas.isNonValidSoC.test(ChargeState.socB.apply(state)) ||

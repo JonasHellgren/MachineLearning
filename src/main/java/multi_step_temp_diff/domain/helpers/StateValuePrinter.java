@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers;
 
-import common.SetUtils;
+import common.MySetUtils;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
@@ -28,7 +28,7 @@ public class StateValuePrinter<S> {
         for (int y = MazeEnvironment.settings.nofRows()-1; y >=0 ; y--) {
             StringBuilder sb=new StringBuilder();
             //for (int y : SetUtils.getSetFromRange(0, MazeEnvironment.NOF_ROWS)) {
-            for (int x : SetUtils.getSetFromRange(0, MazeEnvironment.settings.nofCols())) {
+            for (int x : MySetUtils.getSetFromRange(0, MazeEnvironment.settings.nofCols())) {
                 String str=MazeEnvironment.isObstacle.or(MazeEnvironment.isGoal).test(x,y)
                         ? getObjectForCell.apply(new Pair<>(x,y))
                         : getValueForCell.apply(agentMazeNeural, new Pair<>(x,y));
