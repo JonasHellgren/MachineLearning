@@ -30,8 +30,8 @@ public class TestPositionTransitionRules {
             "13,false,0,14", "13,false,1,14",
             "13,true,0,14", "13,true,1,14",
             "29,true,0,29", "29,true,1,29",
-
     })
+
     public void whenPosAndObstacle_thenCorrectNewPos(ArgumentsAccessor arguments) {
         int pos = arguments.getInteger(0);
         boolean isObstacle = arguments.getBoolean(1);

@@ -17,10 +17,6 @@ public class SiteStateRules {
 
     ChargeEnvironmentSettings settings;
 
- //   public static final int MAX_NOF_STEPS = 100;
-  //  static Range<Integer> CHARGE_POSITIONS = Range.between(21, 29);  //todo from env, test inclusive
-  //  public static final double SOC_BAD = 0.1;
-
     static Map<Predicate<StateInterface<ChargeVariables>>, Supplier<SiteState>> siteStateTable;
     public SiteStateRules(ChargeEnvironmentSettings settings) {
         this.settings =settings;
