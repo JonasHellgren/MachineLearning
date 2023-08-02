@@ -84,8 +84,8 @@ TestAgentChargeGreedy  x
 - ChargeEnvironmentLambdas - skall ta emot ChargeEnvironmentSettings  x
 - införliva ChargeEnvironmentSettings  x
 - införliva ChargeEnvironmentLambdas x
-- modda PositionTransitionRules
-- TestPositionTransitionRules
+- modda PositionTransitionRules x
+- TestPositionTransitionRules  x
 - modda SiteStateRules
 - TestSiteStateRules
 - ChargeEnvironment: Pair<Integer, Integer> ->  Positions  x

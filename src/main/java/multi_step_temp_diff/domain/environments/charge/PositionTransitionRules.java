@@ -7,18 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class PositionTransitionRules {
 
     public static final int DUMMY_POS = 0;
     ChargeEnvironmentSettings settings;
-
-    public PositionTransitionRules(ChargeEnvironmentSettings settings) {
-        this.settings = settings;
-    }
 
     Map<BiPredicate<Integer,Boolean>, BiFunction<Integer,Integer,Integer>> transitionTable;  //pos, isObstacle -> posNew(pos,command)
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPos=(p,o) -> p.getFirst().equals(p.getSecond());
@@ -26,12 +19,12 @@ public class PositionTransitionRules {
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosObstacle=(p,o) -> isAtPos.test(p,o) && o;
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtTrap=(p,o) -> settings.isAtTrapNode(p.getFirst());
 
-    public PositionTransitionRules() {
+    public PositionTransitionRules(ChargeEnvironmentSettings settings) {
+        this.settings = settings;
         this.transitionTable = new HashMap<>();
         addRuleToTable(7,7,8);
         addRuleToTable(10,11,20);
         addRuleToTable(20,20,30);
-        addRuleToTable(22,22,12);
         addRuleToTable(30,40,40);
         addRuleToTable(40,50,50);
         addRuleToTable(51,52,52);

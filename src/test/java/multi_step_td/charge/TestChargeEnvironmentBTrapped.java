@@ -1,5 +1,6 @@
 package multi_step_td.charge;
 
+import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.SiteStateRules;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
@@ -18,21 +19,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestChargeEnvironmentBTrapped {
 
     public static final double SOC_INIT = 0.9;
-    public static final int POS_TRAP = ChargeEnvironment.POS_MAX;
     public static final double SOC_DELTA = 0.0001;
     public static final double DELTA_REWARD = 0.001;
+    public static final int TRAP_POS = 29;
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironment environmentCasted;
     StateInterface<ChargeVariables> state;
     ChargeState stateCasted;
     StepReturn<ChargeVariables> stepReturn;
+    ChargeEnvironmentSettings settings;
 
     @BeforeEach
     public void init() {
+        settings=ChargeEnvironmentSettings.newDefault();
         environment = new ChargeEnvironment();
         environmentCasted=(ChargeEnvironment) environment;
         state = new ChargeState(ChargeVariables.builder()
-                .posA(0).posB(POS_TRAP)
+                .posA(0).posB(TRAP_POS)
                 .socA(SOC_INIT).socB(SOC_INIT)
                 .build());
         stateCasted=(ChargeState) state;
@@ -42,7 +45,7 @@ public class TestChargeEnvironmentBTrapped {
     public void given0_thenAction0_thenBNotChangedAndTimeIncreased() {
         stepReturn = environment.step(state, 0);
         TestChargeHelper.printStepReturn(stepReturn);
-        assertEquals(POS_TRAP, (int) TestChargeHelper.posNewB.apply(stepReturn));
+        assertEquals(TRAP_POS, (int) TestChargeHelper.posNewB.apply(stepReturn));
         assertEquals(SOC_INIT,TestChargeHelper.socNewB.apply(stepReturn),SOC_DELTA);
         assertFalse(stepReturn.isNewStateTerminal);
         assertEquals(1,(int) TestChargeHelper.time.apply(stepReturn));
@@ -102,7 +105,7 @@ public class TestChargeEnvironmentBTrapped {
         TestChargeHelper.printStepReturn(stepReturn);
         assertEquals(20, (int) TestChargeHelper.posNewA.apply(stepReturn));
         assertEquals(SOC_INIT,TestChargeHelper.socNewA.apply(stepReturn),SOC_DELTA);
-        assertEquals(-ChargeEnvironment.COST_QUE,stepReturn.reward, DELTA_REWARD);
+        assertEquals(-settings.costQue(),stepReturn.reward, DELTA_REWARD);
 
     }
 
@@ -171,7 +174,7 @@ public class TestChargeEnvironmentBTrapped {
          TestChargeHelper.printStepReturn(stepReturn);
         assertEquals(19, (int) TestChargeHelper.posNewA.apply(stepReturn));
         assertTrue(TestChargeHelper.socNewA.apply(stepReturn) > SOC_INIT);
-        assertEquals(-ChargeEnvironment.COST_CHARGE,stepReturn.reward,DELTA_REWARD);
+        assertEquals(-settings.costCharge(),stepReturn.reward,DELTA_REWARD);
     }
 
     @Test
@@ -204,7 +207,7 @@ public class TestChargeEnvironmentBTrapped {
         stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
          TestChargeHelper.printStepReturn(stepReturn);
         assertTrue(stepReturn.isNewStateTerminal);
-        assertEquals(ChargeEnvironment.R_BAD,stepReturn.reward,DELTA_REWARD);
+        assertEquals(settings.rewardBad(),stepReturn.reward,DELTA_REWARD);
     }
 
   

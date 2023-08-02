@@ -30,7 +30,7 @@ public class TestChargeHelper {
     public static BiPredicate<StateInterface<ChargeVariables>,StateInterface<ChargeVariables>> sameSoCB = (s0,s1) ->
             ChargeState.socB.apply(s0).equals(ChargeState.socB.apply(s1));
 
-    public static Supplier<Integer> randomAction = () -> RandUtils.getRandomIntNumber(0, ChargeEnvironment.NOF_ACTIONS);
+    public static Supplier<Integer> randomAction = () -> RandUtils.getRandomIntNumber(0, 4);
 
     public static void printStepReturn(StepReturn stepReturn) {
         System.out.println("stepReturn = " + stepReturn);
