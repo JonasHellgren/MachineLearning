@@ -169,11 +169,11 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
 
     private void throwIfBadArgument(StateInterface<ChargeVariables> state, int action) {
-        Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
-        Predicate<Integer> isNonValidPos = (p) -> p < POS_MIN || p > POS_MAX;
-        Predicate<Double> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
-        Predicate<Integer> isNonValidTime = (t) -> t < 0;
-        if (isNonValidAction.test(action) ||
+            Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
+            Predicate<Integer> isNonValidPos = (p) -> p < POS_MIN || p > POS_MAX;
+            Predicate<Double> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
+            Predicate<Integer> isNonValidTime = (t) -> t < 0;
+            if (isNonValidAction.test(action) ||
                 isNonValidPos.test(ChargeState.posA.apply(state)) || isNonValidPos.test(ChargeState.posB.apply(state)) ||
                 isNonValidSoC.test(ChargeState.socA.apply(state)) || isNonValidSoC.test(ChargeState.socB.apply(state)) ||
                 isNonValidTime.test(ChargeState.time.apply(state))

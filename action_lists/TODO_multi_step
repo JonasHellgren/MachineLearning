@@ -81,7 +81,7 @@ TestAgentChargeGreedy  x
 - P charge started x
 - gamla till trash x
 - ChargeEnvironmentSettings x
-- ChargeEnvironmentFunctionsAndPredicates - skall ta emot ChargeEnvironmentSettings
+- ChargeEnvironmentLambdas - skall ta emot ChargeEnvironmentSettings  x
 - modda PositionTransitionRules
 - TestPositionTransitionRules
 - modda SiteStateRules
