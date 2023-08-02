@@ -13,7 +13,6 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
 
 public class TestChargeEnvironmentLambdas {
 
-
     ChargeEnvironmentLambdas lambdas;
 
     @BeforeEach

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
+import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.Map;
@@ -18,6 +19,9 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isMoving;
+import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isNonValidTime;
 
 /***
  *     >> = always right, .> = stay or right, << = always left, .< = stay or left
@@ -101,6 +105,7 @@ import java.util.function.Predicate;
 @Getter
 public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
 
+    /*
     public static final int POS_MIN = 0, POS_MAX = 30;
     public static final int NOF_ACTIONS = 4;
     public static final int SOC_MIN = 0, SOC_MAX = 1;
@@ -111,18 +116,23 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     public static final double DELTA_SOC_IN_CHARGE_AREA = 1 / 20d;
     public static final int CHARGE_QUE_POS = 20;
     public static final double COST_QUE = 1, COST_CHARGE = 0.01d, R_BAD = -100;
+*/
 
-    BiPredicate<Integer, Integer> isMoving = (p, pNew) -> !Objects.equals(p, pNew);
-    Predicate<Integer> isAtChargeQuePos = (p) -> p == CHARGE_QUE_POS;
+//    BiPredicate<Integer, Integer> isMoving = (p, pNew) -> !Objects.equals(p, pNew);
+//    Predicate<Integer> isAtChargeQuePos = (p) -> p == CHARGE_QUE_POS;
 
+    ChargeEnvironmentSettings settings;
+    ChargeEnvironmentLambdas lambdas;
     final PositionTransitionRules positionTransitionRules;
     final SiteStateRules siteStateRules;
     boolean isObstacle;
 
     public ChargeEnvironment() {
+        settings=ChargeEnvironmentSettings.newDefault();
+        lambdas=new ChargeEnvironmentLambdas(settings);
         positionTransitionRules = new PositionTransitionRules();
         siteStateRules = new SiteStateRules();
-        isObstacle = IS_OBSTACLE;
+        isObstacle = settings.isObstacleStart();
     }
 
     @Override
@@ -158,7 +168,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
     @Override
     public Set<Integer> actionSet() {
-        return SetUtils.getSetFromRange(0, NOF_ACTIONS);
+        return SetUtils.getSetFromRange(0, settings.nofActions());
     }
 
     @SneakyThrows
@@ -169,13 +179,13 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
 
     private void throwIfBadArgument(StateInterface<ChargeVariables> state, int action) {
-            Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
+/*            Predicate<Integer> isNonValidAction = (a) -> a > NOF_ACTIONS - 1;
             Predicate<Integer> isNonValidPos = (p) -> p < POS_MIN || p > POS_MAX;
             Predicate<Double> isNonValidSoC = (s) -> s < SOC_MIN || s > SOC_MAX;
-            Predicate<Integer> isNonValidTime = (t) -> t < 0;
-            if (isNonValidAction.test(action) ||
-                isNonValidPos.test(ChargeState.posA.apply(state)) || isNonValidPos.test(ChargeState.posB.apply(state)) ||
-                isNonValidSoC.test(ChargeState.socA.apply(state)) || isNonValidSoC.test(ChargeState.socB.apply(state)) ||
+            Predicate<Integer> isNonValidTime = (t) -> t < 0;  */
+            if (lambdas.isNonValidAction.test(action) ||
+                    lambdas.isNonValidPos.test(ChargeState.posA.apply(state)) || lambdas.isNonValidPos.test(ChargeState.posB.apply(state)) ||
+                    lambdas.isNonValidSoC.test(ChargeState.socA.apply(state)) || lambdas.isNonValidSoC.test(ChargeState.socB.apply(state)) ||
                 isNonValidTime.test(ChargeState.time.apply(state))
         ) {
             throw new IllegalArgumentException("Non valid action or state. State = " + state + ", action = " + action);
@@ -183,11 +193,11 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     }
 
     private Pair<Integer, Integer> getNewPositions(StateInterface<ChargeVariables> state, int action) {
-        Pair<Integer, Integer> commandPair = commandPairs.get(action);
+        Commands commands = settings.commandMap().get(action);
         int posANew = positionTransitionRules.getNewPos(
-                ChargeState.posA.apply(state), isObstacle, commandPair.getFirst());
+                ChargeState.posA.apply(state), isObstacle, commands.cA());
         int posBNew = positionTransitionRules.getNewPos(
-                ChargeState.posB.apply(state), isObstacle, commandPair.getSecond());
+                ChargeState.posB.apply(state), isObstacle, commands.cB());
         return Pair.create(posANew, posBNew);
     }
 
@@ -196,17 +206,18 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         double deltaSoCA = getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getFirst());
         double deltaSoCB = getDeltaSoC(ChargeState.posB.apply(state), posAposBNew.getSecond());
         return Pair.create(
-                MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA, SOC_MIN, SOC_MAX),
-                MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB, SOC_MIN, SOC_MAX));
+                MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA, settings.socMin(), settings.socMax()),
+                MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB, settings.socMin(), settings.socMax()));
     }
 
     private double getDeltaSoC(int pos, int posNew) {
         boolean isInCharge = SiteStateRules.isChargePos.test(pos);
-        boolean isMoving = pos != posNew;  //todo !isMoving.test
         if (isInCharge) {
-            return DELTA_SOC_IN_CHARGE_AREA;
+            return settings.deltaSocInChargeArea();
         } else {
-            return isMoving ? DELTA_SOC_MOVING_NOT_IN_CHARGEAREA : DELTA_SOC_STILL_NOT_IN_CHARGEAREA;
+            return isMoving.test(pos,posNew)
+                    ? settings.deltaSocMovingNotInChargeArea()
+                    : settings.deltaSocStillNotInChargeArea();
         }
     }
 
@@ -215,16 +226,16 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                              SiteState siteState) {
 
         BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
-                isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
+                lambdas.isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
         Integer posA = ChargeState.posA.apply(state), posB = ChargeState.posB.apply(state);
         boolean isAInChargeQue = isStillAtChargeQuePos.test(posA, posAposBNew.getFirst());
         boolean isBInChargeQue = isStillAtChargeQuePos.test(posB, posAposBNew.getSecond());
         boolean isAInChargeArea = SiteStateRules.isChargePos.test(posA);
         boolean isBInChargeArea = SiteStateRules.isChargePos.test(posB);
 
-        BiFunction<Boolean, Boolean, Double> costQue = (isA, isB) -> (isA || isB) ? -COST_QUE : 0d;
-        BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -COST_CHARGE : 0d;
-        Function<SiteState, Double> failPenalty = (ss) -> isAnyConstraintFailed(ss) ? R_BAD : 0;
+        BiFunction<Boolean, Boolean, Double> costQue = (isA, isB) -> (isA || isB) ? -settings.costQue() :  0d;
+        BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -settings.costCharge() : 0d;
+        Function<SiteState, Double> failPenalty = (ss) -> isAnyConstraintFailed(ss) ? settings.rewardBad() :  0;
 
         return costQue.apply(isAInChargeQue, isBInChargeQue) +
                 costCharge.apply(isAInChargeArea, isBInChargeArea) +

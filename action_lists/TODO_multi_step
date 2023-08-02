@@ -82,13 +82,15 @@ TestAgentChargeGreedy  x
 - gamla till trash x
 - ChargeEnvironmentSettings x
 - ChargeEnvironmentLambdas - skall ta emot ChargeEnvironmentSettings  x
+- införliva ChargeEnvironmentSettings  x
+- införliva ChargeEnvironmentLambdas x
 - modda PositionTransitionRules
 - TestPositionTransitionRules
 - modda SiteStateRules
 - TestSiteStateRules
-- ChargeEnvironment: Pair<Integer, Integer> ->  Positions
+- ChargeEnvironment: Pair<Integer, Integer> ->  Positions  x
 - ChargeEnvironment: Pair<Double, Double> -> SoCLevels
-
+- clean up , tex and or i lampda expr
 
 ChargeEnvironmentSettings
 StepReturn isNewStateFail andra miljör
