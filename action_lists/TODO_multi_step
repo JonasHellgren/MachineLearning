@@ -87,9 +87,9 @@ TestAgentChargeGreedy  x
 - modda PositionTransitionRules x
 - TestPositionTransitionRules  x
 - modda SiteStateRules x
-- TestSiteStateRules
+- TestSiteStateRules  x
 - ChargeEnvironment: Pair<Integer, Integer> ->  Positions  x
-- ChargeEnvironment: Pair<Double, Double> -> SoCLevels
+- ChargeEnvironment: Pair<Double, Double> -> SoCLevels x
 - TestCharge ..
 - clean up , tex and or i lampda expr
 

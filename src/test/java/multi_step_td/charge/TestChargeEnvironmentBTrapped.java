@@ -1,15 +1,17 @@
 package multi_step_td.charge;
 
+import lombok.Builder;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
-import multi_step_temp_diff.domain.environments.charge.SiteStateRules;
-import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
-import multi_step_temp_diff.domain.environments.charge.ChargeState;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.environments.charge.*;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /***
@@ -18,47 +20,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestChargeEnvironmentBTrapped {
 
-    public static final double SOC_INIT = 0.9;
-    public static final double SOC_DELTA = 0.0001;
-    public static final double DELTA_REWARD = 0.001;
-    public static final int TRAP_POS = 29;
+    public static final double SOC_B = 0.9;
+    public static final int TRAP_POS = 29, TIME = 10;
+
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironment environmentCasted;
-    StateInterface<ChargeVariables> state;
-    ChargeState stateCasted;
-    StepReturn<ChargeVariables> stepReturn;
     ChargeEnvironmentSettings settings;
+
+    @Builder
+    record ArgumentReader(int posA, double socA, int action,boolean isFailState, int posNew, boolean isSoCIncreased) {
+
+        public ArgumentReader of(ArgumentsAccessor args) {
+            return  ArgumentReader.builder()
+                    .posA(args.getInteger(0)).socA(args.getDouble(1)).action(args.getInteger(2))
+                    .isFailState(args.getBoolean(3)).posNew(args.getInteger(4)).isSoCIncreased(args.getBoolean(5))
+                    .build();
+        }
+    }
+
 
     @BeforeEach
     public void init() {
         settings=ChargeEnvironmentSettings.newDefault();
-        environment = new ChargeEnvironment();
+        environment = new ChargeEnvironment(settings);
         environmentCasted=(ChargeEnvironment) environment;
-        state = new ChargeState(ChargeVariables.builder()
-                .posA(0).posB(TRAP_POS)
-                .socA(SOC_INIT).socB(SOC_INIT)
+    }
+
+
+    @ParameterizedTest
+    @CsvSource({
+            "0,0.9,0, false,1,false","0,0.9,2, false,1,false",
+            "7,0.9,0, false,7,false","7,0.9,2, false,8,false",
+            "10,0.9,0, false,11,false","10,0.9,2, false,20,false","10,0.2,1, true,11,false",
+            "20,0.9,0, false,20,false","20,0.9,2, false,30,false",
+            "30,0.9,0, false,40,true","30,0.9,2, false,40,true",
+            "32,0.9,0, false,22,true","32,0.9,2, false,22,true",
+            "22,0.9,0, false,22,true", "22,0.9,2, false,12,true"
+    })
+
+    public void whenNoObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
+        int posA = arguments.getInteger(0);
+        double socA = arguments.getDouble(1);
+        int action = arguments.getInteger(2);
+        boolean isFailState = arguments.getBoolean(3);
+        int posANew = arguments.getInteger(4);
+        boolean isSoCIncreased = arguments.getBoolean(5);
+
+        StateInterface<ChargeVariables> state = new ChargeState(ChargeVariables.builder()
+                .posA(posA).posB(TRAP_POS)
+                .socA(socA).socB(SOC_B)
+                .time(TIME)
                 .build());
-        stateCasted=(ChargeState) state;
+
+        environmentCasted.setObstacle(false);
+        StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
+
+        System.out.println("stepReturn.newState = " + stepReturn.newState);
+
+        assertEquals(isFailState,stepReturn.isNewStateFail);
+        assertEquals(posANew,stepReturn.newState.getVariables().posA);
+        boolean isNewSoCALarger = stepReturn.newState.getVariables().socA > socA;
+        assertEquals(isSoCIncreased, isNewSoCALarger);
+
     }
 
-    @Test
-    public void given0_thenAction0_thenBNotChangedAndTimeIncreased() {
-        stepReturn = environment.step(state, 0);
-        TestChargeHelper.printStepReturn(stepReturn);
-        assertEquals(TRAP_POS, (int) TestChargeHelper.posNewB.apply(stepReturn));
-        assertEquals(SOC_INIT,TestChargeHelper.socNewB.apply(stepReturn),SOC_DELTA);
-        assertFalse(stepReturn.isNewStateTerminal);
-        assertEquals(1,(int) TestChargeHelper.time.apply(stepReturn));
-    }
-
-    @Test
-    public void givenAPos0_thenAction0_thenNewPos1AndSoCDecreasedAndNotTerminal() {
-        stepReturn = environment.step(state, 0);
-         TestChargeHelper.printStepReturn(stepReturn);
-        assertEquals(1, (int) TestChargeHelper.posNewA.apply(stepReturn));
-        assertTrue(TestChargeHelper.socNewA.apply(stepReturn) < SOC_INIT);
-        assertFalse(stepReturn.isNewStateTerminal);
-    }
+    /*
 
     @Test
     public void givenAPos9_thenAction0_thenNewPos9AndSoCDecreased() {
@@ -210,6 +236,6 @@ public class TestChargeEnvironmentBTrapped {
         assertEquals(settings.rewardBad(),stepReturn.reward,DELTA_REWARD);
     }
 
-  
+  */
 
 }

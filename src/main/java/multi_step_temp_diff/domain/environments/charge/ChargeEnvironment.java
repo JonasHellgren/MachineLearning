@@ -111,7 +111,11 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     boolean isObstacle;
 
     public ChargeEnvironment() {
-        settings=ChargeEnvironmentSettings.newDefault();
+        this(ChargeEnvironmentSettings.newDefault());
+    }
+
+    public ChargeEnvironment(ChargeEnvironmentSettings settings) {
+        this.settings=settings;
         lambdas=new ChargeEnvironmentLambdas(settings);
         positionTransitionRules = new PositionTransitionRules(settings);
         siteStateRules = new SiteStateRules(settings);
@@ -122,21 +126,21 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     public StepReturn<ChargeVariables> step(StateInterface<ChargeVariables> state, int action) {
 
         throwIfBadArgument(state, action);
-        Pair<Integer, Integer> posAposBNew = getNewPositions(state, action);
-        Pair<Double, Double> socAsocB = getNewSoCLevels(state, posAposBNew);
+        Positions positions = getNewPositions(state, action);
+        SoCLevels socs = getNewSoCLevels(state, positions);
         int timeNew = ChargeState.time.apply(state) + 1;
 
         ChargeState newState = new ChargeState(ChargeVariables.builder()
-                .posA(posAposBNew.getFirst()).posB(posAposBNew.getSecond())
-                .socA(socAsocB.getFirst()).socB(socAsocB.getSecond())
+                .posA(positions.posA()).posB(positions.posB())
+                .socA(socs.socA()).socB(socs.socB())
                 .time(timeNew)
                 .build());
         SiteState siteState = siteStateRules.getSiteState(newState);
 
         return StepReturn.<ChargeVariables>builder()
                 .newState(newState)
-                .reward(getReward(state, posAposBNew, siteState))
-                .isNewStateTerminal(siteState != SiteState.isAllFine)
+                .reward(getReward(state, positions, siteState))
+                .isNewStateTerminal(siteState != SiteState.isAllFine)  //also valid for timeUp
                 .isNewStateFail(
                         siteState.equals(SiteState.isTwoCharging) ||
                         siteState.equals(SiteState.isAnySoCBad) || siteState.
@@ -171,20 +175,20 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         }
     }
 
-    private Pair<Integer, Integer> getNewPositions(StateInterface<ChargeVariables> state, int action) {
+    private Positions getNewPositions(StateInterface<ChargeVariables> state, int action) {
         Commands commands = settings.commandMap().get(action);
         int posANew = positionTransitionRules.getNewPos(
                 ChargeState.posA.apply(state), isObstacle, commands.cA());
         int posBNew = positionTransitionRules.getNewPos(
                 ChargeState.posB.apply(state), isObstacle, commands.cB());
-        return Pair.create(posANew, posBNew);
+        return Positions.of(posANew, posBNew);
     }
 
-    private Pair<Double, Double> getNewSoCLevels(StateInterface<ChargeVariables> state,
-                                                 Pair<Integer, Integer> posAposBNew) {
-        double deltaSoCA = getDeltaSoC(ChargeState.posA.apply(state), posAposBNew.getFirst());
-        double deltaSoCB = getDeltaSoC(ChargeState.posB.apply(state), posAposBNew.getSecond());
-        return Pair.create(
+    private SoCLevels getNewSoCLevels(StateInterface<ChargeVariables> state,
+                                                 Positions positions) {
+        double deltaSoCA = getDeltaSoC(ChargeState.posA.apply(state), positions.posA());
+        double deltaSoCB = getDeltaSoC(ChargeState.posB.apply(state), positions.posB());
+        return SoCLevels.of(
                 MathUtils.clip(ChargeState.socA.apply(state) + deltaSoCA, settings.socMin(), settings.socMax()),
                 MathUtils.clip(ChargeState.socB.apply(state) + deltaSoCB, settings.socMin(), settings.socMax()));
     }
@@ -201,14 +205,14 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     }
 
     private double getReward(StateInterface<ChargeVariables> state,
-                             Pair<Integer, Integer> posAposBNew,
+                             Positions positions,
                              SiteState siteState) {
 
         BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
                 lambdas.isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
         Integer posA = ChargeState.posA.apply(state), posB = ChargeState.posB.apply(state);
-        boolean isAInChargeQue = isStillAtChargeQuePos.test(posA, posAposBNew.getFirst());
-        boolean isBInChargeQue = isStillAtChargeQuePos.test(posB, posAposBNew.getSecond());
+        boolean isAInChargeQue = isStillAtChargeQuePos.test(posA, positions.posA());
+        boolean isBInChargeQue = isStillAtChargeQuePos.test(posB, positions.posB());
         boolean isAInChargeArea = lambdas.isChargePos.test(posA);
         boolean isBInChargeArea = lambdas.isChargePos.test(posB);
 
