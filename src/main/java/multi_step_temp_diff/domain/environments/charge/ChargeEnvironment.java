@@ -114,7 +114,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         settings=ChargeEnvironmentSettings.newDefault();
         lambdas=new ChargeEnvironmentLambdas(settings);
         positionTransitionRules = new PositionTransitionRules(settings);
-        siteStateRules = new SiteStateRules();
+        siteStateRules = new SiteStateRules(settings);
         isObstacle = settings.isObstacleStart();
     }
 
@@ -190,7 +190,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     }
 
     private double getDeltaSoC(int pos, int posNew) {
-        boolean isInCharge = SiteStateRules.isChargePos.test(pos);
+        boolean isInCharge = lambdas.isChargePos.test(pos);
         if (isInCharge) {
             return settings.deltaSocInChargeArea();
         } else {
@@ -209,8 +209,8 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         Integer posA = ChargeState.posA.apply(state), posB = ChargeState.posB.apply(state);
         boolean isAInChargeQue = isStillAtChargeQuePos.test(posA, posAposBNew.getFirst());
         boolean isBInChargeQue = isStillAtChargeQuePos.test(posB, posAposBNew.getSecond());
-        boolean isAInChargeArea = SiteStateRules.isChargePos.test(posA);
-        boolean isBInChargeArea = SiteStateRules.isChargePos.test(posB);
+        boolean isAInChargeArea = lambdas.isChargePos.test(posA);
+        boolean isBInChargeArea = lambdas.isChargePos.test(posB);
 
         BiFunction<Boolean, Boolean, Double> costQue = (isA, isB) -> (isA || isB) ? -settings.costQue() :  0d;
         BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -settings.costCharge() : 0d;

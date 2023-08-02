@@ -11,7 +11,7 @@ import java.util.Set;
 public record ChargeEnvironmentSettings(
         int posMin, int posMax,
         int nofActions,
-        int socMin, int socMax,
+        double socMin, double socMax, double socBad,
         boolean isObstacleStart,
         Map<Integer, Commands> commandMap,
         double deltaSocMovingNotInChargeArea,
@@ -19,7 +19,8 @@ public record ChargeEnvironmentSettings(
         double deltaSocInChargeArea,
         int chargeQuePos,
         Set<Integer> allNodes, Set<Integer> siteNodes, Set<Integer> chargeNodes,
-        double costQue, double costCharge, double  rewardBad
+        double costQue, double costCharge, double  rewardBad,
+        int maxNofSteps
 ) {
 
 
@@ -29,7 +30,7 @@ public record ChargeEnvironmentSettings(
         return ChargeEnvironmentSettings.builder()
                 .posMin(POS_MIN).posMax(POS_MAX)
                 .nofActions(4)
-                .socMin(0).socMax(1)
+                .socMin(0).socMax(1).socBad(0.1)
                 .isObstacleStart(false)
                 .commandMap(Map.of(0,Commands.of(0, 0), 1,Commands.of(0, 1), 2,Commands.of(1, 0), 3,Commands.of(1, 1)))
                 .deltaSocMovingNotInChargeArea(-1/40d)
@@ -40,6 +41,7 @@ public record ChargeEnvironmentSettings(
                 .siteNodes(SetUtils.union(MySetUtils.getSetFromRangeInclusive(POS_MIN,20),Set.of(30,40,50,51,52,42,32,22)))
                 .chargeNodes(Set.of(30,40,50,51,52,42,32,22))
                 .costQue(1).costCharge(0.01).rewardBad(-100)
+                .maxNofSteps(1000)
                 .build();
     }
 

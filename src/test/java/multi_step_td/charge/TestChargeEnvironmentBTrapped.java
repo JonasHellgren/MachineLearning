@@ -201,7 +201,7 @@ public class TestChargeEnvironmentBTrapped {
 
     @Test
     public void given0PoorSoC_thenTwoSteps_thenFailState() {
-        TestChargeHelper.setSocA.accept(state, SiteStateRules.SOC_BAD+SOC_DELTA);
+        TestChargeHelper.setSocA.accept(state, settings.socBad()+SOC_DELTA);
         stepReturn = environment.step(state, TestChargeHelper.randomAction.get());
         state.setFromReturn(stepReturn);
         stepReturn = environment.step(state, TestChargeHelper.randomAction.get());

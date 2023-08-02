@@ -86,10 +86,11 @@ TestAgentChargeGreedy  x
 - införliva ChargeEnvironmentLambdas x
 - modda PositionTransitionRules x
 - TestPositionTransitionRules  x
-- modda SiteStateRules
+- modda SiteStateRules x
 - TestSiteStateRules
 - ChargeEnvironment: Pair<Integer, Integer> ->  Positions  x
 - ChargeEnvironment: Pair<Double, Double> -> SoCLevels
+- TestCharge ..
 - clean up , tex and or i lampda expr
 
 ChargeEnvironmentSettings

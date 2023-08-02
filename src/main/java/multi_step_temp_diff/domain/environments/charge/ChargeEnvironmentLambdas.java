@@ -24,6 +24,6 @@ public class ChargeEnvironmentLambdas {
 
     public BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
             isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
-
+    public Predicate<Integer> isChargePos = (p) -> settings.chargeNodes().contains(p);
 
 }
