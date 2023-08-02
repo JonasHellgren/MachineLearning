@@ -21,4 +21,5 @@ public class NStepTDFunctionsAndPredicates {
     n > s.batchSize();
     public static Predicate<Integer> isUpdatePossible = (tau) -> tau>=0;
 
+
 }

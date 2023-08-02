@@ -31,6 +31,10 @@ import java.util.function.Predicate;
  *     49  | 48  | 47  | 46  | 45  | 44  | 43  | 42^^| 41  | 40vv|
  *     59  | 58  | 57  | 56  | 55  | 54  | 53  | 52^^| 51<<| 50<<|
  *
+ *     , where
+ *     CHARGE_NODES=(30,40,50,51,52,42,32,22), TRAP_NODES={21,23-29,31,33-39,....},
+ *     NOT_ONE_INCREASE={7,10,20,22,30,40,52,42,32}
+ *
  * <p>
  * There are two vehicles, A and B. If any of these initially are located in a trap (for ex pos 29). Only
  * one vehicle is active.
@@ -41,12 +45,19 @@ import java.util.function.Predicate;
  * command does not influence transition.
  * <p>
  *  position transition model:
- *  pos             new pos (command=0)      new pos (command=1)
- *  -------------------------------------------------------
- *  10             11                       20
-
-    else(trap)
- *  else(no trap)  pos+1                   pos+1
+ *  pos             new pos (command=0)      new pos (command=1)    comment
+ *  ------------------------------------------------------------------------
+ *  7               7                           8
+    10              11                          20
+    20              20                          30
+    22              22                          12
+    30              40                          40
+    40              50                          50
+    52              42                          42
+    42              32                          32
+    32              22                          22
+    trap           pos                          pos
+ *  one increase   pos+1                        pos+1                no trap node and not NOT_ONE_INCREASE
  *
  * time transition model
  * time <- time+1
@@ -55,8 +66,7 @@ import java.util.function.Predicate;
  *             |  1/10  (pos in CHARGE_NODES)
  *             |  0     (pos not in CHARGE_NODES and not move)
  *  there move is true if new pos differs from pos
- *  CHARGE_NODES=(30,40,50,51,52,42,32,22)
- *  TRAP_NODES={21,23-29,31,33-39,....}
+
  *  reward model:
  *  reward =  COST_QUE*nofQueuing + costCharge + socPenalty + collisionPenalty
  *  nofQueuing: vehicle in pos 20 that not are moving, i.e. queuing for charge
@@ -192,7 +202,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
 
     private double getDeltaSoC(int pos, int posNew) {
         boolean isInCharge = SiteStateRules.isChargePos.test(pos);
-        boolean isMoving = pos != posNew;
+        boolean isMoving = pos != posNew;  //todo !isMoving.test
         if (isInCharge) {
             return DELTA_SOC_IN_CHARGE_AREA;
         } else {

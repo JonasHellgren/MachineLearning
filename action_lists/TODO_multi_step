@@ -78,7 +78,18 @@ TestChargeEnvironmentBRunning  x
 AgentChargeGreedy  x
 TestAgentChargeGreedy  x
 ändra charge miljö till mer som P
-- P charge started
+- P charge started x
+- gamla till trash x
+- ChargeEnvironmentSettings x
+- ChargeEnvironmentFunctionsAndPredicates - skall ta emot ChargeEnvironmentSettings
+- modda PositionTransitionRules
+- TestPositionTransitionRules
+- modda SiteStateRules
+- TestSiteStateRules
+- ChargeEnvironment: Pair<Integer, Integer> ->  Positions
+- ChargeEnvironment: Pair<Double, Double> -> SoCLevels
+
+
 ChargeEnvironmentSettings
 StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy
