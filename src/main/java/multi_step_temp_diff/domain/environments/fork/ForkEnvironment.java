@@ -24,6 +24,7 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
                 .isNewStateTerminal(isTerminalState(newState))
                 .newState(newState)
                 .reward(getReward(newState))
+                .isNewStateFail(false)
                 .build();
     }
 

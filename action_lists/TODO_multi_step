@@ -100,9 +100,8 @@ TestAgentChargeGreedy  x
 - clean up trainers  x
 - snyggare print state - soc många decimaler   x
 
-StepReturn isNewStateFail andra miljör
+StepReturn isNewStateFail andra miljör  x
 RunnerAgentChargeGreedy
-grafix för ovan
 AgentChargeGreedyRuleForChargeDecisionPoint
 when30steps_thenOkState  flytta till AgentChargeGreedyRuleForChargeDecisionPoint
 TestAgentChargeGreedyRuleForChargeDecisionPoint
@@ -111,6 +110,8 @@ AgentChargeNeural
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree
+
+grafix för ovan
 
 
 ide om två nn minnen - ett med större intervall med terminal fail fokus

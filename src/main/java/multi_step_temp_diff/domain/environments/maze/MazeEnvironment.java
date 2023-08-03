@@ -70,6 +70,7 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
                 .isNewStateTerminal(pair.getSecond().equals(PositionType.goal))
                 .newState(pair.getFirst())
                 .reward(getReward(pair.getSecond()))
+                .isNewStateFail(false)
                 .build();
     }
 
@@ -108,7 +109,7 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public static PositionType getPositionType(Integer x, Integer y) {
         List<Supplier<PositionType>> fcnList= stateAfterStepTable.entrySet().stream()
                 .filter(e -> e.getKey().test(x,y)).map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+                .toList();
         if (fcnList.size()>1) {
             throw new RuntimeException("Multiple matching rules, nof ="+fcnList.size());
         }
