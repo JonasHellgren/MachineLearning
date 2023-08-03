@@ -93,8 +93,9 @@ TestAgentChargeGreedy  x
 - TestCharge ..  x
 - TestAgentChargeGreedy x
 - fler tester TestAgentChargeGreedy - tex med obstacle x
-- färstå "0,10,0.9,0.9, false,1,20"
-- studera/clean up AgentChargeGreedy
+- färstå "0,10,0.9,0.9, false,1,20" x
+- clearner chooseBestAction x
+- studera/clean up AgentChargeGreedy x
 - clean up , tex and or i lampda expr,
 - snyggare print state - soc många decimaler
 
@@ -102,6 +103,7 @@ StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy
 grafix för ovan
 AgentChargeGreedyRuleForChargeDecisionPoint
+when30steps_thenOkState  flytta till AgentChargeGreedyRuleForChargeDecisionPoint
 TestAgentChargeGreedyRuleForChargeDecisionPoint
 
 AgentChargeNeural

@@ -33,7 +33,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
         this.actionSelector = AgentActionSelector.<S>builder()
                 .nofActions(environment.actionSet().size())
                 .environment(environment).discountFactor(discountFactor)
-                .readFunction(this::readValue)
+                .readMemoryFunction(this::readValue)
                 .build();
         this.temporalDifferenceTracker=new TemporalDifferenceTracker();
     }

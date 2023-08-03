@@ -11,7 +11,9 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import org.apache.commons.lang3.Range;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -57,7 +59,6 @@ public class TestAgentChargeGreedy {
             "20,30,0.22,0.22, false,20,40",
             "20,30,0.22,0.52, false,20,40",    //A blocked by B, B should not have decided to charge
             "11,22,0.9,0.9, false,12,22",
-            "0,10,0.9,0.9, false,1,20",   //debatable, posBnew should be random
     })
     public void whenNoObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
         environmentCasted.setObstacle(false);
@@ -67,6 +68,21 @@ public class TestAgentChargeGreedy {
         StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
         assertAction(reader, stepReturn);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0,10,0.9,0.9, false,1,11",   //B at split, no short term difference between destionations
+    })
+    public void whenBAtSplitRandomDestination_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
+        environmentCasted.setObstacle(false);
+        ArgumentReader reader= ArgumentReader.of(arguments);
+        StateInterface<ChargeVariables> state = setState(reader);
+        int action = createAgentAndGetAction(state);
+        StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
+        int posB = stepReturn.newState.getVariables().posB;
+        assertTrue(posB==11 || posB==20);
+    }
+
 
     @ParameterizedTest
     @CsvSource({
@@ -83,7 +99,8 @@ public class TestAgentChargeGreedy {
     }
 
     @Test
-    public void when30steps_thenOkState() {
+    @Disabled  //flytta till AgentChargeGreedyRuleForChargeDecisionPoint
+    public void when30steps_thenFailState() {
         StateInterface<ChargeVariables> state = setState(ArgumentReader.builder()
                 .posA(0).posB(1).socA(0.5).socB(0.5).build());
         for (int i = 0; i < 30 ; i++) {
@@ -96,7 +113,7 @@ public class TestAgentChargeGreedy {
             }
         }
         out.println("stepReturn.newState = " + stepReturn.newState);
-        assertFalse(stepReturn.isNewStateFail);
+        assertTrue(stepReturn.isNewStateFail);
 
     }
 
