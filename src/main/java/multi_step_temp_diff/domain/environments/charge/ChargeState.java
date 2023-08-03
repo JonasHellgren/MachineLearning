@@ -26,22 +26,6 @@ public class ChargeState implements StateInterface<ChargeVariables> {
         this.hashCode= Objects.hash(variables.posA,variables.posB,variables.socA,variables.socB,variables.time);
     }
 
-    /*
-    public static ChargeState newFromXY(int x, int y) {
-        return new ChargeState(ChargeVariables.newFromXY(x,y));
-    }
-
-    public static ChargeState newFromRandomPos() {
-        int randomX, randomY;
-        do {
-            randomX = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_COLS);
-            randomY = RandUtils.getRandomIntNumber(0, MazeEnvironment.NOF_ROWS);
-        } while (!MazeEnvironment.isValidStartPosition.apply(randomX,randomY));
-
-        return new ChargeState(ChargeVariables.newFromXY(randomX,randomY));
-    }
-
-     */
     @Override
     public StateInterface<ChargeVariables> copy() {
         return new ChargeState(variables.copy());
