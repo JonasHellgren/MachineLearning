@@ -14,7 +14,7 @@ public record NStepNeuralAgentTrainerSettings(
         Double initValue,
         Integer maxBufferSize,
         Integer maxStepsInEpisode
-) {
+) implements  NStepTabularTrainerSettingsInterface {
 
   //  private static final Double ALPHA = 0.5;
     private static final Integer N_DEFAULT = 3;

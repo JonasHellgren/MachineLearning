@@ -201,11 +201,9 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                              Positions positionsNew,
                              SiteState siteState) {
 
-        BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
-                lambdas.isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
         Integer posAnew = positionsNew.posA(), posBnew = positionsNew.posB();
-        boolean isAInChargeQue = isStillAtChargeQuePos.test(posA.apply(state), posAnew);
-        boolean isBInChargeQue = isStillAtChargeQuePos.test(posB.apply(state), posBnew);
+        boolean isAInChargeQue = lambdas.isStillAtChargeQuePos.test(posA.apply(state), posAnew);
+        boolean isBInChargeQue = lambdas.isStillAtChargeQuePos.test(posB.apply(state), posBnew);
         boolean isAInChargeArea = lambdas.isChargePos.test(posAnew);
         boolean isBInChargeArea = lambdas.isChargePos.test(posBnew);
 

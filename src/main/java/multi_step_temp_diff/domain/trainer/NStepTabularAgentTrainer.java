@@ -7,7 +7,6 @@ import lombok.Setter;
 import multi_step_temp_diff.domain.agent_abstract.AgentTabularInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.helpers.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
@@ -45,9 +44,8 @@ public class NStepTabularAgentTrainer<S> {
 
     public void train() {
         agentInfo = new AgentInfo<>(agent);
-        helper = NStepTDHelper.newFromNofEpisodesAndNofStepsBetween(settings.nofEpis(),
-                settings.nofStepsBetweenUpdatedAndBackuped());
-        decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
+        helper = NStepTDHelper.newHelperFromSettingsAndAgentInfo(settings,agentInfo);
+        decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
 
         while (!helper.episodeCounter.isExceeded()) {
             agent.setState(startStateSupplier.get());
@@ -75,11 +73,11 @@ public class NStepTabularAgentTrainer<S> {
     }
 
     private double updateStateValueForStatePresentAtTimeTau() {
-        double sumRewards = sumOfRewardsFromTimeToUpdatePlusOne(helper), G = sumRewards;
+        double sumRewards = helper.sumOfRewardsFromTimeToUpdatePlusOne(), G = sumRewards;
         int timeBackUpFrom = helper.getTimeBackUpFrom();
         if (isTimeToBackUpFromAtOrBeforeTermination.test(timeBackUpFrom, helper.T)) {
             StateInterface<S> stateAheadToBackupFrom = helper.stateAheadToBackupFrom();
-            double discount = Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
+            double discount = helper.getDiscount();
             G = sumRewards + discount * agent.readValue(stateAheadToBackupFrom);
         }
         final StateInterface<S> stateToUpdate = helper.statesMap.get(helper.tau);
@@ -89,14 +87,6 @@ public class NStepTabularAgentTrainer<S> {
         return difference;
     }
 
-    private double sumOfRewardsFromTimeToUpdatePlusOne(NStepTDHelper<S> h) {
-        Pair<Integer, Integer> iMinMax =
-                new Pair<>(h.tau + 1, Math.min(h.tau + settings.nofStepsBetweenUpdatedAndBackuped(), h.T));
-        List<Double> returnTerms = new ArrayList<>();
-        for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            returnTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - h.tau - 1) * h.timeReturnMap.get(i).reward);
-        }
-        return ListUtils.sumDoubleList(returnTerms);
-    }
+
 
 }

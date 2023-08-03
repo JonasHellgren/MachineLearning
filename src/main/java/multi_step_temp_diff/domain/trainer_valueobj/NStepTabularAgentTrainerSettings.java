@@ -5,13 +5,13 @@ import lombok.Builder;
 import static common.DefaultPredicates.defaultIfNullDouble;
 import static common.DefaultPredicates.defaultIfNullInteger;
 
-public record NStepTabularAgentTrainerSettings (
+public record NStepTabularAgentTrainerSettings  (
         Double alpha,
         Integer nofStepsBetweenUpdatedAndBackuped,
         Integer nofEpis,
         Double probStart,
         Double probEnd
-) {
+) implements  NStepTabularTrainerSettingsInterface {
 
       private static final Double ALPHA = 0.5;
     private static final Integer N_DEFAULT = 3;

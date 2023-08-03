@@ -14,7 +14,6 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.helpers.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
-import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -44,9 +43,9 @@ public class NStepNeuralAgentTrainer<S> {
 
     public void train() {
         agentInfo = new AgentInfo<>(agentNeural);
-        helper = NStepTDHelper.newFromNofEpisodesAndNofStepsBetween(settings.nofEpis(), settings.nofStepsBetweenUpdatedAndBackuped());
+        helper =  NStepTDHelper.newHelperFromSettingsAndAgentInfo(settings,agentInfo);
         buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
-        decayProb = new LogarithmicDecay(settings.probStart(), settings.probEnd(), settings.nofEpis());
+        decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
 
         while (helper.isNofEpisodesNotIsExceeded()) {
             agentNeural.setState(startStateSupplier.get());
@@ -99,16 +98,16 @@ public class NStepNeuralAgentTrainer<S> {
 
 
     private void setValuesInExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-        double discPowNofSteps = Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
+        double discount = helper.getDiscount();
         for (NstepExperience<S> exp : miniBatch) {
             exp.value = (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards + discPowNofSteps * agentNeural.readValue(exp.stateToBackupFrom)
+                    ? exp.sumOfRewards + discount * agentNeural.readValue(exp.stateToBackupFrom)
                     : exp.sumOfRewards;
         }
     }
 
     private NstepExperience<S> getExperienceAtTimeTau() {
-        double sumOfRewards = sumOfRewardsFromTimeToUpdatePlusOne();
+        double sumOfRewards = helper.sumOfRewardsFromTimeToUpdatePlusOne();
         int timeBackUpFrom = helper.getTimeBackUpFrom();
         Optional<StateInterface<S>> stateAheadToBackupFrom =
                 (isTimeToBackUpFromAtOrBeforeTermination.test(timeBackUpFrom, helper.T))
@@ -124,16 +123,6 @@ public class NStepNeuralAgentTrainer<S> {
                 .build();
     }
 
-
-    private double sumOfRewardsFromTimeToUpdatePlusOne() {
-        Pair<Integer, Integer> iMinMax = new Pair<>(helper.tau + 1,
-                Math.min(helper.tau + settings.nofStepsBetweenUpdatedAndBackuped(), helper.T));
-        List<Double> rewardTerms = new ArrayList<>();
-        for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            rewardTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - helper.tau - 1) * helper.timeReturnMap.get(i).reward);
-        }
-        return ListUtils.sumDoubleList(rewardTerms);
-    }
 
 
     /***trash
