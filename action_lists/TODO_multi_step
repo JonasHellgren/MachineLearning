@@ -106,9 +106,8 @@ AgentChargeGreedyRuleForChargeDecisionPoint  x
 TestAgentChargeGreedyRuleForChargeDecisionPoint x
 RunnerAgentChargeGreedyRuleForChargeDecisionPoint x
 andel still que i ovan  x
-when30steps_thenOkState  flytta till AgentChargeGreedyRuleForChargeDecisionPoint
-TestAgentChargeGreedyRuleForChargeDecisionPoint
-pos A =7, pos B = 8 -> A stannar
+TestAgentChargeGreedyRuleForChargeDecisionPoint x
+pos A =7, pos B = 8 -> A stannar - bara que vis 20 straffades  x
 
 AgentChargeNeural
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped

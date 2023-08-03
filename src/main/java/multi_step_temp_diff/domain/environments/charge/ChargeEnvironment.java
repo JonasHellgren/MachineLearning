@@ -17,8 +17,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isMoving;
-import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isNonValidTime;
+import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.*;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 import static multi_step_temp_diff.domain.environments.charge.SiteState.*;
 
@@ -202,8 +201,8 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                              SiteState siteState) {
 
         Integer posAnew = positionsNew.posA(), posBnew = positionsNew.posB();
-        boolean isAInChargeQue = lambdas.isStillAtChargeQuePos.test(posA.apply(state), posAnew);
-        boolean isBInChargeQue = lambdas.isStillAtChargeQuePos.test(posB.apply(state), posBnew);
+        boolean isAStill=isStill.test(posA.apply(state), posAnew);
+        boolean isBStill=isStill.test(posB.apply(state), posBnew);
         boolean isAInChargeArea = lambdas.isChargePos.test(posAnew);
         boolean isBInChargeArea = lambdas.isChargePos.test(posBnew);
 
@@ -211,7 +210,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -settings.costCharge() : 0d;
         Function<SiteState, Double> failPenalty = (ss) -> FAIL_STATES.contains(ss) ? settings.rewardBad() : 0;
 
-        return costQue.apply(isAInChargeQue, isBInChargeQue) +
+        return  costQue.apply(isAStill,isBStill)+
                 costCharge.apply(isAInChargeArea, isBInChargeArea) +
                 failPenalty.apply(siteState);
     }

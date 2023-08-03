@@ -39,7 +39,6 @@ public class AgentActionSelector<S> {
     record ActionAndValue(int action, double value) {
     }
     public int chooseBestAction(StateInterface<S> state) {
-
         List<ActionAndValue> actionAndValueList = getActionAndValueList(state);
         ActionAndValue actionAndValue = getActionAndValueWithHighestValue(actionAndValueList);
         Predicate<ActionAndValue> condition =

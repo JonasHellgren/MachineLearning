@@ -44,6 +44,7 @@ public class TestAgentChargeGreedyRuleForChargeDecisionPoint {
             "0,1,0.4,0.9, false,1,2",   //none at split ->  move on
             "20,30,0.22,0.52, false,20,40",    //A blocked by B, B should not have decided to charge
             "11,22,0.9,0.9, false,12,22",
+            "7,8,0.9,0.9, false,8,9","7,8,0.4,0.3, false,8,9",
 
     })
     public void whenBAtSplitRandomDestination_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {

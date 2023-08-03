@@ -54,11 +54,11 @@ public class AgentChargeGreedyRuleForChargeDecisionPoint extends AgentAbstract<C
     @Override
     public double readValue(StateInterface<ChargeVariables> state) {
 
-        Optional<Double> soc11= isAnyAtNode.test(state, NO_CHARGE_NODE)
+        Optional<Double> soc11= isAnyAtNode.test(state,NO_CHARGE_NODE)
                 ? Optional.of(socOfAtNode.apply(state,NO_CHARGE_NODE))
                 : Optional.empty();
 
-        Optional<Double> soc20= isAnyAtNode.test(state, WILL_CHARGE_NODE)
+        Optional<Double> soc20= isAnyAtNode.test(state,WILL_CHARGE_NODE)
                 ? Optional.of(socOfAtNode.apply(state,WILL_CHARGE_NODE))
                 : Optional.empty();
 
