@@ -24,7 +24,7 @@ public record NStepNeuralAgentTrainerSettings(
     private static final Double PROB_START = 0.9;
     private static final Double PROB_END = 0.01;
     public static final Double INIT_VALUE = 0d;
-    public static final Integer MAX_BUFFER_SIZE = 1_000;
+    public static final Integer MAX_BUFFER_SIZE = 10_000;
 
 
     public static NStepNeuralAgentTrainerSettings getDefault() {

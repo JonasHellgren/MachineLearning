@@ -19,7 +19,7 @@ public record NetSettings (
     public static final Integer OUTPUT_SIZE = 1;
     public static final Double OUT_MIN = 0d;
     public static final Double OUT_MAX = 1d;
-    public static final Double LEARNING_RATE = 0.05;
+    public static final Double LEARNING_RATE = 0.1;
 
     @Builder
     public NetSettings(Integer outPutSize,

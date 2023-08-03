@@ -1,11 +1,15 @@
 package multi_step_temp_diff.domain.environments.charge;
 
+import lombok.extern.java.Log;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+@Log
 public class ChargeEnvironmentLambdas {
 
     ChargeEnvironmentSettings settings;
@@ -25,5 +29,20 @@ public class ChargeEnvironmentLambdas {
     public BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
             isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
     public Predicate<Integer> isChargePos = (p) -> settings.chargeNodes().contains(p);
+
+    public static BiPredicate<StateInterface<ChargeVariables>,Integer> isAnyAtNode = (s, n) ->
+            s.getVariables().posA==n || s.getVariables().posB==n;
+
+    public  static BiFunction<StateInterface<ChargeVariables>,Integer,Double> socOfAtNode=(s,n) ->
+    {
+        if (isAnyAtNode.test(s,n)) {
+            ChargeVariables variables = s.getVariables();
+            return (variables.posA==n)
+                    ? variables.socA : variables.socB;
+        } else {
+            log.warning("None at node ="+n);
+            return 0d;
+        }
+    };
 
 }

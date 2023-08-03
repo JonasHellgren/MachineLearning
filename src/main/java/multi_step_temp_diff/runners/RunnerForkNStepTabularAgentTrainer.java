@@ -1,6 +1,7 @@
 package multi_step_temp_diff.runners;
 
 import common.MultiplePanelsPlotter;
+import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -9,15 +10,18 @@ import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agents.fork.AgentForkTabular;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /***
  * This runner shows that td error decreases more rapidly with many steps learning
  */
 
-public class RunnerNStepTabularAgentTrainer {
+public class RunnerForkNStepTabularAgentTrainer {
     private static final int ONE_STEP = 1;
     private static final int THREE_STEPS = 3;
     private static final int NOF_EPISODES = 100;
@@ -48,6 +52,10 @@ public class RunnerNStepTabularAgentTrainer {
 
         MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Error - 1","Error - 3"), "Step");
         plotter.plot(listOfTrajectories);
+
+        DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
+
+
 
     }
 

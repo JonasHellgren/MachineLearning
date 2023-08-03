@@ -16,6 +16,7 @@ public record AgentForkNeuralSettings(
     public static final ForkNeuralValueMemory<ForkVariables> MEMORY = new ForkNeuralValueMemory<>();
 
     public static AgentForkNeuralSettings getDefault() {
+
         return AgentForkNeuralSettings.builder()
                 .memory(MEMORY)
                 .startState(START_STATE)

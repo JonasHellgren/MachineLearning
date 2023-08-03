@@ -1,6 +1,5 @@
 package multi_step_td.charge;
 
-import lombok.Builder;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedy;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
@@ -9,9 +8,6 @@ import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
-import org.apache.commons.lang3.Range;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,6 +16,8 @@ import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static java.lang.System.out;
+import static multi_step_td.charge.TwoRunningHelper.assertAction;
+import static multi_step_td.charge.TwoRunningHelper.setState;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -33,18 +31,7 @@ public class TestAgentChargeGreedy {
     ChargeState stateCasted;
     StepReturn<ChargeVariables> stepReturn;
 
-    @Builder
-    record ArgumentReader(int posA, int posB, double socA, double socB,
-                          boolean isFailState, int posANew, int posBNew) {
 
-        public static ArgumentReader of(ArgumentsAccessor args) {
-            return  ArgumentReader.builder()
-                    .posA(args.getInteger(0)).posB(args.getInteger(1))
-                    .socA(args.getDouble(2)).socB(args.getDouble(3))
-                    .isFailState(args.getBoolean(4)).posANew(args.getInteger(5)).posBNew(args.getInteger(6))
-                    .build();
-        }
-    }
 
     @BeforeEach
     public void init() {
@@ -62,7 +49,7 @@ public class TestAgentChargeGreedy {
     })
     public void whenNoObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
         environmentCasted.setObstacle(false);
-        ArgumentReader reader= ArgumentReader.of(arguments);
+        TwoRunningHelper reader= TwoRunningHelper.of(arguments);
         StateInterface<ChargeVariables> state = setState(reader);
         int action = createAgentAndGetAction(state);
         StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
@@ -75,7 +62,7 @@ public class TestAgentChargeGreedy {
     })
     public void whenBAtSplitRandomDestination_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
         environmentCasted.setObstacle(false);
-        ArgumentReader reader= ArgumentReader.of(arguments);
+        TwoRunningHelper reader= TwoRunningHelper.of(arguments);
         StateInterface<ChargeVariables> state = setState(reader);
         int action = createAgentAndGetAction(state);
         StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
@@ -91,7 +78,7 @@ public class TestAgentChargeGreedy {
     })
     public void whenObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
         environmentCasted.setObstacle(true);
-        ArgumentReader reader= ArgumentReader.of(arguments);
+        TwoRunningHelper reader= TwoRunningHelper.of(arguments);
         StateInterface<ChargeVariables> state = setState(reader);
         int action = createAgentAndGetAction(state);
         StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
@@ -101,7 +88,7 @@ public class TestAgentChargeGreedy {
     @Test
     @Disabled  //flytta till AgentChargeGreedyRuleForChargeDecisionPoint
     public void when30steps_thenFailState() {
-        StateInterface<ChargeVariables> state = setState(ArgumentReader.builder()
+        StateInterface<ChargeVariables> state = setState(TwoRunningHelper.builder()
                 .posA(0).posB(1).socA(0.5).socB(0.5).build());
         for (int i = 0; i < 30 ; i++) {
             int action = createAgentAndGetAction(state);
@@ -124,21 +111,7 @@ public class TestAgentChargeGreedy {
     }
 
 
-    private static void assertAction(ArgumentReader reader, StepReturn<ChargeVariables> stepReturn) {
-        assertEquals(reader.isFailState, stepReturn.isNewStateFail);
-        assertEquals(reader.posANew, stepReturn.newState.getVariables().posA);
-        assertEquals(reader.posBNew, stepReturn.newState.getVariables().posB);
 
-    }
-
-    @NotNull
-    private static StateInterface<ChargeVariables> setState(ArgumentReader reader) {
-        return new ChargeState(ChargeVariables.builder()
-                .posA(reader.posA).posB(reader.posB)
-                .socA(reader.socA).socB(reader.socB)
-                .time(TIME)
-                .build());
-    }
 
 
 }
