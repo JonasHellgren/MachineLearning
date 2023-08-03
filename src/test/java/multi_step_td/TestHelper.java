@@ -14,6 +14,8 @@ import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import org.junit.Assert;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -47,7 +49,9 @@ public class TestHelper<S> {
 
     public  void printStateValues(Set<StateInterface<S>> stateSet) {
         Map<StateInterface<S>, Double> stateValues = getStateValueMap(stateSet);
-        stateValues.forEach((s,v) -> System.out.println("s="+s+", v="+v));
+
+        DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
+        stateValues.forEach((s,v) -> System.out.println("s="+s+", v="+formatter.format(v)));
     }
 
     public  Map<StateInterface<S>, Double> getStateValueMap(Set<StateInterface<S>> stateSet) {

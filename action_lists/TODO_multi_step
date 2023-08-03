@@ -98,7 +98,7 @@ TestAgentChargeGreedy  x
 - studera/clean up AgentChargeGreedy x
 - clean up ChargeEnvironment , tex and or i lampda expr, x
 - clean up trainers  x
-- snyggare print state - soc många decimaler
+- snyggare print state - soc många decimaler   x
 
 StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy

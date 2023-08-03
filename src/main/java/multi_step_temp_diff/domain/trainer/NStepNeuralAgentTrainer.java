@@ -14,10 +14,8 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.helpers.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
-
 import java.util.*;
 import java.util.function.Supplier;
-
 import static common.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.helpers.NStepTDFunctionsAndPredicates.*;
 
