@@ -12,6 +12,14 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+/**
+ * The logic is that:
+ * 1) a vehicle at node after split for not charging with low soc gives rewardBad
+ * 2) a vehicle at node after split for charging  with high soc gives rewardBad
+ * 3) none of above gives zero value
+ *
+ */
+
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isAnyAtNode;
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.socOfAtNode;
 
@@ -60,25 +68,13 @@ public class AgentChargeGreedyRuleForChargeDecisionPoint extends AgentAbstract<C
         BiConsumer<RewardContainer,Double> rewardWillChargeConsumer= (rc,s) ->
                 rc.set((s>socLimit)?settings.rewardBad():ZERO);
 
-        RewardContainer rc11=new RewardContainer(ZERO);
-        soc11.ifPresent(s -> rewardNoChargeConsumer.accept(rc11,s));
+        RewardContainer rcNoCharge=new RewardContainer(ZERO);
+        soc11.ifPresent(s -> rewardNoChargeConsumer.accept(rcNoCharge,s));
 
-        RewardContainer rc20=new RewardContainer(ZERO);
-        soc20.ifPresent(s -> rewardWillChargeConsumer.accept(rc20,s));
+        RewardContainer rcWillCharge=new RewardContainer(ZERO);
+        soc20.ifPresent(s -> rewardWillChargeConsumer.accept(rcWillCharge,s));
 
-        return rc11.reward+ rc20.reward;
-
-                /*
-        boolean isAt11AndLowSoC=soc11.isPresent() && (soc11.get()<socLimit);
-        boolean isAt20AndHighSoC=soc20.isPresent() && (soc20.get()>socLimit);
-        if (isAt11AndLowSoC) {
-            return settings.rewardBad();
-        }
-        if (isAt20AndHighSoC) {
-            return settings.rewardBad();
-        }
-        return 0;
-        */
+        return rcNoCharge.reward+ rcWillCharge.reward;
     }
 
     @Override

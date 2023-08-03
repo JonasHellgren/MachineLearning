@@ -102,10 +102,13 @@ TestAgentChargeGreedy  x
 
 StepReturn isNewStateFail andra miljör  x
 
-AgentChargeGreedyRuleForChargeDecisionPoint
+AgentChargeGreedyRuleForChargeDecisionPoint  x
+TestAgentChargeGreedyRuleForChargeDecisionPoint x
 RunnerAgentChargeGreedyRuleForChargeDecisionPoint
 when30steps_thenOkState  flytta till AgentChargeGreedyRuleForChargeDecisionPoint
 TestAgentChargeGreedyRuleForChargeDecisionPoint
+
+pos A =7, pos B = 8 -> A stannar
 
 AgentChargeNeural
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped

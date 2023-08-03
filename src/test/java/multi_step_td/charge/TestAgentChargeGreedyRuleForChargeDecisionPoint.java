@@ -21,15 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestAgentChargeGreedyRuleForChargeDecisionPoint {
 
     public static final int PROB_RANDOM = 0;
-    public static final int TIME = 10;
     public static final double SOC_LIMIT = 0.5;
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironment environmentCasted;
     StateInterface<ChargeVariables> state;
     ChargeState stateCasted;
-    StepReturn<ChargeVariables> stepReturn;
-
-
 
     @BeforeEach
     public void init() {
