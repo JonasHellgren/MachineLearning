@@ -92,15 +92,17 @@ TestAgentChargeGreedy  x
 - ChargeEnvironment: Pair<Double, Double> -> SoCLevels x
 - TestCharge ..  x
 - TestAgentChargeGreedy x
-- fler tester TestAgentChargeGreedy
+- fler tester TestAgentChargeGreedy - tex med obstacle x
+- färstå "0,10,0.9,0.9, false,1,20"
+- studera/clean up AgentChargeGreedy
 - clean up , tex and or i lampda expr,
 - snyggare print state - soc många decimaler
 
-ChargeEnvironmentSettings
 StepReturn isNewStateFail andra miljör
 RunnerAgentChargeGreedy
 grafix för ovan
 AgentChargeGreedyRuleForChargeDecisionPoint
+TestAgentChargeGreedyRuleForChargeDecisionPoint
 
 AgentChargeNeural
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped

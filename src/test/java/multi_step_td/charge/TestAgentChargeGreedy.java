@@ -17,11 +17,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestAgentChargeGreedy {
-    public static final double SOC_INIT = 0.9;
+
     public static final int PROB_RANDOM = 0;
     public static final int TIME = 10;
     EnvironmentInterface<ChargeVariables> environment;
@@ -55,9 +56,25 @@ public class TestAgentChargeGreedy {
             "0,1,0.9,0.9, false,1,2",
             "20,30,0.22,0.22, false,20,40",
             "20,30,0.22,0.52, false,20,40",    //A blocked by B, B should not have decided to charge
+            "11,22,0.9,0.9, false,12,22",
+            "0,10,0.9,0.9, false,1,20",   //debatable, posBnew should be random
     })
     public void whenNoObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
         environmentCasted.setObstacle(false);
+        ArgumentReader reader= ArgumentReader.of(arguments);
+        StateInterface<ChargeVariables> state = setState(reader);
+        int action = createAgentAndGetAction(state);
+        StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
+        assertAction(reader, stepReturn);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "6,8,0.9,0.9, false,7,8",   //gap decreases due to obstacle
+            "7,8,0.9,0.9, false,7,8"    //A blocked by B, B blocked by obstacle
+    })
+    public void whenObstacle_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
+        environmentCasted.setObstacle(true);
         ArgumentReader reader= ArgumentReader.of(arguments);
         StateInterface<ChargeVariables> state = setState(reader);
         int action = createAgentAndGetAction(state);
@@ -71,14 +88,14 @@ public class TestAgentChargeGreedy {
                 .posA(0).posB(1).socA(0.5).socB(0.5).build());
         for (int i = 0; i < 30 ; i++) {
             int action = createAgentAndGetAction(state);
-            System.out.println("state = " + state);
+            out.println("state = " + state);
             stepReturn=environment.step(state,action);
             state.setFromReturn(stepReturn);
             if (stepReturn.isNewStateTerminal) {
                 break;
             }
         }
-        System.out.println("stepReturn.newState = " + stepReturn.newState);
+        out.println("stepReturn.newState = " + stepReturn.newState);
         assertFalse(stepReturn.isNewStateFail);
 
     }
@@ -106,64 +123,5 @@ public class TestAgentChargeGreedy {
                 .build());
     }
 
-    /*
-
-
-    @Test
-    public void givenA20B25_whenChooseAction_thenFeasibleActionAWaits() {
-        TestChargeHelper.setPosA.accept(state, 20);
-        TestChargeHelper.setPosB.accept(state, 25);
-        int action = getActionStepAndPrint();
-        Range<Integer> actionFeasible = Range.between(0, 1);  //actions not moving A
-        assertTrue(actionFeasible.contains(action));
-        assertTrue(TestChargeHelper.samePosA.test(state, stepReturn.newState));
-    }
-
-    @Test
-    public void givenA18B29_whenChooseAction_thenFeasibleAction() {
-        TestChargeHelper.setPosA.accept(state, 18);
-        TestChargeHelper.setPosB.accept(state, 29);
-        int action = getActionStepAndPrint();
-        assertTrue(action!=3);
-        assertNotEquals(TestChargeHelper.posNewA.apply(stepReturn),TestChargeHelper.posNewB.apply(stepReturn));
-    }
-
-    @Test
-    public void givenBPos18AndObstacleAndAAt12_thenAnyAction_thenBSamePosAndAChanged() {
-        environmentCasted.setObstacle(true);
-        TestChargeHelper.setPosB.accept(state, 18);
-        TestChargeHelper.setPosA.accept(state, 17);
-        int action = getActionStepAndPrint();
-        Range<Integer> actionFeasible = Range.between(0, 1);  //actions not moving A
-        assertTrue(actionFeasible.contains(action));
-        assertTrue(TestChargeHelper.samePosA.test(state,stepReturn.newState));
-        assertTrue(TestChargeHelper.samePosB.test(state,stepReturn.newState));
-    }
-
-    @Test
-    public void givenA20B11_whenChooseAction_thenAvoidQue() {
-        TestChargeHelper.setPosA.accept(state, 20);
-        TestChargeHelper.setPosB.accept(state, 11);
-        int action = getActionStepAndPrint();
-        Range<Integer> actionFeasible = Range.between(2, 3);  //actions moving A
-        assertTrue(actionFeasible.contains(action));
-        assertFalse(TestChargeHelper.samePosA.test(state,stepReturn.newState));
-        assertFalse(TestChargeHelper.samePosB.test(state,stepReturn.newState));
-    }
-
-
-
-
-
-    private int getActionStepAndPrint() {
-        int action= agent.chooseAction(PROB_RANDOM);
-        stepReturn = environment.step(state, action);
-        TestChargeHelper.printStepReturn(stepReturn);
-        TestChargeHelper.printAction(action);
-        return action;
-    }
-
-
-     */
 
 }
