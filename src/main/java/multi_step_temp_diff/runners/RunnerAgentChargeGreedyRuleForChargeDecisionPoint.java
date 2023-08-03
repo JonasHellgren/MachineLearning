@@ -7,6 +7,7 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
@@ -20,24 +21,21 @@ public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
 
     static EnvironmentInterface<ChargeVariables> environment;
     static ChargeEnvironment environmentCasted;
-    static StateInterface<ChargeVariables> state;
-    static ChargeState stateCasted;
 
     public static void main(String[] args) {
 
-
-
         environment = new ChargeEnvironment();
         environmentCasted = (ChargeEnvironment) environment;
-        stateCasted = (ChargeState) state;
-
-
         StateInterface<ChargeVariables> state = new ChargeState(ChargeVariables.builder()
                 .posA(0).posB(1)
                 .build());
+        ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(environmentCasted.getSettings());
 
+
+        int nofStepsChargeQue=0;
         for (int i = 0; i < NOF_STEPS; i++) {
             int action = createAgentAndGetAction(state);
+
 
             out.println("state = " + state);
             StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
@@ -45,7 +43,14 @@ public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
             if (stepReturn.isNewStateTerminal) {
                 break;
             }
+
+            if (lambdas.isStillAtChargeQuePosFromStates.test(state,stepReturn.newState)) {
+                nofStepsChargeQue++;
+            }
+
         }
+
+        out.println("nofStepsChargeQue = " + nofStepsChargeQue);
 
     }
 

@@ -26,6 +26,9 @@ public class ChargeEnvironmentLambdas {
     public Predicate<Double> isNonValidSoC = (s) -> s < settings.socMin() || s > settings.socMax();
     public static  Predicate<Integer> isNonValidTime = (t) -> t < 0;
 
+
+
+
     public BiPredicate<Integer, Integer> isStillAtChargeQuePos = (pos, posNew) ->
             isAtChargeQuePos.test(pos) && !isMoving.test(pos, posNew);
     public Predicate<Integer> isChargePos = (p) -> settings.chargeNodes().contains(p);
@@ -43,6 +46,13 @@ public class ChargeEnvironmentLambdas {
             log.warning("None at node ="+n);
             return 0d;
         }
+    };
+
+    public BiPredicate<StateInterface<ChargeVariables>, StateInterface<ChargeVariables>>
+            isStillAtChargeQuePosFromStates = (s,sNew) -> {
+        boolean isA=isStillAtChargeQuePos.test(s.getVariables().posA,sNew.getVariables().posA);
+        boolean isB=isStillAtChargeQuePos.test(s.getVariables().posB,sNew.getVariables().posB);
+        return isA || isB;
     };
 
 }

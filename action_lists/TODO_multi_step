@@ -104,10 +104,10 @@ StepReturn isNewStateFail andra miljör  x
 
 AgentChargeGreedyRuleForChargeDecisionPoint  x
 TestAgentChargeGreedyRuleForChargeDecisionPoint x
-RunnerAgentChargeGreedyRuleForChargeDecisionPoint
+RunnerAgentChargeGreedyRuleForChargeDecisionPoint x
+andel still que i ovan  x
 when30steps_thenOkState  flytta till AgentChargeGreedyRuleForChargeDecisionPoint
 TestAgentChargeGreedyRuleForChargeDecisionPoint
-
 pos A =7, pos B = 8 -> A stannar
 
 AgentChargeNeural
