@@ -9,6 +9,7 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
@@ -23,7 +24,8 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
     @Builder
     public AgentChargeNeural(@NonNull EnvironmentInterface<ChargeVariables> environment,
                              @NonNull StateInterface<ChargeVariables> state,
-                             @NonNull AgentChargeNeuralSettings agentSettings) {
+                             @NonNull AgentChargeNeuralSettings agentSettings,
+                             @NonNull InputVectorSetterChargeInterface inputVectorSetterCharge) {
         super(environment, state, agentSettings.discountFactor());
         this.agentSettings =agentSettings;
         NetSettings netSettings = NetSettings.builder()
@@ -31,7 +33,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .learningRate(agentSettings.learningRate())
                 .build();
-        memory=new NeuralValueMemoryCharge<>(netSettings);  //todo InputVectorSetterChargeNeuralMemory
+        memory=new NeuralValueMemoryCharge<>(netSettings,inputVectorSetterCharge);
     }
 
 

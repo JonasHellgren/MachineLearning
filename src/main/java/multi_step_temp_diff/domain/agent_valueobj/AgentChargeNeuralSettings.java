@@ -17,8 +17,11 @@ public record AgentChargeNeuralSettings(
 
     public static final int START_STATE = 0;
     public static final double MAX_VALUE = 0d;
-    public static final double LEARNING_RATE = 0.1;
-    public static final double DISCOUNT_FACTOR = 1d;
+    public static final double LEARNING_RATE = 0.1, DISCOUNT_FACTOR = 1d;
+
+    public static  AgentChargeNeuralSettings newDefault() {
+        return AgentChargeNeuralSettings.builder().build();
+    }
 
     @Builder
     public AgentChargeNeuralSettings(Integer nofStates,

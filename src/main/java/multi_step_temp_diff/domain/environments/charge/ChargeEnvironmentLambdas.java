@@ -5,6 +5,7 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 
 import java.util.Objects;
+import java.util.PrimitiveIterator;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -60,5 +61,6 @@ public class ChargeEnvironmentLambdas {
         return isA || isB;
     };
 
+    public Predicate<Integer> isPosInSite=(p) -> settings.siteNodes().contains(p);
 
 }
