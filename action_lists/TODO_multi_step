@@ -113,8 +113,9 @@ AgentChargeNeural
 - AgentChargeNeural init x
 - AgentChargeNeuralSettings x
 - NeuralValueMemoryCharge x
-- InputVectorSetterChargeInterface
-- PositionMapper
+- InputVectorSetterChargeInterface x
+- PositionMapper  x
+- TestInputSetterSoCAtOccupiedZeroOther
 - TestAgentNeuralChargeMockedData
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped

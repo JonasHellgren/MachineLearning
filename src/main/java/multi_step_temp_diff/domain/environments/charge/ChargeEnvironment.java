@@ -10,11 +10,8 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
-import org.apache.commons.math3.util.Pair;
-
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.*;

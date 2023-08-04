@@ -11,9 +11,9 @@ import org.neuroph.util.TransferFunctionType;
 public class NeuralValueMemoryCharge<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
     private static final double MARGIN = 1.0;
 
-    InputVectorSetterChargeInterface inputVectorSetterCharge;
+    InputVectorSetterChargeInterface<S> inputVectorSetterCharge;
 
-    public NeuralValueMemoryCharge(NetSettings settings, InputVectorSetterChargeInterface inputVectorSetterCharge) {
+    public NeuralValueMemoryCharge(NetSettings settings, InputVectorSetterChargeInterface<S> inputVectorSetterCharge) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 settings.inputSize(),
@@ -28,6 +28,7 @@ public class NeuralValueMemoryCharge<S> extends ValueMemoryNetworkAbstract<S> im
 
     @Override
     public double[] getInputVec(StateInterface<S> state) {
-        return new double[0];
+
+        return inputVectorSetterCharge.defineInArray(state);
     }
 }
