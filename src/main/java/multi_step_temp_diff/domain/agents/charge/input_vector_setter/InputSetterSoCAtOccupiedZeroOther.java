@@ -11,6 +11,7 @@ import multi_step_temp_diff.domain.environments.fork.ForkState;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static common.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 
 public class InputSetterSoCAtOccupiedZeroOther implements InputVectorSetterChargeInterface {
@@ -32,11 +33,11 @@ public class InputSetterSoCAtOccupiedZeroOther implements InputVectorSetterCharg
         Optional<Integer> mappedPosA=positionMapper.map(posA.apply(state));
         Optional<Integer> mappedPosB=positionMapper.map(posB.apply(state));
 
-        Conditionals.executeIfTrue(mappedPosA.isPresent(), () ->
+        executeIfTrue(mappedPosA.isPresent(), () ->
             inArray[mappedPosA.orElseThrow()] = socA.apply(state));
 
-        Conditionals.executeIfTrue(mappedPosB.isPresent(), () ->
-                inArray[mappedPosB.orElseThrow()] = socB.apply(state));
+        executeIfTrue(mappedPosB.isPresent(), () ->
+            inArray[mappedPosB.orElseThrow()] = socB.apply(state));
 
         return inArray;
     }
