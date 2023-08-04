@@ -44,7 +44,7 @@ public class TestInputSetterSoCAtOccupiedZeroOther {
         }
 
         @NotNull
-        StateInterface<ChargeVariables> createState() {
+        ChargeState createState() {
             return new ChargeState(ChargeVariables.builder()
                     .posA(posA).posB(posB)
                     .socA(socA).socB(socB)
@@ -61,7 +61,7 @@ public class TestInputSetterSoCAtOccupiedZeroOther {
     })
     public void whenDecoding_thenOneHotEncodingEqualToSoC(ArgumentsAccessor arguments) {
         ArgumentReader reader= ArgumentReader.of(arguments);
-        StateInterface<ChargeVariables> state = reader.createState();
+        ChargeState state = reader.createState();
         double[] inArr = inputSetter.defineInArray(state);
 
         System.out.println("inArr = " + Arrays.toString(inArr));

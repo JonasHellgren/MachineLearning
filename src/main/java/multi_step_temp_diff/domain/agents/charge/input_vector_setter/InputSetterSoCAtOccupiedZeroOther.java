@@ -16,7 +16,7 @@ import static common.Conditionals.executeIfTrue;
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 
-public class InputSetterSoCAtOccupiedZeroOther<S> implements InputVectorSetterChargeInterface<S> {
+public class InputSetterSoCAtOccupiedZeroOther implements InputVectorSetterChargeInterface {
 
     AgentChargeNeuralSettings agentSettings;
     PositionMapper positionMapper;
@@ -28,19 +28,19 @@ public class InputSetterSoCAtOccupiedZeroOther<S> implements InputVectorSetterCh
     }
 
     @Override
-    public double[] defineInArray(StateInterface<S> state) {
+    public double[] defineInArray(ChargeState state) {
         double[] inArray = new double[agentSettings.nofStates()];
         Arrays.fill(inArray, 0);
 
-        ChargeState stateCasted=(ChargeState) state;
-        Optional<Integer> mappedPosA=positionMapper.map(posA.apply(stateCasted));
-        Optional<Integer> mappedPosB=positionMapper.map(posB.apply(stateCasted));
+     //   ChargeState state=(ChargeState) state;
+        Optional<Integer> mappedPosA=positionMapper.map(posA.apply(state));
+        Optional<Integer> mappedPosB=positionMapper.map(posB.apply(state));
 
         executeIfTrue(mappedPosA.isPresent(), () ->
-            inArray[mappedPosA.orElseThrow()] = socA.apply(stateCasted));
+            inArray[mappedPosA.orElseThrow()] = socA.apply(state));
 
         executeIfTrue(mappedPosB.isPresent(), () ->
-            inArray[mappedPosB.orElseThrow()] = socB.apply(stateCasted));
+            inArray[mappedPosB.orElseThrow()] = socB.apply(state));
 
         return inArray;
     }

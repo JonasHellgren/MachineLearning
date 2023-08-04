@@ -117,6 +117,7 @@ AgentChargeNeural
 - PositionMapper  x
 - TestInputSetterSoCAtOccupiedZeroOther
 - TestAgentNeuralChargeMockedData
+- TestAgentNeuralChargeMockedData - givenConditionalValue_whenTrain_thenCorrect
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
