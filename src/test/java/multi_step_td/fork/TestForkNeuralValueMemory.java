@@ -32,7 +32,7 @@ public class TestForkNeuralValueMemory {
 
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
-    private static final int NOF_STATES = ForkEnvironment.settings.nofStates();
+    private static final int NOF_STATES = ForkEnvironment.envSettings.nofStates();
     private static final int INPUT_SIZE = NOF_STATES;
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
 
@@ -46,7 +46,7 @@ public class TestForkNeuralValueMemory {
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(ForkEnvironment.settings.rewardHell()).maxOut(ForkEnvironment.settings.rewardHeaven()).build();
+                .minOut(ForkEnvironment.envSettings.rewardHell()).maxOut(ForkEnvironment.envSettings.rewardHeaven()).build();
 
         environment = new ForkEnvironment();
         AgentForkNeural agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
@@ -135,7 +135,7 @@ public class TestForkNeuralValueMemory {
     private List<NstepExperience<ForkVariables>> createBatchOddEven(double valueOdd, double valueEven) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomIntNumber = RandUtils.getRandomIntNumber(0, ForkEnvironment.settings.nofStates());
+            final int randomIntNumber = RandUtils.getRandomIntNumber(0, ForkEnvironment.envSettings.nofStates());
             final double value = isEven.test(randomIntNumber) ? valueEven : valueOdd;
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomIntNumber))

@@ -29,7 +29,7 @@ public class TestNStepNeuralAgentTrainerFork {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
     public static final double LEARNING_RATE = 1e-1;
-    private static final int INPUT_SIZE = ForkEnvironment.settings.nofStates();
+    private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates();
     private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
 
     NStepNeuralAgentTrainer<ForkVariables> trainer;
@@ -67,7 +67,7 @@ public class TestNStepNeuralAgentTrainerFork {
 
         helper.printStateValues();
 
-        final double rHeaven = ForkEnvironment.settings.rewardHeaven(),  rHell = ForkEnvironment.settings.rewardHell();
+        final double rHeaven = ForkEnvironment.envSettings.rewardHeaven(),  rHell = ForkEnvironment.envSettings.rewardHell();
         assertEquals(Math.pow(discountFactor,10-7)* rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(7)), delta);
         assertEquals(Math.pow(discountFactor,10-9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(9)), delta);
         assertEquals(Math.pow(discountFactor,9)*rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(0)), delta);
@@ -85,14 +85,14 @@ public class TestNStepNeuralAgentTrainerFork {
         printBufferSize();
         helper.printStateValues();
         final double delta = 1d;
-        assertEquals(ForkEnvironment.settings.rewardHeaven(),agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
+        assertEquals(ForkEnvironment.envSettings.rewardHeaven(),agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
 
     private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(ForkEnvironment.settings.rewardHell()).maxOut(ForkEnvironment.settings.rewardHeaven()).build();
+                .minOut(ForkEnvironment.envSettings.rewardHell()).maxOut(ForkEnvironment.envSettings.rewardHeaven()).build();
         agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
                 environment,
                 discountFactor,
@@ -112,7 +112,7 @@ public class TestNStepNeuralAgentTrainerFork {
         printBufferSize();
         helper.printStateValues();
         final double delta = 1d;
-        assertEquals(ForkEnvironment.settings.rewardHeaven()*discountFactor,
+        assertEquals(ForkEnvironment.envSettings.rewardHeaven()*discountFactor,
                 agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
 
@@ -129,8 +129,8 @@ public class TestNStepNeuralAgentTrainerFork {
 
         System.out.println("valueState7OneStep = " + valueState7OneStep + ", valueState7ThreeSteps = " + valueState7ThreeSteps);
 
-        double err3=Math.abs(valueState7ThreeSteps-ForkEnvironment.settings.rewardHeaven());
-        double err1=Math.abs(valueState7OneStep-ForkEnvironment.settings.rewardHeaven());
+        double err3=Math.abs(valueState7ThreeSteps-ForkEnvironment.envSettings.rewardHeaven());
+        double err1=Math.abs(valueState7OneStep-ForkEnvironment.envSettings.rewardHeaven());
 
         assertTrue(err3<err1);
 

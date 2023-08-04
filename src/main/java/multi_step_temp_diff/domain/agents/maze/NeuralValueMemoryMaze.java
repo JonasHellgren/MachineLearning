@@ -17,11 +17,11 @@ import static multi_step_temp_diff.domain.environments.maze.MazeEnvironment.sett
  *
  */
 
-public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
+public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
 
     private static final double MARGIN = 1.0;
 
-    public MazeNeuralValueMemory(double learningRate) {
+    public NeuralValueMemoryMaze(double learningRate) {
         this(NetSettings.builder()
                 .inputSize(settings.nofCols()+ settings.nofRows())
                 .nofNeuronsHidden((int) ((settings.nofCols()+ settings.nofRows())*1.0))
@@ -31,7 +31,7 @@ public class MazeNeuralValueMemory <S> extends ValueMemoryNetworkAbstract<S> imp
                 .build());
     }
 
-    public MazeNeuralValueMemory(NetSettings settings) {
+    public NeuralValueMemoryMaze(NetSettings settings) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 settings.inputSize(),

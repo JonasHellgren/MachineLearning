@@ -17,7 +17,7 @@ public record ChargeEnvironmentSettings(
         double deltaSocMovingNotInChargeArea,
         double deltaSocStillNotInChargeArea,
         double deltaSocInChargeArea,
-        int chargeQuePos,
+        int chargeQuePos, int chargeDecisionPos,
         Set<Integer> allNodes, Set<Integer> siteNodes, Set<Integer> chargeNodes,
         double costQue, double costCharge, double  rewardBad,
         int maxNofSteps
@@ -36,7 +36,7 @@ public record ChargeEnvironmentSettings(
                 .deltaSocMovingNotInChargeArea(-1/40d)
                 .deltaSocStillNotInChargeArea(0)
                 .deltaSocInChargeArea(1/10d)
-                .chargeQuePos(20)
+                .chargeQuePos(20).chargeDecisionPos(10)
                 .allNodes(MySetUtils.getSetFromRange(POS_MIN, POS_MAX))
                 .siteNodes(SetUtils.union(MySetUtils.getSetFromRangeInclusive(POS_MIN,20),Set.of(30,40,50,51,52,42,32,22)))
                 .chargeNodes(Set.of(30,40,50,51,52,42,32))

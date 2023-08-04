@@ -110,9 +110,18 @@ TestAgentChargeGreedyRuleForChargeDecisionPoint x
 pos A =7, pos B = 8 -> A stannar - bara que vis 20 straffades  x
 
 AgentChargeNeural
+- AgentChargeNeural init
+- AgentChargeNeuralSettings
+- ChargeNeuralValueMemory
+- InputVectorSetterChargeNeuralMemory
+- PositionMapper
+- TestAgentNeuralChargeMockedData
+
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree
+
+RunnerAgentChargeGreedyRuleForChargeDecisionPointObstacleSomeTimes med obstacle ibland
 
 grafix för ovan
 

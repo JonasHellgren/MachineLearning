@@ -1,6 +1,5 @@
 package multi_step_temp_diff.domain.agents.fork;
 
-import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.agent_abstract.PersistentMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -10,23 +9,23 @@ import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 
-import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.settings;
+import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.envSettings;
 
 /**
  * Input is a binary vector with zeros except at active state. Much more stable than one double input.
  */
 
-public class ForkNeuralValueMemory<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
+public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
 
     private static final double MARGIN = 1.0;
 
-    public ForkNeuralValueMemory() {
+    public NeuralValueMemoryFork() {  //todo, remove confusing with envSettings
         this(NetSettings.builder()
-                .inputSize(settings.nofStates()).nofNeuronsHidden(settings.nofStates())
-                .minOut(settings.rewardHell()).maxOut(settings.rewardHeaven()).build());
+                .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
+                .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven()).build());
     }
 
-    public ForkNeuralValueMemory(NetSettings settings) {
+    public NeuralValueMemoryFork(NetSettings settings) {
         neuralNetwork = new MultiLayerPerceptron(
                 TransferFunctionType.TANH,
                 settings.inputSize(),

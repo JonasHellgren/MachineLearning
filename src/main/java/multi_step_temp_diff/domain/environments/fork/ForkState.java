@@ -8,7 +8,7 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 
 import java.util.function.Function;
 
-import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.settings;
+import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.envSettings;
 
 /**
  * To enable get when put in hashmap
@@ -32,7 +32,7 @@ public class ForkState implements StateInterface<ForkVariables> {
     }
 
     public static ForkState newFromRandomPos() {
-        final int randomPos = RandUtils.getRandomIntNumber(0, settings.nofStates());
+        final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
         return new ForkState(ForkVariables.newFromPos(randomPos));
     }
 

@@ -2,9 +2,8 @@ package multi_step_temp_diff.domain.agent_valueobj;
 
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
-import multi_step_temp_diff.domain.agents.maze.MazeNeuralValueMemory;
+import multi_step_temp_diff.domain.agents.maze.NeuralValueMemoryMaze;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
-import java.util.HashMap;
 
 @Builder
 public record AgentMazeNeuralSettings(
@@ -22,7 +21,7 @@ public record AgentMazeNeuralSettings(
         return AgentMazeNeuralSettings.builder()
                 .discountFactor(discountFactor)
                 .learningRate(learningRate)
-                .memory(new MazeNeuralValueMemory<>(learningRate))
+                .memory(new NeuralValueMemoryMaze<>(learningRate))
                 .startX(START_X).startY(START_Y)
                 .build();
     }
@@ -31,7 +30,7 @@ public record AgentMazeNeuralSettings(
         return AgentMazeNeuralSettings.builder()
                 .discountFactor(1)
                 .learningRate(LEARNING_RATE)
-                .memory(new MazeNeuralValueMemory<>(LEARNING_RATE))
+                .memory(new NeuralValueMemoryMaze<>(LEARNING_RATE))
                 .startX(START_X).startY(START_Y)
                 .build();
     }

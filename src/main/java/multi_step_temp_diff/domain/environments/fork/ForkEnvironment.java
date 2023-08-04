@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
-    public static ForkEnvironmentSettings settings=ForkEnvironmentSettings.getDefault();
+    public static ForkEnvironmentSettings envSettings =ForkEnvironmentSettings.getDefault();
 
     @Override
     public StepReturn<ForkVariables> step(StateInterface<ForkVariables> state, int action) {
@@ -29,9 +29,9 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     }
 
     private void throwIfBadArgument(StateInterface<ForkVariables> state, int action) {
-        Predicate<Integer> isNonValidAction = (a) -> a > settings.nofActions() - 1;
+        Predicate<Integer> isNonValidAction = (a) -> a > envSettings.nofActions() - 1;
         Predicate<StateInterface<ForkVariables> > isNonValidState =
-                (s) -> s.getVariables().position > settings.nofStates() - 1;
+                (s) -> s.getVariables().position > envSettings.nofStates() - 1;
 
         Conditionals.executeIfTrue(isNonValidAction.test(action), () ->
         {
@@ -47,13 +47,13 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     private StateInterface<ForkVariables> getNewState(StateInterface<ForkVariables>  state, int action) {
 
         int pos=state.getVariables().position;
-        if (pos==settings.posStartHell()) {
-            return new ForkState(new ForkVariables(settings.posAfterStartHell()));
+        if (pos== envSettings.posStartHell()) {
+            return new ForkState(new ForkVariables(envSettings.posAfterStartHell()));
         }
 
-        boolean isSplit = (pos == settings.posSplit());
+        boolean isSplit = (pos == envSettings.posSplit());
         int newPos= (isSplit)
-                ? (action == 0) ? settings.posStartHell() : settings.posStartHeaven()
+                ? (action == 0) ? envSettings.posStartHell() : envSettings.posStartHeaven()
                 : pos + 1;
         return new ForkState(new ForkVariables(newPos));
     }
@@ -61,27 +61,27 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
     private double getReward(StateInterface<ForkVariables> newState) {
         return (isTerminalState(newState))
                 ? getRewardAtTerminal(newState)
-                : settings.rewardMove();
+                : envSettings.rewardMove();
     }
 
     private double getRewardAtTerminal(StateInterface<ForkVariables> newState) {
-        return (ForkState.getPos.apply(newState).equals(settings.posHeaven()))
-                ? settings.rewardHeaven() : settings.rewardHell();
+        return (ForkState.getPos.apply(newState).equals(envSettings.posHeaven()))
+                ? envSettings.rewardHeaven() : envSettings.rewardHell();
     }
 
     @Override
     public boolean isTerminalState(StateInterface<ForkVariables>  state) {
-        return (ForkState.getPos.apply(state).equals(settings.posHell()) ||
-                ForkState.getPos.apply(state).equals(settings.posHeaven()));
+        return (ForkState.getPos.apply(state).equals(envSettings.posHell()) ||
+                ForkState.getPos.apply(state).equals(envSettings.posHeaven()));
     }
 
     @Override
     public Set<Integer> actionSet() {
-        return MySetUtils.getSetFromRange(0, settings.nofActions());
+        return MySetUtils.getSetFromRange(0, envSettings.nofActions());
     }
 
     @Override
     public  Set<StateInterface<ForkVariables>> stateSet() {
-        return IntStream.range(0, settings.nofStates()).boxed().map(ForkState::newFromPos).collect(Collectors.toSet());
+        return IntStream.range(0, envSettings.nofStates()).boxed().map(ForkState::newFromPos).collect(Collectors.toSet());
     }
 }

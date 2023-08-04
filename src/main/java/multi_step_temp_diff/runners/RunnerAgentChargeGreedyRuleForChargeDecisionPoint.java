@@ -1,5 +1,7 @@
 package multi_step_temp_diff.runners;
 
+import common.Counter;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedyRuleForChargeDecisionPoint;
@@ -13,6 +15,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import static java.lang.System.out;
 
+@Log
 public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
 
     public static final int PROB_RANDOM = 0;
@@ -21,6 +24,7 @@ public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
 
     static EnvironmentInterface<ChargeVariables> environment;
     static ChargeEnvironment environmentCasted;
+    static ChargeEnvironmentLambdas lambdas;
 
     public static void main(String[] args) {
 
@@ -29,29 +33,43 @@ public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
         StateInterface<ChargeVariables> state = new ChargeState(ChargeVariables.builder()
                 .posA(0).posB(1)
                 .build());
-        ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(environmentCasted.getSettings());
+        lambdas = new ChargeEnvironmentLambdas(environmentCasted.getSettings());
 
-
-        int nofStepsChargeQue=0;
+        Counter counterNofStepsChargeQue = new Counter(0, Integer.MAX_VALUE);
         for (int i = 0; i < NOF_STEPS; i++) {
             int action = createAgentAndGetAction(state);
-
-
-            out.println("state = " + state);
-            StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
-            state.setFromReturn(stepReturn);
+            somePrinting(state);
+            StepReturn<ChargeVariables> stepReturn = stepAndSetState(state, action);
+            maybeIncreaseCounter(state, counterNofStepsChargeQue, stepReturn);
             if (stepReturn.isNewStateTerminal) {
                 break;
             }
-
-            if (lambdas.isStillAtChargeQuePosFromStates.test(state,stepReturn.newState)) {
-                nofStepsChargeQue++;
-            }
-
         }
 
-        out.println("nofStepsChargeQue = " + nofStepsChargeQue);
+        out.println("nofStepsChargeQue = " + counterNofStepsChargeQue.getCount());
 
+    }
+
+    private static StepReturn<ChargeVariables> stepAndSetState(StateInterface<ChargeVariables> state, int action) {
+        var stepReturn = environment.step(state, action);
+        state.setFromReturn(stepReturn);
+        return stepReturn;
+    }
+
+
+    private static void maybeIncreaseCounter(StateInterface<ChargeVariables> state,
+                                             Counter counterNofStepsChargeQue,
+                                             StepReturn<ChargeVariables> stepReturn) {
+        if (lambdas.isStillAtChargeQuePosFromStates.test(state, stepReturn.newState)) {
+            counterNofStepsChargeQue.increase();
+        }
+    }
+
+    private static void somePrinting(StateInterface<ChargeVariables> state) {
+        if (lambdas.isAnyAtChargeDecisionPos.test(state)) {
+            out.println("---- Some vehicle at charge decision pos, time = " + state.getVariables().time);
+        }
+        out.println("state = " + state);
     }
 
 

@@ -2,7 +2,6 @@ package multi_step_td;
 
 import common.ListUtils;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
-import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -80,10 +79,10 @@ public class TestHelper<S> {
 
     public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.settings.rewardHeaven()));
-        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.settings.rewardHeaven()));
-        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.settings.rewardHell()));
-        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.settings.rewardHell()));
+        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.envSettings.rewardHeaven()));
+        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.envSettings.rewardHeaven()));
+        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.envSettings.rewardHell()));
+        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.envSettings.rewardHell()));
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 

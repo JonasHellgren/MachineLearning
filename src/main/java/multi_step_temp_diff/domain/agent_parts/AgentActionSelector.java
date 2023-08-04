@@ -45,11 +45,17 @@ public class AgentActionSelector<S> {
                 p -> MathUtils.compareDoubleScalars(p.value(), actionAndValue.value(), toleranceSameValue);
         long nofMatches = actionAndValueList.stream().filter(condition).count();
         ActionAndValue actionAndValueChosen = (nofMatches > 1)
-                ? actionAndValueList.stream()
-                .filter(condition).toList().get(RandUtils.getRandomIntNumber(0, (int) nofMatches))
+                ? getRandomActionAndValue(actionAndValueList, condition, nofMatches)
                 : actionAndValue;
         maybeLog(nofMatches, actionAndValueChosen);
         return actionAndValueChosen.action;
+    }
+
+    private static ActionAndValue getRandomActionAndValue(List<ActionAndValue> actionAndValueList,
+                                                          Predicate<ActionAndValue> condition,
+                                                          long nofMatches) {
+        return actionAndValueList.stream()
+                .filter(condition).toList().get(RandUtils.getRandomIntNumber(0, (int) nofMatches));
     }
 
     private static void maybeLog(long nofMatches, ActionAndValue actionAndValueChosen) {

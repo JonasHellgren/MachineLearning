@@ -19,6 +19,7 @@ public class ChargeEnvironmentLambdas {
     }
 
     public Predicate<Integer> isAtChargeQuePos = (p) -> p == settings.chargeQuePos();
+    public Predicate<Integer> isAtChargeDecisionPos = (p) -> p == settings.chargeDecisionPos();
     public static BiPredicate<Integer, Integer> isMoving = (p, pNew) -> !Objects.equals(p, pNew);
     public static BiPredicate<Integer, Integer> isStill = isMoving.negate();
 
@@ -52,5 +53,12 @@ public class ChargeEnvironmentLambdas {
         boolean isB=isStillAtChargeQuePos.test(s.getVariables().posB,sNew.getVariables().posB);
         return isA || isB;
     };
+
+    public Predicate<StateInterface<ChargeVariables>> isAnyAtChargeDecisionPos = (s) -> {
+        boolean isA=isAtChargeDecisionPos.test(s.getVariables().posA);
+        boolean isB=isAtChargeDecisionPos.test(s.getVariables().posB);
+        return isA || isB;
+    };
+
 
 }
