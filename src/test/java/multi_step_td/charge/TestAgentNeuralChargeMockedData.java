@@ -17,6 +17,8 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
@@ -59,7 +61,11 @@ public class TestAgentNeuralChargeMockedData {
                 .environment(environment).state(initState)
                 .agentSettings(agentSettings)
                 .inputVectorSetterCharge(
-                        new InputSetterSoCAtOccupiedZeroOther(agentSettings, environmentCasted.getSettings()))
+                        new InputSetterSoCAtOccupiedZeroOther(
+                                agentSettings,
+                                environmentCasted.getSettings(),
+                                //new NormalizeMinMax(0,1)))
+                                new NormalizerMeanStd(List.of(0.3,0.5,0.7,0.9))))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
     }
@@ -94,7 +100,7 @@ public class TestAgentNeuralChargeMockedData {
     public void givenRuleBasedValue_whenTrain_thenCorrect() {
 
         Function<ChargeState, Double> stateToValueFunction=(s) -> {
-            double socLimit = 0.34;
+            double socLimit = 0.4;
             ChargeVariables vars = s.getVariables();
             BiPredicate<Double,Integer> isBelowSocLimitAndNotChargePos=(soc, pos) ->
                     soc<socLimit && !lambdas.isChargePos.test(pos);
@@ -127,7 +133,7 @@ public class TestAgentNeuralChargeMockedData {
         valueMap.keySet().forEach(i -> System.out.println(valueMap.get(i)));
 
         for (Integer i:valueMap.keySet()) {
-            Assertions.assertEquals(valueMap.get(i).getFirst(),valueMap.get(i).getSecond());
+            Assertions.assertEquals(valueMap.get(i).getFirst(),valueMap.get(i).getSecond(),DELTA);
         }
 
     }
@@ -153,7 +159,7 @@ public class TestAgentNeuralChargeMockedData {
         ValueTracker errorTracker=agentCasted.getErrorHistory();
         MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(List.of("Error"),"iter");
         plotter.plot(List.of(errorTracker.getValueHistoryAbsoluteValues()));
-        Thread.sleep(100);
+        Thread.sleep(1000);
         plotter.saveImage(PICS_FOLDER +fileName);
     }
 

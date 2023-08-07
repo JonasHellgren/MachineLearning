@@ -9,6 +9,7 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +29,10 @@ public class TestInputSetterSoCAtOccupiedZeroOther {
     @BeforeEach
     public void init() {
         environmentSettings = ChargeEnvironmentSettings.newDefault();
-        inputSetter=new InputSetterSoCAtOccupiedZeroOther(AgentChargeNeuralSettings.newDefault(),environmentSettings);
+        inputSetter=new InputSetterSoCAtOccupiedZeroOther(
+                AgentChargeNeuralSettings.newDefault(),
+                environmentSettings,
+                new NormalizeMinMax(0,1));
     }
 
     @Builder

@@ -119,12 +119,13 @@ AgentChargeNeural
 - TestAgentNeuralChargeMockedData
 - TestAgentNeuralChargeMockedData - givenRuleBasedValue_whenTrain_thenCorrect  x
 - plot network error vs iteration  x
-- ScalerLinear -> Normalizer
-- NormalizerInterface
-- NormalizerInterface -> NormalizerMinMax NormalizerMeanStd
+- ScalerLinear -> Normalizer  x
+- NormalizerInterface  x
+- NormalizerInterface -> NormalizerMinMax NormalizerMeanStd  x
 - TestNormalizer  x
+- apply Normalizer InputSetterSoCAtOccupiedZeroOther  x
 - apply Normalizer out
-- apply Normalizer in
+
 - NetSettings - nof Layers
 - InputSetterSoCAtOccupiedTwoOther
 - få TestAgentNeuralChargeMockedData stabil

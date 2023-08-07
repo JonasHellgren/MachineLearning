@@ -37,6 +37,8 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
                 .readMemoryFunction(this::readValue)
                 .build();
         this.temporalDifferenceTracker=new ValueTracker();
+        errorHistory=new ValueTracker();
+
     }
 
     @Override

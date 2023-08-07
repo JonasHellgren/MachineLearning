@@ -35,7 +35,6 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
                 .learningRate(agentSettings.learningRate())
                 .build();
         memory=new NeuralValueMemoryCharge<>(netSettings,inputVectorSetterCharge);
-        errorHistory=new ValueTracker();
     }
 
 
