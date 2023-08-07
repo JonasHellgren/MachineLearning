@@ -1,7 +1,9 @@
 package multi_step_temp_diff.domain.normalizer;
 
 import common.MathUtils;
+import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.util.DoubleSummaryStatistics;
@@ -14,11 +16,16 @@ import java.util.stream.DoubleStream;
  */
 
 @ToString
+@Log
+@Getter
 public class NormalizerMeanStd implements NormalizerInterface {
 
     double mean, std;
+    List<Double> valueList;
 
     public NormalizerMeanStd(List<Double> valueList) {
+
+        this.valueList=valueList;
 
         if (valueList.isEmpty() || valueList.size()==1) {
             throw new IllegalArgumentException("Empty or single element value list");
@@ -27,13 +34,14 @@ public class NormalizerMeanStd implements NormalizerInterface {
         DoubleSummaryStatistics sumStats=valueList.stream().mapToDouble(v -> v).summaryStatistics();
         mean=sumStats.getAverage();
         List<Double> sumSqr=valueList.stream().map(v -> Math.pow(v-mean,2)).toList();
-        System.out.println("sumSqr = " + sumSqr);
         std=Math.sqrt(sumSqr.stream().mapToDouble(Double::doubleValue).sum()/(valueList.size()-1));
 
         if (MathUtils.isZero(std)) {
             throw new IllegalArgumentException("Value list gives zero standard deviation");
 
         }
+
+        log.info("Normalizer with mean = "+mean + " and std = "+ std);
 
     }
 

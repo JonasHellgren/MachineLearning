@@ -37,7 +37,7 @@ import java.util.function.Function;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 5_000;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 5_00;
     private static final int BATCH_LENGTH = 100;
     public static final double DELTA = 3;
     public static final String PICS_FOLDER = "pics/";

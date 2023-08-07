@@ -128,8 +128,9 @@ AgentChargeNeural
 - apply Normalizer out  x
 - constructor i ValueMemoryNetworkAbstract  x
 - NetSettings - nof Layers  x
-- TestAgentNeuralChargeMockedData clean up
-- RunnerChargeNeuralMocked
+- TestAgentNeuralChargeMockedData clean up - x
+- Plotta egentiga felet  x
+- RunnerChargeNeuralMocked - med olika inställmningar
 
 . AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate
 - InputSetterSoCAtOccupiedTwoOther

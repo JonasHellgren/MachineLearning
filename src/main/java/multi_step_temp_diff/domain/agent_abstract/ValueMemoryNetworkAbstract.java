@@ -74,22 +74,10 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     @Override
     public double learn(List<NstepExperience<S>> miniBatch) {
-
-      //  System.out.println("learningRule.getLearningRate() = " + learningRule.getLearningRate());
-
         DataSet trainingSet = getDataSet(miniBatch);
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
-
-
         return learningRule.getTotalNetworkError();
-
-        //      System.out.println("after");
-
-    }
-
-    public void createNormalizer(double minOut, double maxOut) {
-        normalizer=new NormalizeMinMax(minOut,maxOut);
     }
 
     /**

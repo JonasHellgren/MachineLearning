@@ -13,6 +13,8 @@ import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVector
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
+import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 
@@ -48,7 +50,13 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
 
     @Override
     public void learn(List<NstepExperience<ChargeVariables>> miniBatch) {
-        double error=memory.learn(miniBatch);
-        errorHistory.addValue(error);
+        memory.learn(miniBatch);
+        List<Double> errors=new ArrayList<>();
+        for (NstepExperience<ChargeVariables> exp: miniBatch) {
+            errors.add(Math.abs(exp.value-memory.read(exp.stateToUpdate)));
+        }
+        addErrorToHistory(errors);
     }
+
+
 }
