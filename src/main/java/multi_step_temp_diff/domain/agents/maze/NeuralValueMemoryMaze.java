@@ -22,26 +22,14 @@ public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> impl
 
     private static final double MARGIN = 1.0;
 
-    public NeuralValueMemoryMaze(double learningRate) {
-        this(NetSettings.builder()
-                .inputSize(settings.nofCols()+ settings.nofRows())
-                .nofNeuronsHidden((int) ((settings.nofCols()+ settings.nofRows())*1.0))
-                .outPutSize(1)
-                .learningRate(learningRate)
-                .minOut(settings.rewardGoal()*0.00).maxOut(settings.rewardGoal()*2)
-                .build());
-    }
-
     public NeuralValueMemoryMaze(NetSettings settings) {
         super(new MultiLayerPerceptron(
                         TransferFunctionType.TANH,
                         settings.inputSize(),
                         settings.nofNeuronsHidden(), // settings.nofNeuronsHidden(),
                         settings.outPutSize()),
-                new NormalizeMinMax(settings.minOut(),settings.maxOut()),
                 settings);
 
-        isWarmedUp = false;
     }
 
     @Override

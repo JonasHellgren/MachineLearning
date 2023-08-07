@@ -23,7 +23,8 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S> impl
     public NeuralValueMemoryFork() {  //todo, remove confusing with envSettings
         this(NetSettings.builder()
                 .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
-                .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven()).build());
+                .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven())
+                .normalizer(new NormalizeMinMax(envSettings.rewardHell(),envSettings.rewardHeaven())).build());
     }
 
     public NeuralValueMemoryFork(NetSettings settings) {
@@ -32,7 +33,6 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S> impl
                         settings.inputSize(),
                         settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
                         settings.outPutSize()),
-                new NormalizeMinMax(settings.minOut(),settings.maxOut()),
                 settings);
         isWarmedUp = false;
     }

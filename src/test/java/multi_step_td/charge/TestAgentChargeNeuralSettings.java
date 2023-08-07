@@ -1,6 +1,7 @@
 package multi_step_td.charge;
 
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ public class TestAgentChargeNeuralSettings {
         double discountFactor = 0.5;
         agentChargeNeuralSettings = AgentChargeNeuralSettings.builder()
                 .discountFactor(discountFactor).learningRate(learningRate).startState(startState)
+                .normalizer(new NormalizeMinMax(-100,0))
                 .build();
         out.println("agentChargeNeuralSettings = " + agentChargeNeuralSettings);
 

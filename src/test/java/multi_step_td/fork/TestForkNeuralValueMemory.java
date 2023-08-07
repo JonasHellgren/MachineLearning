@@ -12,6 +12,7 @@ import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,10 +44,13 @@ public class TestForkNeuralValueMemory {
 
     @BeforeEach
     public void init() {
+        double minOut = ForkEnvironment.envSettings.rewardHell();
+        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(ForkEnvironment.envSettings.rewardHell()).maxOut(ForkEnvironment.envSettings.rewardHeaven()).build();
+                .minOut(minOut).maxOut(maxOut)
+                .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
 
         environment = new ForkEnvironment();
         AgentForkNeural agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(

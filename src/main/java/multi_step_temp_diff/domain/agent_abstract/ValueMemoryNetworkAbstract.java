@@ -31,13 +31,11 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
 
     public ValueMemoryNetworkAbstract(MultiLayerPerceptron neuralNetwork,
-                                      NormalizerInterface normalizer,
                                       NetSettings netSettings) {
         this.neuralNetwork = neuralNetwork;
-        this.normalizer = normalizer;
         this.netSettings = netSettings;
         createLearningRule(neuralNetwork, netSettings);
-        createNormalizer(netSettings.minOut() , netSettings.maxOut() );
+        normalizer=netSettings.normalizer();
         isWarmedUp = false;
     }
 

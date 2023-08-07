@@ -124,6 +124,7 @@ AgentChargeNeural
 - NormalizerInterface -> NormalizerMinMax NormalizerMeanStd  x
 - TestNormalizer  x
 - apply Normalizer InputSetterSoCAtOccupiedZeroOther  x
+- tester funkar
 - apply Normalizer out
 - constructor i ValueMemoryNetworkAbstract
 

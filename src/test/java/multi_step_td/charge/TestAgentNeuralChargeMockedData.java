@@ -56,7 +56,9 @@ public class TestAgentNeuralChargeMockedData {
         lambdas=new ChargeEnvironmentLambdas(settings);
         nofSiteNodes = environmentCasted.getSettings().siteNodes().size();
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
-        AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.newDefault();
+        AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
+                .normalizer(new NormalizeMinMax(settings.rewardBad(),0)).build();
+
         agent = AgentChargeNeural.builder()
                 .environment(environment).state(initState)
                 .agentSettings(agentSettings)

@@ -21,7 +21,6 @@ public class NeuralValueMemoryCharge<S> extends ValueMemoryNetworkAbstract<S> im
                         settings.inputSize(),
                         settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
                         settings.outPutSize()),
-                new NormalizeMinMax(settings.minOut(),settings.maxOut()),
                 settings);
 
         this.inputVectorSetterCharge = inputVectorSetterCharge;

@@ -6,6 +6,7 @@ import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
@@ -89,10 +90,13 @@ public class TestNStepNeuralAgentTrainerFork {
     }
 
     private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
+        double minOut = ForkEnvironment.envSettings.rewardHell();
+        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .minOut(ForkEnvironment.envSettings.rewardHell()).maxOut(ForkEnvironment.envSettings.rewardHeaven()).build();
+                .minOut(minOut).maxOut(maxOut)
+                .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
         agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
                 environment,
                 discountFactor,

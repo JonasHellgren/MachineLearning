@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class TestAgentNeuralMaze {
+public class TestAgentNeuralMazeMockedData {
     private static final int NOF_ITERATIONS = 1000;
     private static final int BUFFER_SIZE = NOF_ITERATIONS;
 
