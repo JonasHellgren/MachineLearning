@@ -13,6 +13,9 @@ import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
+import org.neuroph.util.TransferFunctionType;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,9 +33,15 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     public NetSettings netSettings;
 
 
-    public ValueMemoryNetworkAbstract(MultiLayerPerceptron neuralNetwork,
-                                      NetSettings netSettings) {
-        this.neuralNetwork = neuralNetwork;
+    public ValueMemoryNetworkAbstract(NetSettings netSettings) {
+        List<Integer> nofNeurons=new ArrayList<>();
+        nofNeurons.add(netSettings.inputSize());
+        for (int i = 0; i < netSettings.nofHiddenLayers() ; i++) {
+            nofNeurons.add(netSettings.nofNeuronsHidden());
+        }
+        nofNeurons.add(netSettings.outPutSize());
+
+        this.neuralNetwork = new MultiLayerPerceptron(nofNeurons,netSettings.transferFunctionType());
         this.netSettings = netSettings;
         createLearningRule(neuralNetwork, netSettings);
         normalizer=netSettings.normalizer();

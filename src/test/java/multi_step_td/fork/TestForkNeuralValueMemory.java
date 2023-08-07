@@ -18,6 +18,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.neuroph.util.TransferFunctionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class TestForkNeuralValueMemory {
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
                 .minOut(minOut).maxOut(maxOut)
+                .transferFunctionType(TransferFunctionType.TANH)
                 .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
 
         environment = new ForkEnvironment();

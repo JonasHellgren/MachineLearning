@@ -24,16 +24,18 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S> impl
         this(NetSettings.builder()
                 .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
                 .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven())
+                .nofHiddenLayers(1).transferFunctionType(TransferFunctionType.TANH)
                 .normalizer(new NormalizeMinMax(envSettings.rewardHell(),envSettings.rewardHeaven())).build());
     }
 
     public NeuralValueMemoryFork(NetSettings settings) {
-        super(new MultiLayerPerceptron(
+        /* super(new MultiLayerPerceptron(
                         TransferFunctionType.TANH,
                         settings.inputSize(),
                         settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
                         settings.outPutSize()),
-                settings);
+                */
+           super(settings);
         isWarmedUp = false;
     }
 

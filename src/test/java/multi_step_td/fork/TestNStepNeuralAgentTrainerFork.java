@@ -15,6 +15,7 @@ import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSetti
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.neuroph.util.TransferFunctionType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -95,6 +96,7 @@ public class TestNStepNeuralAgentTrainerFork {
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .transferFunctionType(TransferFunctionType.TANH)
                 .minOut(minOut).maxOut(maxOut)
                 .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
         agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(

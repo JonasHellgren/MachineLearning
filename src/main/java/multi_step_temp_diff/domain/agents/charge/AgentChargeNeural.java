@@ -30,8 +30,10 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
         this.agentSettings =agentSettings;
         NetSettings netSettings = NetSettings.builder()
                 .inputSize(agentSettings.nofStates()).nofNeuronsHidden(agentSettings.nofStates())
+                .nofHiddenLayers(agentSettings.nofLayersHidden())
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .nofNeuronsHidden(agentSettings.nofNeuronsHidden())
+                .transferFunctionType(agentSettings.transferFunctionType())
                 .learningRate(agentSettings.learningRate())
                 .normalizer(agentSettings.valueNormalizer())
                 .build();

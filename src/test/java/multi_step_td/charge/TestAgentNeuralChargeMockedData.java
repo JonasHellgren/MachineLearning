@@ -21,6 +21,7 @@ import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
+import org.neuroph.util.TransferFunctionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +32,11 @@ import java.util.function.Function;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 10_000;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 5_000;
     private static final int BATCH_LENGTH = 100;
-    public static final double DELTA = 5;
+    public static final double DELTA = 3;
     public static final String PICS_FOLDER = "pics/";
+    public static final int ITERATIONS_BETWEEN_PRINTI = 1000;
 
     AgentNeuralInterface<ChargeVariables> agent;
     AgentChargeNeural agentCasted;
@@ -53,12 +55,12 @@ public class TestAgentNeuralChargeMockedData {
         lambdas=new ChargeEnvironmentLambdas(settings);
         nofSiteNodes = environmentCasted.getSettings().siteNodes().size();
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
-        double rBad = settings.rewardBad();
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
                 //.valueNormalizer(new NormalizeMinMax(settings.rewardBad(),0))
-                .learningRate(0.1)
-                .nofNeuronsHidden(10)
-                .valueNormalizer(new NormalizerMeanStd(List.of(rBad*10,0d,-1d,-2d,0d,-1d,0d)))
+                .learningRate(0.5)
+                .nofNeuronsHidden(10).transferFunctionType(TransferFunctionType.GAUSSIAN)
+                .nofLayersHidden(5)
+                .valueNormalizer(new NormalizerMeanStd(List.of(settings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))
                 .build();
 
         agent = AgentChargeNeural.builder()
@@ -121,8 +123,8 @@ public class TestAgentNeuralChargeMockedData {
  //       System.out.println("buffer = " + buffer);
 
         for (int i = 0; i < NOF_ITERATIONS; i++) {
-            int finalI = i;
-            Conditionals.executeIfTrue(i % 100 ==0, () -> System.out.println("i = " + finalI));
+            if(i % ITERATIONS_BETWEEN_PRINTI ==0)
+                System.out.println("i = " + i);
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
 

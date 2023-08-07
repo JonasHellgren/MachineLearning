@@ -8,6 +8,8 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import org.neuroph.util.TransferFunctionType;
+
 import java.util.List;
 
 @Getter
@@ -43,6 +45,7 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
         Integer inputSize = agentSettings.nofStates();
         NetSettings netSettings = NetSettings.builder()
                 .inputSize(inputSize).nofNeuronsHidden(agentSettings.nofStates())
+                .nofHiddenLayers(1).transferFunctionType(TransferFunctionType.TANH)
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .learningRate(agentSettings.learningRate())
                 .normalizer(agentSettings.normalizer())

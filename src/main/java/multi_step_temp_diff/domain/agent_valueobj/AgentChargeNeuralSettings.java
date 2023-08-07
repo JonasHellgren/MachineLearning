@@ -5,6 +5,7 @@ import lombok.NonNull;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
+import org.neuroph.util.TransferFunctionType;
 
 import static common.DefaultPredicates.defaultIfNullDouble;
 import static common.DefaultPredicates.defaultIfNullInteger;
@@ -18,6 +19,8 @@ public record AgentChargeNeuralSettings(
         Double discountFactor,
         Double learningRate,
         Integer nofNeuronsHidden,
+        Integer nofLayersHidden,
+        TransferFunctionType transferFunctionType,
         @NonNull NormalizerInterface valueNormalizer) {
 
     public static final int START_STATE = 0;
@@ -25,7 +28,9 @@ public record AgentChargeNeuralSettings(
     public static final double LEARNING_RATE = 0.1, DISCOUNT_FACTOR = 1d;
 
     public static  AgentChargeNeuralSettings newDefault() {
-        return AgentChargeNeuralSettings.builder().valueNormalizer(new NormalizeMinMax(-100,1)).build();
+        return AgentChargeNeuralSettings.builder()
+                .transferFunctionType(TransferFunctionType.GAUSSIAN)
+                .valueNormalizer(new NormalizeMinMax(-100,1)).build();
     }
 
     @Builder
@@ -36,6 +41,8 @@ public record AgentChargeNeuralSettings(
                                      Double discountFactor,
                                      Double learningRate,
                                      Integer nofNeuronsHidden,
+                                     Integer nofLayersHidden,
+                                     @NonNull TransferFunctionType transferFunctionType,
                                      @NonNull NormalizerInterface valueNormalizer) {
         ChargeEnvironmentSettings envSettings=ChargeEnvironmentSettings.newDefault();
 
@@ -46,6 +53,8 @@ public record AgentChargeNeuralSettings(
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
         this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
+        this.nofLayersHidden = defaultIfNullInteger.apply(nofLayersHidden, 1);
+        this.transferFunctionType=transferFunctionType;
         this.valueNormalizer = valueNormalizer;
     }
 }

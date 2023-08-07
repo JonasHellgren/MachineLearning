@@ -23,12 +23,15 @@ public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> impl
     private static final double MARGIN = 1.0;
 
     public NeuralValueMemoryMaze(NetSettings settings) {
-        super(new MultiLayerPerceptron(
+      /*  super(new MultiLayerPerceptron(
                         TransferFunctionType.TANH,
                         settings.inputSize(),
                         settings.nofNeuronsHidden(), // settings.nofNeuronsHidden(),
                         settings.outPutSize()),
-                settings);
+    */
+
+
+    super(settings);
 
     }
 

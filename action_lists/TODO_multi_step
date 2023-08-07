@@ -125,11 +125,12 @@ AgentChargeNeural
 - TestNormalizer  x
 - apply Normalizer InputSetterSoCAtOccupiedZeroOther  x
 - tester funkar x
-- apply Normalizer out
+- apply Normalizer out  x
 - constructor i ValueMemoryNetworkAbstract  x
+- NetSettings - nof Layers  x
+- RunnerChargeNeuralMocked
 
 . AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate
-- NetSettings - nof Layers
 - InputSetterSoCAtOccupiedTwoOther
 - få TestAgentNeuralChargeMockedData stabil
 - Ev sandbox example, 4 ingångar, ut litet om ngn av två första mindre än 0.5

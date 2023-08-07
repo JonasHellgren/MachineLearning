@@ -5,6 +5,7 @@ import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.neuroph.util.TransferFunctionType;
 
 import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -32,6 +33,7 @@ public class TestAgentChargeNeuralSettings {
         double discountFactor = 0.5;
         agentChargeNeuralSettings = AgentChargeNeuralSettings.builder()
                 .discountFactor(discountFactor).learningRate(learningRate).startState(startState)
+                .transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .valueNormalizer(new NormalizeMinMax(-100,0))
                 .build();
         out.println("agentChargeNeuralSettings = " + agentChargeNeuralSettings);
