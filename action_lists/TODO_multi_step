@@ -122,9 +122,13 @@ AgentChargeNeural
 - ScalerLinear -> Normalizer
 - NormalizerInterface
 - NormalizerInterface -> NormalizerMinMax NormalizerMeanStd
+- TestNormalizer  x
 - apply Normalizer out
 - apply Normalizer in
+- NetSettings - nof Layers
+- InputSetterSoCAtOccupiedTwoOther
 - få TestAgentNeuralChargeMockedData stabil
+- Ev sandbox example, 4 ingångar, ut litet om ngn av två första mindre än 0.5
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
