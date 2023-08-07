@@ -3,14 +3,11 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_parts.AgentActionSelector;
 import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
-import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
@@ -80,7 +77,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
         return actionSelector.chooseBestAction(state);
     }
 
-    protected void addErrorToHistory(List<Double> errors) {
+    protected void addErrorsToHistory(List<Double> errors) {
         DoubleSummaryStatistics sumStats=errors.stream().mapToDouble(v -> v).summaryStatistics();
         errorHistory.addValue(sumStats.getAverage());
     }

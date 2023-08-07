@@ -14,7 +14,6 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 
@@ -55,7 +54,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
         for (NstepExperience<ChargeVariables> exp: miniBatch) {
             errors.add(Math.abs(exp.value-memory.read(exp.stateToUpdate)));
         }
-        addErrorToHistory(errors);
+        addErrorsToHistory(errors);
     }
 
 

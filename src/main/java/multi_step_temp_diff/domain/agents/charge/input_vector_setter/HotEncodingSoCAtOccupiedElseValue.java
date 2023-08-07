@@ -11,24 +11,27 @@ import java.util.Optional;
 import static common.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 
-public class HotEncodingSoCAtOccupiedElseZero implements InputVectorSetterChargeInterface {
+public class HotEncodingSoCAtOccupiedElseValue implements InputVectorSetterChargeInterface {
 
     AgentChargeNeuralSettings agentSettings;
     PositionMapper positionMapper;
     NormalizerInterface normalizer;
+    Double valueIfNotOccupied;
 
-    public HotEncodingSoCAtOccupiedElseZero(@NonNull AgentChargeNeuralSettings agentSettings,
-                                            @NonNull ChargeEnvironmentSettings environmentSettings,
-                                            @NonNull NormalizerInterface normalizer) {
+    public HotEncodingSoCAtOccupiedElseValue(@NonNull AgentChargeNeuralSettings agentSettings,
+                                             @NonNull ChargeEnvironmentSettings environmentSettings,
+                                             @NonNull NormalizerInterface normalizer,
+                                             @NonNull  Double value) {
         this.agentSettings = agentSettings;
         this.positionMapper=new PositionMapper(agentSettings,environmentSettings);
         this.normalizer=normalizer;
+        this.valueIfNotOccupied=value;
     }
 
     @Override
     public double[] defineInArray(ChargeState state) {
         double[] inArray = new double[agentSettings.nofStates()];
-        Arrays.fill(inArray, 0);
+        Arrays.fill(inArray, normalizer.normalize(valueIfNotOccupied));
 
         Optional<Integer> mappedPosA=positionMapper.map(posA.apply(state));
         Optional<Integer> mappedPosB=positionMapper.map(posB.apply(state));

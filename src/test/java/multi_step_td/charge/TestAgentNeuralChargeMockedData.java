@@ -1,6 +1,5 @@
 package multi_step_td.charge;
 
-import common.Conditionals;
 import common.MultiplePanelsPlotter;
 import common.RandUtils;
 import lombok.SneakyThrows;
@@ -10,14 +9,13 @@ import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
-import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseZero;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -37,11 +35,15 @@ import java.util.function.Function;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 5_00;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 2_000;
     private static final int BATCH_LENGTH = 100;
     public static final double DELTA = 3;
     public static final String PICS_FOLDER = "pics/";
     public static final int ITERATIONS_BETWEEN_PRINTI = 1000;
+    public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
+    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
+            new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+
 
     AgentNeuralInterface<ChargeVariables> agent;
     AgentChargeNeural agentCasted;
@@ -49,7 +51,6 @@ public class TestAgentNeuralChargeMockedData {
     ChargeEnvironmentLambdas lambdas;
     ChargeEnvironment environmentCasted;
     ChargeEnvironmentSettings settings;
-    int nofSiteNodes;
 
     @BeforeEach
     public void init() {
@@ -57,12 +58,11 @@ public class TestAgentNeuralChargeMockedData {
         environment = new ChargeEnvironment(settings);
         environmentCasted = (ChargeEnvironment) environment;
         lambdas=new ChargeEnvironmentLambdas(settings);
-        nofSiteNodes = environmentCasted.getSettings().siteNodes().size();
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.2)
-                .nofNeuronsHidden(10).transferFunctionType(TransferFunctionType.GAUSSIAN)
-                .nofLayersHidden(5)
+                .learningRate(0.1)
+                .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
+                .nofLayersHidden(3)
                 .valueNormalizer(new NormalizerMeanStd(List.of(settings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))
                 //.valueNormalizer(new NormalizeMinMax(settings.rewardBad(),0))
                 .build();
@@ -71,11 +71,11 @@ public class TestAgentNeuralChargeMockedData {
                 .environment(environment).state(initState)
                 .agentSettings(agentSettings)
                 .inputVectorSetterCharge(
-                        new HotEncodingSoCAtOccupiedElseZero(
+                        new HotEncodingSoCAtOccupiedElseValue(
                                 agentSettings,
                                 environmentCasted.getSettings(),
                                 //new NormalizeMinMax(0,1)))
-                                new NormalizerMeanStd(List.of(0.3,0.5,0.7,0.9))))
+                                NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
     }
