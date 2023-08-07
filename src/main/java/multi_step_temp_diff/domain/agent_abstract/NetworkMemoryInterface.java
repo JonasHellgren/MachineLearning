@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface NetworkMemoryInterface<S>  {
     double read(StateInterface<S> state);
-    void learn(List<NstepExperience<S>> miniBatch);
+    double learn(List<NstepExperience<S>> miniBatch);  //returning error=|target-net|
 }

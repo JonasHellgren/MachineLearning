@@ -1,9 +1,12 @@
 package multi_step_td.charge;
 
+import common.MultiplePanelsPlotter;
 import common.RandUtils;
+import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputSetterSoCAtOccupiedZeroOther;
@@ -13,22 +16,27 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 100, NOF_ITERATIONS = 1000;
-    private static final int BATCH_LENGTH = 30;
+    private static final int BUFFER_SIZE = 1000, NOF_ITERATIONS = 1000;
+    private static final int BATCH_LENGTH = 10;
     public static final double DELTA = 2;
 
     AgentNeuralInterface<ChargeVariables> agent;
+    AgentChargeNeural agentCasted;
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironment environmentCasted;
     ChargeEnvironmentSettings settings;
@@ -48,21 +56,24 @@ public class TestAgentNeuralChargeMockedData {
                 .inputVectorSetterCharge(
                         new InputSetterSoCAtOccupiedZeroOther(agentSettings, environmentCasted.getSettings()))
                 .build();
+        agentCasted = (AgentChargeNeural) agent;
     }
 
     @Test
     @Tag("nettrain")
-    public void givenFixedValue_whenTrain_thenCorrect() {
-        Function<ChargeState, Double> stateToValueFunction =(s) -> -1d;
+    public void givenFixedValue_whenTrain_thenCorrect() throws InterruptedException {
+        Function<ChargeState, Double> stateToValueFunction =(s) -> -0d;
 
         ReplayBufferNStep<ChargeVariables> buffer = ReplayBufferNStep.<ChargeVariables>builder()
                 .buffer(createBuffer(stateToValueFunction)).build();
 
-        System.out.println("buffer = " + buffer);
+      //  System.out.println("buffer = " + buffer);
 
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
+
+        plotAndSaveErrorHistory("fixed");
 
         for (int i = 0; i < 10; i++) {
             ChargeState state = stateRandomPosAndSoC(nofSiteNodes);
@@ -71,6 +82,13 @@ public class TestAgentNeuralChargeMockedData {
             Assertions.assertEquals(stateToValueFunction.apply(state),valueLearned, DELTA);
         }
 
+    }
+
+    private void plotAndSaveErrorHistory(String fileName) {
+        ValueTracker errorTracker=agentCasted.getErrorHistory();
+        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(List.of("Error"),"iter");
+        plotter.plot(List.of(errorTracker.getValueHistoryAbsoluteValues()));
+        plotter.saveImage("pics/"+fileName);
     }
 
     @Test
@@ -93,21 +111,26 @@ public class TestAgentNeuralChargeMockedData {
         ReplayBufferNStep<ChargeVariables> buffer = ReplayBufferNStep.<ChargeVariables>builder()
                 .buffer(createBuffer(stateToValueFunction)).build();
 
-        System.out.println("buffer = " + buffer);
+ //       System.out.println("buffer = " + buffer);
 
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
 
+        plotAndSaveErrorHistory("rule");
+
+
+        Map<Integer, Pair<Double,Double>> valueMap=new HashMap<>();
         for (int i = 0; i < 10; i++) {
             ChargeState state = stateRandomPosAndSoC(nofSiteNodes);
             double valueLearned = agent.readValue(state);
+            valueMap.put(i, new Pair<>(stateToValueFunction.apply(state),valueLearned));
+        }
 
-            System.out.println("state = " + state);
-            System.out.println("stateFunction.apply(state) = " + stateToValueFunction.apply(state));
+        valueMap.keySet().forEach(i -> System.out.println(valueMap.get(i)));
 
-            System.out.println("valueLearned = " + valueLearned);
-            //Assertions.assertEquals(stateToValueFunction.apply(state),valueLearned, DELTA);
+        for (Integer i:valueMap.keySet()) {
+            Assertions.assertEquals(valueMap.get(i).getFirst(),valueMap.get(i).getSecond());
         }
 
     }

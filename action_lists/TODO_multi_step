@@ -117,7 +117,8 @@ AgentChargeNeural
 - PositionMapper  x
 - TestInputSetterSoCAtOccupiedZeroOther  x
 - TestAgentNeuralChargeMockedData
-- TestAgentNeuralChargeMockedData - givenRuleBasedValue_whenTrain_thenCorrect
+- TestAgentNeuralChargeMockedData - givenRuleBasedValue_whenTrain_thenCorrect  x
+- plot network error vs iteration  x
 - ScalerLinear -> Normalizer
 - NormalizerInterface
 - NormalizerInterface -> NormalizerMinMax NormalizerMeanStd

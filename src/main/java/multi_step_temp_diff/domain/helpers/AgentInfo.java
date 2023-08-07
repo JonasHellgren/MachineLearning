@@ -5,7 +5,7 @@ import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_parts.TemporalDifferenceTracker;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,12 +39,12 @@ public class AgentInfo<S> {
     }
 
     public List<Double> getFilteredTemporalDifferenceList(int lengthWindow) {
-        List<Double> diffList=agentCasted.getTemporalDifferenceTracker().getTemporalDifferenceList();
+        List<Double> diffList=agentCasted.getTemporalDifferenceTracker().getValueHistory();
         MovingAverage movingAverage=new MovingAverage(lengthWindow,diffList);
         return movingAverage.getFiltered();
     }
 
-    public TemporalDifferenceTracker getTemporalDifferenceTracker() {
+    public ValueTracker getTemporalDifferenceTracker() {
         return agentCasted.getTemporalDifferenceTracker();
     }
 

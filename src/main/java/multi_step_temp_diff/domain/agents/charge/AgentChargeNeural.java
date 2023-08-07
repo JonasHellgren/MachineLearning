@@ -7,6 +7,7 @@ import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
@@ -34,6 +35,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
                 .learningRate(agentSettings.learningRate())
                 .build();
         memory=new NeuralValueMemoryCharge<>(netSettings,inputVectorSetterCharge);
+        errorHistory=new ValueTracker();
     }
 
 
@@ -44,6 +46,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
 
     @Override
     public void learn(List<NstepExperience<ChargeVariables>> miniBatch) {
-        memory.learn(miniBatch);
+        double error=memory.learn(miniBatch);
+        errorHistory.addValue(error);
     }
 }

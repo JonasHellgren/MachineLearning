@@ -91,7 +91,7 @@ public class NStepNeuralAgentTrainer<S> {
         double valueMemory = agentNeural.readValue(experience.stateToUpdate);
         double valueTarget = experience.value;
         var tracker = agentInfo.getTemporalDifferenceTracker();
-        tracker.addDifference(Math.abs(valueMemory - valueTarget));
+        tracker.addValue(Math.abs(valueMemory - valueTarget));
     }
 
 

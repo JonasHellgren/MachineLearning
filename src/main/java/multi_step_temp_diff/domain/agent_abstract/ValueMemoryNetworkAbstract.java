@@ -50,7 +50,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
 
     @Override
-    public void learn(List<NstepExperience<S>> miniBatch) {
+    public double learn(List<NstepExperience<S>> miniBatch) {
 
       //  System.out.println("learningRule.getLearningRate() = " + learningRule.getLearningRate());
 
@@ -58,7 +58,10 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         doWarmUpIfNotDone(trainingSet);
         learningRule.doOneLearningIteration(trainingSet);
 
-  //      System.out.println("after");
+
+        return learningRule.getTotalNetworkError();
+
+        //      System.out.println("after");
 
     }
 

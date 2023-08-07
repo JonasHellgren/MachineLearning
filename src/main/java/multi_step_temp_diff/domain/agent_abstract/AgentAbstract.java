@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_parts.AgentActionSelector;
-import multi_step_temp_diff.domain.agent_parts.TemporalDifferenceTracker;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 
 @Getter
@@ -17,7 +17,8 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
     double discountFactor;
     int nofSteps;
     AgentActionSelector<S> actionSelector;
-    TemporalDifferenceTracker temporalDifferenceTracker;
+    ValueTracker temporalDifferenceTracker;
+    protected ValueTracker errorHistory;
 
     public AgentAbstract(@NonNull  EnvironmentInterface<S> environment,
                          StateInterface<S> state,
@@ -35,7 +36,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
                 .environment(environment).discountFactor(discountFactor)
                 .readMemoryFunction(this::readValue)
                 .build();
-        this.temporalDifferenceTracker=new TemporalDifferenceTracker();
+        this.temporalDifferenceTracker=new ValueTracker();
     }
 
     @Override
@@ -48,6 +49,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
     public void clear() {
         nofSteps=0;
         temporalDifferenceTracker.reset();
+        errorHistory.reset();
     }
 
     @Override
@@ -57,7 +59,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
 
     @Override
     public void storeTemporalDifference(double difference) {
-        temporalDifferenceTracker.addDifference(Math.abs(difference));
+        temporalDifferenceTracker.addValue(Math.abs(difference));
     }
 
     @Override
