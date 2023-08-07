@@ -11,6 +11,7 @@ public record NetSettings (
         Integer outPutSize,
         Integer inputSize,
         Integer nofNeuronsHidden,
+        Integer nofHiddenLayers,
         Double minOut,
         Double maxOut,
         Double netOutMin,
@@ -28,6 +29,7 @@ public record NetSettings (
     public NetSettings(Integer outPutSize,
                        @NonNull  Integer inputSize,
                        @NonNull  Integer nofNeuronsHidden,
+                       Integer nofHiddenLayers,
                        @NonNull  Double minOut,
                        @NonNull  Double maxOut,
                        Double netOutMin,
@@ -37,6 +39,7 @@ public record NetSettings (
         this.outPutSize = defaultIfNullInteger.apply(outPutSize,OUTPUT_SIZE);
         this.inputSize = inputSize;
         this.nofNeuronsHidden = nofNeuronsHidden;
+        this.nofHiddenLayers = defaultIfNullInteger.apply(nofHiddenLayers,1);
         this.minOut = minOut;
         this.maxOut = maxOut;
         this.netOutMin = defaultIfNullDouble.apply(netOutMin,OUT_MIN);

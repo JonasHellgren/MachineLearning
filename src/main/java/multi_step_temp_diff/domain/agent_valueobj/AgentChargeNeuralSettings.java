@@ -17,14 +17,15 @@ public record AgentChargeNeuralSettings(
         Double maxValue,
         Double discountFactor,
         Double learningRate,
-        @NonNull NormalizerInterface normalizer) {
+        Integer nofNeuronsHidden,
+        @NonNull NormalizerInterface valueNormalizer) {
 
     public static final int START_STATE = 0;
     public static final double MAX_VALUE = 0d;
     public static final double LEARNING_RATE = 0.1, DISCOUNT_FACTOR = 1d;
 
     public static  AgentChargeNeuralSettings newDefault() {
-        return AgentChargeNeuralSettings.builder().normalizer(new NormalizeMinMax(-100,1)).build();
+        return AgentChargeNeuralSettings.builder().valueNormalizer(new NormalizeMinMax(-100,1)).build();
     }
 
     @Builder
@@ -34,7 +35,8 @@ public record AgentChargeNeuralSettings(
                                      Double maxValue,
                                      Double discountFactor,
                                      Double learningRate,
-                                     @NonNull NormalizerInterface normalizer) {
+                                     Integer nofNeuronsHidden,
+                                     @NonNull NormalizerInterface valueNormalizer) {
         ChargeEnvironmentSettings envSettings=ChargeEnvironmentSettings.newDefault();
 
         this.nofStates = envSettings.siteNodes().size();
@@ -43,6 +45,7 @@ public record AgentChargeNeuralSettings(
         this.maxValue = defaultIfNullDouble.apply(maxValue, MAX_VALUE);
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
-        this.normalizer=normalizer;
+        this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
+        this.valueNormalizer = valueNormalizer;
     }
 }

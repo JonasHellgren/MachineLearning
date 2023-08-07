@@ -48,7 +48,7 @@ public class TestNormalizer {
     void whenMeanStd_thenCorrect(ArgumentsAccessor arguments) {
         NormalizerInterface normalizer=new NormalizerMeanStd(List.of(0.3,0.5,0.7,0.9));
 
-        System.out.println("normalizer = " + normalizer);
+        System.out.println("valueNormalizer = " + normalizer);
 
         double value=arguments.getDouble(0);
         double valueNormalizedExpected=arguments.getDouble(1);

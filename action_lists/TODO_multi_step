@@ -124,10 +124,11 @@ AgentChargeNeural
 - NormalizerInterface -> NormalizerMinMax NormalizerMeanStd  x
 - TestNormalizer  x
 - apply Normalizer InputSetterSoCAtOccupiedZeroOther  x
-- tester funkar
+- tester funkar x
 - apply Normalizer out
-- constructor i ValueMemoryNetworkAbstract
+- constructor i ValueMemoryNetworkAbstract  x
 
+. AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate
 - NetSettings - nof Layers
 - InputSetterSoCAtOccupiedTwoOther
 - få TestAgentNeuralChargeMockedData stabil

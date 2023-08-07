@@ -17,9 +17,9 @@ public class NeuralValueMemoryCharge<S> extends ValueMemoryNetworkAbstract<S> im
 
     public NeuralValueMemoryCharge(NetSettings settings, InputVectorSetterChargeInterface inputVectorSetterCharge) {
         super(new MultiLayerPerceptron(
-                        TransferFunctionType.TANH,
+                        TransferFunctionType.GAUSSIAN,
                         settings.inputSize(),
-                        settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
+                        settings.nofNeuronsHidden(), settings.nofNeuronsHidden(), settings.nofNeuronsHidden(),
                         settings.outPutSize()),
                 settings);
 

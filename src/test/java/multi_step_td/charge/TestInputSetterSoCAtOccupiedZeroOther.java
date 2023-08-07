@@ -1,11 +1,9 @@
 package multi_step_td.charge;
 
 import lombok.Builder;
-import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
-import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputSetterSoCAtOccupiedZeroOther;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseZero;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
-import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
@@ -29,7 +27,7 @@ public class TestInputSetterSoCAtOccupiedZeroOther {
     @BeforeEach
     public void init() {
         environmentSettings = ChargeEnvironmentSettings.newDefault();
-        inputSetter=new InputSetterSoCAtOccupiedZeroOther(
+        inputSetter=new HotEncodingSoCAtOccupiedElseZero(
                 AgentChargeNeuralSettings.newDefault(),
                 environmentSettings,
                 new NormalizeMinMax(0,1));

@@ -7,7 +7,6 @@ import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
@@ -32,8 +31,9 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
         NetSettings netSettings = NetSettings.builder()
                 .inputSize(agentSettings.nofStates()).nofNeuronsHidden(agentSettings.nofStates())
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
+                .nofNeuronsHidden(agentSettings.nofNeuronsHidden())
                 .learningRate(agentSettings.learningRate())
-                .normalizer(agentSettings.normalizer())
+                .normalizer(agentSettings.valueNormalizer())
                 .build();
         memory=new NeuralValueMemoryCharge<>(netSettings,inputVectorSetterCharge);
     }

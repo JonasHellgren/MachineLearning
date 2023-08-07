@@ -11,15 +11,15 @@ import java.util.Optional;
 import static common.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 
-public class InputSetterSoCAtOccupiedZeroOther implements InputVectorSetterChargeInterface {
+public class HotEncodingSoCAtOccupiedElseZero implements InputVectorSetterChargeInterface {
 
     AgentChargeNeuralSettings agentSettings;
     PositionMapper positionMapper;
     NormalizerInterface normalizer;
 
-    public InputSetterSoCAtOccupiedZeroOther(@NonNull AgentChargeNeuralSettings agentSettings,
-                                             @NonNull ChargeEnvironmentSettings environmentSettings,
-                                             @NonNull NormalizerInterface normalizer) {
+    public HotEncodingSoCAtOccupiedElseZero(@NonNull AgentChargeNeuralSettings agentSettings,
+                                            @NonNull ChargeEnvironmentSettings environmentSettings,
+                                            @NonNull NormalizerInterface normalizer) {
         this.agentSettings = agentSettings;
         this.positionMapper=new PositionMapper(agentSettings,environmentSettings);
         this.normalizer=normalizer;

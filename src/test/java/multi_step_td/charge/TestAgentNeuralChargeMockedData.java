@@ -1,42 +1,39 @@
 package multi_step_td.charge;
 
+import common.Conditionals;
 import common.MultiplePanelsPlotter;
 import common.RandUtils;
 import lombok.SneakyThrows;
-import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
-import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputSetterSoCAtOccupiedZeroOther;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseZero;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 1000;
-    private static final int BATCH_LENGTH = 50;
-    public static final double DELTA = 2;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 10_000;
+    private static final int BATCH_LENGTH = 100;
+    public static final double DELTA = 5;
     public static final String PICS_FOLDER = "pics/";
 
     AgentNeuralInterface<ChargeVariables> agent;
@@ -56,14 +53,19 @@ public class TestAgentNeuralChargeMockedData {
         lambdas=new ChargeEnvironmentLambdas(settings);
         nofSiteNodes = environmentCasted.getSettings().siteNodes().size();
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
+        double rBad = settings.rewardBad();
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .normalizer(new NormalizeMinMax(settings.rewardBad(),0)).build();
+                //.valueNormalizer(new NormalizeMinMax(settings.rewardBad(),0))
+                .learningRate(0.1)
+                .nofNeuronsHidden(10)
+                .valueNormalizer(new NormalizerMeanStd(List.of(rBad*10,0d,-1d,-2d,0d,-1d,0d)))
+                .build();
 
         agent = AgentChargeNeural.builder()
                 .environment(environment).state(initState)
                 .agentSettings(agentSettings)
                 .inputVectorSetterCharge(
-                        new InputSetterSoCAtOccupiedZeroOther(
+                        new HotEncodingSoCAtOccupiedElseZero(
                                 agentSettings,
                                 environmentCasted.getSettings(),
                                 //new NormalizeMinMax(0,1)))
@@ -109,7 +111,7 @@ public class TestAgentNeuralChargeMockedData {
 
             return  (isBelowSocLimitAndNotChargePos.test(vars.socA, vars.posA) ||
                     isBelowSocLimitAndNotChargePos.test(vars.socB, vars.posB))
-                    ? -10d
+                    ? settings.rewardBad()
                     :0d;
         };
 
@@ -119,6 +121,8 @@ public class TestAgentNeuralChargeMockedData {
  //       System.out.println("buffer = " + buffer);
 
         for (int i = 0; i < NOF_ITERATIONS; i++) {
+            int finalI = i;
+            Conditionals.executeIfTrue(i % 100 ==0, () -> System.out.println("i = " + finalI));
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
 

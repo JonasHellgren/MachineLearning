@@ -32,7 +32,7 @@ public class TestAgentChargeNeuralSettings {
         double discountFactor = 0.5;
         agentChargeNeuralSettings = AgentChargeNeuralSettings.builder()
                 .discountFactor(discountFactor).learningRate(learningRate).startState(startState)
-                .normalizer(new NormalizeMinMax(-100,0))
+                .valueNormalizer(new NormalizeMinMax(-100,0))
                 .build();
         out.println("agentChargeNeuralSettings = " + agentChargeNeuralSettings);
 

@@ -40,7 +40,7 @@ public record ChargeEnvironmentSettings(
                 .allNodes(MySetUtils.getSetFromRange(POS_MIN, POS_MAX))
                 .siteNodes(SetUtils.union(MySetUtils.getSetFromRangeInclusive(POS_MIN,20),Set.of(30,40,50,51,52,42,32,22)))
                 .chargeNodes(Set.of(30,40,50,51,52,42,32))
-                .costQue(1).costCharge(0.01).rewardBad(-100)
+                .costQue(1).costCharge(0.01).rewardBad(-10)
                 .maxNofSteps(1000)
                 .build();
     }
