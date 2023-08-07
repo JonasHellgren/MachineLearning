@@ -115,7 +115,7 @@ AgentChargeNeural
 - NeuralValueMemoryCharge x
 - InputVectorSetterChargeInterface x
 - PositionMapper  x
-- TestInputSetterSoCAtOccupiedZeroOther
+- TestInputSetterSoCAtOccupiedZeroOther  x
 - TestAgentNeuralChargeMockedData
 - TestAgentNeuralChargeMockedData - givenConditionalValue_whenTrain_thenCorrect
 
