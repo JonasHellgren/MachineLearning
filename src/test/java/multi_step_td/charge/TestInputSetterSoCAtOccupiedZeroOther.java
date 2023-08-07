@@ -63,13 +63,9 @@ public class TestInputSetterSoCAtOccupiedZeroOther {
         ArgumentReader reader= ArgumentReader.of(arguments);
         ChargeState state = reader.createState();
         double[] inArr = inputSetter.defineInArray(state);
-
         System.out.println("inArr = " + Arrays.toString(inArr));
 
         assertEquals(reader.socSum,Arrays.stream(inArr).sum());
     }
-
-
-
 
 }

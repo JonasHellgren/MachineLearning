@@ -117,7 +117,13 @@ AgentChargeNeural
 - PositionMapper  x
 - TestInputSetterSoCAtOccupiedZeroOther  x
 - TestAgentNeuralChargeMockedData
-- TestAgentNeuralChargeMockedData - givenConditionalValue_whenTrain_thenCorrect
+- TestAgentNeuralChargeMockedData - givenRuleBasedValue_whenTrain_thenCorrect
+- ScalerLinear -> Normalizer
+- NormalizerInterface
+- NormalizerInterface -> NormalizerMinMax NormalizerMeanStd
+- apply Normalizer out
+- apply Normalizer in
+- få TestAgentNeuralChargeMockedData stabil
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
