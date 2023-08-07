@@ -125,6 +125,7 @@ AgentChargeNeural
 - TestNormalizer  x
 - apply Normalizer InputSetterSoCAtOccupiedZeroOther  x
 - apply Normalizer out
+- constructor i ValueMemoryNetworkAbstract
 
 - NetSettings - nof Layers
 - InputSetterSoCAtOccupiedTwoOther

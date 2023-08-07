@@ -72,7 +72,7 @@ public class TestAgentNeuralChargeMockedData {
 
     @Test
     @Tag("nettrain")
-    public void givenFixedValue_whenTrain_thenCorrect() throws InterruptedException {
+    public void givenFixedValue_whenTrain_thenCorrect() {
         Function<ChargeState, Double> stateToValueFunction =(s) -> -0d;
 
         ReplayBufferNStep<ChargeVariables> buffer = ReplayBufferNStep.<ChargeVariables>builder()

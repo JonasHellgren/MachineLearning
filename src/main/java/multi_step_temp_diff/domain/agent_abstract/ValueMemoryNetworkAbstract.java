@@ -3,9 +3,12 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.Conditionals;
 import common.MathUtils;
 import common.ScalerLinear;
+import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -14,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
+
 public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
 
     private static final double MAX_ERROR = 0.00001;
@@ -21,10 +25,22 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     public MultiLayerPerceptron neuralNetwork;
     public MomentumBackpropagation learningRule;
-    public ScalerLinear scaleOutValueToNormalized;
-    public ScalerLinear scaleOutNormalizedToValue;
+    NormalizerInterface normalizer;
     public boolean isWarmedUp;
     public NetSettings netSettings;
+
+
+    public ValueMemoryNetworkAbstract(MultiLayerPerceptron neuralNetwork,
+                                      NormalizerInterface normalizer,
+                                      NetSettings netSettings) {
+        this.neuralNetwork = neuralNetwork;
+        this.normalizer = normalizer;
+        this.netSettings = netSettings;
+        createLearningRule(neuralNetwork, netSettings);
+        createNormalizer(netSettings.minOut() , netSettings.maxOut() );
+        isWarmedUp = false;
+    }
+
 
     public abstract double[] getInputVec(StateInterface<S> state);
 
@@ -45,7 +61,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         neuralNetwork.setInput(inputVec);
         neuralNetwork.calculate();
         double[] output = Arrays.copyOf(neuralNetwork.getOutput(), netSettings.outPutSize());
-        return scaleOutNormalizedToValue.calcOutDouble(output[0]);
+        return normalizer.normalizeInverted(output[0]);
     }
 
 
@@ -65,9 +81,8 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     }
 
-    public void createOutScalers(double minOut, double maxOut) {
-        scaleOutNormalizedToValue =new ScalerLinear(netSettings.netOutMin(), netSettings.netOutMax(),minOut, maxOut);
-        scaleOutValueToNormalized =new ScalerLinear(minOut, maxOut, netSettings.netOutMin(), netSettings.netOutMax());
+    public void createNormalizer(double minOut, double maxOut) {
+        normalizer=new NormalizeMinMax(minOut,maxOut);
     }
 
     /**
@@ -85,7 +100,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         for (NstepExperience<S> e : buffer) {
             double[] inputVec = getInputVec(e.stateToUpdate);
             double valueClipped= MathUtils.clip(e.value, netSettings.minOut(), netSettings.maxOut());
-            double normalizedValue= scaleOutValueToNormalized.calcOutDouble(valueClipped);
+            double normalizedValue= normalizer.normalize(valueClipped);
             trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
         }
         return trainingSet;
