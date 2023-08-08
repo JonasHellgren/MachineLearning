@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.twelvemonkeys.image.ImageUtil.getHeight;
-import static com.twelvemonkeys.image.ImageUtil.getWidth;
-
 @Log
 public class MultiplePanelsPlotter {
 
