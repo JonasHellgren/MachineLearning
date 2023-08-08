@@ -36,7 +36,7 @@ public class AgentForkTabular extends AgentAbstract<ForkVariables> implements Ag
     private AgentForkTabular(EnvironmentInterface<ForkVariables> environment,
                              StateInterface<ForkVariables> state,
                              AgentForkTabularSettings settings) {
-        super(environment,state, settings.discountFactor());
+        super(environment,state, settings);
         this.settings=settings;
         this.memory = settings.memory();
     }

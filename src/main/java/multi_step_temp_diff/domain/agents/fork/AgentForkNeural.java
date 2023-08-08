@@ -32,7 +32,7 @@ public class AgentForkNeural extends AgentAbstract<ForkVariables> implements Age
     public AgentForkNeural(EnvironmentInterface<ForkVariables> environment,
                            StateInterface<ForkVariables> state,
                            AgentForkNeuralSettings settings) {
-        super(environment, state, settings.discountFactor());
+        super(environment, state, settings);
         this.settings = settings;
         this.memory = getSettings().memory();
     }

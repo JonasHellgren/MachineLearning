@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularTrainerSettingsInterface;
@@ -24,7 +25,8 @@ public class NStepTDHelper<S> {
     private static final int TAU = 0;
 
     NStepTabularTrainerSettingsInterface settings;
-    AgentInfo<S> agentInfo;
+  //  AgentInfo<S> agentInfo;
+    AgentSettingsInterface agentSettings;
 
     @Builder.Default
     public int T= MAX_VALUE;  //time for termination
@@ -40,7 +42,7 @@ public class NStepTDHelper<S> {
     public static <S> NStepTDHelper<S> newHelperFromSettingsAndAgentInfo(
             NStepTabularTrainerSettingsInterface settings,AgentInfo<S> agentInfo) {
         return NStepTDHelper.<S>builder()
-                .settings(settings).agentInfo(agentInfo)
+                .settings(settings).agentSettings(agentSettings)
                 .episodeCounter(new Counter(0, settings.nofEpis()))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
                 .build();

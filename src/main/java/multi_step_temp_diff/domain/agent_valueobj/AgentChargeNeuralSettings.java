@@ -11,7 +11,7 @@ import static common.DefaultPredicates.defaultIfNullDouble;
 import static common.DefaultPredicates.defaultIfNullInteger;
 
 @Builder
-public record AgentChargeNeuralSettings(
+public record AgentChargeNeuralSettings (
         Integer nofStates,
         Integer startState,
         Double minValue,
@@ -22,7 +22,7 @@ public record AgentChargeNeuralSettings(
         Integer nofNeuronsHidden,
         Integer nofLayersHidden,
         TransferFunctionType transferFunctionType,
-        @NonNull NormalizerInterface valueNormalizer) {
+        @NonNull NormalizerInterface valueNormalizer) implements AgentSettingsInterface {
 
     public static final int START_STATE = 0;
     public static final double MAX_VALUE = 0d;
@@ -55,7 +55,7 @@ public record AgentChargeNeuralSettings(
         this.maxValue = defaultIfNullDouble.apply(maxValue, MAX_VALUE);
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
-        this.momentum = defaultIfNullDouble.apply(learningRate, MOMENTUM);
+        this.momentum = defaultIfNullDouble.apply(momentum, MOMENTUM);
         this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
         this.nofLayersHidden = defaultIfNullInteger.apply(nofLayersHidden, 1);
         this.transferFunctionType=transferFunctionType;

@@ -40,7 +40,7 @@ public class TestAgentNeuralMazeMockedData {
     public void init () {
         environment = new MazeEnvironment();
         AgentMazeNeuralSettings agentSettings=AgentMazeNeuralSettings.builder()
-                .discountFactor(1).learningRate(LEARNING_RATE)
+                .discountFactor(1d).learningRate(LEARNING_RATE)
                 .build();
         agent=new AgentMazeNeural(environment,agentSettings);
 

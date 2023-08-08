@@ -1,5 +1,6 @@
 package multi_step_td.charge;
 
+import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedy;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
@@ -106,7 +107,7 @@ public class TestAgentChargeGreedy {
 
 
     private int createAgentAndGetAction(StateInterface<ChargeVariables> state) {
-        AgentInterface<ChargeVariables>  agent = new AgentChargeGreedy(environment, state);
+        AgentInterface<ChargeVariables>  agent = new AgentChargeGreedy(environment, state, AgentChargeNeuralSettings.newDefault());
         return agent.chooseAction(PROB_RANDOM);
     }
 

@@ -31,7 +31,7 @@ public class AgentInfo<S> {
     }
 
     public double getDiscountFactor() {
-        return agentCasted.getDiscountFactor();
+        return agentCasted.getAgentSettings().discountFactor();
     }
 
     public int getNofSteps() {

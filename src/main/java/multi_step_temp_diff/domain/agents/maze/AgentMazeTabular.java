@@ -25,9 +25,7 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
 
     private AgentMazeTabular(EnvironmentInterface<MazeVariables> environment,
                              AgentMazeTabularSettings settings) {
-        super(environment,
-                new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),
-                settings.discountFactor());
+        super(environment, new MazeState(MazeVariables.newFromXY(settings.startX(),settings.startY())),settings);
         this.settings=AgentMazeTabularSettings.getDefault();
         this.memory = settings.memory();
     }

@@ -27,7 +27,7 @@ import java.util.List;
 public class RunnerAgentChargeNeuralBTrapped {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 10;
-    private static final int NOF_EPIS = 5;
+    private static final int NOF_EPIS = 50_000;
     public static final double DELTA = 5;
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =

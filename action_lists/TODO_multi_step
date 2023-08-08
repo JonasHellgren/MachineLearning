@@ -140,7 +140,12 @@ AgentChargeNeural
 - momentum x
 
 RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
-RunnerAgentChargeNeuralBTrapped - bug fastnar på 7, 22 etc
+- flytta discountFactor från AgentAbstract till AgentSettins  x
+- olikma momentum
+- discount factor
+- reset memory
+- ChargeEnv energi minskar även om står still
+
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree
 

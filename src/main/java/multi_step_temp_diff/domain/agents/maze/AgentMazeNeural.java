@@ -25,9 +25,8 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
 
     public AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
                             AgentMazeNeuralSettings agentSettings) {
-        super(environment,
-                new MazeState(MazeVariables.newFromXY(agentSettings.startX(),agentSettings.startY())),
-                agentSettings.discountFactor());
+        super(
+                environment,new MazeState(MazeVariables.newFromXY(agentSettings.startX(),agentSettings.startY())),agentSettings);
         this.settings= AgentMazeNeuralSettings.newDefault();
 
         Integer inputSize = agentSettings.nofStates();

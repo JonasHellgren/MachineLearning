@@ -3,6 +3,7 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
+import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_parts.AgentActionSelector;
 import multi_step_temp_diff.domain.agent_parts.ValueTracker;
@@ -17,7 +18,8 @@ import java.util.List;
 public abstract class AgentAbstract<S> implements AgentInterface<S> {
     EnvironmentInterface<S> environment;
     StateInterface<S> state;
-    double discountFactor;
+    //double discountFactor;
+    AgentSettingsInterface agentSettings;
     int nofSteps;
     AgentActionSelector<S> actionSelector;
     ValueTracker temporalDifferenceTracker;
@@ -25,18 +27,18 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
 
     public AgentAbstract(@NonNull  EnvironmentInterface<S> environment,
                          StateInterface<S> state,
-                         double discountFactor) {
-        if (MathUtils.isZero(discountFactor)) {
+                         AgentSettingsInterface agentSettings) {
+        if (MathUtils.isZero(agentSettings.discountFactor())) {
             log.warning("Zero discountFactor");
         }
 
         this.environment = environment;
         this.state = state;
-        this.discountFactor = discountFactor;
+        this.agentSettings = agentSettings;
         this.nofSteps=0;
         this.actionSelector = AgentActionSelector.<S>builder()
                 .nofActions(environment.actionSet().size())
-                .environment(environment).discountFactor(discountFactor)
+                .environment(environment).discountFactor(agentSettings.discountFactor())  //todo agentSettings
                 .readMemoryFunction(this::readValue)
                 .build();
         this.temporalDifferenceTracker=new ValueTracker();

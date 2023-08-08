@@ -8,10 +8,10 @@ import java.util.Map;
 
 @Builder
 public record AgentForkTabularSettings(
-        double discountFactor,
+        Double discountFactor,
         Map<Integer, Double> memory,
         double valueNotPresent,
-        int startState) {
+        int startState) implements AgentSettingsInterface {
 
     public static final int VALUE_NOT_PRESENT = 0;
     public static final int START_STATE = 0;
@@ -19,7 +19,7 @@ public record AgentForkTabularSettings(
 
     public static AgentForkTabularSettings getDefault() {
         return AgentForkTabularSettings.builder()
-                .discountFactor(1)
+                .discountFactor(1d)
                 .memory(MEMORY)
                 .valueNotPresent(VALUE_NOT_PRESENT)
                 .startState(START_STATE)

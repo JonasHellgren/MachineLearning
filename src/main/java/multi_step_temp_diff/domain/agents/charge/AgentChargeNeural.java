@@ -27,7 +27,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
                              @NonNull StateInterface<ChargeVariables> state,
                              @NonNull AgentChargeNeuralSettings agentSettings,
                              @NonNull InputVectorSetterChargeInterface inputVectorSetterCharge) {
-        super(environment, state, agentSettings.discountFactor());
+        super(environment, state, agentSettings);
         this.agentSettings =agentSettings;
         NetSettings netSettings = NetSettings.builder()
                 .inputSize(inputVectorSetterCharge.inputSize()).nofNeuronsHidden(agentSettings.nofStates())

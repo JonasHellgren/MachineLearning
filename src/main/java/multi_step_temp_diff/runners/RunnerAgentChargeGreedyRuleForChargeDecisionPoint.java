@@ -4,6 +4,7 @@ import common.Counter;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedyRuleForChargeDecisionPoint;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -75,8 +76,9 @@ public class RunnerAgentChargeGreedyRuleForChargeDecisionPoint {
 
     private static int createAgentAndGetAction(StateInterface<ChargeVariables> state) {
         ChargeEnvironmentSettings settings = environmentCasted.getSettings();
+        AgentChargeNeuralSettings agentSettings=AgentChargeNeuralSettings.newDefault();
         AgentInterface<ChargeVariables> agent =
-                new AgentChargeGreedyRuleForChargeDecisionPoint(environment, state, SOC_LIMIT, settings);
+                new AgentChargeGreedyRuleForChargeDecisionPoint(environment, state, SOC_LIMIT, settings,agentSettings);
         return agent.chooseAction(PROB_RANDOM);
     }
 

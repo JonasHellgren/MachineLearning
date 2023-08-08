@@ -15,40 +15,23 @@ public record AgentMazeNeuralSettings(
         Integer nofLayersHidden,
         Double minValue,
         Double maxValue,
-        double discountFactor,
+        Double discountFactor,
         double learningRate,
         int startX,
         int startY,
         NormalizerInterface normalizer)
-{
+implements AgentSettingsInterface {
     public static final double VALUE_IF_NOT_PRESENT=0;
     public static final double LEARNING_RATE=0.5;
     public static final int START_X = 0, START_Y = 0;
     public static final double DISCOUNT_FACTOR = 1d;
-
-
-    /*
-    public static AgentMazeNeuralSettings getWithDiscountAndLearningRate(double discountFactor,double learningRate) {
-        MazeEnvironmentSettings envSettings= MazeEnvironmentSettings.getDefault();
-
-        return AgentMazeNeuralSettings.builder()
-                .nofStates((int) (envSettings.nofCols()+  envSettings.nofRows()))
-                .minValue(0d).maxValue(envSettings.rewardGoal()*2)
-                .discountFactor(discountFactor)
-                .learningRate(learningRate)
-                .startX(START_X).startY(START_Y)
-                .normalizer(new NormalizeMinMax(0,envSettings.rewardGoal()*2))
-                .build();
-    }
-
-    */
 
     @Builder
     public AgentMazeNeuralSettings(Integer nofStates,
                                    Integer nofLayersHidden,
                                    Double minValue,
                                    Double maxValue,
-                                   double discountFactor,
+                                   Double discountFactor,
                                    double learningRate,
                                    int startX,
                                    int startY,

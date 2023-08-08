@@ -9,8 +9,8 @@ import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 public record AgentForkNeuralSettings(
         NetworkMemoryInterface<ForkVariables> memory,
         int startState,
-        double discountFactor
-) {
+        Double discountFactor
+) implements AgentSettingsInterface {
 
     public static final int START_STATE = 0;
     public static final NeuralValueMemoryFork<ForkVariables> MEMORY = new NeuralValueMemoryFork<>();
@@ -20,7 +20,7 @@ public record AgentForkNeuralSettings(
         return AgentForkNeuralSettings.builder()
                 .memory(MEMORY)
                 .startState(START_STATE)
-                .discountFactor(1)
+                .discountFactor(1d)
                 .build();
     }
 
