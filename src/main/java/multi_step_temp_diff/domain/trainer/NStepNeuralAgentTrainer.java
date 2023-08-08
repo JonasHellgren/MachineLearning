@@ -40,8 +40,7 @@ public class NStepNeuralAgentTrainer<S> {
     LogarithmicDecay decayProb;
 
     public void train() {
-        agentInfo = new AgentInfo<>(agentNeural);
-        helper =  NStepTDHelper.newHelperFromSettingsAndAgentInfo(settings,agentInfo);
+        helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
         buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
 

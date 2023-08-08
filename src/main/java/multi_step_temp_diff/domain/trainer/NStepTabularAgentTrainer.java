@@ -10,10 +10,7 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.helpers.AgentInfo;
 import multi_step_temp_diff.domain.helpers.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
-import org.apache.commons.math3.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -44,7 +41,7 @@ public class NStepTabularAgentTrainer<S> {
 
     public void train() {
         agentInfo = new AgentInfo<>(agent);
-        helper = NStepTDHelper.newHelperFromSettingsAndAgentInfo(settings,agentInfo);
+        helper = NStepTDHelper.newHelperFromSettings(settings,agent.getSettings());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
 
         while (!helper.episodeCounter.isExceeded()) {

@@ -144,6 +144,7 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - olikma momentum
 - discount factor
 - reset memory
+- kör episoder
 - ChargeEnv energi minskar även om står still
 
 plotta value sfa pos olika soc

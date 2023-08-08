@@ -39,8 +39,8 @@ public class NStepTDHelper<S> {
     @NonNull  public Counter episodeCounter;
     @NonNull  public Counter timeCounter;  //time step
 
-    public static <S> NStepTDHelper<S> newHelperFromSettingsAndAgentInfo(
-            NStepTabularTrainerSettingsInterface settings,AgentInfo<S> agentInfo) {
+    public static <S> NStepTDHelper<S> newHelperFromSettings(
+            NStepTabularTrainerSettingsInterface settings,AgentSettingsInterface agentSettings) {
         return NStepTDHelper.<S>builder()
                 .settings(settings).agentSettings(agentSettings)
                 .episodeCounter(new Counter(0, settings.nofEpis()))
@@ -100,7 +100,7 @@ public class NStepTDHelper<S> {
     }
 
     public double getDiscount() {
-        return Math.pow(agentInfo.getDiscountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
+        return Math.pow(agentSettings.discountFactor(), settings.nofStepsBetweenUpdatedAndBackuped());
     }
 
     public double sumOfRewardsFromTimeToUpdatePlusOne() {
@@ -108,7 +108,7 @@ public class NStepTDHelper<S> {
                 Math.min(tau + settings.nofStepsBetweenUpdatedAndBackuped(), T));
         List<Double> rewardTerms = new ArrayList<>();
         for (int i = iMinMax.getFirst(); i <= iMinMax.getSecond(); i++) {
-            rewardTerms.add(Math.pow(agentInfo.getDiscountFactor(), i - tau - 1) * timeReturnMap.get(i).reward);
+            rewardTerms.add(Math.pow(agentSettings.discountFactor(), i - tau - 1) * timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(rewardTerms);
     }

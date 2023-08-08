@@ -3,6 +3,7 @@ package multi_step_temp_diff.domain.agents.maze;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentTabularInterface;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
+import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
@@ -38,6 +39,11 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
     @Override
     public void writeValue(StateInterface<MazeVariables>  state, double value) {
         memory.put((MazeState) state, value);
+    }
+
+    @Override
+    public AgentSettingsInterface getSettings() {
+        return settings;
     }
 
     public void clear() {
