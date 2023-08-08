@@ -133,10 +133,11 @@ AgentChargeNeural
 - RunnerChargeNeuralMocked - med olika inställmningar  x
 - hot encoding positions+socs  x
 - RunnerChargeNeuralMocked cleaner x
-- MockedReplayBufferCreatorCharge i TestAgent..
-- Andra TransferFunctionType
-. AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate
-- få TestAgentNeuralChargeMockedData stabil
+- MockedReplayBufferCreatorCharge i TestAgent..  x
+- Andra TransferFunctionType  x
+. AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate x
+- få TestAgentNeuralChargeMockedData stabil x
+- momentum x
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc

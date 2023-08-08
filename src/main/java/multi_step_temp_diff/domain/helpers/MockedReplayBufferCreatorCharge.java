@@ -2,6 +2,7 @@ package multi_step_temp_diff.domain.helpers;
 
 import common.RandUtils;
 import lombok.Builder;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Builder
+@Log
 public class MockedReplayBufferCreatorCharge {
 
     int bufferSize;
@@ -46,8 +48,13 @@ public class MockedReplayBufferCreatorCharge {
 
     @NotNull
     public ChargeState stateRandomPosAndSoC() {
+        int posA = randomPos() ,posB = randomPos();
+        while (posB==posA) {
+            posB = randomPos();
+        }
+
         return new ChargeState(ChargeVariables.builder()
-                .posA(randomPos()).posB(randomPos())
+                .posA(posA).posB(posB)
                 .socA(randomSoC()).socB(randomSoC())
                 .build());
     }

@@ -35,7 +35,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .nofNeuronsHidden(agentSettings.nofNeuronsHidden())
                 .transferFunctionType(agentSettings.transferFunctionType())
-                .learningRate(agentSettings.learningRate())
+                .learningRate(agentSettings.learningRate()).momentum(agentSettings.momentum())
                 .normalizer(agentSettings.valueNormalizer())
                 .build();
         memory=new NeuralValueMemoryCharge<>(netSettings,inputVectorSetterCharge);

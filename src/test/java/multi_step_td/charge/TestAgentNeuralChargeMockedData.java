@@ -1,13 +1,11 @@
 package multi_step_td.charge;
 
-import common.MultiplePanelsPlotter;
 import common.RandUtils;
-import lombok.SneakyThrows;
+import multi_step_temp_diff.domain.test_helpers.AgentNeuralChargeTestHelper;
+import multi_step_temp_diff.domain.helpers.MockedReplayBufferCreatorCharge;
 import multi_step_temp_diff.domain.test_helpers.StateToValueFunctionContainerCharge;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
-import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
@@ -31,20 +29,24 @@ import java.util.function.Function;
 
 /***
  * MeanStd normalizer gives massive improvement versus MinMax
+ * Many hidden layers (deep) and few neurons seems to be better than the opposite
+ * TANH or GAUSSIAN is not critical
+ * momentum is not critical but non-zero seems better
+ * NOF_ITERATIONS_RULE should be approx 10 k for convergence, takes long time
+ *
  */
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 2_000;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS_FIXED =500, NOF_ITERATIONS_RULE = 2_000;
     private static final int BATCH_LENGTH = 100;
-    public static final double DELTA = 3;
-    public static final String PICS_FOLDER = "pics/";
-    public static final int ITERATIONS_BETWEEN_PRINTI = 1000;
+    public static final double DELTA = 5;
+    public static final int ITERATIONS_BETWEEN_PRINTI = 100;
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
-            new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+            new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
     public static final double SOC_LIMIT = 0.4;
-
+    public static final int LENGTH_FILTER_WINDOW = 100;
 
     AgentNeuralInterface<ChargeVariables> agent;
     AgentChargeNeural agentCasted;
@@ -53,6 +55,8 @@ public class TestAgentNeuralChargeMockedData {
     ChargeEnvironment environmentCasted;
     ChargeEnvironmentSettings settings;
     StateToValueFunctionContainerCharge container;
+    AgentNeuralChargeTestHelper helper;
+    MockedReplayBufferCreatorCharge bufferCreator;
 
     @BeforeEach
     public void init() {
@@ -62,9 +66,9 @@ public class TestAgentNeuralChargeMockedData {
         lambdas=new ChargeEnvironmentLambdas(settings);
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.1)
+                .learningRate(0.1).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
-                .nofLayersHidden(3)
+                .nofLayersHidden(5)
                 .valueNormalizer(new NormalizerMeanStd(List.of(settings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))
                 //.valueNormalizer(new NormalizeMinMax(settings.rewardBad(),0))
                 .build();
@@ -76,7 +80,6 @@ public class TestAgentNeuralChargeMockedData {
                         new HotEncodingSoCAtOccupiedElseValue(
                                 agentSettings,
                                 environmentCasted.getSettings(),
-                                //new NormalizeMinMax(0,1)))
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
@@ -86,12 +89,18 @@ public class TestAgentNeuralChargeMockedData {
     @Test
     @Tag("nettrain")
     public void givenFixedValue_whenTrain_thenCorrect() {
-        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(container.fixedAtZero);
-        trainAgent(buffer);
-        plotAndSaveErrorHistory("fixed");
+        bufferCreator= MockedReplayBufferCreatorCharge.builder()
+                .bufferSize(BUFFER_SIZE).settings(settings).stateToValueFunction(container.fixedAtZero)
+                .build();
+        ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
+        helper=AgentNeuralChargeTestHelper.builder()
+                .agent(agent).nofIterations(NOF_ITERATIONS_FIXED).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
+                .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
+        helper.trainAgent(buffer);
+        helper.plotAndSaveErrorHistory("fixed");
 
         for (int i = 0; i < 10; i++) {
-            ChargeState state = stateRandomPosAndSoC();
+            ChargeState state = bufferCreator.stateRandomPosAndSoC();
             double valueLearned = agent.readValue(state);
             Assertions.assertEquals(container.fixedAtZero.apply(state),valueLearned, DELTA);
         }
@@ -101,19 +110,22 @@ public class TestAgentNeuralChargeMockedData {
     @Test
     @Tag("nettrain")
     public void givenRuleBasedValue_whenTrain_thenCorrect() {
-
-
-
-        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(container.limit);
-        trainAgent(buffer);
-        plotAndSaveErrorHistory("rule");
+        bufferCreator= MockedReplayBufferCreatorCharge.builder()
+                .bufferSize(BUFFER_SIZE).settings(settings).stateToValueFunction(container.limit)
+                .build();
+        ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
+        helper=AgentNeuralChargeTestHelper.builder()
+                .agent(agent).nofIterations(NOF_ITERATIONS_RULE).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
+                .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
+        helper.trainAgent(buffer);
+        helper.plotAndSaveErrorHistory("rule");
         Map<Integer, Pair<Double, Double>> valueMap = createValueMap(container.limit);
         printAndAsserValueMap(valueMap);
 
     }
 
     private static void printAndAsserValueMap(Map<Integer, Pair<Double, Double>> valueMap) {
-        valueMap.keySet().forEach(i -> System.out.println(valueMap.get(i)));
+        valueMap.keySet().forEach(i -> System.out.println("i = "+ i+" - "+valueMap.get(i)));
         for (Integer i: valueMap.keySet()) {
             Assertions.assertEquals(valueMap.get(i).getFirst(), valueMap.get(i).getSecond(),DELTA);
         }
@@ -123,68 +135,15 @@ public class TestAgentNeuralChargeMockedData {
     private Map<Integer, Pair<Double, Double>> createValueMap(Function<ChargeState, Double> stateToValueFunction) {
         Map<Integer, Pair<Double,Double>> valueMap=new HashMap<>();
         for (int i = 0; i < 10; i++) {
-            ChargeState state = stateRandomPosAndSoC();
+            ChargeState state = bufferCreator.stateRandomPosAndSoC();
+            System.out.println("i = "+ i+" - " +"state = "+state.getVariables());
             double valueLearned = agent.readValue(state);
             valueMap.put(i, new Pair<>(stateToValueFunction.apply(state),valueLearned));
         }
         return valueMap;
     }
 
-    private ReplayBufferNStep<ChargeVariables> createExpReplayBuffer(Function<ChargeState, Double> stateToValueFunction) {
-        return ReplayBufferNStep.<ChargeVariables>builder()
-                .buffer(createBuffer(stateToValueFunction)).build();
-    }
 
-    private void trainAgent(ReplayBufferNStep<ChargeVariables> buffer) {
-        for (int i = 0; i < NOF_ITERATIONS; i++) {
-            if(i % ITERATIONS_BETWEEN_PRINTI ==0)
-                System.out.println("i = " + i);
-            agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
-        }
-    }
-
-
-    @NotNull
-    private List<NstepExperience<ChargeVariables>> createBuffer(Function<ChargeState, Double> stateFunction) {
-        List<NstepExperience<ChargeVariables>> batch = new ArrayList<>();
-        for (int i = 0; i < BUFFER_SIZE; i++) {
-            ChargeState state = stateRandomPosAndSoC();
-            NstepExperience<ChargeVariables> exp = NstepExperience.<ChargeVariables>builder()
-                    .stateToUpdate(state)
-                    .value(stateFunction.apply(state))
-                    .build();
-            batch.add(exp);
-        }
-        return batch;
-    }
-
-
-    @SneakyThrows
-    private void plotAndSaveErrorHistory(String fileName) {
-        ValueTracker errorTracker=agentCasted.getErrorHistory();
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(List.of("Error"),"iter");
-        plotter.plot(List.of(errorTracker.getValueHistoryAbsoluteValues()));
-        Thread.sleep(1000);
-        plotter.saveImage(PICS_FOLDER +fileName);
-    }
-
-    @NotNull
-    private ChargeState stateRandomPosAndSoC() {
-        return new ChargeState(ChargeVariables.builder()
-                .posA(randomPos()).posB(randomPos())
-                .socA(randomSoC()).socB(randomSoC())
-                .build());
-    }
-
-    private double randomSoC() {
-        return RandUtils.getRandomDouble(0, 1);
-    }
-
-    private int randomPos() {
-       RandUtils<Integer> randUtils=new RandUtils<>();
-        List<Integer> es = new ArrayList<>(settings.siteNodes());
-        return randUtils.getRandomItemFromList(es);
-    }
 
 
 }

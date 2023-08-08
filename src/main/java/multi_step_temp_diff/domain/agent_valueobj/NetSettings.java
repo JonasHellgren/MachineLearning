@@ -19,6 +19,7 @@ public record NetSettings (
         Double netOutMin,
         Double netOutMax,
         Double learningRate,
+        Double momentum,
         @NonNull NormalizerInterface normalizer
 )
 {
@@ -26,6 +27,7 @@ public record NetSettings (
     public static final Double OUT_MIN = 0d;
     public static final Double OUT_MAX = 1d;
     public static final Double LEARNING_RATE = 0.1;
+    public static final double MOMENTUM = 0.25;
 
     @Builder
     public NetSettings(Integer outPutSize,
@@ -38,6 +40,7 @@ public record NetSettings (
                        Double netOutMin,
                        Double netOutMax,
                        Double learningRate,
+                       Double momentum,
                        NormalizerInterface normalizer) {
         this.outPutSize = defaultIfNullInteger.apply(outPutSize,OUTPUT_SIZE);
         this.inputSize = inputSize;
@@ -49,6 +52,8 @@ public record NetSettings (
         this.netOutMin = defaultIfNullDouble.apply(netOutMin,OUT_MIN);
         this.netOutMax = defaultIfNullDouble.apply(netOutMax,OUT_MAX);
         this.learningRate = defaultIfNullDouble.apply(learningRate,LEARNING_RATE);
+        this.momentum = defaultIfNullDouble.apply(momentum, MOMENTUM);
+
         this.normalizer = normalizer;
     }
 

@@ -20,32 +20,20 @@ public class AgentMazeNeural extends AgentAbstract<MazeVariables> implements Age
 
 
     public static AgentMazeNeural newDefault(EnvironmentInterface<MazeVariables> environment) {
-        return new AgentMazeNeural(environment, AgentMazeNeuralSettings.getDefault());
+        return new AgentMazeNeural(environment, AgentMazeNeuralSettings.newDefault());
     }
 
-    public static AgentMazeNeural newFromSettings(EnvironmentInterface<MazeVariables> environment,
-                                                  AgentMazeNeuralSettings settings) {
-        return new AgentMazeNeural(environment, settings);
-    }
-
-    public static AgentMazeNeural newWithDiscountFactorAndLearningRate(EnvironmentInterface<MazeVariables> environment,
-                                                        double discountFactor,double learningRate) {
-
-        var settingsAdapted=AgentMazeNeuralSettings.getWithDiscountAndLearningRate(discountFactor,learningRate);
-        return new AgentMazeNeural(environment, settingsAdapted);
-    }
-
-    private AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
+    public AgentMazeNeural(EnvironmentInterface<MazeVariables> environment,
                             AgentMazeNeuralSettings agentSettings) {
         super(environment,
                 new MazeState(MazeVariables.newFromXY(agentSettings.startX(),agentSettings.startY())),
                 agentSettings.discountFactor());
-        this.settings= AgentMazeNeuralSettings.getDefault();
+        this.settings= AgentMazeNeuralSettings.newDefault();
 
         Integer inputSize = agentSettings.nofStates();
         NetSettings netSettings = NetSettings.builder()
-                .inputSize(inputSize).nofNeuronsHidden(agentSettings.nofStates())
-                .nofHiddenLayers(1).transferFunctionType(TransferFunctionType.TANH)
+                .inputSize(inputSize).nofNeuronsHidden(inputSize)
+                .nofHiddenLayers(agentSettings.nofLayersHidden()).transferFunctionType(TransferFunctionType.TANH)
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .learningRate(agentSettings.learningRate())
                 .normalizer(agentSettings.normalizer())

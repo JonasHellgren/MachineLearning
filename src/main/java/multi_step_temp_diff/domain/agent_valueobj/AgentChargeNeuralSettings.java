@@ -18,6 +18,7 @@ public record AgentChargeNeuralSettings(
         Double maxValue,
         Double discountFactor,
         Double learningRate,
+        Double momentum,
         Integer nofNeuronsHidden,
         Integer nofLayersHidden,
         TransferFunctionType transferFunctionType,
@@ -26,6 +27,7 @@ public record AgentChargeNeuralSettings(
     public static final int START_STATE = 0;
     public static final double MAX_VALUE = 0d;
     public static final double LEARNING_RATE = 0.1, DISCOUNT_FACTOR = 1d;
+    public static final double MOMENTUM = 0.25;
 
     public static  AgentChargeNeuralSettings newDefault() {
         return AgentChargeNeuralSettings.builder()
@@ -40,6 +42,7 @@ public record AgentChargeNeuralSettings(
                                      Double maxValue,
                                      Double discountFactor,
                                      Double learningRate,
+                                     Double momentum,
                                      Integer nofNeuronsHidden,
                                      Integer nofLayersHidden,
                                      @NonNull TransferFunctionType transferFunctionType,
@@ -52,6 +55,7 @@ public record AgentChargeNeuralSettings(
         this.maxValue = defaultIfNullDouble.apply(maxValue, MAX_VALUE);
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
+        this.momentum = defaultIfNullDouble.apply(learningRate, MOMENTUM);
         this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
         this.nofLayersHidden = defaultIfNullInteger.apply(nofLayersHidden, 1);
         this.transferFunctionType=transferFunctionType;

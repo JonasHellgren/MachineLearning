@@ -12,6 +12,7 @@ import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
+import org.neuroph.nnet.learning.DynamicBackPropagation;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
 
@@ -55,6 +56,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         learningRule = new MomentumBackpropagation();
         learningRule.setLearningRate(settings.learningRate());
         learningRule.setNeuralNetwork(neuralNetwork);
+        learningRule.setMomentum(settings.momentum());
         learningRule.setMaxIterations(NOF_ITERATIONS);
     }
 

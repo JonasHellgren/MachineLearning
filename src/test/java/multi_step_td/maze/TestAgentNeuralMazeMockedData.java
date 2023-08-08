@@ -2,6 +2,7 @@ package multi_step_td.maze;
 
 import common.RandUtils;
 import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
@@ -38,7 +39,11 @@ public class TestAgentNeuralMazeMockedData {
     @BeforeEach
     public void init () {
         environment = new MazeEnvironment();
-        agent= AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,1, LEARNING_RATE);
+        AgentMazeNeuralSettings agentSettings=AgentMazeNeuralSettings.builder()
+                .discountFactor(1).learningRate(LEARNING_RATE)
+                .build();
+        agent=new AgentMazeNeural(environment,agentSettings);
+
         agentCasted=(AgentMazeNeural) agent;
         helper=new TestHelper<>(agent, environment);
     }

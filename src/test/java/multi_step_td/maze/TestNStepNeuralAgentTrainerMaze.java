@@ -2,9 +2,8 @@ package multi_step_td.maze;
 
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
-import multi_step_temp_diff.domain.environments.fork.ForkState;
-import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
@@ -35,6 +34,7 @@ public class TestNStepNeuralAgentTrainerMaze {
     public static final HashSet<StateInterface<MazeVariables>> STATE_SET = new HashSet<>(STATES_LIST);
     public static final double LEARNING_RATE =1e-1;
     public static final double PROB_START = 0.1, PROB_END = 1e-5;
+    public static final double DISCOUNT_FACTOR = 1.0;
 
     NStepNeuralAgentTrainer<MazeVariables> trainer;
     AgentNeuralInterface<MazeVariables> agent;
@@ -56,8 +56,8 @@ public class TestNStepNeuralAgentTrainerMaze {
     @Test
     @Tag("nettrain")
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
-        final double discountFactor = 1.0, delta = 10d;
-        setAgentAndTrain(discountFactor,LEARNING_RATE);
+        final double  delta = 10d;
+        setAgentAndTrain();
         printBufferSize();
 
         helper=new TestHelper<>(agent, environment);
@@ -77,8 +77,13 @@ public class TestNStepNeuralAgentTrainerMaze {
     }
 
 
-    private void setAgentAndTrain(double discountFactor,double learningRate) {
-        agent = AgentMazeNeural.newWithDiscountFactorAndLearningRate(environment,discountFactor,learningRate);
+    private void setAgentAndTrain() {
+
+        AgentMazeNeuralSettings agentSettings=AgentMazeNeuralSettings.builder()
+                .discountFactor(DISCOUNT_FACTOR).learningRate(LEARNING_RATE)
+                .build();
+        agent=new AgentMazeNeural(environment,agentSettings);
+
 
         var settings= NStepNeuralAgentTrainerSettings.builder()
                 .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
