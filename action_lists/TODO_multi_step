@@ -130,14 +130,13 @@ AgentChargeNeural
 - NetSettings - nof Layers  x
 - TestAgentNeuralChargeMockedData clean up - x
 - Plotta egentiga felet  x
-- RunnerChargeNeuralMocked - med olika inställmningar
+- RunnerChargeNeuralMocked - med olika inställmningar  x
+- hot encoding positions+socs  x
+- RunnerChargeNeuralMocked cleaner
 - MockedReplayBufferCreatorCharge i TestAgent..
 - Andra TransferFunctionType
-
 . AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate
-- InputSetterSoCAtOccupiedTwoOther
 - få TestAgentNeuralChargeMockedData stabil
-- Ev sandbox example, 4 ingångar, ut litet om ngn av två första mindre än 0.5
 
 TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
 plotta value sfa pos olika soc
@@ -152,6 +151,7 @@ röriga konstruktors if AgentForkNeural
 ide om två nn minnen - ett med större intervall med terminal fail fokus
 för ovan testa ide grovt på mockad data på nät
 
+- Ev sandbox example, 4 ingångar, ut litet om ngn av två första mindre än 0.5
 
 ev target network
 

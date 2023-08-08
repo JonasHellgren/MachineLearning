@@ -30,7 +30,7 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
         super(environment, state, agentSettings.discountFactor());
         this.agentSettings =agentSettings;
         NetSettings netSettings = NetSettings.builder()
-                .inputSize(agentSettings.nofStates()).nofNeuronsHidden(agentSettings.nofStates())
+                .inputSize(inputVectorSetterCharge.inputSize()).nofNeuronsHidden(agentSettings.nofStates())
                 .nofHiddenLayers(agentSettings.nofLayersHidden())
                 .minOut(agentSettings.minValue()).maxOut(agentSettings.maxValue())
                 .nofNeuronsHidden(agentSettings.nofNeuronsHidden())

@@ -10,7 +10,7 @@ import java.util.Set;
 @Builder
 public record ChargeEnvironmentSettings(
         int posMin, int posMax,
-        int nofActions,
+        int nofActions, int nofVehicles,
         double socMin, double socMax, double socBad,
         boolean isObstacleStart,
         Map<Integer, Commands> commandMap,
@@ -29,7 +29,7 @@ public record ChargeEnvironmentSettings(
     public static ChargeEnvironmentSettings newDefault() {
         return ChargeEnvironmentSettings.builder()
                 .posMin(POS_MIN).posMax(POS_MAX)
-                .nofActions(4)
+                .nofActions(4).nofVehicles(2)
                 .socMin(0).socMax(1).socBad(0.2)
                 .isObstacleStart(false)
                 .commandMap(Map.of(0,Commands.of(0, 0), 1,Commands.of(0, 1), 2,Commands.of(1, 0), 3,Commands.of(1, 1)))

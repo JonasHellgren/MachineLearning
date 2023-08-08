@@ -6,6 +6,7 @@ import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingOneAtOccupiedSoCsSeparate;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -24,16 +25,23 @@ import java.util.function.Function;
 
 public class RunnerTrainChargeAgentNeuralMocked {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 5_00;
+    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS = 1_000;
     private static final int BATCH_LENGTH = 100;
     public static final String PICS_FOLDER = "pics/";
     public static final int ITERATIONS_BETWEEN_PRINTI = 1000;
 
-    public static final NormalizerMeanStd NORMALIZER_MINUSONE = new NormalizerMeanStd(List.of(-1d,-1d,-1d,-1d,0.3, 0.5, 0.7, 0.9,1.0));
-    public static final NormalizerMeanStd NORMALIZER_ZERO = new NormalizerMeanStd(List.of(0d,0d,0d,0d,0.3, 0.5, 0.7, 0.9,1.0));
-    public static final NormalizerMeanStd NORMALIZER_ONE = new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9,1.0,1.0,1.0,1.0));
-    public static final NormalizerMeanStd NORMALIZER_TWO = new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 2d, 2d, 2d, 2d, 2d));
-    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE = new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+    public static final NormalizerMeanStd NORMALIZER_MINUSONE =
+            new NormalizerMeanStd(List.of(-1d,-1d,-1d,-1d,0.3, 0.5, 0.7, 0.9,1.0));
+    public static final NormalizerMeanStd NORMALIZER_ZERO =
+            new NormalizerMeanStd(List.of(0d,0d,0d,0d,0.3, 0.5, 0.7, 0.9,1.0));
+    public static final NormalizerMeanStd NORMALIZER_ONE =
+            new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9,1.0,1.0,1.0,1.0));
+    public static final NormalizerMeanStd NORMALIZER_TWO =
+            new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 2d, 2d, 2d, 2d, 2d));
+    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
+            new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+    public static final NormalizerMeanStd NORMALIZER_SEPARATE_SOCS =
+            new NormalizerMeanStd(List.of(1.0, 0d, 0d, 0d, 0d, 0d, 0.6d, 0d, 0d));
 
 
     static AgentNeuralInterface<ChargeVariables> agent;
@@ -70,28 +78,33 @@ public class RunnerTrainChargeAgentNeuralMocked {
 
         agent = createAgent(initState, agentSettings,
                 new HotEncodingSoCAtOccupiedElseValue(agentSettings,settings, NORMALIZER_MINUSONE,-1d));
-        trainAgent(expBuffer);
+     //   trainAgent(expBuffer);
         plotAndSaveErrorHistory("MinusOne");
 
         agent = createAgent(initState, agentSettings,
                 new HotEncodingSoCAtOccupiedElseValue(agentSettings,settings, NORMALIZER_ZERO,0d));
-        trainAgent(expBuffer);
+     //   trainAgent(expBuffer);
         plotAndSaveErrorHistory("Zero");
 
         agent = createAgent(initState, agentSettings,
                 new HotEncodingSoCAtOccupiedElseValue(agentSettings,settings, NORMALIZER_ONE,1d));
-        trainAgent(expBuffer);
+      //  trainAgent(expBuffer);
         plotAndSaveErrorHistory("One");
 
         agent = createAgent(initState, agentSettings,
                 new HotEncodingSoCAtOccupiedElseValue(agentSettings,settings, NORMALIZER_TWO,2d));
-        trainAgent(expBuffer);
+      //  trainAgent(expBuffer);
         plotAndSaveErrorHistory("Two");
 
         agent = createAgent(initState, agentSettings,
                 new HotEncodingSoCAtOccupiedElseValue(agentSettings,settings, NORMALIZER_ONEDOTONE,1.1d));
         trainAgent(expBuffer);
         plotAndSaveErrorHistory("OneDotOne");
+
+        agent = createAgent(initState, agentSettings,
+                new HotEncodingOneAtOccupiedSoCsSeparate(agentSettings,settings, NORMALIZER_SEPARATE_SOCS));
+        trainAgent(expBuffer);
+        plotAndSaveErrorHistory("Sep socs");
 
 
 

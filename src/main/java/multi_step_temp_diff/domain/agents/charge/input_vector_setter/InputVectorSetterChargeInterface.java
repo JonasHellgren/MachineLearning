@@ -6,4 +6,5 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 public interface InputVectorSetterChargeInterface {
     double[] defineInArray(ChargeState state);
+    int inputSize();
 }
