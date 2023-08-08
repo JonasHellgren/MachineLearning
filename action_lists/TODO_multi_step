@@ -147,7 +147,9 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - bugg still 20 x
 - kör episoder x
 - ChargeEnv energi minskar även om står still x
-- RunnerAgentChargeNeuralTrainerBTrapped funkar
+- RunnerAgentChargeNeuralTrainerBTrapped funkar x
+- mindre max tid tränning  x
+- simulering efter träning med större max tid  x
 
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree

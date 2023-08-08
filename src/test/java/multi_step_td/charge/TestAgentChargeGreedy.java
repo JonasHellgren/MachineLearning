@@ -131,7 +131,6 @@ public class TestAgentChargeGreedy {
                 break;
             }
         }
-
         return stepReturn.isNewStateTerminal;
     }
 

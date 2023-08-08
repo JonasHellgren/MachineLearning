@@ -45,6 +45,26 @@ public record ChargeEnvironmentSettings(
                 .build();
     }
 
+    public  ChargeEnvironmentSettings copyWithNewMaxNofSteps(int maxNofSteps ) {
+        return ChargeEnvironmentSettings.builder()
+                .posMin(posMin).posMax(posMax)
+                .nofActions(nofActions).nofVehicles(nofVehicles)
+                .socMin(socMin).socMax(socMax).socBad(socBad)
+                .isObstacleStart(isObstacleStart)
+                .commandMap(commandMap)
+                .deltaSocMovingNotInChargeArea(deltaSocMovingNotInChargeArea)
+                .deltaSocStillNotInChargeArea(deltaSocStillNotInChargeArea)
+                .deltaSocInChargeArea(deltaSocInChargeArea)
+                .chargeQuePos(chargeQuePos).chargeDecisionPos(chargeDecisionPos)
+                .allNodes(allNodes)
+                .siteNodes(siteNodes)
+                .chargeNodes(chargeNodes)
+                .costQue(costQue).costCharge(costCharge).rewardBad(rewardBad)
+                .maxNofSteps(maxNofSteps)
+                .build();
+
+    }
+
     public boolean isAtTrapNode(int pos) {
         Set<Integer> trapNodes=SetUtils.difference(allNodes,siteNodes);
         return trapNodes.contains(pos);

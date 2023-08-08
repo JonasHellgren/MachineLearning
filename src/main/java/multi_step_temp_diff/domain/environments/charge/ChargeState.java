@@ -20,6 +20,9 @@ public class ChargeState implements StateInterface<ChargeVariables> {
     public static Function<StateInterface<ChargeVariables>,Double> socB=(s) -> s.getVariables().socB;
     public static Function<StateInterface<ChargeVariables>,Integer> time=(s) -> s.getVariables().time;
 
+    public static  ChargeState newDummy() {
+        return new ChargeState(ChargeVariables.builder().build());
+    }
 
     public ChargeState(ChargeVariables variables) {
         this.variables = variables;
