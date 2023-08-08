@@ -26,13 +26,13 @@ import java.util.List;
 @Log
 public class RunnerAgentChargeNeuralTrainerBTrapped {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    private static final int BATCH_SIZE = 10;
-    private static final int NOF_EPIS = 50_000;
+    private static final int BATCH_SIZE = 50, MAX_BUFFER_SIZE_EXPERIENCE = 100_000;
+
+    private static final int NOF_EPIS = 20;
     public static final double DELTA = 5;
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
             new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
-    public static final double SOC_LIMIT = 0.4;
     public static final int LENGTH_FILTER_WINDOW = 100;
 
     static AgentNeuralInterface<ChargeVariables> agent;
@@ -89,7 +89,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
        // agentCasted=(AgentChargeNeural) agent;
         NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
                 .probStart(0.25).probEnd(1e-3).nofIterations(1)
-                .batchSize(BATCH_SIZE)
+                .batchSize(BATCH_SIZE).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE)
                 .nofEpis(nofEpis)
                 .nofStepsBetweenUpdatedAndBackuped(nofSteps)
                 .build();

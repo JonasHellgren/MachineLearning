@@ -65,7 +65,7 @@ public class RunnerTrainChargeAgentNeuralMocked {
         agentSettings = getAgentSettings();
         container= new StateToValueFunctionContainerCharge(lambdas,envSettings, SOC_LMIIT);
         MockedReplayBufferCreatorCharge bufferCreator= MockedReplayBufferCreatorCharge.builder()
-                .bufferSize(BUFFER_SIZE).settings(envSettings).stateToValueFunction(container.limit)
+                .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
         ReplayBufferNStep<ChargeVariables> expBuffer=bufferCreator.createExpReplayBuffer();
 

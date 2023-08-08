@@ -183,6 +183,11 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
     }
 
     private double getDeltaSoC(int pos, int posNew) {
+        boolean isNotInSite = !lambdas.isPosInSite.test(posNew);
+        if (isNotInSite) {
+            return 0;  //todo setting
+        }
+
         boolean isInCharge = lambdas.isChargePos.test(posNew);
         if (isInCharge) {
             return settings.deltaSocInChargeArea();
@@ -200,14 +205,16 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         Integer posAnew = positionsNew.posA(), posBnew = positionsNew.posB();
         boolean isAStill=isStill.test(posA.apply(state), posAnew);
         boolean isBStill=isStill.test(posB.apply(state), posBnew);
+        boolean isAInSite=lambdas.isPosInSite.test(posAnew);
+        boolean isBInSite=lambdas.isPosInSite.test(posBnew);
         boolean isAInChargeArea = lambdas.isChargePos.test(posAnew);
         boolean isBInChargeArea = lambdas.isChargePos.test(posBnew);
 
-        BiFunction<Boolean, Boolean, Double> costQue = (isA, isB) -> (isA || isB) ? -settings.costQue() : 0d;
+        BiFunction<Boolean, Boolean, Double> costQue = (isStill, isInSite) -> (isStill && isInSite) ? -settings.costQue() : 0d;
         BiFunction<Boolean, Boolean, Double> costCharge = (isA, isB) -> (isA || isB) ? -settings.costCharge() : 0d;
         Function<SiteState, Double> failPenalty = (ss) -> FAIL_STATES.contains(ss) ? settings.rewardBad() : 0;
 
-        return  costQue.apply(isAStill,isBStill)+
+        return  costQue.apply(isAStill,isAInSite)+costQue.apply(isBStill,isBInSite)+
                 costCharge.apply(isAInChargeArea, isBInChargeArea) +
                 failPenalty.apply(siteState);
     }

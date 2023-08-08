@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,22 @@ public class ChargeStateSuppliers {
         RandUtils<Integer> randUtils=new RandUtils<>();
         List<Integer> es = new ArrayList<>(settings.siteNodes());
         return randUtils.getRandomItemFromList(es);
+    }
+
+
+    public ChargeState stateRandomPosAndSoC() {  //todo move to ChargeStateSuppliers??
+
+        ChargeStateSuppliers stateSuppliers=new ChargeStateSuppliers(settings);
+
+        int posA = stateSuppliers.randomSitePos() ,posB = stateSuppliers.randomSitePos();
+        while (posB==posA) {
+            posB = stateSuppliers.randomSitePos();
+        }
+
+        return new ChargeState(ChargeVariables.builder()
+                .posA(posA).posB(posB)
+                .socA(stateSuppliers.randomSoC()).socB(stateSuppliers.randomSoC())
+                .build());
     }
 
 

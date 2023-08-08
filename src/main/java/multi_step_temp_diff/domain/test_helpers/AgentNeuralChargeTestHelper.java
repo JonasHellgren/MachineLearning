@@ -58,7 +58,7 @@ public class AgentNeuralChargeTestHelper {
         ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(settings);
         StateToValueFunctionContainerCharge container= new StateToValueFunctionContainerCharge(lambdas,settings, dummy);
         MockedReplayBufferCreatorCharge bufferCreator= MockedReplayBufferCreatorCharge.builder()
-                .bufferSize(bufferSize).settings(settings).stateToValueFunction(container.fixedAtZero)
+                .bufferSize(bufferSize).envSettings(settings).stateToValueFunction(container.fixedAtZero)
                 .build();
 
         ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();

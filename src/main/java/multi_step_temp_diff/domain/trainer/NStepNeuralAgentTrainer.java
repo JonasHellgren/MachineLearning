@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
@@ -26,6 +27,7 @@ import static multi_step_temp_diff.domain.helpers.NStepTDFunctionsAndPredicates.
 @Builder
 @Getter
 @Setter
+@Log
 public class NStepNeuralAgentTrainer<S> {
 
     @Builder.Default
@@ -40,6 +42,7 @@ public class NStepNeuralAgentTrainer<S> {
     LogarithmicDecay decayProb;
 
     public void train() {
+        agentInfo=new AgentInfo<>(agentNeural);
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
         buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
@@ -64,9 +67,12 @@ public class NStepNeuralAgentTrainer<S> {
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
-            System.out.println("episode = " + helper.getEpisode());
+            System.out.println("episode = " + helper.getEpisode()+ ", time = " + helper.getTime());
+
             helper.increaseEpisode();
         }
+        log.info("Training finished. Replay buffer size = "+buffer.size());
+
     }
 
     private boolean isTimeForUpdateOkAndNotToLargeTime() {

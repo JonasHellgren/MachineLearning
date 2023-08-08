@@ -1,6 +1,5 @@
 package multi_step_temp_diff.domain.helpers;
 
-import common.RandUtils;
 import lombok.Builder;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
@@ -20,7 +19,7 @@ import java.util.function.Function;
 public class MockedReplayBufferCreatorCharge {
 
     int bufferSize;
-    ChargeEnvironmentSettings settings;
+    ChargeEnvironmentSettings envSettings;
     Function<ChargeState, Double> stateToValueFunction;
 
 
@@ -34,8 +33,9 @@ public class MockedReplayBufferCreatorCharge {
     @NotNull
     public List<NstepExperience<ChargeVariables>> createBuffer() {
         List<NstepExperience<ChargeVariables>> batch = new ArrayList<>();
+        ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
         for (int i = 0; i < bufferSize; i++) {
-            ChargeState state = stateRandomPosAndSoC();
+            ChargeState state = suppliers.stateRandomPosAndSoC();
             NstepExperience<ChargeVariables> exp = NstepExperience.<ChargeVariables>builder()
                     .stateToUpdate(state)
                     .value(stateToValueFunction.apply(state))
@@ -46,22 +46,6 @@ public class MockedReplayBufferCreatorCharge {
     }
 
 
-
-    @NotNull
-    public ChargeState stateRandomPosAndSoC() {  //todo move to ChargeStateSuppliers??
-
-        ChargeStateSuppliers stateSuppliers=new ChargeStateSuppliers(settings);
-
-        int posA = stateSuppliers.randomSitePos() ,posB = stateSuppliers.randomSitePos();
-        while (posB==posA) {
-            posB = stateSuppliers.randomSitePos();
-        }
-
-        return new ChargeState(ChargeVariables.builder()
-                .posA(posA).posB(posB)
-                .socA(stateSuppliers.randomSoC()).socB(stateSuppliers.randomSoC())
-                .build());
-    }
 
 
 

@@ -10,7 +10,6 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestAgentChargeGreedy {
 
     public static final int PROB_RANDOM = 0;
-    public static final int TIME = 10;
+    public static final int SIM_STEPS_ONE_LAP = 20, SIM_STEPS_TWO_LAPS = 40;
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironment environmentCasted;
     StateInterface<ChargeVariables> state;
@@ -59,6 +58,22 @@ public class TestAgentChargeGreedy {
 
     @ParameterizedTest
     @CsvSource({
+            "20,29,0.9,0.9, false,30,29"  //A shall move into charge area because area is not blocked
+    })
+    public void whenBTrapped_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
+        environmentCasted.setObstacle(false);
+        TwoRunningHelper reader= TwoRunningHelper.of(arguments);
+        StateInterface<ChargeVariables> state = setState(reader);
+        int action = createAgentAndGetAction(state);
+        StepReturn<ChargeVariables> stepReturn=environment.step(state,action);
+        int posA = stepReturn.newState.getVariables().posA;
+        out.println("posA = " + posA);
+
+        assertAction(reader, stepReturn);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
             "0,10,0.9,0.9, false,1,11",   //B at split, no short term difference between destionations
     })
     public void whenBAtSplitRandomDestination_thenCorrectNewPosAndSoCChange(ArgumentsAccessor arguments) {
@@ -87,11 +102,27 @@ public class TestAgentChargeGreedy {
     }
 
     @Test
-    @Disabled  //flytta till AgentChargeGreedyRuleForChargeDecisionPoint
-    public void when30steps_thenFailState() {
+    public void whenStartingAt11WithToLowSocRunningOneLap_thenLaterEndsInFailState() {
         StateInterface<ChargeVariables> state = setState(TwoRunningHelper.builder()
-                .posA(0).posB(1).socA(0.5).socB(0.5).build());
-        for (int i = 0; i < 30 ; i++) {
+                .posA(11).posB(29).socA(0.5).socB(0.9).build());
+        boolean isEndingInFail=simulate(state,SIM_STEPS_ONE_LAP);
+        out.println("stepReturn.newState = " + stepReturn.newState);
+        assertTrue(isEndingInFail);
+    }
+
+    @Test
+    public void whenStartingAt11WithHighSocRunningTwoLaps_thenLaterEndsInNonFailState() {
+        StateInterface<ChargeVariables> state = setState(TwoRunningHelper.builder()
+                .posA(11).posB(29).socA(0.99).socB(0.9).build());
+        boolean isEndingInFail=simulate(state,SIM_STEPS_TWO_LAPS);
+        out.println("stepReturn.newState = " + stepReturn.newState);
+        assertFalse(isEndingInFail);
+    }
+
+
+
+    private boolean simulate(StateInterface<ChargeVariables> state, int simSteps) {
+        for (int i = 0; i < simSteps; i++) {
             int action = createAgentAndGetAction(state);
             out.println("state = " + state);
             stepReturn=environment.step(state,action);
@@ -100,9 +131,8 @@ public class TestAgentChargeGreedy {
                 break;
             }
         }
-        out.println("stepReturn.newState = " + stepReturn.newState);
-        assertTrue(stepReturn.isNewStateFail);
 
+        return stepReturn.isNewStateTerminal;
     }
 
 

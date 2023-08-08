@@ -142,10 +142,12 @@ AgentChargeNeural
 RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - flytta discountFactor från AgentAbstract till AgentSettins  x
 - olikma momentum x
-- discount factor
-- reset memory
-- kör episoder
-- ChargeEnv energi minskar även om står still
+- discount factor x
+- reset memory x
+- bugg still 20 x
+- kör episoder x
+- ChargeEnv energi minskar även om står still x
+- RunnerAgentChargeNeuralTrainerBTrapped funkar
 
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree

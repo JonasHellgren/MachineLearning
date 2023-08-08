@@ -1,8 +1,8 @@
 package multi_step_td.charge;
 
-import common.RandUtils;
 import multi_step_temp_diff.domain.test_helpers.AgentNeuralChargeTestHelper;
 import multi_step_temp_diff.domain.helpers.MockedReplayBufferCreatorCharge;
+import multi_step_temp_diff.domain.test_helpers.ChargeStateSuppliers;
 import multi_step_temp_diff.domain.test_helpers.StateToValueFunctionContainerCharge;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.neuroph.util.TransferFunctionType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,23 +53,23 @@ public class TestAgentNeuralChargeMockedData {
     EnvironmentInterface<ChargeVariables> environment;
     ChargeEnvironmentLambdas lambdas;
     ChargeEnvironment environmentCasted;
-    ChargeEnvironmentSettings settings;
+    ChargeEnvironmentSettings envSettings;
     StateToValueFunctionContainerCharge container;
     AgentNeuralChargeTestHelper helper;
     MockedReplayBufferCreatorCharge bufferCreator;
 
     @BeforeEach
     public void init() {
-        settings = ChargeEnvironmentSettings.newDefault();
-        environment = new ChargeEnvironment(settings);
+        envSettings = ChargeEnvironmentSettings.newDefault();
+        environment = new ChargeEnvironment(envSettings);
         environmentCasted = (ChargeEnvironment) environment;
-        lambdas=new ChargeEnvironmentLambdas(settings);
+        lambdas=new ChargeEnvironmentLambdas(envSettings);
         ChargeState initState = new ChargeState(ChargeVariables.builder().build());
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
                 .learningRate(0.1).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .nofLayersHidden(5)
-                .valueNormalizer(new NormalizerMeanStd(List.of(settings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))
+                .valueNormalizer(new NormalizerMeanStd(List.of(envSettings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))
                 //.valueNormalizer(new NormalizeMinMax(settings.rewardBad(),0))
                 .build();
 
@@ -84,7 +83,7 @@ public class TestAgentNeuralChargeMockedData {
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
-        container= new StateToValueFunctionContainerCharge(lambdas,settings, SOC_LIMIT);
+        container= new StateToValueFunctionContainerCharge(lambdas, envSettings, SOC_LIMIT);
     }
 
     @Test
@@ -93,12 +92,13 @@ public class TestAgentNeuralChargeMockedData {
 
         helper=AgentNeuralChargeTestHelper.builder()
                 .agent(agent).batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
-        helper.reset(settings,BUFFER_SIZE, TIME_BUDGET);
+        helper.reset(envSettings,BUFFER_SIZE, TIME_BUDGET);
         helper.plotAndSaveErrorHistory("fixed");
 
-        bufferCreator= MockedReplayBufferCreatorCharge.builder().settings(settings).build();
+        bufferCreator= MockedReplayBufferCreatorCharge.builder().envSettings(envSettings).build();
+        ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
         for (int i = 0; i < 10; i++) {
-            ChargeState state = bufferCreator.stateRandomPosAndSoC();
+            ChargeState state = suppliers.stateRandomPosAndSoC();
             double valueLearned = agent.readValue(state);
             Assertions.assertEquals(container.fixedAtZero.apply(state),valueLearned, DELTA);
         }
@@ -109,7 +109,7 @@ public class TestAgentNeuralChargeMockedData {
     @Tag("nettrain")
     public void givenRuleBasedValue_whenTrain_thenCorrect() {
         bufferCreator= MockedReplayBufferCreatorCharge.builder()
-                .bufferSize(BUFFER_SIZE).settings(settings).stateToValueFunction(container.limit)
+                .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
         ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
         helper=AgentNeuralChargeTestHelper.builder()
@@ -132,8 +132,10 @@ public class TestAgentNeuralChargeMockedData {
     @NotNull
     private Map<Integer, Pair<Double, Double>> createValueMap(Function<ChargeState, Double> stateToValueFunction) {
         Map<Integer, Pair<Double,Double>> valueMap=new HashMap<>();
+        ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
+
         for (int i = 0; i < 10; i++) {
-            ChargeState state = bufferCreator.stateRandomPosAndSoC();
+            ChargeState state = suppliers.stateRandomPosAndSoC();
             System.out.println("i = "+ i+" - " +"state = "+state.getVariables());
             double valueLearned = agent.readValue(state);
             valueMap.put(i, new Pair<>(stateToValueFunction.apply(state),valueLearned));
