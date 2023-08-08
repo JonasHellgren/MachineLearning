@@ -3,6 +3,7 @@ package multi_step_td.charge;
 import common.MultiplePanelsPlotter;
 import common.RandUtils;
 import lombok.SneakyThrows;
+import multi_step_temp_diff.domain.test_helpers.StateToValueFunctionContainerCharge;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /***
@@ -43,6 +43,7 @@ public class TestAgentNeuralChargeMockedData {
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
             new NormalizerMeanStd(List.of(0.3, 0.5, 0.7, 0.9, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+    public static final double SOC_LIMIT = 0.4;
 
 
     AgentNeuralInterface<ChargeVariables> agent;
@@ -51,6 +52,7 @@ public class TestAgentNeuralChargeMockedData {
     ChargeEnvironmentLambdas lambdas;
     ChargeEnvironment environmentCasted;
     ChargeEnvironmentSettings settings;
+    StateToValueFunctionContainerCharge container;
 
     @BeforeEach
     public void init() {
@@ -78,20 +80,20 @@ public class TestAgentNeuralChargeMockedData {
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
+        container= new StateToValueFunctionContainerCharge(lambdas,settings, SOC_LIMIT);
     }
 
     @Test
     @Tag("nettrain")
     public void givenFixedValue_whenTrain_thenCorrect() {
-        Function<ChargeState, Double> stateToValueFunction =(s) -> -0d;
-        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(stateToValueFunction);
+        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(container.fixedAtZero);
         trainAgent(buffer);
         plotAndSaveErrorHistory("fixed");
 
         for (int i = 0; i < 10; i++) {
             ChargeState state = stateRandomPosAndSoC();
             double valueLearned = agent.readValue(state);
-            Assertions.assertEquals(stateToValueFunction.apply(state),valueLearned, DELTA);
+            Assertions.assertEquals(container.fixedAtZero.apply(state),valueLearned, DELTA);
         }
 
     }
@@ -100,22 +102,12 @@ public class TestAgentNeuralChargeMockedData {
     @Tag("nettrain")
     public void givenRuleBasedValue_whenTrain_thenCorrect() {
 
-        Function<ChargeState, Double> stateToValueFunction=(s) -> {
-            double socLimit = 0.4;
-            ChargeVariables vars = s.getVariables();
-            BiPredicate<Double,Integer> isBelowSocLimitAndNotChargePos=(soc, pos) ->
-                    soc<socLimit && !lambdas.isChargePos.test(pos);
 
-            return  (isBelowSocLimitAndNotChargePos.test(vars.socA, vars.posA) ||
-                    isBelowSocLimitAndNotChargePos.test(vars.socB, vars.posB))
-                    ? settings.rewardBad()
-                    :0d;
-        };
 
-        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(stateToValueFunction);
+        ReplayBufferNStep<ChargeVariables> buffer = createExpReplayBuffer(container.limit);
         trainAgent(buffer);
         plotAndSaveErrorHistory("rule");
-        Map<Integer, Pair<Double, Double>> valueMap = createValueMap(stateToValueFunction);
+        Map<Integer, Pair<Double, Double>> valueMap = createValueMap(container.limit);
         printAndAsserValueMap(valueMap);
 
     }

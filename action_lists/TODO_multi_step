@@ -132,7 +132,7 @@ AgentChargeNeural
 - Plotta egentiga felet  x
 - RunnerChargeNeuralMocked - med olika inställmningar  x
 - hot encoding positions+socs  x
-- RunnerChargeNeuralMocked cleaner
+- RunnerChargeNeuralMocked cleaner x
 - MockedReplayBufferCreatorCharge i TestAgent..
 - Andra TransferFunctionType
 . AgentMazeNeuralSettings gör snyggare -utan getWithDiscountAndLearningRate

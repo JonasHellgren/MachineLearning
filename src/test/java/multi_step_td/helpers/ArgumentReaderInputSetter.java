@@ -1,4 +1,4 @@
-package multi_step_td.test_helpers;
+package multi_step_td.helpers;
 
 import lombok.Builder;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
