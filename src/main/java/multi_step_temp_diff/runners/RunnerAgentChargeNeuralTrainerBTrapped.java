@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Log
-public class RunnerAgentChargeNeuralBTrapped {
+public class RunnerAgentChargeNeuralTrainerBTrapped {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 10;
     private static final int NOF_EPIS = 50_000;
@@ -67,7 +67,7 @@ public class RunnerAgentChargeNeuralBTrapped {
 
     private static void buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.1).momentum(0.1d)
+                .learningRate(0.1).discountFactor(0.9).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .nofLayersHidden(5)
                 .valueNormalizer(new NormalizerMeanStd(List.of(envSettings.rewardBad()*10,0d,-1d,-2d,0d,-1d,0d)))

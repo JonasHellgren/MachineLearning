@@ -49,6 +49,7 @@ public class MockedReplayBufferCreatorCharge {
 
     @NotNull
     public ChargeState stateRandomPosAndSoC() {  //todo move to ChargeStateSuppliers??
+
         ChargeStateSuppliers stateSuppliers=new ChargeStateSuppliers(settings);
 
         int posA = stateSuppliers.randomSitePos() ,posB = stateSuppliers.randomSitePos();

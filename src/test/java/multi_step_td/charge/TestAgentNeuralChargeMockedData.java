@@ -47,6 +47,7 @@ public class TestAgentNeuralChargeMockedData {
             new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
     public static final double SOC_LIMIT = 0.4;
     public static final int LENGTH_FILTER_WINDOW = 100;
+    public static final int TIME_BUDGET = 1000;
 
     AgentNeuralInterface<ChargeVariables> agent;
     AgentChargeNeural agentCasted;
@@ -89,16 +90,13 @@ public class TestAgentNeuralChargeMockedData {
     @Test
     @Tag("nettrain")
     public void givenFixedValue_whenTrain_thenCorrect() {
-        bufferCreator= MockedReplayBufferCreatorCharge.builder()
-                .bufferSize(BUFFER_SIZE).settings(settings).stateToValueFunction(container.fixedAtZero)
-                .build();
-        ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
+
         helper=AgentNeuralChargeTestHelper.builder()
-                .agent(agent).nofIterations(NOF_ITERATIONS_FIXED).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
-                .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
-        helper.trainAgent(buffer);
+                .agent(agent).batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
+        helper.reset(settings,BUFFER_SIZE, TIME_BUDGET);
         helper.plotAndSaveErrorHistory("fixed");
 
+        bufferCreator= MockedReplayBufferCreatorCharge.builder().settings(settings).build();
         for (int i = 0; i < 10; i++) {
             ChargeState state = bufferCreator.stateRandomPosAndSoC();
             double valueLearned = agent.readValue(state);

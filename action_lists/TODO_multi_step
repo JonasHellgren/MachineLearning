@@ -141,7 +141,7 @@ AgentChargeNeural
 
 RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - flytta discountFactor från AgentAbstract till AgentSettins  x
-- olikma momentum
+- olikma momentum x
 - discount factor
 - reset memory
 - kör episoder
