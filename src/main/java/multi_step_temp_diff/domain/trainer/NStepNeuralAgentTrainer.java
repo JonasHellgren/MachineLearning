@@ -65,6 +65,9 @@ public class NStepNeuralAgentTrainer<S> {
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
+
+            System.out.println("helper = " + helper);
+
             helper.increaseEpisode();
         }
     }

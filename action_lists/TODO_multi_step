@@ -139,7 +139,8 @@ AgentChargeNeural
 - få TestAgentNeuralChargeMockedData stabil x
 - momentum x
 
-TestAgentChargeNeuralBTrapped - Testa ovan när B är trapped
+RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
+RunnerAgentChargeNeuralBTrapped - bug fastnar på 7, 22 etc
 plotta value sfa pos olika soc
 TestAgentChargeNeuralBFree
 
