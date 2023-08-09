@@ -165,6 +165,8 @@ Overall cleaning  x
 Mer i hjälp klas RunnerBTrapped x
 
 TestAgentChargeNeuralBothFree
+påvisa fordon vid split ej laddar om bakomvarande kritisk soc
+prova target network
 
 snygga upp plotters - tex inställningar i konstruktor
 - MultiePanelScatterPlot

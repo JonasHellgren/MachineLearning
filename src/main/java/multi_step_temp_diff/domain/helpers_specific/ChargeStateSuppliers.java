@@ -30,6 +30,11 @@ public class ChargeStateSuppliers {
         return RandUtils.getRandomDouble(settings.socBad(), settings.socMax());
     }
 
+    public double randomSoCAbove(double socMin) {
+        return RandUtils.getRandomDouble(socMin, settings.socMax());
+    }
+
+
     public int randomSitePos() {
         RandUtils<Integer> randUtils=new RandUtils<>();
         List<Integer> es = new ArrayList<>(settings.siteNodes());
@@ -61,6 +66,16 @@ public class ChargeStateSuppliers {
         return new ChargeState(ChargeVariables.builder()
                 .posA(posA).posB(posB)
                 .socA(settings.socMax()).socB(settings.socMax())
+                .build());
+    }
+
+    public ChargeState randomDifferentSitePositionsAndHighSoC() {
+        int posA = randomSitePos();
+        int posB = posBDifferingFromPosA(posA);
+        double socLowest=(settings.socMax()-settings.socBad())/2d;
+        return new ChargeState(ChargeVariables.builder()
+                .posA(posA).posB(posB)
+                .socA(randomSoCAbove(socLowest)).socB(randomSoCAbove(socLowest))
                 .build());
     }
 

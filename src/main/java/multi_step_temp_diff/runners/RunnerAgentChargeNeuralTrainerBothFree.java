@@ -27,7 +27,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 200;
+    private static final int NOF_EPIS = 100;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     public static final int MAX_NOF_STEPS_TRAINING = 200;
     public static final int BATCH_SIZE1 = 100;
@@ -55,7 +55,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1)
                 .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndMaxSoC())
+                .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                 .build();
         trainer=trainerHelper.buildTrainer();
         trainer.train();
@@ -87,11 +87,11 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
 
     private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.5).discountFactor(0.95).momentum(0.1d)
-                .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
-                .nofLayersHidden(5)
+                .learningRate(0.001).discountFactor(0.99).momentum(0.5d)
+                .nofLayersHidden(3).nofNeuronsHidden(30)
+                .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(List.of(
-                        envSettingsForTraining.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
+                        envSettingsForTraining.rewardBad() * 1, 0d, -1d, -2d, 0d, -1d, 0d)))
                 .build();
 
         agent = AgentChargeNeural.builder()
