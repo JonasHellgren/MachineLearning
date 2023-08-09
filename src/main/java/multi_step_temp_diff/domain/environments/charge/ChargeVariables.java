@@ -1,12 +1,14 @@
 package multi_step_temp_diff.domain.environments.charge;
 
 import lombok.Builder;
-import lombok.ToString;
+import monte_carlo_tree_search.interfaces.StateInterface;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.StringJoiner;
+
+import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.isAnyAtNode;
 
 @Builder
 public class ChargeVariables {
@@ -34,12 +36,16 @@ public class ChargeVariables {
                 .add("soc A = " + formatter.format(socA)).add("soc B = " + formatter.format(socB))
                 .add("time = " + time);
 
-        if (posA==10 || posB==10) {
+        ChargeState state=new ChargeState(this);
+        if (isAnyAtNode.test(state,10)) {
             sj.add("---- a vehicle is at split node -------");
         }
 
+        if (isAnyAtNode.test(state,20)) {
+            sj.add("---- a vehicle is at charge que node -------");
+        }
         return sj.toString();
-
     }
+
 
 }

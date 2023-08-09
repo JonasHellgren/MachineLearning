@@ -39,13 +39,28 @@ public class ChargeStateSuppliers {
 
     public ChargeState randomDifferentSitePositionsAndRandomSoCs() {
         ChargeStateSuppliers stateSuppliers=new ChargeStateSuppliers(settings);
-        int posA = stateSuppliers.randomSitePos() ,posB = stateSuppliers.randomSitePos();
-        while (posB==posA) {
-            posB = stateSuppliers.randomSitePos();
-        }
+        int posA = stateSuppliers.randomSitePos();
+        int posB = posBDifferingFromPosA(posA);
         return new ChargeState(ChargeVariables.builder()
                 .posA(posA).posB(posB)
                 .socA(stateSuppliers.randomSoC()).socB(stateSuppliers.randomSoC())
+                .build());
+    }
+
+    private int posBDifferingFromPosA(int posA) {
+        int posB = randomSitePos();
+        while (posB== posA) {
+            posB = randomSitePos();
+        }
+        return posB;
+    }
+
+    public ChargeState randomDifferentSitePositionsAndMaxSoC() {
+        int posA = randomSitePos();
+        int posB = posBDifferingFromPosA(posA);
+        return new ChargeState(ChargeVariables.builder()
+                .posA(posA).posB(posB)
+                .socA(settings.socMax()).socB(settings.socMax())
                 .build());
     }
 

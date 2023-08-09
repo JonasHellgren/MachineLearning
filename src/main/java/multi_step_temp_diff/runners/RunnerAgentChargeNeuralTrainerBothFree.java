@@ -27,12 +27,13 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 100;
+    private static final int NOF_EPIS = 200;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    public static final double SOC_B = 1.0;
     public static final int MAX_NOF_STEPS_TRAINING = 200;
+    public static final int BATCH_SIZE1 = 100;
+    public static final int SIM_STEPS_MAX_EVAL = 100;
     public static final int TIME_BUDGET_RESET = 1000;
-    public static final int BATCH_SIZE1 = 50;
+
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -54,7 +55,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1)
                 .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndRandomSoCs())
+                .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndMaxSoC())
                 .build();
         trainer=trainerHelper.buildTrainer();
         trainer.train();
@@ -68,16 +69,17 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         plotHelper.plotTdError();
         plotHelper.plotSumRewardsTracker();
         int posB = 0;
+        double socB = 1.0;
         plotHelper.createScatterPlot(envSettings, "V-30", 0.3, posB);
         plotHelper.createScatterPlot(envSettings, "V-80", 0.8, posB);
-        plotHelper.plotV20MinusV11VersusSoC(posB, SOC_B);
+        plotHelper.plotV20MinusV11VersusSoC(posB, socB);
     }
 
     private static void evaluate(ChargeEnvironmentSettings envSettings) {
         environment = new ChargeEnvironment(envSettings);
         ChargeState initState = new ChargeState(ChargeVariables.builder().posA(0).posB(1).socA(0.99).build());
         AgentEvaluator<ChargeVariables> evaluator = AgentEvaluator.<ChargeVariables>builder()
-                .environment(environment).agent(agent).simStepsMax(100)
+                .environment(environment).agent(agent).simStepsMax(SIM_STEPS_MAX_EVAL)
                 .build();
         AgentEvaluatorResults results = evaluator.simulate(initState);
         out.println("results = " + results);
@@ -85,7 +87,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
 
     private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.01).discountFactor(0.9).momentum(0.1d)
+                .learningRate(0.5).discountFactor(0.95).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .nofLayersHidden(5)
                 .valueNormalizer(new NormalizerMeanStd(List.of(

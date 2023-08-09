@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ChargePlotHelper {
 
-    public  final int LENGTH_FILTER_WINDOW = 100;
+    public  final int LENGTH_FILTER_WINDOW = 500;
     public  final int TRAP_POS = 29;
     public  final int MAX_TD_ERROR_IN_PLOT = 2;
 
