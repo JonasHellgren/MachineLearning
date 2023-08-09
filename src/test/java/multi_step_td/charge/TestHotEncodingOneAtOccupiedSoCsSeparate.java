@@ -6,7 +6,7 @@ import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncoding
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;

@@ -2,19 +2,14 @@ package multi_step_temp_diff.domain.agent_abstract;
 
 import common.Conditionals;
 import common.MathUtils;
-import common.ScalerLinear;
-import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.nnet.learning.DynamicBackPropagation;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
-import org.neuroph.util.TransferFunctionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

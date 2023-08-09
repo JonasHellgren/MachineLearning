@@ -1,9 +1,6 @@
 package multi_step_td.charge;
 
-import multi_step_temp_diff.domain.test_helpers.AgentNeuralChargeTestHelper;
-import multi_step_temp_diff.domain.helpers.MockedReplayBufferCreatorCharge;
-import multi_step_temp_diff.domain.test_helpers.ChargeStateSuppliers;
-import multi_step_temp_diff.domain.test_helpers.StateToValueFunctionContainerCharge;
+import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
@@ -15,7 +12,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
@@ -54,9 +51,10 @@ public class TestAgentNeuralChargeMockedData {
     ChargeEnvironmentLambdas lambdas;
     ChargeEnvironment environmentCasted;
     ChargeEnvironmentSettings envSettings;
-    StateToValueFunctionContainerCharge container;
-    AgentNeuralChargeTestHelper helper;
-    MockedReplayBufferCreatorCharge bufferCreator;
+    ChargeStateToValueFunctionContainer container;
+    ChargeAgentNeuralHelper helper;
+    ChargePlotHelper plotHelper;
+    ChargeMockedReplayBufferCreator bufferCreator;
 
     @BeforeEach
     public void init() {
@@ -83,19 +81,20 @@ public class TestAgentNeuralChargeMockedData {
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
         agentCasted = (AgentChargeNeural) agent;
-        container= new StateToValueFunctionContainerCharge(lambdas, envSettings, SOC_LIMIT);
+        container= new ChargeStateToValueFunctionContainer(lambdas, envSettings, SOC_LIMIT);
+        plotHelper= new ChargePlotHelper(agent,null);
     }
 
     @Test
     @Tag("nettrain")
     public void givenFixedValue_whenTrain_thenCorrect() {
 
-        helper=AgentNeuralChargeTestHelper.builder()
+        helper= ChargeAgentNeuralHelper.builder()
                 .agent(agent).batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
         helper.resetAgentMemory(envSettings,BUFFER_SIZE, TIME_BUDGET);
-        helper.plotAndSaveErrorHistory("fixed");
+        plotHelper.plotAndSaveErrorHistory("fixed");
 
-        bufferCreator= MockedReplayBufferCreatorCharge.builder().envSettings(envSettings).build();
+        bufferCreator= ChargeMockedReplayBufferCreator.builder().envSettings(envSettings).build();
         ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
         for (int i = 0; i < 10; i++) {
             ChargeState state = suppliers.stateRandomPosAndSoC();
@@ -108,15 +107,15 @@ public class TestAgentNeuralChargeMockedData {
     @Test
     @Tag("nettrain")
     public void givenRuleBasedValue_whenTrain_thenCorrect() {
-        bufferCreator= MockedReplayBufferCreatorCharge.builder()
+        bufferCreator= ChargeMockedReplayBufferCreator.builder()
                 .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
         ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
-        helper=AgentNeuralChargeTestHelper.builder()
+        helper= ChargeAgentNeuralHelper.builder()
                 .agent(agent).nofIterations(NOF_ITERATIONS_RULE).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
                 .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
         helper.trainAgent(buffer);
-        helper.plotAndSaveErrorHistory("rule");
+        plotHelper.plotAndSaveErrorHistory("rule");
         Map<Integer, Pair<Double, Double>> valueMap = createValueMap(container.limit);
         printAndAsserValueMap(valueMap);
 

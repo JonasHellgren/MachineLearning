@@ -14,10 +14,11 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.helpers.MockedReplayBufferCreatorCharge;
-import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
-import multi_step_temp_diff.domain.test_helpers.AgentNeuralChargeTestHelper;
-import multi_step_temp_diff.domain.test_helpers.StateToValueFunctionContainerCharge;
+import multi_step_temp_diff.domain.helpers_specific.ChargeMockedReplayBufferCreator;
+import multi_step_temp_diff.domain.helpers_specific.ChargePlotHelper;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
+import multi_step_temp_diff.domain.helpers_specific.ChargeStateToValueFunctionContainer;
 import org.neuroph.util.TransferFunctionType;
 import java.util.List;
 
@@ -52,8 +53,9 @@ public class RunnerTrainChargeAgentNeuralMocked {
     static ChargeEnvironmentSettings envSettings;
     static ChargeState initState;
     static AgentChargeNeuralSettings agentSettings;
-    static StateToValueFunctionContainerCharge container;
-    static AgentNeuralChargeTestHelper helper;
+    static ChargeStateToValueFunctionContainer container;
+    static ChargeAgentNeuralHelper helper;
+    static ChargePlotHelper plotHelper;
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -63,50 +65,50 @@ public class RunnerTrainChargeAgentNeuralMocked {
         lambdas=new ChargeEnvironmentLambdas(envSettings);
         initState = new ChargeState(ChargeVariables.builder().build());
         agentSettings = getAgentSettings();
-        container= new StateToValueFunctionContainerCharge(lambdas,envSettings, SOC_LMIIT);
-        MockedReplayBufferCreatorCharge bufferCreator= MockedReplayBufferCreatorCharge.builder()
+        container= new ChargeStateToValueFunctionContainer(lambdas,envSettings, SOC_LMIIT);
+        ChargeMockedReplayBufferCreator bufferCreator= ChargeMockedReplayBufferCreator.builder()
                 .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
         ReplayBufferNStep<ChargeVariables> expBuffer=bufferCreator.createExpReplayBuffer();
-
+        plotHelper= new ChargePlotHelper(agent,null);
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_MINUSONE,-1d));
         helper= crateHelper();
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("MinusOne");
+        plotHelper.plotAndSaveErrorHistory("MinusOne");
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_ZERO,0d));
         helper= crateHelper();
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("Zero");
+        plotHelper.plotAndSaveErrorHistory("Zero");
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_ONE,1d));
         helper= crateHelper();
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("One");
+        plotHelper.plotAndSaveErrorHistory("One");
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_TWO,2d));
         helper= crateHelper();
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("Two");
+        plotHelper.plotAndSaveErrorHistory("Two");
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_ONEDOTONE,1.1d));
         helper= crateHelper();
 
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("OneDotOne");
+        plotHelper.plotAndSaveErrorHistory("OneDotOne");
 
         agent = createAgent(new HotEncodingOneAtOccupiedSoCsSeparate(agentSettings, envSettings, NORMALIZER_SEPARATE_SOCS));
         helper= crateHelper();
         helper.trainAgent(expBuffer);
-        helper.plotAndSaveErrorHistory("Sep socs");
+        plotHelper.plotAndSaveErrorHistory("Sep socs");
 
         log.info("Running finished");
 
     }
 
-    private static AgentNeuralChargeTestHelper crateHelper() {
-        return AgentNeuralChargeTestHelper.builder()
+    private static ChargeAgentNeuralHelper crateHelper() {
+        return ChargeAgentNeuralHelper.builder()
                 .agent(agent).nofIterations(NOF_ITERATIONS).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
                 .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
     }

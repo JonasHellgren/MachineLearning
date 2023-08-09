@@ -158,15 +158,16 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - prova resetta innan  x
 - ny klass AgentEvaluator  x
 - plotta G vs episode  x
-- agent.setState(state) - missat annat ställe?
-- word dokumnetera
+- agent.setState(state) - missat annat ställe?  x
+- word dokumnetera  x
 
-Overall cleaning
-MultiePanelScatterPlot
-Mer i hjälp klas RunnerBTrapped
+Overall cleaning  x
+Mer i hjälp klas RunnerBTrapped x
+
 TestAgentChargeNeuralBothFree
 
 snygga upp plotters - tex inställningar i konstruktor
+- MultiePanelScatterPlot
 - MultiePanelScatterPlot
 
 RunnerAgentChargeGreedyRuleForChargeDecisionPointObstacleSomeTimes med obstacle ibland

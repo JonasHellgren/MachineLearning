@@ -1,10 +1,9 @@
 package multi_step_temp_diff.domain.agent_valueobj;
 
 import lombok.Builder;
-import lombok.NonNull;
 import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
 
 import static common.DefaultPredicates.defaultIfNullDouble;
 import static common.DefaultPredicates.defaultIfNullInteger;

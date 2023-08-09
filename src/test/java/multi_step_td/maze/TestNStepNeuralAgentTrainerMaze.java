@@ -8,7 +8,7 @@ import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
-import multi_step_temp_diff.domain.helpers.StateValuePrinter;
+import multi_step_temp_diff.domain.helpers_specific.MazeStateValuePrinter;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
@@ -67,7 +67,7 @@ public class TestNStepNeuralAgentTrainerMaze {
 
         System.out.println("avgError = " + avgError);
 
-        StateValuePrinter<MazeVariables> printer=new StateValuePrinter<>(agent,environment);
+        MazeStateValuePrinter<MazeVariables> printer=new MazeStateValuePrinter<>(agent,environment);
         printer.printMazeNeuralAgent();
 
         assertTrue(avgError < delta);

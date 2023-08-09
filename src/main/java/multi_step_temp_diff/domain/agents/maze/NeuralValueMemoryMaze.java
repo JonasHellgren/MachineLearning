@@ -5,9 +5,6 @@ import multi_step_temp_diff.domain.agent_abstract.PersistentMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
-import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.util.TransferFunctionType;
 
 import java.util.Arrays;
 

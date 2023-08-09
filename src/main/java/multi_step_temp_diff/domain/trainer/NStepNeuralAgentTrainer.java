@@ -9,17 +9,16 @@ import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
-import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.helpers.AgentInfo;
-import multi_step_temp_diff.domain.helpers.NStepTDHelper;
+import multi_step_temp_diff.domain.helpers_common.AgentInfo;
+import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import java.util.*;
 import java.util.function.Supplier;
 import static common.Conditionals.executeIfTrue;
-import static multi_step_temp_diff.domain.helpers.NStepTDFunctionsAndPredicates.*;
+import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPredicates.*;
 
 /**
  * Inspired by DQN - https://stackoverflow.com/questions/39848984/what-is-phi-in-deep-q-learning-algorithm
@@ -68,7 +67,7 @@ public class NStepNeuralAgentTrainer<S> {
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
-            log.info("episode = " + helper.getEpisode()+ ", time = " + helper.getTime());
+            log.info("episode = " + helper.getEpisode()+ ", time end = " + helper.getTime());
             helper.increaseEpisode();
             helper.updateSumRewardsTracker();
         }

@@ -2,7 +2,7 @@ package multi_step_td;
 
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
-import multi_step_temp_diff.domain.helpers.AgentInfo;
+import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

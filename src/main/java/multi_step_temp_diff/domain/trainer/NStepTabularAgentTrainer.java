@@ -7,15 +7,15 @@ import lombok.Setter;
 import multi_step_temp_diff.domain.agent_abstract.AgentTabularInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.helpers.AgentInfo;
-import multi_step_temp_diff.domain.helpers.NStepTDHelper;
+import multi_step_temp_diff.domain.helpers_common.AgentInfo;
+import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 import static common.Conditionals.executeIfTrue;
-import static multi_step_temp_diff.domain.helpers.NStepTDFunctionsAndPredicates.*;
+import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPredicates.*;
 
 /**
  * https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
@@ -61,6 +61,7 @@ public class NStepTabularAgentTrainer<S> {
                 helper.increaseTime();
             } while (!isAtTimeJustBeforeTermination.test(helper.tau, helper.T));
             helper.increaseEpisode();
+            helper.updateSumRewardsTracker();
         }
     }
 

@@ -6,7 +6,7 @@ import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_parts.AgentActionSelector;
-import multi_step_temp_diff.domain.agent_parts.ValueTracker;
+import multi_step_temp_diff.domain.helpers_common.ValueTracker;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 
 import java.util.DoubleSummaryStatistics;

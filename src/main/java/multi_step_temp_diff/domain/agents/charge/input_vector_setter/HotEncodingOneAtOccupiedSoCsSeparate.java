@@ -4,7 +4,7 @@ import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
-import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
 
 import java.util.Arrays;
 import java.util.Optional;

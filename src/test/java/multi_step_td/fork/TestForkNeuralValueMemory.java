@@ -12,7 +12,7 @@ import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

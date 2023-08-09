@@ -1,13 +1,12 @@
 package multi_step_td.common;
 
-import multi_step_temp_diff.domain.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.normalizer.NormalizerInterface;
-import multi_step_temp_diff.domain.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
