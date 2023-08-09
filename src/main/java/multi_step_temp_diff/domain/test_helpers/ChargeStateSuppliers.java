@@ -28,7 +28,7 @@ public class ChargeStateSuppliers {
     }
 
     public double randomSoC() {
-        return RandUtils.getRandomDouble(0, 1);
+        return RandUtils.getRandomDouble(settings.socBad(), settings.socMax());
     }
 
     public int randomSitePos() {

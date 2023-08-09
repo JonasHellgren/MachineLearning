@@ -150,9 +150,17 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - RunnerAgentChargeNeuralTrainerBTrapped funkar x
 - mindre max tid tränning  x
 - simulering efter träning med större max tid  x
+- plotta v20-v11 för olika soc x
+- ovan för 20-100 soc
+- zoom in TD error plot
+- MultiePanelScatterPlot
+- prova resetta innan
+- ny klass AgentEvaluator
+- agent.setState(state) - missat annat ställe?
+- word dokumnetera
 
-plotta value sfa pos olika soc
-TestAgentChargeNeuralBFree
+Overall cleaning
+TestAgentChargeNeuralBothFree
 
 RunnerAgentChargeGreedyRuleForChargeDecisionPointObstacleSomeTimes med obstacle ibland
 
