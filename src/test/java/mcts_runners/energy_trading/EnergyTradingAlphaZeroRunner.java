@@ -13,6 +13,7 @@ import monte_carlo_tree_search.interfaces.*;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import monte_carlo_tree_search.network_training.ReplayBufferValueSetter;
+import plotters.PlotterMultiplePanelsTrajectory;
 
 import java.util.*;
 
@@ -101,7 +102,7 @@ public class EnergyTradingAlphaZeroRunner {
             tracker.addSumOfRewardsToListAndResetSumOfRewards();
         }
 
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Collections.singletonList("return"),"Iteration");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Collections.singletonList("return"),"Iteration");
         plotter.plot(Collections.singletonList(tracker.getSumOfRewardsList()));
         printMemory();
         runWithMultipleMemoryWeights();

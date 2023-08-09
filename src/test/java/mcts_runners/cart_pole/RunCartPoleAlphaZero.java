@@ -1,7 +1,7 @@
 package mcts_runners.cart_pole;
 
 import common.Conditionals;
-import common.MultiplePanelsPlotter;
+import plotters.PlotterMultiplePanelsTrajectory;
 import common.RandUtils;
 import common.ScalerLinear;
 import lombok.extern.java.Log;
@@ -125,7 +125,7 @@ public class RunCartPoleAlphaZero {
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Error","Return"),"Step");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Arrays.asList("Error","Return"),"Step");
         plotter.plot(Arrays.asList(learningErrors,returns));
     }
 

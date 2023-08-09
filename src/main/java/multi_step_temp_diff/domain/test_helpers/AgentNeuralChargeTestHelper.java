@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.test_helpers;
 
 import common.CpuTimer;
 import common.MovingAverage;
-import common.MultiplePanelsPlotter;
+import plotters.PlotterMultiplePanelsTrajectory;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
@@ -45,7 +45,7 @@ public class AgentNeuralChargeTestHelper {
     public void plotAndSaveErrorHistory(String fileName) {
         AgentChargeNeural agentCasted = (AgentChargeNeural) agent;
         ValueTracker errorTracker=agentCasted.getErrorHistory();
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(List.of("Error "+fileName),"iter");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(List.of("Error "+fileName),"iter");
         MovingAverage movingAverage=new MovingAverage(
                 filterWindowLength,errorTracker.getValueHistoryAbsoluteValues());
         plotter.plot(List.of(movingAverage.getFiltered()));

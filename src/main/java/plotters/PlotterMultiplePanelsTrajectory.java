@@ -1,4 +1,4 @@
-package common;
+package plotters;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class MultiplePanelsPlotter {
+public class PlotterMultiplePanelsTrajectory {
 
     private static final int WIDTH_PANEL = 300;
     private static final int HEIGHT = 220;
@@ -23,7 +23,7 @@ public class MultiplePanelsPlotter {
     List<PlotPanel> panels;
     JFrame frame;
 
-    public MultiplePanelsPlotter(List<String> titleList, String xAxisTitle) {
+    public PlotterMultiplePanelsTrajectory(List<String> titleList, String xAxisTitle) {
         nofPanels=titleList.size();
         panels=new ArrayList<>();
 
@@ -49,10 +49,19 @@ public class MultiplePanelsPlotter {
         } else
         {
             for (int i = 0; i < nofPanels ; i++) {
-                XYSeries series1 = defineDataSeries(listOfTrajectories.get(i));
-                panels.get(i).setChartDataFromSeries(series1);
+                XYSeries seriesi = defineDataSeries(listOfTrajectories.get(i));
+                panels.get(i).setChartDataFromSeries(seriesi);
             }
         }
+    }
+
+    private static XYSeries defineDataSeries(List<Double> doubleList) {
+        XYSeries series = new XYSeries("");
+        int x=0;
+        for (Double value:doubleList) {
+            series.add(x++, value);
+        }
+        return series;
     }
 
     @SneakyThrows
@@ -68,15 +77,6 @@ public class MultiplePanelsPlotter {
         {
             throw new IOException("Unable to save image, file = "+fileName);
         }
-    }
-
-    private static XYSeries defineDataSeries(List<Double> doubleList) {
-        XYSeries series = new XYSeries("");
-        int x=0;
-        for (Double value:doubleList) {
-            series.add(x++, value);
-        }
-        return series;
     }
 
 }

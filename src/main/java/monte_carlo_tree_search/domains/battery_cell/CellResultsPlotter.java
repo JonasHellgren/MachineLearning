@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
-import common.PlotPanel;
+import plotters.PlotPanel;
 import lombok.SneakyThrows;
 import org.jfree.data.xy.XYSeries;
 

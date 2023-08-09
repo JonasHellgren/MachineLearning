@@ -1,6 +1,6 @@
 package mcts_runners.cart_pole;
 
-import common.MultiplePanelsPlotter;
+import plotters.PlotterMultiplePanelsTrajectory;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
@@ -21,7 +21,7 @@ public class RunCartPoleOnlySearch {
     public static void main(String[] args) {
         MonteCarloTreeCreator<CartPoleVariables, Integer> monteCarloTreeCreator= createTreeCreator();
         StateInterface<CartPoleVariables> state=StateCartPole.newAllStatesAsZero();
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("maxValue","nofNodes","maxDepth"),"Iteration");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Arrays.asList("maxValue","nofNodes","maxDepth"),"Iteration");
         CartPoleRunner cpr=new CartPoleRunner(monteCarloTreeCreator,NOF_STEPS,plotter);
         cpr.run(state);
 

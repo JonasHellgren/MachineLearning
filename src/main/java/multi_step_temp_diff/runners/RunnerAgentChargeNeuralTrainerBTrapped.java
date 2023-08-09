@@ -1,7 +1,7 @@
 package multi_step_temp_diff.runners;
 
-import common.MultiplePanelsPlotter;
-import common.ScatterPlotter;
+import plotters.PlotterMultiplePanelsTrajectory;
+import plotters.PlotterScatter;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -86,13 +86,13 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
             ChargeState state11 = new ChargeState(ChargeVariables.builder().posA(11).posB(TRAP_POS).socA(socA).build());
             valueDiffVsSoC.add(agent.readValue(state20)-agent.readValue(state11));
         }
-        MultiplePanelsPlotter plotter = new MultiplePanelsPlotter(Collections.singletonList("v20-v11"), "soc");
+        PlotterMultiplePanelsTrajectory plotter = new PlotterMultiplePanelsTrajectory(Collections.singletonList("v20-v11"), "soc");
         listOfTrajectories.add(valueDiffVsSoC);
         plotter.plot(listOfTrajectories);
     }
 
     private static void createScatterPlot(ChargeEnvironmentSettings envSettings, String xAxisTitle, double socA) {
-        var plotter = new ScatterPlotter(xAxisTitle, "Pos");
+        var plotter = new PlotterScatter(xAxisTitle, "Pos");
         List<Pair<Double,Double>> dataPairs=new ArrayList<>();
         for (int pos: envSettings.siteNodes()) {
             ChargeState state=new ChargeState(ChargeVariables.builder().posA(pos).posB(TRAP_POS).socA(socA).build());
@@ -107,7 +107,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         List<List<Double>> listOfTrajectories = new ArrayList<>();
         List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_FILTER_WINDOW);
         listOfTrajectories.add(filtered1);
-        MultiplePanelsPlotter plotter = new MultiplePanelsPlotter(Collections.singletonList("TD error"), "Step");
+        PlotterMultiplePanelsTrajectory plotter = new PlotterMultiplePanelsTrajectory(Collections.singletonList("TD error"), "Step");
         plotter.plot(listOfTrajectories);
     }
 

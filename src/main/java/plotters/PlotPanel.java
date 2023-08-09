@@ -1,4 +1,4 @@
-package common;
+package plotters;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

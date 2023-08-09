@@ -1,4 +1,4 @@
-package common;
+package plotters;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -16,14 +16,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class ScatterPlotter {
+public class PlotterScatter {
     private static final int WIDTH_PANEL = 500, HEIGHT = 400;
     public static final String TITLE = "";
     public static final Color COLOR_POINTS = Color.BLACK;
     String xAxisTitle,  yAxisTitle;
     JFrame frame;
 
-    public ScatterPlotter(String xAxisTitle, String yAxisTitle) {
+    public PlotterScatter(String xAxisTitle, String yAxisTitle) {
 
         this.xAxisTitle=xAxisTitle; this.yAxisTitle=yAxisTitle;
         frame = new JFrame("");

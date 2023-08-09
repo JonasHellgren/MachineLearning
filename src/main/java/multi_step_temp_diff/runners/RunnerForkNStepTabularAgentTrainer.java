@@ -1,7 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import common.MultiplePanelsPlotter;
-import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
+import plotters.PlotterMultiplePanelsTrajectory;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -50,7 +49,7 @@ public class RunnerForkNStepTabularAgentTrainer {
         List<Double> filtered3 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_WINDOW);
         listOfTrajectories.add(filtered3);
 
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Arrays.asList("Error - 1","Error - 3"), "Step");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Arrays.asList("Error - 1","Error - 3"), "Step");
         plotter.plot(listOfTrajectories);
 
         DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots

@@ -1,6 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import common.MultiplePanelsPlotter;
+import plotters.PlotterMultiplePanelsTrajectory;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -35,7 +35,7 @@ public class RunnerForkNStepNeuralAgentTrainer {
         List<List<Double>> listOfTrajectories=new ArrayList<>();
         List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_WINDOW);
         listOfTrajectories.add(filtered1);
-        MultiplePanelsPlotter plotter=new MultiplePanelsPlotter(Collections.singletonList("Error"), "Step");
+        PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Collections.singletonList("Error"), "Step");
         plotter.plot(listOfTrajectories);
         DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
         agentInfo.getStateValues(agentCasted.getMemory(), environment.stateSet())
