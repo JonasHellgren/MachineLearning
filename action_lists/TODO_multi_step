@@ -156,11 +156,14 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - zoom in TD error plot  x
 
 - prova resetta innan  x
-- ny klass AgentEvaluator
+- ny klass AgentEvaluator  x
+- plotta G vs episode  x
 - agent.setState(state) - missat annat ställe?
 - word dokumnetera
 
 Overall cleaning
+MultiePanelScatterPlot
+Mer i hjälp klas RunnerBTrapped
 TestAgentChargeNeuralBothFree
 
 snygga upp plotters - tex inställningar i konstruktor

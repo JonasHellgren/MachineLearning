@@ -4,9 +4,11 @@ import common.Counter;
 import common.ListUtils;
 import common.LogarithmicDecay;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Builder
+@Getter
 public class NStepTDHelper<S> {
 
     private static final int MAX_VALUE = Integer.MAX_VALUE;
@@ -38,6 +41,7 @@ public class NStepTDHelper<S> {
     public Map<Integer, StateInterface<S>> statesMap= new HashMap<>(); //in episode visited states
     @NonNull  public Counter episodeCounter;
     @NonNull  public Counter timeCounter;  //time step
+    ValueTracker sumRewardsTracker;
 
     public static <S> NStepTDHelper<S> newHelperFromSettings(
             NStepTabularTrainerSettingsInterface settings,AgentSettingsInterface agentSettings) {
@@ -45,6 +49,7 @@ public class NStepTDHelper<S> {
                 .settings(settings).agentSettings(agentSettings)
                 .episodeCounter(new Counter(0, settings.nofEpis()))
                 .timeCounter(new Counter(0, Integer.MAX_VALUE))
+                .sumRewardsTracker(new ValueTracker())
                 .build();
     }
 
@@ -111,6 +116,11 @@ public class NStepTDHelper<S> {
             rewardTerms.add(Math.pow(agentSettings.discountFactor(), i - tau - 1) * timeReturnMap.get(i).reward);
         }
         return ListUtils.sumDoubleList(rewardTerms);
+    }
+
+    public void updateSumRewardsTracker() {
+        List<Double> rewardList=timeReturnMap.keySet().stream().map(t -> timeReturnMap.get(t).reward).toList();
+        sumRewardsTracker.addValue(ListUtils.sumDoubleList(rewardList));
     }
 
     public void reset() {

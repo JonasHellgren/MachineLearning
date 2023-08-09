@@ -9,6 +9,7 @@ import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ValueTracker;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -67,9 +68,9 @@ public class NStepNeuralAgentTrainer<S> {
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
-            System.out.println("episode = " + helper.getEpisode()+ ", time = " + helper.getTime());
-
+            log.info("episode = " + helper.getEpisode()+ ", time = " + helper.getTime());
             helper.increaseEpisode();
+            helper.updateSumRewardsTracker();
         }
         log.info("Training finished. Replay buffer size = "+buffer.size());
 
