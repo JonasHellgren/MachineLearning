@@ -18,13 +18,12 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 public class ChargeTrainerNeuralHelper<S> {
 
     @NonNull AgentNeuralInterface<S> agent;
-  //  @NonNull NStepNeuralAgentTrainer<S> trainer;
     @NonNull EnvironmentInterface<S> environment;
 
     @Builder.Default
-    int nofEpis=50;
+    int nofEpis=NOF_EPIS;
     @Builder.Default
-    int nofStepsBetweenUpdatedAndBackuped=5;
+    int nofStepsBetweenUpdatedAndBackuped=NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED;
     @Builder.Default
     int batchSize=BATCH_SIZE;
     @Builder.Default

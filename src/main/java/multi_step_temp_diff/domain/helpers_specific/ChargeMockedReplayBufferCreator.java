@@ -34,7 +34,7 @@ public class ChargeMockedReplayBufferCreator {
         List<NstepExperience<ChargeVariables>> batch = new ArrayList<>();
         ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
         for (int i = 0; i < bufferSize; i++) {
-            ChargeState state = suppliers.stateRandomPosAndSoC();
+            ChargeState state = suppliers.randomDifferentSitePositionsAndRandomSoCs();
             NstepExperience<ChargeVariables> exp = NstepExperience.<ChargeVariables>builder()
                     .stateToUpdate(state)
                     .value(stateToValueFunction.apply(state))

@@ -1,7 +1,5 @@
 package multi_step_temp_diff.runners;
 
-import lombok.NonNull;
-import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluator;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
 import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
@@ -21,11 +19,8 @@ import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.helpers_specific.ChargeStateSuppliers;
 import multi_step_temp_diff.domain.helpers_specific.ChargeTrainerNeuralHelper;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
-import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
-import org.apache.commons.lang3.tuple.Pair;
 import org.neuroph.util.TransferFunctionType;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
@@ -38,13 +33,12 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 @Log
 public class RunnerAgentChargeNeuralTrainerBTrapped {
 
-    private static final int NOF_EPIS = 30;
+    private static final int NOF_EPIS = 50;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     public static final int POS_B = TRAP_POS; //trap
     public static final double SOC_B = 1.0;
-    public static final int MAX_NOF_STEPS_TRAINING = 100;
+    public static final int MAX_NOF_STEPS_TRAINING = 200;
     public static final int TIME_BUDGET_RESET = 1000;
-    public static final Pair<Double, Double> START_END_PROB_RANDOM_ACTION = Pair.of(0.5, 1e-5);
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -61,9 +55,10 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         lambdas = new ChargeEnvironmentLambdas(envSettingsForTraining);
         ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
 
-        buildAgent(ChargeState.newDummy());
+        agent=buildAgent(ChargeState.newDummy());
         ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper= ChargeTrainerNeuralHelper.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
+                .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.bTrappedAHasRandomSitePosAndRandomSoC())
                 .build();
         trainer=trainerHelper.buildTrainer();
@@ -77,8 +72,8 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         ChargePlotHelper plotHelper=new ChargePlotHelper(agent,trainer);
         plotHelper.plotTdError();
         plotHelper.plotSumRewardsTracker();
-        plotHelper.createScatterPlot(envSettings, "V-30", 0.3);
-        plotHelper.createScatterPlot(envSettings, "V-80", 0.8);
+        plotHelper.createScatterPlot(envSettings, "V-30", 0.3, plotHelper.TRAP_POS);
+        plotHelper.createScatterPlot(envSettings, "V-80", 0.8, plotHelper.TRAP_POS);
         plotHelper.plotV20MinusV11VersusSoC(POS_B, SOC_B);
     }
 
@@ -92,7 +87,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         out.println("results = " + results);
     }
 
-    private static void buildAgent(ChargeState initState) {
+    private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
                 .learningRate(0.1).discountFactor(0.99).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
@@ -114,8 +109,8 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         ChargeAgentNeuralHelper helper = ChargeAgentNeuralHelper.builder()
                 .agent(agent).build();
         helper.resetAgentMemory(envSettingsForTraining, 1000, TIME_BUDGET_RESET);
+
+        return agent;
     }
-
-
 
 }

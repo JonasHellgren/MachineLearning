@@ -97,7 +97,7 @@ public class TestAgentNeuralChargeMockedData {
         bufferCreator= ChargeMockedReplayBufferCreator.builder().envSettings(envSettings).build();
         ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
         for (int i = 0; i < 10; i++) {
-            ChargeState state = suppliers.stateRandomPosAndSoC();
+            ChargeState state = suppliers.randomDifferentSitePositionsAndRandomSoCs();
             double valueLearned = agent.readValue(state);
             Assertions.assertEquals(container.fixedAtZero.apply(state),valueLearned, DELTA);
         }
@@ -134,7 +134,7 @@ public class TestAgentNeuralChargeMockedData {
         ChargeStateSuppliers suppliers=new ChargeStateSuppliers(envSettings);
 
         for (int i = 0; i < 10; i++) {
-            ChargeState state = suppliers.stateRandomPosAndSoC();
+            ChargeState state = suppliers.randomDifferentSitePositionsAndRandomSoCs();
             System.out.println("i = "+ i+" - " +"state = "+state.getVariables());
             double valueLearned = agent.readValue(state);
             valueMap.put(i, new Pair<>(stateToValueFunction.apply(state),valueLearned));

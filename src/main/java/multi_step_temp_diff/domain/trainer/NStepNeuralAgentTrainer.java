@@ -67,11 +67,16 @@ public class NStepNeuralAgentTrainer<S> {
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
+
+         //   helper.statesMap.keySet().forEach( t -> System.out.println(helper.statesMap.get(t)));
+
             log.info("episode = " + helper.getEpisode()+ ", time end = " + helper.getTime());
             helper.increaseEpisode();
             helper.updateSumRewardsTracker();
         }
         log.info("Training finished. Replay buffer size = "+buffer.size());
+
+      //  System.out.println("buffer = " + buffer);
 
     }
 

@@ -37,15 +37,12 @@ public class ChargeStateSuppliers {
     }
 
 
-    public ChargeState stateRandomPosAndSoC() {  //todo move to ChargeStateSuppliers??
-
+    public ChargeState randomDifferentSitePositionsAndRandomSoCs() {
         ChargeStateSuppliers stateSuppliers=new ChargeStateSuppliers(settings);
-
         int posA = stateSuppliers.randomSitePos() ,posB = stateSuppliers.randomSitePos();
         while (posB==posA) {
             posB = stateSuppliers.randomSitePos();
         }
-
         return new ChargeState(ChargeVariables.builder()
                 .posA(posA).posB(posB)
                 .socA(stateSuppliers.randomSoC()).socB(stateSuppliers.randomSoC())

@@ -25,7 +25,7 @@ public class ChargePlotHelper {
 
     public  final int LENGTH_FILTER_WINDOW = 100;
     public  final int TRAP_POS = 29;
-    public  final int MAX_TD_ERROR_IN_PLOT = 3;
+    public  final int MAX_TD_ERROR_IN_PLOT = 2;
 
     AgentNeuralInterface<ChargeVariables> agent;
     NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -44,11 +44,11 @@ public class ChargePlotHelper {
         plotter.plot(listOfPairs);
     }
 
-    public  void createScatterPlot(ChargeEnvironmentSettings envSettings, String xAxisTitle, double socA) {
+    public  void createScatterPlot(ChargeEnvironmentSettings envSettings, String xAxisTitle, double socA, int trapPos) {
         var plotter = new PlotterScatter(xAxisTitle, "Pos");
         List<Pair<Double, Double>> dataPairs = new ArrayList<>();
         for (int pos : envSettings.siteNodes()) {
-            ChargeState state = new ChargeState(ChargeVariables.builder().posA(pos).posB(TRAP_POS).socA(socA).build());
+            ChargeState state = new ChargeState(ChargeVariables.builder().posA(pos).posB(trapPos).socA(socA).build());
             double value = agent.readValue(state);
             dataPairs.add(Pair.of((double) pos, value));
         }
