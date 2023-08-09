@@ -1,5 +1,8 @@
 package multi_step_temp_diff.runners;
 
+import common.MathUtils;
+import multi_step_temp_diff.domain.test_helpers.AgentNeuralChargeTestHelper;
+import plotters.PlotterMultiplePanelsPairs;
 import plotters.PlotterMultiplePanelsTrajectory;
 import plotters.PlotterScatter;
 import lombok.extern.java.Log;
@@ -34,7 +37,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 100, MAX_BUFFER_SIZE_EXPERIENCE = 100_000;
 
-    private static final int NOF_EPIS = 200;
+    private static final int NOF_EPIS = 500;
     public static final double DELTA = 5;
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
@@ -42,6 +45,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
     public static final int LENGTH_FILTER_WINDOW = 100;
     public static final int TRAP_POS = 29;
     public static final int MAX_NOF_STEPS_TRAINING = 100;
+    public static final int MAX_TD_ERROR_IN_PLOT = 3;
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -78,17 +82,17 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
     }
 
     private static void plotV20MinusV11VersusSoC() {
-        List<List<Double>> listOfTrajectories = new ArrayList<>();
-        List<Double> valueDiffVsSoC=new ArrayList<>();
-        for (int socInt = 0; socInt < 100 ; socInt++) {
+        List<List<Pair<Double,Double>>> listOfPairs = new ArrayList<>();
+        List<Pair<Double,Double>> valueDiffVsSoC=new ArrayList<>();
+        for (int socInt = 20; socInt < 100 ; socInt++) {
             double socA = (double) socInt / 100d;
             ChargeState state20 = new ChargeState(ChargeVariables.builder().posA(20).posB(TRAP_POS).socA(socA).build());
             ChargeState state11 = new ChargeState(ChargeVariables.builder().posA(11).posB(TRAP_POS).socA(socA).build());
-            valueDiffVsSoC.add(agent.readValue(state20)-agent.readValue(state11));
+            valueDiffVsSoC.add(Pair.of(socA,agent.readValue(state20)-agent.readValue(state11)));
         }
-        PlotterMultiplePanelsTrajectory plotter = new PlotterMultiplePanelsTrajectory(Collections.singletonList("v20-v11"), "soc");
-        listOfTrajectories.add(valueDiffVsSoC);
-        plotter.plot(listOfTrajectories);
+        PlotterMultiplePanelsPairs plotter = new PlotterMultiplePanelsPairs("soc","v20-v11");
+        listOfPairs.add(valueDiffVsSoC);
+        plotter.plot(listOfPairs);
     }
 
     private static void createScatterPlot(ChargeEnvironmentSettings envSettings, String xAxisTitle, double socA) {
@@ -106,7 +110,8 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
         AgentInfo<ChargeVariables> agentInfo = new AgentInfo<>(agent);
         List<List<Double>> listOfTrajectories = new ArrayList<>();
         List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_FILTER_WINDOW);
-        listOfTrajectories.add(filtered1);
+        List<Double> filteredAndClipped=filtered1.stream().map(n -> MathUtils.clip(n,0, MAX_TD_ERROR_IN_PLOT)).toList();
+        listOfTrajectories.add(filteredAndClipped);
         PlotterMultiplePanelsTrajectory plotter = new PlotterMultiplePanelsTrajectory(Collections.singletonList("TD error"), "Step");
         plotter.plot(listOfTrajectories);
     }
@@ -129,6 +134,11 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
                                 environmentCasted.getSettings(),
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
+
+        log.info("Resetting agent memory");
+        AgentNeuralChargeTestHelper helper=AgentNeuralChargeTestHelper.builder()
+                .agent(agent).build();
+        helper.resetAgentMemory(envSettingsForTraining,1000, 1000);
     }
 
     public static void buildTrainer(int nofEpis, int nofSteps) {

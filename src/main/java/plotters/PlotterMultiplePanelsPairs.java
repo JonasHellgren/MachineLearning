@@ -26,6 +26,7 @@ public class PlotterMultiplePanelsPairs {
     public static final int NOF_ROWS = 1;
     public static final int WIDTH = 500, HEIGHT = 300;
     public static final String EMPTY_TITLE = "";
+    public static final boolean LEGEND = false;
 
     @Builder
     public record Settings(
@@ -105,7 +106,7 @@ public class PlotterMultiplePanelsPairs {
                 settings.xLabelList.get(index),settings.yLabelList.get(index),
                 dataset,
                 PlotOrientation.VERTICAL,
-                true, true, false
+                LEGEND, true, false
         );
     }
 

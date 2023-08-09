@@ -151,19 +151,20 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - mindre max tid tränning  x
 - simulering efter träning med större max tid  x
 - plotta v20-v11 för olika soc x
-- PlotterMultiplePanelsRelation
-- ovan för 20-100 soc
-- zoom in TD error plot
+- PlotterMultiplePanelsRelation  x
+- ovan för 20-100 soc  x
+- zoom in TD error plot  x
 
-- prova resetta innan
+- prova resetta innan  x
 - ny klass AgentEvaluator
 - agent.setState(state) - missat annat ställe?
 - word dokumnetera
 
 Overall cleaning
+TestAgentChargeNeuralBothFree
+
 snygga upp plotters - tex inställningar i konstruktor
 - MultiePanelScatterPlot
-TestAgentChargeNeuralBothFree
 
 RunnerAgentChargeGreedyRuleForChargeDecisionPointObstacleSomeTimes med obstacle ibland
 

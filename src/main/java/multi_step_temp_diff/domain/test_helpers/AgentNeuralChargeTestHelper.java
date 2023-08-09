@@ -2,6 +2,7 @@ package multi_step_temp_diff.domain.test_helpers;
 
 import common.CpuTimer;
 import common.MovingAverage;
+import lombok.NonNull;
 import plotters.PlotterMultiplePanelsTrajectory;
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -22,8 +23,15 @@ public class AgentNeuralChargeTestHelper {
     public static final String PICS_FOLDER = "pics/";
     public static final int SLEEP_TIME = 1000;
 
-    AgentNeuralInterface<ChargeVariables> agent;
-    int nofIterations, iterationsBetweenPrints, batchLength, filterWindowLength;
+    @NonNull  AgentNeuralInterface<ChargeVariables> agent;
+    Integer nofIterations;
+
+    @Builder.Default
+    Integer iterationsBetweenPrints=100;
+    @Builder.Default
+    Integer batchLength=100;
+    @Builder.Default
+    Integer filterWindowLength=100;
 
     public void trainAgent(ReplayBufferNStep<ChargeVariables> buffer) {
         for (int i = 0; i < nofIterations; i++) {
@@ -53,7 +61,7 @@ public class AgentNeuralChargeTestHelper {
         plotter.saveImage(PICS_FOLDER +fileName);
     }
 
-    public void reset(ChargeEnvironmentSettings settings, int bufferSize,  long timeBudget) {
+    public void resetAgentMemory(ChargeEnvironmentSettings settings, int bufferSize, long timeBudget) {
         int dummy = 0;
         ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(settings);
         StateToValueFunctionContainerCharge container= new StateToValueFunctionContainerCharge(lambdas,settings, dummy);

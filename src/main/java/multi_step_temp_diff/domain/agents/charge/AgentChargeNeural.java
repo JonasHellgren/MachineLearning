@@ -1,6 +1,7 @@
 package multi_step_temp_diff.domain.agents.charge;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
@@ -16,7 +17,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Getter
 public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements AgentNeuralInterface<ChargeVariables> {
 
     AgentChargeNeuralSettings agentSettings;

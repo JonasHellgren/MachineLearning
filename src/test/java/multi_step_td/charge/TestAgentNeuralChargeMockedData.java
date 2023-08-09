@@ -92,7 +92,7 @@ public class TestAgentNeuralChargeMockedData {
 
         helper=AgentNeuralChargeTestHelper.builder()
                 .agent(agent).batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
-        helper.reset(envSettings,BUFFER_SIZE, TIME_BUDGET);
+        helper.resetAgentMemory(envSettings,BUFFER_SIZE, TIME_BUDGET);
         helper.plotAndSaveErrorHistory("fixed");
 
         bufferCreator= MockedReplayBufferCreatorCharge.builder().envSettings(envSettings).build();
