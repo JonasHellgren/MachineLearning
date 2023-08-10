@@ -164,7 +164,12 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 Overall cleaning  x
 Mer i hjälp klas RunnerBTrapped x
 
-TestAgentChargeNeuralBothFree
+TestAgentChargeNeuralBothFree  x
+RunnerNormalizerMeanStd - testa olika bad*x
+kunna spara nätverk
+ChargeInitStateVariantsEvaluator
+variera NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED
+bättre förstå AgentEvaluatorResults
 påvisa fordon vid split ej laddar om bakomvarande kritisk soc
 prova target network
 

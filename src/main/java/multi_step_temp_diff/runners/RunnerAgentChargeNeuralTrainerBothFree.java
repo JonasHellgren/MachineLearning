@@ -18,6 +18,7 @@ import multi_step_temp_diff.domain.helpers_specific.ChargePlotHelper;
 import multi_step_temp_diff.domain.helpers_specific.ChargeStateSuppliers;
 import multi_step_temp_diff.domain.helpers_specific.ChargeTrainerNeuralHelper;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
+import org.apache.commons.lang3.tuple.Pair;
 import org.neuroph.util.TransferFunctionType;
 
 import java.util.List;
@@ -25,14 +26,19 @@ import java.util.List;
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
 
+/***
+ * stor discountFactor gör mer instabilt
+ */
+
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 100;
-    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    public static final int MAX_NOF_STEPS_TRAINING = 200;
-    public static final int BATCH_SIZE1 = 100;
+    private static final int NOF_EPIS = 500;
+    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
+    public static final int MAX_NOF_STEPS_TRAINING = 1000;
+    public static final int BATCH_SIZE1 = 20;
     public static final int SIM_STEPS_MAX_EVAL = 100;
     public static final int TIME_BUDGET_RESET = 1000;
+    public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
 
 
     static AgentNeuralInterface<ChargeVariables> agent;
@@ -53,7 +59,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         agent=buildAgent(ChargeState.newDummy());
         ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper= ChargeTrainerNeuralHelper.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
-                .batchSize(BATCH_SIZE1)
+                .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
                 .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                 .build();
@@ -87,11 +93,11 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
 
     private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.001).discountFactor(0.99).momentum(0.5d)
-                .nofLayersHidden(3).nofNeuronsHidden(30)
+                .learningRate(0.1).discountFactor(0.99).momentum(0.01d)
+                .nofLayersHidden(10).nofNeuronsHidden((int) Math.round(envSettingsForTraining.siteNodes().size()/2d))
                 .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(List.of(
-                        envSettingsForTraining.rewardBad() * 1, 0d, -1d, -2d, 0d, -1d, 0d)))
+                        envSettingsForTraining.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
                 .build();
 
         agent = AgentChargeNeural.builder()

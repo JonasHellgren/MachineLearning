@@ -45,15 +45,15 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
     static EnvironmentInterface<ChargeVariables> environment;
     static ChargeEnvironmentLambdas lambdas;
     static ChargeEnvironment environmentCasted;
-    static ChargeEnvironmentSettings envSettingsForTraining;
+    static ChargeEnvironmentSettings envSettings;
 
     public static void main(String[] args) {
         ChargeEnvironmentSettings envSettings = ChargeEnvironmentSettings.newDefault();
-        envSettingsForTraining = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_TRAINING);
-        environment = new ChargeEnvironment(envSettingsForTraining);
+        RunnerAgentChargeNeuralTrainerBTrapped.envSettings = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_TRAINING);
+        environment = new ChargeEnvironment(RunnerAgentChargeNeuralTrainerBTrapped.envSettings);
         environmentCasted = (ChargeEnvironment) environment;
-        lambdas = new ChargeEnvironmentLambdas(envSettingsForTraining);
-        ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
+        lambdas = new ChargeEnvironmentLambdas(RunnerAgentChargeNeuralTrainerBTrapped.envSettings);
+        ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(RunnerAgentChargeNeuralTrainerBTrapped.envSettings);
 
         agent=buildAgent(ChargeState.newDummy());
         ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper= ChargeTrainerNeuralHelper.<ChargeVariables>builder()
@@ -93,7 +93,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .nofLayersHidden(5)
                 .valueNormalizer(new NormalizerMeanStd(List.of(
-                        envSettingsForTraining.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
+                        envSettings.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
                 .build();
 
         agent = AgentChargeNeural.builder()
@@ -102,13 +102,13 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
                 .inputVectorSetterCharge(
                         new HotEncodingSoCAtOccupiedElseValue(
                                 agentSettings,
-                                envSettingsForTraining,
+                                envSettings,
                                 NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
 
         ChargeAgentNeuralHelper helper = ChargeAgentNeuralHelper.builder()
                 .agent(agent).build();
-        helper.resetAgentMemory(envSettingsForTraining, 1000, TIME_BUDGET_RESET);
+        helper.resetAgentMemory(envSettings, 1000, TIME_BUDGET_RESET);
 
         return agent;
     }

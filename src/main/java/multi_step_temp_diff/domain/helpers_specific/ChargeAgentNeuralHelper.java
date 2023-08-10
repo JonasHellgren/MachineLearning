@@ -26,6 +26,7 @@ public class ChargeAgentNeuralHelper {
     public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
             new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
     public static final int TRAP_POS = 29; //trap
+    public static final List<Double> CHARGE_REWARD_VALUES_EXCEPT_FAIL = List.of(0d, -1d, -2d, 0d, -1d, 0d);
 
 
     @NonNull  AgentNeuralInterface<ChargeVariables> agent;
