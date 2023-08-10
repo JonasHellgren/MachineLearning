@@ -165,7 +165,8 @@ Overall cleaning  x
 Mer i hjälp klas RunnerBTrapped x
 
 TestAgentChargeNeuralBothFree  x
-RunnerNormalizerMeanStd - testa olika bad*x
+RunnerNormalizerMeanStd - testa olika bad*x  x
+test alpha =3,5  x
 kunna spara nätverk
 ChargeInitStateVariantsEvaluator
 variera NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED

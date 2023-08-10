@@ -2,6 +2,7 @@ package multi_step_temp_diff.domain.agents.fork;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.agent_abstract.*;
 import multi_step_temp_diff.domain.agent_valueobj.AgentForkNeuralSettings;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
@@ -69,6 +70,18 @@ public class AgentForkNeural extends AgentAbstract<ForkVariables> implements Age
     @Override
     public void learn(List<NstepExperience<ForkVariables>> miniBatch) {
         memory.learn(miniBatch);
+    }
+
+    @SneakyThrows
+    @Override
+    public void saveMemory(String fileName) {
+        throw new NoSuchMethodException("Fork");
+    }
+
+    @SneakyThrows
+    @Override
+    public void loadMemory(String fileName) {
+        throw new NoSuchMethodException("Fork");
     }
 
 

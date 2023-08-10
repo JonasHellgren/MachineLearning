@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static java.lang.System.out;
 
 /**
- * Tha largest alpha giving true in alphaBoolMap should be best adequate
+ * Tha largest alpha giving true in alphaBoolMap should be adequate
  */
 
 public class RunnerNormalizerMeanStd {
@@ -45,22 +45,26 @@ public class RunnerNormalizerMeanStd {
     }
 
     @NotNull
-    private static Map<Double, Boolean> getAlphaBooleanMap(Map<Double, Triple<Double, Double, Double>> alphaNormValuesMap) {
-        Predicate<Triple<Double, Double, Double>> isTripleOk=(t) ->
+    private static Map<Double, Boolean> getAlphaBooleanMap(
+            Map<Double, Triple<Double,
+                    Double, Double>> alphaNormValuesMap) {
+        Predicate<Triple<Double, Double, Double>> isTripleOk = (t) ->
                 normalizer.isNormalizedValueOk(t.getLeft()) &&
-                normalizer.isNormalizedValueOk(t.getMiddle()) &&
-                normalizer.isNormalizedValueOk(t.getRight());
-        List<Boolean> booleans= alphaNormValuesMap.keySet().stream()
+                        normalizer.isNormalizedValueOk(t.getMiddle()) &&
+                        normalizer.isNormalizedValueOk(t.getRight());
+        List<Boolean> booleans = alphaNormValuesMap.keySet().stream()
                 .map(a -> isTripleOk.test(alphaNormValuesMap.get(a))).toList();
 
         return alphaNormValuesMap.keySet().stream()
-                .map(a -> Pair.of(a,isTripleOk.test(alphaNormValuesMap.get(a))))
+                .map(a -> Pair.of(a, isTripleOk.test(alphaNormValuesMap.get(a))))
                 .collect(Collectors.toMap(
                         p -> p.getLeft(), p -> p.getRight()));
     }
 
     @NotNull
-    private static Map<Double, Triple<Double, Double, Double>> getAlphaNormValuesMap(Map<Double, List<Double>> alphaListOfValuesMap, Triple<Double, Double, Double> valuesToNormalize) {
+    private static Map<Double, Triple<Double, Double, Double>> getAlphaNormValuesMap(
+            Map<Double, List<Double>> alphaListOfValuesMap,
+            Triple<Double, Double, Double> valuesToNormalize) {
         Map<Double, Triple<Double, Double, Double>> alphaNormValuesMap = new HashMap<>();
         for (double alpha : ALPHA_LIST) {
             normalizer = new NormalizerMeanStd(alphaListOfValuesMap.get(alpha));

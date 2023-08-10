@@ -58,5 +58,15 @@ public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements
         addErrorsToHistory(errors);
     }
 
+    @Override
+    public void saveMemory(String fileName) {
+        memory.save(fileName);
+    }
+
+    @Override
+    public void loadMemory(String fileName) {
+        memory.load(fileName);
+    }
+
 
 }

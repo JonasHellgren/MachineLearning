@@ -98,10 +98,12 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         return trainingSet;
     }
 
+    @Override
     public void save(String fileName) {
         neuralNetwork.save(fileName);
     }
 
+    @Override
     public void load(String fileName) {
         neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
     }

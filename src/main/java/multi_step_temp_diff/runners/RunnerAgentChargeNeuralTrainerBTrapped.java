@@ -1,5 +1,6 @@
 package multi_step_temp_diff.runners;
 
+import common.ListUtils;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluator;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
 import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
@@ -37,8 +38,9 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     public static final int POS_B = TRAP_POS; //trap
     public static final double SOC_B = 1.0;
-    public static final int MAX_NOF_STEPS_TRAINING = 200;
+    public static final int MAX_NOF_STEPS_TRAINING = 1000;
     public static final int TIME_BUDGET_RESET = 1000;
+    public static final double ALPHA = 3d;
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -89,11 +91,12 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
 
     private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.1).discountFactor(0.99).momentum(0.1d)
+                .learningRate(0.01).discountFactor(0.99).momentum(0.1d)
                 .nofNeuronsHidden(20).transferFunctionType(TransferFunctionType.GAUSSIAN)
                 .nofLayersHidden(5)
-                .valueNormalizer(new NormalizerMeanStd(List.of(
-                        envSettings.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
+                .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
+                        List.of(envSettings.rewardBad() * ALPHA),
+                        ChargeAgentNeuralHelper.CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
                 .build();
 
         agent = AgentChargeNeural.builder()

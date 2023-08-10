@@ -1,5 +1,6 @@
 package multi_step_temp_diff.runners;
 
+import common.ListUtils;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
@@ -32,13 +33,14 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 500;
+    private static final int NOF_EPIS = 50;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int MAX_NOF_STEPS_TRAINING = 1000;
     public static final int BATCH_SIZE1 = 20;
     public static final int SIM_STEPS_MAX_EVAL = 100;
     public static final int TIME_BUDGET_RESET = 1000;
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
+    public static final double ALPHA = 3d;
 
 
     static AgentNeuralInterface<ChargeVariables> agent;
@@ -68,6 +70,8 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         doPlotting(envSettings);
         evaluate(envSettings);
 
+        agent.saveMemory("bothFreeNet");
+
     }
 
     private static void doPlotting(ChargeEnvironmentSettings envSettings) {
@@ -96,8 +100,9 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
                 .learningRate(0.1).discountFactor(0.99).momentum(0.01d)
                 .nofLayersHidden(10).nofNeuronsHidden((int) Math.round(envSettingsForTraining.siteNodes().size()/2d))
                 .transferFunctionType(TransferFunctionType.TANH)
-                .valueNormalizer(new NormalizerMeanStd(List.of(
-                        envSettingsForTraining.rewardBad() * 10, 0d, -1d, -2d, 0d, -1d, 0d)))
+                .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
+                        List.of(envSettingsForTraining.rewardBad() * ALPHA),
+                        ChargeAgentNeuralHelper.CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
                 .build();
 
         agent = AgentChargeNeural.builder()
