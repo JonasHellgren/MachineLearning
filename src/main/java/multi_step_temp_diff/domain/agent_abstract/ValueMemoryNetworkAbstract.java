@@ -3,6 +3,7 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.Conditionals;
 import common.MathUtils;
 import lombok.Getter;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-
+@Log
 public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
 
     private static final double MAX_ERROR = 0.00001;
@@ -100,6 +101,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     @Override
     public void save(String fileName) {
+        log.info("Saving network in file = "+fileName);
         neuralNetwork.save(fileName);
     }
 

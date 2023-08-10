@@ -168,7 +168,7 @@ TestAgentChargeNeuralBothFree  x
 RunnerNormalizerMeanStd - testa olika bad*x  x
 test alpha =3,5  x
 kunna spara nätverk  x
-memory classes plantuml
+memory classes plantuml   x
 ChargeInitStateVariantsEvaluator
 variera NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED
 bättre förstå AgentEvaluatorResults

@@ -33,7 +33,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 50;
+    private static final int NOF_EPIS = 10;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int MAX_NOF_STEPS_TRAINING = 1000;
     public static final int BATCH_SIZE1 = 20;
@@ -70,7 +70,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         doPlotting(envSettings);
         evaluate(envSettings);
 
-        agent.saveMemory("bothFreeNet");
+        agent.saveMemory(FOLDER_NETWORKS +"chargeBothFreeNet.nnet");
 
     }
 
