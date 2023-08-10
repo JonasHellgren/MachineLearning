@@ -33,12 +33,12 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 10;
+    private static final int NOF_EPIS = 200;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int MAX_NOF_STEPS_TRAINING = 1000;
-    public static final int BATCH_SIZE1 = 20;
+    public static final int BATCH_SIZE1 = 100;
     public static final int SIM_STEPS_MAX_EVAL = 100;
-    public static final int TIME_BUDGET_RESET = 1000;
+    public static final int TIME_BUDGET_RESET = 0;  //small <=> no reset
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
     public static final double ALPHA = 3d;
 

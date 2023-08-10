@@ -169,7 +169,8 @@ RunnerNormalizerMeanStd - testa olika bad*x  x
 test alpha =3,5  x
 kunna spara nätverk  x
 memory classes plantuml   x
-ChargeInitStateVariantsEvaluator
+ChargeInitStateVariantsEvaluator x
+record Scenario - scenario ta in namn
 variera NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED
 bättre förstå AgentEvaluatorResults
 påvisa fordon vid split ej laddar om bakomvarande kritisk soc
