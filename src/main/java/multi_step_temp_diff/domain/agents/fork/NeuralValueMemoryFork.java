@@ -1,7 +1,6 @@
 package multi_step_temp_diff.domain.agents.fork;
 
 import multi_step_temp_diff.domain.environments.fork.ForkState;
-import multi_step_temp_diff.domain.agent_abstract.PersistentMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
@@ -15,7 +14,7 @@ import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.envS
  * Input is a binary vector with zeros except at active state. Much more stable than one double input.
  */
 
-public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
+public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S>  {
 
     private static final double MARGIN = 1.0;
 

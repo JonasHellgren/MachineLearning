@@ -1,7 +1,6 @@
 package multi_step_temp_diff.domain.agents.maze;
 
 import multi_step_temp_diff.domain.environments.maze.MazeState;
-import multi_step_temp_diff.domain.agent_abstract.PersistentMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
@@ -15,7 +14,7 @@ import static multi_step_temp_diff.domain.environments.maze.MazeEnvironment.sett
  *
  */
 
-public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> implements PersistentMemoryInterface {
+public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> {
 
     private static final double MARGIN = 1.0;
 
