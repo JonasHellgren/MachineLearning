@@ -28,11 +28,12 @@ public record NetSettings (
     public static final Double OUT_MAX = 1d;
     public static final Double LEARNING_RATE = 0.1;
     public static final double MOMENTUM = 0.25;
+    public static final int NOF_HIDDEN_NEURONS = 10;
 
     @Builder
     public NetSettings(Integer outPutSize,
                        @NonNull  Integer inputSize,
-                       @NonNull  Integer nofNeuronsHidden,
+                       Integer nofNeuronsHidden,
                        Integer nofHiddenLayers,
                        @NonNull TransferFunctionType transferFunctionType,
                        @NonNull  Double minOut,
@@ -44,7 +45,7 @@ public record NetSettings (
                        NormalizerInterface normalizer) {
         this.outPutSize = defaultIfNullInteger.apply(outPutSize,OUTPUT_SIZE);
         this.inputSize = inputSize;
-        this.nofNeuronsHidden = nofNeuronsHidden;
+        this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, NOF_HIDDEN_NEURONS);
         this.nofHiddenLayers = defaultIfNullInteger.apply(nofHiddenLayers,1);
         this.transferFunctionType=transferFunctionType;
         this.minOut = minOut;

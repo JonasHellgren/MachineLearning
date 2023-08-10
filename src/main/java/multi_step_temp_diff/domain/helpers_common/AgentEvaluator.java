@@ -12,13 +12,13 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 public class AgentEvaluator<S> {
 
     public static final int MAX_STEPS = 10_000;
+    public static final double PROB_RANDOM = 0d;
     EnvironmentInterface<S> environment;
     AgentNeuralInterface<S> agent;
     @Builder.Default
     Integer simStepsMax = MAX_STEPS;
 
     public AgentEvaluatorResults simulate(final StateInterface<S> initState) {
-        final double probRandom = 0d;
         double sumRewards=0;
         int dummyAction = 0;
         StepReturn<S> stepReturn = environment.step(initState, dummyAction);
@@ -27,7 +27,7 @@ public class AgentEvaluator<S> {
         for (step = 0; step < simStepsMax; step++) {
             log.info("state = " + state);
             agent.setState(state);
-            int action = agent.chooseAction(probRandom);
+            int action = agent.chooseAction(PROB_RANDOM);
             stepReturn = environment.step(state, action);
             state.setFromReturn(stepReturn);
             sumRewards+=stepReturn.reward;

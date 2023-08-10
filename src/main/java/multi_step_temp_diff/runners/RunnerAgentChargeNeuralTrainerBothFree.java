@@ -70,7 +70,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         doPlotting(envSettings);
         evaluate(envSettings);
 
-        agent.saveMemory(FOLDER_NETWORKS +"chargeBothFreeNet.nnet");
+        agent.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
 
     }
 

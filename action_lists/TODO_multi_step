@@ -170,10 +170,11 @@ test alpha =3,5  x
 kunna spara nätverk  x
 memory classes plantuml   x
 ChargeInitStateVariantsEvaluator x
-record Scenario - scenario ta in namn
-variera NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED
-bättre förstå AgentEvaluatorResults
+record Scenario - scenario ta in namn  x
+RunnerChargeScenariosEvaluator x
+BUGG RunnerChargeScenariosEvaluator ger olika results
 påvisa fordon vid split ej laddar om bakomvarande kritisk soc
+HyperParameterOptimizer
 prova target network
 
 snygga upp plotters - tex inställningar i konstruktor

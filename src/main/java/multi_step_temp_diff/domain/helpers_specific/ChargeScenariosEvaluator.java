@@ -3,54 +3,67 @@ package multi_step_temp_diff.domain.helpers_specific;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
 import multi_step_temp_diff.domain.helpers_common.InitStateVariantsEvaluator;
-import org.apache.commons.lang3.tuple.Pair;
+import multi_step_temp_diff.domain.helpers_common.Scenario;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @Builder
 public class ChargeScenariosEvaluator {
 
-    @NonNull List<Pair<StateInterface<ChargeVariables>, Integer>> scenarios;   //initState, simStepsMax;
+    @NonNull List<Scenario<ChargeVariables>> scenarios;   //initState, simStepsMax;
     @NonNull EnvironmentInterface<ChargeVariables> environment;
     @NonNull AgentNeuralInterface<ChargeVariables> agent;
 
-    Map<Pair<StateInterface<ChargeVariables>, Integer>,AgentEvaluatorResults> scenarioResultMap;
+    static Map<Scenario<ChargeVariables>,AgentEvaluatorResults> scenarioResultMap;
 
+    public Map<Scenario<ChargeVariables>, AgentEvaluatorResults> getScenarioResultMap() {
+        if (isResultMapNull.test(scenarioResultMap)) {
+            return new HashMap<>();
+        }
 
-
-    public ChargeScenariosEvaluator(@NonNull List<Pair<StateInterface<ChargeVariables>, Integer>> scenarios,
-                                    @NonNull EnvironmentInterface<ChargeVariables> environment,
-                                    @NonNull AgentNeuralInterface<ChargeVariables> agent) {
-        this.scenarios = scenarios;
-        this.environment = environment;
-        this.agent = agent;
-
-        scenarioResultMap=new HashMap<>();
-    }
-
-    public Map<Pair<StateInterface<ChargeVariables>, Integer>, AgentEvaluatorResults> getScenarioResultMap() {
         return scenarioResultMap;
     }
 
-    public List<Double> evaluate() {
+    static  Predicate<Map<Scenario<ChargeVariables>,AgentEvaluatorResults>> isResultMapNull=(rm) ->
+            rm==null;
 
+    public List<Double> evaluate() {
+        scenarioResultMap=new HashMap<>();
         InitStateVariantsEvaluator<ChargeVariables> evaluator= InitStateVariantsEvaluator.<ChargeVariables>builder()
                 .environment(environment)
                 .agent(agent)
                 .build();
 
-        scenarioResultMap.clear();
-        for (Pair<StateInterface<ChargeVariables>, Integer> scenario : scenarios) {
+
+        for (Scenario<ChargeVariables> scenario : scenarios) {
             scenarioResultMap.put(scenario,evaluator.evaluate(scenario));
         }
         return scenarioResultMap.values().stream().map(r -> r.sumRewards()).toList();
+    }
+
+
+    @Override
+    public String toString() {
+        if (isResultMapNull.test(scenarioResultMap))  {
+            return "No results available";
+        }
+        List<String> stringList=scenarioResultMap.keySet().stream()
+                .map(s -> "name = "+s.name()+", sumRewards = "+scenarioResultMap.get(s).sumRewards())
+                .toList();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.lineSeparator());
+        for (String txt:stringList) {
+            sb.append(txt);  sb.append(System.lineSeparator());
+        }
+        return sb.toString();
 
     }
 

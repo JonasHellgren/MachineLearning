@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 @Log
 public class AgentActionSelector<S> {
 
-    public static final double TOLERANCE = 1e-5;
+    public static final double TOLERANCE = Double.MIN_VALUE;
     public static final String LOG_MESSAGE_MULTIPLE_MATCHES =
             "Multiple matches in action selection, choosing random action = ";
 
@@ -68,7 +68,8 @@ public class AgentActionSelector<S> {
         List<ActionAndValue> actionAndValueList = new ArrayList<>();
         for (int a : environment.actionSet()) {
             StepReturn<S> sr = environment.step(state, a);
-            double value = sr.reward + discountFactor * readMemoryFunction.apply(sr.newState);
+            Double valueNewState = readMemoryFunction.apply(sr.newState);
+            double value = sr.reward + discountFactor * valueNewState;
             actionAndValueList.add(new ActionAndValue(a, value));
         }
         return actionAndValueList;

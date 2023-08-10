@@ -28,6 +28,8 @@ public class ChargeAgentNeuralHelper {
     public static final int TRAP_POS = 29; //trap
     public static final List<Double> CHARGE_REWARD_VALUES_EXCEPT_FAIL = List.of(0d, -1d, -2d, 0d, -1d, 0d);
     public static final String FOLDER_NETWORKS = "networks/";
+    public static final String FILENAME_CHARGE_BOTH_FREE_NET = "chargeBothFreeNet.nnet";
+
 
 
     @NonNull  AgentNeuralInterface<ChargeVariables> agent;
