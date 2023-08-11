@@ -14,18 +14,17 @@ import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluator;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
-import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
-import multi_step_temp_diff.domain.helpers_specific.ChargePlotHelper;
-import multi_step_temp_diff.domain.helpers_specific.ChargeStateSuppliers;
-import multi_step_temp_diff.domain.helpers_specific.ChargeTrainerNeuralHelper;
+import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.neuroph.util.TransferFunctionType;
 
 import java.util.List;
 
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariousContainer.*;
 
 /***
  * stor discountFactor gör mer instabilt
@@ -58,24 +57,44 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         lambdas = new ChargeEnvironmentLambdas(envSettingsForTraining);
         ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
 
-        agent=buildAgent(ChargeState.newDummy());
-        ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper= ChargeTrainerNeuralHelper.<ChargeVariables>builder()
+        agent = buildAgent(ChargeState.newDummy());
+        ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper = ChargeTrainerNeuralHelper.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
                 .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                 .build();
-        trainer=trainerHelper.buildTrainer();
+        trainer = trainerHelper.buildTrainer();
         trainer.train();
         doPlotting(envSettings);
         evaluate(envSettings);
-
         agent.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
+
+        ChargeScenariosEvaluator evaluator = getChargeScenariosEvaluator();
+        out.println("evaluator = " + evaluator);
+
 
     }
 
+    @NotNull
+    private static ChargeScenariosEvaluator getChargeScenariosEvaluator() {
+        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.builder()
+                .environment(environment).agent(agent)
+                .scenarios(List.of(
+                        BatPos0_At1_BothHighSoC,
+                        BatPos0_AtPosSplitLowSoCA,
+                        BatPos0_At20_BothHighSoC,
+                        BatPosSplit_AatPos40_BothModerateSoC,
+                        BJustBehindLowSoC_AatSplitModerateSoC
+                ))
+                .build();
+
+        evaluator.evaluate();
+        return evaluator;
+    }
+
     private static void doPlotting(ChargeEnvironmentSettings envSettings) {
-        ChargePlotHelper plotHelper=new ChargePlotHelper(agent,trainer);
+        ChargePlotHelper plotHelper = new ChargePlotHelper(agent, trainer);
         plotHelper.plotTdError();
         plotHelper.plotSumRewardsTracker();
         int posB = 0;
@@ -95,10 +114,10 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         out.println("results = " + results);
     }
 
-    private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
+    private static AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
                 .learningRate(0.1).discountFactor(0.99).momentum(0.01d)
-                .nofLayersHidden(10).nofNeuronsHidden((int) Math.round(envSettingsForTraining.siteNodes().size()/2d))
+                .nofLayersHidden(10).nofNeuronsHidden((int) Math.round(envSettingsForTraining.siteNodes().size() / 2d))
                 .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
                         List.of(envSettingsForTraining.rewardBad() * ALPHA),

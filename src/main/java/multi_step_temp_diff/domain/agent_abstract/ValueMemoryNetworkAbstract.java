@@ -108,6 +108,9 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     @Override
     public void load(String fileName) {
         neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
+    //    neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.load(fileName);
+
+
     }
 
 

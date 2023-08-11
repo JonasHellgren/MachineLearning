@@ -68,7 +68,8 @@ public class AgentActionSelector<S> {
         List<ActionAndValue> actionAndValueList = new ArrayList<>();
         for (int a : environment.actionSet()) {
             StepReturn<S> sr = environment.step(state, a);
-            Double valueNewState = readMemoryFunction.apply(sr.newState);
+            StateInterface<S> newState = sr.newState;
+            Double valueNewState = readMemoryFunction.apply(newState);
             double value = sr.reward + discountFactor * valueNewState;
             actionAndValueList.add(new ActionAndValue(a, value));
         }

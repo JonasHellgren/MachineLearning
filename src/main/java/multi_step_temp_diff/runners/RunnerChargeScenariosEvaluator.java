@@ -2,6 +2,7 @@ package multi_step_temp_diff.runners;
 
 import common.ListUtils;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
@@ -30,31 +31,41 @@ public class RunnerChargeScenariosEvaluator {
     public static void main(String[] args) {
         envSettings = ChargeEnvironmentSettings.newDefault();
         environment = new ChargeEnvironment(envSettings);
-        agent=buildAgent(ChargeState.newDummy());
-        agent.loadMemory(FOLDER_NETWORKS+FILENAME_CHARGE_BOTH_FREE_NET);
+        agent = buildAgent(ChargeState.newDummy());
 
-        ChargeScenariosEvaluator evaluator= ChargeScenariosEvaluator.builder()
+        agent.loadMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
+        StateInterface<ChargeVariables> state = BatPosSplit_AatPos40_BothModerateSoC.state();
+        printStateAndValue(state);
+
+        agent.loadMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
+        printStateAndValue(state);
+
+
+        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.builder()
                 .environment(environment).agent(agent)
                 .scenarios(List.of(
-                      BatPos0At1BothHighSoC,
-                       BatPos0AtPosSplitLowSoCA,
-                        BatPos0At20BothHighSoC,
-                       BatPosSplitAtPos40BothModerateSoC,
+                        BatPos0_At1_BothHighSoC,
+                        BatPos0_AtPosSplitLowSoCA,
+                        BatPos0_At20_BothHighSoC,
+                        BatPosSplit_AatPos40_BothModerateSoC,
                         BJustBehindLowSoC_AatSplitModerateSoC
-                ) )
+                ))
                 .build();
 
-        List<Double> sumRewardList=evaluator.evaluate();
-
+        List<Double> sumRewardList = evaluator.evaluate();
         System.out.println("sumRewardList = " + sumRewardList);
-
         System.out.println("evaluator = " + evaluator);
 
 
     }
 
+    private static void printStateAndValue(StateInterface<ChargeVariables> state) {
+        System.out.println("state = " + state);
+        System.out.println("value BatPosSplit_AatPos40_BothModerateSoC.state= " + agent.readValue(state));
+    }
 
-    private static  AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
+
+    private static AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
                 .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
