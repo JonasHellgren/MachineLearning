@@ -58,17 +58,18 @@ import static multi_step_temp_diff.domain.environments.charge.SiteState.*;
  32              22                          22
  19              0                           0
  trap           pos                          pos
- *  else           pos+1                        pos+1
+ *  else        pos+1                        pos+1
  *
  * time transition model
  * time <- time+1
  * soC transition model:
- * delta soC = | -1/40  (pos not in CHARGE_NODES and move)
+ * delta soC = | -1/60  (pos not in CHARGE_NODES and move)
+ *             |  1/200 (pos not in CHARGE_NODES and not move)
  *             |  1/10  (pos in CHARGE_NODES)
  *             |  0     (pos not in CHARGE_NODES and not move)
  *  there move is true if new pos differs from pos
  *  reward model:
- *  reward =  COST_QUE*nofQueuing + costCharge + socPenalty + collisionPenalty
+ *  reward =  COST_QUE*isAQueing+ COST_QUE*isBqueing + costCharge + socPenalty + collisionPenalty
  *  nofQueuing: vehicle in pos 20 that not are moving, i.e. queuing for charge
  *  costCharge = | COST_CHARGE  (any vehicle in CHARGE_NODES)
  *               | 0

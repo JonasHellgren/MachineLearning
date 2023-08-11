@@ -64,28 +64,13 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         doPlotting(envSettings);
         agent.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
 
-        ChargeScenariosEvaluator evaluator = createChargeScenariosEvaluator();
+        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment,agent);
         evaluator.evaluate();
         out.println("evaluator = " + evaluator);
 
     }
 
-    @NotNull
-    private static ChargeScenariosEvaluator createChargeScenariosEvaluator() {
-        return ChargeScenariosEvaluator.builder()
-                .environment(environment).agent(agent)
-                .scenarios(List.of(
-                        BatPos0_At1_BothHighSoC,
-                        BatPos0_AtPosSplitCriticalSoCA,
-                        BatPos0_At20_BothMaxSoC,
-                        BatPosSplit_AatPos40_BothModerateSoC,
-                        B3BehindModerateSoC_AatSplitModerateSoC,
-                        B1BehindCriticalSoC_AatSplitModerateSoC,
-                        B3BehindCriticalSoC_AatSplitModerateSoC,
-                        BatPos0_At1_BothHighSoC_1000steps
-                ))
-                .build();
-    }
+
 
     private static void doPlotting(ChargeEnvironmentSettings envSettings) {
         ChargePlotHelper plotHelper = new ChargePlotHelper(agent, trainer);

@@ -83,8 +83,9 @@ public class NStepNeuralAgentTrainer<S> {
     }
 
     private void logEpisode() {
+        executeIfTrue(helper.getEpisode() % settings.nofEpisodesBetweenLogs()==0, () ->
         log.info("episode = " + helper.getEpisode()+ ", time end = " + helper.getTime()+". SumRewards = "
-                +helper.getSumRewards());
+                +helper.getSumRewards()));
     }
 
     private void logFinishedTraining(CpuTimer timer) {

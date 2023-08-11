@@ -1,26 +1,36 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
 import common.CpuTimer;
+import common.ListUtils;
 import lombok.NonNull;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
+import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
+import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
+import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import org.apache.commons.lang3.tuple.Pair;
+import org.neuroph.util.TransferFunctionType;
 
 import java.util.List;
 import java.util.function.Supplier;
 
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.BUFFER_SIZE_FOR_RESET;
+
 @Builder
 public class ChargeAgentNeuralHelper {
 
-    @NonNull  AgentNeuralInterface<ChargeVariables> agent;
+    @NonNull AgentNeuralInterface<ChargeVariables> agent;
     Integer nofIterations;
 
     @Builder.Default
@@ -56,7 +66,6 @@ public class ChargeAgentNeuralHelper {
         ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
         trainAgentTimeBudget(buffer,timeBudget);
     }
-
 
 
 

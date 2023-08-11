@@ -5,7 +5,6 @@ import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,7 +26,7 @@ public class ChargeTrainerNeuralHelper<S> {
     @Builder.Default
     int batchSize=BATCH_SIZE;
     @Builder.Default
-    int maxBufferSize=MAX_BUFFER_SIZE_EXPERIENCE;
+    int maxBufferSize= MAX_BUFFER_SIZE_EXPERIENCE_REPLAY;
     @Builder.Default
     Pair<Double,Double> startEndProb= Pair.of(0.5, 1e-5);
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
@@ -37,7 +36,7 @@ public class ChargeTrainerNeuralHelper<S> {
     public NStepNeuralAgentTrainer<S> buildTrainer() {
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
                 .probStart(startEndProb.getLeft()).probEnd(startEndProb.getRight()).nofIterations(1)
-                .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE)
+                .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY)
                 .nofEpis(nofEpis)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
                 .build();

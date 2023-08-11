@@ -181,11 +181,12 @@ TD error log trainer x
 scenario 1000 steg - jämföra med rule based x
 stabil körning RunnerAgentChargeNeuralTrainerBothFree x
 
-givenRuleBasedValue_whenTrain_thenCorrect fuckar
 HyperParameterOptimizer
+mer data till ChargeAgentParameters
 remove item full buffer
 prova target network
 
+givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor
 - MultiePanelScatterPlot
 - MultiePanelScatterPlot

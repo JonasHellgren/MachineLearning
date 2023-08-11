@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.BatPos0_At1_BothHighSoC_1000steps;
+
 @Builder
 public class ChargeScenariosEvaluator {
 
@@ -22,6 +25,24 @@ public class ChargeScenariosEvaluator {
     @NonNull AgentNeuralInterface<ChargeVariables> agent;
 
     static Map<Scenario<ChargeVariables>,AgentEvaluatorResults> scenarioResultMap;
+
+    public static ChargeScenariosEvaluator newAllScenarios(@NonNull EnvironmentInterface<ChargeVariables> environment,
+                                                            @NonNull AgentNeuralInterface<ChargeVariables> agent) {
+        return ChargeScenariosEvaluator.builder()
+                .environment(environment).agent(agent)
+                .scenarios(List.of(
+                        BatPos0_At1_BothHighSoC,
+                        BatPos0_AtPosSplitCriticalSoCA,
+                        BatPos0_At20_BothMaxSoC,
+                        BatPosSplit_AatPos40_BothModerateSoC,
+                        B3BehindModerateSoC_AatSplitModerateSoC,
+                        B1BehindCriticalSoC_AatSplitModerateSoC,
+                        B3BehindCriticalSoC_AatSplitModerateSoC,
+                        BatPos0_At1_BothHighSoC_1000steps
+                ))
+                .build();
+    }
+
 
     public Map<Scenario<ChargeVariables>, AgentEvaluatorResults> getScenarioResultMap() {
         if (isResultMapNull.test(scenarioResultMap)) {

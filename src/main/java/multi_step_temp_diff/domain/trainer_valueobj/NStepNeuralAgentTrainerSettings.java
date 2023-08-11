@@ -13,7 +13,8 @@ public record NStepNeuralAgentTrainerSettings(
         Double probEnd,
         Double initValue,
         Integer maxBufferSize,
-        Integer maxStepsInEpisode
+        Integer maxStepsInEpisode,
+        Integer nofEpisodesBetweenLogs
 ) implements  NStepTabularTrainerSettingsInterface {
 
   //  private static final Double ALPHA = 0.5;
@@ -25,6 +26,7 @@ public record NStepNeuralAgentTrainerSettings(
     private static final Double PROB_END = 0.01;
     public static final Double INIT_VALUE = 0d;
     public static final Integer MAX_BUFFER_SIZE = 10_000;
+    public static final int NOF_EPISODES_BETWEEN_LOGS = 100;
 
 
     public static NStepNeuralAgentTrainerSettings getDefault() {
@@ -39,7 +41,8 @@ public record NStepNeuralAgentTrainerSettings(
                                            Double probEnd,
                                            Double initValue,
                                            Integer maxBufferSize,
-                                           Integer maxStepsInEpisode) {
+                                           Integer maxStepsInEpisode,
+                                           Integer nofEpisodesBetweenLogs) {
         this.nofStepsBetweenUpdatedAndBackuped = defaultIfNullInteger.apply(nofStepsBetweenUpdatedAndBackuped,N_DEFAULT);
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
         this.batchSize = defaultIfNullInteger.apply(batchSize,BATCH_SIZE);
@@ -49,5 +52,7 @@ public record NStepNeuralAgentTrainerSettings(
         this.initValue = defaultIfNullDouble.apply(initValue,INIT_VALUE);
         this.maxBufferSize = defaultIfNullInteger.apply(maxBufferSize,MAX_BUFFER_SIZE);
         this.maxStepsInEpisode = defaultIfNullInteger.apply(maxStepsInEpisode,Integer.MAX_VALUE);
+        this.nofEpisodesBetweenLogs = defaultIfNullInteger.apply(nofEpisodesBetweenLogs, NOF_EPISODES_BETWEEN_LOGS);
+
     }
 }
