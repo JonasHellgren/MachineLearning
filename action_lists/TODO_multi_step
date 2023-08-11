@@ -181,10 +181,11 @@ TD error log trainer x
 scenario 1000 steg - jämföra med rule based x
 stabil körning RunnerAgentChargeNeuralTrainerBothFree x
 
-HyperParameterOptimizer
-mer data till ChargeAgentParameters
-remove item full buffer
+HyperParameterOptimizer  c
+mer data till ChargeAgentParameters  x
+policy remove item full buffer
 prova target network
+prova prio exp replay
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor

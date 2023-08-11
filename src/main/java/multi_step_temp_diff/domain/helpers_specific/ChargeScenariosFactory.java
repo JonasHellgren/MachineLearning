@@ -5,6 +5,8 @@ import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.Scenario;
 
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.TRAP_POS;
+
 public class ChargeScenariosFactory {
 
     static final int TIME = 0;
@@ -57,6 +59,11 @@ public class ChargeScenariosFactory {
                     , new ChargeState(ChargeVariables.builder().posB(0).posA(1).socB(SOC_MAX).socA(SOC_MAX).time(TIME)
                             .build()));
 
+    public static Scenario<ChargeVariables> BtTrapped_AatPos0_bothMaxSoC_100steps =
+            new Scenario<>("BatPos0_At1_BothHighSoC"
+                    , new ChargeState(ChargeVariables.builder().posB(TRAP_POS).posA(0)
+                            .socB(SOC_MAX).socA(SOC_MAX).time(TIME)
+                            .build()),100);
 
     public static  Scenario<ChargeVariables> of10Steps(String name, StateInterface<ChargeVariables> state) {
         return new Scenario<>(name, state, 10);

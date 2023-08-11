@@ -36,7 +36,6 @@ public class RunnerChargeHyperParameterOptimizer {
     static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 27);
 
     private static final int NOF_EPIS = 10;
-    public static final int MAX_NOF_STEPS_TRAINING = 100;
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -76,7 +75,7 @@ public class RunnerChargeHyperParameterOptimizer {
                     ChargeState.newDummy(),
                     parameterSetup.nofLayers(),
                     parameterSetup.nofNeuronsHidden());
-            ChargeTrainerNeuralHelper<ChargeVariables> trainerHelper = ChargeTrainerNeuralHelper.<ChargeVariables>builder()
+            ChargeTrainerFactory<ChargeVariables> trainerHelper = ChargeTrainerFactory.<ChargeVariables>builder()
                     .agent(agent).environment(environment)
                     .batchSize(parameterSetup.batchSize()).startEndProb(START_END_PROB)
                     .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(parameterSetup.nofStepBetween())

@@ -14,7 +14,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 
 
 @Builder
-public class ChargeTrainerNeuralHelper<S> {
+public class ChargeTrainerFactory<S> {
 
     @NonNull AgentNeuralInterface<S> agent;
     @NonNull EnvironmentInterface<S> environment;
@@ -28,7 +28,7 @@ public class ChargeTrainerNeuralHelper<S> {
     @Builder.Default
     int maxBufferSize= MAX_BUFFER_SIZE_EXPERIENCE_REPLAY;
     @Builder.Default
-    Pair<Double,Double> startEndProb= Pair.of(0.5, 1e-5);
+    Pair<Double,Double> startEndProb= START_END_PROB;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
 
 

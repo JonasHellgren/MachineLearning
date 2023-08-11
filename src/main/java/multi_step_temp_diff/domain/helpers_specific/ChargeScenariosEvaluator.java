@@ -24,10 +24,10 @@ public class ChargeScenariosEvaluator {
     @NonNull EnvironmentInterface<ChargeVariables> environment;
     @NonNull AgentNeuralInterface<ChargeVariables> agent;
 
-    static Map<Scenario<ChargeVariables>,AgentEvaluatorResults> scenarioResultMap;
+    static Map<Scenario<ChargeVariables>, AgentEvaluatorResults> scenarioResultMap;
 
     public static ChargeScenariosEvaluator newAllScenarios(@NonNull EnvironmentInterface<ChargeVariables> environment,
-                                                            @NonNull AgentNeuralInterface<ChargeVariables> agent) {
+                                                           @NonNull AgentNeuralInterface<ChargeVariables> agent) {
         return ChargeScenariosEvaluator.builder()
                 .environment(environment).agent(agent)
                 .scenarios(List.of(
@@ -43,6 +43,16 @@ public class ChargeScenariosEvaluator {
                 .build();
     }
 
+    public static ChargeScenariosEvaluator newSingleScenario(
+            @NonNull Scenario<ChargeVariables> scenario,
+            @NonNull EnvironmentInterface<ChargeVariables> environment,
+            @NonNull AgentNeuralInterface<ChargeVariables> agent) {
+        return ChargeScenariosEvaluator.builder()
+                .environment(environment).agent(agent)
+                .scenarios(List.of(scenario))
+                .build();
+    }
+
 
     public Map<Scenario<ChargeVariables>, AgentEvaluatorResults> getScenarioResultMap() {
         if (isResultMapNull.test(scenarioResultMap)) {
@@ -51,18 +61,18 @@ public class ChargeScenariosEvaluator {
         return scenarioResultMap;
     }
 
-    static  Predicate<Map<Scenario<ChargeVariables>,AgentEvaluatorResults>> isResultMapNull=(rm) ->
-            rm==null;
+    static Predicate<Map<Scenario<ChargeVariables>, AgentEvaluatorResults>> isResultMapNull = (rm) ->
+            rm == null;
 
     public List<Double> evaluate() {
-        scenarioResultMap=new HashMap<>();
-        InitStateVariantsEvaluator<ChargeVariables> evaluator= InitStateVariantsEvaluator.<ChargeVariables>builder()
+        scenarioResultMap = new HashMap<>();
+        InitStateVariantsEvaluator<ChargeVariables> evaluator = InitStateVariantsEvaluator.<ChargeVariables>builder()
                 .environment(environment)
                 .agent(agent)
                 .build();
 
         for (Scenario<ChargeVariables> scenario : scenarios) {
-            scenarioResultMap.put(scenario,evaluator.evaluate(scenario));
+            scenarioResultMap.put(scenario, evaluator.evaluate(scenario));
         }
         return scenarioResultMap.values().stream().map(r -> r.sumRewards()).toList();
     }
@@ -70,17 +80,18 @@ public class ChargeScenariosEvaluator {
 
     @Override
     public String toString() {
-        if (isResultMapNull.test(scenarioResultMap))  {
+        if (isResultMapNull.test(scenarioResultMap)) {
             return "No results available";
         }
-        List<String> stringList=scenarioResultMap.keySet().stream()
-                .map(s -> "name = "+s.name()+", sumRewards = "+scenarioResultMap.get(s).sumRewards())
+        List<String> stringList = scenarioResultMap.keySet().stream()
+                .map(s -> "name = " + s.name() + ", sumRewards = " + scenarioResultMap.get(s).sumRewards())
                 .toList();
 
         StringBuilder sb = new StringBuilder();
         sb.append(System.lineSeparator());
-        for (String txt:stringList) {
-            sb.append(txt);  sb.append(System.lineSeparator());
+        for (String txt : stringList) {
+            sb.append(txt);
+            sb.append(System.lineSeparator());
         }
         return sb.toString();
 
