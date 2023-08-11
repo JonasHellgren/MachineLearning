@@ -1,0 +1,20 @@
+package multi_step_temp_diff.domain.helpers_specific;
+
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
+
+import java.util.List;
+
+public class ChargeAgentParameters {
+
+    static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
+    static final int NOF_EPIS = 30;
+    public static final int BATCH_SIZE = 100, MAX_BUFFER_SIZE_EXPERIENCE = 100_000;
+    public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
+    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
+            new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
+    public static final int TRAP_POS = 29; //trap
+    public static final List<Double> CHARGE_REWARD_VALUES_EXCEPT_FAIL = List.of(0d, -1d, -2d, 0d, -1d, 0d);
+    public static final double ALPHA = 3d;  //used by out normalizer
+    public static final String FOLDER_NETWORKS = "networks/";
+    public static final String FILENAME_CHARGE_BOTH_FREE_NET = "chargeBothFreeNet.nnet";
+}

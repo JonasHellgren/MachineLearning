@@ -13,6 +13,7 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularTrainerSettingsInterface;
 import org.apache.commons.math3.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,8 +119,13 @@ public class NStepTDHelper<S> {
     }
 
     public void updateSumRewardsTracker() {
+        Double sumRewards = getSumRewards();
+        sumRewardsTracker.addValue(sumRewards);
+    }
+
+    public Double getSumRewards() {
         List<Double> rewardList=timeReturnMap.keySet().stream().map(t -> timeReturnMap.get(t).reward).toList();
-        sumRewardsTracker.addValue(ListUtils.sumDoubleList(rewardList));
+        return ListUtils.sumDoubleList(rewardList);
     }
 
     public void reset() {

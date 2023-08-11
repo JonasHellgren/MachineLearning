@@ -19,18 +19,6 @@ import java.util.function.Supplier;
 
 @Builder
 public class ChargeAgentNeuralHelper {
-    static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    static final int NOF_EPIS = 30;
-    public static final int BATCH_SIZE = 100, MAX_BUFFER_SIZE_EXPERIENCE = 100_000;
-    public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
-    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
-            new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
-    public static final int TRAP_POS = 29; //trap
-    public static final List<Double> CHARGE_REWARD_VALUES_EXCEPT_FAIL = List.of(0d, -1d, -2d, 0d, -1d, 0d);
-    public static final String FOLDER_NETWORKS = "networks/";
-    public static final String FILENAME_CHARGE_BOTH_FREE_NET = "chargeBothFreeNet.nnet";
-
-
 
     @NonNull  AgentNeuralInterface<ChargeVariables> agent;
     Integer nofIterations;

@@ -24,7 +24,8 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.List;
 
 import static java.lang.System.out;
-import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
+
 
 /**No evidence reset helps
  *
@@ -34,13 +35,13 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelp
 @Log
 public class RunnerAgentChargeNeuralTrainerBTrapped {
 
-    private static final int NOF_EPIS = 100;
+    private static final int NOF_EPIS = 50;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     public static final int POS_B = TRAP_POS; //trap
     public static final double SOC_B = 1.0;
-    public static final int MAX_NOF_STEPS_TRAINING = 500;
+    public static final int MAX_NOF_STEPS_TRAINING = 200;
     public static final int TIME_BUDGET_RESET = 1000;
-    public static final double ALPHA = 3d;
+
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -96,7 +97,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
                 .nofLayersHidden(5)
                 .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
                         List.of(envSettings.rewardBad() * ALPHA),
-                        ChargeAgentNeuralHelper.CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
+                        CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
                 .build();
 
         agent = AgentChargeNeural.builder()

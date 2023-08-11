@@ -27,7 +27,6 @@ public class ChargeScenariosEvaluator {
         if (isResultMapNull.test(scenarioResultMap)) {
             return new HashMap<>();
         }
-
         return scenarioResultMap;
     }
 
@@ -40,7 +39,6 @@ public class ChargeScenariosEvaluator {
                 .environment(environment)
                 .agent(agent)
                 .build();
-
 
         for (Scenario<ChargeVariables> scenario : scenarios) {
             scenarioResultMap.put(scenario,evaluator.evaluate(scenario));

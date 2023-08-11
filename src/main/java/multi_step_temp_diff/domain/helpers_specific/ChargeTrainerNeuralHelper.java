@@ -11,8 +11,8 @@ import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSetti
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Supplier;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
 
-import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
 
 @Builder
 public class ChargeTrainerNeuralHelper<S> {

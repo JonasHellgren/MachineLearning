@@ -58,7 +58,7 @@ public class MonteCarloSearchStatistics<S, A> {
         maxDepth = tih.maxDepth();
         nofNodesPerDepthLevel=setNofNodesPerDepthLevel();
         averageNofChildrenPerNode = calcAerageNofChildrenPerNodeThatHasChildren();
-        usedTimeInMilliSeconds = cpuTimer.absoluteProgress();
+        usedTimeInMilliSeconds = cpuTimer.absoluteProgressInMillis();
         usedRelativeTimeInPercentage = cpuTimer.getRelativeProgress() * 100;
     }
 

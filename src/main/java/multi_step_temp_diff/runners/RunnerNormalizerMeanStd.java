@@ -8,14 +8,13 @@ import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import static java.lang.System.out;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
 
 /**
  * Tha largest alpha giving true in alphaBoolMap should be adequate
@@ -81,7 +80,7 @@ public class RunnerNormalizerMeanStd {
         Map<Double, List<Double>> alphaListOfValuesMap = new HashMap<>();
         for (double alpha : ALPHA_LIST) {
             alphaListOfValuesMap.put(alpha, ListUtils.merge(List.of(rewardBad * alpha),
-                    ChargeAgentNeuralHelper.CHARGE_REWARD_VALUES_EXCEPT_FAIL));
+                    CHARGE_REWARD_VALUES_EXCEPT_FAIL));
         }
         return alphaListOfValuesMap;
     }

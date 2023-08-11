@@ -25,7 +25,7 @@ public class AgentEvaluator<S> {
         int step;
         StateInterface<S> state=initState.copy();
         for (step = 0; step < simStepsMax; step++) {
-            log.info("state = " + state);
+            log.fine("state = " + state);
             agent.setState(state);
             int action = agent.chooseAction(PROB_RANDOM);
             stepReturn = environment.step(state, action);

@@ -12,8 +12,6 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.helpers_common.AgentEvaluator;
-import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,8 +21,8 @@ import org.neuroph.util.TransferFunctionType;
 import java.util.List;
 
 import static java.lang.System.out;
-import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper.*;
-import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariousContainer.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
+import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.*;
 
 /***
  * stor discountFactor gör mer instabilt
@@ -32,15 +30,12 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariousConta
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 200;
+    private static final int NOF_EPIS = 5000;
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
-    public static final int MAX_NOF_STEPS_TRAINING = 1000;
-    public static final int BATCH_SIZE1 = 100;
-    public static final int SIM_STEPS_MAX_EVAL = 100;
+    public static final int MAX_NOF_STEPS_TRAINING = 100;
+    public static final int BATCH_SIZE1 = 30;
     public static final int TIME_BUDGET_RESET = 0;  //small <=> no reset
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
-    public static final double ALPHA = 3d;
-
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -67,30 +62,29 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         trainer = trainerHelper.buildTrainer();
         trainer.train();
         doPlotting(envSettings);
-        evaluate(envSettings);
         agent.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
 
-        ChargeScenariosEvaluator evaluator = getChargeScenariosEvaluator();
+        ChargeScenariosEvaluator evaluator = createChargeScenariosEvaluator();
+        evaluator.evaluate();
         out.println("evaluator = " + evaluator);
-
 
     }
 
     @NotNull
-    private static ChargeScenariosEvaluator getChargeScenariosEvaluator() {
-        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.builder()
+    private static ChargeScenariosEvaluator createChargeScenariosEvaluator() {
+        return ChargeScenariosEvaluator.builder()
                 .environment(environment).agent(agent)
                 .scenarios(List.of(
                         BatPos0_At1_BothHighSoC,
-                        BatPos0_AtPosSplitLowSoCA,
-                        BatPos0_At20_BothHighSoC,
+                        BatPos0_AtPosSplitCriticalSoCA,
+                        BatPos0_At20_BothMaxSoC,
                         BatPosSplit_AatPos40_BothModerateSoC,
-                        BJustBehindLowSoC_AatSplitModerateSoC
+                        B3BehindModerateSoC_AatSplitModerateSoC,
+                        B1BehindCriticalSoC_AatSplitModerateSoC,
+                        B3BehindCriticalSoC_AatSplitModerateSoC,
+                        BatPos0_At1_BothHighSoC_1000steps
                 ))
                 .build();
-
-        evaluator.evaluate();
-        return evaluator;
     }
 
     private static void doPlotting(ChargeEnvironmentSettings envSettings) {
@@ -104,24 +98,14 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         plotHelper.plotV20MinusV11VersusSoC(posB, socB);
     }
 
-    private static void evaluate(ChargeEnvironmentSettings envSettings) {
-        environment = new ChargeEnvironment(envSettings);
-        ChargeState initState = new ChargeState(ChargeVariables.builder().posA(0).posB(1).socA(0.99).build());
-        AgentEvaluator<ChargeVariables> evaluator = AgentEvaluator.<ChargeVariables>builder()
-                .environment(environment).agent(agent).simStepsMax(SIM_STEPS_MAX_EVAL)
-                .build();
-        AgentEvaluatorResults results = evaluator.simulate(initState);
-        out.println("results = " + results);
-    }
-
     private static AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(0.1).discountFactor(0.99).momentum(0.01d)
+                .learningRate(0.01).discountFactor(0.99).momentum(0.01d)
                 .nofLayersHidden(10).nofNeuronsHidden((int) Math.round(envSettingsForTraining.siteNodes().size() / 2d))
                 .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(
                         List.of(envSettingsForTraining.rewardBad() * ALPHA),
-                        ChargeAgentNeuralHelper.CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
+                        CHARGE_REWARD_VALUES_EXCEPT_FAIL)))
                 .build();
 
         agent = AgentChargeNeural.builder()

@@ -30,6 +30,7 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
 @Log
 public class NStepNeuralAgentTrainer<S> {
 
+    public static final double SEC2MIN = 1d / 60, MS2SEC = 1d/1000;
     @Builder.Default
     NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.getDefault();
     @NonNull EnvironmentInterface<S> environment;
@@ -46,6 +47,7 @@ public class NStepNeuralAgentTrainer<S> {
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
         buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
+        CpuTimer timer=new CpuTimer();
 
         while (helper.isNofEpisodesNotIsExceeded()) {
             agentNeural.setState(startStateSupplier.get());
@@ -70,14 +72,24 @@ public class NStepNeuralAgentTrainer<S> {
 
          //   helper.statesMap.keySet().forEach( t -> System.out.println(helper.statesMap.get(t)));
 
-            log.info("episode = " + helper.getEpisode()+ ", time end = " + helper.getTime());
+            logEpisode();
             helper.increaseEpisode();
             helper.updateSumRewardsTracker();
         }
-        log.info("Training finished. Replay buffer size = "+buffer.size());
+        logFinishedTraining(timer);
 
-      //  System.out.println("buffer = " + buffer);
+        //  System.out.println("buffer = " + buffer);
 
+    }
+
+    private void logEpisode() {
+        log.info("episode = " + helper.getEpisode()+ ", time end = " + helper.getTime()+". SumRewards = "
+                +helper.getSumRewards());
+    }
+
+    private void logFinishedTraining(CpuTimer timer) {
+        log.info("Training finished. Replay buffer size = "+buffer.size()+". Time needed in minutes = "+
+                timer.absoluteProgressInMillis() * MS2SEC * SEC2MIN);
     }
 
     private boolean isTimeForUpdateOkAndNotToLargeTime() {

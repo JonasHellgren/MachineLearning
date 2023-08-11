@@ -33,7 +33,7 @@ public class CpuTimer {
     }
 
     public void stop() {
-        absoluteProgress=absoluteProgress();
+        absoluteProgress= absoluteProgressInMillis();
         relativeProgress=relativeProgress();
     }
 
@@ -42,10 +42,10 @@ public class CpuTimer {
     }
 
     public float relativeProgress() {
-        return absoluteProgress()/ (float) timeBudgetMillis;
+        return absoluteProgressInMillis()/ (float) timeBudgetMillis;
     }
 
-    public long absoluteProgress() {
+    public long absoluteProgressInMillis() {
         return  (System.currentTimeMillis() - startTimeMillis);
     }
 

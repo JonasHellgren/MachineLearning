@@ -174,9 +174,16 @@ record Scenario - scenario ta in namn  x
 RunnerChargeScenariosEvaluator x
 BUGG RunnerChargeScenariosEvaluator ger olika results  x
 bug fixad - missade sortering i PositionMapper x
-https://en.wikipedia.org/wiki/Encog
-påvisa fordon vid split ej laddar om bakomvarande kritisk soc
+- visa tid runner  x
+sum reweards log trainer x
+variant BatPosSplit_AatPos40_BothModerateSoC  x
+TD error log trainer x
+scenario 1000 steg - jämföra med rule based x
+stabil körning RunnerAgentChargeNeuralTrainerBothFree x
+
+givenRuleBasedValue_whenTrain_thenCorrect fuckar
 HyperParameterOptimizer
+remove item full buffer
 prova target network
 
 snygga upp plotters - tex inställningar i konstruktor
@@ -195,4 +202,4 @@ för ovan testa ide grovt på mockad data på nät
 - Ev sandbox example, 4 ingångar, ut litet om ngn av två första mindre än 0.5
 
 ev target network
-
+https://en.wikipedia.org/wiki/Encog

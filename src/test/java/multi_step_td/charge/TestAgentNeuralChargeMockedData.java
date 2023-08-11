@@ -34,7 +34,7 @@ import java.util.function.Function;
 
 public class TestAgentNeuralChargeMockedData {
 
-    private static final int BUFFER_SIZE = 10_000, NOF_ITERATIONS_FIXED =500, NOF_ITERATIONS_RULE = 2_000;
+    private static final int BUFFER_SIZE = 10_000,  NOF_ITERATIONS_RULE = 1000;
     private static final int BATCH_LENGTH = 100;
     public static final double DELTA = 5;
     public static final int ITERATIONS_BETWEEN_PRINTI = 100;
@@ -87,11 +87,11 @@ public class TestAgentNeuralChargeMockedData {
 
     @Test
     @Tag("nettrain")
+    //@Disabled("to long time")
     public void givenFixedValue_whenTrain_thenCorrect() {
-
         helper= ChargeAgentNeuralHelper.builder()
                 .agent(agent).batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();
-        helper.resetAgentMemory(envSettings,BUFFER_SIZE, TIME_BUDGET);
+        helper.resetAgentMemory(envSettings,BUFFER_SIZE, TIME_BUDGET);  //the agent is trained towards always zero out
         plotHelper.plotAndSaveErrorHistory("fixed");
 
         bufferCreator= ChargeMockedReplayBufferCreator.builder().envSettings(envSettings).build();

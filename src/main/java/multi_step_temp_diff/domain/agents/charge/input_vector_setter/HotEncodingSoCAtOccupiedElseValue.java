@@ -28,28 +28,6 @@ public class HotEncodingSoCAtOccupiedElseValue implements InputVectorSetterCharg
         this.valueIfNotOccupied=value;
     }
 
-    //@Override
-    public double[] defineInArrayTemp(ChargeState state) {
-        double[] inArray = new double[inputSize()];
-        double normalizedValue = normalizer.normalize(valueIfNotOccupied);
-        Arrays.fill(inArray, 0.1);
-
-        Optional<Integer> mappedPosA=positionMapper.map(posA.apply(state));
-        Optional<Integer> mappedPosB=positionMapper.map(posB.apply(state));
-
-        System.out.println("mappedPosA = " + mappedPosA);
-        System.out.println("mappedPosB = " + mappedPosB);
-
-        executeIfTrue(mappedPosA.isPresent(), () ->
-                inArray[2] = socA.apply(state));
-
-
-        executeIfTrue(mappedPosB.isPresent(), () ->
-                inArray[5] = socB.apply(state));
-
-        return inArray;
-
-    }
 
     @Override
     public double[] defineInArray(ChargeState state) {
