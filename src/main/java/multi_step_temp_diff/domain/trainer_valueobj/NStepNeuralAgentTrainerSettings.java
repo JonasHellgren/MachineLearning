@@ -7,6 +7,7 @@ import static common.DefaultPredicates.*;
 public record NStepNeuralAgentTrainerSettings(
         Integer nofStepsBetweenUpdatedAndBackuped,  //todo better name
         Integer nofEpis,
+        Integer maxTrainingTimeInMilliS,
         Integer batchSize,
         Integer nofIterations,
         Double probStart,
@@ -35,6 +36,7 @@ public record NStepNeuralAgentTrainerSettings(
     @Builder
     public NStepNeuralAgentTrainerSettings(Integer nofStepsBetweenUpdatedAndBackuped,
                                            Integer nofEpis,
+                                           Integer maxTrainingTimeInMilliS,
                                            Integer batchSize,
                                            Integer nofIterations,
                                            Double probStart,
@@ -45,6 +47,7 @@ public record NStepNeuralAgentTrainerSettings(
                                            Integer nofEpisodesBetweenLogs) {
         this.nofStepsBetweenUpdatedAndBackuped = defaultIfNullInteger.apply(nofStepsBetweenUpdatedAndBackuped,N_DEFAULT);
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
+        this.maxTrainingTimeInMilliS = defaultIfNullInteger.apply(maxTrainingTimeInMilliS,Integer.MAX_VALUE);
         this.batchSize = defaultIfNullInteger.apply(batchSize,BATCH_SIZE);
         this.nofIterations = defaultIfNullInteger.apply(nofIterations,NOF_ITERATIONS);
         this.probStart = defaultIfNullDouble.apply(probStart,PROB_START);

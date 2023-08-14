@@ -18,7 +18,7 @@ public class CpuTimer {
         this(Long.MAX_VALUE);
     }
 
-    public static CpuTimer newTimer(long timeBudgetMillis) {
+    public static CpuTimer newWithTimeBudgetInMilliSec(long timeBudgetMillis) {
         return new CpuTimer(timeBudgetMillis);
 
     }

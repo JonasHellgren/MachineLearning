@@ -42,7 +42,7 @@ public class TestMonteCarloSearchStatistics {
     @Test public void whenThreeNodesStanding_thenBranchingOne() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = create3nodesTree();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
-                nodeRoot,monteCarloTreeCreator,CpuTimer.newTimer(0),settings);
+                nodeRoot,monteCarloTreeCreator,CpuTimer.newWithTimeBudgetInMilliSec(0),settings);
 
         nodeRoot.printTree();
         System.out.println("statistics = " + statistics);
@@ -59,7 +59,7 @@ public class TestMonteCarloSearchStatistics {
     @Test public void whenTwoDeep1FourDeep2_thenBranchingTwo() {
         NodeWithChildrenInterface<ShipVariables, ShipActionSet> nodeRoot = createTwoDeep1FourDeep2();
         MonteCarloSearchStatistics<ShipVariables, ShipActionSet> statistics=new MonteCarloSearchStatistics<>(
-                nodeRoot,monteCarloTreeCreator,CpuTimer.newTimer(0),settings);
+                nodeRoot,monteCarloTreeCreator,CpuTimer.newWithTimeBudgetInMilliSec(0),settings);
 
         nodeRoot.printTree();
         System.out.println("statistics = " + statistics);

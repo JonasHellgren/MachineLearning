@@ -30,14 +30,14 @@ public class ChargeTrainerFactory<S> {
     @Builder.Default
     Pair<Double,Double> startEndProb= START_END_PROB;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
-
-
+    @Builder.Default
+    int maxTrainingTimeInMilliS=Integer.MAX_VALUE;
 
     public NStepNeuralAgentTrainer<S> buildTrainer() {
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
                 .probStart(startEndProb.getLeft()).probEnd(startEndProb.getRight()).nofIterations(1)
                 .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY)
-                .nofEpis(nofEpis)
+                .nofEpis(nofEpis).maxTrainingTimeInMilliS(maxTrainingTimeInMilliS)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
                 .build();
 

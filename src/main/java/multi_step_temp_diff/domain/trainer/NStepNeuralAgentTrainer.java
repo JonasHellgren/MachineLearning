@@ -47,9 +47,9 @@ public class NStepNeuralAgentTrainer<S> {
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
         buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
-        CpuTimer timer=new CpuTimer();
+        CpuTimer timer=new CpuTimer(settings.maxTrainingTimeInMilliS());
 
-        while (helper.isNofEpisodesNotIsExceeded()) {
+        while (nofEpisodesOrTimeNotIsExceede(timer)) {
             agentNeural.setState(startStateSupplier.get());
             helper.reset();
             do {
@@ -80,6 +80,10 @@ public class NStepNeuralAgentTrainer<S> {
 
         //  System.out.println("buffer = " + buffer);
 
+    }
+
+    private boolean nofEpisodesOrTimeNotIsExceede(CpuTimer timer) {
+        return helper.isNofEpisodesNotIsExceeded() && !timer.isTimeExceeded();
     }
 
     private void logEpisode() {

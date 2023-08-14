@@ -184,8 +184,8 @@ stabil körning RunnerAgentChargeNeuralTrainerBothFree x
 HyperParameterOptimizer  c
 mer data till ChargeAgentParameters  x
 ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint  x
-även mean td error i HyperParameterOptimizer
-tidsbegränsning per parameter uppsättning HyperParameterOptimizer
+även mean td error i RunnerChargeHyperParameterOptimizer  x
+tidsbegränsning per parameter uppsättning HyperParameterOptimizer  x
 RunnerAgentChargeNeuralTrainerBothFreeParallelBatch
 policy remove item full buffer
 prova target network

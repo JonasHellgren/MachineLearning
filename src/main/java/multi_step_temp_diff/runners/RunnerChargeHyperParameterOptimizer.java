@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import common.Counter;
 import common.CpuTimer;
+import common.ListUtils;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -23,6 +24,8 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 @Log
 public class RunnerChargeHyperParameterOptimizer {
 
+    public static final int MAX_TRAIN_TIME_IN_SEC = 1;
+
     record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden) {
         ParameterSetup(List<Integer> list) {
             this(list.get(0), list.get(1), list.get(2), list.get(3));
@@ -34,7 +37,7 @@ public class RunnerChargeHyperParameterOptimizer {
     static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5, 10);
     static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 25);
 
-    private static final int NOF_EPIS = 2000;
+    private static final int NOF_EPIS = 20;
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -64,7 +67,9 @@ public class RunnerChargeHyperParameterOptimizer {
                         NOF_NEURONS_HIDDEN_SET));
 
         log.info("Nof parameter permutations = "+parameterPermutations.size());
-        Map<ParameterSetup, Double> resultMap = new HashMap<>();
+        Map<ParameterSetup, Double> resultMapSumRewards = new HashMap<>();
+        Map<ParameterSetup, Double> resultMapMeanTDerror = new HashMap<>();
+
         Counter counter=new Counter();
         CpuTimer timer=new CpuTimer();
         for (List<Integer> list : parameterPermutations) {
@@ -77,39 +82,55 @@ public class RunnerChargeHyperParameterOptimizer {
             ChargeTrainerFactory<ChargeVariables> trainerHelper = ChargeTrainerFactory.<ChargeVariables>builder()
                     .agent(agent).environment(environment)
                     .batchSize(parameterSetup.batchSize()).startEndProb(START_END_PROB)
-                    .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(parameterSetup.nofStepBetween())
+                    .nofEpis(NOF_EPIS).maxTrainingTimeInMilliS(1000*MAX_TRAIN_TIME_IN_SEC)
+                    .nofStepsBetweenUpdatedAndBackuped(parameterSetup.nofStepBetween())
                     .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                     .build();
             trainer = trainerHelper.buildTrainer();
             trainer.train();
-
-            evaluateAndPutInResultMap(resultMap, parameterSetup);
+            evaluateAndPutInResultMapSumRewards(resultMapSumRewards, parameterSetup);
+            putInResultMapMeanTDerror(resultMapMeanTDerror, parameterSetup);
             counter.increase();
         }
 
         out.println("Time in minutes = " + timer.timeInMinutesAsString());
-        printResults(resultMap);
+        printResults(resultMapSumRewards,resultMapMeanTDerror);
     }
 
-    private static void evaluateAndPutInResultMap(Map<ParameterSetup, Double> resultMap, ParameterSetup parameterSetup) {
+    private static void putInResultMapMeanTDerror(Map<ParameterSetup, Double> resultMapMeanTDerror, ParameterSetup parameterSetup) {
+        List<Double> valueHistory=trainer.getAgentInfo().getTemporalDifferenceTracker().getValueHistory();
+        resultMapMeanTDerror.put(parameterSetup, ListUtils.findAverage(valueHistory).orElseThrow());
+    }
+
+    private static void evaluateAndPutInResultMapSumRewards(Map<ParameterSetup, Double> resultMap, ParameterSetup parameterSetup) {
         ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
         evaluator.evaluate();
         resultMap.put(parameterSetup, evaluator.getSumOfRewardAllScenarios());
     }
 
-    private static void printResults(Map<ParameterSetup, Double> resultMap) {
-        out.println("Non sorted results" );
-        resultMap.entrySet().forEach(out::println);
+    private static void printResults(Map<ParameterSetup, Double> resultMapSumRewards,
+                                     Map<ParameterSetup, Double> resultMapMeanTDError) {
+        out.println("Non sorted results resultMapSumRewards" );
+        resultMapSumRewards.entrySet().forEach(out::println);
 
-        out.println("Sorted results" );
+        out.println("Non sorted results resultMapMeanTD" );
+        resultMapMeanTDError.entrySet().forEach(out::println);
+
+        out.println("Sorted results resultMapSumRewards");
+        sortAndPrintMap(resultMapSumRewards);
+
+        out.println("Sorted results resultMapMeanTDError");
+        sortAndPrintMap(resultMapMeanTDError);
+
+    }
+
+    private static void sortAndPrintMap(Map<ParameterSetup, Double> resultMap) {
         List<Map.Entry<ParameterSetup, Double>> entryList = new ArrayList<>(resultMap.entrySet());
         entryList.sort(Map.Entry.comparingByValue());   // Sort the list based on values
         for (Map.Entry<ParameterSetup, Double> entry : entryList) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
-
-
 
 
 }

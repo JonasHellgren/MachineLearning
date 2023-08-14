@@ -103,7 +103,7 @@ public class MonteCarloTreeCreator<S, A> {
     }
 
     public NodeWithChildrenInterface<S, A> run() throws StartStateIsTrapException {
-        CpuTimer cpuTimer = CpuTimer.newTimer(settings.timeBudgetMilliSeconds);
+        CpuTimer cpuTimer = CpuTimer.newWithTimeBudgetInMilliSec(settings.timeBudgetMilliSeconds);
         MonteCarloTreeCreatorHelper.setSomeFields(startState, this);  //needed because setStartState will not affect correctly otherwise
         MonteCarloTreeCreatorHelper<S, A> helper = new MonteCarloTreeCreatorHelper<>(
                 environment, settings, actionTemplate, startState, nodeRoot, cpuTimer);
