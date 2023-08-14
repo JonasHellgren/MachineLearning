@@ -10,7 +10,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 public class ChargeScenariosFactory {
 
     static final int TIME = 0;
-    public static final double SOL_CRITICAL = 0.55, SOC_MODERATE = 0.9, SOC_MAX = 1.0;
+    public static final double SOL_CRITICAL = 0.55, SOC_MODERATE = 0.75, SOC_MAX = 1.0;
     public static final int POS_SPLIT = 10, POS_CHARGING = 40;;
 
 

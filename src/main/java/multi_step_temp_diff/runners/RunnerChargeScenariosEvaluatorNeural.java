@@ -19,7 +19,7 @@ import java.util.List;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.*;
 
-public class RunnerChargeScenariosEvaluator {
+public class RunnerChargeScenariosEvaluatorNeural {
     public static final double ALPHA = 3d;
 
     static AgentNeuralInterface<ChargeVariables> agent;
@@ -37,24 +37,8 @@ public class RunnerChargeScenariosEvaluator {
 
         agent.loadMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
         printStateAndValue(state);
+        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment,agent);
 
-
-        ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.builder()
-                .environment(environment).agent(agent)
-                .scenarios(List.of(
-                        BatPos0_At1_BothHighSoC,
-                        BatPos0_AtPosSplitCriticalSoCA,
-                        BatPos0_At20_BothMaxSoC,
-                        BatPosSplit_AatPos40_BothModerateSoC,
-                        B3BehindModerateSoC_AatSplitModerateSoC,
-                        B1BehindCriticalSoC_AatSplitModerateSoC,
-                        B3BehindCriticalSoC_AatSplitModerateSoC,
-                        BatPos0_At1_BothHighSoC_1000steps
-                ))
-                .build();
-
-        List<Double> sumRewardList = evaluator.evaluate();
-        System.out.println("sumRewardList = " + sumRewardList);
         System.out.println("evaluator = " + evaluator);
 
 

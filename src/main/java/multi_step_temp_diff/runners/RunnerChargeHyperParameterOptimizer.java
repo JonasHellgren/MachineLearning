@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import common.Counter;
 import common.CpuTimer;
-import common.ListUtils;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -94,9 +93,8 @@ public class RunnerChargeHyperParameterOptimizer {
 
     private static void evaluateAndPutInResultMap(Map<ParameterSetup, Double> resultMap, ParameterSetup parameterSetup) {
         ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
-        List<Double> sumRewardList = evaluator.evaluate();
-        double sumRewardsAllScenarios = ListUtils.sumDoubleList(sumRewardList);
-        resultMap.put(parameterSetup, sumRewardsAllScenarios);
+        evaluator.evaluate();
+        resultMap.put(parameterSetup, evaluator.getSumOfRewardAllScenarios());
     }
 
     private static void printResults(Map<ParameterSetup, Double> resultMap) {

@@ -1,33 +1,37 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
+import common.Conditionals;
+import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
-import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import lombok.extern.java.Log;
+import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentEvaluatorResults;
 import multi_step_temp_diff.domain.helpers_common.InitStateVariantsEvaluator;
 import multi_step_temp_diff.domain.helpers_common.Scenario;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.*;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeScenariosFactory.BatPos0_At1_BothHighSoC_1000steps;
 
 @Builder
+@Log
 public class ChargeScenariosEvaluator {
 
     @NonNull List<Scenario<ChargeVariables>> scenarios;   //initState, simStepsMax;
     @NonNull EnvironmentInterface<ChargeVariables> environment;
-    @NonNull AgentNeuralInterface<ChargeVariables> agent;
+    @NonNull AgentInterface<ChargeVariables> agent;
 
     static Map<Scenario<ChargeVariables>, AgentEvaluatorResults> scenarioResultMap;
+    @Builder.Default
+    List<Double> sumRewardList=new ArrayList<>();
 
     public static ChargeScenariosEvaluator newAllScenarios(@NonNull EnvironmentInterface<ChargeVariables> environment,
-                                                           @NonNull AgentNeuralInterface<ChargeVariables> agent) {
+                                                           @NonNull AgentInterface<ChargeVariables> agent) {
         return ChargeScenariosEvaluator.builder()
                 .environment(environment).agent(agent)
                 .scenarios(List.of(
@@ -46,7 +50,7 @@ public class ChargeScenariosEvaluator {
     public static ChargeScenariosEvaluator newSingleScenario(
             @NonNull Scenario<ChargeVariables> scenario,
             @NonNull EnvironmentInterface<ChargeVariables> environment,
-            @NonNull AgentNeuralInterface<ChargeVariables> agent) {
+            @NonNull AgentInterface<ChargeVariables> agent) {
         return ChargeScenariosEvaluator.builder()
                 .environment(environment).agent(agent)
                 .scenarios(List.of(scenario))
@@ -74,7 +78,15 @@ public class ChargeScenariosEvaluator {
         for (Scenario<ChargeVariables> scenario : scenarios) {
             scenarioResultMap.put(scenario, evaluator.evaluate(scenario));
         }
-        return scenarioResultMap.values().stream().map(r -> r.sumRewards()).toList();
+
+        sumRewardList=scenarioResultMap.values().stream().map(r -> r.sumRewards()).toList();
+        return sumRewardList;
+    }
+
+    public double getSumOfRewardAllScenarios() {
+        Conditionals.executeIfTrue(sumRewardList==null || sumRewardList.isEmpty(), () ->
+                log.warning("No evaluation result available, run evaluate first"));
+        return  ListUtils.sumDoubleList(sumRewardList);
     }
 
 
@@ -93,6 +105,8 @@ public class ChargeScenariosEvaluator {
             sb.append(txt);
             sb.append(System.lineSeparator());
         }
+
+        sb.append("sum of reward-sums all scenarios= ").append(getSumOfRewardAllScenarios());
         return sb.toString();
 
     }

@@ -183,7 +183,7 @@ stabil körning RunnerAgentChargeNeuralTrainerBothFree x
 
 HyperParameterOptimizer  c
 mer data till ChargeAgentParameters  x
-ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint
+ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint  x
 även mean td error i HyperParameterOptimizer
 tidsbegränsning per parameter uppsättning HyperParameterOptimizer
 RunnerAgentChargeNeuralTrainerBothFreeParallelBatch

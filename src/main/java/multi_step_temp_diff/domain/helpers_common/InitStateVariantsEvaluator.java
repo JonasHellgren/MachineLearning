@@ -2,6 +2,7 @@ package multi_step_temp_diff.domain.helpers_common;
 
 import lombok.Builder;
 import lombok.NonNull;
+import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class InitStateVariantsEvaluator<S> {
     @Builder.Default
     List<Scenario<S>> scenarios=new ArrayList<>();   //initState, simStepsMax;
     @NonNull EnvironmentInterface<S> environment;
-    @NonNull AgentNeuralInterface<S> agent;
+    @NonNull AgentInterface<S> agent;
 
     public List<AgentEvaluatorResults> evaluate() {
         List<AgentEvaluatorResults> results = new ArrayList<>();
