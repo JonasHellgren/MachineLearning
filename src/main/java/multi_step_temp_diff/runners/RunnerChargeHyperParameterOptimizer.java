@@ -30,12 +30,12 @@ public class RunnerChargeHyperParameterOptimizer {
         }
     }
 
-    static final Set<Integer> NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET = ImmutableSet.of(1, 5, 10);
+    static final Set<Integer> NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET = ImmutableSet.of(1, 5, 10, 15);
     static final Set<Integer> BATCH_SIZE_SET = ImmutableSet.of(30, 50);
     static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5, 10);
-    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 27);
+    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 25);
 
-    private static final int NOF_EPIS = 10;
+    private static final int NOF_EPIS = 2000;
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;

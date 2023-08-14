@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
+import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -25,7 +26,7 @@ import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentL
 import static multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas.socOfAtNode;
 
 public class AgentChargeGreedyRuleForChargeDecisionPoint extends AgentAbstract<ChargeVariables>
-        implements AgentInterface<ChargeVariables> {
+        {
 
     public static final int DISCOUNT_FACTOR = 1;
     public static final double ZERO = 0d;

@@ -183,14 +183,22 @@ stabil körning RunnerAgentChargeNeuralTrainerBothFree x
 
 HyperParameterOptimizer  c
 mer data till ChargeAgentParameters  x
+ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint
+även mean td error i HyperParameterOptimizer
+tidsbegränsning per parameter uppsättning HyperParameterOptimizer
+RunnerAgentChargeNeuralTrainerBothFreeParallelBatch
 policy remove item full buffer
 prova target network
+statistic (mean, std, etc) TD error i exp replay buffer
 prova prio exp replay
+
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor
 - MultiePanelScatterPlot
 - MultiePanelScatterPlot
+- grid plotter
+- animering site
 
 RunnerAgentChargeGreedyRuleForChargeDecisionPointObstacleSomeTimes med obstacle ibland
 
