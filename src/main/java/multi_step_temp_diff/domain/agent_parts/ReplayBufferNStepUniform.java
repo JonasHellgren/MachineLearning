@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 
 @Builder
-public class ReplayBufferNStep<S> implements ReplayBufferInterface<S> {
+public class ReplayBufferNStepUniform<S> implements ReplayBufferInterface<S> {
 
     private static final int BUFFER_SIZE = 10000;
     @Builder.Default
@@ -19,12 +19,12 @@ public class ReplayBufferNStep<S> implements ReplayBufferInterface<S> {
     @Builder.Default
     public final List<NstepExperience<S>> buffer = new ArrayList<>();
 
-    public static <S> ReplayBufferNStep<S> newDefault() {  //todo remove?
-        return ReplayBufferNStep.<S>builder().build();
+    public static <S> ReplayBufferNStepUniform<S> newDefault() {  //todo remove?
+        return ReplayBufferNStepUniform.<S>builder().build();
     }
 
-    public static <S> ReplayBufferNStep<S> newFromMaxSize(int maxSize) {
-        return ReplayBufferNStep.<S>builder().maxSize(maxSize).build();
+    public static <S> ReplayBufferNStepUniform<S> newFromMaxSize(int maxSize) {
+        return ReplayBufferNStepUniform.<S>builder().maxSize(maxSize).build();
     }
 
     @Override

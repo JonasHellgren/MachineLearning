@@ -3,7 +3,7 @@ package multi_step_td.fork;
 import common.RandUtils;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
@@ -68,7 +68,7 @@ public class TestForkNeuralValueMemory {
     @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect() {
         final double value = 0d;
-        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
@@ -79,7 +79,7 @@ public class TestForkNeuralValueMemory {
     @Tag("nettrain")
     public void givenMockedDataAllStatesTen_whenTrain_thenCorrect() {
         final double value = 10d;
-        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
@@ -90,7 +90,7 @@ public class TestForkNeuralValueMemory {
     @Tag("nettrain")
     public void givenMockedDataAllStatesMinusTen_whenTrain_thenCorrect() {
         final double value = -10d;
-        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
@@ -101,7 +101,7 @@ public class TestForkNeuralValueMemory {
     @Tag("nettrain")
     public void givenMockedDataAllOddStatesMinusTenEvenPlusTen_whenTrain_thenCorrect() {
         final double valueOdd = -10d, valueEven = 10d;
-        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
                 .buffer(createBatchOddEven(valueOdd,valueEven)).build();
         train(buffer);
 
@@ -109,7 +109,7 @@ public class TestForkNeuralValueMemory {
         assertAllStatesOddEven(valueOdd,valueEven);
     }
 
-    private void train(ReplayBufferNStep<ForkVariables> buffer) {
+    private void train(ReplayBufferNStepUniform<ForkVariables> buffer) {
         for (int i = 0; i < NOF_ITERATIONS ; i++) {
             memory.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }

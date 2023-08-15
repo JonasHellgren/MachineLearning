@@ -1,5 +1,6 @@
 package multi_step_td.charge;
 
+import common.DifferenceCalculator;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.PositionMapper;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
@@ -75,15 +76,10 @@ public class TestPositionMapper {
     public void whenSitePositionsList_thenIncreasing() {
         List<Integer> sitePositions=mapper.getSitePositions();
 
-        List<Integer> diff=calcDiff(sitePositions);
+        DifferenceCalculator<Integer> differenceCalculator=new DifferenceCalculator<>(sitePositions);
+        List<Double> diff=differenceCalculator.calculate();
         System.out.println("diff = " + diff);
-
-        boolean anyNonPos=diff.stream().anyMatch(n -> n<0);
-        System.out.println("anyNonPos = " + anyNonPos);
-
-        assertFalse(anyNonPos);
-
-
+        assertFalse(differenceCalculator.anyNegativeDifference());
     }
 
     private void assertEqualMaps(Map<Integer, Integer> posMap1, Map<Integer, Integer> posMap2) {
@@ -101,14 +97,6 @@ public class TestPositionMapper {
         return posMap;
     }
 
-    public static List<Integer> calcDiff(List<Integer> list) {
-        if (list == null || list.size() < 2) {
-            throw new IllegalArgumentException("List must contain at least two elements.");
-        }
 
-        return IntStream.range(1, list.size())
-                .mapToObj(i -> list.get(i) - list.get(i - 1))
-                .collect(Collectors.toList());
-    }
 
 }

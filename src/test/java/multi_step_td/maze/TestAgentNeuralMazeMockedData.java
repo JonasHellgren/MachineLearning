@@ -10,7 +10,7 @@ import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ public class TestAgentNeuralMazeMockedData {
     @Test
     @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect () {
-        ReplayBufferNStep<MazeVariables> buffer=ReplayBufferNStep.<MazeVariables>builder()
+        ReplayBufferNStepUniform<MazeVariables> buffer= ReplayBufferNStepUniform.<MazeVariables>builder()
                 .buffer(createBatch()).build();
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));

@@ -6,17 +6,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
-import multi_step_temp_diff.domain.helpers_specific.ChargeScenariosEvaluator;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -51,7 +48,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     public void train() {
         agentInfo=new AgentInfo<>(agentNeural);
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
-        buffer = ReplayBufferNStep.newFromMaxSize(settings.maxBufferSize());
+        buffer = ReplayBufferNStepUniform.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
         CpuTimer timer=new CpuTimer(settings.maxTrainingTimeInMilliS());
 
@@ -124,8 +121,10 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
         var experience = miniBatch.get(RandUtils.getRandomIntNumber(0, miniBatch.size()));
         double valueMemory = agentNeural.readValue(experience.stateToUpdate);
         double valueTarget = experience.value;
+        double tdError = Math.abs(valueMemory - valueTarget);
+        experience.tdError=tdError;
         var tracker = agentInfo.getTemporalDifferenceTracker();
-        tracker.addValue(Math.abs(valueMemory - valueTarget));
+        tracker.addValue(tdError);
     }
 
 

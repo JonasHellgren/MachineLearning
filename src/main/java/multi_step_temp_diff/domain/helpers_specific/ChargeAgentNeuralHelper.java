@@ -4,7 +4,7 @@ import common.CpuTimer;
 import lombok.NonNull;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
@@ -22,7 +22,7 @@ public class ChargeAgentNeuralHelper {
     @Builder.Default
     Integer filterWindowLength=100;
 
-    public void trainAgent(ReplayBufferNStep<ChargeVariables> buffer) {
+    public void trainAgent(ReplayBufferNStepUniform<ChargeVariables> buffer) {
         for (int i = 0; i < nofIterations; i++) {
             if(i % iterationsBetweenPrints ==0)
                 System.out.println("i = " + i);
@@ -30,7 +30,7 @@ public class ChargeAgentNeuralHelper {
         }
     }
 
-    public void trainAgentTimeBudget(ReplayBufferNStep<ChargeVariables> buffer, long timeBudget) {
+    public void trainAgentTimeBudget(ReplayBufferNStepUniform<ChargeVariables> buffer, long timeBudget) {
         CpuTimer timer=CpuTimer.newWithTimeBudgetInMilliSec(timeBudget);
         while (!timer.isTimeExceeded()) {
             agent.learn(buffer.getMiniBatch(batchLength));
@@ -45,7 +45,7 @@ public class ChargeAgentNeuralHelper {
                 .bufferSize(bufferSize).envSettings(settings).stateToValueFunction(container.fixedAtZero)
                 .build();
 
-        ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
+        ReplayBufferNStepUniform<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
         trainAgentTimeBudget(buffer,timeBudget);
     }
 

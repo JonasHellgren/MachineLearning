@@ -190,13 +190,17 @@ RunnerAgentChargeNeuralTrainerBothFreeParallelTasks x
 call returnera tränad trainer  x
 prova prio exp replay
 - IntervalFinder
+- ExperiencePrioritizationSetter
+- ExperienceProbabilitySetter
+- ExperienceWeightSetter
 
+RunnerChargeHyperParameterOptimizerParallel
 policy remove item full buffer
 prova target network
 statistic (mean, std, etc) TD error i exp replay buffer
 
+AgentChargeNeural learn - ta bort addErrorsToHistory etc - onödig
 ChargeScenariosEvaluator<S> göra generisk
-
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor

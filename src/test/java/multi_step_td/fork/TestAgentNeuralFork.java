@@ -8,7 +8,7 @@ import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -41,7 +41,7 @@ public class TestAgentNeuralFork {
     @Tag("nettrain")
     public void givenMockedDataAllStatesZero_whenTrain_thenCorrect () {
         final double value = 0d;
-        ReplayBufferNStep<ForkVariables> buffer=ReplayBufferNStep.<ForkVariables>builder()
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
                 .buffer(createBatch(value)).build();
         for (int i = 0; i < NOF_ITERATIONS; i++) {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));

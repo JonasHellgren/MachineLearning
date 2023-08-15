@@ -2,7 +2,7 @@ package multi_step_td.charge;
 
 import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
@@ -110,7 +110,7 @@ public class TestAgentNeuralChargeMockedData {
         bufferCreator= ChargeMockedReplayBufferCreator.builder()
                 .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
-        ReplayBufferNStep<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
+        ReplayBufferNStepUniform<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
         helper= ChargeAgentNeuralHelper.builder()
                 .agent(agent).nofIterations(NOF_ITERATIONS_RULE).iterationsBetweenPrints(ITERATIONS_BETWEEN_PRINTI)
                 .batchLength(BATCH_LENGTH).filterWindowLength(LENGTH_FILTER_WINDOW).build();

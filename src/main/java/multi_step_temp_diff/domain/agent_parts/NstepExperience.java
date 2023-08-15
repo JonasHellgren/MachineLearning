@@ -12,7 +12,10 @@ public class NstepExperience<S> {
     private static final double VALUE_NOT_DEF = -1d;
     private static final boolean BACKUP_STATE_PRESENT = false;
     private static final double SUM_R = 0d;
-   // public static StateInterface<S> STATE_IF_NOT_PRESENT=-1;
+    public static final double INIT_TD_ERROR = 100d;
+    public static final double INIT_PRIORITIZATION = 1d;
+    public static final double INIT_WEIGHT = 1d;
+    // public static StateInterface<S> STATE_IF_NOT_PRESENT=-1;
 
     @NonNull  public StateInterface<S> stateToUpdate;
     @Builder.Default
@@ -22,5 +25,11 @@ public class NstepExperience<S> {
     @Builder.Default
     public boolean isBackupStatePresent= BACKUP_STATE_PRESENT;
     @Builder.Default
-    public Double value= VALUE_NOT_DEF;
+    public Double value = VALUE_NOT_DEF;
+    @Builder.Default
+    public Double tdError = INIT_TD_ERROR;
+    @Builder.Default
+    public Double prioritization = INIT_PRIORITIZATION;
+    @Builder.Default
+    public Double weight = INIT_WEIGHT;
 }

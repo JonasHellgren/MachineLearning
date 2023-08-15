@@ -2,7 +2,7 @@ package multi_step_temp_diff.runners;
 
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingOneAtOccupiedSoCsSeparate;
@@ -69,7 +69,7 @@ public class RunnerTrainChargeAgentNeuralMocked {
         ChargeMockedReplayBufferCreator bufferCreator= ChargeMockedReplayBufferCreator.builder()
                 .bufferSize(BUFFER_SIZE).envSettings(envSettings).stateToValueFunction(container.limit)
                 .build();
-        ReplayBufferNStep<ChargeVariables> expBuffer=bufferCreator.createExpReplayBuffer();
+        ReplayBufferNStepUniform<ChargeVariables> expBuffer=bufferCreator.createExpReplayBuffer();
         plotHelper= new ChargePlotHelper(agent,null);
 
         agent = createAgent(new HotEncodingSoCAtOccupiedElseValue(agentSettings, envSettings, NORMALIZER_MINUSONE,-1d));
