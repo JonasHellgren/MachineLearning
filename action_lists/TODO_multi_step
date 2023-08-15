@@ -188,11 +188,14 @@ ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint  x
 tidsbegränsning per parameter uppsättning HyperParameterOptimizer  x
 RunnerAgentChargeNeuralTrainerBothFreeParallelTasks x
 call returnera tränad trainer  x
-ChargeScenariosEvaluator<S>
+prova prio exp replay
+- IntervalFinder
+
 policy remove item full buffer
 prova target network
 statistic (mean, std, etc) TD error i exp replay buffer
-prova prio exp replay
+
+ChargeScenariosEvaluator<S> göra generisk
 
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar

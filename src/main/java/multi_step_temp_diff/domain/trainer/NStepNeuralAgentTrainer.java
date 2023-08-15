@@ -26,6 +26,8 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
 
 /**
  * Inspired by DQN - https://stackoverflow.com/questions/39848984/what-is-phi-in-deep-q-learning-algorithm
+ *
+ * Thanks to Callable multiple trainers can operate in parallel
  */
 
 @Builder
@@ -157,21 +159,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     public NStepNeuralAgentTrainer<S> call() {
         train();
        return this;
-     //   return ListUtils.findAverage(helper.getSumRewardsTracker().getValueHistory()).orElseThrow();
     }
 
-
-    /***trash
-     *
-     *
-     //     System.out.println("state = " + state);
-     //  System.out.println("agentNeural.getState() = " + agentNeural.getState());
-     // System.out.println("h.getEpisode() = " + h.getEpisode());
-
-     //   System.out.println("exp.stateToBackupFrom = " + exp.stateToBackupFrom+", value = "+agentNeural.readValue(exp.stateToBackupFrom));
-
-     //  System.out.println("stateToUpdate = " + stateToUpdate+"sumOfRewards = " + sumOfRewards);
-     //  stateAheadToBackupFrom.ifPresent(System.out::println);
-     */
 
 }

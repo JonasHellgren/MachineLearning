@@ -1,8 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
@@ -28,7 +26,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
     public static final int NOF_TASKS = 10;
     public static final int N_THREADS = 10;
-    private static final int NOF_EPIS = 10, MAX_TRAIN_TIME_IN_MINUTES = 30;  //one will limit
+    private static final int NOF_EPIS = 1000, MAX_TRAIN_TIME_IN_MINUTES = 10;  //one will limit
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int BATCH_SIZE1 = 30;
     public static final int NOF_LAYERS_HIDDEN = 10;
@@ -52,7 +50,7 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
 
         //a trainer includes an agent, so a trainer object below shall be seen as a team of a trainer and an agent
         Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks = createTasks(stateSupplier, agentFactory);
-        List<NStepNeuralAgentTrainer<ChargeVariables>> trainers = runtTasks(tasks);
+        List<NStepNeuralAgentTrainer<ChargeVariables>> trainers = runtTasksAndReturnResultingTrainers(tasks);
         Map<NStepNeuralAgentTrainer<ChargeVariables>, Double> trainerScoreMap = createTrainerEvaluationMap(trainers);
         Optional<Map.Entry<NStepNeuralAgentTrainer<ChargeVariables>,Double>> bestTrainerAndItsScore =
                 trainerScoreMap.entrySet().stream().max(Map.Entry.comparingByValue());
@@ -79,7 +77,7 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
     }
 
     @NotNull
-    private static List<NStepNeuralAgentTrainer<ChargeVariables>> runtTasks(Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks) throws InterruptedException {
+    private static List<NStepNeuralAgentTrainer<ChargeVariables>> runtTasksAndReturnResultingTrainers(Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(N_THREADS);
         List<Future<NStepNeuralAgentTrainer<ChargeVariables>>> futures = executorService.invokeAll(tasks);
         List<NStepNeuralAgentTrainer<ChargeVariables>> trainers = new ArrayList<>();
