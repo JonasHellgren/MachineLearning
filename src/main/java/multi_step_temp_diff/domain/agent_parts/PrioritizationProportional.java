@@ -20,7 +20,5 @@ public class PrioritizationProportional<S> implements PrioritizationStrategyInte
         for (NstepExperience<S> experience:buffer) {
             experience.prioritization=Math.abs(experience.tdError)+epsilon;
         }
-
-
     }
 }

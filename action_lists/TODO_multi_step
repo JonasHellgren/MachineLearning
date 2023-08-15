@@ -189,9 +189,13 @@ tidsbegränsning per parameter uppsättning HyperParameterOptimizer  x
 RunnerAgentChargeNeuralTrainerBothFreeParallelTasks x
 call returnera tränad trainer  x
 prova prio exp replay
-- IntervalFinder
-- ExperiencePrioritizationSetter
-- ExperienceProbabilitySetter
+- IntervalFinder x
+- ExperiencePrioritizationSetter x
+- TestExperiencePrioritizationSetter x
+- ExperienceProbabilitySetter x
+- TestExperienceProbabilitySetter x
+ - RunningSum x
+  - TestRunningSum x
 - ExperienceWeightSetter
 
 RunnerChargeHyperParameterOptimizerParallel

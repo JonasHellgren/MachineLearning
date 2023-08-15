@@ -15,6 +15,7 @@ public class NstepExperience<S> {
     public static final double INIT_TD_ERROR = 100d;
     public static final double INIT_PRIORITIZATION = 1d;
     public static final double INIT_WEIGHT = 1d;
+    public static final double INIT_PROB = 1d;
     // public static StateInterface<S> STATE_IF_NOT_PRESENT=-1;
 
     @NonNull  public StateInterface<S> stateToUpdate;
@@ -30,6 +31,8 @@ public class NstepExperience<S> {
     public Double tdError = INIT_TD_ERROR;
     @Builder.Default
     public Double prioritization = INIT_PRIORITIZATION;
+    @Builder.Default
+    public Double probability = INIT_PROB;
     @Builder.Default
     public Double weight = INIT_WEIGHT;
 }
