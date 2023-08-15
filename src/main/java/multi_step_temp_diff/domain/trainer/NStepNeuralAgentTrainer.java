@@ -6,16 +6,20 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStep;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
+import multi_step_temp_diff.domain.helpers_specific.ChargeScenariosEvaluator;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import static common.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPredicates.*;
@@ -28,7 +32,7 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
 @Getter
 @Setter
 @Log
-public class NStepNeuralAgentTrainer<S> {
+public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrainer<S>> {
 
     public static final double SEC2MIN = 1d / 60, MS2SEC = 1d/1000;
     @Builder.Default
@@ -149,6 +153,12 @@ public class NStepNeuralAgentTrainer<S> {
                 .build();
     }
 
+    @Override
+    public NStepNeuralAgentTrainer<S> call() {
+        train();
+       return this;
+     //   return ListUtils.findAverage(helper.getSumRewardsTracker().getValueHistory()).orElseThrow();
+    }
 
 
     /***trash

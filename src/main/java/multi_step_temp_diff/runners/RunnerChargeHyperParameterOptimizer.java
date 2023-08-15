@@ -24,7 +24,8 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 @Log
 public class RunnerChargeHyperParameterOptimizer {
 
-    public static final int MAX_TRAIN_TIME_IN_SEC = 1;
+    private static final int NOF_EPIS = 2000;
+    public static final int MAX_TRAIN_TIME_IN_SEC = 60*5;
 
     record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden) {
         ParameterSetup(List<Integer> list) {
@@ -37,7 +38,7 @@ public class RunnerChargeHyperParameterOptimizer {
     static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5, 10);
     static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 25);
 
-    private static final int NOF_EPIS = 20;
+
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;

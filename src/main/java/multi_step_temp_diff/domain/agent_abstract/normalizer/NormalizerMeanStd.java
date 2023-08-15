@@ -38,7 +38,7 @@ public class NormalizerMeanStd implements NormalizerInterface {
 
         }
 
-        log.info("Normalizer with mean = "+mean + " and std = "+ std);
+        log.fine("Normalizer with mean = "+mean + " and std = "+ std);
 
     }
 

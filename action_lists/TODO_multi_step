@@ -186,7 +186,9 @@ mer data till ChargeAgentParameters  x
 ScenarioEvaluator i RunnerAgentChargeGreedyRuleForChargeDecisionPoint  x
 även mean td error i RunnerChargeHyperParameterOptimizer  x
 tidsbegränsning per parameter uppsättning HyperParameterOptimizer  x
-RunnerAgentChargeNeuralTrainerBothFreeParallelBatch
+RunnerAgentChargeNeuralTrainerBothFreeParallelTasks x
+call returnera tränad trainer  x
+ChargeScenariosEvaluator<S>
 policy remove item full buffer
 prova target network
 statistic (mean, std, etc) TD error i exp replay buffer

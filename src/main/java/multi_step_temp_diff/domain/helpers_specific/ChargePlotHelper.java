@@ -88,4 +88,15 @@ public class ChargePlotHelper {
         plotter.saveImage(PICS_FOLDER +fileName);
     }
 
+
+    public void doMultiplePlots(ChargeEnvironmentSettings envSettings) {
+        plotTdError();
+        plotSumRewardsTracker();
+        int posB = 0;
+        double socB = 1.0;
+        createScatterPlot(envSettings, "V-30", 0.3, posB);
+        createScatterPlot(envSettings, "V-80", 0.8, posB);
+        plotV20MinusV11VersusSoC(posB, socB);
+    }
+
 }

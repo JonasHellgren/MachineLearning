@@ -16,6 +16,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @Getter
 public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements AgentNeuralInterface<ChargeVariables> {
