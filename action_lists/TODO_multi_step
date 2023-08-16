@@ -200,6 +200,9 @@ prova prio exp replay
 - ReplayBufferNStepPrioritized  x
 - TestReplayBufferNStepPrioritized  x
 - cleaner ReplayBufferNStepPrioritized  x
+- BUGG End element in accumulated experiences differs from one, it is = 3.0 x
+påvisa isTimeToUpdate inte ställer till det  x
+- Testa intervallFinder när prob=0
 - ExperienceWeightSetter
 - TestExperienceWeightSetter
 - method i memory som uppdaterar med olika vikter

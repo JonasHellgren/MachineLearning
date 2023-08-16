@@ -12,6 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+
+/***
+ * Every experience is assigned a probability, if this probability is high it is more likely to be included in a
+ * minibatch.
+ *
+ * Example:
+ * probabilities=[0.5, 0.25,0.25]  -> accumulatedProbabilities=[0,0.5,0.75,1.0]
+ * A number randomBetweenZeroAndOneToPointOutExperience points out an interval in accumulatedProbabilities
+ * For example do 0.3 point out interval zero and 0.9 interval 2.
+ * In this example interval 0, the very first experience, is most likely to be selected.
+
+ */
+
 @Log
 @Builder
 @Getter
@@ -41,6 +54,15 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     public static <S> ReplayBufferNStepUniform<S> newFromMaxSize(int maxSize) {
         return ReplayBufferNStepUniform.<S>builder().maxSize(maxSize).build();
     }
+
+    /***
+     * updateSelectionProbabilities() is potentially costly to execute
+     * On the other hand, if not executed, newly added experiences are not updated regarding
+     * prioritization, probability etc. The approach is to initialize experience with a selection probability of zero.
+     * Thereby the accumulated probabilities are valid.
+     * The consequence is that newly added experiences can not be selected by getMiniBatch() until
+     * updateSelectionProbabilities() is called again.
+     */
 
     @Override
     public void addExperience(NstepExperience<S> experience) {
@@ -73,11 +95,13 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         intervalFinder.setInput(accumulatedProbabilities);
 
         List<Integer> indexes= IntStream.range(0,batchLength).boxed().map(i ->
-             intervalFinder.find(RandUtils.getRandomDouble(0,1))).toList();
+        {
+            double randomBetweenZeroAndOneToPointOutExperience = RandUtils.getRandomDouble(0, 1);
+            return intervalFinder.find(randomBetweenZeroAndOneToPointOutExperience);
+        }).toList();
 
         List<NstepExperience<S>> miniBatch = new ArrayList<>();
         indexes.forEach(i -> miniBatch.add(buffer.get(i)));
-
         return miniBatch;
     }
 

@@ -46,7 +46,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
 
     @Test
     public void whenAddedExperiences_thenCorrectSelectionProbabilities() {
-        List<Double> probabilities = getProbabilites();
+        List<Double> probabilities = getProbabilities();
         System.out.println("probabilities = " + probabilities);
         double probSum = ListUtils.sumList(TD_ERRORS);
         assertTrue(probabilities.containsAll(List.of(2d/ probSum,1d/probSum)));
@@ -58,7 +58,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
         prioritizedBuffer.getMiniBatch(1);
         List<Double> probAccumList = getAccumProbabilites();
         System.out.println("probAccumList = " + probAccumList);
-        List<Double> probabilities = getProbabilites();
+        List<Double> probabilities = getProbabilities();
         assertTrue(probAccumList.containsAll(List.of(0d,probabilities.get(0),1d)));
     }
 
@@ -89,11 +89,10 @@ public class TestReplayBufferNStepPrioritizedProportional {
 
         CpuTimer timer=new CpuTimer();
         prioritizedBuffer.updateSelectionProbabilities();
-        System.out.println("timer.absoluteProgressInMillis() = " + timer.absoluteProgressInMillis());
-
+        System.out.println("time single update probabilities etc = " + timer.absoluteProgressInMillis());
 
         prioritizedBuffer.getMiniBatch(1);
-        List<Double> probabilities = getProbabilites();
+        List<Double> probabilities = getProbabilities();
         List<Double> probAccumList = getAccumProbabilites();
 
         assertTrue(probAccumList.containsAll(List.of(0d,probabilities.get(0))));
@@ -133,7 +132,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
     }
 
         @NotNull
-    private List<Double> getProbabilites() {
+    private List<Double> getProbabilities() {
         return prioritizedBuffer.getBuffer().stream().map(e -> e.probability).toList();
     }
 
