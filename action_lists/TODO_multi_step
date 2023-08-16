@@ -194,10 +194,16 @@ prova prio exp replay
 - TestExperiencePrioritizationSetter x
 - ExperienceProbabilitySetter x
 - TestExperienceProbabilitySetter x
- - RunningSum x
-  - TestRunningSum x
+- RunningSum x
+- TestRunningSum x
+- låta NStepNeuralAgentTrainer ta in godtycklig buffer  x
+- ReplayBufferNStepPrioritized
+- TestReplayBufferNStepPrioritized
+- test NStepNeuralAgentTrainer med prio buffer - kanske på fork
 - ExperienceWeightSetter
 
+
+BUGG RunnerAgentChargeNeuralTrainerBothFreeParallelTasks verkar inte parallisera
 RunnerChargeHyperParameterOptimizerParallel
 policy remove item full buffer
 prova target network

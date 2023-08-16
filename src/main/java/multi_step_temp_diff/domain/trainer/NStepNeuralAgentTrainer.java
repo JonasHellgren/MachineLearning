@@ -34,21 +34,22 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
 public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrainer<S>> {
 
     public static final double SEC2MIN = 1d / 60, MS2SEC = 1d/1000;
+    public static final int MAX_SIZE_BUFFER = 100_000;
     @Builder.Default
     NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.getDefault();
     @NonNull EnvironmentInterface<S> environment;
     @NonNull AgentNeuralInterface<S> agentNeural;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
+    @Builder.Default
+    ReplayBufferInterface<S> buffer=ReplayBufferNStepUniform.newFromMaxSize(MAX_SIZE_BUFFER);
 
     AgentInfo<S> agentInfo;
-    ReplayBufferInterface<S> buffer;
     NStepTDHelper<S> helper;
     LogarithmicDecay decayProb;
 
     public void train() {
         agentInfo=new AgentInfo<>(agentNeural);
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
-        buffer = ReplayBufferNStepUniform.newFromMaxSize(settings.maxBufferSize());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
         CpuTimer timer=new CpuTimer(settings.maxTrainingTimeInMilliS());
 
