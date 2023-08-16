@@ -1,18 +1,37 @@
 package multi_step_temp_diff.domain.agent_parts;
 
-import common.RandUtils;
+import common.*;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.helpers_common.IntervalFinder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
+@Builder
+@Getter
 public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S> {
     private static final int BUFFER_SIZE = 10000;
+    public static final int NOF_STEPS_BETWEEN_SETTING_PROBABILITIES = 10;
+    public static final double TOLERANCE_PROB_ACCUM = 1e-5;
+    public static final double ALPHA = 0.5d;
+
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default
-    public final List<NstepExperience<S>> buffer = new ArrayList<>();
+    double alpha=ALPHA;
+    @Builder.Default
+    int nofExperienceAddingBetweenProbabilitySetting = NOF_STEPS_BETWEEN_SETTING_PROBABILITIES;
+
+    @Builder.Default
+    PrioritizationStrategyInterface<S> prioritizationStrategy=new PrioritizationProportional<>();
+
+
+    final List<NstepExperience<S>> buffer = new ArrayList<>();
+    final Counter addExperienceCounter=new Counter();
+    final IntervalFinder intervalFinder=IntervalFinder.newNoArgumentCheck(new ArrayList<>());
 
     public static <S> ReplayBufferNStepUniform<S> newDefault() {  //todo remove?
         return ReplayBufferNStepUniform.<S>builder().build();
@@ -26,34 +45,48 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     public void addExperience(NstepExperience<S> experience) {
         removeRandomItemIfFull();
         buffer.add(experience);
+        Conditionals.executeIfTrue(isTimeToUpdate(), () ->  updateSelectionProbabilities());
+        addExperienceCounter.increase();
+    }
 
-        //setPrioritization(buffer,strategyPrio);
-        //setProbability(buffer);
+    private boolean isTimeToUpdate() {
+        return addExperienceCounter.getCount() % nofExperienceAddingBetweenProbabilitySetting == 0;
+    }
+
+    public void updateSelectionProbabilities() {
+        ExperiencePrioritizationSetter<S> prioritizationSetter =
+                new ExperiencePrioritizationSetter<>(buffer, prioritizationStrategy);
+        ExperienceProbabilitySetter<S> probabilitySetter = new ExperienceProbabilitySetter<>(buffer, alpha);
         //defineWeight(buffer);  //todo requires learn in ValueMemoryNetworkAbstract to be modified
 
-        //sometimesDefinePrioProbAndWeightForAllExperiences();
-
+        prioritizationSetter.setPrios();
+        probabilitySetter.setProbabilities();
     }
 
     @Override
     public List<NstepExperience<S>> getMiniBatch(int batchLength) {
+         List<Double> probabilities=new ArrayList<>();
+         buffer.forEach(e -> probabilities.add(e.probability));
 
-        //defineProbAccumList()
+        RunningSum<Double> runningSum=new RunningSum<>(probabilities);
+        List<Double> accumulatedProbabilities=runningSum.calculate();
+        if (!MathUtils.compareDoubleScalars(ListUtils.findMax(accumulatedProbabilities).orElseThrow(),1d, TOLERANCE_PROB_ACCUM)) {
+            log.warning("End element in accumulated experiences differs from one, it is = "
+                    +ListUtils.findMax(accumulatedProbabilities).orElseThrow());
+        }
+        accumulatedProbabilities=ListUtils.merge(List.of(0d),accumulatedProbabilities);
 
-        List<Double> probAccumList=new ArrayList<>();
-        IntervalFinder intervalFinder=IntervalFinder.newNoArgumentCheck(probAccumList);
+        intervalFinder.setInput(accumulatedProbabilities);
 
         List<Integer> indexes=new ArrayList<>();
-        for (int i = 0; i < maxSize ; i++) {  //todo use streams
+        for (int i = 0; i < batchLength ; i++) {  //todo use streams
             double randomProbAccum= RandUtils.getRandomDouble(0,1);
-            int index=intervalFinder.find(randomProbAccum);
+            int index=intervalFinder.find(randomProbAccum);  //todo repeat if exists
             indexes.add(index);
         }
 
-
         List<NstepExperience<S>> miniBatch = new ArrayList<>();
-        for (int i = 0; i < Math.min(batchLength,indexes.size()); i++)
-            miniBatch.add(buffer.get(indexes.get(i)));
+        indexes.forEach(i -> miniBatch.add(buffer.get(i)));
 
         return miniBatch;
     }

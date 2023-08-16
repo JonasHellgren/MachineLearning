@@ -197,8 +197,8 @@ prova prio exp replay
 - RunningSum x
 - TestRunningSum x
 - låta NStepNeuralAgentTrainer ta in godtycklig buffer  x
-- ReplayBufferNStepPrioritized
-- TestReplayBufferNStepPrioritized
+- ReplayBufferNStepPrioritized  x
+- TestReplayBufferNStepPrioritized  x
 - test NStepNeuralAgentTrainer med prio buffer - kanske på fork
 - ExperienceWeightSetter
 

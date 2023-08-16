@@ -5,7 +5,7 @@ import lombok.Builder;
 import static common.DefaultPredicates.*;
 
 public record NStepNeuralAgentTrainerSettings(
-        Integer nofStepsBetweenUpdatedAndBackuped,  //todo better name
+        Integer nofStepsBetweenUpdatedAndBackuped,
         Integer nofEpis,
         Integer maxTrainingTimeInMilliS,
         Integer batchSize,
@@ -26,7 +26,7 @@ public record NStepNeuralAgentTrainerSettings(
     private static final Double PROB_START = 0.9;
     private static final Double PROB_END = 0.01;
     public static final Double INIT_VALUE = 0d;
-    public static final Integer MAX_BUFFER_SIZE = 10_000;
+    public static final Integer MAX_BUFFER_SIZE = 10_000;  //only applies if non-default buffer is created
     public static final int NOF_EPISODES_BETWEEN_LOGS = 100;
 
 

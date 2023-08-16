@@ -3,11 +3,18 @@ package multi_step_temp_diff.domain.agent_parts;
 import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
+
+/*** Described more in detail in for example
+ * https://paperswithcode.com/method/prioritized-experience-replay
+ */
+
 @AllArgsConstructor
+@Log
 public class ExperienceProbabilitySetter<S> {
 
     List<NstepExperience<S>> buffer;
@@ -16,11 +23,14 @@ public class ExperienceProbabilitySetter<S> {
     static BiFunction<Double,Double,Double> prioRaised =(p, alpha) -> Math.pow(p,alpha);
 
     public void setProbabilities() {
-        for (NstepExperience<S> experience:buffer) {
-            experience.probability = prioRaised.apply(experience.prioritization,alpha);
-        }
+        buffer.forEach(e -> e.probability= prioRaised.apply(e.prioritization,alpha));
         double sumTerms = getSumTerms();
-        divideEveryProbabilityWithSumOfProbabilities(sumTerms);
+        if (MathUtils.isZero(sumTerms)) {
+            log.warning("All probabilities are zero, setting uniform probabilities");
+            buffer.forEach(e -> e.probability= (double) (1/ buffer.size()));
+        } else {
+            divideEveryProbabilityWithSumOfProbabilities(sumTerms);
+        }
     }
 
     private void divideEveryProbabilityWithSumOfProbabilities(double sumTerms) {
@@ -30,11 +40,7 @@ public class ExperienceProbabilitySetter<S> {
     }
 
     private double getSumTerms() {
-        double sumTerms=buffer.stream().mapToDouble(e -> prioRaised.apply(e.probability,alpha)).sum();
-        if (MathUtils.isZero(sumTerms)) {
-            throw new RuntimeException("All probabilities are zero");
-        }
-        return sumTerms;
+        return buffer.stream().mapToDouble(e -> prioRaised.apply(e.probability,alpha)).sum();
     }
 
 

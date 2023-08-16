@@ -82,6 +82,14 @@ public class IntervalFinder {
         return new IntervalFinder(yVec);
     }
 
+    public void setInput(List<Double> yVec) {
+        this.yVec = yVec;
+    }
+
+    public List<Double> getInput() {
+        return yVec;
+    }
+
     private static void throwIfBadArgument(List<Double> yVec) {
         DifferenceCalculator<Double> differenceCalculator=new DifferenceCalculator<>(yVec);
         differenceCalculator.calculate();
@@ -93,7 +101,7 @@ public class IntervalFinder {
     public int find(double x) {
 
         if (x<ListUtils.findMin(yVec).orElseThrow() || x>ListUtils.findMax(yVec).orElseThrow() )  {
-            throw new IllegalArgumentException("Input value must be inside interval outer ends");
+            throw new IllegalArgumentException("Input value must be inside interval outer ends, x = "+x+", yVec = "+yVec);
         }
 
         int nofIntervals = yVec.size() - 1;
