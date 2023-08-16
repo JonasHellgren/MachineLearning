@@ -109,9 +109,26 @@ public class TestForkNeuralValueMemory {
         assertAllStatesOddEven(valueOdd,valueEven);
     }
 
+    @Test
+    @Tag("nettrain")
+    public void givenMockedDataAllStatesZero_whenTrainWithWeights_thenCorrect() {
+        final double value = 0d;
+        ReplayBufferNStepUniform<ForkVariables> buffer= ReplayBufferNStepUniform.<ForkVariables>builder()
+                .buffer(createBatch(value)).build();
+        trainWithWeights(buffer);
+        helper.printStateValues();
+        helper.assertAllStates(value,DELTA);
+    }
+
     private void train(ReplayBufferNStepUniform<ForkVariables> buffer) {
         for (int i = 0; i < NOF_ITERATIONS ; i++) {
             memory.learn(buffer.getMiniBatch(BATCH_LENGTH));
+        }
+    }
+
+    private void trainWithWeights(ReplayBufferNStepUniform<ForkVariables> buffer) {
+        for (int i = 0; i < NOF_ITERATIONS ; i++) {
+            memory.learnUsingWeights(buffer.getMiniBatch(BATCH_LENGTH));
         }
     }
 
@@ -130,6 +147,7 @@ public class TestForkNeuralValueMemory {
         for (int i = 0; i < BUFFER_SIZE; i++) {
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromRandomPos())
+                    .weight(1d)
                     .value(value)
                     .build();
             batch.add(exp);

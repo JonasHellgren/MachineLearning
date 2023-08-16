@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestExperienceWeightSetter {
 
+    public static final double DELTA = 1e-4;
+
     @ParameterizedTest
     @CsvSource({"0.0, 1",   // prob ->  expWeight
             "0.2, 1", //prob = 0 => DUMMY_WEIGHT
@@ -44,6 +46,8 @@ public class TestExperienceWeightSetter {
     @ParameterizedTest
     @CsvSource({"0.0,0.0, 1d,1d",   // prob0,prob1 ->  expWeight0, expWeight1
             "0.8, 0.2, 0.25,1.0",   //exp0 has 0.8 probability, 4 times higher than exp1, hence weight of exp0 is 4 times smaller
+            "1.0, 0.0, 0.5,1.0",
+            "0.9, 0.1, 0.111111,1.0",   //largest prob is 9 times larger than smallest
     })
     void givenBetaOneAndProbability_thenCorrectWeight(ArgumentsAccessor arguments) {
         double beta = 1d;
@@ -62,8 +66,8 @@ public class TestExperienceWeightSetter {
         System.out.println("buffer.get(0).weight = " + buffer.get(0).weight);
         System.out.println("buffer.get(1).weight = " + buffer.get(1).weight);
 
-        assertEquals(expWeight0, buffer.get(0).weight);
-        assertEquals(expWeight1, buffer.get(1).weight);
+        assertEquals(expWeight0, buffer.get(0).weight, DELTA);
+        assertEquals(expWeight1, buffer.get(1).weight, DELTA);
 
     }
 

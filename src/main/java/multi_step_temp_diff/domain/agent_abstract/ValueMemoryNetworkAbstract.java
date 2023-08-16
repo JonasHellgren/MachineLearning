@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @Log
 public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
-
     private static final double MAX_ERROR = 0.00001;
     private static final int NOF_ITERATIONS = 1;
 
@@ -31,17 +30,17 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
 
     public ValueMemoryNetworkAbstract(NetSettings netSettings) {
-        List<Integer> nofNeurons=new ArrayList<>();
+        List<Integer> nofNeurons = new ArrayList<>();
         nofNeurons.add(netSettings.inputSize());
-        for (int i = 0; i < netSettings.nofHiddenLayers() ; i++) {
+        for (int i = 0; i < netSettings.nofHiddenLayers(); i++) {
             nofNeurons.add(netSettings.nofNeuronsHidden());
         }
         nofNeurons.add(netSettings.outPutSize());
 
-        this.neuralNetwork = new MultiLayerPerceptron(nofNeurons,netSettings.transferFunctionType());
+        this.neuralNetwork = new MultiLayerPerceptron(nofNeurons, netSettings.transferFunctionType());
         this.netSettings = netSettings;
         createLearningRule(neuralNetwork, netSettings);
-        normalizer=netSettings.normalizer();
+        normalizer = netSettings.normalizer();
         isWarmedUp = false;
     }
 
@@ -73,18 +72,33 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     @Override
     public double learn(List<NstepExperience<S>> miniBatch) {
         DataSet trainingSet = getDataSet(miniBatch);
-        doWarmUpIfNotDone(trainingSet);
+        doWarmUpIfNotDone(miniBatch);
         learningRule.doOneLearningIteration(trainingSet);
+        return learningRule.getTotalNetworkError();
+    }
+
+    /**
+     * Calculate loss function (error) regarding weight
+     */
+
+    @Override
+    public double learnUsingWeights(List<NstepExperience<S>> miniBatch) {
+        doWarmUpIfNotDone(miniBatch);
+
+        for (NstepExperience<S> e : miniBatch) {
+            learningRule.setLearningRate(netSettings.learningRate()*e.weight);
+            learningRule.doOneLearningIteration(getDataSet(List.of(e)));
+        }
         return learningRule.getTotalNetworkError();
     }
 
     /**
      * needs warm up - else null pointer exception when calling doOneLearningIteration
      */
-    private void doWarmUpIfNotDone(DataSet trainingSet) {
+    private void doWarmUpIfNotDone(List<NstepExperience<S>> miniBatch) {
         Conditionals.executeIfTrue(!isWarmedUp, () -> {
-            neuralNetwork.learn(trainingSet);
-            isWarmedUp=true;
+            neuralNetwork.learn(getDataSet(miniBatch));
+            isWarmedUp = true;
         });
     }
 
@@ -92,27 +106,26 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         DataSet trainingSet = new DataSet(netSettings.inputSize(), netSettings.outPutSize());
         for (NstepExperience<S> e : buffer) {
             double[] inputVec = getInputVec(e.stateToUpdate);
-            double valueClipped= MathUtils.clip(e.value, netSettings.minOut(), netSettings.maxOut());
-            double normalizedValue= normalizer.normalize(valueClipped);
-            trainingSet.add( new DataSetRow(inputVec,new double[]{normalizedValue}));
+            double valueClipped = MathUtils.clip(e.value, netSettings.minOut(), netSettings.maxOut());
+            double normalizedValue = normalizer.normalize(valueClipped);
+            trainingSet.add(new DataSetRow(inputVec, new double[]{normalizedValue}));
         }
         return trainingSet;
     }
 
     @Override
     public void save(String fileName) {
-        log.info("Saving network in file = "+fileName);
+        log.info("Saving network in file = " + fileName);
         neuralNetwork.save(fileName);
     }
 
     @Override
     public void load(String fileName) {
         neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
-    //    neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.load(fileName);
+        //    neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.load(fileName);
 
 
     }
-
 
 
 }

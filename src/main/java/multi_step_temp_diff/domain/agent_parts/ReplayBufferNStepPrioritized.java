@@ -33,11 +33,14 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     public static final int NOF_STEPS_BETWEEN_SETTING_PROBABILITIES = 10;
     public static final double TOLERANCE_PROB_ACCUM = 1e-5;
     public static final double ALPHA = 0.5d;
+    public static final double BETA = 0.5;
 
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default
     double alpha=ALPHA;
+    @Builder.Default
+    double beta= BETA;
     @Builder.Default
     int nofExperienceAddingBetweenProbabilitySetting = NOF_STEPS_BETWEEN_SETTING_PROBABILITIES;
     @Builder.Default
@@ -68,7 +71,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     public void addExperience(NstepExperience<S> experience) {
         removeRandomItemIfFull();
         buffer.add(experience);
-        Conditionals.executeIfTrue(isTimeToUpdate(), () ->  updateSelectionProbabilities());
+        Conditionals.executeIfTrue(isTimeToUpdate(), () ->  updatePrioritizationSelectionProbabilitiesAndWeights());
         addExperienceCounter.increase();
     }
 
@@ -76,14 +79,15 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         return addExperienceCounter.getCount() % nofExperienceAddingBetweenProbabilitySetting == 0;
     }
 
-    public void updateSelectionProbabilities() {
+    public void updatePrioritizationSelectionProbabilitiesAndWeights() {
         ExperiencePrioritizationSetter<S> prioritizationSetter =
                 new ExperiencePrioritizationSetter<>(buffer, prioritizationStrategy);
         ExperienceProbabilitySetter<S> probabilitySetter = new ExperienceProbabilitySetter<>(buffer, alpha);
-        //defineWeight(buffer);  //todo requires learn in ValueMemoryNetworkAbstract to be modified
+        ExperienceWeightSetter<S> experienceWeightSetter=new ExperienceWeightSetter<>(buffer,beta);
 
         prioritizationSetter.setPrios();
         probabilitySetter.setProbabilities();
+        experienceWeightSetter.setWeights();
     }
 
     @Override

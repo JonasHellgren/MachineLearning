@@ -6,4 +6,5 @@ import java.util.List;
 public interface NetworkMemoryInterface<S> extends PersistentMemoryInterface {
     double read(StateInterface<S> state);
     double learn(List<NstepExperience<S>> miniBatch);  //returning error=|target-net|
+    double learnUsingWeights(List<NstepExperience<S>> miniBatch);
 }

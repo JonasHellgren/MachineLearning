@@ -21,8 +21,8 @@ public class ExperienceWeightSetter<S> {
     @NonNull Double beta;
 
     public static final double DUMMY_WEIGHT = 1;
-    static TriFunction<Double, Double, Double, Double> weightFunction = (onedDivN, p, beta) ->
-            (MathUtils.isZero(p)) ? DUMMY_WEIGHT : Math.pow(onedDivN * 1 / p, beta);
+    static TriFunction<Double, Double, Double, Double> weightFunction = (oneDivN, p, beta) ->
+            (MathUtils.isZero(p)) ? DUMMY_WEIGHT : Math.pow(oneDivN * 1 / p, beta);
 
     public void setWeights() {
         double oneDivN = (double) 1 / buffer.size();

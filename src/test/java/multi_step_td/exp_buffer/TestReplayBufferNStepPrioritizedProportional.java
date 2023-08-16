@@ -41,7 +41,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
 
         TD_ERRORS.forEach(tdError ->
                 addExperienceWithTdError(tdError));
-        prioritizedBuffer.updateSelectionProbabilities();
+        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
         createBufferWithWithSameTdErrorItems(nofItems);
 
         CpuTimer timer=new CpuTimer();
-        prioritizedBuffer.updateSelectionProbabilities();
+        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights();
         System.out.println("time single update probabilities etc = " + timer.absoluteProgressInMillis());
 
         timer.reset();
@@ -117,7 +117,14 @@ public class TestReplayBufferNStepPrioritizedProportional {
         System.out.println("indexes = " + indexes);
 
         assertEquals(indexSet.size(),indexes.size());
+    }
 
+    @Test
+    public void whenDifferentTdErrors_thenCorrectWeights() {
+        List<Double> weights=prioritizedBuffer.getBuffer().stream().map(exp -> exp.weight).toList();
+        System.out.println("weights = " + weights);
+        assertTrue(weights.contains(1d));
+        assertTrue(weights.stream().anyMatch(w -> w<0.9 && w>0.2));  //largest TD error shall be mapped to smaller weight
     }
 
 

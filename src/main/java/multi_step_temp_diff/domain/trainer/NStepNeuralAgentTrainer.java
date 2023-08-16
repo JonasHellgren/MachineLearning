@@ -113,7 +113,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     }
 
     private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-        for (int i = 0; i < settings.nofIterations(); i++) {
+        for (int i = 0; i < settings.nofIterations(); i++) { //todo remove
             agentNeural.learn(miniBatch);
         }
     }

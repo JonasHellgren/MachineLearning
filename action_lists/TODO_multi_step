@@ -205,11 +205,11 @@ påvisa isTimeToUpdate inte ställer till det  x
 - Testa intervallFinder när prob=0  x
 - ExperienceWeightSetter  x
 - TestExperienceWeightSetter  x
-- method i memory som uppdaterar med olika vikter
-- testa ovan
+- test i TestReplayBufferNStepPrioritized för weight x
+- method i memory som uppdaterar med olika vikter x
+- testa ovan  x
 - test NStepNeuralAgentTrainer med prio buffer - kanske på fork
 - Runner på charge med prio buffer
-
 
 BUGG RunnerAgentChargeNeuralTrainerBothFreeParallelTasks verkar inte parallisera
 RunnerChargeHyperParameterOptimizerParallel
