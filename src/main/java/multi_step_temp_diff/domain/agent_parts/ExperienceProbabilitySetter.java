@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 @Log
 public class ExperienceProbabilitySetter<S> {
 
-    List<NstepExperience<S>> buffer;
+    @NonNull List<NstepExperience<S>> buffer;
     @NonNull Double alpha;
 
     static BiFunction<Double,Double,Double> prioRaised =(p, alpha) -> Math.pow(p,alpha);

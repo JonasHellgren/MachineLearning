@@ -1,4 +1,4 @@
-package multi_step_td.common;
+package multi_step_td.exp_buffer;
 
 import multi_step_temp_diff.domain.agent_parts.ExperiencePrioritizationSetter;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;

@@ -1,4 +1,4 @@
-package multi_step_td.agent;
+package multi_step_td.exp_buffer;
 
 import common.CpuTimer;
 import common.ListUtils;
@@ -91,7 +91,10 @@ public class TestReplayBufferNStepPrioritizedProportional {
         prioritizedBuffer.updateSelectionProbabilities();
         System.out.println("time single update probabilities etc = " + timer.absoluteProgressInMillis());
 
+        timer.reset();
         prioritizedBuffer.getMiniBatch(1);
+        System.out.println("time getMiniBatch is = " + timer.absoluteProgressInMillis());
+
         List<Double> probabilities = getProbabilities();
         List<Double> probAccumList = getAccumProbabilites();
 

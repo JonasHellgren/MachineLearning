@@ -88,11 +88,10 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
 
     @Override
     public List<NstepExperience<S>> getMiniBatch(int batchLength) {
-         List<Double> probabilities=new ArrayList<>();
-         buffer.forEach(e -> probabilities.add(e.probability));
+        List<Double> probabilities=buffer.stream().map(e -> e.probability).toList();
 
         List<Double> accumulatedProbabilities = getAccumulatedProbabilities(probabilities);
-        intervalFinder.setInput(accumulatedProbabilities);
+        intervalFinder.setInput(ListUtils.merge(List.of(0d),accumulatedProbabilities));
 
         List<Integer> indexes= IntStream.range(0,batchLength).boxed().map(i ->
         {
@@ -100,9 +99,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
             return intervalFinder.find(randomBetweenZeroAndOneToPointOutExperience);
         }).toList();
 
-        List<NstepExperience<S>> miniBatch = new ArrayList<>();
-        indexes.forEach(i -> miniBatch.add(buffer.get(i)));
-        return miniBatch;
+        return indexes.stream().map(i ->buffer.get(i)).toList();
     }
 
     @NotNull
@@ -113,7 +110,6 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
             log.warning("End element in accumulated experiences differs from one, it is = "
                     +ListUtils.findMax(accumulatedProbabilities).orElseThrow());
         }
-        accumulatedProbabilities=ListUtils.merge(List.of(0d),accumulatedProbabilities);
         return accumulatedProbabilities;
     }
 

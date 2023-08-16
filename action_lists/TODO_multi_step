@@ -202,9 +202,9 @@ prova prio exp replay
 - cleaner ReplayBufferNStepPrioritized  x
 - BUGG End element in accumulated experiences differs from one, it is = 3.0 x
 påvisa isTimeToUpdate inte ställer till det  x
-- Testa intervallFinder när prob=0
-- ExperienceWeightSetter
-- TestExperienceWeightSetter
+- Testa intervallFinder när prob=0  x
+- ExperienceWeightSetter  x
+- TestExperienceWeightSetter  x
 - method i memory som uppdaterar med olika vikter
 - testa ovan
 - test NStepNeuralAgentTrainer med prio buffer - kanske på fork
