@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.helpers_common.IntervalFinder;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Log
 @Builder
@@ -24,10 +27,8 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     double alpha=ALPHA;
     @Builder.Default
     int nofExperienceAddingBetweenProbabilitySetting = NOF_STEPS_BETWEEN_SETTING_PROBABILITIES;
-
     @Builder.Default
     PrioritizationStrategyInterface<S> prioritizationStrategy=new PrioritizationProportional<>();
-
 
     final List<NstepExperience<S>> buffer = new ArrayList<>();
     final Counter addExperienceCounter=new Counter();
@@ -68,6 +69,20 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
          List<Double> probabilities=new ArrayList<>();
          buffer.forEach(e -> probabilities.add(e.probability));
 
+        List<Double> accumulatedProbabilities = getAccumulatedProbabilities(probabilities);
+        intervalFinder.setInput(accumulatedProbabilities);
+
+        List<Integer> indexes= IntStream.range(0,batchLength).boxed().map(i ->
+             intervalFinder.find(RandUtils.getRandomDouble(0,1))).toList();
+
+        List<NstepExperience<S>> miniBatch = new ArrayList<>();
+        indexes.forEach(i -> miniBatch.add(buffer.get(i)));
+
+        return miniBatch;
+    }
+
+    @NotNull
+    private static List<Double> getAccumulatedProbabilities(List<Double> probabilities) {
         RunningSum<Double> runningSum=new RunningSum<>(probabilities);
         List<Double> accumulatedProbabilities=runningSum.calculate();
         if (!MathUtils.compareDoubleScalars(ListUtils.findMax(accumulatedProbabilities).orElseThrow(),1d, TOLERANCE_PROB_ACCUM)) {
@@ -75,20 +90,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
                     +ListUtils.findMax(accumulatedProbabilities).orElseThrow());
         }
         accumulatedProbabilities=ListUtils.merge(List.of(0d),accumulatedProbabilities);
-
-        intervalFinder.setInput(accumulatedProbabilities);
-
-        List<Integer> indexes=new ArrayList<>();
-        for (int i = 0; i < batchLength ; i++) {  //todo use streams
-            double randomProbAccum= RandUtils.getRandomDouble(0,1);
-            int index=intervalFinder.find(randomProbAccum);  //todo repeat if exists
-            indexes.add(index);
-        }
-
-        List<NstepExperience<S>> miniBatch = new ArrayList<>();
-        indexes.forEach(i -> miniBatch.add(buffer.get(i)));
-
-        return miniBatch;
+        return accumulatedProbabilities;
     }
 
     @Override
