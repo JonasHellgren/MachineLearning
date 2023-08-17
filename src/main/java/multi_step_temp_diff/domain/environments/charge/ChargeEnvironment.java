@@ -6,6 +6,7 @@ import common.MySetUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -100,6 +101,7 @@ import static multi_step_temp_diff.domain.environments.charge.SiteState.*;
 
 @Setter
 @Getter
+@Log
 public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> {
 
     public static final Set<SiteState> FAIL_STATES = Set.of(isTwoCharging, isAnySoCBad, isTwoAtSamePos);
@@ -119,6 +121,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
         positionTransitionRules = new PositionTransitionRules(settings);
         siteStateRules = new SiteStateRules(settings);
         isObstacle = settings.isObstacleStart();
+        log.info("ChargeEnvironment created");
     }
 
     @Override

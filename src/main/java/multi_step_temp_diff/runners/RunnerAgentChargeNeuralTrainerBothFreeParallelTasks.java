@@ -32,25 +32,16 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
     public static final int NOF_NEURONS_HIDDEN = 15;
 
     static EnvironmentInterface<ChargeVariables> environment;
-    static ChargeEnvironmentLambdas lambdas;
-    static ChargeEnvironment environmentCasted;
+  //  static ChargeEnvironmentLambdas lambdas;
     static ChargeEnvironmentSettings envSettingsForTraining;
     static ExecutorService executorService;
 
     public static void main(String[] args) throws InterruptedException {
-        ChargeEnvironmentSettings envSettings = ChargeEnvironmentSettings.newDefault();
-        envSettingsForTraining = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_TRAINING);
-        environment = new ChargeEnvironment(envSettingsForTraining);
-        environmentCasted = (ChargeEnvironment) environment;
-        lambdas = new ChargeEnvironmentLambdas(envSettingsForTraining);
-        ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
-        ChargeAgentFactory agentFactory = ChargeAgentFactory.builder()
-                .environment(environment).envSettings(envSettings)
-                .build();
+
         executorService=createExecutorService();
 
         //a trainer includes an agent, so a trainer object below shall be seen as a team of a trainer and an agent
-        Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks = createTasks(stateSupplier, agentFactory);
+        Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks = createTasks();
         List<NStepNeuralAgentTrainer<ChargeVariables>> trainers = runtTasksAndReturnResultingTrainers(tasks,executorService);
         Map<NStepNeuralAgentTrainer<ChargeVariables>, Double> trainerScoreMap = createTrainerEvaluationMap(trainers);
         Optional<Map.Entry<NStepNeuralAgentTrainer<ChargeVariables>,Double>> bestTrainerAndItsScore =
@@ -60,7 +51,7 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
         AgentNeuralInterface<ChargeVariables> bestTrainedAgentNeural = bestTrainer.getAgentNeural();
         bestTrainedAgentNeural.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
         ChargePlotHelper plotHelper=new ChargePlotHelper(bestTrainer.getAgentNeural(),bestTrainer);
-        plotHelper.doMultiplePlots(envSettings);
+       // plotHelper.doMultiplePlots(envSettings);
         executorService.shutdown();
         
     }
@@ -84,8 +75,9 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
             Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks,
             ExecutorService executorService) throws InterruptedException {
         List<Future<NStepNeuralAgentTrainer<ChargeVariables>>> futures = executorService.invokeAll(tasks);
+        log.info("invokeAll finished");
         List<NStepNeuralAgentTrainer<ChargeVariables>> trainers = new ArrayList<>();
-        for (var future : futures) {
+        for (Future<NStepNeuralAgentTrainer<ChargeVariables>> future : futures) {
             try {
                 trainers.add(future.get().call());
             } catch (Exception e) {
@@ -104,15 +96,24 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
     }
 
     @NotNull
-    private static Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> createTasks(ChargeStateSuppliers stateSupplier,
-                                                                                       ChargeAgentFactory agentFactory) {
+    private static Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> createTasks() {
         Set<Callable<NStepNeuralAgentTrainer<ChargeVariables>>> tasks = new HashSet<>();
         for (int i = 0; i < NOF_TASKS; i++) {
+
+            ChargeEnvironmentSettings envSettings = ChargeEnvironmentSettings.newDefault();
+            envSettingsForTraining = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_TRAINING);
+            environment = new ChargeEnvironment(envSettingsForTraining);
+          //  lambdas = new ChargeEnvironmentLambdas(envSettingsForTraining);
+            ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
+            ChargeAgentFactory agentFactory = ChargeAgentFactory.builder()
+                    .environment(environment).envSettings(envSettings)
+                    .build();
+
             AgentNeuralInterface<ChargeVariables> agent = agentFactory.buildAgent(
                     ChargeState.newDummy(),
                     NOF_LAYERS_HIDDEN,
                     NOF_NEURONS_HIDDEN);
-            ChargeTrainerFactory<ChargeVariables> trainerFactory = getTrainerFactory(stateSupplier, agent);
+            ChargeTrainerFactory<ChargeVariables> trainerFactory = getTrainerFactory(stateSupplier, agent, environment);
             Callable<NStepNeuralAgentTrainer<ChargeVariables>> nStepNeuralAgentTrainerCallable =
                     () -> trainerFactory.buildTrainer();
             tasks.add(nStepNeuralAgentTrainerCallable);
@@ -122,7 +123,8 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
 
 
     private static ChargeTrainerFactory<ChargeVariables> getTrainerFactory(ChargeStateSuppliers stateSupplier,
-                                                                           AgentNeuralInterface<ChargeVariables> agent) {
+                                                                           AgentNeuralInterface<ChargeVariables> agent,
+                                                                           EnvironmentInterface<ChargeVariables> environment) {
 
         return ChargeTrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
