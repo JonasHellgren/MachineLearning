@@ -65,7 +65,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 });
                 helper.tau = timeForUpdate.apply(timeStep, settings.nofStepsBetweenUpdatedAndBackuped());
                 executeIfTrue(isPossibleToGetExperience.test(helper.tau), () ->
-                        buffer.addExperience(getExperienceAtTimeTau()));
+                        buffer.addExperience(getExperienceAtTimeTau(),timer));
                 executeIfTrue(isEnoughItemsInBuffer.test(buffer.size(), settings), () -> {
                     var miniBatch = getMiniBatch(buffer);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);

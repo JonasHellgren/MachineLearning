@@ -32,7 +32,7 @@ public class ForkState implements StateInterface<ForkVariables> {
     }
 
     public static ForkState newFromRandomPos() {
-        final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
+        final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates()-1);
         return new ForkState(ForkVariables.newFromPos(randomPos));
     }
 

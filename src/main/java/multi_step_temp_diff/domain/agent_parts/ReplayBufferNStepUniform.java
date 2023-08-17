@@ -1,5 +1,6 @@
 package multi_step_temp_diff.domain.agent_parts;
 
+import common.CpuTimer;
 import common.RandUtils;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
@@ -28,7 +29,7 @@ public class ReplayBufferNStepUniform<S> implements ReplayBufferInterface<S> {
     }
 
     @Override
-    public void addExperience(NstepExperience<S> experience) {
+    public void addExperience(NstepExperience<S> experience, CpuTimer timer) {
         removeRandomItemIfFull();
         buffer.add(experience);
     }

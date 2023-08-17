@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestReplayBufferNStepPrioritizedProportional {
 
     public static final double DELTA_ACCUM_PROB = 1e-10;
+    public static final double BETA = 0.5;
     ReplayBufferNStepPrioritized<ForkVariables> prioritizedBuffer;
     List<Double> TD_ERRORS= List.of(1d,2d,1d);
 
@@ -41,7 +42,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
 
         TD_ERRORS.forEach(tdError ->
                 addExperienceWithTdError(tdError));
-        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights();
+        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights(BETA);
     }
 
     @Test
@@ -88,7 +89,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
         createBufferWithWithSameTdErrorItems(nofItems);
 
         CpuTimer timer=new CpuTimer();
-        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights();
+        prioritizedBuffer.updatePrioritizationSelectionProbabilitiesAndWeights(BETA);
         System.out.println("time single update probabilities etc = " + timer.absoluteProgressInMillis());
 
         timer.reset();
@@ -138,7 +139,7 @@ public class TestReplayBufferNStepPrioritizedProportional {
     private void addExperienceWithTdError(Double tdError) {
         prioritizedBuffer.addExperience(NstepExperience.<ForkVariables>builder()
                 .stateToUpdate(ForkState.newFromRandomPos())
-                .tdError(tdError).build());
+                .tdError(tdError).build(),CpuTimer.newWithTimeBudgetInMilliSec(0));
     }
 
         @NotNull

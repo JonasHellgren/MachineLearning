@@ -1,7 +1,7 @@
 package multi_step_td.maze;
 
 import lombok.SneakyThrows;
-import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
@@ -30,7 +30,7 @@ public class TestNStepNeuralAgentTrainerMaze {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 3;
     private static final int BATCH_SIZE = 50, BUFFER_SIZE_MAX = 100;
     private static final int NOF_EPIS = 500;
-    public static final List<MazeState> STATES_LIST = TestHelper.STATES_MAZE_UPPER;
+    public static final List<MazeState> STATES_LIST = ForkAndMazeHelper.STATES_MAZE_UPPER;
     public static final HashSet<StateInterface<MazeVariables>> STATE_SET = new HashSet<>(STATES_LIST);
     public static final double LEARNING_RATE =1e-1;
     public static final double PROB_START = 0.1, PROB_END = 1e-5;
@@ -40,14 +40,14 @@ public class TestNStepNeuralAgentTrainerMaze {
     AgentNeuralInterface<MazeVariables> agent;
     AgentMazeNeural agentCasted;
     MazeEnvironment environment;
-    TestHelper<MazeVariables> helper;
+    ForkAndMazeHelper<MazeVariables> helper;
 
     @BeforeEach
     public void init() {
         environment=new MazeEnvironment();
         agent= AgentMazeNeural.newDefault(environment);
         agentCasted = (AgentMazeNeural) agent;
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
     }
 
     BiFunction<Integer,Integer,Double> value=(x,y) ->  agent.readValue(MazeState.newFromXY(x,y));
@@ -60,10 +60,10 @@ public class TestNStepNeuralAgentTrainerMaze {
         setAgentAndTrain();
         printBufferSize();
 
-        helper=new TestHelper<>(agent, environment);
-        helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_UPPER));
-        helper.printStateValues(new HashSet<>(TestHelper.STATES_MAZE_MIDDLE));
-        double avgError=TestHelper.avgErrorMaze(helper.getStateValueMap(STATE_SET),STATES_LIST);
+        helper=new ForkAndMazeHelper<>(agent, environment);
+        helper.printStateValues(new HashSet<>(ForkAndMazeHelper.STATES_MAZE_UPPER));
+        helper.printStateValues(new HashSet<>(ForkAndMazeHelper.STATES_MAZE_MIDDLE));
+        double avgError= ForkAndMazeHelper.avgErrorMaze(helper.getStateValueMap(STATE_SET),STATES_LIST);
 
         System.out.println("avgError = " + avgError);
 

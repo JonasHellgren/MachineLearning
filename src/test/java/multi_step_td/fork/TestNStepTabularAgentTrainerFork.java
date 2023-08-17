@@ -2,11 +2,10 @@ package multi_step_td.fork;
 
 
 import lombok.SneakyThrows;
-import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
-import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkTabular;
@@ -43,14 +42,14 @@ public class TestNStepTabularAgentTrainerFork {
 
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        double avgErrOne= TestHelper.avgErrorFork(mapOneStep);
+        double avgErrOne= ForkAndMazeHelper.avgErrorFork(mapOneStep);
 
         agent.clear();
         settings = getnStepTabularAgentTrainerSettings(THREE_STEPS);
         trainer= createTrainer(environment, settings);
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
-        double avgErrThree=TestHelper.avgErrorFork(mapTreeSteps);
+        double avgErrThree= ForkAndMazeHelper.avgErrorFork(mapTreeSteps);
 
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);

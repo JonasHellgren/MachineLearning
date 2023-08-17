@@ -1,7 +1,8 @@
 package multi_step_td.maze;
 
 import common.RandUtils;
-import multi_step_td.TestHelper;
+import multi_step_td.helpers.StateAsserter;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
@@ -30,7 +31,7 @@ public class TestAgentNeuralMazeMockedData {
     public static final double LEARNING_RATE = 5e-1;
     AgentNeuralInterface<MazeVariables> agent;
     AgentMazeNeural agentCasted;
-    TestHelper<MazeVariables> helper;
+    ForkAndMazeHelper<MazeVariables> helper;
     MazeEnvironment environment;
 
     Function<StateInterface<MazeVariables>,Double>  sumXy=(s) ->
@@ -45,7 +46,7 @@ public class TestAgentNeuralMazeMockedData {
         agent=new AgentMazeNeural(environment,agentSettings);
 
         agentCasted=(AgentMazeNeural) agent;
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
     }
 
     @Test
@@ -58,7 +59,9 @@ public class TestAgentNeuralMazeMockedData {
         }
 
         helper.printStateValues();
-        helper.assertAllStates(sumXy, DELTA);
+
+        StateAsserter<MazeVariables> stateAsserter=new StateAsserter<>(agent,environment);
+        stateAsserter.assertAllStates(sumXy, DELTA);
     }
 
     @NotNull
@@ -75,5 +78,7 @@ public class TestAgentNeuralMazeMockedData {
         }
         return batch;
     }
+
+
 
 }

@@ -1,9 +1,8 @@
 package multi_step_td.fork;
 
 import lombok.SneakyThrows;
-import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepPrioritized;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
@@ -38,7 +37,7 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
     AgentNeuralInterface<ForkVariables> agent;
     AgentForkNeural agentCasted;
     ForkEnvironment environment;
-    TestHelper<ForkVariables> helper;
+    ForkAndMazeHelper<ForkVariables> helper;
 
     @BeforeEach
     public void init() {
@@ -54,13 +53,13 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
         buildTrainer();
         trainer.train();
 
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
         helper.printStateValues();
         AgentInfo<ForkVariables> agentInfo=new AgentInfo<>(agent);
 
         System.out.println("trainer.getBuffer().size() = " + trainer.getBuffer().size());
 
-        double avgError = TestHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
+        double avgError = ForkAndMazeHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
         assertTrue(avgError < delta);
     }
 

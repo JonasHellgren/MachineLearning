@@ -1,7 +1,8 @@
 package multi_step_td.fork;
 
 import common.RandUtils;
-import multi_step_td.TestHelper;
+import multi_step_td.helpers.StateAsserter;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
@@ -26,7 +27,7 @@ public class TestAgentNeuralFork {
     private static final int DELTA = 2;
     AgentNeuralInterface<ForkVariables> agent;
     AgentForkNeural agentCasted;
-    TestHelper<ForkVariables> helper;
+    ForkAndMazeHelper<ForkVariables> helper;
     ForkEnvironment environment;
 
     @BeforeEach
@@ -34,7 +35,7 @@ public class TestAgentNeuralFork {
         environment = new ForkEnvironment();
         agent= AgentForkNeural.newDefault(environment);
         agentCasted=(AgentForkNeural) agent;
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
     }
 
     @Test
@@ -48,7 +49,8 @@ public class TestAgentNeuralFork {
         }
 
         helper.printStateValues();
-        helper.assertAllStates(value, DELTA);
+        StateAsserter  stateAsserter=new StateAsserter<>(agent,environment);
+        stateAsserter.assertAllStates(value, DELTA);
     }
 
     @NotNull

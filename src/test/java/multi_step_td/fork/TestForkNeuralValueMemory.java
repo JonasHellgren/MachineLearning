@@ -1,7 +1,8 @@
 package multi_step_td.fork;
 
 import common.RandUtils;
-import multi_step_td.TestHelper;
+import multi_step_td.helpers.StateAsserter;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
@@ -40,7 +41,8 @@ public class TestForkNeuralValueMemory {
 
     NetworkMemoryInterface<ForkVariables> memory;
     EnvironmentInterface<ForkVariables> environment;
-    TestHelper<ForkVariables> helper;
+    ForkAndMazeHelper<ForkVariables> helper;
+    StateAsserter<ForkVariables> stateAsserter;
 
 
     @BeforeEach
@@ -60,7 +62,8 @@ public class TestForkNeuralValueMemory {
                 DISCOUNT_FACTOR,
                 netSettings);
         memory=agent.getMemory();
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
+        stateAsserter=new StateAsserter<>(agent,environment);
     }
 
 
@@ -72,7 +75,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        helper.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStates(value,DELTA);
     }
 
     @Test
@@ -83,7 +86,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        helper.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStates(value,DELTA);
     }
 
     @Test
@@ -94,7 +97,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        helper.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStates(value,DELTA);
     }
 
     @Test
@@ -117,7 +120,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         trainWithWeights(buffer);
         helper.printStateValues();
-        helper.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStates(value,DELTA);
     }
 
     private void train(ReplayBufferNStepUniform<ForkVariables> buffer) {

@@ -211,7 +211,7 @@ påvisa isTimeToUpdate inte ställer till det  x
 - test NStepNeuralAgentTrainer med prio buffer - kanske på fork  x
 - RunnerForkNStepNeuralAgentTrainer -> RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer  x
 - BUGG accumulated experiences differs from one, it is = 2.3130667018961435  x
-- Thus, β starts small (values of 0.4 to 0.6 are commonly used) and anneals towards one
+- Thus, β starts small (values of 0.4 to 0.6 are commonly used) and anneals towards one  x
 - Runner på charge med prio buffer
 
 BUGG RunnerAgentChargeNeuralTrainerBothFreeParallelTasks verkar inte parallisera

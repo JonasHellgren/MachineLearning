@@ -2,10 +2,8 @@ package multi_step_td.maze;
 
 import common.MathUtils;
 import    lombok.SneakyThrows;
-import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
-import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
-import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
@@ -48,10 +46,10 @@ public class TestNStepTabularAgentTrainerMaze {
         agent.clear();
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        printStateValues(TestHelper.STATES_MAZE_UPPER,mapOneStep );
+        printStateValues(ForkAndMazeHelper.STATES_MAZE_UPPER,mapOneStep );
         System.out.println("---------------------------");
 
-        double avgErrOne= TestHelper.avgErrorMaze(mapOneStep,TestHelper.STATES_MAZE_UPPER);
+        double avgErrOne= ForkAndMazeHelper.avgErrorMaze(mapOneStep, ForkAndMazeHelper.STATES_MAZE_UPPER);
         agent.clear();
 
         settings = getnStepTabularAgentTrainerSettings(THREE_STEPS);
@@ -59,9 +57,9 @@ public class TestNStepTabularAgentTrainerMaze {
         trainer.setStartStateSupplier(() -> MazeState.newFromXY(0,5));
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
-        printStateValues(TestHelper.STATES_MAZE_UPPER,mapTreeSteps );
+        printStateValues(ForkAndMazeHelper.STATES_MAZE_UPPER,mapTreeSteps );
 
-        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,TestHelper.STATES_MAZE_UPPER);
+        double avgErrThree= ForkAndMazeHelper.avgErrorMaze(mapTreeSteps, ForkAndMazeHelper.STATES_MAZE_UPPER);
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         printErrors(avgErrOne, avgErrThree);
         Assert.assertTrue(avgErrOne>avgErrThree || MathUtils.compareDoubleScalars(avgErrOne,avgErrThree,0.001));
@@ -80,7 +78,7 @@ public class TestNStepTabularAgentTrainerMaze {
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapOneSteps= trainer.getStateValueMap();
         printManyStateValues(mapOneSteps);
-        double avgErrOne=TestHelper.avgErrorMaze(mapOneSteps,TestHelper.STATES_MAZE_MERGED);
+        double avgErrOne= ForkAndMazeHelper.avgErrorMaze(mapOneSteps, ForkAndMazeHelper.STATES_MAZE_MERGED);
         System.out.println("---------------------------");
 
         agent.clear();
@@ -92,7 +90,7 @@ public class TestNStepTabularAgentTrainerMaze {
         trainer.train();
         Map<StateInterface<MazeVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
         printManyStateValues(mapTreeSteps);
-        double avgErrThree=TestHelper.avgErrorMaze(mapTreeSteps,TestHelper.STATES_MAZE_MERGED);
+        double avgErrThree= ForkAndMazeHelper.avgErrorMaze(mapTreeSteps, ForkAndMazeHelper.STATES_MAZE_MERGED);
 
         printErrors(avgErrOne, avgErrThree);
         Assert.assertTrue(avgErrOne>avgErrThree);
@@ -100,9 +98,9 @@ public class TestNStepTabularAgentTrainerMaze {
     }
 
     private void printManyStateValues(Map<StateInterface<MazeVariables>, Double> mapTreeSteps) {
-        printStateValues(TestHelper.STATES_MAZE_UPPER, mapTreeSteps);
-        printStateValues(TestHelper.STATES_MAZE_MIDDLE, mapTreeSteps);
-        printStateValues(TestHelper.STATES_MAZE_BOTTOM, mapTreeSteps);
+        printStateValues(ForkAndMazeHelper.STATES_MAZE_UPPER, mapTreeSteps);
+        printStateValues(ForkAndMazeHelper.STATES_MAZE_MIDDLE, mapTreeSteps);
+        printStateValues(ForkAndMazeHelper.STATES_MAZE_BOTTOM, mapTreeSteps);
     }
 
 

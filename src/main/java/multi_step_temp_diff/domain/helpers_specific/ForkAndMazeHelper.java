@@ -1,4 +1,4 @@
-package multi_step_td;
+package multi_step_temp_diff.domain.helpers_specific;
 
 import common.ListUtils;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
@@ -11,7 +11,6 @@ import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
-import org.junit.Assert;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -21,7 +20,7 @@ import java.util.function.Function;
 
 //todo exktahera Maze
 
-public class TestHelper<S> {
+public class ForkAndMazeHelper<S> {
 
     AgentInterface<S> agent;
     EnvironmentInterface<S> environment;
@@ -39,7 +38,7 @@ public class TestHelper<S> {
             ListUtils.merge(ListUtils.merge(STATES_MAZE_UPPER, STATES_MAZE_MIDDLE), STATES_MAZE_BOTTOM);
 
 
-    public TestHelper(AgentInterface<S> agentNeural, EnvironmentInterface<S> environment) {
+    public ForkAndMazeHelper(AgentInterface<S> agentNeural, EnvironmentInterface<S> environment) {
         this.agent = agentNeural;
         this.environment=environment;
     }
@@ -64,27 +63,19 @@ public class TestHelper<S> {
     }
 
 
-    public void assertAllStates(double value, double delta) {
-        for (StateInterface<S> state:environment.stateSet()) {
-            Assert.assertEquals(value, agent.readValue(state), delta);
-        }
-    }
 
-    public void assertAllStates(Function<StateInterface<S>,Double> function, double delta) {
-        for (StateInterface<S> state:environment.stateSet()) {
-            Assert.assertEquals(function.apply(state), agent.readValue(state), delta);
-        }
-    }
 
 
     static BiFunction<Map<StateInterface<ForkVariables>, Double>,Integer,Double> getPos=(m, p) -> m.get(ForkState.newFromPos(p));
 
     public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
-        errors.add(Math.abs(getPos.apply(valueMap,0)- ForkEnvironment.envSettings.rewardHeaven()));
-        errors.add(Math.abs(getPos.apply(valueMap,7)-ForkEnvironment.envSettings.rewardHeaven()));
-        errors.add(Math.abs(getPos.apply(valueMap,6)-ForkEnvironment.envSettings.rewardHell()));
-        errors.add(Math.abs(getPos.apply(valueMap,11)-ForkEnvironment.envSettings.rewardHell()));
+        List<Integer> willLeadToHell=List.of(6,11,12,13,14);
+        List<Integer> shallLeadToHeaven=List.of(0,1,2,3,4,5,7,8,9);
+
+        willLeadToHell.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- ForkEnvironment.envSettings.rewardHell()));
+        shallLeadToHeaven.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- ForkEnvironment.envSettings.rewardHeaven()));
+
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }
 

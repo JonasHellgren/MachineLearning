@@ -1,5 +1,6 @@
 package multi_step_td;
 
+import common.CpuTimer;
 import common.RandUtils;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TestReplayBuffer {
 
     private static final int n = 4;
+    public static final CpuTimer CPU_TIMER = CpuTimer.newWithTimeBudgetInMilliSec(0);
     ReplayBufferInterface<ForkVariables> buffer;
 
     @Before
@@ -25,7 +27,7 @@ public class TestReplayBuffer {
     @Test
     public void whenAddingOneExperience_thenExists() {
         buffer.addExperience(NstepExperience.<ForkVariables>builder().stateToUpdate(ForkState.newFromPos(0)).sumOfRewards(0d)
-                .stateToBackupFrom(ForkState.newFromPos(3)).isBackupStatePresent(true).build());
+                .stateToBackupFrom(ForkState.newFromPos(3)).isBackupStatePresent(true).build(),CPU_TIMER);
         System.out.println("buffer = " + buffer);
         Assert.assertEquals(1,buffer.size());
     }
@@ -38,7 +40,7 @@ public class TestReplayBuffer {
             buffer.addExperience(NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(i)).sumOfRewards(sumOfRewards)
                     .stateToBackupFrom(ForkState.newFromPos(i + n)).isBackupStatePresent(true)
-                    .build());
+                    .build(), CPU_TIMER);
         }
 
         List<NstepExperience<ForkVariables>> miniBuffer=buffer.getMiniBatch(5);

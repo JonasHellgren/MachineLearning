@@ -36,18 +36,21 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     public static final int NOF_STEPS_BETWEEN_SETTING_PROBABILITIES = 10;
     public static final double TOLERANCE_PROB_ACCUM = 1e-5;
     public static final double ALPHA = 0.5d;
-    public static final double BETA = 0.5;
+    public static final double BETA0 = 0.5,BETA1 = 1.0;
+    public static final double EPSILON = 0.01;
 
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default
     double alpha=ALPHA;
     @Builder.Default
-    double beta= BETA;
+    double beta0= BETA0;
+    @Builder.Default
+    double beta1= BETA1;
     @Builder.Default
     int nofExperienceAddingBetweenProbabilitySetting = NOF_STEPS_BETWEEN_SETTING_PROBABILITIES;
     @Builder.Default
-    PrioritizationStrategyInterface<S> prioritizationStrategy=new PrioritizationProportional<>();
+    PrioritizationStrategyInterface<S> prioritizationStrategy=new PrioritizationProportional<>(EPSILON);
 
     final List<NstepExperience<S>> buffer = new ArrayList<>();
     final Counter addExperienceCounter=new Counter();
@@ -71,11 +74,12 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
      */
 
     @Override
-    public void addExperience(NstepExperience<S> experience) {
+    public void addExperience(NstepExperience<S> experience,CpuTimer timer) {
         boolean isRemoved=removeRandomItemIfFull();
         buffer.add(experience);
+        double beta=BETA0+(BETA1-BETA0)*timer.relativeProgress();
         Conditionals.executeIfTrue(isTimeToUpdate() || isRemoved,
-                () ->  updatePrioritizationSelectionProbabilitiesAndWeights());
+                () ->  updatePrioritizationSelectionProbabilitiesAndWeights(beta));
         addExperienceCounter.increase();
     }
 
@@ -83,7 +87,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         return addExperienceCounter.getCount() % nofExperienceAddingBetweenProbabilitySetting == 0;
     }
 
-    public void updatePrioritizationSelectionProbabilitiesAndWeights() {
+    public void updatePrioritizationSelectionProbabilitiesAndWeights(double beta) {
         ExperiencePrioritizationSetter<S> prioritizationSetter =
                 new ExperiencePrioritizationSetter<>(buffer, prioritizationStrategy);
         ExperienceProbabilitySetter<S> probabilitySetter = new ExperienceProbabilitySetter<>(buffer, alpha);

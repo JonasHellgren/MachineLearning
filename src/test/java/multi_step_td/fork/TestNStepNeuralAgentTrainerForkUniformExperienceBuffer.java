@@ -1,7 +1,7 @@
 package multi_step_td.fork;
 
 import lombok.SneakyThrows;
-import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
@@ -40,7 +40,7 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
     AgentNeuralInterface<ForkVariables> agent;
     AgentForkNeural agentCasted;
     ForkEnvironment environment;
-    TestHelper<ForkVariables> helper;
+    ForkAndMazeHelper<ForkVariables> helper;
 
     @BeforeEach
     public void init() {
@@ -57,7 +57,7 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
         AgentInfo<ForkVariables> agentInfo=new AgentInfo<>(agent);
         printBufferSize();
 
-        double avgError = TestHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
+        double avgError = ForkAndMazeHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
         assertTrue(avgError < delta);
     }
 
@@ -104,7 +104,7 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
                 environment,
                 discountFactor,
                 netSettings);
-        helper=new TestHelper<>(agent, environment);
+        helper=new ForkAndMazeHelper<>(agent, environment);
         buildTrainer(nofEpisodes, startState, nofStepsBetween);
         trainer.train();
     }
