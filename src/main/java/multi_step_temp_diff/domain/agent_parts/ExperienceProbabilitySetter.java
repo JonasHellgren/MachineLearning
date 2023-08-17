@@ -8,6 +8,8 @@ import lombok.extern.java.Log;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import static java.lang.System.out;
+
 
 /*** Described more in detail in for example
  * https://paperswithcode.com/method/prioritized-experience-replay
@@ -34,14 +36,14 @@ public class ExperienceProbabilitySetter<S> {
     }
 
     private void divideEveryProbabilityWithSumOfProbabilities(double sumTerms) {
+        double oneDivSumTerms=1 / sumTerms;
         for (NstepExperience<S> experience:buffer) {
-            experience.probability = experience.probability/ sumTerms;
+            experience.probability = experience.probability*oneDivSumTerms;
         }
     }
 
-    private double getSumTerms() {
-        return buffer.stream().mapToDouble(e -> prioRaised.apply(e.probability,alpha)).sum();
+    public double getSumTerms() {
+        return buffer.stream().mapToDouble(e -> e.probability).sum();
     }
-
 
 }

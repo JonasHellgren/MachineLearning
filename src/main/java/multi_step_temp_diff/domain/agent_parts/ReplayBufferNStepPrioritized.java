@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static java.lang.System.out;
+import static org.jcodec.algo.SoundFilter.out;
+
 
 /***
  * Every experience is assigned a probability, if this probability is high it is more likely to be included in a
@@ -50,12 +53,12 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     final Counter addExperienceCounter=new Counter();
     final IntervalFinder intervalFinder=IntervalFinder.newNoArgumentCheck(new ArrayList<>());
 
-    public static <S> ReplayBufferNStepUniform<S> newDefault() {  //todo remove?
-        return ReplayBufferNStepUniform.<S>builder().build();
+    public static <S> ReplayBufferNStepPrioritized<S> newDefault() {  //todo remove?
+        return ReplayBufferNStepPrioritized.<S>builder().build();
     }
 
-    public static <S> ReplayBufferNStepUniform<S> newFromMaxSize(int maxSize) {
-        return ReplayBufferNStepUniform.<S>builder().maxSize(maxSize).build();
+    public static <S> ReplayBufferNStepPrioritized<S> newFromMaxSize(int maxSize) {
+        return ReplayBufferNStepPrioritized.<S>builder().maxSize(maxSize).build();
     }
 
     /***
@@ -69,9 +72,10 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
 
     @Override
     public void addExperience(NstepExperience<S> experience) {
-        removeRandomItemIfFull();
+        boolean isRemoved=removeRandomItemIfFull();
         buffer.add(experience);
-        Conditionals.executeIfTrue(isTimeToUpdate(), () ->  updatePrioritizationSelectionProbabilitiesAndWeights());
+        Conditionals.executeIfTrue(isTimeToUpdate() || isRemoved,
+                () ->  updatePrioritizationSelectionProbabilitiesAndWeights());
         addExperienceCounter.increase();
     }
 
@@ -96,7 +100,6 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
 
         List<Double> accumulatedProbabilities = getAccumulatedProbabilities(probabilities);
         intervalFinder.setInput(ListUtils.merge(List.of(0d),accumulatedProbabilities));
-
         List<Integer> indexes= IntStream.range(0,batchLength).boxed().map(i ->
         {
             double randomBetweenZeroAndOneToPointOutExperience = RandUtils.getRandomDouble(0, 1);
@@ -110,6 +113,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
     private static List<Double> getAccumulatedProbabilities(List<Double> probabilities) {
         RunningSum<Double> runningSum=new RunningSum<>(probabilities);
         List<Double> accumulatedProbabilities=runningSum.calculate();
+
         if (!MathUtils.compareDoubleScalars(ListUtils.findMax(accumulatedProbabilities).orElseThrow(),1d, TOLERANCE_PROB_ACCUM)) {
             log.warning("End element in accumulated experiences differs from one, it is = "
                     +ListUtils.findMax(accumulatedProbabilities).orElseThrow());
@@ -122,11 +126,13 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         return buffer.size();
     }
 
-    private void removeRandomItemIfFull() {
+    private boolean removeRandomItemIfFull() {
         if (size() >= maxSize) {
             int indexToRemove= RandUtils.getRandomIntNumber(0,size());
             buffer.remove(indexToRemove);
+            return true;
         }
+        return false;
     }
 
     @Override

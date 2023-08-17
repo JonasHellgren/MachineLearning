@@ -2,6 +2,7 @@ package multi_step_td.fork;
 
 import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -24,9 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Big batch seems to destabilize
  */
 
-public class TestNStepNeuralAgentTrainerFork {
+public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
     private static final int BATCH_SIZE = 10;
+    public static final int MAX_SIZE_BUFFER = 10_000;
     private static final int ONE_STEP = 1;
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
@@ -39,7 +41,6 @@ public class TestNStepNeuralAgentTrainerFork {
     AgentForkNeural agentCasted;
     ForkEnvironment environment;
     TestHelper<ForkVariables> helper;
-
 
     @BeforeEach
     public void init() {
@@ -161,6 +162,7 @@ public class TestNStepNeuralAgentTrainerFork {
                 .startStateSupplier(() -> ForkState.newFromPos(startPos))
                 .agentNeural(agent)
                 .environment(environment)
+                .buffer(ReplayBufferNStepUniform.newFromMaxSize(MAX_SIZE_BUFFER))
                 .build();
 
         System.out.println("buildTrainer");

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import multi_step_td.TestHelper;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepPrioritized;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
@@ -17,17 +18,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.neuroph.util.TransferFunctionType;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    private static final int BATCH_SIZE = 10;
-    private static final int ONE_STEP = 1;
-    private static final int NOF_EPIS = 100;
+    private static final int BATCH_SIZE = 30, NOF_EPIS = 100;
+    public static final int MAX_SIZE_BUFFER = 10_000;
+
     private static final int START_STATE = 0;
     public static final double LEARNING_RATE = 1e-1;
-    private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates();
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates(), NOF_NEURONS_HIDDEN = INPUT_SIZE;
+    public static final double DISCOUNT_FACTOR = 1.0;
+    public static final int NOF_EXPERIENCE_ADDING_BETWEEN_PROBABILITY_SETTING = 10;
 
     NStepNeuralAgentTrainer<ForkVariables> trainer;
     AgentNeuralInterface<ForkVariables> agent;
@@ -44,8 +49,8 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
     @Test
     @Tag("nettrain")
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
-        final double discountFactor = 1.0, delta = 2d;
-        buildAgent(discountFactor);
+        double delta = 2d;
+        buildAgent();
         buildTrainer();
         trainer.train();
 
@@ -59,7 +64,7 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
         assertTrue(avgError < delta);
     }
 
-    private void buildAgent(double discountFactor) {
+    private void buildAgent() {
         double minOut = ForkEnvironment.envSettings.rewardHell();
         double maxOut = ForkEnvironment.envSettings.rewardHeaven();
         NetSettings netSettings = NetSettings.builder()
@@ -67,10 +72,12 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
                 .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
                 .transferFunctionType(TransferFunctionType.TANH)
                 .minOut(minOut).maxOut(maxOut)
-                .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
+                .normalizer(new NormalizerMeanStd(List.of(10*minOut,10*maxOut,0d,0d,0d))).build();
+        //        .normalizer(new NormalizeMinMax(minOut*2,maxOut*2)).build();  //also works
+
         agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
                 environment,
-                discountFactor,
+                DISCOUNT_FACTOR,
                 netSettings);
     }
 
@@ -89,7 +96,10 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
                 .startStateSupplier(() -> ForkState.newFromPos(START_STATE))
                 .agentNeural(agent)
                 .environment(environment)
-                .buffer(ReplayBufferNStepPrioritized.newDefault())
+                .buffer(ReplayBufferNStepPrioritized.<ForkVariables>builder()
+                        .maxSize(MAX_SIZE_BUFFER)
+                        .nofExperienceAddingBetweenProbabilitySetting(NOF_EXPERIENCE_ADDING_BETWEEN_PROBABILITY_SETTING)
+                        .build())
                 .build();
     }
 
