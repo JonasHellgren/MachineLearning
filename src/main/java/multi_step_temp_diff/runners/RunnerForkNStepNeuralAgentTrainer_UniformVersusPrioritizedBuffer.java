@@ -24,11 +24,14 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 
+/***
+ * Mostly errorsPrioAvg is smaller than errorsUniformAvg
+ */
+
 public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 1;
     private static final int BATCH_SIZE = 30;
     private static final int NOF_EPIS = 100, MAX_TRAIN_TIME_IN_SEC = 55;
-    private static final int START_STATE = 0;
     private static final int LENGTH_WINDOW = 1000;
     private static final int DISCOUNT_FACTOR = 1;
 
@@ -37,6 +40,7 @@ public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
     public static final int NOF_HIDDEN_LAYERS = 2, NOF_NEURONS_HIDDEN = INPUT_SIZE;
     public static final double PROB_START = 0.1, PROB_END = 1e-5;
     public static final int MAX_VALUE_IN_PLOT = 5;
+    public static final int NOF_SAMPLES = 10;
 
     static NStepNeuralAgentTrainer<ForkVariables> trainer;
     static AgentNeuralInterface<ForkVariables> agent;
@@ -46,12 +50,10 @@ public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
 
     public static void main(String[] args) {
         environment = new ForkEnvironment();
-        //agent = AgentForkNeural.newWithDiscountFactor(environment, DISCOUNT_FACTOR);
-
         List<Double> errorsUniform = new ArrayList<>();
         List<Double> errorsPrio = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NOF_SAMPLES; i++) {
             buildAgent();
             buildTrainer(ReplayBufferNStepUniform.newDefault());
             trainer.train();
@@ -62,7 +64,7 @@ public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
             buildTrainer(ReplayBufferNStepPrioritized.<ForkVariables>builder()
                     .alpha(0.5).beta0(1.0)
                     .prioritizationStrategy(new PrioritizationProportional<>(0.01))
-                    .nofExperienceAddingBetweenProbabilitySetting(1)
+                    .nofExperienceAddingBetweenProbabilitySetting(10)
                     .build());
             trainer.train();
             plotTdError("Error prioritized");

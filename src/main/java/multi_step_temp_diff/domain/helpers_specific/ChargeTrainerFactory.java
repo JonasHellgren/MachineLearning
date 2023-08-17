@@ -41,6 +41,7 @@ public class ChargeTrainerFactory<S> {
                 .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY)
                 .nofEpis(nofEpis).maxTrainingTimeInMilliS(maxTrainingTimeInMilliS)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
+                .nofEpisodesBetweenLogs(10)
                 .build();
 
         return NStepNeuralAgentTrainer.<S>builder()
