@@ -50,7 +50,7 @@ public class CpuTimer {
     }
 
     public String toString() {
-        return "timeBudgetMillis = "+timeBudgetMillis+", relativeProgress = "+relativeProgress;
+        return "elapsed time in millis() = "+absoluteProgressInMillis()+", relativeProgress = "+relativeProgress();
     }
 
     public  String timeInMinutesAsString() {

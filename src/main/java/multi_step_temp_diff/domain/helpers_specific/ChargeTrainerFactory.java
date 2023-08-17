@@ -18,6 +18,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 @Builder
 public class ChargeTrainerFactory<S> {
 
+    public static final int NOF_EPIS_BETWEEN_LOGS = 100;
     @NonNull AgentNeuralInterface<S> agent;
     @NonNull EnvironmentInterface<S> environment;
 
@@ -34,6 +35,8 @@ public class ChargeTrainerFactory<S> {
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
     @Builder.Default
     int maxTrainingTimeInMilliS=Integer.MAX_VALUE;
+    @Builder.Default
+    int nofEpisodesBetweenLogs= NOF_EPIS_BETWEEN_LOGS;
 
     public NStepNeuralAgentTrainer<S> buildTrainer() {
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
@@ -41,7 +44,7 @@ public class ChargeTrainerFactory<S> {
                 .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY)
                 .nofEpis(nofEpis).maxTrainingTimeInMilliS(maxTrainingTimeInMilliS)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
-                .nofEpisodesBetweenLogs(10)
+                .nofEpisodesBetweenLogs(nofEpisodesBetweenLogs)
                 .build();
 
         return NStepNeuralAgentTrainer.<S>builder()
