@@ -219,7 +219,7 @@ påvisa isTimeToUpdate inte ställer till det  x
 - BUGG Runner på charge med prio buffer concurr mod exception  x
 - ReplayBufferFactory  x
 
-RunnerChargeHyperParameterOptimizerParallel
+RunnerChargeHyperParameterOptimizerParallel  x
 policy remove item full buffer
 prova target network
 statistic (mean, std, etc) TD error i exp replay buffer
