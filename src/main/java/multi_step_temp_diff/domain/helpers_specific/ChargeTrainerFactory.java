@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
@@ -37,6 +39,8 @@ public class ChargeTrainerFactory<S> {
     int maxTrainingTimeInMilliS=Integer.MAX_VALUE;
     @Builder.Default
     int nofEpisodesBetweenLogs= NOF_EPIS_BETWEEN_LOGS;
+    @NonNull
+    ReplayBufferInterface<S> buffer;
 
     public NStepNeuralAgentTrainer<S> buildTrainer() {
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
@@ -52,6 +56,7 @@ public class ChargeTrainerFactory<S> {
                 .startStateSupplier(startStateSupplier)
                 .agentNeural(agent)
                 .environment(environment)
+                .buffer(buffer)
                 .build();
     }
 

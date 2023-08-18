@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
+
 public class ChargePlotHelper {
 
     public  final int LENGTH_FILTER_WINDOW = 500;
@@ -29,6 +29,19 @@ public class ChargePlotHelper {
 
     AgentNeuralInterface<ChargeVariables> agent;
     NStepNeuralAgentTrainer<ChargeVariables> trainer;
+    String nameToAddInYLabel;
+
+
+    public ChargePlotHelper(AgentNeuralInterface<ChargeVariables> agent, NStepNeuralAgentTrainer<ChargeVariables> trainer) {
+        this(agent,trainer,"");
+    }
+    public ChargePlotHelper(AgentNeuralInterface<ChargeVariables> agent,
+                            NStepNeuralAgentTrainer<ChargeVariables> trainer,
+                            String nameToAddInYLabel) {
+        this.agent = agent;
+        this.trainer = trainer;
+        this.nameToAddInYLabel = nameToAddInYLabel;
+    }
 
     public  void plotV20MinusV11VersusSoC(int posB, double socB) {
         List<List<Pair<Double, Double>>> listOfPairs = new ArrayList<>();
@@ -59,7 +72,7 @@ public class ChargePlotHelper {
         AgentInfo<ChargeVariables> agentInfo = new AgentInfo<>(agent);
         List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_FILTER_WINDOW);
         List<Double> filteredAndClipped = filtered1.stream().map(n -> MathUtils.clip(n, 0, MAX_TD_ERROR_IN_PLOT)).toList();
-        plotTrajectory(filteredAndClipped, "Step", "TD error");
+        plotTrajectory(filteredAndClipped, "Step", "TD error"+nameToAddInYLabel);
 
     }
 

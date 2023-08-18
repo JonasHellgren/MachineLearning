@@ -41,7 +41,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     @NonNull AgentNeuralInterface<S> agentNeural;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
     @Builder.Default
-    ReplayBufferInterface<S> buffer=ReplayBufferNStepUniform.newFromMaxSize(MAX_SIZE_BUFFER);
+    ReplayBufferInterface<S> buffer= ReplayBufferNStepUniform.newFromMaxSize(MAX_SIZE_BUFFER);
 
     AgentInfo<S> agentInfo;
     NStepTDHelper<S> helper;
@@ -73,17 +73,11 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
-
-         //   helper.statesMap.keySet().forEach( t -> System.out.println(helper.statesMap.get(t)));
-
             logEpisode();
             helper.increaseEpisode();
             helper.updateSumRewardsTracker();
         }
         logFinishedTraining(timer);
-
-        //  System.out.println("buffer = " + buffer);
-
     }
 
     private boolean nofEpisodesOrTimeNotIsExceede(CpuTimer timer) {
