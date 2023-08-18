@@ -12,6 +12,8 @@ import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.factories.ReplayBufferFactory;
+import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +37,8 @@ public class ChargeTrainerExecutorHelper {
             int batchSize,
             int nofLayersHidden,
             int nofNeuronsHidden,
-            @NonNull
-            ReplayBufferInterface<ChargeVariables> buffer
+            @NonNull  String bufferType,
+            int bufferSize
     ) {
     }
 
@@ -54,10 +56,20 @@ public class ChargeTrainerExecutorHelper {
             ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
             evaluator.evaluate();
             trainerScoreMap.put(trainer, evaluator.getSumOfRewardAllScenarios());
-            out.println("evaluator = " + evaluator);
         }
         return trainerScoreMap;
     }
+
+    public  void printEvaluators(
+            List<NStepNeuralAgentTrainer<ChargeVariables>> trainers,
+            EnvironmentInterface<ChargeVariables> environment) {
+        for (NStepNeuralAgentTrainer<ChargeVariables> trainer : trainers) {
+            var evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, trainer.getAgentNeural());
+            evaluator.evaluate();
+            out.println("evaluator = " + evaluator);
+        }
+    }
+
 
     @NotNull
     public  List<NStepNeuralAgentTrainer<ChargeVariables>> runtTasksAndReturnResultingTrainers(
@@ -91,6 +103,11 @@ public class ChargeTrainerExecutorHelper {
         return ListUtils.findAverage(scores);
     }
 
+
+    /**
+     a trainer includes an agent, so the trainer object below shall be seen as a team of a trainer and an agent
+     */
+
     @NotNull
     public  Set<NStepNeuralAgentTrainer<ChargeVariables>> createTasks(ChargeEnvironmentSettings envSettingsForTraining) {
         ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
@@ -100,7 +117,7 @@ public class ChargeTrainerExecutorHelper {
         Set<NStepNeuralAgentTrainer<ChargeVariables>> tasks = new HashSet<>();
         for (int i = 0; i < settings.nofTasks; i++) {
             var agent = agentFactory.buildAgent(ChargeState.newDummy(), settings.nofLayersHidden, settings.nofNeuronsHidden);
-            ChargeTrainerFactory<ChargeVariables> trainerFactory = getTrainerFactory(stateSupplier, agent);
+            TrainerFactory<ChargeVariables> trainerFactory = getTrainerFactory(stateSupplier, agent);
             NStepNeuralAgentTrainer<ChargeVariables> nStepNeuralAgentTrainer = trainerFactory.buildTrainer();
             tasks.add(nStepNeuralAgentTrainer);
         }
@@ -111,6 +128,7 @@ public class ChargeTrainerExecutorHelper {
     public  void printBestAndAverageScore(String name,
                                           List<NStepNeuralAgentTrainer<ChargeVariables>> trainers) {
 
+        printEvaluators(trainers,environment);
         var bestTrainerAndItsScore = getBestTrainerAndItsScore(trainers);
         var trainerScoreMap = createTrainerEvaluationMap(trainers, environment);
         out.println(name +", best evaluation value = " + bestTrainerAndItsScore.orElseThrow().getValue());
@@ -128,16 +146,17 @@ public class ChargeTrainerExecutorHelper {
         bestTrainedAgentNeural.saveMemory(FOLDER_NETWORKS + FILENAME_CHARGE_BOTH_FREE_NET);
     }
 
-    public  ChargeTrainerFactory<ChargeVariables> getTrainerFactory(ChargeStateSuppliers stateSupplier,
-                                                                           AgentNeuralInterface<ChargeVariables> agent) {
+    public TrainerFactory<ChargeVariables> getTrainerFactory(ChargeStateSuppliers stateSupplier,
+                                                             AgentNeuralInterface<ChargeVariables> agent) {
 
-        return ChargeTrainerFactory.<ChargeVariables>builder()
+        ReplayBufferFactory<ChargeVariables> bufferFactory=new ReplayBufferFactory<>(settings.bufferType,settings.bufferSize);
+        return TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(settings.batchSize).startEndProb(START_END_PROB)
                 .nofEpis(settings.nofEpis).maxTrainingTimeInMilliS(1000 * settings.maxTrainTimeInSeconds)
                 .nofStepsBetweenUpdatedAndBackuped(settings.nofStepsBetweenUpdatedAndBackuped)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
-                .buffer(settings.buffer())
+                .buffer(bufferFactory.create())
                 .build();
     }
 

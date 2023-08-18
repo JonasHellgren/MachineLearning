@@ -1,13 +1,10 @@
-package multi_step_temp_diff.domain.helpers_specific;
+package multi_step_temp_diff.domain.factories;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
@@ -18,7 +15,7 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 
 
 @Builder
-public class ChargeTrainerFactory<S> {
+public class TrainerFactory<S> {
 
     public static final int NOF_EPIS_BETWEEN_LOGS = 100;
     @NonNull AgentNeuralInterface<S> agent;

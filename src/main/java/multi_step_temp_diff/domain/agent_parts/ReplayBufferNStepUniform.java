@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static it.unimi.dsi.fastutil.io.TextIO.BUFFER_SIZE;
+
 
 @Builder
 public class ReplayBufferNStepUniform<S> implements ReplayBufferInterface<S> {
 
-    private static final int BUFFER_SIZE = 10000;
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default

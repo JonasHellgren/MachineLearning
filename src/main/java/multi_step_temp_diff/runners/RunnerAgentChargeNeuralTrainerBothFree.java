@@ -7,6 +7,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 
@@ -46,7 +47,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
                 .build();
         agent = agentFactory.buildAgent(ChargeState.newDummy(), NOF_LAYERS_HIDDEN, NOF_NEURONS_HIDDEN);
 
-        ChargeTrainerFactory<ChargeVariables> trainerHelper = ChargeTrainerFactory.<ChargeVariables>builder()
+        TrainerFactory<ChargeVariables> trainerHelper = TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
                 .nofEpis(NOF_EPIS).maxTrainingTimeInMilliS(1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES)

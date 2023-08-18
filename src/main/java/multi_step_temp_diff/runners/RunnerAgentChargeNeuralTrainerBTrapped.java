@@ -1,5 +1,6 @@
 package multi_step_temp_diff.runners;
 
+import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
@@ -50,7 +51,7 @@ public class RunnerAgentChargeNeuralTrainerBTrapped {
                 .environment(environment).envSettings(envSettings)
                 .build();
         agent = agentFactory.buildAgent(ChargeState.newDummy(),NOF_LAYERS_HIDDEN,NOF_NEURONS_HIDDEN);
-        ChargeTrainerFactory<ChargeVariables> trainerHelper= ChargeTrainerFactory.<ChargeVariables>builder()
+        TrainerFactory<ChargeVariables> trainerHelper= TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .nofEpis(NOF_EPIS).nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.bTrappedAHasRandomSitePosAndRandomSoC())

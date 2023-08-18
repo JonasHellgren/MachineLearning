@@ -14,6 +14,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import java.util.*;
@@ -37,8 +38,6 @@ public class RunnerChargeHyperParameterOptimizer {
     static final Set<Integer> BATCH_SIZE_SET = ImmutableSet.of(30, 50);
     static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5, 10);
     static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 25);
-
-
 
     static AgentNeuralInterface<ChargeVariables> agent;
     static NStepNeuralAgentTrainer<ChargeVariables> trainer;
@@ -80,7 +79,7 @@ public class RunnerChargeHyperParameterOptimizer {
                     ChargeState.newDummy(),
                     parameterSetup.nofLayers(),
                     parameterSetup.nofNeuronsHidden());
-            ChargeTrainerFactory<ChargeVariables> trainerHelper = ChargeTrainerFactory.<ChargeVariables>builder()
+            TrainerFactory<ChargeVariables> trainerHelper = TrainerFactory.<ChargeVariables>builder()
                     .agent(agent).environment(environment)
                     .batchSize(parameterSetup.batchSize()).startEndProb(START_END_PROB)
                     .nofEpis(NOF_EPIS).maxTrainingTimeInMilliS(1000*MAX_TRAIN_TIME_IN_SEC)
@@ -89,8 +88,8 @@ public class RunnerChargeHyperParameterOptimizer {
                     .build();
             trainer = trainerHelper.buildTrainer();
             trainer.train();
-            evaluateAndPutInResultMapSumRewards(resultMapSumRewards, parameterSetup);
-            putInResultMapMeanTDerror(resultMapMeanTDerror, parameterSetup);
+            evaluateAndPutInResultMapSumRewards(resultMapSumRewards, parameterSetup,agent);
+            putInResultMapMeanTDerror(resultMapMeanTDerror, parameterSetup,trainer);
             counter.increase();
         }
 
@@ -98,12 +97,17 @@ public class RunnerChargeHyperParameterOptimizer {
         printResults(resultMapSumRewards,resultMapMeanTDerror);
     }
 
-    private static void putInResultMapMeanTDerror(Map<ParameterSetup, Double> resultMapMeanTDerror, ParameterSetup parameterSetup) {
+    private static void putInResultMapMeanTDerror(Map<ParameterSetup, Double> resultMapMeanTDerror,
+                                                  ParameterSetup parameterSetup,
+                                                  NStepNeuralAgentTrainer<ChargeVariables> trainer) {
         List<Double> valueHistory=trainer.getAgentInfo().getTemporalDifferenceTracker().getValueHistory();
         resultMapMeanTDerror.put(parameterSetup, ListUtils.findAverage(valueHistory).orElseThrow());
     }
 
-    private static void evaluateAndPutInResultMapSumRewards(Map<ParameterSetup, Double> resultMap, ParameterSetup parameterSetup) {
+    private static void evaluateAndPutInResultMapSumRewards(Map<ParameterSetup, Double> resultMap,
+                                                            ParameterSetup parameterSetup,
+                                                            AgentNeuralInterface<ChargeVariables> agent
+                                                            ) {
         ChargeScenariosEvaluator evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
         evaluator.evaluate();
         resultMap.put(parameterSetup, evaluator.getSumOfRewardAllScenarios());

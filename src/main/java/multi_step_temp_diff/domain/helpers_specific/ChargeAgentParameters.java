@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ChargeAgentParameters {
 
-    static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
-    static final int NOF_EPIS = 100;
+    public static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
+    public static final int NOF_EPIS = 100;
     public static final int BATCH_SIZE = 100, MAX_BUFFER_SIZE_EXPERIENCE_REPLAY = 100_000;
     public static final int MAX_NOF_STEPS_TRAINING = 100;
 

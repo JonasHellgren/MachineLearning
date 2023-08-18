@@ -44,8 +44,8 @@ public class SiteStateRules {
                 .filter(e -> e.getKey().test(state)).map(Map.Entry::getValue)
                 .toList();
         if (fcnList.size()>1) {
-            log.warning("state = " + state);
-            log.warning("Multiple matching rules, nof ="+fcnList.size());
+            log.fine("state = " + state);
+            log.fine("Multiple matching rules, nof ="+fcnList.size());
             int randRuleIndex= RandUtils.getRandomIntNumber(0,fcnList.size());
             return fcnList.get(randRuleIndex).get();
         }

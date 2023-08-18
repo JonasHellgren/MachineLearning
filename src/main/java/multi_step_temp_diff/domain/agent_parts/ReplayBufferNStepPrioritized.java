@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static it.unimi.dsi.fastutil.io.TextIO.BUFFER_SIZE;
 import static java.lang.System.out;
 import static org.jcodec.algo.SoundFilter.out;
 
@@ -32,7 +33,6 @@ import static org.jcodec.algo.SoundFilter.out;
 @Builder
 @Getter
 public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S> {
-    private static final int BUFFER_SIZE = 10000;
     public static final int NOF_STEPS_BETWEEN_SETTING_PROBABILITIES = 10;
     public static final double TOLERANCE_PROB_ACCUM = 1e-5;
     public static final double ALPHA = 0.5d;
