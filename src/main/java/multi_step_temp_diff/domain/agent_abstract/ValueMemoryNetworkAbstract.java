@@ -132,7 +132,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     @SneakyThrows
     @Override
     public NetworkMemoryInterface<S> copy() {
-        throw new NoSuchMethodException();
+        throw new NoSuchMethodException();  //throwing if not defined in concrete class
     }
 
     @Override

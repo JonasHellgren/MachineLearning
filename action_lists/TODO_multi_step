@@ -225,11 +225,14 @@ prova target network
 - bevisa ursprungkligt ej påverkas när moddar kopierad  x
 - kolla source target lika i copyWeights  x
 - copyWeights i interface - sliper då skapa nya  x
+- setValuesInExperiencesInMiniBatch använder backUpMinne
 - target netwoek i trainer
 - setValuesInExperiencesInMiniBatch - backup minne minne isf agent minne
 policy remove item full buffer
 statistic (mean, std, etc) TD error i exp replay buffer
 
+TestNStepNeuralAgentTrainerMaze fuckar ibland
+TestForkNeuralValueMemory fuckar
 AgentChargeNeural learn - ta bort addErrorsToHistory etc - onödig
 ChargeScenariosEvaluator<S> göra generisk
 mer till folder factories

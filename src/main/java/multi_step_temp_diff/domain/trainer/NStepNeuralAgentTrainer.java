@@ -7,11 +7,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
@@ -67,7 +69,8 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 executeIfTrue(isPossibleToGetExperience.test(helper.tau), () ->
                         buffer.addExperience(getExperienceAtTimeTau(),timer));
                 executeIfTrue(isEnoughItemsInBuffer.test(buffer.size(), settings), () -> {
-                    var miniBatch = getMiniBatch(buffer);
+                    var miniBatch = buffer.getMiniBatch(settings.batchSize());
+                    setValuesInExperiencesInMiniBatch(miniBatch,agentNeural.getMemory());
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
                     trackTempDifferenceError(miniBatch);
                 });
@@ -100,11 +103,11 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 isNotToManySteps.test(helper.timeCounter, settings.maxStepsInEpisode());
     }
 
-    private List<NstepExperience<S>> getMiniBatch(ReplayBufferInterface<S> buffer) {
+  /*  private List<NstepExperience<S>> getMiniBatch(ReplayBufferInterface<S> buffer) {
         var miniBatch = buffer.getMiniBatch(settings.batchSize());
-        setValuesInExperiencesInMiniBatch(miniBatch);
+       // setValuesInExperiencesInMiniBatch(miniBatch);
         return miniBatch;
-    }
+    }*/
 
     private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
         for (int i = 0; i < settings.nofIterations(); i++) { //todo remove
@@ -123,11 +126,13 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     }
 
 
-    private void setValuesInExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
+    private void setValuesInExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch, NetworkMemoryInterface<S> memory) {
         double discount = helper.getDiscount();
         for (NstepExperience<S> exp : miniBatch) {
             exp.value = (exp.isBackupStatePresent)
-                    ? exp.sumOfRewards + discount * agentNeural.readValue(exp.stateToBackupFrom)
+                    //? exp.sumOfRewards + discount * agentNeural.readValue(exp.stateToBackupFrom)
+                    ? exp.sumOfRewards + discount * memory.read(exp.stateToBackupFrom)
+
                     : exp.sumOfRewards;
         }
     }
