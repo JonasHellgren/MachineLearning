@@ -15,7 +15,8 @@ public record NStepNeuralAgentTrainerSettings(
         Double initValue,
         Integer maxBufferSize,
         Integer maxStepsInEpisode,
-        Integer nofEpisodesBetweenLogs
+        Integer nofEpisodesBetweenLogs,
+        Integer nofStepsBetweenTargetMemoryUpdate
 ) implements  NStepTabularTrainerSettingsInterface {
 
   //  private static final Double ALPHA = 0.5;
@@ -28,6 +29,7 @@ public record NStepNeuralAgentTrainerSettings(
     public static final Double INIT_VALUE = 0d;
     public static final Integer MAX_BUFFER_SIZE = 10_000;  //only applies if non-default buffer is created
     public static final int NOF_EPISODES_BETWEEN_LOGS = 100;
+    public static final int NOF_STEPS_TARGET_MEMORY_UPDATE = 100;
 
 
     public static NStepNeuralAgentTrainerSettings getDefault() {
@@ -44,7 +46,8 @@ public record NStepNeuralAgentTrainerSettings(
                                            Double initValue,
                                            Integer maxBufferSize,
                                            Integer maxStepsInEpisode,
-                                           Integer nofEpisodesBetweenLogs) {
+                                           Integer nofEpisodesBetweenLogs,
+                                           Integer nofStepsBetweenTargetMemoryUpdate) {
         this.nofStepsBetweenUpdatedAndBackuped = defaultIfNullInteger.apply(nofStepsBetweenUpdatedAndBackuped,N_DEFAULT);
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
         this.maxTrainingTimeInMilliS = defaultIfNullInteger.apply(maxTrainingTimeInMilliS,Integer.MAX_VALUE);
@@ -56,6 +59,8 @@ public record NStepNeuralAgentTrainerSettings(
         this.maxBufferSize = defaultIfNullInteger.apply(maxBufferSize,MAX_BUFFER_SIZE);
         this.maxStepsInEpisode = defaultIfNullInteger.apply(maxStepsInEpisode,Integer.MAX_VALUE);
         this.nofEpisodesBetweenLogs = defaultIfNullInteger.apply(nofEpisodesBetweenLogs, NOF_EPISODES_BETWEEN_LOGS);
+        this.nofStepsBetweenTargetMemoryUpdate =
+                defaultIfNullInteger.apply(nofStepsBetweenTargetMemoryUpdate, NOF_STEPS_TARGET_MEMORY_UPDATE);
 
     }
 }

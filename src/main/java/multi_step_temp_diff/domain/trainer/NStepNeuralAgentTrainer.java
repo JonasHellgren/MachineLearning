@@ -13,7 +13,6 @@ import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.helpers_common.NStepTDHelper;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
@@ -54,6 +53,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
         helper =  NStepTDHelper.newHelperFromSettings(settings,agentNeural.getAgentSettings());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
         CpuTimer timer=new CpuTimer(settings.maxTrainingTimeInMilliS());
+        NetworkMemoryInterface<S> memoryTarget= agentNeural.getMemory().copy();
 
         while (nofEpisodesOrTimeNotIsExceede(timer)) {
             agentNeural.setState(startStateSupplier.get());
@@ -70,9 +70,10 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                         buffer.addExperience(getExperienceAtTimeTau(),timer));
                 executeIfTrue(isEnoughItemsInBuffer.test(buffer.size(), settings), () -> {
                     var miniBatch = buffer.getMiniBatch(settings.batchSize());
-                    setValuesInExperiencesInMiniBatch(miniBatch,agentNeural.getMemory());
+                    setValuesInExperiencesInMiniBatch(miniBatch,memoryTarget);
                     trainAgentMemoryFromExperiencesInMiniBatch(miniBatch);
                     trackTempDifferenceError(miniBatch);
+                    maybeUpdateTargetMemory(memoryTarget);
                 });
                 helper.increaseTime();
             } while (isTimeForUpdateOkAndNotToLargeTime());
@@ -81,6 +82,11 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
             helper.updateSumRewardsTracker();
         }
         logFinishedTraining(timer);
+    }
+
+    private  void maybeUpdateTargetMemory(NetworkMemoryInterface<S> memoryTarget) {
+        executeIfTrue(helper.getTime() % settings.nofStepsBetweenTargetMemoryUpdate() == 0 , () ->
+        memoryTarget.copyWeights(agentNeural.getMemory()));
     }
 
     private boolean nofEpisodesOrTimeNotIsExceede(CpuTimer timer) {

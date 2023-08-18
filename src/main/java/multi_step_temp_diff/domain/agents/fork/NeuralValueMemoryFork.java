@@ -1,5 +1,8 @@
 package multi_step_temp_diff.domain.agents.fork;
 
+import lombok.SneakyThrows;
+import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.domain.agents.charge.NeuralValueMemoryCharge;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
@@ -55,5 +58,13 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S>  {
     public void load(String fileName) {
         super.load(fileName);
     }
+
+    @Override
+    public NetworkMemoryInterface<S> copy() {
+        ValueMemoryNetworkAbstract<S> netCopy=new NeuralValueMemoryFork<>(this.netSettings);
+        netCopy.copyWeights(this);
+        return netCopy;
+    }
+
 
 }

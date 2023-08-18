@@ -226,8 +226,9 @@ prova target network
 - kolla source target lika i copyWeights  x
 - copyWeights i interface - sliper då skapa nya  x
 - setValuesInExperiencesInMiniBatch använder backUpMinne
-- target netwoek i trainer
-- setValuesInExperiencesInMiniBatch - backup minne minne isf agent minne
+- target netwoek i trainer  x
+- setValuesInExperiencesInMiniBatch - backup minne minne isf agent minne x
+oxå optimerra BUFFER_MAX_SIZE
 policy remove item full buffer
 statistic (mean, std, etc) TD error i exp replay buffer
 
