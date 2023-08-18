@@ -14,11 +14,13 @@ public class ChargeAgentParameters {
 
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
     public static final double LEARNING_RATE = 0.01;
+    public static final int NOF_LAYERS = 5;
+    public static final int NOF_NEURONS_HIDDEN = 30;
     public static final double DISCOUNT_FACTOR = 0.99;
     public static final double MOMENTUM = 0.01d;
 
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;
-    public static final NormalizerMeanStd NORMALIZER_ONEDOTONE =
+    public static final NormalizerMeanStd NORMALIZER_CHARGE_INPUT_ONEDOTONE =
             new NormalizerMeanStd(List.of(0.3, 0.5, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d, 1.1d));
     public static final int TRAP_POS = 29; //trap
     public static final List<Double> CHARGE_REWARD_VALUES_EXCEPT_FAIL = List.of(0d, -1d, -2d, 0d, -1d, 0d);

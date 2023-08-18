@@ -43,7 +43,7 @@ public class ChargeAgentFactory {
                         new HotEncodingSoCAtOccupiedElseValue(
                                 agentSettings,
                                 envSettings,
-                                NORMALIZER_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
+                                NORMALIZER_CHARGE_INPUT_ONEDOTONE, VALUE_IF_NOT_OCCUPIED))
                 .build();
 
         ChargeAgentNeuralHelper helper = ChargeAgentNeuralHelper.builder()

@@ -29,8 +29,8 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 
 @Log
 public class RunnerChargeHyperParameterOptimizer {
-    public static final int NOF_TASKS = 10;
-    private static final int NOF_EPIS = 10, MAX_TRAIN_TIME_IN_SECONDS = 10 * 60;  //one will limit
+    public static final int NOF_TASKS = 16;
+    private static final int NOF_EPIS = 10_000, MAX_TRAIN_TIME_IN_SECONDS = 3 * 60;  //one will limit
     public static final String BUFFER_TYPE = "Uniform";  //"Prioritized"
 
     record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden) {
@@ -88,6 +88,8 @@ public class RunnerChargeHyperParameterOptimizer {
             executorService.shutdown();
         }
 
+        out.println("resultMapMeanTDerror.size() = " + resultMapMeanTDerror.size());
+
         out.println("Time in minutes = " + timer.timeInMinutesAsString());
         printResults(resultMapSumRewards,resultMapMeanTDerror);
     }
@@ -123,6 +125,7 @@ public class RunnerChargeHyperParameterOptimizer {
                                                   NStepNeuralAgentTrainer<ChargeVariables> trainer) {
         List<Double> valueHistory=trainer.getAgentInfo().getTemporalDifferenceTracker().getValueHistory();
         double averageTdError = ListUtils.findAverage(valueHistory).orElseThrow();
+        resultMapMeanTDerror.putIfAbsent(parameterSetup,List.of(averageTdError));
         resultMapMeanTDerror.computeIfPresent(parameterSetup, (p,list) -> ListUtils.merge(List.of(averageTdError),list) );
     }
 
@@ -130,20 +133,21 @@ public class RunnerChargeHyperParameterOptimizer {
 
     private static void printResults(Map<ParameterSetup, List<Double>> resultMapSumRewards,
                                      Map<ParameterSetup, List<Double>> resultMapMeanTDError) {
-        out.println("Non sorted results resultMapSumRewards" );
+
+
+        out.println("Non sorted results resultMapMeanTD -------------------" );
+        List<Pair<ParameterSetup, Double>> meanTdErrPairs = getPairs(resultMapMeanTDError);
+        meanTdErrPairs.forEach(out::println);
+
+        out.println("Non sorted results resultMapSumRewards ------------------- " );
         List<Pair<ParameterSetup, Double>> sumRewardPairs = getPairs(resultMapSumRewards);
         sumRewardPairs.forEach(out::println);
 
-        out.println("Non sorted results resultMapMeanTD" );
-        List<Pair<ParameterSetup, Double>> meanTdErrPairs = getPairs(resultMapMeanTDError);
-
-        meanTdErrPairs.forEach(out::println);
-
-        out.println("Sorted results resultMapSumRewards");
-        sortAndPrintListOfPairs(sumRewardPairs);
-
-        out.println("Sorted results resultMapMeanTDError");
+        out.println("Sorted results resultMapMeanTDError -------------------");
         sortAndPrintListOfPairs(meanTdErrPairs);
+
+        out.println("Sorted results resultMapSumRewards -------------------");
+        sortAndPrintListOfPairs(sumRewardPairs);
 
     }
 

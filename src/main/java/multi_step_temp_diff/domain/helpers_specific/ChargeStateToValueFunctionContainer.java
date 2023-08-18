@@ -36,4 +36,6 @@ public class ChargeStateToValueFunctionContainer {
 
     public Function<ChargeState, Double> fixedAtZero =(s) -> 0d;
 
+    public Function<ChargeState, Double> fixedAtMinusTen =(s) -> -10d;
+
 }

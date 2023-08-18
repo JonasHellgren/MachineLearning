@@ -89,9 +89,11 @@ public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
         AgentInfo<ForkVariables> agentInfo = new AgentInfo<>(agent);
         List<List<Double>> listOfTrajectories = new ArrayList<>();
         List<Double> filtered1 = agentInfo.getFilteredTemporalDifferenceList(LENGTH_WINDOW);
-        List<Double> filteredAndClipped = filtered1.stream().mapToDouble(n -> MathUtils.clip(n, 0, MAX_VALUE_IN_PLOT)).boxed().toList();
+        List<Double> filteredAndClipped = filtered1.stream()
+                .mapToDouble(n -> MathUtils.clip(n, 0, MAX_VALUE_IN_PLOT)).boxed().toList();
         listOfTrajectories.add(filteredAndClipped);
-        PlotterMultiplePanelsTrajectory plotter = new PlotterMultiplePanelsTrajectory(Collections.singletonList(yTitle), "Step");
+        PlotterMultiplePanelsTrajectory plotter =
+                new PlotterMultiplePanelsTrajectory(Collections.singletonList(yTitle), "Step");
         plotter.plot(listOfTrajectories);
     }
 

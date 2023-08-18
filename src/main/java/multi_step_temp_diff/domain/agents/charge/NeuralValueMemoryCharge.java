@@ -1,5 +1,6 @@
 package multi_step_temp_diff.domain.agents.charge;
 
+import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
@@ -20,6 +21,14 @@ public class NeuralValueMemoryCharge<S> extends ValueMemoryNetworkAbstract<S>  {
         ChargeState stateCasted = (ChargeState) state;
         return inputVectorSetterCharge.defineInArray(stateCasted);
     }
+
+    @Override
+    public NetworkMemoryInterface<S> copy() {
+        ValueMemoryNetworkAbstract<S> netCopy=new NeuralValueMemoryCharge<>(this.netSettings,inputVectorSetterCharge);
+        netCopy.copyWeights(this);
+        return netCopy;
+    }
+
 
 
 

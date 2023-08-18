@@ -3,10 +3,13 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.Conditionals;
 import common.MathUtils;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
+import org.neuroph.core.Layer;
+import org.neuroph.core.Neuron;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -21,6 +24,7 @@ import java.util.List;
 public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
     private static final double MAX_ERROR = 0.00001;
     private static final int NOF_ITERATIONS = 1;
+    public static final String NON_EQUAL_NETS_WHEN_COPYING_WEIGHT = "Non equal nets when copying weight";
 
     public MultiLayerPerceptron neuralNetwork;
     public MomentumBackpropagation learningRule;
@@ -43,7 +47,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         normalizer = netSettings.normalizer();
         isWarmedUp = false;
     }
-
 
     public abstract double[] getInputVec(StateInterface<S> state);
 
@@ -124,7 +127,39 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
         neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
         //    neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.load(fileName);
 
+    }
 
+    @SneakyThrows
+    @Override
+    public NetworkMemoryInterface<S> copy() {
+        throw new NoSuchMethodException();
+    }
+
+    @Override
+    public void copyWeights(NetworkMemoryInterface<S> netOther) {
+        ValueMemoryNetworkAbstract<S> netOtherCasted=(ValueMemoryNetworkAbstract<S>) netOther;
+
+        if (this.neuralNetwork.getLayersCount()!=netOtherCasted.neuralNetwork.getLayersCount()) {
+            throw new IllegalArgumentException(NON_EQUAL_NETS_WHEN_COPYING_WEIGHT);
+        }
+
+        for (int i = 0; i < this.neuralNetwork.getLayersCount(); i++) {
+            Layer targetLayer = this.neuralNetwork.getLayerAt(i);
+            Layer sourceLayer = netOtherCasted.neuralNetwork.getLayerAt(i);
+
+            if (sourceLayer.getNeuronsCount()!=targetLayer.getNeuronsCount()) {
+                throw new IllegalArgumentException(NON_EQUAL_NETS_WHEN_COPYING_WEIGHT);
+            }
+            for (int j = 0; j < sourceLayer.getNeuronsCount(); j++) {
+                Neuron sourceNeuron = sourceLayer.getNeuronAt(j);
+                Neuron targetNeuron = targetLayer.getNeuronAt(j);
+
+                for (int k = 0; k < sourceNeuron.getWeights().length; k++) {
+                    double weight = sourceNeuron.getWeights()[k].getValue();
+                    targetNeuron.getWeights()[k].setValue(weight);
+                }
+            }
+        }
     }
 
 

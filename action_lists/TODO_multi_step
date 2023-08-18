@@ -220,12 +220,19 @@ påvisa isTimeToUpdate inte ställer till det  x
 - ReplayBufferFactory  x
 
 RunnerChargeHyperParameterOptimizerParallel  x
-policy remove item full buffer
 prova target network
+- test kopiera nätverk x
+- bevisa ursprungkligt ej påverkas när moddar kopierad  x
+- kolla source target lika i copyWeights  x
+- copyWeights i interface - sliper då skapa nya  x
+- target netwoek i trainer
+- setValuesInExperiencesInMiniBatch - backup minne minne isf agent minne
+policy remove item full buffer
 statistic (mean, std, etc) TD error i exp replay buffer
 
 AgentChargeNeural learn - ta bort addErrorsToHistory etc - onödig
 ChargeScenariosEvaluator<S> göra generisk
+mer till folder factories
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor

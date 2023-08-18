@@ -104,6 +104,9 @@ public class TestAgentNeuralChargeMockedData {
 
     }
 
+
+
+
     @Test
     @Tag("nettrain")
     public void givenRuleBasedValue_whenTrain_thenCorrect() {

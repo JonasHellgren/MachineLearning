@@ -7,7 +7,10 @@ import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
+import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
+
+import java.util.function.Function;
 
 @Builder
 public class ChargeAgentNeuralHelper {
@@ -38,13 +41,24 @@ public class ChargeAgentNeuralHelper {
     }
 
     public void resetAgentMemory(ChargeEnvironmentSettings settings, int bufferSize, long timeBudget) {
-        int dummy = 0;
         ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(settings);
-        ChargeStateToValueFunctionContainer container= new ChargeStateToValueFunctionContainer(lambdas,settings, dummy);
-        ChargeMockedReplayBufferCreator bufferCreator= ChargeMockedReplayBufferCreator.builder()
-                .bufferSize(bufferSize).envSettings(settings).stateToValueFunction(container.fixedAtZero)
-                .build();
+        ChargeStateToValueFunctionContainer container= new ChargeStateToValueFunctionContainer(lambdas,settings, 0);
+        setAgentMemory(settings,bufferSize,timeBudget,container.fixedAtZero);
+    }
 
+    public void setAgentMemoryToOne(ChargeEnvironmentSettings settings, int bufferSize, long timeBudget) {
+        ChargeEnvironmentLambdas lambdas=new ChargeEnvironmentLambdas(settings);
+        ChargeStateToValueFunctionContainer container= new ChargeStateToValueFunctionContainer(lambdas,settings, 0);
+        setAgentMemory(settings,bufferSize,timeBudget,container.fixedAtMinusTen);
+    }
+
+    public void setAgentMemory(ChargeEnvironmentSettings settings,
+                               int bufferSize,
+                               long timeBudget,
+                               Function<ChargeState, Double> function) {
+        ChargeMockedReplayBufferCreator bufferCreator= ChargeMockedReplayBufferCreator.builder()
+                .bufferSize(bufferSize).envSettings(settings).stateToValueFunction(function)
+                .build();
         ReplayBufferNStepUniform<ChargeVariables> buffer=bufferCreator.createExpReplayBuffer();
         trainAgentTimeBudget(buffer,timeBudget);
     }
