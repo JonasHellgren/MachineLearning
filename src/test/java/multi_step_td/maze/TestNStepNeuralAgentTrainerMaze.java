@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestNStepNeuralAgentTrainerMaze {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 3;
-    private static final int BATCH_SIZE = 50, BUFFER_SIZE_MAX = 100;
+    private static final int BATCH_SIZE = 50, BUFFER_SIZE_MAX = 1000;
     private static final int NOF_EPIS = 500;
     public static final List<MazeState> STATES_LIST = MazeHelper.STATES_MAZE_UPPER;
     public static final HashSet<StateInterface<MazeVariables>> STATE_SET = new HashSet<>(STATES_LIST);
@@ -85,7 +85,6 @@ public class TestNStepNeuralAgentTrainerMaze {
                 .discountFactor(DISCOUNT_FACTOR).learningRate(LEARNING_RATE)
                 .build();
         agent=new AgentMazeNeural(environment,agentSettings);
-
 
         var settings= NStepNeuralAgentTrainerSettings.builder()
                 .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)

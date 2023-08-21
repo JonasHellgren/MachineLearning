@@ -7,6 +7,7 @@ import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
+import multi_step_temp_diff.domain.helpers_specific.MazeStateValuePrinter;
 import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
@@ -15,7 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -109,8 +113,10 @@ public class TestNStepTabularAgentTrainerMaze {
     }
 
     public void printStateValues(List<MazeState> states, Map<StateInterface<MazeVariables>, Double> stateMap ) {
+        DecimalFormat formatter = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
         for (MazeState state:states) {
-            System.out.println("State = "+state+", value = "+stateMap.get(state));
+            Double value = stateMap.get(state);
+            System.out.println("State = "+state+", value = "+ formatter.format(value));
         }
     }
 

@@ -22,7 +22,6 @@ import java.util.List;
 @Getter
 @Log
 public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
-    private static final double MAX_ERROR = 0.00001;
     private static final int NOF_ITERATIONS = 1;
     public static final String NON_EQUAL_NETS_WHEN_COPYING_WEIGHT = "Non equal nets when copying weight";
 

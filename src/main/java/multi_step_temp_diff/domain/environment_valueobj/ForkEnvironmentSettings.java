@@ -25,7 +25,7 @@ public record ForkEnvironmentSettings(
                 .build();
     }
 
-    public  ForkEnvironmentSettings getWithRewardHell(double rewardHell) {
+    public  ForkEnvironmentSettings getWithRewardHellAs(double rewardHell) {
         return ForkEnvironmentSettings.builder()
                 .rewardHeaven(rewardHeaven()).rewardHell(rewardHell).rewardMove(rewardMove)
                 .nofActions(nofActions).nofStates(nofStates)

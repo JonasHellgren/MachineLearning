@@ -22,13 +22,15 @@ import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
  *
  * defaultavgError typ noll när reward hell equal to heaven
  *
+ * TD error för default konvergerar bättre för litet discount factor - typ 0.7
+ *
  */
 
 public class RunnerForkNStepNeuralAgentTrainerChangedRewardHell {
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     private static final int BATCH_SIZE = 30;
-    private static final int NOF_EPIS = 1000, MAX_TRAIN_TIME_IN_SEC = 55;
-    private static final double DISCOUNT_FACTOR = 1;
+    private static final int NOF_EPIS = 1000, MAX_TRAIN_TIME_IN_SEC = 60*60;
+    private static final double DISCOUNT_FACTOR = 1.0;
     public static final double LEARNING_RATE = 1e-2;
     public static final int NOF_HIDDEN_LAYERS = 2;
     public static final double PROB_START = 0.1, PROB_END = 1e-5;
@@ -36,22 +38,22 @@ public class RunnerForkNStepNeuralAgentTrainerChangedRewardHell {
     static ForkEnvironment environment;
 
     public static void main(String[] args) {
-        ForkEnvironmentSettings envSettings =ForkEnvironmentSettings.getDefault();
+        var envSettings =ForkEnvironmentSettings.getDefault();
         environment = new ForkEnvironment(envSettings);
 
         String type = "- default";
         environment.setEnvSettings(envSettings);
-        AgentForkNeural agent = getAgent(envSettings);
-        NStepNeuralAgentTrainer<ForkVariables> trainer = getTrainer(agent);
+        var agent = getAgent(envSettings);
+        var trainer = getTrainer(agent);
         trainer.train();
         plotAndPrintStatesAndAverageValueError(agent, type);
 
         type = "- reward hell equal to heaven";
-        environment.setEnvSettings(envSettings.getWithRewardHell(envSettings.rewardHeaven()));
+        environment.setEnvSettings(envSettings.getWithRewardHellAs(envSettings.rewardHeaven()));
         agent = getAgent(envSettings);
         trainer = getTrainer(agent);
-        trainer.train();
-        plotAndPrintStatesAndAverageValueError(agent,type);
+        //trainer.train();
+        //plotAndPrintStatesAndAverageValueError(agent,type);
     }
 
     private static void plotAndPrintStatesAndAverageValueError(AgentForkNeural agent, String type) {
@@ -59,9 +61,7 @@ public class RunnerForkNStepNeuralAgentTrainerChangedRewardHell {
         stateValuePrinter.printStateValues();
         AgentInfo<ForkVariables> agentInfo=new AgentInfo<>(agent);
         ForkHelper helper=new ForkHelper(environment);
-
         helper.plotTdError(agent,"TD error"+ type);
-
         double avgError = helper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
         System.out.println(type+"avgError = " + avgError);
     }

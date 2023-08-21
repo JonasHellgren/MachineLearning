@@ -1,6 +1,7 @@
 package multi_step_temp_diff.runners;
 
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
+import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
@@ -47,14 +48,15 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
                 .build();
         agent = agentFactory.buildAgent(ChargeState.newDummy(), NOF_LAYERS_HIDDEN, NOF_NEURONS_HIDDEN);
 
-        TrainerFactory<ChargeVariables> trainerHelper = TrainerFactory.<ChargeVariables>builder()
+        TrainerFactory<ChargeVariables> trainerFactory = TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
                 .nofEpis(NOF_EPIS).maxTrainingTimeInMilliS(1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
+                .buffer(ReplayBufferNStepUniform.newFromMaxSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY))
                 .build();
-        trainer = trainerHelper.buildTrainer();
+        trainer = trainerFactory.buildTrainer();
         trainer.train();
         ChargePlotHelper plotHelper=new ChargePlotHelper(agent,trainer);
         plotHelper.doMultiplePlots(envSettings);
