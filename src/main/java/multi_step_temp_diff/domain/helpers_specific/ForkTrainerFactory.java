@@ -14,6 +14,7 @@ import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSetti
 @Builder
 public class ForkTrainerFactory {
 
+    public static final int NOF_EPISODES_BETWEEN_LOGS = 500;
     AgentNeuralInterface<ForkVariables> agent;
     @NonNull ForkEnvironment environment;
     @NonNull Double probStart = 0.1;
@@ -35,6 +36,7 @@ public class ForkTrainerFactory {
                 .nofEpis(nofEpis)
                 .maxTrainingTimeInMilliS(1000 * maxTrainingTimeInSeconds)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)
+                .nofEpisodesBetweenLogs(NOF_EPISODES_BETWEEN_LOGS)
                 .build();
 
         return NStepNeuralAgentTrainer.<ForkVariables>builder()
