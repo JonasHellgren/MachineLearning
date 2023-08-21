@@ -3,7 +3,8 @@ package multi_step_td.fork;
 import common.RandUtils;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
-import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
+import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
+import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
@@ -28,7 +29,7 @@ public class TestAgentNeuralFork {
     private static final int DELTA = 2;
     AgentNeuralInterface<ForkVariables> agent;
     AgentForkNeural agentCasted;
-    ForkAndMazeHelper<ForkVariables> helper;
+    MazeHelper<ForkVariables> helper;
     ForkEnvironment environment;
     ForkEnvironmentSettings envSettings;
 
@@ -37,7 +38,7 @@ public class TestAgentNeuralFork {
         environment = new ForkEnvironment();
         agent= AgentForkNeural.newDefault(environment);
         agentCasted=(AgentForkNeural) agent;
-        helper=new ForkAndMazeHelper<>(agent, environment);
+        helper=new MazeHelper<>(agent, environment);
         envSettings=environment.envSettings;
     }
 
@@ -51,7 +52,7 @@ public class TestAgentNeuralFork {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
 
-        helper.printStateValues();
+       printStates();
         StateAsserter  stateAsserter=new StateAsserter<>(agent,environment);
         stateAsserter.assertAllStates(value, DELTA);
     }
@@ -70,5 +71,9 @@ public class TestAgentNeuralFork {
         return batch;
     }
 
+    private void printStates() {
+        StateValuePrinter<ForkVariables> stateValuePrinter=new StateValuePrinter<>(agent,environment);
+        stateValuePrinter.printStateValues();
+    }
 
 }

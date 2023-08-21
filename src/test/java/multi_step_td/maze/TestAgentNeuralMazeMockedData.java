@@ -2,7 +2,8 @@ package multi_step_td.maze;
 
 import common.RandUtils;
 import multi_step_td.helpers.StateAsserter;
-import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
+import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
+import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
@@ -31,7 +32,7 @@ public class TestAgentNeuralMazeMockedData {
     public static final double LEARNING_RATE = 5e-1;
     AgentNeuralInterface<MazeVariables> agent;
     AgentMazeNeural agentCasted;
-    ForkAndMazeHelper<MazeVariables> helper;
+    MazeHelper<MazeVariables> helper;
     MazeEnvironment environment;
 
     Function<StateInterface<MazeVariables>,Double>  sumXy=(s) ->
@@ -46,7 +47,7 @@ public class TestAgentNeuralMazeMockedData {
         agent=new AgentMazeNeural(environment,agentSettings);
 
         agentCasted=(AgentMazeNeural) agent;
-        helper=new ForkAndMazeHelper<>(agent, environment);
+        helper=new MazeHelper<>(agent, environment);
     }
 
     @Test
@@ -58,7 +59,8 @@ public class TestAgentNeuralMazeMockedData {
             agent.learn(buffer.getMiniBatch(BATCH_LENGTH));
         }
 
-        helper.printStateValues();
+        StateValuePrinter<MazeVariables> stateValuePrinter=new StateValuePrinter<>(agent,environment);
+        stateValuePrinter.printStateValues();
 
         StateAsserter<MazeVariables> stateAsserter=new StateAsserter<>(agent,environment);
         stateAsserter.assertAllStates(sumXy, DELTA);

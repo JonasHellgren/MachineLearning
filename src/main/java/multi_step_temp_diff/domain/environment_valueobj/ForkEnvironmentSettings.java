@@ -25,4 +25,13 @@ public record ForkEnvironmentSettings(
                 .build();
     }
 
+    public  ForkEnvironmentSettings getWithRewardHell(double rewardHell) {
+        return ForkEnvironmentSettings.builder()
+                .rewardHeaven(rewardHeaven()).rewardHell(rewardHell).rewardMove(rewardMove)
+                .nofActions(nofActions).nofStates(nofStates)
+                .posHeaven(posHeaven).posHell(posHell).posSplit(posSplit).posStartHell(posStartHell)
+                .posStartHeaven(posStartHeaven).posAfterStartHell(posAfterStartHell)
+                .build();
+    }
+
 }

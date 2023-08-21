@@ -234,6 +234,7 @@ prova target network
 - studera olika discount rate och nof steps between i fork
 - om hell ger samma reward - noll td error
 - stor nof steps between skall ge noll error i fork - ingen backup- varför ökar MeanTDErrormed steps between
+- förstå NetSettings minOut(minOut).maxOut(maxOut)
 - oxå optimerra BUFFER_MAX_SIZE, DISCOUNT _RATE
 
 

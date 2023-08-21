@@ -2,13 +2,16 @@ package multi_step_td.fork;
 
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
-import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
+import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
+import multi_step_temp_diff.domain.helpers_specific.ForkTrainerFactory;
+import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.helpers_specific.ForkHelper;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
@@ -56,8 +59,9 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
     public void givenDiscountFactorOne_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 1.0, delta = 2d;
         setAgentAndTrain(discountFactor, NOF_EPIS*2, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
-        ForkAndMazeHelper<ForkVariables> helper=new ForkAndMazeHelper<>(agent,environment);
-        helper.printStateValues();
+        ForkHelper helper=new ForkHelper(environment);
+
+        printStates();
         AgentInfo<ForkVariables> agentInfo=new AgentInfo<>(agent);
         printBufferSize();
 
@@ -66,14 +70,14 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
     }
 
 
+
     @Test
     @Tag("nettrain")
     public void givenDiscountFactorDot9_whenTrained_thenCorrectStateValues() {
         final double discountFactor = 0.9, delta = 3d;
         setAgentAndTrain(discountFactor, NOF_EPIS, START_STATE, NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED);
 
-        ForkAndMazeHelper<ForkVariables> helper=new ForkAndMazeHelper<>(agent,environment);
-        helper.printStateValues();
+        printStates();
 
         final double rHeaven = envSettings.rewardHeaven(),  rHell = envSettings.rewardHell();
         assertEquals(Math.pow(discountFactor,10-7)* rHeaven,agentCasted.getMemory().read(ForkState.newFromPos(7)), delta);
@@ -91,9 +95,8 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
         final int nofEpisodes=BATCH_SIZE*10, startPos = 9;
         setAgentAndTrain(discountFactor, nofEpisodes, startPos, ONE_STEP);
         printBufferSize();
+        printStates();
 
-        ForkAndMazeHelper<ForkVariables> helper=new ForkAndMazeHelper<>(agent,environment);
-        helper.printStateValues();
         final double delta = 1d;
         assertEquals(envSettings.rewardHeaven(),agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
@@ -108,8 +111,7 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
 
         printBufferSize();
 
-        ForkAndMazeHelper<ForkVariables> helper=new ForkAndMazeHelper<>(agent,environment);
-        helper.printStateValues();
+        printStates();
         final double delta = 1d;
         assertEquals(envSettings.rewardHeaven()*discountFactor,
                 agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
@@ -135,6 +137,11 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
 
     }
 
+
+    private void printStates() {
+        StateValuePrinter<ForkVariables> stateValuePrinter=new StateValuePrinter<>(agent,environment);
+        stateValuePrinter.printStateValues();
+    }
 
     private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
         double minOut = envSettings.rewardHell();

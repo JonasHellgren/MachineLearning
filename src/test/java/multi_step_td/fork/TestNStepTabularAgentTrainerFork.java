@@ -2,7 +2,9 @@ package multi_step_td.fork;
 
 
 import lombok.SneakyThrows;
-import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkHelper;
+import multi_step_temp_diff.domain.helpers_specific.ForkTrainerFactory;
+import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -42,7 +44,7 @@ public class TestNStepTabularAgentTrainerFork {
 
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        ForkAndMazeHelper<ForkVariables>  helper=new ForkAndMazeHelper<>(agent, environment);
+        ForkHelper helper=new ForkHelper(environment);
         double avgErrOne= helper.avgErrorFork(mapOneStep);
 
         agent.clear();
