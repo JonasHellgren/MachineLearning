@@ -15,12 +15,12 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 
 @Log
 public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
-    public static final int NOF_TASKS = 10;
-    private static final int NOF_EPIS = 1000, MAX_TRAIN_TIME_IN_SECONDS = 2 * 60;  //one will limit
+    public static final int NOF_TASKS = 16;  //lets no core be lazy
+    private static final int NOF_EPIS = 10_000, MAX_TRAIN_TIME_IN_SECONDS = 100 * 60;  //one will limit
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
-    public static final int BATCH_SIZE1 = 30;
-    public static final int NOF_LAYERS_HIDDEN = 10;
-    public static final int NOF_NEURONS_HIDDEN = 15;
+    public static final int BATCH_SIZE1 = 100;
+    public static final int NOF_LAYERS_HIDDEN = 5;
+    public static final int NOF_NEURONS_HIDDEN = 27;
 
     static EnvironmentInterface<ChargeVariables> environment;
 

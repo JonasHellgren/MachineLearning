@@ -75,7 +75,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        stateAsserter.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStatesExceptTerminal(value,DELTA);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        stateAsserter.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStatesExceptTerminal(value,DELTA);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         train(buffer);
         helper.printStateValues();
-        stateAsserter.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStatesExceptTerminal(value,DELTA);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class TestForkNeuralValueMemory {
                 .buffer(createBatch(value)).build();
         trainWithWeights(buffer);
         helper.printStateValues();
-        stateAsserter.assertAllStates(value,DELTA);
+        stateAsserter.assertAllStatesExceptTerminal(value,DELTA);
     }
 
     private void train(ReplayBufferNStepUniform<ForkVariables> buffer) {

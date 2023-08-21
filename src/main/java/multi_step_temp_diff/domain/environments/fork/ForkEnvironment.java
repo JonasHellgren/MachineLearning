@@ -2,6 +2,7 @@ package multi_step_temp_diff.domain.environments.fork;
 
 import common.Conditionals;
 import common.MySetUtils;
+import lombok.Setter;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -12,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Setter
 public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
     public static ForkEnvironmentSettings envSettings =ForkEnvironmentSettings.getDefault();

@@ -52,10 +52,6 @@ public class RunnerForkNStepTabularAgentTrainer {
         PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(Arrays.asList("Error - 1","Error - 3"), "Step");
         plotter.plot(listOfTrajectories);
 
-        DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
-
-
-
     }
 
     private static NStepTabularAgentTrainer<ForkVariables> createTrainer(ForkEnvironment environment, NStepTabularAgentTrainerSettings settings) {

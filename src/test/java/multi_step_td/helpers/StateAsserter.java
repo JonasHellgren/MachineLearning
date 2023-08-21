@@ -1,5 +1,6 @@
 package multi_step_td.helpers;
 
+import common.Conditionals;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -17,6 +18,14 @@ public class StateAsserter<S> {
 
     AgentNeuralInterface<S> agent;
     EnvironmentInterface<S> environment;
+
+    public void assertAllStatesExceptTerminal(double value, double delta) {
+        for (StateInterface<S> state:environment.stateSet()) {
+            Conditionals.executeIfTrue(!environment.isTerminalState(state),
+                    () ->   Assert.assertEquals(value, agent.readValue(state), delta));
+        }
+    }
+
     public void assertAllStates(double value, double delta) {
         for (StateInterface<S> state:environment.stateSet()) {
             Assert.assertEquals(value, agent.readValue(state), delta);

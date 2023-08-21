@@ -91,23 +91,6 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
         assertEquals(ForkEnvironment.envSettings.rewardHeaven(),agentCasted.getMemory().read(ForkState.newFromPos(startPos)), delta);
     }
 
-    private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
-        double minOut = ForkEnvironment.envSettings.rewardHell();
-        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
-        NetSettings netSettings = NetSettings.builder()
-                .learningRate(LEARNING_RATE)
-                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
-                .transferFunctionType(TransferFunctionType.TANH)
-                .minOut(minOut).maxOut(maxOut)
-                .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
-        agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
-                environment,
-                discountFactor,
-                netSettings);
-        helper=new ForkAndMazeHelper<>(agent, environment);
-        buildTrainer(nofEpisodes, startState, nofStepsBetween);
-        trainer.train();
-    }
 
     @Test
     @Tag("nettrain")
@@ -141,6 +124,25 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
 
         assertTrue(err3<err1);
 
+    }
+
+
+    private void setAgentAndTrain(double discountFactor, int nofEpisodes, int startState, int nofStepsBetween) {
+        double minOut = ForkEnvironment.envSettings.rewardHell();
+        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
+        NetSettings netSettings = NetSettings.builder()
+                .learningRate(LEARNING_RATE)
+                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .transferFunctionType(TransferFunctionType.TANH)
+                .minOut(minOut).maxOut(maxOut)
+                .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
+        agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
+                environment,
+                discountFactor,
+                netSettings);
+        helper=new ForkAndMazeHelper<>(agent, environment);
+        buildTrainer(nofEpisodes, startState, nofStepsBetween);
+        trainer.train();
     }
 
     private void printBufferSize() {

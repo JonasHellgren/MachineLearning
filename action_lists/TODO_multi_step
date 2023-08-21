@@ -228,7 +228,15 @@ prova target network
 - setValuesInExperiencesInMiniBatch använder backUpMinne
 - target netwoek i trainer  x
 - setValuesInExperiencesInMiniBatch - backup minne minne isf agent minne x
-oxå optimerra BUFFER_MAX_SIZE
+
+- skapa fork settings Rhell=Rheaven
+- förstå varför tex fel i fork inte konvergerar mot noll
+- studera olika discount rate och nof steps between i fork
+- om hell ger samma reward - noll td error
+- stor nof steps between skall ge noll error i fork - ingen backup- varför ökar MeanTDErrormed steps between
+- oxå optimerra BUFFER_MAX_SIZE, DISCOUNT _RATE
+
+
 policy remove item full buffer
 statistic (mean, std, etc) TD error i exp replay buffer
 

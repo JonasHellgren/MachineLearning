@@ -12,11 +12,11 @@ import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
-import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -30,8 +30,10 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 @Log
 public class RunnerChargeHyperParameterOptimizer {
     public static final int NOF_TASKS = 16;
-    private static final int NOF_EPIS = 10_000, MAX_TRAIN_TIME_IN_SECONDS = 3 * 60;  //one will limit
+    private static final int NOF_EPIS = 10_000, MAX_TRAIN_TIME_IN_SECONDS = 10 * 60;  //one will limit
     public static final String BUFFER_TYPE = "Uniform";  //"Prioritized"
+    public static final int PERCENTILE_IN_PERCENTAGE = 90;
+    public static final int HIGH_PERCENTILE_IN_PERCENTAGE1 = 90,  LOW_PERCENTILE_IN_PERCENTAGE1 = 10;
 
     record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden) {
         ParameterSetup(List<Integer> list) {
@@ -39,10 +41,11 @@ public class RunnerChargeHyperParameterOptimizer {
         }
     }
 
-    static final Set<Integer> NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET = ImmutableSet.of(1, 5, 10, 15);
-    static final Set<Integer> BATCH_SIZE_SET = ImmutableSet.of(30, 50);
-    static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5, 10);
-    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(5, 15, 25);
+
+    static final Set<Integer> NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET = ImmutableSet.of(1, 5, 10);
+    static final Set<Integer> BATCH_SIZE_SET = ImmutableSet.of(30,100);
+    static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5);
+    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(12, 27);
 
     static EnvironmentInterface<ChargeVariables> environment;
 
@@ -84,6 +87,8 @@ public class RunnerChargeHyperParameterOptimizer {
                 evaluateAndPutInResultMapSumRewards(resultMapSumRewards, parameterSetup, trainer.getAgentNeural());
                 putInResultMapMeanTDerror(resultMapMeanTDerror, parameterSetup, trainer);
             }
+            out.println("resultMapSumRewards = " + resultMapSumRewards);
+
             counter.increase();
             executorService.shutdown();
         }
@@ -136,11 +141,11 @@ public class RunnerChargeHyperParameterOptimizer {
 
 
         out.println("Non sorted results resultMapMeanTD -------------------" );
-        List<Pair<ParameterSetup, Double>> meanTdErrPairs = getPairs(resultMapMeanTDError);
+        List<Pair<ParameterSetup, Double>> meanTdErrPairs = getPairs(resultMapMeanTDError, LOW_PERCENTILE_IN_PERCENTAGE1);
         meanTdErrPairs.forEach(out::println);
 
         out.println("Non sorted results resultMapSumRewards ------------------- " );
-        List<Pair<ParameterSetup, Double>> sumRewardPairs = getPairs(resultMapSumRewards);
+        List<Pair<ParameterSetup, Double>> sumRewardPairs = getPairs(resultMapSumRewards, HIGH_PERCENTILE_IN_PERCENTAGE1);
         sumRewardPairs.forEach(out::println);
 
         out.println("Sorted results resultMapMeanTDError -------------------");
@@ -158,13 +163,17 @@ public class RunnerChargeHyperParameterOptimizer {
     }
 
     @NotNull
-    private static List<Pair<ParameterSetup, Double>> getPairs(Map<ParameterSetup, List<Double>> resultMap) {
-
+    private static List<Pair<ParameterSetup, Double>> getPairs(Map<ParameterSetup, List<Double>> resultMap, int percentileInPercentage) {
         List<Map.Entry<ParameterSetup, List<Double>>> entryListWithLists = new ArrayList<>(resultMap.entrySet());
         return entryListWithLists.stream()
-                .map(e -> Pair.of(
-                        e.getKey(),
-                        ListUtils.findAverage(e.getValue()).orElseThrow()))
+                .map(e -> {
+                    List<Double> valueList = e.getValue();
+                    out.println("valueList = " + valueList);
+                    DescriptiveStatistics ds=new DescriptiveStatistics();
+                    valueList.forEach(n -> ds.addValue(n));
+                    double expectedExt=ds.getPercentile(percentileInPercentage);
+                    return  Pair.of(e.getKey(),expectedExt);
+                })
                 .toList();
     }
 
