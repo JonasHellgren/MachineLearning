@@ -15,8 +15,8 @@ import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSetti
 public class RunnerMazeNeuralAgentTrainer {
 
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 3;
-    private static final int BATCH_SIZE = 30, BUFFER_SIZE_MAX = 100_000;
-    private static final int NOF_EPIS = 500;
+    private static final int BATCH_SIZE = 30, BUFFER_SIZE_MAX = 1_000;
+    private static final int NOF_EPIS = 5000;
     public static final double LEARNING_RATE =1e-2;
     public static final double PROB_START = 0.1, PROB_END = 1e-5;
     public static final double DISCOUNT_FACTOR = 1.0;
@@ -39,7 +39,6 @@ public class RunnerMazeNeuralAgentTrainer {
         tdErrorPlotter.plotTdError();
 
     }
-
 
 
     static AgentNeuralInterface<MazeVariables> createAgent() {

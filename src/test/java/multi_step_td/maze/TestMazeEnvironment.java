@@ -6,6 +6,7 @@ import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +73,27 @@ public class TestMazeEnvironment {
         printStepReturn();
         assertEquals(MazeState.newFromXY(4,5),stepReturn.newState);
         assertEquals(MazeEnvironment.settings.rewardGoal()+MazeEnvironment.settings.rewardMove(),stepReturn.reward, DELTA);
+        assertTrue(stepReturn.isNewStateTerminal);
+    }
+
+    @Test
+    public void whenTakingFewSteps_thenNotTerminal() {
+
+        MazeState state = MazeState.newFromXY(1, 1);
+        for (int i = 0; i < 10 ; i++) {
+            stepReturn=environment.step(state,MazeEnvironment.ACTION_UP);
+            state.setFromReturn(stepReturn);
+        }
+        assertFalse(stepReturn.isNewStateTerminal);
+    }
+
+    @Test
+    public void whenTakingManySteps_thenTerminal() {
+
+        MazeState state = MazeState.newFromXY(4, 4);
+        for (int i = 0; i < 10000 ; i++) {
+            stepReturn=environment.step(state,MazeEnvironment.ACTION_UP);
+        }
         assertTrue(stepReturn.isNewStateTerminal);
     }
 

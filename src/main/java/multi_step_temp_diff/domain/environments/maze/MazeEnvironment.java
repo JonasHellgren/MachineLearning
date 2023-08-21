@@ -12,7 +12,6 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * actions: 0=up, 1=right, 2=down, 3=left
@@ -66,12 +65,20 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
     public StepReturn<MazeVariables> step(StateInterface<MazeVariables> state, int action) {
         throwIfBadArgument(state,action);
         final Pair<StateInterface<MazeVariables>, PositionType> pair = getNewPosAndState(state, action);
+        StateInterface<MazeVariables> newState = pair.getFirst();
+        PositionType positionType = pair.getSecond();
         return StepReturn.<MazeVariables>builder()
-                .isNewStateTerminal(pair.getSecond().equals(PositionType.goal))
+                .isNewStateTerminal(isNewStateGoalOrToManySteps(newState, positionType))
                 .newState(pair.getFirst())
-                .reward(getReward(pair.getSecond()))
+                .reward(getReward(positionType))
                 .isNewStateFail(false)
                 .build();
+    }
+
+    private static boolean isNewStateGoalOrToManySteps(StateInterface<MazeVariables> newState,
+                                                       PositionType positionType) {
+        return positionType.equals(PositionType.goal) ||
+                newState.getVariables().nofSteps >= settings.maxStepsInEpisode();
     }
 
     private void throwIfBadArgument(StateInterface<MazeVariables> state, int action) {
@@ -89,10 +96,11 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         int xNew = newX.apply(x,action);
         int y = MazeState.getY.apply(state);
         int yNew = newY.apply(y,action);
+        int nofStepsNew=MazeState.getNofSteps.apply(state)+1;
         PositionType stateAfterStep = getPositionType(xNew, yNew);
         StateInterface<MazeVariables> stateAfter=stateAfterStep.equals(PositionType.wall) || stateAfterStep.equals(PositionType.obstacle)
-                ? MazeState.newFromXY(x,y)   //no motion if entering e.g. wall
-                : MazeState.newFromXY(xNew,yNew);  //otherCell or goal
+                ? MazeState.newFromXYAndStep(x,y,nofStepsNew)   //no motion if entering e.g. wall
+                : MazeState.newFromXYAndStep(xNew,yNew,nofStepsNew);  //otherCell or goal
         return Pair.create(stateAfter,stateAfterStep);
     }
 

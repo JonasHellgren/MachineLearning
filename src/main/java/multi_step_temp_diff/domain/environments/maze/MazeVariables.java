@@ -7,12 +7,13 @@ import lombok.ToString;
 @ToString
 public class MazeVariables {
 
-    public int x,y;
+    public int x,y,nofSteps;
+
     public static MazeVariables newFromXY(int x, int y) {
-        return new MazeVariables(x,y);
+        return new MazeVariables(x,y,0);
     }
     public MazeVariables copy() {
-        return  MazeVariables.newFromXY(x,y);
+        return  new MazeVariables(x,y,nofSteps);
     }
 
 }

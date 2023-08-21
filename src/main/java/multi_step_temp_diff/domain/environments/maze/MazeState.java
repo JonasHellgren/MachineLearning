@@ -4,7 +4,6 @@ import common.RandUtils;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
-import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -21,6 +20,8 @@ public class MazeState implements StateInterface<MazeVariables> {
 
     public static Function<StateInterface<MazeVariables>,Integer> getX=(s) -> s.getVariables().x;
     public static Function<StateInterface<MazeVariables>,Integer> getY=(s) -> s.getVariables().y;
+    public static Function<StateInterface<MazeVariables>,Integer> getNofSteps =(s) -> s.getVariables().nofSteps;
+
 
     public MazeState(MazeVariables variables) {
         this.variables = variables;
@@ -29,6 +30,10 @@ public class MazeState implements StateInterface<MazeVariables> {
 
     public static MazeState newFromXY(int x, int y) {
         return new MazeState(MazeVariables.newFromXY(x,y));
+    }
+
+    public static MazeState newFromXYAndStep(int x, int y, int step) {
+        return new MazeState(new MazeVariables(x,y,step));
     }
 
     public static MazeState newFromRandomPos() {
@@ -50,7 +55,7 @@ public class MazeState implements StateInterface<MazeVariables> {
     public void setFromReturn(StepReturn<MazeVariables> stepReturn) {
         variables.x=MazeState.getX.apply(stepReturn.newState);
         variables.y=MazeState.getY.apply(stepReturn.newState);
-
+        variables.nofSteps=MazeState.getNofSteps.apply(stepReturn.newState);
     }
 
     @Override

@@ -238,6 +238,7 @@ prova target network
 
 - test maze mer
 - RunnerNeuralAgentTrainerMaze
+- nofSteps i MazeVariables  maxStepsInEpisode i Maze  x
 
 
 
