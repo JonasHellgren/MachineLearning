@@ -5,6 +5,7 @@ import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -68,13 +69,16 @@ public class ForkAndMazeHelper<S> {
 
     static BiFunction<Map<StateInterface<ForkVariables>, Double>,Integer,Double> getPos=(m, p) -> m.get(ForkState.newFromPos(p));
 
-    public static double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
+    public  double avgErrorFork(Map<StateInterface<ForkVariables>, Double> valueMap) {
         List<Double> errors=new ArrayList<>();
         List<Integer> willLeadToHell=List.of(6,11,12,13,14);
         List<Integer> shallLeadToHeaven=List.of(0,1,2,3,4,5,7,8,9);
 
-        willLeadToHell.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- ForkEnvironment.envSettings.rewardHell()));
-        shallLeadToHeaven.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- ForkEnvironment.envSettings.rewardHeaven()));
+        ForkEnvironment envCasted=(ForkEnvironment) environment;
+        ForkEnvironmentSettings envSettings=envCasted.envSettings;
+
+        willLeadToHell.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- envSettings.rewardHell()));
+        shallLeadToHeaven.forEach(pos -> errors.add(getPos.apply(valueMap,pos)- envSettings.rewardHeaven()));
 
         return ListUtils.findAverageOfAbsolute(errors).orElseThrow();
     }

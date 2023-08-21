@@ -2,6 +2,7 @@ package multi_step_td.fork;
 
 import common.RandUtils;
 import multi_step_td.helpers.StateAsserter;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -29,6 +30,7 @@ public class TestAgentNeuralFork {
     AgentForkNeural agentCasted;
     ForkAndMazeHelper<ForkVariables> helper;
     ForkEnvironment environment;
+    ForkEnvironmentSettings envSettings;
 
     @BeforeEach
     public void init () {
@@ -36,6 +38,7 @@ public class TestAgentNeuralFork {
         agent= AgentForkNeural.newDefault(environment);
         agentCasted=(AgentForkNeural) agent;
         helper=new ForkAndMazeHelper<>(agent, environment);
+        envSettings=environment.envSettings;
     }
 
     @Test
@@ -57,7 +60,7 @@ public class TestAgentNeuralFork {
     private List<NstepExperience<ForkVariables>> createBatch(double value) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomPos = RandUtils.getRandomIntNumber(0, ForkEnvironment.envSettings.nofStates());
+            final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomPos))
                     .value(value)

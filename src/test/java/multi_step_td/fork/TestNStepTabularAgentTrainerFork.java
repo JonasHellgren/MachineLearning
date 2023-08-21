@@ -42,14 +42,15 @@ public class TestNStepTabularAgentTrainerFork {
 
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapOneStep= trainer.getStateValueMap();
-        double avgErrOne= ForkAndMazeHelper.avgErrorFork(mapOneStep);
+        ForkAndMazeHelper<ForkVariables>  helper=new ForkAndMazeHelper<>(agent, environment);
+        double avgErrOne= helper.avgErrorFork(mapOneStep);
 
         agent.clear();
         settings = getnStepTabularAgentTrainerSettings(THREE_STEPS);
         trainer= createTrainer(environment, settings);
         trainer.train();
         Map<StateInterface<ForkVariables>, Double> mapTreeSteps= trainer.getStateValueMap();
-        double avgErrThree= ForkAndMazeHelper.avgErrorFork(mapTreeSteps);
+        double avgErrThree= helper.avgErrorFork(mapTreeSteps);
 
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         System.out.println("avgErrOne = " + avgErrOne+", avgErrThree = " + avgErrThree);

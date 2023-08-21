@@ -2,6 +2,7 @@ package multi_step_td.fork;
 
 import common.RandUtils;
 import multi_step_td.helpers.StateAsserter;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_parts.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
@@ -35,28 +36,29 @@ public class TestForkNeuralValueMemory {
 
     Predicate<Integer> isEven=(n) ->  (n % 2 == 0);
 
-    private static final int NOF_STATES = ForkEnvironment.envSettings.nofStates();
-    private static final int INPUT_SIZE = NOF_STATES;
-    private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
 
     NetworkMemoryInterface<ForkVariables> memory;
     EnvironmentInterface<ForkVariables> environment;
     ForkAndMazeHelper<ForkVariables> helper;
     StateAsserter<ForkVariables> stateAsserter;
+    ForkEnvironmentSettings envSettings;
 
 
     @BeforeEach
     public void init() {
-        double minOut = ForkEnvironment.envSettings.rewardHell();
-        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
+        environment = new ForkEnvironment();
+
+        ForkEnvironment envCasted=(ForkEnvironment) environment;
+        envSettings=envCasted.envSettings;
+        double minOut = envSettings.rewardHell();
+        double maxOut = envSettings.rewardHeaven();
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
-                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
                 .minOut(minOut).maxOut(maxOut)
                 .transferFunctionType(TransferFunctionType.TANH)
                 .normalizer(new NormalizeMinMax(minOut,maxOut)).build();
 
-        environment = new ForkEnvironment();
         AgentForkNeural agent=AgentForkNeural.newWithDiscountFactorAndMemorySettings(
                 environment,
                 DISCOUNT_FACTOR,
@@ -162,7 +164,7 @@ public class TestForkNeuralValueMemory {
     private List<NstepExperience<ForkVariables>> createBatchOddEven(double valueOdd, double valueEven) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomIntNumber = RandUtils.getRandomIntNumber(0, ForkEnvironment.envSettings.nofStates());
+            final int randomIntNumber = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
             final double value = isEven.test(randomIntNumber) ? valueEven : valueOdd;
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomIntNumber))

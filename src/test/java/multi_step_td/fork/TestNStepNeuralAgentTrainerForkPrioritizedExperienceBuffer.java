@@ -1,6 +1,7 @@
 package multi_step_td.fork;
 
 import lombok.SneakyThrows;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_specific.ForkAndMazeHelper;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
@@ -29,7 +30,7 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
 
     private static final int START_STATE = 0;
     public static final double LEARNING_RATE = 1e-1;
-    private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates(), NOF_NEURONS_HIDDEN = INPUT_SIZE;
+   // private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates(), NOF_NEURONS_HIDDEN = INPUT_SIZE;
     public static final double DISCOUNT_FACTOR = 1.0;
     public static final int NOF_EXPERIENCE_ADDING_BETWEEN_PROBABILITY_SETTING = 10;
 
@@ -38,10 +39,12 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
     AgentForkNeural agentCasted;
     ForkEnvironment environment;
     ForkAndMazeHelper<ForkVariables> helper;
+    ForkEnvironmentSettings envSettings;
 
     @BeforeEach
     public void init() {
         environment = new ForkEnvironment();
+        envSettings=environment.envSettings;
     }
 
     @SneakyThrows
@@ -59,16 +62,17 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
 
         System.out.println("trainer.getBuffer().size() = " + trainer.getBuffer().size());
 
-        double avgError = ForkAndMazeHelper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
+        ForkAndMazeHelper<ForkVariables> helper=new ForkAndMazeHelper<>(agent,environment);
+        double avgError = helper.avgErrorFork(agentInfo.stateValueMap(environment.stateSet()));
         assertTrue(avgError < delta);
     }
 
     private void buildAgent() {
-        double minOut = ForkEnvironment.envSettings.rewardHell();
-        double maxOut = ForkEnvironment.envSettings.rewardHeaven();
+        double minOut = envSettings.rewardHell();
+        double maxOut = envSettings.rewardHeaven();
         NetSettings netSettings = NetSettings.builder()
                 .learningRate(LEARNING_RATE)
-                .inputSize(INPUT_SIZE).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
                 .transferFunctionType(TransferFunctionType.TANH)
                 .minOut(minOut).maxOut(maxOut)
                 .normalizer(new NormalizerMeanStd(List.of(10*minOut,10*maxOut,0d,0d,0d))).build();

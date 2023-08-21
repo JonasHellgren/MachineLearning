@@ -5,10 +5,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 
 import java.util.function.Function;
 
-import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.envSettings;
 
 /**
  * To enable get when put in hashmap
@@ -32,6 +32,7 @@ public class ForkState implements StateInterface<ForkVariables> {
     }
 
     public static ForkState newFromRandomPos() {
+        ForkEnvironmentSettings envSettings=ForkEnvironmentSettings.getDefault();  //slows down
         final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates()-1);
         return new ForkState(ForkVariables.newFromPos(randomPos));
     }

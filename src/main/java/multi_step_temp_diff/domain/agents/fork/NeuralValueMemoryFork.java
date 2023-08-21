@@ -11,8 +11,6 @@ import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
 import org.neuroph.util.TransferFunctionType;
 import java.util.Arrays;
 
-import static multi_step_temp_diff.domain.environments.fork.ForkEnvironment.envSettings;
-
 /**
  * Input is a binary vector with zeros except at active state. Much more stable than one double input.
  */
@@ -21,13 +19,14 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S>  {
 
     private static final double MARGIN = 1.0;
 
+    /*
     public NeuralValueMemoryFork() {  //todo, remove confusing with envSettings
         this(NetSettings.builder()
                 .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
                 .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven())
                 .nofHiddenLayers(1).transferFunctionType(TransferFunctionType.TANH)
                 .normalizer(new NormalizeMinMax(envSettings.rewardHell(),envSettings.rewardHeaven())).build());
-    }
+    }*/
 
     public NeuralValueMemoryFork(NetSettings settings) {
         /* super(new MultiLayerPerceptron(

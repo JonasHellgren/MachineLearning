@@ -1,6 +1,7 @@
 package multi_step_td.fork;
 
 import common.RandUtils;
+import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
@@ -27,10 +28,13 @@ public class TestForkEnvironment {
     Function<StateInterface<ForkVariables>,Integer> getPos=(s) -> s.getVariables().position;
     EnvironmentInterface<ForkVariables> environment;
     StepReturn<ForkVariables> stepReturn;
+    ForkEnvironmentSettings envSettings;
 
     @BeforeEach
     public void init() {
         environment=new ForkEnvironment();
+        ForkEnvironment envCasted=(ForkEnvironment) environment;
+        envSettings=envCasted.envSettings;
     }
 
     @Test
@@ -63,7 +67,7 @@ public class TestForkEnvironment {
         System.out.println("stepReturn = " + stepReturn);
         assertEquals(15,(int) getPos.apply(stepReturn.newState));
         assertTrue(stepReturn.isNewStateTerminal);
-        assertEquals(ForkEnvironment.envSettings.rewardHell(),stepReturn.reward, DELTA);
+        assertEquals(envSettings.rewardHell(),stepReturn.reward, DELTA);
     }
 
     @Test

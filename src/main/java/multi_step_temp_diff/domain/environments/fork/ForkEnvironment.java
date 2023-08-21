@@ -16,7 +16,15 @@ import java.util.stream.IntStream;
 @Setter
 public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
-    public static ForkEnvironmentSettings envSettings =ForkEnvironmentSettings.getDefault();
+    public ForkEnvironmentSettings envSettings;
+
+    public ForkEnvironment() {
+        this(ForkEnvironmentSettings.getDefault());
+    }
+
+    public ForkEnvironment(ForkEnvironmentSettings envSettings) {
+        this.envSettings = envSettings;
+    }
 
     @Override
     public StepReturn<ForkVariables> step(StateInterface<ForkVariables> state, int action) {
