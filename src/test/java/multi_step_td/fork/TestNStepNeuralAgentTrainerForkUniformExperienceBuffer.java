@@ -1,7 +1,7 @@
 package multi_step_td.fork;
 
 import lombok.SneakyThrows;
-import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;

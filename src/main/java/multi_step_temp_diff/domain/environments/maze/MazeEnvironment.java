@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
-import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
 import org.apache.commons.math3.util.Pair;
 import java.util.*;
 import java.util.function.BiFunction;

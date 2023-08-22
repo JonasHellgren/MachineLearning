@@ -1,7 +1,7 @@
 package multi_step_td.fork;
 
 import common.RandUtils;
-import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;

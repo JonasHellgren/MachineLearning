@@ -1,6 +1,6 @@
 package multi_step_td.exp_buffer;
 
-import multi_step_temp_diff.domain.agent_parts.replay_buffer.ExperiencePrioritizationSetter;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.utils.ExperiencePrioritizationSetter;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.prio_strategy.PrioritizationProportional;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;

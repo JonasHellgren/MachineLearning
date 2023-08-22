@@ -58,7 +58,7 @@ public class RunnerMazeNeuralAgentTrainer {
 
     static NStepNeuralAgentTrainer<MazeVariables> createTrainer(AgentNeuralInterface<MazeVariables> agent) {
         var settings= NStepNeuralAgentTrainerSettings.builder()
-                .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
+                .probStart(PROB_START).probEnd(PROB_END)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
@@ -67,7 +67,6 @@ public class RunnerMazeNeuralAgentTrainer {
 
         return NStepNeuralAgentTrainer.<MazeVariables>builder()
                 .settings(settings)
-           //     .startStateSupplier(MazeState::newFromRandomPos)
                 .startStateSupplier(() -> new MazeState(MazeVariables.newFromXY(0,0)) )
                 .agentNeural(agent)
                 .environment(environment)

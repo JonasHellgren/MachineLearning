@@ -1,6 +1,6 @@
 package multi_step_td.charge;
 
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

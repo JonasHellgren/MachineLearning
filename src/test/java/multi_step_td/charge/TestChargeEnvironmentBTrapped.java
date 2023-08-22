@@ -1,7 +1,7 @@
 package multi_step_td.charge;
 
 import lombok.Builder;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.*;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

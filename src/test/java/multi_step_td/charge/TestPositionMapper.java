@@ -3,7 +3,7 @@ package multi_step_td.charge;
 import common.DifferenceCalculator;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.PositionMapper;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

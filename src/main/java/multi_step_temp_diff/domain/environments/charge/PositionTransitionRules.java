@@ -1,6 +1,5 @@
 package multi_step_temp_diff.domain.environments.charge;
 
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import org.apache.commons.math3.util.Pair;
 import java.util.HashMap;
 import java.util.List;

@@ -10,7 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_specific.*;
@@ -30,14 +30,13 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 @Log
 public class RunnerChargeHyperParameterOptimizer {
     public static final int NOF_TASKS = 16;
-    private static final int NOF_EPIS = 10_000, MAX_TRAIN_TIME_IN_SECONDS = 10 * 60;  //one will limit
+    private static final int NOF_EPIS = 100, MAX_TRAIN_TIME_IN_SECONDS = 2 * 60;  //one will limit
     public static final String BUFFER_TYPE = "Uniform";  //"Prioritized"
-    public static final int PERCENTILE_IN_PERCENTAGE = 90;
     public static final int HIGH_PERCENTILE_IN_PERCENTAGE1 = 90,  LOW_PERCENTILE_IN_PERCENTAGE1 = 10;
 
-    record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden) {
+    record ParameterSetup(int nofStepBetween, int batchSize, int nofLayers, int nofNeuronsHidden, double discountFactor) {
         ParameterSetup(List<Integer> list) {
-            this(list.get(0), list.get(1), list.get(2), list.get(3));
+            this(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4));
         }
     }
 
@@ -45,7 +44,8 @@ public class RunnerChargeHyperParameterOptimizer {
     static final Set<Integer> NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET = ImmutableSet.of(1, 5, 10);
     static final Set<Integer> BATCH_SIZE_SET = ImmutableSet.of(30,100);
     static final Set<Integer> NOF_LAYERS_HIDDEN_SET = ImmutableSet.of(2, 5);
-    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(12, 27);
+    static final Set<Integer> NOF_NEURONS_HIDDEN_SET = ImmutableSet.of(15);
+    static final Set<Integer> DISCONT_FACTOR_IN_PERCENTAGE_SET = ImmutableSet.of(90,95,99);
 
     static EnvironmentInterface<ChargeVariables> environment;
 
@@ -62,7 +62,8 @@ public class RunnerChargeHyperParameterOptimizer {
                         NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED_SET,
                         BATCH_SIZE_SET,
                         NOF_LAYERS_HIDDEN_SET,
-                        NOF_NEURONS_HIDDEN_SET));
+                        NOF_NEURONS_HIDDEN_SET,
+                        DISCONT_FACTOR_IN_PERCENTAGE_SET));
 
 
         log.info("Nof parameter permutations = "+parameterPermutations.size());
@@ -110,6 +111,10 @@ public class RunnerChargeHyperParameterOptimizer {
                 .nofLayersHidden(parameterSetup.nofLayers())
                 .nofNeuronsHidden(parameterSetup.nofNeuronsHidden())
                 .bufferType(bufferType).bufferSize(bufferSize)
+                .discountFactor((int) parameterSetup.discountFactor()/(double) 100)
+                .startEndProb(START_END_PROB)
+               // .discountFactor(0.95)
+
                 .build();
         return new ChargeTrainerExecutorHelper(helperSettings, environment);
     }
@@ -168,7 +173,7 @@ public class RunnerChargeHyperParameterOptimizer {
         return entryListWithLists.stream()
                 .map(e -> {
                     List<Double> valueList = e.getValue();
-                    out.println("valueList = " + valueList);
+                 //   out.println("valueList = " + valueList);
                     DescriptiveStatistics ds=new DescriptiveStatistics();
                     valueList.forEach(n -> ds.addValue(n));
                     double expectedExt=ds.getPercentile(percentileInPercentage);

@@ -2,10 +2,8 @@ package multi_step_temp_diff.domain.environments.charge;
 
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 
 import java.util.Objects;
-import java.util.PrimitiveIterator;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;

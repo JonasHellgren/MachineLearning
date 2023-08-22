@@ -3,12 +3,10 @@ package multi_step_temp_diff.domain.agents.charge;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
-import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
-import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import java.util.Optional;

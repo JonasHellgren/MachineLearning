@@ -7,16 +7,16 @@ import java.util.List;
 
 public class ChargeAgentParameters {
 
-    public static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 5;
+    public static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int NOF_EPIS = 100;
-    public static final int BATCH_SIZE = 100, MAX_BUFFER_SIZE_EXPERIENCE_REPLAY = 100_000;
-    public static final int MAX_NOF_STEPS_TRAINING = 100;
+    public static final int BATCH_SIZE = 10, MAX_BUFFER_SIZE_EXPERIENCE_REPLAY = 100_000;
+    public static final int MAX_NOF_STEPS_TRAINING = 1000;
 
-    public static final Pair<Double, Double> START_END_PROB = Pair.of(0.5, 1e-5);
+    public static final Pair<Double, Double> START_END_PROB =  Pair.of(0.9, 0.01);
     public static final double LEARNING_RATE = 0.01;
     public static final int NOF_LAYERS = 5;
     public static final int NOF_NEURONS_HIDDEN = 30;
-    public static final double DISCOUNT_FACTOR = 0.99;
+    public static final double DISCOUNT_FACTOR = 0.95;
     public static final double MOMENTUM = 0.01d;
 
     public static final double VALUE_IF_NOT_OCCUPIED = 1.1d;

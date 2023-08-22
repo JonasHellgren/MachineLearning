@@ -1,10 +1,9 @@
 package multi_step_temp_diff.runners;
 
-import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyRandom;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
-import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
+import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
@@ -12,25 +11,23 @@ import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.helpers_specific.*;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
 
 /***
  A smaller discount factor increases convergence speed of td error
+ A smaller MAX_NOF_STEPS_IN_EPIS increases variance in return
  */
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int MAX_NOF_EPIS = 500;
+    private static final int MAX_NOF_EPIS = 200;
     static double MAX_TRAIN_TIME_IN_MINUTES = 10;  //one will limit
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
-    public static final int BATCH_SIZE1 = 10;  //30
-    public static final int NOF_LAYERS_HIDDEN = 5;  //10
-    public static final int NOF_NEURONS_HIDDEN = 15;  //15
+    public static final int BATCH_SIZE1 = 10;
+    public static final int NOF_LAYERS_HIDDEN = 5;
+    public static final int NOF_NEURONS_HIDDEN = 15;
     public static final int MAX_BUFFER_SIZE = 100_000;
-    public static final int MAX_NOF_STEPS_IN_EPIS = 1_000;
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.9, 0.01);
     public static final double LEARNING_RATE1 = 0.01, DISCOUNT_FACTOR = 0.95;
 
@@ -38,7 +35,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
 
     public static void main(String[] args) {
         ChargeEnvironmentSettings envSettings = ChargeEnvironmentSettings.newDefault();
-        var envSettingsForTraining = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_IN_EPIS);
+        var envSettingsForTraining = envSettings.copyWithNewMaxNofSteps(MAX_NOF_STEPS_TRAINING);
         environment = new ChargeEnvironment(envSettingsForTraining);
         ChargeStateSuppliers stateSupplier = new ChargeStateSuppliers(envSettingsForTraining);
 

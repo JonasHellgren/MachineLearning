@@ -87,7 +87,7 @@ public class TestNStepNeuralAgentTrainerMaze {
         agent=new AgentMazeNeural(environment,agentSettings);
 
         var settings= NStepNeuralAgentTrainerSettings.builder()
-                .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
+                .probStart(PROB_START).probEnd(PROB_END)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE).maxBufferSize(BUFFER_SIZE_MAX)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
