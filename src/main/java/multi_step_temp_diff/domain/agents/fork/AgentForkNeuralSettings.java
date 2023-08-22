@@ -1,9 +1,10 @@
-package multi_step_temp_diff.domain.agent_valueobj;
+package multi_step_temp_diff.domain.agents.fork;
 
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.agents.fork.NeuralValueMemoryFork;
+import multi_step_temp_diff.domain.agent_abstract.AgentSettingsInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import org.neuroph.util.TransferFunctionType;

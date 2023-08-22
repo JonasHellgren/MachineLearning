@@ -1,6 +1,6 @@
 package multi_step_td.charge;
 
-import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizeMinMax;
 import org.junit.jupiter.api.Test;
 import org.neuroph.util.TransferFunctionType;

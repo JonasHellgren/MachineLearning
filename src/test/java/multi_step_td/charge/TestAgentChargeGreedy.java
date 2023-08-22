@@ -1,6 +1,6 @@
 package multi_step_td.charge;
 
-import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedy;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;

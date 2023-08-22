@@ -1,4 +1,4 @@
-package multi_step_temp_diff.domain.agent_valueobj;
+package multi_step_temp_diff.domain.agent_parts.neural_memory;
 
 import lombok.Builder;
 import lombok.NonNull;

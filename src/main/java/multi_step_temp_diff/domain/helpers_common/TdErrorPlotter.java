@@ -3,9 +3,7 @@ package multi_step_temp_diff.domain.helpers_common;
 import common.MathUtils;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import plotters.PlotterMultiplePanelsTrajectory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

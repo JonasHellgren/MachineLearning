@@ -3,7 +3,7 @@ package multi_step_temp_diff.domain.helpers_specific;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
-import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetSettings;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;

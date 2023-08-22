@@ -3,7 +3,7 @@ package multi_step_temp_diff.runners;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyOldest;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
-import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
+import multi_step_temp_diff.domain.agents.maze.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;

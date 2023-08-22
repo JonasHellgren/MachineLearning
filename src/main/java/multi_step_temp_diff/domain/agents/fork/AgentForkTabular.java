@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentTabularInterface;
-import multi_step_temp_diff.domain.agent_valueobj.AgentForkTabularSettings;
-import multi_step_temp_diff.domain.agent_valueobj.AgentMazeTabularSettings;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environments.fork.ForkState;

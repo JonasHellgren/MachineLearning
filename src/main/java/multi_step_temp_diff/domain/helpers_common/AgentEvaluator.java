@@ -8,6 +8,11 @@ import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 
+
+/**
+ * Runs an agent from initState
+ *
+ */
 @Builder
 @Log
 public class AgentEvaluator<S> {

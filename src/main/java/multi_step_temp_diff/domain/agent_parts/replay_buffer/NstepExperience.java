@@ -16,7 +16,6 @@ public class NstepExperience<S> {
     public static final double INIT_PRIORITIZATION = 1d;
     public static final double INIT_WEIGHT = 1d;
     public static final double INIT_PROB = 0d;
-    // public static StateInterface<S> STATE_IF_NOT_PRESENT=-1;
 
     @NonNull  public StateInterface<S> stateToUpdate;
     @Builder.Default

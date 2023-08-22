@@ -5,7 +5,7 @@ import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
+import multi_step_temp_diff.domain.agent_abstract.AgentSettingsInterface;
 
 import java.util.HashMap;
 import java.util.List;

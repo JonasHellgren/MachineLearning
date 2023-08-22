@@ -3,7 +3,6 @@ package multi_step_temp_diff.domain.agent_abstract;
 import common.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_parts.action_selector.AgentActionSelector;
 import multi_step_temp_diff.domain.helpers_common.ValueTracker;
@@ -13,7 +12,7 @@ import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 /***
- *   The concrete implementation of this class is adapted for a domain
+ *  The concrete implementation of this class is adapted for an environment
  *  To avoid code duplication in concrete classes, this class includes fields such as an environment reference
  *  The method readValue is abstract and reads the state value approximation from memory
  *

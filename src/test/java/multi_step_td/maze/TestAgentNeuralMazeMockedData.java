@@ -4,7 +4,7 @@ import common.RandUtils;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
 import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
-import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
+import multi_step_temp_diff.domain.agents.maze.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;

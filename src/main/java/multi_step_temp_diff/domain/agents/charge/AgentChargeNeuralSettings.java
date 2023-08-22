@@ -1,7 +1,8 @@
-package multi_step_temp_diff.domain.agent_valueobj;
+package multi_step_temp_diff.domain.agents.charge;
 
 import lombok.Builder;
 import lombok.NonNull;
+import multi_step_temp_diff.domain.agent_abstract.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizeMinMax;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;

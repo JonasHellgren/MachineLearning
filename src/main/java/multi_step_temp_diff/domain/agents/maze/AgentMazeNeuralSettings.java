@@ -1,7 +1,8 @@
-package multi_step_temp_diff.domain.agent_valueobj;
+package multi_step_temp_diff.domain.agents.maze;
 
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_abstract.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironmentSettings;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 

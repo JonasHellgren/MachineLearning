@@ -2,7 +2,7 @@ package multi_step_td.charge;
 
 import multi_step_temp_diff.domain.agent_abstract.AgentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeGreedyRuleForChargeDecisionPoint;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;

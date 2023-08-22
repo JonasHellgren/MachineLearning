@@ -4,7 +4,7 @@ import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterf
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNeuralAbstract;
-import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetSettings;
 
 import java.util.Arrays;
 

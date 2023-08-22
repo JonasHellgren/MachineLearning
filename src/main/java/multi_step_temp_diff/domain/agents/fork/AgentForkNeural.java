@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.agent_abstract.*;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
-import multi_step_temp_diff.domain.agent_valueobj.AgentForkNeuralSettings;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
-import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 
 import java.util.*;

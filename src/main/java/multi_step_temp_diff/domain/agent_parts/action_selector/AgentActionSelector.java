@@ -6,7 +6,7 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
+import multi_step_temp_diff.domain.agent_abstract.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -17,6 +17,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+/***
+ * Helper class to agent, used for action selection
+ * The readMemoryFunction is essential, it is for reading agent memory
+ */
 
 @Builder
 @Log

@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 import org.neuroph.core.Layer;
@@ -22,6 +21,10 @@ import java.util.List;
 
 /**
  * The concrete implementation of this class is adapted for a domain
+ * The settings netSettings.minOut(), netSettings.maxOut() are debatable, can maybe be removed
+ * Only one output value is handled, see getNetworkOutputValue
+ * Careful setting of normalizer is essential
+ *
  */
 
 @Getter

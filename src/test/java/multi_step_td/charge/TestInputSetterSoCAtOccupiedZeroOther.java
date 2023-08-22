@@ -1,7 +1,7 @@
 package multi_step_td.charge;
 
 import multi_step_td.helpers.ArgumentReaderInputSetter;
-import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;

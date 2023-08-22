@@ -3,7 +3,7 @@ package multi_step_temp_diff.runners;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
-import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
+import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingOneAtOccupiedSoCsSeparate;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
