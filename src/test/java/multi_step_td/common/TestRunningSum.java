@@ -1,6 +1,6 @@
 package multi_step_td.common;
 
-import multi_step_temp_diff.domain.agent_parts.RunningSum;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.RunningSum;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 

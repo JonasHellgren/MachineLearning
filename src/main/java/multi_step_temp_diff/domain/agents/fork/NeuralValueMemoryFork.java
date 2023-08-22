@@ -1,14 +1,11 @@
 package multi_step_temp_diff.domain.agents.fork;
 
-import lombok.SneakyThrows;
-import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
-import multi_step_temp_diff.domain.agents.charge.NeuralValueMemoryCharge;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
-import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
-import org.neuroph.util.TransferFunctionType;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNetworkAbstract;
+
 import java.util.Arrays;
 
 /**

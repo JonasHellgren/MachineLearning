@@ -1,8 +1,8 @@
 package multi_step_td.common;
 
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;

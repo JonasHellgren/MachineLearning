@@ -3,7 +3,7 @@ package multi_step_temp_diff.domain.factories;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.ReplayBufferInterface;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;

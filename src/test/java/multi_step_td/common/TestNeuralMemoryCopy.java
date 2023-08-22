@@ -1,8 +1,7 @@
 package multi_step_td.common;
 
-import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;

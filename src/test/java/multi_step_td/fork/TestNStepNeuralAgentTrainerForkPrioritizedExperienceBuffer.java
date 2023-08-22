@@ -2,13 +2,12 @@ package multi_step_td.fork;
 
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_valueobj.ForkEnvironmentSettings;
-import multi_step_temp_diff.domain.environments.maze.MazeVariables;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
 import multi_step_temp_diff.domain.helpers_specific.ForkHelper;
 import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepPrioritized;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepPrioritized;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.fork.AgentForkNeural;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;

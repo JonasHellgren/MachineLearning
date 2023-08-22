@@ -1,10 +1,9 @@
 package multi_step_temp_diff.domain.agents.maze;
 
-import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
-import multi_step_temp_diff.domain.agents.fork.NeuralValueMemoryFork;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_abstract.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNetworkAbstract;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 
 import java.util.Arrays;

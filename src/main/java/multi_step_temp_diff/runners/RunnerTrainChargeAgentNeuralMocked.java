@@ -2,7 +2,7 @@ package multi_step_temp_diff.runners;
 
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepUniform;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingOneAtOccupiedSoCsSeparate;
@@ -16,7 +16,7 @@ import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_specific.ChargeMockedReplayBufferCreator;
 import multi_step_temp_diff.domain.helpers_specific.ChargePlotHelper;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.helpers_specific.ChargeAgentNeuralHelper;
 import multi_step_temp_diff.domain.helpers_specific.ChargeStateToValueFunctionContainer;
 import org.neuroph.util.TransferFunctionType;

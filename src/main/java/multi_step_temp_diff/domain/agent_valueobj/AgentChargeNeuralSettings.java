@@ -3,8 +3,8 @@ package multi_step_temp_diff.domain.agent_valueobj;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizeMinMax;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 import org.neuroph.util.TransferFunctionType;
 
 import static common.DefaultPredicates.defaultIfNullDouble;

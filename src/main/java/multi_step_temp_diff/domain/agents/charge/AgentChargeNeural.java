@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentAbstract;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.NetworkMemoryInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.InputVectorSetterChargeInterface;
@@ -16,7 +16,6 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @Getter
 public class AgentChargeNeural extends AgentAbstract<ChargeVariables> implements AgentNeuralInterface<ChargeVariables> {

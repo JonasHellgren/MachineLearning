@@ -1,11 +1,10 @@
 package multi_step_td.exp_buffer;
 
-import multi_step_temp_diff.domain.agent_parts.ExperiencePrioritizationSetter;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.PrioritizationProportional;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ExperiencePrioritizationSetter;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.prio_strategy.PrioritizationProportional;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
-import multi_step_temp_diff.domain.helpers_common.IntervalFinder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;

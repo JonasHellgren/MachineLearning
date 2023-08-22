@@ -239,13 +239,18 @@ prova target network
 - test maze mer
 - RunnerNeuralAgentTrainerMaze
 - nofSteps i MazeVariables  maxStepsInEpisode i Maze  x
+- policy remove item full buffer  x
+- defaultIfNullObject  x
+- RunnerAgentChargeNeuralTrainerBothFree - varför konvergerar så långsamt
+- annan discouint rate RunnerAgentChargeNeuralTrainerBothFree x
+- fixa RunnerAgentChargeNeuralTrainerBothFreeParallelTasks
 
-
+- skicka in agentSettings till actionSelector
 
 - oxå optimerra BUFFER_MAX_SIZE, DISCOUNT _RATE
 
+- kommentera klasser
 
-policy remove item full buffer
 statistic (mean, std, etc) TD error i exp replay buffer
 
 TestNStepNeuralAgentTrainerMaze fuckar ibland

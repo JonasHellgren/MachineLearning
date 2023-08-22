@@ -4,7 +4,7 @@ import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerMeanStd;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.agent_valueobj.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.HotEncodingSoCAtOccupiedElseValue;
@@ -23,12 +23,17 @@ public class ChargeAgentFactory {
 
     @NonNull EnvironmentInterface<ChargeVariables> environment;
     @NonNull ChargeEnvironmentSettings envSettings;
+    @Builder.Default
+    double discountFactor = DISCOUNT_FACTOR;
+    @Builder.Default
+    public  double learningRate  = LEARNING_RATE ;
+
 
     public AgentNeuralInterface<ChargeVariables> buildAgent(ChargeState initState,
                                                             int nofLayers,
                                                             int nofNeuronsHidden) {
         AgentChargeNeuralSettings agentSettings = AgentChargeNeuralSettings.builder()
-                .learningRate(LEARNING_RATE).discountFactor(DISCOUNT_FACTOR).momentum(MOMENTUM)
+                .learningRate(learningRate).discountFactor(discountFactor).momentum(MOMENTUM)
                 .nofLayersHidden(nofLayers).nofNeuronsHidden(nofNeuronsHidden)
                 .transferFunctionType(TransferFunctionType.TANH)
                 .valueNormalizer(new NormalizerMeanStd(ListUtils.merge(

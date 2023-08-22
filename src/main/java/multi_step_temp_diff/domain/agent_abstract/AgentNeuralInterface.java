@@ -1,8 +1,8 @@
 package multi_step_temp_diff.domain.agent_abstract;
 
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
-import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 
 import java.util.List;
 

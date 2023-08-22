@@ -1,7 +1,8 @@
 package multi_step_temp_diff.runners;
 
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_abstract.StateInterface;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyOldest;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_valueobj.AgentMazeNeuralSettings;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
@@ -12,13 +13,23 @@ import multi_step_temp_diff.domain.helpers_specific.MazeStateValuePrinter;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 
+/***
+ * For this environment a smaller buffer is better for convergence
+ * - old bad epsiodes are forgotten
+ *
+ * Remove strategy not critical is small buffer (1000 items)
+ * For larger buffer (5k items) it is critical/better to have OldestFirst
+ *
+ * Sätta NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED som stort (typ 100) ger divergens. Typ 10 isf 1 ger stabilare convergence.
+ */
+
 public class RunnerMazeNeuralAgentTrainer {
 
-    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 3;
+    private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     private static final int BATCH_SIZE = 30, BUFFER_SIZE_MAX = 1_000;
-    private static final int NOF_EPIS = 5000;
-    public static final double LEARNING_RATE =1e-2;
-    public static final double PROB_START = 0.1, PROB_END = 1e-5;
+    private static final int NOF_EPIS = 300;
+    public static final double LEARNING_RATE =1e-1;
+    public static final double PROB_START = 0.5, PROB_END = 1e-2;
     public static final double DISCOUNT_FACTOR = 1.0;
 
     static  MazeEnvironment environment;
@@ -26,20 +37,16 @@ public class RunnerMazeNeuralAgentTrainer {
     public static void main(String[] args) {
 
         environment=new MazeEnvironment();
-        AgentNeuralInterface<MazeVariables> agent=createAgent();
-        NStepNeuralAgentTrainer<MazeVariables> trainer=createTrainer(agent);
+        var agent=createAgent();
+        var trainer=createTrainer(agent);
         trainer.train();
 
-        MazeStateValuePrinter<MazeVariables> printer=new MazeStateValuePrinter<>(agent,environment);
+        var printer=new MazeStateValuePrinter<>(agent,environment);
         printer.printMazeNeuralAgent();
 
-        TdErrorPlotter<MazeVariables> tdErrorPlotter=TdErrorPlotter.<MazeVariables>builder()
-                .maxValueInPlot(100d)
-                .agent(agent).build();
+        var tdErrorPlotter=TdErrorPlotter.<MazeVariables>builder().maxValueInPlot(10d).agent(agent).build();
         tdErrorPlotter.plotTdError();
-
     }
-
 
     static AgentNeuralInterface<MazeVariables> createAgent() {
 
@@ -53,16 +60,21 @@ public class RunnerMazeNeuralAgentTrainer {
         var settings= NStepNeuralAgentTrainerSettings.builder()
                 .probStart(PROB_START).probEnd(PROB_END).nofIterations(1)
                 .batchSize(BATCH_SIZE)
-                .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE).maxBufferSize(BUFFER_SIZE_MAX)
+                .nofEpis(NOF_EPIS).batchSize(BATCH_SIZE)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
-                .nofEpisodesBetweenLogs(100)
+                .nofEpisodesBetweenLogs(10)
                 .build();
 
         return NStepNeuralAgentTrainer.<MazeVariables>builder()
                 .settings(settings)
-                .startStateSupplier(MazeState::newFromRandomPos)
+           //     .startStateSupplier(MazeState::newFromRandomPos)
+                .startStateSupplier(() -> new MazeState(MazeVariables.newFromXY(0,0)) )
                 .agentNeural(agent)
                 .environment(environment)
+                .buffer(ReplayBufferNStepUniform.<MazeVariables>builder()
+                        .maxSize(BUFFER_SIZE_MAX)
+                        .removeStrategy(new RemoveStrategyOldest<>())
+                        .build())
                 .build();
 
     }

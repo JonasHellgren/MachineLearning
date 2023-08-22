@@ -2,9 +2,9 @@ package multi_step_td.exp_buffer;
 
 import common.CpuTimer;
 import common.ListUtils;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
-import multi_step_temp_diff.domain.agent_parts.PrioritizationProportional;
-import multi_step_temp_diff.domain.agent_parts.ReplayBufferNStepPrioritized;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.prio_strategy.PrioritizationProportional;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepPrioritized;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import org.jetbrains.annotations.NotNull;

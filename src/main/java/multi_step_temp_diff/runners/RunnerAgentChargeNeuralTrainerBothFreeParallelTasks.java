@@ -21,6 +21,8 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
     public static final int BATCH_SIZE1 = 100;
     public static final int NOF_LAYERS_HIDDEN = 5;
     public static final int NOF_NEURONS_HIDDEN = 27;
+    public static final double LEARNING_RATE1 = 0.1, DISCOUNT_FACTOR = 0.95;
+    public static final Pair<Double, Double> START_END_PROB = Pair.of(0.9, 0.1);
 
     static EnvironmentInterface<ChargeVariables> environment;
 
@@ -44,6 +46,7 @@ public class RunnerAgentChargeNeuralTrainerBothFreeParallelTasks {
                     .nofTasks(NOF_TASKS).nofEpis(NOF_EPIS).maxTrainTimeInSeconds(MAX_TRAIN_TIME_IN_SECONDS)
                     .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                     .batchSize(BATCH_SIZE1).nofLayersHidden(NOF_LAYERS_HIDDEN).nofNeuronsHidden(NOF_NEURONS_HIDDEN)
+                    .discountFactor(DISCOUNT_FACTOR).learningRate(LEARNING_RATE1).startEndProb(START_END_PROB)
                     .bufferType(bufferType).bufferSize(bufferSize)
                     .build();
             ChargeTrainerExecutorHelper helper = new ChargeTrainerExecutorHelper(helperSettings, environment);

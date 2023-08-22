@@ -1,7 +1,7 @@
 package multi_step_td.exp_buffer;
 
-import multi_step_temp_diff.domain.agent_parts.ExperienceProbabilitySetter;
-import multi_step_temp_diff.domain.agent_parts.NstepExperience;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.ExperienceProbabilitySetter;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import org.junit.jupiter.api.BeforeEach;

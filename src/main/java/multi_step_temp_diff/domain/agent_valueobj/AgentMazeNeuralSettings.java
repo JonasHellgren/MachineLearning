@@ -1,12 +1,13 @@
 package multi_step_temp_diff.domain.agent_valueobj;
 
 import lombok.Builder;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.environment_valueobj.MazeEnvironmentSettings;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizeMinMax;
-import multi_step_temp_diff.domain.agent_abstract.normalizer.NormalizerInterface;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 
-import static common.DefaultPredicates.defaultIfNullDouble;
-import static common.DefaultPredicates.defaultIfNullInteger;
+import java.util.List;
+
+import static common.DefaultPredicates.*;
 
 @Builder
 public record AgentMazeNeuralSettings(
@@ -24,6 +25,7 @@ implements AgentSettingsInterface {
     public static final double LEARNING_RATE=0.5;
     public static final int START_X = 0, START_Y = 0;
     public static final double DISCOUNT_FACTOR = 1d;
+    public static final List<Double> VALUE_LIST = List.of(100 * 10d, 80d, 50d, 30d, 50d, 30d);
 
     @Builder
     public AgentMazeNeuralSettings(Integer nofStates,
@@ -45,7 +47,8 @@ implements AgentSettingsInterface {
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
         //this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
-        this.normalizer=new NormalizeMinMax(0,envSettings.rewardGoal()*2);
+        //this.normalizer=new NormalizeMinMax(0,envSettings.rewardGoal()*2);
+        this.normalizer= (NormalizerInterface) defaultIfNullObject.apply(normalizer,new NormalizerMeanStd(VALUE_LIST));
     }
 
     public static AgentMazeNeuralSettings newDefault() {

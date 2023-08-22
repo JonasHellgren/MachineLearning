@@ -12,13 +12,16 @@ import multi_step_temp_diff.domain.environment_abstract.StepReturn;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
+/***
+ *
+ */
+
 @Getter
 @Setter
 @Log
 public abstract class AgentAbstract<S> implements AgentInterface<S> {
     EnvironmentInterface<S> environment;
     StateInterface<S> state;
-    //double discountFactor;
     AgentSettingsInterface agentSettings;
     int nofSteps;
     AgentActionSelector<S> actionSelector;
@@ -42,8 +45,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
                 .readMemoryFunction(this::readValue)
                 .build();
         this.temporalDifferenceTracker=new ValueTracker();
-        errorHistory=new ValueTracker();
-
+        this.errorHistory=new ValueTracker();
     }
 
     @Override
