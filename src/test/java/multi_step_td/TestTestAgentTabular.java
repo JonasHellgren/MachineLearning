@@ -90,12 +90,6 @@ public class TestTestAgentTabular {
         Assert.assertEquals(10d,agent.readValue(ForkState.newFromPos(9)),DELTA);
     }
 
-    @Test
-    public void givenState_whenAction_thenNofStepsIsIncreased() {
-        Assert.assertEquals(0,agentInfo.getNofSteps());
-        agent.chooseAction(PROB_RANDOM);
-        Assert.assertEquals(1,agentInfo.getNofSteps());
 
-    }
 
 }

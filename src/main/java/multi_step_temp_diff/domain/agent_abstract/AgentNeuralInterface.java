@@ -6,6 +6,11 @@ import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 
 import java.util.List;
 
+/**
+ * Additional functionality for agents with neural memory
+ */
+
+
 public interface AgentNeuralInterface<S> extends AgentInterface<S> {
     void learn(List<NstepExperience<S>> miniBatch);
     AgentSettingsInterface getAgentSettings();

@@ -2,7 +2,6 @@ package multi_step_temp_diff.domain.helpers_specific;
 
 import common.MathUtils;
 import common.MovingAverage;
-import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.helpers_common.ValueTracker;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeural;
@@ -92,7 +91,7 @@ public class ChargePlotHelper {
     public static final String PICS_FOLDER = "pics/";
     public void plotAndSaveErrorHistory(String fileName) {
         AgentChargeNeural agentCasted = (AgentChargeNeural) agent;
-        ValueTracker errorTracker=agentCasted.getErrorHistory();
+        ValueTracker errorTracker=agentCasted.getErrorMemoryTracker();
         PlotterMultiplePanelsTrajectory plotter=new PlotterMultiplePanelsTrajectory(List.of("Error "+fileName),"iter");
         MovingAverage movingAverage=new MovingAverage(
                 LENGTH_FILTER_WINDOW,errorTracker.getValueHistoryAbsoluteValues());

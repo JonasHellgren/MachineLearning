@@ -28,6 +28,8 @@ public class NstepExperience<S> {
     @Builder.Default
     public Double value = VALUE_NOT_DEF;
     @Builder.Default
+    public Double valueMemory= VALUE_NOT_DEF;
+    @Builder.Default
     public Double tdError = INIT_TD_ERROR;
     @Builder.Default
     public Double prioritization = INIT_PRIORITIZATION;

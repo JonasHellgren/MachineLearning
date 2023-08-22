@@ -41,7 +41,7 @@ public class NStepTabularAgentTrainer<S> {
 
     public void train() {
         agentInfo = new AgentInfo<>(agent);
-        helper = NStepTDHelper.newHelperFromSettings(settings,agent.getSettings());
+        helper = NStepTDHelper.newHelperFromSettings(settings,agentInfo.getSettings());
         decayProb = NStepTDHelper.newLogDecayFromSettings(settings);
 
         while (!helper.episodeCounter.isExceeded()) {

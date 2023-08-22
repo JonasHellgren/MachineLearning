@@ -6,6 +6,7 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import multi_step_temp_diff.domain.agent_valueobj.AgentSettingsInterface;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -29,7 +30,7 @@ public class AgentActionSelector<S> {
     @Builder.Default
     double toleranceSameValue=TOLERANCE;
     @NonNull EnvironmentInterface<S> environment;
-    final double discountFactor;
+    AgentSettingsInterface agentSettings;
     Function<StateInterface<S>, Double> readMemoryFunction;
 
     public int chooseRandomAction() {
@@ -70,7 +71,7 @@ public class AgentActionSelector<S> {
             StepReturn<S> sr = environment.step(state, a);
             StateInterface<S> newState = sr.newState;
             Double valueNewState = readMemoryFunction.apply(newState);
-            double value = sr.reward + discountFactor * valueNewState;
+            double value = sr.reward + agentSettings.discountFactor() * valueNewState;
             actionAndValueList.add(new ActionAndValue(a, value));
         }
         return actionAndValueList;

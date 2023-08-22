@@ -3,7 +3,7 @@ package multi_step_temp_diff.domain.agents.maze;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterface;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
-import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNeuralAbstract;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import static multi_step_temp_diff.domain.environments.maze.MazeEnvironment.sett
  *
  */
 
-public class NeuralValueMemoryMaze<S> extends ValueMemoryNetworkAbstract<S> {
+public class NeuralValueMemoryMaze<S> extends ValueMemoryNeuralAbstract<S> {
 
     private static final double MARGIN = 1.0;
 

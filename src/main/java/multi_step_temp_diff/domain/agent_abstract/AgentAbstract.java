@@ -13,6 +13,9 @@ import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 /***
+ *   The concrete implementation of this class is adapted for a domain
+ *  To avoid code duplication in concrete classes, this class includes fields such as an environment reference
+ *  The method readValue is abstract and reads the state value approximation from memory
  *
  */
 
@@ -23,10 +26,9 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
     EnvironmentInterface<S> environment;
     StateInterface<S> state;
     AgentSettingsInterface agentSettings;
-    int nofSteps;
     AgentActionSelector<S> actionSelector;
     ValueTracker temporalDifferenceTracker;
-    protected ValueTracker errorHistory;
+    protected ValueTracker errorMemoryTracker;
 
     public AgentAbstract(@NonNull  EnvironmentInterface<S> environment,
                          StateInterface<S> state,
@@ -38,27 +40,24 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
         this.environment = environment;
         this.state = state;
         this.agentSettings = agentSettings;
-        this.nofSteps=0;
         this.actionSelector = AgentActionSelector.<S>builder()
                 .nofActions(environment.actionSet().size())
-                .environment(environment).discountFactor(agentSettings.discountFactor())  //todo agentSettings
+                .environment(environment).agentSettings(agentSettings)
                 .readMemoryFunction(this::readValue)
                 .build();
         this.temporalDifferenceTracker=new ValueTracker();
-        this.errorHistory=new ValueTracker();
+        this.errorMemoryTracker =new ValueTracker();
     }
 
     @Override
     public int chooseAction(double probRandom) {
-        nofSteps++;
         return actionSelector.chooseAction(probRandom,getState());
     }
 
     @Override
     public void clear() {
-        nofSteps=0;
         temporalDifferenceTracker.reset();
-        errorHistory.reset();
+        errorMemoryTracker.reset();
     }
 
     @Override
@@ -83,7 +82,7 @@ public abstract class AgentAbstract<S> implements AgentInterface<S> {
 
     protected void addErrorsToHistory(List<Double> errors) {
         DoubleSummaryStatistics sumStats=errors.stream().mapToDouble(v -> v).summaryStatistics();
-        errorHistory.addValue(sumStats.getAverage());
+        errorMemoryTracker.addValue(sumStats.getAverage());
     }
 
 }

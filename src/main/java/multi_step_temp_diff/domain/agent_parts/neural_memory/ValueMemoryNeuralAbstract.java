@@ -20,9 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The concrete implementation of this class is adapted for a domain
+ */
+
 @Getter
 @Log
-public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInterface<S> {
+public abstract class ValueMemoryNeuralAbstract<S> implements NetworkMemoryInterface<S> {
     private static final int NOF_ITERATIONS = 1;
     public static final String NON_EQUAL_NETS_WHEN_COPYING_WEIGHT = "Non equal nets when copying weight";
 
@@ -33,7 +37,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     public NetSettings netSettings;
 
 
-    public ValueMemoryNetworkAbstract(NetSettings netSettings) {
+    public ValueMemoryNeuralAbstract(NetSettings netSettings) {
         List<Integer> nofNeurons = new ArrayList<>();
         nofNeurons.add(netSettings.inputSize());
         for (int i = 0; i < netSettings.nofHiddenLayers(); i++) {
@@ -81,18 +85,19 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     }
 
     /**
-     * Calculate loss function (error) regarding weight
+     * Calculate loss function (error) regarding weight, needed by prioritized buffer
+     * Not spotless, more desirable to modify loss function. But not managed in Neuroph.
      */
 
     @Override
-    public double learnUsingWeights(List<NstepExperience<S>> miniBatch) {
+    public void learnUsingWeights(List<NstepExperience<S>> miniBatch) {
         doWarmUpIfNotDone(miniBatch);
 
         for (NstepExperience<S> e : miniBatch) {
             learningRule.setLearningRate(netSettings.learningRate()*e.weight);
             learningRule.doOneLearningIteration(getDataSet(List.of(e)));
         }
-        return learningRule.getTotalNetworkError();
+        learningRule.getTotalNetworkError();
     }
 
     /**
@@ -125,8 +130,6 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
     @Override
     public void load(String fileName) {
         neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.createFromFile(fileName);
-        //    neuralNetwork = (MultiLayerPerceptron) MultiLayerPerceptron.load(fileName);
-
     }
 
     @SneakyThrows
@@ -137,7 +140,7 @@ public abstract class ValueMemoryNetworkAbstract<S> implements NetworkMemoryInte
 
     @Override
     public void copyWeights(NetworkMemoryInterface<S> netOther) {
-        ValueMemoryNetworkAbstract<S> netOtherCasted=(ValueMemoryNetworkAbstract<S>) netOther;
+        ValueMemoryNeuralAbstract<S> netOtherCasted=(ValueMemoryNeuralAbstract<S>) netOther;
 
         if (this.neuralNetwork.getLayersCount()!=netOtherCasted.neuralNetwork.getLayersCount()) {
             throw new IllegalArgumentException(NON_EQUAL_NETS_WHEN_COPYING_WEIGHT);

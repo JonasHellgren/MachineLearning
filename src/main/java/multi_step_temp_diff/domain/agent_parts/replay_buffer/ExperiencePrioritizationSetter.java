@@ -15,6 +15,4 @@ public class ExperiencePrioritizationSetter<S> {
         prioritizationStrategy.modify(buffer);
     }
 
-
-
 }

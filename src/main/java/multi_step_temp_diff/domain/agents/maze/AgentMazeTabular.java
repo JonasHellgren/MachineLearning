@@ -41,10 +41,7 @@ public class AgentMazeTabular extends AgentAbstract<MazeVariables> implements Ag
         memory.put((MazeState) state, value);
     }
 
-    @Override
-    public AgentSettingsInterface getSettings() {
-        return settings;
-    }
+
 
     public void clear() {
         super.clear();

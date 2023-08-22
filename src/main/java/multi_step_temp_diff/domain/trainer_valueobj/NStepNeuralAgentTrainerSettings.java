@@ -16,10 +16,11 @@ public record NStepNeuralAgentTrainerSettings(
         Integer maxBufferSize,
         Integer maxStepsInEpisode,
         Integer nofEpisodesBetweenLogs,
-        Integer nofStepsBetweenTargetMemoryUpdate
+        Integer nofStepsBetweenTargetMemoryUpdate,
+        Double fractionMiniBatchForTracking
 ) implements  NStepTabularTrainerSettingsInterface {
 
-  //  private static final Double ALPHA = 0.5;
+    //  private static final Double ALPHA = 0.5;
     private static final Integer N_DEFAULT = 3;
     private static final Integer NOF_EPIS = 100;
     private static final Integer BATCH_SIZE = 50;
@@ -30,6 +31,7 @@ public record NStepNeuralAgentTrainerSettings(
     public static final Integer MAX_BUFFER_SIZE = 10_000;  //only applies if non-default buffer is created
     public static final int NOF_EPISODES_BETWEEN_LOGS = 100;
     public static final int NOF_STEPS_TARGET_MEMORY_UPDATE = 100;
+    public static final double FRACTION_TRACKING = 1.0;
 
 
     public static NStepNeuralAgentTrainerSettings getDefault() {
@@ -47,7 +49,8 @@ public record NStepNeuralAgentTrainerSettings(
                                            Integer maxBufferSize,
                                            Integer maxStepsInEpisode,
                                            Integer nofEpisodesBetweenLogs,
-                                           Integer nofStepsBetweenTargetMemoryUpdate) {
+                                           Integer nofStepsBetweenTargetMemoryUpdate,
+                                           Double fractionMiniBatchForTracking) {
         this.nofStepsBetweenUpdatedAndBackuped = defaultIfNullInteger.apply(nofStepsBetweenUpdatedAndBackuped,N_DEFAULT);
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
         this.maxTrainingTimeInMilliS = defaultIfNullInteger.apply(maxTrainingTimeInMilliS,Integer.MAX_VALUE);
@@ -61,6 +64,6 @@ public record NStepNeuralAgentTrainerSettings(
         this.nofEpisodesBetweenLogs = defaultIfNullInteger.apply(nofEpisodesBetweenLogs, NOF_EPISODES_BETWEEN_LOGS);
         this.nofStepsBetweenTargetMemoryUpdate =
                 defaultIfNullInteger.apply(nofStepsBetweenTargetMemoryUpdate, NOF_STEPS_TARGET_MEMORY_UPDATE);
-
+        this.fractionMiniBatchForTracking=defaultIfNullDouble.apply(fractionMiniBatchForTracking, FRACTION_TRACKING);
     }
 }

@@ -4,7 +4,7 @@ import multi_step_temp_diff.domain.agent_parts.neural_memory.NetworkMemoryInterf
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.agent_valueobj.NetSettings;
-import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNetworkAbstract;
+import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNeuralAbstract;
 
 import java.util.Arrays;
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Input is a binary vector with zeros except at active state. Much more stable than one double input.
  */
 
-public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S>  {
+public class NeuralValueMemoryFork<S> extends ValueMemoryNeuralAbstract<S> {
 
     private static final double MARGIN = 1.0;
 
@@ -57,7 +57,7 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNetworkAbstract<S>  {
 
     @Override
     public NetworkMemoryInterface<S> copy() {
-        ValueMemoryNetworkAbstract<S> netCopy=new NeuralValueMemoryFork<>(this.netSettings);
+        ValueMemoryNeuralAbstract<S> netCopy=new NeuralValueMemoryFork<>(this.netSettings);
         netCopy.copyWeights(this);
         return netCopy;
     }

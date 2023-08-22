@@ -1,36 +1,35 @@
 package multi_step_temp_diff.runners;
 
-import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
-import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyOldest;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyRandom;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.environment_valueobj.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
-import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentLambdas;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.factories.TrainerFactory;
 import multi_step_temp_diff.domain.helpers_specific.*;
-import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 import static java.lang.System.out;
 import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters.*;
 
 /***
-
+ A smaller discount factor increases convergence speed of td error
  */
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int NOF_EPIS = 100_000, MAX_TRAIN_TIME_IN_MINUTES = 2;  //one will limit
+    private static final int MAX_NOF_EPIS = 200, MAX_TRAIN_TIME_IN_MINUTES = 1;  //one will limit
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
-    public static final int BATCH_SIZE1 = 30;
-    public static final int NOF_LAYERS_HIDDEN = 3;  //10
+    public static final int BATCH_SIZE1 = 10;  //30
+    public static final int NOF_LAYERS_HIDDEN = 5;  //10
     public static final int NOF_NEURONS_HIDDEN = 15;  //15
-    public static final int MAX_BUFFER_SIZE = 10_000;
-    public static final int MAX_NOF_STEPS_IN_EPIS = 10_000;
+    public static final int MAX_BUFFER_SIZE = 100_000;
+    public static final int MAX_NOF_STEPS_IN_EPIS = 1_000;
     public static final Pair<Double, Double> START_END_PROB = Pair.of(0.9, 0.01);
     public static final double LEARNING_RATE1 = 0.01, DISCOUNT_FACTOR = 0.95;
 
@@ -51,7 +50,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         var trainerFactory = TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
-                .nofEpis(NOF_EPIS).maxTrainingTimeInMilliS(1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES)
+                .nofEpis(MAX_NOF_EPIS).maxTrainingTimeInMilliS(1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                 .buffer(ReplayBufferNStepUniform.<ChargeVariables>builder()
@@ -68,6 +67,10 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         var evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
         evaluator.evaluate();
         out.println("evaluator = " + evaluator);
+
+        List<NstepExperience<ChargeVariables>> miniBatch= trainer.getBuffer().getMiniBatch(10);
+        trainer.trackTempDifferenceError(miniBatch);
+        miniBatch.forEach(m -> out.println("valueMemory = "+m.valueMemory+", value = "+m.value+", td errror = "+m.tdError));
 
 
     }
