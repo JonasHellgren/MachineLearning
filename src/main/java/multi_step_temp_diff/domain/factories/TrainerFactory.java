@@ -24,6 +24,8 @@ public class TrainerFactory<S> {
     @Builder.Default
     int nofEpis=NOF_EPIS;
     @Builder.Default
+    int maxTrainingTimeInMilliS=Integer.MAX_VALUE;
+    @Builder.Default
     int nofStepsBetweenUpdatedAndBackuped=NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED;
     @Builder.Default
     int batchSize=BATCH_SIZE;
@@ -33,15 +35,13 @@ public class TrainerFactory<S> {
     Pair<Double,Double> startEndProb= START_END_PROB;
     @NonNull Supplier<StateInterface<S>> startStateSupplier;
     @Builder.Default
-    int maxTrainingTimeInMilliS=Integer.MAX_VALUE;
-    @Builder.Default
     int nofEpisodesBetweenLogs= NOF_EPIS_BETWEEN_LOGS;
     @NonNull
     ReplayBufferInterface<S> buffer;
 
     public NStepNeuralAgentTrainer<S> buildTrainer() {
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
-                .probStart(startEndProb.getLeft()).probEnd(startEndProb.getRight()).nofIterations(1)
+                .probStart(startEndProb.getLeft()).probEnd(startEndProb.getRight())
                 .batchSize(batchSize).maxBufferSize(MAX_BUFFER_SIZE_EXPERIENCE_REPLAY)
                 .nofEpis(nofEpis).maxTrainingTimeInMilliS(maxTrainingTimeInMilliS)
                 .nofStepsBetweenUpdatedAndBackuped(nofStepsBetweenUpdatedAndBackuped)

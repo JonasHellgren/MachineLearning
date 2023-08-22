@@ -30,7 +30,7 @@ public class ForkTrainerFactory {
     public  NStepNeuralAgentTrainer<ForkVariables>  buildTrainer(ReplayBufferInterface<ForkVariables> buffer) {
 
         NStepNeuralAgentTrainerSettings settings = NStepNeuralAgentTrainerSettings.builder()
-                .probStart(probStart).probEnd(probEnd).nofIterations(1)
+                .probStart(probStart).probEnd(probEnd)
                 .batchSize(batchSize)
                 .nofEpis(nofEpis)
                 .maxTrainingTimeInMilliS(1000 * maxTrainingTimeInSeconds)

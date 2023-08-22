@@ -244,7 +244,7 @@ prova target network
 - RunnerAgentChargeNeuralTrainerBothFree - varför konvergerar så långsamt
 - annan discouint rate RunnerAgentChargeNeuralTrainerBothFree x
 - fixa RunnerAgentChargeNeuralTrainerBothFreeParallelTasks
-- studera minibatch - går förstå varfr högt td error
+- studera minibatch - går förstå varfr högt td error  x
 
 - skicka in agentSettings till actionSelector
 

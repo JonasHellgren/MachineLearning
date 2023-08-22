@@ -28,6 +28,10 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
  * Inspired by DQN - https://stackoverflow.com/questions/39848984/what-is-phi-in-deep-q-learning-algorithm
  * <p>
  * Thanks to Callable multiple trainers can operate in parallel
+ *
+ * It is important to set nofEpis and maxTrainingTimeInMilliS in an adequate way. If maxTrainingTimeInMilliS is to small
+ * nofEpis will be far from its maximum. The consequence is that decayProb (handling random action) will not perform as
+ * expected. A log warning will appear if this is the case.
  */
 
 @Builder
@@ -59,7 +63,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
         CpuTimer timer = new CpuTimer(settings.maxTrainingTimeInMilliS());
         NetworkMemoryInterface<S> memoryTarget = agentNeural.getMemory().copy();
 
-        while (nofEpisodesOrTimeNotIsExceede(timer)) {
+        while (noEpisodesOrTimeNotIsExceeded(timer)) {
             agentNeural.setState(startStateSupplier.get());
             helper.reset();
             do {
@@ -71,7 +75,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 });
                 helper.tau = timeForUpdate.apply(timeStep, settings.nofStepsBetweenUpdatedAndBackuped());
                 executeIfTrue(isPossibleToGetExperience.test(helper.tau), () ->
-                        buffer.addExperience(getExperienceAtTimeTau(), timer));
+                        buffer.addExperience(getExperienceAtTimeTau(),timer));
                 executeIfTrue(isEnoughItemsInBuffer.test(buffer.size(), settings), () -> {
                     var miniBatch = buffer.getMiniBatch(settings.batchSize());
                     setValuesInExperiencesInMiniBatch(miniBatch, memoryTarget);
@@ -93,7 +97,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
                 memoryTarget.copyWeights(agentNeural.getMemory()));
     }
 
-    private boolean nofEpisodesOrTimeNotIsExceede(CpuTimer timer) {
+    private boolean noEpisodesOrTimeNotIsExceeded(CpuTimer timer) {
         return helper.isNofEpisodesNotIsExceeded() && !timer.isTimeExceeded();
     }
 
@@ -106,6 +110,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     private void logFinishedTraining(CpuTimer timer) {
         log.info("Training finished. Replay buffer size = " + buffer.size() + ". Time needed in minutes = " +
                 timer.absoluteProgressInMillis() * MS2SEC * SEC2MIN);
+        executeIfTrue(timer.isTimeExceeded(), () -> log.warning("Time exceeded before nof episodes"));
     }
 
     private boolean isTimeForUpdateOkAndNotToLargeTime() {
@@ -114,9 +119,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
     }
 
     private void trainAgentMemoryFromExperiencesInMiniBatch(List<NstepExperience<S>> miniBatch) {
-        for (int i = 0; i < settings.nofIterations(); i++) { //todo remove
             agentNeural.learn(miniBatch);
-        }
     }
 
     public void trackTempDifferenceError(List<NstepExperience<S>> miniBatch) {
@@ -137,9 +140,7 @@ public class NStepNeuralAgentTrainer<S> implements Callable<NStepNeuralAgentTrai
         double discount = helper.getDiscount();
         for (NstepExperience<S> exp : miniBatch) {
             exp.value = (exp.isBackupStatePresent)
-                    //? exp.sumOfRewards + discount * agentNeural.readValue(exp.stateToBackupFrom)
                     ? exp.sumOfRewards + discount * memory.read(exp.stateToBackupFrom)
-
                     : exp.sumOfRewards;
         }
     }

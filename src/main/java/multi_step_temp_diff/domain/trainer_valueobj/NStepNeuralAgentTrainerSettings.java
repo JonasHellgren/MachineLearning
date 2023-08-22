@@ -9,7 +9,7 @@ public record NStepNeuralAgentTrainerSettings(
         Integer nofEpis,
         Integer maxTrainingTimeInMilliS,
         Integer batchSize,
-        Integer nofIterations,
+      //  Integer nofIterations,
         Double probStart,
         Double probEnd,
         Double initValue,
@@ -42,7 +42,7 @@ public record NStepNeuralAgentTrainerSettings(
                                            Integer nofEpis,
                                            Integer maxTrainingTimeInMilliS,
                                            Integer batchSize,
-                                           Integer nofIterations,
+                                       //    Integer nofIterations,
                                            Double probStart,
                                            Double probEnd,
                                            Double initValue,
@@ -55,7 +55,7 @@ public record NStepNeuralAgentTrainerSettings(
         this.nofEpis = defaultIfNullInteger.apply(nofEpis,NOF_EPIS);
         this.maxTrainingTimeInMilliS = defaultIfNullInteger.apply(maxTrainingTimeInMilliS,Integer.MAX_VALUE);
         this.batchSize = defaultIfNullInteger.apply(batchSize,BATCH_SIZE);
-        this.nofIterations = defaultIfNullInteger.apply(nofIterations,NOF_ITERATIONS);
+       // this.nofIterations = defaultIfNullInteger.apply(nofIterations,NOF_ITERATIONS);
         this.probStart = defaultIfNullDouble.apply(probStart,PROB_START);
         this.probEnd = defaultIfNullDouble.apply(probEnd,PROB_END);
         this.initValue = defaultIfNullDouble.apply(initValue,INIT_VALUE);

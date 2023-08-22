@@ -91,7 +91,7 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
         agentCasted=(AgentForkNeural) agent;
 
         NStepNeuralAgentTrainerSettings settings= NStepNeuralAgentTrainerSettings.builder()
-                .probStart(0.9).probEnd(1e-5).nofIterations(1)
+                .probStart(0.9).probEnd(1e-5)
                 .batchSize(BATCH_SIZE)
                 .nofEpis(NOF_EPIS)
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)

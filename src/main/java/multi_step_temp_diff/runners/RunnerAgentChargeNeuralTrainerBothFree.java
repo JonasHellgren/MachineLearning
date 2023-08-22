@@ -23,7 +23,8 @@ import static multi_step_temp_diff.domain.helpers_specific.ChargeAgentParameters
 
 public class RunnerAgentChargeNeuralTrainerBothFree {
 
-    private static final int MAX_NOF_EPIS = 200, MAX_TRAIN_TIME_IN_MINUTES = 1;  //one will limit
+    private static final int MAX_NOF_EPIS = 500;
+    static double MAX_TRAIN_TIME_IN_MINUTES = 10;  //one will limit
     private static final int NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED = 10;
     public static final int BATCH_SIZE1 = 10;  //30
     public static final int NOF_LAYERS_HIDDEN = 5;  //10
@@ -50,7 +51,7 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         var trainerFactory = TrainerFactory.<ChargeVariables>builder()
                 .agent(agent).environment(environment)
                 .batchSize(BATCH_SIZE1).startEndProb(START_END_PROB)
-                .nofEpis(MAX_NOF_EPIS).maxTrainingTimeInMilliS(1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES)
+                .nofEpis(MAX_NOF_EPIS).maxTrainingTimeInMilliS((int) (1000 * 60 * MAX_TRAIN_TIME_IN_MINUTES))
                 .nofStepsBetweenUpdatedAndBackuped(NOF_STEPS_BETWEEN_UPDATED_AND_BACKUPED)
                 .startStateSupplier(() -> stateSupplier.randomDifferentSitePositionsAndHighSoC())
                 .buffer(ReplayBufferNStepUniform.<ChargeVariables>builder()
@@ -67,11 +68,6 @@ public class RunnerAgentChargeNeuralTrainerBothFree {
         var evaluator = ChargeScenariosEvaluator.newAllScenarios(environment, agent);
         evaluator.evaluate();
         out.println("evaluator = " + evaluator);
-
-        List<NstepExperience<ChargeVariables>> miniBatch= trainer.getBuffer().getMiniBatch(10);
-        trainer.trackTempDifferenceError(miniBatch);
-        miniBatch.forEach(m -> out.println("valueMemory = "+m.valueMemory+", value = "+m.value+", td errror = "+m.tdError));
-
 
     }
 
