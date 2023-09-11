@@ -258,6 +258,7 @@ TestForkNeuralValueMemory fuckar
 AgentChargeNeural learn - ta bort addErrorsToHistory etc - onödig
 ChargeScenariosEvaluator<S> göra generisk
 mer till folder factories
+Snabba upp genom prototyp
 
 givenRuleBasedValue_whenTrain_thenCorrect fuckar
 snygga upp plotters - tex inställningar i konstruktor
