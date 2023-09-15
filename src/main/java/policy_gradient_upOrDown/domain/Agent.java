@@ -36,8 +36,8 @@ public class Agent {
 
     double derGradLogPolicy(int action) {
         return (action==0)
-                ? 1-sigmoid.apply(theta)
-                : -sigmoid.apply(theta);
+                ? -sigmoid.apply(theta)
+                : 1-sigmoid.apply(theta);
     }
 
 }

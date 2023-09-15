@@ -1,9 +1,9 @@
 env agent x
 TestEnv x
 TestAgent x
-Trainer
-alternativ miljö setting upordown
-tester olika miljöer
+Trainer x
+alternativ miljö setting upordown x
+tester olika miljöer  x
 städa upordown
 dokumentera i md upordown - tex renskriv bevis derGradLog
 
