@@ -1,4 +1,4 @@
-package policy_gradient_upOrDown.domain;
+package policy_gradient_zeroOrOne.domain;
 
 import lombok.Builder;
 import java.util.function.Supplier;

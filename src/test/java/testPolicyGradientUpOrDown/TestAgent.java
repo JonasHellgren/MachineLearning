@@ -3,8 +3,7 @@ package testPolicyGradientUpOrDown;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_upOrDown.domain.Agent;
-import policy_gradient_upOrDown.domain.Environment;
+import policy_gradient_zeroOrOne.domain.Agent;
 
 public class TestAgent {
 

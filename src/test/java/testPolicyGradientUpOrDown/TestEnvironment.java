@@ -2,7 +2,7 @@ package testPolicyGradientUpOrDown;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_upOrDown.domain.Environment;
+import policy_gradient_zeroOrOne.domain.Environment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

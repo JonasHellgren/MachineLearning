@@ -1,0 +1,46 @@
+package policy_gradient_zeroOrOne.domain;
+
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import policy_gradient_zeroOrOne.helpers.ReturnCalculator;
+import java.util.ArrayList;
+import java.util.List;
+
+@Builder
+@Setter
+public class Trainer {
+
+    public static final double DUMMY_VALUE = 0d;
+    Environment environment;
+    Agent agent;
+    @NonNull Integer nofEpisodes;
+    @NonNull Integer nofStepsMax;
+    @NonNull Double gamma, learningRate;
+
+    public void train() {
+        ReturnCalculator returnCalculator=new ReturnCalculator();
+        for (int ei = 0; ei < nofEpisodes; ei++) {
+            List<Experience> experienceList = getExperiences();
+            List<Experience> experienceListWithReturns =
+                    returnCalculator.createExperienceListWithReturns(experienceList,gamma);
+            for (Experience exp:experienceListWithReturns) {
+                double gradLog = agent.gradLogPolicy(exp.action());
+                double vt = exp.value();
+                agent.setTheta(agent.theta+learningRate*gradLog*vt);
+            }
+        }
+    }
+
+    @NotNull
+    private List<Experience> getExperiences() {
+        List<Experience> experienceList=new ArrayList<>();
+        for (int si = 0; si < nofStepsMax ; si++) {
+            int action=agent.chooseAction();
+            double reward=environment.step(action);
+            experienceList.add(new Experience(action,reward, DUMMY_VALUE));
+        }
+        return experienceList;
+    }
+}

@@ -2,7 +2,7 @@ package testPolicyGradientUpOrDown;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import policy_gradient_upOrDown.helpers.ReturnCalculator;
+import policy_gradient_zeroOrOne.helpers.ReturnCalculator;
 
 import java.util.List;
 

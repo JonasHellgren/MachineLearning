@@ -1,10 +1,25 @@
-package policy_gradient_upOrDown.helpers;
+package policy_gradient_zeroOrOne.helpers;
+
+import policy_gradient_zeroOrOne.domain.Experience;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ReturnCalculator {
+
+    public List<Experience>  createExperienceListWithReturns(List<Experience> experienceList, double gamma) {
+        List<Experience> experienceListNew=new ArrayList<>();
+        List<Double> rewards=experienceList.stream().map(e->e.reward()).toList();
+        List<Double> returns=calcReturns(rewards,gamma);
+
+        for (Experience exp:experienceList) {
+            Experience e = new Experience(exp.action(), exp.reward(), returns.get(experienceList.indexOf(exp)));
+            experienceListNew.add(e);
+        }
+        return experienceListNew;
+    }
+
 
     public List<Double> calcReturns(List<Double> rewards, double gamma) {
         List<Double> rewardsDiscounted=new ArrayList<>();

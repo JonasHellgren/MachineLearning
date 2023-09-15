@@ -1,11 +1,10 @@
 package testPolicyGradientUpOrDown;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_upOrDown.helpers.LambdaFunctions;
+import policy_gradient_zeroOrOne.helpers.LambdaFunctions;
 
 public class TestLambdaFunctions {
 

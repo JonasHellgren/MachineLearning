@@ -1,10 +1,10 @@
-package policy_gradient_upOrDown.domain;
+package policy_gradient_zeroOrOne.domain;
 
 import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 
-import static policy_gradient_upOrDown.helpers.LambdaFunctions.sigmoid;
+import static policy_gradient_zeroOrOne.helpers.LambdaFunctions.sigmoid;
 
 @Builder
 @Getter
@@ -33,7 +33,7 @@ public class Agent {
     }
 
     //see md file for derivation
-    double derGradLogPolicy(int action) {
+    double gradLogPolicy(int action) {
         return (action==0)
                 ? -sigmoid.apply(theta)
                 : 1-sigmoid.apply(theta);
