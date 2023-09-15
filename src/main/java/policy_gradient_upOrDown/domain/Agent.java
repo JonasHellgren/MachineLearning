@@ -14,7 +14,6 @@ public class Agent {
     @Builder.Default
     Double theta = THETA;
 
-
     public  static  Agent newDefault() {
         return Agent.builder().build();
     }
@@ -33,7 +32,7 @@ public class Agent {
         return sigmoid.apply(theta);
     }
 
-
+    //see md file for derivation
     double derGradLogPolicy(int action) {
         return (action==0)
                 ? -sigmoid.apply(theta)

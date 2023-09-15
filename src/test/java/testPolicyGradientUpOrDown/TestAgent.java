@@ -22,8 +22,6 @@ public class TestAgent {
         Assertions.assertTrue(action==0 || action==1);
     }
 
-
-
     @Test
     void givenLargeThen_whenChooseAction_thenOne() {
         agent= Agent.builder().theta(Double.MAX_VALUE).build();

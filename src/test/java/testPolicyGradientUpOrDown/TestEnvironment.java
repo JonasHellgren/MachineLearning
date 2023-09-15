@@ -13,19 +13,18 @@ public class TestEnvironment {
 
     @BeforeEach
     public void init() {
-        environment=Environment.newDefault();
+        environment=Environment.newActionZeroIsGood();
     }
 
     @Test
-    public void givenDefault_whenLeft_thenRewardIsOne() {
+    public void givenActionZeroIsGood_whenActionZero_thenRewardIsOne() {
         double reward=environment.step(0);
         assertEquals(1,reward, DELTA);
     }
 
     @Test
-    public void givenDefault_whenRight_thenRewardIsZero() {
+    public void givenActionZeroIsGood_whenActionOne_thenRewardIsMinusOne() {
         double reward=environment.step(1);
-        assertEquals(0,reward, DELTA);
+        assertEquals(-1,reward, DELTA);
     }
-
 }
