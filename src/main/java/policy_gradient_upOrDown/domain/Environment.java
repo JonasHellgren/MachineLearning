@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 public class Environment {
 
     public static final Supplier<Double> REWARD_ACTION_ZERO = () ->  1d;  //up
-    public static final Supplier<Double> REWARD_ACTION_ONE = () -> 0d;  //down
+    public static final Supplier<Double> REWARD_ACTION_ONE = () -> -0.5;  //down
 
     @Builder.Default
     Supplier<Double> rewardActionZero = REWARD_ACTION_ZERO;

@@ -25,7 +25,7 @@ public class TestEnvironment {
     @Test
     public void givenDefault_whenRight_thenRewardIsZero() {
         double reward=environment.step(1);
-        assertEquals(1,reward, DELTA);
+        assertEquals(0,reward, DELTA);
     }
 
 }

@@ -1,4 +1,12 @@
 env agent x
-TestEnv
-TestAgent
+TestEnv x
+TestAgent x
 Trainer
+alternativ miljö setting upordown
+tester olika miljöer
+städa upordown
+dokumentera i md upordown - tex renskriv bevis derGradLog
+
+
+förstå https://www.janisklaise.com/post/rl-policy-gradients/
+koda ovan

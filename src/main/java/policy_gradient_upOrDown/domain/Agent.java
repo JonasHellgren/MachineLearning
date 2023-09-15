@@ -2,14 +2,22 @@ package policy_gradient_upOrDown.domain;
 
 import common.RandUtils;
 import lombok.Builder;
-import policy_gradient_upOrDown.helpers.LambdaFunctions;
+import lombok.Getter;
+
+import static policy_gradient_upOrDown.helpers.LambdaFunctions.sigmoid;
 
 @Builder
+@Getter
 public class Agent {
 
     public static final double THETA = 0.5;
     @Builder.Default
     Double theta = THETA;
+
+
+    public  static  Agent newDefault() {
+        return Agent.builder().build();
+    }
 
     public void setTheta(Double theta) {
         this.theta = theta;
@@ -22,7 +30,14 @@ public class Agent {
     }
 
     public Double getProbOne() {
-        return LambdaFunctions.sigmoid.apply(theta);
+        return sigmoid.apply(theta);
+    }
+
+
+    double derGradLogPolicy(int action) {
+        return (action==0)
+                ? 1-sigmoid.apply(theta)
+                : -sigmoid.apply(theta);
     }
 
 }
