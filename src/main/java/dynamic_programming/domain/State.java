@@ -12,7 +12,12 @@ public record State(int x, int y) {
 
 
     public boolean isValid(int xMax, int yMax) {
+
         return x<=xMax && y<=yMax;
+    }
+
+    public boolean isXBelowMax(int xMax) {
+        return x<xMax;
     }
 
     @Override
