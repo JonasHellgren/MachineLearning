@@ -22,7 +22,7 @@ sigmoid -> 0 (theta -> -inf)
 
 
 
-## gradLogPolicy
+## Understanding gradLogPolicy
 
 The gradient of the policy can in this simple environment be derived analytically for each action
 
@@ -31,7 +31,7 @@ logPolicy=ln sigmoid(theta,a)
 so for a=action=1
 
 gradLogPolicy(a=1)= d/dTheta logPolicy =
-d/dTheta ln ( 1.0 / (1.0 + e^-theta) ) =  .... =
+d/dTheta ln ( 1.0 / (1.0 + e^theta) ) =  .... =
 1-sigmoid(theta)
 
 above is derived using following relations
@@ -47,22 +47,22 @@ The core of the updating algorithm is
 
     agent.setTheta(agent.theta+learningRate*gradLog*vt);
 
-gradLog above depends on the action only for this simple environment, vt is from experience from
+gradLog above depends on the action only for this simple environment, vt is experience from
 taking "randomly" sampled action according to present policy (theta dependant).
 
 The intuition for gradLogPolicy(s(theta),a) is as follows:
 
-positive -> increased theta gives higher probability choosing action in state s
+positive -> increased theta gives higher probability choosing action in state s \
 negative -> decreased theta gives higher probability choosing action in state s
-<=>
+<=>\
 increased theta gives lower probability choosing action in state s
 
 naming: gradLogPolicy=glp, vt=return at time t
 
-glp is pos, vt is pos => theta increased because good to take action \
-glp is neg, vt is pos => theta decreased because bad to take action \
-glp is pos, vt is neg => theta decreased because decreased theta gives higher probability choosing action \
-glp is neg, vt is neg => theta increased because increased theta gives lower probability choosing action 
+glp is pos, vt is pos => theta increased because want to increase probability take good action \
+glp is pos, vt is neg => theta decreased because want to decrease probability taking bad action \
+glp is neg, vt is pos => theta decreased because decreased theta gives higher probability choosing action \
+glp is neg, vt is neg => theta increased because increased theta gives lower probability choosing bad action 
 
 
 
