@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestValueMemoryDPSetter {
+public class TestValueMemoryTrainer {
 
     DirectedGraphDP graph;
     ValueMemoryDP memory;
-    MemoryTrainerDP valueMemorySetter;
+    MemoryTrainerDP trainer;
 
     @BeforeEach
     public void init() {
         graph=TestHelper.createExampleGraph();
-        valueMemorySetter = new MemoryTrainerDP(graph);
-        memory = valueMemorySetter.createMemory();
+        trainer = new MemoryTrainerDP(graph);
+        memory = trainer.createMemory();
     }
 
     @Test

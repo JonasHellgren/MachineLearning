@@ -1,6 +1,8 @@
 package dynamic_programming.domain;
 
+import common.CpuTimer;
 import dynamic_programming.helpers.ActionSelectorDP;
+import lombok.extern.java.Log;
 
 import java.util.Optional;
 
@@ -23,6 +25,7 @@ import java.util.Optional;
  *
  */
 
+@Log
 public class MemoryTrainerDP {
 
     public static final double VALUE_IF_STATE_NOT_PRESENT_IN_MEMORY = 0;
@@ -38,6 +41,7 @@ public class MemoryTrainerDP {
         int x=graph.settings.xMax();
         int yMax=graph.settings.yMax();
         var actionSelector = new ActionSelectorDP(graph, memory);
+        CpuTimer timer=new CpuTimer();
 
         while (x>=0) {
             int y=0;
@@ -54,7 +58,9 @@ public class MemoryTrainerDP {
             x--;
         }
 
+        log.info("DP memory training time (ms) = "+timer.absoluteProgressInMillis());
         return memory;
+
     }
 
     private double getValue(ValueMemoryDP memory, NodeDP node, int action) {

@@ -8,5 +8,7 @@ TestValueMemorySetter x
 OptimalPathFinder x
 TestOptimalPathFinder x
 State -> Node x
+logga tid trainer  x
+plantuml  x
 
 

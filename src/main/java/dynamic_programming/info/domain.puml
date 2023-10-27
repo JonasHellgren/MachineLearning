@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class NodeDP  {
+int x;
+int y;
+}
+
+class EdgeDP {
+NodeDP n0, n1;
+}
+
+class DirectedGraphDP {
+GraphSettingsDP settings;
+Map<EdgeDP,Double> rewards;
++ addEdgeWithReward(EdgeDP edge, double reward);
++ Optional<Double> getReward(NodeDP node, int action);
++ NodeDP getNextNode(NodeDP node, int action);
+}
+
+class MemoryTrainerDP {
+DirectedGraphDP graph;
++ ValueMemoryDP createMemory()
+}
+
+class ValueMemoryDP {
+Map<NodeDP, Double> values;
++ addValue(NodeDP node, double value);
++ Optional<Double> getValue(NodeDP node);
+}
+
+class ActionSelectorDP {
+DirectedGraphDP graph;
+ValueMemoryDP memory;
+Optional<Integer> bestAction(NodeDP node);
+}
+
+class OptimalPathFinderDP {
+DirectedGraphDP graph;
+ValueMemoryDP memory;
+}
+
+EdgeDP -[hidden]r- NodeDP
+DirectedGraphDP *-d- EdgeDP
+DirectedGraphDP *-d- NodeDP
+MemoryTrainerDP -[hidden]d- DirectedGraphDP
+MemoryTrainerDP -[hidden]d- ValueMemoryDP
+MemoryTrainerDP -d-> ActionSelectorDP
+OptimalPathFinderDP -d-> ActionSelectorDP
+
+
+
+
+@enduml
