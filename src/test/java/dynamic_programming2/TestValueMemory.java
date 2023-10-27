@@ -1,6 +1,5 @@
 package dynamic_programming2;
 
-import dynamic_programming.domain.Edge;
 import dynamic_programming.domain.State;
 import dynamic_programming.domain.ValueMemory;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +35,7 @@ public class TestValueMemory {
 
     @NotNull
     private static State newState(int x, int y) {
-        return State.newState(x,y );
+        return State.of(x,y );
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public record State(int x, int y) {
 
-    public static State newState(int x, int y) {
+    public static State of(int x, int y) {
         return new State(x, y);
     }
 

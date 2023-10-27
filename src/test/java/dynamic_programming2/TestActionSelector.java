@@ -36,21 +36,21 @@ public class TestActionSelector {
 
     @Test
     public void whenState20or21_thenBestActionIs0() {
-        int action20 = actionSelector.bestAction(newState(2, 0));
-        int action21 = actionSelector.bestAction(newState(2, 1));
+        int action20 = actionSelector.bestAction(newState(2, 0)).orElseThrow();
+        int action21 = actionSelector.bestAction(newState(2, 1)).orElseThrow();
         Assertions.assertEquals(0, action20);
         Assertions.assertEquals(0, action21);
     }
 
     @Test
     public void whenState10_thenBestActionIs0() {
-        int action10 = actionSelector.bestAction(newState(1, 0));
+        int action10 = actionSelector.bestAction(newState(1, 0)).orElseThrow();
         Assertions.assertEquals(0, action10);
     }
 
     @Test
     public void whenState11_thenBestActionIs1() {
-        int action11 = actionSelector.bestAction(newState(1, 1));
+        int action11 = actionSelector.bestAction(newState(1, 1)).orElseThrow();
         Assertions.assertEquals(1, action11);
     }
 
@@ -63,7 +63,7 @@ public class TestActionSelector {
 
     @NotNull
     private static State newState(int x, int y) {
-        return State.newState(x, y);
+        return State.of(x, y);
     }
 
 }

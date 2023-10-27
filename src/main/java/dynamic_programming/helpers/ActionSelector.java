@@ -4,8 +4,11 @@ import dynamic_programming.domain.DirectedGraph;
 import dynamic_programming.domain.State;
 import dynamic_programming.domain.ValueMemory;
 import org.jetbrains.annotations.NotNull;
+import org.nd4j.linalg.api.ops.Op;
+
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /***
@@ -34,11 +37,12 @@ public class ActionSelector {
         this.memory = memory;
     }
 
-    public int bestAction(State state) {
+    public Optional<Integer> bestAction(State state) {
         List<ActionValuePair> pairList = createValuePairList(state);
-        throwIfEmptyPairList(state, pairList);
-        ActionValuePair bestPair = getActionValuePairWithHighestValue(pairList);
-        return bestPair.action;
+
+        return pairList.isEmpty()
+                ? Optional.empty()  //No feasible actions in state
+                : Optional.of(getActionValuePairWithHighestValue(pairList).action);
 
     }
 
@@ -68,10 +72,5 @@ public class ActionSelector {
         return pairList.stream().max(Comparator.comparing(v -> v.value())).orElseThrow();
     }
 
-    private static void throwIfEmptyPairList(State state, List<ActionValuePair> pairList) {
-        if (pairList.isEmpty()) {
-            throw new IllegalArgumentException("No feasible actions in state =" + state);
-        }
-    }
 
 }

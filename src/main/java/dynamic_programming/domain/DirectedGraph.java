@@ -2,7 +2,6 @@ package dynamic_programming.domain;
 
 import common.Conditionals;
 import lombok.Builder;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class DirectedGraph {
     public State getStateNew(State state,int action) {
         return !state.isXBelowMax(settings.xMax())
                 ? state
-                : State.newState(state.x()+1,action);
+                : State.of(state.x()+1,action);
     }
 
 

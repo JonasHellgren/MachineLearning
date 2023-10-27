@@ -62,7 +62,7 @@ public class TestDirectedGraph {
 
     @NotNull
     private static State newState(int x, int y) {
-        return State.newState(x,y );
+        return State.of(x,y );
     }
 
 }
