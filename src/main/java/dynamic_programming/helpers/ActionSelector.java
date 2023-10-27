@@ -41,7 +41,7 @@ public class ActionSelector {
         List<ActionValuePair> pairList = createValuePairList(state);
 
         return pairList.isEmpty()
-                ? Optional.empty()  //No feasible actions in state
+                ? Optional.empty()  //No feasible action(s) in state
                 : Optional.of(getActionValuePairWithHighestValue(pairList).action);
 
     }

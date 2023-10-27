@@ -29,8 +29,8 @@ public class TestStateAndEdge {
 
     @Test
     public void whenCreatedEdge_thenCorrect() {
-        Edge edge1 = Edge.newEdge(State.of(0,0),State.of(1,0));
-        Edge edge2 = Edge.newEdge(State.of(1,0),State.of(2,0));
+        Edge edge1 = Edge.of(State.of(0,0),State.of(1,0));
+        Edge edge2 = Edge.of(State.of(1,0),State.of(2,0));
         System.out.println("edge1 = " + edge1);
 
         Assertions.assertEquals(edge1,edge1);
@@ -42,8 +42,8 @@ public class TestStateAndEdge {
 
     @Test
     public void whenCreatedEdge_thenCorrectIsValid() {
-        Edge edge1 = Edge.newEdge(State.of(0,0),State.of(1,0));
-        Edge edge2 = Edge.newEdge(State.of(4,0),State.of(5,0));
+        Edge edge1 = Edge.of(State.of(0,0),State.of(1,0));
+        Edge edge2 = Edge.of(State.of(4,0),State.of(5,0));
         int xMax = 1, yMax = 1;
         Assertions.assertTrue(edge1.isValid(xMax, yMax));
         Assertions.assertFalse(edge2.isValid(xMax, yMax));

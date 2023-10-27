@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class ValueMemorySetter {
 
-
+    public static final double VALUE_IF_STATE_NEW_NOT_PRESENT_IN_MEMORY = 0;
     DirectedGraph graph;
 
     public ValueMemorySetter(DirectedGraph graph) {
@@ -22,9 +22,9 @@ public class ValueMemorySetter {
         int yMax=graph.settings.yMax();
         ActionSelector actionSelector = new ActionSelector(graph, memory);
 
-        while (x>0) {
+        while (x>=0) {
             int y=0;
-            while (y<yMax) {
+            while (y<=yMax) {
                 State state = State.of(x, y);
                 Optional<Integer> aBest = actionSelector.bestAction(state);
                 if (aBest.isPresent()) {
@@ -43,7 +43,7 @@ public class ValueMemorySetter {
     private double getValue(ValueMemory memory, State state, int action) {
         State stateNew = graph.getStateNew(state, action);
         double gamma=graph.settings.gamma();
-        Double valueNewState = memory.getValue(stateNew).orElseThrow();
+        Double valueNewState = memory.getValue(stateNew).orElse(VALUE_IF_STATE_NEW_NOT_PRESENT_IN_MEMORY);
         Double reward = graph.getReward(state, action).orElseThrow();
         return reward + gamma * valueNewState;
     }

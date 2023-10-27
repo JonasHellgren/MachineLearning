@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public record Edge (State s0, State s1) {
 
-    public static Edge newEdge(State s0, State s1) {
-        throwIfSameStates(s0, s1);
+    public static Edge of(State s0, State s1) {
+       // throwIfSameStates(s0, s1);
         return new Edge(s0, s1);
     }
 

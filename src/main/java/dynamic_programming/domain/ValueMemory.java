@@ -23,6 +23,10 @@ public class ValueMemory {
         this.values = new HashMap<>();
     }
 
+    public int size() {
+        return values.size();
+    }
+
     public void addValue(State state, double value) {
         if (values.containsKey(state)) {
             log.warning("Memory already includes state, state ="+state);

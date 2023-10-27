@@ -20,8 +20,8 @@ public class TestValueMemory {
 
     @Test
     public void whenAddingOneReward_thenCanGetByActionInState() {
-        State s0 = newState(0, 0);
-        State s1 = newState(1, 0);
+        State s0 = State.of(0, 0);
+        State s1 = State.of(1, 0);
         double valueS0 = 1d, valueS1 = 2d;
         valueMemory.addValue(s0, valueS0);
         valueMemory.addValue(s1, valueS1);
@@ -32,10 +32,5 @@ public class TestValueMemory {
         assertEquals(valueS1,valueMemory.getValue(s1).get());
     }
 
-
-    @NotNull
-    private static State newState(int x, int y) {
-        return State.of(x,y );
-    }
 
 }

@@ -38,7 +38,7 @@ public class DirectedGraph {
 
     public Optional<Double> getReward(State state, int action) {
         State stateNew=getStateNew(state, action);
-        return  Optional.ofNullable(rewards.get(Edge.newEdge(state,stateNew)));  //Optional.empty() if edge not present
+        return  Optional.ofNullable(rewards.get(Edge.of(state,stateNew)));  //Optional.empty() if edge not present
     }
 
     public Optional<Double> getReward(Edge edge) {

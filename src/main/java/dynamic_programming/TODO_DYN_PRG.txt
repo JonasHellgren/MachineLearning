@@ -3,4 +3,5 @@ State  x
 TestState
 TestGraph x
 ActionSelector x
+ValueMemorySetter x
 
