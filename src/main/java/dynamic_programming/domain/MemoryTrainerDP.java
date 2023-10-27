@@ -1,8 +1,6 @@
-package dynamic_programming.helpers;
+package dynamic_programming.domain;
 
-import dynamic_programming.domain.DirectedGraphDP;
-import dynamic_programming.domain.NodeDP;
-import dynamic_programming.domain.ValueMemoryDP;
+import dynamic_programming.helpers.ActionSelectorDP;
 
 import java.util.Optional;
 
@@ -25,12 +23,12 @@ import java.util.Optional;
  *
  */
 
-public class ValueMemorySetterDP {
+public class MemoryTrainerDP {
 
     public static final double VALUE_IF_STATE_NOT_PRESENT_IN_MEMORY = 0;
     DirectedGraphDP graph;
 
-    public ValueMemorySetterDP(DirectedGraphDP graph) {
+    public MemoryTrainerDP(DirectedGraphDP graph) {
         this.graph = graph;
     }
 

@@ -21,8 +21,8 @@ public class TestOptimalPathFinderDP {
     }
 
     private void createMemoryAndPathFinder() {
-        ValueMemorySetterDP valueMemorySetter = new ValueMemorySetterDP(graph);
-        memory = valueMemorySetter.createMemory();
+        MemoryTrainerDP trainer = new MemoryTrainerDP(graph);
+        memory = trainer.createMemory();
         pathFinder=new OptimalPathFinderDP(graph,memory);
     }
 

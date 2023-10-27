@@ -3,7 +3,7 @@ package dynamic_programming2;
 import dynamic_programming.domain.DirectedGraphDP;
 import dynamic_programming.domain.NodeDP;
 import dynamic_programming.domain.ValueMemoryDP;
-import dynamic_programming.helpers.ValueMemorySetterDP;
+import dynamic_programming.domain.MemoryTrainerDP;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,12 +12,12 @@ public class TestValueMemoryDPSetter {
 
     DirectedGraphDP graph;
     ValueMemoryDP memory;
-    ValueMemorySetterDP valueMemorySetter;
+    MemoryTrainerDP valueMemorySetter;
 
     @BeforeEach
     public void init() {
         graph=TestHelper.createExampleGraph();
-        valueMemorySetter = new ValueMemorySetterDP(graph);
+        valueMemorySetter = new MemoryTrainerDP(graph);
         memory = valueMemorySetter.createMemory();
     }
 
