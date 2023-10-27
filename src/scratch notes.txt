@@ -10,7 +10,7 @@ getParameters();  //polymorphism: can return any sub class of EnvironmentParamet
 Agent interface döps om till Learnable x
 Bas klass för agent tabular x
 Bas klass för agent nn  x
-skapa method för "INDArray inputNetwork = state.getStateVariablesAsNetworkInput(envParams)"  x
+skapa method för "INDArray inputNetwork = node.getStateVariablesAsNetworkInput(envParams)"  x
 Warning: Initializing ND4J with Generic x86 binary on a CPU with AVX/AVX2 support
 testa med regel baserad action för MountainCar, tex 2 om pos>tbd och 0 om pos<tbd  X
 startPosition verkar fel x
@@ -27,7 +27,7 @@ plotta policy x
 antal steg isf antal episoder avgör networkTarget uppdatering etc x
 prova SixRooms  x
 learnAtSameInputStandardRewardNonZeroGamma verkar krångla   x
-kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i state, nofFits i AgentNetwork, nofSteps i "specific" State.
+kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i node, nofFits i AgentNetwork, nofSteps i "specific" State.
 snygga upp kod, tex några metoder från test klass in i andra klasser,   x
 stepReturn.reward=-1 för learnAtSameInputStandardRewardNonZeroGamma
 undvika kalla createContinuousVariable flera ggr x
@@ -43,8 +43,8 @@ annan nn arkitekur, testat LEAKRELU, funkar sämre  x
 testa SixRooms  x
 
 code clean up:
-- agent.state.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function  x
-- flytta state.totalNofSteps++;   VET EJ HUR
+- agent.node.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function  x
+- flytta node.totalNofSteps++;   VET EJ HUR
 - render function  x
 - render function i abstract class
 minska q learning rate   x
@@ -75,7 +75,7 @@ exploderar w utan gradientNormalization?
 
 annan environment, tex chart pole  x
 cart pole agent  x
-pole reward från fail state  x
+pole reward från fail node  x
 göra test policy mer flexibel  nja, verker ej gå   x
 långsammare slutanimering  x
 spara bästa policy hittils x
@@ -86,20 +86,20 @@ enkom cart ändra färg sfa action  x
 mer exp replay x
 
 clean up
-- state isf agent till render  x
+- node isf agent till render  x
 - animatePolicy till Environment  x
 - newState och stepReturn, flytta från step  skippar  x
-- döp om badstate till fail state Environment  x
+- döp om badstate till fail node Environment  x
 - load and save methoder i base NnAgentClass  x
 - diverse tex calcRandomFromIntervall til class MathUtils  x
 
 
 spara bästa policy hittils även för mountain car  x
-fail state fcn för mountain car  x
+fail node fcn för mountain car  x
 
 printa [min,avg,max] nofSteps  x
 plantuml  x
-setNetworkInput(state, envParams)     envParams verkar inte behövas här och på andra ställen
+setNetworkInput(node, envParams)     envParams verkar inte behövas här och på andra ställen
 beskrivande .md fil
 pong environment
 

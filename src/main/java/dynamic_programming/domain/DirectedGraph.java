@@ -10,10 +10,20 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The environmental presentation
+ * Includes nodes and edges
+ * An action is equal to the y-value of a node, so when taking an action the new node is normally the x-value+1
+ * of the present node. The y-value of the new node is equal to the action.
+ *
+ * A graph is created by adding multiple edges, each edge has a defined reward
+ */
+
 @Log
 public class DirectedGraph {
 
     public static final double GAMMA = 1d;
+    public static final int INDEX_FIRST_X=0;
 
     public static DirectedGraph newWithSize(int xMax, int yMax) {
         return new DirectedGraph(GraphSettings.builder().xMax(xMax).yMax(yMax).gamma(GAMMA).build());
@@ -32,32 +42,32 @@ public class DirectedGraph {
         return rewards.size();
     }
 
-    public Set<State> getStateSet() {
-        Set<State> set0=rewards.keySet().stream().map(e -> e.s0()).collect(Collectors.toSet());
-        Set<State> set1=rewards.keySet().stream().map(e -> e.s1()).collect(Collectors.toSet());
+    public Set<Node> getNodeSet() {
+        Set<Node> set0=rewards.keySet().stream().map(e -> e.n0()).collect(Collectors.toSet());
+        Set<Node> set1=rewards.keySet().stream().map(e -> e.n1()).collect(Collectors.toSet());
         set0.addAll(set1);
         return set0;
     }
 
-    public void addReward(Edge edge, double reward) {
+    public void addEdgeWithReward(Edge edge, double reward) {
         throwIfBadEdge(edge);
         logIfEdgeExists(edge);
         rewards.put(edge,reward);
     }
 
-    public Optional<Double> getReward(State state, int action) {
-        State stateNew= getNextState(state, action);
-        return  Optional.ofNullable(rewards.get(Edge.of(state,stateNew)));  //Optional.empty() if edge not present
+    public Optional<Double> getReward(Node node, int action) {
+        Node nodeNew = getNextNode(node, action);
+        return  Optional.ofNullable(rewards.get(Edge.of(node, nodeNew)));  //Optional.empty() if edge not present
     }
 
     public Optional<Double> getReward(Edge edge) {
         return  Optional.ofNullable(rewards.get(edge));
     }
 
-    public State getNextState(State state, int action) {
-        return !state.isXBelowMax(settings.xMax())
-                ? state
-                : State.of(state.x()+1,action);
+    public Node getNextNode(Node node, int action) {
+        return !node.isXBelowMax(settings.xMax())
+                ? node
+                : Node.of(node.x()+1,action);
     }
 
 

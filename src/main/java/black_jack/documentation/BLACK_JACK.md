@@ -18,16 +18,16 @@ An observation is the information provided to the artificial decision maker. It 
 * the players current sum,
 * the dealer's one showing card (1-10 where 1 is ace),
 * whether or not the player holds a usable ace (0 or 1).
-So the real state is more extensive compared to the observation.
+So the real node is more extensive compared to the observation.
 
 This environment corresponds to the version of the blackjack problem
 described in the book "Reinforcement Learning: An Introduction", by Sutton and Barto.
 
 ## Monte Carlo policy evaluation
-We begin by considering Monte Carlo methods for learning the state-value function for a given policy. 
-Recall that the value of a state is the expected return, expected cumulative future discounted reward, 
-starting from the state. An obvious way to estimate it from experience, then, is simply to average 
-the returns observed after visits to that state. As more return are observed, the average should 
+We begin by considering Monte Carlo methods for learning the node-value function for a given policy. 
+Recall that the value of a node is the expected return, expected cumulative future discounted reward, 
+starting from the node. An obvious way to estimate it from experience, then, is simply to average 
+the returns observed after visits to that node. As more return are observed, the average should 
 converge to the expected value. This idea underlies all Monte Carlo methods.
 
 ![img.png](img.png)

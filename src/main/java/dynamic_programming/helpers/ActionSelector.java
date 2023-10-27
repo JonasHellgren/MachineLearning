@@ -1,7 +1,7 @@
 package dynamic_programming.helpers;
 
 import dynamic_programming.domain.DirectedGraph;
-import dynamic_programming.domain.State;
+import dynamic_programming.domain.Node;
 import dynamic_programming.domain.ValueMemory;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,34 +36,34 @@ public class ActionSelector {
         this.memory = memory;
     }
 
-    public Optional<Integer> bestAction(State state) {
-        List<ActionValuePair> pairList = createValuePairList(state);
+    public Optional<Integer> bestAction(Node node) {
+        List<ActionValuePair> pairList = createValuePairList(node);
 
         return pairList.isEmpty()
-                ? Optional.empty()  //No feasible action(s) in state
+                ? Optional.empty()  //No feasible action(s) in node
                 : Optional.of(getActionValuePairWithHighestValue(pairList).action);
 
     }
 
     @NotNull
-    private List<ActionValuePair> createValuePairList(State state) {
+    private List<ActionValuePair> createValuePairList(Node node) {
         return IntStream.range(0, graph.settings.getNofActions())
-                .filter(a -> isStateActionPresent(state, a))
-                .mapToObj(a -> createActionValuePair(state, a))
+                .filter(a -> isNodeActionPresent(node, a))
+                .mapToObj(a -> createActionValuePair(node, a))
                 .toList();
     }
 
     @NotNull
-    private ActionValuePair createActionValuePair(State state, int a) {
+    private ActionValuePair createActionValuePair(Node node, int a) {
         double gamma = graph.settings.gamma();
-        double reward = graph.getReward(state, a).orElseThrow();
-        State stateNew = graph.getNextState(state, a);
-        double value = memory.getValue(stateNew).orElse(VALUE_IF_NOT_PRESENT);
+        double reward = graph.getReward(node, a).orElseThrow();
+        Node nodeNew = graph.getNextNode(node, a);
+        double value = memory.getValue(nodeNew).orElse(VALUE_IF_NOT_PRESENT);
         return new ActionValuePair(a, reward + gamma * value);
     }
 
-    private boolean isStateActionPresent(State state, int a) {
-        return graph.getReward(state, a).isPresent();
+    private boolean isNodeActionPresent(Node node, int a) {
+        return graph.getReward(node, a).isPresent();
     }
 
     @NotNull

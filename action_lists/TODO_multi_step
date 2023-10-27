@@ -29,7 +29,7 @@ value = 0 ibland  x
 newDefault snyggare x
 setValuesInExperiencesInMiniBatch - discount hänsyn  x
 testa olika discount TestNStepNeuralAgentTrainer  x
-test - innan terminal state skall discúnt ej påverka  x
+test - innan terminal node skall discúnt ej påverka  x
 givenStartingAtState7_whenTrainedWithMoreSteps_thenFasterLearning  x
 clean up TestNStepNeuralAgentTrainer x
 plantuml multi step  x
@@ -51,16 +51,16 @@ plott ex trackTempDifferenceErrors x
 trackTempDifferenceErrors i NStepNeuralAgentTrainer x
 plotta ovan  x
 
-generisc state x
+generisc node x
 whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell x
-planutml med generisc state  x
+planutml med generisc node  x
 NetworkMemoryInterface mer clean ISP  x
 
 Annan miljö - tex Maze
 MazeEnvironment x
 TestMazeEnvironment  x
 TestNStepTabularAgentTrainerMaze  x
-function för start state  x
+function för start node  x
 State = MazeVariables(x=1, y=5), value = 115.90638230139263  x
 TestNStepNeuralAgentTrainerMaze  x
 pusha  x
@@ -98,7 +98,7 @@ TestAgentChargeGreedy  x
 - studera/clean up AgentChargeGreedy x
 - clean up ChargeEnvironment , tex and or i lampda expr, x
 - clean up trainers  x
-- snyggare print state - soc många decimaler   x
+- snyggare print node - soc många decimaler   x
 
 StepReturn isNewStateFail andra miljör  x
 
@@ -158,7 +158,7 @@ RunnnerAgentChargeNeuralBTrapped - Testa ovan när B är trapped x
 - prova resetta innan  x
 - ny klass AgentEvaluator  x
 - plotta G vs episode  x
-- agent.setState(state) - missat annat ställe?  x
+- agent.setState(node) - missat annat ställe?  x
 - word dokumnetera  x
 
 Overall cleaning  x

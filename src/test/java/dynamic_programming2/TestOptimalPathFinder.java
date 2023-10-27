@@ -17,6 +17,10 @@ public class TestOptimalPathFinder {
     @BeforeEach
     public void init() {
         graph=TestHelper.createExampleGraph();
+        createMemoryAndPathFinder();
+    }
+
+    private void createMemoryAndPathFinder() {
         ValueMemorySetter valueMemorySetter = new ValueMemorySetter(graph);
         memory = valueMemorySetter.createMemory();
         pathFinder=new OptimalPathFinder(graph,memory);
@@ -32,12 +36,24 @@ public class TestOptimalPathFinder {
     }
 
     @Test
-    public void whenCreated_thenCorrectStates() {
-        List<State> statesOnOptimalPath=pathFinder.getStatesOnPath();
-        System.out.println("statesOnOptimalPath = " + statesOnOptimalPath);
+    public void whenCreated_thenCorrectNodes() {
+        List<Node> nodesOnOptimalPath=pathFinder.getNodesOnPath();
+        System.out.println("nodesOnOptimalPath = " + nodesOnOptimalPath);
 
-        assertEquals(3, statesOnOptimalPath.size());
-        assertEquals(List.of(State.of(0,0),State.of(1,1),State.of(2,1)), statesOnOptimalPath);
+        assertEquals(3, nodesOnOptimalPath.size());
+        assertEquals(List.of(Node.of(0,0), Node.of(1,1), Node.of(2,1)), nodesOnOptimalPath);
+    }
+
+    @Test
+    public void whenCreatedUpIsNegativeGraph_thenCorrectSize() {
+        graph=TestHelper.createExampleGraphUpIsNegative();
+        createMemoryAndPathFinder();
+
+        List<Integer> actions=pathFinder.getActionsOnPath();
+        System.out.println("actions = " + actions);
+
+        assertEquals(3, actions.size());
+        assertEquals(List.of(0,0,0), actions);
     }
 
 }

@@ -2,7 +2,7 @@ package dynamic_programming2;
 
 import dynamic_programming.domain.DirectedGraph;
 import dynamic_programming.domain.Edge;
-import dynamic_programming.domain.State;
+import dynamic_programming.domain.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +22,15 @@ public class TestDirectedGraph {
 
     @Test
     public void whenAddingOneReward_thenCorrect() {
-        graph.addReward(Edge.of(State.of(0,0), State.of(1,0)),1d);
+        graph.addEdgeWithReward(Edge.of(Node.of(0,0), Node.of(1,0)),1d);
         assertEquals(1,graph.size());
     }
 
     @Test
     public void whenAddingOneReward_thenCanGet() {
-        Edge edge = Edge.of(State.of(0, 0), State.of(1, 0));
+        Edge edge = Edge.of(Node.of(0, 0), Node.of(1, 0));
         double reward = 1d;
-        graph.addReward(edge, reward);
+        graph.addEdgeWithReward(edge, reward);
         assertTrue(graph.getReward(edge).isPresent());
         assertEquals(reward,graph.getReward(edge).get());
     }
@@ -38,17 +38,17 @@ public class TestDirectedGraph {
     @Test
     public void whenAdding_thenCorrectStateSet() {
         double reward = 1d;
-        Edge edge1 = Edge.of(State.of(0, 0), State.of(1, 0));
-        Edge edge2 = Edge.of(State.of(0, 0), State.of(1, 1));
-        Edge edge3 = Edge.of(State.of(1, 0), State.of(2, 0));
-        Edge edge4 = Edge.of(State.of(1, 0), State.of(2, 1));
+        Edge edge1 = Edge.of(Node.of(0, 0), Node.of(1, 0));
+        Edge edge2 = Edge.of(Node.of(0, 0), Node.of(1, 1));
+        Edge edge3 = Edge.of(Node.of(1, 0), Node.of(2, 0));
+        Edge edge4 = Edge.of(Node.of(1, 0), Node.of(2, 1));
 
-        graph.addReward(edge1, reward);
-        graph.addReward(edge2, reward);
-        graph.addReward(edge3, reward);
-        graph.addReward(edge4, reward);
+        graph.addEdgeWithReward(edge1, reward);
+        graph.addEdgeWithReward(edge2, reward);
+        graph.addEdgeWithReward(edge3, reward);
+        graph.addEdgeWithReward(edge4, reward);
 
-        var states=graph.getStateSet();
+        var states=graph.getNodeSet();
 
         System.out.println("states = " + states);
 
@@ -58,11 +58,11 @@ public class TestDirectedGraph {
 
     @Test
     public void whenAddingOneReward_thenCanGetByActionInState() {
-        State s0 = State.of(0, 0);
-        State s1 = State.of(1, 0);
+        Node s0 = Node.of(0, 0);
+        Node s1 = Node.of(1, 0);
         Edge edge = Edge.of(s0, s1);
         double reward = 1d;
-        graph.addReward(edge, reward);
+        graph.addEdgeWithReward(edge, reward);
         assertTrue(graph.getReward(s0,0).isPresent());
         assertEquals(reward,graph.getReward(s0,0).get());
         Assertions.assertFalse(graph.getReward(s1,0).isPresent());
@@ -70,14 +70,14 @@ public class TestDirectedGraph {
 
     @Test
     public void whenGetStateNew_thenCorrect() {
-        State s00 = State.of(0, 0);
-        State s10 = State.of(1, 0);
-        State s11 = State.of(1, 1);
-        State s30 = State.of(3, 0);
+        Node s00 = Node.of(0, 0);
+        Node s10 = Node.of(1, 0);
+        Node s11 = Node.of(1, 1);
+        Node s30 = Node.of(3, 0);
 
-        assertEquals(s10,graph.getNextState(s00,0));
-        assertEquals(s11,graph.getNextState(s00,1));
-        assertEquals(s30,graph.getNextState(s30,0));  //cant move on
+        assertEquals(s10,graph.getNextNode(s00,0));
+        assertEquals(s11,graph.getNextNode(s00,1));
+        assertEquals(s30,graph.getNextNode(s30,0));  //cant move on
     }
 
 }

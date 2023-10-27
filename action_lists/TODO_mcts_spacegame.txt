@@ -95,7 +95,7 @@ new3times7Grid starta o x1y1  x
 NodeSelector - No valid node selected, all children are terminal-fail lite skakigt x
 
 new5times10Grid redefine memory so lower corridor is choosen  x
-kan man stega in i non term state med icke noll value - ja genom att uppdatera backupNormalFromTreeSteps x
+kan man stega in i non term node med icke noll value - ja genom att uppdatera backupNormalFromTreeSteps x
 inte lägga till node i träd om isChildNonFailTerminal  x
 new3times7GridWithTrapCorridor  x
 NodeSelector buggar  x
@@ -166,7 +166,7 @@ clean up x
 annan domain cart pole x
 clean up multipleBestActionShallGiveMultipleSteps x
 grafix cart pole x
-värde vig goal state bero på environment inte minne  x
+värde vig goal node bero på environment inte minne  x
 valueInTerminal veck x
 TestMockedMemoryFor5times15Grid - depth 3  x
 github token  x
@@ -274,7 +274,7 @@ ElevatorMctsOnlySearchRunner
 - nPersonsInElevator x
 - svårare testfall - med wait på floor3
 - färre builder settings i tester  x
-- koda så policy tillhandahåller tillgängliga actions sfa state - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping x
+- koda så policy tillhandahåller tillgängliga actions sfa node - availableActions i PolicyMoveUpAndDownStopEveryFloorRandomDirectionAfterStopping x
 - logga ovan  x
 - snygga till DecisionTableReader  x
 - fixa failade tester  x
@@ -389,7 +389,7 @@ uppdateringa location planner:
 
 kolla igenom MonteCarloTreeCreator, TestTreeInfoHelper etc
 
-RunCartPoleAlphaZeroTD - använda TD state learning
+RunCartPoleAlphaZeroTD - använda TD node learning
 kan error baserat stopp criteri fås?
 
 många iteration få noder

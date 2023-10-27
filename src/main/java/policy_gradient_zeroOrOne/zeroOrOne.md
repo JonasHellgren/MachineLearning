@@ -52,10 +52,10 @@ taking "randomly" sampled action according to present policy (theta dependant).
 
 The intuition for gradLogPolicy(s(theta),a) is as follows:
 
-positive -> increased theta gives higher probability choosing action in state s \
-negative -> decreased theta gives higher probability choosing action in state s
+positive -> increased theta gives higher probability choosing action in node s \
+negative -> decreased theta gives higher probability choosing action in node s
 <=>\
-increased theta gives lower probability choosing action in state s
+increased theta gives lower probability choosing action in node s
 
 naming: gradLogPolicy=glp, vt=return at time t
 

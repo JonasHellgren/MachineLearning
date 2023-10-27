@@ -1,16 +1,16 @@
 package dynamic_programming.domain;
 
 /***
- * State can also be named node
+ * Corresponds to a state, for speed control of a vehicle y can be speed and x position
  *
  */
 
 import java.util.Objects;
 
-public record State(int x, int y) {
+public record Node(int x, int y) {
 
-    public static State of(int x, int y) {
-        return new State(x, y);
+    public static Node of(int x, int y) {
+        return new Node(x, y);
     }
 
     public boolean isValid(int xMax, int yMax) {
@@ -29,7 +29,7 @@ public record State(int x, int y) {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof State otherCasted)) {
+        if (!(other instanceof Node otherCasted)) {
             return false;
         }
         return otherCasted.x == this.x && otherCasted.y == this.y;

@@ -1,8 +1,7 @@
 package dynamic_programming2;
 
-import dynamic_programming.domain.State;
+import dynamic_programming.domain.Node;
 import dynamic_programming.domain.ValueMemory;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +19,8 @@ public class TestValueMemory {
 
     @Test
     public void whenAddingOneReward_thenCanGetByActionInState() {
-        State s0 = State.of(0, 0);
-        State s1 = State.of(1, 0);
+        Node s0 = Node.of(0, 0);
+        Node s1 = Node.of(1, 0);
         double valueS0 = 1d, valueS1 = 2d;
         valueMemory.addValue(s0, valueS0);
         valueMemory.addValue(s1, valueS1);

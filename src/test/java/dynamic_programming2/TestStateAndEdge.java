@@ -1,7 +1,7 @@
 package dynamic_programming2;
 
 import dynamic_programming.domain.Edge;
-import dynamic_programming.domain.State;
+import dynamic_programming.domain.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,28 +9,28 @@ public class TestStateAndEdge {
 
     @Test
     public void whenCreatedState_thenCorrect() {
-        State state = State.of(0,0);
-        Assertions.assertEquals(0,state.x());
-        Assertions.assertEquals(0,state.y());
+        Node node = Node.of(0,0);
+        Assertions.assertEquals(0, node.x());
+        Assertions.assertEquals(0, node.y());
     }
 
     @Test
     public void whenCreatedTwoStates_thenCorrectEqualsAndHash() {
-        State state1 = State.of(0,0);
-        State state2 = State.of(1,0);
+        Node node1 = Node.of(0,0);
+        Node node2 = Node.of(1,0);
 
-        Assertions.assertEquals(state1,state1);
-        Assertions.assertNotEquals(state1,state2);
-        Assertions.assertEquals(state1.hashCode(),state1.hashCode());
-        Assertions.assertNotEquals(state1.hashCode(),state2.hashCode());
+        Assertions.assertEquals(node1, node1);
+        Assertions.assertNotEquals(node1, node2);
+        Assertions.assertEquals(node1.hashCode(), node1.hashCode());
+        Assertions.assertNotEquals(node1.hashCode(), node2.hashCode());
 
     }
 
 
     @Test
     public void whenCreatedEdge_thenCorrect() {
-        Edge edge1 = Edge.of(State.of(0,0),State.of(1,0));
-        Edge edge2 = Edge.of(State.of(1,0),State.of(2,0));
+        Edge edge1 = Edge.of(Node.of(0,0), Node.of(1,0));
+        Edge edge2 = Edge.of(Node.of(1,0), Node.of(2,0));
         System.out.println("edge1 = " + edge1);
 
         Assertions.assertEquals(edge1,edge1);
@@ -42,8 +42,8 @@ public class TestStateAndEdge {
 
     @Test
     public void whenCreatedEdge_thenCorrectIsValid() {
-        Edge edge1 = Edge.of(State.of(0,0),State.of(1,0));
-        Edge edge2 = Edge.of(State.of(4,0),State.of(5,0));
+        Edge edge1 = Edge.of(Node.of(0,0), Node.of(1,0));
+        Edge edge2 = Edge.of(Node.of(4,0), Node.of(5,0));
         int xMax = 1, yMax = 1;
         Assertions.assertTrue(edge1.isValid(xMax, yMax));
         Assertions.assertFalse(edge2.isValid(xMax, yMax));

@@ -6,6 +6,7 @@ ActionSelector x
 ValueMemorySetter x
 TestValueMemorySetter x
 OptimalPathFinder x
-TestOptimalPathFinder
+TestOptimalPathFinder x
+State -> Node x
 
 
