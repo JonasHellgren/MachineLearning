@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestNodeValueMemory {
+public class TestNodeValueMemoryDP {
 
     private static final double DELTA = 0.1;
     private static final int VALUE = 10;

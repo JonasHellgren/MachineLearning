@@ -6,10 +6,10 @@ import java.util.Objects;
  * An edge is located between two nodes
  */
 
-public record Edge (Node n0, Node n1) {
+public record EdgeDP(NodeDP n0, NodeDP n1) {
 
-    public static Edge of(Node n0, Node n1) {
-        return new Edge(n0, n1);
+    public static EdgeDP of(NodeDP n0, NodeDP n1) {
+        return new EdgeDP(n0, n1);
     }
 
     public boolean isValid(int xMax, int yMax) {
@@ -24,7 +24,7 @@ public record Edge (Node n0, Node n1) {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof Edge otherCasted)) {
+        if (!(other instanceof EdgeDP otherCasted)) {
             return false;
         }
         return otherCasted.n0.equals(this.n0) && otherCasted.n1.equals(this.n1);

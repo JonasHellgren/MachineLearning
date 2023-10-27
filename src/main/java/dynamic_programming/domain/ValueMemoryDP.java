@@ -12,19 +12,19 @@ import java.util.Optional;
  */
 
 @Log
-public class ValueMemory {
+public class ValueMemoryDP {
 
-    public static ValueMemory newEmpty() {
-        return new ValueMemory();
+    public static ValueMemoryDP newEmpty() {
+        return new ValueMemoryDP();
     }
 
-    Map<Node, Double> values;
+    Map<NodeDP, Double> values;
 
-    public ValueMemory() {
+    public ValueMemoryDP() {
         this.values = new HashMap<>();
     }
 
-    public Map<Node, Double> getValues() {
+    public Map<NodeDP, Double> getValues() {
         return values;
     }
 
@@ -36,26 +36,27 @@ public class ValueMemory {
         return size()==0;
     }
 
-    public void addValue(Node node, double value) {
+    public void addValue(NodeDP node, double value) {
         logIfAlreadyPresent(node);
         values.put(node, value);
     }
 
-    private void logIfAlreadyPresent(Node node) {
+
+    public Optional<Double> getValue(NodeDP node) {
+        return Optional.ofNullable(values.get(node));  //Optional.empty() if node not present
+    }
+
+    private void logIfAlreadyPresent(NodeDP node) {
         if (values.containsKey(node)) {
             log.warning("Memory already includes node, node =" + node);
         }
-    }
-
-    public Optional<Double> getValue(Node node) {
-        return Optional.ofNullable(values.get(node));  //Optional.empty() if node not present
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(System.lineSeparator());
-        for (Node node : values.keySet()) {
+        for (NodeDP node : values.keySet()) {
             sb.append(node).append(":").append(values.get(node)).append(System.lineSeparator());
         }
         return sb.toString();

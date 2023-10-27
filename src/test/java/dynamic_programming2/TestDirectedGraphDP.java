@@ -1,8 +1,8 @@
 package dynamic_programming2;
 
-import dynamic_programming.domain.DirectedGraph;
-import dynamic_programming.domain.Edge;
-import dynamic_programming.domain.Node;
+import dynamic_programming.domain.DirectedGraphDP;
+import dynamic_programming.domain.EdgeDP;
+import dynamic_programming.domain.NodeDP;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,25 +10,25 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestDirectedGraph {
+public class TestDirectedGraphDP {
 
     public static final int X_MAX = 3, Y_MAX = 1;
-    DirectedGraph graph;
+    DirectedGraphDP graph;
 
     @BeforeEach
     public void init() {
-        graph=DirectedGraph.newWithSize(X_MAX, Y_MAX);
+        graph= DirectedGraphDP.newWithSize(X_MAX, Y_MAX);
     }
 
     @Test
     public void whenAddingOneReward_thenCorrect() {
-        graph.addEdgeWithReward(Edge.of(Node.of(0,0), Node.of(1,0)),1d);
+        graph.addEdgeWithReward(EdgeDP.of(NodeDP.of(0,0), NodeDP.of(1,0)),1d);
         assertEquals(1,graph.size());
     }
 
     @Test
     public void whenAddingOneReward_thenCanGet() {
-        Edge edge = Edge.of(Node.of(0, 0), Node.of(1, 0));
+        EdgeDP edge = EdgeDP.of(NodeDP.of(0, 0), NodeDP.of(1, 0));
         double reward = 1d;
         graph.addEdgeWithReward(edge, reward);
         assertTrue(graph.getReward(edge).isPresent());
@@ -38,10 +38,10 @@ public class TestDirectedGraph {
     @Test
     public void whenAdding_thenCorrectStateSet() {
         double reward = 1d;
-        Edge edge1 = Edge.of(Node.of(0, 0), Node.of(1, 0));
-        Edge edge2 = Edge.of(Node.of(0, 0), Node.of(1, 1));
-        Edge edge3 = Edge.of(Node.of(1, 0), Node.of(2, 0));
-        Edge edge4 = Edge.of(Node.of(1, 0), Node.of(2, 1));
+        EdgeDP edge1 = EdgeDP.of(NodeDP.of(0, 0), NodeDP.of(1, 0));
+        EdgeDP edge2 = EdgeDP.of(NodeDP.of(0, 0), NodeDP.of(1, 1));
+        EdgeDP edge3 = EdgeDP.of(NodeDP.of(1, 0), NodeDP.of(2, 0));
+        EdgeDP edge4 = EdgeDP.of(NodeDP.of(1, 0), NodeDP.of(2, 1));
 
         graph.addEdgeWithReward(edge1, reward);
         graph.addEdgeWithReward(edge2, reward);
@@ -58,9 +58,9 @@ public class TestDirectedGraph {
 
     @Test
     public void whenAddingOneReward_thenCanGetByActionInState() {
-        Node s0 = Node.of(0, 0);
-        Node s1 = Node.of(1, 0);
-        Edge edge = Edge.of(s0, s1);
+        NodeDP s0 = NodeDP.of(0, 0);
+        NodeDP s1 = NodeDP.of(1, 0);
+        EdgeDP edge = EdgeDP.of(s0, s1);
         double reward = 1d;
         graph.addEdgeWithReward(edge, reward);
         assertTrue(graph.getReward(s0,0).isPresent());
@@ -70,10 +70,10 @@ public class TestDirectedGraph {
 
     @Test
     public void whenGetStateNew_thenCorrect() {
-        Node s00 = Node.of(0, 0);
-        Node s10 = Node.of(1, 0);
-        Node s11 = Node.of(1, 1);
-        Node s30 = Node.of(3, 0);
+        NodeDP s00 = NodeDP.of(0, 0);
+        NodeDP s10 = NodeDP.of(1, 0);
+        NodeDP s11 = NodeDP.of(1, 1);
+        NodeDP s30 = NodeDP.of(3, 0);
 
         assertEquals(s10,graph.getNextNode(s00,0));
         assertEquals(s11,graph.getNextNode(s00,1));

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
-public class TestElevatorStateValueMemory {
+public class TestElevatorStateValueMemoryDP {
 
     private static final int MINI_BATCH_SIZE = 10;
     private static final double DELTA = 2;

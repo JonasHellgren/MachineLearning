@@ -1,8 +1,8 @@
 package dynamic_programming.helpers;
 
-import dynamic_programming.domain.DirectedGraph;
-import dynamic_programming.domain.Node;
-import dynamic_programming.domain.ValueMemory;
+import dynamic_programming.domain.DirectedGraphDP;
+import dynamic_programming.domain.NodeDP;
+import dynamic_programming.domain.ValueMemoryDP;
 
 import java.util.Optional;
 
@@ -25,26 +25,26 @@ import java.util.Optional;
  *
  */
 
-public class ValueMemorySetter {
+public class ValueMemorySetterDP {
 
     public static final double VALUE_IF_STATE_NOT_PRESENT_IN_MEMORY = 0;
-    DirectedGraph graph;
+    DirectedGraphDP graph;
 
-    public ValueMemorySetter(DirectedGraph graph) {
+    public ValueMemorySetterDP(DirectedGraphDP graph) {
         this.graph = graph;
     }
 
-    public ValueMemory createMemory() {
+    public ValueMemoryDP createMemory() {
 
-        var memory=new ValueMemory();
+        var memory=new ValueMemoryDP();
         int x=graph.settings.xMax();
         int yMax=graph.settings.yMax();
-        var actionSelector = new ActionSelector(graph, memory);
+        var actionSelector = new ActionSelectorDP(graph, memory);
 
         while (x>=0) {
             int y=0;
             while (y<=yMax) {
-                var node = Node.of(x, y);
+                var node = NodeDP.of(x, y);
                 Optional<Integer> aBest = actionSelector.bestAction(node);
                 if (aBest.isPresent()) {
                     int action = aBest.get();
@@ -59,8 +59,8 @@ public class ValueMemorySetter {
         return memory;
     }
 
-    private double getValue(ValueMemory memory, Node node, int action) {
-        Node nodeNew = graph.getNextNode(node, action);
+    private double getValue(ValueMemoryDP memory, NodeDP node, int action) {
+        NodeDP nodeNew = graph.getNextNode(node, action);
         double gamma=graph.settings.gamma();
         Double valueNewNode = memory.getValue(nodeNew).orElse(VALUE_IF_STATE_NOT_PRESENT_IN_MEMORY);
         Double reward = graph.getReward(node, action).orElseThrow();

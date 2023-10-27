@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import java.util.Set;
 
-public class TestStateValueMemory {
+public class TestStateValueMemoryDP {
     public static final double DELTA = 0.1;
     public static final int NOF_UPDATES = 10_000;
     public static final double ALPHA = 0.01;

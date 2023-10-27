@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestStateShipActionsValueMemory {
+public class TestStateShipActionsValueMemoryDP {
 
     public static final double DELTA = 0.1;
     public static final int NOF_UPDATES = 10_000;

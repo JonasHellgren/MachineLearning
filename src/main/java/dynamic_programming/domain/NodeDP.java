@@ -7,10 +7,10 @@ package dynamic_programming.domain;
 
 import java.util.Objects;
 
-public record Node(int x, int y) {
+public record NodeDP(int x, int y) {
 
-    public static Node of(int x, int y) {
-        return new Node(x, y);
+    public static NodeDP of(int x, int y) {
+        return new NodeDP(x, y);
     }
 
     public boolean isValid(int xMax, int yMax) {
@@ -29,7 +29,7 @@ public record Node(int x, int y) {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof Node otherCasted)) {
+        if (!(other instanceof NodeDP otherCasted)) {
             return false;
         }
         return otherCasted.x == this.x && otherCasted.y == this.y;

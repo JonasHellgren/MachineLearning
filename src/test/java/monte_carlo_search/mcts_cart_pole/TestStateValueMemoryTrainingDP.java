@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Disabled;
 
 import java.util.List;
 
-public class TestStateValueMemoryTraining {
+public class TestStateValueMemoryTrainingDP {
     private static final int MAX_NOF_ITERATIONS = 10_000;
     private static final int NOF_SIMULATIONS_PER_NODE = 100;
     private static final double COEFFICIENT_EXPLOITATION_EXPLORATION = 0.1;

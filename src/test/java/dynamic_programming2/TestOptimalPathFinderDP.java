@@ -8,11 +8,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestOptimalPathFinder {
+public class TestOptimalPathFinderDP {
 
-    DirectedGraph graph;
-    ValueMemory memory;
-    OptimalPathFinder pathFinder;
+    DirectedGraphDP graph;
+    ValueMemoryDP memory;
+    OptimalPathFinderDP pathFinder;
 
     @BeforeEach
     public void init() {
@@ -21,9 +21,9 @@ public class TestOptimalPathFinder {
     }
 
     private void createMemoryAndPathFinder() {
-        ValueMemorySetter valueMemorySetter = new ValueMemorySetter(graph);
+        ValueMemorySetterDP valueMemorySetter = new ValueMemorySetterDP(graph);
         memory = valueMemorySetter.createMemory();
-        pathFinder=new OptimalPathFinder(graph,memory);
+        pathFinder=new OptimalPathFinderDP(graph,memory);
     }
 
     @Test
@@ -37,11 +37,11 @@ public class TestOptimalPathFinder {
 
     @Test
     public void whenCreated_thenCorrectNodes() {
-        List<Node> nodesOnOptimalPath=pathFinder.getNodesOnPath();
+        List<NodeDP> nodesOnOptimalPath=pathFinder.getNodesOnPath();
         System.out.println("nodesOnOptimalPath = " + nodesOnOptimalPath);
 
         assertEquals(3, nodesOnOptimalPath.size());
-        assertEquals(List.of(Node.of(0,0), Node.of(1,1), Node.of(2,1)), nodesOnOptimalPath);
+        assertEquals(List.of(NodeDP.of(0,0), NodeDP.of(1,1), NodeDP.of(2,1)), nodesOnOptimalPath);
     }
 
     @Test

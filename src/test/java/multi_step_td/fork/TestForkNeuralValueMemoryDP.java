@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TestForkNeuralValueMemory {
+public class TestForkNeuralValueMemoryDP {
     private static final double DELTA = 2;
     private static final int NOF_ITERATIONS = 2000;
     private static final int BATCH_LENGTH = 30;
