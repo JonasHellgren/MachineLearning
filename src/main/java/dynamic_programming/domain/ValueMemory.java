@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Memory for value function, looked up by state
+ */
+
 @Log
 public class ValueMemory {
 
@@ -28,7 +32,7 @@ public class ValueMemory {
     }
 
     public Optional<Double> getValue(State state) {
-        return  Optional.ofNullable(values.get(state));  //Optional.empty() if edge not present
+        return  Optional.ofNullable(values.get(state));  //Optional.empty() if state not present
 
     }
 

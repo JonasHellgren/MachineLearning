@@ -4,15 +4,22 @@ import dynamic_programming.domain.DirectedGraph;
 import dynamic_programming.domain.State;
 import dynamic_programming.domain.ValueMemory;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
+
+/***
+ * Appplyies Bellman equation for selecting action
+ * The action maximizing
+ * V(s)=R(s,a)+gamma*V(T(s,a)
+ * is best
+ */
 
 public class ActionSelector {
 
+    public static final double VALUE_IF_NOT_PRESENT = 0d;
 
-    record ActionValuePair(Integer action, Double value)  {
+    record ActionValuePair(Integer action, Double value) {
         @Override
         public Double value() {
             return value;
@@ -28,26 +35,43 @@ public class ActionSelector {
     }
 
     public int bestAction(State state) {
-
-        double gamma=graph.getGamma();
-        List<ActionSelector.ActionValuePair> pairList=new ArrayList<>();
-
-        for (int a = 0; a < graph.getNofActions() ; a++) {
-            if (graph.getReward(state,a).isPresent()) {
-                double reward = graph.getReward(state, a).get();
-                State stateNew=graph.getStateNew(state,a);
-                double value=memory.getValue(stateNew).orElse(0d);
-                pairList.add(new ActionValuePair(a,reward+gamma*value ));
-            }
-        }
-
-        if (pairList.isEmpty()) {
-            throw new IllegalArgumentException("No feasible actions in state ="+state);
-        }
-
-        ActionValuePair bestPair = pairList.stream().max(Comparator.comparing(v -> v.value())).get();
+        List<ActionValuePair> pairList = createValuePairList(state);
+        throwIfEmptyPairList(state, pairList);
+        ActionValuePair bestPair = getActionValuePairWithHighestValue(pairList);
         return bestPair.action;
 
+    }
+
+    @NotNull
+    private List<ActionValuePair> createValuePairList(State state) {
+        return IntStream.range(0, graph.getNofActions())
+                .filter(a -> isStateActionPresent(state, a))
+                .mapToObj(a -> createActionValuePair(state, a))
+                .toList();
+    }
+
+    @NotNull
+    private ActionValuePair createActionValuePair(State state, int a) {
+        double gamma = graph.getGamma();
+        double reward = graph.getReward(state, a).orElseThrow();
+        State stateNew = graph.getStateNew(state, a);
+        double value = memory.getValue(stateNew).orElse(VALUE_IF_NOT_PRESENT);
+        return new ActionValuePair(a, reward + gamma * value);
+    }
+
+    private boolean isStateActionPresent(State state, int a) {
+        return graph.getReward(state, a).isPresent();
+    }
+
+    @NotNull
+    private static ActionValuePair getActionValuePairWithHighestValue(List<ActionValuePair> pairList) {
+        return pairList.stream().max(Comparator.comparing(v -> v.value())).orElseThrow();
+    }
+
+    private static void throwIfEmptyPairList(State state, List<ActionValuePair> pairList) {
+        if (pairList.isEmpty()) {
+            throw new IllegalArgumentException("No feasible actions in state =" + state);
+        }
     }
 
 }

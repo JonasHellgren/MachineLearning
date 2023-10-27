@@ -1,15 +1,22 @@
 package dynamic_programming.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import java.util.Objects;
 
+/**
+ * An edge is located between two nodes
+ */
 
 public record Edge (State s0, State s1) {
 
     public static Edge newEdge(State s0, State s1) {
+        throwIfSameStates(s0, s1);
         return new Edge(s0, s1);
+    }
+
+    private static void throwIfSameStates(State s0, State s1) {
+        if (s0.equals(s1)) {
+            throw new IllegalArgumentException("An edge cant connect the same node");
+        }
     }
 
     public boolean isValid(int xMax, int yMax) {

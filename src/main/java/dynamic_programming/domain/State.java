@@ -1,23 +1,24 @@
 package dynamic_programming.domain;
 
-import lombok.ToString;
+/***
+ * State can also be named node
+ *
+ */
 
 import java.util.Objects;
 
 public record State(int x, int y) {
 
     public static State newState(int x, int y) {
-        return new State(x,y);
+        return new State(x, y);
     }
 
-
     public boolean isValid(int xMax, int yMax) {
-
-        return x<=xMax && y<=yMax;
+        return x <= xMax && y <= yMax;
     }
 
     public boolean isXBelowMax(int xMax) {
-        return x<xMax;
+        return x < xMax;
     }
 
     @Override
@@ -41,7 +42,7 @@ public record State(int x, int y) {
 
     @Override
     public String toString() {
-        return "(x,y) = ("+x+","+y + ")";
+        return "(x,y) = (" + x + "," + y + ")";
     }
 
 }
