@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /***
- * Appplyies Bellman equation for selecting action
+ * Applies Bellman equation for selecting action
  * The action maximizing
  * V(s)=R(s,a)+gamma*V(T(s,a)
  * is best
@@ -44,7 +44,7 @@ public class ActionSelector {
 
     @NotNull
     private List<ActionValuePair> createValuePairList(State state) {
-        return IntStream.range(0, graph.getNofActions())
+        return IntStream.range(0, graph.settings.getNofActions())
                 .filter(a -> isStateActionPresent(state, a))
                 .mapToObj(a -> createActionValuePair(state, a))
                 .toList();
@@ -52,7 +52,7 @@ public class ActionSelector {
 
     @NotNull
     private ActionValuePair createActionValuePair(State state, int a) {
-        double gamma = graph.getGamma();
+        double gamma = graph.settings.gamma();
         double reward = graph.getReward(state, a).orElseThrow();
         State stateNew = graph.getStateNew(state, a);
         double value = memory.getValue(stateNew).orElse(VALUE_IF_NOT_PRESENT);

@@ -1,14 +1,9 @@
 package dynamic_programming.helpers;
 
 import dynamic_programming.domain.DirectedGraph;
-import dynamic_programming.domain.State;
 import dynamic_programming.domain.ValueMemory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ValueMemorySetter {
-
 
 
     DirectedGraph graph;
@@ -17,7 +12,12 @@ public class ValueMemorySetter {
         this.graph = graph;
     }
 
+    public ValueMemory createMemory() {
 
-    //todo inte ActionSelector
+        int xMax=graph.settings.xMax();
+
+        return null;
+    }
+
 
 }

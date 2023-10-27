@@ -15,31 +15,20 @@ public class DirectedGraph {
     public static final double GAMMA = 1d;
 
     public static DirectedGraph newWithSize(int xMax, int yMax) {
-        return DirectedGraph.builder().xMax(xMax).yMax(yMax).gamma(GAMMA).build();
+        return new DirectedGraph(GraphSettings.builder().xMax(xMax).yMax(yMax).gamma(GAMMA).build());
     }
 
-    @NonNull  final Integer xMax, yMax;
-    Double gamma;
+    public GraphSettings settings;  //immutable record so public is ok
     final Map<Edge,Double> rewards;
 
     @Builder
-    public DirectedGraph(int xMax, int yMax, Double gamma) {
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.gamma = gamma;
+    public DirectedGraph(GraphSettings settings) {
+        this.settings=settings;
         this.rewards=new HashMap<>();
     }
 
-    public Integer size() {
+    public int size() {
         return rewards.size();
-    }
-
-    public Integer getNofActions() {
-        return yMax+1;
-    }
-
-    public Double getGamma() {
-        return gamma;
     }
 
     public void addReward(Edge edge, double reward) {
@@ -58,7 +47,7 @@ public class DirectedGraph {
     }
 
     public State getStateNew(State state,int action) {
-        return !state.isXBelowMax(xMax)
+        return !state.isXBelowMax(settings.xMax())
                 ? state
                 : State.newState(state.x()+1,action);
     }
@@ -69,7 +58,7 @@ public class DirectedGraph {
     }
 
     private void throwIfBadEdge(Edge edge) {
-        if (!edge.isValid(xMax,yMax)) {
+        if (!edge.isValid(settings.xMax(),settings.yMax())) {
             throw new IllegalArgumentException("Bad edge, edge = "+ edge);
         }
     }
