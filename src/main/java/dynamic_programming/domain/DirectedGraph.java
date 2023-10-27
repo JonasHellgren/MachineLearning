@@ -7,6 +7,8 @@ import lombok.extern.java.Log;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log
 public class DirectedGraph {
@@ -30,6 +32,13 @@ public class DirectedGraph {
         return rewards.size();
     }
 
+    public Set<State> getStateSet() {
+        Set<State> set0=rewards.keySet().stream().map(e -> e.s0()).collect(Collectors.toSet());
+        Set<State> set1=rewards.keySet().stream().map(e -> e.s1()).collect(Collectors.toSet());
+        set0.addAll(set1);
+        return set0;
+    }
+
     public void addReward(Edge edge, double reward) {
         throwIfBadEdge(edge);
         logIfEdgeExists(edge);
@@ -37,7 +46,7 @@ public class DirectedGraph {
     }
 
     public Optional<Double> getReward(State state, int action) {
-        State stateNew=getStateNew(state, action);
+        State stateNew= getNextState(state, action);
         return  Optional.ofNullable(rewards.get(Edge.of(state,stateNew)));  //Optional.empty() if edge not present
     }
 
@@ -45,7 +54,7 @@ public class DirectedGraph {
         return  Optional.ofNullable(rewards.get(edge));
     }
 
-    public State getStateNew(State state,int action) {
+    public State getNextState(State state, int action) {
         return !state.isXBelowMax(settings.xMax())
                 ? state
                 : State.of(state.x()+1,action);

@@ -4,4 +4,8 @@ TestState
 TestGraph x
 ActionSelector x
 ValueMemorySetter x
+TestValueMemorySetter x
+OptimalPathFinder x
+TestOptimalPathFinder
+
 

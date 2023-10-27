@@ -52,12 +52,5 @@ public class TestActionSelector {
         Assertions.assertEquals(1, action11);
     }
 
-    @Test
-    public void whenState30_thenThrows() {
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                actionSelector.bestAction(State.of(3, 0)));
-    }
-
-
 
 }

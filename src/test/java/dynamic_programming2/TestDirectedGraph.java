@@ -36,6 +36,27 @@ public class TestDirectedGraph {
     }
 
     @Test
+    public void whenAdding_thenCorrectStateSet() {
+        double reward = 1d;
+        Edge edge1 = Edge.of(State.of(0, 0), State.of(1, 0));
+        Edge edge2 = Edge.of(State.of(0, 0), State.of(1, 1));
+        Edge edge3 = Edge.of(State.of(1, 0), State.of(2, 0));
+        Edge edge4 = Edge.of(State.of(1, 0), State.of(2, 1));
+
+        graph.addReward(edge1, reward);
+        graph.addReward(edge2, reward);
+        graph.addReward(edge3, reward);
+        graph.addReward(edge4, reward);
+
+        var states=graph.getStateSet();
+
+        System.out.println("states = " + states);
+
+        Assertions.assertEquals(5,states.size());
+
+    }
+
+    @Test
     public void whenAddingOneReward_thenCanGetByActionInState() {
         State s0 = State.of(0, 0);
         State s1 = State.of(1, 0);
@@ -54,9 +75,9 @@ public class TestDirectedGraph {
         State s11 = State.of(1, 1);
         State s30 = State.of(3, 0);
 
-        assertEquals(s10,graph.getStateNew(s00,0));
-        assertEquals(s11,graph.getStateNew(s00,1));
-        assertEquals(s30,graph.getStateNew(s30,0));  //cant move on
+        assertEquals(s10,graph.getNextState(s00,0));
+        assertEquals(s11,graph.getNextState(s00,1));
+        assertEquals(s30,graph.getNextState(s30,0));  //cant move on
     }
 
 }

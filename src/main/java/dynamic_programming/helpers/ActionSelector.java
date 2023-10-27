@@ -4,7 +4,6 @@ import dynamic_programming.domain.DirectedGraph;
 import dynamic_programming.domain.State;
 import dynamic_programming.domain.ValueMemory;
 import org.jetbrains.annotations.NotNull;
-import org.nd4j.linalg.api.ops.Op;
 
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +57,7 @@ public class ActionSelector {
     private ActionValuePair createActionValuePair(State state, int a) {
         double gamma = graph.settings.gamma();
         double reward = graph.getReward(state, a).orElseThrow();
-        State stateNew = graph.getStateNew(state, a);
+        State stateNew = graph.getNextState(state, a);
         double value = memory.getValue(stateNew).orElse(VALUE_IF_NOT_PRESENT);
         return new ActionValuePair(a, reward + gamma * value);
     }
