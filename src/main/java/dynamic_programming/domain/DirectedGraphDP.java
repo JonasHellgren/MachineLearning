@@ -50,7 +50,7 @@ public class DirectedGraphDP {
     }
 
     public void addEdgeWithReward(EdgeDP edge, double reward) {
-        throwIfBadEdge(edge);
+        logIfBadEdge(edge);
         logIfEdgeExists(edge);
         rewards.put(edge,reward);
     }
@@ -65,7 +65,7 @@ public class DirectedGraphDP {
     }
 
     public NodeDP getNextNode(NodeDP node, int action) {
-        return !node.isXBelowMax(settings.xMax())
+        return !node.isXBelowOrEqualMax(settings.xMax())
                 ? node
                 : NodeDP.of(node.x()+1,action);
     }
@@ -74,10 +74,20 @@ public class DirectedGraphDP {
         Conditionals.executeIfTrue(rewards.containsKey(edge), () -> log.warning("Edge always defined, edge = "+ edge) );
     }
 
-    private void throwIfBadEdge(EdgeDP edge) {
+    private void logIfBadEdge(EdgeDP edge) {
         if (!edge.isValid(settings.xMax(),settings.yMax())) {
-            throw new IllegalArgumentException("Bad edge, edge = "+ edge);
+            log.warning("Bad edge, edge = "+ edge);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.lineSeparator());
+        for (EdgeDP edgeDP : rewards.keySet()) {
+            sb.append(edgeDP.toString()).append(":").append(rewards.get(edgeDP)).append(System.lineSeparator());
+        }
+        return sb.toString();
     }
 
 }

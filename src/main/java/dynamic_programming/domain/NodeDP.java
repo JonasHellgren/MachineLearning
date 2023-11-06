@@ -17,8 +17,13 @@ public record NodeDP(int x, int y) {
         return x <= xMax && y <= yMax;
     }
 
-    public boolean isXBelowMax(int xMax) {
+    public boolean isXBelowOrEqualMaxOld(int xMax) {
         return x < xMax;
+    }
+
+
+    public boolean isXBelowOrEqualMax(int xMax) {
+        return x <= xMax;
     }
 
     @Override

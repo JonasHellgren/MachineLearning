@@ -74,22 +74,21 @@ public class RunCartPoleAlphaZero {
 
         for (int episode = 0; episode < NOF_EPISODES; episode++) {
             boolean isTerminal = false;
-            StateInterface<CartPoleVariables> state = getStartState();
+            var state = getStartState();
             bufferEpisode.clear();
             int step = 0;
             while (!isTerminal) {
-                ActionInterface<Integer> actionCartPole = isRandomAction(probScaler, episode)
+                var actionCartPole = isRandomAction(probScaler, episode)
                         ?ActionCartPole.newRandom()
                         :getActionFromSearch(mcForSearch, state);
 
-                StepReturnGeneric<CartPoleVariables> sr = stepAndUpdateState(environmentTraining, state, actionCartPole);
+                var sr = stepAndUpdateState(environmentTraining, state, actionCartPole);
                 addExperience(bufferEpisode, state, sr);
                 renderGraphics(memory, graphics, state, step++, actionCartPole);
                 isTerminal = sr.isTerminal;
             }
 
-            ReplayBufferValueSetter<CartPoleVariables,Integer> rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
-
+            var rbvs = trainMemoryFromEpisode(memory, bufferTraining, bufferEpisode);
             someLogging(bufferTraining, episode, step);
             someTracking(memory, learningErrors, returns, rbvs, bufferTraining);
         }
