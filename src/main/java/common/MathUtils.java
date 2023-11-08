@@ -77,6 +77,20 @@ public class MathUtils {
         return true;
     }
 
+    public static List<Double> accumSum(List<Double> list) {
+        List<Double> runningtotal = new ArrayList<>();
+        runningtotal.add(list.get(0));
+        double prev_sum = list.get(0);
+        int i = 1;
+        while (i < list.size()) {
+            prev_sum += list.get(i);
+            runningtotal.add(prev_sum);
+            i++;
+        }
+        return runningtotal;
+    }
+
+
 
 
 }

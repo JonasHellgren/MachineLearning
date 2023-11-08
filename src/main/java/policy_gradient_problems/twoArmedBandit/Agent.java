@@ -2,6 +2,7 @@ package policy_gradient_problems.twoArmedBandit;
 
 import common.IndexFinder;
 import common.ListUtils;
+import common.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +33,12 @@ public class Agent {
         return IndexFinder.findBucket(ListUtils.toArray(limits), RandUtils.getRandomDouble(0, 1));
     }
 
-    public void setThetaList(List<Double> thetaList) {
+    public void setThetas(List<Double> thetaList) {
         this.thetaList = thetaList;
+    }
+
+    public void setThetas(double[] thetaArray) {
+        setThetas(ListUtils.arrayPrimitiveDoublesToList(thetaArray));
     }
 
     public double[] getThetasAsArray() {
@@ -48,11 +53,8 @@ public class Agent {
     private static List<Double> getLimits(double[] piTheta) {
         List<Double> limits = new ArrayList<>();
         limits.add(0d);
-        double accumProb = 0;
-        for (double prob : piTheta) {
-            accumProb += prob;
-            limits.add(accumProb);
-        }
+        List<Double> accumProps=MathUtils.accumSum(ListUtils.arrayPrimitiveDoublesToList(piTheta));
+        limits.addAll(accumProps);
         return limits;
     }
 

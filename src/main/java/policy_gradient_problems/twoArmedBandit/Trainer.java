@@ -1,10 +1,8 @@
 package policy_gradient_problems.twoArmedBandit;
 
-import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.Experience;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -28,17 +26,17 @@ public class Trainer {
     @NonNull Double gamma, learningRate;
 
     public void train() {
-        ReturnCalculator returnCalculator=new ReturnCalculator();
+        var returnCalculator=new ReturnCalculator();
         for (int ei = 0; ei < nofEpisodes; ei++) {
-            List<Experience> experienceList = getExperiences();
-            List<Experience> experienceListWithReturns =
+            var experienceList = getExperiences();
+            var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
             for (Experience exp:experienceListWithReturns) {
-                RealVector thetas = new ArrayRealVector(agent.getThetasAsArray());
-                ArrayRealVector gradLog = new ArrayRealVector(agent.getGradLogList(exp.action()));
+                var thetaVector = new ArrayRealVector(agent.getThetasAsArray());
+                var gradLogVector = new ArrayRealVector(agent.getGradLogList(exp.action()));
                 double vt = exp.value();
-                RealVector thetasNew=thetas.add(gradLog.mapMultiplyToSelf(learningRate*vt));
-                agent.setThetaList(ListUtils.arrayPrimitiveDoublesToList(thetasNew.toArray()));
+                var thetasNewVector=thetaVector.add(gradLogVector.mapMultiplyToSelf(learningRate*vt));
+                agent.setThetas(thetasNewVector.toArray());
             }
 
         }
