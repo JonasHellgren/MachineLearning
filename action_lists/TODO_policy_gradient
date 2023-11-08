@@ -7,6 +7,10 @@ tester olika miljöer  x
 städa upordown z
 dokumentera i md upordown - tex renskriv bevis derGradLog x
 
+two armed bandit working x
+clean up
+gradLog with finite diff
+runner som plottar phiTheta
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
