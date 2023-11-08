@@ -7,6 +7,8 @@ import policy_gradient_problems.twoArmedBandit.Agent;
 import policy_gradient_problems.twoArmedBandit.Environment;
 import policy_gradient_problems.twoArmedBandit.Trainer;
 
+import java.util.Arrays;
+
 public class TestTrainer {
 
     Trainer trainer;
@@ -23,13 +25,14 @@ public class TestTrainer {
         trainer = Trainer.builder()
                 .environment(environment)
                 .agent(agent)
-                .nofEpisodes(100).nofStepsMax(10).gamma(1d).learningRate(1e-2)
+                .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRate(1e-1)
                 .build();
     }
 
     @Test
     public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
+        printPolicy();
         Assertions.assertEquals(1, agent.chooseAction());
     }
 
@@ -38,7 +41,13 @@ public class TestTrainer {
         var environment=Environment.newWithProbabilities(0.5,0.1);
         createTrainer(environment);
         trainer.train();
+        printPolicy();
         Assertions.assertEquals(0, agent.chooseAction());
+    }
+
+
+    private void printPolicy() {
+        System.out.println("agent.piTheta() = " + Arrays.toString(agent.piTheta()));
     }
 
 

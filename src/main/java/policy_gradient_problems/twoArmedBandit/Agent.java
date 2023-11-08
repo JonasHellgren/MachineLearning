@@ -5,10 +5,10 @@ import common.ListUtils;
 import common.RandUtils;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.common.SoftMaxEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Builder
 public class Agent {
@@ -36,15 +36,13 @@ public class Agent {
         this.thetaList = thetaList;
     }
 
-    public List<Double> getThetaList() {
-        return thetaList;
+    public double[] getThetasAsArray() {
+        return ListUtils.toArray(thetaList);
     }
 
   public double[] piTheta() {  //action probabilities according to soft max
-        double sumExpPhi = IntStream.range(0, nofActions).mapToDouble(a -> Math.exp(thetaList.get(a))).sum();
-        return IntStream.range(0, nofActions).mapToDouble(a -> Math.exp(thetaList.get(a)) / sumExpPhi).toArray();
+      return  SoftMaxEvaluator.getProbabilities(thetaList);
     }
-
 
     @NotNull
     private static List<Double> getLimits(double[] piTheta) {
@@ -65,9 +63,9 @@ public class Agent {
     }
 
 
-    public List<Double> getGradLogList(int action) {
+    public double[] getGradLogList(int action) {
         return (action==0)
-                ? List.of(piTheta()[1],-piTheta()[1])
-                : List.of(-piTheta()[0],piTheta()[0]);
+                ? new double[]{piTheta()[1],-piTheta()[1]}
+                : new double[]{-piTheta()[0],piTheta()[0]};
     }
 }

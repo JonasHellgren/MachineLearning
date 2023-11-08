@@ -34,8 +34,8 @@ public class Trainer {
             List<Experience> experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
             for (Experience exp:experienceListWithReturns) {
-                RealVector thetas = new ArrayRealVector(ListUtils.toArray(agent.getThetaList()));
-                RealVector gradLog = new ArrayRealVector(ListUtils.toArray(agent.getGradLogList(exp.action())));
+                RealVector thetas = new ArrayRealVector(agent.getThetasAsArray());
+                ArrayRealVector gradLog = new ArrayRealVector(agent.getGradLogList(exp.action()));
                 double vt = exp.value();
                 RealVector thetasNew=thetas.add(gradLog.mapMultiplyToSelf(learningRate*vt));
                 agent.setThetaList(ListUtils.arrayPrimitiveDoublesToList(thetasNew.toArray()));
