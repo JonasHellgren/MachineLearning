@@ -31,15 +31,25 @@ public class Trainer {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
-            for (Experience exp:experienceListWithReturns) {
-                var thetaVector = new ArrayRealVector(agent.getThetasAsArray());
-                var gradLogVector = new ArrayRealVector(agent.getGradLogList(exp.action()));
-                double vt = exp.value();
+            for (Experience experience:experienceListWithReturns) {
+                var thetaVector = getThetaVector();
+                var gradLogVector = getGradLogVector(experience.action());
+                double vt = experience.value();
                 var thetasNewVector=thetaVector.add(gradLogVector.mapMultiplyToSelf(learningRate*vt));
                 agent.setThetas(thetasNewVector.toArray());
             }
 
         }
+    }
+
+    @NotNull
+    private ArrayRealVector getThetaVector() {
+        return new ArrayRealVector(agent.getThetasAsArray());
+    }
+
+    @NotNull
+    private ArrayRealVector getGradLogVector(int action) {
+        return new ArrayRealVector(agent.getGradLogList(action));
     }
 
     @NotNull

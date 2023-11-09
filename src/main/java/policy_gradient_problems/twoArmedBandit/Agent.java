@@ -53,8 +53,8 @@ public class Agent {
     private static List<Double> getLimits(double[] piTheta) {
         List<Double> limits = new ArrayList<>();
         limits.add(0d);
-        List<Double> accumProps=MathUtils.accumSum(ListUtils.arrayPrimitiveDoublesToList(piTheta));
-        limits.addAll(accumProps);
+        List<Double> accumProbabilities=MathUtils.accumSum(ListUtils.arrayPrimitiveDoublesToList(piTheta));
+        limits.addAll(accumProbabilities);
         return limits;
     }
 
