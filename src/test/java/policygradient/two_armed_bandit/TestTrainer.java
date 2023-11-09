@@ -47,7 +47,7 @@ public class TestTrainer {
 
 
     private void printPolicy() {
-        System.out.println("agent.piTheta() = " + Arrays.toString(agent.piTheta()));
+        System.out.println("agent.piTheta() = " + agent.piTheta());
     }
 
 

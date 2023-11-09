@@ -10,14 +10,14 @@ public class TestAgent {
 
     @Test
     public void givenTheta0MuchLarger_thenAction0 () {
-        var agent= Agent.builder().thetaList(List.of(10d,1d)).build();
+        var agent= Agent.newWithThetas(10d,1d);
         int action=agent.chooseAction();
         Assertions.assertEquals(0,action);
     }
 
     @Test
     public void givenTheta1MuchLarger_thenAction1 () {
-        var agent= Agent.builder().thetaList(List.of(1d,10d)).build();
+        var agent= Agent.newWithThetas(1d,10d);
         int action=agent.chooseAction();
         Assertions.assertEquals(1,action);
     }
@@ -25,7 +25,7 @@ public class TestAgent {
 
     @Test
     public void givenSimilarThetas_thenAction0or1 () {
-        var agent= Agent.builder().thetaList(List.of(1d,1d)).build();
+        var agent= Agent.newWithThetas(1d,1d);
         int action=agent.chooseAction();
         Assertions.assertTrue(action==0 || action==1);
     }
