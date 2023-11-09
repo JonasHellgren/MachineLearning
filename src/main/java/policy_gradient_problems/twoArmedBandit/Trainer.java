@@ -2,7 +2,6 @@ package policy_gradient_problems.twoArmedBandit;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.Experience;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -33,10 +32,10 @@ public class Trainer {
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
             for (Experience experience:experienceListWithReturns) {
                 var thetaVector = agent.getThetaVector();
-                var gradLogVector = agent.getGradLogVector(experience.action());
+                var gradLogVector = agent.gradLogVector(experience.action());
                 double vt = experience.value();
                 var thetasNewVector=thetaVector.add(gradLogVector.mapMultiplyToSelf(learningRate*vt));
-                agent.setTheta(thetasNewVector);
+                agent.setThetaVector(thetasNewVector);
             }
         }
     }

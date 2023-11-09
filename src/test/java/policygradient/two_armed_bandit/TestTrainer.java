@@ -7,8 +7,6 @@ import policy_gradient_problems.twoArmedBandit.Agent;
 import policy_gradient_problems.twoArmedBandit.Environment;
 import policy_gradient_problems.twoArmedBandit.Trainer;
 
-import java.util.Arrays;
-
 public class TestTrainer {
 
     Trainer trainer;
@@ -47,7 +45,7 @@ public class TestTrainer {
 
 
     private void printPolicy() {
-        System.out.println("agent.piTheta() = " + agent.piTheta());
+        System.out.println("agent.piTheta() = " + agent.actionProbabilities());
     }
 
 

@@ -5,6 +5,8 @@ import common.ListUtils;
 import common.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.SoftMaxEvaluator;
@@ -20,16 +22,20 @@ import java.util.List;
  * |
  * |_____0_________|__1___|__2___|
    0               0.5    0.75   1
+
+ The method actionProbabilities() gives action probabilities according to soft max, called piTheta in literature
+
  */
 
 @Builder
+@Getter
+@Setter
 public class Agent {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final int NOF_ACTIONS = 2;
     @Builder.Default
     ArrayRealVector thetaVector =new ArrayRealVector(new double[]{THETA0,THETA1});
-
     @Builder.Default
     int nofActions = NOF_ACTIONS;
 
@@ -41,28 +47,20 @@ public class Agent {
         return Agent.builder().thetaVector(new ArrayRealVector(new double[]{t0,t1})).build();
     }
 
-
     public int chooseAction() {
-        List<Double> piTheta = piTheta();
-        List<Double> limits = getLimits(piTheta);
+        List<Double> actionProbabilities = actionProbabilities();
+        List<Double> limits = getLimits(actionProbabilities);
         throwIfBadLimits(limits);
         double randomNumberBetweenZeroAndOne = RandUtils.getRandomDouble(0, 1);
         return IndexFinder.findBucket(ListUtils.toArray(limits), randomNumberBetweenZeroAndOne);
     }
 
-    public void setTheta(ArrayRealVector theta) {
-        this.thetaVector = theta;
-    }
 
-    public ArrayRealVector getThetaVector() {
-        return thetaVector;
-    }
-
-    public List<Double> piTheta() {  //action probabilities according to soft max
+    public List<Double> actionProbabilities() {
       return  SoftMaxEvaluator.getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaVector.toArray()));
     }
 
-    public ArrayRealVector getGradLogVector(int action) {
+    public ArrayRealVector gradLogVector(int action) {
         return new ArrayRealVector(getGradLogArray(action));
     }
 
@@ -84,7 +82,7 @@ public class Agent {
 
     private double[] getGradLogArray(int action) {
         return (action==0)
-                ? new double[]{piTheta().get(1),-piTheta().get(1)}
-                : new double[]{-piTheta().get(0),piTheta().get(0)};
+                ? new double[]{actionProbabilities().get(1),-actionProbabilities().get(1)}
+                : new double[]{-actionProbabilities().get(0), actionProbabilities().get(0)};
     }
 }
