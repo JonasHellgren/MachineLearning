@@ -4,6 +4,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -77,17 +78,11 @@ public class MathUtils {
         return true;
     }
 
-    public static List<Double> accumSum(List<Double> list) {
-        List<Double> runningtotal = new ArrayList<>();
-        runningtotal.add(list.get(0));
-        double prev_sum = list.get(0);
-        int i = 1;
-        while (i < list.size()) {
-            prev_sum += list.get(i);
-            runningtotal.add(prev_sum);
-            i++;
-        }
-        return runningtotal;
+    public static List<Double> accumulatedSum(List<Double> list) {
+        // Use AtomicReference to hold the running total
+        AtomicReference<Double> runningSum = new AtomicReference<>(0.0);
+        return list.stream().map(numberInList -> runningSum.updateAndGet(sum -> sum + numberInList))
+                .collect(Collectors.toList());
     }
 
 

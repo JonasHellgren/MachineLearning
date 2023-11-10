@@ -17,8 +17,8 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.nativeblas.NativeOpsHolder;
-import regressionnetworks.function.MathFunctionInterface;
-import regressionnetworks.function.SinXDivXMathFunction;
+import dl4j.regressionnetworks.function.MathFunctionInterface;
+import dl4j.regressionnetworks.function.SinXDivXMathFunction;
 
 
 import java.util.Collections;
