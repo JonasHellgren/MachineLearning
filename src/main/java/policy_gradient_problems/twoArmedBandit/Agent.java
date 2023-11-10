@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
+
 import java.util.List;
+
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
@@ -21,11 +23,11 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 public class Agent {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
-    public static final int NOF_ACTIONS = 2;
+    public static final ArrayRealVector ARRAY_REAL_VECTOR = new ArrayRealVector(new double[]{THETA0, THETA1});
     @Builder.Default
-    ArrayRealVector thetaVector = new ArrayRealVector(new double[]{THETA0, THETA1});
+    ArrayRealVector thetaVector = ARRAY_REAL_VECTOR;
     @Builder.Default
-    int nofActions = NOF_ACTIONS;
+    int nofActions = ARRAY_REAL_VECTOR.getDimension();
 
     public static Agent newDefault() {
         return Agent.builder().build();
@@ -42,13 +44,17 @@ public class Agent {
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
     }
 
-    public List<Double> actionProbabilities(double[] thetaArr) {
+    public List<Double> actionProbabilities() {
+        return actionProbabilities(thetaVector.toArray());
+    }
+
+    private List<Double> actionProbabilities(double[] thetaArr) {
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
 
     public ArrayRealVector gradLogVector(int action) {
         var ap = actionProbabilities(thetaVector.toArray());
-        return new ArrayRealVector(calculateGradLog(action,ap));
+        return new ArrayRealVector(calculateGradLog(action, ap));
     }
 
 }

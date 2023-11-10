@@ -11,7 +11,10 @@ two armed bandit working x
 clean up x
 accumSum med streams  x
 gradLog med mer generell matte  x
-runner som plottar phiTheta
+TrainingTracker  x
+runner som plottar phiTheta x
+TrainingTrackerPlotter
+plantuml bandit
 
 sink the ship
 

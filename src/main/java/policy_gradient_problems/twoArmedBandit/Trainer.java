@@ -2,8 +2,10 @@ package policy_gradient_problems.twoArmedBandit;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.Experience;
+import policy_gradient_problems.common.TrainingTracker;
 import policy_gradient_problems.helpers.ReturnCalculator;
 
 import java.util.ArrayList;
@@ -15,14 +17,23 @@ import java.util.List;
  *
  */
 @Builder
+@Log
 public class Trainer {
 
     public static final double DUMMY_VALUE = 0d;
-    Environment environment;
-    Agent agent;
+    @NonNull Environment environment;
+    @NonNull Agent agent;
     @NonNull Integer nofEpisodes;
     @NonNull Integer nofStepsMax;
     @NonNull Double gamma, learningRate;
+
+    @Builder.Default
+    final TrainingTracker tracker=new TrainingTracker();
+
+    public TrainingTracker getTracker() {
+        logIfEmptyTracker();
+        return tracker;
+    }
 
     public void train() {
         var returnCalculator=new ReturnCalculator();
@@ -37,6 +48,7 @@ public class Trainer {
                 var thetasNewVector=thetaVector.add(gradLogVector.mapMultiplyToSelf(learningRate*vt));
                 agent.setThetaVector(thetasNewVector);
             }
+            tracker.addActionProbabilities(0,agent.actionProbabilities());
         }
     }
 
@@ -49,6 +61,13 @@ public class Trainer {
             experienceList.add(new Experience(action,reward, DUMMY_VALUE));
         }
         return experienceList;
+    }
+
+
+    private void logIfEmptyTracker() {
+        if (tracker.isEmpty()) {
+            log.warning("Need to train first");
+        }
     }
 
 }
