@@ -10,10 +10,14 @@ dokumentera i md upordown - tex renskriv bevis derGradLog x
 two armed bandit working x
 clean up x
 accumSum med streams  x
-gradLog with finite diff
+gradLog med mer generell matte  x
 runner som plottar phiTheta
 
 sink the ship
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
+
+
+bubblare:
+gradLog with finite diff

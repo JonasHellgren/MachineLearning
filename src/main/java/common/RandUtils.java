@@ -20,4 +20,8 @@ public class RandUtils <T> {
         return minValue+Math.random()*(maxValue-minValue);
     }
 
+    public static double randomNumberBetweenZeroAndOne() {
+        return  getRandomDouble(0, 1);
+    }
+
 }
