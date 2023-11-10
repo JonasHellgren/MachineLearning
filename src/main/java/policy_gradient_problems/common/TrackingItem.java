@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public record TrackingItem(
-        Map<Integer, List<Double>> stateProbabilitiesMap
+        Map<Integer, List<Double>> stateProbabilitiesMap  //state, actionProbabilities
 ) {
 
     public static TrackingItem newEmpty() {
