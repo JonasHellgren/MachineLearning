@@ -10,6 +10,7 @@ import java.util.List;
 
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
+import static policy_gradient_problems.common.GradLogCalculator.calculateGrad;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
 import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
@@ -38,8 +39,7 @@ public class Agent {
     }
 
     public int chooseAction() {
-        var actionProbabilities = actionProbabilities(thetaVector.toArray());
-        var limits = getLimits(actionProbabilities);
+        var limits = getLimits(getActionProbabilities());
         throwIfBadLimits(limits);
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
     }
@@ -48,13 +48,20 @@ public class Agent {
         return actionProbabilities(thetaVector.toArray());
     }
 
+    public ArrayRealVector gradLogVector(int action) {
+        return new ArrayRealVector(calculateGradLog(action, getActionProbabilities()));
+    }
+
+
+    public ArrayRealVector gradient(int action) {
+        return new ArrayRealVector(calculateGrad(action, getActionProbabilities()));
+    }
+
+    private List<Double> getActionProbabilities() {
+        return actionProbabilities(thetaVector.toArray());
+    }
+
     private List<Double> actionProbabilities(double[] thetaArr) {
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
-
-    public ArrayRealVector gradLogVector(int action) {
-        var ap = actionProbabilities(thetaVector.toArray());
-        return new ArrayRealVector(calculateGradLog(action, ap));
-    }
-
 }

@@ -13,7 +13,7 @@ accumSum med streams  x
 gradLog med mer generell matte  x
 TrainingTracker  x
 runner som plottar phiTheta x
-TrainingTrackerPlotter
+TrainingTrackerPlotter  x
 plantuml bandit
 
 sink the ship

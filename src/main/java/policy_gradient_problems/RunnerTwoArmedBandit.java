@@ -30,7 +30,7 @@ public class RunnerTwoArmedBandit {
         return Trainer.builder()
                 .environment(environment)
                 .agent(agent)
-                .nofEpisodes(100).nofStepsMax(1).gamma(1d).learningRate(0.2)
+                .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRate(0.2)
                 .build();
     }
 

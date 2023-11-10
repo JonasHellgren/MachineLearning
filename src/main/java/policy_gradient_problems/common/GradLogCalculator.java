@@ -15,8 +15,10 @@ import java.util.List;
 
  (3) => d/dthetaj log(smi) = dirac(i,j)-smj
 
+ (4)  dsmi/dthetaj = smi*d/dthetaj log(smi)=smi*(dirac(i,j)-smj)   (change in the softmax inputs)
+
  dirac(i,j) = | 1   (i==j)
-              | 0   (else)
+ | 0   (else)
 
  dirac also defined in
  https://en.wikipedia.org/wiki/Dirac_delta_function
@@ -25,13 +27,23 @@ import java.util.List;
 
 public class GradLogCalculator {
 
-    public static double[] calculateGradLog(final int action, @NonNull  final List<Double> actionProbabilities) {
+    public static double[] calculateGradLog(final int action, @NonNull final List<Double> actionProbabilities) {
         int nofActions = actionProbabilities.size();
-        double[] gradLogArray=new double[nofActions];
+        double[] gradLogArray = new double[nofActions];
         for (int j = 0; j < nofActions; j++) {
-            double dirac= (j==action)?1d:0d;
-            double smj=actionProbabilities.get(j);
-            gradLogArray[j]=dirac-smj;
+            double dirac = (j == action) ? 1d : 0d;
+            double smj = actionProbabilities.get(j);
+            gradLogArray[j] = dirac - smj;
+        }
+        return gradLogArray;
+    }
+
+    public static double[] calculateGrad(final int action, @NonNull final List<Double> actionProbabilities) {
+        double[] gradLog = calculateGradLog(action, actionProbabilities);
+        int nofActions = actionProbabilities.size();
+        double[] gradLogArray = new double[nofActions];
+        for (int i = 0; i < nofActions; i++) {
+            gradLogArray[i] = gradLog[i] * actionProbabilities.get(i);
         }
         return gradLogArray;
     }

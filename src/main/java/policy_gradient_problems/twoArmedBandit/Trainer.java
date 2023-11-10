@@ -3,6 +3,7 @@ package policy_gradient_problems.twoArmedBandit;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.Experience;
 import policy_gradient_problems.common.TrainingTracker;
@@ -42,14 +43,20 @@ public class Trainer {
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
             for (Experience experience:experienceListWithReturns) {
-                var thetaVector = agent.getThetaVector();
                 var gradLogVector = agent.gradLogVector(experience.action());
                 double vt = experience.value();
-                var thetasNewVector=thetaVector.add(gradLogVector.mapMultiplyToSelf(learningRate*vt));
-                agent.setThetaVector(thetasNewVector);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(learningRate * vt);
+                logging(experience, changeInThetaVector,vt);
+                agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
             tracker.addActionProbabilities(0,agent.actionProbabilities());
         }
+    }
+
+    private void logging(Experience experience, RealVector changeInThetaVector, double vt) {
+        log.fine("experience = " + experience +
+                ", changeInThetaVector = " + changeInThetaVector +
+                ", gradient ="+agent.gradient(experience.action()).mapMultiplyToSelf(learningRate * vt));
     }
 
     @NotNull
