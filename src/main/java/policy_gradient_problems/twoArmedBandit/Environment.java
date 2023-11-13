@@ -4,6 +4,13 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 
+
+/**
+ * There are two actions, action 0 is try arm 0, action 1 is try arm 1
+ * Each arm is assigned with a probability between 0 and 1 of winning a coin
+ * The reward is one if an action leads to a coin
+ */
+
 @Builder
 public class Environment {
 

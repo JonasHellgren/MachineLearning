@@ -54,9 +54,8 @@ public class Trainer {
     }
 
     private void logging(Experience experience, RealVector changeInThetaVector, double vt) {
-        log.fine("experience = " + experience +
-                ", changeInThetaVector = " + changeInThetaVector +
-                ", gradient ="+agent.gradient(experience.action()).mapMultiplyToSelf(learningRate * vt));
+        System.out.println("experience = " + experience +
+                ", changeInThetaVector = " + changeInThetaVector);
     }
 
     @NotNull

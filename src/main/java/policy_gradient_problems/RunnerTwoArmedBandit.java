@@ -22,7 +22,7 @@ public class RunnerTwoArmedBandit {
     }
 
     private static void plotActionProbabilitiesDuringTraining(Trainer trainer) {
-        var plotter = new PlotterMultiplePanelsTrajectory(List.of("a0", "a1"), "episode");
+        var plotter = new PlotterMultiplePanelsTrajectory(List.of("pi(0)", "pi(1)"), "episode");
         plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(0));
     }
 
