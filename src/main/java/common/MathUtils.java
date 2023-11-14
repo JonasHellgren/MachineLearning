@@ -40,6 +40,14 @@ public class MathUtils {
         return value>Double.MIN_VALUE;
     }
 
+    public static boolean isInRange(double value, double min, double max) {
+        return (value>=min && value<=max);
+    }
+
+    public static boolean isInRange(int value, int min, int max) {
+        return (value>=min && value<=max);
+    }
+
     public static double setAsSmallIfZero(double value) {
         return (isZero(value)?Double.MIN_VALUE:value);
     }

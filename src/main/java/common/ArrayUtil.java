@@ -14,4 +14,19 @@ import java.util.Arrays;
         return array;
     }
 
+     public static boolean isDoubleArraysEqual(double[] x, double[] y, double tol)
+     {
+         if (x.length!=y.length) {
+             return false;
+         }
+         for (int i = 0; i < x.length; i += 1)
+         {
+             if (Math.abs((y[i] - x[i])) > tol)
+             {
+                 return false;
+             }
+         }
+         return true;
+     }
+
 }
