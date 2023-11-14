@@ -20,7 +20,7 @@ import java.util.List;
  (4)  dsmi/dthetaj = smi*d/dthetaj log(smi)=smi*(dirac(i,j)-smj)   (change in the softmax inputs)
 
  dirac(i,j) = | 1   (i==j)
- | 0   (else)
+              | 0   (else)
 
  dirac also defined in
  https://en.wikipedia.org/wiki/Dirac_delta_function

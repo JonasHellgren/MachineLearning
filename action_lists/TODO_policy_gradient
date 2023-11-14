@@ -18,7 +18,10 @@ plantuml bandit x
 
 short corridor x
 EnvironmentSC  x
-TestEnvironmentSC
+TestEnvironmentSC  x
+AgentSC
+korrekt stateObserved
+TestAgentSC
 
 sink the ship
 

@@ -10,20 +10,23 @@ import static common.RandUtils.getRandomDouble;
 
 public class EnvironmentSC {
 
-    public static final double PROB_DIRECT_TO_TERMINAL = 0.01;
-    public static final double REWARD_S4 = 1d, REWARD_S1 = -1d, REWARD_S7 = -1d;
-    public static final double REWARD_FOR_NON417STATE = -0.1;
+    public static final int NOF_ACTIONS=2;
+    public final int NOF_OBSERVABLE_STATES=3;
+
+    static final double PROB_DIRECT_TO_TERMINAL = 0.01;
+    static final double REWARD_S4 = 1d, REWARD_S1 = -1d, REWARD_S7 = -1d;
+    static final double REWARD_FOR_NON417STATE = -0.1;
 
     final Map<Integer,Double> STATE_REWARD_MAP;
     final Map<Integer,Integer> STATE_OBSERVEDSTATE_MAP;
     final Set<Integer> SET_TERMINAL_STATES;
 
+    public double probDirectToTerminal;
+
     public EnvironmentSC(double probDirectToTerminal) {
         this();
         this.probDirectToTerminal = probDirectToTerminal;
     }
-
-    public double probDirectToTerminal;
 
     public EnvironmentSC() {
         STATE_REWARD_MAP =Map.of(4,REWARD_S4, 1,REWARD_S1, 7,REWARD_S7);
