@@ -4,9 +4,11 @@ import common.ArrayUtil;
 import common.ListUtils;
 import common.MathUtils;
 import common.RandUtils;
+import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static common.IndexFinder.findBucket;
@@ -40,8 +42,24 @@ public class AgentSC {
         thetaVector=new ArrayRealVector(thetaArray);
     }
 
+    public  ArrayRealVector getThetaVector() {
+        return thetaVector;
+    }
+
+    public  void setThetaVector(ArrayRealVector thetaVector) {
+        AgentSC.thetaVector = thetaVector;
+    }
+
+    public int getState() {
+        return state;
+    }
+
     public void setState(int state) {
         this.state = state;
+    }
+
+    public void setStateAsRandomNonTerminal() {
+        this.state=getRandomNonTerminalState();
     }
 
     public int chooseAction(int stateObserved) {
@@ -54,8 +72,8 @@ public class AgentSC {
 
     public List<Double> getActionProbabilitiesInState(int stateObserved) {
         throwIfBadObsState(stateObserved);
-        int beg=stateObserved*EnvironmentSC.NOF_ACTIONS;
-        int end=beg+EnvironmentSC.NOF_ACTIONS;
+        int beg=stateObserved*NOF_ACTIONS;
+        int end=beg+NOF_ACTIONS;
         double[] thetaArrForStateObserved = ArrayUtils.subarray(thetaVector.toArray(), beg, end);
         return actionProbabilities(thetaArrForStateObserved);
     }
@@ -78,7 +96,8 @@ public class AgentSC {
 
 
     private static int getRandomNonTerminalState() {
-        return RandUtils.getRandomIntNumber(2, 6);
+        RandUtils<Integer> randUtils=new RandUtils<>();
+        return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.SET_NON_TERMINAL_STATES));
     }
 
 

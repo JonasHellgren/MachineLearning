@@ -19,6 +19,7 @@ public class EnvironmentSC {
     final Map<Integer,Double> STATE_REWARD_MAP=Map.of(4,REWARD_S4, 1,REWARD_S1, 7,REWARD_S7);
     final Map<Integer,Integer> STATE_OBSERVEDSTATE_MAP=Map.of(1,-1, 2,0, 3,1, 4,-1, 5,1, 6,2, 7,-1);
     public final Set<Integer> SET_TERMINAL_STATES=Set.of(1,4,7);
+    public static  final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
     public static final Set<Integer> SET_OBSERVABLE_STATES=Set.of(-1,0,1,2);
 
     public double probDirectToTerminal;

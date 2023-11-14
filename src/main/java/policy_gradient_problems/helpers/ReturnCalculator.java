@@ -14,7 +14,7 @@ public class ReturnCalculator {
         List<Double> returns=calcReturns(rewards,gamma);
 
         for (Experience exp:experienceList) {
-            Experience e = new Experience(exp.action(), exp.reward(), returns.get(experienceList.indexOf(exp)));
+            Experience e = new Experience(exp.state(),exp.action(), exp.reward(), returns.get(experienceList.indexOf(exp)));
             experienceListNew.add(e);
         }
         return experienceListNew;

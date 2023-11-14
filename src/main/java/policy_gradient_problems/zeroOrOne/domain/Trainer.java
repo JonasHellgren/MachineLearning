@@ -15,6 +15,7 @@ import java.util.List;
 public class Trainer {
 
     public static final double DUMMY_VALUE = 0d;
+    public static final int STATE = 0;
     Environment environment;
     Agent agent;
     @NonNull Integer nofEpisodes;
@@ -41,7 +42,7 @@ public class Trainer {
         for (int si = 0; si < nofStepsMax ; si++) {
             int action=agent.chooseAction();
             double reward=environment.step(action);
-            experienceList.add(new Experience(action,reward, DUMMY_VALUE));
+            experienceList.add(new Experience(STATE,action,reward, DUMMY_VALUE));
         }
         return experienceList;
     }
