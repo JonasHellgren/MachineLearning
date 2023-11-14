@@ -54,7 +54,7 @@ public class Trainer {
     }
 
     private void logging(Experience experience, RealVector changeInThetaVector, double vt) {
-        System.out.println("experience = " + experience +
+        log.fine("experience = " + experience +
                 ", changeInThetaVector = " + changeInThetaVector);
     }
 

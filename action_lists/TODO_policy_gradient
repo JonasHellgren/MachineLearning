@@ -14,7 +14,11 @@ gradLog med mer generell matte  x
 TrainingTracker  x
 runner som plottar phiTheta x
 TrainingTrackerPlotter  x
-plantuml bandit
+plantuml bandit x
+
+short corridor x
+EnvironmentSC  x
+TestEnvironmentSC
 
 sink the ship
 
