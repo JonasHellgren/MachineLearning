@@ -42,7 +42,7 @@ public class TrainerSC {
 
                 //System.out.println("experience = " + experience);
 
-                var gradLogVector = agent.gradLogVector(experience.state(),experience.action());
+                var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(learningRate * vt);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));

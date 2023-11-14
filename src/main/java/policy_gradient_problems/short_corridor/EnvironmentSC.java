@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.Set;
 
 import static common.RandUtils.getRandomDouble;
+import static common.RandUtils.randomNumberBetweenZeroAndOne;
+
+/***
+ * See shortCorridor.md for description
+ */
 
 public class EnvironmentSC {
 
@@ -13,13 +18,12 @@ public class EnvironmentSC {
     public static final int NOF_NON_TERMINAL_OBSERVABLE_STATES =3;
 
     static final double PROB_DIRECT_TO_TERMINAL = 0.01;
-    static final double REWARD_S4 = 1d, REWARD_S1 = -1d, REWARD_S7 = -1d;
     static final double REWARD_FOR_NON417STATE = -0.1;
 
-    final Map<Integer,Double> STATE_REWARD_MAP=Map.of(4,REWARD_S4, 1,REWARD_S1, 7,REWARD_S7);
+    final Map<Integer,Double> STATE_REWARD_MAP=Map.of(4,1d, 1,-1d, 7,-1d);
     final Map<Integer,Integer> STATE_OBSERVEDSTATE_MAP=Map.of(1,-1, 2,0, 3,1, 4,-1, 5,1, 6,2, 7,-1);
     public final Set<Integer> SET_TERMINAL_STATES=Set.of(1,4,7);
-    public static  final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
+    public static final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
     public static final Set<Integer> SET_OBSERVABLE_STATES=Set.of(-1,0,1,2);
 
     public double probDirectToTerminal;
@@ -59,7 +63,7 @@ public class EnvironmentSC {
     }
 
     private int getStateNew(int state, int action) {
-        return getRandomDouble(0,1)< probDirectToTerminal
+        return randomNumberBetweenZeroAndOne() < probDirectToTerminal
                 ? getRandomTerminalState()
                 : getNonTerminalState(state,action);
     }

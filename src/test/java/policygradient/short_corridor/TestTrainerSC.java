@@ -1,12 +1,12 @@
 package policygradient.short_corridor;
 
 import common.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.short_corridor.TrainerSC;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTrainerSC {
 
@@ -29,22 +29,17 @@ public class TestTrainerSC {
     }
 
     @Test
-    public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
+    public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
-        int actionState0 = agent.chooseAction(0);
-        int actionState1 = agent.chooseAction(1);
-        int actionState2 = agent.chooseAction(2);
-
-        Assertions.assertEquals(1, actionState0);
-        Assertions.assertTrue(MathUtils.isInRange(actionState1,0,1));
-        Assertions.assertEquals(0, actionState2);
-
+        assertEquals(1, agent.chooseAction(0));
+        assertTrue(MathUtils.isInRange(agent.chooseAction(1),0,1));
+        assertEquals(0, agent.chooseAction(2));
     }
 
     private void printPolicy() {
         for (int s = 0; s < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES ; s++) {
-            System.out.println("s = "+s+", agent.piTheta() = " + agent.getActionProbabilitiesInState(s));
+            System.out.println("s = "+s+", agent.piTheta() = " + agent.calcActionProbabilitiesInState(s));
         }
     }
 

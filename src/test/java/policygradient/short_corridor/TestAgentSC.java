@@ -39,7 +39,7 @@ public class TestAgentSC {
         double p1 = arguments.getDouble(2);
 
         agent.setState(s);
-        List<Double> actionProbs = agent.getActionProbabilitiesInState(s);
+        List<Double> actionProbs = agent.calcActionProbabilitiesInState(s);
 
         assertEquals(p0, actionProbs.get(0), DELTA_PROB);
         assertEquals(p1, actionProbs.get(1), DELTA_PROB);
@@ -60,7 +60,7 @@ public class TestAgentSC {
         List<Double> gradThetaDesired = getGradThetaDesired(arguments);
         agent = AgentSC.newRandomStartStateDefaultThetas();
         agent.setState(s);
-        ArrayRealVector gradLogVector = agent.gradLogVector(s, a);
+        ArrayRealVector gradLogVector = agent.calcGradLogVector(s, a);
         assertTrue(isDoubleArraysEqual(toArray(gradThetaDesired), gradLogVector.toArray(), 0.1));
     }
 
