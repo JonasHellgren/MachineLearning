@@ -28,6 +28,11 @@ RunnerShortCorridor  x
 shortCorridor.md  x
 
 sink the ship
+EnvironmentShip
+TestEnvironmentShip
+
+short corridor baseline
+short corridor actor critic
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
