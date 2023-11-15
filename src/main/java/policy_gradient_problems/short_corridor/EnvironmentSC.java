@@ -42,6 +42,11 @@ public class EnvironmentSC {
         this.probDirectToTerminal=PROB_DIRECT_TO_TERMINAL;
     }
 
+    public static EnvironmentSC create()  {
+        return new EnvironmentSC();
+
+    }
+
     public StepReturnSC step(int state, int action) {
         int stateNew=getStateNew(state,action);
         double reward=getReward(stateNew);

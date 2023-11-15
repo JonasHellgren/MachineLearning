@@ -24,8 +24,8 @@ korrekt stateObserved  x
 TestAgentSC x
 clean up  x
 tracker.addActionProbabilities x
-RunnerShortCorridor
-shortCorridor.md
+RunnerShortCorridor  x
+shortCorridor.md  x
 
 sink the ship
 

@@ -10,16 +10,11 @@ import java.util.List;
 public class RunnerShortCorridor {
 
     public static void main(String[] args) {
-        var trainer = createEnvironmentAgentTrainerAndReturnTrainer();
+        var trainer = createTrainer(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
         trainer.train();
         plotActionProbabilitiesDuringTraining(trainer);
     }
 
-    private static TrainerSC createEnvironmentAgentTrainerAndReturnTrainer() {
-        var environment = new EnvironmentSC();
-        var agent = AgentSC.newRandomStartStateDefaultThetas();
-        return createTrainer(environment, agent);
-    }
 
     private static void plotActionProbabilitiesDuringTraining(TrainerSC trainer) {
         for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
@@ -30,9 +25,8 @@ public class RunnerShortCorridor {
 
     private static TrainerSC createTrainer(EnvironmentSC environment, AgentSC agent) {
         return TrainerSC.builder()
-                .environment(environment)
-                .agent(agent)
-                .nofEpisodes(1000).nofStepsMax(10).gamma(1d).learningRate(0.02)
+                .environment(environment).agent(agent)
+                .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(0.02)
                 .build();
     }
 

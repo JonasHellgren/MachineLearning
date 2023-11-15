@@ -38,16 +38,11 @@ public class TrainerSC {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
-            //System.out.println("ei = " + ei);
             for (Experience experience:experienceListWithReturns) {
-
-                //System.out.println("experience = " + experience);
-
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(learningRate * vt);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
-                //logging(experience, changeInThetaVector,vt);
             }
             updateTracker(ei);
         }
