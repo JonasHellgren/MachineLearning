@@ -27,8 +27,8 @@ tracker.addActionProbabilities x
 RunnerShortCorridor  x
 shortCorridor.md  x
 
-sink the ship
-EnvironmentShip
+sink the ship  x
+EnvironmentShip x
 TestEnvironmentShip
 
 short corridor baseline

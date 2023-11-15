@@ -10,6 +10,10 @@ public class Counter {
         this(0,Integer.MAX_VALUE);
     }
 
+    public Counter(int maxCount) {
+        this(0,maxCount);
+    }
+
     public Counter(int minCount, int maxCount) {
 
         if (maxCount<minCount) {
