@@ -1,4 +1,4 @@
-package policy_gradient_problems.zeroOrOne.domain;
+package policy_gradient_problems.zeroOrOne;
 
 import common.RandUtils;
 import lombok.Builder;

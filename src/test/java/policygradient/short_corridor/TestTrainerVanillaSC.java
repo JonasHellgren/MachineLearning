@@ -5,12 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.TrainerSC;
+import policy_gradient_problems.short_corridor.TrainerVanillaSC;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTrainerSC {
+public class TestTrainerVanillaSC {
 
-    TrainerSC trainer;
+    TrainerVanillaSC trainer;
     AgentSC agent;
 
     @BeforeEach
@@ -21,7 +21,7 @@ public class TestTrainerSC {
     }
 
     private void createTrainer(EnvironmentSC environment) {
-        trainer = TrainerSC.builder()
+        trainer = TrainerVanillaSC.builder()
                 .environment(environment)
                 .agent(agent)
                 .nofEpisodes(1000).nofStepsMax(10).gamma(1d).learningRate(1e-1)

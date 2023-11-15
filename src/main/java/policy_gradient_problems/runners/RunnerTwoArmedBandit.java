@@ -1,4 +1,4 @@
-package policy_gradient_problems;
+package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.twoArmedBandit.Agent;

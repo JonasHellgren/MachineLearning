@@ -3,7 +3,7 @@ package policygradient.one_or_zero;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.zeroOrOne.domain.Agent;
+import policy_gradient_problems.zeroOrOne.Agent;
 
 public class TestAgent {
 

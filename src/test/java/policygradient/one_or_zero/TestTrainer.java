@@ -3,9 +3,9 @@ package policygradient.one_or_zero;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.zeroOrOne.domain.Agent;
-import policy_gradient_problems.zeroOrOne.domain.Environment;
-import policy_gradient_problems.zeroOrOne.domain.Trainer;
+import policy_gradient_problems.zeroOrOne.Agent;
+import policy_gradient_problems.zeroOrOne.Environment;
+import policy_gradient_problems.zeroOrOne.Trainer;
 
 public class TestTrainer {
     public static final double DELTA_PROB = 0.4;

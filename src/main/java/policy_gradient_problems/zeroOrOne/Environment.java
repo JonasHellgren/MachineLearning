@@ -1,4 +1,4 @@
-package policy_gradient_problems.zeroOrOne.domain;
+package policy_gradient_problems.zeroOrOne;
 
 import lombok.Builder;
 import java.util.function.Supplier;
