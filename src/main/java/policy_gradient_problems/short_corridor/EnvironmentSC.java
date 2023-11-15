@@ -1,10 +1,12 @@
 package policy_gradient_problems.short_corridor;
 
 import common.MathUtils;
+import common.MySetUtils;
 
 import java.util.Map;
 import java.util.Set;
 
+import static common.MySetUtils.getSetFromRange;
 import static common.RandUtils.getRandomDouble;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 
@@ -25,6 +27,9 @@ public class EnvironmentSC {
     public final Set<Integer> SET_TERMINAL_STATES=Set.of(1,4,7);
     public static final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
     public static final Set<Integer> SET_OBSERVABLE_STATES=Set.of(-1,0,1,2);
+    public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL=
+            getSetFromRange(0,NOF_NON_TERMINAL_OBSERVABLE_STATES-1);
+
 
     public double probDirectToTerminal;
 

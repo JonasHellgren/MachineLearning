@@ -10,7 +10,9 @@ import java.util.List;
 @Log
 public class TrainingTracker {
 
-    List<TrackingItem> trackingItemList;
+    //todo TrackingItem -> ActionProbabilitiesAllStatesAtEpisode
+
+    List<TrackingItem> trackingItemList;  //todo map<episode,ActionProbabilitiesAllStatesAtEpisode>
 
     public TrainingTracker() {
         trackingItemList = new ArrayList<>();

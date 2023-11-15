@@ -41,6 +41,9 @@ public class TestTrainerSC {
         for (int s = 0; s < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES ; s++) {
             System.out.println("s = "+s+", agent.piTheta() = " + agent.calcActionProbabilitiesInState(s));
         }
+
+       // System.out.println("trainer.getTracker().getProbabilitiesTrajectoriesForState(0) = " + trainer.getTracker().getProbabilitiesTrajectoriesForState(0));
+
     }
 
 }

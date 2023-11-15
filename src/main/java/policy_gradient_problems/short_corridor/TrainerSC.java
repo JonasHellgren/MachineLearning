@@ -1,5 +1,6 @@
 package policy_gradient_problems.short_corridor;
 
+import common.MySetUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -48,7 +49,13 @@ public class TrainerSC {
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
                 //logging(experience, changeInThetaVector,vt);
             }
-           // tracker.addActionProbabilities(0,agent.actionProbabilities());
+            updateTracker();
+        }
+    }
+
+    private void updateTracker() {
+        for (int s: MySetUtils.getSetFromRange(0,EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES-1)) {
+            tracker.addActionProbabilities(s, agent.calcActionProbabilitiesInState(s));
         }
     }
 
