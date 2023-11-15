@@ -54,7 +54,7 @@ public class TrainerSC {
     }
 
     private void updateTracker(int ei) {
-        for (int s: MySetUtils.getSetFromRange(0,EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES-1)) {
+        for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
             tracker.addActionProbabilities(ei,s, agent.calcActionProbabilitiesInState(s));
         }
     }

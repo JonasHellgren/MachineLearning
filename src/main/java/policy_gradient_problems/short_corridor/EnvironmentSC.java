@@ -28,7 +28,7 @@ public class EnvironmentSC {
     public static final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
     public static final Set<Integer> SET_OBSERVABLE_STATES=Set.of(-1,0,1,2);
     public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL=
-            getSetFromRange(0,NOF_NON_TERMINAL_OBSERVABLE_STATES-1);
+            getSetFromRange(0,NOF_NON_TERMINAL_OBSERVABLE_STATES);
 
 
     public double probDirectToTerminal;
