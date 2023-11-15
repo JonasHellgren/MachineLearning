@@ -1,37 +1,37 @@
 package policy_gradient_problems.common;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Log
 public class TrainingTracker {
-
-    //todo TrackingItem -> ActionProbabilitiesAllStatesAtEpisode
-
-    List<TrackingItem> trackingItemList;  //todo map<episode,ActionProbabilitiesAllStatesAtEpisode>
+    Map<Integer, ActionProbabilitiesAllStatesAtEpisode> episodeActionProbabilitiesMap;
 
     public TrainingTracker() {
-        trackingItemList = new ArrayList<>();
+        episodeActionProbabilitiesMap = new HashMap<>();
     }
 
-    public void addActionProbabilities(int state, List<Double> actionProbabilities) {
-        var trackingItem = TrackingItem.newEmpty();
-        trackingItem.addItem(state, actionProbabilities);
-        trackingItemList.add(trackingItem);
-    }
+    public void addActionProbabilities(int ei, int state, List<Double> actionProbabilities) {
 
-    public boolean isEmpty() {
-        return trackingItemList.isEmpty();
+        if (episodeActionProbabilitiesMap.containsKey(ei)) {
+            var ap = episodeActionProbabilitiesMap.get(ei);
+            ap.addItem(state, actionProbabilities);
+        } else {
+            var ap = new ActionProbabilitiesAllStatesAtEpisode(state, actionProbabilities);
+            episodeActionProbabilitiesMap.put(ei, ap);
+        }
     }
 
     /***
      * One trajectory per action is created
      */
-
     public List<List<Double>> getProbabilitiesTrajectoriesForState(int state) {
         List<List<Double>> emptyListOfTrajectories = new ArrayList<>();
 
@@ -47,28 +47,50 @@ public class TrainingTracker {
         return createListWithAddedTrajectories(state, emptyListOfTrajectories);
     }
 
-    private  int getNofStates() {
-        var trackingItem = getAnyTrackingItem();
-        return trackingItem.stateProbabilitiesMap().keySet().size();
+    public boolean isEmpty() {
+        return episodeActionProbabilitiesMap.isEmpty();
     }
 
-    private TrackingItem getAnyTrackingItem() {
-        return trackingItemList.get(0);
+    @SneakyThrows
+    private ActionProbabilitiesAllStatesAtEpisode getActionProbabilitiesAllStatesAtEpisode0() {
+        if (isEmpty()) {
+            throw new InstantiationException("episodeActionProbabilitiesMap is empty");
+        }
+        return episodeActionProbabilitiesMap.get(0);
     }
 
     private List<List<Double>> createListWithAddedTrajectories(int state,
                                                                final List<List<Double>> listOfTrajectoriesIn) {
-        List<List<Double>> listOfTrajectoriesOut=new ArrayList<>(listOfTrajectoriesIn);
-        TrackingItem anyTrackingItem = getAnyTrackingItem();
-        int nofActions = anyTrackingItem.stateProbabilitiesMap().get(state).size();
-        for (int a = 0; a < nofActions; a++) {
-            List<Double> trajectory=new ArrayList<>();
-            for (TrackingItem item : trackingItemList) {
-                 trajectory.add(item.stateProbabilitiesMap().get(state).get(a));
-            }
-            listOfTrajectoriesOut.add(trajectory);
+        var listOfTrajectoriesOut = new ArrayList<>(listOfTrajectoriesIn);
+        var ap = getActionProbabilitiesAllStatesAtEpisode0();
+        throwIfStateNotPresent(state, ap);
+        for (int a = 0; a < getNofActions(state, ap); a++) {
+            listOfTrajectoriesOut.add(createTrajectoryForActionInState(state, a));
         }
         return listOfTrajectoriesOut;
+    }
+
+    private static int getNofActions(int state, ActionProbabilitiesAllStatesAtEpisode ap) {
+        return ap.stateProbabilitiesMap().get(state).size();
+    }
+
+    private int getNofStates() {
+        var trackingItem = getActionProbabilitiesAllStatesAtEpisode0();
+        return trackingItem.stateProbabilitiesMap().keySet().size();
+    }
+
+    private List<Double> createTrajectoryForActionInState(int state, int a) {
+        List<Double> trajectory = new ArrayList<>();
+        for (ActionProbabilitiesAllStatesAtEpisode item : episodeActionProbabilitiesMap.values()) {
+            trajectory.add(item.stateProbabilitiesMap().get(state).get(a));
+        }
+        return trajectory;
+    }
+
+    private static void throwIfStateNotPresent(int state, ActionProbabilitiesAllStatesAtEpisode ap) {
+        if (!ap.stateProbabilitiesMap().containsKey(state)) {
+            throw new IllegalArgumentException("State not present in tracker, state = " + state);
+        }
     }
 
 

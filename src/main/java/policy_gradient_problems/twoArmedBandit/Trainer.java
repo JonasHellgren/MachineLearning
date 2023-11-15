@@ -50,7 +50,7 @@ public class Trainer {
                 logging(experience, changeInThetaVector,vt);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
-            tracker.addActionProbabilities(0,agent.actionProbabilities());
+            tracker.addActionProbabilities(ei,0,agent.actionProbabilities());
         }
     }
 

@@ -49,13 +49,13 @@ public class TrainerSC {
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
                 //logging(experience, changeInThetaVector,vt);
             }
-            updateTracker();
+            updateTracker(ei);
         }
     }
 
-    private void updateTracker() {
+    private void updateTracker(int ei) {
         for (int s: MySetUtils.getSetFromRange(0,EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES-1)) {
-            tracker.addActionProbabilities(s, agent.calcActionProbabilitiesInState(s));
+            tracker.addActionProbabilities(ei,s, agent.calcActionProbabilitiesInState(s));
         }
     }
 

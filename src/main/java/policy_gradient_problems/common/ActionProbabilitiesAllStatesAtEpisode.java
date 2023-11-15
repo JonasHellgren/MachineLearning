@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record TrackingItem(
+public record ActionProbabilitiesAllStatesAtEpisode(
         Map<Integer, List<Double>> stateProbabilitiesMap  //state, actionProbabilities
 ) {
 
-    public static TrackingItem newEmpty() {
-        return new TrackingItem(new HashMap<>());
+    public ActionProbabilitiesAllStatesAtEpisode(Integer state, List<Double> actionProbabilities) {
+        this(new HashMap<>());
+        stateProbabilitiesMap.put(state,actionProbabilities);
     }
 
     public void addItem(int state, List<Double> actionProbabilities) {

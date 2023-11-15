@@ -23,7 +23,7 @@ AgentSC x
 korrekt stateObserved  x
 TestAgentSC x
 clean up  x
-tracker.addActionProbabilities
+tracker.addActionProbabilities x
 RunnerShortCorridor
 shortCorridor.md
 
