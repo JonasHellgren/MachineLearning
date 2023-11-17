@@ -109,7 +109,7 @@ public class ListUtils {
         return new ArrayList<>(Collections.nCopies(len,value));
     }
 
-    public static List<Double> generateSequenceDoubleStream(double start, double end, double step) {
+    public static List<Double> createDoubleListStartEndStep(double start, double end, double step) {
         return DoubleStream.iterate(start, d -> d <= end, d -> d + step)
                 .boxed()
                 .collect(Collectors.toList());
