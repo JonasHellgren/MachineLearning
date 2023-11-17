@@ -11,6 +11,8 @@ import policy_gradient_problems.helpers.ReturnCalculator;
 @Log
 public class TrainerVanillaSC extends TrainerAbstractSC {
 
+    //todo can we avoid boilerplate code below?
+
     @Builder
     public TrainerVanillaSC(@NonNull EnvironmentSC environment,
                             @NonNull AgentSC agent,
