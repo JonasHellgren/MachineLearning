@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.Experience;
+import policy_gradient_problems.common.TrainerParameters;
 import policy_gradient_problems.common.TrainingTracker;
 
 import java.util.ArrayList;
@@ -19,9 +20,7 @@ public class TrainerAbstractSC {
     public static final double DUMMY_VALUE = 0d;
     @NonNull EnvironmentSC environment;
     @NonNull AgentSC agent;
-    @NonNull Integer nofEpisodes;
-    @NonNull Integer nofStepsMax;
-    @NonNull Double gamma, learningRate;
+    @NonNull TrainerParameters parameters;
     @NonNull TrainingTracker tracker;
 
     public TrainingTracker getTracker() {
@@ -35,6 +34,9 @@ public class TrainerAbstractSC {
         }
     }
 
+    public void setAgent(AgentSC agent) {
+        this.agent = agent;
+    }
 
     @NotNull
     List<Experience> getExperiences() {
@@ -48,7 +50,7 @@ public class TrainerAbstractSC {
             agent.setState(sr.state());
             experienceList.add(new Experience(observedStateOld, action, sr.reward(), DUMMY_VALUE));
             si++;
-        } while(!sr.isTerminal() && si < nofStepsMax);
+        } while(!sr.isTerminal() && si < parameters.nofEpisodes());
         return experienceList;
     }
 

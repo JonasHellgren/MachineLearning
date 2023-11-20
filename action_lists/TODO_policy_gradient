@@ -31,9 +31,7 @@ sink the ship  x
 EnvironmentShip x
 TestEnvironmentShip  x
 
-
-
-TrainerAbstractSC, record TrainerSettings med nofEpisodes etc
+TrainerAbstractSC, record TrainerSettings med nofEpisodes etc  x
 
 short corridor baseline TrainerWithBaselineSC
 RunnerTrainerWithBaselineSC

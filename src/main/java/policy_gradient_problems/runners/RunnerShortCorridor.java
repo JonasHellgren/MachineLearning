@@ -1,6 +1,7 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
+import policy_gradient_problems.common.TrainerParameters;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.short_corridor.TrainerVanillaSC;
@@ -26,7 +27,9 @@ public class RunnerShortCorridor {
     private static TrainerVanillaSC createTrainer(EnvironmentSC environment, AgentSC agent) {
         return TrainerVanillaSC.builder()
                 .environment(environment).agent(agent)
-                .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(0.02)
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(0.02)
+                        .build())
                 .build();
     }
 
