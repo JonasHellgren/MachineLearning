@@ -1,17 +1,20 @@
 package policygradient.short_corridor;
 
 import common.MathUtils;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common.TrainerParameters;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.TrainerVanillaSC;
-import static org.junit.jupiter.api.Assertions.*;
+import policy_gradient_problems.short_corridor.TrainerWithBaselineSC;
 
-public class TestTrainerVanillaSC {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    TrainerVanillaSC trainer;
+public class TestTrainerWithBaselineSC {
+
+    TrainerWithBaselineSC trainer;
     AgentSC agent;
 
     @BeforeEach
@@ -22,11 +25,11 @@ public class TestTrainerVanillaSC {
     }
 
     private void createTrainer(EnvironmentSC environment) {
-        trainer = TrainerVanillaSC.builder()
+        trainer = TrainerWithBaselineSC.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(2e-2)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).beta(0.01).learningRate(2e-2)
                         .build())
                 .build();
     }
@@ -38,6 +41,10 @@ public class TestTrainerVanillaSC {
         assertEquals(1, agent.chooseAction(0));
         assertTrue(MathUtils.isInRange(agent.chooseAction(1),0,1));
         assertEquals(0, agent.chooseAction(2));
+        ArrayRealVector wVector = trainer.getWVector();
+        assertTrue(wVector.getEntry(1)>wVector.getEntry(0));
+        assertTrue(wVector.getEntry(1)>wVector.getEntry(2));
+
 
     }
 
