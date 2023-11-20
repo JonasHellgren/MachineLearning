@@ -24,13 +24,17 @@ public class PlotterMultiplePanelsTrajectory {
     JFrame frame;
 
     public PlotterMultiplePanelsTrajectory(List<String> titleList, String xAxisTitle) {
+        this("",titleList,xAxisTitle);
+    }
+
+    public PlotterMultiplePanelsTrajectory(String title, List<String> titleList, String xAxisTitle) {
         nofPanels=titleList.size();
         panels=new ArrayList<>();
 
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(1, nofPanels));
-        frame.setTitle("");
+        frame.setTitle(title);
         frame.setSize(WIDTH_PANEL*nofPanels, HEIGHT);
         frame.setVisible(true);
         for (int i = 0; i < nofPanels ; i++) {

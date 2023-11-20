@@ -26,7 +26,6 @@ public class TrainerWithBaselineSC  extends TrainerAbstractSC {
         wVector = getZeroVector();
     }
 
-
     public void train() {
         var returnCalculator=new ReturnCalculator();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
@@ -57,9 +56,9 @@ public class TrainerWithBaselineSC  extends TrainerAbstractSC {
         return new ArrayRealVector(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
     }
 
-    private static ArrayRealVector getZeroVectorWithSingleElementAsOne(int index) {
+    private static ArrayRealVector getZeroVectorWithSingleElementAsOne(int indexOneElement) {
         var vector=new ArrayRealVector(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
-        vector.setEntry(index,1d);
+        vector.setEntry(indexOneElement,1d);
         return vector;
     }
 

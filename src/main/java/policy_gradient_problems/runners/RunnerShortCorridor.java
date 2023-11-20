@@ -2,24 +2,30 @@ package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.short_corridor.AgentSC;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.TrainerVanillaSC;
+import policy_gradient_problems.short_corridor.*;
 
 import java.util.List;
 
 public class RunnerShortCorridor {
 
+    public static final double LEARNING_RATE = 0.05;
+    public static final int NOF_EPISODES = 500;
+
     public static void main(String[] args) {
         var trainer = createTrainer(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
         trainer.train();
-        plotActionProbabilitiesDuringTraining(trainer);
+        plotActionProbabilitiesDuringTraining("Vanilla", trainer);
+
+        TrainerWithBaselineSC trainerBaseline = createTrainerBaseline(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
+        trainerBaseline.train();
+        plotActionProbabilitiesDuringTraining("Baseline", trainerBaseline);
+
     }
 
 
-    private static void plotActionProbabilitiesDuringTraining(TrainerVanillaSC trainer) {
+    private static void plotActionProbabilitiesDuringTraining(String title, TrainerAbstractSC trainer) {
         for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            var plotter = new PlotterMultiplePanelsTrajectory(List.of("state = "+s+", pi(0)", "pi(1)"), "episode");
+            var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", pi(0)", "pi(1)"), "episode");
             plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(s));
         }
     }
@@ -28,7 +34,17 @@ public class RunnerShortCorridor {
         return TrainerVanillaSC.builder()
                 .environment(environment).agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(0.02)
+                        .nofEpisodes(NOF_EPISODES).nofStepsMax(100).gamma(1d).learningRate(LEARNING_RATE)
+                        .build())
+                .build();
+    }
+
+
+    private static TrainerWithBaselineSC createTrainerBaseline(EnvironmentSC environment, AgentSC agent) {
+        return TrainerWithBaselineSC.builder()
+                .environment(environment).agent(agent)
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(NOF_EPISODES).nofStepsMax(100).gamma(1d).beta(0.01).learningRate(LEARNING_RATE)
                         .build())
                 .build();
     }

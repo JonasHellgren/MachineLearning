@@ -26,7 +26,10 @@ Two thetas due to two actions. For the two selected actions the action probabili
 
 ![softmax.png](pics%2Fsoftmax.png)
 
-The problem is solved with REINFORCE traning algorithm, see below
+
+### Reinforce vanilla
+
+The problem is firs solved with REINFORCE Vanilla training algorithm, see below
 
 ![reinforce.png](pics%2Freinforce.png)
 
@@ -41,3 +44,8 @@ Thetas for actions in other states are/should not be changed.
 Result plots are given below. The optimal policy is to take a random action in observed state 1.
 
 ![short_corridor_plots.png](pics%2Fshort_corridor_plots.png)
+
+### Reinforce with Baseline
+
+![img.png](pics/reinforceBaseline.png)
+
