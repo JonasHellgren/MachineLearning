@@ -5,22 +5,20 @@ import policy_gradient_problems.common.Experience;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ReturnCalculator {
 
     public List<Experience>  createExperienceListWithReturns(List<Experience> experienceList, double gamma) {
         List<Experience> experienceListNew=new ArrayList<>();
         List<Double> rewards=experienceList.stream().map(e->e.reward()).toList();
-        List<Double> returns=calcReturns(rewards,gamma);
+        ListIterator<Double> returnsIterator=calcReturns(rewards,gamma).listIterator();
 
         for (Experience exp:experienceList) {
-            //todo Experience.copyWithReturn()
-            Experience e = new Experience(exp.state(),exp.action(), exp.reward(), exp.stateNext(), returns.get(experienceList.indexOf(exp)));
-            experienceListNew.add(e);
+            experienceListNew.add(exp.copyWithValue(returnsIterator.next()));
         }
         return experienceListNew;
     }
-
 
     public List<Double> calcReturns(List<Double> rewards, double gamma) {
         List<Double> rewardsDiscounted=new ArrayList<>();

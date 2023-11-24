@@ -8,8 +8,6 @@ import policy_gradient_problems.common.TrainerParameters;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.short_corridor.TrainerActorCriticSC;
-import policy_gradient_problems.short_corridor.TrainerBaselineSC;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,7 +28,7 @@ public class TestTrainerWithActorCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).beta(0.01).learningRate(2e-2)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d).beta(0.1).learningRate(2e-2)
                         .build())
                 .build();
     }

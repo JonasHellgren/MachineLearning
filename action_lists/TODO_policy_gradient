@@ -36,9 +36,10 @@ TrainerAbstractSC, record TrainerSettings med nofEpisodes etc  x
 short corridor baseline TrainerWithBaselineSC  x
 shortCorridor.md om baseline  x
 RunnerTrainerWithBaselineSC  x
-short corridor one step actor critic  TrainerWithActorCriticSC
-Experience.copyWithReturn()
+short corridor one step actor critic  TrainerWithActorCriticSC  x
+Experience.copyWithReturn()  x
 ny klass TabularValueFunction, för tex TrainerActorCriticSC
+uppdatera plantuml
 
 AgentShip
 TrainerShip

@@ -29,12 +29,14 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
+            double I=1;
             for (Experience experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double delta = calcDelta(experience);
-                updateWeightVector(experience, delta);
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
+                updateWeightVector(experience, I*delta);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate()*I*delta);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+                I=I*parameters.gamma();
             }
             updateTracker(ei);
         }
