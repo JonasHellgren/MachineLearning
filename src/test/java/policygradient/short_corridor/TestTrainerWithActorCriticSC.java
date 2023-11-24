@@ -40,9 +40,9 @@ public class TestTrainerWithActorCriticSC {
         assertEquals(1, agent.chooseAction(0));
         assertTrue(MathUtils.isInRange(agent.chooseAction(1),0,1));
         assertEquals(0, agent.chooseAction(2));
-        ArrayRealVector wVector = trainer.getWVector();
-        assertTrue(wVector.getEntry(1)>wVector.getEntry(0));
-        assertTrue(wVector.getEntry(1)>wVector.getEntry(2));
+        var valueFunction = trainer.getValueFunction();
+        assertTrue(valueFunction.getValue(1)>valueFunction.getValue(0));
+        assertTrue(valueFunction.getValue(1)>valueFunction.getValue(2));
 
 
     }

@@ -41,11 +41,9 @@ public class TestTrainerBaselineSC {
         assertEquals(1, agent.chooseAction(0));
         assertTrue(MathUtils.isInRange(agent.chooseAction(1),0,1));
         assertEquals(0, agent.chooseAction(2));
-        ArrayRealVector wVector = trainer.getWVector();
-        assertTrue(wVector.getEntry(1)>wVector.getEntry(0));
-        assertTrue(wVector.getEntry(1)>wVector.getEntry(2));
-
-
+        var wVector = trainer.getValueFunction();
+        assertTrue(wVector.getValue(1)>wVector.getValue(0));
+        assertTrue(wVector.getValue(1)>wVector.getValue(2));
     }
 
     private void printPolicy() {
