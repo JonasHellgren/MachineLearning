@@ -16,7 +16,7 @@ public class RunnerShortCorridor {
         trainer.train();
         plotActionProbabilitiesDuringTraining("Vanilla", trainer);
 
-        TrainerWithBaselineSC trainerBaseline = createTrainerBaseline(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
+        TrainerBaselineSC trainerBaseline = createTrainerBaseline(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
         trainerBaseline.train();
         plotActionProbabilitiesDuringTraining("Baseline", trainerBaseline);
 
@@ -40,8 +40,8 @@ public class RunnerShortCorridor {
     }
 
 
-    private static TrainerWithBaselineSC createTrainerBaseline(EnvironmentSC environment, AgentSC agent) {
-        return TrainerWithBaselineSC.builder()
+    private static TrainerBaselineSC createTrainerBaseline(EnvironmentSC environment, AgentSC agent) {
+        return TrainerBaselineSC.builder()
                 .environment(environment).agent(agent)
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(NOF_EPISODES).nofStepsMax(100).gamma(1d).beta(0.01).learningRate(LEARNING_RATE)

@@ -14,14 +14,14 @@ import policy_gradient_problems.helpers.ReturnCalculator;
  */
 
 @Getter
-public class TrainerWithBaselineSC  extends TrainerAbstractSC {
+public class TrainerBaselineSC extends TrainerAbstractSC {
 
     ArrayRealVector wVector;   //value function parameters
 
     @Builder
-    public TrainerWithBaselineSC(@NonNull EnvironmentSC environment,
-                            @NonNull AgentSC agent,
-                            @NonNull TrainerParameters parameters) {
+    public TrainerBaselineSC(@NonNull EnvironmentSC environment,
+                             @NonNull AgentSC agent,
+                             @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters, new TrainingTracker());
         wVector = getZeroVector();
     }

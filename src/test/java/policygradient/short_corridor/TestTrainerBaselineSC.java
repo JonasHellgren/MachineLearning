@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common.TrainerParameters;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.TrainerWithBaselineSC;
+import policy_gradient_problems.short_corridor.TrainerBaselineSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestTrainerWithBaselineSC {
+public class TestTrainerBaselineSC {
 
-    TrainerWithBaselineSC trainer;
+    TrainerBaselineSC trainer;
     AgentSC agent;
 
     @BeforeEach
@@ -25,7 +25,7 @@ public class TestTrainerWithBaselineSC {
     }
 
     private void createTrainer(EnvironmentSC environment) {
-        trainer = TrainerWithBaselineSC.builder()
+        trainer = TrainerBaselineSC.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

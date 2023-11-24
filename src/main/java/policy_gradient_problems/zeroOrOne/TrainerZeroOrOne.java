@@ -12,7 +12,7 @@ import java.util.List;
 
 @Builder
 @Setter
-public class Trainer {
+public class TrainerZeroOrOne {
 
     public static final double DUMMY_VALUE = 0d;
     public static final int STATE = 0;
@@ -42,7 +42,7 @@ public class Trainer {
         for (int si = 0; si < nofStepsMax ; si++) {
             int action=agent.chooseAction();
             double reward=environment.step(action);
-            experienceList.add(new Experience(STATE,action,reward, DUMMY_VALUE));
+            experienceList.add(new Experience(STATE,action,reward, STATE, DUMMY_VALUE));
         }
         return experienceList;
     }

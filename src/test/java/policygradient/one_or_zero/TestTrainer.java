@@ -5,18 +5,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.zeroOrOne.Agent;
 import policy_gradient_problems.zeroOrOne.Environment;
-import policy_gradient_problems.zeroOrOne.Trainer;
+import policy_gradient_problems.zeroOrOne.TrainerZeroOrOne;
 
 public class TestTrainer {
     public static final double DELTA_PROB = 0.4;
     public static final Environment DUMMY_ENV = Environment.newActionZeroIsGood();
-    Trainer trainer;
+    TrainerZeroOrOne trainer;
     Agent agent;
 
     @BeforeEach
     public void init() {
         agent = Agent.newDefault();
-        trainer = Trainer.builder()
+        trainer = TrainerZeroOrOne.builder()
                 .environment(DUMMY_ENV)
                 .agent(agent)
                 .nofEpisodes(1000).nofStepsMax(10).gamma(1d).learningRate(1e-2)

@@ -48,7 +48,8 @@ public class TrainerAbstractSC {
             int action=agent.chooseAction(observedStateOld);
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
-            experienceList.add(new Experience(observedStateOld, action, sr.reward(), DUMMY_VALUE));
+            int observerdStateNew=environment.getObservedState(sr.state());
+            experienceList.add(new Experience(observedStateOld, action, sr.reward(), observerdStateNew, DUMMY_VALUE));
             si++;
         } while(!sr.isTerminal() && si < parameters.nofEpisodes());
         return experienceList;

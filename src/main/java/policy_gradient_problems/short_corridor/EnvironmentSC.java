@@ -53,9 +53,15 @@ public class EnvironmentSC {
         return StepReturnSC.of(stateNew, getObservedState(stateNew),isTerminal(stateNew),reward);
     }
 
+
+    public boolean isTerminalObserved(int stateObserved) {
+        return !SET_OBSERVABLE_STATES_NON_TERMINAL.contains(stateObserved);
+    }
+
     private boolean isTerminal(int stateNew) {
         return SET_TERMINAL_STATES.contains(stateNew);
     }
+
 
     public int getObservedState(int state) {
         throwIfBadState(state);

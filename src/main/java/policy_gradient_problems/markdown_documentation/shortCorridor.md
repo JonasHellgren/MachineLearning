@@ -49,3 +49,7 @@ Result plots are given below. The optimal policy is to take a random action in o
 
 ![img.png](pics/reinforceBaseline.png)
 
+
+### One step Actor-Critic
+
+![oneStepActorCritic.png](pics%2FoneStepActorCritic.png)

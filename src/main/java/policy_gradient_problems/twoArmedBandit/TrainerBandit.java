@@ -19,10 +19,10 @@ import java.util.List;
  */
 @Builder
 @Log
-public class Trainer {
+public class TrainerBandit {
 
     public static final double DUMMY_VALUE = 0d;
-    public static final int STATE = 0;
+    public static final int STATE_DUMMY = 0;
     @NonNull Environment environment;
     @NonNull Agent agent;
     @NonNull Integer nofEpisodes;
@@ -65,7 +65,7 @@ public class Trainer {
         for (int si = 0; si < nofStepsMax ; si++) {
             int action=agent.chooseAction();
             double reward=environment.step(action);
-            experienceList.add(new Experience(STATE,action,reward, DUMMY_VALUE));
+            experienceList.add(new Experience(STATE_DUMMY,action,reward, STATE_DUMMY, DUMMY_VALUE));
         }
         return experienceList;
     }

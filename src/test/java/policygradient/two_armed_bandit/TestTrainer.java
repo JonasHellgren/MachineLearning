@@ -5,11 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.twoArmedBandit.Agent;
 import policy_gradient_problems.twoArmedBandit.Environment;
-import policy_gradient_problems.twoArmedBandit.Trainer;
+import policy_gradient_problems.twoArmedBandit.TrainerBandit;
 
 public class TestTrainer {
 
-    Trainer trainer;
+    TrainerBandit trainer;
     Agent agent;
 
     @BeforeEach
@@ -20,7 +20,7 @@ public class TestTrainer {
     }
 
     private void createTrainer(Environment environment) {
-        trainer = Trainer.builder()
+        trainer = TrainerBandit.builder()
                 .environment(environment)
                 .agent(agent)
                 .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRate(1e-1)
