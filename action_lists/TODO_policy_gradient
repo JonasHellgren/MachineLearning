@@ -41,6 +41,7 @@ Experience.copyWithReturn()  x
 ny klass TabularValueFunction, för tex TrainerActorCriticSC  x
 uppdatera plantuml  x
 
+
 AgentShip
 TrainerShip
 
