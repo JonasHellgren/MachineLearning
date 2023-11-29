@@ -44,8 +44,11 @@ uppdatera plantuml  x
 
 AgentShip  x
 TestAgentShip  x
-calcGradLogVector  createGradLogAllStates
-TrainerShip
+calcGradLogVector  createGradLogAllStates x
+givenState0_whenGradLogForActionMeanS1_thenCorrect x
+TrainerShip x
+ExperienceContAction Experience, båda!! går göra snyggare?
+
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan

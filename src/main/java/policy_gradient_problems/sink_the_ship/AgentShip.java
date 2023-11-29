@@ -1,18 +1,21 @@
 package policy_gradient_problems.sink_the_ship;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.util.Pair;
-import org.opencv.core.Mat;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
-
 import java.util.Random;
 import java.util.function.Function;
-
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static java.lang.System.arraycopy;
-import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
 
+
+/***
+ * See sinkShip.md for description
+ */
+
+@Getter
+@Setter
 public class AgentShip {
 
     public static final double THETA = 0.5;
@@ -45,6 +48,10 @@ public class AgentShip {
 
     public ArrayRealVector calcGradLogVector(int state, double action) {
         return new ArrayRealVector(createGradLogAllStates(state, calculateGradLogForState(state,action)));
+    }
+
+    public void setRandomState() {
+        state=EnvironmentShip.getRandomState();
     }
 
     Function<Double,Double> sqr=(n) -> Math.pow(n,2);

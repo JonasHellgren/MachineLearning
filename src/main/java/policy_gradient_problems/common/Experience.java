@@ -9,8 +9,6 @@ public record Experience(int state, int action, double reward, int stateNext,  d
     public Experience copyWithValue(double value) {
         return Experience.builder().state(state).action(action).reward(reward).stateNext(stateNext)
                 .value(value).build();
-
-
     }
 
 }

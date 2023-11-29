@@ -24,6 +24,11 @@ public class TabularValueFunction {
         setValue(experience.state(),valueOld+ beta * delta);
     }
 
+    public void updateFromExperienceCont(ExperienceContAction experience, double delta, Double beta) {
+        double valueOld=getValue(experience.state());
+        setValue(experience.state(),valueOld+ beta * delta);
+    }
+
     private  ArrayRealVector getZeroVector() {
         return new ArrayRealVector(nofNonTerminalStates);
     }
