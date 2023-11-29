@@ -1,4 +1,5 @@
 package policy_gradient_problems.sink_the_ship;
+import common.MathUtils;
 import common.RandUtils;
 
 import java.util.Map;
@@ -42,7 +43,7 @@ public class EnvironmentShip {
     }
 
     private boolean isHitting(int state, double normalizedAngle) {
-        double distanceProjectile=calcDistanceProjectile(normalizedAngle);
+        double distanceProjectile=calcDistanceProjectile(MathUtils.clipBetwenZeroAndOne(normalizedAngle));
         double distanceToShip=DISTANCE_TO_SHIP_MAP.get(state);
         double projectileShipDistanceDeviation=Math.abs(distanceToShip-distanceProjectile);
         return projectileShipDistanceDeviation< DEVIATION_MAX_METER;

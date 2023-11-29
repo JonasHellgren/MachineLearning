@@ -47,9 +47,9 @@ TestAgentShip  x
 calcGradLogVector  createGradLogAllStates x
 givenState0_whenGradLogForActionMeanS1_thenCorrect x
 TrainerShip x
-RunnerTrainerActorCriticShip
-
-korrekt gradlog
+RunnerTrainerActorCriticShip  x
+korrekt gradlog x
+plantuml
 tracker.addActionProbabilities  -> addMeasures etc
 getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör
 

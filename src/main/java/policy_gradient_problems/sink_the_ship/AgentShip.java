@@ -1,10 +1,13 @@
 package policy_gradient_problems.sink_the_ship;
 
+import com.codepoetics.protonpack.functions.TriFunction;
+import common.MathUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.util.Pair;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static java.lang.System.arraycopy;
@@ -18,8 +21,9 @@ import static java.lang.System.arraycopy;
 @Setter
 public class AgentShip {
 
-    public static final double THETA_MEAN = 0.5,THETA_STD = -1;  //std=exp(-1)=0.37 => a ~ N(0.5,0.37)
+    public static final double THETA_MEAN = 0.5,THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
     public static final int NOF_THETAS_PER_STATE = 2;
+    public static final double STD_MIN = 0.1;
 
     int state;
     ArrayRealVector thetaVector;
@@ -42,7 +46,6 @@ public class AgentShip {
     public double chooseAction(int state) {
         throwIfBadState(state);
         Pair<Double,Double> meanStdPair = getMeanAndStdFromThetaVector(state);
-        //throwIfBadLimits(limits);
         return sampleFromNormDistribution(meanStdPair);
     }
 
@@ -54,15 +57,19 @@ public class AgentShip {
         state=EnvironmentShip.getRandomState();
     }
 
-    Function<Double,Double> sqr=(n) -> Math.pow(n,2);
+    Function<Double,Double> sqr2 =(n) -> Math.pow(n,2);
+    Function<Double,Double> sqr3=(n) -> Math.pow(n,3);
+    BiFunction<Boolean,Double,Double> zeroIfTrueElseNum=(cond,num) -> (cond) ? 0 : num;
+    BiFunction<Double,Double,Double> scaleToAccountThatStdIsExpTheta= (g,k) -> g*k;
 
     private double[] calculateGradLogForState(int state, double action) {
         var meanAndStd=getMeanAndStdFromThetaVector(state);
         double mean=meanAndStd.getFirst();
         double std=meanAndStd.getSecond();
-        double gradMean=1/sqr.apply(std)*(action-mean);
-        double gradStd=sqr.apply(action-mean)/sqr.apply(std)-1d;
-        return new double[]{gradMean,gradStd};
+        double gradMean=1/sqr2.apply(std)*(action-mean);
+        double gradStd=zeroIfTrueElseNum.apply(std<STD_MIN,sqr2.apply(action-mean)/sqr3.apply(std)-1d/std);
+        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1/Math.exp(std));
+        return new double[]{gradMean,gradStdTheta};
     }
 
     public Pair<Double,Double> getMeanAndStdFromThetaVector(int state) {

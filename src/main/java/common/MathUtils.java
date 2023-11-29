@@ -14,6 +14,10 @@ public class MathUtils {
     private static final Logger logger = Logger.getLogger(MathUtils.class.getName());
 
 
+    public static double clipBetwenZeroAndOne(double value) {
+        return clip(value,0,1);
+    }
+
     public static double clip(double variable, double minValue, double maxValue) {
         double lowerThanMax= Math.min(variable, maxValue);
         return Math.max(lowerThanMax, minValue);
@@ -23,6 +27,7 @@ public class MathUtils {
         int lowerThanMax= Math.min(variable, maxValue);
         return Math.max(lowerThanMax, minValue);
     }
+
 
     public static boolean isZero(double value) {
         return (Math.abs(value-0)<2*Double.MIN_VALUE);

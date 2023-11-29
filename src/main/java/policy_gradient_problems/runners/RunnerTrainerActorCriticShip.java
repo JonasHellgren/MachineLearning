@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RunnerTrainerActorCriticShip {
 
-    public static final int NOF_EPISODES = 1000, NOF_STEPS_MAX = 100;
+    public static final int NOF_EPISODES = 2_000, NOF_STEPS_MAX = 100;
     public static final double LEARNING_RATE = 1e-3, GAMMA = 0.99, BETA = 0.1;
 
     public static void main(String[] args) {
