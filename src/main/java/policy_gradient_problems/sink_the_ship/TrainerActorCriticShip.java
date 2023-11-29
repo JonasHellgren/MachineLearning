@@ -1,5 +1,6 @@
 package policy_gradient_problems.sink_the_ship;
 
+import common.MathUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
@@ -17,7 +18,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
                                 @NonNull AgentShip agent,
                                 @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters, new TrainingTracker());
-        valueFunction=new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
+        valueFunction=new TabularValueFunction(EnvironmentShip.STATES.size());
     }
 
     public void train() {
@@ -32,6 +33,10 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
         double I=1;
         var returnCalculator=new ReturnCalculator();
         var expListWithReturns=returnCalculator.createExperienceListWithReturnsContActions(experienceList,parameters.gamma());
+
+        var hotExpList=expListWithReturns.stream().filter(e -> MathUtils.isPos(e.reward())).toList();
+       // hotExpList.forEach(System.out::println);
+
         for (ExperienceContAction experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);

@@ -18,7 +18,7 @@ import static java.lang.System.arraycopy;
 @Setter
 public class AgentShip {
 
-    public static final double THETA = 0.5;
+    public static final double THETA_MEAN = 0.5,THETA_STD = -1;  //std=exp(-1)=0.37 => a ~ N(0.5,0.37)
     public static final int NOF_THETAS_PER_STATE = 2;
 
     int state;
@@ -27,7 +27,7 @@ public class AgentShip {
 
     public static AgentShip newRandomStartStateDefaultThetas() {
         return newWithRandomStartStateAndGivenThetas(
-                createArrayWithSameDoubleNumber(getThetaLength(), THETA));
+                new double[]{THETA_MEAN,THETA_STD,THETA_MEAN,THETA_STD});
     }
 
     public static AgentShip newWithRandomStartStateAndGivenThetas(double[] thetaArray) {

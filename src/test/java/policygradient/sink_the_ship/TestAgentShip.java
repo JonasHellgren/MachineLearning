@@ -21,7 +21,7 @@ public class TestAgentShip {
     public static final int PROB_DIRECT_TO_TERMINAL = 0;
     public static final double DELTA = 0.1;
     public static final double MEAN_S0 = 0.3, MEAN_S1 = 0.5, THETA_STD0 = -2,THETA_STD1 = 0;
-    public static final int NOF_SAMPLES = 100;
+    public static final int NOF_SAMPLES = 1000;
     EnvironmentShip environment;
     AgentShip agent;
 
