@@ -49,9 +49,10 @@ givenState0_whenGradLogForActionMeanS1_thenCorrect x
 TrainerShip x
 RunnerTrainerActorCriticShip  x
 korrekt gradlog x
-plantuml
+sinkShip.md  x
 tracker.addActionProbabilities  -> addMeasures etc
 getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör
+NormDistributionSampler
 
 ExperienceContAction Experience, båda!! går göra snyggare?
 

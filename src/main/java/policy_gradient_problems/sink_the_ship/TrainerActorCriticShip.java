@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
 import policy_gradient_problems.helpers.ReturnCalculator;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
 import java.util.List;
 
 @Getter
@@ -27,7 +26,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setRandomState();
             trainAgentFromExperiences(getExperiences());
-            updateTracker(ei);
+            updateTracker(ei,valueFunction);
         }
     }
 

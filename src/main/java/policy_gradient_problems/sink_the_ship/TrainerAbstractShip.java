@@ -6,10 +6,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.common.Experience;
-import policy_gradient_problems.common.ExperienceContAction;
-import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.common.TrainingTracker;
+import policy_gradient_problems.common.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +26,12 @@ public class TrainerAbstractShip {
         return tracker;
     }
 
-    void updateTracker(int ei) {
+    void updateTracker(int ei, TabularValueFunction valueFunction ) {
         for (int s: EnvironmentShip.STATES) {
             Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
-            var listFromPair=List.of(msPair.getFirst(),msPair.getSecond());
-            tracker.addActionProbabilities(ei,s,listFromPair );
+            double valueState=valueFunction.getValue(s);
+            var listForPlotting=List.of(msPair.getFirst(),msPair.getSecond(),valueState);
+            tracker.addActionProbabilities(ei,s,listForPlotting );
         }
     }
 

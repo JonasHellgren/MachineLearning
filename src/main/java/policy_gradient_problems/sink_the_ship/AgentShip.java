@@ -68,7 +68,7 @@ public class AgentShip {
         double std=meanAndStd.getSecond();
         double gradMean=1/sqr2.apply(std)*(action-mean);
         double gradStd=zeroIfTrueElseNum.apply(std<STD_MIN,sqr2.apply(action-mean)/sqr3.apply(std)-1d/std);
-        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1/Math.exp(std));
+        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1/std);
         return new double[]{gradMean,gradStdTheta};
     }
 
@@ -83,6 +83,7 @@ public class AgentShip {
     /**
      * https://www.javamex.com/tutorials/random_numbers/gaussian_distribution_2.shtml
      */
+    //todo NormDistributionSampler
     private double sampleFromNormDistribution(Pair<Double, Double> meanStdPair) {
         return meanStdPair.getFirst()+random.nextGaussian() * meanStdPair.getSecond();
     }

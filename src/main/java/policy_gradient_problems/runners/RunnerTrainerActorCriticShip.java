@@ -2,7 +2,6 @@ package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.short_corridor.*;
 import policy_gradient_problems.sink_the_ship.AgentShip;
 import policy_gradient_problems.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.sink_the_ship.TrainerActorCriticShip;
@@ -12,7 +11,7 @@ import java.util.List;
 public class RunnerTrainerActorCriticShip {
 
     public static final int NOF_EPISODES = 2_000, NOF_STEPS_MAX = 100;
-    public static final double LEARNING_RATE = 1e-3, GAMMA = 0.99, BETA = 0.1;
+    public static final double LEARNING_RATE = 1e-3, GAMMA = 1.0, BETA = 0.01;
 
     public static void main(String[] args) {
 
@@ -24,7 +23,7 @@ public class RunnerTrainerActorCriticShip {
 
     private static void plotActionProbabilitiesDuringTraining(String title, TrainerActorCriticShip trainer) {
         for (int s: EnvironmentShip.STATES) {
-            var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", mean", "std"), "episode");
+            var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", mean", "std","value"), "episode");
             plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(s));
         }
     }
