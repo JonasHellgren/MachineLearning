@@ -2,12 +2,14 @@ package policy_gradient_problems.sink_the_ship;
 
 import common.MathUtils;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
 import policy_gradient_problems.helpers.ReturnCalculator;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
 import java.util.List;
 
+@Getter
 public class TrainerActorCriticShip extends TrainerAbstractShip  {
 
     public static final double VALUE_TERMINAL_STATE = 0;
@@ -34,9 +36,6 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
         var returnCalculator=new ReturnCalculator();
         var expListWithReturns=returnCalculator.createExperienceListWithReturnsContActions(experienceList,parameters.gamma());
 
-        var hotExpList=expListWithReturns.stream().filter(e -> MathUtils.isPos(e.reward())).toList();
-       // hotExpList.forEach(System.out::println);
-
         for (ExperienceContAction experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
@@ -48,11 +47,8 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
     }
 
     private double calcDelta(ExperienceContAction experience) {
-        //double v=valueFunction.getValue(experience.state());
-       // double vNext= environment.isTerminal(experience.stateNext())
-       //         ? VALUE_TERMINAL_STATE
-        //        : valueFunction.getValue(experience.stateNext());
-        return experience.reward(); //+parameters.gamma()*vNext-v;
+        double v=valueFunction.getValue(experience.state());
+        return experience.reward()+parameters.gamma()*VALUE_TERMINAL_STATE -v;
     }
 
 }

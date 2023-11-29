@@ -53,7 +53,7 @@ public class TrainerAbstractShip {
             int stateNew=sr.state();
             experienceList.add(new ExperienceContAction(state, action, sr.reward(), stateNew, DUMMY_VALUE));
             si++;
-        } while(!sr.isTerminal() && si < parameters.nofEpisodes());
+        } while(!sr.isTerminal() && si < parameters.nofStepsMax());
         return experienceList;
     }
 

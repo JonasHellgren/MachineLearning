@@ -8,11 +8,8 @@ import java.util.List;
 
 public class RunnerShortCorridor {
 
-    public static final double LEARNING_RATE = 0.05;
-    public static final int NOF_EPISODES = 500;
-    public static final int NOF_STEPS_MAX = 100;
-    public static final double GAMMA = 1.0d;
-    public static final double BETA = 0.1;
+    public static final int NOF_EPISODES = 500, NOF_STEPS_MAX = 100;
+    public static final double LEARNING_RATE = 0.05, GAMMA = 1.0, BETA = 0.1;
 
     public static void main(String[] args) {
         var trainer = createTrainer(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());

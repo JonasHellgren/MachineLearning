@@ -47,6 +47,12 @@ TestAgentShip  x
 calcGradLogVector  createGradLogAllStates x
 givenState0_whenGradLogForActionMeanS1_thenCorrect x
 TrainerShip x
+RunnerTrainerActorCriticShip
+
+korrekt gradlog
+tracker.addActionProbabilities  -> addMeasures etc
+getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör
+
 ExperienceContAction Experience, båda!! går göra snyggare?
 
 
