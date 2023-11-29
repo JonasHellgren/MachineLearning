@@ -42,7 +42,9 @@ ny klass TabularValueFunction, för tex TrainerActorCriticSC  x
 uppdatera plantuml  x
 
 
-AgentShip
+AgentShip  x
+TestAgentShip  x
+calcGradLogVector  createGradLogAllStates
 TrainerShip
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
