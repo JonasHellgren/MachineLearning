@@ -1,10 +1,9 @@
 package policygradient.short_corridor;
 
 import common.MathUtils;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common.TrainerParameters;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.short_corridor.AgentSC;
 import policy_gradient_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.short_corridor.TrainerActorCriticSC;
@@ -28,7 +27,7 @@ public class TestTrainerWithActorCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d).beta(0.1).learningRate(2e-2)
+                        .nofEpisodes(15_000).nofStepsMax(100).gamma(1.0).beta(1e-2).learningRate(1e-3)
                         .build())
                 .build();
     }

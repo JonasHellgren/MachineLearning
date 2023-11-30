@@ -3,13 +3,15 @@ package policy_gradient_problems.short_corridor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import policy_gradient_problems.common.Experience;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
 import policy_gradient_problems.common.TabularValueFunction;
-import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.common.TrainingTracker;
-import policy_gradient_problems.helpers.ReturnCalculator;
-
+import policy_gradient_problems.common_value_classes.TrainerParameters;
+import policy_gradient_problems.common.ReturnCalculator;
 import java.util.List;
+
+/**
+ * Explained in shortCorridor.md
+ */
 
 @Getter
 public class TrainerActorCriticSC extends TrainerAbstractSC {
@@ -33,11 +35,11 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
         }
     }
 
-    private void trainAgentFromExperiences(List<Experience> experienceList) {
+    private void trainAgentFromExperiences(List<ExperienceDiscreteAction> experienceList) {
         double I=1;
         var returnCalculator=new ReturnCalculator();
         var expListWithReturns=returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
-        for (Experience experience: expListWithReturns) {
+        for (ExperienceDiscreteAction experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
             valueFunction.updateFromExperience(experience, I*delta, parameters.beta());
@@ -47,7 +49,7 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
         }
     }
 
-    private double calcDelta(Experience experience) {
+    private double calcDelta(ExperienceDiscreteAction experience) {
         double v=valueFunction.getValue(experience.state());
         double vNext= environment.isTerminalObserved(experience.stateNext())
                 ? VALUE_TERMINAL_STATE

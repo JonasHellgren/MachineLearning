@@ -57,8 +57,8 @@ tracker.addActionProbabilities  -> addMeasures etc  x
 getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör  x
 TrainerAbstract  x
 NormDistributionSampler x
-ExperienceContAction Experience, båda!! går göra snyggare?
-kommentera klasser
+ExperienceContAction Experience, båda!! går göra snyggare?  x
+kommentera klasser  x
 clean up
 
 

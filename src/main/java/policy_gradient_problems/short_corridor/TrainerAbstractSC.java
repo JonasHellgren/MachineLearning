@@ -3,8 +3,8 @@ package policy_gradient_problems.short_corridor;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.TrainerAbstract;
-import policy_gradient_problems.common.Experience;
-import policy_gradient_problems.common.TrainerParameters;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +33,8 @@ public class TrainerAbstractSC extends TrainerAbstract {
         this.agent = agent;
     }
 
-    protected List<Experience> getExperiences() {
-        List<Experience> experienceList=new ArrayList<>();
+    protected List<ExperienceDiscreteAction> getExperiences() {
+        List<ExperienceDiscreteAction> experienceList=new ArrayList<>();
         int si = 0;
         StepReturnSC sr;
         do  {
@@ -43,7 +43,7 @@ public class TrainerAbstractSC extends TrainerAbstract {
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
             int observerdStateNew=environment.getObservedState(sr.state());
-            experienceList.add(new Experience(observedStateOld, action, sr.reward(), observerdStateNew, DUMMY_VALUE));
+            experienceList.add(new ExperienceDiscreteAction(observedStateOld, action, sr.reward(), observerdStateNew, DUMMY_VALUE));
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;

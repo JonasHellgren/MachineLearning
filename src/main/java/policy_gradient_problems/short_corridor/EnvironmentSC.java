@@ -62,7 +62,6 @@ public class EnvironmentSC {
         return SET_TERMINAL_STATES.contains(stateNew);
     }
 
-
     public int getObservedState(int state) {
         throwIfBadState(state);
         return STATE_OBSERVEDSTATE_MAP.get(state);

@@ -1,4 +1,4 @@
-package policy_gradient_problems.common;
+package policy_gradient_problems.common_value_classes;
 
 import lombok.Builder;
 

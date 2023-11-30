@@ -2,10 +2,14 @@ package policy_gradient_problems.abstract_classes;
 
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
-import policy_gradient_problems.common.Experience;
-import policy_gradient_problems.common.TrainerParameters;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.common.TrainingTracker;
-import policy_gradient_problems.sink_the_ship.StepReturnShip;
+
+/**
+ * The mother of all trainer classes
+ * All trainers have a tracker for plotting measures and parameters
+ */
 
 @Log
 public abstract class TrainerAbstract {
@@ -24,7 +28,7 @@ public abstract class TrainerAbstract {
         }
     }
 
-    private void logging(Experience experience, RealVector changeInThetaVector) {
+    private void logging(ExperienceDiscreteAction experience, RealVector changeInThetaVector) {
         System.out.println("experience = " + experience +
                 ", changeInThetaVector = " + changeInThetaVector);
     }

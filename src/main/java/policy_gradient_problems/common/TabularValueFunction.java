@@ -1,6 +1,12 @@
 package policy_gradient_problems.common;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
+import policy_gradient_problems.common_value_classes.ExperienceContAction;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+
+/**
+ * The critic in actor-critic methods
+ */
 
 public class TabularValueFunction {
     ArrayRealVector wVector;   //value function parameters
@@ -19,7 +25,7 @@ public class TabularValueFunction {
         wVector.setEntry(state,value);
     }
 
-    public void updateFromExperience(Experience experience, double delta, Double beta) {
+    public void updateFromExperience(ExperienceDiscreteAction experience, double delta, Double beta) {
         double valueOld=getValue(experience.state());
         setValue(experience.state(),valueOld+ beta * delta);
     }

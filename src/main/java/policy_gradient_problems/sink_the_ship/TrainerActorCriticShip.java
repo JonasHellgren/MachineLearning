@@ -1,11 +1,13 @@
 package policy_gradient_problems.sink_the_ship;
 
-import common.MathUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
-import policy_gradient_problems.helpers.ReturnCalculator;
+import policy_gradient_problems.common.ReturnCalculator;
+import policy_gradient_problems.common_value_classes.ExperienceContAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
+
 import java.util.List;
 
 @Getter

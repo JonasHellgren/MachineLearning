@@ -1,7 +1,7 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.common.TrainerParameters;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.sink_the_ship.AgentShip;
 import policy_gradient_problems.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.sink_the_ship.TrainerActorCriticShip;

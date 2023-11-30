@@ -12,15 +12,15 @@ import lombok.NonNull;
  */
 
 @Builder
-public class Environment {
+public class EnvironmentBandit {
 
 
     @NonNull  Double probWinningAction0, probWinningAction1;
 
     public static final double NOF_COINS_IF_WINNING = 1;
 
-    public static Environment newWithProbabilities(double prob0, double prob1) {
-        return Environment.builder().probWinningAction0(prob0).probWinningAction1(prob1).build();
+    public static EnvironmentBandit newWithProbabilities(double prob0, double prob1) {
+        return EnvironmentBandit.builder().probWinningAction0(prob0).probWinningAction1(prob1).build();
     }
 
     public double step(int action) {

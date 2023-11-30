@@ -5,9 +5,9 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.common.Experience;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
 import policy_gradient_problems.common.TrainingTracker;
-import policy_gradient_problems.helpers.ReturnCalculator;
+import policy_gradient_problems.common.ReturnCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,8 @@ public class TrainerBandit {
 
     public static final double DUMMY_VALUE = 0d;
     public static final int STATE_DUMMY = 0;
-    @NonNull Environment environment;
-    @NonNull Agent agent;
+    @NonNull EnvironmentBandit environment;
+    @NonNull AgentBandit agent;
     @NonNull Integer nofEpisodes;
     @NonNull Integer nofStepsMax;
     @NonNull Double gamma, learningRate;
@@ -43,8 +43,8 @@ public class TrainerBandit {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,gamma);
-            for (Experience experience:experienceListWithReturns) {
-                var gradLogVector = agent.gradLogVector(experience.action());
+            for (ExperienceDiscreteAction experience:experienceListWithReturns) {
+                var gradLogVector = agent.calcGradLogVector(experience.action());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(learningRate * vt);
                 logging(experience, changeInThetaVector,vt);
@@ -54,18 +54,18 @@ public class TrainerBandit {
         }
     }
 
-    private void logging(Experience experience, RealVector changeInThetaVector, double vt) {
+    private void logging(ExperienceDiscreteAction experience, RealVector changeInThetaVector, double vt) {
         log.fine("experience = " + experience +
                 ", changeInThetaVector = " + changeInThetaVector);
     }
 
     @NotNull
-    private List<Experience> getExperiences() {
-        List<Experience> experienceList=new ArrayList<>();
+    private List<ExperienceDiscreteAction> getExperiences() {
+        List<ExperienceDiscreteAction> experienceList=new ArrayList<>();
         for (int si = 0; si < nofStepsMax ; si++) {
             int action=agent.chooseAction();
             double reward=environment.step(action);
-            experienceList.add(new Experience(STATE_DUMMY,action,reward, STATE_DUMMY, DUMMY_VALUE));
+            experienceList.add(new ExperienceDiscreteAction(STATE_DUMMY,action,reward, STATE_DUMMY, DUMMY_VALUE));
         }
         return experienceList;
     }

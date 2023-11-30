@@ -44,7 +44,7 @@ public class AgentSC {
 
     public AgentSC(int stateStart, double[] thetaArray) {
         this.state = stateStart;
-        thetaVector = new ArrayRealVector(thetaArray);
+        this.thetaVector = new ArrayRealVector(thetaArray);
         this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_ACTIONS);
     }
 

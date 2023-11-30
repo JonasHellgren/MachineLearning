@@ -1,8 +1,8 @@
-package policy_gradient_problems.helpers;
+package common;
 
 import java.util.function.Function;
 
-public class LambdaFunctions {
+public class SigmoidFunctions {
 
     public static Function<Double,Double> sigmoid=(x) ->  1.0 / (1.0 + Math.exp(-x));
 

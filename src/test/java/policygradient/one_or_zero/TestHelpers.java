@@ -2,7 +2,7 @@ package policygradient.one_or_zero;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.helpers.ReturnCalculator;
+import policy_gradient_problems.common.ReturnCalculator;
 
 import java.util.List;
 

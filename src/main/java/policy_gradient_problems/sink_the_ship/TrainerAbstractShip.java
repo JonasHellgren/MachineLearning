@@ -1,13 +1,13 @@
 package policy_gradient_problems.sink_the_ship;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.TrainerAbstract;
 import policy_gradient_problems.common.*;
+import policy_gradient_problems.common_value_classes.ExperienceContAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
 import java.util.List;

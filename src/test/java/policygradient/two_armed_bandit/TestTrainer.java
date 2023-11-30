@@ -3,23 +3,23 @@ package policygradient.two_armed_bandit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.twoArmedBandit.Agent;
-import policy_gradient_problems.twoArmedBandit.Environment;
+import policy_gradient_problems.twoArmedBandit.AgentBandit;
+import policy_gradient_problems.twoArmedBandit.EnvironmentBandit;
 import policy_gradient_problems.twoArmedBandit.TrainerBandit;
 
 public class TestTrainer {
 
     TrainerBandit trainer;
-    Agent agent;
+    AgentBandit agent;
 
     @BeforeEach
     public void init() {
-        agent = Agent.newDefault();
-        var environment=Environment.newWithProbabilities(0.5,1.0);
+        agent = AgentBandit.newDefault();
+        var environment= EnvironmentBandit.newWithProbabilities(0.5,1.0);
         createTrainer(environment);
     }
 
-    private void createTrainer(Environment environment) {
+    private void createTrainer(EnvironmentBandit environment) {
         trainer = TrainerBandit.builder()
                 .environment(environment)
                 .agent(agent)
@@ -36,7 +36,7 @@ public class TestTrainer {
 
     @Test
     public void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
-        var environment=Environment.newWithProbabilities(0.5,0.1);
+        var environment= EnvironmentBandit.newWithProbabilities(0.5,0.1);
         createTrainer(environment);
         trainer.train();
         printPolicy();

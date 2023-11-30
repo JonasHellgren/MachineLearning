@@ -6,6 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ *
+ * For proximal policy algorithms
+ */
+
 @Builder
 public class PPOHelper {
 

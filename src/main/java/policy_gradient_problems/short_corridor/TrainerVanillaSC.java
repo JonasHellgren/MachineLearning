@@ -3,9 +3,9 @@ package policy_gradient_problems.short_corridor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import policy_gradient_problems.common.Experience;
-import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.helpers.ReturnCalculator;
+import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
+import policy_gradient_problems.common.ReturnCalculator;
 
 
 @Log
@@ -25,7 +25,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
-            for (Experience experience:experienceListWithReturns) {
+            for (ExperienceDiscreteAction experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * vt);

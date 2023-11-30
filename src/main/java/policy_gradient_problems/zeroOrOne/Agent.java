@@ -4,7 +4,7 @@ import common.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 
-import static policy_gradient_problems.helpers.LambdaFunctions.sigmoid;
+import static common.SigmoidFunctions.sigmoid;
 
 @Builder
 @Getter

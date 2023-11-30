@@ -5,6 +5,11 @@ import common.ListUtils;
 import java.util.List;
 import java.util.stream.IntStream;
 
+/***
+ * For discrete actions
+ * https://en.wikipedia.org/wiki/Softmax_function
+ */
+
 public class SoftMaxEvaluator {
 
 

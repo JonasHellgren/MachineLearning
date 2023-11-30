@@ -1,10 +1,8 @@
 package policygradient.sink_the_ship;
 
-import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.sink_the_ship.AgentShip;
 import policy_gradient_problems.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.sink_the_ship.TrainerActorCriticShip;

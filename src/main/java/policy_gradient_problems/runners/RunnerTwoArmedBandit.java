@@ -1,8 +1,8 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.twoArmedBandit.Agent;
-import policy_gradient_problems.twoArmedBandit.Environment;
+import policy_gradient_problems.twoArmedBandit.AgentBandit;
+import policy_gradient_problems.twoArmedBandit.EnvironmentBandit;
 import policy_gradient_problems.twoArmedBandit.TrainerBandit;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class RunnerTwoArmedBandit {
     }
 
     private static TrainerBandit createEnvironmentAgentTrainerAndReturnTrainer() {
-        var environment = Environment.newWithProbabilities(0.1, 0.5);
-        var agent = Agent.newDefault();
+        var environment = EnvironmentBandit.newWithProbabilities(0.1, 0.5);
+        var agent = AgentBandit.newDefault();
         return createTrainer(environment, agent);
     }
 
@@ -26,7 +26,7 @@ public class RunnerTwoArmedBandit {
         plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(0));
     }
 
-    private static TrainerBandit createTrainer(Environment environment, Agent agent) {
+    private static TrainerBandit createTrainer(EnvironmentBandit environment, AgentBandit agent) {
         return TrainerBandit.builder()
                 .environment(environment)
                 .agent(agent)

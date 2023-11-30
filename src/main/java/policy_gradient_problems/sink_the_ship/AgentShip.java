@@ -93,6 +93,4 @@ public class AgentShip {
         return EnvironmentShip.STATES.size() * NOF_THETAS_PER_STATE;
     }
 
-
-
 }

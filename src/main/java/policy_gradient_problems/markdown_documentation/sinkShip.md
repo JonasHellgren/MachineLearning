@@ -34,18 +34,23 @@ An episode starts in a random state, hence optimal angle for both states will be
 ## Example results
 Parameters for a simulation is given below.
 
-| Parameter | Value | Comment                               |
-|-----------|:------|:--------------------------------------|
-| nofEpisodes  | 2000  |                                       |
-| nofStepsMax  | 100   | Max nof steps in an episode           |
-| gamma | 1.0   |                                       |
-| learningRate      | 1e-3  | Unstable learning for large(r) values |
+| Parameter | Value | Comment                                  |
+|-----------|:------|:-----------------------------------------|
+| nofEpisodes  | 2000  |                                          |
+| nofStepsMax  | 100   | Max nof steps in an episode              |
+| gamma | 1.0   |                                          |
+| learningRate      | 1e-3  | Unstable learning for large(r) values    |
+| MAX_GRAD_ELEMENT | 1.0   | Max value of any item in grad log vector |
 
 One reflections from the results plots is that angles converges to expected values. The standard deviation, for both states, reaches there lower allowed limits.
-The tight panels is the values estimated by the critic, they indicate hit in approx 10% of times for the
+The right panels is the values estimated by the critic, they indicate hit in approx 30% of times for the
 exploratory actor using a relatively high standard deviation.
 
 ![shipResults.png](pics%2FshipResults.png)
+
+Then MAX_GRAD_ELEMENT is set as very large, training gets unstable, see figure below
+
+![shipResultsUnstable.png](pics%2FshipResultsUnstable.png)
 
 ## Parameter update relations
 This section presents how the agent parameters are updated
@@ -60,9 +65,12 @@ But how to get derivate of theta knowing derivate of standard deviation (gradStd
 A critical part is the parameter gradients. The code for this is below. It is a realization of 
 the equations given in the above figures. Parameter updates get unstable if std approaches small values, see division for deriving gradMean.
 This was handled by setting gradStd as zero if std is below a threshold STD_MIN.
+On top of this every element in the grad log vector is clipped to a value between
+
+[-MAX_GRAD_ELEMENT,MAX_GRAD_ELEMENT].
 
 
-
-        double gradMean=1/sqr2.apply(std)*(action-mean);
+        double denom = secondArgIfSmaller.apply(sqr2.apply(std), SMALLEST_DENOM);
+        double gradMean=1/denom*(action-mean);
         double gradStd=zeroIfTrueElseNum.apply(std<STD_MIN,sqr2.apply(action-mean)/sqr3.apply(std)-1d/std);
-        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1/std);
+        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1d/std);
