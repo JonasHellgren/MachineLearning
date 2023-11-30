@@ -2,6 +2,8 @@ package common;
 
 import java.util.Arrays;
 
+import static java.lang.System.arraycopy;
+
 public class ArrayUtil {
 
     public static double sum(double[] array) {
@@ -32,5 +34,7 @@ public class ArrayUtil {
         }
         return true;
     }
+
+
 
 }

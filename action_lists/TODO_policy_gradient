@@ -56,7 +56,7 @@ sqr2 etc till MyFunctions x
 tracker.addActionProbabilities  -> addMeasures etc  x
 getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör  x
 TrainerAbstract  x
-NormDistributionSampler
+NormDistributionSampler x
 ExperienceContAction Experience, båda!! går göra snyggare?
 kommentera klasser
 clean up

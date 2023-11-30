@@ -1,17 +1,16 @@
 package policy_gradient_problems.sink_the_ship;
 
 import common.ArrayUtil;
-import common.MyFunctions;
+import common.NormDistributionSampler;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.util.Pair;
-import java.util.Random;
+import policy_gradient_problems.common.SubArrayExtractor;
+
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import static common.ArrayUtil.createArrayWithSameDoubleNumber;
+
 import static common.MyFunctions.*;
-import static java.lang.System.arraycopy;
 
 
 /***
@@ -28,7 +27,9 @@ public class AgentShip {
 
     int state;
     ArrayRealVector thetaVector;
-    Random random=new Random();
+    NormDistributionSampler sampler=new NormDistributionSampler();
+    SubArrayExtractor subArrayExtractor;
+
 
     public static AgentShip newRandomStartStateDefaultThetas() {
         return newWithRandomStartStateAndGivenThetas(
@@ -42,16 +43,18 @@ public class AgentShip {
     public AgentShip(int stateStart, double[] thetaArray) {
         this.state = stateStart;
         thetaVector = new ArrayRealVector(thetaArray);
+        this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_THETAS_PER_STATE);
     }
 
     public double chooseAction(int state) {
         throwIfBadState(state);
         Pair<Double,Double> meanStdPair = getMeanAndStdFromThetaVector(state);
-        return sampleFromNormDistribution(meanStdPair);
+        return sampler.sampleFromNormDistribution(meanStdPair);
     }
 
     public ArrayRealVector calcGradLogVector(int state, double action) {
-        double[] gradLogAllStates = createGradLogAllStates(state, calculateGradLogForState(state, action));
+        double[] thetasForState = calculateGradLogForState(state, action);
+        double[] gradLogAllStates = subArrayExtractor.arrayWithZeroExceptAtSubArray(state, thetasForState);
         return new ArrayRealVector(ArrayUtil.clip(gradLogAllStates,-MAX_GRAD_ELEMENT,MAX_GRAD_ELEMENT));
     }
 
@@ -74,26 +77,10 @@ public class AgentShip {
 
     public Pair<Double,Double> getMeanAndStdFromThetaVector(int state) {
         throwIfBadState(state);
-        int indexFirstTheta = getIndexFirstThetaForState(state);
+        int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(state);
         double mean = thetaVector.getEntry(indexFirstTheta);
         double std = Math.exp(thetaVector.getEntry(indexFirstTheta+NOF_THETAS_PER_STATE-1));
         return Pair.create(mean, std);
-    }
-
-    /**
-     * https://www.javamex.com/tutorials/random_numbers/gaussian_distribution_2.shtml
-     */
-    //todo NormDistributionSampler
-    private double sampleFromNormDistribution(Pair<Double, Double> meanStdPair) {
-        return meanStdPair.getFirst()+random.nextGaussian() * meanStdPair.getSecond();
-    }
-
-    private static double[] createGradLogAllStates(int stateObserved, double[] gradLogForStateObserved) {
-        double[] gradLogAllStates = createArrayWithSameDoubleNumber(getThetaLength(), 0);
-        int indexSource = 0;
-        int indexFirstTheta = getIndexFirstThetaForState(stateObserved);
-        arraycopy(gradLogForStateObserved, indexSource, gradLogAllStates, indexFirstTheta, NOF_THETAS_PER_STATE);
-        return gradLogAllStates;
     }
 
     private static void throwIfBadState(int state) {
@@ -106,8 +93,6 @@ public class AgentShip {
         return EnvironmentShip.STATES.size() * NOF_THETAS_PER_STATE;
     }
 
-    private static int getIndexFirstThetaForState(int state) {
-        return state * NOF_THETAS_PER_STATE;
-    }
+
 
 }
