@@ -23,7 +23,7 @@ public class RunnerTwoArmedBandit {
 
     private static void plotActionProbabilitiesDuringTraining(TrainerBandit trainer) {
         var plotter = new PlotterMultiplePanelsTrajectory(List.of("pi(0)", "pi(1)"), "episode");
-        plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(0));
+        plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(0));
     }
 
     private static TrainerBandit createTrainer(Environment environment, Agent agent) {

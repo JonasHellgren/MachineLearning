@@ -10,8 +10,8 @@ import java.util.List;
 
 public class RunnerTrainerActorCriticShip {
 
-    public static final int NOF_EPISODES = 2_000, NOF_STEPS_MAX = 100;
-    public static final double LEARNING_RATE = 1e-3, GAMMA = 1.0, BETA = 0.01;
+    public static final int NOF_EPISODES = 5_000, NOF_STEPS_MAX = 100;
+    public static final double LEARNING_RATE = 1e-3, GAMMA = 1.0, BETA = 1e-2;
 
     public static void main(String[] args) {
 
@@ -24,7 +24,7 @@ public class RunnerTrainerActorCriticShip {
     private static void plotActionProbabilitiesDuringTraining(String title, TrainerActorCriticShip trainer) {
         for (int s: EnvironmentShip.STATES) {
             var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", mean", "std","value"), "episode");
-            plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(s));
+            plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
         }
     }
 

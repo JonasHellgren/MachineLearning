@@ -1,7 +1,6 @@
 package policy_gradient_problems.short_corridor;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
@@ -30,11 +29,11 @@ public class TrainerAbstractSC {
 
     void updateTracker(int ei) {
         for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addActionProbabilities(ei,s, agent.calcActionProbabilitiesInState(s));
+            tracker.addMeasures(ei,s, agent.calcActionProbabilitiesInState(s));
         }
     }
 
-    public void setAgent(AgentSC agent) {
+    public void setAgent(@NotNull AgentSC agent) {
         this.agent = agent;
     }
 
@@ -51,7 +50,7 @@ public class TrainerAbstractSC {
             int observerdStateNew=environment.getObservedState(sr.state());
             experienceList.add(new Experience(observedStateOld, action, sr.reward(), observerdStateNew, DUMMY_VALUE));
             si++;
-        } while(!sr.isTerminal() && si < parameters.nofEpisodes());
+        } while(!sr.isTerminal() && si < parameters.nofStepsMax());
         return experienceList;
     }
 

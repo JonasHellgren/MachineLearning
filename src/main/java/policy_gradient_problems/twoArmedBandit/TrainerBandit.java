@@ -50,7 +50,7 @@ public class TrainerBandit {
                 logging(experience, changeInThetaVector,vt);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
-            tracker.addActionProbabilities(ei,0,agent.actionProbabilities());
+            tracker.addMeasures(ei,0,agent.actionProbabilities());
         }
     }
 

@@ -8,8 +8,8 @@ import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.Normaliz
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 import org.neuroph.util.TransferFunctionType;
 
-import static common.DefaultPredicates.defaultIfNullDouble;
-import static common.DefaultPredicates.defaultIfNullInteger;
+import static common.MyFunctions.defaultIfNullDouble;
+import static common.MyFunctions.defaultIfNullInteger;
 
 @Builder
 public record AgentChargeNeuralSettings (

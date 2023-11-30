@@ -5,7 +5,7 @@ import lombok.NonNull;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 import org.neuroph.util.TransferFunctionType;
 
-import static common.DefaultPredicates.*;
+import static common.MyFunctions.*;
 
 @Builder
 public record NetSettings (

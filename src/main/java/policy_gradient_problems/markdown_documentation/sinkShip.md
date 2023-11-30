@@ -58,7 +58,7 @@ But how to get derivate of theta knowing derivate of standard deviation (gradStd
 ![gradStdTheta.png](pics%2FgradStdTheta.png)
 
 A critical part is the parameter gradients. The code for this is below. It is a realization of 
-the equations given in the above figures. Parameter updates get unstable if std approaches small values, see division for dericing gradMean.
+the equations given in the above figures. Parameter updates get unstable if std approaches small values, see division for deriving gradMean.
 This was handled by setting gradStd as zero if std is below a threshold STD_MIN.
 
 

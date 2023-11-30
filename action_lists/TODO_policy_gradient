@@ -50,15 +50,27 @@ TrainerShip x
 RunnerTrainerActorCriticShip  x
 korrekt gradlog x
 sinkShip.md  x
-tracker.addActionProbabilities  -> addMeasures etc
-getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör
+undivka div noll gradMean x
+clip gragLog vektor x
+sqr2 etc till MyFunctions x
+tracker.addActionProbabilities  -> addMeasures etc  x
+getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör  x
+TrainerAbstract
 NormDistributionSampler
-
 ExperienceContAction Experience, båda!! går göra snyggare?
+kommentera klasser
+clean up
+
+
 
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
+
+enkla dl4j exempel
+ovan med anpassad loss
+
+tex short corridor med neuronnät
 
 
 bubblare:

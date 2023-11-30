@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.*;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class TrainerAbstractShip {
             Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
             double valueState=valueFunction.getValue(s);
             var listForPlotting=List.of(msPair.getFirst(),msPair.getSecond(),valueState);
-            tracker.addActionProbabilities(ei,s,listForPlotting );
+            tracker.addMeasures(ei,s,listForPlotting );
         }
     }
 
@@ -51,8 +50,13 @@ public class TrainerAbstractShip {
             int stateNew=sr.state();
             experienceList.add(new ExperienceContAction(state, action, sr.reward(), stateNew, DUMMY_VALUE));
             si++;
-        } while(!sr.isTerminal() && si < parameters.nofStepsMax());
+        } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
+    }
+
+    //todo to TrainerAbstract
+    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturnShip sr) {
+        return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
 

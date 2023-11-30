@@ -29,7 +29,7 @@ public class RunnerShortCorridor {
     private static void plotActionProbabilitiesDuringTraining(String title, TrainerAbstractSC trainer) {
         for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
             var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", pi(0)", "pi(1)"), "episode");
-            plotter.plot(trainer.getTracker().getProbabilitiesTrajectoriesForState(s));
+            plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
         }
     }
 
