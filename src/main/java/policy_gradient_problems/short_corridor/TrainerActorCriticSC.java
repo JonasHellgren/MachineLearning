@@ -21,7 +21,7 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
     public TrainerActorCriticSC(@NonNull EnvironmentSC environment,
                              @NonNull AgentSC agent,
                              @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters, new TrainingTracker());
+        super(environment, agent, parameters);
         valueFunction=new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
     }
 

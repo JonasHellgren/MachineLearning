@@ -18,7 +18,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
     public TrainerActorCriticShip(@NonNull EnvironmentShip environment,
                                 @NonNull AgentShip agent,
                                 @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters, new TrainingTracker());
+        super(environment, agent, parameters);
         valueFunction=new TabularValueFunction(EnvironmentShip.STATES.size());
     }
 

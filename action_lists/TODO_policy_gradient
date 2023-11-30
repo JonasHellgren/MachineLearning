@@ -55,7 +55,7 @@ clip gragLog vektor x
 sqr2 etc till MyFunctions x
 tracker.addActionProbabilities  -> addMeasures etc  x
 getExperiences: while(!sr.isTerminal() && si < parameters.nofStepsMax()) i andra miljör  x
-TrainerAbstract
+TrainerAbstract  x
 NormDistributionSampler
 ExperienceContAction Experience, båda!! går göra snyggare?
 kommentera klasser

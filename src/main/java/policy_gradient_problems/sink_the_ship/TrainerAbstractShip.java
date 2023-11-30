@@ -5,24 +5,26 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
+import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.TrainerAbstract;
 import policy_gradient_problems.common.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Log
-@AllArgsConstructor
-public class TrainerAbstractShip {
+public class TrainerAbstractShip extends TrainerAbstract  {
 
     public static final double DUMMY_VALUE = 0d;
     @NonNull EnvironmentShip environment;
     @NonNull AgentShip agent;
-    @NonNull TrainerParameters parameters;
-    @NonNull TrainingTracker tracker;
 
-    public TrainingTracker getTracker() {
-        logIfEmptyTracker();
-        return tracker;
+    public TrainerAbstractShip(@NonNull EnvironmentShip environment,
+                               @NonNull AgentShip agent,
+                               @NonNull TrainerParameters parameters) {
+        this.environment = environment;
+        this.agent = agent;
+        super.parameters=parameters;
     }
 
     void updateTracker(int ei, TabularValueFunction valueFunction ) {
@@ -34,11 +36,11 @@ public class TrainerAbstractShip {
         }
     }
 
-    public void setAgent(AgentShip agent) {
+    public void setAgent(@NotNull AgentShip agent) {
         this.agent = agent;
     }
 
-    List<ExperienceContAction> getExperiences() {
+     List<ExperienceContAction> getExperiences() {
         List<ExperienceContAction> experienceList=new ArrayList<>();
         int si = 0;
         StepReturnShip sr;
@@ -54,22 +56,12 @@ public class TrainerAbstractShip {
         return experienceList;
     }
 
-    //todo to TrainerAbstract
-    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturnShip sr) {
+    protected boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturnShip sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
 
-    private void logIfEmptyTracker() {
-        if (tracker.isEmpty()) {
-            log.warning("Need to train first");
-        }
-    }
 
-    private void logging(Experience experience, RealVector changeInThetaVector, double vt) {
-        System.out.println("experience = " + experience +
-                ", changeInThetaVector = " + changeInThetaVector);
-    }
 
 
 }

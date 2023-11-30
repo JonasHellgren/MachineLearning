@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.common.Experience;
 import policy_gradient_problems.common.TrainerParameters;
-import policy_gradient_problems.common.TrainingTracker;
 import policy_gradient_problems.helpers.ReturnCalculator;
 
 
@@ -16,7 +15,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
     public TrainerVanillaSC(@NonNull EnvironmentSC environment,
                             @NonNull AgentSC agent,
                             @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters, new TrainingTracker());
+        super(environment, agent, parameters);
     }
 
     public void train() {
