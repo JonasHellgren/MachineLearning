@@ -36,6 +36,9 @@ public class EnvironmentPole {
 
     ParametersPole parameters;
 
+    public static EnvironmentPole newDefault() {
+        return new   EnvironmentPole(ParametersPole.newDefault());
+    }
     public EnvironmentPole(ParametersPole parameters) {
         this.parameters = parameters;
     }

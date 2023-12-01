@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.function.Function;
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
@@ -27,12 +29,14 @@ public class AgentPole {
     static  Function<Double,Double> logistic=(x) -> Math.exp(x)/(1+Math.exp(x));
 
     public static AgentPole newRandomStartStateDefaultThetas(ParametersPole parameters) {
-        return new AgentPole(StatePole.newAngleAndPosRandom(parameters),
-                new ArrayRealVector(createArrayWithSameDoubleNumber(LENGTH_THETA, THETA)));
+        return new AgentPole(StatePole.newAngleAndPosRandom(parameters), getInitThetaVector());
     }
 
+    public static AgentPole newAllZeroStateDefaultThetas() {
+        return new AgentPole(StatePole.newUprightAndStill(),  getInitThetaVector());
+    }
 
-    public int chooseAction(StatePole state) {
+    public int chooseAction() {
         var limits = getLimits(calcActionProbabilitiesInState(state));
         throwIfBadLimits(limits);
         return findBucket(toArray(limits), randomNumberBetweenZeroAndOne());
@@ -44,18 +48,23 @@ public class AgentPole {
     }
 
     public RealVector calcGradLogVector(StatePole state, int action) {
-        RealVector x = state.asRealVector();
+        var x = state.asRealVector();
         double prob0 = calcProbabilityAction0(state);
-        RealVector xTimesProb0= x.mapMultiply(prob0);
-
+        var xTimesProb0= x.mapMultiply(prob0);
         return (action==0)
                 ? x.subtract(xTimesProb0)
-                : (ArrayRealVector) xTimesProb0.mapMultiply(-1d);
+                : xTimesProb0.mapMultiply(-1d);
     }
 
     private double calcProbabilityAction0(StatePole state) {
         double ttx=thetaVector.dotProduct(state.asRealVector());
         return logistic.apply(ttx);
+    }
+
+
+    @NotNull
+    private static ArrayRealVector getInitThetaVector() {
+        return new ArrayRealVector(createArrayWithSameDoubleNumber(LENGTH_THETA, THETA));
     }
 
 

@@ -68,9 +68,12 @@ EnvironmentPole x
 kolla av och snygga upp EnvironmentPole  x
 TestEnvironmentPole  x
 AgentPole x
-TestAgentPole
+TestAgentPole  x
+TrainerVanillaPole  x
+TestTrainerVanillaPole x
 TrainerVanillaPole
 TestTrainerVanillaPole
+RunnerTrainersPole
 
 
 

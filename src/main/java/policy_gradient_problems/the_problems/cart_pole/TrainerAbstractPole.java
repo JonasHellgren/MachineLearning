@@ -1,24 +1,34 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.TrainerAbstract;
 import policy_gradient_problems.common.ReturnCalculator;
-import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.AgentSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StepReturnSC;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+@AllArgsConstructor
 public class TrainerAbstractPole extends TrainerAbstract {
 
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
     AgentPole agent;
     ReturnCalculator returnCalculator=new ReturnCalculator();
+
+    public TrainerAbstractPole(@NonNull EnvironmentPole environment,
+                             @NonNull AgentPole agent,
+                             @NonNull TrainerParameters parameters) {
+        this.environment = environment;
+        this.agent = agent;
+        super.parameters=parameters;
+    }
 
     void updateTracker(int ei, List<Double> nofSteps) {
             tracker.addMeasures(ei,0, nofSteps);
@@ -34,7 +44,7 @@ public class TrainerAbstractPole extends TrainerAbstract {
         StepReturnPole sr;
         do  {
             StatePole stateOld = agent.state;
-            int action=agent.chooseAction(stateOld);
+            int action=agent.chooseAction();
             sr=environment.step(action,agent.state);
             agent.setState(sr.newState());
             experienceList.add(new ExperiencePole(stateOld, action, sr.reward(), sr.newState(), DUMMY_VALUE));
