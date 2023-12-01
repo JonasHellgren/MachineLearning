@@ -67,7 +67,10 @@ koda ovan
 EnvironmentPole x
 kolla av och snygga upp EnvironmentPole  x
 TestEnvironmentPole  x
-AgentPole
+AgentPole x
+TestAgentPole
+TrainerVanillaPole
+TestTrainerVanillaPole
 
 
 

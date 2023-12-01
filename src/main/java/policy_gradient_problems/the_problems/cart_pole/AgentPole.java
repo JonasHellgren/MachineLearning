@@ -1,14 +1,12 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.SigmoidFunctions;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import policy_gradient_problems.the_problems.short_corridor.AgentSC;
-
 import java.util.List;
 import java.util.function.Function;
-
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
@@ -17,6 +15,8 @@ import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
 import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
 
 @AllArgsConstructor
+@Setter
+@Getter
 public class AgentPole {
 
     public static final int LENGTH_THETA = 4;
@@ -30,6 +30,7 @@ public class AgentPole {
         return new AgentPole(StatePole.newAngleAndPosRandom(parameters),
                 new ArrayRealVector(createArrayWithSameDoubleNumber(LENGTH_THETA, THETA)));
     }
+
 
     public int chooseAction(StatePole state) {
         var limits = getLimits(calcActionProbabilitiesInState(state));
