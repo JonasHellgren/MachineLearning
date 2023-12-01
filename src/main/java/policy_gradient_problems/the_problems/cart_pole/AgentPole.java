@@ -22,7 +22,7 @@ public class AgentPole {
     public static final int LENGTH_THETA = 4;
     public static final double THETA = 1d;
     StatePole state;
-    ArrayRealVector thetaVector;
+    RealVector thetaVector;
 
     static  Function<Double,Double> logistic=(x) -> Math.exp(x)/(1+Math.exp(x));
 
@@ -38,20 +38,23 @@ public class AgentPole {
     }
 
     public List<Double> calcActionProbabilitiesInState(StatePole state) {
-       double ttx=thetaVector.dotProduct(state.asRealVector());
-       double prob0=logistic.apply(ttx);
-       return List.of(prob0,1-prob0);
+        double prob0 = calcProbabilityAction0(state);
+        return List.of(prob0,1-prob0);
     }
 
-    public ArrayRealVector calcGradLogVector(StatePole state, int action) {
-        List<Double> probList= calcActionProbabilitiesInState(state);
-        ArrayRealVector x = state.asRealVector();
-        ArrayRealVector xTimesProb0= (ArrayRealVector) x.mapMultiply(probList.get(0));
+    public RealVector calcGradLogVector(StatePole state, int action) {
+        RealVector x = state.asRealVector();
+        double prob0 = calcProbabilityAction0(state);
+        RealVector xTimesProb0= x.mapMultiply(prob0);
 
         return (action==0)
                 ? x.subtract(xTimesProb0)
                 : (ArrayRealVector) xTimesProb0.mapMultiply(-1d);
+    }
 
+    private double calcProbabilityAction0(StatePole state) {
+        double ttx=thetaVector.dotProduct(state.asRealVector());
+        return logistic.apply(ttx);
     }
 
 

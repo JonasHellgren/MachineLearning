@@ -22,7 +22,7 @@ public record StatePole(
                 .build();
     }
 
-    public ArrayRealVector asRealVector() {
+    public RealVector asRealVector() {
         return new ArrayRealVector(new double[]{angle,x,angleDot,xDot});
     }
 
