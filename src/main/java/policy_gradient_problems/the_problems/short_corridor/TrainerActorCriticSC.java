@@ -1,4 +1,4 @@
-package policy_gradient_problems.short_corridor;
+package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
 import policy_gradient_problems.common.TabularValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.common.ReturnCalculator;
-
 import java.util.List;
 
 /**
@@ -15,12 +14,13 @@ import java.util.List;
  */
 
 @Getter
-public class TrainerBaselineSC extends TrainerAbstractSC {
+public class TrainerActorCriticSC extends TrainerAbstractSC {
 
+    public static final double VALUE_TERMINAL_STATE = 0;
     TabularValueFunction valueFunction;
 
     @Builder
-    public TrainerBaselineSC(@NonNull EnvironmentSC environment,
+    public TrainerActorCriticSC(@NonNull EnvironmentSC environment,
                              @NonNull AgentSC agent,
                              @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
@@ -36,23 +36,26 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
     }
 
     private void trainAgentFromExperiences(List<ExperienceDiscreteAction> experienceList) {
+        double I=1;
         var returnCalculator=new ReturnCalculator();
-        var expListWithReturns = returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
-        for (ExperienceDiscreteAction experience:expListWithReturns) {
+        var expListWithReturns=returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
+        for (ExperienceDiscreteAction experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
-            valueFunction.updateFromExperience(experience, delta, parameters.beta());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
+            valueFunction.updateFromExperience(experience, I*delta, parameters.beta());
+            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate()* I *delta);
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+            I = I *parameters.gamma();
         }
     }
 
     private double calcDelta(ExperienceDiscreteAction experience) {
-        double value= valueFunction.getValue(experience.state());
-        double Gt=experience.value();
-        return Gt-value;
+        double v=valueFunction.getValue(experience.state());
+        double vNext= environment.isTerminalObserved(experience.stateNext())
+                ? VALUE_TERMINAL_STATE
+                : valueFunction.getValue(experience.stateNext());
+        return experience.reward()+parameters.gamma()*vNext-v;
     }
-
 
 
 }

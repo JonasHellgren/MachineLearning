@@ -3,9 +3,9 @@ package policygradient.two_armed_bandit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.twoArmedBandit.AgentBandit;
-import policy_gradient_problems.twoArmedBandit.EnvironmentBandit;
-import policy_gradient_problems.twoArmedBandit.TrainerBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.AgentBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBandit;
 
 public class TestTrainer {
 

@@ -1,9 +1,9 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.twoArmedBandit.AgentBandit;
-import policy_gradient_problems.twoArmedBandit.EnvironmentBandit;
-import policy_gradient_problems.twoArmedBandit.TrainerBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.AgentBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBandit;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
-package policy_gradient_problems.short_corridor;
+package policy_gradient_problems.the_problems.short_corridor;
 
 import common.MathUtils;
-import common.MySetUtils;
 
 import java.util.Map;
 import java.util.Set;

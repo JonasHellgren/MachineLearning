@@ -3,6 +3,7 @@ package policy_gradient_problems.runners;
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.short_corridor.*;
+import policy_gradient_problems.the_problems.short_corridor.*;
 
 import java.util.List;
 

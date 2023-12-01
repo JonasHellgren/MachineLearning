@@ -1,14 +1,13 @@
 package policygradient.sink_the_ship;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.sink_the_ship.AgentShip;
-import policy_gradient_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
 
 import java.util.ArrayList;
 import java.util.List;

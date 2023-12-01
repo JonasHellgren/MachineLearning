@@ -1,4 +1,4 @@
-package policy_gradient_problems.twoArmedBandit;
+package policy_gradient_problems.the_problems.twoArmedBandit;
 
 import lombok.Builder;
 import lombok.NonNull;

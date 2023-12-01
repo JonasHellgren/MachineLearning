@@ -4,9 +4,9 @@ import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.short_corridor.AgentSC;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.TrainerActorCriticSC;
+import policy_gradient_problems.the_problems.short_corridor.AgentSC;
+import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.the_problems.short_corridor.TrainerActorCriticSC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

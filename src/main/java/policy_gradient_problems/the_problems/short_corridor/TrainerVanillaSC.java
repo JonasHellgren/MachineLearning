@@ -1,4 +1,4 @@
-package policy_gradient_problems.short_corridor;
+package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.Builder;
 import lombok.NonNull;

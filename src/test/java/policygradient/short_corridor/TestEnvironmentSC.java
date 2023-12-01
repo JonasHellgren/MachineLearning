@@ -1,14 +1,13 @@
 package policygradient.short_corridor;
 
 import common.RandUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.short_corridor.StepReturnSC;
+import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.the_problems.short_corridor.StepReturnSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

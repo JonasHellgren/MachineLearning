@@ -2,9 +2,9 @@ package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.sink_the_ship.AgentShip;
-import policy_gradient_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.sink_the_ship.TrainerActorCriticShip;
+import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.TrainerActorCriticShip;
 
 import java.util.List;
 
@@ -15,15 +15,19 @@ public class RunnerTrainerActorCriticShip {
 
     public static void main(String[] args) {
 
-        var trainerActorCritic = createTrainerActorCritic(new EnvironmentShip(), AgentShip.newRandomStartStateDefaultThetas());
+        var trainerActorCritic = createTrainerActorCritic(
+                new EnvironmentShip(),
+                AgentShip.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
-        plotActionProbabilitiesDuringTraining("ActorCritic", trainerActorCritic);
+        plotActionProbabilitiesDuringTraining(trainerActorCritic);
     }
 
 
-    private static void plotActionProbabilitiesDuringTraining(String title, TrainerActorCriticShip trainer) {
+    private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShip trainer) {
         for (int s: EnvironmentShip.STATES) {
-            var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("state = "+s+", mean", "std","value"), "episode");
+            var plotter = new PlotterMultiplePanelsTrajectory(
+                    "ActorCritic",
+                    List.of("state = "+s+", mean", "std","value"), "episode");
             plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
         }
     }

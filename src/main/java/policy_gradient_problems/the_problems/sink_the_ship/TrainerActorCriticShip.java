@@ -1,4 +1,4 @@
-package policy_gradient_problems.sink_the_ship;
+package policy_gradient_problems.the_problems.sink_the_ship;
 
 import lombok.Builder;
 import lombok.Getter;

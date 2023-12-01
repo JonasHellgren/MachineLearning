@@ -3,9 +3,9 @@ package policygradient.sink_the_ship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.sink_the_ship.AgentShip;
-import policy_gradient_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.sink_the_ship.TrainerActorCriticShip;
+import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.TrainerActorCriticShip;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

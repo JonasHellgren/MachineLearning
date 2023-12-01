@@ -4,8 +4,8 @@ import common.Counter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.sink_the_ship.StepReturnShip;
+import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.StepReturnShip;
 
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
