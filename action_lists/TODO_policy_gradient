@@ -64,6 +64,10 @@ clean up
 
 förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
+EnvironmentPole x
+kolla av och snygga upp EnvironmentPole  x
+TestEnvironmentPole
+
 
 enkla dl4j exempel
 ovan med anpassad loss
