@@ -66,7 +66,9 @@ förstå https://www.janisklaise.com/post/rl-policy-gradients/
 koda ovan
 EnvironmentPole x
 kolla av och snygga upp EnvironmentPole  x
-TestEnvironmentPole
+TestEnvironmentPole  x
+AgentPole
+
 
 
 enkla dl4j exempel

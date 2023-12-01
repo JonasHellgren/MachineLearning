@@ -1,6 +1,8 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.Builder;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 
 import static common.MyFunctions.sqr2;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
@@ -18,6 +20,10 @@ public record StatePole(
         return StatePole.builder()
                 .angle(angle).x(x).angleDot(angleDot).xDot(xDot).nofSteps(nofSteps)
                 .build();
+    }
+
+    public ArrayRealVector asRealVector() {
+        return new ArrayRealVector(new double[]{angle,x,angleDot,xDot});
     }
 
     public static  StatePole newUprightAndStill() {
