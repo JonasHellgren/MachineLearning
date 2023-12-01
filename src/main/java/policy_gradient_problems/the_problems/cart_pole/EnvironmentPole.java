@@ -32,13 +32,19 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 public class EnvironmentPole {
 
-    CartPoleParameters parameters;
+    public static int ACTION_LEFT=0, ACTION_RIGHT=1, NOF_ACTIONS=2;
 
-    public EnvironmentPole(CartPoleParameters parameters) {
+    ParametersPole parameters;
+
+    public EnvironmentPole(ParametersPole parameters) {
         this.parameters = parameters;
     }
 
-    public StepReturnPole step(int action, CartPoleState state) {
+    public ParametersPole getParameters() {
+        return parameters;
+    }
+
+    public StepReturnPole step(int action, StatePole state) {
         var newState=state.calcNew(action, parameters);
         boolean isFail=isFailsState(newState);
         boolean isTerminalState=isTerminalState(newState);
@@ -51,11 +57,11 @@ public class EnvironmentPole {
                 .build();
     }
 
-    public boolean isTerminalState(CartPoleState state) {
+    public boolean isTerminalState(StatePole state) {
         return (isFailsState(state) || state.nofSteps() >= parameters.maxNofSteps());
     }
 
-    public boolean isFailsState(CartPoleState state)
+    public boolean isFailsState(StatePole state)
     {
         return (Math.abs(state.x()) >= parameters.xMax() ||
                 Math.abs(state.angle()) >= parameters.angleMax());

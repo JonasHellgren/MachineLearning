@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record StepReturnPole(
-        CartPoleState newState,
+        StatePole newState,
         boolean isFail,
         boolean isTerminal,
         double reward
