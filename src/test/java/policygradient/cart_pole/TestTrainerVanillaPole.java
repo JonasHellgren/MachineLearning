@@ -1,11 +1,12 @@
 package policygradient.cart_pole;
 
 import common.Counter;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class TestTrainerVanillaPole {
 
@@ -38,7 +39,7 @@ public class TestTrainerVanillaPole {
         int nofSteps= runTrainedAgent(StatePole.newUprightAndStill());
         System.out.println("nofSteps = " + nofSteps);
 
-        Assertions.assertTrue(nofSteps>50);
+        assertTrue(nofSteps>50);
 
     }
 

@@ -20,13 +20,11 @@ import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimi
 @Setter
 @Getter
 public class AgentPole {
-
     public static final int LENGTH_THETA = 4;
     public static final double THETA = 1d;
+
     StatePole state;
     RealVector thetaVector;
-
-    static  Function<Double,Double> logistic=(x) -> Math.exp(x)/(1+Math.exp(x));
 
     public static AgentPole newRandomStartStateDefaultThetas(ParametersPole parameters) {
         return new AgentPole(StatePole.newAngleAndPosRandom(parameters), getInitThetaVector());
@@ -56,11 +54,12 @@ public class AgentPole {
                 : xTimesProb0.mapMultiply(-1d);
     }
 
+    static  Function<Double,Double> logistic=(x) -> Math.exp(x)/(1+Math.exp(x));
+
     private double calcProbabilityAction0(StatePole state) {
         double ttx=thetaVector.dotProduct(state.asRealVector());
         return logistic.apply(ttx);
     }
-
 
     @NotNull
     private static ArrayRealVector getInitThetaVector() {

@@ -15,6 +15,9 @@ public record StatePole(
         double xDot,
         int nofSteps) {
 
+    @Builder
+    record Variables(int action, double sinTheta, double cosTheta) {   //inner record to decrease nof arguments
+    }
 
     public StatePole copy() {
         return StatePole.builder()
@@ -23,18 +26,19 @@ public record StatePole(
     }
 
     public RealVector asRealVector() {
-        return new ArrayRealVector(new double[]{angle,x,angleDot,xDot});
+        return new ArrayRealVector(new double[]{angle, x, angleDot, xDot});
     }
 
-    public static  StatePole newUprightAndStill() {
+    public static StatePole newUprightAndStill() {
         return StatePole.builder()
                 .angle(0).x(0).angleDot(0).xDot(0).nofSteps(0)
                 .build();
     }
-    public static  StatePole newAngleAndPosRandom(ParametersPole p) {
+
+    public static StatePole newAngleAndPosRandom(ParametersPole p) {
         return StatePole.builder()
-                .angle(-p.angleMax()+ randomNumberBetweenZeroAndOne()*2*p.angleMax())
-                .x(-p.xMax()+ randomNumberBetweenZeroAndOne()*2*p.xMax())
+                .angle(-p.angleMax() + randomNumberBetweenZeroAndOne() * 2 * p.angleMax())
+                .x(-p.xMax() + randomNumberBetweenZeroAndOne() * 2 * p.xMax())
                 .angleDot(0)
                 .xDot(0)
                 .nofSteps(0)
@@ -43,34 +47,34 @@ public record StatePole(
 
 
     public StatePole calcNew(int action, ParametersPole parameters) {
-        double cosTheta = Math.cos(angle);
-        double sinTheta = Math.sin(angle);
-        double temp = getTempVariable(action, sinTheta, angleDot,parameters);
-        double thetaAcc = getThetaAcc(cosTheta, sinTheta, temp,parameters);
-        double xAcc = getXAcc(cosTheta, temp, thetaAcc,parameters);
-        double tau=parameters.tau();
-        return  StatePole.builder()
-                .angle(angle+tau*angleDot)
-                .x(x+tau*xDot)
-                .angleDot(angleDot+tau*thetaAcc)
-                .xDot(xDot+tau*xAcc)
-                .nofSteps(nofSteps+1)
+        var variables = Variables.builder()
+                .action(action).sinTheta(Math.sin(angle)).cosTheta(Math.cos(angle)).build();
+        double temp = getTempVariable(variables, parameters);
+        double angleDotAcc = getAngleAcc(temp, variables, parameters);
+        double xDotAcc = getXAcc(temp, variables, parameters);
+        double tau = parameters.tau();
+        return StatePole.builder()
+                .angle(angle + tau * angleDot)
+                .x(x + tau * xDot)
+                .angleDot(angleDot + tau * angleDotAcc)
+                .xDot(xDot + tau * xDotAcc)
+                .nofSteps(nofSteps + 1)
                 .build();
     }
 
-    private double getTempVariable(int action, double sinTheta, double thetaDot, ParametersPole parameters) {
-        double force=(action==0)?-parameters.forceMagnitude():parameters.forceMagnitude();
-        return force + parameters.massPoleTimesLength() * sqr2.apply(thetaDot) * sinTheta;
+    private double getTempVariable(Variables v, ParametersPole p) {
+        double force = (v.action == 0) ? -p.forceMagnitude() : p.forceMagnitude();
+        return force + p.massPoleTimesLength() * sqr2.apply(angleDot) * v.sinTheta;
     }
 
-    private double getXAcc(double cosTheta, double temp, double thetaAcc, ParametersPole parameters) {
-        return temp - parameters.massPoleTimesLength()* thetaAcc * cosTheta / parameters.massTotal();
+    private double getXAcc(double temp, Variables v, ParametersPole p) {
+        return temp - p.massPoleTimesLength() * angleDot * v.cosTheta / p.massTotal();
     }
 
-    private double getThetaAcc(double cosTheta, double sinTheta, double temp, ParametersPole parameters) {
-        double denom = parameters.length() * (4.0 / 3.0 - parameters.massPole() * sqr2.apply(cosTheta) /
-                parameters.massTotal());
-        return (parameters.g() * sinTheta - cosTheta * temp) / denom;
+    private double getAngleAcc(double temp, Variables v, ParametersPole p) {
+        double denom = p.length() * (4.0 / 3.0 - p.massPole() * sqr2.apply(v.cosTheta) /
+                p.massTotal());
+        return (p.g() * v.sinTheta - v.cosTheta * temp) / denom;
     }
 
 
