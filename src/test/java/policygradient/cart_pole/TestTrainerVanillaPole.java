@@ -36,24 +36,16 @@ public class TestTrainerVanillaPole {
         trainer.train();
         System.out.println("agent.getThetaVector() = " + agent.getThetaVector());
 
-        int nofSteps= runTrainedAgent(StatePole.newUprightAndStill());
+        PoleHelper helper= PoleHelper.builder().environment(environment).agent(agent).build();
+
+        int nofSteps= helper.runTrainedAgent(StatePole.newUprightAndStill());
         System.out.println("nofSteps = " + nofSteps);
 
         assertTrue(nofSteps>50);
 
     }
 
-    private int runTrainedAgent(StatePole stateStart) {
-        agent.setState(stateStart);
-        Counter counter=new Counter();
-        StepReturnPole stepReturn;
-        do {
-            stepReturn = environment.step(agent.chooseAction(), agent.getState());
-            agent.setState(stepReturn.newState().copy());
-            counter.increase();
-        } while (!stepReturn.isTerminal() );
-        return counter.getCount();
-    }
+
 
 
 }

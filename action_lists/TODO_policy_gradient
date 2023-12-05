@@ -71,8 +71,9 @@ AgentPole x
 TestAgentPole  x
 TrainerVanillaPole  x
 TestTrainerVanillaPole x
-RunnerTrainersPole
-TrainerBaselinePole
+RunnerTrainersPole x
+TrainerBaselinePole x
+valueFunction med avg of n-step
 TestTrainerBaselinePole
 RunnerTrainersPole
 

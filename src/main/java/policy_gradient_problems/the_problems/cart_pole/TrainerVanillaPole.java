@@ -28,7 +28,6 @@ public class TrainerVanillaPole extends TrainerAbstractPole {
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
             updateTracker(ei, List.of((double) experienceList.size()));
-         //   System.out.println("experienceList.size() = " + experienceList.size());
         }
     }
 

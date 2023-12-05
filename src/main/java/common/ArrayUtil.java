@@ -1,6 +1,7 @@
 package common;
 
 import java.util.Arrays;
+import java.util.stream.DoubleStream;
 
 import static java.lang.System.arraycopy;
 
@@ -14,6 +15,11 @@ public class ArrayUtil {
         double[] array = new double[length];
         Arrays.fill(array, value);
         return array;
+    }
+
+    public static double[] createArrayInRange(double start,double step, double end) {
+        long count = (long) Math.ceil((end - start) / step) + 1;
+        return DoubleStream.iterate(start, n -> n + step).limit(count).toArray();
     }
 
     public static double[] clip(double[] x, double min, double max) {
