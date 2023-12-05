@@ -12,30 +12,35 @@ public class RunnerTrainersPole {
 
 
     public static final int LENGTH_WINDOW = 100;
+    public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
+            .nofEpisodes(10_000).nofStepsMax(100).gamma(0.99).beta(1e-3).learningRate(1e-3)
+            .build();
 
     public static void main(String[] args) {
+        var agent = AgentPole.newAllZeroStateDefaultThetas();
+        var environment = new EnvironmentPole(ParametersPole.newDefault());
 
-        AgentPole agent = AgentPole.newAllZeroStateDefaultThetas();
-        EnvironmentPole environment = new EnvironmentPole(ParametersPole.newDefault());
-
-        TrainerParameters parametersTrainer = TrainerParameters.builder()
-                .nofEpisodes(15000).nofStepsMax(100).gamma(0.99).beta(1e-3).learningRate(1e-3)
-                .build();
-
-        var trainerVanilla = TrainerVanillaPole.builder()
-                .environment(environment).agent(agent.copy()).parameters(parametersTrainer).build();
-        trainerVanilla.train();
-        List<Double> nofStepsListVanilla = getFilteredNofSteps(trainerVanilla.getTracker());
-
-        var trainerBaseline = TrainerBaselinePole.builder()
-                .environment(environment).agent(agent.copy()).parameters(parametersTrainer).build();
-        trainerBaseline.train();
-        List<Double> nofStepsListBaseline = getFilteredNofSteps(trainerBaseline.getTracker());
+        var nofStepsListVanilla = getNofStepsListVanilla(agent, environment);
+        var nofStepsListBaseline = getNofStepsListBaseline(agent, environment);
 
         plotNofStepsVersusEpisode(
                 List.of(nofStepsListVanilla, nofStepsListBaseline),
                 List.of("vanilla", "baseline"));
 
+    }
+
+    private static List<Double> getNofStepsListBaseline(AgentPole agent, EnvironmentPole environment) {
+        var trainerBaseline = TrainerBaselinePole.builder()
+                .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
+        trainerBaseline.train();
+        return getFilteredNofSteps(trainerBaseline.getTracker());
+    }
+
+    private static List<Double> getNofStepsListVanilla(AgentPole agent, EnvironmentPole environment) {
+        var trainerVanilla = TrainerVanillaPole.builder()
+                .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
+        trainerVanilla.train();
+        return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
