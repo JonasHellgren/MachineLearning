@@ -44,14 +44,13 @@ public class RunnerTrainersPole {
     }
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
-        XYChart chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle("Nof steps").width(500).height(300).build();
+        var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle("Nof steps").width(500).height(300).build();
         var titlesIterator = titles.iterator();
         for (List<Double> doubles : listList) {
-            XYSeries series = chart.addSeries(titlesIterator.next(), null, doubles);
+            var series = chart.addSeries(titlesIterator.next(), null, doubles);
             series.setMarker(SeriesMarkers.NONE);
         }
         new SwingWrapper<>(chart).displayChart();
-
     }
 
     private static List<Double> getFilteredNofSteps(TrainingTracker tracker) {

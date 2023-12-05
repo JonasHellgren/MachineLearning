@@ -74,8 +74,12 @@ TestTrainerVanillaPole x
 RunnerTrainersPole x
 TrainerBaselinePole x
 BaselinePole i runner  x
+ExperienceListInfoPole
+TestExperienceListInfoPole
+TestTrainerActorCriticPole
+
+NeuralValueFunctionPole
 valueFunction med avg of n-step
-TestTrainerBaselinePole
 RunnerTrainersPole
 
 
