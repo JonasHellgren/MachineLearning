@@ -1,5 +1,6 @@
 package policygradient.cart_pole;
 
+import common.MathUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,18 +41,16 @@ public class TestTrainerBaselinePole {
 
     @Test
     public void whenTrained_thenCorrectValueFunction() {
-        PoleHelper helper = PoleHelper.builder().environment(environment).agent(agent).build();
-
         double valuea0x0=trainer.getValueFunction().getValue(getFeatureVector(0, 0));
-
         double valuea0d3x0=trainer.getValueFunction().getValue(getFeatureVector(0.3, 0));
+        var wVector=trainer.getValueFunction().getWVector();
 
-        System.out.println("wVector() = " + trainer.getValueFunction().getWVector());
-
+        System.out.println("wVector = " + wVector);
         System.out.println("valuea0x0 = " + valuea0x0);
         System.out.println("valuea0d5x0 = " + valuea0d3x0);
 
-        //assertTrue(nofSteps>50);
+        assertTrue(valuea0x0>valuea0d3x0);  //bad with large angle
+        assertTrue(MathUtils.isNeg(wVector.getEntry(1)));  //bad with large angle
     }
 
     @NotNull

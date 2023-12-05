@@ -11,9 +11,9 @@ package policy_gradient_problems.the_problems.cart_pole;
  *         described by Barto, Sutton, and Anderson
  *     Observation:
  *          Term        Observation               Min                     Max
- *          x           Cart Position             -4.8                    4.8
+ *          x           Cart Position             -xMax                   xMax
  *          xDot        Cart Velocity             -Inf                    Inf
- *          theta       Pole Angle                -0.418 rad (-24 deg)    0.418 rad (24 deg)
+ *          theta       Pole Angle                -angleMax               angleMax
  *          thetaDot    Pole Angular Velocity     -Inf                    Inf
  *
  *

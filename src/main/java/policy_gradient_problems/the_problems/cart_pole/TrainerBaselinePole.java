@@ -25,7 +25,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
 
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+            agent.setState(StatePole.newAllRandom(environment.getParameters()));
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     super.createExperienceListWithReturns(experienceList,parameters.gamma());
@@ -34,14 +34,13 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
                 double vt = experience.value();
 
                 ArrayRealVector vector= getFeatureVector(experience, environment.getParameters());
-                double valueRef=vt;
-                valueFunction.update(vector,valueRef);
+                valueFunction.update(vector,vt);
 
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * vt);
+                double delta=vt-valueFunction.getValue(vector);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
             updateTracker(ei, List.of((double) experienceList.size()));
-            //   System.out.println("experienceList.size() = " + experienceList.size());
         }
     }
 
@@ -50,7 +49,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
         return new ArrayRealVector(new double[]{
                 1d,
                 Math.abs(experience.state().angle())/p.angleMax(),
-                1 //Math.abs(experience.state().x())/p.xMax()
+                Math.abs(experience.state().x())/p.xMax()
         });
     }
 

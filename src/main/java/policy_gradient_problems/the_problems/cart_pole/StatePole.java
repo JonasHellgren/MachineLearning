@@ -1,10 +1,12 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import common.RandUtils;
 import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 import static common.MyFunctions.sqr2;
+import static common.RandUtils.getRandomDouble;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Builder
@@ -37,10 +39,20 @@ public record StatePole(
 
     public static StatePole newAngleAndPosRandom(ParametersPole p) {
         return StatePole.builder()
-                .angle(-p.angleMax() + randomNumberBetweenZeroAndOne() * 2 * p.angleMax())
-                .x(-p.xMax() + randomNumberBetweenZeroAndOne() * 2 * p.xMax())
+                .angle(getRandomDouble(-p.angleMax(),p.angleMax()))
+                .x(getRandomDouble(-p.xMax(),p.xMax()))
                 .angleDot(0)
                 .xDot(0)
+                .nofSteps(0)
+                .build();
+    }
+
+    public static StatePole newAllRandom(ParametersPole p) {
+        return StatePole.builder()
+                .angle(getRandomDouble(-p.angleMax(),p.angleMax()))
+                .x(getRandomDouble(-p.xMax(),p.xMax()))
+                .angleDot(getRandomDouble(-1,1))
+                .xDot(getRandomDouble(-1,1))
                 .nofSteps(0)
                 .build();
     }

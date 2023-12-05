@@ -34,6 +34,10 @@ public class AgentPole {
         return new AgentPole(StatePole.newUprightAndStill(),  getInitThetaVector());
     }
 
+    public AgentPole copy() {
+        return new AgentPole(state.copy(),thetaVector.copy());
+    }
+
     public int chooseAction() {
         var limits = getLimits(calcActionProbabilitiesInState(state));
         throwIfBadLimits(limits);
