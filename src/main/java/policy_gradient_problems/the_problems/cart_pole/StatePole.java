@@ -50,14 +50,14 @@ public record StatePole(
         var variables = Variables.builder()
                 .action(action).sinTheta(Math.sin(angle)).cosTheta(Math.cos(angle)).build();
         double temp = getTempVariable(variables, parameters);
-        double angleDotAcc = getAngleAcc(temp, variables, parameters);
-        double xDotAcc = getXAcc(temp, variables, parameters);
+        double angleAcc = getAngleAcc(temp, variables, parameters);
+        double xAcc = getXAcc(temp, variables, parameters);
         double tau = parameters.tau();
         return StatePole.builder()
                 .angle(angle + tau * angleDot)
                 .x(x + tau * xDot)
-                .angleDot(angleDot + tau * angleDotAcc)
-                .xDot(xDot + tau * xDotAcc)
+                .angleDot(angleDot + tau * angleAcc)
+                .xDot(xDot + tau * xAcc)
                 .nofSteps(nofSteps + 1)
                 .build();
     }

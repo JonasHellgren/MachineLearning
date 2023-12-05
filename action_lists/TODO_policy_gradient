@@ -71,8 +71,9 @@ AgentPole x
 TestAgentPole  x
 TrainerVanillaPole  x
 TestTrainerVanillaPole x
-TrainerVanillaPole
-TestTrainerVanillaPole
+RunnerTrainersPole
+TrainerBaselinePole
+TestTrainerBaselinePole
 RunnerTrainersPole
 
 
