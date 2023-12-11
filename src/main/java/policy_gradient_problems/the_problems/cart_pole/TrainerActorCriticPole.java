@@ -10,7 +10,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.List;
 
-public class TrainerActorCriticPole extends TrainerAbstractPole{
+public class TrainerActorCriticPole extends TrainerAbstractPole {
 
     public static final int NOF_FEATURES = 3;
     //NeuralValueFunctionPole valueFunction;
@@ -18,10 +18,10 @@ public class TrainerActorCriticPole extends TrainerAbstractPole{
 
     @Builder
     public TrainerActorCriticPole(@NonNull EnvironmentPole environment,
-                               @NonNull AgentPole agent,
-                               @NonNull TrainerParameters parameters) {
+                                  @NonNull AgentPole agent,
+                                  @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
-        this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.beta());
+        this.valueFunction = new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.beta());
 
         //  this.valueFunction=new NeuralValueFunctionPole();
     }
@@ -31,18 +31,18 @@ public class TrainerActorCriticPole extends TrainerAbstractPole{
             agent.setState(StatePole.newAllRandom(environment.getParameters()));
             var experienceList = getExperiences();
             var experienceListWithReturns =
-                    super.createExperienceListWithReturns(experienceList,parameters.gamma());
+                    super.createExperienceListWithReturns(experienceList, parameters.gamma());
 
-            var experienceListInfo=new ExperienceListInfoPole(experienceList,parameters);
-            Counter timeCounter=new Counter();
-            for (ExperiencePole experience:experienceListWithReturns) {
-                var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
+            var experienceListInfo = new NStepReturnInfoPole(experienceList, parameters);
+            Counter timeCounter = new Counter();
+            for (ExperiencePole experience : experienceListWithReturns) {
+                var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
                 double vt = experience.value();
 
-                ArrayRealVector vector= getFeatureVector(experience.state(), environment.getParameters());
-                var resultsManySteps=experienceListInfo.getResult(timeCounter.getCount());
+                ArrayRealVector vector = getFeatureVector(experience.state(), environment.getParameters());
+                var resultsManySteps = experienceListInfo.getResult(timeCounter.getCount());
                 double valueRef = getValueRef(resultsManySteps);
-                valueFunction.update(vector,valueRef);
+                valueFunction.update(vector, valueRef);
 
                 //double delta=vt-valueFunction.getValue(vector);
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * vt);
@@ -53,20 +53,24 @@ public class TrainerActorCriticPole extends TrainerAbstractPole{
         }
     }
 
-    private double getValueRef(ExperienceListInfoPole.ResultManySteps resultsManySteps) {
-        double valueFutureState = Math.pow(parameters.gamma(), parameters.stepHorizon()) *
-                valueFunction.getValue(getFeatureVector(resultsManySteps.stateFuture().orElseThrow(), environment.getParameters()));
-        return resultsManySteps.isEndOutside()
-                        ? resultsManySteps.sumRewards()+0d
-                        : resultsManySteps.sumRewards()+valueFutureState;
+    private double getValueRef(NStepReturnInfoPole.ResultManySteps resultsManySteps) {
+        if (resultsManySteps.isEndOutside()) {
+            return resultsManySteps.sumRewards() + 0d;
+        } else {
+            ArrayRealVector featureVector =
+                    getFeatureVector(resultsManySteps.stateFuture().orElseThrow(), environment.getParameters());
+            double valueFutureState = Math.pow(parameters.gamma(), parameters.stepHorizon()) *
+                    valueFunction.getValue(featureVector);
+            return resultsManySteps.sumRewards() + valueFutureState;
+        }
     }
 
     @NotNull
     public static ArrayRealVector getFeatureVector(StatePole state, ParametersPole p) {
         return new ArrayRealVector(new double[]{
                 1d,
-                Math.abs(state.angle())/p.angleMax(),
-                Math.abs(state.x())/p.xMax()
+                Math.abs(state.angle()) / p.angleMax(),
+                Math.abs(state.x()) / p.xMax()
         });
     }
 

@@ -74,9 +74,15 @@ TestTrainerVanillaPole x
 RunnerTrainersPole x
 TrainerBaselinePole x
 BaselinePole i runner  x
-ExperienceListInfoPole
-TestExperienceListInfoPole
-TestTrainerActorCriticPole
+NStepReturnInfoPole x
+TestNStepReturnInfoPole  x
+TestTrainerActorCriticPole x
+pseudocode n-step AC
+få till AC utan minne stort n
+enkla dl4j exempel
+få till nätverk som tar in pole states
+testträna ovan
+införliva i n-step AC
 
 NeuralValueFunctionPole
 valueFunction med avg of n-step
@@ -84,7 +90,7 @@ RunnerTrainersPole
 
 
 
-enkla dl4j exempel
+
 ovan med anpassad loss
 
 tex short corridor med neuronnät
