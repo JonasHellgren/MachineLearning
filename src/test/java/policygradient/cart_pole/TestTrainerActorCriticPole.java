@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTrainerActorCriticPole {
 
-
     TrainerActorCriticPole trainer;
     AgentPole agent;
     EnvironmentPole environment;
@@ -26,7 +25,7 @@ public class TestTrainerActorCriticPole {
         trainer = TrainerActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
-                .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.7).beta(1e-3).build())
+                .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.99).stepHorizon(10).beta(1e-3).build())
                 .build();
     }
 
@@ -34,6 +33,9 @@ public class TestTrainerActorCriticPole {
     public void whenTrained_thenManySteps() {
         PoleHelper helper = PoleHelper.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
+
+        System.out.println("nofSteps = " + nofSteps);
+
         assertTrue(nofSteps > 50);
     }
 

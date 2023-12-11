@@ -31,7 +31,7 @@ public class NStepReturnInfoPole {
     final List<ExperiencePole> experienceList;
     TrainerParameters parametersTrainer;
 
-    public ResultManySteps getResult(int tStart) {
+    public ResultManySteps getResultManySteps(int tStart) {
         int sizeExpList = experienceList.size();
         throwIfBadArgument(tStart, sizeExpList);
         int tEnd=tStart+parametersTrainer.stepHorizon();
@@ -49,8 +49,14 @@ public class NStepReturnInfoPole {
                 .stateFuture(stateFuture)
                 .isEndOutside(isEndOutSide)
                 .build();
-
     }
+
+    public ExperiencePole getExperience(int tStart) {
+        int sizeExpList = experienceList.size();
+        throwIfBadArgument(tStart, sizeExpList);
+        return experienceList.get(tStart);
+    }
+
 
     private static void throwIfBadArgument(int tStart, int sizeExpList) {
         if (tStart > sizeExpList -1) {

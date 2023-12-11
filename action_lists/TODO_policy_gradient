@@ -77,8 +77,8 @@ BaselinePole i runner  x
 NStepReturnInfoPole x
 TestNStepReturnInfoPole  x
 TestTrainerActorCriticPole x
-pseudocode n-step AC
-få till AC utan minne stort n
+pseudocode n-step AC  x
+få till AC utan minne stort n X
 enkla dl4j exempel
 få till nätverk som tar in pole states
 testträna ovan

@@ -26,7 +26,7 @@ public class TestNStepReturnInfoPole {
 
     @Test
     public void whenTStartIsZero_thenCorrect() {
-        var result=listInfoPole.getResult(0);
+        var result=listInfoPole.getResultManySteps(0);
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
@@ -39,7 +39,7 @@ public class TestNStepReturnInfoPole {
 
     @Test
     public void whenTStartIsFive_thenCorrect() {
-        var result=listInfoPole.getResult(5);
+        var result=listInfoPole.getResultManySteps(5);
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
@@ -51,7 +51,7 @@ public class TestNStepReturnInfoPole {
 
     @Test
     public void whenTStartIsSix_thenCorrect() {
-        var result=listInfoPole.getResult(6);
+        var result=listInfoPole.getResultManySteps(6);
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(4);
@@ -62,7 +62,7 @@ public class TestNStepReturnInfoPole {
 
     @Test
     public void whenTStartIs15_thenCorrect() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> listInfoPole.getResult(15));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> listInfoPole.getResultManySteps(15));
     }
 
 

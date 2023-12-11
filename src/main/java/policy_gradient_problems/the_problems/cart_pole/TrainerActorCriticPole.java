@@ -27,25 +27,46 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
     }
 
     public void train() {
+        Integer n = parameters.stepHorizon();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAllRandom(environment.getParameters()));
             var experienceList = getExperiences();
-            var experienceListWithReturns =
-                    super.createExperienceListWithReturns(experienceList, parameters.gamma());
+          //  var experienceListWithReturns =
+          //         super.createExperienceListWithReturns(experienceList, parameters.gamma());
+
+
 
             var experienceListInfo = new NStepReturnInfoPole(experienceList, parameters);
             Counter timeCounter = new Counter();
-            for (ExperiencePole experience : experienceListWithReturns) {
-                var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
-                double vt = experience.value();
+            //for (ExperiencePole experience : experienceListWithReturns) {
+            int T= experienceList.size();
+            for (int tau = 0; tau < T-n+1; tau++) {
+                //Calulate return G
+                var resultManySteps = experienceListInfo.getResultManySteps(tau);
+                var expAtTau = experienceListInfo.getExperience(tau);
 
+                double G = resultManySteps.sumRewards();
+
+                if (resultManySteps.stateFuture().isPresent()) {
+                    G=G+0;      //todo G+γ^n*V(sn')
+                } else {
+                    System.out.println("stateFuture Not present");
+                }
+
+
+                //Update critic
+/*
                 ArrayRealVector vector = getFeatureVector(experience.state(), environment.getParameters());
-                var resultsManySteps = experienceListInfo.getResult(timeCounter.getCount());
+                var resultsManySteps = experienceListInfo.getResultManySteps(timeCounter.getCount());
                 double valueRef = getValueRef(resultsManySteps);
                 valueFunction.update(vector, valueRef);
+*/
 
-                //double delta=vt-valueFunction.getValue(vector);
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * vt);
+                //double delta=G-valueFunction.getValue(vector);
+                //Update actor
+                var gradLogVector = agent.calcGradLogVector(expAtTau.state(),expAtTau.action());
+
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * G);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
                 timeCounter.increase();
             }

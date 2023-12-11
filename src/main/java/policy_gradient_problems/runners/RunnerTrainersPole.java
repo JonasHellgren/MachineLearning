@@ -11,9 +11,9 @@ import java.util.List;
 public class RunnerTrainersPole {
 
 
-    public static final int LENGTH_WINDOW = 100;
+    public static final int LENGTH_WINDOW = 1000;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(10_000).nofStepsMax(100).gamma(0.99).beta(1e-3).learningRate(1e-3)
+            .nofEpisodes(10_000).nofStepsMax(100).gamma(0.99).beta(1e-3).stepHorizon(10).learningRate(1e-3)
             .build();
 
     public static void main(String[] args) {
@@ -22,11 +22,18 @@ public class RunnerTrainersPole {
 
         var nofStepsListVanilla = getNofStepsListVanilla(agent, environment);
         var nofStepsListBaseline = getNofStepsListBaseline(agent, environment);
+        var nofStepsListAC = getNofStepsListAC(agent, environment);
 
         plotNofStepsVersusEpisode(
-                List.of(nofStepsListVanilla, nofStepsListBaseline),
-                List.of("vanilla", "baseline"));
+                List.of(nofStepsListVanilla, nofStepsListBaseline,nofStepsListAC),
+                List.of("vanilla", "baseline", "actor critic"));
+    }
 
+    private static List<Double> getNofStepsListVanilla(AgentPole agent, EnvironmentPole environment) {
+        var trainerVanilla = TrainerVanillaPole.builder()
+                .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
+        trainerVanilla.train();
+        return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
     private static List<Double> getNofStepsListBaseline(AgentPole agent, EnvironmentPole environment) {
@@ -36,12 +43,13 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
-    private static List<Double> getNofStepsListVanilla(AgentPole agent, EnvironmentPole environment) {
-        var trainerVanilla = TrainerVanillaPole.builder()
+    private static List<Double> getNofStepsListAC(AgentPole agent, EnvironmentPole environment) {
+        var trainerAC = TrainerActorCriticPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
-        trainerVanilla.train();
-        return getFilteredNofSteps(trainerVanilla.getTracker());
+        trainerAC.train();
+        return getFilteredNofSteps(trainerAC.getTracker());
     }
+
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
         var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle("Nof steps").width(500).height(300).build();
