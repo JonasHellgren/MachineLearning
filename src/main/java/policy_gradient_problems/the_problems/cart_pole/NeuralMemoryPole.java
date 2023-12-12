@@ -66,13 +66,8 @@ public class NeuralMemoryPole {
 
 
     public Double getOutValue(List<Double> inData) {
-        List<List<Double>> inDataList=new ArrayList<>();
-        inDataList.add(inData);
-        INDArray output = net.output(Dl4JUtil.convertListOfLists(inDataList, NOF_INPUTS), false);
+        INDArray output = net.output(Dl4JUtil.convertList(inData, NOF_INPUTS), false);
         return output.getDouble(NOF_OUTPUTS -1);
     }
-
-
-
 
 }

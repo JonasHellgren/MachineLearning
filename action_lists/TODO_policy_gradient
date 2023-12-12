@@ -87,7 +87,8 @@ FitSum2  x
 Normalizer x
 FitSum2 normalzed x
 clener x
-NeuralValueFunctionPole
+NeuralValueFunctionPole  x
+normalizer i ovan
 TestNeuralValueFunctionPole
 
 NeuralValueFunctionPole
