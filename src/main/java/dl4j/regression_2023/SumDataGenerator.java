@@ -13,8 +13,7 @@ import static common.RandUtils.getRandomDouble;
 @Builder
 public class SumDataGenerator {
 
-    @NonNull Integer maxValue;
-    @NonNull Integer minValue;
+    @NonNull Double  minValue,maxValue;
     @NonNull Integer nSamplesPerEpoch;
 
     public   Pair<List<List<Double>> , List<Double>> getTrainingData() {

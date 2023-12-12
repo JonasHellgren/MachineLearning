@@ -65,7 +65,7 @@ public class MemoryNeuralSum {
 
     public void train(List<List<Double>> in, List<Double> out) {
         int length = in.size();
-        INDArray inputNDArray = Dl4JUtil.getIndArray(in,NOF_INPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in,NOF_INPUTS);
         INDArray outPut = Nd4j.create(ListUtils.toArray(out), length, NOF_OUTPUTS);
        // normalizer.transform(inputNDArray, outPut);
         DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPut,randGen);
@@ -77,7 +77,7 @@ public class MemoryNeuralSum {
     public Double getOutValue(List<Double> inData) {
         List<List<Double>> inDataList=new ArrayList<>();
         inDataList.add(inData);
-        INDArray output = net.output(Dl4JUtil.getIndArray(inDataList,NOF_INPUTS), false);
+        INDArray output = net.output(Dl4JUtil.convertListOfLists(inDataList,NOF_INPUTS), false);
         return output.getDouble(NOF_OUTPUTS -1);
     }
 

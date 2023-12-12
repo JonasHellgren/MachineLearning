@@ -3,28 +3,22 @@ package policy_gradient_problems.the_problems.cart_pole;
 import common.Dl4JUtil;
 import common.ListUtils;
 import lombok.Builder;
-import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import static common.Dl4JUtil.getIndArray;
 
 public class NeuralMemoryPole {
     @Builder
@@ -63,7 +57,7 @@ public class NeuralMemoryPole {
 
     public void fit(List<List<Double>> in, List<Double> out) {
         int length = in.size();
-        INDArray inputNDArray = getIndArray(in, NOF_INPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
         INDArray outPut = Nd4j.create(ListUtils.toArray(out), length, NOF_OUTPUTS);
         DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPut,randGen);
         iterator.reset();
@@ -74,7 +68,7 @@ public class NeuralMemoryPole {
     public Double getOutValue(List<Double> inData) {
         List<List<Double>> inDataList=new ArrayList<>();
         inDataList.add(inData);
-        INDArray output = net.output(getIndArray(inDataList, NOF_INPUTS), false);
+        INDArray output = net.output(Dl4JUtil.convertListOfLists(inDataList, NOF_INPUTS), false);
         return output.getDouble(NOF_OUTPUTS -1);
     }
 

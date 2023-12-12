@@ -1,9 +1,11 @@
 package common;
 
+import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.Collections;
@@ -21,7 +23,7 @@ public class Dl4JUtil {
      * @return in converted to INDArray
      */
 
-    public static INDArray getIndArray(List<List<Double>> in, int nofInputs) {
+    public static INDArray convertListOfLists(List<List<Double>> in, int nofInputs) {
         int numRows = in.size();
         int numColumns = in.get(0).size();
 
@@ -39,6 +41,10 @@ public class Dl4JUtil {
         return Nd4j.create(flatArray, new int[]{numRows, numColumns});
     }
 
+    public static INDArray convertList(List<Double> in, int nofInputs) {
+        return Nd4j.create(ListUtils.toArray(in),new int[]{1, nofInputs});
+    }
+
     public static DataSetIterator getDataSetIterator(INDArray input, INDArray outPut, Random randGen) {
         DataSet dataSet = new DataSet(input, outPut);
         List<DataSet> listDs = dataSet.asList();
@@ -46,6 +52,22 @@ public class Dl4JUtil {
         return new ListDataSetIterator<>(listDs, input.rows());
     }
 
+
+    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> inMinMax,
+                                                           List<Pair<Double,Double>> outMinMax) {
+        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
+        List<Double> minInList=inMinMax.stream().map(p -> p.getFirst()).toList();
+        List<Double> maxInList=inMinMax.stream().map(p -> p.getSecond()).toList();
+        List<Double> minOutList=outMinMax.stream().map(p -> p.getFirst()).toList();
+        List<Double> maxOutList=outMinMax.stream().map(p -> p.getSecond()).toList();
+        normalizer.setFeatureStats(
+                Nd4j.create(ListUtils.toArray(minInList)),
+                Nd4j.create(ListUtils.toArray(maxInList)));
+        normalizer.setLabelStats(
+                Nd4j.create(ListUtils.toArray(minOutList)),
+                Nd4j.create(ListUtils.toArray(maxOutList)));
+        return normalizer;
+    }
 
 
 }
