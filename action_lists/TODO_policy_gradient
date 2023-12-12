@@ -82,7 +82,9 @@ få till AC utan minne stort n X
 enkla dl4j exempel
 få till nätverk som tar in pole states
 testträna ovan
-införliva i n-step AC
+införliva i n-step AC x
+FitSum2  x
+NeuralValueFunctionPole
 
 NeuralValueFunctionPole
 valueFunction med avg of n-step

@@ -3,6 +3,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 import common.Counter;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.WeightsDotProductFeatureValueFunction;
@@ -10,6 +11,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.List;
 
+@Log
 public class TrainerActorCriticPole extends TrainerAbstractPole {
 
     public static final int NOF_FEATURES = 3;
@@ -50,7 +52,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
                 if (resultManySteps.stateFuture().isPresent()) {
                     G=G+0;      //todo G+γ^n*V(sn')
                 } else {
-                    System.out.println("stateFuture Not present");
+                    log.warning("stateFuture tot present");
                 }
 
 

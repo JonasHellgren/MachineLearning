@@ -1,7 +1,7 @@
 package dl4j.simpleneuralnetworks;
 
 
-import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
+import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
@@ -28,9 +28,9 @@ import java.util.Random;
 public class FitSum {
 
     public static final int seed = 12345;  //Random number generator seed, for reproducability
-    public static final int nEpochs = 200;  //Number of epochs (full passes of the data)
-    private static final int nSamples = 1000;  //Number of data points
-    public static final int batchSize = 100;  //each epoch has nSamples/batchSize parameter updates
+    public static final int nEpochs = 2000;  //Number of epochs (full passes of the data)
+    private static final int nSamples = 10;  //Number of data points
+    public static final int batchSize = 10;  //each epoch has nSamples/batchSize parameter updates
     public static final double learningRate = 0.01; //Network learning rate
     private static int MIN_RANGE = 0;  // The range of the sample data,
     private static int MAX_RANGE = 3;
@@ -40,7 +40,7 @@ public class FitSum {
         //Generate the training data
         DataSetIterator iterator = getTrainingData(batchSize,rng);
         //Create the network
-        int numInput = 2;    int nHidden = 10;    int numOutputs = 1;
+        int numInput = 2;    int nHidden = 5;    int numOutputs = 1;
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .weightInit(WeightInit.XAVIER)

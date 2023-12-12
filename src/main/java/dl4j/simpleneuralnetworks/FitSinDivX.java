@@ -18,9 +18,9 @@ package dl4j.simpleneuralnetworks;
  ******************************************************************************/
 
 
-import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.MathFunction;
 //import org.deeplearning4j.examples.quickstart.modeling.feedforward.regression.mathfunctions.SinXDivXMathFunction;
+import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
