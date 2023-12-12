@@ -1,54 +1,53 @@
-package dl4j.regression_2023;
+package policy_gradient_problems.the_problems.cart_pole;
 
+import common.Dl4JUtil;
 import common.ListUtils;
 import lombok.Builder;
+import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import common.Dl4JUtil;
 
+import static common.Dl4JUtil.getIndArray;
 
-public class MemoryNeuralSum {
-
-
+public class NeuralMemoryPole {
     @Builder
-    public record Settings(
-            double learningRate,
-            int nHidden) {
+    public record Settings(double learningRate,int nHidden) {
     }
 
-    public static final int RAND_SEED = 12345;  //Random number generator seed, for reproducability
-    static int NOF_INPUTS = 2,NOF_OUTPUTS = 1;
+    public static final int RAND_SEED = 12345;
+    public static final double MOMENTUM = 0.9;
+    static int NOF_INPUTS = 4,NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;
     public static final Random randGen = new Random(RAND_SEED);
-    NormalizerMinMaxScaler normalizer;
 
-    public static MemoryNeuralSum newDefault(NormalizerMinMaxScaler normalizer) {
-        return new MemoryNeuralSum(
-                Settings.builder().learningRate(1e-3).nHidden(2).build(),
-                normalizer);
+    public static NeuralMemoryPole newDefault() {
+        return new NeuralMemoryPole(NeuralMemoryPole.Settings
+                .builder().learningRate(1e-3).nHidden(10).build());
     }
 
-    public MemoryNeuralSum(Settings settings,NormalizerMinMaxScaler normalizer) {
+    public NeuralMemoryPole(NeuralMemoryPole.Settings settings) {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(RAND_SEED)
                 .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(settings.learningRate, 0.9))
+                .updater(new Nesterovs(settings.learningRate, MOMENTUM))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(NOF_INPUTS).nOut(settings.nHidden)
                         .activation(Activation.RELU)
@@ -59,15 +58,13 @@ public class MemoryNeuralSum {
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
-        this.normalizer=normalizer;
     }
 
 
-    public void train(List<List<Double>> in, List<Double> out) {
+    public void fit(List<List<Double>> in, List<Double> out) {
         int length = in.size();
-        INDArray inputNDArray = Dl4JUtil.getIndArray(in,NOF_INPUTS);
+        INDArray inputNDArray = getIndArray(in, NOF_INPUTS);
         INDArray outPut = Nd4j.create(ListUtils.toArray(out), length, NOF_OUTPUTS);
-       // normalizer.transform(inputNDArray, outPut);
         DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPut,randGen);
         iterator.reset();
         net.fit(iterator);
@@ -77,9 +74,10 @@ public class MemoryNeuralSum {
     public Double getOutValue(List<Double> inData) {
         List<List<Double>> inDataList=new ArrayList<>();
         inDataList.add(inData);
-        INDArray output = net.output(Dl4JUtil.getIndArray(inDataList,NOF_INPUTS), false);
+        INDArray output = net.output(getIndArray(inDataList, NOF_INPUTS), false);
         return output.getDouble(NOF_OUTPUTS -1);
     }
+
 
 
 

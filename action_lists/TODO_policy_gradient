@@ -84,7 +84,11 @@ få till nätverk som tar in pole states
 testträna ovan
 införliva i n-step AC x
 FitSum2  x
+Normalizer x
+FitSum2 normalzed x
+clener
 NeuralValueFunctionPole
+TestNeuralValueFunctionPole
 
 NeuralValueFunctionPole
 valueFunction med avg of n-step
