@@ -15,18 +15,16 @@ import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import common.Dl4JUtil;
 
 
-public class MemoryNeuralSum {
-
+public class NeuralMemorySum {
 
     @Builder
-    public record Settings(
+    public record Settings (
             double learningRate,
             int nHidden) {
     }
@@ -38,13 +36,13 @@ public class MemoryNeuralSum {
     public static final Random randGen = new Random(RAND_SEED);
     NormalizerMinMaxScaler normalizer;
 
-    public static MemoryNeuralSum newDefault(NormalizerMinMaxScaler normalizer) {
-        return new MemoryNeuralSum(
+    public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizer) {
+        return new NeuralMemorySum(
                 Settings.builder().learningRate(1e-3).nHidden(2).build(),
                 normalizer);
     }
 
-    public MemoryNeuralSum(Settings settings,NormalizerMinMaxScaler normalizer) {
+    public NeuralMemorySum(Settings settings, NormalizerMinMaxScaler normalizer) {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(RAND_SEED)
                 .weightInit(WeightInit.XAVIER)
@@ -67,14 +65,18 @@ public class MemoryNeuralSum {
         int length = in.size();
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in,NOF_INPUTS);
         INDArray outPut = Nd4j.create(ListUtils.toArray(out), length, NOF_OUTPUTS);
-       // normalizer.transform(inputNDArray, outPut);
+        normalizer.transform(inputNDArray);
         DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPut,randGen);
         iterator.reset();
         net.fit(iterator);
     }
 
+    public Double getOutValue(INDArray inData) {
+        List<Double> inData1 = ListUtils.arrayPrimitiveDoublesToList(inData.toDoubleVector());
+        return getOutValue(inData1);
+    }
 
-    public Double getOutValue(List<Double> inData) {
+        public Double getOutValue(List<Double> inData) {
         List<List<Double>> inDataList=new ArrayList<>();
         inDataList.add(inData);
         INDArray output = net.output(Dl4JUtil.convertListOfLists(inDataList,NOF_INPUTS), false);

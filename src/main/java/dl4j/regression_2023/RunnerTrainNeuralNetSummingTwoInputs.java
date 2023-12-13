@@ -1,6 +1,7 @@
 package dl4j.regression_2023;
 
 import common.Dl4JUtil;
+import common.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -20,12 +21,12 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
 
     static SumDataGenerator dataGenerator;
     static NormalizerMinMaxScaler normalizer;
-    static MemoryNeuralSum neuralMemory;
+    static NeuralMemorySum neuralMemory;
 
     public static void main(String[] args) {
         dataGenerator = createGenerator();
         normalizer = createNormalizer();
-        neuralMemory = MemoryNeuralSum.newDefault(normalizer);
+        neuralMemory = NeuralMemorySum.newDefault(normalizer);
         trainMemory();
         evalMemory();
     }
@@ -52,10 +53,8 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
         var trainData = dataGenerator.getTrainingData();
         for (List<Double> inData : trainData.getFirst()) {
             INDArray inputNDArray = Dl4JUtil.convertList(inData,NOF_INPUTS);
-            DataSet dataSet=new DataSet(inputNDArray, Nd4j.zeros(NOF_OUTPUTS));
-            normalizer.transform(dataSet);
-            var outValue = neuralMemory.getOutValue(inData);
-            normalizer.revertLabels(Dl4JUtil.convertList(List.of(outValue), NOF_OUTPUTS));
+            normalizer.transform(inputNDArray);
+            var outValue = neuralMemory.getOutValue(inputNDArray);
             System.out.println("inData = " + inData + ", outValue = " + outValue);
         }
     }
