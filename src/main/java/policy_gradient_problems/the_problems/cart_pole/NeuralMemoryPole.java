@@ -21,18 +21,22 @@ public class NeuralMemoryPole {
 
     static int NOF_INPUTS = 4, NOF_OUTPUTS = 1;
 
+    NetSettings netSettings;
     MultiLayerNetwork net;
     final Random randGen;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
     public static NeuralMemoryPole newDefault() {
+        NetSettings netSettings = NetSettings.builder()
+                .learningRate(1e-3).nofFitsPerEpoch(1).nHidden0(20).nHidden1(20).build();
         return new NeuralMemoryPole(
-                NetSettings.builder().learningRate(1e-3).nHidden0(20).nHidden1(20).build(),
+                netSettings,
                 ParametersPole.newDefault());
     }
 
     public NeuralMemoryPole(NetSettings settings, ParametersPole parameters) {
+        this.netSettings=settings;
         var conf = new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())
                 .weightInit(WeightInit.XAVIER)
@@ -55,7 +59,7 @@ public class NeuralMemoryPole {
     }
 
     public void fit(List<List<Double>> in, List<Double> out) {
-        fitter.train(in, out,out.size());
+        fitter.train(in, out, netSettings.nofFitsPerEpoch());
     }
 
     public Double getOutValue(INDArray inData) {

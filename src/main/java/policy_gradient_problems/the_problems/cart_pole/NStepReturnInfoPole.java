@@ -31,6 +31,14 @@ public class NStepReturnInfoPole {
     final List<ExperiencePole> experienceList;
     TrainerParameters parametersTrainer;
 
+    public ResultManySteps getResultManySteps(ExperiencePole e) {
+        int tStart = experienceList.indexOf(e);
+        if (tStart==-1) {
+            throw new IllegalArgumentException("Experience not present");
+        }
+        return getResultManySteps(tStart);
+    }
+
     public ResultManySteps getResultManySteps(int tStart) {
         int sizeExpList = experienceList.size();
         throwIfBadArgument(tStart, sizeExpList);

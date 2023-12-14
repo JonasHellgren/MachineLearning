@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTrainerActorCriticPole {
@@ -25,7 +27,8 @@ public class TestTrainerActorCriticPole {
         trainer = TrainerActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
-                .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.99).stepHorizon(10).beta(1e-3).build())
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99).stepHorizon(50).beta(1e-3).build())
                 .build();
     }
 
@@ -36,6 +39,20 @@ public class TestTrainerActorCriticPole {
 
         System.out.println("nofSteps = " + nofSteps);
 
+        NeuralMemoryPole memory=trainer.getValueFunction();
+        double valAll0=memory.getOutValue(StatePole.newUprightAndStill().asList());
+        double valBigAngle=memory.getOutValue(StatePole.builder().angle(0.2).build().asList());
+
+        System.out.println("valAll0 = " + valAll0);
+        System.out.println("valBigAngle = " + valBigAngle);
+
+        for (int i = 0; i < 10 ; i++) {
+            StatePole statePole = StatePole.newAllRandom(environment.getParameters());
+            double valAllRandom=memory.getOutValue(statePole.asList());
+            System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
+        }
+
+        assertTrue(valAll0>valBigAngle);
         assertTrue(nofSteps > 50);
     }
 

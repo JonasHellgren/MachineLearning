@@ -35,7 +35,8 @@ public record StatePole(
     }
 
     public List<Double> asList() {
-        return ListUtils.arrayPrimitiveDoublesToList(asRealVector().toArray());
+       // return ListUtils.arrayPrimitiveDoublesToList(asRealVector().toArray());
+        return List.of(angle, x, angleDot, xDot);
     }
 
 

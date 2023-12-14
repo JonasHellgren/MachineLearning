@@ -17,15 +17,20 @@ public class Dl4JUtil {
     /***
      *
      *
-     * @param in:  List of in data points.
+     * @param listOfLists:  List of in data points.
      *          in.add(List.of(1,2); in.add(List.of(2,2);  <=> inouts of 1st and second point
      * @param nofInputs  shall align with one sublist of the in argument
      * @return in converted to INDArray
      */
 
-    public static INDArray convertListOfLists(List<List<Double>> in, int nofInputs) {
-        int numRows = in.size();
-        int numColumns = in.get(0).size();
+    public static INDArray convertListOfLists(List<List<Double>> listOfLists, int nofInputs) {
+        int numRows = listOfLists.size();
+
+        if (numRows==0) {
+            throw new IllegalArgumentException("Empty list");
+        }
+
+        int numColumns = listOfLists.get(0).size();
 
         if (numColumns!= nofInputs) {
             throw new IllegalArgumentException("bad numColumns, numColumns = "+numColumns);
@@ -33,7 +38,7 @@ public class Dl4JUtil {
 
         double[] flatArray = new double[numRows * numColumns];
         for (int i = 0; i < numRows; i++) {
-            List<Double> row = in.get(i);
+            List<Double> row = listOfLists.get(i);
             for (int j = 0; j < numColumns; j++) {
                 flatArray[i * numColumns + j] = row.get(j);
             }
