@@ -29,12 +29,12 @@ public class NeuralMemoryPole {
 
     MultiLayerNetwork net;
     public static final Random randGen = new Random(RAND_SEED);
-    NormalizerMinMaxScaler normalizer;
+    NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
     public static NeuralMemoryPole newDefault() {
         return new NeuralMemoryPole(
-                Settings.builder().learningRate(1e-3).nHidden(20).momentum(0.9).build(),
+                Settings.builder().learningRate(1e-1).nHidden(20).momentum(0.9).build(),
                 ParametersPole.newDefault());
     }
 
@@ -53,15 +53,18 @@ public class NeuralMemoryPole {
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
-        this.normalizer = createNormalizer(parameters);
+        this.normalizerIn = createNormalizerIn(parameters);
+        this.normalizerOut = createNormalizerOut(parameters);
+
         this.fitter = Dl4JNetFitter.builder()
                 .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(randGen).normalizerIn(normalizer)
+                .net(net).randGen(randGen)
+                .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
                 .build();
     }
 
-    public NormalizerMinMaxScaler getNormalizer() {
-        return normalizer;
+    public NormalizerMinMaxScaler getNormalizerIn() {
+        return normalizerIn;
     }
 
     public void fit(List<List<Double>> in, List<Double> out) {
@@ -70,12 +73,15 @@ public class NeuralMemoryPole {
 
 
     public Double getOutValue(INDArray inData) {
-        normalizer.transform(inData);
-        return net.output(inData, false).getDouble();
+        normalizerIn.transform(inData);
+        INDArray output = net.output(inData, false);
+        normalizerOut.revertFeatures(output);
+        return output.getDouble();
     }
 
     public Double getOutValue(List<Double> inData) {
-        return getOutValue(Dl4JUtil.convertList(inData, NOF_INPUTS));
+        INDArray inData1 = Dl4JUtil.convertList(inData, NOF_INPUTS);
+        return getOutValue(inData1);
     }
 
     public double getError() {
@@ -83,14 +89,18 @@ public class NeuralMemoryPole {
     }
 
 
-    private static NormalizerMinMaxScaler createNormalizer(ParametersPole p) {
+    private static NormalizerMinMaxScaler createNormalizerIn(ParametersPole p) {
         var inMinMax = List.of(
                 Pair.create(-p.angleMax(), p.angleMax()),
                 Pair.create(-p.xMax(), p.xMax()),
                 Pair.create(-p.angleDotMax(), p.angleDotMax()),
                 Pair.create(-p.xDotMax(), p.xDotMax()));
+        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));
+    }
+
+    private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {
         var outMinMax = List.of(Pair.create(0d, p.maxNofSteps()));
-        return Dl4JUtil.createNormalizerOld(inMinMax, outMinMax,Pair.create(-1d,1d));
+        return Dl4JUtil.createNormalizer(outMinMax,Pair.create(-1d,1d));
     }
 
 

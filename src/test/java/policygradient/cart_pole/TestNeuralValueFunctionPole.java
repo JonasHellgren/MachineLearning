@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TestNeuralValueFunctionPole {
 
-    public static final int NOF_EPOCHS = 1000;
+    public static final int NOF_EPOCHS = 100;
     public static final int NOF_SAMPLES = 10;
     NeuralMemoryPole memory;
     ParametersPole parameters;
