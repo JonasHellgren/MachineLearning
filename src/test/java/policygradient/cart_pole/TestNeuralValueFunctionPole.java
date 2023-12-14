@@ -3,9 +3,9 @@ package policygradient.cart_pole;
 import common.RandUtils;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
@@ -33,7 +33,7 @@ public class TestNeuralValueFunctionPole {
     @Test
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
-        int nofEpochs = 100;
+        int nofEpochs = 20;
         var errors = trainNet(stateFcn, nofEpochs);
         plotLoss(errors);
         printAndAssert();
@@ -41,7 +41,7 @@ public class TestNeuralValueFunctionPole {
 
     @SneakyThrows
     @Test
-    @Ignore("takes long time")
+    @Disabled("takes long time")
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesRandom_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) ->  copyWithAngle(StatePole.newAllRandom(parameters),a);
         int nofEpochs = 1000;
