@@ -11,8 +11,6 @@ import org.knowm.xchart.XYChart;
 import policy_gradient_problems.the_problems.cart_pole.NeuralMemoryPole;
 import policy_gradient_problems.the_problems.cart_pole.ParametersPole;
 import policy_gradient_problems.the_problems.cart_pole.StatePole;
-import qlearning_objoriented_class_sceleton.models.State;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,7 +2,6 @@ package dl4j.regression_2023;
 
 import common.Dl4JNetFitter;
 import common_records.NetSettings;
-import lombok.Builder;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -43,12 +42,12 @@ public class NeuralMemorySum {
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
                 .list()
-                .layer(0, new DenseLayer.Builder().nIn(NOF_INPUTS).nOut(settings.nHidden())
+                .layer(0, new DenseLayer.Builder().nIn(NOF_INPUTS).nOut(settings.nHidden0())
                         .activation(Activation.RELU)
                         .build())
                 .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
-                        .nIn(settings.nHidden()).nOut(NOF_OUTPUTS).build())
+                        .nIn(settings.nHidden0()).nOut(NOF_OUTPUTS).build())
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
