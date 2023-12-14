@@ -21,13 +21,11 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
     static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 100, NOF_INPUTS = 2;
 
     static SumDataGenerator dataGenerator;
-    static NormalizerMinMaxScaler normalizer;
     static NeuralMemorySum neuralMemory;
 
     public static void main(String[] args) {
         dataGenerator = createGenerator();
-        normalizer = createNormalizer();
-        neuralMemory = NeuralMemorySum.newDefault(normalizer);
+        neuralMemory = NeuralMemorySum.newDefault(createNormalizerIn(),createNormalizerOut());
         var lossVersusEpisode=trainMemory();
         plotLoss(lossVersusEpisode);
         evalMemory();
@@ -43,11 +41,16 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
                 .minValue(MIN_VALUE).maxValue(MAX_VALUE).nSamplesPerEpoch(N_SAMPLES_PER_EPOCH).build();
     }
 
-    private static NormalizerMinMaxScaler createNormalizer() {
+    private static NormalizerMinMaxScaler createNormalizerIn() {
         var inMinMax = List.of(Pair.create(MIN_VALUE, MAX_VALUE), Pair.create(MIN_VALUE,MAX_VALUE));
-        var outMinMax = List.of(Pair.create(MIN_VALUE, 2*MAX_VALUE));
-        return Dl4JUtil.createNormalizerOld(inMinMax,outMinMax);
+        return Dl4JUtil.createNormalizer(inMinMax);
     }
+
+    private static NormalizerMinMaxScaler createNormalizerOut() {
+        var outMinMax = List.of(Pair.create(MIN_VALUE, 2*MAX_VALUE));
+        return Dl4JUtil.createNormalizer(outMinMax);
+    }
+
 
     private static List<Double> trainMemory() {
         List<Double> errors=new ArrayList<>();

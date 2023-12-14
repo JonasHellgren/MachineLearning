@@ -52,6 +52,12 @@ public class Dl4JUtil {
         return new ListDataSetIterator<>(listDs, input.rows());
     }
 
+
+    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMax
+                                                         ) {
+        return  createNormalizer(minMax,Pair.create(0d,1d));
+
+    }
     public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMaxList,
                                                              Pair<Double, Double> netMinMax) {
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(), netMinMax.getSecond());

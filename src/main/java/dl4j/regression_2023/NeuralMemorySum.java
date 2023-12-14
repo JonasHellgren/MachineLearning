@@ -31,16 +31,19 @@ public class NeuralMemorySum {
 
     MultiLayerNetwork net;
     public static final Random randGen = new Random(RAND_SEED);
-    NormalizerMinMaxScaler normalizer;
+    NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
-    public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizer) {
+    public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizerIn,
+                                             NormalizerMinMaxScaler normalizerOut) {
         return new NeuralMemorySum(
-                Settings.builder().learningRate(1e-3).nHidden(2).build(),
-                normalizer);
+                Settings.builder().learningRate(1e-1).nHidden(2).build(),
+                normalizerIn, normalizerOut);
     }
 
-    public NeuralMemorySum(Settings settings, NormalizerMinMaxScaler normalizer) {
+    public NeuralMemorySum(Settings settings,
+                           NormalizerMinMaxScaler normalizerIn,
+                           NormalizerMinMaxScaler normalizerOut) {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(RAND_SEED)
                 .weightInit(WeightInit.XAVIER)
@@ -55,10 +58,12 @@ public class NeuralMemorySum {
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
-        this.normalizer = normalizer;
+        this.normalizerIn = normalizerIn;
+        this.normalizerOut = normalizerOut;
         this.fitter=Dl4JNetFitter.builder()
                 .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(randGen).normalizer(normalizer)
+                .net(net).randGen(randGen)
+                .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
                 .build();
     }
 
@@ -68,8 +73,10 @@ public class NeuralMemorySum {
     }
 
     public Double getOutValue(INDArray inData) {
-        normalizer.transform(inData);
-        return net.output(inData,false).getDouble();
+        normalizerIn.transform(inData);
+        INDArray output = net.output(inData, false);
+        normalizerOut.revertFeatures(output);
+        return output.getDouble();
     }
 
     public Double getOutValue(List<Double> inData) {

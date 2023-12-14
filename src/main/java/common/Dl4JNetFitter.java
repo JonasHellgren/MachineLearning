@@ -16,13 +16,14 @@ public class Dl4JNetFitter {
     @NonNull Integer nofInputs, nofOutputs;
     @NonNull MultiLayerNetwork net;
     @NonNull Random randGen;
-    @NonNull NormalizerMinMaxScaler normalizer;
+    @NonNull NormalizerMinMaxScaler normalizerIn, normalizerOut;
 
     public void train(List<List<Double>> in, List<Double> out) {
         int length = in.size();
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, nofInputs);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), length, nofOutputs);
-        normalizer.transform(inputNDArray);
+        normalizerIn.transform(inputNDArray);
+        normalizerOut.transform(outPutNDArray);
         DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPutNDArray, randGen);
         iterator.reset();
         net.fit(iterator);

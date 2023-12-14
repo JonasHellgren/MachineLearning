@@ -90,7 +90,8 @@ clener x
 NeuralValueFunctionPole  x
 normalizer i ovan  x
 TestNeuralValueFunctionPole x
-TestNormalizer
+TestNormalizer  x
+kunnna anropa train flera ggr utan create etc
 normarizer out NeuralSum
 oven men i NeuralPole
 slumpstate test i TestNeuralValueFunctionPole

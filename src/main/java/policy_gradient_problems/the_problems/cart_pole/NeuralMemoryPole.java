@@ -56,7 +56,7 @@ public class NeuralMemoryPole {
         this.normalizer = createNormalizer(parameters);
         this.fitter = Dl4JNetFitter.builder()
                 .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(randGen).normalizer(normalizer)
+                .net(net).randGen(randGen).normalizerIn(normalizer)
                 .build();
     }
 
