@@ -1,12 +1,14 @@
 package dl4j.regression_2023;
 
 import common.Dl4JUtil;
-import common.ListUtils;
 import org.apache.commons.math3.util.Pair;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
-import org.nd4j.linalg.factory.Nd4j;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,8 +18,7 @@ import java.util.List;
 
 public class RunnerTrainNeuralNetSummingTwoInputs {
     static final double MIN_VALUE = 0, MAX_VALUE = 10d;
-    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 100;
-    static final int NOF_INPUTS = 2,NOF_OUTPUTS = 1;
+    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 100, NOF_INPUTS = 2;
 
     static SumDataGenerator dataGenerator;
     static NormalizerMinMaxScaler normalizer;
@@ -27,8 +28,14 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
         dataGenerator = createGenerator();
         normalizer = createNormalizer();
         neuralMemory = NeuralMemorySum.newDefault(normalizer);
-        trainMemory();
+        var lossVersusEpisode=trainMemory();
+        plotLoss(lossVersusEpisode);
         evalMemory();
+    }
+
+    private static void plotLoss(List<Double> errors) {
+        XYChart chart = QuickChart.getChart("Training error", "episode", "Error", "e(ep)", null, errors);
+        new SwingWrapper<>(chart).displayChart();
     }
 
     private static SumDataGenerator createGenerator() {
@@ -42,18 +49,21 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
         return Dl4JUtil.createNormalizer(inMinMax,outMinMax);
     }
 
-    private static void trainMemory() {
+    private static List<Double> trainMemory() {
+        List<Double> errors=new ArrayList<>();
         for (int i = 0; i < NOF_EPOCHS; i++) {
             var trainData = dataGenerator.getTrainingData();
             neuralMemory.train(trainData.getFirst(), trainData.getSecond());
+            double error=neuralMemory.getError();
+            errors.add(error);
         }
+        return errors;
     }
 
     private static void evalMemory() {
         var trainData = dataGenerator.getTrainingData();
         for (List<Double> inData : trainData.getFirst()) {
             INDArray inputNDArray = Dl4JUtil.convertList(inData,NOF_INPUTS);
-            normalizer.transform(inputNDArray);
             var outValue = neuralMemory.getOutValue(inputNDArray);
             System.out.println("inData = " + inData + ", outValue = " + outValue);
         }

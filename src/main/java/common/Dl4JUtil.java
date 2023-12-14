@@ -54,8 +54,15 @@ public class Dl4JUtil {
 
 
     public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> inMinMax,
-                                                           List<Pair<Double,Double>> outMinMax) {
-        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
+                                                          List<Pair<Double,Double>> outMinMax) {
+    return  createNormalizer(inMinMax,outMinMax,Pair.create(0d,1d));
+
+    }
+
+        public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> inMinMax,
+                                                           List<Pair<Double,Double>> outMinMax,
+                                                              Pair<Double, Double> netMinMax) {
+        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(),netMinMax.getSecond());
         List<Double> minInList=inMinMax.stream().map(p -> p.getFirst()).toList();
         List<Double> maxInList=inMinMax.stream().map(p -> p.getSecond()).toList();
         List<Double> minOutList=outMinMax.stream().map(p -> p.getFirst()).toList();

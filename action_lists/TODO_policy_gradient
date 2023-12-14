@@ -88,15 +88,17 @@ Normalizer x
 FitSum2 normalzed x
 clener x
 NeuralValueFunctionPole  x
-normalizer i ovan
-TestNeuralValueFunctionPole
+normalizer i ovan  x
+TestNeuralValueFunctionPole x
+TestNormalizer
+normarizer out NeuralSum
+oven men i NeuralPole
+slumpstate test i TestNeuralValueFunctionPole
+
 
 NeuralValueFunctionPole
 valueFunction med avg of n-step
 RunnerTrainersPole
-
-
-
 
 ovan med anpassad loss
 

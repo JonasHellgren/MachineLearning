@@ -14,7 +14,9 @@ public record ParametersPole(
         double forceMagnitude,
         double tau,
         double angleMax,
+        double angleDotMax,
         double xMax,
+        double xDotMax,
         double maxNofSteps,
         double rewardNonFail,
         double rewardFail)   {
@@ -26,6 +28,8 @@ public record ParametersPole(
     public static final double G = 9.81, TAU = 0.02;
     public static final double FORCE_MAGNITUDE = 10;
     public static final int MAX_NOF_STEPS = 100;
+    public static final double ANGLE_DOT_MAX = 0.3;
+    public static final int X_DOT_MAX = 10;
 
     public static ParametersPole newDefault() {
         return ParametersPole.builder()
@@ -34,7 +38,7 @@ public record ParametersPole(
                 .length(LENGTH).massPoleTimesLength(MASS_POLE*LENGTH)
                 .forceMagnitude(FORCE_MAGNITUDE)
                 .tau(TAU)
-                .angleMax(ANGLE_MAX).xMax(X_MAX)
+                .angleMax(ANGLE_MAX).angleDotMax(ANGLE_DOT_MAX).xMax(X_MAX).xDotMax(X_DOT_MAX)
                 .maxNofSteps(MAX_NOF_STEPS)
                 .rewardNonFail(1).rewardFail(0)
                 .build();
@@ -47,7 +51,7 @@ public record ParametersPole(
                 .length(LENGTH).massPoleTimesLength(MASS_POLE*LENGTH)
                 .forceMagnitude(FORCE_MAGNITUDE)
                 .tau(TAU)
-                .angleMax(ANGLE_MAX).xMax(X_MAX)
+                .angleMax(ANGLE_MAX).angleDotMax(ANGLE_DOT_MAX).xMax(X_MAX).xDotMax(X_DOT_MAX)
                 .maxNofSteps(MAX_NOF_STEPS)
                 .rewardNonFail(0).rewardFail(-1)
                 .build();

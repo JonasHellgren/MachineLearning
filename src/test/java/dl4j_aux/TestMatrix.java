@@ -1,4 +1,4 @@
-package nd4j_linear_algebra;
+package dl4j_aux;
 
 import org.junit.Assert;
 import org.junit.Before;

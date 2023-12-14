@@ -1,6 +1,6 @@
 package dl4j.regression_2023;
 
-import common.ListUtils;
+import common.Dl4JNetFitter;
 import lombok.Builder;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -10,12 +10,9 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
-import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import common.Dl4JUtil;
@@ -24,17 +21,18 @@ import common.Dl4JUtil;
 public class NeuralMemorySum {
 
     @Builder
-    public record Settings (
+    public record Settings(
             double learningRate,
             int nHidden) {
     }
 
-    public static final int RAND_SEED = 12345;  //Random number generator seed, for reproducability
-    static int NOF_INPUTS = 2,NOF_OUTPUTS = 1;
+    public static final int RAND_SEED = 12345;
+    static int NOF_INPUTS = 2, NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;
     public static final Random randGen = new Random(RAND_SEED);
     NormalizerMinMaxScaler normalizer;
+    Dl4JNetFitter fitter;
 
     public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizer) {
         return new NeuralMemorySum(
@@ -57,32 +55,30 @@ public class NeuralMemorySum {
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
-        this.normalizer=normalizer;
+        this.normalizer = normalizer;
+        this.fitter=Dl4JNetFitter.builder()
+                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
+                .net(net).randGen(randGen).normalizer(normalizer)
+                .build();
     }
 
 
     public void train(List<List<Double>> in, List<Double> out) {
-        int length = in.size();
-        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in,NOF_INPUTS);
-        INDArray outPut = Nd4j.create(ListUtils.toArray(out), length, NOF_OUTPUTS);
-        normalizer.transform(inputNDArray);
-        DataSetIterator iterator = Dl4JUtil.getDataSetIterator(inputNDArray, outPut,randGen);
-        iterator.reset();
-        net.fit(iterator);
+        fitter.train(in,out);
     }
 
     public Double getOutValue(INDArray inData) {
-        List<Double> inData1 = ListUtils.arrayPrimitiveDoublesToList(inData.toDoubleVector());
-        return getOutValue(inData1);
+        normalizer.transform(inData);
+        return net.output(inData,false).getDouble();
     }
 
-        public Double getOutValue(List<Double> inData) {
-        List<List<Double>> inDataList=new ArrayList<>();
-        inDataList.add(inData);
-        INDArray output = net.output(Dl4JUtil.convertListOfLists(inDataList,NOF_INPUTS), false);
-        return output.getDouble(NOF_OUTPUTS -1);
+    public Double getOutValue(List<Double> inData) {
+        return getOutValue(Dl4JUtil.convertList(inData, NOF_INPUTS));
     }
 
+    public double getError() {
+        return net.gradientAndScore().getSecond();
+    }
 
 
 }
