@@ -2,6 +2,8 @@ package policygradient.cart_pole;
 
 import common.RandUtils;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +15,10 @@ import policy_gradient_problems.the_problems.cart_pole.ParametersPole;
 import policy_gradient_problems.the_problems.cart_pole.StatePole;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class TestNeuralValueFunctionPole {
 
-    public static final int NOF_EPOCHS = 100;
     public static final int NOF_SAMPLES = 10;
     NeuralMemoryPole memory;
     ParametersPole parameters;
@@ -29,43 +31,67 @@ public class TestNeuralValueFunctionPole {
 
     @SneakyThrows
     @Test
-    public void givenAbsAngleLargerThan0d1Gives10Else0_whenTrained_thenCorrect() {
+    public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
+        Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
+        int nofEpochs = 100;
+        var errors = trainNet(stateFcn, nofEpochs);
+        plotLoss(errors);
+        printAndAssert();
+    }
 
+    @SneakyThrows
+    @Test
+    @Ignore("takes long time")
+    public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesRandom_whenTrained_thenCorrect() {
+        Function<Double,StatePole> stateFcn=(a) ->  copyWithAngle(StatePole.newAllRandom(parameters),a);
+        int nofEpochs = 1000;
+        var errors = trainNet(stateFcn, nofEpochs);
+        plotLoss(errors);
+        printAndAssert();
+    }
+
+    private void printAndAssert() {
+        double outLargeAngle = memory.getOutValue(getStateForAngleRestZero(0.2).asList());
+        double outSmallAngle = memory.getOutValue(getStateForAngleRestZero(0.0).asList());
+        System.out.println("outLargeAngle = " + outLargeAngle);
+        System.out.println("outSmallAngle = " + outSmallAngle);
+        Assertions.assertTrue(outLargeAngle<outSmallAngle);
+    }
+
+    @NotNull
+    private List<Double> trainNet(Function<Double,StatePole> stateFcn, int nofEpochs) {
         List<Double> errors = new ArrayList<>();
-
-        for (int i = 0; i < NOF_EPOCHS; i++) {
-
+        for (int i = 0; i < nofEpochs; i++) {
             List<List<Double>> in = new ArrayList<>();
             List<Double> out = new ArrayList<>();
-
             for (int j = 0; j < NOF_SAMPLES; j++) {
                 double angle = RandUtils.getRandomDouble(-parameters.angleMax(), parameters.angleMax());
-                var state = StatePole.builder().angle(angle).x(0d).angleDot(0).xDot(0).build();
+                var state = stateFcn.apply(angle);
                 double value = (Math.abs(angle) > 0.1) ? 5 : 10d;
                 in.add(state.asList());
                 out.add(value);
             }
-
             memory.fit(in, out);
             errors.add(memory.getError());
         }
-
-        plotLoss(errors);
-        Thread.sleep(1500);
-
-        double outLargeAngle = memory.getOutValue(StatePole.builder().angle(0.2).x(0d).angleDot(0).xDot(0).build().asList());
-        double outSmallAngle = memory.getOutValue(StatePole.builder().angle(0.0).x(0d).angleDot(0).xDot(0).build().asList());
-
-        System.out.println("outLargeAngle = " + outLargeAngle);
-        System.out.println("outSmallAngle = " + outSmallAngle);
-
-        Assertions.assertTrue(outLargeAngle<outSmallAngle);
-
+        return errors;
     }
 
+    private StatePole copyWithAngle(StatePole state,double angle) {
+        return StatePole.builder()
+                .angle(angle).x(state.x()).angleDot(state.angleDot()).xDot(state.xDot()).nofSteps(state.nofSteps())
+                .build();
+    }
+
+    private static StatePole getStateForAngleRestZero(double angle) {
+        return StatePole.builder().angle(angle).x(0d).angleDot(0).xDot(0).build();
+    }
+
+    @SneakyThrows
     private static void plotLoss(List<Double> errors) {
         XYChart chart = QuickChart.getChart("Training error", "episode", "Error", "e(ep)", null, errors);
         new SwingWrapper<>(chart).displayChart();
+        Thread.sleep(1500);
     }
 
 }

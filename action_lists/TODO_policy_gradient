@@ -93,7 +93,7 @@ TestNeuralValueFunctionPole x
 TestNormalizer  x
 kunnna anropa train flera ggr utan create etc  x
 normarizer out NeuralSum x
-oven men i NeuralPole
+oven men i NeuralPole  x
 slumpstate test i TestNeuralValueFunctionPole
 
 
