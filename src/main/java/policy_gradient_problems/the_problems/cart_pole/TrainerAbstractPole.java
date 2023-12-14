@@ -30,8 +30,9 @@ public class TrainerAbstractPole extends TrainerAbstract {
         super.parameters=parameters;
     }
 
-    void updateTracker(int ei, List<Double> nofSteps) {
-            tracker.addMeasures(ei,0, nofSteps);
+    void updateTracker(int ei, List<ExperiencePole> experienceList) {
+        List<Double> nofSteps=List.of((double) experienceList.size());
+        tracker.addMeasures(ei,0, nofSteps);
     }
 
     public void setAgent(@NotNull AgentPole agent) {

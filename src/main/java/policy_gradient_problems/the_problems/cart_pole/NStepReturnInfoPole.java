@@ -23,7 +23,7 @@ public class NStepReturnInfoPole {
 
     @Builder
     public record ResultManySteps(
-            Double sumRewards,
+            Double sumRewardsNSteps,
             Optional<StatePole> stateFuture,
             boolean isEndOutside
     ) { }
@@ -53,7 +53,7 @@ public class NStepReturnInfoPole {
                 : Optional.of(experienceList.get(tEnd-1).stateNext());
 
         return ResultManySteps.builder()
-                .sumRewards(rewardSumDiscounted)
+                .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)
                 .isEndOutside(isEndOutSide)
                 .build();

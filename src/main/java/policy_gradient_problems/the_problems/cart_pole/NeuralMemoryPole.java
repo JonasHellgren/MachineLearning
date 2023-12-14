@@ -74,6 +74,10 @@ public class NeuralMemoryPole {
         return getOutValue(inData1);
     }
 
+    public Double getOutValue(StatePole state) {
+        var inData1 = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
+        return getOutValue(inData1);
+    }
 
     private static OutputLayer createOutLayer(Integer nHidden) {
         return new OutputLayer.Builder(LossFunctions.LossFunction.MSE)

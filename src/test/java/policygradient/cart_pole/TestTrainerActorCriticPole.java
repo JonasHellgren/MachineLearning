@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTrainerActorCriticPole {
@@ -39,7 +37,7 @@ public class TestTrainerActorCriticPole {
 
         System.out.println("nofSteps = " + nofSteps);
 
-        NeuralMemoryPole memory=trainer.getValueFunction();
+        NeuralMemoryPole memory=trainer.getMemory();
         double valAll0=memory.getOutValue(StatePole.newUprightAndStill().asList());
         double valBigAngle=memory.getOutValue(StatePole.builder().angle(0.2).build().asList());
 

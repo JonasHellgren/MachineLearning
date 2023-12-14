@@ -40,7 +40,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
-            updateTracker(ei, List.of((double) experienceList.size()));
+            updateTracker(ei, experienceList);
         }
     }
 

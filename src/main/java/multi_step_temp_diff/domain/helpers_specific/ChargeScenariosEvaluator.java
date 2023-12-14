@@ -96,7 +96,7 @@ public class ChargeScenariosEvaluator {
             return "No results available";
         }
         List<String> stringList = scenarioResultMap.keySet().stream()
-                .map(s -> "name = " + s.name() + ", sumRewards = " + scenarioResultMap.get(s).sumRewards())
+                .map(s -> "name = " + s.name() + ", sumRewardsNSteps = " + scenarioResultMap.get(s).sumRewards())
                 .toList();
 
         StringBuilder sb = new StringBuilder();

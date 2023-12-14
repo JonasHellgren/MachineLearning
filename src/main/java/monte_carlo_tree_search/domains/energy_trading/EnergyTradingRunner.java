@@ -75,7 +75,7 @@ public class EnergyTradingRunner {
                         "times = " + times.toString() + NEW_LINE +
                         "SoElist = "+ SoElist.toString() + NEW_LINE +
                         "rewards = "+rewards.toString() + NEW_LINE +
-                        "sumRewards = "+ListUtils.sumDoubleList(rewards);
+                        "sumRewardsNSteps = "+ListUtils.sumDoubleList(rewards);
 
     }
 

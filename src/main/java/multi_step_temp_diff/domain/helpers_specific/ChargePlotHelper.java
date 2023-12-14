@@ -77,7 +77,7 @@ public class ChargePlotHelper {
 
     public  void plotSumRewardsTracker() {
         List<Double> trajectory = trainer.getHelper().getSumRewardsTracker().getValueHistory();
-        plotTrajectory(trajectory, "Episode", "sumRewards");
+        plotTrajectory(trajectory, "Episode", "sumRewardsNSteps");
     }
 
 

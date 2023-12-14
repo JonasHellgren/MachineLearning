@@ -99,7 +99,7 @@ NeuralValueFunctionPole 2 hidden x
 valueFunction med avg of n-step
 RunnerTrainersPole
 TrainerActorCriticPole med Neural mem
-
+beta -> learningRateCritic, learningRate -> learningRateActor
 
 correct AC
 

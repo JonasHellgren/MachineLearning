@@ -19,7 +19,7 @@ import java.util.*;
 
 /***
  *   The parameter weightMemoryValue is critical
- *   Optimal/correct result is sumRewards = 3.0, mostly found for some weightMemoryValue setting
+ *   Optimal/correct result is sumRewardsNSteps = 3.0, mostly found for some weightMemoryValue setting
  */
 
 @Log
