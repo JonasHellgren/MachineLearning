@@ -52,16 +52,28 @@ public class Dl4JUtil {
         return new ListDataSetIterator<>(listDs, input.rows());
     }
 
+    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMaxList,
+                                                             Pair<Double, Double> netMinMax) {
+        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(), netMinMax.getSecond());
+        List<Double> minInList = minMaxList.stream().map(p -> p.getFirst()).toList();
+        List<Double> maxInList = minMaxList.stream().map(p -> p.getSecond()).toList();
+        normalizer.setFeatureStats(
+                Nd4j.create(ListUtils.toArray(minInList)),
+                Nd4j.create(ListUtils.toArray(maxInList)));
 
-    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> inMinMax,
-                                                          List<Pair<Double,Double>> outMinMax) {
-    return  createNormalizer(inMinMax,outMinMax,Pair.create(0d,1d));
+        return normalizer;
+    }
+
+
+        public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double,Double>> inMinMax,
+                                                             List<Pair<Double,Double>> outMinMax) {
+    return  createNormalizerOld(inMinMax,outMinMax,Pair.create(0d,1d));
 
     }
 
-        public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> inMinMax,
-                                                           List<Pair<Double,Double>> outMinMax,
-                                                              Pair<Double, Double> netMinMax) {
+        public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double,Double>> inMinMax,
+                                                                 List<Pair<Double,Double>> outMinMax,
+                                                                 Pair<Double, Double> netMinMax) {
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(),netMinMax.getSecond());
         List<Double> minInList=inMinMax.stream().map(p -> p.getFirst()).toList();
         List<Double> maxInList=inMinMax.stream().map(p -> p.getSecond()).toList();
@@ -75,6 +87,8 @@ public class Dl4JUtil {
                 Nd4j.create(ListUtils.toArray(maxOutList)));
         return normalizer;
     }
+
+
 
 
 }

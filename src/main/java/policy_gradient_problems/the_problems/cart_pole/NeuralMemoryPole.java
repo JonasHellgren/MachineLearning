@@ -90,7 +90,7 @@ public class NeuralMemoryPole {
                 Pair.create(-p.angleDotMax(), p.angleDotMax()),
                 Pair.create(-p.xDotMax(), p.xDotMax()));
         var outMinMax = List.of(Pair.create(0d, p.maxNofSteps()));
-        return Dl4JUtil.createNormalizer(inMinMax, outMinMax,Pair.create(-1d,1d));
+        return Dl4JUtil.createNormalizerOld(inMinMax, outMinMax,Pair.create(-1d,1d));
     }
 
 

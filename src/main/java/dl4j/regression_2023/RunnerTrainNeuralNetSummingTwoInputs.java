@@ -46,7 +46,7 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
     private static NormalizerMinMaxScaler createNormalizer() {
         var inMinMax = List.of(Pair.create(MIN_VALUE, MAX_VALUE), Pair.create(MIN_VALUE,MAX_VALUE));
         var outMinMax = List.of(Pair.create(MIN_VALUE, 2*MAX_VALUE));
-        return Dl4JUtil.createNormalizer(inMinMax,outMinMax);
+        return Dl4JUtil.createNormalizerOld(inMinMax,outMinMax);
     }
 
     private static List<Double> trainMemory() {
