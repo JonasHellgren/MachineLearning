@@ -100,6 +100,12 @@ valueFunction med avg of n-step
 RunnerTrainersPole
 TrainerActorCriticPole med Neural mem
 
+
+correct AC
+
+startState som TrainerParameters
+ParametersPole clean with builder consttuccotr
+
 ovan med anpassad loss
 
 tex short corridor med neuronnät

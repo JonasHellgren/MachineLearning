@@ -25,7 +25,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
 
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setState(StatePole.newAllRandom(environment.getParameters()));
+            agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     super.createExperienceListWithReturns(experienceList,parameters.gamma());

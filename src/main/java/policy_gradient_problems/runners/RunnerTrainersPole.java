@@ -11,15 +11,16 @@ import java.util.List;
 public class RunnerTrainersPole {
 
 
-    public static final int LENGTH_WINDOW = 1000;
+    public static final int LENGTH_WINDOW = 100;
+    public static final int NOF_STEPS_MAX = 200;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(3_000).nofStepsMax(100).gamma(0.99).learningRate(1e-3).beta(1e-3)
-            .stepHorizon(20)   //only relevant for AC
+            .nofEpisodes(2_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRate(1e-3).beta(1e-3)
+            .stepHorizon(50)   //only relevant for AC
             .build();
 
     public static void main(String[] args) {
         var agent = AgentPole.newAllZeroStateDefaultThetas();
-        var environment = new EnvironmentPole(ParametersPole.newDefault());
+        var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
         var nofStepsListVanilla = getNofStepsListVanilla(agent, environment);
         var nofStepsListBaseline = getNofStepsListBaseline(agent, environment);
@@ -28,10 +29,6 @@ public class RunnerTrainersPole {
         plotNofStepsVersusEpisode(
                 List.of(nofStepsListVanilla, nofStepsListBaseline,nofStepsListAC),
                 List.of("vanilla", "baseline", "actor critic"));
-
-
-
-
     }
 
     private static List<Double> getNofStepsListVanilla(AgentPole agent, EnvironmentPole environment) {

@@ -44,6 +44,21 @@ public record ParametersPole(
                 .build();
     }
 
+    public static ParametersPole newWithMaxNofSteps(int maxNofSteps) {
+        return ParametersPole.builder()
+                .g(G).pi(PI)
+                .massCart(MASS_CART).massPole(MASS_POLE).massTotal(MASS_CART + MASS_POLE)
+                .length(LENGTH).massPoleTimesLength(MASS_POLE*LENGTH)
+                .forceMagnitude(FORCE_MAGNITUDE)
+                .tau(TAU)
+                .angleMax(ANGLE_MAX).angleDotMax(ANGLE_DOT_MAX).xMax(X_MAX).xDotMax(X_DOT_MAX)
+                .maxNofSteps(maxNofSteps)
+                .rewardNonFail(1).rewardFail(0)
+                .build();
+    }
+
+
+
     public static ParametersPole newRewardNegativeFail() {
         return ParametersPole.builder()
                 .g(G).pi(PI)

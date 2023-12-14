@@ -59,12 +59,27 @@ public class NStepReturnInfoPole {
                 .build();
     }
 
-    public ExperiencePole getExperience(int tStart) {
+    public ExperiencePole getExperience(int t) {
         int sizeExpList = experienceList.size();
-        throwIfBadArgument(tStart, sizeExpList);
-        return experienceList.get(tStart);
+        throwIfBadArgument(t, sizeExpList);
+        return experienceList.get(t);
     }
 
+
+    public Optional<ExperiencePole> getEndExperience() {
+        int sizeExpList = experienceList.size();
+        return (experienceList.isEmpty())
+                ?Optional.empty()
+                : Optional.of(experienceList.get(sizeExpList-1));
+    }
+
+
+    public boolean isEndExperienceFail() {
+        var expEnd=getEndExperience();
+        return expEnd.isPresent() && expEnd.orElseThrow().isFail();
+
+
+    }
 
     private static void throwIfBadArgument(int tStart, int sizeExpList) {
         if (tStart > sizeExpList -1) {

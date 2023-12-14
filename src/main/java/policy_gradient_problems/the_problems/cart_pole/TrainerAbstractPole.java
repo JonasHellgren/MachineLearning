@@ -47,7 +47,7 @@ public class TrainerAbstractPole extends TrainerAbstract {
             int action=agent.chooseAction();
             sr=environment.step(action,agent.state);
             agent.setState(sr.newState());
-            experienceList.add(new ExperiencePole(stateOld, action, sr.reward(), sr.newState(), DUMMY_VALUE));
+            experienceList.add(new ExperiencePole(stateOld, action, sr.reward(), sr.newState(), sr.isFail(),DUMMY_VALUE));
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
