@@ -95,9 +95,7 @@ kunnna anropa train flera ggr utan create etc  x
 normarizer out NeuralSum x
 oven men i NeuralPole  x
 slumpstate test i TestNeuralValueFunctionPole x
-
-
-NeuralValueFunctionPole
+NeuralValueFunctionPole 2 hidden x
 valueFunction med avg of n-step
 RunnerTrainersPole
 

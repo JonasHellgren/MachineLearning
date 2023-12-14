@@ -33,7 +33,7 @@ public class TestNeuralValueFunctionPole {
     @Test
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
-        int nofEpochs = 20;
+        int nofEpochs = 100;
         var errors = trainNet(stateFcn, nofEpochs);
         plotLoss(errors);
         printAndAssert();
@@ -58,7 +58,6 @@ public class TestNeuralValueFunctionPole {
         Assertions.assertTrue(outLargeAngle<outSmallAngle);
     }
 
-    @NotNull
     private List<Double> trainNet(Function<Double,StatePole> stateFcn, int nofEpochs) {
         List<Double> errors = new ArrayList<>();
         for (int i = 0; i < nofEpochs; i++) {
@@ -67,7 +66,7 @@ public class TestNeuralValueFunctionPole {
             for (int j = 0; j < NOF_SAMPLES; j++) {
                 double angle = RandUtils.getRandomDouble(-parameters.angleMax(), parameters.angleMax());
                 var state = stateFcn.apply(angle);
-                double value = (Math.abs(angle) > 0.1) ? 5 : 10d;
+                double value = (Math.abs(angle) > 0.1) ? 20 : 80d;
                 in.add(state.asList());
                 out.add(value);
             }

@@ -4,7 +4,6 @@ import common.Dl4JNetFitter;
 import common.Dl4JUtil;
 import common_records.NetSettings;
 import org.apache.commons.math3.util.Pair;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
@@ -29,25 +28,25 @@ public class NeuralMemoryPole {
 
     public static NeuralMemoryPole newDefault() {
         return new NeuralMemoryPole(
-                NetSettings.builder().learningRate(1e-2).nHidden0(20).build(),
+                NetSettings.builder().learningRate(1e-3).nHidden0(20).nHidden1(20).build(),
                 ParametersPole.newDefault());
     }
 
     public NeuralMemoryPole(NetSettings settings, ParametersPole parameters) {
-        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
+        var conf = new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
                 .list()
                 .layer(0, createHiddenLayer(settings.nHidden0()))
-                .layer(1, createOutLayer(settings.nHidden0()))
+                .layer(1, createHiddenLayer(settings.nHidden1()))
+                .layer(2, createOutLayer(settings.nHidden1()))
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
         this.randGen=new Random(settings.seed());
         this.normalizerIn = createNormalizerIn(parameters);
         this.normalizerOut = createNormalizerOut(parameters);
-
         this.fitter = Dl4JNetFitter.builder()
                 .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
                 .net(net).randGen(randGen)
@@ -61,13 +60,13 @@ public class NeuralMemoryPole {
 
     public Double getOutValue(INDArray inData) {
         normalizerIn.transform(inData);
-        INDArray output = net.output(inData, false);
+        var output = net.output(inData, false);
         normalizerOut.revertFeatures(output);
         return output.getDouble();
     }
 
     public Double getOutValue(List<Double> inData) {
-        INDArray inData1 = Dl4JUtil.convertList(inData, NOF_INPUTS);
+        var inData1 = Dl4JUtil.convertList(inData, NOF_INPUTS);
         return getOutValue(inData1);
     }
 
