@@ -1,16 +1,11 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.ListUtils;
-import common.RandUtils;
 import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-
 import java.util.List;
-
 import static common.MyFunctions.sqr2;
 import static common.RandUtils.getRandomDouble;
-import static common.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Builder
 public record StatePole(

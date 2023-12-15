@@ -98,16 +98,18 @@ slumpstate test i TestNeuralValueFunctionPole x
 NeuralValueFunctionPole 2 hidden x
 valueFunction med avg of n-step
 RunnerTrainersPole
-TrainerActorCriticPole med Neural mem
+TrainerActorCriticPole med Neural mem x
+correct AC x
+
+uppdatera pseudocode AC  x
+pseudocode andra
 beta -> learningRateCritic, learningRate -> learningRateActor
-
-correct AC
-
-startState som TrainerParameters
 ParametersPole clean with builder consttuccotr
 
-ovan med anpassad loss
+möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
+animering i pole runner med färdig AC policy
 
+förstå hur göra anpassad loss i DL4J
 tex short corridor med neuronnät
 
 

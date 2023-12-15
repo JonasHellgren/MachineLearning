@@ -28,10 +28,9 @@ Two thetas due to two actions. For the two selected actions the action probabili
 
 
 ### Reinforce vanilla
-
-The problem is firs solved with REINFORCE Vanilla training algorithm, see below
-
-![reinforce.png](pics%2Freinforce.png)
+  
+The problem is firs solved with REINFORCE Vanilla training algorithm, see 
+[pseudocode](pseudocode.md).
 
 The gradient of the log policy, gradLog, is defined below. In the relation i corresponds to the index of the "chosen" action (included in a <s,a,r> tuple) and
 j corresponds to theta index. The term si is the present action probability of action j.

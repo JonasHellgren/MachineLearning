@@ -9,7 +9,8 @@ public record TrainerParameters(
         Double gamma,
         Double beta,
         Double learningRate,
-        Integer stepHorizon) {
+        Integer stepHorizon,
+        Integer nofFitsPerEpoch) {
 
     static final int NOF_EPISODES = 2000;
     static final int NOF_STEPS = 100;
@@ -17,6 +18,7 @@ public record TrainerParameters(
     static final double BETA = 0.001;
     static final double LEARNING_RATE = 0.01;
     public static final int STEP_HORIZON = 10;
+    public static final int NOF_FITS_PER_EPOCH = 10;
 
     public static TrainerParameters newDefault() {
         return TrainerParameters.builder().build();
@@ -28,13 +30,14 @@ public record TrainerParameters(
                              Double gamma,
                              Double beta,
                              Double learningRate,
-                             Integer stepHorizon) {
+                             Integer stepHorizon,
+                             Integer nofFitsPerEpoch) {
         this.nofEpisodes = MyFunctions.defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
         this.nofStepsMax = MyFunctions.defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
         this.gamma = MyFunctions.defaultIfNullDouble.apply(gamma, GAMMA);
         this.beta = MyFunctions.defaultIfNullDouble.apply(beta, BETA);
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
         this.stepHorizon = MyFunctions.defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
-
+        this.nofFitsPerEpoch = MyFunctions.defaultIfNullInteger.apply(nofFitsPerEpoch, NOF_FITS_PER_EPOCH);
     }
 }
