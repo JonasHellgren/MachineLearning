@@ -4,7 +4,7 @@
 
     Initialize environment and agent
     Repeat (for each episode):
-    Initialize the starting state of the environment
+    Initialize s, the starting state of the environment
     Repeat:
         a ← π(a|s)  //Select action a using the current policy
         Take action a, observe reward r and new state s'  //apply action on environment
@@ -87,7 +87,7 @@ Many steps (large n) gives high variance, while few steps gives higher bias.
 
     //Phase 3: Update actor
     For t in range(0, T)
-        A ← r+γ*V(s')-V(s')  //Advantage=Q(s,a)-V(s)=r+γ*V(s')-V(s')
+        A ← r+γ*V(s')-V(s)  //Advantage=Q(s,a)-V(s)=r+γ*V(s')-V(s)
         actorLoss ← -∇θlog π(a|s,θ) * A
         Update θ to minimize actorLoss
 

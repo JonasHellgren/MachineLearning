@@ -1,10 +1,7 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.Builder;
-
-import static common.MyFunctions.defaultIfNullDouble;
-import static common.MyFunctions.defaultIfNullInteger;
-
+import static common.MyFunctions.*;
 
 public record ParametersPole(
         double g,
@@ -27,12 +24,13 @@ public record ParametersPole(
     static final double MASS_POLE = 0.1, MASS_CART = 1;
     static final double LENGTH = 0.5;
     static final double PI = 3.141592;
-    public static final double ANGLE_MAX = 12 * 2 * PI / 360, X_MAX = 2;
-    public static final double G = 9.81, TAU = 0.02;
-    public static final double FORCE_MAGNITUDE = 10;
-    public static final int MAX_NOF_STEPS = 100;
-    public static final double ANGLE_DOT_MAX = 0.3;
-    public static final double X_DOT_MAX = 10;
+    static final double ANGLE_MAX = 12 * 2 * PI / 360, X_MAX = 2;
+    static final double G = 9.81, TAU = 0.02;
+    static final double FORCE_MAGNITUDE = 10;
+    static final int MAX_NOF_STEPS = 100;
+    static final double ANGLE_DOT_MAX = 0.3;
+    static final double X_DOT_MAX = 10;
+    static final double REWARD = 1d, REWARD_FAIL = 0d;
 
     @Builder
     public ParametersPole(Double massCart,
@@ -63,8 +61,8 @@ public record ParametersPole(
                 defaultIfNullDouble.apply(xMax, X_MAX),
                 defaultIfNullDouble.apply(xDotMax, X_DOT_MAX),
                 defaultIfNullInteger.apply(maxNofSteps, MAX_NOF_STEPS),
-                defaultIfNullDouble.apply(rewardNonFail, 1d),
-                defaultIfNullDouble.apply(rewardFail, 0d));
+                defaultIfNullDouble.apply(rewardNonFail, REWARD),
+                defaultIfNullDouble.apply(rewardFail, REWARD_FAIL));
     }
 
 

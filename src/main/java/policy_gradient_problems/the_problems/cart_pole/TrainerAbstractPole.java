@@ -2,6 +2,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.TrainerAbstract;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 @AllArgsConstructor
+@Getter
 public class TrainerAbstractPole extends TrainerAbstract {
 
     public static final double DUMMY_VALUE = 0d;
@@ -39,7 +41,7 @@ public class TrainerAbstractPole extends TrainerAbstract {
         this.agent = agent;
     }
 
-    protected List<ExperiencePole> getExperiences() {
+    public List<ExperiencePole> getExperiences() {
         List<ExperiencePole> experienceList=new ArrayList<>();
         int si = 0;
         StepReturnPole sr;

@@ -10,12 +10,11 @@ import java.util.List;
 
 public class RunnerTrainersPole {
 
-
-    public static final int LENGTH_WINDOW = 10;
-    public static final int NOF_STEPS_MAX = 200;
+    public static final int LENGTH_WINDOW = 100, NOF_STEPS_MAX = 300;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(1_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3).learningRateCritic(1e-3)
-            .stepHorizon(20).nofFitsPerEpoch(10)   //only relevant for AC
+            .nofEpisodes(2_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
+            .learningRateCritic(1e-2)  //not relevant for vanilla
+            .stepHorizon(2).relativeNofFitsPerEpoch(0.5)   //only relevant for AC
             .build();
 
     public static void main(String[] args) {
@@ -35,6 +34,9 @@ public class RunnerTrainersPole {
         var trainerVanilla = TrainerVanillaPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
+
+        System.out.println("vanilla thetaVector() = " + trainerVanilla.getAgent().getThetaVector());
+
         return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
@@ -42,6 +44,9 @@ public class RunnerTrainersPole {
         var trainerBaseline = TrainerBaselinePole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
+
+        System.out.println("baseline thetaVector() = " + trainerBaseline.getAgent().getThetaVector());
+
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
@@ -51,6 +56,9 @@ public class RunnerTrainersPole {
         trainerAC.train();
 
         printMemory(environment, trainerAC);
+        System.out.println("AC thetaVector() = " + trainerAC.getAgent().getThetaVector());
+        trainerAC.getAgent().setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+        System.out.println("trainerAC.getExperiences().size() = " + trainerAC.getExperiences().size());
 
         return getFilteredNofSteps(trainerAC.getTracker());
     }
@@ -69,7 +77,6 @@ public class RunnerTrainersPole {
             System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
         }
     }
-
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
         var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle("Nof steps").width(500).height(300).build();

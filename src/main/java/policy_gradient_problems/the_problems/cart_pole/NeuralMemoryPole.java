@@ -29,7 +29,7 @@ public class NeuralMemoryPole {
 
     public static NeuralMemoryPole newDefault() {
         NetSettings netSettings = NetSettings.builder()
-                .learningRate(1e-3).nofFitsPerEpoch(1).nHidden0(20).nHidden1(20).build();
+                .learningRate(1e-3).nHidden(10).build();
         return new NeuralMemoryPole(
                 netSettings,
                 ParametersPole.newDefault());
@@ -42,9 +42,10 @@ public class NeuralMemoryPole {
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
                 .list()
-                .layer(0, createHiddenLayer(settings.nHidden0()))
-                .layer(1, createHiddenLayer(settings.nHidden1()))
-                .layer(2, createOutLayer(settings.nHidden1()))
+                .layer(0, createHiddenLayer(settings.nHidden()))
+                .layer(1, createHiddenLayer(settings.nHidden()))
+                .layer(2, createHiddenLayer(settings.nHidden()))
+                .layer(3, createOutLayer(settings.nHidden()))
                 .build();
         this.net = new MultiLayerNetwork(conf);
         net.init();
@@ -58,8 +59,8 @@ public class NeuralMemoryPole {
                 .build();
     }
 
-    public void fit(List<List<Double>> in, List<Double> out) {
-        fitter.train(in, out, netSettings.nofFitsPerEpoch());
+    public void fit(List<List<Double>> in, List<Double> out,int  nofFitsPerEpoch) {
+        fitter.train(in, out, nofFitsPerEpoch);
     }
 
     public Double getOutValue(INDArray inData) {
@@ -101,7 +102,7 @@ public class NeuralMemoryPole {
                 Pair.create(-p.xMax(), p.xMax()),
                 Pair.create(-p.angleDotMax(), p.angleDotMax()),
                 Pair.create(-p.xDotMax(), p.xDotMax()));
-        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(0d,1d));
+        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));
     }
 
     private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {

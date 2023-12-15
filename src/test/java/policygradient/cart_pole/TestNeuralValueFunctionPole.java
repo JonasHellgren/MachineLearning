@@ -31,10 +31,10 @@ public class TestNeuralValueFunctionPole {
 
     @SneakyThrows
     @Test
-    @Disabled("takes long time")
+  //  @Disabled("takes long time")
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
-        int nofEpochs = 100;
+        int nofEpochs = 200;
         var errors = trainNet(stateFcn, nofEpochs);
         plotLoss(errors);
         printAndAssert();
@@ -67,11 +67,12 @@ public class TestNeuralValueFunctionPole {
             for (int j = 0; j < NOF_SAMPLES; j++) {
                 double angle = RandUtils.getRandomDouble(-parameters.angleMax(), parameters.angleMax());
                 var state = stateFcn.apply(angle);
-                double value = (Math.abs(angle) > 0.1) ? 20 : 80d;
+                double value = (Math.abs(angle) > 0.1) ? 20 : 200d;
                 in.add(state.asList());
                 out.add(value);
             }
-            memory.fit(in, out);
+            int nofFits = (int) (0.5 * NOF_SAMPLES);
+            memory.fit(in, out,nofFits);
             errors.add(memory.getError());
         }
         return errors;
