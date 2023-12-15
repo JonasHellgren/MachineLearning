@@ -41,8 +41,8 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
         for (ExperienceDiscreteAction experience:expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
-            valueFunction.updateFromExperience(experience, delta, parameters.beta());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
+            valueFunction.updateFromExperience(experience, delta, parameters.learningRateCritic());
+            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
         }
     }

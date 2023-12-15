@@ -43,8 +43,8 @@ public class RunnerTrainerActorCriticShip {
     private static TrainerParameters getTrainerParameters() {
         return TrainerParameters.builder()
                 .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX)
-                .gamma(GAMMA).learningRate(LEARNING_RATE)
-                .beta(BETA)  //not used by Vanilla
+                .gamma(GAMMA).learningRateActor(LEARNING_RATE)
+                .learningRateCritic(BETA)  //not used by Vanilla
                 .build();
     }
 

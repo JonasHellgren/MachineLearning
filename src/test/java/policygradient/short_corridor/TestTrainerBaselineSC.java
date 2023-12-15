@@ -28,7 +28,8 @@ public class TestTrainerBaselineSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).beta(0.01).learningRate(2e-2)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d)
+                        .learningRateCritic(0.01).learningRateActor(2e-2)
                         .build())
                 .build();
     }

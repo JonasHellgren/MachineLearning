@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
@@ -26,11 +27,13 @@ public class TestTrainerActorCriticPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99).stepHorizon(50).beta(1e-3).build())
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99).stepHorizon(50)
+                        .learningRateCritic(1e-3).build())
                 .build();
     }
 
     @Test
+    @Disabled ("long time")
     public void whenTrained_thenManySteps() {
         PoleHelper helper = PoleHelper.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());

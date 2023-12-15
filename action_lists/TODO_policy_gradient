@@ -103,7 +103,7 @@ correct AC x
 
 uppdatera pseudocode AC  x
 pseudocode andra  x
-beta -> learningRateCritic, learningRate -> learningRateActor
+beta -> learningRateCritic, learningRateActor -> learningRateActor  x
 ParametersPole clean with builder consttuccotr
 
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface

@@ -30,7 +30,8 @@ public class TestTrainerActorCriticShip {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d).beta(0.1).learningRate(1e-3)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d)
+                        .learningRateCritic(0.1).learningRateActor(1e-3)
                         .build())
                 .build();
     }

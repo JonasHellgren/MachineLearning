@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /***
- * agent.theta <- agent.theta+learningRate*gradLog*vt;
+ * agent.theta <- agent.theta+learningRateActor*gradLog*vt;
  *
  */
 @Builder

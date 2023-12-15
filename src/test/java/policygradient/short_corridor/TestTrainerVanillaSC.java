@@ -26,7 +26,7 @@ public class TestTrainerVanillaSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRate(2e-2)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(1d).learningRateActor(2e-2)
                         .build())
                 .build();
     }

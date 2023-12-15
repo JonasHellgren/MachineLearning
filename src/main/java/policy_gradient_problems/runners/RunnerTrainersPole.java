@@ -14,7 +14,7 @@ public class RunnerTrainersPole {
     public static final int LENGTH_WINDOW = 10;
     public static final int NOF_STEPS_MAX = 200;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(1_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRate(1e-3).beta(1e-3)
+            .nofEpisodes(1_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3).learningRateCritic(1e-3)
             .stepHorizon(20).nofFitsPerEpoch(10)   //only relevant for AC
             .build();
 

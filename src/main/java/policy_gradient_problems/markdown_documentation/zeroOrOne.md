@@ -45,7 +45,7 @@ in similar way gradLogPolicy(a=0)=-sigmoid(theta)
 
 The core of the updating algorithm is
 
-    agent.setTheta(agent.theta+learningRate*gradLog*vt);
+    agent.setTheta(agent.theta+learningRateActor*gradLog*vt);
 
 gradLog above depends on the action only for this simple environment, vt is experience from
 taking "randomly" sampled action according to present policy (theta dependant).

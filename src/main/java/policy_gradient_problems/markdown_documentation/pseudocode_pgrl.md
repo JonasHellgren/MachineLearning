@@ -31,7 +31,7 @@
     For each step t of the episode:
         s ← exper(t)   
         Gt = Return from step t  
-        A = Gt - V(s) //advantage using s
+        A = Gt - V(s) //advantage using value of s
         Update the actor parameters: θ = θ + αActor * ∇θ log π(a|s, θ)*A 
         Update the value function parameters: w = w + αValue * A * ∇w Vw(St)
 

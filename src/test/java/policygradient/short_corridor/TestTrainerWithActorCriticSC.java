@@ -27,7 +27,8 @@ public class TestTrainerWithActorCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(15_000).nofStepsMax(100).gamma(1.0).beta(1e-2).learningRate(1e-3)
+                        .nofEpisodes(15_000).nofStepsMax(100).gamma(0.99)
+                        .learningRateCritic(1e-2).learningRateActor(1e-3)
                         .build())
                 .build();
     }
@@ -42,8 +43,6 @@ public class TestTrainerWithActorCriticSC {
         var valueFunction = trainer.getValueFunction();
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(0));
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(2));
-
-
     }
 
     private void printPolicy() {

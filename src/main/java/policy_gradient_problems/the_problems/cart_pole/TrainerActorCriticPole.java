@@ -42,7 +42,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
                                   @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
         NetSettings netSettings = NetSettings.builder()
-                .nofFitsPerEpoch(parameters.nofFitsPerEpoch()).learningRate(parameters.beta()).build();
+                .nofFitsPerEpoch(parameters.nofFitsPerEpoch()).learningRate(parameters.learningRateCritic()).build();
         this.memory = new NeuralMemoryPole(netSettings, environment.getParameters());
     }
 
@@ -87,7 +87,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
             var expAtTau = elInfo.getExperience(tau);
             double advantage = calcAdvantage(expAtTau);
             var gradLogVector = agent.calcGradLogVector(expAtTau.state(), expAtTau.action());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * advantage);
+            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
         }
     }

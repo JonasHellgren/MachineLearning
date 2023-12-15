@@ -42,8 +42,8 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
         for (ExperienceDiscreteAction experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
-            valueFunction.updateFromExperience(experience, I*delta, parameters.beta());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate()* I *delta);
+            valueFunction.updateFromExperience(experience, I*delta, parameters.learningRateCritic());
+            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor()* I *delta);
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             I = I *parameters.gamma();
         }

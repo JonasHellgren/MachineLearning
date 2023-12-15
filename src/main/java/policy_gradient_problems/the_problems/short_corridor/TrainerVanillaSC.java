@@ -28,7 +28,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
             for (ExperienceDiscreteAction experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * vt);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
             updateTracker(ei);

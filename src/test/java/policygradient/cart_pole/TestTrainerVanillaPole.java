@@ -26,7 +26,7 @@ public class TestTrainerVanillaPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(2000).nofStepsMax(100).gamma(0.99).learningRate(2e-3)
+                        .nofEpisodes(2000).nofStepsMax(100).gamma(0.99).learningRateActor(2e-3)
                         .build())
                 .build();
     }

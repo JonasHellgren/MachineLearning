@@ -28,7 +28,7 @@ public class TestTrainerBaselinePole {
         trainer = TrainerBaselinePole.builder()
                 .environment(environment)
                 .agent(agent)
-                .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.7).beta(1e-3).build())
+                .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.9).learningRateCritic(1e-2).build())
                 .build();
     }
 
@@ -36,6 +36,7 @@ public class TestTrainerBaselinePole {
     public void whenTrained_thenManySteps() {
         PoleHelper helper = PoleHelper.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
+        System.out.println("nofSteps = " + nofSteps);
         assertTrue(nofSteps > 50);
     }
 

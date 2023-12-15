@@ -7,7 +7,6 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.WeightsDotProductFeatureValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import java.util.List;
 
 @Getter
 public class TrainerBaselinePole extends TrainerAbstractPole {
@@ -20,7 +19,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
                               @NonNull AgentPole agent,
                               @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
-        this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.beta());
+        this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.learningRateCritic());
     }
 
     public void train() {
@@ -37,7 +36,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
                 valueFunction.update(vector,vt);
 
                 double delta=vt-valueFunction.getValue(vector);
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
                 agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             }
             updateTracker(ei, experienceList);
