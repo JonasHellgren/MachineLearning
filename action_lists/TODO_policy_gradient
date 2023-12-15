@@ -104,7 +104,7 @@ correct AC x
 uppdatera pseudocode AC  x
 pseudocode andra  x
 beta -> learningRateCritic, learningRateActor -> learningRateActor  x
-ParametersPole clean with builder consttuccotr
+ParametersPole clean with builder consttuccotr  x
 
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 animering i pole runner med färdig AC policy

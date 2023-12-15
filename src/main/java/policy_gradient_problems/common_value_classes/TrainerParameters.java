@@ -3,6 +3,9 @@ package policy_gradient_problems.common_value_classes;
 import common.MyFunctions;
 import lombok.Builder;
 
+import static common.MyFunctions.defaultIfNullDouble;
+import static common.MyFunctions.defaultIfNullInteger;
+
 public record TrainerParameters(
         Integer nofEpisodes,
         Integer nofStepsMax,
@@ -31,12 +34,12 @@ public record TrainerParameters(
                              Double learningRateActor,
                              Integer stepHorizon,
                              Integer nofFitsPerEpoch) {
-        this.nofEpisodes = MyFunctions.defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
-        this.nofStepsMax = MyFunctions.defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
-        this.gamma = MyFunctions.defaultIfNullDouble.apply(gamma, GAMMA);
-        this.learningRateCritic = MyFunctions.defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        this.learningRateActor = MyFunctions.defaultIfNullDouble.apply(learningRateActor, LEARNING_RATE);
-        this.stepHorizon = MyFunctions.defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
-        this.nofFitsPerEpoch = MyFunctions.defaultIfNullInteger.apply(nofFitsPerEpoch, NOF_FITS_PER_EPOCH);
+        this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
+        this.nofStepsMax = defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
+        this.gamma = defaultIfNullDouble.apply(gamma, GAMMA);
+        this.learningRateCritic = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
+        this.learningRateActor = defaultIfNullDouble.apply(learningRateActor, LEARNING_RATE);
+        this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
+        this.nofFitsPerEpoch = defaultIfNullInteger.apply(nofFitsPerEpoch, NOF_FITS_PER_EPOCH);
     }
 }
