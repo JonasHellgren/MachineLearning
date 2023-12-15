@@ -12,9 +12,9 @@ public class RunnerTrainersPole {
 
     public static final int LENGTH_WINDOW = 100, NOF_STEPS_MAX = 300;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(2_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
-            .learningRateCritic(1e-2)  //not relevant for vanilla
-            .stepHorizon(2).relativeNofFitsPerEpoch(0.5)   //only relevant for AC
+            .nofEpisodes(5_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
+            .learningRateCritic(1e-3)  //not relevant for vanilla  1e-2
+            .stepHorizon(10).relativeNofFitsPerEpoch(0.5)   //only relevant for AC  2
             .build();
 
     public static void main(String[] args) {
@@ -57,7 +57,7 @@ public class RunnerTrainersPole {
 
         printMemory(environment, trainerAC);
         System.out.println("AC thetaVector() = " + trainerAC.getAgent().getThetaVector());
-        trainerAC.getAgent().setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+        trainerAC.getAgent().setState(StatePole.newUprightAndStill());
         System.out.println("trainerAC.getExperiences().size() = " + trainerAC.getExperiences().size());
 
         return getFilteredNofSteps(trainerAC.getTracker());
