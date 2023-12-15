@@ -31,14 +31,30 @@
     For each step t of the episode:
         s ← exper(t)   
         Gt = Return from step t  
-        δt = Gt - V(s) //advantage using s
-        Update the actor parameters: θ = θ + αActor * ∇θ log π(a|s, θ)*δt 
-        Update the value function parameters: w = w + αValue * δt * ∇w Vw(St)
+        A = Gt - V(s) //advantage using s
+        Update the actor parameters: θ = θ + αActor * ∇θ log π(a|s, θ)*A 
+        Update the value function parameters: w = w + αValue * A * ∇w Vw(St)
+
+## One step Actor-Critic
+
+    Initialize policy parameters θ
+    Initialize value function parameters w
+    Repeat (for each episode):
+    Initialize s //initial state
+    Repeat (for each step of the episode):
+        a ← action given by current policy π(·|θ) in state s
+        Take action a, observe reward r and next state s'
+        δ ← r + γ * V(s') - V(s)  //TD error
+        Update policy parameters θ ← θ + α * ∇θ log π(a|s, θ) * δ
+        Update value function parameters w ← w + β * ∇w V(s) * δ 
+        s ← s'  
+        Until s is terminal
 
 
 ## Multi step actor critic
 This algorithm makes no critic or actor updates during an episode. Hence, suited for environments with 
-finite episodes.
+finite episodes. Thanks to the multi-step critic training, a balance between variance and bias can be achieved.
+Many steps (large n) gives high variance, while few steps gives higher bias.
 
         
     Initialize critic memory with random weights ω. Maps state s to value V. 

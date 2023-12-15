@@ -46,37 +46,7 @@ Result plots are given below. The optimal policy is to take a random action in o
 
 
 ### Reinforce with Baseline
-
-![img.png](pics/reinforceBaseline.png)
-
-The corresponding code is
-    
-        public void train() {
-        for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setStateAsRandomNonTerminal();
-            trainAgentFromExperiences(getExperiences());
-            updateTracker(ei);
-        }
-    }
-
-    private void trainAgentFromExperiences(List<Experience> experienceList) {
-        var returnCalculator=new ReturnCalculator();
-        var expListWithReturns = returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
-        for (Experience experience:expListWithReturns) {
-            var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
-            double delta = calcDelta(experience);
-            valueFunction.updateFromExperience(experience, delta, parameters.beta());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRate() * delta);
-            agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
-        }
-    }
-
-    private double calcDelta(Experience experience) {
-        double value= valueFunction.getValue(experience.state());
-        double Gt=experience.value();
-        return Gt -value;
-    }
-
+The corresponding code is [pseudocode](pseudocode_pgrl.md)
 
 ### One step Actor-Critic
 
@@ -84,18 +54,8 @@ One-step actor–critic methods replace the full return of REINFORCE with the on
 REINFORCE with baseline is unbiased and will converge asymptotically to a local minimum, but like all Monte Carlo methods
 it tends to learn slowly, produce estimates of high variance. With temporal-difference methods we can eliminate these inconveniences.
 
-![oneStepActorCritic.png](pics%2FoneStepActorCritic.png)
-
-The code is very similar to the base line case, but method for delta calculation is changed as follows
-
-        private double calcDelta(Experience experience) {
-        double v=valueFunction.getValue(experience.state());
-        double vNext= environment.isTerminalObserved(experience.stateNext())
-                ? VALUE_TERMINAL_STATE
-                : valueFunction.getValue(experience.stateNext());
-        return experience.reward()+parameters.gamma()*vNext-v;
-    }
-
+The is very similar to the base line case, but method for delta calculation is changed as follows
+[pseudocode](pseudocode_pgrl.md).
 The code, applies a bootstrapping critic. Simulations plots below, especially in state 1 is the lower variance, compared to Vanilla REINFORCE, obvious.
 
 

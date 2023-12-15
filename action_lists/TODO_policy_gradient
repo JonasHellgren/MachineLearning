@@ -102,7 +102,7 @@ TrainerActorCriticPole med Neural mem x
 correct AC x
 
 uppdatera pseudocode AC  x
-pseudocode andra
+pseudocode andra  x
 beta -> learningRateCritic, learningRate -> learningRateActor
 ParametersPole clean with builder consttuccotr
 
