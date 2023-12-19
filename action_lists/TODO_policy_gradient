@@ -105,9 +105,12 @@ uppdatera pseudocode AC  x
 pseudocode andra  x
 beta -> learningRateCritic, learningRateActor -> learningRateActor  x
 ParametersPole clean with builder consttuccotr  x
-trainer AC konvergerar ej bra
-stepHorizon(1) buggar
+trainer AC konvergerar ej bra x
 
+customloss test x
+
+
+stepHorizon(1) buggar
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 animering i pole runner med färdig AC policy
 

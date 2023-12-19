@@ -61,13 +61,16 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
 
     void updateCritic(Integer n, List<ExperiencePole> experiences) {
         int T = experiences.size();
-        double gammaPowN = Math.pow(parameters.gamma(), parameters.stepHorizon());
+        double gammaPowN = Math.pow(parameters.gamma(), n);
         var elInfo = new NStepReturnInfoPole(experiences, parameters);
         int tEnd = elInfo.isEndExperienceFail() ? T : T - n + 1;  //explained in top of file
         List<List<Double>> stateValuesList = new ArrayList<>();
         List<Double> valueTarList = new ArrayList<>();
+
+
         for (int t = 0; t < tEnd; t++) {
             var resMS = elInfo.getResultManySteps(t);
+           // executeIfTrue(resMS.isEndOutside(), () -> log.info("Warning isEndOutside"));
             double sumRewards = resMS.sumRewardsNSteps();
             double valueFut = (resMS.stateFuture().isPresent())
                     ? gammaPowN * memory.getOutValue(resMS.stateFuture().orElseThrow())
@@ -77,6 +80,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
         }
         int nofFits = (int) Math.max(1,(parameters.relativeNofFitsPerEpoch() * tEnd));  //todo get from record method
         executeIfTrue(!stateValuesList.isEmpty(), () -> memory.fit(stateValuesList, valueTarList, nofFits));
+        executeIfTrue(stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
         stateValuesList.clear();
         valueTarList.clear();
     }

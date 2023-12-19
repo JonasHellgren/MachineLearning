@@ -102,7 +102,7 @@ public class NeuralMemoryPole {
                 Pair.create(-p.xMax(), p.xMax()),
                 Pair.create(-p.angleDotMax(), p.angleDotMax()),
                 Pair.create(-p.xDotMax(), p.xDotMax()));
-        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));
+        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));  //0,1 gives worse performance
     }
 
     private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {

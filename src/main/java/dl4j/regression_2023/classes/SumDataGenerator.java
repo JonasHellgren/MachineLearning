@@ -1,4 +1,4 @@
-package dl4j.regression_2023;
+package dl4j.regression_2023.classes;
 
 import common.ListUtils;
 import lombok.Builder;

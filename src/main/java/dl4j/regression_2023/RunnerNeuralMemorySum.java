@@ -18,7 +18,7 @@ import java.util.Random;
 import common.Dl4JUtil;
 
 
-public class NeuralMemorySum {
+public class RunnerNeuralMemorySum {
 
     static int NOF_INPUTS = 2, NOF_OUTPUTS = 1;
 
@@ -28,14 +28,14 @@ public class NeuralMemorySum {
     final Dl4JNetFitter fitter;
     final NetSettings settings;
 
-    public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizerIn,
-                                             NormalizerMinMaxScaler normalizerOut) {
-        return new NeuralMemorySum(NetSettings.newDefault(), normalizerIn, normalizerOut);
+    public static RunnerNeuralMemorySum newDefault(NormalizerMinMaxScaler normalizerIn,
+                                                   NormalizerMinMaxScaler normalizerOut) {
+        return new RunnerNeuralMemorySum(NetSettings.newDefault(), normalizerIn, normalizerOut);
     }
 
-    public NeuralMemorySum(NetSettings settings,
-                           NormalizerMinMaxScaler normalizerIn,
-                           NormalizerMinMaxScaler normalizerOut) {
+    public RunnerNeuralMemorySum(NetSettings settings,
+                                 NormalizerMinMaxScaler normalizerIn,
+                                 NormalizerMinMaxScaler normalizerOut) {
         this.settings=settings;
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())
