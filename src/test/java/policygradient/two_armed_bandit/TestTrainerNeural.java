@@ -3,27 +3,26 @@ package policygradient.two_armed_bandit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.the_problems.twoArmedBandit.AgentBandit;
-import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
-import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBandit;
+import policy_gradient_problems.common_value_classes.TrainerParameters;
+import policy_gradient_problems.the_problems.twoArmedBandit.*;
 
-public class TestTrainer {
+public class TestTrainerNeural {
 
-    TrainerBandit trainer;
-    AgentBandit agent;
+    TrainerBanditNeural trainer;
+    AgentBanditNeural agent;
 
     @BeforeEach
     public void init() {
-        agent = AgentBandit.newDefault();
-        var environment= EnvironmentBandit.newWithProbabilities(0.5,1.0);
+        var environment= EnvironmentBandit.newWithProbabilities(0.0,1.0);
         createTrainer(environment);
+        agent=trainer.getAgent();
     }
 
     private void createTrainer(EnvironmentBandit environment) {
-        trainer = TrainerBandit.builder()
+        trainer = TrainerBanditNeural.builder()
                 .environment(environment)
-                .agent(agent)
-                .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRate(1e-1)
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).learningRateActor(1e-1).build())
                 .build();
     }
 
@@ -36,16 +35,16 @@ public class TestTrainer {
 
     @Test
     public void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
-        var environment= EnvironmentBandit.newWithProbabilities(0.5,0.1);
+        var environment= EnvironmentBandit.newWithProbabilities(1.0,0.0);
         createTrainer(environment);
         trainer.train();
         printPolicy();
         Assertions.assertEquals(0, agent.chooseAction());
     }
 
-
     private void printPolicy() {
-        System.out.println("agent.piTheta() = " + agent.actionProbabilities());
+        agent=trainer.getAgent();
+        System.out.println("action probs() = " + agent.getActionProbabilities());
     }
 
 

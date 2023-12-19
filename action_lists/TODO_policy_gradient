@@ -110,8 +110,7 @@ trainer AC konvergerar ej bra x
 customloss test x
 Dl4j pg loss x
 CustomPolicyGradientLoss x
-RunnerCustomPolicyGradientLoss
-
+RunnerCustomPolicyGradientLoss x
 AgentBanditNeural
 
 stepHorizon(1) buggar

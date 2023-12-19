@@ -1,4 +1,4 @@
-package dl4j.regression_2023.classes;
+package common;
 
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
@@ -10,9 +10,10 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 
 /**
- *   policyGradientLoss=-logProb*advVec
- *
- *   gradient=(softMax-yRef)
+ *  negate below because we want to maximize, want to find the net weights that maximizes
+
+    policyGradientLoss=-logProb*advVec
+    gradient=-(yRef-softMax)
  */
 
 
@@ -32,7 +33,7 @@ public class CustomPolicyGradientLoss  implements ILossFunction {
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray y = getSoftMax(preOutput);
-        return y.sub(yRef);
+        return yRef.sub(y).neg();
     }
 
     @Override

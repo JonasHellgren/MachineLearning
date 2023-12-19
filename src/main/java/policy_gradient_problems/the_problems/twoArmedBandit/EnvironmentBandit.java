@@ -14,7 +14,7 @@ import lombok.NonNull;
 @Builder
 public class EnvironmentBandit {
 
-
+    public  static int NOF_ACTIONS=2;
     @NonNull  Double probWinningAction0, probWinningAction1;
 
     public static final double NOF_COINS_IF_WINNING = 1;
