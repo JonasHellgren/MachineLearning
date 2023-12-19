@@ -107,7 +107,7 @@ public class CustomLoss implements ILossFunction {
 
     @Override
     public String toString() {
-        return "CustomLossL1L2()";
+        return "CustomLoss()";
     }
 
 

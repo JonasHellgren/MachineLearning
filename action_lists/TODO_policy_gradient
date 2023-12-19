@@ -108,12 +108,15 @@ ParametersPole clean with builder consttuccotr  x
 trainer AC konvergerar ej bra x
 
 customloss test x
+Dl4j pg loss x
+CustomPolicyGradientLoss x
+RunnerCustomPolicyGradientLoss
 
+AgentBanditNeural
 
 stepHorizon(1) buggar
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 animering i pole runner med färdig AC policy
-
 förstå hur göra anpassad loss i DL4J
 tex short corridor med neuronnät
 
