@@ -111,13 +111,23 @@ customloss test x
 Dl4j pg loss x
 CustomPolicyGradientLoss x
 RunnerCustomPolicyGradientLoss x
-AgentBanditNeural
+AgentBanditNeural  x
 
-stepHorizon(1) buggar
+numerisk gradient dl4j
+
+MultiLayerNetworkCreator
+Using ND4J with AVX512 will improve performance
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
+stepHorizon(1) buggar
+short corridor med neural policy agent
+cart pole ACNeuralPolicy
+
 animering i pole runner med färdig AC policy
-förstå hur göra anpassad loss i DL4J
-tex short corridor med neuronnät
+
+läsa mcts kod
+strategi sätta ihop mcts med pg problems
+alphazero på cartpole
+
 
 
 bubblare:

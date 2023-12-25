@@ -1,6 +1,6 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common_records.NetSettings;
+import common_dl4j.NetSettings;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

@@ -1,6 +1,6 @@
 package dl4j.regression_2023;
 
-import common.CustomPolicyGradientLoss;
+import common_dl4j.CustomPolicyGradientLoss;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;

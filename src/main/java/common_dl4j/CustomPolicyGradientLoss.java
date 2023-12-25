@@ -1,4 +1,4 @@
-package common;
+package common_dl4j;
 
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
@@ -33,7 +33,7 @@ public class CustomPolicyGradientLoss  implements ILossFunction {
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray y = getSoftMax(preOutput);
-        return yRef.sub(y).neg();
+        return yRef.sub(y).neg();  //todo - really correct
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CustomPolicyGradientLoss  implements ILossFunction {
         return yRef.mul(logProb);
     }
 
-    private static INDArray getSoftMax(INDArray preOutput) {
+    private static INDArray getSoftMax(INDArray preOutput) {  //todo avoid new SoftMax -> as class field
         return Nd4j.getExecutioner().exec(new SoftMax(preOutput))[0];
     }
 

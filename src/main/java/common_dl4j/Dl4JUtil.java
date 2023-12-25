@@ -1,5 +1,6 @@
-package common;
+package common_dl4j;
 
+import common.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;

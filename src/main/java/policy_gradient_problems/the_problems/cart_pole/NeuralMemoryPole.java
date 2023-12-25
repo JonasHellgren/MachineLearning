@@ -1,8 +1,8 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.Dl4JNetFitter;
-import common.Dl4JUtil;
-import common_records.NetSettings;
+import common_dl4j.Dl4JNetFitter;
+import common_dl4j.Dl4JUtil;
+import common_dl4j.NetSettings;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;

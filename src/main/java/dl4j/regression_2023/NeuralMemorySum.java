@@ -1,7 +1,7 @@
 package dl4j.regression_2023;
 
-import common.Dl4JNetFitter;
-import common_records.NetSettings;
+import common_dl4j.Dl4JNetFitter;
+import common_dl4j.NetSettings;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -15,10 +15,10 @@ import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import java.util.List;
 import java.util.Random;
-import common.Dl4JUtil;
+import common_dl4j.Dl4JUtil;
 
 
-public class RunnerNeuralMemorySum {
+public class NeuralMemorySum {
 
     static int NOF_INPUTS = 2, NOF_OUTPUTS = 1;
 
@@ -28,14 +28,14 @@ public class RunnerNeuralMemorySum {
     final Dl4JNetFitter fitter;
     final NetSettings settings;
 
-    public static RunnerNeuralMemorySum newDefault(NormalizerMinMaxScaler normalizerIn,
-                                                   NormalizerMinMaxScaler normalizerOut) {
-        return new RunnerNeuralMemorySum(NetSettings.newDefault(), normalizerIn, normalizerOut);
+    public static NeuralMemorySum newDefault(NormalizerMinMaxScaler normalizerIn,
+                                             NormalizerMinMaxScaler normalizerOut) {
+        return new NeuralMemorySum(NetSettings.newDefault(), normalizerIn, normalizerOut);
     }
 
-    public RunnerNeuralMemorySum(NetSettings settings,
-                                 NormalizerMinMaxScaler normalizerIn,
-                                 NormalizerMinMaxScaler normalizerOut) {
+    public NeuralMemorySum(NetSettings settings,
+                           NormalizerMinMaxScaler normalizerIn,
+                           NormalizerMinMaxScaler normalizerOut) {
         this.settings=settings;
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())

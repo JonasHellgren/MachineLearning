@@ -33,7 +33,7 @@ public class TrainerBanditNeural extends TrainerBanditAbstract {
             for (ExperienceDiscreteAction experience : experienceListWithReturns) {
                 INDArray oneHotVector = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
                 oneHotVector.putScalar(experience.action(), experience.value());
-                agent.fit(oneHotVector);
+                agent.fit(oneHotVector);  //there is no in state for bandit problems
             }
             tracker.addMeasures(ei, 0, agent.getActionProbabilities());
         }

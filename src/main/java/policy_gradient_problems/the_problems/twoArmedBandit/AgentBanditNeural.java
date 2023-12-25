@@ -1,8 +1,9 @@
 package policy_gradient_problems.the_problems.twoArmedBandit;
 
-import common.CustomPolicyGradientLoss;
+import common_dl4j.CustomPolicyGradientLoss;
 import common.ListUtils;
 import common.RandUtils;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
@@ -60,7 +61,7 @@ public class AgentBanditNeural implements AgentInterface  {
     @NotNull
     private static MultiLayerNetwork createNetwork(double learningRate1) {
 
-        MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Nesterovs(learningRate1, momentum))
@@ -71,8 +72,8 @@ public class AgentBanditNeural implements AgentInterface  {
                 .layer(1, new OutputLayer.Builder(new CustomPolicyGradientLoss())
                         .activation(Activation.SOFTMAX)
                         .nIn(nHidden).nOut(numOutputs).build())
-                .build()
-        );
+                .build();
+        MultiLayerNetwork net = new MultiLayerNetwork(conf);
         net.init();
         net.setListeners(new ScoreIterationListener(Integer.MAX_VALUE));
         return net;

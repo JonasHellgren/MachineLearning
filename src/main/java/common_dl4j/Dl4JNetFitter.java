@@ -1,5 +1,6 @@
-package common;
+package common_dl4j;
 
+import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;

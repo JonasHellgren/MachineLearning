@@ -1,6 +1,6 @@
 package dl4j.regression_2023;
 
-import common.Dl4JUtil;
+import common_dl4j.Dl4JUtil;
 import dl4j.regression_2023.classes.SumDataGenerator;
 import org.apache.commons.math3.util.Pair;
 import org.knowm.xchart.QuickChart;
@@ -22,11 +22,11 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
     static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 100, NOF_INPUTS = 2;
 
     static SumDataGenerator dataGenerator;
-    static RunnerNeuralMemorySum neuralMemory;
+    static NeuralMemorySum neuralMemory;
 
     public static void main(String[] args) {
         dataGenerator = createGenerator();
-        neuralMemory = RunnerNeuralMemorySum.newDefault(createNormalizerIn(),createNormalizerOut());
+        neuralMemory = NeuralMemorySum.newDefault(createNormalizerIn(),createNormalizerOut());
         var lossVersusEpisode=trainMemory();
         plotLoss(lossVersusEpisode);
         evalMemory();
