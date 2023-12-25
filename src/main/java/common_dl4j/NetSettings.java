@@ -2,6 +2,7 @@ package common_dl4j;
 
 import common.MyFunctions;
 import lombok.Builder;
+import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
@@ -11,6 +12,7 @@ public record NetSettings(
         Double learningRate,
         Double momentum,
         Integer nofFitsPerEpoch,
+        WeightInit weightInit,
         Integer nHiddenLayers,
         Integer nInput,
         Integer nHidden,
@@ -28,6 +30,7 @@ public record NetSettings(
     public NetSettings(Double learningRate,
                        Double momentum,
                        Integer nofFitsPerEpoch,
+                       WeightInit weightInit,
                        Integer nHiddenLayers,
                        Integer nInput,
                        Integer nHidden,
@@ -39,7 +42,8 @@ public record NetSettings(
                        Integer seed) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
-        this.nofFitsPerEpoch = MyFunctions.defaultIfNullInteger.apply(nofFitsPerEpoch,10);
+        this.nofFitsPerEpoch = MyFunctions.defaultIfNullInteger.apply(nofFitsPerEpoch, 1);
+        this.weightInit = (WeightInit) MyFunctions.defaultIfNullObject.apply(weightInit,WeightInit.XAVIER);
         this.nHiddenLayers = MyFunctions.defaultIfNullInteger.apply(nHiddenLayers, 1);
         this.nInput = MyFunctions.defaultIfNullInteger.apply(nInput, 1);
         this.nHidden = MyFunctions.defaultIfNullInteger.apply(nHidden, N_HIDDEN);

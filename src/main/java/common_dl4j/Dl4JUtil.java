@@ -32,9 +32,8 @@ public class Dl4JUtil {
         }
 
         int numColumns = listOfLists.get(0).size();
-
         if (numColumns!= nofInputs) {
-            throw new IllegalArgumentException("bad numColumns, numColumns = "+numColumns);
+            throw new IllegalArgumentException("bad numColumns, numColumns = "+numColumns+", nofInputs = "+nofInputs);
         }
 
         double[] flatArray = new double[numRows * numColumns];
@@ -47,8 +46,13 @@ public class Dl4JUtil {
         return Nd4j.create(flatArray, new int[]{numRows, numColumns});
     }
 
-    public static INDArray convertList(List<Double> in, int nofInputs) {
+    public static INDArray convertList(List<Double> in, int nofInputs) {  //todo fimpa nofInputs
         return Nd4j.create(ListUtils.toArray(in),new int[]{1, nofInputs});
+    }
+
+
+    public static INDArray convertList2(List<Double> in) {
+        return Nd4j.create(ListUtils.toArray(in),new int[]{in.size(),1});
     }
 
     public static DataSetIterator getDataSetIterator(INDArray input, INDArray outPut, Random randGen) {
