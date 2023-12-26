@@ -11,6 +11,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 public record NetSettings(
         Double learningRate,
         Double momentum,
+        Double l2Value,
         Integer nofFitsPerEpoch,
         WeightInit weightInit,
         Integer nHiddenLayers,
@@ -29,6 +30,7 @@ public record NetSettings(
     @Builder
     public NetSettings(Double learningRate,
                        Double momentum,
+                       Double l2Value,
                        Integer nofFitsPerEpoch,
                        WeightInit weightInit,
                        Integer nHiddenLayers,
@@ -42,6 +44,7 @@ public record NetSettings(
                        Integer seed) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
+        this.l2Value = MyFunctions.defaultIfNullDouble.apply(l2Value,0d);
         this.nofFitsPerEpoch = MyFunctions.defaultIfNullInteger.apply(nofFitsPerEpoch, 1);
         this.weightInit = (WeightInit) MyFunctions.defaultIfNullObject.apply(weightInit,WeightInit.XAVIER);
         this.nHiddenLayers = MyFunctions.defaultIfNullInteger.apply(nHiddenLayers, 1);

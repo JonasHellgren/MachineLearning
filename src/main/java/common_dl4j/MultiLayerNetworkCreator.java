@@ -22,6 +22,7 @@ public class MultiLayerNetworkCreator {
         return new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())
                 .weightInit(settings.weightInit())
+                .l2(settings.l2Value())
                 .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
                 .list();
     }

@@ -3,25 +3,17 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import common_dl4j.CustomPolicyGradientLoss;
 import common.ListUtils;
 import common.RandUtils;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
+import common_dl4j.MultiLayerNetworkCreator;
+import common_dl4j.NetSettings;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.config.Nesterovs;
 import policy_gradient_problems.abstract_classes.AgentInterface;
-
 import java.util.List;
-
 import static common.IndexFinder.findBucket;
-import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
+import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
 public class AgentBanditNeural implements AgentInterface  {
 
@@ -39,7 +31,6 @@ public class AgentBanditNeural implements AgentInterface  {
     }
 
     public AgentBanditNeural(double learningRate) {
-        System.out.println("agent created");
         this.network=createNetwork(learningRate);
     }
 
@@ -60,23 +51,13 @@ public class AgentBanditNeural implements AgentInterface  {
 
     @NotNull
     private static MultiLayerNetwork createNetwork(double learningRate1) {
-
-        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-                .seed(seed)
-                .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(learningRate1, momentum))
-                .list()
-                .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)
-                        .activation(Activation.RELU)
-                        .build())
-                .layer(1, new OutputLayer.Builder(CustomPolicyGradientLoss.newNotNum())
-                        .activation(Activation.SOFTMAX)
-                        .nIn(nHidden).nOut(numOutputs).build())
+        var netSettings= NetSettings.builder()
+                .nHiddenLayers(1).nInput(numInput).nHidden(nHidden).nOutput(numOutputs)
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
+                .nofFitsPerEpoch(1).learningRate(learningRate1).momentum(momentum).seed(seed)
+                .lossFunction(CustomPolicyGradientLoss.newNotNum())
                 .build();
-        MultiLayerNetwork net = new MultiLayerNetwork(conf);
-        net.init();
-        net.setListeners(new ScoreIterationListener(Integer.MAX_VALUE));
-        return net;
+        return MultiLayerNetworkCreator.create(netSettings);
     }
 
 }

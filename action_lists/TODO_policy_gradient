@@ -115,11 +115,14 @@ AgentBanditNeural  x
 
 MultiLayerNetworkCreator x
 numerisk gradient dl4j x
-Using ND4J with AVX512 will improve performance
+Using ND4J with AVX512 will improve performance x
+MultiLayerNetworkCreator på fler ställen  x
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 stepHorizon(1) buggar
 short corridor med neural policy agent
 cart pole ACNeuralPolicy
+
+cart pole PPOPolicy
 
 animering i pole runner med färdig AC policy
 

@@ -1,5 +1,7 @@
 package dl4j.regression_2023;
 
+import common.CpuTimer;
+import common.ListUtils;
 import common_dl4j.Dl4JUtil;
 import dl4j.regression_2023.classes.SumDataGenerator;
 import org.apache.commons.math3.util.Pair;
@@ -19,17 +21,19 @@ import java.util.List;
 
 public class RunnerTrainNeuralNetSummingTwoInputs {
     static final double MIN_VALUE = 0, MAX_VALUE = 10d;
-    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 100, NOF_INPUTS = 2;
+    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 200, NOF_INPUTS = 2;
 
     static SumDataGenerator dataGenerator;
     static NeuralMemorySum neuralMemory;
 
     public static void main(String[] args) {
+        CpuTimer timer=new CpuTimer();
         dataGenerator = createGenerator();
         neuralMemory = NeuralMemorySum.newDefault(createNormalizerIn(),createNormalizerOut());
         var lossVersusEpisode=trainMemory();
         plotLoss(lossVersusEpisode);
         evalMemory();
+        System.out.println("time used (millis) = " + timer.absoluteProgressInMillis());
     }
 
     private static void plotLoss(List<Double> errors) {
@@ -69,7 +73,7 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
         for (List<Double> inData : trainData.getFirst()) {
             INDArray inputNDArray = Dl4JUtil.convertList(inData,NOF_INPUTS);
             var outValue = neuralMemory.getOutValue(inputNDArray);
-            System.out.println("inData = " + inData + ", outValue = " + outValue);
+            System.out.println("inData = " + inData + ", outValue = " + outValue+", error = "+Math.abs(outValue- ListUtils.sumList(inData)));
         }
     }
 

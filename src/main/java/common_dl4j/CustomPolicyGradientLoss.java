@@ -14,8 +14,9 @@ import org.nd4j.linalg.ops.transforms.Transforms;
  * policyGradientLoss=-logProb*advVec
  * gradient=-(yRef-softMax)
  * <p>
- * Proof: yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
- * softMax = action probs, e.g. [0.5 0.5]
+ * Intuition:
+ *  yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
+ *  softMax = action probs, e.g. [0.5 0.5]
  * -(yrVec-softMax)=-[0.5 -0.5]=[-0.5 0.5]  <=> change net params so prob(a=0) increases, decreases for rest
  *
  */
