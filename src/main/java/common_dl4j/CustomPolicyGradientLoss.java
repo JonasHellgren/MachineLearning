@@ -14,6 +14,12 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
     policyGradientLoss=-logProb*advVec
     gradient=-(yRef-softMax)
+
+    Proof: yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
+    softMax = action probs, e.g. [0.5 0.5]
+    -(yrVec-softMax)=-[0.5 -0.5]=[-0.5 0.5]  <=> change net params so prob(a=0) increases, decreases for rest
+
+   https://en.wikipedia.org/wiki/Finite_difference
  */
 
 
@@ -30,11 +36,30 @@ public class CustomPolicyGradientLoss  implements ILossFunction {
         return getPolicyGradientLoss(yRef,preOutput).neg();
     }
 
+    //@Override
+    public INDArray computeGradientOld(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
+        INDArray y = getSoftMax(preOutput);
+        return yRef.sub(y).neg();
+    }
+
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        INDArray y = getSoftMax(preOutput);
-        return yRef.sub(y).neg();  //todo - really correct
+
+        double eps=1e-3;
+        long nOut=yRef.size(0);
+        INDArray dldz=Nd4j.zeros(nOut);
+        for (long i = 0; i < nOut ; i++) {
+            var zPlus=preOutput.dup();
+            zPlus.putScalar(i,zPlus.getDouble(i)+eps);
+            var zMin=preOutput.dup();
+            zMin.putScalar(i,zMin.getDouble(i)-eps);
+            double lossPlus=computeScore(yRef,zPlus,activationFn,mask,true);
+            double lossMin=computeScore(yRef,zMin,activationFn,mask,true);
+            dldz.putScalar(i,(lossPlus-lossMin)/(2*eps));
+        }
+        return dldz;
     }
+
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray yRef,

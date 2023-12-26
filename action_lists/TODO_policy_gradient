@@ -113,9 +113,8 @@ CustomPolicyGradientLoss x
 RunnerCustomPolicyGradientLoss x
 AgentBanditNeural  x
 
-numerisk gradient dl4j
-
-MultiLayerNetworkCreator
+MultiLayerNetworkCreator x
+numerisk gradient dl4j x
 Using ND4J with AVX512 will improve performance
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 stepHorizon(1) buggar
