@@ -69,7 +69,7 @@ public class AgentBanditNeural implements AgentInterface  {
                 .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)
                         .activation(Activation.RELU)
                         .build())
-                .layer(1, new OutputLayer.Builder(new CustomPolicyGradientLoss())
+                .layer(1, new OutputLayer.Builder(CustomPolicyGradientLoss.newNotNum())
                         .activation(Activation.SOFTMAX)
                         .nIn(nHidden).nOut(numOutputs).build())
                 .build();

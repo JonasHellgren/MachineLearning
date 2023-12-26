@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.api.ops.impl.transforms.custom.SoftMax;
 import org.nd4j.linalg.factory.Nd4j;
@@ -30,7 +31,7 @@ public class TestCustomPolicyGradientLoss {
                 .nHiddenLayers(2)
                 .nInput(N_INPUT).nHidden(2).nOutput(2)
                 .learningRate(1e-2)
-                        .lossFunction(new CustomPolicyGradientLoss())
+                        .lossFunction(CustomPolicyGradientLoss.newNumDefault())
                         .activOutLayer(Activation.SOFTMAX)
                 .build());
     }
@@ -49,7 +50,8 @@ public class TestCustomPolicyGradientLoss {
         ILossFunction lossFunction = outputLayer.getLossFn();
 
         INDArray z = Nd4j.ones(EnvironmentBandit.NOF_ACTIONS);
-        var grad=lossFunction.computeGradient(oneHotVector,z,null,null);
+        IActivation af= Activation.SOFTMAX.getActivationFunction();
+        var grad=lossFunction.computeGradient(oneHotVector,z,af,null);
         System.out.println("grad = " + grad);
 
         printProbs();

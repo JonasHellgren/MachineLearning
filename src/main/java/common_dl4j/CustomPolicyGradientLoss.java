@@ -1,65 +1,79 @@
 package common_dl4j;
 
+import com.codepoetics.protonpack.functions.TriFunction;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.api.ops.impl.transforms.custom.SoftMax;
-import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
 
 /**
- *  negate below because we want to maximize, want to find the net weights that maximizes
-
-    policyGradientLoss=-logProb*advVec
-    gradient=-(yRef-softMax)
-
-    Proof: yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
-    softMax = action probs, e.g. [0.5 0.5]
-    -(yrVec-softMax)=-[0.5 -0.5]=[-0.5 0.5]  <=> change net params so prob(a=0) increases, decreases for rest
-
-   https://en.wikipedia.org/wiki/Finite_difference
+ * negate below because we want to maximize, want to find the net weights that maximizes
+ * <p>
+ * policyGradientLoss=-logProb*advVec
+ * gradient=-(yRef-softMax)
+ * <p>
+ * Proof: yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
+ * softMax = action probs, e.g. [0.5 0.5]
+ * -(yrVec-softMax)=-[0.5 -0.5]=[-0.5 0.5]  <=> change net params so prob(a=0) increases, decreases for rest
+ *
  */
 
 
-public class CustomPolicyGradientLoss  implements ILossFunction {
+public class CustomPolicyGradientLoss implements ILossFunction {
+
+    public static final double EPS = 1e-5, EPS_DUMMY = 0d;
+    double eps;
+    boolean isNumGrad;
+    NumericalGradCalculator gradCalculator;
+
+    public static CustomPolicyGradientLoss newNotNum() {
+        return new CustomPolicyGradientLoss(false, EPS_DUMMY);
+    }
+
+    public static CustomPolicyGradientLoss newNumDefault() {
+        return new CustomPolicyGradientLoss(true, EPS);
+    }
+
+    public CustomPolicyGradientLoss(boolean isNumGrad, double eps) {
+        this.eps = eps;
+        this.isNumGrad = isNumGrad;
+        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn =
+                (p, a, m) -> computeScore(p.getFirst(), p.getSecond(), a, m, false);
+        gradCalculator = new NumericalGradCalculator(eps, scoreFcn);
+    }
 
     @Override
-    public double computeScore(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
-        INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput);
+    public double computeScore(INDArray yRef,
+                               INDArray preOutput,
+                               IActivation activationFn,
+                               INDArray mask,
+                               boolean average) {
+        INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
         return -policyGradientLoss.sumNumber().doubleValue();
     }
 
     @Override
     public INDArray computeScoreArray(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        return getPolicyGradientLoss(yRef,preOutput).neg();
-    }
-
-    //@Override
-    public INDArray computeGradientOld(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        INDArray y = getSoftMax(preOutput);
-        return yRef.sub(y).neg();
+        return getPolicyGradientLoss(yRef, preOutput, activationFn).neg();
     }
 
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-
-        double eps=1e-3;
-        long nOut=yRef.size(0);
-        INDArray dldz=Nd4j.zeros(nOut);
-        for (long i = 0; i < nOut ; i++) {
-            var zPlus=preOutput.dup();
-            zPlus.putScalar(i,zPlus.getDouble(i)+eps);
-            var zMin=preOutput.dup();
-            zMin.putScalar(i,zMin.getDouble(i)-eps);
-            double lossPlus=computeScore(yRef,zPlus,activationFn,mask,true);
-            double lossMin=computeScore(yRef,zMin,activationFn,mask,true);
-            dldz.putScalar(i,(lossPlus-lossMin)/(2*eps));
-        }
-        return dldz;
+        return isNumGrad
+                ? calcGradientNum(yRef, preOutput, activationFn, mask)
+                : calcGradientNotNum(yRef, preOutput, activationFn);
     }
 
+    private static INDArray calcGradientNotNum(INDArray yRef, INDArray preOutput, IActivation activationFn) {
+        INDArray y = activationFn.getActivation(preOutput, false);
+        return yRef.sub(y).neg();
+    }
+
+    public INDArray calcGradientNum(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
+        return gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
+    }
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray yRef,
@@ -83,14 +97,11 @@ public class CustomPolicyGradientLoss  implements ILossFunction {
         return "PolicyGradientLoss";
     }
 
-    private static INDArray getPolicyGradientLoss(INDArray yRef, INDArray preOutput) {
-        INDArray y = getSoftMax(preOutput);
-        INDArray logProb= Transforms.log(y);
+    private static INDArray getPolicyGradientLoss(INDArray yRef, INDArray preOutput, IActivation activationFn) {
+        INDArray y = activationFn.getActivation(preOutput, false);
+        INDArray logProb = Transforms.log(y);
         return yRef.mul(logProb);
     }
 
-    private static INDArray getSoftMax(INDArray preOutput) {  //todo avoid new SoftMax -> as class field
-        return Nd4j.getExecutioner().exec(new SoftMax(preOutput))[0];
-    }
 
 }
