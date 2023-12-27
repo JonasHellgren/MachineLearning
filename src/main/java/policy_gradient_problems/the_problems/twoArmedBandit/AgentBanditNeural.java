@@ -20,7 +20,7 @@ public class AgentBanditNeural implements AgentInterface  {
     static final int seed = 12345;
     static final double momentum = 0.95;
     static final int numInput = 1;
-    public static final INDArray IN = Nd4j.zeros(1, numInput);
+    static final INDArray IN = Nd4j.zeros(1, numInput);
     static final int numOutputs = 2;
     static final int nHidden = 4;
 
