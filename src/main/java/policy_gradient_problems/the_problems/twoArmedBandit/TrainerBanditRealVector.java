@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
-import policy_gradient_problems.common.TrainingTracker;
 import policy_gradient_problems.common.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -13,7 +12,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
  */
 
 @Log
-public class TrainerBanditRealVector extends TrainerBanditAbstract {
+public class TrainerBanditRealVector extends TrainerAbstractBandit {
 
     AgentBanditRealVector agent;
 
@@ -24,7 +23,6 @@ public class TrainerBanditRealVector extends TrainerBanditAbstract {
         super(environment, parameters);
         this.agent=agent;
     }
-
 
 
     public void train() {

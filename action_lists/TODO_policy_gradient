@@ -118,7 +118,19 @@ numerisk gradient dl4j x
 Using ND4J with AVX512 will improve performance x
 MultiLayerNetworkCreator på fler ställen  x
 md fil om entropy etc x
-möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
+möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface x
+ny record Action, antingen int eller double
+skapa AgentAbstract, innehåller state
+skapa generisk Experience
+skapa generisk StepReturn
+NeuralMemoryPole memory;  //todo flytta till agent
+skapa generisk ThetaActorTrainer
+ovan in bandit sc
+skapa generisk NeuralActorTrainer
+skapa generisk ThetaCriticNeuralActorTrainer
+skapa generisk NeuralCriticNeuralActorTrainer
+
+
 stepHorizon(1) buggar
 fixa gitpush
 short corridor med neural policy agent

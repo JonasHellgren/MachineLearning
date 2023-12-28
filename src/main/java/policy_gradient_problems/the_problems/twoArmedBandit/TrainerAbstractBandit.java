@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class TrainerBanditAbstract extends TrainerAbstract {
+public class TrainerAbstractBandit extends TrainerAbstract {
 
     public static final double DUMMY_VALUE = 0d;
     public static final int STATE_DUMMY = 0;
 
      EnvironmentBandit environment;
 
-    public TrainerBanditAbstract(EnvironmentBandit environment,
+    public TrainerAbstractBandit(EnvironmentBandit environment,
                                  TrainerParameters parameters) {
         this.environment = environment;
         super.parameters=parameters;

@@ -21,10 +21,11 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 @Builder
 @Getter
 @Setter
-public class AgentBanditRealVector implements AgentInterface {
+public class AgentBanditRealVector implements AgentInterface {  //todo AgentThetaPolicyInterface
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
-    public static final ArrayRealVector ARRAY_REAL_VECTOR = new ArrayRealVector(new double[]{THETA0, THETA1});
+    public static final ArrayRealVector ARRAY_REAL_VECTOR =
+            new ArrayRealVector(new double[]{THETA0, THETA1});
     @Builder.Default
     ArrayRealVector thetaVector = ARRAY_REAL_VECTOR;
     @Builder.Default
@@ -38,12 +39,12 @@ public class AgentBanditRealVector implements AgentInterface {
         return AgentBanditRealVector.builder().thetaVector(new ArrayRealVector(new double[]{t0, t1})).build();
     }
 
-        @Override
-        public int chooseAction() {
-            var limits = getLimits(getActionProbabilities());
-            throwIfBadLimits(limits);
-            return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
-        }
+    @Override
+    public int chooseAction() {
+        var limits = getLimits(getActionProbabilities());
+        throwIfBadLimits(limits);
+        return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
+    }
 
     public List<Double> actionProbabilities() {
         return actionProbabilities(thetaVector.toArray());

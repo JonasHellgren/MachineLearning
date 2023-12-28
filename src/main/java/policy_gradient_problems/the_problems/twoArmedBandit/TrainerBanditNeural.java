@@ -11,7 +11,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Log
 @Getter
-public class TrainerBanditNeural extends TrainerBanditAbstract {
+public class TrainerBanditNeural extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
     AgentBanditNeural agent;
@@ -33,11 +33,9 @@ public class TrainerBanditNeural extends TrainerBanditAbstract {
             for (ExperienceDiscreteAction experience : experienceListWithReturns) {
                 INDArray oneHotVector = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
                 oneHotVector.putScalar(experience.action(), experience.value());
-                agent.fit(oneHotVector);  //there is no in state for bandit problems
+                agent.fit(oneHotVector);  //there is no state for bandit problems
             }
             tracker.addMeasures(ei, 0, agent.getActionProbabilities());
         }
-
     }
-
 }

@@ -34,7 +34,7 @@ import static common.Conditionals.executeIfTrue;
 @Getter
 public class TrainerActorCriticPole extends TrainerAbstractPole {
 
-    NeuralMemoryPole memory;
+    NeuralMemoryPole memory;  //todo flytta till agent
 
     @Builder
     public TrainerActorCriticPole(@NonNull EnvironmentPole environment,

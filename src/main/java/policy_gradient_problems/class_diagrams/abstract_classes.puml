@@ -10,14 +10,18 @@ interface StateInterface<V=generic state variables> {
 
 interface AgentInterface<V=generic state variables> {
 + int chooseAction(double probRandom)  //todo int generic
-+ setState(StateInterface<<V>> state);
-+ double readValue(StateInterface<<V>> state);  //todo needed?
+'/ + setState(StateInterface<<V>> state);
+'/ + double readValue(StateInterface<<V>> state);  //todo needed?
 }
+
+'/ AgentThetaActorInterface  agent.changeActor
+'/ AgentNeuralActorInterface  fitActor
+'/ AgentNeuralActorCriticInterface  fitActor fitCritic
 
 
 abstract class AgentAbstract {
-    EnvironmentInterface<<S>> environment;
-    StateInterface<<S>> state;
+'/    EnvironmentInterface<<V>> environment;
+    StateInterface<<V>> state;
 }
 
 
@@ -26,26 +30,39 @@ interface TrainerInterface<V=generic state variables> {
 }
 
 abstract class TrainerAbstract {
-    EnvironmentInterface<<S>> environment;
-    StateInterface<<S>> state;
+TrainingTracker tracker
+TrainerParameters parameters
+}
+
+abstract class TrainerAbstractTBD {
+    EnvironmentInterface<<V>> environment;
+    Agent<<V>> agent;
 }
 
 interface EnvironmentInterface<S=generic state variables> {
-+  StepReturn step(StateInterface<<S>> state,int action);
-+  boolean isTerminalState(StateInterface<<S>> state);
++  StepReturn<<V>> step(StateInterface<<V>> state,int action);
+'/ +  boolean isTerminalState(StateInterface<<V>> state);
 }
 
+
+EnvironmentInterface <|-- Environment1
+EnvironmentInterface <|-- Environment2
 
 AgentInterface <|-- AgentAbstract
 AgentAbstract  <|-- Agent1
 AgentAbstract  <|-- Agent2
 
 TrainerInterface <|-- TrainerAbstract
+TrainerAbstract <|-- TrainerAbstractTBD
+TrainerAbstractTBD  <|-- Trainer1
+TrainerAbstractTBD  <|-- Trainer2
+
 
 StateInterface -[hidden]- EnvironmentInterface
 
-EnvironmentInterface <|-- Anvironment1
-EnvironmentInterface <|-- Anvironment2
+AgentInterface -[hidden]- StateInterface
+
+Environment1 -[hidden]- TrainerInterface
 
 
 @enduml

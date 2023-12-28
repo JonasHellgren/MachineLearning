@@ -6,7 +6,6 @@ import common.RandUtils;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -15,7 +14,7 @@ import java.util.List;
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
-public class AgentBanditNeural implements AgentInterface  {
+public class AgentBanditNeural implements AgentInterface  {  //todo AgentNeuralPolicyInterface
 
     static final int seed = 12345;
     static final double momentum = 0.95;
@@ -49,7 +48,6 @@ public class AgentBanditNeural implements AgentInterface  {
         network.fit(IN,out);
     }
 
-    @NotNull
     private static MultiLayerNetwork createNetwork(double learningRate1) {
         var netSettings= NetSettings.builder()
                 .nHiddenLayers(1).nInput(numInput).nHidden(nHidden).nOutput(numOutputs)
