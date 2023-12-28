@@ -119,7 +119,7 @@ Using ND4J with AVX512 will improve performance x
 MultiLayerNetworkCreator på fler ställen  x
 md fil om entropy etc x
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface x
-ny record Action, antingen int eller double
+ny record Action, antingen int eller double  x
 skapa AgentAbstract, innehåller state
 skapa generisk Experience
 skapa generisk StepReturn
