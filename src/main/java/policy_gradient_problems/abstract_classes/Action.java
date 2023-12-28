@@ -15,7 +15,6 @@ public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
     public Action {
         long nofInt = intValue.isPresent() ? 1 : 0;
         long nofDouble = doubleValue.isPresent() ? 1 : 0;
-
         if (nofInt + nofDouble != 1) {
             throw new IllegalArgumentException("Exactly one value in action must be defined");
         }

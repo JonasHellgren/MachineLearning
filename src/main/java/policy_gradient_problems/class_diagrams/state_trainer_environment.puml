@@ -8,21 +8,7 @@ interface StateInterface<V=generic state variables> {
 + set(StateInterface<V> state);
 }
 
-interface AgentInterface<V=generic state variables> {
-+ int chooseAction(double probRandom)  //todo int generic
-'/ + setState(StateInterface<<V>> state);
-'/ + double readValue(StateInterface<<V>> state);  //todo needed?
-}
 
-'/ AgentThetaActorInterface  agent.changeActor
-'/ AgentNeuralActorInterface  fitActor
-'/ AgentNeuralActorCriticInterface  fitActor fitCritic
-
-
-abstract class AgentAbstract {
-'/    EnvironmentInterface<<V>> environment;
-    StateInterface<<V>> state;
-}
 
 
 interface TrainerInterface<V=generic state variables> {
@@ -48,20 +34,12 @@ interface EnvironmentInterface<V=generic state variables> {
 EnvironmentInterface <|-- Environment1
 EnvironmentInterface <|-- Environment2
 
-AgentInterface <|-- AgentAbstract
-AgentAbstract  <|-- Agent1
-AgentAbstract  <|-- Agent2
-
 TrainerInterface <|-- TrainerAbstract
 TrainerAbstract <|-- TrainerAbstractTBD
 TrainerAbstractTBD  <|-- Trainer1
 TrainerAbstractTBD  <|-- Trainer2
 
-
 StateInterface -[hidden]- EnvironmentInterface
-
-AgentInterface -[hidden]- StateInterface
-
 Environment1 -[hidden]- TrainerInterface
 
 

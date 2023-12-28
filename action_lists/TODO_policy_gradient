@@ -121,8 +121,8 @@ md fil om entropy etc x
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface x
 ny record Action, antingen int eller double  x
 Action med optional x
-AgentThetaActorInterface i plantuml etc
-skapa AgentThetaActorInterface
+AgentThetaActorInterface i plantuml etc  x
+skapa AgentThetaActorInterface etc x
 skapa AgentAbstract, innehåller state
 skapa generisk Experience
 skapa generisk StepReturn
