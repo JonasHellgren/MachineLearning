@@ -35,6 +35,7 @@ public class NeuralMemoryPole {
                 ParametersPole.newDefault());
     }
 
+    //todo MemoryCreator
     public NeuralMemoryPole(NetSettings settings, ParametersPole parameters) {
         this.netSettings=settings;
         var conf = new NeuralNetConfiguration.Builder()

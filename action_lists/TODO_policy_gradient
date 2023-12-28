@@ -117,7 +117,7 @@ MultiLayerNetworkCreator x
 numerisk gradient dl4j x
 Using ND4J with AVX512 will improve performance x
 MultiLayerNetworkCreator på fler ställen  x
-md fil om entropy etc
+md fil om entropy etc x
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface
 stepHorizon(1) buggar
 fixa gitpush

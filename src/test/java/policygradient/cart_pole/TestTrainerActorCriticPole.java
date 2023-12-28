@@ -18,11 +18,11 @@ public class TestTrainerActorCriticPole {
     public void init() {
         environment = EnvironmentPole.newDefault();
         agent = AgentPole.newRandomStartStateDefaultThetas(environment.getParameters());
-        createTrainer(environment);
+        createTrainer(environment, agent);
         trainer.train();
     }
 
-    private void createTrainer(EnvironmentPole environment) {
+    private void createTrainer(EnvironmentPole environment, AgentPole agent) {
         trainer = TrainerActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)

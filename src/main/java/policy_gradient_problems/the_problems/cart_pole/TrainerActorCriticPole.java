@@ -89,18 +89,11 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
     void updateActor(List<ExperiencePole> experiences) {
         var elInfo = new NStepReturnInfoPole(experiences, parameters);
         int T = experiences.size();
-
-        //var experienceListWithReturns =  //skall veck
-          //      super.createExperienceListWithReturns(experiences,parameters.gamma());
-
         for (int tau = 0; tau < T; tau++) {
             var expAtTau = elInfo.getExperience(tau);
             double advantage = calcAdvantage(expAtTau);
             var gradLogVector = agent.calcGradLogVector(expAtTau.state(), expAtTau.action());
-           // advantage=experienceListWithReturns.get(tau).value();  //skall veck
-
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
-
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
         }
     }
