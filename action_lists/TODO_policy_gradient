@@ -120,23 +120,28 @@ MultiLayerNetworkCreator på fler ställen  x
 md fil om entropy etc x
 möjligt få StatePole och ExperiencePole generiska, dvs implementera Interface x
 ny record Action, antingen int eller double  x
+Action med optional x
+AgentThetaActorInterface i plantuml etc
+skapa AgentThetaActorInterface
 skapa AgentAbstract, innehåller state
 skapa generisk Experience
 skapa generisk StepReturn
 NeuralMemoryPole memory;  //todo flytta till agent
 skapa generisk ThetaActorTrainer
-ovan in bandit sc
+ovan på bandit
+fixa gitpush
 skapa generisk NeuralActorTrainer
 skapa generisk ThetaCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 
 
 stepHorizon(1) buggar
-fixa gitpush
 short corridor med neural policy agent
 cart pole ACNeuralPolicy
 
 cart pole PPOPolicy
+
+dokumentera public methoder etc
 
 animering i pole runner med färdig AC policy
 

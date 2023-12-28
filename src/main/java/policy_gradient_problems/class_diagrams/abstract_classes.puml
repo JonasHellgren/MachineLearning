@@ -39,7 +39,7 @@ abstract class TrainerAbstractTBD {
     Agent<<V>> agent;
 }
 
-interface EnvironmentInterface<S=generic state variables> {
+interface EnvironmentInterface<V=generic state variables> {
 +  StepReturn<<V>> step(StateInterface<<V>> state,int action);
 '/ +  boolean isTerminalState(StateInterface<<V>> state);
 }

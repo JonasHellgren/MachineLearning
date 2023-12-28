@@ -1,34 +1,33 @@
 package policy_gradient_problems.abstract_classes;
 
-public record Action (Integer intValue, Double doubleValue) {
+import java.util.Optional;
 
-    public static Action asInteger(Integer intAction) {
-        return new Action(intAction,null);
+public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
+
+    public static Action ofInteger(Integer intAction) {
+        return new Action(Optional.of(intAction), Optional.empty());
     }
 
-    public static Action asDouble(Double doubleAction) {
-        return new Action(null,doubleAction);
+    public static Action ofDouble(Double doubleAction) {
+        return new Action(Optional.empty(), Optional.of(doubleAction));
     }
 
     public Action {
-        if ((intValue == null && doubleValue == null) || (intValue != null && doubleValue != null)) {
-            throw new IllegalArgumentException("Exactly one of intValue or doubleValue must be non-null");
+        long nofInt = intValue.isPresent() ? 1 : 0;
+        long nofDouble = doubleValue.isPresent() ? 1 : 0;
+
+        if (nofInt + nofDouble != 1) {
+            throw new IllegalArgumentException("Exactly one value in action must be defined");
         }
     }
 
     public int asInt() {
-        if (intValue == null) {
-            throw new RuntimeException("Int value not defined");
-        }
-        return intValue;
+        return intValue.orElseThrow();
     }
 
 
     public double asDouble() {
-        if (doubleValue == null) {
-            throw new RuntimeException ("Double value not defined");
-        }
-        return doubleValue;
+        return doubleValue.orElseThrow();
     }
 
 }
