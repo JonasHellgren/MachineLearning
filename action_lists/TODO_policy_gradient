@@ -123,7 +123,7 @@ ny record Action, antingen int eller double  x
 Action med optional x
 AgentThetaActorInterface i plantuml etc  x
 skapa AgentThetaActorInterface etc x
-skapa AgentAbstract, innehåller state
+skapa AgentAbstract, innehåller state  x
 skapa generisk Experience
 skapa generisk StepReturn
 NeuralMemoryPole memory;  //todo flytta till agent

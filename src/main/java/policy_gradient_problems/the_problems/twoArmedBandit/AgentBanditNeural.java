@@ -34,7 +34,7 @@ public class AgentBanditNeural implements AgentInterface  {  //todo AgentNeuralP
     }
 
     @Override
-    public int chooseAction() {
+    public int chooseActionOld() {
         var limits = getLimits(getActionProbabilities());
         throwIfBadLimits(limits);
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());

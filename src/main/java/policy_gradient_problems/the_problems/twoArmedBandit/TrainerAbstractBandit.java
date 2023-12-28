@@ -28,7 +28,7 @@ public class TrainerAbstractBandit extends TrainerAbstract {
     public List<ExperienceDiscreteAction> getExperiences(AgentInterface agent) {
         List<ExperienceDiscreteAction> experienceList=new ArrayList<>();
         for (int si = 0; si < parameters.nofStepsMax() ; si++) {
-            int action=agent.chooseAction();
+            int action=agent.chooseActionOld();
             double reward=environment.step(action);
             experienceList.add(new ExperienceDiscreteAction(STATE_DUMMY,action,reward, STATE_DUMMY, DUMMY_VALUE));
         }

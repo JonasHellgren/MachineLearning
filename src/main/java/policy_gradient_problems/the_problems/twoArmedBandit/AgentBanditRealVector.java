@@ -40,7 +40,7 @@ public class AgentBanditRealVector implements AgentInterface {  //todo AgentThet
     }
 
     @Override
-    public int chooseAction() {
+    public int chooseActionOld() {
         var limits = getLimits(getActionProbabilities());
         throwIfBadLimits(limits);
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());

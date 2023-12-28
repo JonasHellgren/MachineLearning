@@ -3,7 +3,7 @@
 
 interface AgentInterface<V=generic state variables> {
 + int chooseAction(double probRandom)  //todo int generic
-'/ + setState(StateInterface<<V>> state);
++ setState(StateInterface<<V>> state);
 '/ + double readValue(StateInterface<<V>> state);  //todo needed?
 }
 
@@ -31,7 +31,7 @@ AgentInterface <|-- AgentNeuralActorInterface
 AgentInterface <|-- AgentNeuralActorCriticInterface
 AgentAbstract  <|-- Agent1
 AgentAbstract  <|-- Agent2
-AgentThetaActorInterface  <|-- Agent2
-AgentNeuralActorInterface  <|-- Agent1
+AgentThetaActorInterface  <|-- Agent1
+AgentNeuralActorInterface  <|-- Agent2
 
 @enduml

@@ -30,7 +30,7 @@ public class TestTrainerNeural {
     public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(1, agent.chooseAction());
+        Assertions.assertEquals(1, agent.chooseActionOld());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class TestTrainerNeural {
         createTrainer(environment);
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(0, agent.chooseAction());
+        Assertions.assertEquals(0, agent.chooseActionOld());
     }
 
     private void printPolicy() {
