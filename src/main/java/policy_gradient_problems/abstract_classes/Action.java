@@ -29,4 +29,9 @@ public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
         return doubleValue.orElseThrow(() -> new NoSuchElementException("Double value not present"));
     }
 
+    @Override
+    public String toString() {
+        return intValue.map(Object::toString).orElseGet(() -> doubleValue.orElseThrow().toString());
+    }
+
 }

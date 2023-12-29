@@ -7,7 +7,7 @@ interface AgentI<V=generic state variables> {
 '/ + double readValue(StateI<<V>> state);  //todo needed?
 }
 
-interface AgentThetaActorI {
+interface AgentParamActorI {
 + changeActor(change);
 }
 
@@ -26,12 +26,12 @@ abstract class AgentA {
 }
 
 AgentI <|-- AgentA
-AgentI <|-- AgentThetaActorI
+AgentI <|-- AgentParamActorI
 AgentI <|-- AgentNeuralActorI
 AgentI <|-- AgentNeuralActorCriticI
 AgentA  <|-- Agent1
 AgentA  <|-- Agent2
-AgentThetaActorI  <|-- Agent1
+AgentParamActorI  <|-- Agent1
 AgentNeuralActorI  <|-- Agent2
 
 @enduml

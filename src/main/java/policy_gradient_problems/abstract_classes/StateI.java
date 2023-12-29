@@ -2,9 +2,9 @@ package policy_gradient_problems.abstract_classes;
 
 import java.util.List;
 
-public interface StateI<S> {
-    S getVariables();
-    void set(StateI<S> state);
-    StateI<S> copy();
+public interface StateI<V> {
+    V getVariables();
+    void setVariables(V variables);
+    StateI<V> copy();
     List<Double> asList();
 }

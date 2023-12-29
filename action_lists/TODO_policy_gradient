@@ -125,8 +125,8 @@ AgentThetaActorInterface i plantuml etc  x
 skapa AgentThetaActorInterface etc x
 skapa AgentAbstract, innehåller state  x
 namnbyte  Interface -> I Abstract -> A x
-skapa generisk Experience
-skapa generisk StepReturn
+skapa generisk Experience  x
+skapa generisk StepReturn  x
 NeuralMemoryPole memory;  //todo flytta till agent
 skapa generisk ThetaActorTrainer
 ovan på bandit

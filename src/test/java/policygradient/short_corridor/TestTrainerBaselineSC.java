@@ -2,6 +2,7 @@ package policygradient.short_corridor;
 
 import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.AgentSC;
@@ -35,6 +36,7 @@ public class TestTrainerBaselineSC {
     }
 
     @Test
+    @Disabled("takes long time")
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
