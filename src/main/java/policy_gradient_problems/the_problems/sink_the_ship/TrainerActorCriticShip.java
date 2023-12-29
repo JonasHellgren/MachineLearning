@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
 import policy_gradient_problems.common.ReturnCalculatorOld;
+import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -21,34 +23,35 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
                                 @NonNull AgentShip agent,
                                 @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
-        valueFunction=new TabularValueFunction(EnvironmentShip.STATES.size());
+        valueFunction=new TabularValueFunction(EnvironmentShip.POSITIONS.size());
     }
 
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setRandomState();
-            trainAgentFromExperiences(getExperiences());
+            trainAgentFromExperiences(getExperiences(agent));
             updateTracker(ei,valueFunction);
         }
     }
 
-    private void trainAgentFromExperiences(List<ExperienceContAction> experienceList) {
+    private void trainAgentFromExperiences(List<Experience<VariablesShip>> experienceList) {
         double I=1;
-        var returnCalculator=new ReturnCalculatorOld();
-        var expListWithReturns=returnCalculator.createExperienceListWithReturnsContActions(experienceList,parameters.gamma());
+        var returnCalculator=new ReturnCalculator<VariablesShip>();
+        var expListWithReturns=returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
 
-        for (ExperienceContAction experience: expListWithReturns) {
+        for (Experience<VariablesShip> experience: expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
-            valueFunction.updateFromExperienceCont(experience, I*delta, parameters.learningRateCritic());
+            int pos = experience.state().getVariables().pos();
+            valueFunction.updateFromExperienceCont(pos, I*delta, parameters.learningRateCritic());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor()* I *delta);
             agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
             I = I *parameters.gamma();
         }
     }
 
-    private double calcDelta(ExperienceContAction experience) {
-        double v=valueFunction.getValue(experience.state());
+    private double calcDelta(Experience<VariablesShip> experience) {
+        double v=valueFunction.getValue(experience.state().getVariables().pos());
         return experience.reward()+parameters.gamma()*VALUE_TERMINAL_STATE -v;
     }
 

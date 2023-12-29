@@ -1,6 +1,7 @@
 package policy_gradient_problems.common;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.ExperienceOld;
 
@@ -30,9 +31,9 @@ public class TabularValueFunction {
         setValue(experience.state(),valueOld+ beta * delta);
     }
 
-    public void updateFromExperienceCont(ExperienceContAction experience, double delta, Double beta) {
-        double valueOld=getValue(experience.state());
-        setValue(experience.state(),valueOld+ beta * delta);
+    public void updateFromExperienceCont(int intState, double delta, Double beta) {
+        double valueOld=getValue(intState);
+        setValue(intState,valueOld+ beta * delta);
     }
 
     private  ArrayRealVector getZeroVector() {

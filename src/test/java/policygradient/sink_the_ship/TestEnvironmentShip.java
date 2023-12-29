@@ -4,8 +4,12 @@ import common.Counter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.StateShip;
 import policy_gradient_problems.the_problems.sink_the_ship.StepReturnShip;
+import policy_gradient_problems.the_problems.sink_the_ship.VariablesShip;
 
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,20 +46,20 @@ public class TestEnvironmentShip {
     }
 
     private void assertHitInState(int state) {
-        StepReturnShip sr;
+        StepReturn<VariablesShip> sr;
         double normAngle;
         Counter counter=new Counter(10_000);
         do {
             normAngle = randomNumberBetweenZeroAndOne();
-            sr=environment.step(state, normAngle);
+            sr=environment.step(StateShip.newFromPos(state), Action.ofDouble(normAngle));
             counter.increase();
-        } while (!sr.isHit() && !counter.isExceeded());
+        } while (!sr.isTerminal() && !counter.isExceeded());
 
         System.out.println("normAngle = " + normAngle);
 
         Double expectedDistance = EnvironmentShip.DISTANCE_TO_SHIP_MAP.get(state);
         double actualDistance = environment.calcDistanceProjectile(normAngle);
-        Assertions.assertTrue(sr.isHit());
+        Assertions.assertTrue(sr.isTerminal());
         Assertions.assertEquals(expectedDistance, actualDistance, DIST_TOL);
     }
 

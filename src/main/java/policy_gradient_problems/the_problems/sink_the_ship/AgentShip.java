@@ -1,16 +1,24 @@
 package policy_gradient_problems.the_problems.sink_the_ship;
 
 import common.ArrayUtil;
+import common.ListUtils;
 import common.NormDistributionSampler;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.AgentA;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common.SubArrayExtractor;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static common.MyFunctions.*;
+import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 
 /***
@@ -19,13 +27,12 @@ import static common.MyFunctions.*;
 
 @Getter
 @Setter
-public class AgentShip {
+public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI<VariablesShip> {
 
     public static final double THETA_MEAN = 0.5,THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
     public static final int NOF_THETAS_PER_STATE = 2;
     public static final double STD_MIN = 2.5e-2,  SMALLEST_DENOM = 1e-2,  MAX_GRAD_ELEMENT = 1;
 
-    int state;
     ArrayRealVector thetaVector;
     NormDistributionSampler sampler=new NormDistributionSampler();
     SubArrayExtractor subArrayExtractor;
@@ -37,29 +44,43 @@ public class AgentShip {
     }
 
     public static AgentShip newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
-        return new AgentShip(EnvironmentShip.getRandomState(), thetaArray);
+        return new AgentShip(EnvironmentShip.getRandomPos(), thetaArray);
     }
 
     public AgentShip(int stateStart, double[] thetaArray) {
-        this.state = stateStart;
+        super(new StateShip(new VariablesShip(stateStart)));
         thetaVector = new ArrayRealVector(thetaArray);
         this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_THETAS_PER_STATE);
     }
 
-    public double chooseAction(int state) {
-        throwIfBadState(state);
-        Pair<Double,Double> meanStdPair = getMeanAndStdFromThetaVector(state);
-        return sampler.sampleFromNormDistribution(meanStdPair);
+    @Override
+    public Action chooseAction() {
+        int pos = getState().getVariables().pos();
+        throwIfBadState(pos);
+        Pair<Double,Double> meanStdPair = getMeanAndStdFromThetaVector(pos);
+        return Action.ofDouble(sampler.sampleFromNormDistribution(meanStdPair));
     }
 
-    public ArrayRealVector calcGradLogVector(int state, double action) {
-        double[] thetasForState = calculateGradLogForState(state, action);
-        double[] gradLogAllStates = subArrayExtractor.arrayWithZeroExceptAtSubArray(state, thetasForState);
+    @Override
+    public void changeActor(RealVector change) {
+        setThetaVector(getThetaVector().add(change));
+    }
+
+    @Override
+    public List<Double> getActionProbabilities() {
+        return actionProbabilities(thetaVector.toArray());
+    }
+
+    @Override
+    public ArrayRealVector calcGradLogVector(StateI<VariablesShip> state, Action action) {
+        int pos = state.getVariables().pos();
+        double[] thetasForState = calculateGradLogForState(pos, action.asDouble());
+        double[] gradLogAllStates = subArrayExtractor.arrayWithZeroExceptAtSubArray(pos, thetasForState);
         return new ArrayRealVector(ArrayUtil.clip(gradLogAllStates,-MAX_GRAD_ELEMENT,MAX_GRAD_ELEMENT));
     }
 
     public void setRandomState() {
-        state=EnvironmentShip.getRandomState();
+        setState(StateShip.newFromPos(EnvironmentShip.getRandomPos()));
     }
 
     BiFunction<Double,Double,Double> scaleToAccountThatStdIsExpTheta= (g,k) -> g*k;
@@ -84,13 +105,17 @@ public class AgentShip {
     }
 
     private static void throwIfBadState(int state) {
-        if (!EnvironmentShip.STATES.contains(state)) {
+        if (!EnvironmentShip.POSITIONS.contains(state)) {
             throw new IllegalArgumentException("Non valid state, state = " + state);
         }
     }
 
     public static int getThetaLength() {
-        return EnvironmentShip.STATES.size() * NOF_THETAS_PER_STATE;
+        return EnvironmentShip.POSITIONS.size() * NOF_THETAS_PER_STATE;
     }
 
+
+    private List<Double> actionProbabilities(double[] thetaArr) {
+        return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
+    }
 }

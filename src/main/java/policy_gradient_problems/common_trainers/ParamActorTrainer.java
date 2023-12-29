@@ -19,7 +19,7 @@ public class ParamActorTrainer<V> {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         for (Experience<V> experience : elwr) {
-            var gradLogVector = agent.calcGradLogVector(experience.action().asInt());
+            var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double vt = experience.value();
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
             agent.changeActor(changeInThetaVector);

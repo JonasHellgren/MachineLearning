@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentI;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.*;
 
 import java.util.List;
 import static common.MyFunctions.*;
@@ -49,8 +47,8 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
         setThetaVector(getThetaVector().add(changeInThetaVector));
     }
 
-    public ArrayRealVector calcGradLogVector(int action) {
-        return new ArrayRealVector(calculateGradLog(action, getActionProbabilities()));
+    public ArrayRealVector calcGradLogVector(StateI<VariablesBandit> state, Action action) {
+        return new ArrayRealVector(calculateGradLog(action.asInt(), getActionProbabilities()));
     }
 
     public List<Double> getActionProbabilities() {

@@ -24,7 +24,7 @@ public class RunnerTrainerActorCriticShip {
 
 
     private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShip trainer) {
-        for (int s: EnvironmentShip.STATES) {
+        for (int s: EnvironmentShip.POSITIONS) {
             var plotter = new PlotterMultiplePanelsTrajectory(
                     "ActorCritic",
                     List.of("state = "+s+", mean", "std","value"), "episode");

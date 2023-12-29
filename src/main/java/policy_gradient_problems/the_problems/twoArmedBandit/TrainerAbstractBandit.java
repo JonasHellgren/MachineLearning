@@ -32,7 +32,7 @@ public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
         List<Experience<VariablesBandit>> experienceList=new ArrayList<>();
         for (int si = 0; si < parameters.nofStepsMax() ; si++) {
             Action action=agent.chooseAction();
-            StepReturn<VariablesBandit> sr =environment.step(action);
+            StepReturn<VariablesBandit> sr =environment.step(STATE_DUMMY,action);
             experienceList.add(new Experience<>(STATE_DUMMY,action, sr.reward(), STATE_DUMMY, DUMMY_VALUE));
         }
         return experienceList;

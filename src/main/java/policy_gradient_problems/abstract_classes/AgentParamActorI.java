@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface AgentParamActorI<V> extends AgentI<V> {
     void changeActor(RealVector change);
-    ArrayRealVector calcGradLogVector(int action);
+    ArrayRealVector calcGradLogVector(StateI<V> state,Action action);
     List<Double> getActionProbabilities();
 }

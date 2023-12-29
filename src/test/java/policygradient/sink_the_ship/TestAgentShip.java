@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
 import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.the_problems.sink_the_ship.StateShip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +51,14 @@ public class TestAgentShip {
 
     @Test
     public void givenState0_whenManySamples_thenCorrect() {
-        DescriptiveStatistics ds = getDescriptiveStatisticsForState(0);
+        DescriptiveStatistics ds = getDescriptiveStatisticsForPos(0);
         assertEquals(ds.getMean(), MEAN_S0, DELTA);
         assertEquals(ds.getStandardDeviation(), Math.exp(THETA_STD0), DELTA);
     }
 
     @Test
     public void givenState1_whenManySamples_thenCorrect() {
-        DescriptiveStatistics ds = getDescriptiveStatisticsForState(1);
+        DescriptiveStatistics ds = getDescriptiveStatisticsForPos(1);
         assertEquals(ds.getMean(), MEAN_S1, DELTA);
         assertEquals(ds.getStandardDeviation(), Math.exp(THETA_STD1), DELTA);
     }
@@ -76,7 +78,7 @@ public class TestAgentShip {
         double derMeanDes = arguments.getDouble(1);
         double derStdDes = arguments.getDouble(2);
 
-        var gradLog0=agent.calcGradLogVector(state,action);
+        var gradLog0=agent.calcGradLogVector(StateShip.newFromPos(state), Action.ofDouble(action));
         double derMean=gradLog0.getEntry(0);
         double derStd=gradLog0.getEntry(1);
 
@@ -86,10 +88,11 @@ public class TestAgentShip {
 
 
 
-    private DescriptiveStatistics getDescriptiveStatisticsForState(int state) {
+    private DescriptiveStatistics getDescriptiveStatisticsForPos(int pos) {
+        agent.setState(StateShip.newFromPos(pos));
         List<Double> actions=new ArrayList<>();
         for (int i = 0; i < NOF_SAMPLES; i++) {
-            actions.add(agent.chooseAction(state));
+            actions.add(agent.chooseAction().asDouble());
         }
         DescriptiveStatistics ds=new DescriptiveStatistics();
         actions.forEach(ds::addValue);

@@ -132,7 +132,7 @@ skapa generisk ParamActorTrainer x
 ovan på bandit x
 skapa generisk NeuralActorTrainer x
 fixa gitpush x
-generics på ship
+generics på ship  x
 valueFunction i agent
 ParamActorTabularCriticTrainer
 

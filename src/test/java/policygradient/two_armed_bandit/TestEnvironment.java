@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
+import policy_gradient_problems.the_problems.twoArmedBandit.StateBandit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class TestEnvironment {
 
     public static final double DELTA = 0.01;
     public static final int ACTION0 = 0,ACTION1=1;
+    public static final StateBandit STATE = StateBandit.newDefault();
     EnvironmentBandit environment;
 
     @BeforeEach
@@ -22,13 +24,13 @@ public class TestEnvironment {
 
     @Test
     public void givenProbabilitiesAsInInit_whenActionZero_thenWinningZeroCoins() {
-        var sr=environment.step(Action.ofInteger(ACTION0));
+        var sr=environment.step(STATE,Action.ofInteger(ACTION0));
         Assertions.assertEquals(0, sr.reward(), DELTA);
     }
 
     @Test
     public void givenProbabilitiesAsInInit_whenActionOne_thenWinningOneCoin() {
-        var sr=environment.step(Action.ofInteger(ACTION1));
+        var sr=environment.step(STATE,Action.ofInteger(ACTION1));
         Assertions.assertEquals(1,sr.reward(), DELTA);
     }
 
@@ -40,7 +42,7 @@ public class TestEnvironment {
 
         List<Double> rewardList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
-            rewardList.add(environment.step(Action.ofInteger(ACTION0)).reward());
+            rewardList.add(environment.step(STATE,Action.ofInteger(ACTION0)).reward());
         }
 
         System.out.println("rewardList = " + rewardList);

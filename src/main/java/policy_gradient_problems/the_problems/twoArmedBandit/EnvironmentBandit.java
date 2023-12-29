@@ -4,6 +4,7 @@ import common.RandUtils;
 import lombok.Builder;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.EnvironmentI;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.StepReturn;
 
 
@@ -25,7 +26,7 @@ public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
         return EnvironmentBandit.builder().probWinAction0(prob0).probWinAction1(prob1).build();
     }
 
-    public StepReturn<VariablesBandit> step(Action action) {
+    public StepReturn<VariablesBandit> step(StateI<VariablesBandit> state, Action action) {
         double reward = (action.asInt() == 0) ? tryToGetCoin(probWinAction0): tryToGetCoin(probWinAction1);
         return StepReturn.<VariablesBandit>builder().reward(reward).build();
     }

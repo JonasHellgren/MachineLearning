@@ -1,25 +1,30 @@
 package policy_gradient_problems.the_problems.sink_the_ship;
 import common.MathUtils;
 import common.RandUtils;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.EnvironmentI;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.StepReturn;
 
 import java.util.Map;
 import java.util.Set;
 
-public class EnvironmentShip {
-    public static final Set<Integer> STATES =Set.of(0,1);
+public class EnvironmentShip implements EnvironmentI<VariablesShip> {
+    public static final Set<Integer> POSITIONS =Set.of(0,1);
+    public static final boolean IS_FAIL = false;
 
     final double ANGLE_MAX = Math.PI / 4,CONSTANCE_OF_GRAVITY = 9.81;
     final double SPEED_PROJECTILE_MPS = 150.0, DEVIATION_MAX_METER = 20d;
 
     public static final Map<Integer,Double> DISTANCE_TO_SHIP_MAP = Map.of(0,1000d, 1,2000d);  //<state, distance>
     final double REWARD_HIT = 1, REWARD_MISS = 0;
-    final boolean IS_TERMINAL = false;
 
-    public StepReturnShip step(int state, double action) {
-        boolean isHit=isHitting(state,action);
+    public StepReturn<VariablesShip> step(StateI<VariablesShip> state, Action action) {
+        int pos = state.getVariables().pos();
+        boolean isHit=isHitting(pos,action.asDouble());
         double reward = getReward(isHit);
-        int stateNew=getStateNew(state);
-        return new StepReturnShip(stateNew, IS_TERMINAL, isHit, reward);
+        var stateNew=StateShip.newFromPos(getStateNew(pos));
+        return new StepReturn<>(stateNew, IS_FAIL, isHit, reward);
     }
 
     public double calcDistanceProjectile(double normalizedAngle) {
@@ -29,13 +34,13 @@ public class EnvironmentShip {
                 *Math.sin(angleInRadians)/CONSTANCE_OF_GRAVITY;
     }
 
-    public static  Integer getRandomState() {
+    public static  Integer getRandomPos() {
         int randIndex=RandUtils.getRandomIntNumber(0,nofStates());
-        return STATES.stream().toList().get(randIndex);
+        return POSITIONS.stream().toList().get(randIndex);
     }
 
     public static  Integer nofStates() {
-        return STATES.size();
+        return POSITIONS.size();
     }
 
     private  double getReward(boolean isHit) {
