@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.AgentSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.the_problems.short_corridor.StateSC;
 import policy_gradient_problems.the_problems.short_corridor.TrainerActorCriticSC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,18 +38,26 @@ public class TestTrainerWithActorCriticSC {
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
-        assertEquals(1, agent.chooseAction(0));
-        assertTrue(MathUtils.isInRange(agent.chooseAction(1),0,1));
-        assertEquals(0, agent.chooseAction(2));
+        setRealPos(2);
+        assertEquals(1, agent.chooseAction().asInt());
+        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
+        setRealPos(6);
+        assertEquals(0, agent.chooseAction().asInt());
         var valueFunction = trainer.getValueFunction();
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(0));
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(2));
     }
 
+
+    private void setRealPos(int pos) {
+        agent.setState(StateSC.newFromPos(pos));
+    }
+
+
     private void printPolicy() {
         System.out.println("policy");
         for (int s = 0; s < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES ; s++) {
-            System.out.println("s = "+s+", agent.actionProb() = " + agent.calcActionProbabilitiesInState(s));
+            System.out.println("s = "+s+", agent.actionProb() = " + agent.calcActionProbsInObsState(s));
         }
     }
 

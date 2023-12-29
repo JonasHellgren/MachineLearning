@@ -133,8 +133,12 @@ ovan på bandit x
 skapa generisk NeuralActorTrainer x
 fixa gitpush x
 generics på ship  x
-valueFunction i agent
-ParamActorTabularCriticTrainer
+valueFunction i agent x
+ParamActorTabularCriticTrainer x
+sc generisk  x
+valueFunction i agent sc
+clean up sc
+generisk trainer sc
 
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer

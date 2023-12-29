@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.the_problems.short_corridor.StateSC;
 import policy_gradient_problems.the_problems.short_corridor.StepReturnSC;
+import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,10 +47,10 @@ public class TestEnvironmentSC {
         boolean isTerminal= arguments.getBoolean(4);
         double r = arguments.getDouble(5);
 
-        StepReturnSC sr=environment.step(s,a);
+        StepReturn<VariablesSC> sr=environment.step(StateSC.newFromPos(s), Action.ofInteger(a));
 
-        assertEquals(sNew,sr.state());
-        assertEquals(sNewObserved,sr.observedState());
+        assertEquals(sNew,EnvironmentSC.getPos(sr.state()));
+        assertEquals(sNewObserved,EnvironmentSC.getObservedPos(sr.state()));
         assertEquals(isTerminal,sr.isTerminal());
         assertEquals(r,sr.reward());
     }
@@ -58,7 +62,7 @@ public class TestEnvironmentSC {
         int stateRandom= RandUtils.getRandomIntNumber(2,7);
         int actionRandom= RandUtils.getRandomIntNumber(0,2);
 
-        StepReturnSC sr=environment.step(stateRandom,actionRandom);
+        StepReturn sr=environment.step(StateSC.newFromPos(stateRandom), Action.ofInteger(actionRandom));
         System.out.println("stateRandom = " + stateRandom+", sr = " + sr);
 
         assertTrue(sr.isTerminal());

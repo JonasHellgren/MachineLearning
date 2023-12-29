@@ -1,6 +1,10 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
 import common.MathUtils;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.EnvironmentI;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.StepReturn;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,21 +17,21 @@ import static common.RandUtils.randomNumberBetweenZeroAndOne;
  * See shortCorridor.md for description
  */
 
-public class EnvironmentSC {
+public class EnvironmentSC implements EnvironmentI<VariablesSC> {
 
-    public static final int NOF_ACTIONS=2;
-    public static final int NOF_NON_TERMINAL_OBSERVABLE_STATES =3;
+    public static final int NOF_ACTIONS = 2;
+    public static final int NOF_NON_TERMINAL_OBSERVABLE_STATES = 3;
 
     static final double PROB_DIRECT_TO_TERMINAL = 0.01;
     static final double REWARD_FOR_NON417STATE = -0.1;
 
-    final Map<Integer,Double> STATE_REWARD_MAP=Map.of(4,1d, 1,-1d, 7,-1d);
-    final Map<Integer,Integer> STATE_OBSERVEDSTATE_MAP=Map.of(1,-1, 2,0, 3,1, 4,-1, 5,1, 6,2, 7,-1);
-    public final Set<Integer> SET_TERMINAL_STATES=Set.of(1,4,7);
-    public static final Set<Integer> SET_NON_TERMINAL_STATES=Set.of(2,3,5,6);
-    public static final Set<Integer> SET_OBSERVABLE_STATES=Set.of(-1,0,1,2);
-    public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL=
-            getSetFromRange(0,NOF_NON_TERMINAL_OBSERVABLE_STATES);
+    final Map<Integer, Double> STATE_REWARD_MAP = Map.of(4, 1d, 1, -1d, 7, -1d);
+    final static Map<Integer, Integer> STATE_OBSERVEDSTATE_MAP = Map.of(1, -1, 2, 0, 3, 1, 4, -1, 5, 1, 6, 2, 7, -1);
+    public final Set<Integer> SET_TERMINAL_STATES = Set.of(1, 4, 7);
+    public static final Set<Integer> SET_NON_TERMINAL_STATES = Set.of(2, 3, 5, 6);
+    public static final Set<Integer> SET_OBSERVABLE_STATES = Set.of(-1, 0, 1, 2);
+    public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL =
+            getSetFromRange(0, NOF_NON_TERMINAL_OBSERVABLE_STATES);
 
 
     public double probDirectToTerminal;
@@ -38,18 +42,18 @@ public class EnvironmentSC {
     }
 
     public EnvironmentSC() {
-        this.probDirectToTerminal=PROB_DIRECT_TO_TERMINAL;
+        this.probDirectToTerminal = PROB_DIRECT_TO_TERMINAL;
     }
 
-    public static EnvironmentSC create()  {
+    public static EnvironmentSC create() {
         return new EnvironmentSC();
 
     }
 
-    public StepReturnSC step(int state, int action) {
-        int stateNew=getStateNew(state,action);
-        double reward=getReward(stateNew);
-        return StepReturnSC.of(stateNew, getObservedState(stateNew),isTerminal(stateNew),reward);
+    public StepReturn<VariablesSC> step(StateI<VariablesSC> state, Action action) {
+        int posRealNew = getRealPosNew(getPos(state), action.asInt());
+        double reward = getReward(posRealNew);
+        return new StepReturn<>(StateSC.newFromPos(posRealNew), false, isTerminal(posRealNew), reward);
     }
 
 
@@ -61,14 +65,23 @@ public class EnvironmentSC {
         return SET_TERMINAL_STATES.contains(stateNew);
     }
 
-    public int getObservedState(int state) {
+
+    public static int getObservedPos(StateI<VariablesSC> state) {
+        return getObservedPos(getPos(state));
+    }
+
+    public static int getObservedPos(int state) {
         throwIfBadState(state);
         return STATE_OBSERVEDSTATE_MAP.get(state);
     }
 
-    private void throwIfBadState(int state) {
+    public static int getPos(StateI<VariablesSC> state) {
+        return state.getVariables().pos();
+    }
+
+    private static void throwIfBadState(int state) {
         if (!STATE_OBSERVEDSTATE_MAP.containsKey(state)) {
-            throw new IllegalArgumentException("Non valid state, state = "+ state);
+            throw new IllegalArgumentException("Non valid state, state = " + state);
         }
     }
 
@@ -76,10 +89,10 @@ public class EnvironmentSC {
         return STATE_REWARD_MAP.getOrDefault(state, REWARD_FOR_NON417STATE);
     }
 
-    private int getStateNew(int state, int action) {
+    private int getRealPosNew(int state, int action) {
         return randomNumberBetweenZeroAndOne() < probDirectToTerminal
                 ? getRandomTerminalState()
-                : getNonTerminalState(state,action);
+                : getNonTerminalState(state, action);
     }
 
     private static int getRandomTerminalState() {
@@ -87,7 +100,7 @@ public class EnvironmentSC {
     }
 
     private int getNonTerminalState(int state, int action) {
-        return MathUtils.isZero(action) ? state-1 : state+1;
+        return MathUtils.isZero(action) ? state - 1 : state + 1;
 
     }
 

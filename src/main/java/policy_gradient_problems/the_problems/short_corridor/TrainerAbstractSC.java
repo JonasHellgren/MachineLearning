@@ -2,16 +2,17 @@ package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_value_classes.ExperienceOld;
+import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrainerAbstractSC extends TrainerA {
+public class TrainerAbstractSC extends TrainerA<VariablesSC> {
 
     public static final double DUMMY_VALUE = 0d;
     @NonNull EnvironmentSC environment;
@@ -27,7 +28,7 @@ public class TrainerAbstractSC extends TrainerA {
 
     void updateTracker(int ei) {
         for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei,s, agent.calcActionProbabilitiesInState(s));
+            tracker.addMeasures(ei,s, agent.calcActionProbsInObsState(s));
         }
     }
 
@@ -35,23 +36,28 @@ public class TrainerAbstractSC extends TrainerA {
         this.agent = agent;
     }
 
-    protected List<ExperienceOld> getExperiences() {
-        List<ExperienceOld> experienceList=new ArrayList<>();
+    public List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
+        List<Experience<VariablesSC>> experienceList=new ArrayList<>();
         int si = 0;
-        StepReturnSC sr;
+        StepReturn<VariablesSC> sr;
         do  {
-            int observedStateOld = environment.getObservedState(agent.getState());
-            int action=agent.chooseAction(observedStateOld);
+            Action action=agent.chooseAction();
+            int  observerdPosOld = EnvironmentSC.getObservedPos(agent.getState());
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
-            int observerdStateNew=environment.getObservedState(sr.state());
-            experienceList.add(new ExperienceOld(observedStateOld, action, sr.reward(), observerdStateNew, DUMMY_VALUE));
+            int observerdPosNew= EnvironmentSC.getObservedPos(sr.state());
+            experienceList.add(new Experience<>(
+                    StateSC.newFromPos(observerdPosOld),
+                    action,
+                    sr.reward(),
+                    StateSC.newFromPos(observerdPosNew),
+                    DUMMY_VALUE));
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }
 
-    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturnSC sr) {
+    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
@@ -61,8 +67,8 @@ public class TrainerAbstractSC extends TrainerA {
 
     }
 
-    @Override
-    public List<Experience> getExperiences(AgentI agent) {
+/*    @Override
+    public List<Experience<VariablesSC>> getExperiences(AgentI agent) {
         return null;
-    }
+    }*/
 }

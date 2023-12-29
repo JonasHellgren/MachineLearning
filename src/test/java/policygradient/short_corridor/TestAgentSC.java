@@ -8,6 +8,7 @@ import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import policy_gradient_problems.the_problems.short_corridor.AgentSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
+import policy_gradient_problems.the_problems.short_corridor.StateSC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,11 @@ public class TestAgentSC {
             "0, 0,1", "1, 0.5,0.5", "2, 1.0,0.0"
     })
     public void whenActionProbs_thenCorrect(ArgumentsAccessor arguments) {
-        int s = arguments.getInteger(0);
+        int os = arguments.getInteger(0);
         double p0 = arguments.getDouble(1);
         double p1 = arguments.getDouble(2);
 
-        agent.setState(s);
-        List<Double> actionProbs = agent.calcActionProbabilitiesInState(s);
+        List<Double> actionProbs = agent.calcActionProbsInObsState(os);
 
         assertEquals(p0, actionProbs.get(0), DELTA_PROB);
         assertEquals(p1, actionProbs.get(1), DELTA_PROB);
@@ -55,31 +55,31 @@ public class TestAgentSC {
 
     })
     public void whenGradLog_thenCorrect(ArgumentsAccessor arguments) {
-        int s = arguments.getInteger(0);
+        int os = arguments.getInteger(0);
         int a = arguments.getInteger(1);
         List<Double> gradThetaDesired = getGradThetaDesired(arguments);
         agent = AgentSC.newRandomStartStateDefaultThetas();
-        agent.setState(s);
-        ArrayRealVector gradLogVector = agent.calcGradLogVector(s, a);
+        ArrayRealVector gradLogVector = agent.calcGradLogVector(os, a);
         assertTrue(isDoubleArraysEqual(toArray(gradThetaDesired), gradLogVector.toArray(), 0.1));
     }
 
-    @ParameterizedTest   //obs state, action
+    @ParameterizedTest   //real state, action
     @CsvSource({
-            "0, 1",
-            "1, 12",
-            "2, 0",
+            "2, 1",
+            "3, 1",
+            "6, 0",
+
     })
     public void whenChooseAction_thenCorrect(ArgumentsAccessor arguments) {
         int s = arguments.getInteger(0);
         int a = arguments.getInteger(1);
-        agent.setState(s);
+        agent.setState(StateSC.newFromPos(s));
 
-        int choosenAction = agent.chooseAction(s);
-        if (s == 1) {
-            assertTrue(choosenAction == 0 || choosenAction == 1);
+        var choosenAction = agent.chooseAction();
+        if (s == 3) {  //obs state of 3 is 1, so best action is 0 or 1
+            assertTrue(choosenAction.asInt() == 0 || choosenAction.asInt() == 1);
         } else {
-            assertEquals(a, choosenAction);
+            assertEquals(a, choosenAction.asInt());
         }
     }
 

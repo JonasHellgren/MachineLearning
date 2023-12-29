@@ -5,32 +5,41 @@ import common.RandUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.AgentA;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common.SubArrayExtractor;
+import policy_gradient_problems.common.TabularValueFunction;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.common.BucketLimitsHandler.*;
 import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
+import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
 import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 /***
  * See shortCorridor.md for description
+ *
+ * State in AgentA is real state, state in an Experience is observed state
+ * Action probabilities are based on observed state
  */
 
 @Getter
 @Setter
-public class AgentSC {
+public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<VariablesSC> {
     public static final double THETA = 0.5;
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
 
-    int state;
-    ArrayRealVector thetaVector;
+    ArrayRealVector actorParams;
     SubArrayExtractor subArrayExtractor;
 
     public static AgentSC newRandomStartStateDefaultThetas() {
@@ -42,29 +51,53 @@ public class AgentSC {
         return new AgentSC(getRandomNonTerminalState(), thetaArray);
     }
 
-    public AgentSC(int stateStart, double[] thetaArray) {
-        this.state = stateStart;
-        this.thetaVector = new ArrayRealVector(thetaArray);
-        this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_ACTIONS);
+    public AgentSC(int posStart, double[] thetaArray) {
+        super(StateSC.newFromPos(posStart));
+        this.actorParams = new ArrayRealVector(thetaArray);
+        this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
     }
 
-    public int chooseAction(int stateObserved) {
-        throwIfBadObsState(stateObserved);
-        var limits = getLimits(calcActionProbabilitiesInState(stateObserved));
+
+    @Override
+    public TabularValueFunction getCriticParams() {
+        return null;
+    }
+
+    @Override  //todo to AgentA
+    public void changeActor(RealVector change) {
+        setActorParams(getActorParams().add(change));
+    }
+
+    @Override
+    public ArrayRealVector calcGradLogVector(StateI<VariablesSC> stateInExperience, Action action) {
+        int stateObserved =EnvironmentSC.getPos(stateInExperience);
+        return calcGradLogVector(stateObserved, action.asInt());
+    }
+
+    @Override
+    public List<Double> getActionProbabilities() {
+        return calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
+    }
+
+    @Override
+    public Action chooseAction() {
+        int observedStateOld = EnvironmentSC.getObservedPos(getState());
+        throwIfBadObsState(observedStateOld);
+        var limits = getLimits(calcActionProbsInObsState(observedStateOld));
         throwIfBadLimits(limits);
-        return findBucket(toArray(limits), randomNumberBetweenZeroAndOne());
+        return Action.ofInteger(findBucket(toArray(limits), randomNumberBetweenZeroAndOne()));
     }
 
-    public List<Double> calcActionProbabilitiesInState(int stateObserved) {
+    public List<Double> calcActionProbsInObsState(int stateObserved) {
         throwIfBadObsState(stateObserved);
         int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(stateObserved);
         int indexEndTheta = indexFirstTheta + NOF_ACTIONS;
-        return actionProbabilities(subarray(thetaVector.toArray(), indexFirstTheta, indexEndTheta));
+        return actionProbabilities(subarray(actorParams.toArray(), indexFirstTheta, indexEndTheta));
     }
 
     public ArrayRealVector calcGradLogVector(int stateObserved, int action) {
-        double[] gradLogForStateObserved = calculateGradLog(action, calcActionProbabilitiesInState(stateObserved));
-        return new ArrayRealVector(subArrayExtractor.arrayWithZeroExceptAtSubArray(stateObserved, gradLogForStateObserved));
+        double[] gradLogStateObs = calculateGradLog(action, calcActionProbsInObsState(stateObserved));
+        return new ArrayRealVector(subArrayExtractor.arrayWithZeroExceptAtSubArray(stateObserved, gradLogStateObs));
     }
 
     public static int getThetaLength() {
@@ -72,7 +105,7 @@ public class AgentSC {
     }
 
     public void setStateAsRandomNonTerminal() {
-        this.state = getRandomNonTerminalState();
+        setState(StateSC.newFromPos(getRandomNonTerminalState()));
     }
 
 

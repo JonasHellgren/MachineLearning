@@ -20,8 +20,6 @@ public class StateShip implements StateI<VariablesShip> {
     public static StateShip newDefault() {
         return new StateShip(VariablesShip.newDefault());
     }
-
-
     public static StateShip newFromPos(int pos) {
         return new StateShip(new VariablesShip(pos));
     }
@@ -32,9 +30,7 @@ public class StateShip implements StateI<VariablesShip> {
 
     @Override
     public StateI<VariablesShip> copy() {
-        StateShip stateShip = StateShip.newDefault();
-        stateShip.setVariables(variables);
-        return stateShip;
+        return StateShip.newFromPos(getPos());
     }
 
     @Override

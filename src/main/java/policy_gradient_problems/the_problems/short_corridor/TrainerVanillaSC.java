@@ -3,6 +3,8 @@ package policy_gradient_problems.the_problems.short_corridor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.common.ReturnCalculatorOld;
@@ -19,17 +21,17 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
     }
 
     public void train() {
-        var returnCalculator=new ReturnCalculatorOld();
+        var returnCalculator=new ReturnCalculator<VariablesSC>();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setStateAsRandomNonTerminal();
-            var experienceList = getExperiences();
+            var experienceList = getExperiences(agent);
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList,parameters.gamma());
-            for (ExperienceOld experience:experienceListWithReturns) {
-                var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
+            for (Experience<VariablesSC> experience:experienceListWithReturns) {
+                var gradLogVector = agent.calcGradLogVector(EnvironmentSC.getPos(experience.state()),experience.action().asInt());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
-                agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+                agent.setActorParams(agent.getActorParams().add(changeInThetaVector));
             }
             updateTracker(ei);
         }
