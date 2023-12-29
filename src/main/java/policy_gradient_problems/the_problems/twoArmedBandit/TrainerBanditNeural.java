@@ -3,10 +3,7 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
-import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_trainers.NeuralActorTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Log
@@ -24,16 +21,11 @@ public class TrainerBanditNeural extends TrainerAbstractBandit {
     }
 
     public void train() {
-        var rc = new ReturnCalculator<VariablesBandit>();
+        NeuralActorTrainer<VariablesBandit> episodeTrainer=new NeuralActorTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            var experienceList = super.getExperiences(agent);
-            var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
-            for (Experience<VariablesBandit> experience : elwr) {
-                INDArray oneHotVector = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
-                oneHotVector.putScalar(experience.action().asInt(), experience.value());
-                agent.fit(oneHotVector);  //there is no state for bandit problems
-            }
+            episodeTrainer.trainFromEpisode(super.getExperiences(agent));
             tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
         }
     }
+
 }

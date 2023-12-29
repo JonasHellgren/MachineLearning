@@ -10,9 +10,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.AgentNeuralActorI;
+
 import java.util.List;
 
-public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {
+public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
 
     static final int numInput = 1;
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
@@ -47,4 +49,8 @@ public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI
         return MultiLayerNetworkCreator.create(netSettings);
     }
 
+    @Override
+    public void fitActor(INDArray in, INDArray out) {
+        fit(out);
+    }
 }

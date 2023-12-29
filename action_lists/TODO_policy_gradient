@@ -130,8 +130,8 @@ skapa generisk StepReturn  x
 Generic klasser på bandit  x
 skapa generisk ParamActorTrainer x
 ovan på bandit x
+skapa generisk NeuralActorTrainer x
 fixa gitpush
-skapa generisk NeuralActorTrainer
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 NeuralMemoryPole memory;  //todo flytta till agent
