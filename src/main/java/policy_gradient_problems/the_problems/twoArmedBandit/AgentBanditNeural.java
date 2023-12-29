@@ -2,33 +2,22 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 
 import common_dl4j.CustomPolicyGradientLoss;
 import common.ListUtils;
-import common.RandUtils;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
-import lombok.SneakyThrows;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentI;
-import policy_gradient_problems.abstract_classes.StateI;
-
 import java.util.List;
-import static common.IndexFinder.findBucket;
-import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
-public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {  //todo AgentNeuralPolicyInterface
+public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {
 
-    static final int seed = 12345;
-    static final double momentum = 0.95;
     static final int numInput = 1;
-    static final INDArray IN = Nd4j.zeros(1, numInput);
-    static final int numOutputs = 2;
-    static final int nHidden = 4;
+    static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
 
-    MultiLayerNetwork network;
+    MultiLayerNetwork actorMemory;
 
     public static AgentBanditNeural newDefault(double learningRate) {
         return new AgentBanditNeural(learningRate);
@@ -36,35 +25,15 @@ public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI
 
     public AgentBanditNeural(double learningRate) {
         super(StateBandit.newDefault());
-        this.network=createNetwork(learningRate);
-    }
-
-    public int chooseActionOld() {
-        var limits = getLimits(getActionProbabilities());
-        throwIfBadLimits(limits);
-        return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
-    }
-
-    @SneakyThrows
-    @Override
-    public Action chooseAction() {  //todo till AgentA
-        var limits = getLimits(getActionProbabilities());
-        throwIfBadLimits(limits);
-        return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
-    }
-
-    @SneakyThrows
-    @Override
-    public void setState(StateI<VariablesBandit> state) {
-        throw new NoSuchMethodException();
+        this.actorMemory =createNetwork(learningRate);
     }
 
     public List<Double> getActionProbabilities() {
-        return ListUtils.arrayPrimitiveDoublesToList(network.output(IN).toDoubleVector());
+        return ListUtils.arrayPrimitiveDoublesToList(actorMemory.output(DUMMY_IN).toDoubleVector());
     }
 
     public void fit(INDArray out) {
-        network.fit(IN,out);
+        actorMemory.fit(DUMMY_IN,out);
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate1) {

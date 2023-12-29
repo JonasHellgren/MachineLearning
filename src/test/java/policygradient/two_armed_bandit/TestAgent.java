@@ -9,14 +9,14 @@ public class TestAgent {
     @Test
     public void givenTheta0MuchLarger_thenAction0 () {
         var agent= AgentBanditRealVector.newWithThetas(10d,1d);
-        int action=agent.chooseActionOld();
+        int action=agent.chooseAction().asInt();
         Assertions.assertEquals(0,action);
     }
 
     @Test
     public void givenTheta1MuchLarger_thenAction1 () {
         var agent= AgentBanditRealVector.newWithThetas(1d,10d);
-        int action=agent.chooseActionOld();
+        int action=agent.chooseAction().asInt();
         Assertions.assertEquals(1,action);
     }
 
@@ -24,7 +24,7 @@ public class TestAgent {
     @Test
     public void givenSimilarThetas_thenAction0or1 () {
         var agent= AgentBanditRealVector.newWithThetas(1d,1d);
-        int action=agent.chooseActionOld();
+        int action=agent.chooseAction().asInt();
         Assertions.assertTrue(action==0 || action==1);
     }
 

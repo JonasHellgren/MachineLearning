@@ -6,9 +6,7 @@ public record VariablesBandit(int arm) {
         return new VariablesBandit(0);
     }
 
-
     public VariablesBandit copy() {
         return new VariablesBandit(arm);
     }
-
 }

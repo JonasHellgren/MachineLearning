@@ -16,8 +16,8 @@ import java.util.List;
 @Log
 public class TrainerAbstractBandit extends TrainerA {
 
-    public static final double DUMMY_VALUE = 0d;
-    public static final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
+    final double DUMMY_VALUE = 0d;
+    final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
 
      EnvironmentBandit environment;
 

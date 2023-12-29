@@ -2,7 +2,6 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 
 import common.RandUtils;
 import lombok.Builder;
-import lombok.NonNull;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.EnvironmentI;
 import policy_gradient_problems.common_generic.StepReturn;
@@ -17,23 +16,21 @@ import policy_gradient_problems.common_generic.StepReturn;
 @Builder
 public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
 
-    public  static int NOF_ACTIONS=2;
-    @NonNull  Double probWinningAction0, probWinningAction1;
+    public static final int NOF_ACTIONS = 2;
+    Double probWinAction0, probWinAction1;
 
     public static final double NOF_COINS_IF_WINNING = 1;
 
     public static EnvironmentBandit newWithProbabilities(double prob0, double prob1) {
-        return EnvironmentBandit.builder().probWinningAction0(prob0).probWinningAction1(prob1).build();
+        return EnvironmentBandit.builder().probWinAction0(prob0).probWinAction1(prob1).build();
     }
 
     public StepReturn<VariablesBandit> step(Action action) {
-         double reward=(action.asInt()==0)
-                 ? tryToGetCoins(probWinningAction0)
-                : tryToGetCoins(probWinningAction1);
-         return StepReturn.<VariablesBandit>builder().reward(reward).build();
+        double reward = (action.asInt() == 0) ? tryToGetCoin(probWinAction0): tryToGetCoin(probWinAction1);
+        return StepReturn.<VariablesBandit>builder().reward(reward).build();
     }
 
-    private static double tryToGetCoins(double probWinningAction) {
+    private static double tryToGetCoin(double probWinningAction) {
         return RandUtils.getRandomDouble(0, 1) < probWinningAction ? NOF_COINS_IF_WINNING : 0;
     }
 

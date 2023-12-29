@@ -34,7 +34,7 @@ public class TestTrainerRealVector {
     public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(1, agent.chooseActionOld());
+        Assertions.assertEquals(1, agent.chooseAction().asInt());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class TestTrainerRealVector {
         createTrainer(environment);
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(0, agent.chooseActionOld());
+        Assertions.assertEquals(0, agent.chooseAction().asInt());
     }
 
 
