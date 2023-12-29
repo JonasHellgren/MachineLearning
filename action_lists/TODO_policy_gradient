@@ -127,14 +127,14 @@ skapa AgentAbstract, innehåller state  x
 namnbyte  Interface -> I Abstract -> A x
 skapa generisk Experience  x
 skapa generisk StepReturn  x
-NeuralMemoryPole memory;  //todo flytta till agent
-skapa generisk ThetaActorTrainer
+Generic klasser på bandit
+skapa generisk ParamActorTrainer
 ovan på bandit
 fixa gitpush
 skapa generisk NeuralActorTrainer
-skapa generisk ThetaCriticNeuralActorTrainer
+skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
-
+NeuralMemoryPole memory;  //todo flytta till agent
 
 stepHorizon(1) buggar
 short corridor med neural policy agent
