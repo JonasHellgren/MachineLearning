@@ -3,6 +3,7 @@ package policygradient.two_armed_bandit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
 
 import java.util.ArrayList;
@@ -21,14 +22,14 @@ public class TestEnvironment {
 
     @Test
     public void givenProbabilitiesAsInInit_whenActionZero_thenWinningZeroCoins() {
-        double reward=environment.step(ACTION0);
-        Assertions.assertEquals(0,reward, DELTA);
+        var sr=environment.step(Action.ofInteger(ACTION0));
+        Assertions.assertEquals(0, sr.reward(), DELTA);
     }
 
     @Test
     public void givenProbabilitiesAsInInit_whenActionOne_thenWinningOneCoin() {
-        double reward=environment.step(ACTION1);
-        Assertions.assertEquals(1,reward, DELTA);
+        var sr=environment.step(Action.ofInteger(ACTION1));
+        Assertions.assertEquals(1,sr.reward(), DELTA);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class TestEnvironment {
 
         List<Double> rewardList=new ArrayList<>();
         for (int i = 0; i < 100 ; i++) {
-            rewardList.add(environment.step(ACTION0));
+            rewardList.add(environment.step(Action.ofInteger(ACTION0)).reward());
         }
 
         System.out.println("rewardList = " + rewardList);

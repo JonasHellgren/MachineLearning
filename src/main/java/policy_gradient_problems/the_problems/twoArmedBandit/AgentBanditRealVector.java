@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 
@@ -21,18 +22,26 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
  * Bucket is defined in class BucketLimitsHandler
  */
 
-@Builder
 @Getter
 @Setter
-public class AgentBanditRealVector implements AgentI<Integer> {  //todo AgentThetaPolicyInterface
+public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final ArrayRealVector ARRAY_REAL_VECTOR =
             new ArrayRealVector(new double[]{THETA0, THETA1});
-    @Builder.Default
-    ArrayRealVector thetaVector = ARRAY_REAL_VECTOR;
-    @Builder.Default
-    int nofActions = ARRAY_REAL_VECTOR.getDimension();
+    ArrayRealVector thetaVector;
+    int nofActions;
+
+    @Builder
+    public AgentBanditRealVector(ArrayRealVector thetaVector, int nofActions) {
+        super(StateBandit.newDefault());
+        this.thetaVector = (ArrayRealVector) MyFunctions.defaultIfNullObject.apply(thetaVector,ARRAY_REAL_VECTOR);
+        this.nofActions = MyFunctions.defaultIfNullInteger.apply(nofActions,ARRAY_REAL_VECTOR.getDimension());
+    }
+/*
+    public AgentBanditRealVector(StateI<VariablesBandit> state) {
+        super(state);
+    }*/
 
     public static AgentBanditRealVector newDefault() {
         return AgentBanditRealVector.builder().build();
@@ -50,13 +59,15 @@ public class AgentBanditRealVector implements AgentI<Integer> {  //todo AgentThe
 
     @SneakyThrows
     @Override
-    public Action chooseAction() {
-        throw new NoSuchMethodException();
+    public Action chooseAction() { //todo till AgentA
+        var limits = getLimits(getActionProbabilities());
+        throwIfBadLimits(limits);
+        return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
     }
 
     @SneakyThrows
     @Override
-    public void setState(StateI state) {
+    public void setState(StateI<VariablesBandit> state) {
         throw new NoSuchMethodException();
     }
 

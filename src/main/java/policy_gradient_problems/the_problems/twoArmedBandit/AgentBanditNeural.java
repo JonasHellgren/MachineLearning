@@ -11,6 +11,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 
@@ -18,7 +19,7 @@ import java.util.List;
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
-public class AgentBanditNeural  implements AgentI<Integer> {  //todo AgentNeuralPolicyInterface
+public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {  //todo AgentNeuralPolicyInterface
 
     static final int seed = 12345;
     static final double momentum = 0.95;
@@ -34,6 +35,7 @@ public class AgentBanditNeural  implements AgentI<Integer> {  //todo AgentNeural
     }
 
     public AgentBanditNeural(double learningRate) {
+        super(StateBandit.newDefault());
         this.network=createNetwork(learningRate);
     }
 
@@ -45,13 +47,15 @@ public class AgentBanditNeural  implements AgentI<Integer> {  //todo AgentNeural
 
     @SneakyThrows
     @Override
-    public Action chooseAction() {
-        throw new NoSuchMethodException();
+    public Action chooseAction() {  //todo till AgentA
+        var limits = getLimits(getActionProbabilities());
+        throwIfBadLimits(limits);
+        return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
     }
 
     @SneakyThrows
     @Override
-    public void setState(StateI state) {
+    public void setState(StateI<VariablesBandit> state) {
         throw new NoSuchMethodException();
     }
 
@@ -65,9 +69,9 @@ public class AgentBanditNeural  implements AgentI<Integer> {  //todo AgentNeural
 
     private static MultiLayerNetwork createNetwork(double learningRate1) {
         var netSettings= NetSettings.builder()
-                .nHiddenLayers(1).nInput(numInput).nHidden(nHidden).nOutput(numOutputs)
+                .nHiddenLayers(1).nInput(numInput).nHidden(4).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(learningRate1).momentum(momentum).seed(seed)
+                .nofFitsPerEpoch(1).learningRate(learningRate1).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newNotNum())
                 .build();
         return MultiLayerNetworkCreator.create(netSettings);

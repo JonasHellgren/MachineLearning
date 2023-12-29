@@ -3,8 +3,10 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import lombok.Builder;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
-import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
-import policy_gradient_problems.common.ReturnCalculator;
+import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_value_classes.ExperienceOld;
+import policy_gradient_problems.common.ReturnCalculatorOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 /***
@@ -26,13 +28,13 @@ public class TrainerBanditRealVector extends TrainerAbstractBandit {
 
 
     public void train() {
-        var returnCalculator=new ReturnCalculator();
+        var returnCalculator=new ReturnCalculator<VariablesBandit>();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             var experienceList = getExperiences(agent);
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList, parameters.gamma());
-            for (ExperienceDiscreteAction experience:experienceListWithReturns) {
-                var gradLogVector = agent.calcGradLogVector(experience.action());
+            for (Experience<VariablesBandit> experience:experienceListWithReturns) {
+                var gradLogVector = agent.calcGradLogVector(experience.action().asInt());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
                 logging(experience, changeInThetaVector);
@@ -42,7 +44,7 @@ public class TrainerBanditRealVector extends TrainerAbstractBandit {
         }
     }
 
-    private void logging(ExperienceDiscreteAction experience, RealVector changeInThetaVector) {
+    private void logging(Experience<VariablesBandit> experience, RealVector changeInThetaVector) {
         log.fine("experience = " + experience +
                 ", changeInThetaVector = " + changeInThetaVector);
     }

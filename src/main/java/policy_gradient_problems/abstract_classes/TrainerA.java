@@ -2,7 +2,7 @@ package policy_gradient_problems.abstract_classes;
 
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
-import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
+import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.common.TrainingTracker;
 
@@ -28,7 +28,7 @@ public abstract class TrainerA {
         }
     }
 
-    private void logging(ExperienceDiscreteAction experience, RealVector changeInThetaVector) {
+    private void logging(ExperienceOld experience, RealVector changeInThetaVector) {
         System.out.println("experience = " + experience +
                 ", changeInThetaVector = " + changeInThetaVector);
     }

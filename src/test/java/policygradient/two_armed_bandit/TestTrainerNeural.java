@@ -29,7 +29,7 @@ public class TestTrainerNeural {
     }
 
     @Test
-    @Disabled("takes long time")
+    //@Disabled("takes long time")
     public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
@@ -37,7 +37,7 @@ public class TestTrainerNeural {
     }
 
     @Test
-    @Disabled("takes long time")
+    //@Disabled("takes long time")
     public void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
         var environment= EnvironmentBandit.newWithProbabilities(1.0,0.0);
         createTrainer(environment);

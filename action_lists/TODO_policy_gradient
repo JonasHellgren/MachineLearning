@@ -127,7 +127,7 @@ skapa AgentAbstract, innehåller state  x
 namnbyte  Interface -> I Abstract -> A x
 skapa generisk Experience  x
 skapa generisk StepReturn  x
-Generic klasser på bandit
+Generic klasser på bandit  x
 skapa generisk ParamActorTrainer
 ovan på bandit
 fixa gitpush
@@ -135,7 +135,7 @@ skapa generisk NeuralActorTrainer
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 NeuralMemoryPole memory;  //todo flytta till agent
-
+TestReturnCalculator
 stepHorizon(1) buggar
 short corridor med neural policy agent
 cart pole ACNeuralPolicy

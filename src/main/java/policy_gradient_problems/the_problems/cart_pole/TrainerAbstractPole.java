@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.TrainerA;
-import policy_gradient_problems.common.ReturnCalculator;
+import policy_gradient_problems.common.ReturnCalculatorOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class TrainerAbstractPole extends TrainerA {
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
     AgentPole agent;
-    ReturnCalculator returnCalculator=new ReturnCalculator();
+    ReturnCalculatorOld returnCalculator=new ReturnCalculatorOld();
 
     public TrainerAbstractPole(@NonNull EnvironmentPole environment,
                              @NonNull AgentPole agent,

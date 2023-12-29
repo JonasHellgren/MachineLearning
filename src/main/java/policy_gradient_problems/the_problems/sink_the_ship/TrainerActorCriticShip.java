@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common.*;
-import policy_gradient_problems.common.ReturnCalculator;
+import policy_gradient_problems.common.ReturnCalculatorOld;
 import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -34,7 +34,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip  {
 
     private void trainAgentFromExperiences(List<ExperienceContAction> experienceList) {
         double I=1;
-        var returnCalculator=new ReturnCalculator();
+        var returnCalculator=new ReturnCalculatorOld();
         var expListWithReturns=returnCalculator.createExperienceListWithReturnsContActions(experienceList,parameters.gamma());
 
         for (ExperienceContAction experience: expListWithReturns) {

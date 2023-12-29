@@ -3,6 +3,9 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.EnvironmentI;
+import policy_gradient_problems.common_generic.StepReturn;
 
 
 /**
@@ -12,7 +15,7 @@ import lombok.NonNull;
  */
 
 @Builder
-public class EnvironmentBandit {
+public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
 
     public  static int NOF_ACTIONS=2;
     @NonNull  Double probWinningAction0, probWinningAction1;
@@ -23,10 +26,11 @@ public class EnvironmentBandit {
         return EnvironmentBandit.builder().probWinningAction0(prob0).probWinningAction1(prob1).build();
     }
 
-    public double step(int action) {
-        return  action==0
-                ? tryToGetCoins(probWinningAction0)
+    public StepReturn<VariablesBandit> step(Action action) {
+         double reward=(action.asInt()==0)
+                 ? tryToGetCoins(probWinningAction0)
                 : tryToGetCoins(probWinningAction1);
+         return StepReturn.<VariablesBandit>builder().reward(reward).build();
     }
 
     private static double tryToGetCoins(double probWinningAction) {
