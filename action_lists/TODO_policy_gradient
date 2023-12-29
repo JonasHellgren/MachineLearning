@@ -131,7 +131,7 @@ Generic klasser på bandit  x
 skapa generisk ParamActorTrainer x
 ovan på bandit x
 skapa generisk NeuralActorTrainer x
-fixa gitpush
+fixa gitpush x
 generics på ship
 valueFunction i agent
 ParamActorTabularCriticTrainer
