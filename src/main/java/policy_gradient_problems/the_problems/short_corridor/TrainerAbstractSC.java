@@ -2,14 +2,14 @@ package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.abstract_classes.TrainerAbstract;
+import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_value_classes.ExperienceDiscreteAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrainerAbstractSC extends TrainerAbstract {
+public class TrainerAbstractSC extends TrainerA {
 
     public static final double DUMMY_VALUE = 0d;
     @NonNull EnvironmentSC environment;

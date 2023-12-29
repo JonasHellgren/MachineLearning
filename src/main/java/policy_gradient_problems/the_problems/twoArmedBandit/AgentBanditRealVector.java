@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.abstract_classes.AgentInterface;
-import policy_gradient_problems.abstract_classes.StateInterface;
+import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.StateI;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 @Builder
 @Getter
 @Setter
-public class AgentBanditRealVector implements AgentInterface<Integer> {  //todo AgentThetaPolicyInterface
+public class AgentBanditRealVector implements AgentI<Integer> {  //todo AgentThetaPolicyInterface
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final ArrayRealVector ARRAY_REAL_VECTOR =
@@ -56,7 +56,7 @@ public class AgentBanditRealVector implements AgentInterface<Integer> {  //todo 
 
     @SneakyThrows
     @Override
-    public void setState(StateInterface state) {
+    public void setState(StateI state) {
         throw new NoSuchMethodException();
     }
 

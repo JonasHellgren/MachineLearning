@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.abstract_classes.TrainerAbstract;
+import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common.*;
 import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class TrainerAbstractShip extends TrainerAbstract  {
+public class TrainerAbstractShip extends TrainerA {
 
     public static final double DUMMY_VALUE = 0d;
     @NonNull EnvironmentShip environment;

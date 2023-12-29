@@ -12,7 +12,7 @@ import policy_gradient_problems.common.TrainingTracker;
  */
 
 @Log
-public abstract class TrainerAbstract {
+public abstract class TrainerA {
 
     protected TrainingTracker tracker=new TrainingTracker();
     protected TrainerParameters parameters;

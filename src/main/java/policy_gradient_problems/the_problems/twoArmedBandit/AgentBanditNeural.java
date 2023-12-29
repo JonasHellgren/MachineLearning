@@ -11,14 +11,14 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.abstract_classes.AgentInterface;
-import policy_gradient_problems.abstract_classes.StateInterface;
+import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.StateI;
 
 import java.util.List;
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
-public class AgentBanditNeural  implements AgentInterface<Integer>  {  //todo AgentNeuralPolicyInterface
+public class AgentBanditNeural  implements AgentI<Integer> {  //todo AgentNeuralPolicyInterface
 
     static final int seed = 12345;
     static final double momentum = 0.95;
@@ -51,7 +51,7 @@ public class AgentBanditNeural  implements AgentInterface<Integer>  {  //todo Ag
 
     @SneakyThrows
     @Override
-    public void setState(StateInterface state) {
+    public void setState(StateI state) {
         throw new NoSuchMethodException();
     }
 

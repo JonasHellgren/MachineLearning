@@ -1,15 +1,12 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.abstract_classes.TrainerAbstract;
+import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.AgentSC;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.ListIterator;
 
 @AllArgsConstructor
 @Getter
-public class TrainerAbstractPole extends TrainerAbstract {
+public class TrainerAbstractPole extends TrainerA {
 
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;

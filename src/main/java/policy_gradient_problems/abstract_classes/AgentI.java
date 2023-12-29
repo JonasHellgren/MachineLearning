@@ -1,9 +1,9 @@
 package policy_gradient_problems.abstract_classes;
 
-public interface AgentInterface<V> {
+public interface AgentI<V> {
      int chooseActionOld();
 
      Action chooseAction();
-     void setState(StateInterface<V> state);
+     void setState(StateI<V> state);
 
 }
