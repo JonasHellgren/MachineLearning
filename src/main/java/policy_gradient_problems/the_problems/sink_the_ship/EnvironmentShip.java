@@ -19,6 +19,7 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     public static final Map<Integer,Double> DISTANCE_TO_SHIP_MAP = Map.of(0,1000d, 1,2000d);  //<state, distance>
     final double REWARD_HIT = 1, REWARD_MISS = 0;
 
+    @Override
     public StepReturn<VariablesShip> step(StateI<VariablesShip> state, Action action) {
         int pos = state.getVariables().pos();
         boolean isHit=isHitting(pos,action.asDouble());

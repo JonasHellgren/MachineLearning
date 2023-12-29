@@ -8,7 +8,6 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.the_problems.sink_the_ship.StateShip;
-import policy_gradient_problems.the_problems.sink_the_ship.StepReturnShip;
 import policy_gradient_problems.the_problems.sink_the_ship.VariablesShip;
 
 import static common.RandUtils.randomNumberBetweenZeroAndOne;

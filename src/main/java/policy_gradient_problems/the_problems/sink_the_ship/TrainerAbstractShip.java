@@ -45,6 +45,11 @@ public class TrainerAbstractShip extends TrainerA<VariablesShip> {
         this.agent = agent;
     }
 
+    @Override
+    public void train() {
+
+    }
+
     public List<Experience<VariablesShip>> getExperiences(AgentI<VariablesShip> agent) {
         List<Experience<VariablesShip>> experienceList=new ArrayList<>();
         int si = 0;

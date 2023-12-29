@@ -28,6 +28,11 @@ public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
     }
 
 
+    @Override
+    public void train() {
+
+    }
+
     public List<Experience<VariablesBandit>> getExperiences(AgentI<VariablesBandit> agent) {
         List<Experience<VariablesBandit>> experienceList=new ArrayList<>();
         for (int si = 0; si < parameters.nofStepsMax() ; si++) {

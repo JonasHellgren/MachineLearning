@@ -4,9 +4,11 @@ import common.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
+import policy_gradient_problems.common.TabularValueFunction;
 
 import java.util.List;
 import static common.MyFunctions.*;
@@ -42,6 +44,12 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
         return AgentBanditRealVector.builder().thetaVector(new ArrayRealVector(new double[]{t0, t1})).build();
     }
 
+
+    @SneakyThrows
+    @Override
+    public TabularValueFunction getCriticParams() {
+        throw new NoSuchMethodException("No critic for agent");
+    }
 
     public void changeActor(RealVector changeInThetaVector) {
         setThetaVector(getThetaVector().add(changeInThetaVector));

@@ -26,6 +26,9 @@ public class StateShip implements StateI<VariablesShip> {
         return new StateShip(new VariablesShip(pos));
     }
 
+    public int getPos() {
+        return variables.pos();
+    }
 
     @Override
     public StateI<VariablesShip> copy() {
@@ -36,6 +39,6 @@ public class StateShip implements StateI<VariablesShip> {
 
     @Override
     public List<Double> asList() {
-        return List.of((double) variables.pos());
+        return List.of((double) getPos());
     }
 }

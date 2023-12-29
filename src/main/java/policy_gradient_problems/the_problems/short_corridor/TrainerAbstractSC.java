@@ -57,6 +57,11 @@ public class TrainerAbstractSC extends TrainerA {
 
 
     @Override
+    public void train() {
+
+    }
+
+    @Override
     public List<Experience> getExperiences(AgentI agent) {
         return null;
     }

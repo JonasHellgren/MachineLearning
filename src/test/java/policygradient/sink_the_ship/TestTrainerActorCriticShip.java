@@ -53,7 +53,7 @@ public class TestTrainerActorCriticShip {
         System.out.println("policy");
         for (int s: EnvironmentShip.POSITIONS) {
             System.out.println("s = "+s+", agent{mean,std} = " + agent.getMeanAndStdFromThetaVector(s));
-            System.out.println("s = "+s+", trainer value = " + trainer.getValueFunction().getValue(s));
+            System.out.println("s = "+s+", trainer value = " + agent.getCriticParams().getValue(s));
 
 
         }
