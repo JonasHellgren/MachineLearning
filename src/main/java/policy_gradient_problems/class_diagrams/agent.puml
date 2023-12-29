@@ -1,37 +1,37 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-interface AgentInterface<V=generic state variables> {
+interface AgentI<V=generic state variables> {
 + int chooseAction(double probRandom)  //todo int generic
-+ setState(StateInterface<<V>> state);
-'/ + double readValue(StateInterface<<V>> state);  //todo needed?
++ setState(StateI<<V>> state);
+'/ + double readValue(StateI<<V>> state);  //todo needed?
 }
 
-interface AgentThetaActorInterface {
+interface AgentThetaActorI {
 + changeActor(change);
 }
 
-interface AgentNeuralActorInterface {
+interface AgentNeuralActorI {
 + fitActor(in,out);
 }
 
-interface AgentNeuralActorCriticInterface {
+interface AgentNeuralActorCriticI {
 + fitActor(in,out);
 + fitCritic(in,value);
 }
 
-abstract class AgentAbstract {
-'/    EnvironmentInterface<<V>> environment;
-    StateInterface<<V>> state;
+abstract class AgentA {
+'/    EnvironmentI<<V>> environment;
+    StateI<<V>> state;
 }
 
-AgentInterface <|-- AgentAbstract
-AgentInterface <|-- AgentThetaActorInterface
-AgentInterface <|-- AgentNeuralActorInterface
-AgentInterface <|-- AgentNeuralActorCriticInterface
-AgentAbstract  <|-- Agent1
-AgentAbstract  <|-- Agent2
-AgentThetaActorInterface  <|-- Agent1
-AgentNeuralActorInterface  <|-- Agent2
+AgentI <|-- AgentA
+AgentI <|-- AgentThetaActorI
+AgentI <|-- AgentNeuralActorI
+AgentI <|-- AgentNeuralActorCriticI
+AgentA  <|-- Agent1
+AgentA  <|-- Agent2
+AgentThetaActorI  <|-- Agent1
+AgentNeuralActorI  <|-- Agent2
 
 @enduml

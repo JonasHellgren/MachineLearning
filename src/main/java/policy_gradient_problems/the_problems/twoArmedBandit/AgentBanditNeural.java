@@ -5,16 +5,20 @@ import common.ListUtils;
 import common.RandUtils;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
+import lombok.SneakyThrows;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentInterface;
+import policy_gradient_problems.abstract_classes.StateInterface;
+
 import java.util.List;
 import static common.IndexFinder.findBucket;
 import static policy_gradient_problems.common.BucketLimitsHandler.*;
 
-public class AgentBanditNeural implements AgentInterface  {  //todo AgentNeuralPolicyInterface
+public class AgentBanditNeural  implements AgentInterface<Integer>  {  //todo AgentNeuralPolicyInterface
 
     static final int seed = 12345;
     static final double momentum = 0.95;
@@ -33,11 +37,22 @@ public class AgentBanditNeural implements AgentInterface  {  //todo AgentNeuralP
         this.network=createNetwork(learningRate);
     }
 
-    @Override
     public int chooseActionOld() {
         var limits = getLimits(getActionProbabilities());
         throwIfBadLimits(limits);
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
+    }
+
+    @SneakyThrows
+    @Override
+    public Action chooseAction() {
+        throw new NoSuchMethodException();
+    }
+
+    @SneakyThrows
+    @Override
+    public void setState(StateInterface state) {
+        throw new NoSuchMethodException();
     }
 
     public List<Double> getActionProbabilities() {

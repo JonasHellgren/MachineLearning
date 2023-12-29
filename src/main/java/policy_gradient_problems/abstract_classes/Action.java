@@ -1,5 +1,6 @@
 package policy_gradient_problems.abstract_classes;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
@@ -21,12 +22,11 @@ public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
     }
 
     public int asInt() {
-        return intValue.orElseThrow();
+        return intValue.orElseThrow(() -> new NoSuchElementException("Int value not present"));
     }
 
-
     public double asDouble() {
-        return doubleValue.orElseThrow();
+        return doubleValue.orElseThrow(() -> new NoSuchElementException("Double value not present"));
     }
 
 }

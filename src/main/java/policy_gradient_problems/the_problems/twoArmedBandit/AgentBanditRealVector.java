@@ -4,8 +4,11 @@ import common.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentInterface;
+import policy_gradient_problems.abstract_classes.StateInterface;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 @Builder
 @Getter
 @Setter
-public class AgentBanditRealVector implements AgentInterface {  //todo AgentThetaPolicyInterface
+public class AgentBanditRealVector implements AgentInterface<Integer> {  //todo AgentThetaPolicyInterface
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final ArrayRealVector ARRAY_REAL_VECTOR =
@@ -39,11 +42,22 @@ public class AgentBanditRealVector implements AgentInterface {  //todo AgentThet
         return AgentBanditRealVector.builder().thetaVector(new ArrayRealVector(new double[]{t0, t1})).build();
     }
 
-    @Override
     public int chooseActionOld() {
         var limits = getLimits(getActionProbabilities());
         throwIfBadLimits(limits);
         return findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne());
+    }
+
+    @SneakyThrows
+    @Override
+    public Action chooseAction() {
+        throw new NoSuchMethodException();
+    }
+
+    @SneakyThrows
+    @Override
+    public void setState(StateInterface state) {
+        throw new NoSuchMethodException();
     }
 
     public List<Double> actionProbabilities() {

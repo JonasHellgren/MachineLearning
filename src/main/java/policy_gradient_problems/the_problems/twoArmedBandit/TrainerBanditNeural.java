@@ -26,7 +26,7 @@ public class TrainerBanditNeural extends TrainerAbstractBandit {
     public void train() {
         var returnCalculator = new ReturnCalculator();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            var experienceList = getExperiences(agent);
+            var experienceList = super.getExperiences(agent);
             var experienceListWithReturns =
                     returnCalculator.createExperienceListWithReturns(experienceList, parameters.gamma());
 

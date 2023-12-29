@@ -3,44 +3,44 @@
 'https://plantuml.com/class-diagram
 
 
-interface StateInterface<V=generic state variables> {
+interface StateI<V=generic state variables> {
 + V getVariables();
-+ set(StateInterface<V> state);
++ set(StateI<V> state);
 }
 
 
 
 
-interface TrainerInterface<V=generic state variables> {
+interface TrainerI<V=generic state variables> {
 + train()
 }
 
-abstract class TrainerAbstract {
+abstract class TrainerA {
 TrainingTracker tracker
 TrainerParameters parameters
 }
 
-abstract class TrainerAbstractTBD {
-    EnvironmentInterface<<V>> environment;
+abstract class TrainerATBD {
+    EnvironmentI<<V>> environment;
     Agent<<V>> agent;
 }
 
-interface EnvironmentInterface<V=generic state variables> {
-+  StepReturn<<V>> step(StateInterface<<V>> state,int action);
-'/ +  boolean isTerminalState(StateInterface<<V>> state);
+interface EnvironmentI<V=generic state variables> {
++  StepReturn<<V>> step(StateI<<V>> state,int action);
+'/ +  boolean isTerminalState(StateI<<V>> state);
 }
 
 
-EnvironmentInterface <|-- Environment1
-EnvironmentInterface <|-- Environment2
+EnvironmentI <|-- Environment1
+EnvironmentI <|-- Environment2
 
-TrainerInterface <|-- TrainerAbstract
-TrainerAbstract <|-- TrainerAbstractTBD
-TrainerAbstractTBD  <|-- Trainer1
-TrainerAbstractTBD  <|-- Trainer2
+TrainerI <|-- TrainerA
+TrainerA <|-- TrainerTbdA
+TrainerTbdA  <|-- Trainer1
+TrainerTbdA  <|-- Trainer2
 
-StateInterface -[hidden]- EnvironmentInterface
-Environment1 -[hidden]- TrainerInterface
+StateI -[hidden]- EnvironmentI
+Environment1 -[hidden]- TrainerI
 
 
 @enduml
