@@ -24,18 +24,16 @@ public class TrainerBanditNeural extends TrainerAbstractBandit {
     }
 
     public void train() {
-        var returnCalculator = new ReturnCalculator<VariablesBandit>();
+        var rc = new ReturnCalculator<VariablesBandit>();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             var experienceList = super.getExperiences(agent);
-            var experienceListWithReturns =
-                    returnCalculator.createExperienceListWithReturns(experienceList, parameters.gamma());
-
-            for (Experience<VariablesBandit> experience : experienceListWithReturns) {
+            var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
+            for (Experience<VariablesBandit> experience : elwr) {
                 INDArray oneHotVector = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
                 oneHotVector.putScalar(experience.action().asInt(), experience.value());
                 agent.fit(oneHotVector);  //there is no state for bandit problems
             }
-            tracker.addMeasures(ei, 0, agent.getActionProbabilities());
+            tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
         }
     }
 }

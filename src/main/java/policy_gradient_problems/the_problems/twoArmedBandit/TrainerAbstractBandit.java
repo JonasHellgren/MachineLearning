@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class TrainerAbstractBandit extends TrainerA {
+public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
 
     final double DUMMY_VALUE = 0d;
     final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();

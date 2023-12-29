@@ -2,7 +2,9 @@ package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.ArrayList;
@@ -54,4 +56,8 @@ public class TrainerAbstractSC extends TrainerA {
     }
 
 
+    @Override
+    public List<Experience> getExperiences(AgentI agent) {
+        return null;
+    }
 }

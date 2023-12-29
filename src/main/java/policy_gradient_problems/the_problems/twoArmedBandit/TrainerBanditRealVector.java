@@ -5,8 +5,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
-import policy_gradient_problems.common_value_classes.ExperienceOld;
-import policy_gradient_problems.common.ReturnCalculatorOld;
+import policy_gradient_problems.common_trainers.ParamActorTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 /***
@@ -26,21 +25,30 @@ public class TrainerBanditRealVector extends TrainerAbstractBandit {
         this.agent=agent;
     }
 
-
     public void train() {
-        var returnCalculator=new ReturnCalculator<VariablesBandit>();
+
+        var rc=new ReturnCalculator<VariablesBandit>();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             var experienceList = getExperiences(agent);
-            var experienceListWithReturns =
-                    returnCalculator.createExperienceListWithReturns(experienceList, parameters.gamma());
-            for (Experience<VariablesBandit> experience:experienceListWithReturns) {
+            ParamActorTrainer<VariablesBandit> episodeTrainer= new ParamActorTrainer<>(agent,parameters);
+            episodeTrainer.trainFromEpisode(experienceList);
+            super.tracker.addMeasures(ei,0,agent.actionProbabilities());
+        }
+    }
+
+    public void trainOld() {
+        var rc=new ReturnCalculator<VariablesBandit>();
+        for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
+            var experienceList = getExperiences(agent);
+            var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
+            for (Experience<VariablesBandit> experience:elwr) {
                 var gradLogVector = agent.calcGradLogVector(experience.action().asInt());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
                 logging(experience, changeInThetaVector);
-                agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+                agent.changeActor(changeInThetaVector);
             }
-            tracker.addMeasures(ei,0,agent.actionProbabilities());
+            super.tracker.addMeasures(ei,0,agent.actionProbabilities());
         }
     }
 

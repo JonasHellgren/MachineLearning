@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
+
 import java.util.List;
 import static common.MyFunctions.*;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
@@ -19,7 +22,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentI<VariablesBandit> {
+public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentParamActorI<VariablesBandit> {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final ArrayRealVector VECTOR = new ArrayRealVector(new double[]{THETA0, THETA1});
@@ -45,10 +48,15 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
         return actionProbabilities(thetaVector.toArray());
     }
 
+    public void changeActor(RealVector changeInThetaVector) {
+        setThetaVector(getThetaVector().add(changeInThetaVector));
+    }
+
     public ArrayRealVector calcGradLogVector(int action) {
         return new ArrayRealVector(calculateGradLog(action, getActionProbabilities()));
     }
 
+    //todo same as above
     public List<Double> getActionProbabilities() {
         return actionProbabilities(thetaVector.toArray());
     }

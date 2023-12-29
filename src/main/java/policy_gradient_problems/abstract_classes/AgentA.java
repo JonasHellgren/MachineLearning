@@ -3,6 +3,7 @@ package policy_gradient_problems.abstract_classes;
 import common.ListUtils;
 import common.RandUtils;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
@@ -13,6 +14,7 @@ import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
 import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
 
 @Setter
+@Getter
 @AllArgsConstructor
 public abstract class AgentA<V> implements AgentI<V> {
 

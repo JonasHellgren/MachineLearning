@@ -4,8 +4,10 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common.*;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -61,7 +63,8 @@ public class TrainerAbstractShip extends TrainerA {
     }
 
 
-
-
-
+    @Override
+    public List<Experience> getExperiences(AgentI agent) {
+        return null;
+    }
 }

@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common.ReturnCalculatorOld;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
@@ -68,4 +70,8 @@ public class TrainerAbstractPole extends TrainerA {
         return experienceListNew;
     }
 
+    @Override
+    public List<Experience> getExperiences(AgentI agent) {
+        return null;
+    }
 }
