@@ -21,7 +21,8 @@ public class TrainerBanditNeural extends TrainerAbstractBandit {
     }
 
     public void train() {
-        NeuralActorTrainer<VariablesBandit> episodeTrainer=new NeuralActorTrainer<>(agent,parameters);
+        NeuralActorTrainer<VariablesBandit> episodeTrainer=
+                new NeuralActorTrainer<>(agent,parameters,EnvironmentBandit.NOF_ACTIONS);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
             tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());

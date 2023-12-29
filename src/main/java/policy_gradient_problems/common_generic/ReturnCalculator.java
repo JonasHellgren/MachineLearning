@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 
-//todo test
+//todo test & static methods
 public class ReturnCalculator<S> {
 
     public List<Experience<S>>  createExperienceListWithReturns(List<Experience<S>> experienceList,

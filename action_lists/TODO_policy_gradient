@@ -132,6 +132,10 @@ skapa generisk ParamActorTrainer x
 ovan på bandit x
 skapa generisk NeuralActorTrainer x
 fixa gitpush
+generics på ship
+valueFunction i agent
+ParamActorTabularCriticTrainer
+
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 NeuralMemoryPole memory;  //todo flytta till agent
