@@ -44,9 +44,6 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
         return AgentBanditRealVector.builder().thetaVector(new ArrayRealVector(new double[]{t0, t1})).build();
     }
 
-    public List<Double> actionProbabilities() {
-        return actionProbabilities(thetaVector.toArray());
-    }
 
     public void changeActor(RealVector changeInThetaVector) {
         setThetaVector(getThetaVector().add(changeInThetaVector));
@@ -56,7 +53,6 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
         return new ArrayRealVector(calculateGradLog(action, getActionProbabilities()));
     }
 
-    //todo same as above
     public List<Double> getActionProbabilities() {
         return actionProbabilities(thetaVector.toArray());
     }

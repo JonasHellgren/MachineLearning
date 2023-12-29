@@ -26,37 +26,11 @@ public class TrainerBanditRealVector extends TrainerAbstractBandit {
     }
 
     public void train() {
-
-        var rc=new ReturnCalculator<VariablesBandit>();
+        ParamActorTrainer<VariablesBandit> episodeTrainer= new ParamActorTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            var experienceList = getExperiences(agent);
-            ParamActorTrainer<VariablesBandit> episodeTrainer= new ParamActorTrainer<>(agent,parameters);
-            episodeTrainer.trainFromEpisode(experienceList);
-            super.tracker.addMeasures(ei,0,agent.actionProbabilities());
+            episodeTrainer.trainFromEpisode(getExperiences(agent));
+            super.tracker.addMeasures(ei,agent.getState().getVariables().arm(),agent.getActionProbabilities());
         }
     }
-
-    public void trainOld() {
-        var rc=new ReturnCalculator<VariablesBandit>();
-        for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            var experienceList = getExperiences(agent);
-            var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
-            for (Experience<VariablesBandit> experience:elwr) {
-                var gradLogVector = agent.calcGradLogVector(experience.action().asInt());
-                double vt = experience.value();
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
-                logging(experience, changeInThetaVector);
-                agent.changeActor(changeInThetaVector);
-            }
-            super.tracker.addMeasures(ei,0,agent.actionProbabilities());
-        }
-    }
-
-    private void logging(Experience<VariablesBandit> experience, RealVector changeInThetaVector) {
-        log.fine("experience = " + experience +
-                ", changeInThetaVector = " + changeInThetaVector);
-    }
-
-
 
 }

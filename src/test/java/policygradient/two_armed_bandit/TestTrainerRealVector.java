@@ -48,7 +48,7 @@ public class TestTrainerRealVector {
 
 
     private void printPolicy() {
-        System.out.println("agent.piTheta() = " + agent.actionProbabilities());
+        System.out.println("agent.piTheta() = " + agent.getActionProbabilities());
     }
 
 

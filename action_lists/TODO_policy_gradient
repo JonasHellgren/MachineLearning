@@ -128,8 +128,8 @@ namnbyte  Interface -> I Abstract -> A x
 skapa generisk Experience  x
 skapa generisk StepReturn  x
 Generic klasser på bandit  x
-skapa generisk ParamActorTrainer
-ovan på bandit
+skapa generisk ParamActorTrainer x
+ovan på bandit x
 fixa gitpush
 skapa generisk NeuralActorTrainer
 skapa generisk ParamCriticNeuralActorTrainer
