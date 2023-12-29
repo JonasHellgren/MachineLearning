@@ -3,38 +3,34 @@ package policy_gradient_problems.the_problems.sink_the_ship;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
 import policy_gradient_problems.common_trainers.ParamActorTabCriticTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
-import java.util.List;
-
 @Getter
-public class TrainerActorCriticShip extends TrainerAbstractShip  {
+public class TrainerActorCriticShip extends TrainerAbstractShip {
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerActorCriticShip(@NonNull EnvironmentShip environment,
-                                @NonNull AgentShip agent,
-                                @NonNull TrainerParameters parameters) {
+                                  @NonNull AgentShip agent,
+                                  @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
     }
 
     public void train() {
-        ParamActorTabCriticTrainer<VariablesShip> episodeTrainer=
+        ParamActorTabCriticTrainer<VariablesShip> episodeTrainer =
                 ParamActorTabCriticTrainer.<VariablesShip>builder()
-                .agent(agent)
-                .parameters(parameters)
-                .valueTermState(VALUE_TERMINAL_STATE)
-                .tabularCoder((v) -> v.pos() )
-                .build();
+                        .agent(agent)
+                        .parameters(parameters)
+                        .valueTermState(VALUE_TERMINAL_STATE)
+                        .tabularCoder((v) -> v.pos())
+                        .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setRandomState();
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei,agent.getCriticParams());
+            updateTracker(ei, agent.getCriticParams());
         }
     }
 }

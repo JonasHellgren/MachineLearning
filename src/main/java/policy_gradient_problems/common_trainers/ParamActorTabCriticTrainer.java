@@ -2,7 +2,6 @@ package policy_gradient_problems.common_trainers;
 
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.Setter;
 import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.common.TabularValueFunction;
 import policy_gradient_problems.common_generic.Experience;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.function.Function;
 
 @Builder
-@Setter
 public class ParamActorTabCriticTrainer<V> {
     @NonNull AgentParamActorI<V> agent;
     @NonNull TrainerParameters parameters;
@@ -26,8 +24,8 @@ public class ParamActorTabCriticTrainer<V> {
         for (Experience<V> experience: elwr) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
-            int tc = getTabularCoder(experience);
-            getCriticParams().updateFromExperience(tc, I*delta, parameters.learningRateCritic());
+            int key = getTabularFunctionKey(experience);
+            getCriticParams().updateFromExperience(key, I*delta, parameters.learningRateCritic());
             var change = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor()* I *delta);
             agent.changeActor(change);
             I = I *parameters.gamma();
@@ -38,12 +36,12 @@ public class ParamActorTabCriticTrainer<V> {
         return agent.getCriticParams();
     }
 
-    private int getTabularCoder(Experience<V> experience) {
+    private int getTabularFunctionKey(Experience<V> experience) {
         return tabularCoder.apply(experience.state().getVariables());
     }
 
     private double calcDelta(Experience<V> experience) {
-        double v= getCriticParams().getValue(getTabularCoder(experience));
+        double v= getCriticParams().getValue(getTabularFunctionKey(experience));
         return experience.reward()+parameters.gamma()*valueTermState-v;
     }
 
