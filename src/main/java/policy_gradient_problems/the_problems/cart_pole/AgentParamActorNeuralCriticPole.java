@@ -19,14 +19,13 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
     NetSettings criticSettings;
     ParametersPole parametersPole;
 
-    public AgentParamActorNeuralCriticPole newDefaultCritic(StateI<VariablesPole> stateStart,
-                                           RealVector actorParam) {
+    public static AgentParamActorNeuralCriticPole newDefaultCritic(StateI<VariablesPole> stateStart) {
         NetSettings netSettings = NetSettings.builder()
                 .nHidden(10)
                 .learningRate(1e-3).build();
         return  AgentParamActorNeuralCriticPole.builder()
-                .stateStart(stateStart).actorParam(actorParam)
-                .criticSettings(criticSettings).parametersPole(ParametersPole.newDefault()).build();
+                .stateStart(stateStart).actorParam(AgentParamActorPoleHelper.getInitThetaVector())
+                .criticSettings(netSettings).parametersPole(ParametersPole.newDefault()).build();
     }
 
     @Builder
@@ -46,6 +45,11 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
     @Override
     public void fitCritic(List<List<Double>> in, List<Double> out, int nofFits) {
         critic.fit(in,out,nofFits);
+    }
+
+    @Override
+    public double getCriticOut(StateI<VariablesPole> state) {
+        return critic.getOutValue(state);
     }
 
     public AgentParamActorNeuralCriticPole copy() {

@@ -23,14 +23,11 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
-    AgentParamActorPole agent;
     ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
     public TrainerAbstractPole(@NonNull EnvironmentPole environment,
-                             @NonNull AgentParamActorPole agent,
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
-        this.agent = agent;
         super.parameters=parameters;
     }
 
@@ -39,11 +36,8 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
         tracker.addMeasures(ei,0, nofSteps);
     }
 
-    public void setAgent(@NotNull AgentParamActorPole agent) {
-        this.agent = agent;
-    }
 
-    public List<Experience<VariablesPole>> getExperiences() {
+    public List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {
         List<Experience<VariablesPole>> experienceList=new ArrayList<>();
         int si = 0;
         StepReturn<VariablesPole> sr;
@@ -79,8 +73,4 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
     }
 
-    @Override
-    public List<Experience<VariablesPole>> getExperiences(AgentI agent) {
-        return null;
-    }
 }

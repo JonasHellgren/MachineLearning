@@ -141,8 +141,8 @@ clean up sc  x
 generisk trainer sc x
 
 pole generisk  x
-AgentPole -> AgentParamActorPole, AgentParamActorNeuralCriticPole
-NeuralMemoryPole memory;  //todo flytta till agent
+AgentPole -> AgentParamActorPole, AgentParamActorNeuralCriticPole  x
+skapa AgentParamActorI
 TrainerVanillaPole använder AgentParamActorPole
 TrainerParamActorNeuralCriticPole använder AgentParamActorPoleNeuralCritic
 skapa generisk ParamActorNeuralMultiStepCriticTrainer

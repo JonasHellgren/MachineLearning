@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
+import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.common.WeightsDotProductFeatureValueFunction;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -12,21 +14,24 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 @Getter
 public class TrainerBaselinePole extends TrainerAbstractPole {
 
+    AgentParamActorTabCriticI<VariablesPole> agent;
+
     public static final int NOF_FEATURES = 3;
     WeightsDotProductFeatureValueFunction valueFunction;
 
     @Builder
     public TrainerBaselinePole(@NonNull EnvironmentPole environment,
-                              @NonNull AgentParamActorPole agent,
+                              @NonNull AgentParamActorTabCriticI<VariablesPole> agent,
                               @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters);
+        super(environment, parameters);
+        this.agent=agent;
         this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.learningRateCritic());
     }
 
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
-            var experienceList = getExperiences();
+            var experienceList = getExperiences(agent);
             var experienceListWithReturns =
                     super.createExperienceListWithReturns(experienceList,parameters.gamma());
             for (Experience<VariablesPole> experience:experienceListWithReturns) {

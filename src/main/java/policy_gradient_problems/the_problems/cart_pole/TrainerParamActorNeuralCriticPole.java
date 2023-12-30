@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -35,24 +36,21 @@ import static common.Conditionals.executeIfTrue;
 @Getter
 public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
 
-    NeuralMemoryPole memory;  //todo flytta till agent
+    AgentParamActorNeuralCriticI<VariablesPole> agent;
 
     @Builder
     public TrainerParamActorNeuralCriticPole(@NonNull EnvironmentPole environment,
-                                             @NonNull AgentParamActorPole agent,
+                                             @NonNull AgentParamActorNeuralCriticI<VariablesPole> agent,
                                              @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters);
-        NetSettings netSettings = NetSettings.builder()
-                .nHidden(10)
-                .learningRate(parameters.learningRateCritic()).build();
-        this.memory = new NeuralMemoryPole(netSettings, environment.getParameters());
+        super(environment, parameters);
+        this.agent=agent;
     }
 
     public void train() {
         Integer n = parameters.stepHorizon();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
-            var experiences = getExperiences();
+            var experiences = getExperiences(agent);
             updateCritic(n, experiences);
             updateActor(experiences);
             printIfSuccessFul(ei, experiences);
@@ -73,13 +71,13 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
            // executeIfTrue(resMS.isEndOutside(), () -> log.info("Warning isEndOutside"));
             double sumRewards = resMS.sumRewardsNSteps();
             double valueFut = (resMS.stateFuture().isPresent())
-                    ? gammaPowN * memory.getOutValue(resMS.stateFuture().orElseThrow())
+                    ? gammaPowN * agent.getCriticOut(resMS.stateFuture().orElseThrow())
                     : 0;
             stateValuesList.add(elInfo.getExperience(t).state().asList());
             valueTarList.add(sumRewards + valueFut);
         }
         int nofFits = (int) Math.max(1,(parameters.relativeNofFitsPerEpoch() * tEnd));  //todo get from record method
-        executeIfTrue(!stateValuesList.isEmpty(), () -> memory.fit(stateValuesList, valueTarList, nofFits));
+        executeIfTrue(!stateValuesList.isEmpty(), () -> agent.fitCritic(stateValuesList, valueTarList, nofFits));
         executeIfTrue(stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
         stateValuesList.clear();
         valueTarList.clear();
@@ -105,8 +103,8 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
      */
     double calcAdvantage(Experience<VariablesPole> expAtTau) {
         double r = expAtTau.reward();
-        Double valueS = memory.getOutValue(expAtTau.state());
-        Double valueSNew = memory.getOutValue(expAtTau.stateNext());
+        double valueS = agent.getCriticOut(expAtTau.state());
+        double valueSNew = agent.getCriticOut(expAtTau.stateNext());
         boolean isActionResultingInFailState = expAtTau.isFail();
         return (isActionResultingInFailState) ? r : r + parameters.gamma() * valueSNew - valueS;
     }

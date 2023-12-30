@@ -2,12 +2,13 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import common.Counter;
 import lombok.Builder;
+import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.common_generic.StepReturn;
 
 @Builder
 public class PoleAgentOneEpisodeRunner {
     EnvironmentPole environment;
-    AgentParamActorPole agent;
+    AgentI<VariablesPole> agent;
 
     public int runTrainedAgent(StatePole stateStart) {
         agent.setState(stateStart);
