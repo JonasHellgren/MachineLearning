@@ -1,17 +1,15 @@
 package policygradient.two_armed_bandit;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.twoArmedBandit.*;
 
 public class TestTrainerNeural {
 
-    TrainerBanditNeural trainer;
-    AgentBanditNeural agent;
+    TrainerBanditNeuralActor trainer;
+    AgentBanditNeuralActor agent;
 
     @BeforeEach
     public void init() {
@@ -21,7 +19,7 @@ public class TestTrainerNeural {
     }
 
     private void createTrainer(EnvironmentBandit environment) {
-        trainer = TrainerBanditNeural.builder()
+        trainer = TrainerBanditNeuralActor.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(100).nofStepsMax(1).gamma(1d).learningRateActor(1e-1).build())

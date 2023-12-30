@@ -1,14 +1,11 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
 import common_dl4j.NetSettings;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
 import policy_gradient_problems.common.ParamFunction;
-import policy_gradient_problems.common.TabularValueFunction;
-
 import java.util.List;
 
 public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> implements AgentParamActorNeuralCriticI<VariablesPole> {

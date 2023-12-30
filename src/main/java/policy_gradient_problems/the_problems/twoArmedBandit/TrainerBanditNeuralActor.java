@@ -8,16 +8,16 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Log
 @Getter
-public class TrainerBanditNeural extends TrainerAbstractBandit {
+public class TrainerBanditNeuralActor extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
-    AgentBanditNeural agent;
+    AgentBanditNeuralActor agent;
 
     @Builder
-    public TrainerBanditNeural(EnvironmentBandit environment,
-                               TrainerParameters parameters) {
+    public TrainerBanditNeuralActor(EnvironmentBandit environment,
+                                    TrainerParameters parameters) {
         super(environment, parameters);
-        this.agent = new AgentBanditNeural(parameters.learningRateActor());
+        this.agent = new AgentBanditNeuralActor(parameters.learningRateActor());
     }
 
     public void train() {

@@ -5,23 +5,28 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.common.WeightsDotProductFeatureValueFunction;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
+/**
+ * Not perfectly clean having valueFunction in trainer, but too much hassle creating specific agent
+ */
+
 @Getter
 public class TrainerBaselinePole extends TrainerAbstractPole {
 
-    AgentParamActorTabCriticI<VariablesPole> agent;
+    AgentParamActorI<VariablesPole> agent;
 
     public static final int NOF_FEATURES = 3;
     WeightsDotProductFeatureValueFunction valueFunction;
 
     @Builder
     public TrainerBaselinePole(@NonNull EnvironmentPole environment,
-                              @NonNull AgentParamActorTabCriticI<VariablesPole> agent,
+                              @NonNull AgentParamActorI<VariablesPole> agent,
                               @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;

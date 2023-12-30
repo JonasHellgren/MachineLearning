@@ -23,7 +23,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentParamActorTabCriticI<VariablesBandit> {
+public class AgentBanditParamActor extends AgentA<VariablesBandit> implements AgentParamActorI<VariablesBandit> {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final double[] VECTOR = new double[]{THETA0, THETA1};
@@ -32,25 +32,18 @@ public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements A
     int nofActions;
 
     @Builder
-    public AgentBanditRealVector(ParamFunction actor, int nofActions) {
+    public AgentBanditParamActor(ParamFunction actor, int nofActions) {
         super(StateBandit.newDefault());
         this.actor = (ParamFunction) defaultIfNullObject.apply(actor,new ParamFunction(VECTOR));
         this.nofActions = defaultIfNullInteger.apply(nofActions, VECTOR.length);
     }
 
-    public static AgentBanditRealVector newDefault() {
-        return AgentBanditRealVector.builder().build();
+    public static AgentBanditParamActor newDefault() {
+        return AgentBanditParamActor.builder().build();
     }
 
-    public static AgentBanditRealVector newWithThetas(double t0, double t1) {
-        return AgentBanditRealVector.builder().actor(new ParamFunction(new double[]{t0, t1})).build();
-    }
-
-
-    @SneakyThrows
-    @Override
-    public TabularValueFunction getCritic() {
-        throw new NoSuchMethodException("No critic for agent");
+    public static AgentBanditParamActor newWithThetas(double t0, double t1) {
+        return AgentBanditParamActor.builder().actor(new ParamFunction(new double[]{t0, t1})).build();
     }
 
     @Override

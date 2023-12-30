@@ -2,6 +2,7 @@ package policy_gradient_problems.common_trainers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ParamActorTrainer<V> {
 
-    AgentParamActorTabCriticI<V> agent;
+    AgentParamActorI<V> agent;
     TrainerParameters parameters;
 
     public void trainFromEpisode(List<Experience<V>> experienceList) {

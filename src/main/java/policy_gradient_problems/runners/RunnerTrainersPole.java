@@ -45,7 +45,7 @@ public class RunnerTrainersPole {
 
     private static List<Double> getNofStepsListBaseline(AgentParamActorPole agent, EnvironmentPole environment) {
         var trainerBaseline = TrainerBaselinePole.builder()
-                .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
+                .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
 
         //System.out.println("baseline thetaVector() = " + trainerBaseline.getAgent().getActor());

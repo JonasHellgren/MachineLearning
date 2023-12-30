@@ -4,24 +4,24 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.twoArmedBandit.AgentBanditRealVector;
+import policy_gradient_problems.the_problems.twoArmedBandit.AgentBanditParamActor;
 import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
-import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBanditRealVector;
+import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBanditParamActor;
 
 public class TestBanditTrainerRealVector {
 
-    TrainerBanditRealVector trainer;
-    AgentBanditRealVector agent;
+    TrainerBanditParamActor trainer;
+    AgentBanditParamActor agent;
 
     @BeforeEach
     public void init() {
-        agent = AgentBanditRealVector.newDefault();
+        agent = AgentBanditParamActor.newDefault();
         var environment= EnvironmentBandit.newWithProbabilities(0.5,1.0);
         createTrainer(environment);
     }
 
     private void createTrainer(EnvironmentBandit environment) {
-        trainer = TrainerBanditRealVector.builder()
+        trainer = TrainerBanditParamActor.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

@@ -9,12 +9,11 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.AgentNeuralActorI;
 
 import java.util.List;
 
-public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
+public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
 
     static final int numInput = 1;
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
@@ -22,11 +21,11 @@ public class AgentBanditNeural extends AgentA<VariablesBandit> implements AgentN
 
     MultiLayerNetwork actorMemory;
 
-    public static AgentBanditNeural newDefault(double learningRate) {
-        return new AgentBanditNeural(learningRate);
+    public static AgentBanditNeuralActor newDefault(double learningRate) {
+        return new AgentBanditNeuralActor(learningRate);
     }
 
-    public AgentBanditNeural(double learningRate) {
+    public AgentBanditNeuralActor(double learningRate) {
         super(DUMMY_STATE);
         this.actorMemory =createNetwork(learningRate);
     }
