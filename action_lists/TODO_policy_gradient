@@ -138,8 +138,9 @@ ParamActorTabularCriticTrainer x
 sc generisk  x
 valueFunction i agent sc  x
 clean up sc  x
-generisk trainer sc
+generisk trainer sc x
 
+pole generisk
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 NeuralMemoryPole memory;  //todo flytta till agent

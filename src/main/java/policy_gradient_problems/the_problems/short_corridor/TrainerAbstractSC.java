@@ -8,6 +8,7 @@ import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +24,12 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
         this.agent = agent;
-        super.parameters=parameters;
+        super.parameters = parameters;
     }
 
     void updateTracker(int ei) {
-        for (int s: EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei,s, agent.calcActionProbsInObsState(s));
+        for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
+            tracker.addMeasures(ei, s, agent.calcActionProbsInObsState(s));
         }
     }
 
@@ -37,30 +38,33 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
     }
 
     public List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
-        List<Experience<VariablesSC>> experienceList=new ArrayList<>();
+        List<Experience<VariablesSC>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<VariablesSC> sr;
-        do  {
-            Action action=agent.chooseAction();
-            int  observerdPosOld = EnvironmentSC.getObservedPos(agent.getState());
-            sr=environment.step(agent.getState(),action);
-            agent.setState(sr.state());
-            int observerdPosNew= EnvironmentSC.getObservedPos(sr.state());
-            experienceList.add(new Experience<>(
-                    StateSC.newFromPos(observerdPosOld),
-                    action,
-                    sr.reward(),
-                    StateSC.newFromPos(observerdPosNew),
-                    DUMMY_VALUE));
+        do {
+            var action = agent.chooseAction();
+            sr = environment.step(agent.getState(), action);
+            experienceList.add(createExperience(sr, action, agent));
             si++;
-        } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
+            agent.setState(sr.state());
+        } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
+    }
+
+    private Experience<VariablesSC> createExperience(StepReturn<VariablesSC> sr,
+                                                     Action action,
+                                                     AgentI<VariablesSC> agent) {
+        return new Experience<>(
+                StateSC.newFromPos(EnvironmentSC.getObservedPos(agent.getState())),
+                action,
+                sr.reward(),
+                StateSC.newFromPos(EnvironmentSC.getObservedPos(sr.state())),
+                DUMMY_VALUE);
     }
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
-
 
     @Override
     public void train() {
