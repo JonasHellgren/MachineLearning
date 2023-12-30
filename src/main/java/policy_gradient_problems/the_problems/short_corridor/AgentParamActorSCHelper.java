@@ -11,6 +11,7 @@ import policy_gradient_problems.common.SubArrayExtractor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
@@ -48,7 +49,11 @@ public class AgentParamActorSCHelper {
         return EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES * NOF_ACTIONS;
     }
 
-
+    public static double[] getArrayWithEqualThetas() {
+        return createArrayWithSameDoubleNumber(
+                AgentParamActorSCHelper.getThetaLength(),
+                AgentParamActorSCHelper.THETA);
+    }
 
     void throwIfBadObsState(int stateObserved) {
         if (!EnvironmentSC.SET_OBSERVABLE_STATES.contains(stateObserved)) {

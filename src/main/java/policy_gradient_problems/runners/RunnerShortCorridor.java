@@ -13,19 +13,15 @@ public class RunnerShortCorridor {
     public static final double LEARNING_RATE = 0.05, GAMMA = 1.0, BETA = 0.1;
 
     public static void main(String[] args) {
-        var trainer = createTrainer(EnvironmentSC.create(), AgentParamActorSC.newRandomStartStateDefaultThetas());
+        var trainer = createTrainer(AgentParamActorSC.newRandomStartStateDefaultThetas());
         trainer.train();
         plotActionProbabilitiesDuringTraining("Vanilla", trainer);
 
-        var trainerBaseline = createTrainerBaseline(
-                EnvironmentSC.create(),
-                AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
+        var trainerBaseline = createTrainerBaseline(AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
         trainerBaseline.train();
         plotActionProbabilitiesDuringTraining("Baseline", trainerBaseline);
 
-        var trainerActorCritic = createTrainerActorCritic(
-                EnvironmentSC.create(),
-                AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
+        var trainerActorCritic = createTrainerActorCritic(AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
         plotActionProbabilitiesDuringTraining("ActorCritic", trainerActorCritic);
     }
@@ -38,25 +34,23 @@ public class RunnerShortCorridor {
         }
     }
 
-    private static TrainerVanillaSC createTrainer(EnvironmentSC environment, AgentParamActorSC agent) {
+    private static TrainerVanillaSC createTrainer(AgentParamActorSC agent) {
         return TrainerVanillaSC.builder()
-                .environment(environment).agent(agent)
+                .environment(EnvironmentSC.create()).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();
     }
 
-    private static TrainerBaselineSC createTrainerBaseline(EnvironmentSC environment,
-                                                           AgentParamActorTabCriticSC agent) {
+    private static TrainerBaselineSC createTrainerBaseline(AgentParamActorTabCriticSC agent) {
         return TrainerBaselineSC.builder()
-                .environment(environment).agent(agent)
+                .environment(EnvironmentSC.create()).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();
     }
 
-    private static TrainerActorCriticSC createTrainerActorCritic(EnvironmentSC environment,
-                                                                 AgentParamActorTabCriticSC agent) {
+    private static TrainerActorCriticSC createTrainerActorCritic(AgentParamActorTabCriticSC agent) {
         return TrainerActorCriticSC.builder()
-                .environment(environment).agent(agent)
+                .environment(EnvironmentSC.create()).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();
     }

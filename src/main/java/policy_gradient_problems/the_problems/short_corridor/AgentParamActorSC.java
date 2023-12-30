@@ -7,8 +7,6 @@ import policy_gradient_problems.abstract_classes.*;
 import policy_gradient_problems.common.ParamFunction;
 import java.util.List;
 
-import static common.ArrayUtil.createArrayWithSameDoubleNumber;
-
 @Getter
 public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParamActorI<VariablesSC> {
 
@@ -16,10 +14,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     AgentParamActorSCHelper helper;
 
     public static AgentParamActorSC newRandomStartStateDefaultThetas() {
-        return newWithRandomStartStateAndGivenThetas(
-                createArrayWithSameDoubleNumber(
-                        AgentParamActorSCHelper.getThetaLength(),
-                        AgentParamActorSCHelper.THETA));
+        return newWithRandomStartStateAndGivenThetas(AgentParamActorSCHelper.getArrayWithEqualThetas());
     }
 
     public static AgentParamActorSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
@@ -29,7 +24,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     public AgentParamActorSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromPos(posStart));
         this.actor = new ParamFunction(thetaArray);
-        this.helper=new AgentParamActorSCHelper(actor);
+        this.helper = new AgentParamActorSCHelper(actor);
     }
 
     @Override

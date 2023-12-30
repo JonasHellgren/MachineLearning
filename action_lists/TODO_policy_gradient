@@ -177,7 +177,6 @@ strategi sätta ihop mcts med pg problems
 alphazero på cartpole
 
 
-
 bubblare/ned prioriterat:
 gradLog with finite diff
 skapa generisk ParamActorNeuralMultiStepCriticTrainer

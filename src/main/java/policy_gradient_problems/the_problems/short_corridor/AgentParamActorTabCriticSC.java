@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
@@ -34,10 +35,7 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
     AgentParamActorSCHelper helper;
 
     public static AgentParamActorTabCriticSC newRandomStartStateDefaultThetas() {
-        return newWithRandomStartStateAndGivenThetas(
-                createArrayWithSameDoubleNumber(
-                        AgentParamActorSCHelper.getThetaLength(),
-                        AgentParamActorSCHelper.THETA));
+        return newWithRandomStartStateAndGivenThetas(AgentParamActorSCHelper.getArrayWithEqualThetas());
     }
 
     public static AgentParamActorTabCriticSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
@@ -48,7 +46,7 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
         super(StateSC.newFromPos(posStart));
         this.actor = new ParamFunction(thetaArray);
         this.critic = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
-        this.helper=new AgentParamActorSCHelper(actor);
+        this.helper = new AgentParamActorSCHelper(actor);
     }
 
     @Override
