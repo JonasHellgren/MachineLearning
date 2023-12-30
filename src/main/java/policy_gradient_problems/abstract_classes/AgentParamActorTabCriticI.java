@@ -6,7 +6,7 @@ import policy_gradient_problems.common.TabularValueFunction;
 
 import java.util.List;
 
-public interface AgentParamActorI<V> extends AgentI<V> {
+public interface AgentParamActorTabCriticI<V> extends AgentI<V> {
     TabularValueFunction getCritic();
     void changeActor(RealVector change);
     ArrayRealVector calcGradLogVector(StateI<V> state,Action action);

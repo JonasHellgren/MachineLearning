@@ -1,9 +1,7 @@
 package policy_gradient_problems.the_problems.twoArmedBandit;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.StateI;
 
 import java.util.List;
@@ -30,5 +28,11 @@ public class StateBandit implements StateI<VariablesBandit> {
     @Override
     public List<Double> asList() {
         return List.of((double) variables.arm());
+    }
+
+    @SneakyThrows
+    @Override
+    public RealVector asRealVector() {
+        throw new NoSuchMethodException();
     }
 }

@@ -3,6 +3,9 @@ package policygradient.cart_pole;
 import common.Counter;
 import common.RandUtils;
 import org.junit.jupiter.api.*;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.cart_pole.*;
 
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ public class TestEnvironmentPole {
     private static final int NOT_TRIALS = 1000;
 
     EnvironmentPole environment;
-    StepReturnPole stepReturn;
+    StepReturn<VariablesPole> stepReturn;
 
     @BeforeEach
     public void init() {
@@ -24,7 +27,8 @@ public class TestEnvironmentPole {
 
     @Test
     public void whenForceLeft_thenMovesCartLeftAndRotatesRight() {
-        var state = applyActionUntilTermination(EnvironmentPole.ACTION_LEFT, StatePole.newUprightAndStill());
+        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_LEFT, StatePole.newUprightAndStill());
+        var state=(StatePole) state0;
         assertTrue(state.x() < 0);
         assertTrue(state.angle() > 0);
         assertTrue(state.nofSteps() > 0);
@@ -32,7 +36,8 @@ public class TestEnvironmentPole {
 
     @Test
     public void whenForceRight_thenMovesCartRightAndRotatesLeft() {
-        var state = applyActionUntilTermination(EnvironmentPole.ACTION_RIGHT, StatePole.newUprightAndStill());
+        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_RIGHT, StatePole.newUprightAndStill());
+        var state=(StatePole) state0;
         assertTrue(state.x() > 0);
         assertTrue(state.angle() < 0);
         assertTrue(state.nofSteps() > 0);
@@ -59,22 +64,22 @@ public class TestEnvironmentPole {
     }
 
 
-    private StatePole applyActionUntilTermination(int action, StatePole stateStart) {
+    private StateI<VariablesPole> applyActionUntilTermination(int action, StatePole stateStart) {
         var state = stateStart.copy();
         do {
-            stepReturn = environment.step(action, state);
-            state = stepReturn.newState().copy();
+            stepReturn = environment.step(state,Action.ofInteger(action));
+            state = stepReturn.state().copy();
         } while (!stepReturn.isTerminal());
         return state;
     }
 
-    private int applyRandomActionUntilTermination(StatePole stateStart) {
+    private int applyRandomActionUntilTermination(StateI<VariablesPole> stateStart) {
         var state = stateStart.copy();
         Counter counter=new Counter();
         do {
             int randomAction = RandUtils.getRandomIntNumber(0, EnvironmentPole.NOF_ACTIONS);
-            stepReturn = environment.step(randomAction, state);
-            state = stepReturn.newState().copy();
+            stepReturn = environment.step(state, Action.ofInteger(randomAction));
+            state = stepReturn.state().copy();
             counter.increase();
         } while (!stepReturn.isTerminal());
         return counter.getCount();

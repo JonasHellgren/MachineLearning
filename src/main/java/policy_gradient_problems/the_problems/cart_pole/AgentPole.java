@@ -1,30 +1,32 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.AgentA;
+import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common.ParamFunction;
+import policy_gradient_problems.common.TabularValueFunction;
 
 import java.util.List;
 import java.util.function.Function;
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
-import static common.IndexFinder.findBucket;
-import static common.ListUtils.toArray;
-import static common.RandUtils.randomNumberBetweenZeroAndOne;
-import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
 
-@AllArgsConstructor
 @Setter
 @Getter
-public class AgentPole {
+public class AgentPole extends AgentA<VariablesPole> implements AgentParamActorTabCriticI<VariablesPole> {
     public static final int LENGTH_THETA = 4;
     public static final double THETA = 1d;
 
-    StatePole state;
-    RealVector thetaVector;
+    //StateI<VariablesPole> state;
+    //RealVector actor;
+
+    ParamFunction actor;
+    TabularValueFunction critic;
 
     public static AgentPole newRandomStartStateDefaultThetas(ParametersPole parameters) {
         return new AgentPole(StatePole.newAngleAndPosRandom(parameters), getInitThetaVector());
@@ -34,22 +36,36 @@ public class AgentPole {
         return new AgentPole(StatePole.newUprightAndStill(),  getInitThetaVector());
     }
 
+    public AgentPole(StateI<VariablesPole> stateStart, RealVector thetaVector) {
+        super(stateStart);
+        this.actor = new ParamFunction(thetaVector);
+    }
+
     public AgentPole copy() {
-        return new AgentPole(state.copy(),thetaVector.copy());
+        return new AgentPole(getState().copy(), actor.copy().asRealVector());
     }
 
-    public int chooseAction() {
-        var limits = getLimits(calcActionProbabilitiesInState(state));
-        throwIfBadLimits(limits);
-        return findBucket(toArray(limits), randomNumberBetweenZeroAndOne());
+    @Override
+    public void changeActor(RealVector change) {
+        actor.change(change);
     }
 
-    public List<Double> calcActionProbabilitiesInState(StatePole state) {
+    @Override
+    public ArrayRealVector calcGradLogVector(StateI<VariablesPole> state, Action action) {
+        return (ArrayRealVector) calcGradLogVector(state,action.asInt());
+    }
+
+    @Override
+    public List<Double> getActionProbabilities() {
+        return calcActionProbabilitiesInState(getState());
+    }
+
+    public List<Double> calcActionProbabilitiesInState(StateI<VariablesPole> state) {
         double prob0 = calcProbabilityAction0(state);
         return List.of(prob0,1-prob0);
     }
 
-    public RealVector calcGradLogVector(StatePole state, int action) {
+    public RealVector calcGradLogVector(StateI<VariablesPole> state, int action) {
         var x = state.asRealVector();
         double prob0 = calcProbabilityAction0(state);
         var xTimesProb0= x.mapMultiply(prob0);
@@ -60,8 +76,8 @@ public class AgentPole {
 
     static  Function<Double,Double> logistic=(x) -> Math.exp(x)/(1+Math.exp(x));
 
-    private double calcProbabilityAction0(StatePole state) {
-        double ttx=thetaVector.dotProduct(state.asRealVector());
+    private double calcProbabilityAction0(StateI<VariablesPole> state) {
+        double ttx= actor.asRealVector().dotProduct(state.asRealVector());
         return logistic.apply(ttx);
     }
 

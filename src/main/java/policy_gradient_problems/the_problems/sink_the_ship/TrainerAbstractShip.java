@@ -21,6 +21,7 @@ import java.util.List;
 public class TrainerAbstractShip extends TrainerA<VariablesShip> {
 
     public static final double DUMMY_VALUE = 0d;
+    public static final boolean FAIL_DUMMY = false;
     @NonNull EnvironmentShip environment;
     @NonNull AgentShip agent;
 
@@ -60,7 +61,7 @@ public class TrainerAbstractShip extends TrainerA<VariablesShip> {
             sr=environment.step(state,action);
             agent.setState(sr.state());
             var stateNew=sr.state();
-            experienceList.add(new Experience<>(state, action, sr.reward(), stateNew, DUMMY_VALUE));
+            experienceList.add(new Experience<>(state, action, sr.reward(), stateNew, FAIL_DUMMY, DUMMY_VALUE));
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.the_problems.cart_pole.AgentPole;
 import policy_gradient_problems.the_problems.cart_pole.EnvironmentPole;
 import policy_gradient_problems.the_problems.cart_pole.StatePole;
+import policy_gradient_problems.the_problems.cart_pole.VariablesPole;
 
 public class TestAgentPole {
 
@@ -42,7 +43,7 @@ public class TestAgentPole {
 
     @Test
     public void whenAllStatesZeroExceptXIsOne_thenCorrectProbs() {
-        agent.setState(StatePole.builder().angle(0).angleDot(0).x(1).xDot(0).build());
+        agent.setState(StatePole.newFromVariables(VariablesPole.builder().angle(0).angleDot(0).x(1).xDot(0).build()));
         var actionProbs=agent.calcActionProbabilitiesInState(agent.getState());
         System.out.println("actionProbs = " + actionProbs);
 

@@ -11,7 +11,6 @@ import policy_gradient_problems.abstract_classes.*;
 import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.TabularValueFunction;
 
-import java.util.Arrays;
 import java.util.List;
 import static common.MyFunctions.*;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
@@ -24,7 +23,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentParamActorI<VariablesBandit> {
+public class AgentBanditRealVector  extends AgentA<VariablesBandit> implements AgentParamActorTabCriticI<VariablesBandit> {
 
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final double[] VECTOR = new double[]{THETA0, THETA1};

@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common.ReturnCalculatorOld;
 import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
@@ -16,12 +20,12 @@ import java.util.ListIterator;
 
 @AllArgsConstructor
 @Getter
-public class TrainerAbstractPole extends TrainerA {
+public class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
     AgentPole agent;
-    ReturnCalculatorOld returnCalculator=new ReturnCalculatorOld();
+    ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
     public TrainerAbstractPole(@NonNull EnvironmentPole environment,
                              @NonNull AgentPole agent,
@@ -31,7 +35,7 @@ public class TrainerAbstractPole extends TrainerA {
         super.parameters=parameters;
     }
 
-    void updateTracker(int ei, List<ExperiencePole> experienceList) {
+    void updateTracker(int ei, List<Experience<VariablesPole>> experienceList) {
         List<Double> nofSteps=List.of((double) experienceList.size());
         tracker.addMeasures(ei,0, nofSteps);
     }
@@ -40,31 +44,32 @@ public class TrainerAbstractPole extends TrainerA {
         this.agent = agent;
     }
 
-    public List<ExperiencePole> getExperiences() {
-        List<ExperiencePole> experienceList=new ArrayList<>();
+    public List<Experience<VariablesPole>> getExperiences() {
+        List<Experience<VariablesPole>> experienceList=new ArrayList<>();
         int si = 0;
-        StepReturnPole sr;
+        StepReturn<VariablesPole> sr;
         do  {
-            StatePole stateOld = agent.state;
-            int action=agent.chooseAction();
-            sr=environment.step(action,agent.state);
-            agent.setState(sr.newState());
-            experienceList.add(new ExperiencePole(stateOld, action, sr.reward(), sr.newState(), sr.isFail(),DUMMY_VALUE));
+            StateI<VariablesPole> stateOld = agent.getState();
+            Action action=agent.chooseAction();
+            sr=environment.step(agent.getState(),action);
+            agent.setState(sr.state());
+            Experience<VariablesPole> exp = new Experience<>(stateOld, action, sr.reward(), sr.state(), sr.isFail(), DUMMY_VALUE);
+            experienceList.add(exp);
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }
 
-    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturnPole sr) {
+    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesPole> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
-    protected List<ExperiencePole>  createExperienceListWithReturns(
-            List<ExperiencePole> experienceList, double gamma) {
-        List<ExperiencePole> experienceListNew=new ArrayList<>();
+    protected List<Experience<VariablesPole>>  createExperienceListWithReturns(
+            List<Experience<VariablesPole>> experienceList, double gamma) {
+        List<Experience<VariablesPole>> experienceListNew=new ArrayList<>();
         List<Double> rewards=experienceList.stream().map(e->e.reward()).toList();
         ListIterator<Double> returnsIterator=returnCalculator.calcReturns(rewards,gamma).listIterator();
-        for (ExperiencePole exp:experienceList) {
+        for (Experience<VariablesPole> exp:experienceList) {
             experienceListNew.add(exp.copyWithValue(returnsIterator.next()));
         }
         return experienceListNew;
@@ -76,7 +81,7 @@ public class TrainerAbstractPole extends TrainerA {
     }
 
     @Override
-    public List<Experience> getExperiences(AgentI agent) {
+    public List<Experience<VariablesPole>> getExperiences(AgentI agent) {
         return null;
     }
 }

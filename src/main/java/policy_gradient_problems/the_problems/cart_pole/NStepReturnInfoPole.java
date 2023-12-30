@@ -3,6 +3,8 @@ package policy_gradient_problems.the_problems.cart_pole;
 import common.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.List;
@@ -24,11 +26,11 @@ public class NStepReturnInfoPole {
     @Builder
     public record ResultManySteps(
             Double sumRewardsNSteps,
-            Optional<StatePole> stateFuture,
+            Optional<StateI<VariablesPole>> stateFuture,
             boolean isEndOutside
     ) { }
 
-    final List<ExperiencePole> experienceList;
+    final List<Experience<VariablesPole>> experienceList;
     TrainerParameters parametersTrainer;
 
     public ResultManySteps getResultManySteps(ExperiencePole e) {
@@ -48,7 +50,7 @@ public class NStepReturnInfoPole {
                 .toList();
         double rewardSumDiscounted= ListUtils.discountedSum(rewardList,parametersTrainer.gamma());
         boolean isEndOutSide=tEnd>sizeExpList;
-        Optional<StatePole> stateFuture=isEndOutSide
+        Optional<StateI<VariablesPole>> stateFuture=isEndOutSide
                 ? Optional.empty()
                 : Optional.of(experienceList.get(tEnd-1).stateNext());
 
@@ -59,14 +61,14 @@ public class NStepReturnInfoPole {
                 .build();
     }
 
-    public ExperiencePole getExperience(int t) {
+    public Experience<VariablesPole> getExperience(int t) {
         int sizeExpList = experienceList.size();
         throwIfBadArgument(t, sizeExpList);
         return experienceList.get(t);
     }
 
 
-    public Optional<ExperiencePole> getEndExperience() {
+    public Optional<Experience<VariablesPole>> getEndExperience() {
         int sizeExpList = experienceList.size();
         return (experienceList.isEmpty())
                 ?Optional.empty()

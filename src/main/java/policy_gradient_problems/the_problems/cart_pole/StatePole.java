@@ -1,97 +1,95 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.bytedeco.opencv.presets.opencv_core;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
+
 import java.util.List;
+
 import static common.MyFunctions.sqr2;
 import static common.RandUtils.getRandomDouble;
 
-@Builder
-public record StatePole(
-        double angle,
-        double x,
-        double angleDot,
-        double xDot,
-        int nofSteps) {
+@Getter
+@Setter
+@AllArgsConstructor
+public class StatePole implements StateI<VariablesPole> {
+
+    VariablesPole variables;
 
     @Builder
-    record Variables(int action, double sinTheta, double cosTheta) {   //inner record to decrease nof arguments
-    }
-
-    public StatePole copy() {
-        return StatePole.builder()
-                .angle(angle).x(x).angleDot(angleDot).xDot(xDot).nofSteps(nofSteps)
-                .build();
-    }
-
-    public RealVector asRealVector() {
-        return new ArrayRealVector(new double[]{angle, x, angleDot, xDot});
-    }
-
-    public List<Double> asList() {
-       // return ListUtils.arrayPrimitiveDoublesToList(asRealVector().toArray());
-        return List.of(angle, x, angleDot, xDot);
-    }
-
-
-    public static StatePole newUprightAndStill() {
-        return StatePole.builder()
-                .angle(0).x(0).angleDot(0).xDot(0).nofSteps(0)
-                .build();
-    }
-
-    public static StatePole newAngleAndPosRandom(ParametersPole p) {
-        return StatePole.builder()
-                .angle(getRandomDouble(-p.angleMax(),p.angleMax()))
-                .x(getRandomDouble(-p.xMax(),p.xMax()))
-                .angleDot(0)
-                .xDot(0)
-                .nofSteps(0)
-                .build();
+    public StatePole(double angle,
+                     double x,
+                     double angleDot,
+                     double xDot,
+                     int nofSteps
+    ) {
+        variables = VariablesPole.builder().angle(angle).x(x).angleDot(angleDot).xDot(xDot).nofSteps(nofSteps).build();
     }
 
     public static StatePole newAllRandom(ParametersPole p) {
-        return StatePole.builder()
-                .angle(getRandomDouble(-p.angleMax(),p.angleMax()))
-                .x(getRandomDouble(-p.xMax(),p.xMax()))
-                .angleDot(getRandomDouble(-1,1))
-                .xDot(getRandomDouble(-1,1))
-                .nofSteps(0)
-                .build();
+        return new StatePole(VariablesPole.newAllRandom(p));
     }
 
+    public static StatePole newUprightAndStill() {
+        return new StatePole(VariablesPole.newUprightAndStill());
+    }
+
+    public static StatePole newAngleAndPosRandom(ParametersPole p) {
+        return new StatePole(VariablesPole.newAngleAndPosRandom(p));
+    }
+
+    public static StatePole newFromVariables(VariablesPole v) {
+        return new StatePole(v);
+    }
 
     public StatePole calcNew(int action, ParametersPole parameters) {
-        var variables = Variables.builder()
-                .action(action).sinTheta(Math.sin(angle)).cosTheta(Math.cos(angle)).build();
-        double temp = getTempVariable(variables, parameters);
-        double angleAcc = getAngleAcc(temp, variables, parameters);
-        double xAcc = getXAcc(temp, variables, parameters);
-        double tau = parameters.tau();
-        return StatePole.builder()
-                .angle(angle + tau * angleDot)
-                .x(x + tau * xDot)
-                .angleDot(angleDot + tau * angleAcc)
-                .xDot(xDot + tau * xAcc)
-                .nofSteps(nofSteps + 1)
-                .build();
+        return new StatePole(variables.calcNew(action, parameters));
     }
 
-    private double getTempVariable(Variables v, ParametersPole p) {
-        double force = (v.action == 0) ? -p.forceMagnitude() : p.forceMagnitude();
-        return force + p.massPoleTimesLength() * sqr2.apply(angleDot) * v.sinTheta;
+    public double angle() {
+        return variables.angle();
     }
 
-    private double getXAcc(double temp, Variables v, ParametersPole p) {
-        return temp - p.massPoleTimesLength() * angleDot * v.cosTheta / p.massTotal();
+    public double angleDot() {
+        return variables.angleDot();
     }
 
-    private double getAngleAcc(double temp, Variables v, ParametersPole p) {
-        double denom = p.length() * (4.0 / 3.0 - p.massPole() * sqr2.apply(v.cosTheta) /
-                p.massTotal());
-        return (p.g() * v.sinTheta - v.cosTheta * temp) / denom;
+    public double x() {
+        return variables.x();
     }
 
+    public double xDot() {
+        return variables.xDot();
+    }
+
+    public int nofSteps() {
+        return variables.nofSteps();
+    }
+
+    @Override
+    public StateI<VariablesPole> copy() {
+        return new StatePole(variables);
+    }
+
+    @Override
+    public List<Double> asList() {
+        return variables.asList();
+    }
+
+    @Override
+    public RealVector asRealVector() {
+        return variables.asRealVector();
+    }
+
+    @Override
+    public String toString() {
+        return variables.toString();
+    }
 
 }

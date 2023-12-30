@@ -35,7 +35,7 @@ public class RunnerTrainersPole {
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
 
-        System.out.println("vanilla thetaVector() = " + trainerVanilla.getAgent().getThetaVector());
+        System.out.println("vanilla thetaVector() = " + trainerVanilla.getAgent().getActor());
 
         return getFilteredNofSteps(trainerVanilla.getTracker());
     }
@@ -45,7 +45,7 @@ public class RunnerTrainersPole {
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
 
-        System.out.println("baseline thetaVector() = " + trainerBaseline.getAgent().getThetaVector());
+        System.out.println("baseline thetaVector() = " + trainerBaseline.getAgent().getActor());
 
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
@@ -56,7 +56,7 @@ public class RunnerTrainersPole {
         trainerAC.train();
 
         printMemory(environment, trainerAC);
-        System.out.println("AC thetaVector() = " + trainerAC.getAgent().getThetaVector());
+        System.out.println("AC thetaVector() = " + trainerAC.getAgent().getActor());
         trainerAC.getAgent().setState(StatePole.newUprightAndStill());
         System.out.println("trainerAC.getExperiences().size() = " + trainerAC.getExperiences().size());
 
@@ -66,7 +66,7 @@ public class RunnerTrainersPole {
     private static void printMemory(EnvironmentPole environment, TrainerActorCriticPole trainerAC) {
         NeuralMemoryPole memory= trainerAC.getMemory();
         double valAll0=memory.getOutValue(StatePole.newUprightAndStill().asList());
-        double valBigAngle=memory.getOutValue(StatePole.builder().angle(0.2).build().asList());
+        double valBigAngle=memory.getOutValue(StatePole.newFromVariables(VariablesPole.builder().angle(0.2).build()).asList());
 
         System.out.println("valAll0 = " + valAll0);
         System.out.println("valBigAngle = " + valBigAngle);

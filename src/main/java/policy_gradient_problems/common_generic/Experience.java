@@ -9,10 +9,11 @@ public record Experience<V> (
         Action action,
         double reward,
         StateI<V> stateNext,
+        boolean isFail,
         double value)
 {
     public Experience<V> copyWithValue(double value) {
-        return Experience.<V>builder().state(state).action(action).reward(reward).stateNext(stateNext)
+        return Experience.<V>builder().state(state).action(action).reward(reward).stateNext(stateNext).isFail(isFail)
                 .value(value).build();
     }
 }

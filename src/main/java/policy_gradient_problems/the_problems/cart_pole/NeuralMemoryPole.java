@@ -14,6 +14,8 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+import policy_gradient_problems.abstract_classes.StateI;
+
 import java.util.List;
 import java.util.Random;
 
@@ -76,7 +78,7 @@ public class NeuralMemoryPole {
         return getOutValue(inData1);
     }
 
-    public Double getOutValue(StatePole state) {
+    public Double getOutValue(StateI<VariablesPole> state) {
         var inData1 = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
         return getOutValue(inData1);
     }

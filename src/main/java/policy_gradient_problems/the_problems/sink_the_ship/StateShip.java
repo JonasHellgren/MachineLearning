@@ -1,9 +1,7 @@
 package policy_gradient_problems.the_problems.sink_the_ship;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.the_problems.twoArmedBandit.VariablesBandit;
 
@@ -36,5 +34,11 @@ public class StateShip implements StateI<VariablesShip> {
     @Override
     public List<Double> asList() {
         return List.of((double) getPos());
+    }
+
+    @SneakyThrows
+    @Override
+    public RealVector asRealVector() {
+        throw new NoSuchMethodException();
     }
 }

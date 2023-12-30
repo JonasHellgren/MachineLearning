@@ -5,9 +5,9 @@ import org.apache.commons.math3.linear.RealVector;
 
 public class ParamFunction {
 
-    ArrayRealVector params;
+    RealVector params;
 
-    public ParamFunction(ArrayRealVector params) {
+    public ParamFunction(RealVector params) {
         this.params = params;
     }
 
@@ -19,8 +19,18 @@ public class ParamFunction {
        params=params.add(change);
     }
 
+
+    public ParamFunction copy() {
+        return new ParamFunction(params.copy());
+    }
+
+
     public double[] toArray() {
         return params.toArray();
+    }
+
+    public RealVector asRealVector() {
+        return params;
     }
 
     public double getEntry(int i) {

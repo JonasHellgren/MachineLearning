@@ -8,7 +8,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.SubArrayExtractor;
@@ -36,7 +36,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<VariablesSC> {
+public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorTabCriticI<VariablesSC> {
     public static final double THETA = 0.5;
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
 

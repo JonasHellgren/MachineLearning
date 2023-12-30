@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
         }
     }
 
-    void updateCritic(Integer n, List<ExperiencePole> experiences) {
+    void updateCritic(Integer n, List<Experience<VariablesPole>> experiences) {
         int T = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
         var elInfo = new NStepReturnInfoPole(experiences, parameters);
@@ -86,7 +87,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
     }
 
 
-    void updateActor(List<ExperiencePole> experiences) {
+    void updateActor(List<Experience<VariablesPole>> experiences) {
         var elInfo = new NStepReturnInfoPole(experiences, parameters);
         int T = experiences.size();
         for (int tau = 0; tau < T; tau++) {
@@ -94,7 +95,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
             double advantage = calcAdvantage(expAtTau);
             var gradLogVector = agent.calcGradLogVector(expAtTau.state(), expAtTau.action());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
-            agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+            agent.changeActor(changeInThetaVector);
         }
     }
 
@@ -103,7 +104,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
      * If an action leads to a fail state, the advantage calculation focus on the immediate reward,
      * value of future state can be regarded as not possible to define/irrelevant due to the fail state.
      */
-    double calcAdvantage(ExperiencePole expAtTau) {
+    double calcAdvantage(Experience<VariablesPole> expAtTau) {
         double r = expAtTau.reward();
         Double valueS = memory.getOutValue(expAtTau.state());
         Double valueSNew = memory.getOutValue(expAtTau.stateNext());
@@ -111,7 +112,7 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
         return (isActionResultingInFailState) ? r : r + parameters.gamma() * valueSNew - valueS;
     }
 
-    void printIfSuccessFul(int ei, List<ExperiencePole> experiences) {
+    void printIfSuccessFul(int ei, List<Experience<VariablesPole>> experiences) {
         var elInfo = new NStepReturnInfoPole(experiences, parameters);
         executeIfTrue(!elInfo.isEndExperienceFail(), () ->
                 log.info("Episode successful, ei = " + ei + ", n steps = " + experiences.size()));

@@ -16,6 +16,7 @@ import java.util.List;
 public class TrainerAbstractSC extends TrainerA<VariablesSC> {
 
     public static final double DUMMY_VALUE = 0d;
+    public static final boolean FAIL_DUMMY = false;
     @NonNull EnvironmentSC environment;
     @NonNull AgentSC agent;
 
@@ -59,6 +60,7 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
                 action,
                 sr.reward(),
                 StateSC.newFromPos(EnvironmentSC.getObservedPos(sr.state())),
+                FAIL_DUMMY,
                 DUMMY_VALUE);
     }
 

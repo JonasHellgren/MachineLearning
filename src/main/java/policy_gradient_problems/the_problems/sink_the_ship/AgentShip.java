@@ -10,7 +10,7 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.SubArrayExtractor;
@@ -29,7 +29,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI<VariablesShip> {
+public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorTabCriticI<VariablesShip> {
 
     public static final double THETA_MEAN = 0.5,THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
     public static final int NOF_THETAS_PER_STATE = 2;

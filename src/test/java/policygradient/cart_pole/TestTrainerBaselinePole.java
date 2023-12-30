@@ -5,6 +5,8 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 
@@ -56,10 +58,11 @@ public class TestTrainerBaselinePole {
 
     @NotNull
     private  ArrayRealVector getFeatureVector(double angle, double x) {
+        StateI<VariablesPole> statePole = StatePole.newFromVariables(VariablesPole.builder()
+                .angle(angle).x(x)
+                .build());
         return TrainerBaselinePole.getFeatureVector(
-                ExperiencePole.builder().state(StatePole.builder()
-                        .angle(angle).x(x)
-                        .build()).build(),
+                Experience.<VariablesPole>builder().state(statePole).build(),
                 environment.getParameters()
 
         );

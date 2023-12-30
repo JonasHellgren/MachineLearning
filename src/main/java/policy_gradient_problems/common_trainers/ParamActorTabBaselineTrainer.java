@@ -2,7 +2,7 @@ package policy_gradient_problems.common_trainers;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 @Builder
 public class ParamActorTabBaselineTrainer <V> {
-    @NonNull AgentParamActorI<V> agent;
+    @NonNull AgentParamActorTabCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Function<V, Integer> tabularCoder;  //transforms state to key used by critic function
 

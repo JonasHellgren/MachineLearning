@@ -1,6 +1,5 @@
 package policygradient.cart_pole;
 
-import common.Counter;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
@@ -34,7 +33,7 @@ public class TestTrainerVanillaPole {
     @Test
     public void whenTrained_thenManySteps() {
         trainer.train();
-        System.out.println("agent.getThetaVector() = " + agent.getThetaVector());
+        System.out.println("agent.getThetaVector() = " + agent.getActor());
 
         PoleHelper helper= PoleHelper.builder().environment(environment).agent(agent).build();
 

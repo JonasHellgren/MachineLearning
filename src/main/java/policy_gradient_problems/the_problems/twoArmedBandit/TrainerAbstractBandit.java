@@ -16,6 +16,7 @@ import java.util.List;
 @Log
 public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
 
+    public static final boolean FAIL_DUMMY = false;
     final double DUMMY_VALUE = 0d;
     final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
 
@@ -38,7 +39,7 @@ public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
         for (int si = 0; si < parameters.nofStepsMax() ; si++) {
             Action action=agent.chooseAction();
             StepReturn<VariablesBandit> sr =environment.step(STATE_DUMMY,action);
-            experienceList.add(new Experience<>(STATE_DUMMY,action, sr.reward(), STATE_DUMMY, DUMMY_VALUE));
+            experienceList.add(new Experience<>(STATE_DUMMY,action, sr.reward(), STATE_DUMMY, FAIL_DUMMY, DUMMY_VALUE));
         }
         return experienceList;
     }

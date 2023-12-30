@@ -1,5 +1,11 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.EnvironmentI;
+import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common_generic.StepReturn;
+import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
+
 /***
  * Description:
  *         A pole is attached by an un-actuated joint to a cart, which moves along
@@ -30,7 +36,7 @@ package policy_gradient_problems.the_problems.cart_pole;
  *     For the interested reader, dynamics details in: https://coneural.org/florian/papers/05_cart_pole.pdf
 */
 
-public class EnvironmentPole {
+public class EnvironmentPole implements EnvironmentI<VariablesPole> {
 
     public static int ACTION_LEFT=0, ACTION_RIGHT=1, NOF_ACTIONS=2;
 
@@ -47,17 +53,13 @@ public class EnvironmentPole {
         return parameters;
     }
 
-    public StepReturnPole step(int action, StatePole state) {
-        var newState=state.calcNew(action, parameters);
+    public StepReturn<VariablesPole> step(StateI<VariablesPole> state0, Action action) {
+        StatePole state = (StatePole) state0;
+        StatePole newState=state.calcNew(action.asInt(), parameters);
         boolean isFail=isFailsState(newState);
         boolean isTerminalState=isTerminalState(newState);
         double reward = (isFailsState(newState))? parameters.rewardFail() : parameters.rewardNonFail();
-        return StepReturnPole.builder()
-                .newState(newState)
-                .isFail(isFail)
-                .isTerminal(isTerminalState)
-                .reward(reward)
-                .build();
+        return new StepReturn<>(newState,isFail,isTerminalState,reward);
     }
 
     public boolean isTerminalState(StatePole state) {

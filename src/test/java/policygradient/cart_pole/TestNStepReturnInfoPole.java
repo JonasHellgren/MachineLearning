@@ -1,6 +1,8 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.*;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ public class TestNStepReturnInfoPole {
     @BeforeEach
     public void init() {
         trainerParameters=TrainerParameters.builder().gamma(0.5).stepHorizon(5).build();
-        List<ExperiencePole> experiencePoleList=new ArrayList<>();
+        List<Experience<VariablesPole>> experiencePoleList=new ArrayList<>();
         for (int x = 0; x < 10 ; x++) {
             experiencePoleList.add(expOf(x));
         }
@@ -33,9 +35,8 @@ public class TestNStepReturnInfoPole {
         Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
         Assertions.assertTrue(result.stateFuture().isPresent());
         Assertions.assertFalse(result.isEndOutside());
-        Assertions.assertEquals(4+1,result.stateFuture().get().x());
+        Assertions.assertEquals(4+1,result.stateFuture().get().getVariables().x());
     }
-
 
     @Test
     public void whenTStartIsFive_thenCorrect() {
@@ -46,7 +47,7 @@ public class TestNStepReturnInfoPole {
         Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
         Assertions.assertTrue(result.stateFuture().isPresent());
         Assertions.assertFalse(result.isEndOutside());
-        Assertions.assertEquals(9+1,result.stateFuture().get().x());
+        Assertions.assertEquals(9+1,result.stateFuture().get().getVariables().x());
     }
 
     @Test
@@ -66,10 +67,10 @@ public class TestNStepReturnInfoPole {
     }
 
 
-    private static ExperiencePole expOf(double x) {
+    private static Experience<VariablesPole> expOf(double x) {
         var state=StatePole.builder().x(x).build();
         var stateNext= StatePole.builder().x(x+1).build();
-        return ExperiencePole.of(state, 0, REWARD, false, stateNext);
+        return new Experience<>(state, Action.ofInteger(0), REWARD, stateNext, false, 0);
     }
 
     private double getExpectedDiscSum(int listLength) {

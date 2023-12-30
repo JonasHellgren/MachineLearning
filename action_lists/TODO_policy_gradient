@@ -140,12 +140,14 @@ valueFunction i agent sc  x
 clean up sc  x
 generisk trainer sc x
 
-pole generisk
+pole generisk  x
+AgentNeuralPole
 skapa generisk ParamCriticNeuralActorTrainer
 skapa generisk NeuralCriticNeuralActorTrainer
 NeuralMemoryPole memory;  //todo flytta till agent
 TestReturnCalculator
 stepHorizon(1) buggar
+ArrayRealVector RealVector rörs ihop
 short corridor med neural policy agent
 cart pole ACNeuralPolicy
 

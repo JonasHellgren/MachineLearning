@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.common.WeightsDotProductFeatureValueFunction;
+import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Getter
@@ -28,7 +29,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
             var experienceList = getExperiences();
             var experienceListWithReturns =
                     super.createExperienceListWithReturns(experienceList,parameters.gamma());
-            for (ExperiencePole experience:experienceListWithReturns) {
+            for (Experience<VariablesPole> experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
 
@@ -37,18 +38,21 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
 
                 double delta=vt-valueFunction.getValue(vector);
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
-                agent.setThetaVector(agent.getThetaVector().add(changeInThetaVector));
+
+                agent.changeActor(changeInThetaVector);
+                //agent.setActor(agent.getActor().add(changeInThetaVector));
             }
             updateTracker(ei, experienceList);
         }
     }
 
     @NotNull
-    public static ArrayRealVector getFeatureVector(ExperiencePole experience, ParametersPole p) {
+    public static ArrayRealVector getFeatureVector(Experience<VariablesPole> experience, ParametersPole p) {
+        StatePole stateCasted=(StatePole) experience.state();
         return new ArrayRealVector(new double[]{
                 1d,
-                Math.abs(experience.state().angle())/p.angleMax(),
-                Math.abs(experience.state().x())/p.xMax()
+                Math.abs(stateCasted.angle())/p.angleMax(),
+                Math.abs(stateCasted.x())/p.xMax()
         });
     }
 

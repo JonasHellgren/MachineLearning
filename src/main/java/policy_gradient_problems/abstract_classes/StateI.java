@@ -1,5 +1,7 @@
 package policy_gradient_problems.abstract_classes;
 
+import org.apache.commons.math3.linear.RealVector;
+
 import java.util.List;
 
 public interface StateI<V> {
@@ -7,4 +9,5 @@ public interface StateI<V> {
     void setVariables(V variables);
     StateI<V> copy();
     List<Double> asList();
+    RealVector asRealVector();
 }
