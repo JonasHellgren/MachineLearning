@@ -13,7 +13,8 @@ import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 /**
- * Not perfectly clean having valueFunction in trainer, but too much hassle creating specific agent
+ * Not clean having valueFunction in trainer, but too much hassle creating specific agent
+ * Baseline is not worth it, mostly similar to Vanilla version
  */
 
 @Getter
@@ -42,15 +43,11 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
             for (Experience<VariablesPole> experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();
-
                 ArrayRealVector vector= getFeatureVector(experience, environment.getParameters());
                 valueFunction.update(vector,vt);
-
                 double delta=vt-valueFunction.getValue(vector);
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
-
                 agent.changeActor(changeInThetaVector);
-                //agent.setActor(agent.getActor().add(changeInThetaVector));
             }
             updateTracker(ei, experienceList);
         }

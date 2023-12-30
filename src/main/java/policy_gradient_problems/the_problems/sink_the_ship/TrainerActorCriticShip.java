@@ -3,7 +3,7 @@ package policy_gradient_problems.the_problems.sink_the_ship;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import policy_gradient_problems.common_trainers.ParamActorTabCriticTrainer;
+import policy_gradient_problems.common_trainers.ParamActorTabCriticEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Getter
@@ -19,8 +19,8 @@ public class TrainerActorCriticShip extends TrainerAbstractShip {
     }
 
     public void train() {
-        ParamActorTabCriticTrainer<VariablesShip> episodeTrainer =
-                ParamActorTabCriticTrainer.<VariablesShip>builder()
+        ParamActorTabCriticEpisodeTrainer<VariablesShip> episodeTrainer =
+                ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
                         .agent(agent)
                         .parameters(parameters)
                         .valueTermState(VALUE_TERMINAL_STATE)

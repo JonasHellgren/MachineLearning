@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Builder
-public class ParamActorTabCriticTrainer<V> {
+public class ParamActorTabCriticEpisodeTrainer<V> {
     @NonNull AgentParamActorTabCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;

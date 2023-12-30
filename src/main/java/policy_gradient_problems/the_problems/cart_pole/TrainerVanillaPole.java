@@ -4,8 +4,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.abstract_classes.AgentParamActorI;
-import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
-import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_trainers.ParamActorEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 public class TrainerVanillaPole extends TrainerAbstractPole {
@@ -21,21 +20,12 @@ public class TrainerVanillaPole extends TrainerAbstractPole {
     }
 
     public void train() {
+        var episodeTrainer= new ParamActorEpisodeTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
-            var experienceList = getExperiences(agent);
-            var experienceListWithReturns =
-                    super.createExperienceListWithReturns(experienceList,parameters.gamma());
-            for (Experience<VariablesPole> experience:experienceListWithReturns) {
-                var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
-                double vt = experience.value();
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
-                agent.changeActor(changeInThetaVector);
-
-               // agent.setActor(agent.getActor().add(changeInThetaVector));
-            }
-            updateTracker(ei, experienceList);
-
+            var experiences = getExperiences(agent);
+            episodeTrainer.trainFromEpisode(experiences);
+            updateTracker(ei, experiences);
         }
     }
 

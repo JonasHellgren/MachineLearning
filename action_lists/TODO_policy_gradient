@@ -145,11 +145,14 @@ AgentPole -> AgentParamActorPole, AgentParamActorNeuralCriticPole  x
 skapa AgentParamActorI x
 TrainerVanillaPole använder AgentParamActorPole x
 TrainerParamActorNeuralCriticPole använder AgentParamActorPoleNeuralCritic x
+TrainerVanillaPole använder generisk epsiode trainer  x
 AgentSC -> AgentParamActorSC, AgentParamActorTabCriticSC
 AgentParamActorTabCriticI ersätt getCritic
 
-skapa generisk ParamActorNeuralMultiStepCriticTrainer
-TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrainer
+skapa MultistepNeuralAgentHelper
+använd ovan i TrainerParamActorNeuralCriticPole
+
+generell pg clean up
 
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
@@ -175,5 +178,7 @@ alphazero på cartpole
 
 
 
-bubblare:
+bubblare/ned prioriterat:
 gradLog with finite diff
+skapa generisk ParamActorNeuralMultiStepCriticTrainer
+TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrainer

@@ -3,14 +3,8 @@ package policy_gradient_problems.the_problems.short_corridor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
-import policy_gradient_problems.common.TabularValueFunction;
-import policy_gradient_problems.common_trainers.ParamActorTabBaselineTrainer;
-import policy_gradient_problems.common_trainers.ParamActorTrainer;
+import policy_gradient_problems.common_trainers.ParamActorTabBaselineEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-
-import java.util.List;
 
 /**
  * Explained in shortCorridor.md
@@ -28,7 +22,7 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
 
 
     public void train() {
-        ParamActorTabBaselineTrainer<VariablesSC> episodeTrainer = ParamActorTabBaselineTrainer
+        ParamActorTabBaselineEpisodeTrainer<VariablesSC> episodeTrainer = ParamActorTabBaselineEpisodeTrainer
                 .<VariablesSC>builder()
                 .agent(agent).parameters(parameters)
                 .tabularCoder((v) -> v.pos())

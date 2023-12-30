@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Builder
-public class ParamActorTabBaselineTrainer <V> {
+public class ParamActorTabBaselineEpisodeTrainer<V> {
     @NonNull AgentParamActorTabCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Function<V, Integer> tabularCoder;  //transforms state to key used by critic function

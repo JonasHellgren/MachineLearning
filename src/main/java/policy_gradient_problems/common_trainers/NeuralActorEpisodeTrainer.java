@@ -12,7 +12,7 @@ import java.util.List;
 
 @Log
 @AllArgsConstructor
-public class NeuralActorTrainer<V> {
+public class NeuralActorEpisodeTrainer<V> {
 
     AgentNeuralActorI<V> agent;
     TrainerParameters parameters;
