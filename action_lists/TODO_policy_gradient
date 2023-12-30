@@ -147,7 +147,7 @@ TrainerVanillaPole använder AgentParamActorPole x
 TrainerParamActorNeuralCriticPole använder AgentParamActorPoleNeuralCritic x
 TrainerVanillaPole använder generisk epsiode trainer  x
 AgentSC -> AgentParamActorSC, AgentParamActorTabCriticSC  x
-AgentParamActorTabCriticI ersätt getCritic
+AgentParamActorTabCriticI ersätt getCritic  x
 
 skapa MultistepNeuralAgentHelper
 använd ovan i TrainerParamActorNeuralCriticPole

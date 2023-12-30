@@ -23,7 +23,7 @@ public class ParamActorTabBaselineEpisodeTrainer<V> {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double delta = calcDelta(experience);
             int key = getTabularFunctionKey(experience.state());
-            agent.getCritic().updateFromExperience(key, delta, parameters.learningRateCritic());
+            agent.changeCritic(key, parameters.learningRateCritic()*delta);
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
             agent.changeActor(changeInThetaVector);
         }
@@ -36,7 +36,7 @@ public class ParamActorTabBaselineEpisodeTrainer<V> {
 
     private double calcDelta(Experience<V> experience) {
         int key = getTabularFunctionKey(experience.state());
-        double value= agent.getCritic().getValue(key);
+        double value= agent.getCriticValue(key);
         double Gt=experience.value();
         return Gt-value;
     }

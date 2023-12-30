@@ -28,16 +28,17 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
             var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
             double delta = calcDelta(experience);
             int key = getTabularFunctionKey(experience.state());
-            getCriticParams().updateFromExperience(key, I * delta, parameters.learningRateCritic());
+            //getCriticParams().updateFromExperience(key, I * delta, parameters.learningRateCritic());
+            agent.changeCritic(key,parameters.learningRateActor() * I * delta);
             var change = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * I * delta);
             agent.changeActor(change);
             I = I * parameters.gamma();
         }
     }
-
+/*
     private TabularValueFunction getCriticParams() {
         return agent.getCritic();
-    }
+    }*/
 
     private int getTabularFunctionKey(StateI<V> state) {
         return tabularCoder.apply(state.getVariables());
@@ -47,10 +48,10 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
         int keyState = getTabularFunctionKey(experience.state());
         int keyStateNext = getTabularFunctionKey(experience.stateNext());
 
-        double v = getCriticParams().getValue(keyState);
+        double v = agent.getCriticValue(keyState);
         double vNext = isTerminal.apply(experience.stateNext())
                 ? valueTermState
-                : getCriticParams().getValue(keyStateNext);
+                : agent.getCriticValue(keyStateNext);
         return experience.reward() + parameters.gamma() * vNext - v;
     }
 

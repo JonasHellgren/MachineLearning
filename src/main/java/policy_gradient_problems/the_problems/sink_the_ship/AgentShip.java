@@ -120,4 +120,13 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorT
         return EnvironmentShip.POSITIONS.size() * NOF_THETAS_PER_STATE;
     }
 
+    @Override
+    public void changeCritic(int key, double change) {
+        critic.setValue(key,getCriticValue(key)+change);
+    }
+
+    @Override
+    public double getCriticValue(int key) {
+        return critic.getValue(key);
+    }
 }

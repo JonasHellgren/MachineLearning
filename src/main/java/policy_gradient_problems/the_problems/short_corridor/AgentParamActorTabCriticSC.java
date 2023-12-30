@@ -71,4 +71,13 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
     }
 
 
+    @Override
+    public void changeCritic(int key, double change) {
+        critic.setValue(key,getCriticValue(key)+change);
+    }
+
+    @Override
+    public double getCriticValue(int key) {
+        return critic.getValue(key);
+    }
 }
