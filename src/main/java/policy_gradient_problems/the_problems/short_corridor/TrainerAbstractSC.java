@@ -57,18 +57,14 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
         return experienceList;
     }
 
-    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn sr) {
+    private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
 
     @Override
     public void train() {
-
     }
 
-/*    @Override
-    public List<Experience<VariablesSC>> getExperiences(AgentI agent) {
-        return null;
-    }*/
+
 }

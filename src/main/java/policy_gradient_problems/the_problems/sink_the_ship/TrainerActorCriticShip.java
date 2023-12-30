@@ -25,6 +25,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip {
                         .parameters(parameters)
                         .valueTermState(VALUE_TERMINAL_STATE)
                         .tabularCoder((v) -> v.pos())
+                        .isTerminal((s) -> false)
                         .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
