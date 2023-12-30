@@ -27,13 +27,15 @@ public class TestTrainerActorCriticPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99).stepHorizon(50)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.99)
+                        .stepHorizon(10)
+                        .relativeNofFitsPerEpoch(0.5)
                         .learningRateCritic(1e-3).build())
                 .build();
     }
 
     @Test
-    @Disabled ("long time")
+   // @Disabled ("long time")
     public void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());

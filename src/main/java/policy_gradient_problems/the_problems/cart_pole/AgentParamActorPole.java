@@ -16,28 +16,43 @@ import java.util.List;
 
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 
+/***
+ * TabularValueFunction is not used in some constructors, e.g. AgentParamActorPole
+ */
+
 @Setter
 @Getter
 public class AgentParamActorPole extends AgentA<VariablesPole> implements AgentParamActorTabCriticI<VariablesPole> {
-    public static final int LENGTH_THETA = 4;
-    public static final double THETA = 1d;
 
     ParamFunction actor;
     TabularValueFunction critic;
     AgentParamActorPoleHelper helper;
 
     public static AgentParamActorPole newRandomStartStateDefaultThetas(ParametersPole parameters) {
-        return new AgentParamActorPole(StatePole.newAngleAndPosRandom(parameters), getInitThetaVector());
+        return new AgentParamActorPole(
+                StatePole.newAngleAndPosRandom(parameters),
+                AgentParamActorPoleHelper.getInitThetaVector());
     }
 
     public static AgentParamActorPole newAllZeroStateDefaultThetas() {
-        return new AgentParamActorPole(StatePole.newUprightAndStill(),  getInitThetaVector());
+        return new AgentParamActorPole(
+                StatePole.newUprightAndStill(),
+                AgentParamActorPoleHelper.getInitThetaVector());
     }
 
     public AgentParamActorPole(StateI<VariablesPole> stateStart, RealVector thetaVector) {
-        super(stateStart);
-        this.actor = new ParamFunction(thetaVector);
+        this(stateStart,new ParamFunction(thetaVector),new TabularValueFunction(0),null);
         this.helper=new AgentParamActorPoleHelper(actor);
+    }
+
+    public AgentParamActorPole(StateI<VariablesPole> state,
+                               ParamFunction actor,
+                               TabularValueFunction critic,
+                               AgentParamActorPoleHelper helper) {
+        super(state);
+        this.actor = actor;
+        this.critic = critic;
+        this.helper = helper;
     }
 
     public AgentParamActorPole copy() {
@@ -58,10 +73,5 @@ public class AgentParamActorPole extends AgentA<VariablesPole> implements AgentP
     public List<Double> getActionProbabilities() {
         return helper.calcActionProbabilitiesInState(getState());
     }
-
-    private static ArrayRealVector getInitThetaVector() {
-        return new ArrayRealVector(createArrayWithSameDoubleNumber(LENGTH_THETA, THETA));
-    }
-
 
 }
