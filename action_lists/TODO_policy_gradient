@@ -142,7 +142,8 @@ generisk trainer sc x
 
 pole generisk  x
 AgentPole -> AgentParamActorPole, AgentParamActorNeuralCriticPole  x
-skapa AgentParamActorI
+skapa AgentParamActorI x
+AgentParamActorTabCriticI ersätt getCritic
 TrainerVanillaPole använder AgentParamActorPole
 TrainerParamActorNeuralCriticPole använder AgentParamActorPoleNeuralCritic
 skapa generisk ParamActorNeuralMultiStepCriticTrainer
@@ -151,6 +152,8 @@ TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrain
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
+
+plantnum AgentI etc
 
 rensa, tex ExperienceOld
 TestReturnCalculator

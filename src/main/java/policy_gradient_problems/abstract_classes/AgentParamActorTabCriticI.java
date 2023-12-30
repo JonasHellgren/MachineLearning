@@ -1,14 +1,7 @@
 package policy_gradient_problems.abstract_classes;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.common.TabularValueFunction;
 
-import java.util.List;
-
-public interface AgentParamActorTabCriticI<V> extends AgentI<V> {
+public interface AgentParamActorTabCriticI<V> extends AgentParamActorI<V> {
     TabularValueFunction getCritic();
-    void changeActor(RealVector change);
-    ArrayRealVector calcGradLogVector(StateI<V> state,Action action);
-    List<Double> getActionProbabilities();
 }
