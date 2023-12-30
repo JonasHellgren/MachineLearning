@@ -10,11 +10,14 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 @Log
 public class TrainerVanillaSC extends TrainerAbstractSC {
 
+    AgentSC agent;
+
     @Builder
     public TrainerVanillaSC(@NonNull EnvironmentSC environment,
                             @NonNull AgentSC agent,
                             @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters);
+        super(environment, parameters);
+        this.agent=agent;
     }
 
 
@@ -24,7 +27,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setStateAsRandomNonTerminal();
             episodeTrainer.trainFromEpisode(getExperiences(agent));
-            updateTracker(ei);
+            updateTracker(ei,agent);
         }
     }
 

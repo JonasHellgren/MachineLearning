@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
+import policy_gradient_problems.the_problems.short_corridor.AgentParamActorSCHelper;
 import policy_gradient_problems.the_problems.short_corridor.AgentSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
@@ -39,7 +40,7 @@ public class TestAgentSC {
         double p0 = arguments.getDouble(1);
         double p1 = arguments.getDouble(2);
 
-        List<Double> actionProbs = agent.calcActionProbsInObsState(os);
+        List<Double> actionProbs = agent.getHelper().calcActionProbsInObsState(os);
 
         assertEquals(p0, actionProbs.get(0), DELTA_PROB);
         assertEquals(p1, actionProbs.get(1), DELTA_PROB);
@@ -59,7 +60,7 @@ public class TestAgentSC {
         int a = arguments.getInteger(1);
         List<Double> gradThetaDesired = getGradThetaDesired(arguments);
         agent = AgentSC.newRandomStartStateDefaultThetas();
-        ArrayRealVector gradLogVector = agent.calcGradLogVector(os, a);
+        ArrayRealVector gradLogVector = agent.getHelper().calcGradLogVector(os, a);
         assertTrue(isDoubleArraysEqual(toArray(gradThetaDesired), gradLogVector.toArray(), 0.1));
     }
 
@@ -87,7 +88,7 @@ public class TestAgentSC {
     @NotNull
     private static List<Double> getGradThetaDesired(ArgumentsAccessor arguments) {
         List<Double> gradThetaDesired = new ArrayList<>();
-        for (int i = 0; i < AgentSC.getThetaLength(); i++) {
+        for (int i = 0; i < AgentParamActorSCHelper.getThetaLength(); i++) {
             gradThetaDesired.add(arguments.getDouble(i + 2));
         }
         return gradThetaDesired;

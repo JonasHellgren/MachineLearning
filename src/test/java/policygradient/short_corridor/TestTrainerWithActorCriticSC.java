@@ -57,7 +57,7 @@ public class TestTrainerWithActorCriticSC {
     private void printPolicy() {
         System.out.println("policy");
         for (int s = 0; s < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES ; s++) {
-            System.out.println("s = "+s+", agent.actionProb() = " + agent.calcActionProbsInObsState(s));
+            System.out.println("s = "+s+", agent.actionProb() = " + agent.getHelper().calcActionProbsInObsState(s));
         }
     }
 

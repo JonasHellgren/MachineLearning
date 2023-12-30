@@ -13,13 +13,16 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 @Getter
 public class TrainerActorCriticSC extends TrainerAbstractSC {
 
+    AgentSC agent;
+
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerActorCriticSC(@NonNull EnvironmentSC environment,
                                 @NonNull AgentSC agent,
                                 @NonNull TrainerParameters parameters) {
-        super(environment, agent, parameters);
+        super(environment, parameters);
+        this.agent=agent;
     }
 
 
@@ -36,7 +39,7 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setStateAsRandomNonTerminal();
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei);
+            updateTracker(ei,agent);
         }
     }
 

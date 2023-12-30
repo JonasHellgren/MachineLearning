@@ -42,23 +42,22 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorTabCr
 
     ParamFunction actor;
     TabularValueFunction critic;
-
-    SubArrayExtractor subArrayExtractor;
+    AgentParamActorSCHelper helper;
 
     public static AgentSC newRandomStartStateDefaultThetas() {
         return newWithRandomStartStateAndGivenThetas(
-                createArrayWithSameDoubleNumber(getThetaLength(), THETA));
+                createArrayWithSameDoubleNumber(AgentParamActorSCHelper.getThetaLength(), THETA));
     }
 
     public static AgentSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
-        return new AgentSC(getRandomNonTerminalState(), thetaArray);
+        return new AgentSC(AgentParamActorSCHelper.getRandomNonTerminalState(), thetaArray);
     }
 
     public AgentSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromPos(posStart));
         this.actor = new ParamFunction(thetaArray);
         this.critic = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
-        this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
+        this.helper=new AgentParamActorSCHelper(actor);
     }
 
     @Override
@@ -69,57 +68,27 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorTabCr
     @Override
     public ArrayRealVector calcGradLogVector(StateI<VariablesSC> stateInExperience, Action action) {
         int stateObserved =EnvironmentSC.getPos(stateInExperience);
-        return calcGradLogVector(stateObserved, action.asInt());
+        return helper.calcGradLogVector(stateObserved, action.asInt());
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-        return calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
+        return helper.calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
     }
 
     @Override
     public Action chooseAction() {
         int observedStateOld = EnvironmentSC.getObservedPos(getState());
-        throwIfBadObsState(observedStateOld);
-        var limits = getLimits(calcActionProbsInObsState(observedStateOld));
+        helper.throwIfBadObsState(observedStateOld);
+        var limits = getLimits(helper.calcActionProbsInObsState(observedStateOld));
         throwIfBadLimits(limits);
         return Action.ofInteger(findBucket(toArray(limits), randomNumberBetweenZeroAndOne()));
     }
 
-    public List<Double> calcActionProbsInObsState(int stateObserved) {
-        throwIfBadObsState(stateObserved);
-        int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(stateObserved);
-        int indexEndTheta = indexFirstTheta + NOF_ACTIONS;
-        return actionProbabilities(subarray(actor.toArray(), indexFirstTheta, indexEndTheta));
-    }
-
-    public ArrayRealVector calcGradLogVector(int stateObserved, int action) {
-        double[] gradLogStateObs = calculateGradLog(action, calcActionProbsInObsState(stateObserved));
-        return new ArrayRealVector(subArrayExtractor.arrayWithZeroExceptAtSubArray(stateObserved, gradLogStateObs));
-    }
-
-    public static int getThetaLength() {
-        return EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES * NOF_ACTIONS;
-    }
-
     public void setStateAsRandomNonTerminal() {
-        setState(StateSC.newFromPos(getRandomNonTerminalState()));
+        setState(StateSC.newFromPos(AgentParamActorSCHelper.getRandomNonTerminalState()));
     }
 
 
-    private void throwIfBadObsState(int stateObserved) {
-        if (!EnvironmentSC.SET_OBSERVABLE_STATES.contains(stateObserved)) {
-            throw new IllegalArgumentException("Non valid obs state, state = " + stateObserved);
-        }
-    }
-
-    private static int getRandomNonTerminalState() {
-        RandUtils<Integer> randUtils = new RandUtils<>();
-        return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.SET_NON_TERMINAL_STATES));
-    }
-
-    private List<Double> actionProbabilities(double[] thetaArr) {
-        return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
-    }
 
 }

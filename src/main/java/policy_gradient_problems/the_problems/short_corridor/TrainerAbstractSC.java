@@ -18,24 +18,17 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
     public static final double DUMMY_VALUE = 0d;
     public static final boolean FAIL_DUMMY = false;
     @NonNull EnvironmentSC environment;
-    @NonNull AgentSC agent;
 
     public TrainerAbstractSC(@NonNull EnvironmentSC environment,
-                             @NonNull AgentSC agent,
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
-        this.agent = agent;
         super.parameters = parameters;
     }
 
-    void updateTracker(int ei) {
+    void updateTracker(int ei,AgentSC agent) {
         for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei, s, agent.calcActionProbsInObsState(s));
+            tracker.addMeasures(ei, s, agent.getHelper().calcActionProbsInObsState(s));
         }
-    }
-
-    public void setAgent(@NotNull AgentSC agent) {
-        this.agent = agent;
     }
 
     public List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
