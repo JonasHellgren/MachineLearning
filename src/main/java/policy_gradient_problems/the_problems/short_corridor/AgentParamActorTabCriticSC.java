@@ -70,8 +70,5 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
         return helper.chooseAction(getState());
     }
 
-    public void setStateAsRandomNonTerminal() {  //todo remove
-        setState(StateSC.newFromPos(AgentParamActorSCHelper.getRandomNonTerminalState()));
-    }
 
 }

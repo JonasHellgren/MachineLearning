@@ -37,7 +37,7 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
                         .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setStateAsRandomNonTerminal();
+            agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
             updateTracker(ei,agent.getHelper());
         }

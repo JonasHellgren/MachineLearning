@@ -48,7 +48,5 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
         return helper.chooseAction(getState());
     }
 
-    public void setStateAsRandomNonTerminal() {
-        setState(StateSC.newFromPos(AgentParamActorSCHelper.getRandomNonTerminalState()));
-    }
+
 }

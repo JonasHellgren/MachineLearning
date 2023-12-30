@@ -23,7 +23,6 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
         this.agent=agent;
     }
 
-
     public void train() {
         ParamActorTabBaselineEpisodeTrainer<VariablesSC> episodeTrainer = ParamActorTabBaselineEpisodeTrainer
                 .<VariablesSC>builder()
@@ -32,7 +31,7 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
                 .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setStateAsRandomNonTerminal();
+            agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
             updateTracker(ei,agent.getHelper());
         }

@@ -25,7 +25,6 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
     public void train() {
         var episodeTrainer= new ParamActorEpisodeTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setStateAsRandomNonTerminal();
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainFromEpisode(getExperiences(agent));
             updateTracker(ei,agent.getHelper());
