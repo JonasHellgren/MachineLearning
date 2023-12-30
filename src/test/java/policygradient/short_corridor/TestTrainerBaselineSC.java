@@ -46,7 +46,7 @@ public class TestTrainerBaselineSC {
         assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
         agent.setState(StateSC.newFromPos(2));  //todo correct real pos
         assertEquals(0, agent.chooseAction().asInt());
-        var wVector = trainer.getValueFunction();
+        var wVector = agent.getCritic();
         assertTrue(wVector.getValue(1)>wVector.getValue(0));
         assertTrue(wVector.getValue(1)>wVector.getValue(2));
     }
