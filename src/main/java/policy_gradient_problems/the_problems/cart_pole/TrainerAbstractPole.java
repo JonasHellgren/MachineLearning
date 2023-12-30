@@ -8,7 +8,6 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
-import policy_gradient_problems.common.ReturnCalculatorOld;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
 import policy_gradient_problems.common_generic.StepReturn;
@@ -24,11 +23,11 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
     public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
-    AgentPole agent;
+    AgentParamActorPole agent;
     ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
     public TrainerAbstractPole(@NonNull EnvironmentPole environment,
-                             @NonNull AgentPole agent,
+                             @NonNull AgentParamActorPole agent,
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
         this.agent = agent;
@@ -40,7 +39,7 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
         tracker.addMeasures(ei,0, nofSteps);
     }
 
-    public void setAgent(@NotNull AgentPole agent) {
+    public void setAgent(@NotNull AgentParamActorPole agent) {
         this.agent = agent;
     }
 

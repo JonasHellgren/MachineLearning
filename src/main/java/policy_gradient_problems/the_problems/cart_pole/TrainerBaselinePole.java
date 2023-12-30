@@ -17,7 +17,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
 
     @Builder
     public TrainerBaselinePole(@NonNull EnvironmentPole environment,
-                              @NonNull AgentPole agent,
+                              @NonNull AgentParamActorPole agent,
                               @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
         this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.learningRateCritic());

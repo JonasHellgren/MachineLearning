@@ -10,13 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestTrainerVanillaPole {
 
     TrainerVanillaPole trainer;
-    AgentPole agent;
+    AgentParamActorPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
     public void init() {
         environment= EnvironmentPole.newDefault();
-        agent = AgentPole.newRandomStartStateDefaultThetas(environment.getParameters());
+        agent = AgentParamActorPole.newRandomStartStateDefaultThetas(environment.getParameters());
         createTrainer(environment);
     }
 
@@ -35,7 +35,7 @@ public class TestTrainerVanillaPole {
         trainer.train();
         System.out.println("agent.getThetaVector() = " + agent.getActor());
 
-        PoleHelper helper= PoleHelper.builder().environment(environment).agent(agent).build();
+        PoleAgentOneEpisodeRunner helper= PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
 
         int nofSteps= helper.runTrainedAgent(StatePole.newUprightAndStill());
         System.out.println("nofSteps = " + nofSteps);

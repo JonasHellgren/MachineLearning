@@ -33,14 +33,14 @@ import static common.Conditionals.executeIfTrue;
 
 @Log
 @Getter
-public class TrainerActorCriticPole extends TrainerAbstractPole {
+public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
 
     NeuralMemoryPole memory;  //todo flytta till agent
 
     @Builder
-    public TrainerActorCriticPole(@NonNull EnvironmentPole environment,
-                                  @NonNull AgentPole agent,
-                                  @NonNull TrainerParameters parameters) {
+    public TrainerParamActorNeuralCriticPole(@NonNull EnvironmentPole environment,
+                                             @NonNull AgentParamActorPole agent,
+                                             @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
         NetSettings netSettings = NetSettings.builder()
                 .nHidden(10)
@@ -67,7 +67,6 @@ public class TrainerActorCriticPole extends TrainerAbstractPole {
         int tEnd = elInfo.isEndExperienceFail() ? T : T - n + 1;  //explained in top of file
         List<List<Double>> stateValuesList = new ArrayList<>();
         List<Double> valueTarList = new ArrayList<>();
-
 
         for (int t = 0; t < tEnd; t++) {
             var resMS = elInfo.getResultManySteps(t);

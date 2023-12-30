@@ -18,7 +18,7 @@ public class RunnerTrainersPole {
             .build();
 
     public static void main(String[] args) {
-        var agent = AgentPole.newAllZeroStateDefaultThetas();
+        var agent = AgentParamActorPole.newAllZeroStateDefaultThetas();
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
         var nofStepsListVanilla = getNofStepsListVanilla(agent, environment);
@@ -30,7 +30,7 @@ public class RunnerTrainersPole {
                 List.of("vanilla", "baseline", "actor critic"));
     }
 
-    private static List<Double> getNofStepsListVanilla(AgentPole agent, EnvironmentPole environment) {
+    private static List<Double> getNofStepsListVanilla(AgentParamActorPole agent, EnvironmentPole environment) {
         var trainerVanilla = TrainerVanillaPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
@@ -40,7 +40,7 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
-    private static List<Double> getNofStepsListBaseline(AgentPole agent, EnvironmentPole environment) {
+    private static List<Double> getNofStepsListBaseline(AgentParamActorPole agent, EnvironmentPole environment) {
         var trainerBaseline = TrainerBaselinePole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
@@ -50,8 +50,8 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
-    private static List<Double> getNofStepsListAC(AgentPole agent, EnvironmentPole environment) {
-        var trainerAC = TrainerActorCriticPole.builder()
+    private static List<Double> getNofStepsListAC(AgentParamActorPole agent, EnvironmentPole environment) {
+        var trainerAC = TrainerParamActorNeuralCriticPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerAC.train();
 
@@ -63,7 +63,7 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerAC.getTracker());
     }
 
-    private static void printMemory(EnvironmentPole environment, TrainerActorCriticPole trainerAC) {
+    private static void printMemory(EnvironmentPole environment, TrainerParamActorNeuralCriticPole trainerAC) {
         NeuralMemoryPole memory= trainerAC.getMemory();
         double valAll0=memory.getOutValue(StatePole.newUprightAndStill().asList());
         double valBigAngle=memory.getOutValue(StatePole.newFromVariables(VariablesPole.builder().angle(0.2).build()).asList());

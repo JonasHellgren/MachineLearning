@@ -5,9 +5,9 @@ import lombok.Builder;
 import policy_gradient_problems.common_generic.StepReturn;
 
 @Builder
-public class PoleHelper {
+public class PoleAgentOneEpisodeRunner {
     EnvironmentPole environment;
-    AgentPole agent;
+    AgentParamActorPole agent;
 
     public int runTrainedAgent(StatePole stateStart) {
         agent.setState(stateStart);

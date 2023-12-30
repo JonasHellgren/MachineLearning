@@ -10,7 +10,7 @@ public class TrainerVanillaPole extends TrainerAbstractPole {
 
     @Builder
     public TrainerVanillaPole(@NonNull EnvironmentPole environment,
-                            @NonNull AgentPole agent,
+                            @NonNull AgentParamActorPole agent,
                             @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
     }

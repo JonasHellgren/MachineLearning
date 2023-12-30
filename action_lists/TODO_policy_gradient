@@ -141,14 +141,21 @@ clean up sc  x
 generisk trainer sc x
 
 pole generisk  x
-AgentNeuralPole
-skapa generisk ParamCriticNeuralActorTrainer
-skapa generisk NeuralCriticNeuralActorTrainer
+AgentPole -> AgentParamActorPole, AgentParamActorNeuralCriticPole
 NeuralMemoryPole memory;  //todo flytta till agent
+TrainerVanillaPole använder AgentParamActorPole
+TrainerParamActorNeuralCriticPole använder AgentParamActorPoleNeuralCritic
+skapa generisk ParamActorNeuralMultiStepCriticTrainer
+TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrainer
+
+short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
+skapa generisk NeuralCriticNeuralActorTrainer
+koda AgentNeuralActorNeuralCriticPole
+
+rensa, tex ExperienceOld
 TestReturnCalculator
 stepHorizon(1) buggar
 ArrayRealVector RealVector rörs ihop
-short corridor med neural policy agent
 cart pole ACNeuralPolicy
 
 cart pole PPOPolicy

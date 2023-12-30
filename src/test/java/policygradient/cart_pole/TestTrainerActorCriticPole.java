@@ -10,20 +10,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTrainerActorCriticPole {
 
-    TrainerActorCriticPole trainer;
-    AgentPole agent;
+    TrainerParamActorNeuralCriticPole trainer;
+    AgentParamActorPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
     public void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentPole.newRandomStartStateDefaultThetas(environment.getParameters());
+        agent = AgentParamActorPole.newRandomStartStateDefaultThetas(environment.getParameters());
         createTrainer(environment, agent);
         trainer.train();
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentPole agent) {
-        trainer = TrainerActorCriticPole.builder()
+    private void createTrainer(EnvironmentPole environment, AgentParamActorPole agent) {
+        trainer = TrainerParamActorNeuralCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
@@ -35,7 +35,7 @@ public class TestTrainerActorCriticPole {
     @Test
     @Disabled ("long time")
     public void whenTrained_thenManySteps() {
-        PoleHelper helper = PoleHelper.builder().environment(environment).agent(agent).build();
+        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
 
         System.out.println("nofSteps = " + nofSteps);
