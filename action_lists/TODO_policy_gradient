@@ -153,6 +153,7 @@ skapa MultistepNeuralAgentHelper
 använd ovan i TrainerParamActorNeuralCriticPole
 
 generell pg clean up
+double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer

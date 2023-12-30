@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.common.TabularValueFunction;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -26,25 +25,21 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         for (Experience<V> experience : elwr) {
             var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
-            double delta = calcDelta(experience);
+            double tdError = calcTdError(experience);
             int key = getTabularFunctionKey(experience.state());
-            //getCriticParams().updateFromExperience(key, I * delta, parameters.learningRateCritic());
-            agent.changeCritic(key,parameters.learningRateActor() * I * delta);
-            var change = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * I * delta);
+            double changeTd = parameters.learningRateActor() * I * tdError;
+            agent.changeCritic(key, changeTd);
+            var change = gradLogVector.mapMultiplyToSelf(changeTd);
             agent.changeActor(change);
             I = I * parameters.gamma();
         }
     }
-/*
-    private TabularValueFunction getCriticParams() {
-        return agent.getCritic();
-    }*/
 
     private int getTabularFunctionKey(StateI<V> state) {
         return tabularCoder.apply(state.getVariables());
     }
 
-    private double calcDelta(Experience<V> experience) {
+    private double calcTdError(Experience<V> experience) {
         int keyState = getTabularFunctionKey(experience.state());
         int keyStateNext = getTabularFunctionKey(experience.stateNext());
 
