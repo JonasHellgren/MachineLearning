@@ -30,4 +30,5 @@ public abstract class AgentA<V> implements AgentI<V> {
         return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
     }
 
+
 }

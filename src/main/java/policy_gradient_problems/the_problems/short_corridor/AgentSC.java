@@ -10,6 +10,7 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.SubArrayExtractor;
 import policy_gradient_problems.common.TabularValueFunction;
 
@@ -29,7 +30,7 @@ import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 /***
  * See shortCorridor.md for description
  *
- * State in AgentA is real state, state in an Experience is observed state
+ * State in AgentA is real state, state in an Experience is observed state, what training is based on
  * Action probabilities are based on observed state
  */
 
@@ -39,8 +40,8 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
     public static final double THETA = 0.5;
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
 
-    ArrayRealVector actorParams;
-    TabularValueFunction criticParams;
+    ParamFunction actor;
+    TabularValueFunction critic;
 
     SubArrayExtractor subArrayExtractor;
 
@@ -55,14 +56,14 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
 
     public AgentSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromPos(posStart));
-        this.actorParams = new ArrayRealVector(thetaArray);
-        this.criticParams = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
+        this.actor = new ParamFunction(thetaArray);
+        this.critic = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
         this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
     }
 
-    @Override  //todo to AgentA
+    @Override
     public void changeActor(RealVector change) {
-        setActorParams(getActorParams().add(change));
+        actor.change(change);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
         throwIfBadObsState(stateObserved);
         int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(stateObserved);
         int indexEndTheta = indexFirstTheta + NOF_ACTIONS;
-        return actionProbabilities(subarray(actorParams.toArray(), indexFirstTheta, indexEndTheta));
+        return actionProbabilities(subarray(actor.toArray(), indexFirstTheta, indexEndTheta));
     }
 
     public ArrayRealVector calcGradLogVector(int stateObserved, int action) {

@@ -8,8 +8,7 @@ import policy_gradient_problems.the_problems.twoArmedBandit.AgentBanditRealVecto
 import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
 import policy_gradient_problems.the_problems.twoArmedBandit.TrainerBanditRealVector;
 
-public class TestTrainerRealVector {
-
+public class TestBanditTrainerRealVector {
 
     TrainerBanditRealVector trainer;
     AgentBanditRealVector agent;

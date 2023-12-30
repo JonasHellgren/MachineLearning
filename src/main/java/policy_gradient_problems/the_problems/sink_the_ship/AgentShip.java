@@ -12,6 +12,7 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.abstract_classes.StateI;
+import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.SubArrayExtractor;
 import policy_gradient_problems.common.TabularValueFunction;
 
@@ -34,12 +35,11 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI
     public static final int NOF_THETAS_PER_STATE = 2;
     public static final double STD_MIN = 2.5e-2,  SMALLEST_DENOM = 1e-2,  MAX_GRAD_ELEMENT = 1;
 
-    ArrayRealVector actorParams;
-    TabularValueFunction criticParams;
+    ParamFunction actor;
+    TabularValueFunction critic;
 
     NormDistributionSampler sampler;
     SubArrayExtractor subArrayExtractor;
-
 
     public static AgentShip newRandomStartStateDefaultThetas() {
         return newWithRandomStartStateAndGivenThetas(
@@ -52,8 +52,8 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI
 
     public AgentShip(int stateStart, double[] thetaArray) {
         super(new StateShip(new VariablesShip(stateStart)));
-        this.actorParams = new ArrayRealVector(thetaArray);
-        this.criticParams=new TabularValueFunction(EnvironmentShip.POSITIONS.size());
+        this.actor = new ParamFunction(thetaArray);
+        this.critic =new TabularValueFunction(EnvironmentShip.POSITIONS.size());
         this.sampler=new NormDistributionSampler();
         this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_THETAS_PER_STATE);
     }
@@ -68,12 +68,12 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI
 
     @Override
     public void changeActor(RealVector change) {
-        setActorParams(getActorParams().add(change));
+        actor.change(change);
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-        var thetaArr=actorParams.toArray();
+        var thetaArr= actor.toArray();
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
 
@@ -105,8 +105,8 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorI
     public Pair<Double,Double> getMeanAndStdFromThetaVector(int state) {
         throwIfBadState(state);
         int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(state);
-        double mean = actorParams.getEntry(indexFirstTheta);
-        double std = Math.exp(actorParams.getEntry(indexFirstTheta+NOF_THETAS_PER_STATE-1));
+        double mean = actor.getEntry(indexFirstTheta);
+        double std = Math.exp(actor.getEntry(indexFirstTheta+NOF_THETAS_PER_STATE-1));
         return Pair.create(mean, std);
     }
 

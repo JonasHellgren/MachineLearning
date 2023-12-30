@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
-import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common.TabularValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.common.ReturnCalculatorOld;
 
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
             double delta = calcDelta(experience);
             valueFunction.updateFromExperience(EnvironmentSC.getPos(experience.state()), delta, parameters.learningRateCritic());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
-            agent.setActorParams(agent.getActorParams().add(changeInThetaVector));
+            agent.getActor().change(changeInThetaVector);
         }
     }
 

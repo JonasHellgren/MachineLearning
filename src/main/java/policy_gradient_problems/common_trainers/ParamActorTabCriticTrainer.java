@@ -33,7 +33,7 @@ public class ParamActorTabCriticTrainer<V> {
     }
 
     private TabularValueFunction getCriticParams() {
-        return agent.getCriticParams();
+        return agent.getCritic();
     }
 
     private int getTabularFunctionKey(Experience<V> experience) {

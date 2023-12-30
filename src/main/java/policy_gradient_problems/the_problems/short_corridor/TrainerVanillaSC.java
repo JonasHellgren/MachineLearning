@@ -5,9 +5,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
-import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.common.ReturnCalculatorOld;
 
 
 @Log
@@ -31,7 +29,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
                 var gradLogVector = agent.calcGradLogVector(EnvironmentSC.getPos(experience.state()),experience.action().asInt());
                 double vt = experience.value();
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
-                agent.setActorParams(agent.getActorParams().add(changeInThetaVector));
+                agent.getActor().change(changeInThetaVector);
             }
             updateTracker(ei);
         }

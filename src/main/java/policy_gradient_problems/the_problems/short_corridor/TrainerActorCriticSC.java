@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;
-import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common.TabularValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.common.ReturnCalculatorOld;
 
 import java.util.List;
 
@@ -45,13 +43,13 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
             double delta = calcDelta(experience);
             getCriticParams().updateFromExperience(EnvironmentSC.getPos(experience.state()), I * delta, parameters.learningRateCritic());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * I * delta);
-            agent.setActorParams(agent.getActorParams().add(changeInThetaVector));
+            agent.getActor().change(changeInThetaVector);
             I = I * parameters.gamma();
         }
     }
 
     private TabularValueFunction getCriticParams() {
-        return agent.getCriticParams();
+        return agent.getCritic();
     }
 
     private double calcDelta(Experience<VariablesSC> experience) {

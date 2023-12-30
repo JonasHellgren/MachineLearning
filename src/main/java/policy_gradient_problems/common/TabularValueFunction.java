@@ -24,10 +24,6 @@ public class TabularValueFunction {
         wVector.setEntry(state,value);
     }
 
-    public void updateFromExperience(ExperienceOld experience, double delta, Double beta) {
-        double valueOld=getValue(experience.state());
-        setValue(experience.state(),valueOld+ beta * delta);
-    }
 
     public void updateFromExperience(int intState, double delta, Double beta) {
         double valueOld=getValue(intState);

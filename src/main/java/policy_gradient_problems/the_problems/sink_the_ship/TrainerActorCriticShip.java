@@ -30,7 +30,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setRandomState();
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei, agent.getCriticParams());
+            updateTracker(ei, agent.getCritic());
         }
     }
 }
