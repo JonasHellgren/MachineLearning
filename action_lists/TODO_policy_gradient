@@ -137,7 +137,7 @@ valueFunction i agent x
 ParamActorTabularCriticTrainer x
 sc generisk  x
 valueFunction i agent sc  x
-clean up sc
+clean up sc  x
 generisk trainer sc
 
 skapa generisk ParamCriticNeuralActorTrainer

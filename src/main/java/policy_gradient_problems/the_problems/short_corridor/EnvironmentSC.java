@@ -33,7 +33,6 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL =
             getSetFromRange(0, NOF_NON_TERMINAL_OBSERVABLE_STATES);
 
-
     public double probDirectToTerminal;
 
     public EnvironmentSC(double probDirectToTerminal) {
@@ -41,13 +40,12 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
         this.probDirectToTerminal = probDirectToTerminal;
     }
 
-    public EnvironmentSC() {
-        this.probDirectToTerminal = PROB_DIRECT_TO_TERMINAL;
-    }
-
     public static EnvironmentSC create() {
         return new EnvironmentSC();
+    }
 
+    public EnvironmentSC() {
+        this.probDirectToTerminal = PROB_DIRECT_TO_TERMINAL;
     }
 
     public StepReturn<VariablesSC> step(StateI<VariablesSC> state, Action action) {
@@ -61,22 +59,21 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
         return !SET_OBSERVABLE_STATES_NON_TERMINAL.contains(stateObserved);
     }
 
-    private boolean isTerminal(int stateNew) {
-        return SET_TERMINAL_STATES.contains(stateNew);
-    }
-
-
     public static int getObservedPos(StateI<VariablesSC> state) {
         return getObservedPos(getPos(state));
     }
 
-    public static int getObservedPos(int state) {
+    public static int getPos(StateI<VariablesSC> state) {
+        return state.getVariables().pos();
+    }
+
+    private static int getObservedPos(int state) {
         throwIfBadState(state);
         return STATE_OBSERVEDSTATE_MAP.get(state);
     }
 
-    public static int getPos(StateI<VariablesSC> state) {
-        return state.getVariables().pos();
+    private boolean isTerminal(int stateNew) {
+        return SET_TERMINAL_STATES.contains(stateNew);
     }
 
     private static void throwIfBadState(int state) {
@@ -101,7 +98,6 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
 
     private int getNonTerminalState(int state, int action) {
         return MathUtils.isZero(action) ? state - 1 : state + 1;
-
     }
 
 }

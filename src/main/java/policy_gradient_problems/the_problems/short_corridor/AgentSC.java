@@ -107,7 +107,7 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
     }
 
 
-    private static void throwIfBadObsState(int stateObserved) {
+    private void throwIfBadObsState(int stateObserved) {
         if (!EnvironmentSC.SET_OBSERVABLE_STATES.contains(stateObserved)) {
             throw new IllegalArgumentException("Non valid obs state, state = " + stateObserved);
         }
