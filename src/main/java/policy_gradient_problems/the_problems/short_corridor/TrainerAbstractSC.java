@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.StepReturn;
@@ -25,9 +26,10 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
         super.parameters = parameters;
     }
 
-    void updateTracker(int ei,AgentSC agent) {
+    void updateTracker(int ei, AgentParamActorSCHelper helper) {
+
         for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei, s, agent.getHelper().calcActionProbsInObsState(s));
+            tracker.addMeasures(ei, s, helper.calcActionProbsInObsState(s));
         }
     }
 

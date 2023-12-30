@@ -4,7 +4,7 @@ import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.AgentSC;
+import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
 import policy_gradient_problems.the_problems.short_corridor.TrainerActorCriticSC;
@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestTrainerWithActorCriticSC {
 
     TrainerActorCriticSC trainer;
-    AgentSC agent;
+    AgentParamActorTabCriticSC agent;
 
     @BeforeEach
     public void init() {
-        agent = AgentSC.newRandomStartStateDefaultThetas();
+        agent = AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas();
         var environment= new EnvironmentSC();
         createTrainer(environment);
     }

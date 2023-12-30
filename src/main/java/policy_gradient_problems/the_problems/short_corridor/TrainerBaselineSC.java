@@ -13,11 +13,11 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 @Getter
 public class TrainerBaselineSC extends TrainerAbstractSC {
 
-    AgentSC agent;
+    AgentParamActorTabCriticSC agent;
 
     @Builder
     public TrainerBaselineSC(@NonNull EnvironmentSC environment,
-                             @NonNull AgentSC agent,
+                             @NonNull AgentParamActorTabCriticSC agent,
                              @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
@@ -34,7 +34,7 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setStateAsRandomNonTerminal();
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei,agent);
+            updateTracker(ei,agent.getHelper());
         }
     }
 }

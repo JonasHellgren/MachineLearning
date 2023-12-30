@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import policy_gradient_problems.the_problems.short_corridor.AgentParamActorSCHelper;
-import policy_gradient_problems.the_problems.short_corridor.AgentSC;
+import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
 
@@ -23,12 +23,12 @@ public class TestAgentSC {
     public static final int PROB_DIRECT_TO_TERMINAL = 0;
     public static final double DELTA_PROB = 0.1;
     EnvironmentSC environment;
-    AgentSC agent;
+    AgentParamActorTabCriticSC agent;
 
     @BeforeEach
     public void init() {
         environment = new EnvironmentSC(PROB_DIRECT_TO_TERMINAL);
-        agent = AgentSC.newWithRandomStartStateAndGivenThetas(new double[]{-10, 10, 0.5, 0.5, 10, -10,});
+        agent = AgentParamActorTabCriticSC.newWithRandomStartStateAndGivenThetas(new double[]{-10, 10, 0.5, 0.5, 10, -10,});
     }
 
     @ParameterizedTest   //obs state, p0, p1
@@ -59,7 +59,7 @@ public class TestAgentSC {
         int os = arguments.getInteger(0);
         int a = arguments.getInteger(1);
         List<Double> gradThetaDesired = getGradThetaDesired(arguments);
-        agent = AgentSC.newRandomStartStateDefaultThetas();
+        agent = AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas();
         ArrayRealVector gradLogVector = agent.getHelper().calcGradLogVector(os, a);
         assertTrue(isDoubleArraysEqual(toArray(gradThetaDesired), gradLogVector.toArray(), 0.1));
     }

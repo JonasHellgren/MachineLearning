@@ -3,21 +3,20 @@ package policygradient.short_corridor;
 import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.AgentSC;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.TrainerVanillaSC;
+import policy_gradient_problems.the_problems.short_corridor.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTrainerVanillaSC {
 
     TrainerVanillaSC trainer;
-    AgentSC agent;
+    AgentParamActorSC agent;
 
     @BeforeEach
     public void init() {
-        agent = AgentSC.newRandomStartStateDefaultThetas();
+        agent = AgentParamActorSC.newRandomStartStateDefaultThetas();
         var environment= new EnvironmentSC();
         createTrainer(environment);
     }

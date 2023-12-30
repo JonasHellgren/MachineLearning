@@ -1,28 +1,59 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
+import lombok.Getter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
-
+import policy_gradient_problems.common.ParamFunction;
 import java.util.List;
 
+import static common.ArrayUtil.createArrayWithSameDoubleNumber;
+
+@Getter
 public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParamActorI<VariablesSC> {
-    public AgentParamActorSC(StateI<VariablesSC> state) {
-        super(state);
+
+    ParamFunction actor;
+    AgentParamActorSCHelper helper;
+
+    public static AgentParamActorSC newRandomStartStateDefaultThetas() {
+        return newWithRandomStartStateAndGivenThetas(
+                createArrayWithSameDoubleNumber(
+                        AgentParamActorSCHelper.getThetaLength(),
+                        AgentParamActorSCHelper.THETA));
+    }
+
+    public static AgentParamActorSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
+        return new AgentParamActorSC(AgentParamActorSCHelper.getRandomNonTerminalState(), thetaArray);
+    }
+
+    public AgentParamActorSC(int posStart, double[] thetaArray) {
+        super(StateSC.newFromPos(posStart));
+        this.actor = new ParamFunction(thetaArray);
+        this.helper=new AgentParamActorSCHelper(actor);
     }
 
     @Override
     public void changeActor(RealVector change) {
-
+        actor.change(change);
     }
 
     @Override
-    public ArrayRealVector calcGradLogVector(StateI<VariablesSC> state, Action action) {
-        return null;
+    public ArrayRealVector calcGradLogVector(StateI<VariablesSC> stateInExperience, Action action) {
+        int stateObserved = EnvironmentSC.getPos(stateInExperience);
+        return helper.calcGradLogVector(stateObserved, action.asInt());
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-        return null;
+        return helper.calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
+    }
+
+    @Override
+    public Action chooseAction() {
+        return helper.chooseAction(getState());
+    }
+
+    public void setStateAsRandomNonTerminal() {
+        setState(StateSC.newFromPos(AgentParamActorSCHelper.getRandomNonTerminalState()));
     }
 }

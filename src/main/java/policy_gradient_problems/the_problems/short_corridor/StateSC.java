@@ -21,6 +21,12 @@ public class StateSC implements StateI<VariablesSC> {
     public static StateSC newFromPos(int pos) {
         return new StateSC(new VariablesSC(pos));
     }
+    public static StateSC randomNonTerminal() {
+        return new StateSC(new VariablesSC(AgentParamActorSCHelper.getRandomNonTerminalState()));
+    }
+
+
+
 
     public int getPos() {
         return variables.pos();

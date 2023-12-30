@@ -1,6 +1,7 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
+import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.*;
 
@@ -12,15 +13,19 @@ public class RunnerShortCorridor {
     public static final double LEARNING_RATE = 0.05, GAMMA = 1.0, BETA = 0.1;
 
     public static void main(String[] args) {
-        var trainer = createTrainer(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
+        var trainer = createTrainer(EnvironmentSC.create(), AgentParamActorSC.newRandomStartStateDefaultThetas());
         trainer.train();
         plotActionProbabilitiesDuringTraining("Vanilla", trainer);
 
-        var trainerBaseline = createTrainerBaseline(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
+        var trainerBaseline = createTrainerBaseline(
+                EnvironmentSC.create(),
+                AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
         trainerBaseline.train();
         plotActionProbabilitiesDuringTraining("Baseline", trainerBaseline);
 
-        var trainerActorCritic = createTrainerActorCritic(EnvironmentSC.create(), AgentSC.newRandomStartStateDefaultThetas());
+        var trainerActorCritic = createTrainerActorCritic(
+                EnvironmentSC.create(),
+                AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
         plotActionProbabilitiesDuringTraining("ActorCritic", trainerActorCritic);
     }
@@ -33,21 +38,23 @@ public class RunnerShortCorridor {
         }
     }
 
-    private static TrainerVanillaSC createTrainer(EnvironmentSC environment, AgentSC agent) {
+    private static TrainerVanillaSC createTrainer(EnvironmentSC environment, AgentParamActorSC agent) {
         return TrainerVanillaSC.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();
     }
 
-    private static TrainerBaselineSC createTrainerBaseline(EnvironmentSC environment, AgentSC agent) {
+    private static TrainerBaselineSC createTrainerBaseline(EnvironmentSC environment,
+                                                           AgentParamActorTabCriticSC agent) {
         return TrainerBaselineSC.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();
     }
 
-    private static TrainerActorCriticSC createTrainerActorCritic(EnvironmentSC environment, AgentSC agent) {
+    private static TrainerActorCriticSC createTrainerActorCritic(EnvironmentSC environment,
+                                                                 AgentParamActorTabCriticSC agent) {
         return TrainerActorCriticSC.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())

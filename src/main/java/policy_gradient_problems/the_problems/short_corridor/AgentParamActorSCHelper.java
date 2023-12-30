@@ -3,18 +3,26 @@ package policy_gradient_problems.the_problems.short_corridor;
 import common.ListUtils;
 import common.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
+import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common.ParamFunction;
 import policy_gradient_problems.common.SubArrayExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static common.IndexFinder.findBucket;
+import static common.ListUtils.toArray;
+import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
+import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
+import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
 import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
 import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
 
 public class AgentParamActorSCHelper {
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
+    public static final double THETA = 0.5;
 
     ParamFunction actor;
     SubArrayExtractor subArrayExtractor;
@@ -55,6 +63,14 @@ public class AgentParamActorSCHelper {
 
     private List<Double> actionProbabilities(double[] thetaArr) {
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
+    }
+
+    public Action chooseAction(StateI<VariablesSC> state) {
+        int observedStateOld = EnvironmentSC.getObservedPos(state);
+        throwIfBadObsState(observedStateOld);
+        var limits = getLimits(calcActionProbsInObsState(observedStateOld));
+        throwIfBadLimits(limits);
+        return Action.ofInteger(findBucket(toArray(limits), randomNumberBetweenZeroAndOne()));
     }
 
 }
