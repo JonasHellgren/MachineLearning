@@ -136,7 +136,7 @@ generics på ship  x
 valueFunction i agent x
 ParamActorTabularCriticTrainer x
 sc generisk  x
-valueFunction i agent sc
+valueFunction i agent sc  x
 clean up sc
 generisk trainer sc
 

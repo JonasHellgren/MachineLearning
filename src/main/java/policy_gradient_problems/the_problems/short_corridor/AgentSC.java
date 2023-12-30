@@ -40,6 +40,8 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
 
     ArrayRealVector actorParams;
+    TabularValueFunction criticParams;
+
     SubArrayExtractor subArrayExtractor;
 
     public static AgentSC newRandomStartStateDefaultThetas() {
@@ -54,13 +56,8 @@ public class AgentSC extends AgentA<VariablesSC> implements AgentParamActorI<Var
     public AgentSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromPos(posStart));
         this.actorParams = new ArrayRealVector(thetaArray);
+        this.criticParams = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
         this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
-    }
-
-
-    @Override
-    public TabularValueFunction getCriticParams() {
-        return null;
     }
 
     @Override  //todo to AgentA

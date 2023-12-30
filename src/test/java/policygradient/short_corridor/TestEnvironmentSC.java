@@ -10,7 +10,6 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.StepReturnSC;
 import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

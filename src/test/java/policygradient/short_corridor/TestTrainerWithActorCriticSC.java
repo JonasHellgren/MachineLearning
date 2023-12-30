@@ -43,7 +43,7 @@ public class TestTrainerWithActorCriticSC {
         assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
         setRealPos(6);
         assertEquals(0, agent.chooseAction().asInt());
-        var valueFunction = trainer.getValueFunction();
+        var valueFunction = agent.getCriticParams();
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(0));
         assertTrue(valueFunction.getValue(1)>valueFunction.getValue(2));
     }

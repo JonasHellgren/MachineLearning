@@ -1,4 +1,4 @@
-package policygradient.two_armed_bandit;
+package dl4j_aux;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.Arrays;
 
-public class TestAddingVectors {
-
+public class TestAddingAndMultipleVectors {
 
     @Test
     public void givenVectors_thenCorrectSum() {
@@ -17,10 +16,7 @@ public class TestAddingVectors {
         RealVector vSum = v1.add(v2);
 
         System.out.println("vSum = " + vSum);
-        System.out.println("vSum.toArray() = " + Arrays.toString(vSum.toArray()));
-
-        Assertions.assertTrue(Arrays.equals(new double[]{2d, 4d, 2d}, vSum.toArray()));
-
+        Assertions.assertArrayEquals(new double[]{2d, 4d, 2d}, vSum.toArray());
     }
 
 
@@ -31,7 +27,7 @@ public class TestAddingVectors {
 
         System.out.println("vMult = " + vMult);
 
-        Assertions.assertTrue(Arrays.equals(new double[]{2d, 4d, 2d}, vMult.toArray()));
+        Assertions.assertArrayEquals(new double[]{2d, 4d, 2d}, vMult.toArray());
 
     }
 

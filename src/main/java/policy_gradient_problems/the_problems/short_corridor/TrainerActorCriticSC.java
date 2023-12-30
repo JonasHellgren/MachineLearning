@@ -20,14 +20,12 @@ import java.util.List;
 public class TrainerActorCriticSC extends TrainerAbstractSC {
 
     public static final double VALUE_TERMINAL_STATE = 0;
-    TabularValueFunction valueFunction;
 
     @Builder
     public TrainerActorCriticSC(@NonNull EnvironmentSC environment,
                                 @NonNull AgentSC agent,
                                 @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
-        valueFunction = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
     }
 
     public void train() {
@@ -45,18 +43,22 @@ public class TrainerActorCriticSC extends TrainerAbstractSC {
         for (Experience<VariablesSC> experience : expListWithReturns) {
             var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
             double delta = calcDelta(experience);
-            valueFunction.updateFromExperience(EnvironmentSC.getPos(experience.state()), I * delta, parameters.learningRateCritic());
+            getCriticParams().updateFromExperience(EnvironmentSC.getPos(experience.state()), I * delta, parameters.learningRateCritic());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * I * delta);
             agent.setActorParams(agent.getActorParams().add(changeInThetaVector));
             I = I * parameters.gamma();
         }
     }
 
+    private TabularValueFunction getCriticParams() {
+        return agent.getCriticParams();
+    }
+
     private double calcDelta(Experience<VariablesSC> experience) {
-        double v = valueFunction.getValue(EnvironmentSC.getPos(experience.state()));
+        double v = getCriticParams().getValue(EnvironmentSC.getPos(experience.state()));
         double vNext = environment.isTerminalObserved(EnvironmentSC.getPos(experience.stateNext()))
                 ? VALUE_TERMINAL_STATE
-                : valueFunction.getValue(EnvironmentSC.getPos(experience.stateNext()));
+                : getCriticParams().getValue(EnvironmentSC.getPos(experience.stateNext()));
         return experience.reward() + parameters.gamma() * vNext - v;
     }
 
