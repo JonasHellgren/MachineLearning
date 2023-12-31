@@ -4,8 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_episode_trainers.MultistepNeuralCriticUpdater;
+import policy_gradient_problems.common_episode_trainers.MultistepParamActorUpdater;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_helpers.AdvantageCalculator;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
@@ -41,18 +43,36 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
 
     public void train() {
         Integer n = parameters.stepHorizon();
-        var criticUpdater=new MultistepNeuralCriticUpdater<VariablesPole>(
-                parameters,
-                (s) -> agent.getCriticOut(s),
-                (t) -> agent.fitCritic(t.getLeft(),t.getMiddle(),t.getRight()) );
+        var cu = createCriticUpdater();
+        var au = createActorUpdater();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+            setStartStateInAgent();
             var experiences = getExperiences(agent);
-            criticUpdater.updateCritic(n, experiences);
-            updateActor(experiences);
+            cu.updateCritic(n, experiences);
+            au.updateActor(experiences);
             printIfSuccessFul(ei, experiences);
             updateTracker(ei, experiences);
         }
+    }
+
+    private void setStartStateInAgent() {
+        agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+    }
+
+
+    private MultistepNeuralCriticUpdater<VariablesPole> createCriticUpdater() {
+        return new MultistepNeuralCriticUpdater<>(
+                parameters,
+                (s) -> agent.getCriticOut(s),
+                (t) -> agent.fitCritic(t.getLeft(),t.getMiddle(),t.getRight()) );
+    }
+
+    private MultistepParamActorUpdater<VariablesPole> createActorUpdater() {
+        return MultistepParamActorUpdater.<VariablesPole>builder()
+                .parameters(parameters)
+                .criticOut((s) -> agent.getCriticOut(s))
+                .calcGradLogVector((s,a) -> agent.calcGradLogVector(s,a))
+                .changeActor((rv) -> agent.changeActor(rv)).build();
     }
 
     void printIfSuccessFul(int ei, List<Experience<VariablesPole>> experiences) {
@@ -62,18 +82,7 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
     }
 
 
-    void updateActor(List<Experience<VariablesPole>> experiences) {
-        var nri = new NStepReturnInfo<>(experiences, parameters);
-        var ac=new AdvantageCalculator<VariablesPole>(parameters, (s) -> agent.getCriticOut(s));
-        int T = experiences.size();
-        for (int tau = 0; tau < T; tau++) {
-            var expAtTau = nri.getExperience(tau);
-            double advantage = ac.calcAdvantage(expAtTau);
-            var gradLogVector = agent.calcGradLogVector(expAtTau.state(), expAtTau.action());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
-            agent.changeActor(changeInThetaVector);
-        }
-    }
+
 
 
 

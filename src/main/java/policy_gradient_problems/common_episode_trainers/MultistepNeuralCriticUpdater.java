@@ -16,7 +16,7 @@ import java.util.function.Function;
 import static common.Conditionals.executeIfTrue;
 
 /***
- * The function criticOut and consumer fitCritic is used to make the function generic,
+ * The function criticOut and consumer fitCritic is used to make the class generic,
  * would not be fully generic if for example AgentParamActorNeuralCriticI<V> agent is used instead
 
  *  An episode gives a set of experiences: e0, e1, e2, ei,.....,e_i+n

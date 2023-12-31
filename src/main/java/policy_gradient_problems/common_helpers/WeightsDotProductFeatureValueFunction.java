@@ -22,10 +22,6 @@ public class WeightsDotProductFeatureValueFunction {
     public  void update(ArrayRealVector state, double valueRef) {
         double delta=valueRef-getValue(state);
         RealVector deltaVector = state.copy().mapMultiplyToSelf(alpha * delta);
-
-     //   System.out.println("deltaVector = " + deltaVector);
-     //   System.out.println("valueRef = " + valueRef);
-
         wVector=wVector.add(deltaVector);  //w+alpha*delta*state
     }
 
