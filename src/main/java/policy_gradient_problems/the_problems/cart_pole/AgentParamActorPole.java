@@ -34,7 +34,7 @@ import java.util.List;
 
     public AgentParamActorPole(StateI<VariablesPole> stateStart, RealVector thetaVector) {
         this(stateStart,new ParamFunction(thetaVector),null);
-        this.helper=new AgentParamActorPoleHelper(actor);
+        this.helper=new AgentParamActorPoleHelper(actor);  //fills null above
     }
 
     public AgentParamActorPole(StateI<VariablesPole> state,

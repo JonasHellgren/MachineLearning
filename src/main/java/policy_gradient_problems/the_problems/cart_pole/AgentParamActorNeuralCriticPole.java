@@ -1,12 +1,16 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import common_dl4j.CustomPolicyGradientLoss;
 import common_dl4j.NetSettings;
 import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.*;
 import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_helpers.ParamFunction;
+
 import java.util.List;
 
 public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> implements AgentParamActorNeuralCriticI<VariablesPole> {
@@ -18,10 +22,17 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
     ParametersPole parametersPole;
 
     public static AgentParamActorNeuralCriticPole newDefaultCritic(StateI<VariablesPole> stateStart) {
-        NetSettings netSettings = NetSettings.builder()
-                .nHidden(10)
-                .learningRate(1e-3).build();
-        return  AgentParamActorNeuralCriticPole.builder()
+        /*NetSettings netSettings = NetSettings.builder()
+                .nHiddenLayers(2).nHidden(10).learningRate(1e-3).build();
+*/
+        var netSettings= NetSettings.builder()
+                .nHiddenLayers(3).nInput(4).nHidden(10).nOutput(1)
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .build();
+
+        return AgentParamActorNeuralCriticPole.builder()
                 .stateStart(stateStart).actorParam(AgentParamActorPoleHelper.getInitThetaVector())
                 .criticSettings(netSettings).parametersPole(ParametersPole.newDefault()).build();
     }
@@ -34,15 +45,15 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
         super(stateStart);
         this.actor = new ParamFunction(actorParam);
         this.critic = new NeuralMemoryPole(criticSettings, parametersPole);
-        this.helper=new AgentParamActorPoleHelper(actor);
-        this.criticSettings=criticSettings;
-        this.parametersPole=parametersPole;
+        this.helper = new AgentParamActorPoleHelper(actor);
+        this.criticSettings = criticSettings;
+        this.parametersPole = parametersPole;
     }
 
 
     @Override
     public void fitCritic(List<List<Double>> in, List<Double> out, int nofFits) {
-        critic.fit(in,out,nofFits);
+        critic.fit(in, out, nofFits);
     }
 
     @Override
@@ -65,7 +76,7 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
 
     @Override
     public ArrayRealVector calcGradLogVector(StateI<VariablesPole> state, Action action) {
-        return (ArrayRealVector) helper.calcGradLogVector(state,action.asInt());
+        return (ArrayRealVector) helper.calcGradLogVector(state, action.asInt());
     }
 
     @Override

@@ -5,6 +5,10 @@ import policy_gradient_problems.common_generic.Experience;
 import java.util.*;
 import static common.ListUtils.*;
 
+/**
+ *  See corresponding test for purpose
+ */
+
 public class ReturnCalculator<S> {
 
     public List<Experience<S>>  createExperienceListWithReturns(@NonNull  List<Experience<S>> experienceList,

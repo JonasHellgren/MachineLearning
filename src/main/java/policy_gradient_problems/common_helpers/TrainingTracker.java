@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Handy for plotting training results, included in trainer base class
+ */
+
 @Getter
 @Log
 public class TrainingTracker {

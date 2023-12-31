@@ -31,7 +31,7 @@ public class TestNeuralValueFunctionPole {
 
     @SneakyThrows
     @Test
-    @Disabled("takes long time")
+   // @Disabled("takes long time")
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
         int nofEpochs = 200;

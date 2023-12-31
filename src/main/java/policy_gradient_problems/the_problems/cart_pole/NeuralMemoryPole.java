@@ -1,8 +1,6 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common_dl4j.Dl4JNetFitter;
-import common_dl4j.Dl4JUtil;
-import common_dl4j.NetSettings;
+import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -30,8 +28,20 @@ public class NeuralMemoryPole {
     Dl4JNetFitter fitter;
 
     public static NeuralMemoryPole newDefault() {
+
+/*
         NetSettings netSettings = NetSettings.builder()
-                .learningRate(1e-3).nHidden(10).build();
+                .learningRate(1e-3).nHiddenLayers(1).nHidden(10).build();
+*/
+
+
+        var netSettings= NetSettings.builder()
+                .nHiddenLayers(3).nInput(4).nHidden(10).nOutput(1)
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .build();
+
         return new NeuralMemoryPole(
                 netSettings,
                 ParametersPole.newDefault());
@@ -40,7 +50,7 @@ public class NeuralMemoryPole {
     //todo MemoryCreator
     public NeuralMemoryPole(NetSettings settings, ParametersPole parameters) {
         this.netSettings=settings;
-        var conf = new NeuralNetConfiguration.Builder()
+/*        var conf = new NeuralNetConfiguration.Builder()
                 .seed(settings.seed())
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
@@ -50,7 +60,9 @@ public class NeuralMemoryPole {
                 .layer(2, createHiddenLayer(settings.nHidden()))
                 .layer(3, createOutLayer(settings.nHidden()))
                 .build();
-        this.net = new MultiLayerNetwork(conf);
+        this.net = new MultiLayerNetwork(conf);*/
+
+        this.net=MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.randGen=new Random(settings.seed());
         this.normalizerIn = createNormalizerIn(parameters);
@@ -61,6 +73,7 @@ public class NeuralMemoryPole {
                 .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
                 .build();
     }
+
 
     public void fit(List<List<Double>> in, List<Double> out,int  nofFitsPerEpoch) {
         fitter.train(in, out, nofFitsPerEpoch);

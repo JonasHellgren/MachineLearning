@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.cart_pole.VariablesPole;
 import java.util.function.Function;
 
 /**

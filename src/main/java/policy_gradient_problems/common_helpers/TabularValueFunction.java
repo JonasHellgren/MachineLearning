@@ -3,7 +3,7 @@ package policy_gradient_problems.common_helpers;
 import org.apache.commons.math3.linear.ArrayRealVector;
 
 /**
- * The critic in actor-critic methods
+ * The critic in some actor-critic agents
  */
 
 public class TabularValueFunction {

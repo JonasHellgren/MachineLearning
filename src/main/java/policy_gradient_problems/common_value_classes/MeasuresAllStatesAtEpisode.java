@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Used by training tracker
+ */
+
 public record MeasuresAllStatesAtEpisode(
         Map<Integer, List<Double>> stateMeasuresMap  //state, measures
 ) {

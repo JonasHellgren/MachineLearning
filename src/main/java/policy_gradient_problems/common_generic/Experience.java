@@ -28,7 +28,7 @@ public record Experience<V>(
     }
 
 
-    public static <V> Experience<V> ofWithFail(StateI<V> state,
+    public static <V> Experience<V> ofWithIsFail(StateI<V> state,
                                                Action action,
                                                double reward,
                                                StateI<V> stateNext,

@@ -6,8 +6,6 @@ import lombok.Builder;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.cart_pole.ExperiencePole;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -33,7 +31,7 @@ public class NStepReturnInfo<V> {
     final List<Experience<V>> experienceList;
     TrainerParameters parametersTrainer;
 
-    public ResultManySteps<V> getResultManySteps(ExperiencePole e) {
+    public ResultManySteps<V> getResultManySteps(Experience<V> e) {
         int tStart = experienceList.indexOf(e);
         if (tStart == -1) {
             throw new IllegalArgumentException("Experience not present");

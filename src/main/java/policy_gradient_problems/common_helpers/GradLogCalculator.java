@@ -38,14 +38,5 @@ public class GradLogCalculator {
         return gradLogArray;
     }
 
-    public static double[] calculateGrad(final int action, @NonNull final List<Double> actionProbabilities) {
-        double[] gradLog = calculateGradLog(action, actionProbabilities);
-        int nofActions = actionProbabilities.size();
-        double[] gradLogArray = new double[nofActions];  //todo ArrayUtils.multiplyElements
-        for (int i = 0; i < nofActions; i++) {
-            gradLogArray[i] = gradLog[i] * actionProbabilities.get(i);
-        }
-        return gradLogArray;
-    }
 
 }

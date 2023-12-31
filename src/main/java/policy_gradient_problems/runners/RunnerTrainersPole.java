@@ -37,9 +37,6 @@ public class RunnerTrainersPole {
         var trainerVanilla = TrainerVanillaPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
-
-      //  System.out.println("vanilla thetaVector() = " + trainerVanilla.getAgent().getActor());
-
         return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
@@ -47,9 +44,6 @@ public class RunnerTrainersPole {
         var trainerBaseline = TrainerBaselinePole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
-
-        //System.out.println("baseline thetaVector() = " + trainerBaseline.getAgent().getActor());
-
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
@@ -57,31 +51,11 @@ public class RunnerTrainersPole {
         var trainerAC = TrainerParamActorNeuralCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerAC.train();
-
-   //     printMemory(environment, trainerAC);
-      //  System.out.println("AC thetaVector() = " + trainerAC.getAgent().getActor());
         trainerAC.getAgent().setState(StatePole.newUprightAndStill());
         System.out.println("trainerAC.getExperiences().size() = " + trainerAC.getExperiences(agent).size());
 
         return getFilteredNofSteps(trainerAC.getTracker());
     }
-
-/*
-    private static void printMemory(EnvironmentPole environment, TrainerParamActorNeuralCriticPole trainerAC) {
-        NeuralMemoryPole memory= trainerAC.getMemory();
-        double valAll0=memory.getOutValue(StatePole.newUprightAndStill().asList());
-        double valBigAngle=memory.getOutValue(StatePole.newFromVariables(VariablesPole.builder().angle(0.2).build()).asList());
-
-        System.out.println("valAll0 = " + valAll0);
-        System.out.println("valBigAngle = " + valBigAngle);
-
-        for (int i = 0; i < 10 ; i++) {
-            StatePole statePole = StatePole.newAllRandom(environment.getParameters());
-            double valAllRandom=memory.getOutValue(statePole.asList());
-            System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
-        }
-    }
-*/
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
         var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle("Nof steps").width(500).height(300).build();

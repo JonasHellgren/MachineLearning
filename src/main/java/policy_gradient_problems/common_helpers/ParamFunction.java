@@ -3,6 +3,10 @@ package policy_gradient_problems.common_helpers;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
+/**
+ * Actor memory for some agent classes
+ */
+
 public class ParamFunction {
 
     RealVector params;

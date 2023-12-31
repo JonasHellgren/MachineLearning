@@ -33,7 +33,8 @@ import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
  *     Actions:     0     Push cart to the left,  1     Push cart to the right
   *     Reward:     Reward is 1 for every step taken, including the termination step
 
- *     For the interested reader, dynamics details in: https://coneural.org/florian/papers/05_cart_pole.pdf
+ *     For the interested reader, dynamics details in:
+ *     https://coneural.org/florian/papers/05_cart_pole.pdf
 */
 
 public class EnvironmentPole implements EnvironmentI<VariablesPole> {

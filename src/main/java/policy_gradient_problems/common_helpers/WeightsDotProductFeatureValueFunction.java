@@ -4,6 +4,10 @@ import lombok.Getter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
+/**
+ * Critic memory in some agents
+ */
+
 @Getter
 public class WeightsDotProductFeatureValueFunction {
 
