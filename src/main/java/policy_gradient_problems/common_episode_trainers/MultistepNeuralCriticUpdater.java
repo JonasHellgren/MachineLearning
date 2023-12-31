@@ -36,7 +36,6 @@ public class MultistepNeuralCriticUpdater<V> {
     Function<StateI<V>,Double> criticOut;
     Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;
 
-
     public void updateCritic(Integer n, List<Experience<V>> experiences) {
         int T = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
@@ -47,19 +46,15 @@ public class MultistepNeuralCriticUpdater<V> {
 
         for (int t = 0; t < tEnd; t++) {
             var resMS = elInfo.getResultManySteps(t);
-            // executeIfTrue(resMS.isEndOutside(), () -> log.info("Warning isEndOutside"));
             double sumRewards = resMS.sumRewardsNSteps;
-            double valueFut = !resMS.isEndOutside  //(resMS.stateFuture().isPresent())
-                    //? gammaPowN * agent.getCriticOut(resMS.stateFuture)
+            double valueFut = !resMS.isFutureStateOutside
                     ? gammaPowN * criticOut.apply(resMS.stateFuture)
                     : 0;
             stateValuesList.add(elInfo.getExperience(t).state().asList());
             valueTarList.add(sumRewards + valueFut);
         }
         int nofFits = (int) Math.max(1,(parameters.relativeNofFitsPerEpoch() * tEnd));  //todo get from record method
-//        executeIfTrue(!stateValuesList.isEmpty(), () -> agent.fitCritic(stateValuesList, valueTarList, nofFits));
         executeIfTrue(!stateValuesList.isEmpty(), () -> fitCritic.accept(Triple.of(stateValuesList, valueTarList, nofFits)));
-
         executeIfTrue(stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
         stateValuesList.clear();
         valueTarList.clear();

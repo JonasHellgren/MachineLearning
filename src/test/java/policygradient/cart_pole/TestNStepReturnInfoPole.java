@@ -34,7 +34,7 @@ public class TestNStepReturnInfoPole {
 
         double expectedDiscSum = getExpectedDiscSum(5);
         Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertFalse(result.isEndOutside);
+        Assertions.assertFalse(result.isFutureStateOutside);
         Assertions.assertEquals(4+1,result.stateFuture.getVariables().x());
     }
 
@@ -45,7 +45,7 @@ public class TestNStepReturnInfoPole {
 
         double expectedDiscSum = getExpectedDiscSum(5);
         Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertFalse(result.isEndOutside);
+        Assertions.assertFalse(result.isFutureStateOutside);
         Assertions.assertEquals(9+1,result.stateFuture.getVariables().x());
     }
 
@@ -56,7 +56,7 @@ public class TestNStepReturnInfoPole {
 
         double expectedDiscSum = getExpectedDiscSum(4);
         Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertTrue(result.isEndOutside);
+        Assertions.assertTrue(result.isFutureStateOutside);
     }
 
     @Test

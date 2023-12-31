@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_episode_trainers.MultistepNeuralCriticUpdater;
 import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_helpers.AdvantageCalculator;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -62,28 +63,18 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
 
 
     void updateActor(List<Experience<VariablesPole>> experiences) {
-        var elInfo = new NStepReturnInfo<>(experiences, parameters);
+        var nri = new NStepReturnInfo<>(experiences, parameters);
+        var ac=new AdvantageCalculator<VariablesPole>(parameters, (s) -> agent.getCriticOut(s));
         int T = experiences.size();
         for (int tau = 0; tau < T; tau++) {
-            var expAtTau = elInfo.getExperience(tau);
-            double advantage = calcAdvantage(expAtTau);
+            var expAtTau = nri.getExperience(tau);
+            double advantage = ac.calcAdvantage(expAtTau);
             var gradLogVector = agent.calcGradLogVector(expAtTau.state(), expAtTau.action());
             var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
             agent.changeActor(changeInThetaVector);
         }
     }
 
-    /**
-     * advantage=Q(s,a)-V(s)=r+γ*V(s')-V(s')
-     * If an action leads to a fail state, the advantage calculation focus on the immediate reward,
-     * value of future state can be regarded as not possible to define/irrelevant due to the fail state.
-     */
-    double calcAdvantage(Experience<VariablesPole> expAtTau) {
-        double r = expAtTau.reward();
-        double valueS = agent.getCriticOut(expAtTau.state());
-        double valueSNew = agent.getCriticOut(expAtTau.stateNext());
-        boolean isActionResultingInFailState = expAtTau.isFail();
-        return (isActionResultingInFailState) ? r : r + parameters.gamma() * valueSNew - valueS;
-    }
+
 
 }

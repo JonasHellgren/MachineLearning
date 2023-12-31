@@ -27,16 +27,8 @@ public class NStepReturnInfo<V> {
     public static class ResultManySteps<V> {
         public Double sumRewardsNSteps;
         public StateI<V> stateFuture;
-        public boolean isEndOutside;
+        public boolean isFutureStateOutside;
     }
-
-////Following would have been cleaner but gives compilation error
-/*    @Builder
-    public  record ResultManySteps<V> (
-        Double sumRewardsNSteps,
-        StateI<V> stateFuture,
-        boolean isEndOutside)
-    {    }*/
 
     final List<Experience<V>> experienceList;
     TrainerParameters parametersTrainer;
@@ -58,19 +50,12 @@ public class NStepReturnInfo<V> {
                 .toList();
         double rewardSumDiscounted = ListUtils.discountedSum(rewardList, parametersTrainer.gamma());
         boolean isEndOutSide = tEnd > sizeExpList;
-/*
-        Optional<StateI<V>> stateFuture=isEndOutSide
-                ? Optional.empty()
-                : Optional.of(experienceList.get(tEnd-1).stateNext());
-*/
-        StateI<V> stateFuture = isEndOutSide
-                ? null
-                : experienceList.get(tEnd - 1).stateNext();
+        StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(tEnd - 1).stateNext();
 
         return ResultManySteps.<V>builder()
                 .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)
-                .isEndOutside(isEndOutSide)
+                .isFutureStateOutside(isEndOutSide)
                 .build();
     }
 
