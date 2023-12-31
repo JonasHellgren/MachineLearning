@@ -5,8 +5,8 @@ import common.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.common.ParamFunction;
-import policy_gradient_problems.common.SubArrayExtractor;
+import policy_gradient_problems.common_helpers.ParamFunction;
+import policy_gradient_problems.common_helpers.SubArrayExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
-import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
-import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
+import static policy_gradient_problems.common_helpers.BucketLimitsHandler.getLimits;
+import static policy_gradient_problems.common_helpers.BucketLimitsHandler.throwIfBadLimits;
+import static policy_gradient_problems.common_helpers.GradLogCalculator.calculateGradLog;
+import static policy_gradient_problems.common_helpers.SoftMaxEvaluator.getProbabilities;
 
 public class AgentParamActorSCHelper {
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;

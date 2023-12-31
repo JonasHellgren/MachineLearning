@@ -3,7 +3,7 @@ package policy_gradient_problems.the_problems.sink_the_ship;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import policy_gradient_problems.common_trainers.ParamActorTabCriticEpisodeTrainer;
+import policy_gradient_problems.common_episode_trainers.ParamActorTabCriticEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Getter

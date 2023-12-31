@@ -4,7 +4,7 @@ import common.MovingAverage;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.abstract_classes.AgentParamActorNeuralCriticI;
-import policy_gradient_problems.common.TrainingTracker;
+import policy_gradient_problems.common_helpers.TrainingTracker;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 import java.util.List;
@@ -13,7 +13,7 @@ public class RunnerTrainersPole {
 
     public static final int LENGTH_WINDOW = 100, NOF_STEPS_MAX = 300;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(3_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
+            .nofEpisodes(2_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
             .learningRateCritic(1e-3)  //not relevant for vanilla  1e-3
             .stepHorizon(5).relativeNofFitsPerEpoch(0.5)   //only relevant for AC  10
             .build();

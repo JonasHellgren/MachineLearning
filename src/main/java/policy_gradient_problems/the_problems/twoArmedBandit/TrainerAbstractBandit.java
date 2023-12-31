@@ -5,7 +5,7 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
-import policy_gradient_problems.common.TrainingTracker;
+import policy_gradient_problems.common_helpers.TrainingTracker;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.common_value_classes.TrainerParameters;

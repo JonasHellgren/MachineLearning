@@ -149,9 +149,9 @@ TrainerVanillaPole använder generisk epsiode trainer  x
 AgentSC -> AgentParamActorSC, AgentParamActorTabCriticSC  x
 AgentParamActorTabCriticI ersätt getCritic  x
 
-skapa MultistepNeuralAgentHelper
-använd ovan i TrainerParamActorNeuralCriticPole
-
+skapa MultistepNeuralAgentHelper x
+använd ovan i TrainerParamActorNeuralCriticPole x
+plantnum AgentI etc x
 generell pg clean up
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 
@@ -159,7 +159,7 @@ short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 
-plantnum AgentI etc
+
 
 rensa, tex ExperienceOld
 TestReturnCalculator

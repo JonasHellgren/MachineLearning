@@ -5,7 +5,7 @@ import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
-import policy_gradient_problems.common.ParamFunction;
+import policy_gradient_problems.common_helpers.ParamFunction;
 import java.util.List;
 
 public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> implements AgentParamActorNeuralCriticI<VariablesPole> {

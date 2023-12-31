@@ -4,8 +4,8 @@ import common.BestPairFinder;
 import common.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import plotters.PlotterMultiplePanelsPairs;
-import policy_gradient_problems.common.PPOHelper;
-import policy_gradient_problems.common.SoftMaxEvaluator;
+import policy_gradient_problems.common_helpers.PPOHelper;
+import policy_gradient_problems.common_helpers.SoftMaxEvaluator;
 
 import java.util.*;
 

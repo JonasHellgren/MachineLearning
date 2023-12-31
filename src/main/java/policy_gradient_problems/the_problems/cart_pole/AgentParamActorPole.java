@@ -4,14 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.*;
-import policy_gradient_problems.common.ParamFunction;
-import policy_gradient_problems.common.TabularValueFunction;
+import policy_gradient_problems.common_helpers.ParamFunction;
 
 import java.util.List;
-
-import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 
 /***
  */

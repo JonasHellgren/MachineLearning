@@ -8,10 +8,9 @@ import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
-import policy_gradient_problems.common.*;
+import policy_gradient_problems.common_helpers.*;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.StepReturn;
-import policy_gradient_problems.common_value_classes.ExperienceContAction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;

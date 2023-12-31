@@ -20,6 +20,12 @@ interface AgentNeuralActorCriticI {
 + fitCritic(in,value);
 }
 
+
+interface AgentParamActorNeuralCriticI extends AgentParamActorI {
++ fitCritic(in,value);
+}
+
+
 abstract class AgentA {
 '/    EnvironmentI<<V>> environment;
     StateI<<V>> state;
@@ -31,7 +37,9 @@ AgentI <|-- AgentNeuralActorI
 AgentI <|-- AgentNeuralActorCriticI
 AgentA  <|-- Agent1
 AgentA  <|-- Agent2
+AgentA  <|-- Agent3
 AgentParamActorI  <|-- Agent1
 AgentNeuralActorI  <|-- Agent2
+AgentParamActorNeuralCriticI <|-- Agent3
 
 @enduml

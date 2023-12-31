@@ -3,7 +3,7 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import policy_gradient_problems.common_trainers.NeuralActorEpisodeTrainer;
+import policy_gradient_problems.common_episode_trainers.NeuralActorEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Log

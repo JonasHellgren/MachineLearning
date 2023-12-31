@@ -4,17 +4,15 @@ import common.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
-import policy_gradient_problems.common.ParamFunction;
-import policy_gradient_problems.common.TabularValueFunction;
+import policy_gradient_problems.common_helpers.ParamFunction;
 
 import java.util.List;
 import static common.MyFunctions.*;
-import static policy_gradient_problems.common.GradLogCalculator.calculateGradLog;
-import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
+import static policy_gradient_problems.common_helpers.GradLogCalculator.calculateGradLog;
+import static policy_gradient_problems.common_helpers.SoftMaxEvaluator.getProbabilities;
 
 
 /***

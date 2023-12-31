@@ -10,8 +10,8 @@ import lombok.SneakyThrows;
 import java.util.List;
 
 import static common.IndexFinder.findBucket;
-import static policy_gradient_problems.common.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.common.BucketLimitsHandler.throwIfBadLimits;
+import static policy_gradient_problems.common_helpers.BucketLimitsHandler.getLimits;
+import static policy_gradient_problems.common_helpers.BucketLimitsHandler.throwIfBadLimits;
 
 @Setter
 @Getter

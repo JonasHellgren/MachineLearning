@@ -4,19 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.common.ParamFunction;
-import policy_gradient_problems.common.TabularValueFunction;
+import policy_gradient_problems.common_helpers.ParamFunction;
+import policy_gradient_problems.common_helpers.TabularValueFunction;
 
 import java.util.List;
 
-import static common.ArrayUtil.createArrayWithSameDoubleNumber;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.common.SoftMaxEvaluator.getProbabilities;
+import static policy_gradient_problems.common_helpers.SoftMaxEvaluator.getProbabilities;
 
 /***
  * See shortCorridor.md for description

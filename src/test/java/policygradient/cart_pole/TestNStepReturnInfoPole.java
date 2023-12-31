@@ -3,6 +3,7 @@ package policygradient.cart_pole;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_helpers.NStepReturnInfo;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import static common.ListUtils.*;
 public class TestNStepReturnInfoPole {
 
     public static final double REWARD = 1d;
-    NStepReturnInfoPole listInfoPole;
+    NStepReturnInfo<VariablesPole> listInfoPole;
     TrainerParameters trainerParameters;
 
     @BeforeEach
@@ -22,7 +23,7 @@ public class TestNStepReturnInfoPole {
         for (int x = 0; x < 10 ; x++) {
             experiencePoleList.add(expOf(x));
         }
-        listInfoPole=new NStepReturnInfoPole(experiencePoleList,trainerParameters);
+        listInfoPole=new NStepReturnInfo<>(experiencePoleList,trainerParameters);
     }
 
 
@@ -32,10 +33,9 @@ public class TestNStepReturnInfoPole {
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
-        Assertions.assertTrue(result.stateFuture().isPresent());
-        Assertions.assertFalse(result.isEndOutside());
-        Assertions.assertEquals(4+1,result.stateFuture().get().getVariables().x());
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
+        Assertions.assertFalse(result.isEndOutside);
+        Assertions.assertEquals(4+1,result.stateFuture.getVariables().x());
     }
 
     @Test
@@ -44,10 +44,9 @@ public class TestNStepReturnInfoPole {
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
-        Assertions.assertTrue(result.stateFuture().isPresent());
-        Assertions.assertFalse(result.isEndOutside());
-        Assertions.assertEquals(9+1,result.stateFuture().get().getVariables().x());
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
+        Assertions.assertFalse(result.isEndOutside);
+        Assertions.assertEquals(9+1,result.stateFuture.getVariables().x());
     }
 
     @Test
@@ -56,9 +55,8 @@ public class TestNStepReturnInfoPole {
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(4);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
-        Assertions.assertFalse(result.stateFuture().isPresent());
-        Assertions.assertTrue(result.isEndOutside());
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
+        Assertions.assertTrue(result.isEndOutside);
     }
 
     @Test

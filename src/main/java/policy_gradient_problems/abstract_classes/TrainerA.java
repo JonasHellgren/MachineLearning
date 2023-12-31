@@ -5,8 +5,7 @@ import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.common.TrainingTracker;
-import policy_gradient_problems.the_problems.twoArmedBandit.VariablesBandit;
+import policy_gradient_problems.common_helpers.TrainingTracker;
 
 import java.util.List;
 
