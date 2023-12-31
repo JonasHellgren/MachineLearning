@@ -5,6 +5,7 @@ import lombok.Builder;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.abstract_classes.*;
+import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_helpers.ParamFunction;
 import java.util.List;
 

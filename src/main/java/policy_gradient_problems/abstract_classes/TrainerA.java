@@ -2,6 +2,7 @@ package policy_gradient_problems.abstract_classes;
 
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.RealVector;
+import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.ExperienceOld;
 import policy_gradient_problems.common_value_classes.TrainerParameters;

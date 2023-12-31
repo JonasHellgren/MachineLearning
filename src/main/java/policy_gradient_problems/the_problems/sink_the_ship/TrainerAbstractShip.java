@@ -5,7 +5,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_helpers.*;

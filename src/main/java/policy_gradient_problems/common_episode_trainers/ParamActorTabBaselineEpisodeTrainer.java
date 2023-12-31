@@ -2,7 +2,7 @@ package policy_gradient_problems.common_episode_trainers;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
+import policy_gradient_problems.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.ReturnCalculator;

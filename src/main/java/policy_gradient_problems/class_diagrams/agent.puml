@@ -4,42 +4,52 @@
 interface AgentI<V=generic state variables> {
 + int chooseAction(double probRandom)  //todo int generic
 + setState(StateI<<V>> state);
++ StateI<<V>> getState()
 '/ + double readValue(StateI<<V>> state);  //todo needed?
 }
 
-interface AgentParamActorI {
+interface ParamActorI {
 + changeActor(change);
++ ArrayRealVector calcGradLogVector(state, action);
++ List<Double> getActionProbabilities()
 }
 
-interface AgentNeuralActorI {
+
+interface NeuralActorI {
 + fitActor(in,out);
 }
 
-interface AgentNeuralActorCriticI {
-+ fitActor(in,out);
+
+interface NeuralCriticI {
 + fitCritic(in,value);
++ double getCriticOut(StateI<V> state);
 }
 
+
+interface AgentParamActorI extends AgentI, ParamActorI {
+}
+
+interface AgentNeuralActorI extends AgentI, NeuralActorI {
+}
+
+interface AgentNeuralActorNeuralCriticI extends AgentI, NeuralActorI, NeuralCriticI {
+}
 
 interface AgentParamActorNeuralCriticI extends AgentParamActorI {
-+ fitCritic(in,value);
 }
 
-
-abstract class AgentA {
-'/    EnvironmentI<<V>> environment;
+abstract class AgentA extends AgentI {
     StateI<<V>> state;
 }
 
-AgentI <|-- AgentA
-AgentI <|-- AgentParamActorI
-AgentI <|-- AgentNeuralActorI
-AgentI <|-- AgentNeuralActorCriticI
+
 AgentA  <|-- Agent1
 AgentA  <|-- Agent2
 AgentA  <|-- Agent3
 AgentParamActorI  <|-- Agent1
 AgentNeuralActorI  <|-- Agent2
-AgentParamActorNeuralCriticI <|-- Agent3
+AgentNeuralActorNeuralCriticI <|-- Agent3
+
+
 
 @enduml

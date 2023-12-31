@@ -3,7 +3,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.common_episode_trainers.ParamActorEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 

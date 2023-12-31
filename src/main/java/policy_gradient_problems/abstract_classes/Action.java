@@ -3,6 +3,10 @@ package policy_gradient_problems.abstract_classes;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * Generic action, handles both discrete and continuous actions, only one of the arguments can be non-empty
+ */
+
 public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
 
     public static Action ofInteger(Integer intAction) {

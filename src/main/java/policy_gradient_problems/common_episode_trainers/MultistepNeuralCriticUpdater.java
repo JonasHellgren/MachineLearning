@@ -36,7 +36,8 @@ public class MultistepNeuralCriticUpdater<V> {
     Function<StateI<V>,Double> criticOut;
     Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;
 
-    public void updateCritic(Integer n, List<Experience<V>> experiences) {
+    public void updateCritic(List<Experience<V>> experiences) {
+        Integer n = parameters.stepHorizon();
         int T = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
         var elInfo = new NStepReturnInfo<>(experiences, parameters);

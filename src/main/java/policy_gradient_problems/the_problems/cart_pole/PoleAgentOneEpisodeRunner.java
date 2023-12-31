@@ -2,7 +2,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import common.Counter;
 import lombok.Builder;
-import policy_gradient_problems.abstract_classes.AgentI;
+import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.common_generic.StepReturn;
 
 @Builder

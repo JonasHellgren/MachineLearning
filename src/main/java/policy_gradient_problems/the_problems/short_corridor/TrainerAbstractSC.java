@@ -1,10 +1,8 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.abstract_classes.AgentI;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_generic.StepReturn;

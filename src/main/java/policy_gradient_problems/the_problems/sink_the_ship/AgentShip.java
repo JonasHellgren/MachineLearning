@@ -10,7 +10,7 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentParamActorTabCriticI;
+import policy_gradient_problems.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_helpers.ParamFunction;
 import policy_gradient_problems.common_helpers.SubArrayExtractor;

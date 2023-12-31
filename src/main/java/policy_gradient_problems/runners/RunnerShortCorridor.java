@@ -1,7 +1,6 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.*;
 

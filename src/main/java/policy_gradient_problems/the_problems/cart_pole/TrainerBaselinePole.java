@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
-import policy_gradient_problems.abstract_classes.AgentParamActorI;
+import policy_gradient_problems.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.common_helpers.WeightsDotProductFeatureValueFunction;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;

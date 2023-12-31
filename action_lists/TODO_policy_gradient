@@ -152,16 +152,15 @@ AgentParamActorTabCriticI ersätt getCritic  x
 skapa MultistepNeuralAgentHelper x
 använd ovan i TrainerParamActorNeuralCriticPole x
 plantnum AgentI etc x
+MultistepParamActorUpdater x
 generell pg clean up
+rensa, tex ExperienceOld
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 
-
-
-rensa, tex ExperienceOld
 TestReturnCalculator
 stepHorizon(1) buggar
 ArrayRealVector RealVector rörs ihop

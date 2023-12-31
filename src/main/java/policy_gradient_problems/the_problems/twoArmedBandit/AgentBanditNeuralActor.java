@@ -9,7 +9,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.AgentA;
-import policy_gradient_problems.abstract_classes.AgentNeuralActorI;
+import policy_gradient_problems.agent_interfaces.AgentNeuralActorI;
 
 import java.util.List;
 
