@@ -8,7 +8,7 @@ import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_helpers.ReturnCalculator;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 

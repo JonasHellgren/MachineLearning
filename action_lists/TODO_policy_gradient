@@ -154,6 +154,7 @@ använd ovan i TrainerParamActorNeuralCriticPole x
 plantnum AgentI etc x
 MultistepParamActorUpdater x
 generell pg clean up
+TestReturnCalculator - visade sig bugga x
 rensa, tex ExperienceOld
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 
@@ -161,7 +162,6 @@ short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 
-TestReturnCalculator
 stepHorizon(1) buggar
 ArrayRealVector RealVector rörs ihop
 cart pole ACNeuralPolicy

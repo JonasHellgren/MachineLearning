@@ -128,7 +128,7 @@ public class ListUtils {
     }
 
     /**
-     * 1d,10d,10d , df=0.5->  10d,5d,2.5d
+     * 10d,10d,10d , df=0.5->  10d,5d,2.5d
      */
 
     public static List<Double> discountedElements(List<Double> list, double discountFactor) {

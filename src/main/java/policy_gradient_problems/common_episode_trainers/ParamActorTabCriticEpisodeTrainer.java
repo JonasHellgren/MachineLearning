@@ -5,7 +5,7 @@ import lombok.NonNull;
 import policy_gradient_problems.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_helpers.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.List;
 import java.util.function.Function;
@@ -41,7 +41,6 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
     private double calcTdError(Experience<V> experience) {
         int keyState = getTabularFunctionKey(experience.state());
         int keyStateNext = getTabularFunctionKey(experience.stateNext());
-
         double v = agent.getCriticValue(keyState);
         double vNext = isTerminal.apply(experience.stateNext())
                 ? valueTermState

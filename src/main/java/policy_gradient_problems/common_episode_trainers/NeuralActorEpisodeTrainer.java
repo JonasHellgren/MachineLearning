@@ -6,7 +6,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorI;
 import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_generic.ReturnCalculator;
+import policy_gradient_problems.common_helpers.ReturnCalculator;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.List;
 

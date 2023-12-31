@@ -8,8 +8,12 @@ interface StateI<V=generic state variables> {
 + set(StateI<V> state);
 }
 
+class Action {
++ asInt()
++ asDouble()
+}
 
-
+note left of Action : generic action type
 
 interface TrainerI<V=generic state variables> {
 + train()
@@ -20,13 +24,13 @@ TrainingTracker tracker
 TrainerParameters parameters
 }
 
-abstract class TrainerATBD {
+abstract class TrainerTbdA<for specific environment> {
     EnvironmentI<<V>> environment;
     Agent<<V>> agent;
 }
 
 interface EnvironmentI<V=generic state variables> {
-+  StepReturn<<V>> step(StateI<<V>> state,int action);
++  StepReturn<<V>> step(StateI<<V>> state,Action action);
 '/ +  boolean isTerminalState(StateI<<V>> state);
 }
 
@@ -38,6 +42,8 @@ TrainerI <|-- TrainerA
 TrainerA <|-- TrainerTbdA
 TrainerTbdA  <|-- Trainer1
 TrainerTbdA  <|-- Trainer2
+
+note right of Trainer1 : May have different training algorithm than Trainer2
 
 StateI -[hidden]- EnvironmentI
 Environment1 -[hidden]- TrainerI
