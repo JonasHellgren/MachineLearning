@@ -16,7 +16,6 @@ import policy_gradient_problems.common_generic.StepReturn;
 
 @Builder
 public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
-
     public static final int NOF_ACTIONS = 2;
     Double probWinAction0, probWinAction1;
 

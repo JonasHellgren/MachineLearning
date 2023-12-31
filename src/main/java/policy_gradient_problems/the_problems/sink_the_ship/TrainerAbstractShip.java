@@ -18,9 +18,6 @@ import java.util.List;
 
 @Log
 public class TrainerAbstractShip extends TrainerA<VariablesShip> {
-
-    public static final double DUMMY_VALUE = 0d;
-    public static final boolean FAIL_DUMMY = false;
     @NonNull EnvironmentShip environment;
     @NonNull AgentShip agent;
 
@@ -46,8 +43,7 @@ public class TrainerAbstractShip extends TrainerA<VariablesShip> {
     }
 
     @Override
-    public void train() {
-
+    public void train() {  //defined in subclass
     }
 
     public List<Experience<VariablesShip>> getExperiences(AgentI<VariablesShip> agent) {
@@ -60,7 +56,7 @@ public class TrainerAbstractShip extends TrainerA<VariablesShip> {
             sr=environment.step(state,action);
             agent.setState(sr.state());
             var stateNew=sr.state();
-            experienceList.add(new Experience<>(state, action, sr.reward(), stateNew, FAIL_DUMMY, DUMMY_VALUE));
+            experienceList.add(Experience.of(state, action, sr.reward(), stateNew));
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;

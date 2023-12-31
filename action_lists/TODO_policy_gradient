@@ -155,9 +155,9 @@ plantnum AgentI etc x
 MultistepParamActorUpdater x
 generell pg clean up
 TestReturnCalculator - visade sig bugga x
-rensa, tex ExperienceOld
-double I = 1; bara i ParamActorTabCriticEpisodeTrainer
+rensa, tex ExperienceOld  x
 
+double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
@@ -178,6 +178,7 @@ alphazero på cartpole
 
 
 bubblare/ned prioriterat:
+TrainerBaselinePole använda generisk tränare
 gradLog with finite diff
 skapa generisk ParamActorNeuralMultiStepCriticTrainer
 TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrainer

@@ -16,30 +16,26 @@ import java.util.List;
 @Log
 public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
 
-    public static final boolean FAIL_DUMMY = false;
-    final double DUMMY_VALUE = 0d;
     final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
-
-     EnvironmentBandit environment;
+    EnvironmentBandit environment;
 
     public TrainerAbstractBandit(EnvironmentBandit environment,
                                  TrainerParameters parameters) {
         this.environment = environment;
-        super.parameters=parameters;
+        super.parameters = parameters;
     }
 
 
     @Override
-    public void train() {
-
+    public void train() {  //defined in subclass
     }
 
     public List<Experience<VariablesBandit>> getExperiences(AgentI<VariablesBandit> agent) {
-        List<Experience<VariablesBandit>> experienceList=new ArrayList<>();
-        for (int si = 0; si < parameters.nofStepsMax() ; si++) {
-            Action action=agent.chooseAction();
-            StepReturn<VariablesBandit> sr =environment.step(STATE_DUMMY,action);
-            experienceList.add(new Experience<>(STATE_DUMMY,action, sr.reward(), STATE_DUMMY, FAIL_DUMMY, DUMMY_VALUE));
+        List<Experience<VariablesBandit>> experienceList = new ArrayList<>();
+        for (int si = 0; si < parameters.nofStepsMax(); si++) {
+            Action action = agent.chooseAction();
+            StepReturn<VariablesBandit> sr = environment.step(STATE_DUMMY, action);
+            experienceList.add(Experience.of(STATE_DUMMY, action, sr.reward(), STATE_DUMMY));
         }
         return experienceList;
     }

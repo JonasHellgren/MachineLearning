@@ -2,6 +2,7 @@ package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
 import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.agent_interfaces.AgentI;
 import policy_gradient_problems.abstract_classes.TrainerA;
 import policy_gradient_problems.common_generic.Experience;
@@ -13,9 +14,6 @@ import java.util.List;
 
 
 public class TrainerAbstractSC extends TrainerA<VariablesSC> {
-
-    public static final double DUMMY_VALUE = 0d;
-    public static final boolean FAIL_DUMMY = false;
     @NonNull EnvironmentSC environment;
 
     public TrainerAbstractSC(@NonNull EnvironmentSC environment,
@@ -48,13 +46,11 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
     private Experience<VariablesSC> createExperience(StepReturn<VariablesSC> sr,
                                                      Action action,
                                                      AgentI<VariablesSC> agent) {
-        return new Experience<>(
-                StateSC.newFromPos(EnvironmentSC.getObservedPos(agent.getState())),
-                action,
-                sr.reward(),
-                StateSC.newFromPos(EnvironmentSC.getObservedPos(sr.state())),
-                FAIL_DUMMY,
-                DUMMY_VALUE);
+        return Experience.of(getObsState(agent.getState()), action, sr.reward(), getObsState(sr.state()));
+    }
+
+    private static StateSC getObsState(StateI<VariablesSC> agent) {
+        return StateSC.newFromPos(EnvironmentSC.getObservedPos(agent));
     }
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
@@ -62,7 +58,7 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
     }
 
     @Override
-    public void train() {
+    public void train() { //defined in subclass
     }
 
 

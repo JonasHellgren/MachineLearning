@@ -28,13 +28,11 @@ public class AgentBanditParamActor extends AgentA<VariablesBandit> implements Ag
     public static final double[] VECTOR = new double[]{THETA0, THETA1};
 
     ParamFunction actor;
-    int nofActions;
 
     @Builder
     public AgentBanditParamActor(ParamFunction actor, int nofActions) {
         super(StateBandit.newDefault());
         this.actor = (ParamFunction) defaultIfNullObject.apply(actor,new ParamFunction(VECTOR));
-        this.nofActions = defaultIfNullInteger.apply(nofActions, VECTOR.length);
     }
 
     public static AgentBanditParamActor newDefault() {

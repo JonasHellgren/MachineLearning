@@ -2,22 +2,17 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
-import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
 
 import java.util.List;
 import java.util.Random;
 
-public class NeuralMemoryPole {
+public class NeuralCriticMemoryPole {
 
     static int NOF_INPUTS = 4, NOF_OUTPUTS = 1;
 
@@ -27,41 +22,21 @@ public class NeuralMemoryPole {
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
-    public static NeuralMemoryPole newDefault() {
+    public static NeuralCriticMemoryPole newDefault() {
+        return new NeuralCriticMemoryPole(getDefaultNetSettings(),ParametersPole.newDefault());
+    }
 
-/*
-        NetSettings netSettings = NetSettings.builder()
-                .learningRate(1e-3).nHiddenLayers(1).nHidden(10).build();
-*/
-
-
-        var netSettings= NetSettings.builder()
-                .nHiddenLayers(3).nInput(4).nHidden(10).nOutput(1)
+    public static NetSettings getDefaultNetSettings() {
+        return NetSettings.builder()
+                .nInput(4).nHiddenLayers(3).nHidden(10).nOutput(1)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
                 .build();
-
-        return new NeuralMemoryPole(
-                netSettings,
-                ParametersPole.newDefault());
     }
 
-    //todo MemoryCreator
-    public NeuralMemoryPole(NetSettings settings, ParametersPole parameters) {
+    public NeuralCriticMemoryPole(NetSettings settings, ParametersPole parameters) {
         this.netSettings=settings;
-/*        var conf = new NeuralNetConfiguration.Builder()
-                .seed(settings.seed())
-                .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(settings.learningRate(), settings.momentum()))
-                .list()
-                .layer(0, createHiddenLayer(settings.nHidden()))
-                .layer(1, createHiddenLayer(settings.nHidden()))
-                .layer(2, createHiddenLayer(settings.nHidden()))
-                .layer(3, createOutLayer(settings.nHidden()))
-                .build();
-        this.net = new MultiLayerNetwork(conf);*/
-
         this.net=MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.randGen=new Random(settings.seed());
@@ -94,18 +69,6 @@ public class NeuralMemoryPole {
     public Double getOutValue(StateI<VariablesPole> state) {
         var inData1 = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
         return getOutValue(inData1);
-    }
-
-    private static OutputLayer createOutLayer(Integer nHidden) {
-        return new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
-                .activation(Activation.IDENTITY)
-                .nIn(nHidden).nOut(NOF_OUTPUTS).build();
-    }
-
-    private static DenseLayer createHiddenLayer(Integer nHidden0) {
-        return new DenseLayer.Builder().nIn(NOF_INPUTS).nOut(nHidden0)
-                .activation(Activation.RELU)
-                .build();
     }
 
     public double getError() {

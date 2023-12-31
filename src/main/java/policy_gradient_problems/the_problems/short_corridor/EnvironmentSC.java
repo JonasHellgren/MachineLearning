@@ -54,7 +54,6 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
         return new StepReturn<>(StateSC.newFromPos(posRealNew), false, isTerminal(posRealNew), reward);
     }
 
-
     public boolean isTerminalObserved(int stateObserved) {
         return !SET_OBSERVABLE_STATES_NON_TERMINAL.contains(stateObserved);
     }

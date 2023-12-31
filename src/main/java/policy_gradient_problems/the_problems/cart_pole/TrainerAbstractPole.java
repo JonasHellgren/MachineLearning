@@ -19,8 +19,6 @@ import java.util.ListIterator;
 @AllArgsConstructor
 @Getter
 public class TrainerAbstractPole extends TrainerA<VariablesPole> {
-
-    public static final double DUMMY_VALUE = 0d;
     EnvironmentPole environment;
     ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
@@ -45,7 +43,8 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
             Action action=agent.chooseAction();
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
-            Experience<VariablesPole> exp = new Experience<>(stateOld, action, sr.reward(), sr.state(), sr.isFail(), DUMMY_VALUE);
+            Experience<VariablesPole> exp =
+                    Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), sr.isFail());
             experienceList.add(exp);
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
@@ -68,8 +67,7 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
     }
 
     @Override
-    public void train() {
-
+    public void train() {  //defined in subclass
     }
 
 }

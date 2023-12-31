@@ -25,9 +25,6 @@ public class StateSC implements StateI<VariablesSC> {
         return new StateSC(new VariablesSC(AgentParamActorSCHelper.getRandomNonTerminalState()));
     }
 
-
-
-
     public int getPos() {
         return variables.pos();
     }

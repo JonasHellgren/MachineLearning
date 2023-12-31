@@ -2,7 +2,6 @@ package policygradient.cart_pole;
 
 import common.RandUtils;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
-import policy_gradient_problems.the_problems.cart_pole.NeuralMemoryPole;
+import policy_gradient_problems.the_problems.cart_pole.NeuralCriticMemoryPole;
 import policy_gradient_problems.the_problems.cart_pole.ParametersPole;
 import policy_gradient_problems.the_problems.cart_pole.StatePole;
 import java.util.ArrayList;
@@ -20,18 +19,18 @@ import java.util.function.Function;
 public class TestNeuralValueFunctionPole {
 
     public static final int NOF_SAMPLES = 10;
-    NeuralMemoryPole memory;
+    NeuralCriticMemoryPole memory;
     ParametersPole parameters;
 
     @BeforeEach
     public void init() {
-        memory = NeuralMemoryPole.newDefault();
+        memory = NeuralCriticMemoryPole.newDefault();
         parameters = ParametersPole.newDefault();
     }
 
     @SneakyThrows
     @Test
-   // @Disabled("takes long time")
+    @Disabled("takes long time")
     public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
         int nofEpochs = 200;

@@ -29,7 +29,7 @@ public class AgentParamActorSCHelper {
     SubArrayExtractor subArrayExtractor;
 
     public AgentParamActorSCHelper(ParamFunction actor) {
-        this.actor=actor;
+        this.actor = actor;
         this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
     }
 

@@ -12,7 +12,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 /**
  * Not clean having valueFunction in trainer, but too much hassle creating specific agent
- * Baseline is not worth it, mostly similar to Vanilla version
+ * Baseline is not worth it, mostly similar to Vanilla version in structure and performance
  */
 
 @Getter
