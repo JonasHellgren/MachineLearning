@@ -161,7 +161,9 @@ AgentI genomtänk  x
 använda final och abstract på trainer klasser  x
 createExperienceListWithReturns i TrainerAbstract ta bort?  x
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer  - fimpat x
+NeuralActor: fitActor(INDArray in, INDArray out) -> fitActor(List<List>> in, List<> INDArray out);
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
+hur skall AgentNeuralActorI kunna klara cont action
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 

@@ -15,8 +15,10 @@ public final class TrainerBanditNeuralActor extends TrainerAbstractBandit {
 
     @Builder
     public TrainerBanditNeuralActor(EnvironmentBandit environment,
+                                    AgentBanditNeuralActor agent,
                                     TrainerParameters parameters) {
         super(environment, parameters);
+        this.agent=agent;
         this.agent = new AgentBanditNeuralActor(parameters.learningRateActor());
     }
 

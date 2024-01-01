@@ -1,5 +1,6 @@
 package policy_gradient_problems.common_episode_trainers;
 
+import common.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -23,12 +24,21 @@ public class NeuralActorEpisodeTrainer<V> {
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         for (Experience<V> experience : elwr) {
             var in = Nd4j.create(agent.getState().asList());
-            var out = createOut(experience);
-            agent.fitActor(in, out);
+            var out = createOutOld(experience);
+            agent.fitActor(in,out);
+         //   agent.fitActor(agent.getState().asList(), createOut(experience));
         }
     }
 
-    private INDArray createOut(Experience<V> experience) {
+    private List<Double> createOut(Experience<V> experience) {
+        //todo throw if asInt not valid
+
+        List<Double> out=ListUtils.createListWithEqualElementValues(nofActions,0d);
+        out.set(experience.action().asInt(), experience.value());
+        return out;
+    }
+
+    private INDArray createOutOld(Experience<V> experience) {
         var oneHotVector = Nd4j.zeros(nofActions);
         oneHotVector.putScalar(experience.action().asInt(), experience.value());
         return oneHotVector;
