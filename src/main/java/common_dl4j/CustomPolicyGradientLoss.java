@@ -9,37 +9,27 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 
 /**
- * negate below because we want to maximize, want to find the net weights that maximizes
- * <p>
+ * negate below because we want to maximize, want to find the net weights that maximizes entropy-loss
+ * entropy-loss expresses how similar two distributions are, we want estimate probabilities to be as similar
+ * to "true" (labeled) probabilities
  * policyGradientLoss=-logProb*advVec
- * gradient=-(yRef-softMax)
- * <p>
- * Intuition:
- *  yRef=Gt*yrVec; yrVec = one hot vector, one at action index, e.g. [1 0]
- *  softMax = action probs, e.g. [0.5 0.5]
- * -(yrVec-softMax)=-[0.5 -0.5]=[-0.5 0.5]  <=> change net params so prob(a=0) increases, decreases for rest
  *
+ * See entropy.md for more intuition
  */
 
 
 public class CustomPolicyGradientLoss implements ILossFunction {
 
-    public static final double EPS = 1e-5, EPS_DUMMY = 0d;
+    public static final double EPS = 1e-5;
     double eps;
-    boolean isNumGrad;
     NumericalGradCalculator gradCalculator;
 
-    public static CustomPolicyGradientLoss newNotNum() {
-        return new CustomPolicyGradientLoss(false, EPS_DUMMY);
+    public static CustomPolicyGradientLoss newDefault() {
+        return new CustomPolicyGradientLoss(EPS);
     }
 
-    public static CustomPolicyGradientLoss newNumDefault() {
-        return new CustomPolicyGradientLoss(true, EPS);
-    }
-
-    public CustomPolicyGradientLoss(boolean isNumGrad, double eps) {
+    public CustomPolicyGradientLoss(double eps) {
         this.eps = eps;
-        this.isNumGrad = isNumGrad;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn =
                 (p, a, m) -> computeScore(p.getFirst(), p.getSecond(), a, m, false);
         gradCalculator = new NumericalGradCalculator(eps, scoreFcn);
@@ -62,18 +52,8 @@ public class CustomPolicyGradientLoss implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        return isNumGrad
-                ? calcGradientNum(yRef, preOutput, activationFn, mask)
-                : calcGradientNotNum(yRef, preOutput, activationFn);
-    }
-
-    private static INDArray calcGradientNotNum(INDArray yRef, INDArray preOutput, IActivation activationFn) {
-        INDArray y = activationFn.getActivation(preOutput, false);
-        return yRef.sub(y).neg();
-    }
-
-    public INDArray calcGradientNum(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        return gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
+        INDArray grad = gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
+        return grad.reshape(1,grad.length());  // reshape it to a row matrix of size 1×n
     }
 
     @Override
@@ -98,6 +78,7 @@ public class CustomPolicyGradientLoss implements ILossFunction {
         return "PolicyGradientLoss";
     }
 
+    //minimize cross-entropy, see entropy.md for details
     private static INDArray getPolicyGradientLoss(INDArray yRef, INDArray preOutput, IActivation activationFn) {
         INDArray y = activationFn.getActivation(preOutput, false);
         INDArray logProb = Transforms.log(y);

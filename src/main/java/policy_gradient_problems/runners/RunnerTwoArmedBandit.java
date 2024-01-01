@@ -52,7 +52,7 @@ public class RunnerTwoArmedBandit {
 
     private static TrainerParameters getTrainerParametersNeural() {
         return TrainerParameters.builder()
-                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-2).build();
+                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-1).build();
     }
 
 }
