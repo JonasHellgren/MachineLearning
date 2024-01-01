@@ -157,9 +157,9 @@ generell pg clean up  x
 TestReturnCalculator - visade sig bugga x
 rensa, tex ExperienceOld  x
 
-AgentI genomtänk
+AgentI genomtänk  x
 använda final och abstract på trainer klasser  x
-createExperienceListWithReturns i TrainerAbstract ta bort?
+createExperienceListWithReturns i TrainerAbstract ta bort?  x
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer

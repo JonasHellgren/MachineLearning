@@ -11,5 +11,4 @@ public interface AgentI<V> {
      Action chooseAction();
      StateI<V> getState();
      void setState(StateI<V> state);
-
 }

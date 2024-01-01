@@ -13,7 +13,7 @@ public class RunnerTrainersPole {
 
     public static final int LENGTH_WINDOW = 100, NOF_STEPS_MAX = 300;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(2_000).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
+            .nofEpisodes(1_500).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
             .learningRateCritic(1e-3)  //not relevant for vanilla  1e-3
             .stepHorizon(5).relativeNofFitsPerEpoch(0.5)   //only relevant for AC  10
             .build();

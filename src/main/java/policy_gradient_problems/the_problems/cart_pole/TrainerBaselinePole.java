@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.agent_interfaces.AgentParamActorI;
+import policy_gradient_problems.common_helpers.ReturnCalculator;
 import policy_gradient_problems.common_helpers.WeightsDotProductFeatureValueFunction;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -37,8 +38,8 @@ public final class TrainerBaselinePole extends TrainerAbstractPole {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
             var experienceList = getExperiences(agent);
-            var experienceListWithReturns =
-                    super.createExperienceListWithReturns(experienceList,parameters.gamma());
+            var rc=new ReturnCalculator<VariablesPole>();
+            var experienceListWithReturns =rc.createExperienceListWithReturns(experienceList, parameters.gamma());
             for (Experience<VariablesPole> experience:experienceListWithReturns) {
                 var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
                 double vt = experience.value();

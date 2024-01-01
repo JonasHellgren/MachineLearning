@@ -11,7 +11,7 @@ import static common.ListUtils.*;
 
 public class ReturnCalculator<S> {
 
-    public List<Experience<S>>  createExperienceListWithReturns(@NonNull  List<Experience<S>> experienceList,
+    public List<Experience<S>>  createExperienceListWithReturns(@NonNull List<Experience<S>> experienceList,
                                                                 double gamma) {
         List<Experience<S>> experienceListNew=new ArrayList<>();
         List<Double> rewards=experienceList.stream().map(e->e.reward()).toList();

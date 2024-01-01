@@ -55,16 +55,4 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
-    protected List<Experience<VariablesPole>>  createExperienceListWithReturns(
-            List<Experience<VariablesPole>> experienceList, double gamma) {
-        List<Experience<VariablesPole>> experienceListNew=new ArrayList<>();
-        List<Double> rewards=experienceList.stream().map(e->e.reward()).toList();
-        ListIterator<Double> returnsIterator=returnCalculator.calcReturns(rewards,gamma).listIterator();
-        for (Experience<VariablesPole> exp:experienceList) {
-            experienceListNew.add(exp.copyWithValue(returnsIterator.next()));
-        }
-        return experienceListNew;
-    }
-
-
 }
