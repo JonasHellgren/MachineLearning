@@ -8,6 +8,8 @@ import java.util.List;
 
 public class RunnerTwoArmedBandit {
 
+    public static final int NOF_EPISODES = 1_000, NOF_STEPS_MAX = 1;
+
     public static void main(String[] args) {
         var trainerParam = createTrainerParam();
         trainerParam.train();
@@ -40,18 +42,17 @@ public class RunnerTwoArmedBandit {
     }
 
     private static EnvironmentBandit getEnvironment() {
-        return EnvironmentBandit.newWithProbabilities(0.1, 0.5);
+        return EnvironmentBandit.newWithProbabilities(0.1, 0.9);
     }
-
 
     private static TrainerParameters getTrainerParametersParam() {
         return TrainerParameters.builder()
-                .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRateActor(1e-1).build();
+                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-1).build();
     }
 
     private static TrainerParameters getTrainerParametersNeural() {
         return TrainerParameters.builder()
-                .nofEpisodes(1_000).nofStepsMax(1).gamma(1d).learningRateActor(1e-3).build();
+                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-2).build();
     }
 
 }

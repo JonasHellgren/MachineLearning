@@ -34,39 +34,27 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
         return ListUtils.arrayPrimitiveDoublesToList(actorMemory.output(DUMMY_IN).toDoubleVector());
     }
 
-
     public void fit(INDArray out) {
         actorMemory.fit(DUMMY_IN,out);
     }
 
-
     private static MultiLayerNetwork createNetwork(double learningRate) {
         var netSettings= NetSettings.builder()
-                .nHiddenLayers(1).nInput(numInput).nHidden(4).nOutput(2)
+                .nHiddenLayers(1).nInput(numInput).nHidden(10).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newNotNum())
                 .build();
         return MultiLayerNetworkCreator.create(netSettings);
     }
 
-    //@Override
-/*
+    @Override
     public void fitActor(List<Double> in, List<Double> out) {
         fit(out);
     }
-*/
 
-
-/*
     public void fit(List<Double> out) {
         actorMemory.fit(DUMMY_IN, Nd4j.create(out));
-    }
-
-*/
-
-    public void fitActor(INDArray in, INDArray out) {
-        fit(out);
     }
 
 }
