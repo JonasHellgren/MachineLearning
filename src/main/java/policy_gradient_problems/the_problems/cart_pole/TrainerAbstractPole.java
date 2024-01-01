@@ -18,7 +18,7 @@ import java.util.ListIterator;
 
 @AllArgsConstructor
 @Getter
-public class TrainerAbstractPole extends TrainerA<VariablesPole> {
+public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
     EnvironmentPole environment;
     ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
@@ -34,7 +34,7 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
     }
 
 
-    public List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {
+    protected List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {
         List<Experience<VariablesPole>> experienceList=new ArrayList<>();
         int si = 0;
         StepReturn<VariablesPole> sr;
@@ -66,8 +66,5 @@ public class TrainerAbstractPole extends TrainerA<VariablesPole> {
         return experienceListNew;
     }
 
-    @Override
-    public void train() {  //defined in subclass
-    }
 
 }

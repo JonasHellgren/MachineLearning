@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrainerAbstractSC extends TrainerA<VariablesSC> {
-    @NonNull EnvironmentSC environment;
+public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
+    EnvironmentSC environment;
 
     public TrainerAbstractSC(@NonNull EnvironmentSC environment,
                              @NonNull TrainerParameters parameters) {
@@ -23,13 +23,12 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
     }
 
     void updateTracker(int ei, AgentParamActorSCHelper helper) {
-
         for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
             tracker.addMeasures(ei, s, helper.calcActionProbsInObsState(s));
         }
     }
 
-    public List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
+    protected List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
         List<Experience<VariablesSC>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<VariablesSC> sr;
@@ -57,9 +56,6 @@ public class TrainerAbstractSC extends TrainerA<VariablesSC> {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
-    @Override
-    public void train() { //defined in subclass
-    }
 
 
 }

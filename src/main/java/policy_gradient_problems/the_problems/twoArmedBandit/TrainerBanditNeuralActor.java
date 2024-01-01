@@ -8,7 +8,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Log
 @Getter
-public class TrainerBanditNeuralActor extends TrainerAbstractBandit {
+public final class TrainerBanditNeuralActor extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
     AgentBanditNeuralActor agent;
@@ -20,6 +20,7 @@ public class TrainerBanditNeuralActor extends TrainerAbstractBandit {
         this.agent = new AgentBanditNeuralActor(parameters.learningRateActor());
     }
 
+    @Override
     public void train() {
         NeuralActorEpisodeTrainer<VariablesBandit> episodeTrainer=
                 new NeuralActorEpisodeTrainer<>(agent,parameters,EnvironmentBandit.NOF_ACTIONS);

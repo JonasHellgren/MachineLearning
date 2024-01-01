@@ -7,7 +7,7 @@ import policy_gradient_problems.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.common_episode_trainers.ParamActorEpisodeTrainer;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
-public class TrainerVanillaPole extends TrainerAbstractPole {
+public final class TrainerVanillaPole extends TrainerAbstractPole {
 
     AgentParamActorI<VariablesPole> agent;
 
@@ -19,6 +19,7 @@ public class TrainerVanillaPole extends TrainerAbstractPole {
         this.agent=agent;
     }
 
+    @Override
     public void train() {
         var episodeTrainer= new ParamActorEpisodeTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {

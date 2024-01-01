@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
+public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
 
     final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
     EnvironmentBandit environment;
@@ -23,11 +23,6 @@ public class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
                                  TrainerParameters parameters) {
         this.environment = environment;
         super.parameters = parameters;
-    }
-
-
-    @Override
-    public void train() {  //defined in subclass
     }
 
     public List<Experience<VariablesBandit>> getExperiences(AgentI<VariablesBandit> agent) {

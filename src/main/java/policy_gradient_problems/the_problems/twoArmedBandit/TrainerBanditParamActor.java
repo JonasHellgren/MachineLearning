@@ -10,7 +10,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
  */
 
 @Log
-public class TrainerBanditParamActor extends TrainerAbstractBandit {
+public final class TrainerBanditParamActor extends TrainerAbstractBandit {
 
     AgentBanditParamActor agent;
 
@@ -22,6 +22,7 @@ public class TrainerBanditParamActor extends TrainerAbstractBandit {
         this.agent=agent;
     }
 
+    @Override
     public void train() {
         ParamActorEpisodeTrainer<VariablesBandit> episodeTrainer= new ParamActorEpisodeTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {

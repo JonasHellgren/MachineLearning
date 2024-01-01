@@ -7,7 +7,7 @@ import policy_gradient_problems.common_episode_trainers.ParamActorTabCriticEpiso
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 @Getter
-public class TrainerActorCriticShip extends TrainerAbstractShip {
+public final class TrainerActorCriticShip extends TrainerAbstractShip {
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
@@ -18,6 +18,7 @@ public class TrainerActorCriticShip extends TrainerAbstractShip {
         super(environment, agent, parameters);
     }
 
+    @Override
     public void train() {
         ParamActorTabCriticEpisodeTrainer<VariablesShip> episodeTrainer =
                 ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()

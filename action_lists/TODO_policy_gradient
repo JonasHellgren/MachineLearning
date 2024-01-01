@@ -153,10 +153,13 @@ skapa MultistepNeuralAgentHelper x
 använd ovan i TrainerParamActorNeuralCriticPole x
 plantnum AgentI etc x
 MultistepParamActorUpdater x
-generell pg clean up
+generell pg clean up  x
 TestReturnCalculator - visade sig bugga x
 rensa, tex ExperienceOld  x
 
+AgentI genomtänk
+använda final och abstract på trainer klasser  x
+createExperienceListWithReturns i TrainerAbstract ta bort?
 double I = 1; bara i ParamActorTabCriticEpisodeTrainer
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
@@ -164,7 +167,6 @@ koda AgentNeuralActorNeuralCriticPole
 
 stepHorizon(1) buggar
 ArrayRealVector RealVector rörs ihop
-cart pole ACNeuralPolicy
 
 cart pole PPOPolicy
 

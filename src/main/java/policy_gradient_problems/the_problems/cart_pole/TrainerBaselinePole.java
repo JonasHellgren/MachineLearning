@@ -16,7 +16,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
  */
 
 @Getter
-public class TrainerBaselinePole extends TrainerAbstractPole {
+public final class TrainerBaselinePole extends TrainerAbstractPole {
 
     AgentParamActorI<VariablesPole> agent;
 
@@ -32,6 +32,7 @@ public class TrainerBaselinePole extends TrainerAbstractPole {
         this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, parameters.learningRateCritic());
     }
 
+    @Override
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));

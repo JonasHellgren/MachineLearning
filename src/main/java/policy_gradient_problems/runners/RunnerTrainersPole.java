@@ -52,8 +52,6 @@ public class RunnerTrainersPole {
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill());
-        System.out.println("trainerAC.getExperiences().size() = " + trainerAC.getExperiences(agent).size());
-
         return getFilteredNofSteps(trainerAC.getTracker());
     }
 

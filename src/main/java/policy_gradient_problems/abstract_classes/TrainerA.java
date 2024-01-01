@@ -20,7 +20,7 @@ public abstract class TrainerA<V> {
     protected TrainerParameters parameters;
 
     public abstract void train();
-    public abstract List<Experience<V>> getExperiences(AgentI<V> agent);
+    protected abstract List<Experience<V>> getExperiences(AgentI<V> agent);
 
     public TrainingTracker getTracker() {
         logIfEmptyTracker();

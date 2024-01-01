@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class TrainerAbstractShip extends TrainerA<VariablesShip> {
+public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
     @NonNull EnvironmentShip environment;
     @NonNull AgentShip agent;
 
@@ -42,11 +42,7 @@ public class TrainerAbstractShip extends TrainerA<VariablesShip> {
         this.agent = agent;
     }
 
-    @Override
-    public void train() {  //defined in subclass
-    }
-
-    public List<Experience<VariablesShip>> getExperiences(AgentI<VariablesShip> agent) {
+    protected List<Experience<VariablesShip>> getExperiences(AgentI<VariablesShip> agent) {
         List<Experience<VariablesShip>> experienceList=new ArrayList<>();
         int si = 0;
         StepReturn<VariablesShip> sr;

@@ -8,7 +8,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 
 @Log
-public class TrainerVanillaSC extends TrainerAbstractSC {
+public final class TrainerVanillaSC extends TrainerAbstractSC {
 
     AgentParamActorSC agent;
 
@@ -20,7 +20,7 @@ public class TrainerVanillaSC extends TrainerAbstractSC {
         this.agent=agent;
     }
 
-
+    @Override
     public void train() {
         var episodeTrainer= new ParamActorEpisodeTrainer<>(agent,parameters);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {

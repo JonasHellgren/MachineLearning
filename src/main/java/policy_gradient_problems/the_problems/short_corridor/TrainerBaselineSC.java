@@ -11,7 +11,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
  */
 
 @Getter
-public class TrainerBaselineSC extends TrainerAbstractSC {
+public final class TrainerBaselineSC extends TrainerAbstractSC {
 
     AgentParamActorTabCriticSC agent;
 
@@ -23,6 +23,7 @@ public class TrainerBaselineSC extends TrainerAbstractSC {
         this.agent=agent;
     }
 
+    @Override
     public void train() {
         ParamActorTabBaselineEpisodeTrainer<VariablesSC> episodeTrainer = ParamActorTabBaselineEpisodeTrainer
                 .<VariablesSC>builder()

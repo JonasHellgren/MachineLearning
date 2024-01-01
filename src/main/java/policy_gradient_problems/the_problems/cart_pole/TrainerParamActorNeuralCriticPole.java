@@ -27,7 +27,7 @@ import static common.Conditionals.executeIfTrue;
 
 @Log
 @Getter
-public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
+public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
 
     AgentParamActorNeuralCriticI<VariablesPole> agent;
 
@@ -39,6 +39,7 @@ public class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole {
         this.agent = agent;
     }
 
+    @Override
     public void train() {
         var cu = createCriticUpdater();
         var au = createActorUpdater();
