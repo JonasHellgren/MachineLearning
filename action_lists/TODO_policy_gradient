@@ -160,7 +160,7 @@ rensa, tex ExperienceOld  x
 AgentI genomtänk  x
 använda final och abstract på trainer klasser  x
 createExperienceListWithReturns i TrainerAbstract ta bort?  x
-double I = 1; bara i ParamActorTabCriticEpisodeTrainer
+double I = 1; bara i ParamActorTabCriticEpisodeTrainer  - fimpat x
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole

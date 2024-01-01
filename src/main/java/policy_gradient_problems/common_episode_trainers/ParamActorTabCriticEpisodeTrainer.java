@@ -19,18 +19,16 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
     @NonNull Function<StateI<V>, Boolean> isTerminal;
 
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {
-        double I = 1;
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         for (Experience<V> experience : elwr) {
             var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
             double tdError = calcTdError(experience);
             int key = getTabularFunctionKey(experience.state());
-            double changeTd = parameters.learningRateActor() * I * tdError;
+            double changeTd = parameters.learningRateActor() * tdError;
             agent.changeCritic(key, changeTd);
             var change = gradLogVector.mapMultiplyToSelf(changeTd);
             agent.changeActor(change);
-            I = I * parameters.gamma();
         }
     }
 

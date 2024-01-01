@@ -19,7 +19,7 @@
     Generate an episode following the current policy π(·|θ), store experiences
     For each step t of the episode:
         Gt = Return from step t  //sum of rewards from experience at time t until end of episode
-        Update the actor parameters: θ = θ + αActor * ∇θ log π(a|s, θ) *Gt
+        Update actor: θ = θ + αActor * ∇θ log π(a|s, θ) *Gt
 
 
 ## Reinforce with baseline
@@ -32,8 +32,8 @@
         s ← exper(t)   
         Gt = Return from step t  
         A = Gt - V(s) //advantage using value of s
-        Update the actor parameters: θ = θ + αActor * ∇θ log π(a|s, θ)*A 
-        Update the value function parameters: w = w + αValue * A * ∇w Vw(St)
+        Update actor: θ = θ + αActor * ∇θ log π(a|s, θ)*A 
+        Update value function: w = w + αValue * A * ∇w Vw(St)
 
 ## One step Actor-Critic
 
@@ -45,8 +45,8 @@
         a ← action given by current policy π(·|θ) in state s
         Take action a, observe reward r and next state s'
         δ ← r + γ * V(s') - V(s)  //TD error
-        Update policy parameters θ ← θ + α * ∇θ log π(a|s, θ) * δ
-        Update value function parameters w ← w + β * ∇w V(s) * δ 
+        Update actor: θ ← θ + αActor * ∇θ log π(a|s, θ) * δ
+        Update critic:  w ← w + αCritic * ∇w V(s) * δ 
         s ← s'  
         Until s is terminal
 
