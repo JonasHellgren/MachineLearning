@@ -25,7 +25,6 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
         super(state);
     }
 
-
     @Override
     public List<Double> getActionProbabilities() {
         double[] outArr = actor.getOutValue(toArray(getState().asList()));

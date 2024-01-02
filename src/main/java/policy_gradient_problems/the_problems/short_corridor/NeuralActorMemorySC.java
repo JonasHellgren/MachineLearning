@@ -28,8 +28,8 @@ public class NeuralActorMemorySC {
     NormalizerMinMaxScaler normalizerIn;
  //   Dl4JNetFitter fitter;
 
-    public static NeuralCriticMemoryPole newDefault() {
-        return new NeuralCriticMemoryPole(getDefaultNetSettings(), ParametersPole.newDefault());
+    public static NeuralActorMemorySC newDefault() {
+        return new NeuralActorMemorySC(getDefaultNetSettings());
     }
 
     public NeuralActorMemorySC(NetSettings netSettings) {
@@ -45,12 +45,16 @@ public class NeuralActorMemorySC {
 
 
     public void fit(List<Double> in, List<Double> out, int  nofFitsPerEpoch) {
-        net.fit(Nd4j.create(in), Nd4j.create(out));
+        INDArray indArray = Nd4j.create(in);
+        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
+        net.fit(indArray, Nd4j.create(out));
     }
 
     public double[] getOutValue(double[] inData) {
         INDArray indArray = Nd4j.create(inData);
         normalizerIn.transform(indArray);
+        System.out.println("indArray = " + indArray);
+        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
         return net.output(indArray).toDoubleVector();
     }
 
@@ -60,9 +64,9 @@ public class NeuralActorMemorySC {
 
    private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(10).nOutput(1)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(50).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(1e-2).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newDefault())
                 .build();
     }
@@ -72,12 +76,6 @@ public class NeuralActorMemorySC {
         List<Double> os = EnvironmentSC.SET_OBSERVABLE_STATES.stream().map(n -> n.doubleValue()).toList();
         var inMinMax = List.of(Pair.create(findMin(os).orElseThrow(),findMax(os).orElseThrow()));
         return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));  //0,1 gives worse performance
-    }
-
-    private static NormalizerMinMaxScaler createNormalizerOut() {
-        var values=EnvironmentSC.STATE_REWARD_MAP.values().stream().toList();
-        var outMinMax = List.of(Pair.create(findMin(values).orElseThrow(), findMax(values).orElseThrow()));
-        return Dl4JUtil.createNormalizer(outMinMax);
     }
 
 

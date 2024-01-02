@@ -53,6 +53,7 @@ public class CustomPolicyGradientLoss implements ILossFunction {
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray grad = gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
+        System.out.println("grad = " + grad);
         return grad.reshape(1,grad.length());  // reshape it to a row matrix of size 1×n
     }
 

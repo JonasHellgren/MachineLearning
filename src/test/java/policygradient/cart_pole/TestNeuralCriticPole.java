@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class TestNeuralValueFunctionPole {
+public class TestNeuralCriticPole {
 
     public static final int NOF_SAMPLES = 10;
     NeuralCriticMemoryPole memory;
