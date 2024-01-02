@@ -1,6 +1,7 @@
 package policy_gradient_problems.abstract_classes;
 
 import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 import java.util.List;
 

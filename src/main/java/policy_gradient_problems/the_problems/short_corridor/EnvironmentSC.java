@@ -25,7 +25,7 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     static final double PROB_DIRECT_TO_TERMINAL = 0.01;
     static final double REWARD_FOR_NON417STATE = -0.1;
 
-    final Map<Integer, Double> STATE_REWARD_MAP = Map.of(4, 1d, 1, -1d, 7, -1d);
+    public static final Map<Integer, Double> STATE_REWARD_MAP = Map.of(4, 1d, 1, -1d, 7, -1d);
     final static Map<Integer, Integer> STATE_OBSERVEDSTATE_MAP = Map.of(1, -1, 2, 0, 3, 1, 4, -1, 5, 1, 6, 2, 7, -1);
     public final Set<Integer> SET_TERMINAL_STATES = Set.of(1, 4, 7);
     public static final Set<Integer> SET_NON_TERMINAL_STATES = Set.of(2, 3, 5, 6);

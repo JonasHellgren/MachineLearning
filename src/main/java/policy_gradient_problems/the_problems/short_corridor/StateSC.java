@@ -2,6 +2,8 @@ package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.*;
 import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.the_problems.sink_the_ship.VariablesShip;
 
@@ -44,4 +46,5 @@ public class StateSC implements StateI<VariablesSC> {
     public RealVector asRealVector() {
         throw new NoSuchMethodException();
     }
+
 }

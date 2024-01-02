@@ -16,9 +16,9 @@ public class NeuralCriticMemoryPole {
 
     static int NOF_INPUTS = 4, NOF_OUTPUTS = 1;
 
-    NetSettings netSettings;
+    NetSettings netSettings;  //todo veck
     MultiLayerNetwork net;
-    final Random randGen;
+    final Random randGen;  //todo veck
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 

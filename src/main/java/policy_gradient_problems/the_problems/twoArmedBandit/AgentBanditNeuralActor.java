@@ -19,7 +19,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
     public static final StateBandit DUMMY_STATE = StateBandit.newDefault();
 
-    MultiLayerNetwork actorMemory;
+    MultiLayerNetwork actor;
 
     public static AgentBanditNeuralActor newDefault(double learningRate) {
         return new AgentBanditNeuralActor(learningRate);
@@ -27,15 +27,11 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
 
     public AgentBanditNeuralActor(double learningRate) {
         super(DUMMY_STATE);
-        this.actorMemory =createNetwork(learningRate);
+        this.actor =createNetwork(learningRate);
     }
 
     public List<Double> getActionProbabilities() {
-        return ListUtils.arrayPrimitiveDoublesToList(actorMemory.output(DUMMY_IN).toDoubleVector());
-    }
-
-    public void fit(INDArray out) {
-        actorMemory.fit(DUMMY_IN,out);
+        return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate) {
@@ -54,7 +50,14 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     }
 
     public void fit(List<Double> out) {
-        actorMemory.fit(DUMMY_IN, Nd4j.create(out));
+        actor.fit(DUMMY_IN, Nd4j.create(out));
     }
+
+/*
+    public void fit(INDArray out) {
+        actor.fit(DUMMY_IN,out);
+    }
+*/
+
 
 }

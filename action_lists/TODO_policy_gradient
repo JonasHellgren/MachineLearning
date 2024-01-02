@@ -164,7 +164,12 @@ double I = 1; bara i ParamActorTabCriticEpisodeTrainer  - fimpat x
 NeuralActor: fitActor(INDArray in, INDArray out) -> fitActor(List<List>> in, List<> INDArray out);  x
 whenCreated_thenSameNumAsAnalyticGrad buggar   x
 CustomPolicyGradientLoss.newNumDefault() buggar  x
-short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC
+short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC  x
+NeuralActorMemorySC  NeuralCriticMemorySC x
+TestNeuralActorMemorySC
+TestNeuralCriticMemorySC
+realisera AgentNeuralActorNeuralCriticSC
+TestAgentNeuralActorNeuralCriticSC
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 hur skall AgentNeuralActorI kunna klara cont action
