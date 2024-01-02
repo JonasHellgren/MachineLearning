@@ -167,8 +167,9 @@ CustomPolicyGradientLoss.newNumDefault() buggar  x
 short corridor med neural actor-critic agent - AgentNeuralActorNeuralCriticSC  x
 NeuralActorMemorySC  NeuralCriticMemorySC x
 TestNeuralActorMemorySC x
-EntropyCalculator
-TestEntropyCalculator
+EntropyCalculator x
+TestEntropyCalculator x
+EntropyCalculator i CustomPGLoss
 bugg - problem när Gt -1  - Loss=−log(P(a∣s))⋅G  +β⋅H(P)
 
 TestNeuralCriticMemorySC
