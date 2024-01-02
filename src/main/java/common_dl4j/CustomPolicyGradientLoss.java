@@ -42,7 +42,8 @@ public class CustomPolicyGradientLoss implements ILossFunction {
                                INDArray mask,
                                boolean average) {
         INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
-        return -policyGradientLoss.sumNumber().doubleValue();
+        double crossEntropy = -policyGradientLoss.sumNumber().doubleValue();
+        return crossEntropy;
     }
 
     @Override

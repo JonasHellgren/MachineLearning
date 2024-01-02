@@ -2,19 +2,13 @@ package policygradient.short_corridor;
 
 import common.ListUtils;
 import common.RandUtils;
-import org.apache.arrow.flatbuf.Int;
 import org.apache.commons.lang3.tuple.Triple;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.the_problems.short_corridor.NeuralActorMemorySC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
-
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +50,7 @@ public class TestNeuralActorMemorySC {
         /*    System.out.println("in = " + in);
             System.out.println("onHotOut = " + onHotOut);
         */    actor.fit(in, onHotOut,1);
+             printStateProb();
         }
     }
 
@@ -74,12 +69,12 @@ public class TestNeuralActorMemorySC {
     //(0):s0,a0 -> Gt=-1; (1):s0,a1 -> Gt=1; (2):2,a0 -> Gt=1, (3):s2,a1 -> Gt=-1
     private static Map<Integer, Triple<Integer, Integer, Double>> getCaseSAGtMap() {
         return Map.of(
-                //0,Triple.of(0,0,-1d), 1,Triple.of(0,1,1d),
-                0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),
+                0,Triple.of(0,0,-1d), 1,Triple.of(0,1,1d),
+                //0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),
 
                 //0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),
-                //2,Triple.of(2,0,1d),  3,Triple.of(2,1,-1d)
-                2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)
+                2,Triple.of(2,0,1d),  3,Triple.of(2,1,-1d)
+                //2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)
 
                 //2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)
         );

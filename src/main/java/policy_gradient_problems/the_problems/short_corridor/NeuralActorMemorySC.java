@@ -53,9 +53,8 @@ public class NeuralActorMemorySC {
     public double[] getOutValue(double[] inData) {
         INDArray indArray = Nd4j.create(inData);
         normalizerIn.transform(indArray);
-        System.out.println("indArray = " + indArray);
         indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
-        return net.output(indArray).toDoubleVector();
+       return net.output(indArray).toDoubleVector();
     }
 
     public double getError() {
