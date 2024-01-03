@@ -25,7 +25,7 @@ public class NeuralActorEpisodeTrainer<V> {
         }
     }
 
-    private List<Double> createOut(Experience<V> experience) {
+    private List<Double> createOut(Experience<V> experience) {  //todo code duplic in NeuralActorNeuralCriticEpisodeTrainer
         int actionInt = experience.action().asInt();
         throwIfNonValidAction(actionInt);
         List<Double> out=ListUtils.createListWithEqualElementValues(nofActions,0d);

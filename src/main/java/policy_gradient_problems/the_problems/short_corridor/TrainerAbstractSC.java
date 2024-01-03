@@ -1,6 +1,7 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.NonNull;
+import org.apache.arrow.flatbuf.Int;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.agent_interfaces.AgentI;
@@ -11,6 +12,7 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 
 public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
@@ -22,9 +24,9 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
         super.parameters = parameters;
     }
 
-    void updateTracker(int ei, AgentParamActorSCHelper helper) {
+    void updateTracker(int ei, Function<Integer,List<Double>> apFcn) {
         for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei, s, helper.calcActionProbsInObsState(s));
+            tracker.addMeasures(ei, s, apFcn.apply(s));
         }
     }
 

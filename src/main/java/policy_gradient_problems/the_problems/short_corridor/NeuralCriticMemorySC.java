@@ -8,9 +8,6 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.the_problems.cart_pole.NeuralCriticMemoryPole;
-import policy_gradient_problems.the_problems.cart_pole.ParametersPole;
-
 import java.util.List;
 import java.util.Random;
 
@@ -59,7 +56,7 @@ public class NeuralCriticMemorySC {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(5).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .nofFitsPerEpoch(1).learningRate(1e-2).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
                 .build();
     }

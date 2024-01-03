@@ -47,8 +47,8 @@ public class RunnerShortCorridor {
                 .build();
     }
 
-    private static TrainerActorCriticSC createTrainerActorCritic(AgentParamActorTabCriticSC agent) {
-        return TrainerActorCriticSC.builder()
+    private static TrainerParamActorTabCriticSC createTrainerActorCritic(AgentParamActorTabCriticSC agent) {
+        return TrainerParamActorTabCriticSC.builder()
                 .environment(EnvironmentSC.create()).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();

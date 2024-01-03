@@ -34,7 +34,7 @@ public final class TrainerBaselineSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei,agent.getHelper());
+            updateTracker(ei,(s) -> agent.getHelper().calcActionProbsInObsState(s));
         }
     }
 }

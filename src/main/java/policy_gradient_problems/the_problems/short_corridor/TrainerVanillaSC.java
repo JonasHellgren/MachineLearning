@@ -26,7 +26,7 @@ public final class TrainerVanillaSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainFromEpisode(getExperiences(agent));
-            updateTracker(ei,agent.getHelper());
+            updateTracker(ei,(s) -> agent.helper.calcActionProbsInObsState(s));
         }
     }
 
