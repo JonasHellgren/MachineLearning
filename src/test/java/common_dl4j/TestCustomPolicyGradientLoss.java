@@ -48,26 +48,34 @@ public class TestCustomPolicyGradientLoss {
         Assertions.assertNotEquals(Math.signum(gradNum.getDouble(0)),Math.signum(gradNum.getDouble(1)));
     }
 
-
     @Test
     public void whenOneAtIndex0_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndex(1d,0);
-        var probsBefore= net.output(IN).dup();
+        var pBef= net.output(IN).dup();
         net.fit(IN,out);
-        var probsAfter= net.output(IN).dup();
-        Assertions.assertTrue(probsAfter.getDouble(0)>probsBefore.getDouble(0));
-        Assertions.assertTrue(probsAfter.getDouble(1)<probsBefore.getDouble(1));
+        var pAfter= net.output(IN).dup();
+        Assertions.assertTrue(getP(pAfter, 0) > getP(pBef, 0));
+        Assertions.assertTrue(getP(pAfter, 1) < getP(pBef, 1));
     }
-
 
     @Test
     public void whenOneAtIndex1_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndex(1d,1);
-        var probsBefore= net.output(IN).dup();
+        var pBef= net.output(IN).dup();
         net.fit(IN,out);
-        var probsAfter= net.output(IN).dup();
-        Assertions.assertTrue(probsAfter.getDouble(0)<probsBefore.getDouble(0));
-        Assertions.assertTrue(probsAfter.getDouble(1)>probsBefore.getDouble(1));
+        var pAfter= net.output(IN).dup();
+        Assertions.assertTrue(getP(pAfter, 0) < getP(pBef, 0));
+        Assertions.assertTrue(getP(pAfter, 1) > getP(pBef, 1));
+    }
+
+    @Test
+    public void whenMinusOneAtIndex0_thenCorrectNewProb() {
+        INDArray out = getOutWithGtAtIndex(-1d,0);
+        var pBef= net.output(IN).dup();
+        net.fit(IN,out);
+        var pAfter= net.output(IN).dup();
+        Assertions.assertTrue(getP(pAfter, 0) < getP(pBef, 0));
+        Assertions.assertTrue(getP(pAfter, 1) > getP(pBef, 1));
     }
 
     @NotNull
@@ -75,6 +83,11 @@ public class TestCustomPolicyGradientLoss {
         INDArray out = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
         out.putScalar(l, gt);
         return out;
+    }
+
+
+    private static double getP(INDArray probsAfter, int action) {
+        return probsAfter.getDouble(action);
     }
 
     private INDArray getGradient(INDArray out, MultiLayerNetwork netNotNum1) {

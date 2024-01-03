@@ -169,7 +169,7 @@ NeuralActorMemorySC  NeuralCriticMemorySC x
 TestNeuralActorMemorySC x
 EntropyCalculator x
 TestEntropyCalculator x
-EntropyCalculator i CustomPGLoss
+EntropyCalculator i CustomPGLoss  x
 bugg - problem när Gt -1  - Loss=−log(P(a∣s))⋅G  +β⋅H(P)
 
 TestNeuralCriticMemorySC

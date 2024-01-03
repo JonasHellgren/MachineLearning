@@ -1,9 +1,11 @@
 package common_dl4j;
 
 import com.codepoetics.protonpack.functions.TriFunction;
+import lombok.SneakyThrows;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
@@ -41,14 +43,21 @@ public class CustomPolicyGradientLoss implements ILossFunction {
                                IActivation activationFn,
                                INDArray mask,
                                boolean average) {
+
+        INDArray estProbabilities = activationFn.getActivation(preOutput, false);
+        return EntropyCalculator.calcCrossEntropy(yRef,estProbabilities);
+
+/*
         INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
         double crossEntropy = -policyGradientLoss.sumNumber().doubleValue();
         return crossEntropy;
+*/
     }
 
+    @SneakyThrows
     @Override
     public INDArray computeScoreArray(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        return getPolicyGradientLoss(yRef, preOutput, activationFn).neg();
+       throw new NoSuchMethodException();  //only needed for batches of data-points
     }
 
     @Override
