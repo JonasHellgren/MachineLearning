@@ -19,14 +19,14 @@ import static common.ListUtils.findMin;
 
 public class NeuralCriticMemorySC {
 
-    static int NOF_INPUTS = 1, NOF_OUTPUTS = EnvironmentSC.NOF_ACTIONS;
+    static int NOF_INPUTS = 1, NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
-    public static NeuralCriticMemoryPole newDefault() {
-        return new NeuralCriticMemoryPole(getDefaultNetSettings(), ParametersPole.newDefault());
+    public static NeuralCriticMemorySC newDefault() {
+        return new NeuralCriticMemorySC(getDefaultNetSettings());
     }
 
     public NeuralCriticMemorySC(NetSettings netSettings) {
@@ -57,9 +57,9 @@ public class NeuralCriticMemorySC {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(10).nOutput(1)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(5).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(1e-2).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
                 .build();
     }

@@ -4,6 +4,7 @@ import common.ListUtils;
 import common.RandUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.the_problems.short_corridor.NeuralActorMemorySC;
@@ -12,14 +13,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Probabilites converges badly for negative Gt, tries to change more despite prob already is 0 or 1.
+ */
+
 public class TestNeuralActorMemorySC {
 
-
     public static final int N_ACTIONS = 2;
-    NeuralActorMemorySC actor;
+    static NeuralActorMemorySC  actor;
 
-    @BeforeEach
-    public void init() {
+    @BeforeAll
+    public static void init() {
         actor=NeuralActorMemorySC.newDefault();
         printStateProb();
         trainActor();
@@ -39,7 +43,7 @@ public class TestNeuralActorMemorySC {
         Assertions.assertTrue(probs[0]>probs[1]);
     }
 
-    void trainActor() {
+    static void trainActor() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
         for (int ei = 0; ei < 100 ; ei++) {
             int caseNr= RandUtils.getRandomIntNumber(0,4);
@@ -47,14 +51,11 @@ public class TestNeuralActorMemorySC {
             var state=StateSC.newFromPos(triplet.getLeft());
             List<Double> in = state.asList();
             List<Double> onHotOut = createOut(triplet.getMiddle(), triplet.getRight());
-        /*    System.out.println("in = " + in);
-            System.out.println("onHotOut = " + onHotOut);
-        */    actor.fit(in, onHotOut,1);
-        //     printStateProb();
+            actor.fit(in, onHotOut,1);
         }
     }
 
-    private void printStateProb() {
+    private static void printStateProb() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
 
         for (int ci = 0; ci < 4 ; ci=ci+2) {
@@ -70,17 +71,14 @@ public class TestNeuralActorMemorySC {
     private static Map<Integer, Triple<Integer, Integer, Double>> getCaseSAGtMap() {
         return Map.of(
                 0,Triple.of(0,0,-1d), 1,Triple.of(0,1,1d),
-                //0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),
+             //   0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),  //give smoother gradients
 
-                //0,Triple.of(0,0,0d), 1,Triple.of(0,1,1d),
                 2,Triple.of(2,0,1d),  3,Triple.of(2,1,-1d)
-                //2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)
-
-                //2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)
+             //   2,Triple.of(2,0,1d),  3,Triple.of(2,1,0d)  //give smoother gradients
         );
     }
 
-    private List<Double> createOut(int action, double value) {
+    private static List<Double> createOut(int action, double value) {
         List<Double> out= ListUtils.createListWithEqualElementValues(N_ACTIONS,0d);
         out.set(action, value);
         return out;
