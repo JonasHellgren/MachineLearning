@@ -34,8 +34,8 @@ public class TestNeuralActorMemorySC {
 
 
     @Test
-    public void whenObsState6_thenHigherProbA0() {
-        var probs=actor.getOutValue(ListUtils.toArray(List.of(0d)));
+    public void whenObsState2_thenHigherProbA0() {
+        var probs=actor.getOutValue(ListUtils.toArray(List.of(2d)));
         Assertions.assertTrue(probs[0]>probs[1]);
     }
 
@@ -50,7 +50,7 @@ public class TestNeuralActorMemorySC {
         /*    System.out.println("in = " + in);
             System.out.println("onHotOut = " + onHotOut);
         */    actor.fit(in, onHotOut,1);
-             printStateProb();
+        //     printStateProb();
         }
     }
 

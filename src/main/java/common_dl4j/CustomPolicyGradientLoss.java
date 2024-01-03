@@ -22,16 +22,17 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 public class CustomPolicyGradientLoss implements ILossFunction {
 
-    public static final double EPS = 1e-5;
-    double eps;
+    public static final double EPS = 1e-5, BETA = 1e-1d;
+    double eps, beta;
     NumericalGradCalculator gradCalculator;
 
     public static CustomPolicyGradientLoss newDefault() {
-        return new CustomPolicyGradientLoss(EPS);
+        return new CustomPolicyGradientLoss(EPS, BETA);
     }
 
-    public CustomPolicyGradientLoss(double eps) {
+    public CustomPolicyGradientLoss(double eps, double beta) {
         this.eps = eps;
+        this.beta=beta;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn =
                 (p, a, m) -> computeScore(p.getFirst(), p.getSecond(), a, m, false);
         gradCalculator = new NumericalGradCalculator(eps, scoreFcn);
@@ -45,13 +46,24 @@ public class CustomPolicyGradientLoss implements ILossFunction {
                                boolean average) {
 
         INDArray estProbabilities = activationFn.getActivation(preOutput, false);
-        return EntropyCalculator.calcCrossEntropy(yRef,estProbabilities);
+        double ce = EntropyCalculator.calcCrossEntropy(yRef, estProbabilities);
+        double entropy=EntropyCalculator.calcEntropy(estProbabilities);
+        double K = 1; // getK(estProbabilities);
+        return ce-beta*K*entropy;
 
 /*
         INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
         double crossEntropy = -policyGradientLoss.sumNumber().doubleValue();
         return crossEntropy;
 */
+    }
+
+    private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
+        double probMin1= estProbabilities.minNumber().doubleValue();
+        INDArray oneSubN= estProbabilities.rsub(1);
+        double probMin2=oneSubN.minNumber().doubleValue();
+        double pMin=Math.min(probMin1,probMin2);
+        return Math.min(100,Math.abs(Math.log(pMin/(1-pMin))));
     }
 
     @SneakyThrows
@@ -63,7 +75,7 @@ public class CustomPolicyGradientLoss implements ILossFunction {
     @Override
     public INDArray computeGradient(INDArray yRef, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray grad = gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
-        System.out.println("grad = " + grad);
+     //   System.out.println("grad = " + grad);
         return grad.reshape(1,grad.length());  // reshape it to a row matrix of size 1×n
     }
 

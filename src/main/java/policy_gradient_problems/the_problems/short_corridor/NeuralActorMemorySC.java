@@ -1,6 +1,5 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
-import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -8,15 +7,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
-import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.the_problems.cart_pole.NeuralCriticMemoryPole;
-import policy_gradient_problems.the_problems.cart_pole.ParametersPole;
-import policy_gradient_problems.the_problems.cart_pole.VariablesPole;
-
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import static common.ListUtils.findMax;
 import static common.ListUtils.findMin;
 

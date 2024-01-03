@@ -54,6 +54,7 @@ public class TestCustomPolicyGradientLoss {
         var pBef= net.output(IN).dup();
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
+
         Assertions.assertTrue(getP(pAfter, 0) > getP(pBef, 0));
         Assertions.assertTrue(getP(pAfter, 1) < getP(pBef, 1));
     }
@@ -64,6 +65,7 @@ public class TestCustomPolicyGradientLoss {
         var pBef= net.output(IN).dup();
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
+
         Assertions.assertTrue(getP(pAfter, 0) < getP(pBef, 0));
         Assertions.assertTrue(getP(pAfter, 1) > getP(pBef, 1));
     }
