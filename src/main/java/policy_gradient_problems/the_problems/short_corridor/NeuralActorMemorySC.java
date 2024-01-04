@@ -14,7 +14,7 @@ import static common.ListUtils.findMin;
 
 public class NeuralActorMemorySC {
 
-    static int NOF_INPUTS = 1, NOF_OUTPUTS = EnvironmentSC.NOF_ACTIONS;
+    static int NOF_INPUTS = 3, NOF_OUTPUTS = EnvironmentSC.NOF_ACTIONS;
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn;
@@ -44,7 +44,18 @@ public class NeuralActorMemorySC {
         return net.gradientAndScore().getSecond();
     }
 
+
     private INDArray transformToIndArray(List<Double> in) {
+        List<Double> onHot = ListUtils.createListWithEqualElementValues(NOF_INPUTS, 0d);
+        int pos = in.get(0).intValue();
+        onHot.set(pos, 1d);
+        INDArray indArray = Nd4j.create(onHot);
+        normalizerIn.transform(indArray);
+        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
+        return indArray;
+    }
+
+    private INDArray transformToIndArrayOld(List<Double> in) {
         INDArray indArray = Nd4j.create(in);
         normalizerIn.transform(indArray);
         indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
@@ -55,7 +66,7 @@ public class NeuralActorMemorySC {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-4).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newDefault())
                 .build();
     }

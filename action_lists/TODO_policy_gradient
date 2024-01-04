@@ -174,8 +174,9 @@ bugg - problem när Gt -1  - Loss=−log(P(a∣s))⋅G  +β⋅H(P)  - löst med 
 TestNeuralCriticMemorySC  x
 realisera AgentNeuralActorNeuralCriticSC  x
 TestAgentNeuralActorNeuralCriticSC x
-
 AgentNeuralActorNeuralCriticSC buggar x
+prova one hot neural AC actor x
+hittat och fixt bugg i AgentNeuralActorNeuralCriticSC - ej obs state x
 
 public class Test till runner
 skapa generisk NeuralCriticNeuralActorTrainer

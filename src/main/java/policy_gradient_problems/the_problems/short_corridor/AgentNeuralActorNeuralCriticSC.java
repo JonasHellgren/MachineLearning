@@ -28,12 +28,16 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
 
     @Override
     public List<Double> getActionProbabilities() {
-        double[] outArr = actor.getOutValue(toArray(getState().asList()));
-        return arrayPrimitiveDoublesToList(outArr);
+        double obsState= EnvironmentSC.getObservedPos(getState());
+        return calcActionProbsInObsState(obsState);
+        //double[] outArr = actor.getOutValue(new double[]{obsState});
+        //double[] outArr = actor.getOutValue(toArray(getState().asList()));
+        //return arrayPrimitiveDoublesToList(outArr);
     }
 
-    public List<Double> calcActionProbsInObsState(int stateObserved) {
-        double[] outArr = actor.getOutValue(toArray(List.of((double) stateObserved)));
+    public List<Double> calcActionProbsInObsState(double stateObserved) {
+        double[] outArr = actor.getOutValue(new double[]{stateObserved});
+        //double[] outArr = actor.getOutValue(toArray(List.of((double) stateObserved)));
         return arrayPrimitiveDoublesToList(outArr);
     }
 

@@ -74,7 +74,7 @@ public class RunnerShortCorridor2 {
 
     private static TrainerParameters getTrainerParameters() {
         return TrainerParameters.builder()
-                .nofEpisodes(10000).nofStepsMax(100)
+                .nofEpisodes(1000).nofStepsMax(100)
                 .gamma(1.0).relativeNofFitsPerEpoch(1.0)
                 .build();
     }
