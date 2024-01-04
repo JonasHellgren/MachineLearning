@@ -103,7 +103,7 @@ public class TestNeuralCriticMemorySC {
             series.setMarker(SeriesMarkers.NONE);
         }
         new SwingWrapper<>(chart).displayChart();
-        saveBitmap(chart, CHART_DIR + FILE_NAME, BitmapEncoder.BitmapFormat.PNG);
+    //    saveBitmap(chart, CHART_DIR + FILE_NAME, BitmapEncoder.BitmapFormat.PNG);
 
     }
 

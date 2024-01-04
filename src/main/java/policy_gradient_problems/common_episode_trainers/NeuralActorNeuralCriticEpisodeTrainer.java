@@ -46,7 +46,7 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
 
             List<Double> stateAsList = experience.state().asList();
 
-            double vNext = getCriticOut(experience.stateNext());
+            double vNext = valNext(experience); //getCriticOut(experience.stateNext());
             double vTar = experience.reward()+ parameters.gamma()*vNext ;
 
            // double v=vMap.get(pos);
