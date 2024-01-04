@@ -3,6 +3,7 @@ package policy_gradient_problems.the_problems.short_corridor;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
@@ -44,8 +45,10 @@ public class NeuralCriticMemorySC {
     }
 
     public Double getOutValue(StateI<VariablesSC> state) {
-        var inData1 = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
-        return getOutValue(inData1);
+        var inList = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
+//        System.out.println("state = " + state);
+       // System.out.println("inList = " + inList);
+        return getOutValue(inList);
     }
 
     public double getError() {
@@ -54,10 +57,13 @@ public class NeuralCriticMemorySC {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(5).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(10).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.9).seed(1234)
+                //.lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .lossFunction(LossFunctions.LossFunction.SQUARED_LOSS.getILossFunction())
+
+                .weightInit(WeightInit.RELU)
                 .build();
     }
 

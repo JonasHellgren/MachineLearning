@@ -55,7 +55,7 @@ public class NeuralActorMemorySC {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .nofFitsPerEpoch(1).learningRate(1e-4).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newDefault())
                 .build();
     }

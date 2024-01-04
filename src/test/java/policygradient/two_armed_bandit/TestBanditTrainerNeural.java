@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.twoArmedBandit.*;
 
-public class TestTrainerNeural {
+public class TestBanditTrainerNeural {
 
     TrainerBanditNeuralActor trainer;
     AgentBanditNeuralActor agent;
