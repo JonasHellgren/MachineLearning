@@ -45,24 +45,24 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
 
 
             List<Double> stateAsList = experience.state().asList();
-/*
+
             double vNext = getCriticOut(experience.stateNext());
             double vTar = experience.reward()+ parameters.gamma()*vNext ;
-*/
+
            // double v=vMap.get(pos);
            // double vTar = experience.reward()+ parameters.gamma()*vNext ;
 
             inList.add(stateAsList);
             //outList.add(vTar);
-            //outList.add(experience.value());  //todo fel
+            outList.add(experience.value());  //todo fel
 
-            outList.add(vMap.get(pos));    //todo fel
+            //outList.add(vMap.get(pos));    //todo fel
 
 
             //List<Double> oneHot = createOneHot(experience, experience.value());  //todo
-          //  double v = getCriticOut(experience.state());
-            //double adv=vTar-v;
-            double adv=experience.value();
+            double v = getCriticOut(experience.state());
+            double adv=vTar-v;
+            //double adv=experience.value();
             List<Double> oneHot = createOneHot(experience, adv);
             agent.fitActor(stateAsList, oneHot);  //todo
 
@@ -77,7 +77,7 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
 
      //   System.out.println("inList = " + inList);
      //   System.out.println("outList = " + outList);
-      //  printStateValues();
+       printStateValues();
     //    System.out.println("inList = " + inList);
     //    System.out.println("outList = " + outList);
 
