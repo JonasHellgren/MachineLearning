@@ -53,8 +53,8 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
            // double vTar = experience.reward()+ parameters.gamma()*vNext ;
 
             inList.add(stateAsList);
-            //outList.add(vTar);
-            outList.add(experience.value());  //todo fel
+            outList.add(vTar);
+            //outList.add(experience.value());  //todo fel
 
             //outList.add(vMap.get(pos));    //todo fel
 
