@@ -48,7 +48,7 @@ public class CustomPolicyGradientLoss implements ILossFunction {
         INDArray estProbabilities = activationFn.getActivation(preOutput, false);
         double ce = EntropyCalculator.calcCrossEntropy(yRef, estProbabilities);
         double entropy=EntropyCalculator.calcEntropy(estProbabilities);
-        double K = 1; // getK(estProbabilities);
+        double K = 1; //getK(estProbabilities);
         return ce-beta*K*entropy;
 
 /*

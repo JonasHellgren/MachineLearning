@@ -16,8 +16,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
 
     @BeforeEach
     public void init() {
-        agent = AgentNeuralActorNeuralCriticSC.newDefault();
-        var environment= new EnvironmentSC();
+         var environment= new EnvironmentSC();
         createTrainer(environment);
     }
 
@@ -26,7 +25,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(500).nofStepsMax(100).gamma(0.9)
+                        .nofEpisodes(5_000).nofStepsMax(100).gamma(0.5)
                         //.learningRateCritic(1e-2).learningRateActor(1e-3)
                         .build())
                 .build();
@@ -36,13 +35,16 @@ public class TestTrainerNeuralActorNeuralCriticSC {
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
+
+        assertTrue(getCriticOutValue(1) >getCriticOutValue(0));
+        assertTrue(getCriticOutValue(1)>getCriticOutValue(2));
+
         setRealPos(2);
         assertEquals(1, agent.chooseAction().asInt());
         assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
         setRealPos(6);
         assertEquals(0, agent.chooseAction().asInt());
-        assertTrue(getCriticOutValue(1) >getCriticOutValue(0));
-        assertTrue(getCriticOutValue(1)>getCriticOutValue(2));
+
     }
 
     private static Double getCriticOutValue(int pos) {

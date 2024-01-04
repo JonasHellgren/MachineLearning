@@ -5,7 +5,6 @@ import common.RandUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.the_problems.short_corridor.NeuralActorMemorySC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
@@ -45,7 +44,7 @@ public class TestNeuralActorMemorySC {
 
     static void trainActor() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
-        for (int ei = 0; ei < 100 ; ei++) {
+        for (int ei = 0; ei < 1_000 ; ei++) {
             int caseNr= RandUtils.getRandomIntNumber(0,4);
             var triplet=caseSAGtMap.get(caseNr);
             var state=StateSC.newFromPos(triplet.getLeft());

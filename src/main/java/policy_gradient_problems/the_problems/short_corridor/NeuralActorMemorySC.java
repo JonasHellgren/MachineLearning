@@ -1,5 +1,6 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
+import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -17,7 +18,6 @@ public class NeuralActorMemorySC {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn;
- //   Dl4JNetFitter fitter;
 
     public static NeuralActorMemorySC newDefault() {
         return new NeuralActorMemorySC(getDefaultNetSettings());
@@ -27,24 +27,16 @@ public class NeuralActorMemorySC {
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.normalizerIn = createNormalizerIn();
-   /*     this.fitter = Dl4JNetFitter.builder()
-                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(new Random(netSettings.seed()))
-                .normalizerIn(normalizerIn)
-                .build();*/
     }
 
 
     public void fit(List<Double> in, List<Double> out, int  nofFitsPerEpoch) {
-        INDArray indArray = Nd4j.create(in);
-        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
+        INDArray indArray = transformToIndArray(in);
         net.fit(indArray, Nd4j.create(out));
     }
 
     public double[] getOutValue(double[] inData) {
-        INDArray indArray = Nd4j.create(inData);
-        normalizerIn.transform(indArray);
-        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
+        INDArray indArray = transformToIndArray(ListUtils.arrayPrimitiveDoublesToList(inData));
        return net.output(indArray).toDoubleVector();
     }
 
@@ -52,9 +44,16 @@ public class NeuralActorMemorySC {
         return net.gradientAndScore().getSecond();
     }
 
+    private INDArray transformToIndArray(List<Double> in) {
+        INDArray indArray = Nd4j.create(in);
+        normalizerIn.transform(indArray);
+        indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
+        return indArray;
+    }
+
    private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(10).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLoss.newDefault())

@@ -173,7 +173,11 @@ EntropyCalculator i CustomPGLoss  x
 bugg - problem när Gt -1  - Loss=−log(P(a∣s))⋅G  +β⋅H(P)  - löst med eps i  EntropyCalculator x
 TestNeuralCriticMemorySC  x
 realisera AgentNeuralActorNeuralCriticSC  x
-TestAgentNeuralActorNeuralCriticSC
+TestAgentNeuralActorNeuralCriticSC x
+
+AgentNeuralActorNeuralCriticSC buggar x
+
+public class Test till runner
 skapa generisk NeuralCriticNeuralActorTrainer
 koda AgentNeuralActorNeuralCriticPole
 hur skall AgentNeuralActorI kunna klara cont action
