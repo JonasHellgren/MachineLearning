@@ -178,6 +178,8 @@ AgentNeuralActorNeuralCriticSC buggar x
 prova one hot neural AC actor x
 hittat och fixt bugg i AgentNeuralActorNeuralCriticSC - ej obs state x
 one hot även för critic x
+minor clean up x
+mer clean up
 
 public class Test till runner
 skapa generisk NeuralCriticNeuralActorTrainer
