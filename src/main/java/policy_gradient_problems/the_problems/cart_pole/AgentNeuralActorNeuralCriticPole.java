@@ -29,7 +29,7 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
                                            NetSettings criticSettings,
                                            ParametersPole parametersPole) {
         super(stateStart);
-        this.actor = NeuralActorMemoryPole.newDefault();
+        this.actor = NeuralActorMemoryPole.newDefault(parametersPole);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);
       //  this.helper = new AgentParamActorPoleHelper(actor);
     }

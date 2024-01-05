@@ -5,44 +5,49 @@ import common_dl4j.CustomPolicyGradientLoss;
 import common_dl4j.Dl4JUtil;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
+import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 public class NeuralActorMemoryPole {
-    static int NOF_INPUTS = 4, NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
+    static int NOF_INPUTS = StatePole.newUprightAndStill().asList().size(), NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
     MultiLayerNetwork net;
+    NormalizerMinMaxScaler normalizerIn;
 
-    public static NeuralActorMemoryPole newDefault() {
-        return new NeuralActorMemoryPole(getDefaultNetSettings());
+    public static NeuralActorMemoryPole newDefault(ParametersPole parametersPole) {
+        return new NeuralActorMemoryPole(getDefaultNetSettings(),parametersPole);
     }
 
-    public NeuralActorMemoryPole(NetSettings netSettings) {
+    public NeuralActorMemoryPole(NetSettings netSettings, ParametersPole parametersPole) {
         this.net= MultiLayerNetworkCreator.create(netSettings);
+        this.normalizerIn = createNormalizerIn(parametersPole);
         net.init();
     }
 
     public void fit(List<Double> in, List<Double> out) {
-        INDArray indArray = transformToIndArray(in);
-        net.fit(indArray, Nd4j.create(out));
+        net.fit(getAsNormalizedIndArray(in), Nd4j.create(out));
     }
-
-    public List<Double> getOutValue(List<Double> inData) {
-        INDArray indArray = transformToIndArray(inData);
-        return arrayPrimitiveDoublesToList(net.output(indArray).toDoubleVector());
+    public List<Double> getOutValue(List<Double> in) {
+        return arrayPrimitiveDoublesToList(net.output(getAsNormalizedIndArray(in)).toDoubleVector());
     }
 
     public double getError() {
         return net.gradientAndScore().getSecond();
     }
 
-    private INDArray transformToIndArray(List<Double> in) {
-        return Dl4JUtil.createOneHotAndReshape(NOF_INPUTS, in.get(0).intValue());
+    private INDArray getAsNormalizedIndArray(List<Double> in) {
+        INDArray indArray = Nd4j.create(in);
+        normalizerIn.transform(indArray);
+        indArray=indArray.reshape(1,NOF_INPUTS);
+        return indArray;
     }
 
     private static NetSettings getDefaultNetSettings() {
@@ -53,4 +58,10 @@ public class NeuralActorMemoryPole {
                 .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.5))
                 .build();
     }
+
+    private static NormalizerMinMaxScaler createNormalizerIn(ParametersPole p) {
+        List<Pair<Double, Double>> inMinMax = p.minMaxStatePairList();
+        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));  //0,1 gives worse performance
+    }
+
 }

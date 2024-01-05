@@ -186,6 +186,9 @@ kunna påverka hur stokastisk med entropy loss i CustomPolicyGradientLoss x
 Experience med isTerminal x
 skapa generisk NeuralCriticNeuralActorTrainer x
 koda AgentNeuralActorNeuralCriticPole
+NeuralActorMemoryPole x
+TestNeuralActorMemoryPole
+
 
 uppdatera md fil one step ac
 mer clean up

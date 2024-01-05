@@ -1,12 +1,17 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
-import common.ListUtils;
 import common_dl4j.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
+import static common.ListUtils.arrayPrimitiveDoublesToList;
+
+/**
+ * State, observed position, is transformed to one hot representation, vector with zeros and one 1-element
+ * The 1-element is placed at same index as observed position
+ */
 
 public class NeuralActorMemorySC {
 
@@ -24,12 +29,11 @@ public class NeuralActorMemorySC {
     }
 
     public void fit(List<Double> in, List<Double> out) {
-        INDArray indArray = transformToIndArray(in);
-        net.fit(indArray, Nd4j.create(out));
+        net.fit(transformDiscretePosStateToOneHotIndArray(in), Nd4j.create(out));
     }
 
     public double[] getOutValue(double[] inData) {
-        INDArray indArray = transformToIndArray(ListUtils.arrayPrimitiveDoublesToList(inData));
+        INDArray indArray = transformDiscretePosStateToOneHotIndArray(arrayPrimitiveDoublesToList(inData));
        return net.output(indArray).toDoubleVector();
     }
 
@@ -37,7 +41,7 @@ public class NeuralActorMemorySC {
         return net.gradientAndScore().getSecond();
     }
 
-    private INDArray transformToIndArray(List<Double> in) {
+    private INDArray transformDiscretePosStateToOneHotIndArray(List<Double> in) {
         return Dl4JUtil.createOneHotAndReshape(NOF_INPUTS, in.get(0).intValue());
     }
 

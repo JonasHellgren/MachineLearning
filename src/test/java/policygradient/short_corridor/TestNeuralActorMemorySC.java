@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class TestNeuralActorMemorySC {
 
-    public static final int N_ACTIONS = 2;
+    static final int N_ACTIONS = 2;
     static NeuralActorMemorySC  actor;
 
     @BeforeAll

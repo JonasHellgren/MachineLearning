@@ -1,6 +1,10 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.Builder;
+import org.apache.commons.math3.util.Pair;
+
+import java.util.List;
+
 import static common.MyFunctions.*;
 
 public record ParametersPole(
@@ -77,5 +81,14 @@ public record ParametersPole(
     public static ParametersPole newRewardNegativeFail() {
         return ParametersPole.builder().rewardFail(-1d).rewardNonFail(0d).build();
     }
+
+    public  List<Pair<Double, Double>> minMaxStatePairList() {
+        return List.of(
+                Pair.create(-angleMax(), angleMax()),
+                Pair.create(-xMax(), xMax()),
+                Pair.create(-angleDotMax(), angleDotMax()),
+                Pair.create(-xDotMax(), xDotMax()));
+    }
+
 
 }

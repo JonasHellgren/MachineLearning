@@ -48,6 +48,11 @@ public class StatePole implements StateI<VariablesPole> {
         return new StatePole(v);
     }
 
+    public StatePole newWithAngle(double angle) {
+        return StatePole.newFromVariables(VariablesPole.builder()
+                .angle(angle).x(x()).angleDot(angleDot()).xDot(xDot()).nofSteps(nofSteps()).build());
+    }
+
     public StatePole calcNew(int action, ParametersPole parameters) {
         return new StatePole(variables.calcNew(action, parameters));
     }

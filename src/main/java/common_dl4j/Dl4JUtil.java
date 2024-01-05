@@ -3,6 +3,7 @@ package common_dl4j;
 import common.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
+import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -63,14 +64,18 @@ public class Dl4JUtil {
     }
 
     public static INDArray createOneHot(int nofInputs, int hotIndex) {
-        List<Double> onHot = ListUtils.createListWithEqualElementValues(nofInputs, 0d);
-        onHot.set(hotIndex, 1d);
+        List<Double> onHot = createListWithOneHot(nofInputs, hotIndex);
         return Nd4j.create(onHot);
     }
 
-    public static INDArray createOneHotAndReshape(int nofInputs, int hotIndex) {
+    public static List<Double> createListWithOneHot(int nofInputs, int hotIndex) {
         List<Double> onHot = ListUtils.createListWithEqualElementValues(nofInputs, 0d);
         onHot.set(hotIndex, 1d);
+        return onHot;
+    }
+
+    public static INDArray createOneHotAndReshape(int nofInputs, int hotIndex) {
+        List<Double> onHot = createListWithOneHot(nofInputs, hotIndex);
         return Nd4j.create(onHot).reshape(1,nofInputs); // reshape it to a row matrix of size 1×n
     }
 
