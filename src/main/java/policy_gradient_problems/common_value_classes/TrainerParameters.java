@@ -41,4 +41,9 @@ public record TrainerParameters(
         this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
         this.relativeNofFitsPerEpoch = defaultIfNullDouble.apply(relativeNofFitsPerEpoch, RELATIVE_NOF_FITS_PER_EPOCH);
     }
+
+    public int nofFits(int nofExper) {
+        return (int) Math.max(1, (relativeNofFitsPerEpoch() * nofExper));
+    }
+
 }

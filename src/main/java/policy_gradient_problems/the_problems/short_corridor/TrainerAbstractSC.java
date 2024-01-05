@@ -47,7 +47,9 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
     private Experience<VariablesSC> createExperience(StateI<VariablesSC> state,
                                                      StepReturn<VariablesSC> sr,
                                                      Action action) {
-        return Experience.of(asObserved(state), action, sr.reward(), asObserved(sr.state()));
+        return Experience.ofWithIsTerminal(asObserved(state), action, sr.reward(), asObserved(sr.state()),
+                environment.isTerminalObserved(asObserved(sr.state()).getPos()));
+
     }
 
     private static StateSC asObserved(StateI<VariablesSC> state) {

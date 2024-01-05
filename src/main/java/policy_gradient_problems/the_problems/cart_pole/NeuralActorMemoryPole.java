@@ -1,24 +1,28 @@
-package policy_gradient_problems.the_problems.short_corridor;
+package policy_gradient_problems.the_problems.cart_pole;
 
 import common.ListUtils;
-import common_dl4j.*;
+import common_dl4j.CustomPolicyGradientLoss;
+import common_dl4j.Dl4JUtil;
+import common_dl4j.MultiLayerNetworkCreator;
+import common_dl4j.NetSettings;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
 
-public class NeuralActorMemorySC {
+import static common.ListUtils.arrayPrimitiveDoublesToList;
 
-    static int NOF_INPUTS = 3, NOF_OUTPUTS = EnvironmentSC.NOF_ACTIONS;
+public class NeuralActorMemoryPole {
+    static int NOF_INPUTS = 4, NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
     MultiLayerNetwork net;
 
-    public static NeuralActorMemorySC newDefault() {
-        return new NeuralActorMemorySC(getDefaultNetSettings());
+    public static NeuralActorMemoryPole newDefault() {
+        return new NeuralActorMemoryPole(getDefaultNetSettings());
     }
 
-    public NeuralActorMemorySC(NetSettings netSettings) {
+    public NeuralActorMemoryPole(NetSettings netSettings) {
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
     }
@@ -28,9 +32,9 @@ public class NeuralActorMemorySC {
         net.fit(indArray, Nd4j.create(out));
     }
 
-    public double[] getOutValue(double[] inData) {
-        INDArray indArray = transformToIndArray(ListUtils.arrayPrimitiveDoublesToList(inData));
-       return net.output(indArray).toDoubleVector();
+    public List<Double> getOutValue(List<Double> inData) {
+        INDArray indArray = transformToIndArray(inData);
+        return arrayPrimitiveDoublesToList(net.output(indArray).toDoubleVector());
     }
 
     public double getError() {

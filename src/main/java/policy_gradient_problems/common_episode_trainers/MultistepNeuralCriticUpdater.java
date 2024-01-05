@@ -54,7 +54,7 @@ public class MultistepNeuralCriticUpdater<V> {
             stateValuesList.add(elInfo.getExperience(t).state().asList());
             valueTarList.add(sumRewards + valueFut);
         }
-        int nofFits = (int) Math.max(1,(parameters.relativeNofFitsPerEpoch() * tEnd));  //todo get from record method
+        int nofFits = parameters.nofFits(tEnd);
         executeIfTrue(!stateValuesList.isEmpty(), () -> fitCritic.accept(Triple.of(stateValuesList, valueTarList, nofFits)));
         executeIfTrue(stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
         stateValuesList.clear();

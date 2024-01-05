@@ -36,7 +36,7 @@ public class TestTrainerActorCriticPole {
     }
 
     @Test
-    @Disabled ("long time")
+   // @Disabled ("long time")
     public void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());

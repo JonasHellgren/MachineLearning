@@ -44,7 +44,6 @@ public class TestTrainerNeuralActorNeuralCriticSC {
         assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(), 0, 1));
         setRealPos(6);
         assertEquals(0, agent.chooseAction().asInt());
-
     }
 
     private static Double getCriticOutValue(int pos) {

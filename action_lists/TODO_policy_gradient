@@ -181,13 +181,15 @@ one hot även för critic x
 minor clean up x
 getObservedPos createOneHot etc i StateSC  x
 skippa norm one hot actor och critic SC  x
-bara printa state values efter träning
-mer clean up
-kunna påverka hur stokastisk med entropy loss i CustomPolicyGradientLoss
-
-public class Test till runner
-skapa generisk NeuralCriticNeuralActorTrainer
+bara printa state values efter träning x
+kunna påverka hur stokastisk med entropy loss i CustomPolicyGradientLoss x
+Experience med isTerminal x
+skapa generisk NeuralCriticNeuralActorTrainer x
 koda AgentNeuralActorNeuralCriticPole
+
+uppdatera md fil one step ac
+mer clean up
+public class Test till runner
 hur skall AgentNeuralActorI kunna klara cont action
 
 stepHorizon(1) buggar

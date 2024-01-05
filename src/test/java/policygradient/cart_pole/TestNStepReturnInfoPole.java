@@ -68,7 +68,7 @@ public class TestNStepReturnInfoPole {
     private static Experience<VariablesPole> expOf(double x) {
         var state=StatePole.builder().x(x).build();
         var stateNext= StatePole.builder().x(x+1).build();
-        return new Experience<>(state, Action.ofInteger(0), REWARD, stateNext, false, 0);
+        return Experience.of(state, Action.ofInteger(0), REWARD, stateNext);
     }
 
     private double getExpectedDiscSum(int listLength) {

@@ -28,7 +28,7 @@ public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
                         .valueTermState(VALUE_TERMINAL_STATE)
                         .nofActions(2)
     //                    .tabularCoder((v) -> v.pos())
-                        .isTerminal((s) -> environment.isTerminalObserved(EnvironmentSC.getPos(s)))
+                       // .isTerminal((s) -> environment.isTerminalObserved(EnvironmentSC.getPos(s)))
                         .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {

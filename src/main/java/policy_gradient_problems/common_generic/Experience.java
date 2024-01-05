@@ -15,6 +15,7 @@ public record Experience<V>(
         double reward,
         StateI<V> stateNext,
         boolean isFail,
+        boolean isTerminal,
         double value) {
 
     public static final double VALUE = 0d;
@@ -24,7 +25,7 @@ public record Experience<V>(
                                        double reward,
                                        StateI<V> stateNext
     ) {
-        return new Experience<>(state, action, reward, stateNext, false, VALUE);
+        return new Experience<>(state, action, reward, stateNext, false, false, VALUE);
     }
 
 
@@ -34,12 +35,22 @@ public record Experience<V>(
                                                StateI<V> stateNext,
                                                boolean isFail
     ) {
-        return new Experience<>(state, action, reward, stateNext, isFail, VALUE);
+        return new Experience<>(state, action, reward, stateNext, isFail, false, VALUE);
     }
 
+    public static <V> Experience<V> ofWithIsTerminal(StateI<V> state,
+                                                 Action action,
+                                                 double reward,
+                                                 StateI<V> stateNext,
+                                                 boolean isTerminal
+    ) {
+        return new Experience<>(state, action, reward, stateNext, false, isTerminal, VALUE);
+    }
 
     public Experience<V> copyWithValue(double value) {
-        return Experience.<V>builder().state(state).action(action).reward(reward).stateNext(stateNext).isFail(isFail)
+        return Experience.<V>builder()
+                .state(state).action(action).reward(reward).stateNext(stateNext)
+                .isFail(isFail).isTerminal(isTerminal)
                 .value(value).build();
     }
 }

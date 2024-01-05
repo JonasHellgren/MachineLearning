@@ -5,18 +5,14 @@ import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.jetbrains.annotations.NotNull;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
-import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import static common.ListUtils.findMax;
 import static common.ListUtils.findMin;
 
@@ -25,7 +21,7 @@ public class NeuralCriticMemorySC {
     static int NOF_INPUTS = 3, NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;
-    NormalizerMinMaxScaler normalizerIn, normalizerOut;
+    NormalizerMinMaxScaler normalizerOut;
     Dl4JNetFitter fitter;
 
     public static NeuralCriticMemorySC newDefault() {
@@ -39,7 +35,6 @@ public class NeuralCriticMemorySC {
         this.fitter = Dl4JNetFitter.builder()
                 .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
                 .net(net).randGen(new Random(netSettings.seed()))
-                //.normalizerIn(normalizerIn)
                 .normalizerOut(normalizerOut)
                 .build();
     }

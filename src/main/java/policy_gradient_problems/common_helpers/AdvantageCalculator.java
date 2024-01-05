@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 /**
  * advantage=Q(s,a)-V(s)=r+γ*V(s')-V(s')
- * If an action leads to a fail state, the advantage calculation focus on the immediate reward,
+ * If an action leads to a fail or terminal state, the advantage calculation focus on the immediate reward,
  * value of future state can be regarded as not possible to define/irrelevant due to the fail state.
  */
 
@@ -22,8 +22,8 @@ public class AdvantageCalculator<V> {
         double r = expAtTau.reward();
         double valueS = criticOut.apply(expAtTau.state());
         double valueSNew = criticOut.apply(expAtTau.stateNext());
-        boolean isActionResultingInFailState = expAtTau.isFail();
-        return (isActionResultingInFailState) ? r : r + parameters.gamma() * valueSNew - valueS;
+        boolean isActionResultingInFailOrTerminalState = expAtTau.isFail() || expAtTau.isTerminal();
+        return (isActionResultingInFailOrTerminalState) ? r : r + parameters.gamma() * valueSNew - valueS;
     }
 
 }
