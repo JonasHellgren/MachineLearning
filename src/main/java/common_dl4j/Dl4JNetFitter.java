@@ -1,5 +1,6 @@
 package common_dl4j;
 
+import common.Conditionals;
 import common.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
@@ -22,7 +23,7 @@ public class Dl4JNetFitter {
     @NonNull Integer nofInputs, nofOutputs;
     @NonNull MultiLayerNetwork net;
     @NonNull Random randGen;
-    @NonNull NormalizerMinMaxScaler normalizerIn, normalizerOut;
+    NormalizerMinMaxScaler normalizerIn, normalizerOut;
 
     public void train(List<List<Double>> in, List<Double> out) {
         train(in, out, 1);
@@ -40,8 +41,8 @@ public class Dl4JNetFitter {
         int length = in.size();
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, nofInputs);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), length, nofOutputs);
-        normalizerIn.transform(inputNDArray);
-        normalizerOut.transform(outPutNDArray);
+        Conditionals.executeIfTrue(normalizerIn!=null, () -> normalizerIn.transform(inputNDArray));
+        Conditionals.executeIfTrue(normalizerOut!=null,() ->  normalizerOut.transform(outPutNDArray));
         return Dl4JUtil.getDataSetIterator(inputNDArray, outPutNDArray, randGen);
     }
 

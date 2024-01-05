@@ -50,7 +50,7 @@ public class TestNeuralActorMemorySC {
             var state=StateSC.newFromPos(triplet.getLeft());
             List<Double> in = state.asList();
             List<Double> onHotOut = createOut(triplet.getMiddle(), triplet.getRight());
-            actor.fit(in, onHotOut,1);
+            actor.fit(in, onHotOut);
         }
     }
 

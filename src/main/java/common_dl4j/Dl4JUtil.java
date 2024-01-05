@@ -62,6 +62,17 @@ public class Dl4JUtil {
         return new ListDataSetIterator<>(listDs, input.rows());
     }
 
+    public static INDArray createOneHot(int nofInputs, int hotIndex) {
+        List<Double> onHot = ListUtils.createListWithEqualElementValues(nofInputs, 0d);
+        onHot.set(hotIndex, 1d);
+        return Nd4j.create(onHot);
+    }
+
+    public static INDArray createOneHotAndReshape(int nofInputs, int hotIndex) {
+        List<Double> onHot = ListUtils.createListWithEqualElementValues(nofInputs, 0d);
+        onHot.set(hotIndex, 1d);
+        return Nd4j.create(onHot).reshape(1,nofInputs); // reshape it to a row matrix of size 1×n
+    }
 
     public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMax
                                                          ) {
