@@ -47,4 +47,9 @@ public class StateSC implements StateI<VariablesSC> {
         throw new NoSuchMethodException();
     }
 
+    public StateSC asObserved() {
+        int obsPos= EnvironmentSC.getObservedPos(this);
+        return newFromPos(obsPos);
+    }
+
 }

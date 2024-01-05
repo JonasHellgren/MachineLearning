@@ -47,10 +47,10 @@ public class NeuralActorMemorySC {
 
     private INDArray transformToIndArray(List<Double> in) {
         List<Double> onHot = ListUtils.createListWithEqualElementValues(NOF_INPUTS, 0d);
-        int pos = in.get(0).intValue();
-        onHot.set(pos, 1d);
+        onHot.set( in.get(0).intValue(), 1d);
         INDArray indArray = Nd4j.create(onHot);
         normalizerIn.transform(indArray);
+     //   System.out.println("indArray = " + indArray);
         indArray= indArray.reshape(1,indArray.length());  // reshape it to a row matrix of size 1×n
         return indArray;
     }
@@ -67,7 +67,7 @@ public class NeuralActorMemorySC {
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(CustomPolicyGradientLoss.newDefault())
+                .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.5))
                 .build();
     }
 

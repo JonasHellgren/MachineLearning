@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.StepReturn;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
@@ -49,7 +50,8 @@ public class TestEnvironmentSC {
         StepReturn<VariablesSC> sr=environment.step(StateSC.newFromPos(s), Action.ofInteger(a));
 
         assertEquals(sNew,EnvironmentSC.getPos(sr.state()));
-        assertEquals(sNewObserved,EnvironmentSC.getObservedPos(sr.state()));
+        StateSC state = (StateSC) sr.state();
+        assertEquals(sNewObserved,state.asObserved().getPos());
         assertEquals(isTerminal,sr.isTerminal());
         assertEquals(r,sr.reward());
     }

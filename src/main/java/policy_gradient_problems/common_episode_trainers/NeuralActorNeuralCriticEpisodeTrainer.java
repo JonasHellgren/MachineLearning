@@ -27,13 +27,9 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
     @NonNull Function<StateI<V>, Boolean> isTerminal;
 
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {
-        var rc = new ReturnCalculator<V>();
-        var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         List<List<Double>> inList = new ArrayList<>();
         List<Double> outList = new ArrayList<>();
-        //  System.out.println("episode");
-
-        for (Experience<V> experience : elwr) {
+        for (Experience<V> experience : experienceList) {
             List<Double> stateAsList = experience.state().asList();
             double vNext = valNext(experience);
             double vTar = experience.reward() + parameters.gamma() * vNext;
@@ -41,12 +37,11 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
             outList.add(vTar);
             double v = getCriticOut(experience.state());
             double adv = vTar - v;
-            agent.fitActor(stateAsList, createOneHot(experience,adv));  //todo
-
+            agent.fitActor(stateAsList, createOneHot(experience,adv));
         }
         int nofFits = (int) Math.max(1, (parameters.relativeNofFitsPerEpoch() * experienceList.size()));  //todo get from record method
         agent.fitCritic(inList, outList, nofFits);
-        printStateValues();
+      //  printStateValues();
     }
 
     private void printStateValues() {

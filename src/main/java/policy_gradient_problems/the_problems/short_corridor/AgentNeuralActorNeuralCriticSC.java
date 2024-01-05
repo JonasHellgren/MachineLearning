@@ -7,7 +7,6 @@ import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
-import static common.ListUtils.toArray;
 
 @Getter
 public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
@@ -28,16 +27,12 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
 
     @Override
     public List<Double> getActionProbabilities() {
-        double obsState= EnvironmentSC.getObservedPos(getState());
-        return calcActionProbsInObsState(obsState);
-        //double[] outArr = actor.getOutValue(new double[]{obsState});
-        //double[] outArr = actor.getOutValue(toArray(getState().asList()));
-        //return arrayPrimitiveDoublesToList(outArr);
+        StateSC stateAsObs=(StateSC) getState();
+        return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
     }
 
-    public List<Double> calcActionProbsInObsState(double stateObserved) {
+    public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
         double[] outArr = actor.getOutValue(new double[]{stateObserved});
-        //double[] outArr = actor.getOutValue(toArray(List.of((double) stateObserved)));
         return arrayPrimitiveDoublesToList(outArr);
     }
 

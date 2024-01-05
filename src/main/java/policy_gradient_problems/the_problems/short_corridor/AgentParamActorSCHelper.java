@@ -71,7 +71,10 @@ public class AgentParamActorSCHelper {
     }
 
     public Action chooseAction(StateI<VariablesSC> state) {
-        int observedStateOld = EnvironmentSC.getObservedPos(state);
+        //int observedStateOld = EnvironmentSC.getObservedPos(state);
+
+        StateSC stateAsObs=(StateSC) state;
+        int observedStateOld = stateAsObs.asObserved().getPos();
         throwIfBadObsState(observedStateOld);
         var limits = getLimits(calcActionProbsInObsState(observedStateOld));
         throwIfBadLimits(limits);

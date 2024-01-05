@@ -16,7 +16,8 @@ public class TestTrainerNeuralActorNeuralCriticSC {
 
     @BeforeEach
     public void init() {
-         var environment= new EnvironmentSC();
+        var environment = new EnvironmentSC();
+        agent = AgentNeuralActorNeuralCriticSC.newDefault();
         createTrainer(environment);
     }
 
@@ -25,8 +26,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1_000).nofStepsMax(100).gamma(0.5)
-                        //.learningRateCritic(1e-2).learningRateActor(1e-3)
+                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.5)
                         .build())
                 .build();
     }
@@ -36,12 +36,12 @@ public class TestTrainerNeuralActorNeuralCriticSC {
         trainer.train();
         printPolicy();
 
-        assertTrue(getCriticOutValue(1) >getCriticOutValue(0));
-        assertTrue(getCriticOutValue(1)>getCriticOutValue(2));
+        assertTrue(getCriticOutValue(1) > getCriticOutValue(0));
+        assertTrue(getCriticOutValue(1) > getCriticOutValue(2));
 
         setRealPos(2);
         assertEquals(1, agent.chooseAction().asInt());
-        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
+        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(), 0, 1));
         setRealPos(6);
         assertEquals(0, agent.chooseAction().asInt());
 
@@ -60,10 +60,10 @@ public class TestTrainerNeuralActorNeuralCriticSC {
 
     private void printPolicy() {
         System.out.println("policy");
-        for (int pos = 0; pos < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES ; pos++) {
-            System.out.println("s = "+pos+
-                    ", agent.actionProb() = " + agent.calcActionProbsInObsState(pos)+
-                    ", value = "+getCriticOutValue(pos));
+        for (int pos = 0; pos < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES; pos++) {
+            System.out.println("s = " + pos +
+                    ", agent.actionProb() = " + agent.calcActionProbabilitiesInObsState(pos) +
+                    ", value = " + getCriticOutValue(pos));
         }
     }
 

@@ -22,12 +22,16 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 public class CustomPolicyGradientLoss implements ILossFunction {
 
-    public static final double EPS = 1e-5, BETA = 1e-1d;
+    public static final double EPS = 1e-5, BETA = 0.1d;
     double eps, beta;
     NumericalGradCalculator gradCalculator;
 
     public static CustomPolicyGradientLoss newDefault() {
         return new CustomPolicyGradientLoss(EPS, BETA);
+    }
+
+    public static CustomPolicyGradientLoss newWithBeta(double beta) {
+        return new CustomPolicyGradientLoss(EPS, beta);
     }
 
     public CustomPolicyGradientLoss(double eps, double beta) {

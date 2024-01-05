@@ -37,21 +37,22 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
         do {
             var action = agent.chooseAction();
             sr = environment.step(agent.getState(), action);
-            experienceList.add(createExperience(sr, action, agent));
+            experienceList.add(createExperience(agent.getState(),sr, action));
             si++;
             agent.setState(sr.state());
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }
 
-    private Experience<VariablesSC> createExperience(StepReturn<VariablesSC> sr,
-                                                     Action action,
-                                                     AgentI<VariablesSC> agent) {
-        return Experience.of(getObsState(agent.getState()), action, sr.reward(), getObsState(sr.state()));
+    private Experience<VariablesSC> createExperience(StateI<VariablesSC> state,
+                                                     StepReturn<VariablesSC> sr,
+                                                     Action action) {
+        return Experience.of(asObserved(state), action, sr.reward(), asObserved(sr.state()));
     }
 
-    private static StateSC getObsState(StateI<VariablesSC> agent) {
-        return StateSC.newFromPos(EnvironmentSC.getObservedPos(agent));
+    private static StateSC asObserved(StateI<VariablesSC> state) {
+        StateSC stateCasted= (StateSC) state;
+        return stateCasted.asObserved();
     }
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
