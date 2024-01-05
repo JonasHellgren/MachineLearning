@@ -2,11 +2,13 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import policy_gradient_problems.common_episode_trainers.NeuralActorNeuralCriticEpisodeTrainer;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import java.util.List;
 
+@Log
 public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
     AgentNeuralActorNeuralCriticPole agent;
@@ -38,6 +40,10 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
             List<Experience<VariablesPole>> experList = getExperiences(agent);
             episodeTrainer.trainAgentFromExperiences(experList);
             updateTracker(ei,experList);
+
+            if (experList.size() > 50) {
+                    log.info("Nof episodes = " + experList.size());
+            }
         }
     }
     

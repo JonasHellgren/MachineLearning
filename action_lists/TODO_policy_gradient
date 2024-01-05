@@ -187,7 +187,8 @@ Experience med isTerminal x
 skapa generisk NeuralCriticNeuralActorTrainer x
 koda AgentNeuralActorNeuralCriticPole
 NeuralActorMemoryPole x
-TestNeuralActorMemoryPole
+TestNeuralActorMemoryPole x
+Neural ac pole i runner
 
 
 uppdatera md fil one step ac
