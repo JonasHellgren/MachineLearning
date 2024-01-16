@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import common.ListUtils;
+import common.RandUtils;
 import common_dl4j.Dl4JUtil;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.the_problems.cart_pole.*;
@@ -51,12 +52,10 @@ public class TestNeuralActorMemoryPole {
             var state= StatePole.newAllRandom(parametersPole);
             List<Double> in = state.asList();
             int action=(state.angle()<0) ? 0 : 1;  //neg angle -> push left and vice vera
-            List<Double> onHotOut = Dl4JUtil.createListWithOneHot(EnvironmentPole.NOF_ACTIONS,action);
-            actor.fit(in, onHotOut);
+            double nofSteps= RandUtils.getRandomDouble(0,parametersPole.maxNofSteps());
+            List<Double> oneHotOut = Dl4JUtil.createListWithOneHotWithValue(EnvironmentPole.NOF_ACTIONS,action,nofSteps);
+            actor.fit(in, oneHotOut);
         }
     }
-
-
-
 
 }

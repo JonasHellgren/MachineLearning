@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -27,7 +28,7 @@ public class TestTrainerNeuralActorNeuralCriticPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(5000).nofStepsMax(100).gamma(0.99)
+                        .nofEpisodes(50).nofStepsMax(100).gamma(0.99)
                         .stepHorizon(10)
                         .relativeNofFitsPerEpoch(0.5)
                         .build())
@@ -35,7 +36,7 @@ public class TestTrainerNeuralActorNeuralCriticPole {
     }
 
     @Test
-    // @Disabled ("long time")
+    //@Disabled("long time")
     public void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
@@ -50,8 +51,13 @@ public class TestTrainerNeuralActorNeuralCriticPole {
 
         for (int i = 0; i < 10 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
-            double valAllRandom=agent.getCriticOut(statePole);
-            System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
+            double valueCritic=agent.getCriticOut(statePole);
+
+            agent.setState(statePole);
+            var probs=agent.getActionProbabilities();
+            System.out.println("state = "+statePole+", valueCritic = " + valueCritic+", probs = "+probs);
+
+
         }
 
         assertTrue(valAll0>valBigAngle);

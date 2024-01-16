@@ -188,6 +188,8 @@ skapa generisk NeuralCriticNeuralActorTrainer x
 koda AgentNeuralActorNeuralCriticPole
 NeuralActorMemoryPole x
 TestNeuralActorMemoryPole x
+NeuralActorMemoryPole normalized out  x
+StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
 
 

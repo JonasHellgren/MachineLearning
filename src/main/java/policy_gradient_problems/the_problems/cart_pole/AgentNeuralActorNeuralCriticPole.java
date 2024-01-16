@@ -6,7 +6,6 @@ import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
-import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
         implements AgentNeuralActorNeuralCriticI<VariablesPole> {
@@ -36,6 +35,7 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
 
     @Override
     public List<Double> getActionProbabilities() {
+      //  System.out.println("actor.getOutValue(getState().asList()) = " + actor.getOutValue(getState().asList()));
         return actor.getOutValue(getState().asList());
     }
 

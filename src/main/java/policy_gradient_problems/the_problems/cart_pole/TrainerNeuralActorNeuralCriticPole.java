@@ -42,7 +42,7 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
             updateTracker(ei,experList);
 
             if (experList.size() > 50) {
-                    log.info("Nof episodes = " + experList.size());
+                    log.info("Episode = "+ei+", nof steps = " + experList.size());
             }
         }
     }

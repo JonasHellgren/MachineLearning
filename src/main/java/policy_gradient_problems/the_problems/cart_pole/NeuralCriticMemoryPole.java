@@ -14,7 +14,8 @@ import java.util.Random;
 
 public class NeuralCriticMemoryPole {
 
-    static int NOF_INPUTS = 4, NOF_OUTPUTS = 1;
+    static int NOF_INPUTS = StatePole.newUprightAndStill().asList().size();
+    static int NOF_OUTPUTS = 1;
 
     NetSettings netSettings;  //todo veck
     MultiLayerNetwork net;
@@ -28,7 +29,7 @@ public class NeuralCriticMemoryPole {
 
     public static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(4).nHiddenLayers(3).nHidden(10).nOutput(1)
+                .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(10).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
