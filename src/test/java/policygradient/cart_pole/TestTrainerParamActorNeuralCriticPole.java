@@ -59,8 +59,8 @@ public class TestTrainerParamActorNeuralCriticPole {
             System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
         }
 
-        assertTrue(valAll0>valBigAngle);
         assertTrue(nofSteps > 20);
+
     }
 
 

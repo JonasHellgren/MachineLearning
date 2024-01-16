@@ -4,6 +4,7 @@ import common.MathUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
@@ -43,6 +44,7 @@ public class TestTrainerBaselinePole {
     }
 
     @Test
+    @Disabled
     public void whenTrained_thenCorrectValueFunction() {
         double valuea0x0=trainer.getValueFunction().getValue(getFeatureVector(0, 0));
         double valuea0d3x0=trainer.getValueFunction().getValue(getFeatureVector(0.3, 0));

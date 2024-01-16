@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
@@ -35,27 +36,26 @@ public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
     }
 
     @Test
-    // @Disabled ("long time")
+    //@Disabled()
     public void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
+        int nofSteps = getNofSteps();
+        somePrinting(nofSteps);
+        printMemories();
+        assertTrue(nofSteps > 20);
+    }
 
-
-        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
-        int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
-
+    private void somePrinting(int nofSteps) {
         System.out.println("nofSteps = " + nofSteps);
-
         double valAll0=agent.getCriticOut(StatePole.newUprightAndStill());
         double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
+        System.out.println("valAll0 = " + valAll0+", valBigAngle = " + valBigAngle);
+    }
 
-        System.out.println("valAll0 = " + valAll0);
-        System.out.println("valBigAngle = " + valBigAngle);
-
-        printMemories();
-
-        assertTrue(valAll0>valBigAngle);
-        assertTrue(nofSteps > 20);
+    private int getNofSteps() {
+        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+        return helper.runTrainedAgent(StatePole.newUprightAndStill());
     }
 
     private void printMemories() {

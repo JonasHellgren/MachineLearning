@@ -191,11 +191,13 @@ TestNeuralActorMemoryPole x
 NeuralActorMemoryPole normalized out  x
 TestTrainerNeuralActorNeuralCriticPole konvergarar inte
 
-
-TrainerMultiStepNeuralActorNeuralCriticPole
-
+TrainerMultiStepNeuralActorNeuralCriticPole x
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
+
+
+TrainerMultiStepNeuralActorNeuralCriticPole cleaner
+
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
 

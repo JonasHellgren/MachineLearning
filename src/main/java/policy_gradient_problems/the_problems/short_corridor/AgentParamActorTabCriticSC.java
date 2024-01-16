@@ -60,7 +60,8 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
 
     @Override
     public List<Double> getActionProbabilities() {
-        return helper.calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
+        StateSC stateAsObs=(StateSC) getState();
+        return helper.calcActionProbsInObsState(stateAsObs.asObserved().getPos());
     }
 
     @Override

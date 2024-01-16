@@ -3,18 +3,19 @@ package policygradient.short_corridor;
 import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.common_helpers.TabularValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
 import policy_gradient_problems.the_problems.short_corridor.TrainerParamActorTabCriticSC;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTrainerWithActorCriticSC {
 
     TrainerParamActorTabCriticSC trainer;
-    AgentParamActorTabCriticSC agent;
+    static AgentParamActorTabCriticSC agent;
 
     @BeforeEach
     public void init() {
@@ -38,14 +39,23 @@ public class TestTrainerWithActorCriticSC {
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
+
         setRealPos(2);
-        assertEquals(1, agent.chooseAction().asInt());
-        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
+        assertTrue(isProbMovingRightLarger());
         setRealPos(6);
-        assertEquals(0, agent.chooseAction().asInt());
+        assertFalse(isProbMovingRightLarger());
+
+        assertTrue(getCriticOutValue(1) >getCriticOutValue(0));
+        assertTrue(getCriticOutValue(1)>getCriticOutValue(2));
+    }
+
+    private static double getCriticOutValue(int state) {
         var valueFunction = agent.getCritic();
-        assertTrue(valueFunction.getValue(1)>valueFunction.getValue(0));
-        assertTrue(valueFunction.getValue(1)>valueFunction.getValue(2));
+        return valueFunction.getValue(state);
+    }
+
+    private static boolean isProbMovingRightLarger() {
+        return agent.getActionProbabilities().get(0) < agent.getActionProbabilities().get(1);
     }
 
 

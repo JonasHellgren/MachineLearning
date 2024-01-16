@@ -1,13 +1,11 @@
 package policygradient.short_corridor;
 
-import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTrainerNeuralActorNeuralCriticSC {
 
@@ -26,7 +24,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(100).gamma(0.5)
+                        .nofEpisodes(300).gamma(0.5)
                         .build())
                 .build();
     }
@@ -40,10 +38,14 @@ public class TestTrainerNeuralActorNeuralCriticSC {
         assertTrue(getCriticOutValue(1) > getCriticOutValue(2));
 
         setRealPos(2);
-        assertEquals(1, agent.chooseAction().asInt());
-        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(), 0, 1));
+        assertTrue(isProbMovingRightLarger());
         setRealPos(6);
-        assertEquals(0, agent.chooseAction().asInt());
+        assertFalse(isProbMovingRightLarger());
+
+    }
+
+    private static boolean isProbMovingRightLarger() {
+        return agent.getActionProbabilities().get(0) < agent.getActionProbabilities().get(1);
     }
 
     private static Double getCriticOutValue(int pos) {
