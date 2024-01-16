@@ -84,20 +84,30 @@ public class CustomLoss implements ILossFunction {
     */
     @Override
     public INDArray computeGradient(INDArray yHat, INDArray preOutput, IActivation activationFn, INDArray mask) {
+        INDArray dLdPreOut = getAnalyticGrad(yHat, preOutput, activationFn);
+        //INDArray dLdPreOut = getNumericGrad(yHat, preOutput, activationFn);
+
+        maskIfRequired(mask, dLdPreOut);
+        return dLdPreOut;
+
+    }
+
+    private static INDArray getAnalyticGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
         INDArray y = activationFn.getActivation(preOutput.dup(), true);
         yHat = yHat.castTo(preOutput.dataType());   //else: Failed to execute op mmul exception
         INDArray yMinusyHat = yHat.sub(y);
         INDArray dldyhat = yMinusyHat.mul(-2).sub(Transforms.sign(yMinusyHat));
-        INDArray dLdPreOut = activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
-        maskIfRequired(mask, dLdPreOut);
-
-        System.out.println("yHat = " + yHat);
-        System.out.println("y = " + y);
-        System.out.println("dLdPreOut = " + dLdPreOut);
-
-        return dLdPreOut;
-
+        return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
     }
+
+    private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
+        INDArray y = activationFn.getActivation(preOutput.dup(), true);
+        yHat = yHat.castTo(preOutput.dataType());   //else: Failed to execute op mmul exception
+        INDArray yMinusyHat = yHat.sub(y);
+        INDArray dldyhat = yMinusyHat.mul(-2).sub(Transforms.sign(yMinusyHat));
+        return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
+    }
+
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
