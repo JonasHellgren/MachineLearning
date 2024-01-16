@@ -28,11 +28,11 @@ public class TestCustomPolicyGradientLoss {
 
     @BeforeEach
     public void init() {
-        net = getNet(CustomPolicyGradientLoss.newDefault());
+        net = getNet(CustomPolicyGradientLossNew.newDefault());
     }
 
     @NotNull
-    private static MultiLayerNetwork getNet(CustomPolicyGradientLoss lossFunction) {
+    private static MultiLayerNetwork getNet(ILossFunction lossFunction) {
         return MultiLayerNetworkCreator.create(NetSettings.builder()
                 .nHiddenLayers(2)
                 .nInput(N_INPUT).nHidden(2).nOutput(2)

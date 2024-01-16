@@ -16,6 +16,7 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nesterovs;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -25,10 +26,10 @@ import java.util.Random;
  * The example is identical to the one in org.deeplearning4j.examples.feedforward.regression.RegressionSum
  * except for the custom loss function
  */
-public class RunCustomLoss {
+public class RunCustomLoss1Out {
     static final int seed = 12345;
-    static final int nEpochs = 200;
-    static final int nSamples = 1000;
+    static final int nEpochs = 2;  //200
+    static final int nSamples = 5;  //1000
     static final int batchSize = 100;
     static final double learningRate = 0.001;
     static final double momentum = 0.95;
@@ -49,8 +50,8 @@ public class RunCustomLoss {
         double[] input1 = new double[nSamples];
         double[] input2 = new double[nSamples];
         for (int i = 0; i < nSamples; i++) {
-            input1[i] = MIN_RANGE + (MAX_RANGE - MIN_RANGE) * RunCustomLoss.rng.nextDouble();
-            input2[i] = MIN_RANGE + (MAX_RANGE - MIN_RANGE) * RunCustomLoss.rng.nextDouble();
+            input1[i] = MIN_RANGE + (MAX_RANGE - MIN_RANGE) * rng.nextDouble();
+            input2[i] = MIN_RANGE + (MAX_RANGE - MIN_RANGE) * rng.nextDouble();
             sum[i] = input1[i] + input2[i];
         }
         INDArray inputNDArray1 = Nd4j.create(input1, new int[]{nSamples, 1});
@@ -58,9 +59,10 @@ public class RunCustomLoss {
         INDArray inputNDArray = Nd4j.hstack(inputNDArray1, inputNDArray2);
         INDArray outPut = Nd4j.create(sum, new int[]{nSamples, 1});
         DataSet dataSet = new DataSet(inputNDArray, outPut);
+        System.out.println("dataSet = " + dataSet);
         List<DataSet> listDs = dataSet.asList();
         Collections.shuffle(listDs, rng);
-        return new ListDataSetIterator<>(listDs, RunCustomLoss.batchSize);
+        return new ListDataSetIterator<>(listDs, batchSize);
     }
 
 
@@ -75,7 +77,7 @@ public class RunCustomLoss {
     private static MultiLayerNetwork createNetwork() {
         int numInput = 2;
         int numOutputs = 1;
-        int nHidden = 10;
+        int nHidden = 5;
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .weightInit(WeightInit.XAVIER)

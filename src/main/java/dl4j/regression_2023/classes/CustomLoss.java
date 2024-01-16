@@ -37,12 +37,14 @@ public class CustomLoss implements ILossFunction {
         The score is calculated as the sum of (y-y_hat)^2 + |y - y_hat|
      */
     private INDArray scoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
+
         INDArray output = activationFn.getActivation(preOutput.dup(), true);
         INDArray yMinusYHat = labels.sub(output);
         INDArray absYMinusyHat = Transforms.abs(yMinusYHat);
         INDArray yMinusyHatSqr = yMinusYHat.mul(yMinusYHat);
         INDArray scoreArr=yMinusyHatSqr.add(absYMinusyHat);   //(y-y_hat)^2+|y - y_hat|
         maskIfRequired(mask, scoreArr);
+
         return scoreArr;
     }
 
@@ -88,6 +90,11 @@ public class CustomLoss implements ILossFunction {
         INDArray dldyhat = yMinusyHat.mul(-2).sub(Transforms.sign(yMinusyHat));
         INDArray dLdPreOut = activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
         maskIfRequired(mask, dLdPreOut);
+
+        System.out.println("yHat = " + yHat);
+        System.out.println("y = " + y);
+        System.out.println("dLdPreOut = " + dLdPreOut);
+
         return dLdPreOut;
 
     }

@@ -17,8 +17,8 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
     double eps, beta;
     NumericalGradCalculator gradCalculator;
 
-    public static CustomPolicyGradientLoss newDefault() {
-        return new CustomPolicyGradientLoss(EPS, BETA);
+    public static CustomPolicyGradientLossNew newDefault() {
+        return new CustomPolicyGradientLossNew(EPS, BETA);
     }
 
     public static CustomPolicyGradientLoss newWithBeta(double beta) {
