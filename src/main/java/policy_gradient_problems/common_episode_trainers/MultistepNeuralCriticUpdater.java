@@ -2,7 +2,10 @@ package policy_gradient_problems.common_episode_trainers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.apache.arrow.flatbuf.Int;
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
+import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -32,18 +35,42 @@ import static common.Conditionals.executeIfTrue;
 @AllArgsConstructor
 public class MultistepNeuralCriticUpdater<V> {
 
+    @AllArgsConstructor
+    public static class MultiStepResults {
+        public int nofSteps;
+        public List<List<Double>> stateValuesList;
+        public List<Action> actionList;
+        public List<Double> valuePresentList;
+        public List<Double> valueTarList;
+    }
+
     TrainerParameters parameters;
     Function<StateI<V>,Double> criticOut;
     Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;
 
-    public void updateCritic(List<Experience<V>> experiences) {
+    //todo split method below
+
+    public MultiStepResults updateCritic(List<Experience<V>> experiences) {
+        MultiStepResults results = getMultiStepResults(experiences);
+        int nofFits = parameters.nofFits(results.nofSteps);
+        executeIfTrue(!results.stateValuesList.isEmpty(), () ->
+                fitCritic.accept(Triple.of(results.stateValuesList, results.valueTarList, nofFits)));
+        executeIfTrue(results.stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
+
+        return results;
+    }
+
+    private  MultiStepResults getMultiStepResults(List<Experience<V>> experiences) {
         Integer n = parameters.stepHorizon();
         int T = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
         var elInfo = new NStepReturnInfo<>(experiences, parameters);
         int tEnd = elInfo.isEndExperienceFail() ? T : T - n + 1;  //explained in top of file
+
         List<List<Double>> stateValuesList = new ArrayList<>();
         List<Double> valueTarList = new ArrayList<>();
+        List<Action> actionList=new ArrayList<>();
+        List<Double> valuePresentList=new ArrayList<>();
 
         for (int t = 0; t < tEnd; t++) {
             var resMS = elInfo.getResultManySteps(t);
@@ -53,15 +80,10 @@ public class MultistepNeuralCriticUpdater<V> {
                     : 0;
             stateValuesList.add(elInfo.getExperience(t).state().asList());
             valueTarList.add(sumRewards + valueFut);
+            actionList.add(elInfo.getExperience(t).action());
+            valuePresentList.add(criticOut.apply(elInfo.getExperience(t).state()));
         }
-        int nofFits = parameters.nofFits(tEnd);
-        executeIfTrue(!stateValuesList.isEmpty(), () -> fitCritic.accept(Triple.of(stateValuesList, valueTarList, nofFits)));
-        executeIfTrue(stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
-        stateValuesList.clear();
-        valueTarList.clear();
+        return new MultiStepResults(tEnd,stateValuesList,actionList, valuePresentList, valueTarList);
     }
 
-
-    
-    
 }

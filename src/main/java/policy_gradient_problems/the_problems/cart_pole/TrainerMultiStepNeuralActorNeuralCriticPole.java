@@ -1,12 +1,12 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import common.ListUtils;
+import common_dl4j.Dl4JUtil;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_episode_trainers.MultistepNeuralCriticUpdater;
-import policy_gradient_problems.common_episode_trainers.MultistepParamActorUpdater;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -18,6 +18,7 @@ import static common.Conditionals.executeIfTrue;
 @Log
 public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
+    public static final int NOF_ACTIONS = 2;
     AgentNeuralActorNeuralCriticI<VariablesPole> agent;
 
     @Builder
@@ -35,10 +36,16 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
-            cu.updateCritic(experiences);
+            MultistepNeuralCriticUpdater.MultiStepResults msRes= cu.updateCritic(experiences);
 
-
-         //   agent.fitActor(inList, oneHot, nofFits);
+            for (int i = 0; i < msRes.nofSteps ; i++) {
+                var in=msRes.stateValuesList.get(i);
+                int actionInt = msRes.actionList.get(i).asInt();
+                double adv=msRes.valueTarList.get(i)-msRes.valuePresentList.get(i);
+                List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(NOF_ACTIONS, actionInt,adv);
+                oneHot.set(actionInt, adv);
+                agent.fitActor(in, oneHot);
+            }
 
             //updateActor(experiences);
             printIfSuccessFul(ei, experiences);
