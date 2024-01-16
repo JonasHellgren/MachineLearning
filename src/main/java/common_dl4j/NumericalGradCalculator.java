@@ -18,7 +18,7 @@ public class NumericalGradCalculator {
     double eps;
     TriFunction<Pair<INDArray,INDArray>,IActivation,INDArray,Double> scoreFcn;
 
-    INDArray getGrad(INDArray yRef, INDArray z, IActivation activationFn, INDArray mask) {
+    public INDArray getGrad(INDArray yRef, INDArray z, IActivation activationFn, INDArray mask) {
 
         long nOut= yRef.size(0);
         INDArray dldz= Nd4j.zeros(nOut);

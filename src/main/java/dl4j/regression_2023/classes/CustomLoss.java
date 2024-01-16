@@ -1,5 +1,8 @@
 package dl4j.regression_2023.classes;
 
+import com.codepoetics.protonpack.functions.TriFunction;
+import common_dl4j.NumericalGradCalculator;
+import common_dl4j.NumericalGradCalculatorNew;
 import org.nd4j.common.base.Preconditions;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -20,33 +23,6 @@ import org.nd4j.common.primitives.Pair;
  */
 
 public class CustomLoss implements ILossFunction {
-
-    /*
-    Needs modification depending on your loss function
-        scoreArray calculates the loss for a single data point or in other words a batch size of one
-        It returns an array the shape and size of the output of the neural net.
-        Each element in the array is the loss function applied to the prediction and it's true value
-        scoreArray takes in:
-        true labels - labels
-        the input to the final/output layer of the neural network - preOutput,
-        the activation function on the final layer of the neural network - activationFn
-        the mask - (if there is a) mask associated with the label
-
-        This is the output of the neural network, the y_hat in the notation above
-        To obtain y_hat: pre-output is transformed by the activation function to give the output of the neural network
-        The score is calculated as the sum of (y-y_hat)^2 + |y - y_hat|
-     */
-    private INDArray scoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-
-        INDArray output = activationFn.getActivation(preOutput.dup(), true);
-        INDArray yMinusYHat = labels.sub(output);
-        INDArray absYMinusyHat = Transforms.abs(yMinusYHat);
-        INDArray yMinusyHatSqr = yMinusYHat.mul(yMinusYHat);
-        INDArray scoreArr=yMinusyHatSqr.add(absYMinusyHat);   //(y-y_hat)^2+|y - y_hat|
-        maskIfRequired(mask, scoreArr);
-
-        return scoreArr;
-    }
 
     /*
     Remains the same for all loss functions
@@ -73,6 +49,37 @@ public class CustomLoss implements ILossFunction {
         return scoreArr.sum(1);
     }
 
+
+    /*
+    Needs modification depending on your loss function
+        scoreArray calculates the loss for a single data point or in other words a batch size of one
+        It returns an array the shape and size of the output of the neural net.
+        Each element in the array is the loss function applied to the prediction and it's true value
+        scoreArray takes in:
+        true labels - labels
+        the input to the final/output layer of the neural network - preOutput,
+        the activation function on the final layer of the neural network - activationFn
+        the mask - (if there is a) mask associated with the label
+
+        This is the output of the neural network, the y_hat in the notation above
+        To obtain y_hat: pre-output is transformed by the activation function to give the output of the neural network
+        The score is calculated as the sum of (y-y_hat)^2 + |y - y_hat|
+     */
+    private static INDArray scoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
+        INDArray output = activationFn.getActivation(preOutput.dup(), true);
+        INDArray yMinusYHat = labels.sub(output);
+        INDArray absYMinusyHat = Transforms.abs(yMinusYHat);
+        INDArray yMinusyHatSqr = yMinusYHat.mul(yMinusYHat);
+        INDArray scoreArr=yMinusyHatSqr.add(absYMinusyHat);   //(y-y_hat)^2+|y - y_hat|
+        maskIfRequired(mask, scoreArr);
+
+       /* System.out.println("labels = " + labels);
+        System.out.println("output = " + output);
+        System.out.println("scoreArr = " + scoreArr);
+*/
+        return scoreArr;
+    }
+
     /*
     Needs modification depending on your loss function
         Compute the gradient wrt to the preout (which is the input to the final layer of the neural net)
@@ -85,7 +92,15 @@ public class CustomLoss implements ILossFunction {
     @Override
     public INDArray computeGradient(INDArray yHat, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray dLdPreOut = getAnalyticGrad(yHat, preOutput, activationFn);
-        //INDArray dLdPreOut = getNumericGrad(yHat, preOutput, activationFn);
+        INDArray dLdPreOutNum = getNumericGrad(yHat, preOutput, activationFn);
+
+        INDArray y = activationFn.getActivation(preOutput.dup(), true);
+
+        System.out.println("yHat = " + yHat);
+        System.out.println("preOutput = " + preOutput);
+        System.out.println("y = " + y);
+        System.out.println("dLdPreOut = " + dLdPreOut);
+        System.out.println("dLdPreOutNum = " + dLdPreOutNum);
 
         maskIfRequired(mask, dLdPreOut);
         return dLdPreOut;
@@ -100,12 +115,14 @@ public class CustomLoss implements ILossFunction {
         return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
     }
 
+    public static final double EPS = 1e-5;
+
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
-        INDArray y = activationFn.getActivation(preOutput.dup(), true);
-        yHat = yHat.castTo(preOutput.dataType());   //else: Failed to execute op mmul exception
-        INDArray yMinusyHat = yHat.sub(y);
-        INDArray dldyhat = yMinusyHat.mul(-2).sub(Transforms.sign(yMinusyHat));
-        return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
+        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
+                (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
+        NumericalGradCalculatorNew  gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
+
+        return gradCalculator.getGrad(yHat,preOutput,activationFn,null);
     }
 
 
