@@ -1,9 +1,9 @@
 package policy_gradient_problems.agent_interfaces;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
-
 import java.util.List;
 
 public interface NeuralActor<V> {
-    void fitActor(List<Double> in, List<Double> out);
+    void fitActorOld(List<Double> in, List<Double> out);  //todo remove
+
+    void fitActor(List<List<Double>> inList, List<List<Double>> outList);
 }

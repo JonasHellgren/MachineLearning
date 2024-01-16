@@ -1,6 +1,5 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.ListUtils;
 import common_dl4j.Dl4JUtil;
 import lombok.Builder;
 import lombok.NonNull;
@@ -44,7 +43,7 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
                 double adv=msRes.valueTarList.get(i)-msRes.valuePresentList.get(i);
                 List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(NOF_ACTIONS, actionInt,adv);
                 oneHot.set(actionInt, adv);
-                agent.fitActor(in, oneHot);
+                agent.fitActorOld(in, oneHot);
             }
 
             //updateActor(experiences);

@@ -15,6 +15,8 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
 
+import java.util.List;
+
 public class TestCustomPolicyGradientLoss {
 
     public static final int N_INPUT = 1;
@@ -52,6 +54,10 @@ public class TestCustomPolicyGradientLoss {
     public void whenOneAtIndex0_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndex(1d,0);
         var pBef= net.output(IN).dup();
+
+        System.out.println("IN.shapeInfoToString() = " + IN.shapeInfoToString());
+        System.out.println("out.shapeInfoToString() = " + out.shapeInfoToString());
+
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
 
@@ -81,11 +87,23 @@ public class TestCustomPolicyGradientLoss {
     }
 
     @NotNull
+    private static INDArray getOutWithGtAtIndexNew(double gt, int l) {
+/*
+        INDArray out = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);  //FEL todo
+        out.putScalar(l, gt);
+*/
+        int nofActions = EnvironmentBandit.NOF_ACTIONS;
+        List<Double> oneHot=Dl4JUtil.createListWithOneHotWithValue(nofActions,l,gt);
+        return Dl4JUtil.convertListOfLists(List.of(oneHot), nofActions);
+    }
+
+    @NotNull
     private static INDArray getOutWithGtAtIndex(double gt, int l) {
-        INDArray out = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);
+        INDArray out = Nd4j.zeros(EnvironmentBandit.NOF_ACTIONS);  //FEL todo
         out.putScalar(l, gt);
         return out;
     }
+
 
 
     private static double getP(INDArray probsAfter, int action) {

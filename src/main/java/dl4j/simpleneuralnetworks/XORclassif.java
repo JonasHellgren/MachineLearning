@@ -48,6 +48,9 @@ import org.slf4j.LoggerFactory;
 public class XORclassif {
 
     private static final Logger log = LoggerFactory.getLogger(XORclassif.class);
+    public static final int NOF_EX = 4;
+    public static final int NOF_IN = 2;
+    public static final int NOF_OUT = 2;
 
     public static void main(String[] args) {
 
@@ -56,9 +59,9 @@ public class XORclassif {
 
         log.info("Data preparation...");
         // list off input values, 4 training samples with data for 2 input-neurons each
-        INDArray input = Nd4j.zeros(4, 2);
+        INDArray input = Nd4j.zeros(NOF_EX, NOF_IN);
         // correspondending list with expected output values
-        INDArray labels = Nd4j.zeros(4, 2);
+        INDArray labels = Nd4j.zeros(NOF_EX, NOF_OUT);
         // create first dataset, when first input=0 and second input=0
         input.putScalar(new int[]{0, 0}, 0);    input.putScalar(new int[]{0, 1}, 0);
         labels.putScalar(new int[]{0, 0}, 1);    labels.putScalar(new int[]{0, 1}, 0);
@@ -73,6 +76,10 @@ public class XORclassif {
         labels.putScalar(new int[]{3, 0}, 1);    labels.putScalar(new int[]{3, 1}, 0);
         // create dataset object
         DataSet ds = new DataSet(input, labels);
+
+        System.out.println("input.shapeInfoToString() = " + input.shapeInfoToString());
+        System.out.println("labels.shapeInfoToString() = " + labels.shapeInfoToString());
+
 
         log.info("Network configuration and training...");
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()

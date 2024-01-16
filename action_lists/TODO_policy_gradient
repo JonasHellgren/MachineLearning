@@ -192,6 +192,10 @@ NeuralActorMemoryPole normalized out  x
 TestTrainerNeuralActorNeuralCriticPole konvergarar inte
 
 TrainerMultiStepNeuralActorNeuralCriticPole x
+
+TestCustomPolicyGradientLoss med correct shape på out
+NeuralActorEpisodeTrainer - använd trainFromEpisodeNew
+
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
 

@@ -1,6 +1,7 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import policy_gradient_problems.abstract_classes.AgentA;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
@@ -37,8 +38,14 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
     }
 
     @Override
-    public void fitActor(List<Double> in, List<Double> out) {
+    public void fitActorOld(List<Double> in, List<Double> out) {
         actor.fit(in,out);
+    }
+
+    @SneakyThrows
+    @Override
+    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
+        throw new NoSuchMethodException();
     }
 
     @Override
