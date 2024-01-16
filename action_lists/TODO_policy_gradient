@@ -189,6 +189,13 @@ koda AgentNeuralActorNeuralCriticPole
 NeuralActorMemoryPole x
 TestNeuralActorMemoryPole x
 NeuralActorMemoryPole normalized out  x
+TestTrainerNeuralActorNeuralCriticPole konvergarar inte
+
+
+TrainerMultiStepNeuralActorNeuralCriticPole
+
+NeuralActor<V>   List<List...>
+få CustomPolicyGradientLoss klara batch
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
 

@@ -29,9 +29,12 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
             outList.add(Gt);
             double v=agent.getCriticOut(experience.state());
             double adv = Gt - v;
-            agent.fitActor(stateAsList, helper.createOneHot(experience,adv));
+            agent.fitActor(stateAsList, helper.createOneHot(experience,adv));  //todo efter for loop
         }
         int nofFits = parameters.nofFits(experienceList.size());
+
+      //  System.out.println("outList = " + outList);
+
         agent.fitCritic(inList, outList, nofFits);
     }
 

@@ -1,9 +1,6 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common_dl4j.CustomPolicyGradientLoss;
-import common_dl4j.Dl4JUtil;
-import common_dl4j.MultiLayerNetworkCreator;
-import common_dl4j.NetSettings;
+import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
@@ -11,6 +8,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
+import java.util.Random;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
@@ -27,6 +25,7 @@ public class NeuralActorMemoryPole {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
+//    Dl4JNetFitter fitter;
 
     public static NeuralActorMemoryPole newDefault(ParametersPole parametersPole) {
         return new NeuralActorMemoryPole(getDefaultNetSettings(),parametersPole);
@@ -37,10 +36,16 @@ public class NeuralActorMemoryPole {
         this.normalizerIn = createNormalizerIn(parametersPole);
         this.normalizerOut = createNormalizerOut(parametersPole);
         net.init();
+/*        this.fitter = Dl4JNetFitter.builder()
+                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
+                .net(net).randGen(new Random(netSettings.seed()))
+                .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
+                .build();*/
     }
 
     public void fit(List<Double> in, List<Double> out) {
         net.fit(getInAsNormalized(in), getOutAsNormalized(out));
+     //   fitter.train(in,out,1);   //todo apply
     }
 
     public List<Double> getOutValue(List<Double> in) {
@@ -68,8 +73,8 @@ public class NeuralActorMemoryPole {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.5))
+                .nofFitsPerEpoch(1).learningRate(1e-4).momentum(0.95).seed(1234)
+                .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.05))
                 .build();
     }
 
@@ -79,8 +84,8 @@ public class NeuralActorMemoryPole {
     }
 
     private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {
-        var outMinMax = List.of(Pair.create(0d, p.maxNofSteps()));
-        return Dl4JUtil.createNormalizer(outMinMax);
+        var outMinMax = List.of(Pair.create(0d, 10d));
+        return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d,1d));
     }
 
 }

@@ -8,6 +8,11 @@ import policy_gradient_problems.the_problems.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
+/***
+ * Does not converge
+ */
+
 public class TestTrainerParamActorNeuralCriticPole {
 
     TrainerParamActorNeuralCriticPole trainer;
@@ -27,7 +32,7 @@ public class TestTrainerParamActorNeuralCriticPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(500).nofStepsMax(100).gamma(0.99)
+                        .nofEpisodes(300).nofStepsMax(100).gamma(0.99)
                         .stepHorizon(10)
                         .relativeNofFitsPerEpoch(0.5)
                         .build())
