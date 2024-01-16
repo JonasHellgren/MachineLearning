@@ -70,13 +70,8 @@ public class CustomLoss implements ILossFunction {
         INDArray yMinusYHat = labels.sub(output);
         INDArray absYMinusyHat = Transforms.abs(yMinusYHat);
         INDArray yMinusyHatSqr = yMinusYHat.mul(yMinusYHat);
-        INDArray scoreArr=yMinusyHatSqr.add(absYMinusyHat);   //(y-y_hat)^2+|y - y_hat|
+        INDArray scoreArr = yMinusyHatSqr.add(absYMinusyHat);   //(y-y_hat)^2+|y - y_hat|
         maskIfRequired(mask, scoreArr);
-
-       /* System.out.println("labels = " + labels);
-        System.out.println("output = " + output);
-        System.out.println("scoreArr = " + scoreArr);
-*/
         return scoreArr;
     }
 
@@ -89,22 +84,18 @@ public class CustomLoss implements ILossFunction {
         dyhat/dpreout = d(Activation(preout))/dpreout = Activation'(preout)
         dL/dpreout = dL/dyhat * dyhat/dpreout
     */
+
     @Override
     public INDArray computeGradient(INDArray yHat, INDArray preOutput, IActivation activationFn, INDArray mask) {
         INDArray dLdPreOut = getAnalyticGrad(yHat, preOutput, activationFn);
         INDArray dLdPreOutNum = getNumericGrad(yHat, preOutput, activationFn);
-
         INDArray y = activationFn.getActivation(preOutput.dup(), true);
-
-        System.out.println("yHat = " + yHat);
-        System.out.println("preOutput = " + preOutput);
-        System.out.println("y = " + y);
+/*
         System.out.println("dLdPreOut = " + dLdPreOut);
-        System.out.println("dLdPreOutNum = " + dLdPreOutNum);
-
+        System.out.println("dLdPreOutNum = " + dLdPreOutNum);   //similar numbers as above
+*/
         maskIfRequired(mask, dLdPreOut);
         return dLdPreOut;
-
     }
 
     private static INDArray getAnalyticGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
@@ -115,16 +106,14 @@ public class CustomLoss implements ILossFunction {
         return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
     }
 
-    public static final double EPS = 1e-5;
+    static final double EPS = 1e-5;
 
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
                 (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
-        NumericalGradCalculatorNew  gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
-
-        return gradCalculator.getGrad(yHat,preOutput,activationFn,null);
+        NumericalGradCalculatorNew gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
+        return gradCalculator.getGrad(yHat, preOutput, activationFn, null);
     }
-
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
@@ -137,7 +126,6 @@ public class CustomLoss implements ILossFunction {
     public String name() {
         return toString();
     }
-
 
     @Override
     public String toString() {
