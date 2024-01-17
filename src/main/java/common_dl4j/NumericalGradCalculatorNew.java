@@ -4,6 +4,7 @@ import com.codepoetics.protonpack.functions.TriFunction;
 import lombok.AllArgsConstructor;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
@@ -24,7 +25,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 @AllArgsConstructor
 public class NumericalGradCalculatorNew {
 
-    double eps;
+    float eps;
     TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn;
 
     public INDArray getGrad(INDArray labels, INDArray z, IActivation activationFn, INDArray mask) {
@@ -32,10 +33,10 @@ public class NumericalGradCalculatorNew {
         INDArray zMin = changePreOut(z,-eps);
         INDArray lossPlus = scoreFcn.apply(Pair.create(labels, zPlus), activationFn, mask);
         INDArray lossMin = scoreFcn.apply(Pair.create(labels, zMin), activationFn, mask);
-        return lossPlus.sub(lossMin).div(2 * eps);
+        return lossPlus.sub(lossMin).div(2 * eps).castTo(DataType.FLOAT);
     }
 
-    private INDArray changePreOut(INDArray z, double eps) {
+    private INDArray changePreOut(INDArray z, float eps) {
         return z.dup().add(eps);
     }
 

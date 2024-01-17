@@ -27,8 +27,8 @@ import java.util.Random;
  */
 public class RunCustomLoss2Out {
     static final int seed = 12345;
-    static final int nEpochs = 1;  //200
-    static final int nSamples = 10;  //1000
+    static final int nEpochs = 100;  //200
+    static final int nSamples = 1000;  //1000
     static final int batchSize = 100;
     static final double learningRate = 0.001;
     static final double momentum = 0.95;

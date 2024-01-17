@@ -24,6 +24,8 @@ import org.nd4j.common.primitives.Pair;
 
 public class CustomLoss implements ILossFunction {
 
+    boolean IS_NUM_GRAD=true;
+
     /*
     Remains the same for all loss functions
     Compute Score computes the average loss function across many datapoints.
@@ -87,13 +89,11 @@ public class CustomLoss implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray yHat, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        INDArray dLdPreOut = getAnalyticGrad(yHat, preOutput, activationFn);
-        INDArray dLdPreOutNum = getNumericGrad(yHat, preOutput, activationFn);
-        INDArray y = activationFn.getActivation(preOutput.dup(), true);
-/*
-        System.out.println("dLdPreOut = " + dLdPreOut);
-        System.out.println("dLdPreOutNum = " + dLdPreOutNum);   //similar numbers as above
-*/
+        INDArray dLdPreOut = IS_NUM_GRAD
+                ? getNumericGrad(yHat, preOutput, activationFn)
+                : getAnalyticGrad(yHat, preOutput, activationFn);
+
+
         maskIfRequired(mask, dLdPreOut);
         return dLdPreOut;
     }
@@ -106,7 +106,7 @@ public class CustomLoss implements ILossFunction {
         return activationFn.backprop(preOutput.dup(), dldyhat).getFirst();
     }
 
-    static final double EPS = 1e-5;
+    static final float EPS = 1e-5f;
 
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
