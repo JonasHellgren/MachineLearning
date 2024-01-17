@@ -111,7 +111,7 @@ public class CustomLoss implements ILossFunction {
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
                 (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
-        NumericalGradCalculatorNew gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
+        var gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
         return gradCalculator.getGrad(yHat, preOutput, activationFn, null);
     }
 
@@ -131,7 +131,6 @@ public class CustomLoss implements ILossFunction {
     public String toString() {
         return "CustomLoss()";
     }
-
 
     private static double getAverageScoreIfRequested(boolean average, INDArray scoreArr, double score) {
         if (average) {
