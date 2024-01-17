@@ -37,15 +37,18 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
         return arrayPrimitiveDoublesToList(outArr);
     }
 
+    @SneakyThrows
     @Override
     public void fitActorOld(List<Double> in, List<Double> out) {
-        actor.fit(in,out);
+        //actor.fit(in,out);
+        throw new NoSuchMethodException();
     }
 
     @SneakyThrows
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
-        throw new NoSuchMethodException();
+       // throw new NoSuchMethodException();
+        actor.fit(inList,outList);
     }
 
     @Override

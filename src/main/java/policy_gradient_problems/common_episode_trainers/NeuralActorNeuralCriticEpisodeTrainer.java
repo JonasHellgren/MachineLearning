@@ -19,6 +19,8 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {
         List<List<Double>> inList = new ArrayList<>();
         List<Double> outList = new ArrayList<>();
+        List<List<Double>> oneHotList = new ArrayList<>();
+
         var helper= ExperienceHelper.<V>builder()
                 .valueTermState(valueTermState).nofActions(nofActions).criticOut((s) -> agent.getCriticOut(s)).build();
         for (Experience<V> experience : experienceList) {
@@ -29,13 +31,15 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
             outList.add(Gt);
             double v=agent.getCriticOut(experience.state());
             double adv = Gt - v;
-            agent.fitActorOld(stateAsList, helper.createOneHot(experience,adv));  //todo efter for loop
+            oneHotList.add(helper.createOneHot(experience, adv));
+          //  agent.fitActorOld(stateAsList, oneHot);  //todo efter for loop
         }
         int nofFits = parameters.nofFits(experienceList.size());
 
       //  System.out.println("outList = " + outList);
 
         agent.fitCritic(inList, outList, nofFits);
+        agent.fitActor(inList, oneHotList);
     }
 
 }

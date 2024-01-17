@@ -199,12 +199,12 @@ whenCreatedManyPoints_thenCorrectGrad x
 TestCustomPolicyGradientLoss med correct shape på out  x
 NeuralActorEpisodeTrainer - använd trainFromEpisodeNew  x
 
+NeuralActorMemorySC använda CustomPolicyGradientLossNew x
+
 CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver
 samma med NumericalGradCalculatorNew
-
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
-
 
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner
 

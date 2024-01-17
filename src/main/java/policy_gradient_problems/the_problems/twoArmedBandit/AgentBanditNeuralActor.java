@@ -2,6 +2,7 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 
 import common_dl4j.*;
 import common.ListUtils;
+import lombok.SneakyThrows;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -47,21 +48,10 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
         return MultiLayerNetworkCreator.create(netSettings);
     }
 
+    @SneakyThrows
     @Override
     public void fitActorOld(List<Double> in, List<Double> out) {
-        fitOld(out);
-    }
-
-
-    private void fitOld(List<Double> out) {
-        INDArray labels = Nd4j.create(out);
-
-        System.out.println("DUMMY_IN = " + DUMMY_IN);
-        System.out.println("DUMMY_IN.shapeInfoToString() = " + DUMMY_IN.shapeInfoToString());
-        System.out.println("labels = " + labels);
-        System.out.println("labels.shapeInfoToString() = " + labels.shapeInfoToString());
-
-        actor.fit(DUMMY_IN, labels);
+        throw  new NoSuchMethodException();
     }
 
     @Override
@@ -76,13 +66,5 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
 
         actor.fit(dumIn, out);
     }
-
-
-/*
-    public void fit(INDArray out) {
-        actor.fit(DUMMY_IN,out);
-    }
-*/
-
 
 }

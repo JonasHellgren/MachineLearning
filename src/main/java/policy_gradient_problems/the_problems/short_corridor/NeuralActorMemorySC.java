@@ -28,12 +28,18 @@ public class NeuralActorMemorySC {
         net.init();
     }
 
-    public void fit(List<Double> in, List<Double> out) {
+ /*   public void fitOld(List<Double> in, List<Double> out) {
         net.fit(transformDiscretePosStateToOneHotIndArray(in), Nd4j.create(out));
+    }*/
+
+    public void fit(List<List<Double>> inList, List<List<Double>> outList) {
+        INDArray in = transformDiscretePosState(inList);
+        INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+        net.fit(in, out);
     }
 
     public double[] getOutValue(double[] inData) {
-        INDArray indArray = transformDiscretePosStateToOneHotIndArray(arrayPrimitiveDoublesToList(inData));
+        INDArray indArray = getOneHot(List.of(arrayPrimitiveDoublesToList(inData)),0).reshape(1,NOF_INPUTS);
        return net.output(indArray).toDoubleVector();
     }
 
@@ -41,8 +47,17 @@ public class NeuralActorMemorySC {
         return net.gradientAndScore().getSecond();
     }
 
-    private INDArray transformDiscretePosStateToOneHotIndArray(List<Double> in) {
-        return Dl4JUtil.createOneHotAndReshape(NOF_INPUTS, in.get(0).intValue());
+    private INDArray transformDiscretePosState(List<List<Double>> inList) {
+        int nofPoints = inList.size();
+        INDArray inArr = Nd4j.create(nofPoints, NOF_INPUTS);
+        for (int i = 0; i <nofPoints ; i++) {
+            inArr.getRow(i).addi(getOneHot(inList, i));
+        }
+        return inArr;
+    }
+
+    private static INDArray getOneHot(List<List<Double>> inList, int i) {
+        return Dl4JUtil.createOneHot(NOF_INPUTS, inList.get(i).get(0).intValue());
     }
 
     private static NetSettings getDefaultNetSettings() {
@@ -50,7 +65,7 @@ public class NeuralActorMemorySC {
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.5))
+                .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.5))
                 .build();
     }
 }

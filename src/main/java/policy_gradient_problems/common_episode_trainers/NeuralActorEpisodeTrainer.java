@@ -33,13 +33,13 @@ public class NeuralActorEpisodeTrainer<V> {
 
     }
 
-    public void trainFromEpisode(List<Experience<V>> experienceList) {
+ /*   public void trainFromEpisode(List<Experience<V>> experienceList) {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         for (Experience<V> experience : elwr) {
             agent.fitActorOld(agent.getState().asList(), createOut(experience));
         }
-    }
+    }*/
 
     private List<Double> createOut(Experience<V> experience) {  //todo code duplic in NeuralActorNeuralCriticEpisodeTrainer
         int actionInt = experience.action().asInt();

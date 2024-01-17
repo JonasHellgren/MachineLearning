@@ -1,9 +1,7 @@
 package policygradient.short_corridor;
 
-import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common_helpers.TabularValueFunction;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
 import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
@@ -12,7 +10,7 @@ import policy_gradient_problems.the_problems.short_corridor.TrainerParamActorTab
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTrainerWithActorCriticSC {
+public class TestTrainerParamActorTabCriticSC {
 
     TrainerParamActorTabCriticSC trainer;
     static AgentParamActorTabCriticSC agent;

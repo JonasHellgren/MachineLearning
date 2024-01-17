@@ -8,6 +8,7 @@ import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         return new CustomPolicyGradientLossNew(EPS, BETA);
     }
 
-    public static CustomPolicyGradientLoss newWithBeta(double beta) {
-        return new CustomPolicyGradientLoss(EPS, beta);
+    public static CustomPolicyGradientLossNew newWithBeta(double beta) {
+        return new CustomPolicyGradientLossNew(EPS, beta);
     }
 
     public CustomPolicyGradientLossNew(double eps, double beta) {
@@ -62,7 +63,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
             INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
             scoreArrAllPoints.getRow(i).addi(scoreArr);
         }
-        return scoreArrAllPoints; 
+        return scoreArrAllPoints;
     }
 
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
@@ -99,6 +100,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
+
         int nofOut = labels.rank();
         int nofPoints = labels.rows();
         INDArray gradAllPoints = Nd4j.create(nofPoints, nofOut);
@@ -115,6 +117,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
                                                           IActivation activationFn,
                                                           INDArray mask,
                                                           boolean average) {
+
         return Pair.of(
                 computeScore(yRef, preOutput, activationFn, mask, average),
                 computeGradient(yRef, preOutput, activationFn, mask));
