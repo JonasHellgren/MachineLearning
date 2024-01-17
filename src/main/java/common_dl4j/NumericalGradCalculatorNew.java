@@ -44,18 +44,23 @@ public class NumericalGradCalculatorNew {
     }
 
     public INDArray getGradSoftMax(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
-        long nOut= label.rank();
+
+        if (label.rank() != 1 || z.rank() != 1) {
+            throw new IllegalArgumentException("Label/z shall be rank one, one example only");
+        }
+
+        long nOut= label.length();
         INDArray dldz= Nd4j.zeros(nOut);
         for (long i = 0; i < nOut ; i++) {
             INDArray zPlus = getCloneWithChangedValueAtIndex(z, i, eps);
             INDArray zMin = getCloneWithChangedValueAtIndex(z, i, -eps);
             INDArray lossPlus=scoreFcn.apply(Pair.create(label,zPlus), activationFn, mask);
             INDArray lossMin=scoreFcn.apply(Pair.create(label,zMin), activationFn, mask);
-            double lossPlusDouble= (double) lossPlus.sumNumber();
-            double lossMinDouble= (double) lossMin.sumNumber();
-
+            double lossPlusDouble= lossPlus.sumNumber().doubleValue();
+            double lossMinDouble= lossMin.sumNumber().doubleValue();
             dldz.putScalar(i,(lossPlusDouble-lossMinDouble)/(2*eps));
         }
+        System.out.println("nOut = " + nOut);
         return dldz;
     }
 

@@ -8,14 +8,12 @@ import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
-import org.nd4j.linalg.ops.transforms.Transforms;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomPolicyGradientLossNew implements ILossFunction {
 
-    public static final float EPS = 1e-3f;
+    static final float EPS = 1e-5f;
     static double BETA = 0.1d;
     double eps, beta;
     NumericalGradCalculatorNew gradCalculator;
@@ -36,51 +34,41 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         this.gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
     }
 
-        /*
-    Remains the same for all loss functions
-    Compute Score computes the average loss function across many datapoints.
+     /*
+    computeScore computes the average loss function across many datapoints.
     The loss for a single datapoint is summed over all output features.
      */
 
     @Override
     public double computeScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
-
-        int nofExamples = labels.rows();
-        int rank = labels.rank();
-        INDArray scoreArrAllPoints=Nd4j.create(nofExamples,rank);
-        for (int i = 0; i < nofExamples; i++) {
-            INDArray scoreArr = scoreOnePoint(labels, preOutput, activationFn, mask);
-            scoreArrAllPoints.getRow(i).addi(scoreArr);
-        }
+        INDArray scoreArrAllPoints = computeScoreArray(labels, preOutput, activationFn, mask);
         double score = scoreArrAllPoints.sumNumber().doubleValue();
         score = getAverageScoreIfRequested(average, scoreArrAllPoints, score);
         return score;
     }
 
     /*
-  Remains the same for all loss functions
-  Compute Score computes the loss function for many datapoints.
+  computeScoreArray computes the loss function for many datapoints.
   The loss for a single datapoint is the loss summed over all output features.
   Returns an array that is #of samples x size of the output feature
    */
 
     @Override
     public INDArray computeScoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-
-        System.out.println("\"computeScoreArray\" = " + "computeScoreArray");
-        INDArray scoreArr = scoreOnePoint(labels, preOutput, activationFn, mask);
-        return scoreArr.sum(1);
+        int nofPoints = labels.rows();
+        int nofOut = labels.rank();
+        INDArray scoreArrAllPoints = Nd4j.create(nofPoints, nofOut);
+        for (int i = 0; i < nofPoints; i++) {
+            INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
+            scoreArrAllPoints.getRow(i).addi(scoreArr);
+        }
+        return scoreArrAllPoints; 
     }
 
-    private INDArray scoreOnePoint(INDArray label,
-                                   INDArray z,
-                                   IActivation activationFn,
-                                   INDArray mask) {
-
-
+    private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
         List<Double> scoreList = new ArrayList<>();
-        int nOut = label.rank();
-        for (int i = 0; i < nOut; i++) {
+        int nofOut = label.rank();
+        for (int i = 0; i < nofOut; i++) {
             INDArray estProbabilities = activationFn.getActivation(z, false);
             double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
             double entropy = EntropyCalculator.calcEntropy(estProbabilities);
@@ -88,7 +76,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
             scoreList.add(ce - beta * K * entropy);
         }
 
-        INDArray outArray1 = Nd4j.create(ListUtils.toArray(scoreList), new int[]{nOut});
+        INDArray outArray1 = Nd4j.create(ListUtils.toArray(scoreList), new int[]{nofOut});
         return outArray1.castTo(DataType.FLOAT);
 
     }
@@ -111,18 +99,13 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        int nOut = labels.rank();
-        int nofExamples = labels.rows();
-        int rank = labels.rank();
-        INDArray gradAllPoints=Nd4j.create(nofExamples,rank);
-        for (int i = 0; i < nofExamples; i++) {
-            INDArray grad1 = gradCalculator.getGradSoftMax(labels, preOutput, activationFn, null);
+        int nofOut = labels.rank();
+        int nofPoints = labels.rows();
+        INDArray gradAllPoints = Nd4j.create(nofPoints, nofOut);
+        for (int i = 0; i < nofPoints; i++) {
+            INDArray grad1 = gradCalculator.getGradSoftMax(labels.getRow(i), preOutput.getRow(i), activationFn, null);
             gradAllPoints.getRow(i).addi(grad1);
         }
-
-        System.out.println("gradAllPoints = " + gradAllPoints);
-        INDArray grad = Nd4j.create(new float[]{-1,0}, new int[]{1, nOut});
-
         return gradAllPoints.castTo(DataType.FLOAT);
     }
 
@@ -148,31 +131,5 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         return "PolicyGradientLoss";
     }
 
-    //minimize cross-entropy, see entropy.md for details
-    private static INDArray getPolicyGradientLoss(INDArray oneHotGt, INDArray preOutput, IActivation activationFn) {
-        INDArray estProbabilities = activationFn.getActivation(preOutput, false);
-        INDArray logP = Transforms.log(estProbabilities);
-        return oneHotGt.mul(logP);
-    }
 
-        /*@Override
-    public double computeScore(INDArray yRef,
-                               INDArray preOutput,
-                               IActivation activationFn,
-                               INDArray mask,
-                               boolean average) {
-
-        System.out.println("yRef = " + yRef);
-        INDArray estProbabilities = activationFn.getActivation(preOutput, false);
-        double ce = EntropyCalculator.calcCrossEntropy(yRef, estProbabilities);
-        double entropy=EntropyCalculator.calcEntropy(estProbabilities);
-        double K = 1; //getK(estProbabilities);
-        return ce-beta*K*entropy;
-*/
-/*
-        INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
-        double crossEntropy = -policyGradientLoss.sumNumber().doubleValue();
-        return crossEntropy;
-
-} */
 }

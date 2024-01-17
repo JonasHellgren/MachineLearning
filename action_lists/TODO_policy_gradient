@@ -195,6 +195,7 @@ TrainerMultiStepNeuralActorNeuralCriticPole x
 RunCustomLoss2Out x
 CustomLoss med num gradient  x
 
+whenCreatedManyPoints_thenCorrectGrad
 TestCustomPolicyGradientLoss med correct shape på out
 NeuralActorEpisodeTrainer - använd trainFromEpisodeNew
 
