@@ -27,7 +27,7 @@ public final class TrainerBanditNeuralActor extends TrainerAbstractBandit {
         NeuralActorEpisodeTrainer<VariablesBandit> episodeTrainer=
                 new NeuralActorEpisodeTrainer<>(agent,parameters,EnvironmentBandit.NOF_ACTIONS);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            episodeTrainer.trainFromEpisode(super.getExperiences(agent));
+            episodeTrainer.trainFromEpisodeNew(super.getExperiences(agent));
             tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
         }
     }

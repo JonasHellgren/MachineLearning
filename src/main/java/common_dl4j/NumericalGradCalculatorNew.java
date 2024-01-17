@@ -60,7 +60,6 @@ public class NumericalGradCalculatorNew {
             double lossMinDouble= lossMin.sumNumber().doubleValue();
             dldz.putScalar(i,(lossPlusDouble-lossMinDouble)/(2*eps));
         }
-        System.out.println("nOut = " + nOut);
         return dldz;
     }
 
