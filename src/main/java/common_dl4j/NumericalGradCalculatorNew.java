@@ -6,6 +6,7 @@ import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 /**
  *
@@ -28,6 +29,8 @@ public class NumericalGradCalculatorNew {
     float eps;
     TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn;
 
+
+
     public INDArray getGrad(INDArray labels, INDArray z, IActivation activationFn, INDArray mask) {
         INDArray zPlus = changePreOut(z,eps);
         INDArray zMin = changePreOut(z,-eps);
@@ -39,5 +42,29 @@ public class NumericalGradCalculatorNew {
     private INDArray changePreOut(INDArray z, float eps) {
         return z.dup().add(eps);
     }
+
+    public INDArray getGradSoftMax(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
+        long nOut= label.rank();
+        INDArray dldz= Nd4j.zeros(nOut);
+        for (long i = 0; i < nOut ; i++) {
+            INDArray zPlus = getCloneWithChangedValueAtIndex(z, i, eps);
+            INDArray zMin = getCloneWithChangedValueAtIndex(z, i, -eps);
+            INDArray lossPlus=scoreFcn.apply(Pair.create(label,zPlus), activationFn, mask);
+            INDArray lossMin=scoreFcn.apply(Pair.create(label,zMin), activationFn, mask);
+            double lossPlusDouble= (double) lossPlus.sumNumber();
+            double lossMinDouble= (double) lossMin.sumNumber();
+
+            dldz.putScalar(i,(lossPlusDouble-lossMinDouble)/(2*eps));
+        }
+        System.out.println("dldz = " + dldz);
+        return dldz;
+    }
+
+    private INDArray getCloneWithChangedValueAtIndex(INDArray preOutput, long i, double eps) {
+        var z= preOutput.dup();
+        z.putScalar(i,z.getDouble(i)+ eps);
+        return z;
+    }
+
 
 }

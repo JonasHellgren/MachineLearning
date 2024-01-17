@@ -93,7 +93,6 @@ public class CustomLoss implements ILossFunction {
                 ? getNumericGrad(yHat, preOutput, activationFn)
                 : getAnalyticGrad(yHat, preOutput, activationFn);
 
-
         maskIfRequired(mask, dLdPreOut);
         return dLdPreOut;
     }

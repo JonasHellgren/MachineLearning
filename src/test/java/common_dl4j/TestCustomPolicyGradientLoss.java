@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.activations.IActivation;
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
@@ -22,7 +23,6 @@ public class TestCustomPolicyGradientLoss {
     public static final int N_INPUT = 1;
     public static final INDArray IN = Nd4j.zeros(1, N_INPUT);
     public static final double DELTA = 1e-3;
-
 
     MultiLayerNetwork net;
 
@@ -52,7 +52,7 @@ public class TestCustomPolicyGradientLoss {
 
     @Test
     public void whenOneAtIndex0_thenCorrectNewProb() {
-        INDArray out = getOutWithGtAtIndex(1d,0);
+        INDArray out = getOutWithGtAtIndexNew(1d,0);
         var pBef= net.output(IN).dup();
 
         System.out.println("IN.shapeInfoToString() = " + IN.shapeInfoToString());
@@ -60,6 +60,9 @@ public class TestCustomPolicyGradientLoss {
 
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
+
+        System.out.println("pBef = " + pBef+", pAfter = " + pAfter);
+
 
         Assertions.assertTrue(getP(pAfter, 0) > getP(pBef, 0));
         Assertions.assertTrue(getP(pAfter, 1) < getP(pBef, 1));
@@ -94,7 +97,7 @@ public class TestCustomPolicyGradientLoss {
 */
         int nofActions = EnvironmentBandit.NOF_ACTIONS;
         List<Double> oneHot=Dl4JUtil.createListWithOneHotWithValue(nofActions,l,gt);
-        return Dl4JUtil.convertListOfLists(List.of(oneHot), nofActions);
+        return Dl4JUtil.convertListOfLists(List.of(oneHot), nofActions).castTo(DataType.FLOAT);
     }
 
     @NotNull

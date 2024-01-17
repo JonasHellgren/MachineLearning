@@ -1,8 +1,10 @@
 package common_dl4j;
 
 import com.codepoetics.protonpack.functions.TriFunction;
+import common.ListUtils;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
@@ -13,9 +15,10 @@ import java.util.List;
 
 public class CustomPolicyGradientLossNew implements ILossFunction {
 
-    public static final double EPS = 1e-5, BETA = 0.1d;
+    public static final float EPS = 1e-3f;
+    static double BETA = 0.1d;
     double eps, beta;
-    NumericalGradCalculator gradCalculator;
+    NumericalGradCalculatorNew gradCalculator;
 
     public static CustomPolicyGradientLossNew newDefault() {
         return new CustomPolicyGradientLossNew(EPS, BETA);
@@ -29,15 +32,35 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         this.eps = eps;
         this.beta = beta;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
-                (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
-      //  gradCalculator = new NumericalGradCalculator(eps, scoreFcn);
+                (p, a, m) -> scoreOnePoint(p.getFirst(), p.getSecond(), a, m);
+        this.gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
     }
+
+        /*
+    Remains the same for all loss functions
+    Compute Score computes the average loss function across many datapoints.
+    The loss for a single datapoint is summed over all output features.
+     */
 
     @Override
     public double computeScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
-        INDArray scoreArr = scoreArray(labels, preOutput, activationFn, mask);
-        double score = scoreArr.sumNumber().doubleValue();
-        score = getAverageScoreIfRequested(average, scoreArr, score);
+
+        int nofExamples = labels.rows();
+        int rank = labels.rank();
+        System.out.println("nofExamples = " + nofExamples);
+        System.out.println("rank = " + rank);
+        INDArray scoreArrAllPoints=Nd4j.create(nofExamples,rank);
+        System.out.println("scoreArrAllPoints.shapeInfoToString() = " + scoreArrAllPoints.shapeInfoToString());
+        System.out.println("scoreArrAllPoints = " + scoreArrAllPoints);
+        for (int i = 0; i < nofExamples; i++) {
+            INDArray scoreArr = scoreOnePoint(labels, preOutput, activationFn, mask);
+
+            System.out.println("scoreArr.shapeInfoToString() = " + scoreArr.shapeInfoToString());
+            System.out.println("scoreArr = " + scoreArr);
+            scoreArrAllPoints.getRow(i).addi(scoreArr);
+        }
+        double score = scoreArrAllPoints.sumNumber().doubleValue();
+        score = getAverageScoreIfRequested(average, scoreArrAllPoints, score);
         return score;
     }
 
@@ -50,36 +73,42 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeScoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        INDArray scoreArr = scoreArray(labels, preOutput, activationFn, mask);
+
+        System.out.println("\"computeScoreArray\" = " + "computeScoreArray");
+        INDArray scoreArr = scoreOnePoint(labels, preOutput, activationFn, mask);
         return scoreArr.sum(1);
     }
 
-    private INDArray scoreArray(INDArray labels,
-                                INDArray preOutput,
-                                IActivation activationFn,
-                                INDArray mask) {
+    private INDArray scoreOnePoint(INDArray label,
+                                   INDArray z,
+                                   IActivation activationFn,
+                                   INDArray mask) {
 
 
-        System.out.println("labels = " + labels);
+       // System.out.println("labels = " + labels);
+
+        System.out.println("preOutput = " + z);
 
         List<Double> scoreList = new ArrayList<>();
-        int nofExamples = labels.rows();
-        for (int i = 0; i < nofExamples; i++) {
-            INDArray estProbabilities = activationFn.getActivation(preOutput, false);
-            INDArray yRef = labels.getRow(i);
-            System.out.println("yRef = " + yRef);
-
-            double ce = EntropyCalculator.calcCrossEntropy(yRef, estProbabilities);
+        int nOut = label.rank();
+        for (int i = 0; i < nOut; i++) {
+            INDArray estProbabilities = activationFn.getActivation(z, false);
+            double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
             double entropy = EntropyCalculator.calcEntropy(estProbabilities);
             double K = 1; //getK(estProbabilities);
-            //scoreList.add(ce - beta * K * entropy);
+            scoreList.add(ce - beta * K * entropy);
         }
 
-        scoreList.add(1d);
+       // System.out.println("scoreList = " + scoreList);
 
-        INDArray outArray = Nd4j.create(scoreList);
-        System.out.println("outArray = " + outArray);
-        return outArray;
+        //  scoreList.add(1d);
+      //  scoreList.add(1d);
+
+        //INDArray outArray = Nd4j.create(ListUtils.toArray(scoreList), new int[]{1, nOut});
+
+        INDArray outArray =  Nd4j.create(new double[]{0,-1}, new int[]{2});
+       // System.out.println("outArray = " + outArray);
+        return outArray.castTo(DataType.FLOAT);
 
 /*
         INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
@@ -106,7 +135,13 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        int nofExamples = labels.rows();
+
+        INDArray grad1 = gradCalculator.getGradSoftMax(labels, preOutput, activationFn, null);
+        System.out.println("grad = " + grad1);
+
+        INDArray grad = Nd4j.create(new float[]{1,0}, new int[]{1, 2});
+        return grad.castTo(DataType.FLOAT);
+        /*        int nofExamples = labels.rows();
         long size = labels.rank();
         INDArray gradMat=Nd4j.create(nofExamples, size);
         for (int i = 0; i < nofExamples; i++) {
@@ -115,7 +150,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
             gradMat.add(grad);
 
         }
-        return gradMat;  // reshape it to a row matrix of size 1×n
+        return gradMat;  // reshape it to a row matrix of size 1×n*/
     }
 
 
