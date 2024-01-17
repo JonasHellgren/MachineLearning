@@ -56,7 +56,6 @@ public class NumericalGradCalculatorNew {
 
             dldz.putScalar(i,(lossPlusDouble-lossMinDouble)/(2*eps));
         }
-        System.out.println("dldz = " + dldz);
         return dldz;
     }
 

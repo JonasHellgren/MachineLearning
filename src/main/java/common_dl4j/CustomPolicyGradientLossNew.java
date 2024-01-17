@@ -47,16 +47,9 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
         int nofExamples = labels.rows();
         int rank = labels.rank();
-        System.out.println("nofExamples = " + nofExamples);
-        System.out.println("rank = " + rank);
         INDArray scoreArrAllPoints=Nd4j.create(nofExamples,rank);
-        System.out.println("scoreArrAllPoints.shapeInfoToString() = " + scoreArrAllPoints.shapeInfoToString());
-        System.out.println("scoreArrAllPoints = " + scoreArrAllPoints);
         for (int i = 0; i < nofExamples; i++) {
             INDArray scoreArr = scoreOnePoint(labels, preOutput, activationFn, mask);
-
-            System.out.println("scoreArr.shapeInfoToString() = " + scoreArr.shapeInfoToString());
-            System.out.println("scoreArr = " + scoreArr);
             scoreArrAllPoints.getRow(i).addi(scoreArr);
         }
         double score = scoreArrAllPoints.sumNumber().doubleValue();
@@ -85,10 +78,6 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
                                    INDArray mask) {
 
 
-       // System.out.println("labels = " + labels);
-
-        System.out.println("preOutput = " + z);
-
         List<Double> scoreList = new ArrayList<>();
         int nOut = label.rank();
         for (int i = 0; i < nOut; i++) {
@@ -99,22 +88,9 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
             scoreList.add(ce - beta * K * entropy);
         }
 
-       // System.out.println("scoreList = " + scoreList);
+        INDArray outArray1 = Nd4j.create(ListUtils.toArray(scoreList), new int[]{nOut});
+        return outArray1.castTo(DataType.FLOAT);
 
-        //  scoreList.add(1d);
-      //  scoreList.add(1d);
-
-        //INDArray outArray = Nd4j.create(ListUtils.toArray(scoreList), new int[]{1, nOut});
-
-        INDArray outArray =  Nd4j.create(new double[]{0,-1}, new int[]{2});
-       // System.out.println("outArray = " + outArray);
-        return outArray.castTo(DataType.FLOAT);
-
-/*
-        INDArray policyGradientLoss = getPolicyGradientLoss(yRef, preOutput, activationFn);
-        double crossEntropy = -policyGradientLoss.sumNumber().doubleValue();
-        return crossEntropy;
-*/
     }
 
     private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
@@ -135,32 +111,20 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-
-        INDArray grad1 = gradCalculator.getGradSoftMax(labels, preOutput, activationFn, null);
-        System.out.println("grad = " + grad1);
-
-        INDArray grad = Nd4j.create(new float[]{1,0}, new int[]{1, 2});
-        return grad.castTo(DataType.FLOAT);
-        /*        int nofExamples = labels.rows();
-        long size = labels.rank();
-        INDArray gradMat=Nd4j.create(nofExamples, size);
+        int nOut = labels.rank();
+        int nofExamples = labels.rows();
+        int rank = labels.rank();
+        INDArray gradAllPoints=Nd4j.create(nofExamples,rank);
         for (int i = 0; i < nofExamples; i++) {
-            INDArray yRef = labels.getRow(i);
-            INDArray grad = gradCalculator.getGrad(yRef, preOutput, activationFn, mask);
-            gradMat.add(grad);
-
+            INDArray grad1 = gradCalculator.getGradSoftMax(labels, preOutput, activationFn, null);
+            gradAllPoints.getRow(i).addi(grad1);
         }
-        return gradMat;  // reshape it to a row matrix of size 1×n*/
-    }
 
+        System.out.println("gradAllPoints = " + gradAllPoints);
+        INDArray grad = Nd4j.create(new float[]{-1,0}, new int[]{1, nOut});
 
-/*
-    @Override
-    public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-        INDArray grad = gradCalculator.getGrad(labels, preOutput, activationFn, mask);
-        return grad.reshape(1, grad.length());  // reshape it to a row matrix of size 1×n
+        return gradAllPoints.castTo(DataType.FLOAT);
     }
-*/
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray yRef,
