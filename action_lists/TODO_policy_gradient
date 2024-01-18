@@ -204,18 +204,20 @@ Dl4JBatchNetFitter x
 Double relativeNofFitsPerBatch,        int sizeBatch  -> NetSettings  x
 
 Dl4JBatchNetFitter på AgentBanditNeuralActor  x
+Dl4JBatchNetFitter på NeuralMemorySum
+Dl4JBatchNetFitter - test using all points, not just sub set in batch
+Dl4JBatchNetFitter på NeuralCriticMemorySC
+Dl4JBatchNetFitter på NeuralCriticMemoryPole
+Dl4JBatchNetFitter på NeuralActorMemoryPole
 
+behövs Dl4JNetFitter ?
 fitActor med nofFits
 TestTrainerNeuralActorNeuralCriticPole
-
-
 CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver
 samma med NumericalGradCalculatorNew
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner
-Dl4JBatchNetFitter - test using all points, not just sub set in batch
-
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
 
