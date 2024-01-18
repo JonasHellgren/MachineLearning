@@ -204,6 +204,8 @@ NeuralActorMemorySC använda CustomPolicyGradientLossNew x
 sizeBatch=min(p.sizeBatch,nExper)
 nBatch=nExper/sizeBatch, nFitsPerBatch=round(relNFits*sizeBatch)
 
+
+Dl4JBatchNetFitter
 Double relativeNofFitsPerEpoch,        int sizeBatch  -> NetSettings  x
 
 fitActor med nofFits

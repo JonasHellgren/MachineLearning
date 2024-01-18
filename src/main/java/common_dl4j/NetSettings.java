@@ -27,11 +27,11 @@ public record NetSettings(
         ILossFunction lossFunction,
         Integer seed,
         Double relativeNofFitsPerEpoch,
-        int sizeBatch) {
+        Integer sizeBatch) {
 
     public static final int N_HIDDEN = 10;
     public static final ILossFunction LOSS_FCN = LossFunctions.LossFunction.MSE.getILossFunction();
-    public static final double RELATIVE_NOF_FITS_PER_EPOCH = 0.1;
+    public static final double RELATIVE_NOF_FITS_PER_EPOCH = 0.5;
     public static final int SIZE_BATCH = 16;
 
     @Builder
@@ -50,7 +50,7 @@ public record NetSettings(
                        ILossFunction lossFunction,
                        Integer seed,
                        Double relativeNofFitsPerEpoch,
-                       int sizeBatch) {
+                       Integer sizeBatch) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
         this.l2Value = MyFunctions.defaultIfNullDouble.apply(l2Value,0d);
@@ -72,4 +72,9 @@ public record NetSettings(
     public static NetSettings newDefault() {
       return NetSettings.builder().build();
   }
+
+     public int nofFits(int nofExper) {
+        return (int) Math.max(1, (relativeNofFitsPerEpoch() * nofExper));
+    }
+
 }

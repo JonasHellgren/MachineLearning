@@ -42,9 +42,7 @@ public record TrainerParameters(
 
     }
 
-/*    public int nofFits(int nofExper) {
-        return (int) Math.max(1, (relativeNofFitsPerEpoch() * nofExper));
-    }*/
+
 
 
 
