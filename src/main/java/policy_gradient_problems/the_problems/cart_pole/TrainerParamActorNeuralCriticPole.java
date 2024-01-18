@@ -61,7 +61,7 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
         return new MultistepNeuralCriticUpdater<>(
                 parameters,
                 (s) -> agent.getCriticOut(s),
-                (t) -> agent.fitCritic(t.getLeft(), t.getMiddle(), t.getRight()));
+                (t) -> agent.fitCritic(t.getLeft(), t.getMiddle()));
     }
 
     private MultistepParamActorUpdater<VariablesPole> createActorUpdater() {

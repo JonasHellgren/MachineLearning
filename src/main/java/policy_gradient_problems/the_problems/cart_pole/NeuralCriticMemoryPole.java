@@ -52,8 +52,8 @@ public class NeuralCriticMemoryPole {
     }
 
 
-    public void fit(List<List<Double>> in, List<Double> out,int  nofFitsPerEpoch) {
-        fitter.train(in, out, nofFitsPerEpoch);
+    public void fit(List<List<Double>> in, List<Double> out) {
+        fitter.train(in, out);
     }
 
     public Double getOutValue(INDArray inData) {

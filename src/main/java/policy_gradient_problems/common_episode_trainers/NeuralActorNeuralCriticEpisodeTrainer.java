@@ -40,7 +40,7 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
       //  System.out.println("outList = " + outList);
 
      //   Pair<Integer,Double> sizeBatchRelNFitsPair=parameters.sizeBatchRelNFitsPair();
-        agent.fitCritic(inList, outList,experienceList.size());  //todo
+        agent.fitCritic(inList, outList);  //todo
         agent.fitActor(inList, oneHotList);
     }
 

@@ -24,7 +24,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(300).gamma(0.5)
+                        .nofEpisodes(100).gamma(0.5)
                         .build())
                 .build();
     }

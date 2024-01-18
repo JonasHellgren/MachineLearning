@@ -14,11 +14,7 @@ import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
 import policy_gradient_problems.the_problems.short_corridor.NeuralCriticMemorySC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
 import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
-
-import java.io.IOException;
 import java.util.*;
-
-import static org.knowm.xchart.BitmapEncoder.*;
 
 public class TestNeuralCriticMemorySC {
 
@@ -75,7 +71,7 @@ public class TestNeuralCriticMemorySC {
             var state= StateSC.newFromPos(pair.getLeft());
             List<Double> in = state.asList();
             List<Double> out = List.of(pair.getRight());
-            critic.fit(List.of(in), out, NOF_FITS_PER_EPOCH);
+            critic.fit(List.of(in), out);
             //valuesList.add(getStateValueMap().values().stream().toList());
             List<Double> values=getStateValueMap().values().stream().toList();
             values0.add(values.get(0));

@@ -1,5 +1,6 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
+import common.Conditionals;
 import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
@@ -8,6 +9,7 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class NeuralCriticMemorySC {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerOut;
-    Dl4JNetFitter fitter;
+    Dl4JBatchNetFitter fitter;
 
     public static NeuralCriticMemorySC newDefault() {
         return new NeuralCriticMemorySC(getDefaultNetSettings());
@@ -32,22 +34,22 @@ public class NeuralCriticMemorySC {
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.normalizerOut = createNormalizerOut();
-        this.fitter = Dl4JNetFitter.builder()
-                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(new Random(netSettings.seed()))
-                .normalizerOut(normalizerOut)
-                .build();
+        this.fitter = new Dl4JBatchNetFitter(net,netSettings);
     }
 
 
-    public void fit(List<List<Double>> in, List<Double> out, int  nofFitsPerEpoch) {
-
+    public void fit(List<List<Double>> in, List<Double> out) {
         List<List<Double>> inListHot=new ArrayList<>();
         for (List<Double> inList:in) {
             List<Double> inHot = createOneHot(inList);
             inListHot.add(inHot);
         }
-        fitter.train(inListHot, out, nofFitsPerEpoch);
+
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(inListHot, NOF_INPUTS);
+        INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), inListHot.size(), NOF_OUTPUTS);
+        //INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);  //todo få detta funka
+        normalizerOut.transform(outPutNDArray);
+        fitter.batchFit(inputNDArray, outPutNDArray);
     }
 
     public Double getOutValue(StateI<VariablesSC> state) {
@@ -65,6 +67,7 @@ public class NeuralCriticMemorySC {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .relativeNofFitsPerBatch(0.5).sizeBatch(16)
                 .weightInit(WeightInit.RELU)
                 .build();
     }

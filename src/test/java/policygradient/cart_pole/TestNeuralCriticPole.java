@@ -71,7 +71,7 @@ public class TestNeuralCriticPole {
                 out.add(value);
             }
             int nofFits = (int) (0.5 * NOF_SAMPLES);
-            memory.fit(in, out,nofFits);
+            memory.fit(in, out);
             errors.add(memory.getError());
         }
         return errors;

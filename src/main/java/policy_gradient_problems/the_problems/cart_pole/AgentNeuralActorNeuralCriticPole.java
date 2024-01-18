@@ -53,8 +53,8 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
 
 
     @Override
-    public void fitCritic(List<List<Double>> in, List<Double> out, int nofFits) {
-        critic.fit(in, out, nofFits);
+    public void fitCritic(List<List<Double>> in, List<Double> out) {
+        critic.fit(in, out);
     }
 
     @Override

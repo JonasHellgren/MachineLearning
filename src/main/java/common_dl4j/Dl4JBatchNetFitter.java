@@ -37,7 +37,6 @@ public class Dl4JBatchNetFitter {
         int nPoints= (int) in.length();
         int sizeBatch=Math.min(netSettings.sizeBatch(),nPoints);
         int nFitsPerBatch= netSettings.nofFits(sizeBatch);
-
         DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
 
       // net.setListeners(new ScoreIterationListener(1));

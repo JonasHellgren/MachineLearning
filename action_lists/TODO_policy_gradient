@@ -204,9 +204,9 @@ Dl4JBatchNetFitter x
 Double relativeNofFitsPerBatch,        int sizeBatch  -> NetSettings  x
 
 Dl4JBatchNetFitter på AgentBanditNeuralActor  x
-Dl4JBatchNetFitter på NeuralMemorySum
+Dl4JBatchNetFitter på NeuralMemorySum  x
 Dl4JBatchNetFitter - test using all points, not just sub set in batch
-Dl4JBatchNetFitter på NeuralCriticMemorySC
+Dl4JBatchNetFitter på NeuralCriticMemorySC  x
 Dl4JBatchNetFitter på NeuralCriticMemoryPole
 Dl4JBatchNetFitter på NeuralActorMemoryPole
 

@@ -41,6 +41,7 @@ public class Dl4JNetFitter {
         int length = in.size();
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, nofInputs);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), length, nofOutputs);
+        //      INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);
         Conditionals.executeIfTrue(normalizerIn!=null, () -> normalizerIn.transform(inputNDArray));
         Conditionals.executeIfTrue(normalizerOut!=null,() ->  normalizerOut.transform(outPutNDArray));
         return Dl4JUtil.getDataSetIterator(inputNDArray, outPutNDArray, randGen);
