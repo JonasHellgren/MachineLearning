@@ -15,7 +15,7 @@ public record NetSettings(
         Double learningRate,
         Double momentum,
         Double l2Value,
-        Integer nofFitsPerEpoch,
+        Integer nofFitsPerEpoch,  //todo ta bort
         WeightInit weightInit,
         Integer nHiddenLayers,
         Integer nInput,

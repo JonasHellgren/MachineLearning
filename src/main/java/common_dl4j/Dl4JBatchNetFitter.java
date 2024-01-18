@@ -36,14 +36,13 @@ public class Dl4JBatchNetFitter {
     public void batchFit(INDArray in, INDArray out ) {
         int nPoints= (int) in.length();
         int sizeBatch=Math.min(netSettings.sizeBatch(),nPoints);
-        int nBatch= (int) Math.round(nPoints/(double) sizeBatch);
-        int nFitsPerBatch= netSettings.nofFits(nBatch);
+        int nFitsPerBatch= netSettings.nofFits(sizeBatch);
 
         DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
 
-   /*     net.setListeners(new ScoreIterationListener(1));
-        System.out.println("nFitsPerBatch = " + nFitsPerBatch);
-        System.out.println("before fitting");*/
+      // net.setListeners(new ScoreIterationListener(1));
+      //  System.out.println("nFitsPerBatch = " + nFitsPerBatch);
+      //  System.out.println("before fitting");
 
         for (int i = 0; i < nFitsPerBatch; i++) {
             iterator.reset();

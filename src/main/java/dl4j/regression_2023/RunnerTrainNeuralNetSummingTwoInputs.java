@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RunnerTrainNeuralNetSummingTwoInputs {
     static final double MIN_VALUE = 0, MAX_VALUE = 10d;
-    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 200, NOF_INPUTS = 2;
+    static final int N_SAMPLES_PER_EPOCH = 10, NOF_EPOCHS = 500, NOF_INPUTS = 2;
 
     static SumDataGenerator dataGenerator;
     static NeuralMemorySum neuralMemory;
