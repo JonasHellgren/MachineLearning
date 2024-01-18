@@ -3,6 +3,7 @@ package policy_gradient_problems.the_problems.twoArmedBandit;
 import common_dl4j.*;
 import common.ListUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -42,8 +43,6 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newDefault())
-                //.lossFunction(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD.getILossFunction())
-
                 .build();
         return MultiLayerNetworkCreator.create(netSettings);
     }
@@ -53,6 +52,10 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     public void fitActorOld(List<Double> in, List<Double> out) {
         throw  new NoSuchMethodException();
     }
+/*
+    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
+        fit(outList);
+    }*/
 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
@@ -60,10 +63,8 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     }
 
     private void fit(List<List<Double>> outList) {
-        int nofDataPoints=outList.size();
         INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)), numInput);
         INDArray out=Dl4JUtil.convertListOfLists(outList, NOF_ACTIONS);
-
         actor.fit(dumIn, out);
     }
 

@@ -46,13 +46,13 @@ public class MultistepNeuralCriticUpdater<V> {
 
     TrainerParameters parameters;
     Function<StateI<V>,Double> criticOut;
-    Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;
+    Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //tod pair
 
     //todo split method below
 
     public MultiStepResults updateCritic(List<Experience<V>> experiences) {
         MultiStepResults results = getMultiStepResults(experiences);
-        int nofFits = parameters.nofFits(results.nofSteps);
+        int nofFits = results.nofSteps; //parameters.nofFits(results.nofSteps); todo remove
         executeIfTrue(!results.stateValuesList.isEmpty(), () ->
                 fitCritic.accept(Triple.of(results.stateValuesList, results.valueTarList, nofFits)));
         executeIfTrue(results.stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));

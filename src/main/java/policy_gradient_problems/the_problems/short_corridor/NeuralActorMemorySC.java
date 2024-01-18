@@ -66,6 +66,7 @@ public class NeuralActorMemorySC {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.5))
+                .relativeNofFitsPerEpoch(1.0)
                 .build();
     }
 }

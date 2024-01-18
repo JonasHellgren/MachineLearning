@@ -2,6 +2,7 @@ package policy_gradient_problems.common_episode_trainers;
 
 import lombok.Builder;
 import lombok.NonNull;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_helpers.ExperienceHelper;
@@ -34,11 +35,12 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
             oneHotList.add(helper.createOneHot(experience, adv));
           //  agent.fitActorOld(stateAsList, oneHot);  //todo efter for loop
         }
-        int nofFits = parameters.nofFits(experienceList.size());
+       // int nofFits = parameters.nofFits(experienceList.size());
 
       //  System.out.println("outList = " + outList);
 
-        agent.fitCritic(inList, outList, nofFits);
+     //   Pair<Integer,Double> sizeBatchRelNFitsPair=parameters.sizeBatchRelNFitsPair();
+        agent.fitCritic(inList, outList,experienceList.size());  //todo
         agent.fitActor(inList, oneHotList);
     }
 

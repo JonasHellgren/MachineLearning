@@ -33,6 +33,7 @@ public class NeuralCriticMemoryPole {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+                .relativeNofFitsPerEpoch(0.5)
                 .build();
     }
 

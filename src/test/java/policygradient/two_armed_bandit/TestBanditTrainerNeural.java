@@ -41,7 +41,7 @@ public class TestBanditTrainerNeural {
         createTrainer(environment);
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(0, agent.chooseAction().asInt());
+        Assertions.assertEquals(0, agent.chooseAction().asInt());  //todo better use prob
     }
 
     private void printPolicy() {

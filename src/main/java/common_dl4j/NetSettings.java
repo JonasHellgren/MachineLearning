@@ -7,6 +7,9 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+import static common.MyFunctions.defaultIfNullDouble;
+import static common.MyFunctions.defaultIfNullInteger;
+
 
 public record NetSettings(
         Double learningRate,
@@ -22,10 +25,14 @@ public record NetSettings(
         Activation activHiddenLayer,
         Activation activOutLayer,
         ILossFunction lossFunction,
-        Integer seed) {
+        Integer seed,
+        Double relativeNofFitsPerEpoch,
+        int sizeBatch) {
 
     public static final int N_HIDDEN = 10;
     public static final ILossFunction LOSS_FCN = LossFunctions.LossFunction.MSE.getILossFunction();
+    public static final double RELATIVE_NOF_FITS_PER_EPOCH = 0.1;
+    public static final int SIZE_BATCH = 16;
 
     @Builder
     public NetSettings(Double learningRate,
@@ -41,7 +48,9 @@ public record NetSettings(
                        Activation activHiddenLayer,
                        Activation activOutLayer,
                        ILossFunction lossFunction,
-                       Integer seed) {
+                       Integer seed,
+                       Double relativeNofFitsPerEpoch,
+                       int sizeBatch) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
         this.l2Value = MyFunctions.defaultIfNullDouble.apply(l2Value,0d);
@@ -56,6 +65,8 @@ public record NetSettings(
         this.activOutLayer = (Activation) MyFunctions.defaultIfNullObject.apply(activOutLayer, Activation.IDENTITY);
         this.lossFunction = (ILossFunction) MyFunctions.defaultIfNullObject.apply(lossFunction,LOSS_FCN);
         this.seed = MyFunctions.defaultIfNullInteger.apply(seed,12345);
+        this.relativeNofFitsPerEpoch = defaultIfNullDouble.apply(relativeNofFitsPerEpoch, RELATIVE_NOF_FITS_PER_EPOCH);
+        this.sizeBatch = defaultIfNullInteger.apply(sizeBatch, SIZE_BATCH);
     }
 
     public static NetSettings newDefault() {

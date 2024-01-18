@@ -201,11 +201,19 @@ NeuralActorEpisodeTrainer - använd trainFromEpisodeNew  x
 
 NeuralActorMemorySC använda CustomPolicyGradientLossNew x
 
+sizeBatch=min(p.sizeBatch,nExper)
+nBatch=nExper/sizeBatch, nFitsPerBatch=round(relNFits*sizeBatch)
+
+Double relativeNofFitsPerEpoch,        int sizeBatch  -> NetSettings  x
+
+fitActor med nofFits
+TestTrainerNeuralActorNeuralCriticPole
+
+
 CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver
 samma med NumericalGradCalculatorNew
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
-
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner
 
 StatePole.nofActions() StatePole.nofStates()
