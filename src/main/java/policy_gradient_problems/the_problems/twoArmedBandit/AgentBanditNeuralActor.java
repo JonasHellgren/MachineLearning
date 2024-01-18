@@ -23,6 +23,8 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     public static final int NOF_ACTIONS = 2;
 
     MultiLayerNetwork actor;
+    NetSettings netSettings;
+    Dl4JBatchNetFitter netFitter;
 
     public static AgentBanditNeuralActor newDefault(double learningRate) {
         return new AgentBanditNeuralActor(learningRate);
@@ -31,6 +33,8 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     public AgentBanditNeuralActor(double learningRate) {
         super(DUMMY_STATE);
         this.actor =createNetwork(learningRate);
+        this.netSettings=getNetSettings(learningRate);
+        this.netFitter=new Dl4JBatchNetFitter(actor,netSettings);
     }
 
     public List<Double> getActionProbabilities() {
@@ -38,13 +42,17 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate) {
-        var netSettings= NetSettings.builder()
+        NetSettings netSettings = getNetSettings(learningRate);
+        return MultiLayerNetworkCreator.create(netSettings);
+    }
+
+    private static NetSettings getNetSettings(double learningRate) {
+        return NetSettings.builder()
                 .nHiddenLayers(1).nInput(numInput).nHidden(10).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newDefault())
                 .build();
-        return MultiLayerNetworkCreator.create(netSettings);
     }
 
     @SneakyThrows
@@ -52,10 +60,6 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     public void fitActorOld(List<Double> in, List<Double> out) {
         throw  new NoSuchMethodException();
     }
-/*
-    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
-        fit(outList);
-    }*/
 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
@@ -65,7 +69,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     private void fit(List<List<Double>> outList) {
         INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)), numInput);
         INDArray out=Dl4JUtil.convertListOfLists(outList, NOF_ACTIONS);
-        actor.fit(dumIn, out);
+        netFitter.batchFit(dumIn,out);
     }
 
 }

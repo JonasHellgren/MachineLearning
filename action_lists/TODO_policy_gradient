@@ -200,13 +200,10 @@ TestCustomPolicyGradientLoss med correct shape på out  x
 NeuralActorEpisodeTrainer - använd trainFromEpisodeNew  x
 
 NeuralActorMemorySC använda CustomPolicyGradientLossNew x
+Dl4JBatchNetFitter x
+Double relativeNofFitsPerBatch,        int sizeBatch  -> NetSettings  x
 
-sizeBatch=min(p.sizeBatch,nExper)
-nBatch=nExper/sizeBatch, nFitsPerBatch=round(relNFits*sizeBatch)
-
-
-Dl4JBatchNetFitter
-Double relativeNofFitsPerEpoch,        int sizeBatch  -> NetSettings  x
+Dl4JBatchNetFitter på AgentBanditNeuralActor  x
 
 fitActor med nofFits
 TestTrainerNeuralActorNeuralCriticPole
@@ -217,6 +214,7 @@ samma med NumericalGradCalculatorNew
 NeuralActor<V>   List<List...>
 få CustomPolicyGradientLoss klara batch
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner
+Dl4JBatchNetFitter - test using all points, not just sub set in batch
 
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner

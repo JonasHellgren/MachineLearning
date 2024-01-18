@@ -30,7 +30,7 @@ public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(500).nofStepsMax(100).gamma(0.95)
                         .stepHorizon(10)
-                        //.relativeNofFitsPerEpoch(0.5)
+                        //.relativeNofFitsPerBatch(0.5)
                         .build())
                 .build();
     }

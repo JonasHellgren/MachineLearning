@@ -34,7 +34,7 @@ public class TestTrainerParamActorNeuralCriticPole {
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(300).nofStepsMax(100).gamma(0.99)
                         .stepHorizon(10)
-                        //.relativeNofFitsPerEpoch(0.5)
+                        //.relativeNofFitsPerBatch(0.5)
                         .build())
                 .build();
     }

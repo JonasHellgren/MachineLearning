@@ -26,7 +26,7 @@ public record NetSettings(
         Activation activOutLayer,
         ILossFunction lossFunction,
         Integer seed,
-        Double relativeNofFitsPerEpoch,
+        Double relativeNofFitsPerBatch,
         Integer sizeBatch) {
 
     public static final int N_HIDDEN = 10;
@@ -49,7 +49,7 @@ public record NetSettings(
                        Activation activOutLayer,
                        ILossFunction lossFunction,
                        Integer seed,
-                       Double relativeNofFitsPerEpoch,
+                       Double relativeNofFitsPerBatch,
                        Integer sizeBatch) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
@@ -65,7 +65,7 @@ public record NetSettings(
         this.activOutLayer = (Activation) MyFunctions.defaultIfNullObject.apply(activOutLayer, Activation.IDENTITY);
         this.lossFunction = (ILossFunction) MyFunctions.defaultIfNullObject.apply(lossFunction,LOSS_FCN);
         this.seed = MyFunctions.defaultIfNullInteger.apply(seed,12345);
-        this.relativeNofFitsPerEpoch = defaultIfNullDouble.apply(relativeNofFitsPerEpoch, RELATIVE_NOF_FITS_PER_EPOCH);
+        this.relativeNofFitsPerBatch = defaultIfNullDouble.apply(relativeNofFitsPerBatch, RELATIVE_NOF_FITS_PER_EPOCH);
         this.sizeBatch = defaultIfNullInteger.apply(sizeBatch, SIZE_BATCH);
     }
 
@@ -74,7 +74,7 @@ public record NetSettings(
   }
 
      public int nofFits(int nofExper) {
-        return (int) Math.max(1, (relativeNofFitsPerEpoch() * nofExper));
+        return (int) Math.max(1, (relativeNofFitsPerBatch() * nofExper));
     }
 
 }

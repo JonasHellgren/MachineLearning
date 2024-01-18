@@ -27,6 +27,7 @@ public class NeuralActorMemorySC {
 
     MultiLayerNetwork net;
     NetSettings netSettings;
+    Dl4JBatchNetFitter netFitter;
 
     public static NeuralActorMemorySC newDefault() {
         return new NeuralActorMemorySC(getDefaultNetSettings());
@@ -36,6 +37,7 @@ public class NeuralActorMemorySC {
         this.netSettings=netSettings;
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
+        this.netFitter=new Dl4JBatchNetFitter(net,netSettings);
     }
 
  /*   public void fitOld(List<Double> in, List<Double> out) {
@@ -45,11 +47,7 @@ public class NeuralActorMemorySC {
     public void fit(List<List<Double>> inList, List<List<Double>> outList) {
         INDArray in = transformDiscretePosState(inList);
         INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
-
-        Dl4JBatchNetFitter netFitter=new Dl4JBatchNetFitter(net,netSettings);
         netFitter.batchFit(in,out);
-
-
     }
 
     public double[] getOutValue(double[] inData) {
@@ -80,7 +78,7 @@ public class NeuralActorMemorySC {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.5))
-                .relativeNofFitsPerEpoch(1.0)
+                .relativeNofFitsPerBatch(1.0)
                 .build();
     }
 }
