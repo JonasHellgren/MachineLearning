@@ -208,6 +208,7 @@ Dl4JBatchNetFitter på NeuralMemorySum  x
 Dl4JBatchNetFitter - test using all points, not just sub set in batch
 Dl4JBatchNetFitter på NeuralCriticMemorySC  x
 TestTrainerParamActorNeuralCriticPole fuckar  x
+INDarray exampel  x
 Dl4JBatchNetFitter på NeuralCriticMemoryPole
 Dl4JBatchNetFitter på NeuralActorMemoryPole
 
