@@ -213,11 +213,10 @@ batch ex x
 Dl4JBatchNetFitter korrekt?  x
 Dl4JBatchNetFitter på NeuralCriticMemoryPole  x
 Dl4JBatchNetFitter på NeuralActorMemoryPole x
-
-CustomPolicyGradientLossNew - ersätta scoreOnePoint
+CustomPolicyGradientLossNew - ersätta scoreOnePoint  x
 absNoFit parameter - påv fitter  x
 Dl4JUtil - convertListOfLists snyggare och snabbare - prealloc INDArray
-
+Dl4JBatchNetFitter på NeuralActorMemoryPole - stabil
 
 behövs Dl4JNetFitter ?
 fitActor med nofFits

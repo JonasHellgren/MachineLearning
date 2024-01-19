@@ -1,16 +1,12 @@
 package common_dl4j;
 
 import com.codepoetics.protonpack.functions.TriFunction;
-import common.ListUtils;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CustomPolicyGradientLossNew implements ILossFunction {
 
@@ -57,8 +53,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
     @Override
     public INDArray computeScoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
         int nofPoints = labels.rows();
-        int nofOut = labels.rank();
-        INDArray scoreArrAllPoints = Nd4j.create(nofPoints, nofOut);
+        INDArray scoreArrAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
             INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
             scoreArrAllPoints.getRow(i).addi(scoreArr);
@@ -66,21 +61,20 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         return scoreArrAllPoints;
     }
 
+
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
-        List<Double> scoreList = new ArrayList<>();
-        int nofOut = label.rank();
+        int nofOut = label.columns();
+        INDArray scoreAllPoints = getEmptyIndMatrix(label);
         for (int i = 0; i < nofOut; i++) {
             INDArray estProbabilities = activationFn.getActivation(z, false);
             double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
             double entropy = EntropyCalculator.calcEntropy(estProbabilities);
             double K = 1; //getK(estProbabilities);
-            scoreList.add(ce - beta * K * entropy);
+            scoreAllPoints.putScalar(0,i,ce - beta * K * entropy);
         }
-
-        INDArray outArray1 = Nd4j.create(ListUtils.toArray(scoreList), new int[]{nofOut});
-        return outArray1.castTo(DataType.FLOAT);
-
+        return scoreAllPoints.reshape(nofOut);
     }
+
 
     private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
         double probMin1 = estProbabilities.minNumber().doubleValue();
@@ -100,15 +94,17 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
-
-        int nofOut = labels.rank();
         int nofPoints = labels.rows();
-        INDArray gradAllPoints = Nd4j.create(nofPoints, nofOut);
+        INDArray gradAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
             INDArray grad1 = gradCalculator.getGradSoftMax(labels.getRow(i), preOutput.getRow(i), activationFn, null);
             gradAllPoints.getRow(i).addi(grad1);
         }
         return gradAllPoints.castTo(DataType.FLOAT);
+    }
+
+    private static INDArray getEmptyIndMatrix(INDArray labels) {
+        return Nd4j.create(labels.rows(), labels.columns());
     }
 
     @Override

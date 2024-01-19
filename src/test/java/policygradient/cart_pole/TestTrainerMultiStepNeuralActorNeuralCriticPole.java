@@ -25,7 +25,7 @@ public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(300).nofStepsMax(100).gamma(0.95)
+                        .nofEpisodes(100).nofStepsMax(100).gamma(0.95)
                         .stepHorizon(10)
                         //.relativeNofFitsPerBatch(0.5)
                         .build())

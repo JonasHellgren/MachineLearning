@@ -44,10 +44,6 @@ public class Dl4JBatchNetFitter {
         int nFitsPerBatch= netSettings.nofFits(sizeBatch);
         DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
 
-        // net.setListeners(new ScoreIterationListener(1));
-      //   System.out.println("nFitsPerBatch = " + nFitsPerBatch+", sizeBatch = " + sizeBatch);
-        //  System.out.println("before fitting");
-
         while (iterator.hasNext()) {
             DataSet miniBatch = iterator.next();
             for (int i = 0; i < nFitsPerBatch; i++) {
@@ -59,24 +55,6 @@ public class Dl4JBatchNetFitter {
         }
     }
 
-
-    public void fitOld(INDArray in, INDArray out ) {  //todo remove
-        int nPoints= (int) in.length();
-        int sizeBatch=Math.min(netSettings.sizeBatch(),nPoints);
-        int nFitsPerBatch= netSettings.nofFits(sizeBatch);
-        DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
-
-      // net.setListeners(new ScoreIterationListener(1));
-      //  System.out.println("nFitsPerBatch = " + nFitsPerBatch);
-      //  System.out.println("before fitting");
-
-        for (int i = 0; i < nFitsPerBatch; i++) {
-            iterator.reset();
-            net.fit(iterator);
-        }
-    }
-
-    @NotNull
     private DataSetIterator createDataSetIterator(INDArray in, INDArray out, int sizeBatch) {
         DataSet dataSet = new DataSet(in, out);
         List<DataSet> listDs = dataSet.asList();

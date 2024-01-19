@@ -34,26 +34,9 @@ public class NeuralActorMemorySC {
         this.netFitter=new Dl4JBatchNetFitter(net,netSettings);
     }
 
- /*   public void fitOld(List<Double> in, List<Double> out) {
-        net.fit(transformDiscretePosStateToOneHotIndArray(in), Nd4j.create(out));
-    }*/
-
     public void fit(List<List<Double>> inList, List<List<Double>> outList) {
        INDArray in = transformDiscretePosState(inList);
        INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
-
-/*
-        System.out.println("in = " + in);
-        System.out.println("out = " + out);
-        System.out.println("in.shapeInfoToString() = " + in.shapeInfoToString());
-        System.out.println("out.shapeInfoToString() = " + out.shapeInfoToString());
-        System.out.println("net.summary() = " + net.summary()); */
-
-        if (inList.size()==1) {
-         //   return;
-        }
-
-      //  System.out.println("inList.size() = " + inList.size());
         netFitter.fit(in,out);
     }
 

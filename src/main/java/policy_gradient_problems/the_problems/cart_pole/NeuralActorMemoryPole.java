@@ -94,9 +94,10 @@ public class NeuralActorMemoryPole {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-4).momentum(0.95).seed(1234)
-                .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.05))
-                .relativeNofFitsPerBatch(1e-3).sizeBatch(1)
+                .learningRate(1e-3).momentum(0.95).seed(1234)
+                .lossFunction(CustomPolicyGradientLossNew.newWithBeta(1e-1))
+                .sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)
+                //.relativeNofFitsPerBatch(1e-3)
                 .build();
     }
 
