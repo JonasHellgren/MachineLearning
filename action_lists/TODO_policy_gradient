@@ -228,13 +228,12 @@ samma med NumericalGradCalculatorNew  x
 NeuralActor<V>   List<List...>  x
 få CustomPolicyGradientLoss klara batch x
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner  x
-StatePole.nofActions() StatePole.nofStates()
+StatePole.nofActions() StatePole.nofStates()  x
 Neural ac pole i runner
 
 
 uppdatera md fil one step ac
 mer clean up
-påvkerar regularisation    .l2(settings.l2Value())
 public class Test till runner
 hur skall AgentNeuralActorI kunna klara cont action
 

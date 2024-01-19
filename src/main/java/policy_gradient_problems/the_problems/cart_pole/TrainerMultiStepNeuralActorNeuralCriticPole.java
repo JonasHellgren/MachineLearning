@@ -19,7 +19,6 @@ import static common.Conditionals.executeIfTrue;
 @Log
 public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
-    public static final int NOF_ACTIONS = 2;
     AgentNeuralActorNeuralCriticI<VariablesPole> agent;
 
     @Builder
@@ -57,7 +56,7 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
     private static List<Double> createOneHot(MultistepNeuralCriticUpdater.MultiStepResults msRes, int i) {
         int actionInt = msRes.actionList.get(i).asInt();
         double adv= msRes.valueTarList.get(i)- msRes.valuePresentList.get(i);
-        List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(NOF_ACTIONS, actionInt,adv);
+        List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(StatePole.nofActions(), actionInt,adv);
         oneHot.set(actionInt, adv);
         return oneHot;
     }

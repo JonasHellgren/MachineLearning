@@ -44,6 +44,14 @@ public class StatePole implements StateI<VariablesPole> {
         return new StatePole(VariablesPole.newAngleAndPosRandom(p));
     }
 
+    public static int nofActions() {
+        return 2;
+    }
+
+    public static int nofStates() {
+        return 4;
+    }
+
     public static StatePole newFromVariables(VariablesPole v) {
         return new StatePole(v);
     }
