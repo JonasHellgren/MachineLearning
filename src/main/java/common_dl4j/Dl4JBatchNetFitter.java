@@ -45,16 +45,16 @@ public class Dl4JBatchNetFitter {
         DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
 
         // net.setListeners(new ScoreIterationListener(1));
-        //  System.out.println("nFitsPerBatch = " + nFitsPerBatch);
+      //   System.out.println("nFitsPerBatch = " + nFitsPerBatch+", sizeBatch = " + sizeBatch);
         //  System.out.println("before fitting");
 
         while (iterator.hasNext()) {
             DataSet miniBatch = iterator.next();
-            //miniBatch.shuffle();  //optional
             for (int i = 0; i < nFitsPerBatch; i++) {
                 INDArray features = miniBatch.getFeatures();
                 INDArray labels = miniBatch.getLabels();
                 net.fit(features, labels); // Fit the model on each mini-batch
+               // miniBatch.shuffle();  //optional
             }
         }
     }

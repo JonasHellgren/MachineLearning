@@ -48,9 +48,9 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
                 oneHot.set(actionInt, adv);
                 inList.add(in);
                 outList.add(oneHot);
-                agent.fitActor(List.of(in), List.of(oneHot));
+               // agent.fitActor(List.of(in), List.of(oneHot));
             }
-            //agent.fitActor(inList,outList);
+            agent.fitActor(inList,outList);
 
             //updateActor(experiences);
             printIfSuccessFul(ei, experiences);

@@ -212,7 +212,10 @@ INDarray exampel  x
 batch ex x
 Dl4JBatchNetFitter korrekt?  x
 Dl4JBatchNetFitter på NeuralCriticMemoryPole  x
-Dl4JBatchNetFitter på NeuralActorMemoryPole
+Dl4JBatchNetFitter på NeuralActorMemoryPole x
+
+CustomPolicyGradientLossNew - ersätta scoreOnePoint
+absNoFit parameter - påv fitter  x
 Dl4JUtil - convertListOfLists snyggare och snabbare - prealloc INDArray
 
 

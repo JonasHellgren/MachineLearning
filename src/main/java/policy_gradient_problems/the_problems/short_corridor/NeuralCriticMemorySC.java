@@ -44,6 +44,10 @@ public class NeuralCriticMemorySC {
             inListHot.add(inHot);
         }
 
+        if (in.size()==1) {
+         //   return;
+        }
+
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(inListHot, NOF_INPUTS);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), inListHot.size(), NOF_OUTPUTS);
         //INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);  //todo få detta funka
@@ -62,11 +66,12 @@ public class NeuralCriticMemorySC {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(10).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(10).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.9).seed(1234)
+                .learningRate(1e-3).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
-                .relativeNofFitsPerBatch(0.5).sizeBatch(16)
+                //.relativeNofFitsPerBatch(0.5).sizeBatch(8)
+                .sizeBatch(4).isNofFitsAbsolute(true).absNoFit(3)
                 .weightInit(WeightInit.RELU)
                 .build();
     }

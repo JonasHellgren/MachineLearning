@@ -48,6 +48,12 @@ public class NeuralActorMemorySC {
         System.out.println("in.shapeInfoToString() = " + in.shapeInfoToString());
         System.out.println("out.shapeInfoToString() = " + out.shapeInfoToString());
         System.out.println("net.summary() = " + net.summary()); */
+
+        if (inList.size()==1) {
+         //   return;
+        }
+
+      //  System.out.println("inList.size() = " + inList.size());
         netFitter.fit(in,out);
     }
 
@@ -77,9 +83,9 @@ public class NeuralActorMemorySC {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.5))
-                .relativeNofFitsPerBatch(1.0)
+                .sizeBatch(4).isNofFitsAbsolute(true).absNoFit(10)
                 .build();
     }
 }

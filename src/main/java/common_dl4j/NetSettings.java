@@ -27,18 +27,21 @@ public record NetSettings(
         ILossFunction lossFunction,
         Integer seed,
         Double relativeNofFitsPerBatch,
+        Integer absNoFit,
+        Boolean isNofFitsAbsolute,
         Integer sizeBatch) {
 
     public static final int N_HIDDEN = 10;
     public static final ILossFunction LOSS_FCN = LossFunctions.LossFunction.MSE.getILossFunction();
     public static final double RELATIVE_NOF_FITS_PER_EPOCH = 0.5;
     public static final int SIZE_BATCH = 16;
+    public static final boolean IS_NFITS_ABS = false;
 
     @Builder
     public NetSettings(Double learningRate,
                        Double momentum,
                        Double l2Value,
-                       Integer nofFitsPerEpoch,
+                       Integer nofFitsPerEpoch,  //todo veck
                        WeightInit weightInit,
                        Integer nHiddenLayers,
                        Integer nInput,
@@ -50,6 +53,8 @@ public record NetSettings(
                        ILossFunction lossFunction,
                        Integer seed,
                        Double relativeNofFitsPerBatch,
+                       Integer absNoFit,
+                       Boolean isNofFitsAbsolute,
                        Integer sizeBatch) {
         this.learningRate = MyFunctions.defaultIfNullDouble.apply(learningRate,1e-1);
         this.momentum = MyFunctions.defaultIfNullDouble.apply(momentum,0.9);
@@ -66,6 +71,8 @@ public record NetSettings(
         this.lossFunction = (ILossFunction) MyFunctions.defaultIfNullObject.apply(lossFunction,LOSS_FCN);
         this.seed = MyFunctions.defaultIfNullInteger.apply(seed,12345);
         this.relativeNofFitsPerBatch = defaultIfNullDouble.apply(relativeNofFitsPerBatch, RELATIVE_NOF_FITS_PER_EPOCH);
+        this.isNofFitsAbsolute = (Boolean) MyFunctions.defaultIfNullObject.apply(isNofFitsAbsolute, IS_NFITS_ABS);
+        this.absNoFit=MyFunctions.defaultIfNullInteger.apply(absNoFit,1);
         this.sizeBatch = defaultIfNullInteger.apply(sizeBatch, SIZE_BATCH);
     }
 
@@ -73,8 +80,12 @@ public record NetSettings(
       return NetSettings.builder().build();
   }
 
-     public int nofFits(int nofExper) {
-        return (int) Math.max(1, (relativeNofFitsPerBatch() * nofExper));
+     public int nofFits(int nofPoints) {
+        return  isNofFitsAbsolute
+                ? absNoFit
+                : (int) Math.max(1, (relativeNofFitsPerBatch() * nofPoints));
     }
+
+
 
 }
