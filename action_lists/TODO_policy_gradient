@@ -209,6 +209,8 @@ Dl4JBatchNetFitter - test using all points, not just sub set in batch
 Dl4JBatchNetFitter på NeuralCriticMemorySC  x
 TestTrainerParamActorNeuralCriticPole fuckar  x
 INDarray exampel  x
+batch ex
+Dl4JUtil - convertListOfLists snyggare och snabbare
 Dl4JBatchNetFitter på NeuralCriticMemoryPole
 Dl4JBatchNetFitter på NeuralActorMemoryPole
 
