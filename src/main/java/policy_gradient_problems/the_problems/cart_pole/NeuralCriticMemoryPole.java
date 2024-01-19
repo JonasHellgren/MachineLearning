@@ -51,9 +51,11 @@ public class NeuralCriticMemoryPole {
                 .build();
     }
 
-
     public void fit(List<List<Double>> in, List<Double> out) {
-        fitter.train(in, out);
+        int size = netSettings.nofFits(in.size());
+        for (int i = 0; i < size; i++) {
+            fitter.train(in, out);
+        }
     }
 
     public Double getOutValue(INDArray inData) {
