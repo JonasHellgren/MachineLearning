@@ -216,8 +216,8 @@ Dl4JBatchNetFitter på NeuralActorMemoryPole x
 CustomPolicyGradientLossNew - ersätta scoreOnePoint  x
 absNoFit parameter - påv fitter  x
 Dl4JUtil - convertListOfLists snyggare och snabbare - prealloc INDArray  x
-Dl4JUtil putRow
-Dl4JBatchNetFitter på NeuralActorMemoryPole - stabil
+Dl4JUtil putRow  x
+Dl4JBatchNetFitter på NeuralActorMemoryPole - stabil  x
 
 behövs Dl4JNetFitter ?
 fitActor med nofFits

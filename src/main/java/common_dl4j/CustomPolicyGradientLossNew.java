@@ -8,6 +8,8 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 
+import static common_dl4j.Dl4JUtil.replaceRow;
+
 public class CustomPolicyGradientLossNew implements ILossFunction {
 
     static final float EPS = 1e-5f;
@@ -56,7 +58,8 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         INDArray scoreArrAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
             INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
-            scoreArrAllPoints.getRow(i).addi(scoreArr);
+            replaceRow(scoreArrAllPoints,scoreArr,i);
+
         }
         return scoreArrAllPoints;
     }
@@ -76,15 +79,6 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
     }
 
 
-    private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
-        double probMin1 = estProbabilities.minNumber().doubleValue();
-        INDArray oneSubN = estProbabilities.rsub(1);
-        double probMin2 = oneSubN.minNumber().doubleValue();
-        double pMin = Math.min(probMin1, probMin2);
-        return Math.min(100, Math.abs(Math.log(pMin / (1 - pMin))));
-    }
-
-
     private static double getAverageScoreIfRequested(boolean average, INDArray scoreArr, double score) {
         if (average) {
             score /= scoreArr.size(0);
@@ -98,7 +92,7 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         INDArray gradAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
             INDArray grad1 = gradCalculator.getGradSoftMax(labels.getRow(i), preOutput.getRow(i), activationFn, null);
-            gradAllPoints.getRow(i).addi(grad1);
+            replaceRow(gradAllPoints,grad1,i);
         }
         return gradAllPoints.castTo(DataType.FLOAT);
     }
@@ -130,5 +124,14 @@ public class CustomPolicyGradientLossNew implements ILossFunction {
         return "PolicyGradientLoss";
     }
 
+
+/*
+    private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
+        double probMin1 = estProbabilities.minNumber().doubleValue();
+        INDArray oneSubN = estProbabilities.rsub(1);
+        double probMin2 = oneSubN.minNumber().doubleValue();
+        double pMin = Math.min(probMin1, probMin2);
+        return Math.min(100, Math.abs(Math.log(pMin / (1 - pMin))));
+    }*/
 
 }

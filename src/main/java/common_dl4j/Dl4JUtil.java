@@ -29,20 +29,20 @@ public class Dl4JUtil {
     public static INDArray convertListOfLists(List<List<Double>> listOfLists, int nofInputs) {
         int numRows = listOfLists.size();
 
-        if (numRows==0) {
+        if (numRows == 0) {
             log.severe("Empty list");
-            return Nd4j.create(0,0);
+            return Nd4j.create(0, 0);
         }
 
         int numColumns = listOfLists.get(0).size();
-        if (numColumns!= nofInputs) {
-            throw new IllegalArgumentException("bad numColumns, numColumns = "+numColumns+", nofInputs = "+nofInputs);
+        if (numColumns != nofInputs) {
+            throw new IllegalArgumentException("bad numColumns, numColumns = " + numColumns + ", nofInputs = " + nofInputs);
         }
 
-        INDArray indArray=Nd4j.create(numRows, numColumns);
+        INDArray indArray = Nd4j.create(numRows, numColumns);
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
-                indArray.putScalar(i,j,listOfLists.get(i).get(j));
+                indArray.putScalar(i, j, listOfLists.get(i).get(j));
             }
         }
         return indArray;
@@ -50,12 +50,24 @@ public class Dl4JUtil {
 
 
     public static INDArray convertListToOneRow(List<Double> in, int nofInputs) {  //todo fimpa nofInputs
-        return Nd4j.create(ListUtils.toArray(in),new int[]{1, nofInputs});
+        return Nd4j.create(ListUtils.toArray(in), new int[]{1, nofInputs});
     }
 
 
     public static INDArray convertListToOneColumn(List<Double> in) {
-        return Nd4j.create(ListUtils.toArray(in),new int[]{in.size(),1});
+        return Nd4j.create(ListUtils.toArray(in), new int[]{in.size(), 1});
+    }
+
+    public static void replaceRow(INDArray original, INDArray toReplace, int rowIndex) {
+
+        if (toReplace.rows()!=1) {
+            throw new IllegalArgumentException("To replace has not one row, is not a vector");
+        }
+
+        if (original.columns() != toReplace.columns()) {
+            throw new IllegalArgumentException("Column dimensions do not match");
+        }
+        original.putRow(rowIndex, toReplace);  // Replace the specified row
     }
 
     public static DataSetIterator getDataSetIterator(INDArray input, INDArray outPut, Random randGen) {
@@ -82,16 +94,17 @@ public class Dl4JUtil {
 
     public static INDArray createOneHotAndReshape(int nofInputs, int hotIndex) {
         List<Double> onHot = createListWithOneHot(nofInputs, hotIndex);
-        return Nd4j.create(onHot).reshape(1,nofInputs); // reshape it to a row matrix of size 1×n
+        return Nd4j.create(onHot).reshape(1, nofInputs); // reshape it to a row matrix of size 1×n
     }
 
-    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMax
-                                                         ) {
-        return  createNormalizer(minMax,Pair.create(0d,1d));
+    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double, Double>> minMax
+    ) {
+        return createNormalizer(minMax, Pair.create(0d, 1d));
 
     }
-    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double,Double>> minMaxList,
-                                                             Pair<Double, Double> netMinMax) {
+
+    public static NormalizerMinMaxScaler createNormalizer(List<Pair<Double, Double>> minMaxList,
+                                                          Pair<Double, Double> netMinMax) {
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(), netMinMax.getSecond());
         List<Double> minInList = minMaxList.stream().map(p -> p.getFirst()).toList();
         List<Double> maxInList = minMaxList.stream().map(p -> p.getSecond()).toList();
@@ -103,20 +116,20 @@ public class Dl4JUtil {
     }
 
 
-        public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double,Double>> inMinMax,
-                                                             List<Pair<Double,Double>> outMinMax) {
-    return  createNormalizerOld(inMinMax,outMinMax,Pair.create(0d,1d));
+    public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double, Double>> inMinMax,
+                                                             List<Pair<Double, Double>> outMinMax) {
+        return createNormalizerOld(inMinMax, outMinMax, Pair.create(0d, 1d));
 
     }
 
-        public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double,Double>> inMinMax,
-                                                                 List<Pair<Double,Double>> outMinMax,
-                                                                 Pair<Double, Double> netMinMax) {
-        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(),netMinMax.getSecond());
-        List<Double> minInList=inMinMax.stream().map(p -> p.getFirst()).toList();
-        List<Double> maxInList=inMinMax.stream().map(p -> p.getSecond()).toList();
-        List<Double> minOutList=outMinMax.stream().map(p -> p.getFirst()).toList();
-        List<Double> maxOutList=outMinMax.stream().map(p -> p.getSecond()).toList();
+    public static NormalizerMinMaxScaler createNormalizerOld(List<Pair<Double, Double>> inMinMax,
+                                                             List<Pair<Double, Double>> outMinMax,
+                                                             Pair<Double, Double> netMinMax) {
+        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler(netMinMax.getFirst(), netMinMax.getSecond());
+        List<Double> minInList = inMinMax.stream().map(p -> p.getFirst()).toList();
+        List<Double> maxInList = inMinMax.stream().map(p -> p.getSecond()).toList();
+        List<Double> minOutList = outMinMax.stream().map(p -> p.getFirst()).toList();
+        List<Double> maxOutList = outMinMax.stream().map(p -> p.getSecond()).toList();
         normalizer.setFeatureStats(
                 Nd4j.create(ListUtils.toArray(minInList)),
                 Nd4j.create(ListUtils.toArray(maxInList)));
@@ -125,8 +138,6 @@ public class Dl4JUtil {
                 Nd4j.create(ListUtils.toArray(maxOutList)));
         return normalizer;
     }
-
-
 
 
 }
