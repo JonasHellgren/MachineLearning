@@ -211,9 +211,9 @@ TestTrainerParamActorNeuralCriticPole fuckar  x
 INDarray exampel  x
 batch ex x
 Dl4JBatchNetFitter korrekt?  x
-Dl4JBatchNetFitter på NeuralCriticMemoryPole
+Dl4JBatchNetFitter på NeuralCriticMemoryPole  x
 Dl4JBatchNetFitter på NeuralActorMemoryPole
-Dl4JUtil - convertListOfLists snyggare och snabbare
+Dl4JUtil - convertListOfLists snyggare och snabbare - prealloc INDArray
 
 
 behövs Dl4JNetFitter ?

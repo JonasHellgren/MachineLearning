@@ -1,11 +1,14 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import common.Conditionals;
+import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
 
@@ -17,11 +20,9 @@ public class NeuralCriticMemoryPole {
     static int NOF_INPUTS = StatePole.newUprightAndStill().asList().size();
     static int NOF_OUTPUTS = 1;
 
-    NetSettings netSettings;  //todo veck
     MultiLayerNetwork net;
-    final Random randGen;  //todo veck
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
-    Dl4JNetFitter fitter;
+    Dl4JBatchNetFitter fitter;
 
     public static NeuralCriticMemoryPole newDefault() {
         return new NeuralCriticMemoryPole(getDefaultNetSettings(),ParametersPole.newDefault());
@@ -29,33 +30,31 @@ public class NeuralCriticMemoryPole {
 
     public static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(10).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(2).nHidden(10).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
                 .relativeNofFitsPerBatch(0.5)
                 .build();
     }
 
-    public NeuralCriticMemoryPole(NetSettings settings, ParametersPole parameters) {
-        this.netSettings=settings;
+    public NeuralCriticMemoryPole(NetSettings netSettings, ParametersPole parameters) {
         this.net=MultiLayerNetworkCreator.create(netSettings);
         net.init();
-        this.randGen=new Random(settings.seed());
         this.normalizerIn = createNormalizerIn(parameters);
         this.normalizerOut = createNormalizerOut(parameters);
-        this.fitter = Dl4JNetFitter.builder()
-                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(randGen)
-                .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
-                .build();
+        this.fitter=new Dl4JBatchNetFitter(net,netSettings);
     }
 
     public void fit(List<List<Double>> in, List<Double> out) {
-        int size = netSettings.nofFits(in.size());
-        for (int i = 0; i < size; i++) {
-            fitter.train(in, out);
-        }
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
+        INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), in.size(), NOF_OUTPUTS);
+        //      INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);
+        normalizerIn.transform(inputNDArray);
+        normalizerOut.transform(outPutNDArray);
+
+        fitter.fit(inputNDArray,outPutNDArray);
+
     }
 
     public Double getOutValue(INDArray inData) {
