@@ -4,7 +4,6 @@ import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.layers.BaseOutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class TestCustomPolicyGradientLoss {
 
     @BeforeEach
     public void init() {
-        net = getNet(CustomPolicyGradientLossNew.newDefault());
+        net = getNet(CustomPolicyGradientLoss.newDefault());
     }
 
     @NotNull

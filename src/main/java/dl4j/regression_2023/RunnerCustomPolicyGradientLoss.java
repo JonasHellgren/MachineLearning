@@ -31,7 +31,7 @@ public class RunnerCustomPolicyGradientLoss {
 
 
     public static void main(String[] args) {
-        float advAction0 = 0,advAction1 = 10;
+        float advAction0 = 0,advAction1 = 1;
         var net = createNetwork();
 
         INDArray inEx = Nd4j.rand(1, numInput);
@@ -41,7 +41,7 @@ public class RunnerCustomPolicyGradientLoss {
 
         for (int i = 0; i < nEpochs; i++) {
             INDArray in = Nd4j.rand(1, numInput);
-            INDArray out = Nd4j.create(new float[]{advAction0, advAction1});
+            INDArray out = Nd4j.create(new float[]{advAction0, advAction1}).reshape(1,numOutputs);
             net.fit(in, out);
         }
 

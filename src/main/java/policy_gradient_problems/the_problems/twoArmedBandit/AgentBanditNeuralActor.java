@@ -48,7 +48,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
                 .nHiddenLayers(1).nInput(numInput).nHidden(10).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
-                .lossFunction(CustomPolicyGradientLossNew.newDefault())
+                .lossFunction(CustomPolicyGradientLoss.newDefault())
                 .build();
     }
 

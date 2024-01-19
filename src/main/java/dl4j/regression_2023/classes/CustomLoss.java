@@ -2,12 +2,9 @@ package dl4j.regression_2023.classes;
 
 import com.codepoetics.protonpack.functions.TriFunction;
 import common_dl4j.NumericalGradCalculator;
-import common_dl4j.NumericalGradCalculatorNew;
-import org.nd4j.common.base.Preconditions;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
-import org.nd4j.linalg.lossfunctions.LossUtil;
 import org.nd4j.linalg.ops.transforms.Transforms;
 import org.nd4j.common.primitives.Pair;
 
@@ -110,7 +107,7 @@ public class CustomLoss implements ILossFunction {
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
                 (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
-        var gradCalculator = new NumericalGradCalculatorNew(EPS, scoreFcn);
+        var gradCalculator = new NumericalGradCalculator(EPS, scoreFcn);
         return gradCalculator.getGrad(yHat, preOutput, activationFn, null);
     }
 

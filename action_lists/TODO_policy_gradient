@@ -223,10 +223,10 @@ fimpa convertListOfLists nofinp  x
 behövs Dl4JNetFitter ?  x
 fitActor med nofFits  x
 TestTrainerNeuralActorNeuralCriticPole  x
-CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver
-samma med NumericalGradCalculatorNew
-NeuralActor<V>   List<List...>
-få CustomPolicyGradientLoss klara batch
+CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver x
+samma med NumericalGradCalculatorNew  x
+NeuralActor<V>   List<List...>  x
+få CustomPolicyGradientLoss klara batch x
 TrainerMultiStepNeuralActorNeuralCriticPole cleaner
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
