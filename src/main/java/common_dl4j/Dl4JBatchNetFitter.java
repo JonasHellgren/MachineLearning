@@ -52,7 +52,9 @@ public class Dl4JBatchNetFitter {
             DataSet miniBatch = iterator.next();
             //miniBatch.shuffle();  //optional
             for (int i = 0; i < nFitsPerBatch; i++) {
-                net.fit(miniBatch); // Fit the model on each mini-batch
+                INDArray features = miniBatch.getFeatures();
+                INDArray labels = miniBatch.getLabels();
+                net.fit(features, labels); // Fit the model on each mini-batch
             }
         }
     }

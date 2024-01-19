@@ -84,6 +84,7 @@ public class UsingDataSetIterator {
             while (iterator.hasNext()) {
                 DataSet miniBatch = iterator.next();
                 //miniBatch.shuffle();  //optional
+                System.out.println("miniBatch = " + miniBatch);
                 net.fit(miniBatch); // Fit the model on each mini-batch
                 nofBatches++;
             }

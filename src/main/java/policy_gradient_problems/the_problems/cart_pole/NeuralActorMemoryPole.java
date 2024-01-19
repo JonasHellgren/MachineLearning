@@ -43,8 +43,17 @@ public class NeuralActorMemoryPole {
     public void fit(List<List<Double>> in, List<List<Double>> outList) {
         INDArray inAsNormalized = getInAsNormalized(in.get(0));
         INDArray outAsNormalized = getOutAsNormalized(outList.get(0));
+
+        inAsNormalized=inAsNormalized.reshape(1,4);
+        outAsNormalized=outAsNormalized.reshape(1,2);
+
+      //  INDArray inAsNormalized=Nd4j.create(new float[]{1,1,1,1},new int[]{1,4});
+      //  INDArray outAsNormalized=Nd4j.create(new float[]{1,1},new int[]{1,2});
+
+
         net.fit(inAsNormalized, outAsNormalized);
      //   fitter.train(in,out,1);   //todo apply*/
+
 /*
 
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
@@ -57,9 +66,12 @@ public class NeuralActorMemoryPole {
 
         System.out.println("inputNDArray = " + inputNDArray);
         System.out.println("outPutNDArray = " + outPutNDArray);
-
-        fitter.fitOld(inputNDArray,outPutNDArray);
 */
+
+
+
+    //    fitter.fit(inAsNormalized,outAsNormalized);
+
 
     }
 
@@ -88,10 +100,12 @@ public class NeuralActorMemoryPole {
         return NetSettings.builder()
                 .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .nofFitsPerEpoch(1).learningRate(1e-4).momentum(0.95).seed(1234)
-                .lossFunction(CustomPolicyGradientLoss.newWithBeta(0.05))
+                .nofFitsPerEpoch(1).learningRate(1e-3).momentum(0.95).seed(1234)
+                .lossFunction(CustomPolicyGradientLossNew.newWithBeta(0.5))
+                .relativeNofFitsPerBatch(0.5)
                 .build();
     }
+
 
     private static NormalizerMinMaxScaler createNormalizerIn(ParametersPole p) {
         List<Pair<Double, Double>> inMinMax = p.minMaxStatePairList();

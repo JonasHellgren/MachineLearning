@@ -39,12 +39,15 @@ public class NeuralActorMemorySC {
     }*/
 
     public void fit(List<List<Double>> inList, List<List<Double>> outList) {
-        INDArray in = transformDiscretePosState(inList);
-        INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+       INDArray in = transformDiscretePosState(inList);
+       INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+
+/*
         System.out.println("in = " + in);
         System.out.println("out = " + out);
         System.out.println("in.shapeInfoToString() = " + in.shapeInfoToString());
         System.out.println("out.shapeInfoToString() = " + out.shapeInfoToString());
+        System.out.println("net.summary() = " + net.summary()); */
         netFitter.fit(in,out);
     }
 
