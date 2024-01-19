@@ -232,13 +232,8 @@ StatePole.nofActions() StatePole.nofStates()  x
 fitActorOld veck  x
 Neural ac pole i runner  x
 
-uppdatera md fil one step ac
+uppdatera md fil one step ac  x
 mer clean up
-public class Test till runner
-hur skall AgentNeuralActorI kunna klara cont action
-
-stepHorizon(1) buggar
-ArrayRealVector RealVector rörs ihop
 
 cart pole PPOPolicy
 
@@ -252,6 +247,9 @@ alphazero på cartpole
 
 
 bubblare/ned prioriterat:
+ArrayRealVector RealVector rörs ihop
+hur skall AgentNeuralActorI kunna klara cont action
+public class Test till runner
 ta bort AgentParamActorNeuralCriticPole
 TrainerBaselinePole använda generisk tränare
 gradLog with finite diff
