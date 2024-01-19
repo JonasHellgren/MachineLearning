@@ -58,47 +58,35 @@ public class CustomPolicyGradientLoss implements ILossFunction {
         INDArray scoreArrAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
             INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
-            replaceRow(scoreArrAllPoints,scoreArr,i);
+            replaceRow(scoreArrAllPoints, scoreArr, i);
 
         }
         return scoreArrAllPoints;
     }
 
+    /***
+     * The most critical method
+     */
 
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
         int nofOut = label.columns();
-        INDArray scoreAllPoints = getEmptyIndMatrix(label);
-        for (int i = 0; i < nofOut; i++) {
-            INDArray estProbabilities = activationFn.getActivation(z, false);
-            double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
-            double entropy = EntropyCalculator.calcEntropy(estProbabilities);
-            double K = 1; //getK(estProbabilities);
-            scoreAllPoints.putScalar(0,i,ce - beta * K * entropy);
-        }
-        return scoreAllPoints.reshape(nofOut);
+        INDArray estProbabilities = activationFn.getActivation(z, false);
+        double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
+        double entropy = EntropyCalculator.calcEntropy(estProbabilities);
+        double K = 1; //getK(estProbabilities);
+        return  Nd4j.valueArrayOf(1,nofOut,ce - beta * K * entropy);
     }
 
-
-    private static double getAverageScoreIfRequested(boolean average, INDArray scoreArr, double score) {
-        if (average) {
-            score /= scoreArr.size(0);
-        }
-        return score;
-    }
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
         int nofPoints = labels.rows();
         INDArray gradAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
-            INDArray grad1 = gradCalculator.getGradSoftMax(labels.getRow(i), preOutput.getRow(i), activationFn, null);
-            replaceRow(gradAllPoints,grad1,i);
+            INDArray grad = gradCalculator.getGradSoftMax(labels.getRow(i), preOutput.getRow(i), activationFn, null);
+            replaceRow(gradAllPoints, grad, i);
         }
         return gradAllPoints.castTo(DataType.FLOAT);
-    }
-
-    private static INDArray getEmptyIndMatrix(INDArray labels) {
-        return Nd4j.create(labels.rows(), labels.columns());
     }
 
     @Override
@@ -122,6 +110,17 @@ public class CustomPolicyGradientLoss implements ILossFunction {
     @Override
     public String toString() {
         return "PolicyGradientLoss";
+    }
+
+    private static INDArray getEmptyIndMatrix(INDArray labels) {
+        return Nd4j.create(labels.rows(), labels.columns());
+    }
+
+    private static double getAverageScoreIfRequested(boolean average, INDArray scoreArr, double score) {
+        if (average) {
+            score /= scoreArr.size(0);
+        }
+        return score;
     }
 
 

@@ -231,8 +231,9 @@ TrainerMultiStepNeuralActorNeuralCriticPole cleaner  x
 StatePole.nofActions() StatePole.nofStates()  x
 fitActorOld veck  x
 Neural ac pole i runner  x
-
 uppdatera md fil one step ac  x
+
+påbörja cart pole PPOPolicy
 mer clean up
 
 cart pole PPOPolicy
