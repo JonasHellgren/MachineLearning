@@ -41,8 +41,11 @@ public class NeuralActorMemoryPole {
     }
 
     public void fit(List<List<Double>> in, List<List<Double>> outList) {
-/*        net.fit(getInAsNormalized(in), getOutAsNormalized(out));
+        INDArray inAsNormalized = getInAsNormalized(in.get(0));
+        INDArray outAsNormalized = getOutAsNormalized(outList.get(0));
+        net.fit(inAsNormalized, outAsNormalized);
      //   fitter.train(in,out,1);   //todo apply*/
+/*
 
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
         //INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
@@ -56,6 +59,7 @@ public class NeuralActorMemoryPole {
         System.out.println("outPutNDArray = " + outPutNDArray);
 
         fitter.fitOld(inputNDArray,outPutNDArray);
+*/
 
     }
 
