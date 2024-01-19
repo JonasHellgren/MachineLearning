@@ -1,6 +1,5 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.Conditionals;
 import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
@@ -11,9 +10,7 @@ import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
-
 import java.util.List;
-import java.util.Random;
 
 public class NeuralCriticMemoryPole {
 
@@ -52,9 +49,7 @@ public class NeuralCriticMemoryPole {
         //      INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);
         normalizerIn.transform(inputNDArray);
         normalizerOut.transform(outPutNDArray);
-
         fitter.fit(inputNDArray,outPutNDArray);
-
     }
 
     public Double getOutValue(INDArray inData) {

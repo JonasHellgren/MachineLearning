@@ -1,5 +1,6 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
+import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -25,7 +26,7 @@ public class NeuralActorMemoryPole {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
-//    Dl4JNetFitter fitter;
+    Dl4JBatchNetFitter fitter;
 
     public static NeuralActorMemoryPole newDefault(ParametersPole parametersPole) {
         return new NeuralActorMemoryPole(getDefaultNetSettings(),parametersPole);
@@ -36,16 +37,26 @@ public class NeuralActorMemoryPole {
         this.normalizerIn = createNormalizerIn(parametersPole);
         this.normalizerOut = createNormalizerOut(parametersPole);
         net.init();
-/*        this.fitter = Dl4JNetFitter.builder()
-                .nofInputs(NOF_INPUTS).nofOutputs(NOF_OUTPUTS)
-                .net(net).randGen(new Random(netSettings.seed()))
-                .normalizerIn(normalizerIn).normalizerOut(normalizerOut)
-                .build();*/
+        this.fitter=new Dl4JBatchNetFitter(net,netSettings);
     }
 
-    public void fit(List<Double> in, List<Double> out) {
-        net.fit(getInAsNormalized(in), getOutAsNormalized(out));
-     //   fitter.train(in,out,1);   //todo apply
+    public void fit(List<List<Double>> in, List<List<Double>> outList) {
+/*        net.fit(getInAsNormalized(in), getOutAsNormalized(out));
+     //   fitter.train(in,out,1);   //todo apply*/
+
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
+        //INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
+
+        //INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(outList), in.size(), NOF_OUTPUTS);
+              INDArray outPutNDArray = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+        normalizerIn.transform(inputNDArray);
+        normalizerOut.transform(outPutNDArray);
+
+        System.out.println("inputNDArray = " + inputNDArray);
+        System.out.println("outPutNDArray = " + outPutNDArray);
+
+        fitter.fitOld(inputNDArray,outPutNDArray);
+
     }
 
     public List<Double> getOutValue(List<Double> in) {

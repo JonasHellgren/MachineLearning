@@ -54,7 +54,7 @@ public class TestNeuralActorMemoryPole {
             int action=(state.angle()<0) ? 0 : 1;  //neg angle -> push left and vice vera
             double nofSteps= RandUtils.getRandomDouble(0,parametersPole.maxNofSteps()/10);
             List<Double> oneHotOut = Dl4JUtil.createListWithOneHotWithValue(EnvironmentPole.NOF_ACTIONS,action,nofSteps);
-            actor.fit(in, oneHotOut);
+            actor.fit(List.of(in), List.of(oneHotOut));
         }
     }
 

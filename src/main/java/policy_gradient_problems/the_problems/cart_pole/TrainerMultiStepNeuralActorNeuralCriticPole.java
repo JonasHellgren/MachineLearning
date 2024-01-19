@@ -43,7 +43,7 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
                 double adv=msRes.valueTarList.get(i)-msRes.valuePresentList.get(i);
                 List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(NOF_ACTIONS, actionInt,adv);
                 oneHot.set(actionInt, adv);
-                agent.fitActorOld(in, oneHot);
+                agent.fitActor(List.of(in), List.of(oneHot));
             }
 
             //updateActor(experiences);
