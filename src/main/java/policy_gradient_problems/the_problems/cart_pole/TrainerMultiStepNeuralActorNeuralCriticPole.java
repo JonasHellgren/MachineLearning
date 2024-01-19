@@ -10,6 +10,7 @@ import policy_gradient_problems.common_generic.Experience;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static common.Conditionals.executeIfTrue;
@@ -37,14 +38,19 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
             var experiences = super.getExperiences(agent);
             MultistepNeuralCriticUpdater.MultiStepResults msRes= cu.updateCritic(experiences);
 
+            List<List<Double>> inList=new ArrayList<>();
+            List<List<Double>> outList=new ArrayList<>();
             for (int i = 0; i < msRes.nofSteps ; i++) {
                 var in=msRes.stateValuesList.get(i);
                 int actionInt = msRes.actionList.get(i).asInt();
                 double adv=msRes.valueTarList.get(i)-msRes.valuePresentList.get(i);
                 List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(NOF_ACTIONS, actionInt,adv);
                 oneHot.set(actionInt, adv);
+                inList.add(in);
+                outList.add(oneHot);
                 agent.fitActor(List.of(in), List.of(oneHot));
             }
+            //agent.fitActor(inList,outList);
 
             //updateActor(experiences);
             printIfSuccessFul(ei, experiences);
