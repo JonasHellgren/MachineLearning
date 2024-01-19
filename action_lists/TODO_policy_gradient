@@ -227,7 +227,7 @@ CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver x
 samma med NumericalGradCalculatorNew  x
 NeuralActor<V>   List<List...>  x
 få CustomPolicyGradientLoss klara batch x
-TrainerMultiStepNeuralActorNeuralCriticPole cleaner
+TrainerMultiStepNeuralActorNeuralCriticPole cleaner  x
 StatePole.nofActions() StatePole.nofStates()
 Neural ac pole i runner
 
