@@ -1,6 +1,5 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
-import common.Conditionals;
 import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
@@ -14,7 +13,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.abstract_classes.StateI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import static common.ListUtils.findMax;
 import static common.ListUtils.findMin;
 
@@ -49,7 +48,7 @@ public class NeuralCriticMemorySC {
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), inListHot.size(), NOF_OUTPUTS);
         //INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);  //todo få detta funka
         normalizerOut.transform(outPutNDArray);
-        fitter.batchFit(inputNDArray, outPutNDArray);
+        fitter.fit(inputNDArray, outPutNDArray);
     }
 
     public Double getOutValue(StateI<VariablesSC> state) {

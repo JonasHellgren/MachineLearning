@@ -40,7 +40,7 @@ public class NeuralMemorySumUsingBatchFitter {
 
 
     public void train(INDArray in, INDArray out) {
-        fitter.batchFit(in,out);
+        fitter.fit(in,out);
     }
 
     public double getError() {

@@ -1,18 +1,12 @@
 package policy_gradient_problems.the_problems.short_corridor;
 
 import common_dl4j.*;
-import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
@@ -47,7 +41,7 @@ public class NeuralActorMemorySC {
     public void fit(List<List<Double>> inList, List<List<Double>> outList) {
         INDArray in = transformDiscretePosState(inList);
         INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
-        netFitter.batchFit(in,out);
+        netFitter.fit(in,out);
     }
 
     public double[] getOutValue(double[] inData) {

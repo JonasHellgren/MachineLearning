@@ -17,7 +17,12 @@ import java.util.Random;
  * sizeBatch=min(p.sizeBatch,nExper)
  * nBatch=nExper/sizeBatch, nFitsPerBatch=round(relNFits*sizeBatch)
  *
- * todo test using all points, not just sub set in batch
+ * Collections.shuffle shuffles the entire list of DataSet objects before creating the ListDataSetIterator.
+ * Each epoch will now process mini-batches that are randomly shuffled.
+ * Nof batches per epoch is described in top of file.
+
+ * Shuffling the entire dataset is a common and recommended practice in training neural networks,
+ * shuffling within a mini-batch is less common and typically used in specific scenarios
  */
 
 @AllArgsConstructor
@@ -33,7 +38,27 @@ public class Dl4JBatchNetFitter {
         this.rnd = new Random(netSettings.seed());
     }
 
-    public void batchFit(INDArray in, INDArray out ) {
+    public void fit(INDArray in, INDArray out ) {
+        int nPoints= (int) in.length();
+        int sizeBatch=Math.min(netSettings.sizeBatch(),nPoints);
+        int nFitsPerBatch= netSettings.nofFits(sizeBatch);
+        DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
+
+        // net.setListeners(new ScoreIterationListener(1));
+        //  System.out.println("nFitsPerBatch = " + nFitsPerBatch);
+        //  System.out.println("before fitting");
+
+        while (iterator.hasNext()) {
+            DataSet miniBatch = iterator.next();
+            //miniBatch.shuffle();  //optional
+            for (int i = 0; i < nFitsPerBatch; i++) {
+                net.fit(miniBatch); // Fit the model on each mini-batch
+            }
+        }
+    }
+
+
+    public void fitOld(INDArray in, INDArray out ) {  //todo remove
         int nPoints= (int) in.length();
         int sizeBatch=Math.min(netSettings.sizeBatch(),nPoints);
         int nFitsPerBatch= netSettings.nofFits(sizeBatch);
