@@ -3,24 +3,24 @@ package policy_gradient_problems.runners;
 import common.MovingAverage;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
+import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_helpers.TrainingTracker;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
 import java.util.List;
 
+//todo add ppo
+
 public class RunnerTrainersPole {
 
-    public static final int LENGTH_WINDOW = 100, NOF_STEPS_MAX = 300;
+    public static final int LENGTH_WINDOW = 10, NOF_STEPS_MAX = 100;
     public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(1_500).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).learningRateActor(1e-3)
-            .learningRateCritic(1e-3)  //not relevant for vanilla  1e-3
-            .stepHorizon(5)
-            .build();
+            .nofEpisodes(100).nofStepsMax(NOF_STEPS_MAX).gamma(0.95).stepHorizon(10).build();
 
     public static void main(String[] args) {
         var agent = AgentParamActorPole.newAllZeroStateDefaultThetas();
-        var agentAC = AgentParamActorNeuralCriticPole.newDefaultCritic(StatePole.newUprightAndStill());
+        var agentAC = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
 
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
@@ -47,8 +47,8 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
-    private static List<Double> getNofStepsListAC(AgentParamActorNeuralCriticI<VariablesPole> agent, EnvironmentPole environment) {
-        var trainerAC = TrainerParamActorNeuralCriticPole.builder()
+    private static List<Double> getNofStepsListAC(AgentNeuralActorNeuralCriticI<VariablesPole> agent, EnvironmentPole environment) {
+        var trainerAC = TrainerMultiStepNeuralActorNeuralCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill());

@@ -38,6 +38,11 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
 
+    @Override
+    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
+        fit(outList);
+    }
+
     private static MultiLayerNetwork createNetwork(double learningRate) {
         NetSettings netSettings = getNetSettings(learningRate);
         return MultiLayerNetworkCreator.create(netSettings);
@@ -52,16 +57,6 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
                 .build();
     }
 
-    @SneakyThrows
-    @Override
-    public void fitActorOld(List<Double> in, List<Double> out) {
-        throw  new NoSuchMethodException();
-    }
-
-    @Override
-    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
-        fit(outList);
-    }
 
     private void fit(List<List<Double>> outList) {
         INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)));

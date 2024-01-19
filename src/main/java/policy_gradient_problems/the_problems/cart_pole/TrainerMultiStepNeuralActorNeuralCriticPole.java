@@ -2,6 +2,7 @@ package policy_gradient_problems.the_problems.cart_pole;
 
 import common_dl4j.Dl4JUtil;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import java.util.List;
 import static common.Conditionals.executeIfTrue;
 
 @Log
+@Getter
 public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
     AgentNeuralActorNeuralCriticI<VariablesPole> agent;

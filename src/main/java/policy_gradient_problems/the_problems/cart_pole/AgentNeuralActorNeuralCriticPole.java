@@ -40,12 +40,6 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
         return actor.getOutValue(getState().asList());
     }
 
-    @Override
-    @SneakyThrows
-    public void fitActorOld(List<Double> in, List<Double> out) {
-        //actor.fit(in,out);
-        throw new NoSuchMethodException();
-    }
 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
