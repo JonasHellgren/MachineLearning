@@ -233,8 +233,10 @@ fitActorOld veck  x
 Neural ac pole i runner  x
 uppdatera md fil one step ac  x
 
-påbörja cart pole PPOPolicy
+påbörja CustomPPOLoss  x
 mer clean up
+
+TestCustomPPOLoss
 
 cart pole PPOPolicy
 

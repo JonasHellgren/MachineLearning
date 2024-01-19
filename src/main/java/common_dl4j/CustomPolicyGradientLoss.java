@@ -65,7 +65,7 @@ public class CustomPolicyGradientLoss implements ILossFunction {
     }
 
     /***
-     * The most critical method
+     * A critical method
      */
 
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
@@ -74,9 +74,13 @@ public class CustomPolicyGradientLoss implements ILossFunction {
         double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
         double entropy = EntropyCalculator.calcEntropy(estProbabilities);
         double K = 1; //getK(estProbabilities);
-        return  Nd4j.valueArrayOf(1,nofOut,ce - beta * K * entropy);
+        double cost = ce - beta * K * entropy;  //minimized, score=-cost (maximized)
+        return  Nd4j.valueArrayOf(1,nofOut, cost);
     }
 
+    /**
+     *  Called when fitting net
+     */
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
