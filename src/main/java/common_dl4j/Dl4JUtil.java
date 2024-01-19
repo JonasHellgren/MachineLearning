@@ -22,11 +22,10 @@ public class Dl4JUtil {
      *
      * @param listOfLists:  List of in data points.
      *          in.add(List.of(1,2); in.add(List.of(2,2);  <=> inouts of 1st and second point
-     * @param nofInputs  shall align with one sublist of the in argument - candidate to remove
      * @return in converted to INDArray
      */
 
-    public static INDArray convertListOfLists(List<List<Double>> listOfLists, int nofInputs) {
+    public static INDArray convertListOfLists(List<List<Double>> listOfLists) {
         int numRows = listOfLists.size();
 
         if (numRows == 0) {
@@ -35,9 +34,11 @@ public class Dl4JUtil {
         }
 
         int numColumns = listOfLists.get(0).size();
+/*
         if (numColumns != nofInputs) {
             throw new IllegalArgumentException("bad numColumns, numColumns = " + numColumns + ", nofInputs = " + nofInputs);
         }
+*/
 
         INDArray indArray = Nd4j.create(numRows, numColumns);
         for (int i = 0; i < numRows; i++) {
@@ -49,8 +50,8 @@ public class Dl4JUtil {
     }
 
 
-    public static INDArray convertListToOneRow(List<Double> in, int nofInputs) {  //todo fimpa nofInputs
-        return Nd4j.create(ListUtils.toArray(in), new int[]{1, nofInputs});
+    public static INDArray convertListToOneRow(List<Double> in) {  //todo fimpa nofInputs
+        return Nd4j.create(ListUtils.toArray(in), new int[]{1, in.size()});
     }
 
 

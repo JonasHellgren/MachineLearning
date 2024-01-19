@@ -21,7 +21,7 @@ public class NeuralActorMemorySC {
 
     MultiLayerNetwork net;
     NetSettings netSettings;
-    Dl4JBatchNetFitter netFitter;
+    Dl4JNetFitter netFitter;
 
     public static NeuralActorMemorySC newDefault() {
         return new NeuralActorMemorySC(getDefaultNetSettings());
@@ -31,12 +31,12 @@ public class NeuralActorMemorySC {
         this.netSettings=netSettings;
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
-        this.netFitter=new Dl4JBatchNetFitter(net,netSettings);
+        this.netFitter=new Dl4JNetFitter(net,netSettings);
     }
 
     public void fit(List<List<Double>> inList, List<List<Double>> outList) {
        INDArray in = transformDiscretePosState(inList);
-       INDArray out = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+       INDArray out = Dl4JUtil.convertListOfLists(outList);
         netFitter.fit(in,out);
     }
 

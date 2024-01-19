@@ -14,7 +14,7 @@ public class NeuralMemorySumUsingBatchFitter {
 
     final MultiLayerNetwork net;
     final Random randGen;
-    final Dl4JBatchNetFitter fitter;
+    final Dl4JNetFitter fitter;
     final NetSettings settings;
 
     public static NeuralMemorySumUsingBatchFitter newDefault() {
@@ -35,7 +35,7 @@ public class NeuralMemorySumUsingBatchFitter {
         this.net = MultiLayerNetworkCreator.create(settings);
         net.init();
         this.randGen= new Random(settings.seed());
-        this.fitter=new Dl4JBatchNetFitter(net,settings);
+        this.fitter=new Dl4JNetFitter(net,settings);
     }
 
 

@@ -1,6 +1,5 @@
 package policy_gradient_problems.the_problems.cart_pole;
 
-import common.ListUtils;
 import common_dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -8,15 +7,14 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
+
 import java.util.List;
-import java.util.Random;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 /**
  * The out value is probabilitiesm in [0,1], hence shall not be reverted in getOutValue
  * But normalization is needed in the fit method
- *
  */
 
 public class NeuralActorMemoryPole {
@@ -26,47 +24,26 @@ public class NeuralActorMemoryPole {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
-    Dl4JBatchNetFitter fitter;
+    Dl4JNetFitter fitter;
 
     public static NeuralActorMemoryPole newDefault(ParametersPole parametersPole) {
-        return new NeuralActorMemoryPole(getDefaultNetSettings(),parametersPole);
+        return new NeuralActorMemoryPole(getDefaultNetSettings(), parametersPole);
     }
 
     public NeuralActorMemoryPole(NetSettings netSettings, ParametersPole parametersPole) {
-        this.net= MultiLayerNetworkCreator.create(netSettings);
+        this.net = MultiLayerNetworkCreator.create(netSettings);
         this.normalizerIn = createNormalizerIn(parametersPole);
         this.normalizerOut = createNormalizerOut(parametersPole);
         net.init();
-        this.fitter=new Dl4JBatchNetFitter(net,netSettings);
+        this.fitter = new Dl4JNetFitter(net, netSettings);
     }
 
     public void fit(List<List<Double>> in, List<List<Double>> outList) {
-          INDArray inAsNormalized = getInAsNormalized(in.get(0));
-        INDArray outAsNormalized = getOutAsNormalized(outList.get(0));
-
-        inAsNormalized=inAsNormalized.reshape(1,4);
-        outAsNormalized=outAsNormalized.reshape(1,2);
-
-      //  INDArray inAsNormalized=Nd4j.create(new float[]{1,1,1,1},new int[]{1,4});
-      //  INDArray outAsNormalized=Nd4j.create(new float[]{1,1},new int[]{1,2});
-
-     //   net.fit(inAsNormalized, outAsNormalized);
-     //   fitter.train(in,out,1);   //todo apply
-
-        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
-        //INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
-
-        //INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(outList), in.size(), NOF_OUTPUTS);
-              INDArray outPutNDArray = Dl4JUtil.convertListOfLists(outList, NOF_OUTPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in);
+        INDArray outPutNDArray = Dl4JUtil.convertListOfLists(outList);
         normalizerIn.transform(inputNDArray);
         normalizerOut.transform(outPutNDArray);
-
-        //  System.out.println("normalizerIn = " + normalizerIn);
-     //   System.out.println("normalizerOut = " + normalizerOut);
-
-        fitter.fit(inputNDArray,outPutNDArray);
-
-
+        fitter.fit(inputNDArray, outPutNDArray);
     }
 
     public List<Double> getOutValue(List<Double> in) {
@@ -80,13 +57,7 @@ public class NeuralActorMemoryPole {
     private INDArray getInAsNormalized(List<Double> in) {
         INDArray indArray = Nd4j.create(in);
         normalizerIn.transform(indArray);
-        indArray=indArray.reshape(1,NOF_INPUTS);
-        return indArray;
-    }
-
-    private INDArray getOutAsNormalized(List<Double> out) {
-        INDArray indArray = Nd4j.create(out);
-        normalizerOut.transform(indArray);
+        indArray = indArray.reshape(1, NOF_INPUTS);
         return indArray;
     }
 
@@ -96,20 +67,19 @@ public class NeuralActorMemoryPole {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-3).momentum(0.95).seed(1234)
                 .lossFunction(CustomPolicyGradientLossNew.newWithBeta(1e-1))
-                .sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)
-                //.relativeNofFitsPerBatch(1e-3)
+                .sizeBatch(8).isNofFitsAbsolute(true).absNoFit(3)
                 .build();
     }
 
 
     private static NormalizerMinMaxScaler createNormalizerIn(ParametersPole p) {
         List<Pair<Double, Double>> inMinMax = p.minMaxStatePairList();
-        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d,1d));  //0,1 gives worse performance
+        return Dl4JUtil.createNormalizer(inMinMax, Pair.create(-1d, 1d));  //0,1 gives worse performance
     }
 
     private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {
         var outMinMax = List.of(Pair.create(0d, 10d));
-        return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d,1d));
+        return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d, 1d));
     }
 
 }

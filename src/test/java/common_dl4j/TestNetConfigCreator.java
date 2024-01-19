@@ -27,7 +27,7 @@ public class TestNetConfigCreator {
 
     @Test
     public void whenCreated_thenCorrect() {
-        INDArray inputNDArray = Dl4JUtil.convertListToOneRow(List.of(1d,1d),2);
+        INDArray inputNDArray = Dl4JUtil.convertListToOneRow(List.of(1d,1d));
         var outValue = net.output(inputNDArray,false);
         Assertions.assertEquals(LEARNING_RATE,net.getLearningRate(0));
         Assertions.assertEquals(N_HIDDEN_LAYERS,net.getnLayers()-1-1);

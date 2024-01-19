@@ -23,7 +23,7 @@ public class NeuralCriticMemorySC {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerOut;
-    Dl4JBatchNetFitter fitter;
+    Dl4JNetFitter fitter;
 
     public static NeuralCriticMemorySC newDefault() {
         return new NeuralCriticMemorySC(getDefaultNetSettings());
@@ -33,7 +33,7 @@ public class NeuralCriticMemorySC {
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.normalizerOut = createNormalizerOut();
-        this.fitter = new Dl4JBatchNetFitter(net,netSettings);
+        this.fitter = new Dl4JNetFitter(net,netSettings);
     }
 
 
@@ -44,11 +44,7 @@ public class NeuralCriticMemorySC {
             inListHot.add(inHot);
         }
 
-        if (in.size()==1) {
-         //   return;
-        }
-
-        INDArray inputNDArray = Dl4JUtil.convertListOfLists(inListHot, NOF_INPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(inListHot);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), inListHot.size(), NOF_OUTPUTS);
         //INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);  //todo få detta funka
         normalizerOut.transform(outPutNDArray);

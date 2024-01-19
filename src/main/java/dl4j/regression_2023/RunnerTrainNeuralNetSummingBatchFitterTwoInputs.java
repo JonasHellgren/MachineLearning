@@ -22,7 +22,7 @@ import java.util.List;
 
 public class RunnerTrainNeuralNetSummingBatchFitterTwoInputs {
     static final double MIN_VALUE = 0, MAX_VALUE = 10d;
-    static final int N_SAMPLES = 50, NOF_EPOCHS = 100, NOF_INPUTS = 2, NOF_OUTPUTS = 1;
+    static final int N_SAMPLES = 50, NOF_EPOCHS = 100,  NOF_OUTPUTS = 1;
 
     static SumDataGenerator dataGenerator;
     static NeuralMemorySumUsingBatchFitter neuralMemory;
@@ -65,7 +65,7 @@ public class RunnerTrainNeuralNetSummingBatchFitterTwoInputs {
 
     private static List<Double> trainMemory(Pair<List<List<Double>> , List<Double>>  trainData) {
         List<Double> errors=new ArrayList<>();
-        INDArray inputNDArray = Dl4JUtil.convertListOfLists(trainData.getFirst(), NOF_INPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(trainData.getFirst());
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(trainData.getSecond()), N_SAMPLES,  NOF_OUTPUTS);
         normalizerIn.transform(inputNDArray);
         normalizerOut.transform(outPutNDArray);
@@ -81,7 +81,7 @@ public class RunnerTrainNeuralNetSummingBatchFitterTwoInputs {
     private static void evalMemory() {
         var trainData = dataGenerator.getTrainingData();
         for (List<Double> inData : trainData.getFirst()) {
-            INDArray inputNDArray = Dl4JUtil.convertListToOneRow(inData,NOF_INPUTS);
+            INDArray inputNDArray = Dl4JUtil.convertListToOneRow(inData);
             var outValue = getOutValue(inputNDArray);
             System.out.println("inData = " + inData + ", outValue = " + outValue+", error = "+Math.abs(outValue- ListUtils.sumList(inData)));
         }

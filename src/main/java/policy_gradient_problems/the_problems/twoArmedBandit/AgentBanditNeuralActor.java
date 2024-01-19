@@ -21,7 +21,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
 
     MultiLayerNetwork actor;
     NetSettings netSettings;
-    Dl4JBatchNetFitter netFitter;
+    Dl4JNetFitter netFitter;
 
     public static AgentBanditNeuralActor newDefault(double learningRate) {
         return new AgentBanditNeuralActor(learningRate);
@@ -31,7 +31,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
         super(DUMMY_STATE);
         this.actor =createNetwork(learningRate);
         this.netSettings=getNetSettings(learningRate);
-        this.netFitter=new Dl4JBatchNetFitter(actor,netSettings);
+        this.netFitter=new Dl4JNetFitter(actor,netSettings);
     }
 
     public List<Double> getActionProbabilities() {
@@ -64,8 +64,8 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     }
 
     private void fit(List<List<Double>> outList) {
-        INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)), numInput);
-        INDArray out=Dl4JUtil.convertListOfLists(outList, NOF_ACTIONS);
+        INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)));
+        INDArray out=Dl4JUtil.convertListOfLists(outList);
         netFitter.fit(dumIn,out);
     }
 

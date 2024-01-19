@@ -46,9 +46,9 @@ public class TestCustomPolicyGradientLoss {
     @Test
     public void whenCreated_thenCorrectGrad() {
         List<List<Double>> listOfListsZ = List.of(List.of(0d, 0d));
-        INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ, N_OUTPUT).castTo(DataType.FLOAT);
+        INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ).castTo(DataType.FLOAT);
         List<List<Double>> listOfListsOut = List.of(List.of(1d, 0d));
-        INDArray out = Dl4JUtil.convertListOfLists(listOfListsOut, N_OUTPUT).castTo(DataType.FLOAT);
+        INDArray out = Dl4JUtil.convertListOfLists(listOfListsOut).castTo(DataType.FLOAT);
 
         ILossFunction lossFunction = getLossFunction(net);
         IActivation af= Activation.SOFTMAX.getActivationFunction();
@@ -61,9 +61,9 @@ public class TestCustomPolicyGradientLoss {
     public void whenCreatedManyPoints_thenCorrectGradAnScoreArr() {
 
         List<List<Double>> listOfListsZ = List.of(List.of(0d, 0d),List.of(0d, 0d));
-        INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ, N_OUTPUT).castTo(DataType.FLOAT);
+        INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ).castTo(DataType.FLOAT);
         List<List<Double>> listOfListsOut = List.of(List.of(1d, 0d),List.of(0d, 0.0d));
-        INDArray out = Dl4JUtil.convertListOfLists(listOfListsOut, N_OUTPUT).castTo(DataType.FLOAT);
+        INDArray out = Dl4JUtil.convertListOfLists(listOfListsOut).castTo(DataType.FLOAT);
 
         ILossFunction lossFunction = getLossFunction(net);
         IActivation af= Activation.SOFTMAX.getActivationFunction();
@@ -112,7 +112,7 @@ public class TestCustomPolicyGradientLoss {
     private static INDArray getOutWithGtAtIndexNew(double gt, int l) {
         int nofActions = EnvironmentBandit.NOF_ACTIONS;
         List<Double> oneHot=Dl4JUtil.createListWithOneHotWithValue(nofActions,l,gt);
-        return Dl4JUtil.convertListOfLists(List.of(oneHot), nofActions).castTo(DataType.FLOAT);
+        return Dl4JUtil.convertListOfLists(List.of(oneHot)).castTo(DataType.FLOAT);
     }
 
     private static double getP(INDArray probsAfter, int action) {

@@ -219,9 +219,10 @@ Dl4JUtil - convertListOfLists snyggare och snabbare - prealloc INDArray  x
 Dl4JUtil putRow  x
 Dl4JBatchNetFitter på NeuralActorMemoryPole - stabil  x
 
-behövs Dl4JNetFitter ?
-fitActor med nofFits
-TestTrainerNeuralActorNeuralCriticPole
+fimpa convertListOfLists nofinp  x
+behövs Dl4JNetFitter ?  x
+fitActor med nofFits  x
+TestTrainerNeuralActorNeuralCriticPole  x
 CustomPolicyGradientLossNew -> CustomPolicyGradientLoss - ta bort äldre ver
 samma med NumericalGradCalculatorNew
 NeuralActor<V>   List<List...>

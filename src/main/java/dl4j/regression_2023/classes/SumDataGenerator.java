@@ -33,7 +33,7 @@ public class SumDataGenerator {
 
     public   Pair<INDArray , INDArray> getTrainingDataIndArray() {
         Pair<List<List<Double>> , List<Double>> data0= getTrainingData();
-        INDArray in= Dl4JUtil.convertListOfLists(data0.getFirst(), NOF_INPUTS);
+        INDArray in= Dl4JUtil.convertListOfLists(data0.getFirst());
         INDArray out= Dl4JUtil.convertListToOneColumn(data0.getSecond());
         return Pair.create(in,out);
     }

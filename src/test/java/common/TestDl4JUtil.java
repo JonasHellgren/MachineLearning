@@ -20,7 +20,7 @@ public class TestDl4JUtil {
         listOfList.add(List.of(1d, 2d, 3d));
         listOfList.add(List.of(10d, 20d, 30d));
 
-        INDArray indArray = Dl4JUtil.convertListOfLists(listOfList, 3);
+        INDArray indArray = Dl4JUtil.convertListOfLists(listOfList);
 
         Assertions.assertEquals(2, indArray.size(0));
         Assertions.assertEquals(3, indArray.size(1));
@@ -33,7 +33,7 @@ public class TestDl4JUtil {
     public void whenConvertList_thenCorrect() {
 
         List<Double> list = List.of(1d, 2d, 3d);
-        INDArray indArray = Dl4JUtil.convertListToOneRow(list, 3);
+        INDArray indArray = Dl4JUtil.convertListToOneRow(list);
         Assertions.assertEquals(3, indArray.size(1));
         Assertions.assertEquals(1d, indArray.getDouble(0, 0));  //row, col
         Assertions.assertEquals(2d, indArray.getDouble(0, 1));

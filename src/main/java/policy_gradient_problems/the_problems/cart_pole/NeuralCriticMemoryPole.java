@@ -19,7 +19,7 @@ public class NeuralCriticMemoryPole {
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
-    Dl4JBatchNetFitter fitter;
+    Dl4JNetFitter fitter;
 
     public static NeuralCriticMemoryPole newDefault() {
         return new NeuralCriticMemoryPole(getDefaultNetSettings(),ParametersPole.newDefault());
@@ -40,11 +40,11 @@ public class NeuralCriticMemoryPole {
         net.init();
         this.normalizerIn = createNormalizerIn(parameters);
         this.normalizerOut = createNormalizerOut(parameters);
-        this.fitter=new Dl4JBatchNetFitter(net,netSettings);
+        this.fitter=new Dl4JNetFitter(net,netSettings);
     }
 
     public void fit(List<List<Double>> in, List<Double> out) {
-        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in, NOF_INPUTS);
+        INDArray inputNDArray = Dl4JUtil.convertListOfLists(in);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), in.size(), NOF_OUTPUTS);
         //      INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);
         normalizerIn.transform(inputNDArray);
@@ -60,12 +60,12 @@ public class NeuralCriticMemoryPole {
     }
 
     public Double getOutValue(List<Double> inData) {
-        var inData1 = Dl4JUtil.convertListToOneRow(inData, NOF_INPUTS);
+        var inData1 = Dl4JUtil.convertListToOneRow(inData);
         return getOutValue(inData1);
     }
 
     public Double getOutValue(StateI<VariablesPole> state) {
-        var inData1 = Dl4JUtil.convertListToOneRow(state.asList(), NOF_INPUTS);
+        var inData1 = Dl4JUtil.convertListToOneRow(state.asList());
         return getOutValue(inData1);
     }
 
