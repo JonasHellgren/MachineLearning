@@ -1,6 +1,5 @@
 package dl4j.regression_2023;
 
-import common.Conditionals;
 import common.CpuTimer;
 import common.ListUtils;
 import common_dl4j.Dl4JUtil;
@@ -82,7 +81,7 @@ public class RunnerTrainNeuralNetSummingBatchFitterTwoInputs {
     private static void evalMemory() {
         var trainData = dataGenerator.getTrainingData();
         for (List<Double> inData : trainData.getFirst()) {
-            INDArray inputNDArray = Dl4JUtil.convertList(inData,NOF_INPUTS);
+            INDArray inputNDArray = Dl4JUtil.convertListToOneRow(inData,NOF_INPUTS);
             var outValue = getOutValue(inputNDArray);
             System.out.println("inData = " + inData + ", outValue = " + outValue+", error = "+Math.abs(outValue- ListUtils.sumList(inData)));
         }

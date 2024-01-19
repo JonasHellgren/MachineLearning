@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
-import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public class SumDataGenerator {
     public   Pair<INDArray , INDArray> getTrainingDataIndArray() {
         Pair<List<List<Double>> , List<Double>> data0= getTrainingData();
         INDArray in= Dl4JUtil.convertListOfLists(data0.getFirst(), NOF_INPUTS);
-        INDArray out= Dl4JUtil.convertList2(data0.getSecond());
+        INDArray out= Dl4JUtil.convertListToOneColumn(data0.getSecond());
         return Pair.create(in,out);
     }
 

@@ -60,12 +60,12 @@ public class NeuralCriticMemoryPole {
     }
 
     public Double getOutValue(List<Double> inData) {
-        var inData1 = Dl4JUtil.convertList(inData, NOF_INPUTS);
+        var inData1 = Dl4JUtil.convertListToOneRow(inData, NOF_INPUTS);
         return getOutValue(inData1);
     }
 
     public Double getOutValue(StateI<VariablesPole> state) {
-        var inData1 = Dl4JUtil.convertList(state.asList(), NOF_INPUTS);
+        var inData1 = Dl4JUtil.convertListToOneRow(state.asList(), NOF_INPUTS);
         return getOutValue(inData1);
     }
 

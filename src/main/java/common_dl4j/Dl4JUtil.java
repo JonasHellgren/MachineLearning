@@ -1,6 +1,7 @@
 package common_dl4j;
 
 import common.ListUtils;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+@Log
 public class Dl4JUtil {
 
     /***
@@ -20,7 +22,7 @@ public class Dl4JUtil {
      *
      * @param listOfLists:  List of in data points.
      *          in.add(List.of(1,2); in.add(List.of(2,2);  <=> inouts of 1st and second point
-     * @param nofInputs  shall align with one sublist of the in argument
+     * @param nofInputs  shall align with one sublist of the in argument - candidate to remove
      * @return in converted to INDArray
      */
 
@@ -28,7 +30,8 @@ public class Dl4JUtil {
         int numRows = listOfLists.size();
 
         if (numRows==0) {
-            throw new IllegalArgumentException("Empty list");
+            log.severe("Empty list");
+            return Nd4j.create(0,0);
         }
 
         int numColumns = listOfLists.get(0).size();
@@ -36,22 +39,22 @@ public class Dl4JUtil {
             throw new IllegalArgumentException("bad numColumns, numColumns = "+numColumns+", nofInputs = "+nofInputs);
         }
 
-        double[] flatArray = new double[numRows * numColumns];
+        INDArray indArray=Nd4j.create(numRows, numColumns);
         for (int i = 0; i < numRows; i++) {
-            List<Double> row = listOfLists.get(i);
             for (int j = 0; j < numColumns; j++) {
-                flatArray[i * numColumns + j] = row.get(j);
+                indArray.putScalar(i,j,listOfLists.get(i).get(j));
             }
         }
-        return Nd4j.create(flatArray, new int[]{numRows, numColumns});
+        return indArray;
     }
 
-    public static INDArray convertList(List<Double> in, int nofInputs) {  //todo fimpa nofInputs
+
+    public static INDArray convertListToOneRow(List<Double> in, int nofInputs) {  //todo fimpa nofInputs
         return Nd4j.create(ListUtils.toArray(in),new int[]{1, nofInputs});
     }
 
 
-    public static INDArray convertList2(List<Double> in) {
+    public static INDArray convertListToOneColumn(List<Double> in) {
         return Nd4j.create(ListUtils.toArray(in),new int[]{in.size(),1});
     }
 

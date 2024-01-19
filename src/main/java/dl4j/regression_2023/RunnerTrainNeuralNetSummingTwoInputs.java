@@ -71,7 +71,7 @@ public class RunnerTrainNeuralNetSummingTwoInputs {
     private static void evalMemory() {
         var trainData = dataGenerator.getTrainingData();
         for (List<Double> inData : trainData.getFirst()) {
-            INDArray inputNDArray = Dl4JUtil.convertList(inData,NOF_INPUTS);
+            INDArray inputNDArray = Dl4JUtil.convertListToOneRow(inData,NOF_INPUTS);
             var outValue = neuralMemory.getOutValue(inputNDArray);
             System.out.println("inData = " + inData + ", outValue = " + outValue+", error = "+Math.abs(outValue- ListUtils.sumList(inData)));
         }

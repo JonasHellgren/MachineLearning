@@ -3,12 +3,7 @@ package dl4j.regression_2023;
 import common_dl4j.Dl4JNetFitter;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
@@ -73,7 +68,7 @@ public class NeuralMemorySum {
     }
 
     public Double getOutValue(List<Double> inData) {
-        return getOutValue(Dl4JUtil.convertList(inData, NOF_INPUTS));
+        return getOutValue(Dl4JUtil.convertListToOneRow(inData, NOF_INPUTS));
     }
 
     public double getError() {

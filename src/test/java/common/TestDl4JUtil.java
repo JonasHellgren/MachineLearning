@@ -33,7 +33,7 @@ public class TestDl4JUtil {
     public void whenConvertList_thenCorrect() {
 
         List<Double> list = List.of(1d, 2d, 3d);
-        INDArray indArray = Dl4JUtil.convertList(list, 3);
+        INDArray indArray = Dl4JUtil.convertListToOneRow(list, 3);
         Assertions.assertEquals(3, indArray.size(1));
         Assertions.assertEquals(1d, indArray.getDouble(0, 0));  //row, col
         Assertions.assertEquals(2d, indArray.getDouble(0, 1));
