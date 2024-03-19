@@ -34,7 +34,8 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
             double adv = Gt - v;
             oneHotList.add(helper.createOneHot(experience, adv));
         }
-        agent.fitCritic(inList, outList);  //todo
+
+        agent.fitCritic(inList, outList);
         agent.fitActor(inList, oneHotList);
     }
 

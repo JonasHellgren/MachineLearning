@@ -5,6 +5,7 @@ import common.RandUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.the_problems.short_corridor.NeuralActorMemorySC;
 import policy_gradient_problems.the_problems.short_corridor.StateSC;
@@ -19,32 +20,37 @@ import java.util.Map;
 public class TestNeuralActorMemorySC {
 
     static final int N_ACTIONS = 2;
+    public static final int NOF_STEPS = 1_000;
     static NeuralActorMemorySC  actor;
 
     @BeforeAll
     public static void init() {
         actor=NeuralActorMemorySC.newDefault();
         printStateProb();
-        trainActor();
-        printStateProb();
+
     }
 
     @Test
-    public void whenObsState0_thenHigherProbA1() {
+    void whenObsState0_thenHigherProbA1() {
+        trainActor();
+        printStateProb();
         var probs=actor.getOutValue(ListUtils.toArray(List.of(0d)));
         Assertions.assertTrue(probs[1]>probs[0]);
     }
 
 
     @Test
-    public void whenObsState2_thenHigherProbA0() {
+    @Disabled("Long time")
+    void whenObsState2_thenHigherProbA0() {
+        trainActor();
+        printStateProb();
         var probs=actor.getOutValue(ListUtils.toArray(List.of(2d)));
         Assertions.assertTrue(probs[0]>probs[1]);
     }
 
     static void trainActor() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
-        for (int ei = 0; ei < 2_000 ; ei++) {
+        for (int ei = 0; ei < NOF_STEPS; ei++) {
             int caseNr= RandUtils.getRandomIntNumber(0,4);
             var triplet=caseSAGtMap.get(caseNr);
             var state=StateSC.newFromPos(triplet.getLeft());

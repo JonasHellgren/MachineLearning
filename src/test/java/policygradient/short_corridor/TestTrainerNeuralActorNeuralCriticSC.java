@@ -31,7 +31,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
     }
 
     @Test
-    @Disabled("long time")
+    //@Disabled("long time")
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();

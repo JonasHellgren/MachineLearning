@@ -13,6 +13,7 @@ import java.util.List;
 public class RunnerShortCorridor {
 
     public static final int PLOTTED_ACTION = 0;
+    public static final int NOF_EPISODES = 500;
     static List<List<Double>> probA0S0Lists=new ArrayList<>();
     static List<String> probA0S0TitlesLists=new ArrayList<>();
     static List<List<Double>> probA0S1Lists=new ArrayList<>();
@@ -64,7 +65,8 @@ public class RunnerShortCorridor {
     private static TrainerParamActorSC createTrainerParam(AgentParamActorSC agent) {
         return TrainerParamActorSC.builder()
                 .environment(EnvironmentSC.create()).agent(agent)
-                .parameters(getTrainerParameters())
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(NOF_EPISODES).gamma(0.5).build())
                 .build();
     }
 
@@ -72,14 +74,17 @@ public class RunnerShortCorridor {
         return TrainerNeuralActorNeuralCriticSC.builder()
                 .environment(EnvironmentSC.create())
                 .agent(agent)
-                .parameters(getTrainerParameters())
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(NOF_EPISODES).gamma(0.5)
+                        .nofStepsMax(5).build())
                 .build();
     }
 
     private static TrainerParameters getTrainerParameters() {
         return TrainerParameters.builder()
-                .nofEpisodes(2000).nofStepsMax(100)
-                .gamma(0.9)  //.relativeNofFitsPerBatch(1.0)
+                //.nofEpisodes(500).nofStepsMax(100)
+               // .gamma(0.9)  //.relativeNofFitsPerBatch(1.0)
+                .nofEpisodes(100).gamma(0.1).learningRateCritic(1e-4).learningRateActor(1e-4)
                 .build();
     }
 
