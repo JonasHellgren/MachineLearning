@@ -8,9 +8,9 @@ import policy_gradient_problems.the_problems.short_corridor.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTrainerVanillaSC {
+public class TestTrainerParamActorSC {
 
-    TrainerVanillaSC trainer;
+    TrainerParamActorSC trainer;
     AgentParamActorSC agent;
 
     @BeforeEach
@@ -21,7 +21,7 @@ public class TestTrainerVanillaSC {
     }
 
     private void createTrainer(EnvironmentSC environment) {
-        trainer = TrainerVanillaSC.builder()
+        trainer = TrainerParamActorSC.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

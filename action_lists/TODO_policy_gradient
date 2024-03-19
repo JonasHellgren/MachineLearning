@@ -233,6 +233,16 @@ fitActorOld veck  x
 Neural ac pole i runner  x
 uppdatera md fil one step ac  x
 
+ta bort TrainerI
+MultiStepResults som record och egen klass
+behövs alla trainers?
+common_generic + common_value_classes -> value_classes
+MultistepNeuralCriticUpdater är svår förstå
+RunnerShortCorridor fuckar för neural
+VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters
+döpa om TrainerVanillaPole till mfl TrainerParameterActorPole
+
+Pseudocode PPO
 påbörja CustomPPOLoss  x
 mer clean up
 

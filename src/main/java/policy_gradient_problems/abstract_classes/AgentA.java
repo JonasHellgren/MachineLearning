@@ -15,7 +15,7 @@ import static policy_gradient_problems.common_helpers.BucketLimitsHandler.getLim
 import static policy_gradient_problems.common_helpers.BucketLimitsHandler.throwIfBadLimits;
 
 /**
- * Generic abstract agent, handles ant state with variables V
+ * Generic abstract agent, handles a state with variables V
  * All agents contains state
  */
 
@@ -26,7 +26,7 @@ public abstract class AgentA<V> implements AgentI<V> {
 
     StateI<V> state;
 
-    abstract public  List<Double> getActionProbabilities();
+    public abstract List<Double> getActionProbabilities();
 
     @SneakyThrows
     @Override

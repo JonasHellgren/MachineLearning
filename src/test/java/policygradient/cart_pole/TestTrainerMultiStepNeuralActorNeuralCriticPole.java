@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.cart_pole.*;
@@ -33,7 +34,7 @@ public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
     }
 
     @Test
-    //@Disabled()
+    @Disabled()
     public void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();

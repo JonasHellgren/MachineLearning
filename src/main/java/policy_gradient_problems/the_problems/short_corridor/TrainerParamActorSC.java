@@ -8,14 +8,14 @@ import policy_gradient_problems.common_value_classes.TrainerParameters;
 
 
 @Log
-public final class TrainerVanillaSC extends TrainerAbstractSC {
+public final class TrainerParamActorSC extends TrainerAbstractSC {
 
     AgentParamActorSC agent;
 
     @Builder
-    public TrainerVanillaSC(@NonNull EnvironmentSC environment,
-                            @NonNull AgentParamActorSC agent,
-                            @NonNull TrainerParameters parameters) {
+    public TrainerParamActorSC(@NonNull EnvironmentSC environment,
+                               @NonNull AgentParamActorSC agent,
+                               @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
     }

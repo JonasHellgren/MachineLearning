@@ -18,14 +18,14 @@ public record Experience<V>(
         boolean isTerminal,
         double value) {
 
-    public static final double VALUE = 0d;
+    public static final double DEFAULT_VALUE = 0d;
 
     public static <V> Experience<V> of(StateI<V> state,
                                        Action action,
                                        double reward,
                                        StateI<V> stateNext
     ) {
-        return new Experience<>(state, action, reward, stateNext, false, false, VALUE);
+        return new Experience<>(state, action, reward, stateNext, false, false, DEFAULT_VALUE);
     }
 
 
@@ -35,7 +35,7 @@ public record Experience<V>(
                                                StateI<V> stateNext,
                                                boolean isFail
     ) {
-        return new Experience<>(state, action, reward, stateNext, isFail, false, VALUE);
+        return new Experience<>(state, action, reward, stateNext, isFail, false, DEFAULT_VALUE);
     }
 
     public static <V> Experience<V> ofWithIsTerminal(StateI<V> state,
@@ -44,7 +44,7 @@ public record Experience<V>(
                                                  StateI<V> stateNext,
                                                  boolean isTerminal
     ) {
-        return new Experience<>(state, action, reward, stateNext, false, isTerminal, VALUE);
+        return new Experience<>(state, action, reward, stateNext, false, isTerminal, DEFAULT_VALUE);
     }
 
     public Experience<V> copyWithValue(double value) {

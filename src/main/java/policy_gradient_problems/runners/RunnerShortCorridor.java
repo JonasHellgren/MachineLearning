@@ -1,5 +1,6 @@
 package policy_gradient_problems.runners;
 
+import lombok.extern.java.Log;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.markers.SeriesMarkers;
@@ -8,6 +9,7 @@ import policy_gradient_problems.the_problems.short_corridor.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
 public class RunnerShortCorridor {
 
     public static final int PLOTTED_ACTION = 0;
@@ -20,12 +22,14 @@ public class RunnerShortCorridor {
 
     public static void main(String[] args) {
 
-        var trainer = createTrainerVanilla(AgentParamActorSC.newRandomStartStateDefaultThetas());
+        var trainer = createTrainerParam(AgentParamActorSC.newRandomStartStateDefaultThetas());
         trainer.train();
-        addDataToPlotLists(trainer, "Vanilla");
+        log.info("Parameter trained");
+        addDataToPlotLists(trainer, "Param");
 
         var trainerActorCritic = createTrainerNeuralAC(AgentNeuralActorNeuralCriticSC.newDefault());
         trainerActorCritic.train();
+        log.info("Neural AC trained");
         addDataToPlotLists(trainerActorCritic, "NeuralAC");
 
         doPlotting();
@@ -57,8 +61,8 @@ public class RunnerShortCorridor {
         new SwingWrapper<>(chart).displayChart();
     }
 
-    private static TrainerVanillaSC createTrainerVanilla(AgentParamActorSC agent) {
-        return TrainerVanillaSC.builder()
+    private static TrainerParamActorSC createTrainerParam(AgentParamActorSC agent) {
+        return TrainerParamActorSC.builder()
                 .environment(EnvironmentSC.create()).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();

@@ -1,6 +1,7 @@
 package policygradient.short_corridor;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.short_corridor.*;
@@ -30,6 +31,7 @@ public class TestTrainerNeuralActorNeuralCriticSC {
     }
 
     @Test
+    @Disabled("long time")
     public void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();

@@ -51,21 +51,19 @@ public class MultistepNeuralCriticUpdater<V> {
     //todo split method below
 
     public MultiStepResults updateCritic(List<Experience<V>> experiences) {
-        MultiStepResults results = getMultiStepResults(experiences);
-        int nofFits = results.nofSteps; //parameters.nofFits(results.nofSteps); todo remove
+        var results = getMultiStepResults(experiences);
         executeIfTrue(!results.stateValuesList.isEmpty(), () ->
-                fitCritic.accept(Triple.of(results.stateValuesList, results.valueTarList, nofFits)));
+                fitCritic.accept(Triple.of(results.stateValuesList, results.valueTarList, results.nofSteps)));
         executeIfTrue(results.stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
-
         return results;
     }
 
     private  MultiStepResults getMultiStepResults(List<Experience<V>> experiences) {
         Integer n = parameters.stepHorizon();
-        int T = experiences.size();
+        int nofExperiences = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
         var elInfo = new NStepReturnInfo<>(experiences, parameters);
-        int tEnd = elInfo.isEndExperienceFail() ? T : T - n + 1;  //explained in top of file
+        int tEnd = elInfo.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;  //explained in top of file
 
         List<List<Double>> stateValuesList = new ArrayList<>();
         List<Double> valueTarList = new ArrayList<>();

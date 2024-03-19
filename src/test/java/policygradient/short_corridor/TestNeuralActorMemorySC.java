@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Probabilites converges badly for negative Gt, tries to change more despite prob already is 0 or 1.
+ * Probabilities converges badly for negative Gt, tries to change more despite prob already is 0 or 1.
  */
 
 public class TestNeuralActorMemorySC {
@@ -44,7 +44,7 @@ public class TestNeuralActorMemorySC {
 
     static void trainActor() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
-        for (int ei = 0; ei < 1_000 ; ei++) {
+        for (int ei = 0; ei < 2_000 ; ei++) {
             int caseNr= RandUtils.getRandomIntNumber(0,4);
             var triplet=caseSAGtMap.get(caseNr);
             var state=StateSC.newFromPos(triplet.getLeft());

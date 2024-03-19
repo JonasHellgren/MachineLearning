@@ -1,5 +1,6 @@
 package policy_gradient_problems.runners;
 
+import lombok.extern.java.Log;
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
@@ -8,18 +9,18 @@ import policy_gradient_problems.the_problems.sink_the_ship.TrainerActorCriticShi
 
 import java.util.List;
 
+@Log
 public class RunnerTrainerActorCriticShip {
 
     public static final int NOF_EPISODES = 5_000, NOF_STEPS_MAX = 100;
     public static final double LEARNING_RATE = 1e-3, GAMMA = 1.0, BETA = 1e-2;
 
     public static void main(String[] args) {
-
         var trainerActorCritic = createTrainerActorCritic(
-                new EnvironmentShip(),
-                AgentShip.newRandomStartStateDefaultThetas());
+                new EnvironmentShip(),AgentShip.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
         plotActionProbabilitiesDuringTraining(trainerActorCritic);
+        log.info("Training finished");
     }
 
 

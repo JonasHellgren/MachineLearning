@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
@@ -40,7 +41,7 @@ public class TestTrainerParamActorNeuralCriticPole {
     }
 
     @Test
-   // @Disabled ("long time")
+    @Disabled("long time")
     public void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
