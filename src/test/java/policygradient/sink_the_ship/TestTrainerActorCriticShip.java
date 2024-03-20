@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d)
-                        .learningRateActor(1e-3)
+                        .learningRateNonNeuralActor(1e-3)
                         .build())
                 .build();
     }

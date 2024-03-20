@@ -103,7 +103,7 @@ correct AC x
 
 uppdatera pseudocode AC  x
 pseudocode andra  x
-beta -> learningRateCritic, learningRateActor -> learningRateActor  x
+beta -> learningRateCritic, learningRateNonNeuralActor -> learningRateNonNeuralActor  x
 ParametersPole clean with builder consttuccotr  x
 trainer AC konvergerar ej bra x
 
@@ -238,8 +238,8 @@ ta bort TrainerI  x
 MultiStepResults som record och egen klass x
 package struktur  - domain helpers runners  x
 läsa testkod  x
-TrainerParameters learningRate påv ej - ev ta bort
-common_generic + common_value_classes -> value_classes
+TrainerParameters learningRate påv ej - ev ta bort  x
+common_generic + common_value_classes -> value_classes  x
 MultistepNeuralCriticUpdater är svår förstå
 Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //todo MultiStepResults
 VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters

@@ -13,9 +13,11 @@ import java.util.List;
 
 public class RunnerTrainersPole {
 
-    public static final int LENGTH_WINDOW = 10, NOF_STEPS_MAX = 300;
-    public static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
-            .nofEpisodes(100).nofStepsMax(NOF_STEPS_MAX).gamma(0.95).stepHorizon(10).build();
+    static final int LENGTH_WINDOW = 10;
+    static final int NOF_STEPS_MAX = 200;
+    static final int NOF_EPISODES = 100;
+     static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
+            .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).gamma(0.95).stepHorizon(10).build();
 
     public static void main(String[] args) {
         var agent = AgentParamActorPole.newAllZeroStateDefaultThetas();

@@ -36,7 +36,7 @@ public class RunnerTwoArmedBandit {
     private static TrainerBanditNeuralActor createTrainerNeural() {
         return TrainerBanditNeuralActor.builder()
                 .environment(getEnvironment())
-                .agent(AgentBanditNeuralActor.newDefault(getTrainerParametersNeural().learningRateActor()))
+                .agent(AgentBanditNeuralActor.newDefault(getTrainerParametersNeural().learningRateNonNeuralActor()))
                 .parameters(getTrainerParametersNeural())
                 .build();
     }
@@ -47,12 +47,12 @@ public class RunnerTwoArmedBandit {
 
     private static TrainerParameters getTrainerParametersParam() {
         return TrainerParameters.builder()
-                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-1).build();
+                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateNonNeuralActor(1e-1).build();
     }
 
     private static TrainerParameters getTrainerParametersNeural() {
         return TrainerParameters.builder()
-                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).learningRateActor(1e-1).build();
+                .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).build();
     }
 
 }

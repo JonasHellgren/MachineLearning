@@ -39,7 +39,7 @@ Parameters for a simulation is given below.
 | nofEpisodes  | 2000  |                                          |
 | nofStepsMax  | 100   | Max nof steps in an episode              |
 | gamma | 1.0   |                                          |
-| learningRateActor      | 1e-3  | Unstable learning for large(r) values    |
+| learningRateNonNeuralActor      | 1e-3  | Unstable learning for large(r) values    |
 | MAX_GRAD_ELEMENT | 1.0   | Max value of any item in grad log vector |
 
 One reflections from the results plots is that angles converges to expected values. The standard deviation, for both states, reaches there lower allowed limits.

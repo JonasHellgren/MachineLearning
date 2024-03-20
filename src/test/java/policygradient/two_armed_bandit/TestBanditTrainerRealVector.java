@@ -25,7 +25,7 @@ import policy_gradient_problems.environments.twoArmedBandit.TrainerBanditParamAc
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRateActor(0.2).build())
+                        .nofEpisodes(1000).nofStepsMax(1).gamma(1d).learningRateNonNeuralActor(0.2).build())
                 .build();
     }
 

@@ -11,6 +11,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 public final class TrainerBanditNeuralActor extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
+    public static final double LEARNING_RATE = 0.01;
     AgentBanditNeuralActor agent;
 
     @Builder
@@ -19,7 +20,7 @@ public final class TrainerBanditNeuralActor extends TrainerAbstractBandit {
                                     TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
-        this.agent = new AgentBanditNeuralActor(parameters.learningRateActor());
+        this.agent = new AgentBanditNeuralActor(LEARNING_RATE);
     }
 
     @Override

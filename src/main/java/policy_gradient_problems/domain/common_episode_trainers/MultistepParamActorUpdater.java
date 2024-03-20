@@ -35,7 +35,7 @@ public class MultistepParamActorUpdater<V> {
             var expAtTau = nri.getExperience(tau);
             double advantage = ac.calcAdvantage(expAtTau);
             var gradLogVector = calcGradLogVector.apply(expAtTau.state(), expAtTau.action());
-            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * advantage);
+            var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateNonNeuralActor() * advantage);
             changeActor.accept(changeInThetaVector);
         }
     }

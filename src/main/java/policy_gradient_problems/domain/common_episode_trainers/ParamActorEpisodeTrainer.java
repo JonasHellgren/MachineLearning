@@ -21,7 +21,7 @@ public class ParamActorEpisodeTrainer<V> {
         for (Experience<V> experience : elwr) {
             var gradLogVector = agent.calcGradLogVector(experience.state(),experience.action());
             double vt = experience.value();
-            var changeParam = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * vt);
+            var changeParam = gradLogVector.mapMultiplyToSelf(parameters.learningRateNonNeuralActor() * vt);
             agent.changeActor(changeParam);
         }
     }

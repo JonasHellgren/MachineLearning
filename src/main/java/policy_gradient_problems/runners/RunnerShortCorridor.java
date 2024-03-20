@@ -80,13 +80,6 @@ public class RunnerShortCorridor {
                 .build();
     }
 
-    private static TrainerParameters getTrainerParameters() {
-        return TrainerParameters.builder()
-                //.nofEpisodes(500).nofStepsMax(100)
-               // .gamma(0.9)  //.relativeNofFitsPerBatch(1.0)
-                .nofEpisodes(100).gamma(0.1).learningRateActor(1e-4)
-                .build();
-    }
 
 
 }

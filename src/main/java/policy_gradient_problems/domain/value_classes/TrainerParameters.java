@@ -9,7 +9,7 @@ public record TrainerParameters(
         Integer nofEpisodes,
         Integer nofStepsMax,
         Double gamma,
-        Double learningRateActor,
+        Double learningRateNonNeuralActor,
         Integer stepHorizon) {
 
     static final int NOF_EPISODES = 2000;
@@ -27,21 +27,14 @@ public record TrainerParameters(
     public TrainerParameters(Integer nofEpisodes,
                              Integer nofStepsMax,
                              Double gamma,
-                             Double learningRateActor,
+                             Double learningRateNonNeuralActor,
                              Integer stepHorizon) {
         this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
         this.nofStepsMax = defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
         this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
-        this.learningRateActor = defaultIfNullDouble.apply(learningRateActor, LEARNING_RATE);
+        this.learningRateNonNeuralActor = defaultIfNullDouble.apply(learningRateNonNeuralActor, LEARNING_RATE);
         this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
-
-
     }
-
-
-
-
-
 
 
 }

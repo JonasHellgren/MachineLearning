@@ -47,7 +47,7 @@ public final class TrainerBaselinePole extends TrainerAbstractPole {
                 ArrayRealVector vector= getFeatureVector(experience, environment.getParameters());
                 valueFunction.update(vector,vt);
                 double delta=vt-valueFunction.getValue(vector);
-                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateActor() * delta);
+                var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateNonNeuralActor() * delta);
                 agent.changeActor(changeInThetaVector);
             }
             updateTracker(ei, experienceList);

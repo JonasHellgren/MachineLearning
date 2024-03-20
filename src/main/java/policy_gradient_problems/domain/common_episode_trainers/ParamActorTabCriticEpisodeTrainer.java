@@ -25,7 +25,7 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
             var gradLogVector = agent.calcGradLogVector(experience.state(), experience.action());
             double tdError = calcTdError(experience);
             int key = getTabularFunctionKey(experience.state());
-            double changeTd = parameters.learningRateActor() * tdError;
+            double changeTd = parameters.learningRateNonNeuralActor() * tdError;
             agent.changeCritic(key, changeTd);
             var change = gradLogVector.mapMultiplyToSelf(changeTd);
             agent.changeActor(change);

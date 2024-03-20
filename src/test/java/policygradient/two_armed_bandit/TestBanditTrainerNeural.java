@@ -22,7 +22,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
         trainer = TrainerBanditNeuralActor.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).learningRateActor(1e-1).build())
+                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).build())
                 .build();
     }
 
@@ -41,7 +41,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
         createTrainer(environment);
         trainer.train();
         printPolicy();
-        Assertions.assertEquals(0, agent.chooseAction().asInt());  //todo better use prob
+        Assertions.assertEquals(0, agent.chooseAction().asInt());  //can also use prob
     }
 
     private void printPolicy() {
