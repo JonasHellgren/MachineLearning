@@ -84,7 +84,7 @@ public class RunnerShortCorridor {
         return TrainerParameters.builder()
                 //.nofEpisodes(500).nofStepsMax(100)
                // .gamma(0.9)  //.relativeNofFitsPerBatch(1.0)
-                .nofEpisodes(100).gamma(0.1).learningRateCritic(1e-4).learningRateActor(1e-4)
+                .nofEpisodes(100).gamma(0.1).learningRateActor(1e-4)
                 .build();
     }
 

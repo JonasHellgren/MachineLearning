@@ -1,4 +1,4 @@
-package policygradient.common;
+package policygradient.helpers;
 
 import common.ArrayUtil;
 import common.RandUtils;

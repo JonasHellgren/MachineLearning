@@ -245,6 +245,7 @@ Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //todo Mul
 VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters
 döpa om TrainerVanillaPole till mfl TrainerParameterActorPole
 behövs alla trainers?
+fler tester helpers
 ref bilder i markdown
 
 Pseudocode PPO

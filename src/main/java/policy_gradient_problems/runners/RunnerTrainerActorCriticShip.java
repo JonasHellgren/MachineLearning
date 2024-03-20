@@ -12,8 +12,10 @@ import java.util.List;
 @Log
 public class RunnerTrainerActorCriticShip {
 
-    public static final int NOF_EPISODES = 5_000, NOF_STEPS_MAX = 100;
-    public static final double LEARNING_RATE = 1e-3, GAMMA = 1.0, BETA = 1e-2;
+    public static final int NOF_EPISODES = 5_000;
+    static final int NOF_STEPS_MAX = 100;
+    public static final double LEARNING_RATE = 1e-3;
+    static final double GAMMA = 1.0;
 
     public static void main(String[] args) {
         var trainerActorCritic = createTrainerActorCritic(
@@ -45,7 +47,6 @@ public class RunnerTrainerActorCriticShip {
         return TrainerParameters.builder()
                 .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX)
                 .gamma(GAMMA).learningRateActor(LEARNING_RATE)
-                .learningRateCritic(BETA)  //not used by Vanilla
                 .build();
     }
 

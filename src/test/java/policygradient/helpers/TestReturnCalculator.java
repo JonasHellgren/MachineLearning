@@ -1,4 +1,4 @@
-package policygradient.common;
+package policygradient.helpers;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
