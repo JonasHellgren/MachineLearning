@@ -12,24 +12,24 @@ import policy_gradient_problems.helpers.WeightsDotProductFeatureValueFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestWeightsDotProductFeatureValueFunction {
+ class TestWeightsDotProductFeatureValueFunction {
 
 
-    public static final double ALPHA = 0.1;
-    public static final int NOF_FEATURES = 1;
-    public static final int NOF_ITERATIONS = 1000;
-    public static final double TOL = 0.01;
+     static final double ALPHA = 0.1;
+     static final int NOF_FEATURES = 1;
+     static final int NOF_ITERATIONS = 1000;
+     static final double TOL = 0.01;
     WeightsDotProductFeatureValueFunction valueFunction;
 
     @BeforeEach
-    public void init() {
+     void init() {
         valueFunction =new WeightsDotProductFeatureValueFunction(NOF_FEATURES, ALPHA);
         trainValueFunction();
     }
 
     @ParameterizedTest
     @CsvSource({"0.1,1", "0.5,5", "1,10"})
-    public void whenUpdated_thenCorrect(ArgumentsAccessor arguments) {
+     void whenUpdated_thenCorrect(ArgumentsAccessor arguments) {
         double x = arguments.getDouble(0);
         double y = arguments.getDouble(1);
         assertEquals(y, valueFunction.getValue(getStateIn(x)), TOL);

@@ -52,7 +52,7 @@ public class TestNeuralActorMemorySC {
         for (int ei = 0; ei < NOF_STEPS; ei++) {
             int caseNr= RandUtils.getRandomIntNumber(0,4);
             var triplet=caseSAGtMap.get(caseNr);
-            var state=StateSC.newFromPos(triplet.getLeft());
+            var state=StateSC.newFromRealPos(triplet.getLeft());
             List<Double> in = state.asList();
             List<Double> onHotOut = createOut(triplet.getMiddle(), triplet.getRight());
             actor.fit(List.of(in), List.of(onHotOut));

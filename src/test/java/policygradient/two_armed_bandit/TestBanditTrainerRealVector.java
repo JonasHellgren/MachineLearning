@@ -8,13 +8,13 @@ import policy_gradient_problems.environments.twoArmedBandit.AgentBanditParamActo
 import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
 import policy_gradient_problems.environments.twoArmedBandit.TrainerBanditParamActor;
 
-public class TestBanditTrainerRealVector {
+ class TestBanditTrainerRealVector {
 
     TrainerBanditParamActor trainer;
     AgentBanditParamActor agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         agent = AgentBanditParamActor.newDefault();
         var environment= EnvironmentBandit.newWithProbabilities(0.5,1.0);
         createTrainer(environment);
@@ -30,14 +30,14 @@ public class TestBanditTrainerRealVector {
     }
 
     @Test
-    public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
+     void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
         Assertions.assertEquals(1, agent.chooseAction().asInt());
     }
 
     @Test
-    public void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
+     void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
         var environment= EnvironmentBandit.newWithProbabilities(0.5,0.1);
         createTrainer(environment);
         trainer.train();

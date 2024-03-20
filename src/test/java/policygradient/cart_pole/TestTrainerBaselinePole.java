@@ -13,14 +13,14 @@ import policy_gradient_problems.environments.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestTrainerBaselinePole {
+ class TestTrainerBaselinePole {
 
     TrainerBaselinePole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = EnvironmentPole.newDefault();
         agent = AgentParamActorPole.newRandomStartStateDefaultThetas(environment.getParameters());
         createTrainer(environment);
@@ -36,7 +36,7 @@ public class TestTrainerBaselinePole {
     }
 
     @Test
-    public void whenTrained_thenManySteps() {
+     void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
         System.out.println("nofSteps = " + nofSteps);
@@ -44,8 +44,8 @@ public class TestTrainerBaselinePole {
     }
 
     @Test
-    @Disabled
-    public void whenTrained_thenCorrectValueFunction() {
+    @Disabled("long time")
+     void whenTrained_thenCorrectValueFunction() {
         double valuea0x0=trainer.getValueFunction().getValue(getFeatureVector(0, 0));
         double valuea0d3x0=trainer.getValueFunction().getValue(getFeatureVector(0.3, 0));
         var wVector=trainer.getValueFunction().getWVector();

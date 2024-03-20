@@ -10,13 +10,13 @@ import policy_gradient_problems.environments.short_corridor.TrainerParamActorTab
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTrainerParamActorTabCriticSC {
+ class TestTrainerParamActorTabCriticSC {
 
     TrainerParamActorTabCriticSC trainer;
     static AgentParamActorTabCriticSC agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         agent = AgentParamActorTabCriticSC.newRandomStartStateDefaultThetas();
         var environment= new EnvironmentSC();
         createTrainer(environment);
@@ -34,7 +34,7 @@ public class TestTrainerParamActorTabCriticSC {
     }
 
     @Test
-    public void whenTrained_thenCorrectActionSelectionInEachState() {
+     void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
 
@@ -58,7 +58,7 @@ public class TestTrainerParamActorTabCriticSC {
 
 
     private void setRealPos(int pos) {
-        agent.setState(StateSC.newFromPos(pos));
+        agent.setState(StateSC.newFromRealPos(pos));
     }
 
 

@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.*;
 
-public class TestBanditTrainerNeural {
+ class TestBanditTrainerNeural {
 
     TrainerBanditNeuralActor trainer;
     AgentBanditNeuralActor agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         var environment= EnvironmentBandit.newWithProbabilities(0.0,1.0);
         createTrainer(environment);
         agent=trainer.getAgent();
@@ -28,7 +28,7 @@ public class TestBanditTrainerNeural {
 
     @Test
     //@Disabled("takes long time")
-    public void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
+     void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
         Assertions.assertEquals(1, agent.chooseAction().asInt());
@@ -36,7 +36,7 @@ public class TestBanditTrainerNeural {
 
     @Test
     //@Disabled("takes long time")
-    public void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
+     void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
         var environment= EnvironmentBandit.newWithProbabilities(1.0,0.0);
         createTrainer(environment);
         trainer.train();

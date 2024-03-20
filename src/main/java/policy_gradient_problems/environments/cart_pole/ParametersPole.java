@@ -1,6 +1,7 @@
 package policy_gradient_problems.environments.cart_pole;
 
 import lombok.Builder;
+import lombok.With;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public record ParametersPole(
         double g,
         double pi,
         double massCart,
-        double massPole,
+        @With double massPole,
         double massTotal,
         double length,
         double massPoleTimesLength,

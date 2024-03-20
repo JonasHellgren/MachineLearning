@@ -51,7 +51,7 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     public StepReturn<VariablesSC> step(StateI<VariablesSC> state, Action action) {
         int posRealNew = getRealPosNew(getPos(state), action.asInt());
         double reward = getReward(posRealNew);
-        return new StepReturn<>(StateSC.newFromPos(posRealNew), false, isTerminal(posRealNew), reward);
+        return new StepReturn<>(StateSC.newFromRealPos(posRealNew), false, isTerminal(posRealNew), reward);
     }
 
     public boolean isTerminalObserved(int stateObserved) {

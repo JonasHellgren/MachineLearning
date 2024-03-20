@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import static common.ListUtils.*;
 
-public class TestNStepReturnInfoPole {
+ class TestNStepReturnInfoPole {
 
-    public static final double REWARD = 1d;
+     static final double REWARD = 1d;
     NStepReturnInfo<VariablesPole> listInfoPole;
     TrainerParameters trainerParameters;
 
     @BeforeEach
-    public void init() {
+     void init() {
         trainerParameters=TrainerParameters.builder().gamma(0.5).stepHorizon(5).build();
         List<Experience<VariablesPole>> experiencePoleList=new ArrayList<>();
         for (int x = 0; x < 10 ; x++) {
@@ -28,7 +28,7 @@ public class TestNStepReturnInfoPole {
 
 
     @Test
-    public void whenTStartIsZero_thenCorrect() {
+     void whenTStartIsZero_thenCorrect() {
         var result=listInfoPole.getResultManySteps(0);
         System.out.println("result = " + result);
 
@@ -39,7 +39,7 @@ public class TestNStepReturnInfoPole {
     }
 
     @Test
-    public void whenTStartIsFive_thenCorrect() {
+     void whenTStartIsFive_thenCorrect() {
         var result=listInfoPole.getResultManySteps(5);
         System.out.println("result = " + result);
 
@@ -50,7 +50,7 @@ public class TestNStepReturnInfoPole {
     }
 
     @Test
-    public void whenTStartIsSix_thenCorrect() {
+     void whenTStartIsSix_thenCorrect() {
         var result=listInfoPole.getResultManySteps(6);
         System.out.println("result = " + result);
 
@@ -60,7 +60,7 @@ public class TestNStepReturnInfoPole {
     }
 
     @Test
-    public void whenTStartIs15_thenCorrect() {
+     void whenTStartIs15_thenCorrect() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> listInfoPole.getResultManySteps(15));
     }
 

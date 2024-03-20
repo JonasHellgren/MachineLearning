@@ -6,44 +6,36 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 
 import java.util.Optional;
 
-public class TestAction {
+class TestAction {
 
     @Test
-    public void whenActionBothInAndDouble_thenThrows() {
+    void whenActionBothInAndDouble_thenThrows() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> {
-                    Action action = new Action(Optional.of(1), Optional.of(1d));
-                });
+                () -> new Action(Optional.of(1), Optional.of(1d)));
     }
 
     @Test
-    public void whenIntAction_thenCorrect() {
+    void whenIntAction_thenCorrect() {
         Action action = Action.ofInteger(1);
         Assertions.assertEquals(1, action.asInt());
     }
 
     @Test
-    public void whenDoubleAction_thenCorrect() {
+     void whenDoubleAction_thenCorrect() {
         Action action = Action.ofDouble(1d);
         Assertions.assertEquals(1d, action.asDouble());
     }
 
     @Test
-    public void whenIntAction_thenThrowsIfAsDouble() {
+     void whenIntAction_thenThrowsIfAsDouble() {
         Action action = Action.ofInteger(1);
-        Assertions.assertThrows(RuntimeException.class,
-                () -> {
-                    var val = action.asDouble();
-                });
+        Assertions.assertThrows(RuntimeException.class, () -> action.asDouble());
     }
 
     @Test
-    public void whenDoubleAction_thenThrowsIfAsInt() {
+     void whenDoubleAction_thenThrowsIfAsInt() {
         Action action = Action.ofDouble(1d);
-        Assertions.assertThrows(RuntimeException.class,
-                () -> {
-                    var val = action.asInt();
-                });
+        Assertions.assertThrows(RuntimeException.class, () -> action.asInt());
     }
 
 }

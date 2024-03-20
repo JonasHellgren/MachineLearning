@@ -17,17 +17,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestAgentShip {
+ class TestAgentShip {
 
-    public static final int PROB_DIRECT_TO_TERMINAL = 0;
-    public static final double DELTA = 0.1;
-    public static final double MEAN_S0 = 0.3, MEAN_S1 = 0.5, THETA_STD0 = -2,THETA_STD1 = 0;
-    public static final int NOF_SAMPLES = 1000;
+     static final int PROB_DIRECT_TO_TERMINAL = 0;
+     static final double DELTA = 0.1;
+     static final double MEAN_S0 = 0.3, MEAN_S1 = 0.5, THETA_STD0 = -2,THETA_STD1 = 0;
+     static final int NOF_SAMPLES = 1000;
     EnvironmentShip environment;
     AgentShip agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = new EnvironmentShip();
         agent = AgentShip.newWithRandomStartStateAndGivenThetas(new double[]{MEAN_S0, THETA_STD0, MEAN_S1, THETA_STD1});
     }
@@ -36,7 +36,7 @@ public class TestAgentShip {
     @CsvSource({
             "0, 0.3,0.1", "1, 0.5,1.0"
     })
-    public void whenState_thenCorrectMeanAndStd(ArgumentsAccessor arguments) {
+     void whenState_thenCorrectMeanAndStd(ArgumentsAccessor arguments) {
         int s = arguments.getInteger(0);
         double mean = arguments.getDouble(1);
         double std = arguments.getDouble(2);
@@ -50,14 +50,14 @@ public class TestAgentShip {
     }
 
     @Test
-    public void givenState0_whenManySamples_thenCorrect() {
+     void givenState0_whenManySamples_thenCorrect() {
         DescriptiveStatistics ds = getDescriptiveStatisticsForPos(0);
         assertEquals(ds.getMean(), MEAN_S0, DELTA);
         assertEquals(ds.getStandardDeviation(), Math.exp(THETA_STD0), DELTA);
     }
 
     @Test
-    public void givenState1_whenManySamples_thenCorrect() {
+     void givenState1_whenManySamples_thenCorrect() {
         DescriptiveStatistics ds = getDescriptiveStatisticsForPos(1);
         assertEquals(ds.getMean(), MEAN_S1, DELTA);
         assertEquals(ds.getStandardDeviation(), Math.exp(THETA_STD1), DELTA);
@@ -70,7 +70,7 @@ public class TestAgentShip {
             "-0.1, -1,-1",
             "2, 1,1"
     })
-    public void givenState0_whenGradLogForActionMeanS1_thenCorrect(ArgumentsAccessor arguments) {
+     void givenState0_whenGradLogForActionMeanS1_thenCorrect(ArgumentsAccessor arguments) {
         int state = 0;
 
         double deltaAction = arguments.getDouble(0);

@@ -17,7 +17,7 @@ public class StateSC implements StateI<VariablesSC> {
     public static StateSC newDefault() {
         return new StateSC(VariablesSC.newDefault());
     }
-    public static StateSC newFromPos(int pos) {
+    public static StateSC newFromRealPos(int pos) {
         return new StateSC(new VariablesSC(pos));
     }
     public static StateSC randomNonTerminal() {
@@ -30,7 +30,7 @@ public class StateSC implements StateI<VariablesSC> {
 
     @Override
     public StateI<VariablesSC> copy() {
-        return StateSC.newFromPos(getPos());
+        return StateSC.newFromRealPos(getPos());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StateSC implements StateI<VariablesSC> {
 
     public StateSC asObserved() {
         int obsPos= EnvironmentSC.getObservedPos(this);
-        return newFromPos(obsPos);
+        return newFromRealPos(obsPos);
     }
 
 }

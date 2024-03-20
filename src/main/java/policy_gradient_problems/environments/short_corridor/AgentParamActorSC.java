@@ -26,7 +26,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     }
 
     public AgentParamActorSC(int posStart, double[] thetaArray) {
-        super(StateSC.newFromPos(posStart));
+        super(StateSC.newFromRealPos(posStart));
         this.actor = new ParamFunction(thetaArray);
         this.helper = new AgentParamActorSCHelper(actor);
     }

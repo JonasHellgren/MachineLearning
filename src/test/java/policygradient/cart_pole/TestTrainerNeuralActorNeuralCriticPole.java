@@ -7,14 +7,14 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestTrainerNeuralActorNeuralCriticPole {
+ class TestTrainerNeuralActorNeuralCriticPole {
 
     TrainerNeuralActorNeuralCriticPole trainer;
     AgentNeuralActorNeuralCriticPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = EnvironmentPole.newDefault();
         agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
         createTrainer(environment, agent);
@@ -27,14 +27,13 @@ public class TestTrainerNeuralActorNeuralCriticPole {
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(500).nofStepsMax(100).gamma(0.95)
                         .stepHorizon(10)
-                        //.relativeNofFitsPerBatch(0.5)
                         .build())
                 .build();
     }
 
     @Test
     @Disabled("fails and long time")
-    public void whenTrained_thenManySteps() {
+     void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
         System.out.println("After trained");

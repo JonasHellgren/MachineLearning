@@ -14,18 +14,18 @@ import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestEnvironmentShip {
+ class TestEnvironmentShip {
 
-    public static final int DIST_TOL = 100;
+     static final int DIST_TOL = 100;
     EnvironmentShip environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment=new EnvironmentShip();
     }
 
     @Test
-    public void whenNonZeroAngle_thenNonZeroDistanceProjectile() {
+     void whenNonZeroAngle_thenNonZeroDistanceProjectile() {
         double distance0=environment.calcDistanceProjectile(0d);
         double distance1=environment.calcDistanceProjectile(0.01);
         assertEquals(0,distance0);
@@ -33,13 +33,13 @@ public class TestEnvironmentShip {
     }
 
     @Test
-    public void whenState0_thenThereIsAngleGivingHit() {
+     void whenState0_thenThereIsAngleGivingHit() {
         int state = 0;
         assertHitInState(state);
     }
 
     @Test
-    public void whenState1_thenThereIsAngleGivingHit() {
+     void whenState1_thenThereIsAngleGivingHit() {
         int state = 1;
         assertHitInState(state);
     }

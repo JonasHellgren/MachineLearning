@@ -18,15 +18,15 @@ import static common.ArrayUtil.isDoubleArraysEqual;
 import static common.ListUtils.toArray;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestAgentSC {
+ class TestAgentSC {
 
-    public static final int PROB_DIRECT_TO_TERMINAL = 0;
-    public static final double DELTA_PROB = 0.1;
+     static final int PROB_DIRECT_TO_TERMINAL = 0;
+     static final double DELTA_PROB = 0.1;
     EnvironmentSC environment;
     AgentParamActorTabCriticSC agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = new EnvironmentSC(PROB_DIRECT_TO_TERMINAL);
         agent = AgentParamActorTabCriticSC.newWithRandomStartStateAndGivenThetas(new double[]{-10, 10, 0.5, 0.5, 10, -10,});
     }
@@ -35,7 +35,7 @@ public class TestAgentSC {
     @CsvSource({
             "0, 0,1", "1, 0.5,0.5", "2, 1.0,0.0"
     })
-    public void whenActionProbs_thenCorrect(ArgumentsAccessor arguments) {
+     void whenActionProbs_thenCorrect(ArgumentsAccessor arguments) {
         int os = arguments.getInteger(0);
         double p0 = arguments.getDouble(1);
         double p1 = arguments.getDouble(2);
@@ -55,7 +55,7 @@ public class TestAgentSC {
             "2,0, 0,0,0,0,0.5,-0.5"
 
     })
-    public void whenGradLog_thenCorrect(ArgumentsAccessor arguments) {
+     void whenGradLog_thenCorrect(ArgumentsAccessor arguments) {
         int os = arguments.getInteger(0);
         int a = arguments.getInteger(1);
         List<Double> gradThetaDesired = getGradThetaDesired(arguments);
@@ -71,10 +71,10 @@ public class TestAgentSC {
             "6, 0",
 
     })
-    public void whenChooseAction_thenCorrect(ArgumentsAccessor arguments) {
+     void whenChooseAction_thenCorrect(ArgumentsAccessor arguments) {
         int s = arguments.getInteger(0);
         int a = arguments.getInteger(1);
-        agent.setState(StateSC.newFromPos(s));
+        agent.setState(StateSC.newFromRealPos(s));
 
         var choosenAction = agent.chooseAction();
         if (s == 3) {  //obs state of 3 is 1, so best action is 0 or 1

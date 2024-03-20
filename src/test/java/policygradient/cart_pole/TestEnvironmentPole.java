@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestEnvironmentPole {
+ class TestEnvironmentPole {
 
     private static final int NOT_TRIALS = 1000;
 
@@ -21,12 +21,12 @@ public class TestEnvironmentPole {
     StepReturn<VariablesPole> stepReturn;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = new EnvironmentPole(ParametersPole.newDefault());
     }
 
     @Test
-    public void whenForceLeft_thenMovesCartLeftAndRotatesRight() {
+     void whenForceLeft_thenMovesCartLeftAndRotatesRight() {
         var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_LEFT, StatePole.newUprightAndStill());
         var state=(StatePole) state0;
         assertTrue(state.x() < 0);
@@ -35,7 +35,7 @@ public class TestEnvironmentPole {
     }
 
     @Test
-    public void whenForceRight_thenMovesCartRightAndRotatesLeft() {
+     void whenForceRight_thenMovesCartRightAndRotatesLeft() {
         var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_RIGHT, StatePole.newUprightAndStill());
         var state=(StatePole) state0;
         assertTrue(state.x() > 0);
@@ -44,7 +44,7 @@ public class TestEnvironmentPole {
     }
 
     @Test
-    public void moreStepsFromUpRightComparedToRandom() {
+     void moreStepsFromUpRightComparedToRandom() {
         double averageNofStepsUpRight = calAverageNofStepsForRandomActions(StatePole.newUprightAndStill());
         double averageNofStepsRandom = calAverageNofStepsForRandomActions(
                 StatePole.newAngleAndPosRandom(environment.getParameters()));

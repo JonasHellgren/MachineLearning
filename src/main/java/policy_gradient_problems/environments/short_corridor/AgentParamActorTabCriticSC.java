@@ -41,7 +41,7 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
     }
 
     public AgentParamActorTabCriticSC(int posStart, double[] thetaArray) {
-        super(StateSC.newFromPos(posStart));
+        super(StateSC.newFromRealPos(posStart));
         this.actor = new ParamFunction(thetaArray);
         this.critic = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
         this.helper = new AgentParamActorSCHelper(actor);

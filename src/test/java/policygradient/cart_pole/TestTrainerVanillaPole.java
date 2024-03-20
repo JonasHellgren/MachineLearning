@@ -7,14 +7,14 @@ import policy_gradient_problems.environments.cart_pole.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class TestTrainerVanillaPole {
+ class TestTrainerVanillaPole {
 
     TrainerVanillaPole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment= EnvironmentPole.newDefault();
         agent = AgentParamActorPole.newRandomStartStateDefaultThetas(environment.getParameters());
         createTrainer(environment);
@@ -25,21 +25,16 @@ public class TestTrainerVanillaPole {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(2000).nofStepsMax(100).gamma(0.99).learningRateActor(2e-3)
+                        .nofEpisodes(2000).nofStepsMax(100).gamma(0.99)
                         .build())
                 .build();
     }
 
     @Test
-    public void whenTrained_thenManySteps() {
+     void whenTrained_thenManySteps() {
         trainer.train();
-        System.out.println("agent.getThetaVector() = " + agent.getActor());
-
         PoleAgentOneEpisodeRunner helper= PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
-
         int nofSteps= helper.runTrainedAgent(StatePole.newUprightAndStill());
-        System.out.println("nofSteps = " + nofSteps);
-
         assertTrue(nofSteps>50);
 
     }

@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Does not converge
  */
 
-public class TestTrainerParamActorNeuralCriticPole {
+ class TestTrainerParamActorNeuralCriticPole {
 
     TrainerParamActorNeuralCriticPole trainer;
     AgentParamActorNeuralCriticI<VariablesPole> agent;
     EnvironmentPole environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = EnvironmentPole.newDefault();
         agent = AgentParamActorNeuralCriticPole.newDefaultCritic(StatePole.newUprightAndStill());
         createTrainer(environment, agent);
@@ -42,7 +42,7 @@ public class TestTrainerParamActorNeuralCriticPole {
 
     @Test
     @Disabled("long time")
-    public void whenTrained_thenManySteps() {
+     void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
 

@@ -8,12 +8,14 @@ import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
 
-public class TestExperience {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class TestExperience {
 
     Experience<VariablesBandit> experience;
 
     @BeforeEach
-    public void init() {
+     void init() {
         experience=Experience.<VariablesBandit>builder()
                 .state(StateBandit.newDefault())
                 .action(Action.ofInteger(0))
@@ -24,18 +26,18 @@ public class TestExperience {
     }
 
     @Test
-    public void givenExperience_thenCorrect() {
+     void givenExperience_thenCorrect() {
         System.out.println("experience = " + experience);
-        Assertions.assertEquals(0,experience.state().getVariables().arm());
-        Assertions.assertEquals(0,experience.reward());
-        Assertions.assertEquals(0,experience.stateNext().getVariables().arm());
-        Assertions.assertEquals(0,experience.value());
+        assertEquals(0,experience.state().getVariables().arm());
+        assertEquals(0d,experience.reward());
+        assertEquals(0,experience.stateNext().getVariables().arm());
+        assertEquals(0,experience.value());
     }
 
     @Test
-    public void givenExperience_whenNewWithValue_thenCorrect() {
+     void givenExperience_whenNewWithValue_thenCorrect() {
         experience=experience.copyWithValue(10);
-        Assertions.assertEquals(10,experience.value());
+        assertEquals(10,experience.value());
     }
 
 }

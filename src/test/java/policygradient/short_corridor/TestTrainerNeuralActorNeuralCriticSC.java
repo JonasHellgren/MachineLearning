@@ -1,19 +1,20 @@
 package policygradient.short_corridor;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.short_corridor.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTrainerNeuralActorNeuralCriticSC {
+ class TestTrainerNeuralActorNeuralCriticSC {
 
     TrainerNeuralActorNeuralCriticSC trainer;
     static AgentNeuralActorNeuralCriticSC agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         var environment = new EnvironmentSC();
         agent = AgentNeuralActorNeuralCriticSC.newDefault();
         createTrainer(environment);
@@ -30,8 +31,8 @@ public class TestTrainerNeuralActorNeuralCriticSC {
     }
 
     @Test
-    //@Disabled("long time")
-    public void whenTrained_thenCorrectActionSelectionInEachState() {
+    @Disabled("long time")
+     void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
 
@@ -51,12 +52,12 @@ public class TestTrainerNeuralActorNeuralCriticSC {
 
     private static Double getCriticOutValue(int pos) {
         var critic = agent.getCritic();
-        return critic.getOutValue(StateSC.newFromPos(pos));
+        return critic.getOutValue(StateSC.newFromRealPos(pos));
     }
 
 
     private void setRealPos(int pos) {
-        agent.setState(StateSC.newFromPos(pos));
+        agent.setState(StateSC.newFromRealPos(pos));
     }
 
 

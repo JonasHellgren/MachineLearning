@@ -1,23 +1,29 @@
 package policygradient.cart_pole;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.environments.cart_pole.ParametersPole;
 
-public class TestParametersPole {
+ class TestParametersPole {
 
 
     ParametersPole parameters;
     @BeforeEach
-    public void init() {
+     void init() {
         parameters=ParametersPole.newDefault();
     }
 
     @Test
-    public void givenDefault_thenCorrect() {
+     void givenDefault_thenCorrect() {
         System.out.println("parameters = " + parameters);
-
+        Assertions.assertEquals(0.1,parameters.massPole());
     }
 
+     @Test
+     void givenWith_thenCorrect() {
+         System.out.println("parameters = " + parameters);
+         Assertions.assertEquals(1,parameters.withMassPole(1).massPole());
+     }
 
 }

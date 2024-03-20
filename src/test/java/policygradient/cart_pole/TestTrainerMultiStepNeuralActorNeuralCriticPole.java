@@ -8,14 +8,14 @@ import policy_gradient_problems.environments.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
+ class TestTrainerMultiStepNeuralActorNeuralCriticPole {
 
     TrainerMultiStepNeuralActorNeuralCriticPole trainer;
     AgentNeuralActorNeuralCriticPole agent;
     EnvironmentPole environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment = EnvironmentPole.newDefault();
         agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
         createTrainer(environment, agent);
@@ -34,8 +34,8 @@ public class TestTrainerMultiStepNeuralActorNeuralCriticPole {
     }
 
     @Test
-    @Disabled()
-    public void whenTrained_thenManySteps() {
+    @Disabled("Long time")
+     void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
         int nofSteps = getNofSteps();

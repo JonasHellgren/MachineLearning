@@ -17,7 +17,7 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
     NeuralCriticMemorySC critic;
 
     public static AgentNeuralActorNeuralCriticSC newDefault() {
-        return new AgentNeuralActorNeuralCriticSC(StateSC.newFromPos(0));
+        return new AgentNeuralActorNeuralCriticSC(StateSC.newFromRealPos(0));
     }
 
     public AgentNeuralActorNeuralCriticSC(StateI<VariablesSC> state) {

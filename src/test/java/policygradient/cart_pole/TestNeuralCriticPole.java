@@ -16,14 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class TestNeuralCriticPole {
+ class TestNeuralCriticPole {
 
-    public static final int NOF_SAMPLES = 10;
+     static final int NOF_SAMPLES = 10;
     NeuralCriticMemoryPole memory;
     ParametersPole parameters;
 
     @BeforeEach
-    public void init() {
+     void init() {
         memory = NeuralCriticMemoryPole.newDefault();
         parameters = ParametersPole.newDefault();
     }
@@ -31,7 +31,7 @@ public class TestNeuralCriticPole {
     @SneakyThrows
     @Test
     @Disabled("takes long time")
-    public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
+    void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
         int nofEpochs = 200;
         var errors = trainNet(stateFcn, nofEpochs);
@@ -42,7 +42,7 @@ public class TestNeuralCriticPole {
     @SneakyThrows
     @Test
     @Disabled("takes long time")
-    public void givenAbsAngleLargerThan0d1Gives10Else0RestStatesRandom_whenTrained_thenCorrect() {
+     void givenAbsAngleLargerThan0d1Gives10Else0RestStatesRandom_whenTrained_thenCorrect() {
         Function<Double,StatePole> stateFcn=(a) ->  copyWithAngle(StatePole.newAllRandom(parameters),a);
         int nofEpochs = 1000;
         var errors = trainNet(stateFcn, nofEpochs);
@@ -70,7 +70,6 @@ public class TestNeuralCriticPole {
                 in.add(state.asList());
                 out.add(value);
             }
-            int nofFits = (int) (0.5 * NOF_SAMPLES);
             memory.fit(in, out);
             errors.add(memory.getError());
         }

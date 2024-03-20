@@ -13,18 +13,18 @@ import policy_gradient_problems.environments.short_corridor.VariablesSC;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestReturnCalculator {
+ class TestReturnCalculator {
 
     ReturnCalculator<VariablesSC> returnCalculator;
 
     @BeforeEach
-    public void init() {
+     void init() {
         returnCalculator=new ReturnCalculator<>();
     }
 
     //rewards=[0,1,1], gamma=1 => returns=[2,2,1]
     @Test
-    public void givenReturns0d1d1dGamma1_thenCorrect() {
+     void givenReturns0d1d1dGamma1_thenCorrect() {
         var rewards= List.of(0d,1d,1d);
         double gamma = 1d;
         var returns = getReturns(rewards, gamma);
@@ -33,7 +33,7 @@ public class TestReturnCalculator {
 
     //rewards=[0,1,1], gamma=0d5 => returns=[2,1,0.25]
     @Test
-    public void givenReturns0d1d1dGamma0d5_thenCorrect() {
+     void givenReturns0d1d1dGamma0d5_thenCorrect() {
         var rewards= List.of(0d,1d,1d);
         double gamma = 0.5d;
         var returns = getReturns(rewards, gamma);
@@ -43,7 +43,7 @@ public class TestReturnCalculator {
     //list = [10 10 10], df=0.5 => listDf=[1*df^0 1*df^1 1*df^2]
     // => product(returns(list),listDf)=[30,10,2.5]
     @Test
-    public void givenReturns00d10d10dGamma0d5_thenCorrect() {
+     void givenReturns00d10d10dGamma0d5_thenCorrect() {
         var rewards= List.of(10d,10d,10d);
         double gamma = 0.5d;
         var returns = getReturns(rewards, gamma);
@@ -51,7 +51,7 @@ public class TestReturnCalculator {
     }
 
     @Test
-    public void givenEmpty_thenCorrect() {
+     void givenEmpty_thenCorrect() {
         List<Double> rewards= new ArrayList<>();
         double gamma = 0.5d;
         var returns = getReturns(rewards, gamma);

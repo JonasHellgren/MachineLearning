@@ -36,7 +36,6 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
         this.helper = new AgentParamActorPoleHelper(actor);
     }
 
-
     @Override
     public void fitCritic(List<List<Double>> in, List<Double> out) {
             critic.fit(in, out);

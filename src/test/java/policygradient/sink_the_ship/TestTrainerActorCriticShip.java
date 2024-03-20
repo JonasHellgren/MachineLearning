@@ -10,16 +10,16 @@ import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShi
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestTrainerActorCriticShip {
+ class TestTrainerActorCriticShip {
 
-    public static final double EXPECTED_ACTION0 = 0.2871;
-    public static final double EXPECTED_ACTION1 = 0.6711;
-    public static final double DELTA = 0.1;
+     static final double EXPECTED_ACTION0 = 0.2871;
+     static final double EXPECTED_ACTION1 = 0.6711;
+     static final double DELTA = 0.1;
     TrainerActorCriticShip trainer;
     AgentShip agent;
 
     @BeforeEach
-    public void init() {
+     void init() {
         agent = AgentShip.newRandomStartStateDefaultThetas();
         var environment= new EnvironmentShip();
         createTrainer(environment);
@@ -37,7 +37,7 @@ public class TestTrainerActorCriticShip {
     }
 
     @Test
-    public void whenTrained_thenCorrectActionSelectionInEachState() {
+     void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
 

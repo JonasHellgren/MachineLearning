@@ -10,32 +10,32 @@ import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestEnvironment {
+ class TestEnvironmentBandit {
 
-    public static final double DELTA = 0.01;
-    public static final int ACTION0 = 0,ACTION1=1;
-    public static final StateBandit STATE = StateBandit.newDefault();
+     static final double DELTA = 0.01;
+     static final int ACTION0 = 0,ACTION1=1;
+     static final StateBandit STATE = StateBandit.newDefault();
     EnvironmentBandit environment;
 
     @BeforeEach
-    public void init() {
+     void init() {
         environment= EnvironmentBandit.newWithProbabilities(0.0,1.0);
     }
 
     @Test
-    public void givenProbabilitiesAsInInit_whenActionZero_thenWinningZeroCoins() {
+     void givenProbabilitiesAsInInit_whenActionZero_thenWinningZeroCoins() {
         var sr=environment.step(STATE,Action.ofInteger(ACTION0));
         Assertions.assertEquals(0, sr.reward(), DELTA);
     }
 
     @Test
-    public void givenProbabilitiesAsInInit_whenActionOne_thenWinningOneCoin() {
+     void givenProbabilitiesAsInInit_whenActionOne_thenWinningOneCoin() {
         var sr=environment.step(STATE,Action.ofInteger(ACTION1));
         Assertions.assertEquals(1,sr.reward(), DELTA);
     }
 
     @Test
-    public void givenProbability50PercentActionZero_whenActionZeroManyTimes_thenSometimesWinningOneCoin() {
+     void givenProbability50PercentActionZero_whenActionZeroManyTimes_thenSometimesWinningOneCoin() {
         double prob0 = 0.5;
         double prob1NotInteresting = 1.0;
         environment= EnvironmentBandit.newWithProbabilities(prob0, prob1NotInteresting);
