@@ -13,7 +13,7 @@ import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
-import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
+import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
 
 import java.util.List;
 

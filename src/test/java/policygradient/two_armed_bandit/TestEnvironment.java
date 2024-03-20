@@ -3,9 +3,9 @@ package policygradient.two_armed_bandit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.the_problems.twoArmedBandit.EnvironmentBandit;
-import policy_gradient_problems.the_problems.twoArmedBandit.StateBandit;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
+import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,11 +3,10 @@ package policy_gradient_problems.runners;
 import common.MovingAverage;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.agent_interfaces.AgentParamActorNeuralCriticI;
-import policy_gradient_problems.common_helpers.TrainingTracker;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.cart_pole.*;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
+import policy_gradient_problems.helpers.TrainingTracker;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.cart_pole.*;
 import java.util.List;
 
 //todo add ppo

@@ -2,11 +2,11 @@ package policygradient.short_corridor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.TrainerParamActorTabCriticSC;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.short_corridor.AgentParamActorTabCriticSC;
+import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
+import policy_gradient_problems.environments.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.TrainerParamActorTabCriticSC;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.the_problems.short_corridor.AgentParamActorSCHelper;
-import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.AgentParamActorSCHelper;
+import policy_gradient_problems.environments.short_corridor.AgentParamActorTabCriticSC;
+import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
+import policy_gradient_problems.environments.short_corridor.StateSC;
 
 import java.util.ArrayList;
 import java.util.List;

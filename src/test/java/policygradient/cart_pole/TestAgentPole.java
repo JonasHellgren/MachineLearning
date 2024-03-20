@@ -3,11 +3,11 @@ package policygradient.cart_pole;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.the_problems.cart_pole.AgentParamActorPole;
-import policy_gradient_problems.the_problems.cart_pole.EnvironmentPole;
-import policy_gradient_problems.the_problems.cart_pole.StatePole;
-import policy_gradient_problems.the_problems.cart_pole.VariablesPole;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.environments.cart_pole.AgentParamActorPole;
+import policy_gradient_problems.environments.cart_pole.EnvironmentPole;
+import policy_gradient_problems.environments.cart_pole.StatePole;
+import policy_gradient_problems.environments.cart_pole.VariablesPole;
 
 public class TestAgentPole {
 

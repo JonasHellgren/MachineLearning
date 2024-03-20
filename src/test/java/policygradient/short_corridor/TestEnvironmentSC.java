@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.common_generic.StepReturn;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.domain.value_classes.StepReturn;
+import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
+import policy_gradient_problems.environments.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.VariablesSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -2,10 +2,10 @@ package policy_gradient_problems.runners;
 
 import lombok.extern.java.Log;
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
-import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.the_problems.sink_the_ship.TrainerActorCriticShip;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.sink_the_ship.AgentShip;
+import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShip;
 
 import java.util.List;
 

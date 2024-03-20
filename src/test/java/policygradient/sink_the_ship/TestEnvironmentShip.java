@@ -4,11 +4,11 @@ import common.Counter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.common_generic.StepReturn;
-import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.the_problems.sink_the_ship.StateShip;
-import policy_gradient_problems.the_problems.sink_the_ship.VariablesShip;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.domain.value_classes.StepReturn;
+import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.StateShip;
+import policy_gradient_problems.environments.sink_the_ship.VariablesShip;
 
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;

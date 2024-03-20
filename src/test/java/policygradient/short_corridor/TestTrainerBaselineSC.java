@@ -4,11 +4,11 @@ import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.AgentParamActorTabCriticSC;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.TrainerBaselineSC;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.short_corridor.AgentParamActorTabCriticSC;
+import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
+import policy_gradient_problems.environments.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.TrainerBaselineSC;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

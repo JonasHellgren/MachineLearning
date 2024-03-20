@@ -1,8 +1,8 @@
 package policy_gradient_problems.runners;
 
 import plotters.PlotterMultiplePanelsTrajectory;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.twoArmedBandit.*;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.twoArmedBandit.*;
 
 import java.util.List;
 

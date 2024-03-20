@@ -9,11 +9,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import policy_gradient_problems.abstract_classes.StateI;
-import policy_gradient_problems.the_problems.short_corridor.EnvironmentSC;
-import policy_gradient_problems.the_problems.short_corridor.NeuralCriticMemorySC;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
+import policy_gradient_problems.domain.abstract_classes.StateI;
+import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
+import policy_gradient_problems.environments.short_corridor.NeuralCriticMemorySC;
+import policy_gradient_problems.environments.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.VariablesSC;
 import java.util.*;
 
 public class TestNeuralCriticMemorySC {

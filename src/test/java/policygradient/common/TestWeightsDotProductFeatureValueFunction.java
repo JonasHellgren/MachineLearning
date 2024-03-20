@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.common_helpers.WeightsDotProductFeatureValueFunction;
+import policy_gradient_problems.helpers.WeightsDotProductFeatureValueFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

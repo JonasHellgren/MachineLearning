@@ -2,7 +2,7 @@ package policygradient.abstract_classes;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.abstract_classes.Action;
+import policy_gradient_problems.domain.abstract_classes.Action;
 
 import java.util.Optional;
 

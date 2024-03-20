@@ -4,8 +4,8 @@ import lombok.extern.java.Log;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.short_corridor.*;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.short_corridor.*;
 import java.util.ArrayList;
 import java.util.List;
 

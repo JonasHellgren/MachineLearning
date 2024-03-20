@@ -2,7 +2,7 @@ package policygradient.two_armed_bandit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.the_problems.twoArmedBandit.AgentBanditParamActor;
+import policy_gradient_problems.environments.twoArmedBandit.AgentBanditParamActor;
 
 public class TestAgent {
 

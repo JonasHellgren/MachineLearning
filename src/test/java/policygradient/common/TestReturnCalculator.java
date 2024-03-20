@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_helpers.ReturnCalculator;
-import policy_gradient_problems.the_problems.short_corridor.StateSC;
-import policy_gradient_problems.the_problems.short_corridor.VariablesSC;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.helpers.ReturnCalculator;
+import policy_gradient_problems.environments.short_corridor.StateSC;
+import policy_gradient_problems.environments.short_corridor.VariablesSC;
 
 import java.util.ArrayList;
 import java.util.List;

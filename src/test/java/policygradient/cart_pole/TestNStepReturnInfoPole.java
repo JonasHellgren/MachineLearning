@@ -1,11 +1,11 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.*;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.common_generic.Experience;
-import policy_gradient_problems.common_helpers.NStepReturnInfo;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.cart_pole.*;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.helpers.NStepReturnInfo;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.cart_pole.*;
 import java.util.ArrayList;
 import java.util.List;
 import static common.ListUtils.*;

@@ -4,7 +4,7 @@ import common.ListUtils;
 import common.RandUtils;
 import common_dl4j.Dl4JUtil;
 import org.junit.jupiter.api.*;
-import policy_gradient_problems.the_problems.cart_pole.*;
+import policy_gradient_problems.environments.cart_pole.*;
 import java.util.List;
 
 public class TestNeuralActorMemoryPole {

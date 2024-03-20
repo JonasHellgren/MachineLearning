@@ -1,8 +1,8 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.*;
-import policy_gradient_problems.common_value_classes.TrainerParameters;
-import policy_gradient_problems.the_problems.cart_pole.*;
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

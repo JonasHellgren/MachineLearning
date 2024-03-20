@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.abstract_classes.Action;
-import policy_gradient_problems.the_problems.sink_the_ship.AgentShip;
-import policy_gradient_problems.the_problems.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.the_problems.sink_the_ship.StateShip;
+import policy_gradient_problems.domain.abstract_classes.Action;
+import policy_gradient_problems.environments.sink_the_ship.AgentShip;
+import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.StateShip;
 
 import java.util.ArrayList;
 import java.util.List;
