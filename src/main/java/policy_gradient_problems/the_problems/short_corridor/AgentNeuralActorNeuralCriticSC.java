@@ -46,7 +46,7 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
 
     @Override
     public void fitCritic(List<List<Double>> stateValuesList, List<Double> valueTarList) {
-            critic.fit(stateValuesList,valueTarList);
+        critic.fit(stateValuesList,valueTarList);
     }
 
     @Override

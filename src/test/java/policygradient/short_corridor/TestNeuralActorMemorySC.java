@@ -27,7 +27,6 @@ public class TestNeuralActorMemorySC {
     public static void init() {
         actor=NeuralActorMemorySC.newDefault();
         printStateProb();
-
     }
 
     @Test

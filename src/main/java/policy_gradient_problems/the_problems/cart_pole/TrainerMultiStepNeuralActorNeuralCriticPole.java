@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.common_episode_trainers.MultistepNeuralCriticUpdater;
 import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.MultiStepResults;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 
@@ -44,20 +45,20 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
         }
     }
 
-    private void updateActor(MultistepNeuralCriticUpdater.MultiStepResults msRes) {
+    private void updateActor(MultiStepResults msRes) {
         List<List<Double>> inList=new ArrayList<>();
         List<List<Double>> outList=new ArrayList<>();
-        for (int step = 0; step < msRes.nofSteps ; step++) {
-            inList.add(msRes.stateValuesList.get(step));
+        for (int step = 0; step < msRes.nofSteps() ; step++) {
+            inList.add(msRes.stateValuesList().get(step));
             outList.add(createOneHot(msRes, step));
         }
         agent.fitActor(inList,outList);
     }
 
     @NotNull
-    private static List<Double> createOneHot(MultistepNeuralCriticUpdater.MultiStepResults msRes, int i) {
-        int actionInt = msRes.actionList.get(i).asInt();
-        double adv= msRes.valueTarList.get(i)- msRes.valuePresentList.get(i);
+    private static List<Double> createOneHot(MultiStepResults msRes, int i) {
+        int actionInt = msRes.actionList().get(i).asInt();
+        double adv= msRes.valueTarList().get(i)- msRes.valuePresentList().get(i);
         List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(StatePole.nofActions(), actionInt,adv);
         oneHot.set(actionInt, adv);
         return oneHot;

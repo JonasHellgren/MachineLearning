@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.abstract_classes.Action;
 import policy_gradient_problems.abstract_classes.StateI;
 import policy_gradient_problems.common_generic.Experience;
+import policy_gradient_problems.common_generic.MultiStepResults;
 import policy_gradient_problems.common_value_classes.TrainerParameters;
 import policy_gradient_problems.common_helpers.NStepReturnInfo;
 
@@ -35,26 +36,17 @@ import static common.Conditionals.executeIfTrue;
 @AllArgsConstructor
 public class MultistepNeuralCriticUpdater<V> {
 
-    @AllArgsConstructor
-    public static class MultiStepResults {
-        public int nofSteps;
-        public List<List<Double>> stateValuesList;
-        public List<Action> actionList;
-        public List<Double> valuePresentList;
-        public List<Double> valueTarList;
-    }
-
     TrainerParameters parameters;
     Function<StateI<V>,Double> criticOut;
-    Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //tod pair
+    Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //todo MultiStepResults
 
     //todo split method below
 
     public MultiStepResults updateCritic(List<Experience<V>> experiences) {
         var results = getMultiStepResults(experiences);
-        executeIfTrue(!results.stateValuesList.isEmpty(), () ->
-                fitCritic.accept(Triple.of(results.stateValuesList, results.valueTarList, results.nofSteps)));
-        executeIfTrue(results.stateValuesList.isEmpty(), () -> log.warning("empty stateValuesList"));
+        executeIfTrue(!results.stateValuesList().isEmpty(), () ->
+                fitCritic.accept(Triple.of(results.stateValuesList(), results.valueTarList(), results.nofSteps())));
+        executeIfTrue(results.stateValuesList().isEmpty(), () -> log.warning("empty stateValuesList"));
         return results;
     }
 
@@ -65,23 +57,20 @@ public class MultistepNeuralCriticUpdater<V> {
         var elInfo = new NStepReturnInfo<>(experiences, parameters);
         int tEnd = elInfo.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;  //explained in top of file
 
-        List<List<Double>> stateValuesList = new ArrayList<>();
-        List<Double> valueTarList = new ArrayList<>();
-        List<Action> actionList=new ArrayList<>();
-        List<Double> valuePresentList=new ArrayList<>();
-
+        var results=MultiStepResults.create(tEnd);
         for (int t = 0; t < tEnd; t++) {
             var resMS = elInfo.getResultManySteps(t);
             double sumRewards = resMS.sumRewardsNSteps;
             double valueFut = !resMS.isFutureStateOutside
                     ? gammaPowN * criticOut.apply(resMS.stateFuture)
                     : 0;
-            stateValuesList.add(elInfo.getExperience(t).state().asList());
-            valueTarList.add(sumRewards + valueFut);
-            actionList.add(elInfo.getExperience(t).action());
-            valuePresentList.add(criticOut.apply(elInfo.getExperience(t).state()));
+
+            results.addStateValues(elInfo.getExperience(t).state().asList());
+            results.addAction(elInfo.getExperience(t).action());
+            results.addValue(criticOut.apply(elInfo.getExperience(t).state()));
+            results.addValueTarget(sumRewards + valueFut);
         }
-        return new MultiStepResults(tEnd,stateValuesList,actionList, valuePresentList, valueTarList);
+        return results;
     }
 
 }
