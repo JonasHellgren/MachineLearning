@@ -20,14 +20,15 @@ public class RunnerTrainersPole {
             .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).gamma(0.95).stepHorizon(10).build();
 
     public static void main(String[] args) {
-        var agent = AgentParamActorPole.newAllZeroStateDefaultThetas();
-        var agentAC = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
+        var parameters = ParametersPole.newDefault();
+        var agent = AgentParamActorPole.newAllZeroStateDefaultThetas(parameters);
+        var agentAC = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill(parameters));
 
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
         var nofStepsListVanilla = getNofStepsListVanilla(agent, environment);
         var nofStepsListBaseline = getNofStepsListBaseline(agent, environment);
-        var nofStepsListAC = getNofStepsListAC(agentAC, environment);
+        var nofStepsListAC = getNofStepsListAC(agentAC, environment,parameters);
 
         plotNofStepsVersusEpisode(
                 List.of(nofStepsListVanilla, nofStepsListBaseline,nofStepsListAC),
@@ -48,11 +49,13 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerBaseline.getTracker());
     }
 
-    private static List<Double> getNofStepsListAC(AgentNeuralActorNeuralCriticI<VariablesPole> agent, EnvironmentPole environment) {
+    private static List<Double> getNofStepsListAC(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
+                                                  EnvironmentPole environment,
+                                                  ParametersPole parameters) {
         var trainerAC = TrainerMultiStepNeuralActorNeuralCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerAC.train();
-        trainerAC.getAgent().setState(StatePole.newUprightAndStill());
+        trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));
         return getFilteredNofSteps(trainerAC.getTracker());
     }
 

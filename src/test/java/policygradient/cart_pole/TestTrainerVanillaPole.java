@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     TrainerVanillaPole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
+     ParametersPole parametersPole=ParametersPole.newDefault();
+
 
     @BeforeEach
      void init() {
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
      void whenTrained_thenManySteps() {
         trainer.train();
         PoleAgentOneEpisodeRunner helper= PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
-        int nofSteps= helper.runTrainedAgent(StatePole.newUprightAndStill());
+        int nofSteps= helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
         assertTrue(nofSteps>50);
 
     }

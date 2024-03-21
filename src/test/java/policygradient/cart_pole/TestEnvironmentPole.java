@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     EnvironmentPole environment;
     StepReturn<VariablesPole> stepReturn;
+    ParametersPole parametersPole=ParametersPole.newDefault();
+
 
     @BeforeEach
      void init() {
@@ -27,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     @Test
      void whenForceLeft_thenMovesCartLeftAndRotatesRight() {
-        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_LEFT, StatePole.newUprightAndStill());
+        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_LEFT, StatePole.newUprightAndStill(parametersPole));
         var state=(StatePole) state0;
         assertTrue(state.x() < 0);
         assertTrue(state.angle() > 0);
@@ -36,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     @Test
      void whenForceRight_thenMovesCartRightAndRotatesLeft() {
-        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_RIGHT, StatePole.newUprightAndStill());
+        var state0 = applyActionUntilTermination(EnvironmentPole.ACTION_RIGHT, StatePole.newUprightAndStill(parametersPole));
         var state=(StatePole) state0;
         assertTrue(state.x() > 0);
         assertTrue(state.angle() < 0);
@@ -45,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     @Test
      void moreStepsFromUpRightComparedToRandom() {
-        double averageNofStepsUpRight = calAverageNofStepsForRandomActions(StatePole.newUprightAndStill());
+        double averageNofStepsUpRight = calAverageNofStepsForRandomActions(StatePole.newUprightAndStill(parametersPole));
         double averageNofStepsRandom = calAverageNofStepsForRandomActions(
                 StatePole.newAngleAndPosRandom(environment.getParameters()));
 

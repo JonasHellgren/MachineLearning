@@ -28,9 +28,9 @@ import java.util.List;
                 AgentParamActorPoleHelper.getInitThetaVector());
     }
 
-    public static AgentParamActorPole newAllZeroStateDefaultThetas() {
+    public static AgentParamActorPole newAllZeroStateDefaultThetas(ParametersPole parameters) {
         return new AgentParamActorPole(
-                StatePole.newUprightAndStill(),
+                StatePole.newUprightAndStill(parameters),
                 AgentParamActorPoleHelper.getInitThetaVector());
     }
 

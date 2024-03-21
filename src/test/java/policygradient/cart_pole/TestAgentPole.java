@@ -3,10 +3,8 @@ package policygradient.cart_pole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.environments.cart_pole.AgentParamActorPole;
-import policy_gradient_problems.environments.cart_pole.EnvironmentPole;
-import policy_gradient_problems.environments.cart_pole.StatePole;
-import policy_gradient_problems.environments.cart_pole.VariablesPole;
+import policy_gradient_problems.environments.cart_pole.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAgentPole {
@@ -14,11 +12,13 @@ class TestAgentPole {
     static final double TOL = 1e-5;
     EnvironmentPole environment;
     AgentParamActorPole agent;
+    ParametersPole parametersPole=ParametersPole.newDefault();
+
 
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentParamActorPole.newAllZeroStateDefaultThetas();
+        agent = AgentParamActorPole.newAllZeroStateDefaultThetas(parametersPole);
     }
 
     @Test
@@ -40,7 +40,9 @@ class TestAgentPole {
 
     @Test
      void whenAllStatesZeroExceptXIsOne_thenCorrectProbs() {
-        agent.setState(StatePole.newFromVariables(VariablesPole.builder().angle(0).angleDot(0).x(1).xDot(0).build()));
+        agent.setState(StatePole.newFromVariables(
+                VariablesPole.builder().angle(0).angleDot(0).x(1).xDot(0).build(),
+                parametersPole));
         var actionProbs=agent.getActionProbabilities();
         System.out.println("actionProbs = " + actionProbs);
         assertEquals(actionProbs.get(0), Math.exp(1) / (1 + Math.exp(1)), TOL);

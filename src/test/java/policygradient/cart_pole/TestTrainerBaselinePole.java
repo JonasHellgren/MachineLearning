@@ -18,6 +18,7 @@ class TestTrainerBaselinePole {
     TrainerBaselinePole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
+    ParametersPole parametersPole;
 
     @BeforeEach
     void init() {
@@ -25,6 +26,7 @@ class TestTrainerBaselinePole {
         agent = AgentParamActorPole.newRandomStartStateDefaultThetas(environment.getParameters());
         createTrainer(environment);
         trainer.train();
+        parametersPole=ParametersPole.newDefault();
     }
 
     private void createTrainer(EnvironmentPole environment) {
@@ -39,7 +41,7 @@ class TestTrainerBaselinePole {
     @Test
     void whenTrained_thenManySteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
-        int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
+        int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
         System.out.println("nofSteps = " + nofSteps);
         assertTrue(nofSteps > 50);
     }
@@ -61,9 +63,9 @@ class TestTrainerBaselinePole {
 
     @NotNull
     private ArrayRealVector getFeatureVector(double angle, double x) {
-        StateI<VariablesPole> statePole = StatePole.newFromVariables(VariablesPole.builder()
-                .angle(angle).x(x)
-                .build());
+        StateI<VariablesPole> statePole = StatePole.newFromVariables(
+                VariablesPole.builder().angle(angle).x(x).build(),
+                parametersPole);
         return TrainerBaselinePole.getFeatureVector(
                 Experience.<VariablesPole>builder().state(statePole).build(),
                 environment.getParameters()

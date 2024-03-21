@@ -32,7 +32,7 @@ import java.util.function.Function;
     @Test
     @Disabled("takes long time")
     void givenAbsAngleLargerThan0d1Gives10Else0RestStatesZero_whenTrained_thenCorrect() {
-        Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(),a);
+        Function<Double,StatePole> stateFcn=(a) -> copyWithAngle(StatePole.newUprightAndStill(parameters),a);
         int nofEpochs = 200;
         var errors = trainNet(stateFcn, nofEpochs);
         plotLoss(errors);

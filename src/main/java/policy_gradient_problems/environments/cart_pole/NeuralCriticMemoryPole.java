@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NeuralCriticMemoryPole {
 
-    static int NOF_INPUTS = StatePole.newUprightAndStill().asList().size();
+    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
     static int NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;

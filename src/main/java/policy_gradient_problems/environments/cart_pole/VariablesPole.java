@@ -17,9 +17,7 @@ public record VariablesPole(
                             double xDot,
                             int nofSteps) {
 
-    @Builder
-    record Variables(int action, double sinTheta, double cosTheta) {   //inner record to decrease nof arguments
-    }
+
 
     public VariablesPole copy() {
         return VariablesPole.builder()
@@ -34,7 +32,6 @@ public record VariablesPole(
     public List<Double> asList() {
         return List.of(angle, x, angleDot, xDot);
     }
-
 
     public static VariablesPole newUprightAndStill() {
         return VariablesPole.builder()
@@ -63,36 +60,7 @@ public record VariablesPole(
     }
 
 
-    public VariablesPole calcNew(int action, ParametersPole parameters) {
-        var variables = VariablesPole.Variables.builder()
-                .action(action).sinTheta(Math.sin(angle)).cosTheta(Math.cos(angle)).build();
-        double temp = getTempVariable(variables, parameters);
-        double angleAcc = getAngleAcc(temp, variables, parameters);
-        double xAcc = getXAcc(temp, variables, parameters);
-        double tau = parameters.tau();
-        return VariablesPole.builder()
-                .angle(angle + tau * angleDot)
-                .x(x + tau * xDot)
-                .angleDot(angleDot + tau * angleAcc)
-                .xDot(xDot + tau * xAcc)
-                .nofSteps(nofSteps + 1)
-                .build();
-    }
 
-    private double getTempVariable(VariablesPole.Variables v, ParametersPole p) {
-        double force = (v.action == 0) ? -p.forceMagnitude() : p.forceMagnitude();
-        return force + p.massPoleTimesLength() * sqr2.apply(angleDot) * v.sinTheta;
-    }
-
-    private double getXAcc(double temp, VariablesPole.Variables v, ParametersPole p) {
-        return temp - p.massPoleTimesLength() * angleDot * v.cosTheta / p.massTotal();
-    }
-
-    private double getAngleAcc(double temp, VariablesPole.Variables v, ParametersPole p) {
-        double denom = p.length() * (4.0 / 3.0 - p.massPole() * sqr2.apply(v.cosTheta) /
-                p.massTotal());
-        return (p.g() * v.sinTheta - v.cosTheta * temp) / denom;
-    }
 
     @Override
     public String toString() {

@@ -13,11 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     TrainerMultiStepNeuralActorNeuralCriticPole trainer;
     AgentNeuralActorNeuralCriticPole agent;
     EnvironmentPole environment;
+    ParametersPole parametersPole=ParametersPole.newDefault();
+
 
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
+        agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-    @Disabled("Long time")
+   // @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
@@ -47,14 +49,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     private void somePrinting(int nofSteps) {
         System.out.println("nofSteps = " + nofSteps);
-        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill());
+        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill(parametersPole));
         double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
         System.out.println("valAll0 = " + valAll0+", valBigAngle = " + valBigAngle);
     }
 
     private int getNofSteps() {
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
-        return helper.runTrainedAgent(StatePole.newUprightAndStill());
+        return helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
     }
 
     private void printMemories() {

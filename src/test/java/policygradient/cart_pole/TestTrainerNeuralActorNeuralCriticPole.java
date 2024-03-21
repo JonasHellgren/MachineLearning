@@ -12,11 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     TrainerNeuralActorNeuralCriticPole trainer;
     AgentNeuralActorNeuralCriticPole agent;
     EnvironmentPole environment;
+     ParametersPole parametersPole=ParametersPole.newDefault();
+
 
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill());
+        agent = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
@@ -39,11 +41,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         System.out.println("After trained");
         PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder()
                 .environment(environment).agent(agent).build();
-        int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill());
+        int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
 
         System.out.println("nofSteps = " + nofSteps);
 
-        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill());
+        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill(parametersPole));
         double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
 
         System.out.println("valAll0 = " + valAll0);

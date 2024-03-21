@@ -18,7 +18,7 @@ import static common.ListUtils.arrayPrimitiveDoublesToList;
  */
 
 public class NeuralActorMemoryPole {
-    static int NOF_INPUTS = StatePole.newUprightAndStill().asList().size(), NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
+    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates(), NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
     //todo StatePole.noActions()
 

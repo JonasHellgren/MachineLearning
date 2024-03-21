@@ -11,52 +11,66 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class StatePole implements StateI<VariablesPole> {
 
     VariablesPole variables;
+    ParametersPole parameters;
+    PoleRelations relations;
 
     @Builder
     public StatePole(double angle,
                      double x,
                      double angleDot,
                      double xDot,
-                     int nofSteps
+                     int nofSteps,
+                     ParametersPole parameters
     ) {
         variables = VariablesPole.builder().angle(angle).x(x).angleDot(angleDot).xDot(xDot).nofSteps(nofSteps).build();
+        this.parameters=parameters;
+        this.relations=new PoleRelations(parameters);
+    }
+
+    public static StatePole newFromVariables(VariablesPole v,ParametersPole p) {
+        return new StatePole(v,p);
     }
 
     public static StatePole newAllRandom(ParametersPole p) {
-        return new StatePole(VariablesPole.newAllRandom(p));
+        return new StatePole(VariablesPole.newAllRandom(p),p);
     }
 
-    public static StatePole newUprightAndStill() {
-        return new StatePole(VariablesPole.newUprightAndStill());
+    public static StatePole newUprightAndStill(ParametersPole p) {
+        return new StatePole(VariablesPole.newUprightAndStill(),p);
     }
 
     public static StatePole newAngleAndPosRandom(ParametersPole p) {
-        return new StatePole(VariablesPole.newAngleAndPosRandom(p));
+        return new StatePole(VariablesPole.newAngleAndPosRandom(p),p);
     }
+
+    public StatePole newWithAngle(double angle,ParametersPole parameters) {
+        return StatePole.newFromVariables(VariablesPole.builder()
+                .angle(angle).x(x()).angleDot(angleDot()).xDot(xDot()).nofSteps(nofSteps()).build(),parameters);
+    }
+
+
+    private StatePole(VariablesPole variables, ParametersPole parameters) {
+        this.variables = variables;
+        this.parameters = parameters;
+        this.relations=new PoleRelations(parameters);
+    }
+
 
     public static int nofActions() {
         return 2;
     }
 
-    public static int nofStates() {
-        return 4;
+    public  int nofStates() {
+        return variables.asList().size();
     }
 
-    public static StatePole newFromVariables(VariablesPole v) {
-        return new StatePole(v);
-    }
 
-    public StatePole newWithAngle(double angle) {
-        return StatePole.newFromVariables(VariablesPole.builder()
-                .angle(angle).x(x()).angleDot(angleDot()).xDot(xDot()).nofSteps(nofSteps()).build());
-    }
 
     public StatePole calcNew(int action, ParametersPole parameters) {
-        return new StatePole(variables.calcNew(action, parameters));
+        return new StatePole(relations.calcNew(action,variables),parameters);
     }
 
     public double angle() {
@@ -81,7 +95,7 @@ public class StatePole implements StateI<VariablesPole> {
 
     @Override
     public StateI<VariablesPole> copy() {
-        return new StatePole(variables);
+        return new StatePole(variables.copy(),parameters);
     }
 
     @Override
