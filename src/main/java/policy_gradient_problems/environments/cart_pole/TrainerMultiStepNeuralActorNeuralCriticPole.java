@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.MultistepNeuralCriticUpdater;
+import policy_gradient_problems.domain.common_episode_trainers.MultiStepNeuralCriticUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.MultiStepResults;
 import policy_gradient_problems.helpers.NStepReturnInfo;
@@ -68,8 +68,8 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
         agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
     }
 
-    private MultistepNeuralCriticUpdater<VariablesPole> createCriticUpdater() {
-        return new MultistepNeuralCriticUpdater<>(
+    private MultiStepNeuralCriticUpdater<VariablesPole> createCriticUpdater() {
+        return new MultiStepNeuralCriticUpdater<>(
                 parameters,
                 (s) -> agent.getCriticOut(s),
                 (t) -> agent.fitCritic(t.getLeft(), t.getMiddle()));

@@ -31,7 +31,7 @@ import static common.Conditionals.executeIfTrue;
 
 @Log
 @AllArgsConstructor
-public class MultistepNeuralCriticUpdater<V> {
+public class MultiStepNeuralCriticUpdater<V> {
 
     TrainerParameters parameters;
     Function<StateI<V>,Double> criticOut;
