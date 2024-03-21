@@ -240,8 +240,7 @@ package struktur  - domain helpers runners  x
 läsa testkod  x
 TrainerParameters learningRate påv ej - ev ta bort  x
 common_generic + common_value_classes -> value_classes  x
-MultistepNeuralCriticUpdater är svår förstå
-Consumer<Triple<List<List<Double>>,List<Double>,Integer>> fitCritic;  //todo MultiStepResults
+MultistepNeuralCriticUpdater är svår förstå  x
 VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters
 döpa om TrainerVanillaPole till mfl TrainerParameterActorPole
 behövs alla trainers?

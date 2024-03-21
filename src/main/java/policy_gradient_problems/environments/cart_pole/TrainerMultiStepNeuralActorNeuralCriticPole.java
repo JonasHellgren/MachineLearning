@@ -7,11 +7,12 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.MultiStepNeuralCriticUpdater;
+import policy_gradient_problems.helpers.MultiStepNeuralCriticUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.MultiStepResults;
 import policy_gradient_problems.helpers.NStepReturnInfo;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.helpers.NeuralActorUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,48 +35,25 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
 
     @Override
     public void train() {
-        var cu = createCriticUpdater();
+        var cu = new MultiStepNeuralCriticUpdater<>(parameters, agent);
+        var au=new NeuralActorUpdater<>(agent);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
-            var multiStepResults= cu.updateCritic(experiences);
-            updateActor(multiStepResults);
-            printIfSuccessFul(ei, experiences);
+            var multiStepResults = cu.getMultiStepResults(experiences);
+            cu.updateCritic(multiStepResults);
+            au.updateActor(multiStepResults);
+            printIfSuccessful(ei, experiences);
             updateTracker(ei, experiences);
         }
-    }
-
-    private void updateActor(MultiStepResults msRes) {
-        List<List<Double>> inList=new ArrayList<>();
-        List<List<Double>> outList=new ArrayList<>();
-        for (int step = 0; step < msRes.nofSteps() ; step++) {
-            inList.add(msRes.stateValuesList().get(step));
-            outList.add(createOneHot(msRes, step));
-        }
-        agent.fitActor(inList,outList);
-    }
-
-    @NotNull
-    private static List<Double> createOneHot(MultiStepResults msRes, int i) {
-        int actionInt = msRes.actionList().get(i).asInt();
-        double adv= msRes.valueTarList().get(i)- msRes.valuePresentList().get(i);
-        List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(StatePole.nofActions(), actionInt,adv);
-        oneHot.set(actionInt, adv);
-        return oneHot;
     }
 
     private void setStartStateInAgent() {
         agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
     }
 
-    private MultiStepNeuralCriticUpdater<VariablesPole> createCriticUpdater() {
-        return new MultiStepNeuralCriticUpdater<>(
-                parameters,
-                (s) -> agent.getCriticOut(s),
-                (t) -> agent.fitCritic(t.getLeft(), t.getMiddle()));
-    }
 
-    void printIfSuccessFul(int ei, List<Experience<VariablesPole>> experiences) {
+    void printIfSuccessful(int ei, List<Experience<VariablesPole>> experiences) {
         var elInfo = new NStepReturnInfo<>(experiences, parameters);
         executeIfTrue(!elInfo.isEndExperienceFail(), () ->
                 log.info("Episode successful, ei = " + ei + ", n steps = " + experiences.size()));

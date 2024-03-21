@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.MultiStepNeuralCriticUpdater;
-import policy_gradient_problems.domain.common_episode_trainers.MultistepParamActorUpdater;
+import policy_gradient_problems.helpers.MultiStepNeuralCriticUpdater;
+import policy_gradient_problems.helpers.MultistepParamActorUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.helpers.NStepReturnInfo;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
@@ -41,12 +41,13 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
 
     @Override
     public void train() {
-        var cu = createCriticUpdater();
+        var cu = new MultiStepNeuralCriticUpdater<>(parameters,agent);
         var au = createActorUpdater();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
-            cu.updateCritic(experiences);
+            var multiStepResults = cu.getMultiStepResults(experiences);
+            cu.updateCritic(multiStepResults);
             au.updateActor(experiences);
             printIfSuccessFul(ei, experiences);
             updateTracker(ei, experiences);
@@ -55,13 +56,6 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
 
     private void setStartStateInAgent() {
         agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
-    }
-
-    private MultiStepNeuralCriticUpdater<VariablesPole> createCriticUpdater() {
-        return new MultiStepNeuralCriticUpdater<>(
-                parameters,
-                (s) -> agent.getCriticOut(s),
-                (t) -> agent.fitCritic(t.getLeft(), t.getMiddle()));
     }
 
     private MultistepParamActorUpdater<VariablesPole> createActorUpdater() {

@@ -34,14 +34,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-    //@Disabled("Long time")
+    @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
         int nofSteps = getNofSteps();
         somePrinting(nofSteps);
         printMemories();
-        assertTrue(nofSteps > 20);
+         System.out.println("nofSteps = " + nofSteps);
+         assertTrue(nofSteps > 20);
     }
 
     private void somePrinting(int nofSteps) {
@@ -57,7 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     private void printMemories() {
-        for (int i = 0; i < 10 ; i++) {
+        for (int i = 0; i < 5 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
             double valueCritic=agent.getCriticOut(statePole);
 

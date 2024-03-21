@@ -1,4 +1,4 @@
-package policy_gradient_problems.domain.common_episode_trainers;
+package policy_gradient_problems.helpers;
 
 import lombok.Builder;
 import lombok.NonNull;
