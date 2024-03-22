@@ -23,7 +23,7 @@ import static common.ListUtils.*;
         for (int x = 0; x < 10 ; x++) {
             experiencePoleList.add(expOf(x));
         }
-        listInfoPole=new MultiStepReturnEvaluator<>(experiencePoleList,trainerParameters);
+        listInfoPole=new MultiStepReturnEvaluator<>(trainerParameters,experiencePoleList);
     }
 
 
@@ -61,7 +61,8 @@ import static common.ListUtils.*;
 
     @Test
      void whenTStartIs15_thenCorrect() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> listInfoPole.getResultManySteps(15));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> listInfoPole.getResultManySteps(15));
     }
 
 

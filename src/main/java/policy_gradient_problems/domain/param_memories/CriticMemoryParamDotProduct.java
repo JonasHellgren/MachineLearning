@@ -1,4 +1,4 @@
-package policy_gradient_problems.helpers;
+package policy_gradient_problems.domain.param_memories;
 
 import lombok.Getter;
 import org.apache.commons.math3.linear.ArrayRealVector;

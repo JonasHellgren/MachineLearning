@@ -5,7 +5,7 @@ import common.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ActorMemoryParam;
+import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
 import common.SubArrayExtractor;
 
 import java.util.ArrayList;

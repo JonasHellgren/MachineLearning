@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ActorMemoryParam;
+import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
 
 import java.util.List;
 import java.util.function.Function;

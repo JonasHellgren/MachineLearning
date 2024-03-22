@@ -52,7 +52,7 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
 
 
     void printIfSuccessful(int ei, List<Experience<VariablesPole>> experiences) {
-        var elInfo = new MultiStepReturnEvaluator<>(experiences, parameters);
+        var elInfo = new MultiStepReturnEvaluator<>(parameters,experiences);
         executeIfTrue(!elInfo.isEndExperienceFail(), () ->
                 log.info("Episode successful, ei = " + ei + ", n steps = " + experiences.size()));
     }

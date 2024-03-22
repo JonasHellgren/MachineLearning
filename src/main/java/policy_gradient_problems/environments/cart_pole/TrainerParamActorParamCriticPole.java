@@ -7,7 +7,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.helpers.ReturnCalculator;
-import policy_gradient_problems.helpers.CriticMemoryParamDotProduct;
+import policy_gradient_problems.domain.param_memories.CriticMemoryParamDotProduct;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 

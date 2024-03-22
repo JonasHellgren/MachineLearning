@@ -8,8 +8,8 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ActorMemoryParam;
-import policy_gradient_problems.helpers.CriticMemoryParamOneHot;
+import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
+import policy_gradient_problems.domain.param_memories.CriticMemoryParamOneHot;
 
 import java.util.List;
 

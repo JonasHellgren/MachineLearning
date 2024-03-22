@@ -12,8 +12,6 @@ import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class MultiStepResultsGenerator<V> {
-
-
     @NonNull TrainerParameters parameters;
     @NonNull NeuralCriticI<V> agent;
 
@@ -21,7 +19,7 @@ public class MultiStepResultsGenerator<V> {
         Integer n = parameters.stepHorizon();
         int nofExperiences = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
-        var elInfo = new MultiStepReturnEvaluator<>(experiences, parameters);
+        var elInfo = new MultiStepReturnEvaluator<>(parameters,experiences);
         int tEnd = elInfo.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;  //explained in top of file
 
         var results = MultiStepResults.create(tEnd);

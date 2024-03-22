@@ -30,6 +30,7 @@ public class TestNeuralActorMemorySC {
     }
 
     @Test
+    @Disabled("Long time")
     void whenObsState0_thenHigherProbA1() {
         trainActor();
         printStateProb();

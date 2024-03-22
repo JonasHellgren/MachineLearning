@@ -1,6 +1,7 @@
 package policy_gradient_problems.domain.value_classes;
 
 import lombok.Builder;
+import lombok.With;
 
 import static common.MyFunctions.defaultIfNullDouble;
 import static common.MyFunctions.defaultIfNullInteger;
@@ -8,7 +9,7 @@ import static common.MyFunctions.defaultIfNullInteger;
 public record TrainerParameters(
         Integer nofEpisodes,
         Integer nofStepsMax,
-        Double gamma,
+        @With Double gamma,
         Double learningRateNonNeuralActor,
         Integer stepHorizon) {
 

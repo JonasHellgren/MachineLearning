@@ -248,6 +248,7 @@ flytta några helpers till common, tex BucketLimitsHandler
 ResultManySteps som record  x
 MultiStepResultsGenerator NeuralCriticUpdater  NeuralActorUpdater x
 fler tester helpers
+MultistepParamActorUpdater  ersätt fält med agent
 ref bilder i markdown
 
 Pseudocode PPO

@@ -26,7 +26,7 @@ public class MultistepParamActorUpdater<V> {
     @NonNull Consumer<RealVector> changeActor;
 
     public void updateActor(List<Experience<V>> experiences) {
-        var nri = new MultiStepReturnEvaluator<>(experiences, parameters);
+        var nri = new MultiStepReturnEvaluator<>(parameters,experiences);
         var ac=new AdvantageCalculator<>(parameters, criticOut);
         int T = experiences.size();
         for (int tau = 0; tau < T; tau++) {
