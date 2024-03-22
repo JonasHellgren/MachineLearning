@@ -246,6 +246,7 @@ döpa om TrainerVanillaPole till mfl TrainerParameterActorPole  x
 behövs alla trainers? x
 flytta några helpers till common, tex BucketLimitsHandler
 ResultManySteps som record  x
+MultiStepResultsGenerator NeuralCriticUpdater  NeuralActorUpdater x
 fler tester helpers
 ref bilder i markdown
 

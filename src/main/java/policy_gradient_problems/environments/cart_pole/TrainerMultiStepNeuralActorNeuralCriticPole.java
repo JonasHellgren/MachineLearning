@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.helpers.MultiStepNeuralCriticUpdater;
+import policy_gradient_problems.helpers.NeuralCriticUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.helpers.MultiStepResultsGenerator;
 import policy_gradient_problems.helpers.MultiStepReturnEvaluator;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.helpers.NeuralActorUpdater;
@@ -31,14 +32,15 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
 
     @Override
     public void train() {
-        var cu = new MultiStepNeuralCriticUpdater<>(parameters, agent);
+        var msg=new MultiStepResultsGenerator<>(parameters,agent);
+        var cu = new NeuralCriticUpdater<>(agent);
         var au=new NeuralActorUpdater<>(agent);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
-            var multiStepResults = cu.getMultiStepResults(experiences);
-            cu.updateCritic(multiStepResults);
-            au.updateActor(multiStepResults);
+            var msr = msg.generate(experiences);
+            cu.updateCritic(msr);
+            au.updateActor(msr);
             printIfSuccessful(ei, experiences);
             updateTracker(ei, experiences);
         }
