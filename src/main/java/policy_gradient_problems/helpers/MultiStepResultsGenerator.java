@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.NeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.MultiStepResults;
+import policy_gradient_problems.domain.value_classes.ResultManySteps;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.stream.IntStream;
  If isFutureStateOutside() is true, t+tHor is outside the end of the episode, hence valueFut must be zero.
 
  |_____|_____|_____|_____|_____|_____|_____|_____|_____|
- t               tEndep      t+tHor
+ 0     t          tEndep      t+tHor
 
  If isEndExperienceFail() is true the episode ended in fail state. In this case we want tEnd to cover the entire episode.
  The reason is that we want to learn also from steps/states close to tEndep. This is done by setting tEnd as
@@ -30,7 +31,6 @@ import java.util.stream.IntStream;
  nofExperiences-n+1.
  Or phrased differently, only states present earlier in the episode will be updated if not ending in fail state.
  The reason is that future, t+tHorizon, state values are not known for states later in the episode.
-
  */
 
 @AllArgsConstructor
@@ -45,23 +45,29 @@ public class MultiStepResultsGenerator<V> {
         double gammaPowN = Math.pow(parameters.gamma(), n);
         var mse = new MultiStepReturnEvaluator<>(parameters, experiences);
         int tEnd = mse.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;  //explained in top of file
-
         Conditionals.executeIfTrue(!mse.isEndExperienceFail(), () -> log.fine("Non ending in fail"));
-
         var results = MultiStepResults.create(tEnd, nofExperiences);
         IntStream.range(0, tEnd).forEach(t -> {
             var resMS = mse.getResultManySteps(t);
-            double sumRewards = resMS.sumRewardsNSteps();
-            double valueFut = !resMS.isFutureStateOutside()
-                    ? gammaPowN * agent.getCriticOut(resMS.stateFuture())
-                    : 0;
-            results.addStateValues(mse.getExperience(t).state().asList());
-            results.addAction(mse.getExperience(t).action());
-            double criticOut = agent.getCriticOut(mse.getExperience(t).state());
-            results.addPresentValue(criticOut);
-            results.addValueTarget(sumRewards + valueFut);
+            addValueTarget(gammaPowN, results, resMS);
+            addOther(mse, results, t);
         });
         return results;
+    }
+
+    private void addValueTarget(double gammaPowN, MultiStepResults results, ResultManySteps<V> resMS) {
+        double sumRewards = resMS.sumRewardsNSteps();
+        double valueFut = !resMS.isFutureStateOutside()
+                ? gammaPowN * agent.getCriticOut(resMS.stateFuture())
+                : 0;
+        results.addValueTarget(sumRewards + valueFut);
+    }
+
+    private void addOther(MultiStepReturnEvaluator<V> mse, MultiStepResults results, int t) {
+        results.addStateValues(mse.getExperience(t).state().asList());
+        results.addAction(mse.getExperience(t).action());
+        double criticOut = agent.getCriticOut(mse.getExperience(t).state());
+        results.addPresentValue(criticOut);
     }
 
 }

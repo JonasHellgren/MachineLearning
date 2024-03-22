@@ -250,7 +250,7 @@ MultiStepResultsGenerator NeuralCriticUpdater  NeuralActorUpdater x
 fler tester helpers x
 TestMultiStepResultsGenerator x
 MultistepParamActorUpdater  ersätt fält med agent  x
-ref bilder i markdown
+ref bilder i markdown  x
 
 Pseudocode PPO
 påbörja CustomPPOLoss  x
