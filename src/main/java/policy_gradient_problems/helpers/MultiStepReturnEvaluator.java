@@ -2,15 +2,18 @@ package policy_gradient_problems.helpers;
 
 import common.ListUtils;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.domain.value_classes.ResultManySteps;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 /***
+ *
+ * Used by trainers to derive return (sum rewards) at tStart for given experienceList
+ *
  *  n-step return si Gk:k+n=R(k)...gamma^(n-1)*R(k+n-1)+gamma^n*V(S(k+n-1))
  *  k is referring to experience index
  *  therefore
@@ -19,17 +22,10 @@ import java.util.stream.IntStream;
  */
 
 @AllArgsConstructor
-public class NStepReturnInfo<V> {
-
-    @Builder
-    public static class ResultManySteps<V> {
-        public Double sumRewardsNSteps;
-        public StateI<V> stateFuture;
-        public boolean isFutureStateOutside;
-    }
+public class MultiStepReturnEvaluator<V> {
 
     final List<Experience<V>> experienceList;
-    TrainerParameters parametersTrainer;
+    TrainerParameters parameters;
 
     public ResultManySteps<V> getResultManySteps(Experience<V> e) {
         int tStart = experienceList.indexOf(e);
@@ -42,11 +38,11 @@ public class NStepReturnInfo<V> {
     public ResultManySteps<V> getResultManySteps(int tStart) {
         int sizeExpList = experienceList.size();
         throwIfBadArgument(tStart, sizeExpList);
-        int tEnd = tStart + parametersTrainer.stepHorizon();
+        int tEnd = tStart + parameters.stepHorizon();
         List<Double> rewardList = IntStream.range(tStart, Math.min(tEnd, sizeExpList))  //range -> end exclusive
                 .mapToObj(t -> experienceList.get(t).reward())
                 .toList();
-        double rewardSumDiscounted = ListUtils.discountedSum(rewardList, parametersTrainer.gamma());
+        double rewardSumDiscounted = ListUtils.discountedSum(rewardList, parameters.gamma());
         boolean isEndOutSide = tEnd > sizeExpList;
         StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(tEnd - 1).stateNext();
 

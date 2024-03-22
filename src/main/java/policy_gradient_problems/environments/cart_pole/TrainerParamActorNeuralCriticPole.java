@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentParamActorNeuralCri
 import policy_gradient_problems.helpers.MultiStepNeuralCriticUpdater;
 import policy_gradient_problems.helpers.MultistepParamActorUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.helpers.NStepReturnInfo;
+import policy_gradient_problems.helpers.MultiStepReturnEvaluator;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
     }
 
     void printIfSuccessFul(int ei, List<Experience<VariablesPole>> experiences) {
-        var elInfo = new NStepReturnInfo<>(experiences, parameters);
+        var elInfo = new MultiStepReturnEvaluator<>(experiences, parameters);
         executeIfTrue(!elInfo.isEndExperienceFail(), () ->
                 log.info("Episode successful, ei = " + ei + ", n steps = " + experiences.size()));
     }

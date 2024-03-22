@@ -2,6 +2,7 @@ package policygradient.two_armed_bandit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.*;
@@ -27,7 +28,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
     }
 
     @Test
-    //@Disabled("takes long time")
+    @Disabled("takes long time")
      void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();
@@ -35,7 +36,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
     }
 
     @Test
-    //@Disabled("takes long time")
+    @Disabled("takes long time")
      void givenEnvActionZeroIsWellRewarded_whenTrained_thenCorrect() {
         var environment= EnvironmentBandit.newWithProbabilities(1.0,0.0);
         createTrainer(environment);

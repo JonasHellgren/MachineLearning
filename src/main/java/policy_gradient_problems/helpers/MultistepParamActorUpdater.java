@@ -7,8 +7,6 @@ import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.helpers.AdvantageCalculator;
-import policy_gradient_problems.helpers.NStepReturnInfo;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.List;
 import java.util.function.*;
@@ -28,7 +26,7 @@ public class MultistepParamActorUpdater<V> {
     @NonNull Consumer<RealVector> changeActor;
 
     public void updateActor(List<Experience<V>> experiences) {
-        var nri = new NStepReturnInfo<>(experiences, parameters);
+        var nri = new MultiStepReturnEvaluator<>(experiences, parameters);
         var ac=new AdvantageCalculator<>(parameters, criticOut);
         int T = experiences.size();
         for (int tau = 0; tau < T; tau++) {

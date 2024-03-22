@@ -8,14 +8,14 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
-import policy_gradient_problems.helpers.ParamFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 
 import java.util.List;
 import static common.MyFunctions.*;
 import static policy_gradient_problems.helpers.GradLogCalculator.calculateGradLog;
-import static policy_gradient_problems.helpers.SoftMaxEvaluator.getProbabilities;
+import static common.SoftMaxEvaluator.getProbabilities;
 
 
 /***
@@ -29,12 +29,12 @@ public class AgentBanditParamActor extends AgentA<VariablesBandit> implements Ag
     public static final double THETA0 = 0.5, THETA1 = 0.5;
     public static final double[] VECTOR = new double[]{THETA0, THETA1};
 
-    ParamFunction actor;
+    ActorMemoryParam actor;
 
     @Builder
-    public AgentBanditParamActor(ParamFunction actor, int nofActions) {
+    public AgentBanditParamActor(ActorMemoryParam actor, int nofActions) {
         super(StateBandit.newDefault());
-        this.actor = (ParamFunction) defaultIfNullObject.apply(actor,new ParamFunction(VECTOR));
+        this.actor = (ActorMemoryParam) defaultIfNullObject.apply(actor,new ActorMemoryParam(VECTOR));
     }
 
     public static AgentBanditParamActor newDefault() {
@@ -42,7 +42,7 @@ public class AgentBanditParamActor extends AgentA<VariablesBandit> implements Ag
     }
 
     public static AgentBanditParamActor newWithThetas(double t0, double t1) {
-        return AgentBanditParamActor.builder().actor(new ParamFunction(new double[]{t0, t1})).build();
+        return AgentBanditParamActor.builder().actor(new ActorMemoryParam(new double[]{t0, t1})).build();
     }
 
     @Override

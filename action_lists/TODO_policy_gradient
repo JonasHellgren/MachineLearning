@@ -243,8 +243,9 @@ common_generic + common_value_classes -> value_classes  x
 MultistepNeuralCriticUpdater är svår förstå  x
 VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters x
 döpa om TrainerVanillaPole till mfl TrainerParameterActorPole  x
-behövs alla trainers?
+behövs alla trainers? x
 flytta några helpers till common, tex BucketLimitsHandler
+ResultManySteps som record  x
 fler tester helpers
 ref bilder i markdown
 

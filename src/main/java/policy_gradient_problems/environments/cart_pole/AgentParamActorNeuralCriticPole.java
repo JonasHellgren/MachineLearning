@@ -6,7 +6,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorNeuralCriticI;
-import policy_gradient_problems.helpers.ParamFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> implements AgentParamActorNeuralCriticI<VariablesPole> {
 
-    ParamFunction actor;
+    ActorMemoryParam actor;
     NeuralCriticMemoryPole critic;
     AgentParamActorPoleHelper helper;
 
@@ -31,7 +31,7 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
                                            NetSettings criticSettings,
                                            ParametersPole parametersPole) {
         super(stateStart);
-        this.actor = new ParamFunction(actorParam);
+        this.actor = new ActorMemoryParam(actorParam);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);
         this.helper = new AgentParamActorPoleHelper(actor);
     }

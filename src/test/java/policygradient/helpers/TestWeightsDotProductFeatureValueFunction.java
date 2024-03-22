@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import policy_gradient_problems.helpers.WeightsDotProductFeatureValueFunction;
+import policy_gradient_problems.helpers.CriticMemoryParamDotProduct;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      static final int NOF_FEATURES = 1;
      static final int NOF_ITERATIONS = 1000;
      static final double TOL = 0.01;
-    WeightsDotProductFeatureValueFunction valueFunction;
+    CriticMemoryParamDotProduct valueFunction;
 
     @BeforeEach
      void init() {
-        valueFunction =new WeightsDotProductFeatureValueFunction(NOF_FEATURES, ALPHA);
+        valueFunction =new CriticMemoryParamDotProduct(NOF_FEATURES, ALPHA);
         trainValueFunction();
     }
 

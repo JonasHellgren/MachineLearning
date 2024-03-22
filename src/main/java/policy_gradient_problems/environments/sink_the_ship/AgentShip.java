@@ -12,15 +12,15 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ParamFunction;
-import policy_gradient_problems.helpers.SubArrayExtractor;
-import policy_gradient_problems.helpers.TabularValueFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
+import common.SubArrayExtractor;
+import policy_gradient_problems.helpers.CriticMemoryParamOneHot;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
 import static common.MyFunctions.*;
-import static policy_gradient_problems.helpers.SoftMaxEvaluator.getProbabilities;
+import static common.SoftMaxEvaluator.getProbabilities;
 
 
 /***
@@ -35,8 +35,8 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorT
     public static final int NOF_THETAS_PER_STATE = 2;
     public static final double STD_MIN = 2.5e-2,  SMALLEST_DENOM = 1e-2,  MAX_GRAD_ELEMENT = 1;
 
-    ParamFunction actor;
-    TabularValueFunction critic;
+    ActorMemoryParam actor;
+    CriticMemoryParamOneHot critic;
 
     NormDistributionSampler sampler;
     SubArrayExtractor subArrayExtractor;
@@ -52,8 +52,8 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorT
 
     public AgentShip(int stateStart, double[] thetaArray) {
         super(new StateShip(new VariablesShip(stateStart)));
-        this.actor = new ParamFunction(thetaArray);
-        this.critic =new TabularValueFunction(EnvironmentShip.POSITIONS.size());
+        this.actor = new ActorMemoryParam(thetaArray);
+        this.critic =new CriticMemoryParamOneHot(EnvironmentShip.POSITIONS.size());
         this.sampler=new NormDistributionSampler();
         this.subArrayExtractor=new SubArrayExtractor(getThetaLength(),NOF_THETAS_PER_STATE);
     }

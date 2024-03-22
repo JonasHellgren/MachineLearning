@@ -11,8 +11,8 @@ import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import java.util.List;
 
 import static common.IndexFinder.findBucket;
-import static policy_gradient_problems.helpers.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.helpers.BucketLimitsHandler.throwIfBadLimits;
+import static common.BucketLimitsHandler.getLimits;
+import static common.BucketLimitsHandler.throwIfBadLimits;
 
 /**
  * Generic abstract agent, handles a state with variables V

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ParamFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
 
 import java.util.List;
 import java.util.function.Function;
@@ -16,7 +16,7 @@ public class AgentParamActorPoleHelper {
     public static final int LENGTH_THETA = 4;
     public static final double THETA = 1d;
 
-    ParamFunction actor;
+    ActorMemoryParam actor;
     public List<Double> calcActionProbabilitiesInState(StateI<VariablesPole> state) {
         double prob0 = calcProbabilityAction0(state);
         return List.of(prob0,1-prob0);

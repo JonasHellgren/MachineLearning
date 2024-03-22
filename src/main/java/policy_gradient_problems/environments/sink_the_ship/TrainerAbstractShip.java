@@ -29,7 +29,7 @@ public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
         super.parameters=parameters;
     }
 
-    void updateTracker(int ei, TabularValueFunction valueFunction ) {
+    void updateTracker(int ei, CriticMemoryParamOneHot valueFunction ) {
         for (int s: EnvironmentShip.POSITIONS) {
             Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
             double valueState=valueFunction.getValue(s);

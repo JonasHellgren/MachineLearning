@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ * Data container for episode results
  * Every item in lists is for specific time step
  */
 

@@ -5,8 +5,8 @@ import common.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ParamFunction;
-import policy_gradient_problems.helpers.SubArrayExtractor;
+import policy_gradient_problems.helpers.ActorMemoryParam;
+import common.SubArrayExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,19 +16,19 @@ import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.helpers.BucketLimitsHandler.getLimits;
-import static policy_gradient_problems.helpers.BucketLimitsHandler.throwIfBadLimits;
+import static common.BucketLimitsHandler.getLimits;
+import static common.BucketLimitsHandler.throwIfBadLimits;
 import static policy_gradient_problems.helpers.GradLogCalculator.calculateGradLog;
-import static policy_gradient_problems.helpers.SoftMaxEvaluator.getProbabilities;
+import static common.SoftMaxEvaluator.getProbabilities;
 
 public class AgentParamActorSCHelper {
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
     public static final double THETA = 0.5;
 
-    ParamFunction actor;
+    ActorMemoryParam actor;
     SubArrayExtractor subArrayExtractor;
 
-    public AgentParamActorSCHelper(ParamFunction actor) {
+    public AgentParamActorSCHelper(ActorMemoryParam actor) {
         this.actor = actor;
         this.subArrayExtractor = new SubArrayExtractor(getThetaLength(), NOF_ACTIONS);
     }

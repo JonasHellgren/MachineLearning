@@ -9,12 +9,12 @@ import org.apache.commons.math3.linear.RealVector;
  */
 
 @Getter
-public class WeightsDotProductFeatureValueFunction {
+public class CriticMemoryParamDotProduct {
 
     ArrayRealVector wVector;   //value function parameters
     double alpha;
 
-    public WeightsDotProductFeatureValueFunction(int nofFeatures, double alpha) {
+    public CriticMemoryParamDotProduct(int nofFeatures, double alpha) {
         this.wVector=new ArrayRealVector(nofFeatures);
         this.alpha=alpha;
     }

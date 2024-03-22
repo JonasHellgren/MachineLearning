@@ -6,7 +6,8 @@ import java.util.*;
 import static common.ListUtils.*;
 
 /**
- *  See corresponding test for purpose
+ *  Fills in value field in experience
+ *  See corresponding test for more
  */
 
 public class ReturnCalculator<S> {

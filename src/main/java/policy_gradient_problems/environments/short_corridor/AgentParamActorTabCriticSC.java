@@ -8,13 +8,13 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.helpers.ParamFunction;
-import policy_gradient_problems.helpers.TabularValueFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
+import policy_gradient_problems.helpers.CriticMemoryParamOneHot;
 
 import java.util.List;
 
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static policy_gradient_problems.helpers.SoftMaxEvaluator.getProbabilities;
+import static common.SoftMaxEvaluator.getProbabilities;
 
 /***
  * See shortCorridor.md for description
@@ -28,8 +28,8 @@ import static policy_gradient_problems.helpers.SoftMaxEvaluator.getProbabilities
 public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements AgentParamActorTabCriticI<VariablesSC> {
     public static final int NOF_ACTIONS = EnvironmentSC.NOF_ACTIONS;
 
-    ParamFunction actor;
-    TabularValueFunction critic;
+    ActorMemoryParam actor;
+    CriticMemoryParamOneHot critic;
     AgentParamActorSCHelper helper;
 
     public static AgentParamActorTabCriticSC newRandomStartStateDefaultThetas() {
@@ -42,8 +42,8 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
 
     public AgentParamActorTabCriticSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromRealPos(posStart));
-        this.actor = new ParamFunction(thetaArray);
-        this.critic = new TabularValueFunction(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
+        this.actor = new ActorMemoryParam(thetaArray);
+        this.critic = new CriticMemoryParamOneHot(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
         this.helper = new AgentParamActorSCHelper(actor);
     }
 

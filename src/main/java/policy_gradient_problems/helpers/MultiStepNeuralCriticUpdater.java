@@ -37,15 +37,15 @@ public class MultiStepNeuralCriticUpdater<V> {
         Integer n = parameters.stepHorizon();
         int nofExperiences = experiences.size();
         double gammaPowN = Math.pow(parameters.gamma(), n);
-        var elInfo = new NStepReturnInfo<>(experiences, parameters);
+        var elInfo = new MultiStepReturnEvaluator<>(experiences, parameters);
         int tEnd = elInfo.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;  //explained in top of file
 
         var results = MultiStepResults.create(tEnd);
         IntStream.range(0, tEnd).forEach(t -> {
             var resMS = elInfo.getResultManySteps(t);
-            double sumRewards = resMS.sumRewardsNSteps;
-            double valueFut = !resMS.isFutureStateOutside
-                    ? gammaPowN * agent.getCriticOut(resMS.stateFuture)
+            double sumRewards = resMS.sumRewardsNSteps();
+            double valueFut = !resMS.isFutureStateOutside()
+                    ? gammaPowN * agent.getCriticOut(resMS.stateFuture())
                     : 0;
             results.addStateValues(elInfo.getExperience(t).state().asList());
             results.addAction(elInfo.getExperience(t).action());

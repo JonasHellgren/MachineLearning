@@ -7,15 +7,15 @@ import org.apache.commons.math3.linear.RealVector;
  * Actor memory for some agent classes
  */
 
-public class ParamFunction {
+public class ActorMemoryParam {
 
     RealVector params;
 
-    public ParamFunction(RealVector params) {
+    public ActorMemoryParam(RealVector params) {
         this.params = params;
     }
 
-    public ParamFunction(double[] thetaArray) {
+    public ActorMemoryParam(double[] thetaArray) {
         this.params=new ArrayRealVector(thetaArray);
     }
 
@@ -24,8 +24,8 @@ public class ParamFunction {
     }
 
 
-    public ParamFunction copy() {
-        return new ParamFunction(params.copy());
+    public ActorMemoryParam copy() {
+        return new ActorMemoryParam(params.copy());
     }
 
 

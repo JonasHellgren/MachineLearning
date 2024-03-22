@@ -6,11 +6,11 @@ import org.apache.commons.math3.linear.ArrayRealVector;
  * The critic in some actor-critic agents
  */
 
-public class TabularValueFunction {
+public class CriticMemoryParamOneHot {
     ArrayRealVector wVector;   //value function parameters
     int nofNonTerminalStates;
 
-    public TabularValueFunction(int nofNonTerminalStates) {
+    public CriticMemoryParamOneHot(int nofNonTerminalStates) {
         this.nofNonTerminalStates=nofNonTerminalStates;
         this.wVector=getZeroVector();
     }

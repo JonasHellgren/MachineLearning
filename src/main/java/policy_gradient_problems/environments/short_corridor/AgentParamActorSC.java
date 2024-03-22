@@ -5,7 +5,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
-import policy_gradient_problems.helpers.ParamFunction;
+import policy_gradient_problems.helpers.ActorMemoryParam;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParamActorI<VariablesSC> {
 
-    ParamFunction actor;
+    ActorMemoryParam actor;
     AgentParamActorSCHelper helper;
 
     public static AgentParamActorSC newRandomStartStateDefaultThetas() {
@@ -27,7 +27,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
 
     public AgentParamActorSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromRealPos(posStart));
-        this.actor = new ParamFunction(thetaArray);
+        this.actor = new ActorMemoryParam(thetaArray);
         this.helper = new AgentParamActorSCHelper(actor);
     }
 

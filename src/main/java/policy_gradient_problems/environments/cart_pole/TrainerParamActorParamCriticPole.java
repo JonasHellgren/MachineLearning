@@ -7,7 +7,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.helpers.ReturnCalculator;
-import policy_gradient_problems.helpers.WeightsDotProductFeatureValueFunction;
+import policy_gradient_problems.helpers.CriticMemoryParamDotProduct;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
@@ -23,7 +23,7 @@ public final class TrainerParamActorParamCriticPole extends TrainerAbstractPole 
 
 
     AgentParamActorI<VariablesPole> agent;
-    WeightsDotProductFeatureValueFunction valueFunction;
+    CriticMemoryParamDotProduct valueFunction;
 
     @Builder
     public TrainerParamActorParamCriticPole(@NonNull EnvironmentPole environment,
@@ -31,7 +31,7 @@ public final class TrainerParamActorParamCriticPole extends TrainerAbstractPole 
                                             @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
-        this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, LEARNING_RATE);
+        this.valueFunction=new CriticMemoryParamDotProduct(NOF_FEATURES, LEARNING_RATE);
     }
 
     @Override

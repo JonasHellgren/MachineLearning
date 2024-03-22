@@ -1,4 +1,4 @@
-package policy_gradient_problems.helpers;
+package common;
 
 import common.ListUtils;
 import org.jetbrains.annotations.NotNull;

@@ -3,7 +3,7 @@ package policygradient.cart_pole;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.helpers.NStepReturnInfo;
+import policy_gradient_problems.helpers.MultiStepReturnEvaluator;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import static common.ListUtils.*;
  class TestNStepReturnInfoPole {
 
      static final double REWARD = 1d;
-    NStepReturnInfo<VariablesPole> listInfoPole;
+    MultiStepReturnEvaluator<VariablesPole> listInfoPole;
     TrainerParameters trainerParameters;
 
     @BeforeEach
@@ -23,7 +23,7 @@ import static common.ListUtils.*;
         for (int x = 0; x < 10 ; x++) {
             experiencePoleList.add(expOf(x));
         }
-        listInfoPole=new NStepReturnInfo<>(experiencePoleList,trainerParameters);
+        listInfoPole=new MultiStepReturnEvaluator<>(experiencePoleList,trainerParameters);
     }
 
 
@@ -33,9 +33,9 @@ import static common.ListUtils.*;
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertFalse(result.isFutureStateOutside);
-        Assertions.assertEquals(4+1,result.stateFuture.getVariables().x());
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
+        Assertions.assertFalse(result.isFutureStateOutside());
+        Assertions.assertEquals(4+1,result.stateFuture().getVariables().x());
     }
 
     @Test
@@ -44,9 +44,9 @@ import static common.ListUtils.*;
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(5);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertFalse(result.isFutureStateOutside);
-        Assertions.assertEquals(9+1,result.stateFuture.getVariables().x());
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
+        Assertions.assertFalse(result.isFutureStateOutside());
+        Assertions.assertEquals(9+1,result.stateFuture().getVariables().x());
     }
 
     @Test
@@ -55,8 +55,8 @@ import static common.ListUtils.*;
         System.out.println("result = " + result);
 
         double expectedDiscSum = getExpectedDiscSum(4);
-        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps);
-        Assertions.assertTrue(result.isFutureStateOutside);
+        Assertions.assertEquals(expectedDiscSum,result.sumRewardsNSteps());
+        Assertions.assertTrue(result.isFutureStateOutside());
     }
 
     @Test

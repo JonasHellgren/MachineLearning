@@ -5,7 +5,7 @@ import common.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import plotters.PlotterMultiplePanelsPairs;
 import policy_gradient_problems.helpers.PPOHelper;
-import policy_gradient_problems.helpers.SoftMaxEvaluator;
+import common.SoftMaxEvaluator;
 
 import java.util.*;
 
