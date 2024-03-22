@@ -241,9 +241,10 @@ läsa testkod  x
 TrainerParameters learningRate påv ej - ev ta bort  x
 common_generic + common_value_classes -> value_classes  x
 MultistepNeuralCriticUpdater är svår förstå  x
-VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters
-döpa om TrainerVanillaPole till mfl TrainerParameterActorPole
+VariablesPole calcNew - följa StatePole innehar VariablesPole, PoleRelations, PoleParameters x
+döpa om TrainerVanillaPole till mfl TrainerParameterActorPole  x
 behövs alla trainers?
+flytta några helpers till common, tex BucketLimitsHandler
 fler tester helpers
 ref bilder i markdown
 

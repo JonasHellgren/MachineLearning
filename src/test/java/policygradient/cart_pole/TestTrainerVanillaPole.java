@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
  class TestTrainerVanillaPole {
 
-    TrainerVanillaPole trainer;
+    TrainerParamActorPole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
      ParametersPole parametersPole=ParametersPole.newDefault();
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     private void createTrainer(EnvironmentPole environment) {
-        trainer = TrainerVanillaPole.builder()
+        trainer = TrainerParamActorPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

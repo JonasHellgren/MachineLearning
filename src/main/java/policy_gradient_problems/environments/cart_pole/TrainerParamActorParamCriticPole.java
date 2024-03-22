@@ -17,7 +17,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
  */
 
 @Getter
-public final class TrainerBaselinePole extends TrainerAbstractPole {
+public final class TrainerParamActorParamCriticPole extends TrainerAbstractPole {
     public static final int NOF_FEATURES = 3;
     static final double LEARNING_RATE = 0.01;
 
@@ -26,9 +26,9 @@ public final class TrainerBaselinePole extends TrainerAbstractPole {
     WeightsDotProductFeatureValueFunction valueFunction;
 
     @Builder
-    public TrainerBaselinePole(@NonNull EnvironmentPole environment,
-                              @NonNull AgentParamActorI<VariablesPole> agent,
-                              @NonNull TrainerParameters parameters) {
+    public TrainerParamActorParamCriticPole(@NonNull EnvironmentPole environment,
+                                            @NonNull AgentParamActorI<VariablesPole> agent,
+                                            @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
         this.valueFunction=new WeightsDotProductFeatureValueFunction(NOF_FEATURES, LEARNING_RATE);

@@ -13,9 +13,9 @@ import policy_gradient_problems.environments.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TestTrainerBaselinePole {
+class TestTrainerParamActorParamCriticPole {
 
-    TrainerBaselinePole trainer;
+    policy_gradient_problems.environments.cart_pole.TrainerParamActorParamCriticPole trainer;
     AgentParamActorPole agent;
     EnvironmentPole environment;
     ParametersPole parametersPole;
@@ -30,7 +30,7 @@ class TestTrainerBaselinePole {
     }
 
     private void createTrainer(EnvironmentPole environment) {
-        trainer = TrainerBaselinePole.builder()
+        trainer = policy_gradient_problems.environments.cart_pole.TrainerParamActorParamCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder().nofEpisodes(5000).gamma(0.9)
@@ -66,7 +66,7 @@ class TestTrainerBaselinePole {
         StateI<VariablesPole> statePole = StatePole.newFromVariables(
                 VariablesPole.builder().angle(angle).x(x).build(),
                 parametersPole);
-        return TrainerBaselinePole.getFeatureVector(
+        return policy_gradient_problems.environments.cart_pole.TrainerParamActorParamCriticPole.getFeatureVector(
                 Experience.<VariablesPole>builder().state(statePole).build(),
                 environment.getParameters()
 

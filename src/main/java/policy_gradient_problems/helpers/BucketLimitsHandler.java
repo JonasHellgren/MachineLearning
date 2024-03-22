@@ -23,6 +23,9 @@ import static common.MathUtils.accumulatedSum;
 
 public class BucketLimitsHandler {
 
+    private BucketLimitsHandler() {
+    }
+
     @NotNull
     public static List<Double> getLimits(List<Double> actionProbabilities) {
         List<Double> limits = new ArrayList<>();
@@ -34,7 +37,7 @@ public class BucketLimitsHandler {
 
     public static void throwIfBadLimits(List<Double> limits) {
         if (ListUtils.findMin(limits).orElseThrow() < 0d || ListUtils.findMin(limits).orElseThrow() > 1) {
-            throw new RuntimeException("Bad action probabilities");
+            throw new ArithmeticException("Bad action probabilities");
         }
     }
 

@@ -7,14 +7,14 @@ import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.domain.common_episode_trainers.ParamActorEpisodeTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
-public final class TrainerVanillaPole extends TrainerAbstractPole {
+public final class TrainerParamActorPole extends TrainerAbstractPole {
 
     AgentParamActorI<VariablesPole> agent;
 
     @Builder
-    public TrainerVanillaPole(@NonNull EnvironmentPole environment,
-                            @NonNull AgentParamActorPole agent,
-                            @NonNull TrainerParameters parameters) {
+    public TrainerParamActorPole(@NonNull EnvironmentPole environment,
+                                 @NonNull AgentParamActorPole agent,
+                                 @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent=agent;
     }

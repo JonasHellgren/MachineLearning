@@ -36,14 +36,14 @@ public class RunnerTrainersPole {
     }
 
     private static List<Double> getNofStepsListVanilla(AgentParamActorPole agent, EnvironmentPole environment) {
-        var trainerVanilla = TrainerVanillaPole.builder()
+        var trainerVanilla = TrainerParamActorPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
         return getFilteredNofSteps(trainerVanilla.getTracker());
     }
 
     private static List<Double> getNofStepsListBaseline(AgentParamActorPole agent, EnvironmentPole environment) {
-        var trainerBaseline = TrainerBaselinePole.builder()
+        var trainerBaseline = TrainerParamActorParamCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
         return getFilteredNofSteps(trainerBaseline.getTracker());

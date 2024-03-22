@@ -68,7 +68,6 @@ public class StatePole implements StateI<VariablesPole> {
     }
 
 
-
     public StatePole calcNew(int action, ParametersPole parameters) {
         return new StatePole(relations.calcNew(action,variables),parameters);
     }

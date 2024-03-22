@@ -1,5 +1,6 @@
 package policygradient.short_corridor;
 
+import common.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
@@ -8,12 +9,13 @@ import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
 import policy_gradient_problems.environments.short_corridor.StateSC;
 import policy_gradient_problems.environments.short_corridor.TrainerParamActorTabCriticSC;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerParamActorTabCriticSC {
+ class TestParamActorTabCriticSC {
 
     TrainerParamActorTabCriticSC trainer;
-    static AgentParamActorTabCriticSC agent;
+    AgentParamActorTabCriticSC agent;
 
     @BeforeEach
      void init() {
@@ -27,40 +29,25 @@ import static org.junit.jupiter.api.Assertions.*;
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(15_000).nofStepsMax(100).gamma(0.99)
-                        .learningRateNonNeuralActor(1e-3)
+                        .nofEpisodes(2000).nofStepsMax(100).gamma(1d)
                         .build())
                 .build();
     }
 
     @Test
+    //@Disabled("takes long time")
      void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();
-
-        setRealPos(2);
-        assertTrue(isProbMovingRightLarger());
-        setRealPos(6);
-        assertFalse(isProbMovingRightLarger());
-
-        assertTrue(getCriticOutValue(1) >getCriticOutValue(0));
-        assertTrue(getCriticOutValue(1)>getCriticOutValue(2));
+        agent.setState(StateSC.newFromRealPos(2));
+        assertEquals(1, agent.chooseAction().asInt());
+        assertTrue(MathUtils.isInRange(agent.chooseAction().asInt(),0,1));
+        agent.setState(StateSC.newFromRealPos(6));
+        assertEquals(0, agent.chooseAction().asInt());
+        var wVector = agent.getCritic();
+        assertTrue(wVector.getValue(1)>wVector.getValue(0));
+        assertTrue(wVector.getValue(1)>wVector.getValue(2));
     }
-
-    private static double getCriticOutValue(int state) {
-        var valueFunction = agent.getCritic();
-        return valueFunction.getValue(state);
-    }
-
-    private static boolean isProbMovingRightLarger() {
-        return agent.getActionProbabilities().get(0) < agent.getActionProbabilities().get(1);
-    }
-
-
-    private void setRealPos(int pos) {
-        agent.setState(StateSC.newFromRealPos(pos));
-    }
-
 
     private void printPolicy() {
         System.out.println("policy");

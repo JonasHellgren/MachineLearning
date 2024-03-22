@@ -6,14 +6,17 @@ import lombok.With;
 
 import static common.MyFunctions.sqr2;
 
+/**
+ * TempVariables is inner record to decrease nof arguments
+ */
+
 @AllArgsConstructor
 public class PoleRelations {
 
     ParametersPole parameters;
 
     @Builder
-
-    record TempVariables(int action, double sinTheta, double cosTheta, @With double temp) {   //inner record to decrease nof arguments
+    record TempVariables(int action, double sinTheta, double cosTheta, @With double temp) {
     }
 
     public VariablesPole calcNew(int action, VariablesPole s) {
