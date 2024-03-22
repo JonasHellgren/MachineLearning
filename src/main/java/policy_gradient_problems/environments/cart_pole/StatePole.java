@@ -1,6 +1,5 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +45,7 @@ public class StatePole implements StateI<VariablesPole> {
         return new StatePole(VariablesPole.newAngleAndPosRandom(p),p);
     }
 
-    public StatePole newWithAngle(double angle,ParametersPole parameters) {
+    public StatePole copyWithAngle(double angle) {
         return StatePole.newFromVariables(VariablesPole.builder()
                 .angle(angle).x(x()).angleDot(angleDot()).xDot(xDot()).nofSteps(nofSteps()).build(),parameters);
     }

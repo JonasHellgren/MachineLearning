@@ -19,7 +19,7 @@ public class NeuralActorUpdater<V> {
     public void updateActor(MultiStepResults msRes) {
         List<List<Double>> inList=new ArrayList<>();
         List<List<Double>> outList=new ArrayList<>();
-        for (int step = 0; step < msRes.nofSteps() ; step++) {
+        for (int step = 0; step < msRes.tEnd() ; step++) {  //correct? or nofSteps
             inList.add(msRes.stateValuesList().get(step));
             outList.add(createOneHot(msRes, step));
         }

@@ -11,7 +11,7 @@ public record TrainerParameters(
         Integer nofStepsMax,
         @With Double gamma,
         Double learningRateNonNeuralActor,
-        Integer stepHorizon) {
+        @With Integer stepHorizon) {
 
     static final int NOF_EPISODES = 2000;
     static final int NOF_STEPS = 100;

@@ -1,7 +1,9 @@
 package policy_gradient_problems.helpers;
 
+import common.Conditionals;
 import common.ListUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ResultManySteps;
@@ -22,6 +24,7 @@ import java.util.stream.IntStream;
  */
 
 @AllArgsConstructor
+@Log
 public class MultiStepReturnEvaluator<V> {
     TrainerParameters parameters;
     List<Experience<V>> experienceList;
@@ -37,14 +40,15 @@ public class MultiStepReturnEvaluator<V> {
     public ResultManySteps<V> getResultManySteps(int tStart) {
         int sizeExpList = experienceList.size();
         throwIfBadArgument(tStart, sizeExpList);
-        int tEnd = tStart + parameters.stepHorizon();
-        List<Double> rewardList = IntStream.range(tStart, Math.min(tEnd, sizeExpList))  //range -> end exclusive
+        int idxEndExperience = tStart + parameters.stepHorizon();
+        List<Double> rewardList = IntStream.range(tStart, Math.min(idxEndExperience, sizeExpList))  //range -> end exclusive
                 .mapToObj(t -> experienceList.get(t).reward())
                 .toList();
         double rewardSumDiscounted = ListUtils.discountedSum(rewardList, parameters.gamma());
-        boolean isEndOutSide = tEnd > sizeExpList;
-        StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(tEnd - 1).stateNext();
-
+        boolean isEndOutSide = idxEndExperience > sizeExpList;
+        Conditionals.executeIfTrue(isEndOutSide, () ->
+                log.fine("Index end experience is outside, idxEndExperience="+idxEndExperience+", sizeExpList= "+sizeExpList));
+        StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(idxEndExperience - 1).stateNext();
         return ResultManySteps.<V>builder()
                 .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)
@@ -69,6 +73,7 @@ public class MultiStepReturnEvaluator<V> {
 
     public boolean isEndExperienceFail() {
         var expEnd = getEndExperience();
+//      return expEnd.isPresent() && (expEnd.orElseThrow().isFail() || expEnd.orElseThrow().isTerminal());
         return expEnd.isPresent() && expEnd.orElseThrow().isFail();
 
 

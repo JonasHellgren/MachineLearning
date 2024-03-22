@@ -14,6 +14,7 @@ import java.util.List;
 
 @Builder
 public record MultiStepResults(
+        int tEnd,
         int nofSteps,
         List<List<Double>> stateValuesList,
         List<Action> actionList,
@@ -22,8 +23,9 @@ public record MultiStepResults(
 ) {
 
 
-    public static MultiStepResults create(int nofSteps) {
+    public static MultiStepResults create(int tEnd,int nofSteps) {
        return MultiStepResults.builder()
+                .tEnd(tEnd)
                 .nofSteps(nofSteps)
                 .stateValuesList(new ArrayList<>())
                 .actionList(new ArrayList<>())
@@ -39,7 +41,7 @@ public record MultiStepResults(
         actionList.add(action);
     }
 
-    public void addValue(Double value) {
+    public void addPresentValue(Double value) {
         valuePresentList.add(value);
     }
 

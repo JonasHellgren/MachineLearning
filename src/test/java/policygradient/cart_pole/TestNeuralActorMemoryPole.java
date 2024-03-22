@@ -42,7 +42,7 @@ import java.util.List;
 
 
     private static List<Double> getActionProbabilitesForAngle(double angle) {
-        StatePole state = StatePole.newAllRandom(parametersPole).newWithAngle(angle,parametersPole);
+        StatePole state = StatePole.newAllRandom(parametersPole).copyWithAngle(angle);
         return actor.getOutValue(state.asList());
     }
 

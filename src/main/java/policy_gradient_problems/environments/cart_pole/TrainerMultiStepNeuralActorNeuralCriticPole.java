@@ -39,10 +39,13 @@ public class TrainerMultiStepNeuralActorNeuralCriticPole extends TrainerAbstract
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
             var msr = msg.generate(experiences);
-            cu.updateCritic(msr);
-            au.updateActor(msr);
-            printIfSuccessful(ei, experiences);
-            updateTracker(ei, experiences);
+            if (msr.tEnd()<1) {
+                log.warning("tEnd zero or below");
+            }
+                cu.updateCritic(msr);
+                au.updateActor(msr);
+                printIfSuccessful(ei, experiences);
+                updateTracker(ei, experiences);
         }
     }
 

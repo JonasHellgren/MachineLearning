@@ -7,7 +7,7 @@ import policy_gradient_problems.environments.cart_pole.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestAgentPole {
+class TestAgentParamPole {
 
     static final double TOL = 1e-5;
     EnvironmentPole environment;
