@@ -1,7 +1,6 @@
 package common_dl4j;
 
 import com.google.common.base.Preconditions;
-import common.MathUtils;
 import lombok.AllArgsConstructor;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
@@ -9,17 +8,22 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class CustomPPOLoss  implements ILossFunction  {
 
-    public static final double EPSILON = 0.2;
-    double epsilon;
+    public static final double DEF_EPSILON = 0.2;
+    public static final double EPSILON_FIN_DIFF = 1e-6;
+
+    double epsilon;  //for PPO clipping
+    double eps = EPSILON_FIN_DIFF; // Epsilon value for finite difference calculation
+
     PPOScoreCalculator scoreCalculator;
 
     public static CustomPPOLoss newDefault() {
-        return new CustomPPOLoss(EPSILON);
+        return new CustomPPOLoss(DEF_EPSILON);
     }
 
     public CustomPPOLoss(double epsilon) {
@@ -28,26 +32,33 @@ public class CustomPPOLoss  implements ILossFunction  {
     }
 
     @Override
-    public double computeScore(INDArray indArray, INDArray indArray1, IActivation iActivation, INDArray indArray2, boolean b) {
-        return 0;
+    public double computeScore(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask, boolean average) {
+       INDArray scoreArr=computeScoreArray(labels,preOut,actFcn,mask);
+       double score=scoreArr.sumNumber().doubleValue();
+      return average  ? score/scoreArr.size(0)  : score;
     }
 
     @Override
     public INDArray computeScoreArray(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask) {
         int numEx= (int) labels.size(0);
         var scoreArray= Nd4j.create(numEx);
-        IntStream.range(0,numEx).forEach(i -> {
-                var label=labels.getRow(i);
-                var outPut=preOut.getRow(i);
-                scoreArray.putScalar(i,scoreOnePoint(label,outPut,actFcn));
-
-        });
+        IntStream.range(0,numEx).forEach(i ->
+                scoreArray.putScalar(i,scoreOnePoint(labels.getRow(i),preOut.getRow(i),actFcn)));
         return scoreArray;
     }
 
+    /***
+      Computing the gradient numerically for the preOutput
+      Can potentially be replaced with some non-numerical
+     */
+
     @Override
-    public INDArray computeGradient(INDArray indArray, INDArray indArray1, IActivation iActivation, INDArray indArray2) {
-        return null;
+    public INDArray computeGradient(INDArray labels, INDArray preOut, IActivation activationFn, INDArray indArray2) {
+        Function<INDArray, Double> scoreFunction = (parameters) -> {
+            INDArray activatedOutput = activationFn.getActivation(preOut.dup(), true);
+            return scoreOnePoint(labels, activatedOutput,activationFn);
+        };
+        return FiniteDifferenceCalculator.calculateGradient(scoreFunction, preOut, eps);
     }
 
     @Override
@@ -61,8 +72,6 @@ public class CustomPPOLoss  implements ILossFunction  {
     }
 
     /**
-     * label = [0,0,...,Adv,..,0.2, 0.5,..], first half is one hot coded Adv, second half is old probs
-     *
      * label=[action,adv,probOld]
      */
 
