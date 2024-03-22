@@ -7,7 +7,7 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.helpers.MultiStepResultsGenerator;
 import policy_gradient_problems.helpers.NeuralCriticUpdater;
-import policy_gradient_problems.helpers.MultistepParamActorUpdater;
+import policy_gradient_problems.helpers.MultistepParamActorNeuralCriticUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.helpers.MultiStepReturnEvaluator;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
@@ -44,7 +44,7 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
     public void train() {
         var msg = new MultiStepResultsGenerator<>(parameters, agent);
         var cu = new NeuralCriticUpdater<>(agent);
-        var au = createActorUpdater();
+        var au =new MultistepParamActorNeuralCriticUpdater<>(parameters,agent);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
@@ -58,14 +58,6 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
 
     private void setStartStateInAgent() {
         agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
-    }
-
-    private MultistepParamActorUpdater<VariablesPole> createActorUpdater() {
-        return MultistepParamActorUpdater.<VariablesPole>builder()
-                .parameters(parameters)
-                .criticOut((s) -> agent.getCriticOut(s))
-                .calcGradLogVector((s, a) -> agent.calcGradLogVector(s, a))
-                .changeActor((rv) -> agent.changeActor(rv)).build();
     }
 
     void printIfSuccessFul(int ei, List<Experience<VariablesPole>> experiences) {

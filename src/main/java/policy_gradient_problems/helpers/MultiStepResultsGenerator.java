@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /***
- This class evaluates results used to train an agent. Time steps between 0 and tEnd are used. So time t
- is in [0,tEnd].  An episode ends at time tEndep, see figure below.
+ This class evaluates an episode to derive data/results used to train an agent. Time steps between 0 and tEnd are used.
+ So time t is in [0,tEnd].  An episode ends at time tEndep, see figure below.
  A critical part is the target value, it is defined in addValueTarget(sumRewards + valueFut).
  The term valueFut makes things a bit tricky, hence a deeper explanation follows.
  If isFutureStateOutside() is true, t+tHor is outside the end of the episode, hence valueFut must be zero.
