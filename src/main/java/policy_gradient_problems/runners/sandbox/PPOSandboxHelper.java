@@ -1,4 +1,4 @@
-package policy_gradient_problems.helpers;
+package policy_gradient_problems.runners.sandbox;
 
 import common.MathUtils;
 import lombok.Builder;
@@ -12,13 +12,13 @@ import java.util.List;
  */
 
 @Builder
-public class PPOHelper {
+public class PPOSandboxHelper {
 
     @Builder.Default
     double  penRatioDeviation=1e-5;
 
-    public static PPOHelper newDefault() {
-        return PPOHelper.builder().build();
+    public static PPOSandboxHelper newDefault() {
+        return PPOSandboxHelper.builder().build();
     }
 
      public double getPPOObjective(double ratio, double advantage, double epsilon) {

@@ -4,7 +4,6 @@ import common.BestPairFinder;
 import common.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import plotters.PlotterMultiplePanelsPairs;
-import policy_gradient_problems.helpers.PPOHelper;
 import common.SoftMaxEvaluator;
 
 import java.util.*;
@@ -15,7 +14,7 @@ public class RunnerPlayingWithPPOObjective {
     public static final double A0 = -0.5, A1 = -0.3;
     public static final double THETA0OLD = 0d, THETA1OLD=THETA0OLD;
     static  List<Double> theta0List=ListUtils.createDoubleListStartEndStep(-1d,1d,0.25);
-    static  PPOHelper helper=PPOHelper.newDefault();
+    static PPOSandboxHelper helper= PPOSandboxHelper.newDefault();
 
     public static void main(String[] args) {
 
@@ -58,7 +57,7 @@ public class RunnerPlayingWithPPOObjective {
         double theta1=-theta0;
 
         List<Double> prob01= SoftMaxEvaluator.getProbabilities(List.of(theta0,theta1));
-        List<Double> ratios = PPOHelper.divideListElements(prob01Old, prob01);
+        List<Double> ratios = PPOSandboxHelper.divideListElements(prob01Old, prob01);
         List<Double> objectives=new ArrayList<>();
         var advantageIterator= advantages.iterator();
         for (double ratio:ratios) {

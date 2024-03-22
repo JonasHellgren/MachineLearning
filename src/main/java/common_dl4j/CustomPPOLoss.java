@@ -1,18 +1,31 @@
-package policy_gradient_problems.helpers;
+package common_dl4j;
 
+import com.google.common.base.Preconditions;
 import common.MathUtils;
+import lombok.AllArgsConstructor;
 import org.nd4j.common.primitives.Pair;
 import org.nd4j.linalg.activations.IActivation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 
+import java.util.stream.IntStream;
+
+@AllArgsConstructor
 public class CustomPPOLoss  implements ILossFunction  {
 
+    public static final double EPSILON = 0.2;
+    double epsilon;
+    PPOScoreCalculator scoreCalculator;
 
-    public static final double SMALL = 1e-5;
+    public static CustomPPOLoss newDefault() {
+        return new CustomPPOLoss(EPSILON);
+    }
 
-    double epsilon=0.2;  //todo via constructor also
+    public CustomPPOLoss(double epsilon) {
+        this.epsilon = epsilon;
+        this.scoreCalculator=new PPOScoreCalculator(epsilon);
+    }
 
     @Override
     public double computeScore(INDArray indArray, INDArray indArray1, IActivation iActivation, INDArray indArray2, boolean b) {
@@ -20,8 +33,16 @@ public class CustomPPOLoss  implements ILossFunction  {
     }
 
     @Override
-    public INDArray computeScoreArray(INDArray indArray, INDArray indArray1, IActivation iActivation, INDArray indArray2) {
-        return null;
+    public INDArray computeScoreArray(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask) {
+        int numEx= (int) labels.size(0);
+        var scoreArray= Nd4j.create(numEx);
+        IntStream.range(0,numEx).forEach(i -> {
+                var label=labels.getRow(i);
+                var outPut=preOut.getRow(i);
+                scoreArray.putScalar(i,scoreOnePoint(label,outPut,actFcn));
+
+        });
+        return scoreArray;
     }
 
     @Override
@@ -45,19 +66,15 @@ public class CustomPPOLoss  implements ILossFunction  {
      * label=[action,adv,probOld]
      */
 
-    private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
+    private double scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         int nofOut = label.columns();
+        Preconditions.checkArgument(nofOut==3,"Wrong label definition PPO custom loss");
         INDArray estProbabilities = activationFn.getActivation(z, false);
-        double action=label.getDouble(0,0);
-        double adv=label.getDouble(0,1);
-        double probOld=label.getDouble(0,2);
-        double probNew=estProbabilities.getDouble(0, (int) action);
-        double probRatio=probNew/Math.max(probOld, SMALL);
-        double clippedProbRatio= MathUtils.clip(probRatio,1-epsilon,1+epsilon);
-        double ppoScore=Math.min(probRatio*adv,clippedProbRatio*adv);  //maximized
-        double cost=-ppoScore;  //minimized
-        return Nd4j.valueArrayOf(1,nofOut, cost);
+        double ppoScore = scoreCalculator.calcScore(label, estProbabilities);
+        return -ppoScore;  //Negative for maximization in optimization context
     }
+
+
 
 
     private static INDArray getEmptyIndMatrix(INDArray labels) {

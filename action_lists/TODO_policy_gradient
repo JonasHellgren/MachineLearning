@@ -253,6 +253,7 @@ MultistepParamActorUpdater  ersätt fält med agent  x
 ref bilder i markdown  x
 Pseudocode PPO x
 påbörja CustomPPOLoss  x
+TestCustomPPOLoss
 mer clean up
 
 TestCustomPPOLoss
