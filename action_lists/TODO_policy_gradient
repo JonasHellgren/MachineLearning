@@ -258,7 +258,7 @@ TestCustomPPOLoss  x
 -
 psudo code ppo multi step  x
 psudo code multi step  x
-uppdatera multi step return def  - terminal isf fail etc
+uppdatera multi step return def  - terminal isf fail etc  x
 mer clean up
 
 ny environment - MultiCoinDenominationsBandit

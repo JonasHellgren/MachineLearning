@@ -28,14 +28,6 @@ import java.util.stream.IntStream;
 public class MultiStepReturnEvaluator<V> {
     TrainerParameters parameters;
     List<Experience<V>> experienceList;
-/*
-    public ResultManySteps<V> getResultManySteps(Experience<V> e) {
-        int tStart = experienceList.indexOf(e);
-        if (tStart == -1) {
-            throw new IllegalArgumentException("Experience not present");
-        }
-        return getResultManySteps(tStart);
-    }*/
 
     public ResultManySteps<V> getResultManySteps(int tStart) {
         int sizeExpList = experienceList.size();

@@ -17,7 +17,8 @@ import policy_gradient_problems.domain.value_classes.StepReturn;
 @Builder
 public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
     public static final int NOF_ACTIONS = 2;
-    Double probWinAction0, probWinAction1;
+    Double probWinAction0;
+    Double probWinAction1;
 
     public static final double NOF_COINS_IF_WINNING = 1;
 
