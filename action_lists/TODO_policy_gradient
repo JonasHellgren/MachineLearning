@@ -259,10 +259,12 @@ TestCustomPPOLoss  x
 psudo code ppo multi step  x
 psudo code multi step  x
 uppdatera multi step return def  - terminal isf fail etc  x
-mer clean up
 
-ny environment - MultiCoinDenominationsBandit
+ny environment - MultiCoinDenominationsBandit   x
+TestMultiCoinDenominationsBandit  x
+MultiCoinBanditAgentPPO
 TrainerMultiCoinBanditPPO
+mer clean up
 
 cart pole PPOPolicy
 
