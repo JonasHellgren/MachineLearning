@@ -33,8 +33,8 @@ public class TestPPOScoreCalculator {
         double pOld = 0.5;
         double pNew2 = 1.0;
 
-        INDArray label = Nd4j.create(new double[][]{{a, adv, pOld}}); // Action 2, advantage 1.0, old probability 0.5
-        INDArray estProbabilities = Nd4j.create(new double[][]{{0, 0, pNew2}}); // Extremely high new probability for action 2
+        INDArray label = Nd4j.create(new double[]{a, adv, pOld}); // Action 2, advantage 1.0, old probability 0.5
+        INDArray estProbabilities = Nd4j.create(new double[]{0, 0, pNew2}); // Extremely high new probability for action 2
         double lb=adv*(1-EPSILON);
         double ub=adv*(1+EPSILON);
         double advTimesProbRatio=adv*pNew2/pOld;
@@ -59,7 +59,7 @@ public class TestPPOScoreCalculator {
         double pOld= arguments.getDouble(2);
         double pNew= arguments.getDouble(3);
 
-        INDArray label = Nd4j.create(new double[][]{{a, adv, pOld}}); // Action 2, advantage 1.0, old probability 0.5
+        INDArray label = Nd4j.create(new double[]{a, adv, pOld}); // Action 2, advantage 1.0, old probability 0.5
         var oneHot=createListWithOneHotWithValue(3, (int) a,pNew);
         INDArray estProbabilities = getIndArray(oneHot);
         var minMaxList=List.of(adv*(1-EPSILON),adv*(1+EPSILON));
@@ -76,7 +76,7 @@ public class TestPPOScoreCalculator {
 
     private static INDArray getIndArray(List<Double> oneHot) {
         return Nd4j.create(oneHot.stream()
-                .mapToDouble(d -> d == 0.0 ? 0.0 : d).toArray()).reshape(1, oneHot.size());
+                .mapToDouble(d -> d == 0.0 ? 0.0 : d).toArray()).reshape(oneHot.size());
     }
 
 

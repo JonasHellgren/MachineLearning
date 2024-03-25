@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 public class CustomPPOLoss  implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.2;
-    public static final double EPSILON_FIN_DIFF = 1e-6;
+    public static final double EPSILON_FIN_DIFF = 1e-5;
 
     double epsilon;  //for PPO clipping
     double eps = EPSILON_FIN_DIFF; // Epsilon value for finite difference calculation
@@ -33,7 +33,7 @@ public class CustomPPOLoss  implements ILossFunction  {
 
     @Override
     public double computeScore(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask, boolean average) {
-       INDArray scoreArr=computeScoreArray(labels,preOut,actFcn,mask);
+        INDArray scoreArr=computeScoreArray(labels,preOut,actFcn,mask);
        double score=scoreArr.sumNumber().doubleValue();
       return average  ? score/scoreArr.size(0)  : score;
     }
@@ -54,11 +54,17 @@ public class CustomPPOLoss  implements ILossFunction  {
 
     @Override
     public INDArray computeGradient(INDArray labels, INDArray preOut, IActivation activationFn, INDArray indArray2) {
-        Function<INDArray, Double> scoreFunction = (parameters) -> {
-            INDArray activatedOutput = activationFn.getActivation(preOut.dup(), true);
-            return scoreOnePoint(labels, activatedOutput,activationFn);
-        };
-        return FiniteDifferenceCalculator.calculateGradient(scoreFunction, preOut, eps);
+        Preconditions.checkArgument(labels.rank()==2,"Rank label is not 2");
+        Preconditions.checkArgument(labels.rank()==2,"Rank preOut is not 2");
+
+        var gradArray= Nd4j.create(preOut.rows(), preOut.columns());
+        IntStream.range(0,labels.rows()).forEach(i -> {
+            Function<INDArray, Double> scoreFunction = (p) -> scoreOnePoint(labels.getRow(i), p, activationFn);
+            INDArray gradArr = FiniteDifferenceCalculator.calculateGradient(scoreFunction, preOut.getRow(i), eps);
+            gradArray.putRow(i, gradArr);
+        });
+
+        return gradArray;
     }
 
     @Override

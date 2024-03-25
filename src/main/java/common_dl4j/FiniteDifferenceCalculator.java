@@ -19,16 +19,15 @@ public class FiniteDifferenceCalculator {
      * @return The numerical gradient as an INDArray.
      */
     public static INDArray calculateGradient(Function<INDArray, Double> function, INDArray point, double epsilon) {
-        INDArray gradient = Nd4j.zeros(point.shape());
+        INDArray gradient = Nd4j.zeros(point.length());
+
         for (int i = 0; i < point.length(); i++) {
             INDArray pointPlusEpsilon = point.dup();
             pointPlusEpsilon.putScalar(i, point.getDouble(i) + epsilon);
             double fPlusEpsilon = function.apply(pointPlusEpsilon);
-
             INDArray pointMinusEpsilon = point.dup();
             pointMinusEpsilon.putScalar(i, point.getDouble(i) - epsilon);
             double fMinusEpsilon = function.apply(pointMinusEpsilon);
-
             double derivative = (fPlusEpsilon - fMinusEpsilon) / (2 * epsilon);
             gradient.putScalar(i, derivative);
         }

@@ -1,5 +1,6 @@
 package common_dl4j;
 
+import com.google.common.base.Preconditions;
 import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -13,14 +14,15 @@ public class PPOScoreCalculator {
     @NonNull  Double epsilon;
 
     public double calcScore(INDArray label, INDArray estProbabilities) {
-        double action= label.getInt(0,0);
-        double adv= label.getDouble(0,1);
-        double probOld= label.getDouble(0,2);
-        double probNew= estProbabilities.getDouble(0, (int) action);
+        Preconditions.checkArgument(label.rank()==1,"Rank label is not one");
+        Preconditions.checkArgument(estProbabilities.rank()==1,"Rank estProbabilities is not one");
+
+        double action= label.getInt(0);
+        double adv= label.getDouble(1);
+        double probOld= label.getDouble(2);
+        double probNew= estProbabilities.getDouble((int) action);
         double probRatio=probNew/Math.max(probOld, SMALL);
         double clippedProbRatio= MathUtils.clip(probRatio,1-epsilon,1+epsilon);
-        //return Math.min(probRatio*adv,clippedProbRatio*adv);  //standard approach
-
         return MathUtils.isPos(adv)
                 ? Math.min(probRatio*adv,clippedProbRatio*adv)
                 : Math.max(probRatio*adv,clippedProbRatio*adv);
