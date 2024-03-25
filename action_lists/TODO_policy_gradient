@@ -254,10 +254,10 @@ ref bilder i markdown  x
 Pseudocode PPO x
 påbörja CustomPPOLoss  x
 FiniteDifferenceCalculator  x
-TestCustomPPOLoss
+TestCustomPPOLoss  x
 -
-psudo code ppo multi step
-psudo code multi step
+psudo code ppo multi step  x
+psudo code multi step  x
 uppdatera multi step return def  - terminal isf fail etc
 mer clean up
 

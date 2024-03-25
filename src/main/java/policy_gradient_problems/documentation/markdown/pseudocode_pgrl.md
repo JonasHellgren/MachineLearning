@@ -97,38 +97,29 @@ Many steps (large n) gives high variance, while few steps gives higher bias.
 
 ## Proximal Policy Optimization (PPO)
 
-    Repeat (for each iteration):
-    Collect set of trajectories D_k by running policy π_θ_old in the environment
-    Estimate advantages Â_t using the current value function V_w
-    Optimize surrogate L wrt θ, with K epochs and minibatch size M ≤ |D_k|:
-    For each epoch:
-    For each minibatch:
-    θ ← θ + α * ∇_θ L(θ_old, θ)
-    where L(θ_old, θ) is defined as:
-    L(θ_old, θ) = ̂E_t[min(r_t(θ) Â_t, clip(r_t(θ), 1-ε, 1+ε) Â_t)]
-    with r_t(θ) = π_θ(a_t|s_t) / π_θ_old(a_t|s_t)
-    Update the value function by fitting V_w to the observed returns:
-        w ← w - α_v * ∇_w MSE(V_w(s_t), G_t)
-    Update policy parameters: θ_old ← θ
-    Until convergence or maximum iterations reached
-
-## PPO - One fit per episode
-
-    Repeat (for each iteration):
-    Initialize s (initial state)
-    Repeat (for each episode):
-    Collect a trajectory D by running policy π_θ_old in the environment from initial state s to termination
-    For each step in D:
-    Calculate advantage Â_t using the current value function V_w for each s_t in the trajectory
-    Optimize surrogate L wrt θ for one epoch using trajectory D:
-    θ ← θ + α * ∇_θ L(θ_old, θ)
-    where L(θ_old, θ) is defined as:
-    L(θ_old, θ) = min(r_t(θ) Â_t, clip(r_t(θ), 1-ε, 1+ε) Â_t)
-    with r_t(θ) = π_θ(a_t|s_t) / π_θ_old(a_t|s_t)
-
-    Update the value function by fitting V_w to the observed returns from D:
-            w ← w - α_v * ∇_w MSE(V_w(s_t), G_t)
-    Update policy parameters: θ_old ← θ
-
-    Until convergence or maximum iterations reached
+    Initialize policy network π with weights θ (actor)
+    Initialize value network V with weights ϕ (critic)
+    for each iteration do:
+    Initialize memory buffer B
+    for each episode do:
+    Receive initial state s
+    for t = 1, T do:
+        Select action a_t according to policy π(·|s, θ) (e.g., via softmax)
+        Execute action a_t and observe reward r_t and new state s'
+        Store (s, a_t, r_t, s') in B
+        s ← s'
+        if episode is done then:
+        break
+    end for
+    Compute returns G_t for each time step t in the episode using multi-step returns
+    For each step, calculate the advantage estimates A_t using G_t and V(s_t, ϕ)
+    end for
+    for each epoch do:
+    Define mini-batch from B
+    for each mini-batch do:
+        Update actor network 
+        Update critic network 
+    end for
+    end for
+    end for
 
