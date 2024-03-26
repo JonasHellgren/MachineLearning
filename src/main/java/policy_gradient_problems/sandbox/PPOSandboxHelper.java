@@ -1,4 +1,4 @@
-package policy_gradient_problems.runners.sandbox;
+package policy_gradient_problems.sandbox;
 
 import common.MathUtils;
 import lombok.Builder;

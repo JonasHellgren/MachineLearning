@@ -52,7 +52,7 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
 
     private static NetSettings getNetSettings(double learningRate) {
         return NetSettings.builder()
-                .nHiddenLayers(1).nInput(numInput).nHidden(10).nOutput(2)
+                .nHiddenLayers(1).nInput(numInput).nHidden(3).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
                 .lossFunction(PPOLoss.newDefault())

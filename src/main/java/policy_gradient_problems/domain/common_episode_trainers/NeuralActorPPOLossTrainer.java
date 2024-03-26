@@ -27,10 +27,9 @@ public class NeuralActorPPOLossTrainer<V> {
     private List<Double> createOut(Experience<V> experience) {
         int actionInt = experience.action().asInt();
         Preconditions.checkArgument(nofActions>=0 && actionInt < nofActions,"Non valid action, actionInt =" + actionInt);
-        double a = experience.action().asDouble();
         double probOld=agent.getActionProbabilities().get(actionInt);
         double adv=experience.value();
-        return List.of(a,adv,probOld);
+        return List.of((double) actionInt,adv,probOld);
     }
 
 }
