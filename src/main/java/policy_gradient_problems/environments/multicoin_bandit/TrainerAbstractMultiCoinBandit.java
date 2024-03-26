@@ -1,26 +1,27 @@
-package policy_gradient_problems.environments.twoArmedBandit;
+package policy_gradient_problems.environments.multicoin_bandit;
 
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
-import policy_gradient_problems.helpers.TrainingTracker;
+import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
+import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
+import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
+import policy_gradient_problems.helpers.TrainingTracker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
+public abstract  class TrainerAbstractMultiCoinBandit extends TrainerA<VariablesBandit> {
 
     final StateI<VariablesBandit> STATE_DUMMY = StateBandit.newDefault();
-    EnvironmentBandit environment;
+    EnvironmentMultiCoinBandit environment;
 
-    TrainerAbstractBandit(EnvironmentBandit environment,
-                                 TrainerParameters parameters) {
+    TrainerAbstractMultiCoinBandit(EnvironmentMultiCoinBandit environment,
+                          TrainerParameters parameters) {
         this.environment = environment;
         super.parameters = parameters;
     }
@@ -29,7 +30,7 @@ public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
         List<Experience<VariablesBandit>> experienceList = new ArrayList<>();
         for (int si = 0; si < parameters.nofStepsMax(); si++) {
             Action action = agent.chooseAction();
-            StepReturn<VariablesBandit> sr = environment.step(STATE_DUMMY, action);
+            var sr = environment.step(STATE_DUMMY, action);
             experienceList.add(Experience.of(STATE_DUMMY, action, sr.reward(), STATE_DUMMY));
         }
         return experienceList;
@@ -47,5 +48,4 @@ public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
             log.warning("Need to train first");
         }
     }
-
 }

@@ -26,8 +26,6 @@ public abstract class AgentA<V> implements AgentI<V> {
 
     StateI<V> state;
 
-    public abstract List<Double> getActionProbabilities();
-
     @SneakyThrows
     @Override
     public Action chooseAction() {

@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 @AllArgsConstructor
-public class CustomPPOLoss  implements ILossFunction  {
+public class PPOLoss implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.2;
     public static final double EPSILON_FIN_DIFF = 1e-5;
@@ -22,11 +22,11 @@ public class CustomPPOLoss  implements ILossFunction  {
 
     PPOScoreCalculator scoreCalculator;
 
-    public static CustomPPOLoss newDefault() {
-        return new CustomPPOLoss(DEF_EPSILON);
+    public static PPOLoss newDefault() {
+        return new PPOLoss(DEF_EPSILON);
     }
 
-    public CustomPPOLoss(double epsilon) {
+    public PPOLoss(double epsilon) {
         this.epsilon = epsilon;
         this.scoreCalculator=new PPOScoreCalculator(epsilon);
     }

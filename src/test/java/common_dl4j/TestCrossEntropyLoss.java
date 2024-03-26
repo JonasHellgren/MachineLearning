@@ -17,18 +17,18 @@ import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
 
 import java.util.List;
 
-public class TestCustomPolicyGradientLoss {
+ class TestCrossEntropyLoss {
 
-    public static final int N_INPUT = 1;
-    public static final INDArray IN = Nd4j.zeros(1, N_INPUT);
-    public static final double DELTA = 1e-3;
-    public static final int N_OUTPUT = 2;
+     static final int N_INPUT = 1;
+     static final INDArray IN = Nd4j.zeros(1, N_INPUT);
+     static final double DELTA = 1e-3;
+     static final int N_OUTPUT = 2;
 
     MultiLayerNetwork net;
 
     @BeforeEach
-    public void init() {
-        net = getNet(CustomPolicyGradientLoss.newDefault());
+     void init() {
+        net = getNet(CrossEntropyLoss.newDefault());
     }
 
     @NotNull
@@ -43,7 +43,7 @@ public class TestCustomPolicyGradientLoss {
     }
 
     @Test
-    public void whenCreated_thenCorrectGrad() {
+     void whenCreated_thenCorrectGrad() {
         List<List<Double>> listOfListsZ = List.of(List.of(0d, 0d));
         INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ).castTo(DataType.FLOAT);
         List<List<Double>> listOfListsOut = List.of(List.of(1d, 0d));
@@ -57,7 +57,7 @@ public class TestCustomPolicyGradientLoss {
     }
 
     @Test
-    public void whenCreatedManyPoints_thenCorrectGradAnScoreArr() {
+     void whenCreatedManyPoints_thenCorrectGradAnScoreArr() {
 
         List<List<Double>> listOfListsZ = List.of(List.of(0d, 0d),List.of(0d, 0d));
         INDArray z = Dl4JUtil.convertListOfLists(listOfListsZ).castTo(DataType.FLOAT);
@@ -77,7 +77,7 @@ public class TestCustomPolicyGradientLoss {
     }
 
     @Test
-    public void whenOneAtIndex0_thenCorrectNewProb() {
+     void whenOneAtIndex0_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndexNew(1d,0);
         var pBef= net.output(IN).dup();
         net.fit(IN,out);
@@ -87,22 +87,22 @@ public class TestCustomPolicyGradientLoss {
     }
 
     @Test
-    public void whenOneAtIndex1_thenCorrectNewProb() {
+     void whenOneAtIndex1_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndexNew(1d,1);
         var pBef= net.output(IN).dup();
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
-
         Assertions.assertTrue(getP(pAfter, 0) < getP(pBef, 0));
         Assertions.assertTrue(getP(pAfter, 1) > getP(pBef, 1));
     }
 
     @Test
-    public void whenMinusOneAtIndex0_thenCorrectNewProb() {
+     void whenMinusOneAtIndex0_thenCorrectNewProb() {
         INDArray out = getOutWithGtAtIndexNew(-1d,0);
         var pBef= net.output(IN).dup();
         net.fit(IN,out);
         var pAfter= net.output(IN).dup();
+        System.out.println("whenMinusOneAtIndex0_thenCorrectNewProb, pAfter = " + pAfter);
         Assertions.assertTrue(getP(pAfter, 0) < getP(pBef, 0));
         Assertions.assertTrue(getP(pAfter, 1) > getP(pBef, 1));
     }

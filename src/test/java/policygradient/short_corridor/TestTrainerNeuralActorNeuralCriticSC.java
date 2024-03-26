@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
-    @Disabled("long time")
+    //@Disabled("long time")
      void whenTrained_thenCorrectActionSelectionInEachState() {
         trainer.train();
         printPolicy();

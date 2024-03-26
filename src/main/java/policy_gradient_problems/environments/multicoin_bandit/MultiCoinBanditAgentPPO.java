@@ -1,32 +1,35 @@
-package policy_gradient_problems.environments.twoArmedBandit;
+package policy_gradient_problems.environments.multicoin_bandit;
 
-import common_dl4j.*;
 import common.ListUtils;
+import common_dl4j.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
+import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
 
 import java.util.List;
 
-public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
+public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
 
     static final int numInput = 1;
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
     public static final StateBandit DUMMY_STATE = StateBandit.newDefault();
     public static final int NOF_ACTIONS = 2;
+    public static final INDArray DUM_LIST_IN = Dl4JUtil.convertListOfLists(List.of(List.of(0d)));
 
     MultiLayerNetwork actor;
     NetSettings netSettings;
     Dl4JNetFitter netFitter;
 
-    public static AgentBanditNeuralActor newDefault(double learningRate) {
-        return new AgentBanditNeuralActor(learningRate);
+    public static MultiCoinBanditAgentPPO newDefault(double learningRate) {
+        return new MultiCoinBanditAgentPPO(learningRate);
     }
 
-    public AgentBanditNeuralActor(double learningRate) {
+    public MultiCoinBanditAgentPPO(double learningRate) {
         super(DUMMY_STATE);
         this.actor =createNetwork(learningRate);
         this.netSettings=getNetSettings(learningRate);
@@ -38,8 +41,8 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     }
 
     @Override
-    public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
-        fit(outList);
+    public void fitActor(List<List<Double>> inList, List<List<Double>> labelList) {
+        fit(labelList);
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate) {
@@ -52,15 +55,16 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
                 .nHiddenLayers(1).nInput(numInput).nHidden(10).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
-                .lossFunction(CrossEntropyLoss.newDefault())
+                .lossFunction(PPOLoss.newDefault())
                 .build();
     }
 
 
-    private void fit(List<List<Double>> outList) {
-        INDArray dumIn = Dl4JUtil.convertListOfLists(List.of(List.of(0d)));
-        INDArray out=Dl4JUtil.convertListOfLists(outList);
-        netFitter.fit(dumIn,out);
+    private void fit(List<List<Double>> labelList) {
+        INDArray out=Dl4JUtil.convertListOfLists(labelList);
+        netFitter.fit(DUM_LIST_IN,out);
     }
+
+
 
 }

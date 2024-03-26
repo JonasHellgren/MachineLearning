@@ -263,8 +263,10 @@ uppdatera multi step return def  - terminal isf fail etc  x
 ny environment - MultiCoinDenominationsBandit   x
 TestMultiCoinDenominationsBandit  x
 MultiCoinBanditAgentPPO
+NeuralActorPPOLossTrainer
 TrainerMultiCoinBanditPPO
 mer clean up
+- trainFromEpisode på flera ställen göra generisk
 
 cart pole PPOPolicy
 

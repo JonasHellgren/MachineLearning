@@ -16,7 +16,7 @@ import org.nd4j.linalg.lossfunctions.ILossFunction;
 
 import java.util.List;
 
-public class TestCustomPPOLoss {
+public class TestPPOLoss {
 
     public static final int N_INPUT = 1;
     public static final INDArray IN = Nd4j.zeros(1, N_INPUT);
@@ -28,7 +28,7 @@ public class TestCustomPPOLoss {
 
     @BeforeEach
     public void init() {
-        net = getNet(CustomPPOLoss.newDefault());
+        net = getNet(PPOLoss.newDefault());
     }
 
     @NotNull

@@ -1,6 +1,6 @@
 package dl4j.regression_2023;
 
-import common_dl4j.CustomPolicyGradientLoss;
+import common_dl4j.CrossEntropyLoss;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
@@ -64,7 +64,7 @@ public class RunnerCustomPolicyGradientLoss {
                 .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)
                         .activation(Activation.RELU)
                         .build())
-                .layer(1, new OutputLayer.Builder(CustomPolicyGradientLoss.newDefault())
+                .layer(1, new OutputLayer.Builder(CrossEntropyLoss.newDefault())
                         .activation(Activation.SOFTMAX)
                         .nIn(nHidden).nOut(numOutputs).build())
                 .build()

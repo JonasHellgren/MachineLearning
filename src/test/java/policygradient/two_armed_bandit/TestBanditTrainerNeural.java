@@ -28,7 +28,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
     }
 
     @Test
-    @Disabled("takes long time")
+    //@Disabled("takes long time")
      void givenEnvActionOneIsWellRewarded_whenTrained_thenCorrect() {
         trainer.train();
         printPolicy();

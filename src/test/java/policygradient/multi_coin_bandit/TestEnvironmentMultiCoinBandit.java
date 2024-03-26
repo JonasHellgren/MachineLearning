@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.environments.multicoin_bandit.EnvironmentMultiCoinBandit;
-import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 
 class TestEnvironmentMultiCoinBandit {

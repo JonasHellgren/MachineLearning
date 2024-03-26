@@ -10,22 +10,22 @@ import org.nd4j.linalg.lossfunctions.ILossFunction;
 
 import static common_dl4j.Dl4JUtil.replaceRow;
 
-public class CustomPolicyGradientLoss implements ILossFunction {
+public class CrossEntropyLoss implements ILossFunction {
 
     static final float EPS = 1e-5f;
     static double BETA = 0.1d;
     double eps, beta;
     NumericalGradCalculator gradCalculator;
 
-    public static CustomPolicyGradientLoss newDefault() {
-        return new CustomPolicyGradientLoss(EPS, BETA);
+    public static CrossEntropyLoss newDefault() {
+        return new CrossEntropyLoss(EPS, BETA);
     }
 
-    public static CustomPolicyGradientLoss newWithBeta(double beta) {
-        return new CustomPolicyGradientLoss(EPS, beta);
+    public static CrossEntropyLoss newWithBeta(double beta) {
+        return new CrossEntropyLoss(EPS, beta);
     }
 
-    public CustomPolicyGradientLoss(double eps, double beta) {
+    public CrossEntropyLoss(double eps, double beta) {
         this.eps = eps;
         this.beta = beta;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
@@ -66,6 +66,8 @@ public class CustomPolicyGradientLoss implements ILossFunction {
 
     /***
      * A critical method
+     * label expresses the "target" action probabilites. One hot encoding for value of taken action.
+     * labels [1,0,0] will give smaller action change compared to [10,0,0]
      */
 
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
