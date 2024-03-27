@@ -272,6 +272,7 @@ mer clean up
 - namn som anger CrossEntropyLoss  x
 -computeGradientAndScore x
 - trainFromEpisode på flera ställen göra generisk
+- NeuralActorCrossEntropyLossTrainer + NeuralActorPPOLossTrainer -> NeuralActorTrainer
 - fitActor INDArray direkt
 
 cart pole PPOPolicy

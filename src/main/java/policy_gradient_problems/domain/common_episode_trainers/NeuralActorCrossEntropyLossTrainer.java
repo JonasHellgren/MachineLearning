@@ -28,7 +28,7 @@ public class NeuralActorCrossEntropyLossTrainer<V> {
 
     }
 
-    private List<Double> createOut(Experience<V> experience) {  //todo code duplic in NeuralActorNeuralCriticEpisodeTrainer
+    private List<Double> createOut(Experience<V> experience) {
         int actionInt = experience.action().asInt();
         Preconditions.checkArgument(actionInt < nofActions, "Non valid action, actionInt =" + actionInt);
         List<Double> out = ListUtils.createListWithEqualElementValues(nofActions, 0d);
