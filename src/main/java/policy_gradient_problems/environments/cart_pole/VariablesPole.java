@@ -1,6 +1,7 @@
 package policy_gradient_problems.environments.cart_pole;
 
 import lombok.Builder;
+import lombok.With;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
@@ -13,7 +14,7 @@ import static common.RandUtils.getRandomDouble;
 public record VariablesPole(
                             double angle,
                             double x,
-                            double angleDot,
+                            @With double angleDot,
                             double xDot,
                             int nofSteps) {
 

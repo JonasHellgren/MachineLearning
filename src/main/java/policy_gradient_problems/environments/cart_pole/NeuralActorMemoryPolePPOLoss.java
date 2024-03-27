@@ -57,11 +57,11 @@ public class NeuralActorMemoryPolePPOLoss {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(N_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(N_OUTPUTS)
+                .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .learningRate(1e-3).momentum(0.95).seed(1234)   //1e-3
-                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-3,1e-1))  //1e-3,1e-1
-                .sizeBatch(8).isNofFitsAbsolute(true).absNoFit(3)
+                .learningRate(1e-4).momentum(0.9).seed(1234)   //1e-3
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-3,1e-5))  //1e-3,1e-1
+                .sizeBatch(64).relativeNofFitsPerBatch(0.5)
                 .build();
     }
 
@@ -75,6 +75,14 @@ public class NeuralActorMemoryPolePPOLoss {
         var outMinMax = List.of(Pair.create(0d, 1d));
         return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d, 1d));
     }
+/***
+ *                 .nInput(N_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(N_OUTPUTS)
+ *                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
+ *                 .learningRate(1e-4).momentum(0.95).seed(1234)   //1e-3
+ *                 .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-1,1e-1))  //1e-3,1e-1
+ *                 .sizeBatch(8).isNofFitsAbsolute(true).absNoFit(8)  //...3
+ *                 .build();
+ */
 
 
 }

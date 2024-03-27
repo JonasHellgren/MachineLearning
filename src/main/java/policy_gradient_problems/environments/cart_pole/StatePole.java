@@ -50,6 +50,10 @@ public class StatePole implements StateI<VariablesPole> {
                 .angle(angle).x(x()).angleDot(angleDot()).xDot(xDot()).nofSteps(nofSteps()).build(),parameters);
     }
 
+    public StatePole copyWithAngleDot(double angleDot) {
+        return StatePole.newFromVariables(variables.withAngleDot(angleDot),parameters);
+    }
+
 
     private StatePole(VariablesPole variables, ParametersPole parameters) {
         this.variables = variables;

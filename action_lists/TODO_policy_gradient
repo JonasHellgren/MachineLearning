@@ -280,7 +280,8 @@ NeuralActorUpdater generisk genom interface  x
 TestTrainerMultiStepActorCriticPolePPO
 
 cart pole PPOPolicy
-entropy på PPO loss
+entropy på PPO loss  x
+entropy på PPO loss beta = 0.1;  //todo in constructior
 
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
 

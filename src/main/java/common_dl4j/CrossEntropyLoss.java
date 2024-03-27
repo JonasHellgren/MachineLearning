@@ -77,6 +77,7 @@ public class CrossEntropyLoss implements ILossFunction {
      * labels [1,0,0] will give smaller action change compared to [10,0,0]
      */
 
+    //todo return double
     private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         int nofOut = label.columns();
         INDArray estProbabilities = activationFn.getActivation(z, false);

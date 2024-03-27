@@ -18,6 +18,7 @@ public class PPOLoss implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.1;
     public static final double EPSILON_FIN_DIFF = 1e-1;
+    public static final double beta = 0.1;  //todo in constructior
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
     PPOScoreCalculator  scoreCalculator;
@@ -105,8 +106,9 @@ public class PPOLoss implements ILossFunction  {
         int nofOut = label.columns();
         Preconditions.checkArgument(nofOut==3,"Wrong label definition PPO custom loss, label="+label);
         INDArray estProbabilities = activationFn.getActivation(z, false);
+        double entropy = EntropyCalculator.calcEntropy(estProbabilities);
         double ppoScore = scoreCalculator.calcScore(label, estProbabilities);
-        return -ppoScore;  //Negative for maximization in optimization context
+        return -(ppoScore+ beta *entropy);  //Negative for maximization in optimization context
     }
 
 

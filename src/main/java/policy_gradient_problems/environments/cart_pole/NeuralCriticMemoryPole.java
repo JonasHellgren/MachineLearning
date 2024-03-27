@@ -27,11 +27,11 @@ public class NeuralCriticMemoryPole {
 
     public static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(2).nHidden(10).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .learningRate(1e-3).momentum(0.95).seed(1234)
+                .learningRate(1e-4).momentum(0.9).seed(1234)    //1e-3
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
-                .relativeNofFitsPerBatch(0.5)
+                .sizeBatch(64).relativeNofFitsPerBatch(0.5)
                 .build();
     }
 
@@ -87,5 +87,14 @@ public class NeuralCriticMemoryPole {
         return Dl4JUtil.createNormalizer(outMinMax);
     }
 
+/**
+ *               .nInput(NOF_INPUTS).nHiddenLayers(2).nHidden(10).nOutput(NOF_OUTPUTS)
+ *                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
+ *                 .learningRate(1e-3).momentum(0.95).seed(1234)    //1e-3
+ *                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
+ *                 .sizeBatch(64).relativeNofFitsPerBatch(0.5)
+ *                 .build();
+ *     }
+ */
 
 }

@@ -53,7 +53,7 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
     }
 
     private void setStartStateInAgent() {
-        agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
+        agent.setState(StatePole.newUprightAndStill(environment.getParameters()));
     }
 
 

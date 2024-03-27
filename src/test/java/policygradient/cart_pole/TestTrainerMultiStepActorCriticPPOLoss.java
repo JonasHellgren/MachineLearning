@@ -28,7 +28,7 @@ class TestTrainerMultiStepActorCriticPPOLoss {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(200).nofStepsMax(100).gamma(0.95)
+                        .nofEpisodes(100).nofStepsMax(50).gamma(0.99)  //0.95
                         .stepHorizon(10)
                         .build())
                 .actorUpdater(new NeuralActorUpdaterCrossPPOLoss<>())
@@ -49,9 +49,10 @@ class TestTrainerMultiStepActorCriticPPOLoss {
 
     private void somePrinting(int nofSteps) {
         System.out.println("nofSteps = " + nofSteps);
-        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill(parametersPole));
-        double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
-        System.out.println("valAll0 = " + valAll0+", valBigAngle = " + valBigAngle);
+        StatePole uprightAndStill = StatePole.newUprightAndStill(parametersPole);
+        double valAll0=agent.getCriticOut(uprightAndStill);
+        double valBigAngleDot=agent.getCriticOut(uprightAndStill.copyWithAngleDot(0.2));
+        System.out.println("valAll0 = " + valAll0+", valBigAngleDot = " + valBigAngleDot);
     }
 
     private int getNofSteps() {
