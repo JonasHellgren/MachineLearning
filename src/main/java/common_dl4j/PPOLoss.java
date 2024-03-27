@@ -78,7 +78,6 @@ public class PPOLoss implements ILossFunction  {
             INDArray gradArr = calculateGradient(scoreFunction, preOut.getRow(i), epsilonFinDiff);
             gradArray.putRow(i, gradArr);
         });
-
         return gradArray;
     }
 

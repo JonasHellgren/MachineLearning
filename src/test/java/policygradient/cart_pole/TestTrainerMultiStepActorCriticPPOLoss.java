@@ -28,7 +28,7 @@ class TestTrainerMultiStepActorCriticPPOLoss {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(100).nofStepsMax(100).gamma(0.95)
+                        .nofEpisodes(200).nofStepsMax(100).gamma(0.95)
                         .stepHorizon(10)
                         .build())
                 .actorUpdater(new NeuralActorUpdaterCrossPPOLoss<>())

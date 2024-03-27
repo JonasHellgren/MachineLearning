@@ -280,6 +280,7 @@ NeuralActorUpdater generisk genom interface  x
 TestTrainerMultiStepActorCriticPolePPO
 
 cart pole PPOPolicy
+entropy på PPO loss
 
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
 

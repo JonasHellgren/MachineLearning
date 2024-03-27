@@ -13,8 +13,8 @@ import java.util.List;
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 public class NeuralActorMemoryPolePPOLoss {
-    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
-    static int NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
+    static final int N_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
+    static final int N_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
@@ -51,16 +51,16 @@ public class NeuralActorMemoryPolePPOLoss {
     private INDArray getInAsNormalized(List<Double> in) {
         INDArray indArray = Nd4j.create(in);
         normalizerIn.transform(indArray);
-        indArray = indArray.reshape(1, NOF_INPUTS);
+        indArray = indArray.reshape(1, N_INPUTS);
         return indArray;
     }
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(NOF_OUTPUTS)
+                .nInput(N_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-1,1e-1))
+                .learningRate(1e-3).momentum(0.95).seed(1234)   //1e-3
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-3,1e-1))  //1e-3,1e-1
                 .sizeBatch(8).isNofFitsAbsolute(true).absNoFit(3)
                 .build();
     }
@@ -72,7 +72,7 @@ public class NeuralActorMemoryPolePPOLoss {
     }
 
     private static NormalizerMinMaxScaler createNormalizerOut(ParametersPole p) {
-        var outMinMax = List.of(Pair.create(0d, 10d));
+        var outMinMax = List.of(Pair.create(0d, 1d));
         return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d, 1d));
     }
 
