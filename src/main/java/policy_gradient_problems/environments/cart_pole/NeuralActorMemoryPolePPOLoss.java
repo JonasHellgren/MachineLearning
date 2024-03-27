@@ -12,25 +12,19 @@ import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
-/**
- * The out value is probabilitiesm in [0,1], hence shall not be reverted in getOutValue
- * But normalization is needed in the fit method
- */
-
-public class NeuralActorMemoryPole {
-    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates(), NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
-
-    //todo StatePole.noActions()
+public class NeuralActorMemoryPolePPOLoss {
+    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
+    static int NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
-    public static NeuralActorMemoryPole newDefault(ParametersPole parametersPole) {
-        return new NeuralActorMemoryPole(getDefaultNetSettings(), parametersPole);
+    public static NeuralActorMemoryPolePPOLoss newDefault(ParametersPole parametersPole) {
+        return new NeuralActorMemoryPolePPOLoss(getDefaultNetSettings(), parametersPole);
     }
 
-    public NeuralActorMemoryPole(NetSettings netSettings, ParametersPole parametersPole) {
+    public NeuralActorMemoryPolePPOLoss(NetSettings netSettings, ParametersPole parametersPole) {
         this.net = MultiLayerNetworkCreator.create(netSettings);
         this.normalizerIn = createNormalizerIn(parametersPole);
         this.normalizerOut = createNormalizerOut(parametersPole);
@@ -66,7 +60,7 @@ public class NeuralActorMemoryPole {
                 .nInput(NOF_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-3).momentum(0.95).seed(1234)
-                .lossFunction(CrossEntropyLoss.newWithBeta(1e-1))
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-1,1e-1))
                 .sizeBatch(8).isNofFitsAbsolute(true).absNoFit(3)
                 .build();
     }
@@ -81,5 +75,6 @@ public class NeuralActorMemoryPole {
         var outMinMax = List.of(Pair.create(0d, 10d));
         return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d, 1d));
     }
+
 
 }

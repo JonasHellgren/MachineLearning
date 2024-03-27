@@ -273,7 +273,11 @@ mer clean up
 -computeGradientAndScore x
 - trainFromEpisode på flera ställen göra generisk
 - NeuralActorCrossEntropyLossTrainer + NeuralActorPPOLossTrainer -> NeuralActorTrainer  x
-- fitActor INDArray direkt
+- fitActor INDArray direkt - skippar tills vidare verkar inte sakta ner så mkt x
+
+TrainerMultiStepNeuralActorNeuralCriticPole -> TrainerMultiStepActorCriticPole  x
+NeuralActorUpdater generisk genom interface  x
+TestTrainerMultiStepActorCriticPolePPO
 
 cart pole PPOPolicy
 

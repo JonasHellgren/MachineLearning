@@ -4,6 +4,7 @@ import common.MovingAverage;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
+import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
 import policy_gradient_problems.helpers.TrainingTracker;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
@@ -52,8 +53,9 @@ public class RunnerTrainersPole {
     private static List<Double> getNofStepsListAC(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
                                                   EnvironmentPole environment,
                                                   ParametersPole parameters) {
-        var trainerAC = TrainerMultiStepNeuralActorNeuralCriticPole.builder()
-                .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
+        var trainerAC = TrainerMultiStepActorCriticPole.builder()
+                .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER)
+                .actorUpdater(new NeuralActorUpdaterCrossEntropyLoss<>()).build();
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));
         return getFilteredNofSteps(trainerAC.getTracker());

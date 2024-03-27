@@ -33,8 +33,8 @@ public class RunnerTwoArmedBandit {
                 .build();
     }
 
-    private static TrainerBanditNeuralActor createTrainerNeural() {
-        return TrainerBanditNeuralActor.builder()
+    private static TrainerBanditNeuralActorCrossEntropyLoss createTrainerNeural() {
+        return TrainerBanditNeuralActorCrossEntropyLoss.builder()
                 .environment(getEnvironment())
                 .agent(AgentBanditNeuralActor.newDefault(getTrainerParametersNeural().learningRateNonNeuralActor()))
                 .parameters(getTrainerParametersNeural())

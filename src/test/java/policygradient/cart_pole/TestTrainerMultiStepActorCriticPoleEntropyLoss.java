@@ -1,16 +1,16 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
+import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerMultiStepNeuralActorNeuralCriticPole {
+ class TestTrainerMultiStepActorCriticPoleEntropyLoss {
 
-    TrainerMultiStepNeuralActorNeuralCriticPole trainer;
+    TrainerMultiStepActorCriticPole trainer;
     AgentNeuralActorNeuralCriticPole agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPole agent) {
-        trainer = TrainerMultiStepNeuralActorNeuralCriticPole.builder()
+        trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
@@ -32,11 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                         .stepHorizon(10)
                         //.relativeNofFitsPerBatch(0.5)
                         .build())
+                .actorUpdater(new NeuralActorUpdaterCrossEntropyLoss<>())
                 .build();
     }
 
     @Test
-    @Disabled("Long time")
+   // @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
