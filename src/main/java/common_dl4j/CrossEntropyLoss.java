@@ -7,30 +7,30 @@ import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
-
 import static common_dl4j.Dl4JUtil.replaceRow;
 
 public class CrossEntropyLoss implements ILossFunction {
 
-    static final float EPS = 1e-5f;
-    static double BETA = 0.1d;
-    double eps, beta;
+    static final float DEFAULT_EPS = 1e-5f;
+    static final double DEFAULT_BETA = 0.1d;
+    double eps;
+    double beta;
     NumericalGradCalculator gradCalculator;
 
     public static CrossEntropyLoss newDefault() {
-        return new CrossEntropyLoss(EPS, BETA);
+        return new CrossEntropyLoss(DEFAULT_EPS, DEFAULT_BETA);
     }
 
     public static CrossEntropyLoss newWithBeta(double beta) {
-        return new CrossEntropyLoss(EPS, beta);
+        return new CrossEntropyLoss(DEFAULT_EPS, beta);
     }
 
     public CrossEntropyLoss(double eps, double beta) {
         this.eps = eps;
         this.beta = beta;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
-                (p, a, m) -> scoreOnePoint(p.getFirst(), p.getSecond(), a, m);
-        this.gradCalculator = new NumericalGradCalculator(EPS, scoreFcn);
+                (p, a, m) -> scoreOnePoint(p.getFirst(), p.getSecond(), a);
+        this.gradCalculator = new NumericalGradCalculator(DEFAULT_EPS, scoreFcn);
     }
 
      /*
@@ -39,7 +39,11 @@ public class CrossEntropyLoss implements ILossFunction {
      */
 
     @Override
-    public double computeScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask, boolean average) {
+    public double computeScore(INDArray labels,
+                               INDArray preOutput,
+                               IActivation activationFn,
+                               INDArray mask,
+                               boolean average) {
         INDArray scoreArrAllPoints = computeScoreArray(labels, preOutput, activationFn, mask);
         double score = scoreArrAllPoints.sumNumber().doubleValue();
         score = getAverageScoreIfRequested(average, scoreArrAllPoints, score);
@@ -53,11 +57,14 @@ public class CrossEntropyLoss implements ILossFunction {
    */
 
     @Override
-    public INDArray computeScoreArray(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask) {
+    public INDArray computeScoreArray(INDArray labels,
+                                      INDArray preOutput,
+                                      IActivation activationFn,
+                                      INDArray mask) {
         int nofPoints = labels.rows();
         INDArray scoreArrAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
-            INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn, mask);
+            INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn);
             replaceRow(scoreArrAllPoints, scoreArr, i);
 
         }
@@ -70,13 +77,12 @@ public class CrossEntropyLoss implements ILossFunction {
      * labels [1,0,0] will give smaller action change compared to [10,0,0]
      */
 
-    private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn, INDArray mask) {
+    private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         int nofOut = label.columns();
         INDArray estProbabilities = activationFn.getActivation(z, false);
         double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
         double entropy = EntropyCalculator.calcEntropy(estProbabilities);
-        double K = 1; //getK(estProbabilities);
-        double cost = ce - beta * K * entropy;  //minimized, score=-cost (maximized)
+        double cost = ce - beta  * entropy;  //minimized, score=-cost (maximized)
         return  Nd4j.valueArrayOf(1,nofOut, cost);
     }
 
@@ -130,13 +136,5 @@ public class CrossEntropyLoss implements ILossFunction {
     }
 
 
-/*
-    private static double getK(INDArray estProbabilities) {  //more aggressive entropy penalty
-        double probMin1 = estProbabilities.minNumber().doubleValue();
-        INDArray oneSubN = estProbabilities.rsub(1);
-        double probMin2 = oneSubN.minNumber().doubleValue();
-        double pMin = Math.min(probMin1, probMin2);
-        return Math.min(100, Math.abs(Math.log(pMin / (1 - pMin))));
-    }*/
 
 }

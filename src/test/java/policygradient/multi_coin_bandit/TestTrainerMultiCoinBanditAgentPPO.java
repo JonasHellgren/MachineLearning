@@ -24,7 +24,7 @@ class TestTrainerMultiCoinBanditAgentPPO {
         trainer = TrainerMultiCoinBanditAgentPPO.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).build())
+                        .nofEpisodes(500).nofStepsMax(1).gamma(1d).build())
                 .build();
     }
 

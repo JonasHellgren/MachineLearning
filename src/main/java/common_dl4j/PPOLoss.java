@@ -11,6 +11,8 @@ import org.nd4j.linalg.lossfunctions.ILossFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import static common_dl4j.FiniteDifferenceCalculator.calculateGradient;
+
 @AllArgsConstructor
 public class PPOLoss implements ILossFunction  {
 
@@ -18,7 +20,6 @@ public class PPOLoss implements ILossFunction  {
     public static final double EPSILON_FIN_DIFF = 1e-1;
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
-
     PPOScoreCalculator  scoreCalculator;
 
     public static PPOLoss newDefault() {
@@ -39,14 +40,21 @@ public class PPOLoss implements ILossFunction  {
     }
 
     @Override
-    public double computeScore(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask, boolean average) {
+    public double computeScore(INDArray labels,
+                               INDArray preOut,
+                               IActivation actFcn,
+                               INDArray mask,
+                               boolean average) {
         INDArray scoreArr=computeScoreArray(labels,preOut,actFcn,mask);
        double score=scoreArr.sumNumber().doubleValue();
         return average  ? score/scoreArr.size(0)  : score;
     }
 
     @Override
-    public INDArray computeScoreArray(INDArray labels, INDArray preOut, IActivation actFcn, INDArray mask) {
+    public INDArray computeScoreArray(INDArray labels,
+                                      INDArray preOut,
+                                      IActivation actFcn,
+                                      INDArray mask) {
         int numEx= (int) labels.size(0);
         var scoreArray= Nd4j.create(numEx);
         IntStream.range(0,numEx).forEach(i ->
@@ -67,7 +75,7 @@ public class PPOLoss implements ILossFunction  {
         var gradArray= Nd4j.create(preOut.rows(), preOut.columns());
         IntStream.range(0,labels.rows()).forEach(i -> {
             Function<INDArray, Double> scoreFunction = (p) -> scoreOnePoint(labels.getRow(i), p, activationFn);
-            INDArray gradArr = FiniteDifferenceCalculator.calculateGradient(scoreFunction, preOut.getRow(i), epsilonFinDiff);
+            INDArray gradArr = calculateGradient(scoreFunction, preOut.getRow(i), epsilonFinDiff);
             gradArray.putRow(i, gradArr);
         });
 
@@ -75,8 +83,14 @@ public class PPOLoss implements ILossFunction  {
     }
 
     @Override
-    public Pair<Double, INDArray> computeGradientAndScore(INDArray indArray, INDArray indArray1, IActivation iActivation, INDArray indArray2, boolean b) {
-        return null;
+    public Pair<Double, INDArray> computeGradientAndScore(INDArray labels,
+                                                          INDArray preOut,
+                                                          IActivation actFcn,
+                                                          INDArray mask,
+                                                          boolean avg) {
+        return Pair.of(
+                computeScore(labels, preOut, actFcn, mask, avg),
+                computeGradient(labels, preOut, actFcn, mask));
     }
 
     @Override

@@ -7,15 +7,10 @@ For PPO, in both cases, the clipped operation makes sure it won’t deviate larg
 
 ![ppo_objective.png](..%2Fpics%2Fppo_objective.png)
 
-Let's consider a bandit problem, two actions. Softmax with two thetas, theta1=-theta0.
-Large theta0
+Let's consider a bandit problem, two actions. The uppper plot is for large eps (1) and the lower for smaller (1e-2).
+Clipping, small eps, gives smaller changes in policy.
 
-Below is optimal theta0 for different wps and A0. In all cases theta0old=theta1old=0.
-It is clear that eps restricts the new theta0.
-![ppoex_epsIi1.png](..%2Fpics%2Fppoex_epsIi1.png)
 
-![ppoex_epsIsDot2.png](..%2Fpics%2Fppoex_epsIsDot2.png)
+![largeEpsBandit.png](..%2Fpics%2FlargeEpsBandit.png)
 
-![ppoex_a0IsNegEpsIs1.png](..%2Fpics%2Fppoex_a0IsNegEpsIs1.png)
-
-![ppoex_a0IsNegEpsIsDot2.png](..%2Fpics%2Fppoex_a0IsNegEpsIsDot2.png)
+![smallEpsBandit.png](..%2Fpics%2FsmallEpsBandit.png)

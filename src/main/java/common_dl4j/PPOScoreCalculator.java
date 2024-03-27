@@ -28,7 +28,7 @@ public class PPOScoreCalculator {
         double probRatio=probNew/Math.max(probOld, SMALL);
         double clippedProbRatio= MathUtils.clip(probRatio,1-epsilon,1+epsilon);
         executeIfTrue(!MathUtils.isEqualDoubles(clippedProbRatio,probRatio,SMALL),
-                () -> log.info("Prob ratio is clipped, probRatio =" + probRatio+
+                () -> log.fine("Prob ratio is clipped, probRatio =" + probRatio+
                         ", clippedProbRatio = " + clippedProbRatio+", probOld="+probOld));
         return MathUtils.isPos(adv)
                 ? Math.min(probRatio*adv,clippedProbRatio*adv)

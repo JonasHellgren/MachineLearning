@@ -29,8 +29,6 @@ public class NumericalGradCalculator {
     float eps;
     TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn;
 
-
-
     public INDArray getGrad(INDArray labels, INDArray z, IActivation activationFn, INDArray mask) {
         INDArray zPlus = changePreOut(z,eps);
         INDArray zMin = changePreOut(z,-eps);
