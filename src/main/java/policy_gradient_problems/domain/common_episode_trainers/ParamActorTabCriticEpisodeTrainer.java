@@ -40,7 +40,7 @@ public class ParamActorTabCriticEpisodeTrainer<V> {
         int keyState = getTabularFunctionKey(experience.state());
         int keyStateNext = getTabularFunctionKey(experience.stateNext());
         double v = agent.getCriticValue(keyState);
-        double vNext = isTerminal.apply(experience.stateNext())
+        double vNext = Boolean.TRUE.equals(isTerminal.apply(experience.stateNext()))
                 ? valueTermState
                 : agent.getCriticValue(keyStateNext);
         return experience.reward() + parameters.gamma() * vNext - v;

@@ -269,7 +269,7 @@ RunnerMultiCoinBandit x
 mer printing TestTrainerMultiCoinBanditAgentPPO - förstå  x
 mer clean up
 - cleaner CrossEntropyLoss  x
-- namn som anger CrossEntropyLoss
+- namn som anger CrossEntropyLoss  x
 -computeGradientAndScore x
 - trainFromEpisode på flera ställen göra generisk
 - fitActor INDArray direkt

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-public class NeuralActorNeuralCriticEpisodeTrainer<V> {
+public class NeuralActorNeuralCriticCrossEntropyLossTrainer<V> {
     @NonNull AgentNeuralActorNeuralCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;
@@ -26,11 +26,11 @@ public class NeuralActorNeuralCriticEpisodeTrainer<V> {
         for (Experience<V> experience : experienceList) {
             var stateAsList = experience.state().asList();
             double vNext = helper.valNext(experience);
-            double Gt = experience.reward() + parameters.gamma() * vNext;
+            double returnAtTime = experience.reward() + parameters.gamma() * vNext;
             inList.add(stateAsList);
-            outList.add(Gt);
+            outList.add(returnAtTime);
             double v=agent.getCriticOut(experience.state());
-            double adv = Gt - v;
+            double adv = returnAtTime - v;
             oneHotList.add(helper.createOneHot(experience, adv));
         }
 

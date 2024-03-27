@@ -12,7 +12,6 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
 
     NeuralActorMemoryPole actor;
     NeuralCriticMemoryPole critic;
-    //AgentParamActorPoleHelper helper;
 
     public static AgentNeuralActorNeuralCriticPole newDefault(StateI<VariablesPole> stateStart) {
         var netSettings= NeuralCriticMemoryPole.getDefaultNetSettings();
@@ -30,19 +29,16 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
         super(stateStart);
         this.actor = NeuralActorMemoryPole.newDefault(parametersPole);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);
-      //  this.helper = new AgentParamActorPoleHelper(actor);
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-      //  System.out.println("actor.getOutValue(getState().asList()) = " + actor.getOutValue(getState().asList()));
         return actor.getOutValue(getState().asList());
     }
 
 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
-        //throw new NoSuchMethodException();
         actor.fit(inList,outList);
     }
 
