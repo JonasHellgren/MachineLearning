@@ -33,10 +33,10 @@ public class CartPoleVariables {
 
         //For each significant field in the class, check if that field matches the corresponding field of this object
         CartPoleVariables equalsSample = (CartPoleVariables) obj;
-        boolean isSameTheta = MathUtils.compareDoubleScalars(equalsSample.theta,this.theta, DELTA);
-        boolean isSameX = MathUtils.compareDoubleScalars(equalsSample.x,this.x, DELTA);
-        boolean isSameThetaDot = MathUtils.compareDoubleScalars(equalsSample.thetaDot,this.thetaDot, DELTA);
-        boolean isSameXDot= MathUtils.compareDoubleScalars(equalsSample.xDot,this.xDot, DELTA);
+        boolean isSameTheta = MathUtils.isEqualDoubles(equalsSample.theta,this.theta, DELTA);
+        boolean isSameX = MathUtils.isEqualDoubles(equalsSample.x,this.x, DELTA);
+        boolean isSameThetaDot = MathUtils.isEqualDoubles(equalsSample.thetaDot,this.thetaDot, DELTA);
+        boolean isSameXDot= MathUtils.isEqualDoubles(equalsSample.xDot,this.xDot, DELTA);
         return isSameTheta && isSameX && isSameThetaDot && isSameXDot;
     }
 

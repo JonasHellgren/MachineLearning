@@ -121,7 +121,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         RunningSum<Double> runningSum=new RunningSum<>(probabilities);
         List<Double> accumulatedProbabilities=runningSum.calculate();
 
-        if (!MathUtils.compareDoubleScalars(ListUtils.findMax(accumulatedProbabilities).orElseThrow(),1d, TOLERANCE_PROB_ACCUM)) {
+        if (!MathUtils.isEqualDoubles(ListUtils.findMax(accumulatedProbabilities).orElseThrow(),1d, TOLERANCE_PROB_ACCUM)) {
             log.warning("End element in accumulated experiences differs from one, it is = "
                     +ListUtils.findMax(accumulatedProbabilities).orElseThrow());
         }

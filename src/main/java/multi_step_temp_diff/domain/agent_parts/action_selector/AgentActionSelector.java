@@ -48,7 +48,7 @@ public class AgentActionSelector<S> {
         List<ActionAndValue> actionAndValueList = getActionAndValueList(state);
         ActionAndValue actionAndValue = getActionAndValueWithHighestValue(actionAndValueList);
         Predicate<ActionAndValue> condition =
-                p -> MathUtils.compareDoubleScalars(p.value(), actionAndValue.value(), toleranceSameValue);
+                p -> MathUtils.isEqualDoubles(p.value(), actionAndValue.value(), toleranceSameValue);
         long nofMatches = actionAndValueList.stream().filter(condition).count();
         ActionAndValue actionAndValueChosen = (nofMatches > 1)
                 ? getRandomActionAndValue(actionAndValueList, condition, nofMatches)

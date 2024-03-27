@@ -40,7 +40,7 @@ public class TestPPOScoreCalculator {
         double advTimesProbRatio=adv*pNew2/pOld;
         double score= scoreCalculator.calcScore(label,estProbabilities);
         printing(lb, ub, advTimesProbRatio, score);
-        boolean isClipped= MathUtils.compareDoubleScalars(score,lb, TOL) || MathUtils.compareDoubleScalars(score,ub, TOL);
+        boolean isClipped= MathUtils.isEqualDoubles(score,lb, TOL) || MathUtils.isEqualDoubles(score,ub, TOL);
 
         Assertions.assertTrue(score>=lb && score<=ub);
         Conditionals.executeIfTrue(!isClipped,() -> Assertions.assertEquals(advTimesProbRatio,score));
@@ -68,7 +68,7 @@ public class TestPPOScoreCalculator {
         double advTimesProbRatio=adv*pNew/pOld;
         double score= scoreCalculator.calcScore(label,estProbabilities);
         printing(lb, ub, advTimesProbRatio, score);
-        boolean isClipped= MathUtils.compareDoubleScalars(score,lb, TOL) || MathUtils.compareDoubleScalars(score,ub, TOL);
+        boolean isClipped= MathUtils.isEqualDoubles(score,lb, TOL) || MathUtils.isEqualDoubles(score,ub, TOL);
 
         Assertions.assertTrue(score>=lb && score<=ub);
         Conditionals.executeIfTrue(!isClipped,() -> Assertions.assertEquals(advTimesProbRatio,score));

@@ -96,7 +96,7 @@ public class VariablesElevator {
         boolean isSamePos = this.pos == equalsSample.pos;
         boolean isSamePersonsInElevator = this.nPersonsInElevator == equalsSample.nPersonsInElevator;
         boolean isSamePersonsWaiting = this.nPersonsWaiting.equals(equalsSample.nPersonsWaiting);
-        boolean isSameSoE = MathUtils.compareDoubleScalars(this.SoE, equalsSample.SoE, DELTA);
+        boolean isSameSoE = MathUtils.isEqualDoubles(this.SoE, equalsSample.SoE, DELTA);
         return isSamePos && isSamePersonsInElevator && isSamePersonsWaiting && isSameSoE;
     }
 

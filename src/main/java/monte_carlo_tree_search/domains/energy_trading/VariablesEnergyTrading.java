@@ -3,9 +3,6 @@ package monte_carlo_tree_search.domains.energy_trading;
 import common.MathUtils;
 import lombok.Builder;
 import lombok.ToString;
-import monte_carlo_tree_search.domains.elevator.VariablesElevator;
-
-import java.util.ArrayList;
 
 @Builder
 @ToString
@@ -48,7 +45,7 @@ public class VariablesEnergyTrading {
         VariablesEnergyTrading equalsSample = (VariablesEnergyTrading) obj;
         boolean isSameTime = this.time == equalsSample.time;
      //   boolean isSamePrice = MathUtils.compareDoubleScalars(this.price,equalsSample.price, DELTA);
-        boolean isSameSoE = MathUtils.compareDoubleScalars(this.SoE,equalsSample.SoE, DELTA);
+        boolean isSameSoE = MathUtils.isEqualDoubles(this.SoE,equalsSample.SoE, DELTA);
 
         return isSameTime && isSameSoE;
     }

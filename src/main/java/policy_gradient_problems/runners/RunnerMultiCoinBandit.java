@@ -13,14 +13,13 @@ public class RunnerMultiCoinBandit {
         var trainer=createTrainer(environment);
         trainer.train();
         plotActionProbabilitiesDuringTraining("ppo",trainer);
-
     }
 
     static TrainerMultiCoinBanditAgentPPO createTrainer(EnvironmentMultiCoinBandit environment) {
         return TrainerMultiCoinBanditAgentPPO.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).build())
+                        .nofEpisodes(1000).nofStepsMax(1).gamma(1d).build())
                 .build();
     }
 

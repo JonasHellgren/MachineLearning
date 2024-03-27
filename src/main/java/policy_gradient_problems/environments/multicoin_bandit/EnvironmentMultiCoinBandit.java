@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class EnvironmentMultiCoinBandit implements EnvironmentI<VariablesBandit> {
     public static final int NOF_ACTIONS = 2;
-    static final List<Double> COINS = List.of(1d, 5d, 10d);
+    static final List<Double> COINS = List.of(-10d,1d, 5d, 10d);
     Double probWinAction0;
     Double probWinAction1;
 

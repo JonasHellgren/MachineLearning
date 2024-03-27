@@ -4,12 +4,16 @@ import com.google.common.base.Preconditions;
 import common.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import static common.Conditionals.executeIfTrue;
+
 @AllArgsConstructor
+@Log
 public class PPOScoreCalculator {
 
-    public static final double SMALL = 1e-5;
+    public static final double SMALL = 1e-2;
 
     @NonNull  Double epsilon;
 
@@ -23,6 +27,9 @@ public class PPOScoreCalculator {
         double probNew= estProbabilities.getDouble((int) action);
         double probRatio=probNew/Math.max(probOld, SMALL);
         double clippedProbRatio= MathUtils.clip(probRatio,1-epsilon,1+epsilon);
+        executeIfTrue(!MathUtils.isEqualDoubles(clippedProbRatio,probRatio,SMALL),
+                () -> log.info("Prob ratio is clipped, probRatio =" + probRatio+
+                        ", clippedProbRatio = " + clippedProbRatio+", probOld="+probOld));
         return MathUtils.isPos(adv)
                 ? Math.min(probRatio*adv,clippedProbRatio*adv)
                 : Math.max(probRatio*adv,clippedProbRatio*adv);

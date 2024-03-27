@@ -55,8 +55,8 @@ public class ChargeState implements StateInterface<ChargeVariables> {
         ChargeState otherCasted = (ChargeState) otherState;
         return Objects.equals(posA.apply(this), posA.apply(otherCasted)) &&
                Objects.equals(posB.apply(this), posB.apply(otherCasted)) &&
-               MathUtils.compareDoubleScalars(socA.apply(this), socA.apply(otherCasted), SOC_TOL) &&
-               MathUtils.compareDoubleScalars(socB.apply(this), socB.apply(otherCasted), SOC_TOL) &&
+               MathUtils.isEqualDoubles(socA.apply(this), socA.apply(otherCasted), SOC_TOL) &&
+               MathUtils.isEqualDoubles(socB.apply(this), socB.apply(otherCasted), SOC_TOL) &&
                Objects.equals(time.apply(this), time.apply(otherCasted));
     }
 

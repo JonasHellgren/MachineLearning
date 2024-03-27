@@ -10,8 +10,14 @@ import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
-
 import java.util.List;
+
+/***
+ * The parameters to newWithEpsPPOEpsFinDiff(epsPPO,epsilonFinDiff) are critical
+ *
+ * epsilonFinDiff needs to be relatively large (1e-1) for clipping to be present
+ * A smaller epsPPO means less policy change <=> smoother convergence
+ */
 
 public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
 
@@ -55,7 +61,7 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
                 .nHiddenLayers(1).nInput(numInput).nHidden(3).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
-                .lossFunction(PPOLoss.newDefault())
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-2,1e-1))
                 .build();
     }
 

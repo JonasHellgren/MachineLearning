@@ -7,7 +7,6 @@ import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;
 import multi_step_temp_diff.domain.environments.maze.MazeState;
 import multi_step_temp_diff.domain.environments.maze.MazeVariables;
-import multi_step_temp_diff.domain.helpers_specific.MazeStateValuePrinter;
 import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
@@ -66,7 +65,7 @@ public class TestNStepTabularAgentTrainerMaze {
         double avgErrThree= MazeHelper.avgErrorMaze(mapTreeSteps, MazeHelper.STATES_MAZE_UPPER);
         System.out.println("mapTreeSteps = " + mapTreeSteps);
         printErrors(avgErrOne, avgErrThree);
-        Assert.assertTrue(avgErrOne>avgErrThree || MathUtils.compareDoubleScalars(avgErrOne,avgErrThree,0.001));
+        Assert.assertTrue(avgErrOne>avgErrThree || MathUtils.isEqualDoubles(avgErrOne,avgErrThree,0.001));
     }
 
 

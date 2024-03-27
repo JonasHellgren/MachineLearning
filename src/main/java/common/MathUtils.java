@@ -1,13 +1,10 @@
 package common;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MathUtils {
 
@@ -73,7 +70,7 @@ public class MathUtils {
         return (Math.abs(s1-s2)<delta);
     }
 
-    public static boolean compareDoubleScalars(double s1,double s2, double delta)
+    public static boolean isEqualDoubles(double s1, double s2, double delta)
     {
         return (Math.abs(s1-s2)<delta);
     }
