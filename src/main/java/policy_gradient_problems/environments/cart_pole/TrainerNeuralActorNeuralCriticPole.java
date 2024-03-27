@@ -11,14 +11,14 @@ import java.util.List;
 @Log
 public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
-    AgentNeuralActorNeuralCriticPole agent;
+    AgentNeuralActorNeuralCriticPoleEntropyLoss agent;
     ParametersPole parametersPole;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerNeuralActorNeuralCriticPole(@NonNull EnvironmentPole environment,
-                                            @NonNull AgentNeuralActorNeuralCriticPole agent,
+                                            @NonNull AgentNeuralActorNeuralCriticPoleEntropyLoss agent,
                                             @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;

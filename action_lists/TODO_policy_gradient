@@ -281,6 +281,8 @@ TestTrainerMultiStepActorCriticPolePPO
 
 cart pole PPOPolicy
 
+NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
+
 dokumentera public methoder etc
 
 animering i pole runner med färdig AC policy

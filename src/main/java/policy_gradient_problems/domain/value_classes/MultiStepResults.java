@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Data container for episode results
  * Every item in lists is for specific time step
  */
@@ -18,17 +17,19 @@ public record MultiStepResults(
         int nofSteps,
         List<List<Double>> stateValuesList,
         List<Action> actionList,
+        List<Double> probActionList,
         List<Double> valuePresentList,
         List<Double> valueTarList
 ) {
 
 
-    public static MultiStepResults create(int tEnd,int nofSteps) {
-       return MultiStepResults.builder()
+    public static MultiStepResults create(int tEnd, int nofSteps) {
+        return MultiStepResults.builder()
                 .tEnd(tEnd)
                 .nofSteps(nofSteps)
                 .stateValuesList(new ArrayList<>())
                 .actionList(new ArrayList<>())
+                .probActionList(new ArrayList<>())
                 .valuePresentList(new ArrayList<>())
                 .valueTarList(new ArrayList<>()).build();
     }
@@ -40,6 +41,11 @@ public record MultiStepResults(
     public void addAction(Action action) {
         actionList.add(action);
     }
+
+    public void addProbAction(Double probAction) {
+        probActionList.add(probAction);
+    }
+
 
     public void addPresentValue(Double value) {
         valuePresentList.add(value);

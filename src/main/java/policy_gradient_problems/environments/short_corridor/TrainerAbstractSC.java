@@ -15,6 +15,7 @@ import java.util.function.Function;
 
 
 public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
+    public static final int PROB_ACTION = 1;
     EnvironmentSC environment;
 
     public TrainerAbstractSC(@NonNull EnvironmentSC environment,
@@ -46,7 +47,7 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
     private Experience<VariablesSC> createExperience(StateI<VariablesSC> state,
                                                      StepReturn<VariablesSC> sr,
                                                      Action action) {
-        return Experience.ofWithIsTerminal(asObserved(state), action, sr.reward(), asObserved(sr.state()),
+        return Experience.ofWithIsTerminal(asObserved(state), action, sr.reward(), asObserved(sr.state()), PROB_ACTION,
                 environment.isTerminalObserved(asObserved(sr.state()).getPos()));
 
     }

@@ -104,7 +104,7 @@ public class PPOLoss implements ILossFunction  {
 
     private double scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         int nofOut = label.columns();
-        Preconditions.checkArgument(nofOut==3,"Wrong label definition PPO custom loss");
+        Preconditions.checkArgument(nofOut==3,"Wrong label definition PPO custom loss, label="+label);
         INDArray estProbabilities = activationFn.getActivation(z, false);
         double ppoScore = scoreCalculator.calcScore(label, estProbabilities);
         return -ppoScore;  //Negative for maximization in optimization context

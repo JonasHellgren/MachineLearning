@@ -7,15 +7,15 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
-public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
+public class AgentNeuralActorNeuralCriticPoleEntropyLoss extends AgentA<VariablesPole>
         implements AgentNeuralActorNeuralCriticI<VariablesPole> {
 
     NeuralActorMemoryPoleCrossEntropyLoss actor;
     NeuralCriticMemoryPole critic;
 
-    public static AgentNeuralActorNeuralCriticPole newDefault(StateI<VariablesPole> stateStart) {
+    public static AgentNeuralActorNeuralCriticPoleEntropyLoss newDefault(StateI<VariablesPole> stateStart) {
         var netSettings= NeuralCriticMemoryPole.getDefaultNetSettings();
-        return AgentNeuralActorNeuralCriticPole.builder()
+        return AgentNeuralActorNeuralCriticPoleEntropyLoss.builder()
                 .stateStart(stateStart)
                 .criticSettings(netSettings)
                 .parametersPole(ParametersPole.newDefault())
@@ -23,9 +23,9 @@ public class AgentNeuralActorNeuralCriticPole extends AgentA<VariablesPole>
     }
 
     @Builder
-    public AgentNeuralActorNeuralCriticPole(StateI<VariablesPole> stateStart,
-                                           NetSettings criticSettings,
-                                           ParametersPole parametersPole) {
+    public AgentNeuralActorNeuralCriticPoleEntropyLoss(StateI<VariablesPole> stateStart,
+                                                       NetSettings criticSettings,
+                                                       ParametersPole parametersPole) {
         super(stateStart);
         this.actor = NeuralActorMemoryPoleCrossEntropyLoss.newDefault(parametersPole);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);

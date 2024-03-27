@@ -42,8 +42,9 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
             Action action=agent.chooseAction();
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
+            double probAction=agent.getActionProbabilities().get(action.asInt());
             Experience<VariablesPole> exp =
-                    Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), sr.isFail());
+                    Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
             experienceList.add(exp);
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));

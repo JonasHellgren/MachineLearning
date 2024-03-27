@@ -5,47 +5,46 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
+import policy_gradient_problems.helpers.NeuralActorUpdaterCrossPPOLoss;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerMultiStepActorCriticPoleEntropyLoss {
+class TestTrainerMultiStepActorCriticPPOLoss {
 
     TrainerMultiStepActorCriticPole trainer;
-    AgentNeuralActorNeuralCriticPoleEntropyLoss agent;
+    AgentNeuralActorNeuralCriticPolePPO agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
 
-
     @BeforeEach
-     void init() {
+    void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPoleEntropyLoss.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentNeuralActorNeuralCriticPolePPO.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPoleEntropyLoss agent) {
+    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPolePPO agent) {
         trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(100).nofStepsMax(100).gamma(0.95)
                         .stepHorizon(10)
-                        //.relativeNofFitsPerBatch(0.5)
                         .build())
-                .actorUpdater(new NeuralActorUpdaterCrossEntropyLoss<>())
+                .actorUpdater(new NeuralActorUpdaterCrossPPOLoss<>())
                 .build();
     }
 
     @Test
-   // @Disabled("Long time")
-     void whenTrained_thenManySteps() {
+        // @Disabled("Long time")
+    void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
         int nofSteps = getNofSteps();
         somePrinting(nofSteps);
         printMemories();
-         System.out.println("nofSteps = " + nofSteps);
-         assertTrue(nofSteps > 20);
+        System.out.println("nofSteps = " + nofSteps);
+        assertTrue(nofSteps > 20);
     }
 
     private void somePrinting(int nofSteps) {
@@ -70,6 +69,5 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
             System.out.println("state = "+statePole+", valueCritic = " + valueCritic+", probs = "+probs);
         }
     }
-
 
 }

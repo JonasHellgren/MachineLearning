@@ -53,6 +53,7 @@ public class MultiStepResultsGenerator<V> {
     private void addOther(MultiStepReturnEvaluator<V> mse, MultiStepResults results, int t) {
         results.addStateValues(mse.getExperience(t).state().asList());
         results.addAction(mse.getExperience(t).action());
+        results.addProbAction(mse.getExperience(t).probAction());
         double criticOut = agent.getCriticOut(mse.getExperience(t).state());
         results.addPresentValue(criticOut);
     }

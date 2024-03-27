@@ -23,7 +23,7 @@ public class RunnerTrainersPole {
     public static void main(String[] args) {
         var parameters = ParametersPole.newDefault();
         var agent = AgentParamActorPole.newAllZeroStateDefaultThetas(parameters);
-        var agentAC = AgentNeuralActorNeuralCriticPole.newDefault(StatePole.newUprightAndStill(parameters));
+        var agentAC = AgentNeuralActorNeuralCriticPoleEntropyLoss.newDefault(StatePole.newUprightAndStill(parameters));
 
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
