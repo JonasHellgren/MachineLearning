@@ -17,6 +17,12 @@ import java.util.List;
 
 import static common.Conditionals.executeIfTrue;
 
+/***
+ * Start state for every episode is deterministic to enable interpretation training evolution,
+ * i.e. of nof-steps vs episode.
+ *
+ */
+
 @Log
 @Getter
 public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {

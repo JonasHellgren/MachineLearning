@@ -3,6 +3,7 @@ package policy_gradient_problems.environments.cart_pole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
@@ -14,6 +15,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @AllArgsConstructor
 @Getter
@@ -33,6 +35,7 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
     }
 
 
+    @SneakyThrows
     protected List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {
         List<Experience<VariablesPole>> experienceList=new ArrayList<>();
         int si = 0;
@@ -42,13 +45,21 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
             Action action=agent.chooseAction();
             sr=environment.step(agent.getState(),action);
             agent.setState(sr.state());
-            double probAction=agent.getActionProbabilities().get(action.asInt());
+            List<Double> actionProbabilities = agent.getActionProbabilities();
+            throwIfBadAction(action, actionProbabilities);
+            double probAction= actionProbabilities.get(action.asInt());
             Experience<VariablesPole> exp =
                     Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
             experienceList.add(exp);
             si++;
         } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
+    }
+
+    private static void throwIfBadAction(Action action, List<Double> actionProbabilities) throws DataFormatException {
+        if (action.asInt()>= actionProbabilities.size()) {
+            throw new DataFormatException("Bad action value, action = "+ action +", actionProbabilities="+ actionProbabilities);
+        }
     }
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesPole> sr) {

@@ -14,6 +14,13 @@ import static common.ListUtils.arrayPrimitiveDoublesToList;
  * absNoFit - to large -> converges to sub optimal
  * epsPPO - to small - no/slow convergence
  * epsFinDiff  - to small - no/slow convergence
+ * absNoFit - slows down computation with little convergence gain
+ *
+ *
+ * Effective reinforcement learning involves balancing exploration (trying new actions to discover their value)
+ * and exploitation (using known information to maximize reward). A small ϵ can skew this balance towards exploitation
+ * too early, limiting the exploration necessary for finding optimal strategies in
+ * environments with nuances like CartPole.
  */
 
 public class NeuralActorMemoryPolePPOLoss {
@@ -64,11 +71,10 @@ public class NeuralActorMemoryPolePPOLoss {
                 .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-4).momentum(0.9).seed(1234)   //1e-3
-                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(0.5,1e-5))  //1e-3,1e-1
-                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(5)  //relativeNofFitsPerBatch(0.01)
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(0.9,1e-5))  //0.9,1e-5
+                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(3)  //relativeNofFitsPerBatch(0.01)
                 .build();
     }
-
 
     private static NormalizerMinMaxScaler createNormalizerIn(ParametersPole p) {
         List<Pair<Double, Double>> inMinMax = p.minMaxStatePairList();
@@ -80,7 +86,7 @@ public class NeuralActorMemoryPolePPOLoss {
         return Dl4JUtil.createNormalizer(outMinMax, Pair.create(0d, 1d));
     }
 /***
- *                 .nInput(N_INPUTS).nHiddenLayers(3).nHidden(20).nOutput(N_OUTPUTS)
+ *                 .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
  *                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
  *                 .learningRate(1e-4).momentum(0.95).seed(1234)   //1e-3
  *                 .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-1,1e-1))  //1e-3,1e-1

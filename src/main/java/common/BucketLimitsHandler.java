@@ -36,7 +36,8 @@ public class BucketLimitsHandler {
     }
 
     public static void throwIfBadLimits(List<Double> limits) {
-        if (ListUtils.findMin(limits).orElseThrow() < 0d || ListUtils.findMin(limits).orElseThrow() > 1) {
+        if (ListUtils.findMin(limits).orElseThrow() < -Double.MIN_VALUE ||
+                ListUtils.findMin(limits).orElseThrow() > 1-Double.MIN_VALUE) {
             throw new ArithmeticException("Bad action probabilities");
         }
     }
