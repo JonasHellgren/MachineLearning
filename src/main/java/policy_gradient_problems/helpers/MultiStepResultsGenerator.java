@@ -1,6 +1,5 @@
 package policy_gradient_problems.helpers;
 
-import common.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -55,7 +54,7 @@ public class MultiStepResultsGenerator<V> {
         results.addAction(mse.getExperience(t).action());
         results.addProbAction(mse.getExperience(t).probAction());
         double criticOut = agent.getCriticOut(mse.getExperience(t).state());
-        results.addPresentValue(criticOut);
+        results.addCriticValue(criticOut);
     }
 
 }

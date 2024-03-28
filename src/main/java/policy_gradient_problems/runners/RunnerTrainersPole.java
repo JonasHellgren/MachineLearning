@@ -19,9 +19,9 @@ import java.util.List;
 @Log
 public class RunnerTrainersPole {
 
-    static final int LENGTH_WINDOW = 10;
-    static final int NOF_STEPS_MAX = 50;
-    static final int NOF_EPISODES = 500;
+    static final int LENGTH_WINDOW = 1;
+    static final int NOF_STEPS_MAX = 100;
+    static final int NOF_EPISODES = 300;
      static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
             .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).stepHorizon(5).build();
 
@@ -37,11 +37,13 @@ public class RunnerTrainersPole {
       //  var nofStepsListAC = getNofStepsListAC(agentAC, environment,parameters);
         var nofStepsListPPO = getNofStepsListPPO(agentPPO, environment,parameters);
 
-        printMemories(agentPPO,environment);
+        printMemories(agentPPO,environment.getParameters());
+        somePrinting(agentPPO,environment.getParameters());
+
 
         plotNofStepsVersusEpisode(
-                List.of(nofStepsListVanilla, nofStepsListBaseline,nofStepsListPPO),
-                List.of("vanilla", "baseline", "ppo"));  //"actor critic"
+                List.of(nofStepsListVanilla, nofStepsListPPO),  //nofStepsListBaseline
+                List.of("vanilla",  "ppo"));  //"baseline" "actor critic"
     }
 
     private static List<Double> getNofStepsListVanilla(AgentParamActorPole agent, EnvironmentPole environment) {
@@ -92,15 +94,22 @@ public class RunnerTrainersPole {
         new SwingWrapper<>(chart).displayChart();
     }
 
-    static void printMemories(AgentNeuralActorNeuralCriticI<VariablesPole> agent, EnvironmentPole environment) {
+    static void printMemories(AgentNeuralActorNeuralCriticI<VariablesPole> agent, ParametersPole parametersPole) {
         for (int i = 0; i < 5 ; i++) {
-            StatePole statePole = StatePole.newAllRandom(environment.getParameters());
+            StatePole statePole = StatePole.newAllRandom(parametersPole);
             double valueCritic=agent.getCriticOut(statePole);
 
             agent.setState(statePole);
             var probs=agent.getActionProbabilities();
             System.out.println("state = "+statePole+", valueCritic = " + valueCritic+", probs = "+probs);
         }
+    }
+
+    static void somePrinting(AgentNeuralActorNeuralCriticI<VariablesPole> agent, ParametersPole parametersPole) {
+        StatePole uprightAndStill = StatePole.newUprightAndStill(parametersPole);
+        double valAll0=agent.getCriticOut(uprightAndStill);
+        double valBigAngleDot=agent.getCriticOut(uprightAndStill.copyWithAngleDot(0.2));
+        System.out.println("valAll0 = " + valAll0+", valBigAngleDot = " + valBigAngleDot);
     }
 
     private static List<Double> getFilteredNofSteps(TrainingTracker tracker) {

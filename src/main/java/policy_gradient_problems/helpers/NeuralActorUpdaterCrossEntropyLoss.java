@@ -2,7 +2,6 @@ package policy_gradient_problems.helpers;
 
 import common_dl4j.Dl4JUtil;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.abstract_classes.ActorUpdaterI;
 import policy_gradient_problems.domain.agent_interfaces.NeuralActor;
@@ -30,7 +29,7 @@ public class NeuralActorUpdaterCrossEntropyLoss<V> implements ActorUpdaterI<V> {
     @NotNull
     public static List<Double> createOneHot(MultiStepResults msRes, int i) {
         int actionInt = msRes.actionList().get(i).asInt();
-        double adv= msRes.valueTarList().get(i)- msRes.valuePresentList().get(i);
+        double adv= msRes.valueTarList().get(i)- msRes.valueCriticList().get(i);
         List<Double> oneHot = Dl4JUtil.createListWithOneHotWithValue(StatePole.nofActions(), actionInt,adv);
         oneHot.set(actionInt, adv);
         return oneHot;

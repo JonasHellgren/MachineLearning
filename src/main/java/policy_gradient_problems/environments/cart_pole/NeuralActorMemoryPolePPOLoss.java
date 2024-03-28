@@ -7,10 +7,14 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.factory.Nd4j;
-
 import java.util.List;
-
 import static common.ListUtils.arrayPrimitiveDoublesToList;
+
+/***
+ * absNoFit - to large -> converges to sub optimal
+ * epsPPO - to small - no/slow convergence
+ * epsFinDiff  - to small - no/slow convergence
+ */
 
 public class NeuralActorMemoryPolePPOLoss {
     static final int N_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
@@ -60,8 +64,8 @@ public class NeuralActorMemoryPolePPOLoss {
                 .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-4).momentum(0.9).seed(1234)   //1e-3
-                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(1e-3,1e-5))  //1e-3,1e-1
-                .sizeBatch(64).relativeNofFitsPerBatch(0.5)
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(0.5,1e-5))  //1e-3,1e-1
+                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(5)  //relativeNofFitsPerBatch(0.01)
                 .build();
     }
 

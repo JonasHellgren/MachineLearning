@@ -52,7 +52,7 @@ public class TestMultiStepResultsGenerator {
         Assertions.assertEquals(nofExp,msr.nofSteps());
         Assertions.assertEquals(nofExp-STEP_HORIZON+1,msr.tEnd());  //described in class why
         Assertions.assertEquals(0, ListUtils.sumList(msr.valueTarList()));  //only sum rewards when gamma is zero
-        Assertions.assertNotEquals(0, ListUtils.sumList(msr.valuePresentList()));
+        Assertions.assertNotEquals(0, ListUtils.sumList(msr.valueCriticList()));
     }
 
     @Test

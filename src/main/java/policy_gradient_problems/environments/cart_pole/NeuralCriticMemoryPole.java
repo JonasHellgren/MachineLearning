@@ -14,8 +14,8 @@ import java.util.List;
 
 public class NeuralCriticMemoryPole {
 
-    static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
-    static int NOF_OUTPUTS = 1;
+    static final int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
+    static final int NOF_OUTPUTS = 1;
 
     MultiLayerNetwork net;
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
@@ -31,7 +31,7 @@ public class NeuralCriticMemoryPole {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .learningRate(1e-4).momentum(0.9).seed(1234)    //1e-3
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
-                .sizeBatch(64).relativeNofFitsPerBatch(0.5)
+                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(32)
                 .build();
     }
 

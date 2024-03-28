@@ -18,7 +18,7 @@ public record MultiStepResults(
         List<List<Double>> stateValuesList,
         List<Action> actionList,
         List<Double> probActionList,
-        List<Double> valuePresentList,
+        List<Double> valueCriticList,
         List<Double> valueTarList
 ) {
 
@@ -30,7 +30,7 @@ public record MultiStepResults(
                 .stateValuesList(new ArrayList<>())
                 .actionList(new ArrayList<>())
                 .probActionList(new ArrayList<>())
-                .valuePresentList(new ArrayList<>())
+                .valueCriticList(new ArrayList<>())
                 .valueTarList(new ArrayList<>()).build();
     }
 
@@ -46,9 +46,8 @@ public record MultiStepResults(
         probActionList.add(probAction);
     }
 
-
-    public void addPresentValue(Double value) {
-        valuePresentList.add(value);
+    public void addCriticValue(Double value) {
+        valueCriticList.add(value);
     }
 
     public void addValueTarget(Double value) {
