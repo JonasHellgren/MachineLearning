@@ -18,25 +18,31 @@ public class PPOLoss implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.1;
     public static final double EPSILON_FIN_DIFF = 1e-1;
-    public static final double beta = 1e-2;  //todo in constructior
+    public static final double BETA_ENTROPY = 1e-2;
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
+    double beta;
     PPOScoreCalculator  scoreCalculator;
 
     public static PPOLoss newDefault() {
-        return new PPOLoss(DEF_EPSILON, EPSILON_FIN_DIFF);
+        return new PPOLoss(DEF_EPSILON, EPSILON_FIN_DIFF, BETA_ENTROPY);
     }
 
     public static PPOLoss newWithEpsilonPPO(double epsilon) {
-        return new PPOLoss(epsilon,EPSILON_FIN_DIFF);
+        return new PPOLoss(epsilon,EPSILON_FIN_DIFF, BETA_ENTROPY);
     }
 
     public static PPOLoss newWithEpsPPOEpsFinDiff(double epsPPO, double epsilonFinDiff) {
-        return new PPOLoss(epsPPO,epsilonFinDiff);
+        return new PPOLoss(epsPPO,epsilonFinDiff,BETA_ENTROPY);
     }
 
-    private PPOLoss(double epsilonPPO, double epsilonFinDiff) {
+    public static PPOLoss newWithEpsPPOEpsFinDiffbetaEntropy(double epsPPO, double epsilonFinDiff, double beta) {
+        return new PPOLoss(epsPPO,epsilonFinDiff,beta);
+    }
+
+    private PPOLoss(double epsilonPPO, double epsilonFinDiff, double beta) {
         this.epsilonFinDiff=epsilonFinDiff;
+        this.beta=beta;
         this.scoreCalculator=new PPOScoreCalculator(epsilonPPO);
     }
 

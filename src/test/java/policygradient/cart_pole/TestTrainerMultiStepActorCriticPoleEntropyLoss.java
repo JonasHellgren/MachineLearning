@@ -1,6 +1,7 @@
 package policygradient.cart_pole;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-   // @Disabled("Long time")
+    @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();

@@ -20,8 +20,8 @@ import java.util.List;
 public class RunnerTrainersPole {
 
     static final int LENGTH_WINDOW = 5;
-    static final int NOF_STEPS_MAX = 150;
-    static final int NOF_EPISODES = 500;
+    static final int NOF_STEPS_MAX = 100;
+    static final int NOF_EPISODES = 200;
      static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
             .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).stepHorizon(5).build();
 

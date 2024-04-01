@@ -277,24 +277,27 @@ mer clean up
 
 TrainerMultiStepNeuralActorNeuralCriticPole -> TrainerMultiStepActorCriticPole  x
 NeuralActorUpdater generisk genom interface  x
-TestTrainerMultiStepActorCriticPolePPO
-
-cart pole PPOPolicy
+TestTrainerMultiStepActorCriticPolePPOLoss x
+cart pole PPOPolicy x
 entropy på PPO loss  x
-entropy på PPO loss beta = 0.1;  //todo in constructior
+entropy på PPO loss beta = 0.1;  //todo in constructior  x
 
+fler Rl measures
+cart pole - varannan random - varannan står
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
 
-dokumentera public methoder etc
+maze with ppo
+- kolla av korrekt value
 
-animering i pole runner med färdig AC policy
+safe cannon with ppo
 
-läsa mcts kod
-strategi sätta ihop mcts med pg problems
-alphazero på cartpole
+simplified battery trading with safe RL ppo
+
 
 
 bubblare/ned prioriterat:
+dokumentera public methoder etc
+animering i pole runner med färdig AC policy
 ArrayRealVector RealVector rörs ihop
 hur skall AgentNeuralActorI kunna klara cont action
 public class Test till runner
@@ -303,3 +306,7 @@ TrainerBaselinePole använda generisk tränare
 gradLog with finite diff
 skapa generisk ParamActorNeuralMultiStepCriticTrainer
 TrainerParamActorNeuralCriticPole använder ParamActorNeuralMultiStepCriticTrainer
+
+läsa mcts kod
+strategi sätta ihop mcts med pg problems
+alphazero på cartpole

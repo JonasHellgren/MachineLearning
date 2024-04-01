@@ -71,8 +71,8 @@ public class NeuralActorMemoryPolePPOLoss {
                 .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-4).momentum(0.9).seed(1234)   //1e-3
-                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(0.9,1e-5))  //0.9,1e-5
-                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(3)  //relativeNofFitsPerBatch(0.01)
+                .lossFunction(PPOLoss.newWithEpsPPOEpsFinDiff(0.5,1e-5))  //0.9,1e-5
+                .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(4)  //relativeNofFitsPerBatch(0.01)
                 .build();
     }
 
