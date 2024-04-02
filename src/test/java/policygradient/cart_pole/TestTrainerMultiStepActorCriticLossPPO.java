@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossPPOLoss;
+import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +31,7 @@ class TestTrainerMultiStepActorCriticLossPPO {
                         .nofEpisodes(100).nofStepsMax(50).gamma(0.99)  //0.95
                         .stepHorizon(10)
                         .build())
-                .actorUpdater(new NeuralActorUpdaterCrossPPOLoss<>())
+                .actorUpdater(new NeuralActorUpdaterPPOLoss<>())
                 .build();
     }
 

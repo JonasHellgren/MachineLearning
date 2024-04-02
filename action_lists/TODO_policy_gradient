@@ -283,7 +283,7 @@ entropy på PPO loss  x
 entropy på PPO loss beta = 0.1;  //todo in constructior  x
 
 förklara Weighted cross entropy loss  x
-döm om klasser med CntropyLoss  -> CEM
+döm om klasser med CntropyLoss  -> CEM  x
 
 Training Recoders
 Probability   Lik nuvarande

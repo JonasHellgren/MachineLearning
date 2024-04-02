@@ -129,7 +129,7 @@ public class LossCEM implements ILossFunction {
 
     @Override
     public String toString() {
-        return "PolicyGradientLoss";
+        return "LossCEM";
     }
 
     private static INDArray getEmptyIndMatrix(INDArray labels) {

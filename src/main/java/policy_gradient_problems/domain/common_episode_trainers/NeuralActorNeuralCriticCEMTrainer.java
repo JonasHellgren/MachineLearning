@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-public class NeuralActorNeuralCriticCrossEntropyLossTrainer<V> {
+public class NeuralActorNeuralCriticCEMTrainer<V> {
     @NonNull AgentNeuralActorNeuralCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;

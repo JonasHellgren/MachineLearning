@@ -11,7 +11,6 @@ import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.helpers.MultiStepResultsGenerator;
 import policy_gradient_problems.helpers.MultiStepReturnEvaluator;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
 
 import java.util.List;
 

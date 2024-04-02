@@ -17,7 +17,7 @@ import static common.ListUtils.arrayPrimitiveDoublesToList;
  * But normalization is needed in the fit method
  */
 
-public class NeuralActorMemoryPoleCrossEntropyLoss {
+public class NeuralActorMemoryPoleCEMLoss {
     static int NOF_INPUTS = StatePole.newUprightAndStill(ParametersPole.newDefault()).nofStates();
     static int NOF_OUTPUTS = EnvironmentPole.NOF_ACTIONS;
 
@@ -25,11 +25,11 @@ public class NeuralActorMemoryPoleCrossEntropyLoss {
     NormalizerMinMaxScaler normalizerIn, normalizerOut;
     Dl4JNetFitter fitter;
 
-    public static NeuralActorMemoryPoleCrossEntropyLoss newDefault(ParametersPole parametersPole) {
-        return new NeuralActorMemoryPoleCrossEntropyLoss(getDefaultNetSettings(), parametersPole);
+    public static NeuralActorMemoryPoleCEMLoss newDefault(ParametersPole parametersPole) {
+        return new NeuralActorMemoryPoleCEMLoss(getDefaultNetSettings(), parametersPole);
     }
 
-    public NeuralActorMemoryPoleCrossEntropyLoss(NetSettings netSettings, ParametersPole parametersPole) {
+    public NeuralActorMemoryPoleCEMLoss(NetSettings netSettings, ParametersPole parametersPole) {
         this.net = MultiLayerNetworkCreator.create(netSettings);
         this.normalizerIn = createNormalizerIn(parametersPole);
         this.normalizerOut = createNormalizerOut(parametersPole);

@@ -9,13 +9,13 @@ import java.util.List;
 
  class TestNeuralActorMemoryPole {
 
-    static NeuralActorMemoryPoleCrossEntropyLoss actor;
+    static NeuralActorMemoryPoleCEMLoss actor;
     static  ParametersPole parametersPole;
 
     @BeforeAll
      static void init() {
         parametersPole=ParametersPole.newDefault();
-        actor= NeuralActorMemoryPoleCrossEntropyLoss.newDefault(parametersPole);
+        actor= NeuralActorMemoryPoleCEMLoss.newDefault(parametersPole);
         trainActor();
     }
 

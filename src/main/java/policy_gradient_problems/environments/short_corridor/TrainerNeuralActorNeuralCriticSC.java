@@ -2,7 +2,7 @@ package policy_gradient_problems.environments.short_corridor;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCrossEntropyLossTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCEMTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
@@ -21,8 +21,8 @@ public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
 
     @Override
     public void train() {
-        NeuralActorNeuralCriticCrossEntropyLossTrainer<VariablesSC> episodeTrainer =
-                NeuralActorNeuralCriticCrossEntropyLossTrainer.<VariablesSC>builder()
+        NeuralActorNeuralCriticCEMTrainer<VariablesSC> episodeTrainer =
+                NeuralActorNeuralCriticCEMTrainer.<VariablesSC>builder()
                         .agent(agent)
                         .parameters(parameters)
                         .valueTermState(VALUE_TERMINAL_STATE)

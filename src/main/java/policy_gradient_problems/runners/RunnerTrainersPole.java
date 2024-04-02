@@ -4,11 +4,9 @@ import common.MovingAverage;
 import lombok.extern.java.Log;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import policy_gradient_problems.domain.abstract_classes.AgentA;
-import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossPPOLoss;
+import policy_gradient_problems.helpers.NeuralActorUpdaterCEMLoss;
+import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
 import policy_gradient_problems.helpers.TrainingTracker;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
@@ -28,7 +26,7 @@ public class RunnerTrainersPole {
     public static void main(String[] args) {
         var parameters = ParametersPole.newDefault();
         var agent = AgentParamActorPole.newAllZeroStateDefaultThetas(parameters);
-        var agentAC = AgentNeuralActorNeuralCriticPoleEntropyLoss.newDefault(StatePole.newUprightAndStill(parameters));
+        var agentAC = AgentNeuralActorNeuralCriticPoleCEMLoss.newDefault(StatePole.newUprightAndStill(parameters));
         var agentPPO = AgentNeuralActorNeuralCriticPolePPO.newDefault(StatePole.newUprightAndStill(parameters));
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
@@ -65,7 +63,7 @@ public class RunnerTrainersPole {
                                                   ParametersPole parameters) {
         var trainerAC = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER)
-                .actorUpdater(new NeuralActorUpdaterCrossEntropyLoss<>()).build();
+                .actorUpdater(new NeuralActorUpdaterCEMLoss<>()).build();
         log.info("training ac");
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));
@@ -77,7 +75,7 @@ public class RunnerTrainersPole {
                                                   ParametersPole parameters) {
         var trainerAC = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER)
-                .actorUpdater(new NeuralActorUpdaterCrossPPOLoss<>()).build();
+                .actorUpdater(new NeuralActorUpdaterPPOLoss<>()).build();
         log.info("training ppo");
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));

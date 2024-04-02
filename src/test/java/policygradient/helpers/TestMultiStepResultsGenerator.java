@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.cart_pole.AgentNeuralActorNeuralCriticPoleEntropyLoss;
+import policy_gradient_problems.environments.cart_pole.AgentNeuralActorNeuralCriticPoleCEMLoss;
 import policy_gradient_problems.environments.cart_pole.ParametersPole;
 import policy_gradient_problems.environments.cart_pole.StatePole;
 import policy_gradient_problems.environments.cart_pole.VariablesPole;
@@ -29,7 +29,7 @@ public class TestMultiStepResultsGenerator {
     @BeforeEach
     void init() {
         parametersPole = ParametersPole.newDefault();
-        var agent = AgentNeuralActorNeuralCriticPoleEntropyLoss.newDefault(
+        var agent = AgentNeuralActorNeuralCriticPoleCEMLoss.newDefault(
                 StatePole.newUprightAndStill(parametersPole));
         TrainerParameters parameters = TrainerParameters.newDefault().withGamma(0d).withStepHorizon(STEP_HORIZON);
         generator=new MultiStepResultsGenerator<>(parameters,agent);

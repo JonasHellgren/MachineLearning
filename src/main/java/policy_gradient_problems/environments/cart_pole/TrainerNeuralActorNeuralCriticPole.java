@@ -3,7 +3,7 @@ package policy_gradient_problems.environments.cart_pole;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCrossEntropyLossTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCEMTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.List;
@@ -11,14 +11,14 @@ import java.util.List;
 @Log
 public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
-    AgentNeuralActorNeuralCriticPoleEntropyLoss agent;
+    AgentNeuralActorNeuralCriticPoleCEMLoss agent;
     ParametersPole parametersPole;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerNeuralActorNeuralCriticPole(@NonNull EnvironmentPole environment,
-                                            @NonNull AgentNeuralActorNeuralCriticPoleEntropyLoss agent,
+                                            @NonNull AgentNeuralActorNeuralCriticPoleCEMLoss agent,
                                             @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
@@ -27,8 +27,8 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
     @Override
     public void train() {
-        NeuralActorNeuralCriticCrossEntropyLossTrainer<VariablesPole> episodeTrainer =
-                NeuralActorNeuralCriticCrossEntropyLossTrainer.<VariablesPole>builder()
+        NeuralActorNeuralCriticCEMTrainer<VariablesPole> episodeTrainer =
+                NeuralActorNeuralCriticCEMTrainer.<VariablesPole>builder()
                         .agent(agent)
                         .parameters(parameters)
                         .valueTermState(VALUE_TERMINAL_STATE)

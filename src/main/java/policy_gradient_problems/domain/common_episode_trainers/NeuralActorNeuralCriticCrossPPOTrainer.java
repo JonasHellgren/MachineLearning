@@ -8,9 +8,8 @@ import policy_gradient_problems.helpers.ExperienceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class NeuralActorNeuralCriticCrossPPOLossTrainer<V> {
+public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
     @NonNull AgentNeuralActorNeuralCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;

@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
-import policy_gradient_problems.helpers.NeuralActorUpdaterCrossEntropyLoss;
+import policy_gradient_problems.helpers.NeuralActorUpdaterCEMLoss;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerMultiStepActorCriticPoleEntropyLoss {
+ class TestTrainerMultiStepActorCriticPoleCEM {
 
     TrainerMultiStepActorCriticPole trainer;
-    AgentNeuralActorNeuralCriticPoleEntropyLoss agent;
+    AgentNeuralActorNeuralCriticPoleCEMLoss agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
 
@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPoleEntropyLoss.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentNeuralActorNeuralCriticPoleCEMLoss.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPoleEntropyLoss agent) {
+    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPoleCEMLoss agent) {
         trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                         .stepHorizon(10)
                         //.relativeNofFitsPerBatch(0.5)
                         .build())
-                .actorUpdater(new NeuralActorUpdaterCrossEntropyLoss<>())
+                .actorUpdater(new NeuralActorUpdaterCEMLoss<>())
                 .build();
     }
 

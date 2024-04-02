@@ -7,15 +7,15 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
-public class AgentNeuralActorNeuralCriticPoleEntropyLoss extends AgentA<VariablesPole>
+public class AgentNeuralActorNeuralCriticPoleCEMLoss extends AgentA<VariablesPole>
         implements AgentNeuralActorNeuralCriticI<VariablesPole> {
 
-    NeuralActorMemoryPoleCrossEntropyLoss actor;
+    NeuralActorMemoryPoleCEMLoss actor;
     NeuralCriticMemoryPole critic;
 
-    public static AgentNeuralActorNeuralCriticPoleEntropyLoss newDefault(StateI<VariablesPole> stateStart) {
+    public static AgentNeuralActorNeuralCriticPoleCEMLoss newDefault(StateI<VariablesPole> stateStart) {
         var netSettings= NeuralCriticMemoryPole.getDefaultNetSettings();
-        return AgentNeuralActorNeuralCriticPoleEntropyLoss.builder()
+        return AgentNeuralActorNeuralCriticPoleCEMLoss.builder()
                 .stateStart(stateStart)
                 .criticSettings(netSettings)
                 .parametersPole(ParametersPole.newDefault())
@@ -23,11 +23,11 @@ public class AgentNeuralActorNeuralCriticPoleEntropyLoss extends AgentA<Variable
     }
 
     @Builder
-    public AgentNeuralActorNeuralCriticPoleEntropyLoss(StateI<VariablesPole> stateStart,
-                                                       NetSettings criticSettings,
-                                                       ParametersPole parametersPole) {
+    public AgentNeuralActorNeuralCriticPoleCEMLoss(StateI<VariablesPole> stateStart,
+                                                   NetSettings criticSettings,
+                                                   ParametersPole parametersPole) {
         super(stateStart);
-        this.actor = NeuralActorMemoryPoleCrossEntropyLoss.newDefault(parametersPole);
+        this.actor = NeuralActorMemoryPoleCEMLoss.newDefault(parametersPole);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);
     }
 
