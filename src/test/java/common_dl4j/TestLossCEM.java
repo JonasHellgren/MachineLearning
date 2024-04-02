@@ -17,7 +17,7 @@ import policy_gradient_problems.environments.twoArmedBandit.EnvironmentBandit;
 
 import java.util.List;
 
- class TestCrossEntropyLoss {
+ class TestLossCEM {
 
      static final int N_INPUT = 1;
      static final INDArray IN = Nd4j.zeros(1, N_INPUT);
@@ -28,7 +28,7 @@ import java.util.List;
 
     @BeforeEach
      void init() {
-        net = getNet(CrossEntropyLoss.newDefault());
+        net = getNet(LossCEM.newDefault());
     }
 
     @NotNull

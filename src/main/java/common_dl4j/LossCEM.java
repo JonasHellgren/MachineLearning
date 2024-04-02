@@ -9,7 +9,18 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.ILossFunction;
 import static common_dl4j.Dl4JUtil.replaceRow;
 
-public class CrossEntropyLoss implements ILossFunction {
+/**
+ *
+ * Applies cross entropy method
+ * The idea is to use the weighted cross entropy loss:
+ * L=-sum(wi*[yi*log(pi))
+ * Label argument in scoreOnePoint includes representation of wi and yi in equation above
+ * The z argument in the same method is for pi
+ * Big wi and differing probability distributions hence gives a big loss
+ *
+ */
+
+public class LossCEM implements ILossFunction {
 
     static final float DEFAULT_EPS = 1e-5f;
     static final double DEFAULT_BETA = 0.1d;
@@ -17,15 +28,15 @@ public class CrossEntropyLoss implements ILossFunction {
     double beta;
     NumericalGradCalculator gradCalculator;
 
-    public static CrossEntropyLoss newDefault() {
-        return new CrossEntropyLoss(DEFAULT_EPS, DEFAULT_BETA);
+    public static LossCEM newDefault() {
+        return new LossCEM(DEFAULT_EPS, DEFAULT_BETA);
     }
 
-    public static CrossEntropyLoss newWithBeta(double beta) {
-        return new CrossEntropyLoss(DEFAULT_EPS, beta);
+    public static LossCEM newWithBeta(double beta) {
+        return new LossCEM(DEFAULT_EPS, beta);
     }
 
-    public CrossEntropyLoss(double eps, double beta) {
+    public LossCEM(double eps, double beta) {
         this.eps = eps;
         this.beta = beta;
         TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =

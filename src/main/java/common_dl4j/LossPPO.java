@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import static common_dl4j.FiniteDifferenceCalculator.calculateGradient;
 
 @AllArgsConstructor
-public class PPOLoss implements ILossFunction  {
+public class LossPPO implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.1;
     public static final double EPSILON_FIN_DIFF = 1e-1;
@@ -24,23 +24,23 @@ public class PPOLoss implements ILossFunction  {
     double beta;
     PPOScoreCalculator  scoreCalculator;
 
-    public static PPOLoss newDefault() {
-        return new PPOLoss(DEF_EPSILON, EPSILON_FIN_DIFF, BETA_ENTROPY);
+    public static LossPPO newDefault() {
+        return new LossPPO(DEF_EPSILON, EPSILON_FIN_DIFF, BETA_ENTROPY);
     }
 
-    public static PPOLoss newWithEpsilonPPO(double epsilon) {
-        return new PPOLoss(epsilon,EPSILON_FIN_DIFF, BETA_ENTROPY);
+    public static LossPPO newWithEpsilonPPO(double epsilon) {
+        return new LossPPO(epsilon,EPSILON_FIN_DIFF, BETA_ENTROPY);
     }
 
-    public static PPOLoss newWithEpsPPOEpsFinDiff(double epsPPO, double epsilonFinDiff) {
-        return new PPOLoss(epsPPO,epsilonFinDiff,BETA_ENTROPY);
+    public static LossPPO newWithEpsPPOEpsFinDiff(double epsPPO, double epsilonFinDiff) {
+        return new LossPPO(epsPPO,epsilonFinDiff,BETA_ENTROPY);
     }
 
-    public static PPOLoss newWithEpsPPOEpsFinDiffbetaEntropy(double epsPPO, double epsilonFinDiff, double beta) {
-        return new PPOLoss(epsPPO,epsilonFinDiff,beta);
+    public static LossPPO newWithEpsPPOEpsFinDiffbetaEntropy(double epsPPO, double epsilonFinDiff, double beta) {
+        return new LossPPO(epsPPO,epsilonFinDiff,beta);
     }
 
-    private PPOLoss(double epsilonPPO, double epsilonFinDiff, double beta) {
+    private LossPPO(double epsilonPPO, double epsilonFinDiff, double beta) {
         this.epsilonFinDiff=epsilonFinDiff;
         this.beta=beta;
         this.scoreCalculator=new PPOScoreCalculator(epsilonPPO);

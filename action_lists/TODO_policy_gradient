@@ -282,8 +282,18 @@ cart pole PPOPolicy x
 entropy på PPO loss  x
 entropy på PPO loss beta = 0.1;  //todo in constructior  x
 
+förklara Weighted cross entropy loss  x
+döm om klasser med CntropyLoss  -> CEM
+
+Training Recoders
+Probability   Lik nuvarande
+episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >
+
+Training.   sumRewards nSteps criticLoss actorLoss etc
+Evaluation   sumRewards etc  - extractField hjälper
+
 fler Rl measures
-cart pole - varannan random - varannan står
+
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
 
 maze with ppo
