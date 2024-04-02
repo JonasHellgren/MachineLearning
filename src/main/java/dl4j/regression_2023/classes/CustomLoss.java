@@ -105,8 +105,8 @@ public class CustomLoss implements ILossFunction {
     static final float EPS = 1e-5f;
 
     private static INDArray getNumericGrad(INDArray yHat, INDArray preOutput, IActivation activationFn) {
-        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
-                (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m);
+        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn =
+                (p, a, m) -> scoreArray(p.getFirst(), p.getSecond(), a, m).sumNumber().doubleValue();
         var gradCalculator = new NumericalGradCalculator(EPS, scoreFcn);
         return gradCalculator.getGrad(yHat, preOutput, activationFn, null);
     }

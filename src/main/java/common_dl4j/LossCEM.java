@@ -39,7 +39,7 @@ public class LossCEM implements ILossFunction {
     public LossCEM(double eps, double beta) {
         this.eps = eps;
         this.beta = beta;
-        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn =
+        TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn =
                 (p, a, m) -> scoreOnePoint(p.getFirst(), p.getSecond(), a);
         this.gradCalculator = new NumericalGradCalculator(DEFAULT_EPS, scoreFcn);
     }
@@ -75,9 +75,8 @@ public class LossCEM implements ILossFunction {
         int nofPoints = labels.rows();
         INDArray scoreArrAllPoints = getEmptyIndMatrix(labels);
         for (int i = 0; i < nofPoints; i++) {
-            INDArray scoreArr = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn);
-            replaceRow(scoreArrAllPoints, scoreArr, i);
-
+            double score = scoreOnePoint(labels.getRow(i), preOutput.getRow(i), activationFn);
+            scoreArrAllPoints.putScalar(i,score);
         }
         return scoreArrAllPoints;
     }
@@ -88,14 +87,11 @@ public class LossCEM implements ILossFunction {
      * labels [1,0,0] will give smaller action change compared to [10,0,0]
      */
 
-    //todo return double
-    private INDArray scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
-        int nofOut = label.columns();
+    private double scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         INDArray estProbabilities = activationFn.getActivation(z, false);
         double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
         double entropy = EntropyCalculator.calcEntropy(estProbabilities);
-        double cost = ce - beta  * entropy;  //minimized, score=-cost (maximized)
-        return  Nd4j.valueArrayOf(1,nofOut, cost);
+        return ce - beta  * entropy;
     }
 
     /**

@@ -27,14 +27,15 @@ import org.nd4j.linalg.factory.Nd4j;
 public class NumericalGradCalculator {
 
     float eps;
-    TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, INDArray> scoreFcn;
+    TriFunction<Pair<INDArray, INDArray>, IActivation, INDArray, Double> scoreFcn;
+
 
     public INDArray getGrad(INDArray labels, INDArray z, IActivation activationFn, INDArray mask) {
         INDArray zPlus = changePreOut(z,eps);
         INDArray zMin = changePreOut(z,-eps);
-        INDArray lossPlus = scoreFcn.apply(Pair.create(labels, zPlus), activationFn, mask);
-        INDArray lossMin = scoreFcn.apply(Pair.create(labels, zMin), activationFn, mask);
-        return lossPlus.sub(lossMin).div(2 * eps).castTo(DataType.FLOAT);
+        INDArray lossPlus = Nd4j.scalar(scoreFcn.apply(Pair.create(labels, zPlus), activationFn, mask));
+        INDArray lossMin = Nd4j.scalar(scoreFcn.apply(Pair.create(labels, zMin), activationFn, mask));
+        return (lossPlus.sub(lossMin).div(2 * eps).castTo(DataType.FLOAT));
     }
 
     private INDArray changePreOut(INDArray z, float eps) {
@@ -52,10 +53,8 @@ public class NumericalGradCalculator {
         for (long i = 0; i < nOut ; i++) {
             INDArray zPlus = getCloneWithChangedValueAtIndex(z, i, eps);
             INDArray zMin = getCloneWithChangedValueAtIndex(z, i, -eps);
-            INDArray lossPlus=scoreFcn.apply(Pair.create(label,zPlus), activationFn, mask);
-            INDArray lossMin=scoreFcn.apply(Pair.create(label,zMin), activationFn, mask);
-            double lossPlusDouble= lossPlus.sumNumber().doubleValue();
-            double lossMinDouble= lossMin.sumNumber().doubleValue();
+            double lossPlusDouble=scoreFcn.apply(Pair.create(label,zPlus), activationFn, mask);
+            double lossMinDouble=scoreFcn.apply(Pair.create(label,zMin), activationFn, mask);
             dldz.putScalar(i,(lossPlusDouble-lossMinDouble)/(2*eps));
         }
         return dldz;
