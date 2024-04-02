@@ -3,6 +3,7 @@ package policy_gradient_problems.helpers;
 import common.Conditionals;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,12 +24,12 @@ public class RecorderActionProbabilities {
     }
 
     public void addStateProbabilitiesMap(@NonNull Map<Integer, List<Double>> probMap) {
-        checkNewProbMaP(probMap);
+        Conditionals.executeIfTrue(!isEmpty(), () -> checkNewProbMap(probMap));
         episodeProbabilitiesList.add(probMap);
     }
 
     /**
-     *  Returns a list with length nof episodes where each item includes probabilities of actions
+     * Returns a list with length nof episodes where each item includes probabilities of actions
      */
 
     public List<List<Double>> probabilitiesForState(int state) {  //List<...>.size=nof episodes
@@ -37,14 +38,14 @@ public class RecorderActionProbabilities {
     }
 
     /**
-     *  Returns a list with length nof actions where each item includes nof actions trajectories
-     *  Each trajectory with length equal to nof episodes
+     * Returns a list with length nof actions where each item includes nof actions trajectories
+     * Each trajectory with length equal to nof episodes
      */
 
     public List<List<Double>> probTrajectoryForEachAction(int state) {  //List<...>.size=nof actions
         checkArgument(recordedStates().contains(state), "State = " + state + " not recorded");
         return IntStream.range(0, nActions())
-                .mapToObj(a -> probabilityTrajectoryForStateAndAction(state,a))
+                .mapToObj(a -> probabilityTrajectoryForStateAndAction(state, a))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -78,14 +79,12 @@ public class RecorderActionProbabilities {
         return integerListMap.keySet().stream().findFirst().orElseThrow();
     }
 
-    private void checkNewProbMaP(@NotNull Map<Integer, List<Double>> probMap) {
-        Conditionals.executeIfTrue(!isEmpty(), () -> {
-                    var firstRecording = firstRecording();
-                    checkArgument(probMap.keySet().containsAll(firstRecording.keySet()), ERROR_MESSAGE);
-                    int anyState = getAnyState(probMap);
-                    checkArgument(probMap.get(anyState).size() == nActions(), ERROR_MESSAGE);
-                }
-        );
+    void checkNewProbMap(@NotNull Map<Integer, List<Double>> probMap) {
+        var firstRecording = firstRecording();
+        checkArgument(probMap.keySet().containsAll(firstRecording.keySet()), ERROR_MESSAGE);
+        int anyState = getAnyState(probMap);
+        checkArgument(probMap.get(anyState).size() == nActions(), ERROR_MESSAGE);
+
     }
 
 

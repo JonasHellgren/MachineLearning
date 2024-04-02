@@ -12,7 +12,7 @@ public class RunnerMultiCoinBandit {
         var environment= EnvironmentMultiCoinBandit.newWithProbabilities(0.0,1.0);
         var trainer=createTrainer(environment);
         trainer.train();
-        plotActionProbabilitiesDuringTraining("ppo",trainer);
+        plotActionProbabilitiesDuringTraining(trainer);
     }
 
     static TrainerMultiCoinBanditAgentPPO createTrainer(EnvironmentMultiCoinBandit environment) {
@@ -23,8 +23,8 @@ public class RunnerMultiCoinBandit {
                 .build();
     }
 
-    private static void plotActionProbabilitiesDuringTraining(String title, TrainerMultiCoinBanditAgentPPO trainer) {
-        var plotter = new PlotterMultiplePanelsTrajectory(title, List.of("pi(0)", "pi(1)"), "episode");
+    private static void plotActionProbabilitiesDuringTraining(TrainerMultiCoinBanditAgentPPO trainer) {
+        var plotter = new PlotterMultiplePanelsTrajectory("ppo", List.of("pi(0)", "pi(1)"), "episode");
         plotter.plot(trainer.getRecorderActionProbabilities().probTrajectoryForEachAction(0));
     }
 

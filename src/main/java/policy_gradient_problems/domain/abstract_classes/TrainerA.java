@@ -7,6 +7,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.helpers.RecorderActionProbabilities;
+import policy_gradient_problems.helpers.RecorderStateValues;
 import policy_gradient_problems.helpers.TrainingTracker;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public abstract class TrainerA<V> {
 
     protected TrainingTracker tracker=new TrainingTracker(); //todo remove
     protected RecorderActionProbabilities recorderActionProbabilities=new RecorderActionProbabilities();
+    protected RecorderStateValues recorderStateValues=new RecorderStateValues();
     protected TrainerParameters parameters;
 
     public abstract void train();

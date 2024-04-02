@@ -31,8 +31,8 @@ public class RunnerTrainerActorCriticShip {
             var plotter = new PlotterMultiplePanelsTrajectory(
                     "ActorCritic",
                     List.of("state = "+s+", mean", "std","value"), "episode");
-          //plotter.plot(trainer.getRecorderStateValues().probabilitiesForState(s));
-             plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
+          plotter.plot(trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s));
+             //plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
         }
     }
 

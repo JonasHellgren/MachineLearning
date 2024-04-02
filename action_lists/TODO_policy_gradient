@@ -288,8 +288,8 @@ döm om klasser med CntropyLoss  -> CEM  x
 Training Recoders
 Probability   Lik nuvarande x
 implemetera ovan  MultiCoinBandit TwoBandit SC x
-RecorderStateValues
-TrainerAbstractShip med RecorderStateValues
+RecorderStateValues  x
+TrainerAbstractShip med RecorderStateValues  x
 episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >
 
 Training.   sumRewards nSteps criticLoss actorLoss etc

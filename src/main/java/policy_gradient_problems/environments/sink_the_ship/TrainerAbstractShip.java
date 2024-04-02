@@ -14,30 +14,35 @@ import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log
 public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
     @NonNull EnvironmentShip environment;
     @NonNull AgentShip agent;
 
-    public TrainerAbstractShip(@NonNull EnvironmentShip environment,
-                               @NonNull AgentShip agent,
-                               @NonNull TrainerParameters parameters) {
+    protected TrainerAbstractShip(@NonNull EnvironmentShip environment,
+                                  @NonNull AgentShip agent,
+                                  @NonNull TrainerParameters parameters) {
         this.environment = environment;
         this.agent = agent;
-        super.parameters=parameters;
+        super.parameters = parameters;
     }
 
-    void updateTracker(int ei, CriticMemoryParamOneHot valueFunction ) {
-        for (int s: EnvironmentShip.POSITIONS) {
-            Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
-            double valueState=valueFunction.getValue(s);
-            var listForPlotting=List.of(msPair.getFirst(),msPair.getSecond(),valueState);
-
-
-            tracker.addMeasures(ei,s,listForPlotting );
-        }
+    void updateTracker(CriticMemoryParamOneHot valueFunction) {
+        Map<Integer, List<Double>> map = EnvironmentShip.POSITIONS.stream()
+                .collect(Collectors.toMap(
+                        s -> s,
+                        s -> {
+                            Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
+                            double valueState = valueFunction.getValue(s);
+                            return List.of(msPair.getFirst(), msPair.getSecond(), valueState);
+                        }
+                ));
+        super.getRecorderStateValues().addStateValuesMap(map);
     }
 
     public void setAgent(@NotNull AgentShip agent) {
@@ -45,18 +50,18 @@ public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
     }
 
     protected List<Experience<VariablesShip>> getExperiences(AgentI<VariablesShip> agent) {
-        List<Experience<VariablesShip>> experienceList=new ArrayList<>();
+        List<Experience<VariablesShip>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<VariablesShip> sr;
-        do  {
+        do {
             StateI<VariablesShip> state = agent.getState();
-            Action action=agent.chooseAction();
-            sr=environment.step(state,action);
+            Action action = agent.chooseAction();
+            sr = environment.step(state, action);
             agent.setState(sr.state());
-            var stateNew=sr.state();
+            var stateNew = sr.state();
             experienceList.add(Experience.of(state, action, sr.reward(), stateNew));
             si++;
-        } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
+        } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }
 
