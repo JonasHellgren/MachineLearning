@@ -290,9 +290,11 @@ Probability   Lik nuvarande x
 implemetera ovan  MultiCoinBandit TwoBandit SC x
 RecorderStateValues  x
 TrainerAbstractShip med RecorderStateValues  x
-episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >
+episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >  x
 
 Training.   sumRewards nSteps criticLoss actorLoss etc
+RecorderTrainingMeasures
+TestRecorderTrainingMeasures
 Evaluation   sumRewards etc  - extractField hjälper
 
 fler Rl measures
