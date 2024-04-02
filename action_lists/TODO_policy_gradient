@@ -286,7 +286,10 @@ förklara Weighted cross entropy loss  x
 döm om klasser med CntropyLoss  -> CEM  x
 
 Training Recoders
-Probability   Lik nuvarande
+Probability   Lik nuvarande x
+implemetera ovan  MultiCoinBandit TwoBandit SC x
+RecorderStateValues
+TrainerAbstractShip med RecorderStateValues
 episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >
 
 Training.   sumRewards nSteps criticLoss actorLoss etc

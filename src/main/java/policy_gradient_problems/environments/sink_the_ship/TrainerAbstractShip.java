@@ -34,6 +34,8 @@ public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
             Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
             double valueState=valueFunction.getValue(s);
             var listForPlotting=List.of(msPair.getFirst(),msPair.getSecond(),valueState);
+
+
             tracker.addMeasures(ei,s,listForPlotting );
         }
     }

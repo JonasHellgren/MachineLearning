@@ -11,20 +11,21 @@ import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 @Log
 @Getter
-public final class TrainerBanditNeuralActorCrossEntropyLoss extends TrainerAbstractBandit {
+public final class TrainerBanditNeuralActorCEM extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
     public static final double LEARNING_RATE = 0.01;
     AgentBanditNeuralActor agent;
 
     @Builder
-    public TrainerBanditNeuralActorCrossEntropyLoss(EnvironmentBandit environment,
-                                                    AgentBanditNeuralActor agent,
-                                                    TrainerParameters parameters) {
+    public TrainerBanditNeuralActorCEM(EnvironmentBandit environment,
+                                       AgentBanditNeuralActor agent,
+                                       TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
         this.agent = new AgentBanditNeuralActor(LEARNING_RATE);
@@ -50,7 +51,9 @@ public final class TrainerBanditNeuralActorCrossEntropyLoss extends TrainerAbstr
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
-            tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
+            //tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
+            var map= Map.of(agent.getState().getVariables().arm(),agent.getActionProbabilities());
+            super.recorderActionProbabilities.addStateProbabilitiesMap(map);
         }
     }
 

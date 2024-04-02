@@ -5,6 +5,7 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
+import policy_gradient_problems.helpers.RecorderActionProbabilities;
 import policy_gradient_problems.helpers.TrainingTracker;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.StepReturn;
@@ -40,6 +41,7 @@ public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
         logIfEmptyTracker();
         return super.tracker;
     }
+
 
 
     private void logIfEmptyTracker() {

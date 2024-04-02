@@ -6,6 +6,8 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.short_corridor.*;
+import policy_gradient_problems.helpers.RecorderActionProbabilities;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
 public class RunnerShortCorridor {
 
     public static final int PLOTTED_ACTION = 0;
-    public static final int NOF_EPISODES = 500;
+    public static final int NOF_EPISODES = 100;
     static List<List<Double>> probA0S0Lists=new ArrayList<>();
     static List<String> probA0S0TitlesLists=new ArrayList<>();
     static List<List<Double>> probA0S1Lists=new ArrayList<>();
@@ -43,11 +45,12 @@ public class RunnerShortCorridor {
     }
 
     private static void addDataToPlotLists(TrainerAbstractSC trainer, String seriesName) {
-        probA0S0Lists.add(trainer.getTracker().getMeasureTrajectoriesForState(0).get(PLOTTED_ACTION));
+        RecorderActionProbabilities recorder = trainer.getRecorderActionProbabilities();
+        probA0S0Lists.add(recorder.probabilityTrajectoryForStateAndAction(0,PLOTTED_ACTION));
         probA0S0TitlesLists.add(seriesName);
-        probA0S1Lists.add(trainer.getTracker().getMeasureTrajectoriesForState(1).get(PLOTTED_ACTION));
+        probA0S1Lists.add(recorder.probabilityTrajectoryForStateAndAction(1,PLOTTED_ACTION));
         probA0S1TitlesLists.add(seriesName);
-        probA0S2Lists.add(trainer.getTracker().getMeasureTrajectoriesForState(2).get(PLOTTED_ACTION));
+        probA0S2Lists.add(recorder.probabilityTrajectoryForStateAndAction(2,PLOTTED_ACTION));
         probA0S2TitlesLists.add(seriesName);
     }
 

@@ -11,6 +11,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 @Log
@@ -51,7 +52,8 @@ public class TrainerMultiCoinBanditAgentPPO extends TrainerAbstractMultiCoinBand
                         .build();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
-            tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
+            super.getRecorderActionProbabilities().addStateProbabilitiesMap(
+                    Map.of(agent.getState().getVariables().arm(), agent.getActionProbabilities()));
         }
     }
 }

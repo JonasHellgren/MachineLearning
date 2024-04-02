@@ -9,7 +9,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
 
  class TestBanditTrainerNeural {
 
-    TrainerBanditNeuralActorCrossEntropyLoss trainer;
+    TrainerBanditNeuralActorCEM trainer;
     AgentBanditNeuralActor agent;
 
     @BeforeEach
@@ -20,7 +20,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
     }
 
     private void createTrainer(EnvironmentBandit environment) {
-        trainer = TrainerBanditNeuralActorCrossEntropyLoss.builder()
+        trainer = TrainerBanditNeuralActorCEM.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
                         .nofEpisodes(100).nofStepsMax(1).gamma(1d).build())

@@ -22,7 +22,7 @@ public class RunnerTwoArmedBandit {
 
     private static void plotActionProbabilitiesDuringTraining(String title, TrainerAbstractBandit trainer) {
         var plotter = new PlotterMultiplePanelsTrajectory(title,List.of("pi(0)", "pi(1)"), "episode");
-        plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(0));
+        plotter.plot(trainer.getRecorderActionProbabilities().probTrajectoryForEachAction(0));
     }
 
     private static TrainerBanditParamActor createTrainerParam() {
@@ -33,8 +33,8 @@ public class RunnerTwoArmedBandit {
                 .build();
     }
 
-    private static TrainerBanditNeuralActorCrossEntropyLoss createTrainerNeural() {
-        return TrainerBanditNeuralActorCrossEntropyLoss.builder()
+    private static TrainerBanditNeuralActorCEM createTrainerNeural() {
+        return TrainerBanditNeuralActorCEM.builder()
                 .environment(getEnvironment())
                 .agent(AgentBanditNeuralActor.newDefault(getTrainerParametersNeural().learningRateNonNeuralActor()))
                 .parameters(getTrainerParametersNeural())

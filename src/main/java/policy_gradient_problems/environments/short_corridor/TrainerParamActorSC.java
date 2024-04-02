@@ -26,7 +26,7 @@ public final class TrainerParamActorSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainFromEpisode(getExperiences(agent));
-            updateTracker(ei,(s) -> agent.helper.calcActionProbsInObsState(s));
+            updateProbRecorder(ei,(s) -> agent.helper.calcActionProbsInObsState(s));
         }
     }
 

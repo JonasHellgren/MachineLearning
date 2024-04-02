@@ -32,7 +32,7 @@ public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateTracker(ei,(s) ->  agent.calcActionProbabilitiesInObsState(s));
+            updateProbRecorder(ei,(s) ->  agent.calcActionProbabilitiesInObsState(s));
         }
     }
 }

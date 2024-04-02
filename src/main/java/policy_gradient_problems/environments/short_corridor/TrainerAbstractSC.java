@@ -10,8 +10,11 @@ import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
@@ -24,10 +27,11 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
         super.parameters = parameters;
     }
 
-    void updateTracker(int ei, Function<Integer,List<Double>> apFcn) {
-        for (int s : EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL) {
-            tracker.addMeasures(ei, s, apFcn.apply(s));
-        }
+    void updateProbRecorder(int ei, Function<Integer,List<Double>> apFcn) {
+
+        Map<Integer, List<Double>> map = EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL
+                .stream().collect(Collectors.toMap(s -> s, apFcn));
+        recorderActionProbabilities.addStateProbabilitiesMap(map);
     }
 
     protected List<Experience<VariablesSC>> getExperiences(AgentI<VariablesSC> agent) {
