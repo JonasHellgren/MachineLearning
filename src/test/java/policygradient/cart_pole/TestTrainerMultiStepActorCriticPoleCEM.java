@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-    @Disabled("Long time")
+  //  @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();

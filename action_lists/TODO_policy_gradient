@@ -302,7 +302,7 @@ införliva fler Rl measures
 införliva RecorderEvaluationProgress i sc x
 införliva RecorderEvaluationProgress i cart pole x
 
-NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika
+NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika  x
 
 AgentNeuralActorNeuralCriticSCCEM
 RunnerShortCorridor  lägg till PPO

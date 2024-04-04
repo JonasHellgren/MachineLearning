@@ -41,7 +41,7 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
                        AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
         super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
                 .nSteps(experienceList.size())
-                .actorLoss(agent.lossActorAndCritic().getFirst())
+                .actorLoss(Math.abs(agent.lossActorAndCritic().getFirst()))
                 .criticLoss(agent.lossActorAndCritic().getSecond())
                 .build());
     }
