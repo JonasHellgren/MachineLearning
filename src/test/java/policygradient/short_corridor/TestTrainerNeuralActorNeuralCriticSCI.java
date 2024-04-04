@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     private static Double getCriticOutValue(int pos) {
         var critic = agent.getCritic();
-        return critic.getOutValue(StateSC.newFromRealPos(pos));
+        return critic.getOutValue(StateSC.newFromObsPos(pos));
     }
 
 
@@ -64,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.*;
         System.out.println("policy");
         for (int pos = 0; pos < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES; pos++) {
             System.out.println("s = " + pos +
-                    ", agent.actionProb() = " + agent.actorOut(StateSC.newFromRealPos(pos)) +
+                    ", agent.actionProb() = " + agent.actorOut(StateSC.newFromObsPos(pos)) +
                     ", value = " + getCriticOutValue(pos));
         }
     }

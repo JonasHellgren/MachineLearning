@@ -47,7 +47,7 @@ public class PanelCartPoleAnimation extends JPanel {
     final double CART_WIDTH=0.3;  //in domain
     final double CART_HEIGHT=0.2;
     final int POLE_LENGTH=1;
-    final double  CART_Y=0; //(double) CART_HEIGHT/2;   //center of gravity pos
+    final double  CART_Y=0; //(double) CART_HEIGHT/2;   //center of gravity posReal
 
     public PanelCartPoleAnimation(ScaleLinear xScaler,
                                   ScaleLinear yScaler) {

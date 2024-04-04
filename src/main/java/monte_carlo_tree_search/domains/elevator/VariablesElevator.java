@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * states={pos, nPersonsInElevator, nPersonsWaitingFloor1,..,nPersonsWaitingFloor3,SoE}
+ * states={posReal, nPersonsInElevator, nPersonsWaitingFloor1,..,nPersonsWaitingFloor3,SoE}
  */
 
 @Builder

@@ -17,25 +17,36 @@ public class StateSC implements StateI<VariablesSC> {
     public static StateSC newDefault() {
         return new StateSC(VariablesSC.newDefault());
     }
+
     public static StateSC newFromRealPos(int pos) {
-        return new StateSC(new VariablesSC(pos));
-    }
-    public static StateSC randomNonTerminal() {
-        return new StateSC(new VariablesSC(AgentParamActorSCHelper.getRandomNonTerminalState()));
+        return new StateSC(VariablesSC.newOfReal(pos));
     }
 
-    public int getPos() {
-        return variables.pos();
+    public static StateSC newFromObsPos(int pos) {
+        return new StateSC(VariablesSC.newOfObserved(pos));
+    }
+
+
+    public static StateSC randomNonTerminal() {
+        return new StateSC(VariablesSC.newOfReal(AgentParamActorSCHelper.getRandomNonTerminalState()));
+    }
+
+    public int getRealPos() {
+        return variables.posReal();
+    }
+
+    public int getObsPos() {
+        return variables.posObserved();
     }
 
     @Override
     public StateI<VariablesSC> copy() {
-        return StateSC.newFromRealPos(getPos());
+        return StateSC.newFromRealPos(getRealPos());
     }
 
     @Override
     public List<Double> asList() {
-        return List.of((double) getPos());
+        return List.of((double) getObsPos());
     }
 
     @SneakyThrows
@@ -44,9 +55,9 @@ public class StateSC implements StateI<VariablesSC> {
         throw new NoSuchMethodException();
     }
 
-    public StateSC asObserved() {
-        int obsPos= EnvironmentSC.getObservedPos(this);
-        return newFromRealPos(obsPos);
-    }
+/*    public StateSC asObserved() {
+        int realPos= EnvironmentSC.getObservedPos(variables.posReal());
+        return newFromRealPos(realPos);
+    }*/
 
 }

@@ -12,7 +12,7 @@ public class PositionTransitionRules {
     public static final int DUMMY_POS = 0;
     ChargeEnvironmentSettings settings;
 
-    Map<BiPredicate<Integer,Boolean>, BiFunction<Integer,Integer,Integer>> transitionTable;  //pos, isObstacle -> posNew(pos,command)
+    Map<BiPredicate<Integer,Boolean>, BiFunction<Integer,Integer,Integer>> transitionTable;  //posReal, isObstacle -> posNew(posReal,command)
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPos=(p,o) -> p.getFirst().equals(p.getSecond());
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosNoObstacle=(p,o) -> isAtPos.test(p,o) && !o;
     BiPredicate<Pair<Integer,Integer>,Boolean> isAtPosObstacle=(p,o) -> isAtPos.test(p,o) && o;

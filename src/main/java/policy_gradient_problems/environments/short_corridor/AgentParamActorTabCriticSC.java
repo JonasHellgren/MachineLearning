@@ -54,14 +54,14 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
 
     @Override
     public ArrayRealVector calcGradLogVector(StateI<VariablesSC> stateInExperience, Action action) {
-        int stateObserved = EnvironmentSC.getPos(stateInExperience);
+        int stateObserved = EnvironmentSC.getObservedPos(stateInExperience);
         return helper.calcGradLogVector(stateObserved, action.asInt());
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-        StateSC stateAsObs=(StateSC) getState();
-        return helper.calcActionProbsInObsState(stateAsObs.asObserved().getPos());
+        StateSC state=(StateSC) getState();
+        return helper.calcActionProbsInObsState(state.variables.posObserved());
     }
 
     @Override

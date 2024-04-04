@@ -46,13 +46,12 @@ public class NeuralCriticMemorySC {
 
         INDArray inputNDArray = Dl4JUtil.convertListOfLists(inListHot);
         INDArray outPutNDArray = Nd4j.create(ListUtils.toArray(out), inListHot.size(), NOF_OUTPUTS);
-        //INDArray outPutNDArray = Dl4JUtil.convertListOfLists(List.of(out), NOF_OUTPUTS);  //todo få detta funka
         normalizerOut.transform(outPutNDArray);
         fitter.fit(inputNDArray, outPutNDArray);
     }
 
     public Double getOutValue(StateI<VariablesSC> state) {
-        INDArray indArray = Dl4JUtil.createOneHotAndReshape(NOF_INPUTS, state.getVariables().pos());
+        INDArray indArray = Dl4JUtil.createOneHotAndReshape(NOF_INPUTS, state.getVariables().posObserved());
         return getOutValue(indArray);
     }
 

@@ -31,8 +31,8 @@ public final class TrainerParamActorTabCriticSC extends TrainerAbstractSC {
                 .<VariablesSC>builder()
                 .agent(agent).parameters(parameters)
                 .valueTermState(VALUE_TERMINAL_STATE)
-                .tabularCoder((v) -> v.pos())
-                .isTerminal((s) -> environment.isTerminalObserved(EnvironmentSC.getPos(s)))
+                .tabularCoder((v) -> v.posObserved())
+                .isTerminal((s) -> environment.isTerminalObserved(EnvironmentSC.getObservedPos(s)))
                 .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {

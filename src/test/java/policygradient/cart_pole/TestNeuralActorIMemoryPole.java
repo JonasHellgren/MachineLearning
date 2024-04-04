@@ -29,7 +29,7 @@ import java.util.List;
     @Test
      void whenTrained_thenHigherProbAction1IfPosAngle() {
         List<Double> probs = getActionProbabilitesForAngle(parametersPole.angleMax());
-        System.out.println("probs pos a = " + probs);
+        System.out.println("probs posReal a = " + probs);
         Assertions.assertTrue(probs.get(1)>probs.get(0));
     }
 

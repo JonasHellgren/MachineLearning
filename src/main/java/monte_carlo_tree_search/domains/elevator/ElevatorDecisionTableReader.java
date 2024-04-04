@@ -27,12 +27,12 @@ public class ElevatorDecisionTableReader {
     public  Integer readSingleActionChooseRandomIfMultiple(Integer speed, Integer pos, Double SoE) {
         List<Integer> actionValues= new ArrayList<>(readAllAvailableActions(speed, pos, SoE));
         if (actionValues.size()>1) {
-           // logging(speed, pos, fcnList);
+           // logging(speed, posReal, fcnList);
             return actionValues.get(RandomUtils.nextInt(0,actionValues.size()));
         }
         if (actionValues.size()==0) {
-            log.warning("No matching rule. Speed = "+speed+", pos = "+pos);
-            throw new RuntimeException("No matching rule. Speed = "+speed+", pos = "+pos);
+            log.warning("No matching rule. Speed = "+speed+", posReal = "+pos);
+            throw new RuntimeException("No matching rule. Speed = "+speed+", posReal = "+pos);
             //RandUtils<Integer> speedRand=new RandUtils<>();
             //ActionElevator actionElevatorDummy=ActionElevator.newValueDefaultRange(0);
             //List<Integer> actionList=new ArrayList<>(actionElevatorDummy.applicableActions());

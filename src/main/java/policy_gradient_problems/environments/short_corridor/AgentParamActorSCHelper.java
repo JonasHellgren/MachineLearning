@@ -61,7 +61,7 @@ public class AgentParamActorSCHelper {
         }
     }
 
-    static int getRandomNonTerminalState() {
+    static int getRandomNonTerminalState() {  //todo move to env
         RandUtils<Integer> randUtils = new RandUtils<>();
         return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.SET_NON_TERMINAL_STATES));
     }
@@ -74,7 +74,7 @@ public class AgentParamActorSCHelper {
         //int observedStateOld = EnvironmentSC.getObservedPos(state);
 
         StateSC stateAsObs=(StateSC) state;
-        int observedStateOld = stateAsObs.asObserved().getPos();
+        int observedStateOld = stateAsObs.getVariables().posObserved();
         throwIfBadObsState(observedStateOld);
         var limits = getLimits(calcActionProbsInObsState(observedStateOld));
         throwIfBadLimits(limits);

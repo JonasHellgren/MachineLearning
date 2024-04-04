@@ -52,7 +52,7 @@ public class TestHardCodedPathsInEnvironment {
     private double getReturnForActions(StateShip pos, List<ActionInterface<ShipActionSet>> actions) {
         double G=0;
         for (ActionInterface<ShipActionSet> action: actions) {
-            System.out.println("pos = " + pos);
+            System.out.println("posReal = " + pos);
             StepReturnGeneric<ShipVariables> stepReturn= environment.step(action, pos);
             pos.setFromReturn(stepReturn);
             G=G+stepReturn.reward;

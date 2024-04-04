@@ -56,15 +56,17 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
     private Experience<VariablesSC> createExperience(StateI<VariablesSC> state,
                                                      StepReturn<VariablesSC> sr,
                                                      Action action) {
-        return Experience.ofWithIsTerminal(asObserved(state), action, sr.reward(), asObserved(sr.state()), PROB_ACTION,
-                environment.isTerminalObserved(asObserved(sr.state()).getPos()));
+        return Experience.ofWithIsTerminal(state, action, sr.reward(), sr.state(), PROB_ACTION,
+                environment.isTerminalObserved(sr.state().getVariables().posObserved()));
 
     }
+/*
 
     private static StateSC asObserved(StateI<VariablesSC> state) {
         StateSC stateCasted = (StateSC) state;
         return stateCasted.asObserved();
     }
+*/
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();

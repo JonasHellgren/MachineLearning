@@ -28,12 +28,13 @@ public class AgentActorICriticSCLossPPO extends AgentA<VariablesSC>
 
     @Override
     public List<Double> getActionProbabilities() {
-        StateSC stateAsObs=(StateSC) getState();
-        return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
+        StateSC state=(StateSC) getState();
+        //return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
+        return actorOut(state);
     }
 
     public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
-        return actorOut(new StateSC(new VariablesSC(stateObserved)));
+        return actorOut(new StateSC(VariablesSC.newOfObserved(stateObserved)));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class AgentActorICriticSCLossPPO extends AgentA<VariablesSC>
 
     @Override
     public List<Double> actorOut(StateI<VariablesSC> state) {
-        return arrayPrimitiveDoublesToList(actor.getOutValue(new double[]{state.getVariables().pos()}));
+        return arrayPrimitiveDoublesToList(actor.getOutValue(new double[]{state.getVariables().posObserved()}));
     }
 
     @Override

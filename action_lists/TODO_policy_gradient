@@ -306,9 +306,10 @@ NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika  x
 NeuralActorMemorySC -> NeuralActorMemorySCLossCEM  NeuralActorMemorySCLossPPO  x
 AgentActorCriticSCLossPPO  x
 NeuralActorI - ny method actorOut(state)  x
+VariablesSC add observedPos  x
+fixa TestNeuralCriticMemorySC  x
+TrainerNeuralActorNeuralCriticSC flexibel agent x
 fimpa getActionProbabilities i interface
-VariablesSC add observedPos
-TrainerNeuralActorNeuralCriticSC flexibel agent
 RunnerShortCorridor lägg till PPO
 
 maze with ppo

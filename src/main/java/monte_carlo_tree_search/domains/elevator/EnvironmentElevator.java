@@ -31,18 +31,18 @@ import java.util.stream.Collectors;
  * |_01__|
  * |_00__|____ floor 0
  * <p>
- * states={speed,pos, nPersonsInElevator, nPersonsWaitingFloor1,..,nPersonsWaitingFloor3,SoE}
+ * states={speed,posReal, nPersonsInElevator, nPersonsWaitingFloor1,..,nPersonsWaitingFloor3,SoE}
  * <p>
  * action = speed
  * <p>
- * d/dt pos= speed
- * d/dt SoE=  powerCharge  (pos & speed == 0)
+ * d/dt posReal= speed
+ * d/dt SoE=  powerCharge  (posReal & speed == 0)
  * powerUp  (speed is positive)
  * powerDown (speed is negative)
  * 0 (speed is zero)
  * <p>
  * nPersonsInElevator = 0 if floor = 0, increased if entering floor with waiting person(s)
- * nPersonsWaitingFloor i = zero if pos corresponds to that floor
+ * nPersonsWaitingFloor i = zero if posReal corresponds to that floor
  * <p>
  * reward=sum (nPersonsWaitingFloor i)
  */

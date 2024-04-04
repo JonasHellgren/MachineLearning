@@ -18,7 +18,7 @@ public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>
     NeuralCriticMemorySC critic;
 
     public static AgentActorICriticSCLossCEM newDefault() {
-        return new AgentActorICriticSCLossCEM(StateSC.newFromRealPos(0));
+        return new AgentActorICriticSCLossCEM(StateSC.newFromObsPos(0));
     }
 
     public AgentActorICriticSCLossCEM(StateI<VariablesSC> state) {
@@ -29,9 +29,9 @@ public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>
 
     @Override
     public List<Double> getActionProbabilities() {
-        StateSC stateAsObs=(StateSC) getState();
-        return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
-        //return actorOut(stateAsObs);
+        StateSC state=(StateSC) getState();
+        //return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
+        return actorOut(state);
     }
 
     public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
@@ -52,7 +52,7 @@ public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>
 
     @Override
     public List<Double> actorOut(StateI<VariablesSC> state) {
-        double[] outArr = actor.getOutValue(new double[]{state.getVariables().pos()});
+        double[] outArr = actor.getOutValue(new double[]{state.getVariables().posObserved()});
         return arrayPrimitiveDoublesToList(outArr);
     }
 

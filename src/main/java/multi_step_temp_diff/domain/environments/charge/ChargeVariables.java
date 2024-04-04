@@ -32,7 +32,7 @@ public class ChargeVariables {
     public String toString() {
         StringJoiner sj = new StringJoiner(", ");
         DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //US <=> only dots
-        sj.add("pos A = " + posA).add("pos B = " + posB)
+        sj.add("posReal A = " + posA).add("posReal B = " + posB)
                 .add("soc A = " + formatter.format(socA)).add("soc B = " + formatter.format(socB))
                 .add("time = " + time);
 

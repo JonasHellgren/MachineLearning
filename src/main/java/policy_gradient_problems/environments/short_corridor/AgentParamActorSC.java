@@ -38,13 +38,13 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
 
     @Override
     public ArrayRealVector calcGradLogVector(StateI<VariablesSC> stateInExperience, Action action) {
-        int stateObserved = EnvironmentSC.getPos(stateInExperience);
+        int stateObserved = EnvironmentSC.getObservedPos(stateInExperience);
         return helper.calcGradLogVector(stateObserved, action.asInt());
     }
 
     @Override
     public List<Double> getActionProbabilities() {
-        return helper.calcActionProbsInObsState(EnvironmentSC.getPos(getState()));
+        return helper.calcActionProbsInObsState(EnvironmentSC.getObservedPos(getState()));
     }
 
     @Override

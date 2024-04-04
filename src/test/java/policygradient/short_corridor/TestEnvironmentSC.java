@@ -47,8 +47,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         var sr=environment.step(StateSC.newFromRealPos(s), Action.ofInteger(a));
 
         assertEquals(sNew,EnvironmentSC.getPos(sr.state()));
-        StateSC state = (StateSC) sr.state();
-        assertEquals(sNewObserved,state.asObserved().getPos());
+        StateSC stateNew = (StateSC) sr.state();
+        assertEquals(sNewObserved,stateNew.getVariables().posObserved());
         assertEquals(isTerminal,sr.isTerminal());
         assertEquals(r,sr.reward());
     }

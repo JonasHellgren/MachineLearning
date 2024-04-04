@@ -63,12 +63,12 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     }
 
     public static int getPos(StateI<VariablesSC> state) {
-        return state.getVariables().pos();
+        return state.getVariables().posReal();
     }
 
-    private static int getObservedPos(int state) {
-        throwIfBadState(state);
-        return STATE_OBSERVEDSTATE_MAP.get(state);
+    public static int getObservedPos(int pos) {
+        throwIfBadState(pos);
+        return STATE_OBSERVEDSTATE_MAP.get(pos);
     }
 
     private boolean isTerminal(int stateNew) {

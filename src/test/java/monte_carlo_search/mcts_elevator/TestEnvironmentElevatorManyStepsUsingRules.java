@@ -103,7 +103,7 @@ public class TestEnvironmentElevatorManyStepsUsingRules {
         VariablesElevator variables = state.getVariables();
         visitedPositions.clear();
         for (int i = 0; i < NOF_STEPS_HALF_RANDOM_POLICY; i++) {
-          //  if (EnvironmentElevator.isAtFloor.test(variables.speed, variables.pos))  {
+          //  if (EnvironmentElevator.isAtFloor.test(variables.speed, variables.posReal))  {
                 System.out.println("variables = " + variables);  //}
             visitedPositions.add(variables.pos);
             variables = getVariablesElevatorAfterStep(state, policy);
