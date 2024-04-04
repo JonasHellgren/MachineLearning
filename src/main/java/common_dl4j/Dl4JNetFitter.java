@@ -30,6 +30,7 @@ public class Dl4JNetFitter {
     MultiLayerNetwork net;
     NetSettings netSettings;
     Random rnd;
+    double lossLastFit;
 
     public Dl4JNetFitter(MultiLayerNetwork net, NetSettings netSettings) {
         this.net = net;
@@ -43,15 +44,22 @@ public class Dl4JNetFitter {
         int nFitsPerBatch= netSettings.nofFits(sizeBatch);
         DataSetIterator iterator = createDataSetIterator(in, out, sizeBatch);
 
+        double sumLoss=0;
         while (iterator.hasNext()) {
             DataSet miniBatch = iterator.next();
             for (int i = 0; i < nFitsPerBatch; i++) {
                 INDArray features = miniBatch.getFeatures();
                 INDArray labels = miniBatch.getLabels();
                 net.fit(features, labels); // Fit the model on each mini-batch
+                sumLoss+=net.score();
                // miniBatch.shuffle();  //optional
             }
         }
+        lossLastFit=sumLoss/(sizeBatch*nFitsPerBatch);
+    }
+
+    public double getLossLastFit() {
+        return lossLastFit;
     }
 
     private DataSetIterator createDataSetIterator(INDArray in, INDArray out, int sizeBatch) {

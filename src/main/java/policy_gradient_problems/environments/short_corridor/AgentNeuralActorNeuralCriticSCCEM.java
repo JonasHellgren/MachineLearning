@@ -2,6 +2,7 @@ package policy_gradient_problems.environments.short_corridor;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
@@ -10,19 +11,19 @@ import java.util.List;
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 @Getter
-public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
+public class AgentNeuralActorNeuralCriticSCCEM extends AgentA<VariablesSC>
         implements AgentNeuralActorNeuralCriticI<VariablesSC> {
 
-    NeuralActorMemorySC actor;
+    NeuralActorMemorySCCEMLoss actor;
     NeuralCriticMemorySC critic;
 
-    public static AgentNeuralActorNeuralCriticSC newDefault() {
-        return new AgentNeuralActorNeuralCriticSC(StateSC.newFromRealPos(0));
+    public static AgentNeuralActorNeuralCriticSCCEM newDefault() {
+        return new AgentNeuralActorNeuralCriticSCCEM(StateSC.newFromRealPos(0));
     }
 
-    public AgentNeuralActorNeuralCriticSC(StateI<VariablesSC> state) {
+    public AgentNeuralActorNeuralCriticSCCEM(StateI<VariablesSC> state) {
         super(state);
-        this.actor=NeuralActorMemorySC.newDefault();
+        this.actor= NeuralActorMemorySCCEMLoss.newDefault();
         this.critic=NeuralCriticMemorySC.newDefault();
     }
 
@@ -32,11 +33,16 @@ public class AgentNeuralActorNeuralCriticSC extends AgentA<VariablesSC>
         return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
     }
 
+
     public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
         double[] outArr = actor.getOutValue(new double[]{stateObserved});
         return arrayPrimitiveDoublesToList(outArr);
     }
 
+    @Override
+    public Pair<Double,Double> lossActorAndCritic() {
+        return Pair.create(actor.getError(),critic.getError());
+    }
 
     @SneakyThrows
     @Override

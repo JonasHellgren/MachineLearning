@@ -8,10 +8,10 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
 import policy_gradient_problems.domain.common_episode_trainers.NeuralActorTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 @Log
@@ -34,7 +34,7 @@ public final class TrainerBanditNeuralActorCEM extends TrainerAbstractBandit {
     @Override
     public void train() {
         BiFunction<Experience<VariablesBandit>, AgentNeuralActorI<VariablesBandit>, List<Double>> labels =
-                (exp, agent) -> {
+                (exp, a) -> {
                     int actionInt = exp.action().asInt();
                     int nofActions = EnvironmentBandit.NOF_ACTIONS;
                     Preconditions.checkArgument(actionInt < nofActions, "Non valid action, actionInt =" + actionInt);
@@ -51,10 +51,15 @@ public final class TrainerBanditNeuralActorCEM extends TrainerAbstractBandit {
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
-            //tracker.addMeasures(ei, agent.getState().getVariables().arm(), agent.getActionProbabilities());
-            var map= Map.of(agent.getState().getVariables().arm(),agent.getActionProbabilities());
-            super.recorderActionProbabilities.addStateProbabilitiesMap(map);
+            updateRecorders();
         }
     }
+
+    private void updateRecorders() {
+        super.updateActionProbsRecorder(agent);
+        super.recorderTrainingProgress.add(
+                ProgressMeasures.ofAllZero().withActorLoss(agent.lossLastFit()));
+    }
+
 
 }

@@ -15,7 +15,7 @@ import static common.ListUtils.arrayPrimitiveDoublesToList;
  * The 1-element is placed at same index as observed position
  */
 
-public class NeuralActorMemorySC {
+public class NeuralActorMemorySCCEMLoss {
 
     static int NOF_INPUTS = 3, NOF_OUTPUTS = EnvironmentSC.NOF_ACTIONS;
 
@@ -23,11 +23,11 @@ public class NeuralActorMemorySC {
     NetSettings netSettings;
     Dl4JNetFitter netFitter;
 
-    public static NeuralActorMemorySC newDefault() {
-        return new NeuralActorMemorySC(getDefaultNetSettings());
+    public static NeuralActorMemorySCCEMLoss newDefault() {
+        return new NeuralActorMemorySCCEMLoss(getDefaultNetSettings());
     }
 
-    public NeuralActorMemorySC(NetSettings netSettings) {
+    public NeuralActorMemorySCCEMLoss(NetSettings netSettings) {
         this.netSettings=netSettings;
         this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
@@ -64,11 +64,12 @@ public class NeuralActorMemorySC {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(20).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(5).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .learningRate(1e-4).momentum(0.95).seed(1234)
-                .lossFunction(LossCEM.newWithBeta(0.5))
-                .sizeBatch(4).isNofFitsAbsolute(true).absNoFit(10)
+                .learningRate(1e-4).momentum(0.9).seed(1234)
+                .lossFunction(LossCEM.newWithBeta(1e-2))
+                //.sizeBatch(4).isNofFitsAbsolute(true).absNoFit(10)  //4 10
+                .sizeBatch(10).isNofFitsAbsolute(false).relativeNofFitsPerBatch(1.0)  //4 10
                 .build();
     }
 }

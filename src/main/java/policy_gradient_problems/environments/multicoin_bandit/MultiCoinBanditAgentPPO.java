@@ -2,6 +2,7 @@ package policy_gradient_problems.environments.multicoin_bandit;
 
 import common.ListUtils;
 import common_dl4j.*;
+import org.bytedeco.opencv.presets.opencv_core;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -42,6 +43,7 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
         this.netFitter=new Dl4JNetFitter(actor,netSettings);
     }
 
+    @Override
     public List<Double> getActionProbabilities() {
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
@@ -49,6 +51,10 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> labelList) {
         fit(labelList);
+    }
+
+    double lossLastFit() {
+        return netFitter.getLossLastFit();
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate) {

@@ -2,21 +2,21 @@ package policy_gradient_problems.environments.cart_pole;
 
 import common_dl4j.NetSettings;
 import lombok.Builder;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-
 import java.util.List;
 
-public class AgentNeuralActorNeuralCriticPolePPO extends AgentA<VariablesPole>
+public class AgentActorCriticPoleCEM extends AgentA<VariablesPole>
         implements AgentNeuralActorNeuralCriticI<VariablesPole> {
 
-    NeuralActorMemoryPolePPOLoss actor;
+    NeuralActorMemoryPoleCEMLoss actor;
     NeuralCriticMemoryPole critic;
 
-    public static AgentNeuralActorNeuralCriticPolePPO newDefault(StateI<VariablesPole> stateStart) {
+    public static AgentActorCriticPoleCEM newDefault(StateI<VariablesPole> stateStart) {
         var netSettings= NeuralCriticMemoryPole.getDefaultNetSettings();
-        return AgentNeuralActorNeuralCriticPolePPO.builder()
+        return AgentActorCriticPoleCEM.builder()
                 .stateStart(stateStart)
                 .criticSettings(netSettings)
                 .parametersPole(ParametersPole.newDefault())
@@ -24,11 +24,11 @@ public class AgentNeuralActorNeuralCriticPolePPO extends AgentA<VariablesPole>
     }
 
     @Builder
-    public AgentNeuralActorNeuralCriticPolePPO(StateI<VariablesPole> stateStart,
-                                            NetSettings criticSettings,
-                                            ParametersPole parametersPole) {
+    public AgentActorCriticPoleCEM(StateI<VariablesPole> stateStart,
+                                   NetSettings criticSettings,
+                                   ParametersPole parametersPole) {
         super(stateStart);
-        this.actor = NeuralActorMemoryPolePPOLoss.newDefault(parametersPole);
+        this.actor = NeuralActorMemoryPoleCEMLoss.newDefault(parametersPole);
         this.critic = new NeuralCriticMemoryPole(criticSettings, parametersPole);
     }
 
@@ -52,5 +52,10 @@ public class AgentNeuralActorNeuralCriticPolePPO extends AgentA<VariablesPole>
     @Override
     public double getCriticOut(StateI<VariablesPole> state) {
         return critic.getOutValue(state);
+    }
+
+    @Override
+    public Pair<Double, Double> lossActorAndCritic() {
+        return Pair.create(actor.getError(),critic.getError());
     }
 }

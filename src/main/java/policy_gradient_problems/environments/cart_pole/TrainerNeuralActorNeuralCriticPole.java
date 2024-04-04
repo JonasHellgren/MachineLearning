@@ -11,14 +11,14 @@ import java.util.List;
 @Log
 public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
-    AgentNeuralActorNeuralCriticPoleCEMLoss agent;
+    AgentActorCriticPoleCEM agent;
     ParametersPole parametersPole;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerNeuralActorNeuralCriticPole(@NonNull EnvironmentPole environment,
-                                            @NonNull AgentNeuralActorNeuralCriticPoleCEMLoss agent,
+                                            @NonNull AgentActorCriticPoleCEM agent,
                                             @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
@@ -39,7 +39,7 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
             agent.setState(StatePole.newAngleAndPosRandom(parametersPole));
             List<Experience<VariablesPole>> experList = getExperiences(agent);
             episodeTrainer.trainAgentFromExperiences(experList);
-            updateTracker(experList);
+            updateTracker(experList,agent);
 
             if (experList.size() > 50) {
                     log.info("Episode = "+ei+", nof steps = " + experList.size());

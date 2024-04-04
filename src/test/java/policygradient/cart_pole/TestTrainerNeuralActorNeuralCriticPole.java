@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  class TestTrainerNeuralActorNeuralCriticPole {
 
     TrainerNeuralActorNeuralCriticPole trainer;
-    AgentNeuralActorNeuralCriticPoleCEMLoss agent;
+    AgentActorCriticPoleCEM agent;
     EnvironmentPole environment;
      ParametersPole parametersPole=ParametersPole.newDefault();
 
@@ -18,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPoleCEMLoss.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentActorCriticPoleCEM.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPoleCEMLoss agent) {
+    private void createTrainer(EnvironmentPole environment, AgentActorCriticPoleCEM agent) {
         trainer = TrainerNeuralActorNeuralCriticPole.builder()
                 .environment(environment)
                 .agent(agent)

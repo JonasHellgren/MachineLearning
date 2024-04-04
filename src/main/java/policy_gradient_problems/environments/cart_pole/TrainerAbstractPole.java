@@ -8,6 +8,7 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -22,43 +23,54 @@ import java.util.zip.DataFormatException;
 @Getter
 public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
     EnvironmentPole environment;
-    ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
+    ReturnCalculator<VariablesPole> returnCalculator = new ReturnCalculator<>();
 
     TrainerAbstractPole(@NonNull EnvironmentPole environment,
-                             @NonNull TrainerParameters parameters) {
+                        @NonNull TrainerParameters parameters) {
         this.environment = environment;
-        super.parameters=parameters;
+        super.parameters = parameters;
     }
 
     void updateTracker(List<Experience<VariablesPole>> experienceList) {
-        recorderTrainingProgress.add(ProgressMeasures.ofAllZero().withNSteps(experienceList.size()));
+        super.getRecorderTrainingProgress().add(
+                ProgressMeasures.ofAllZero().withNSteps(experienceList.size()));
+    }
+
+
+    void updateTracker(List<Experience<VariablesPole>> experienceList,
+                       AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
+        super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
+                .nSteps(experienceList.size())
+                .actorLoss(agent.lossActorAndCritic().getFirst())
+                .criticLoss(agent.lossActorAndCritic().getSecond())
+                .build());
     }
 
 
     @SneakyThrows
     protected List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {
-        List<Experience<VariablesPole>> experienceList=new ArrayList<>();
+        List<Experience<VariablesPole>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<VariablesPole> sr;
-        do  {
+        do {
             StateI<VariablesPole> stateOld = agent.getState();
-            Action action=agent.chooseAction();
-            sr=environment.step(agent.getState(),action);
+            Action action = agent.chooseAction();
+            sr = environment.step(agent.getState(), action);
             agent.setState(sr.state());
             List<Double> actionProbabilities = agent.getActionProbabilities();
             throwIfBadAction(action, actionProbabilities);
-            double probAction= actionProbabilities.get(action.asInt());
+            double probAction = actionProbabilities.get(action.asInt());
             Experience<VariablesPole> exp =
                     Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
             experienceList.add(exp);
             si++;
-        } while(isNotTerminalAndNofStepsNotExceeded(si, sr));
+        } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }
 
     private static void throwIfBadAction(Action action, List<Double> actionProbabilities) throws DataFormatException {
-        if (action.asInt()>= actionProbabilities.size()) {
-            throw new DataFormatException("Bad action value, action = "+ action +", actionProbabilities="+ actionProbabilities);
+        if (action.asInt() >= actionProbabilities.size()) {
+            throw new DataFormatException("Bad action value, action = " + action + ", actionProbabilities=" + actionProbabilities);
         }
     }
 

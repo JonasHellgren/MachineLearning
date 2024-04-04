@@ -7,13 +7,13 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
 
-    AgentNeuralActorNeuralCriticSC agent;
+    AgentNeuralActorNeuralCriticSCCEM agent;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerNeuralActorNeuralCriticSC(@NonNull EnvironmentSC environment,
-                                        @NonNull AgentNeuralActorNeuralCriticSC agent,
+                                        @NonNull AgentNeuralActorNeuralCriticSCCEM agent,
                                         @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
@@ -32,7 +32,7 @@ public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateProbRecorder(ei,(s) ->  agent.calcActionProbabilitiesInObsState(s));
+            updateRecorders((s) ->  agent.calcActionProbabilitiesInObsState(s),agent.lossActorAndCritic());
         }
     }
 }

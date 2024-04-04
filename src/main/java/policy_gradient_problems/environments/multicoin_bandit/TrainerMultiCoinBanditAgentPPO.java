@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
 import policy_gradient_problems.domain.common_episode_trainers.NeuralActorTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.*;
 
@@ -54,6 +55,7 @@ public class TrainerMultiCoinBanditAgentPPO extends TrainerAbstractMultiCoinBand
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
             super.getRecorderActionProbabilities().addStateProbabilitiesMap(
                     Map.of(agent.getState().getVariables().arm(), agent.getActionProbabilities()));
+            super.getRecorderTrainingProgress().add(ProgressMeasures.ofAllZero().withActorLoss(agent.lossLastFit()));
         }
     }
 }

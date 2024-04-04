@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.environments.short_corridor.NeuralActorMemorySC;
+import policy_gradient_problems.environments.short_corridor.NeuralActorMemorySCCEMLoss;
 import policy_gradient_problems.environments.short_corridor.StateSC;
 import java.util.Arrays;
 import java.util.List;
@@ -17,15 +17,15 @@ import java.util.Map;
  * Probabilities converges badly for negative Gt, tries to change more despite prob already is 0 or 1.
  */
 
-public class TestNeuralActorMemorySC {
+public class TestNeuralActorMemorySCCEMLoss {
 
     static final int N_ACTIONS = 2;
     public static final int NOF_STEPS = 1_000;
-    static NeuralActorMemorySC  actor;
+    static NeuralActorMemorySCCEMLoss actor;
 
     @BeforeAll
     public static void init() {
-        actor=NeuralActorMemorySC.newDefault();
+        actor= NeuralActorMemorySCCEMLoss.newDefault();
         printStateProb();
     }
 

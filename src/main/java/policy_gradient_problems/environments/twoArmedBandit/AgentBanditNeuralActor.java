@@ -33,6 +33,7 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
         this.netFitter=new Dl4JNetFitter(actor,netSettings);
     }
 
+    @Override
     public List<Double> getActionProbabilities() {
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
@@ -40,6 +41,10 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
         fit(outList);
+    }
+
+    double lossLastFit() {
+        return netFitter.getLossLastFit();
     }
 
     private static MultiLayerNetwork createNetwork(double learningRate) {

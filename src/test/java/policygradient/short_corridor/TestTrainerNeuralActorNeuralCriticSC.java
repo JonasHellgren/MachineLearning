@@ -1,7 +1,6 @@
 package policygradient.short_corridor;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.short_corridor.*;
@@ -11,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
  class TestTrainerNeuralActorNeuralCriticSC {
 
     TrainerNeuralActorNeuralCriticSC trainer;
-    static AgentNeuralActorNeuralCriticSC agent;
+    static AgentNeuralActorNeuralCriticSCCEM agent;
 
     @BeforeEach
      void init() {
         var environment = new EnvironmentSC();
-        agent = AgentNeuralActorNeuralCriticSC.newDefault();
+        agent = AgentNeuralActorNeuralCriticSCCEM.newDefault();
         createTrainer(environment);
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class RunnerShortCorridor {
 
     public static final int PLOTTED_ACTION = 0;
-    public static final int NOF_EPISODES = 100;
+    public static final int NOF_EPISODES = 500;  //5000 for convergence
     static List<List<Double>> probA0S0Lists=new ArrayList<>();
     static List<String> probA0S0TitlesLists=new ArrayList<>();
     static List<List<Double>> probA0S1Lists=new ArrayList<>();
@@ -30,15 +30,16 @@ public class RunnerShortCorridor {
         log.info("Parameter trained");
         addDataToPlotLists(trainer, "Param");
 
-        var trainerActorCritic = createTrainerNeuralAC(AgentNeuralActorNeuralCriticSC.newDefault());
+        var trainerActorCritic = createTrainerNeuralAC(AgentNeuralActorNeuralCriticSCCEM.newDefault());
         trainerActorCritic.train();
         log.info("Neural AC trained");
         addDataToPlotLists(trainerActorCritic, "NeuralAC");
+        trainerActorCritic.getRecorderTrainingProgress().plot("AC CEM");
 
-        doPlotting();
+        doPlottingAllTrainers();
     }
 
-    private static void doPlotting() {
+    private static void doPlottingAllTrainers() {
         plotsprobXForTrainerVersusEpisode("S0A0", probA0S0Lists,probA0S0TitlesLists);
         plotsprobXForTrainerVersusEpisode("S1A0", probA0S1Lists,probA0S1TitlesLists);
         plotsprobXForTrainerVersusEpisode("S2A0", probA0S2Lists,probA0S2TitlesLists);
@@ -73,7 +74,7 @@ public class RunnerShortCorridor {
                 .build();
     }
 
-    private static TrainerNeuralActorNeuralCriticSC createTrainerNeuralAC(AgentNeuralActorNeuralCriticSC agent) {
+    private static TrainerNeuralActorNeuralCriticSC createTrainerNeuralAC(AgentNeuralActorNeuralCriticSCCEM agent) {
         return TrainerNeuralActorNeuralCriticSC.builder()
                 .environment(EnvironmentSC.create())
                 .agent(agent)

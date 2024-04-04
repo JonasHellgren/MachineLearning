@@ -3,6 +3,7 @@ package policy_gradient_problems.environments.short_corridor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.common_episode_trainers.ParamActorEpisodeTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
@@ -26,7 +27,7 @@ public final class TrainerParamActorSC extends TrainerAbstractSC {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StateSC.randomNonTerminal());
             episodeTrainer.trainFromEpisode(getExperiences(agent));
-            updateProbRecorder(ei,(s) -> agent.helper.calcActionProbsInObsState(s));
+            updateRecorders((s) -> agent.helper.calcActionProbsInObsState(s), Pair.create(0d,0d));
         }
     }
 

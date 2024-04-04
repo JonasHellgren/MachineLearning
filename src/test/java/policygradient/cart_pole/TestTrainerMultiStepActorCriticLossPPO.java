@@ -12,18 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TestTrainerMultiStepActorCriticLossPPO {
 
     TrainerMultiStepActorCriticPole trainer;
-    AgentNeuralActorNeuralCriticPolePPO agent;
+    AgentActorCriticPolePPO agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
 
     @BeforeEach
     void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentNeuralActorNeuralCriticPolePPO.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentActorCriticPolePPO.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentNeuralActorNeuralCriticPolePPO agent) {
+    private void createTrainer(EnvironmentPole environment, AgentActorCriticPolePPO agent) {
         trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
