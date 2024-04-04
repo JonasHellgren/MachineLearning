@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  class TestTrainerMultiStepActorCriticPoleCEM {
 
     TrainerMultiStepActorCriticPole trainer;
-    AgentActorCriticPoleCEM agent;
+    AgentActorICriticPoleCEM agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
 
@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @BeforeEach
      void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentActorCriticPoleCEM.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentActorICriticPoleCEM.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentActorCriticPoleCEM agent) {
+    private void createTrainer(EnvironmentPole environment, AgentActorICriticPoleCEM agent) {
         trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-  //  @Disabled("Long time")
+    @Disabled("Long time")
      void whenTrained_thenManySteps() {
         printMemories();
         trainer.train();
@@ -49,8 +49,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     private void somePrinting(int nofSteps) {
         System.out.println("nofSteps = " + nofSteps);
-        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill(parametersPole));
-        double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
+        double valAll0=agent.criticOut(StatePole.newUprightAndStill(parametersPole));
+        double valBigAngle=agent.criticOut(StatePole.builder().angle(0.2).build());
         System.out.println("valAll0 = " + valAll0+", valBigAngle = " + valBigAngle);
     }
 
@@ -62,7 +62,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     private void printMemories() {
         for (int i = 0; i < 5 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
-            double valueCritic=agent.getCriticOut(statePole);
+            double valueCritic=agent.criticOut(statePole);
 
             agent.setState(statePole);
             var probs=agent.getActionProbabilities();

@@ -1,7 +1,7 @@
 package policy_gradient_problems.domain.common_episode_trainers;
 
 import lombok.Builder;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -15,9 +15,9 @@ import java.util.function.BiFunction;
 @Builder
 public class NeuralActorTrainer<V> {
 
-    AgentNeuralActorI<V> agent;
+    AgentNeuralActorII<V> agent;
     TrainerParameters parameters;
-    BiFunction<Experience<V>,AgentNeuralActorI<V>,List<Double>> labelFunction;
+    BiFunction<Experience<V>, AgentNeuralActorII<V>,List<Double>> labelFunction;
 
     public void trainFromEpisode(List<Experience<V>> experienceList) {
         var rc = new ReturnCalculator<V>();

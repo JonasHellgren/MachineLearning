@@ -1,5 +1,6 @@
 package policy_gradient_problems.environments.short_corridor;
 
+
 public record VariablesSC(int pos) {
 
     public static VariablesSC newDefault() {

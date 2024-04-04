@@ -10,7 +10,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
  class TestBanditTrainerNeural {
 
     TrainerBanditNeuralActorCEM trainer;
-    AgentBanditNeuralActor agent;
+    AgentBanditNeuralActorI agent;
 
     @BeforeEach
      void init() {

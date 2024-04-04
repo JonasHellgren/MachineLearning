@@ -304,7 +304,11 @@ införliva RecorderEvaluationProgress i cart pole x
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika  x
 
 NeuralActorMemorySC -> NeuralActorMemorySCLossCEM  NeuralActorMemorySCLossPPO  x
-AgentActorCriticSCLossPPO
+AgentActorCriticSCLossPPO  x
+NeuralActorI - ny method actorOut(state)  x
+fimpa getActionProbabilities i interface
+VariablesSC add observedPos
+TrainerNeuralActorNeuralCriticSC flexibel agent
 RunnerShortCorridor lägg till PPO
 
 maze with ppo

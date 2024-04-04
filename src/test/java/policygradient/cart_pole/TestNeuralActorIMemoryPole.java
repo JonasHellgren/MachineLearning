@@ -7,7 +7,7 @@ import org.junit.jupiter.api.*;
 import policy_gradient_problems.environments.cart_pole.*;
 import java.util.List;
 
- class TestNeuralActorMemoryPole {
+ class TestNeuralActorIMemoryPole {
 
     static NeuralActorMemoryPoleCEMLoss actor;
     static  ParametersPole parametersPole;

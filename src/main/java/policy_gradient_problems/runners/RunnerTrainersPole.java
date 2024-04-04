@@ -4,7 +4,7 @@ import common.MovingAverage;
 import lombok.extern.java.Log;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
 import policy_gradient_problems.helpers.NeuralActorUpdaterCEMLoss;
 import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
 import policy_gradient_problems.helpers.RecorderTrainingProgress;
@@ -25,8 +25,8 @@ public class RunnerTrainersPole {
     public static void main(String[] args) {
         var parameters = ParametersPole.newDefault();
         var agentParamActor = AgentParamActorPole.newAllZeroStateDefaultThetas(parameters);
-        var agentCEM = AgentActorCriticPoleCEM.newDefault(StatePole.newUprightAndStill(parameters));
-        var agentPPO = AgentActorCriticPolePPO.newDefault(StatePole.newUprightAndStill(parameters));
+        var agentCEM = AgentActorICriticPoleCEM.newDefault(StatePole.newUprightAndStill(parameters));
+        var agentPPO = AgentActorICriticPolePPO.newDefault(StatePole.newUprightAndStill(parameters));
         var environment = new EnvironmentPole(ParametersPole.newWithMaxNofSteps(NOF_STEPS_MAX));
 
         var nofStepsListVanilla = trainVanilla(agentParamActor, environment);
@@ -56,7 +56,7 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerBaseline.getRecorderTrainingProgress());
     }
 
-    private static List<Double> trainCEM(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
+    private static List<Double> trainCEM(AgentNeuralActorNeuralCriticII<VariablesPole> agent,
                                          EnvironmentPole environment,
                                          ParametersPole parameters) {
         var trainerAC = TrainerMultiStepActorCriticPole.builder()
@@ -68,7 +68,7 @@ public class RunnerTrainersPole {
         return getFilteredNofSteps(trainerAC.getRecorderTrainingProgress());
     }
 
-    private static List<Double> trainPPO(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
+    private static List<Double> trainPPO(AgentNeuralActorNeuralCriticII<VariablesPole> agent,
                                          EnvironmentPole environment,
                                          ParametersPole parameters) {
         var trainerAC = TrainerMultiStepActorCriticPole.builder()
@@ -91,10 +91,10 @@ public class RunnerTrainersPole {
         new SwingWrapper<>(chart).displayChart();
     }
 
-    static void printMemories(AgentNeuralActorNeuralCriticI<VariablesPole> agent, ParametersPole parametersPole) {
+    static void printMemories(AgentNeuralActorNeuralCriticII<VariablesPole> agent, ParametersPole parametersPole) {
         for (int i = 0; i < 5 ; i++) {
             StatePole statePole = StatePole.newAllRandom(parametersPole);
-            double valueCritic=agent.getCriticOut(statePole);
+            double valueCritic=agent.criticOut(statePole);
 
             agent.setState(statePole);
             var probs=agent.getActionProbabilities();
@@ -102,10 +102,10 @@ public class RunnerTrainersPole {
         }
     }
 
-    static void somePrinting(AgentNeuralActorNeuralCriticI<VariablesPole> agent, ParametersPole parametersPole) {
+    static void somePrinting(AgentNeuralActorNeuralCriticII<VariablesPole> agent, ParametersPole parametersPole) {
         StatePole uprightAndStill = StatePole.newUprightAndStill(parametersPole);
-        double valAll0=agent.getCriticOut(uprightAndStill);
-        double valBigAngleDot=agent.getCriticOut(uprightAndStill.copyWithAngleDot(0.2));
+        double valAll0=agent.criticOut(uprightAndStill);
+        double valBigAngleDot=agent.criticOut(uprightAndStill.copyWithAngleDot(0.2));
         System.out.println("valAll0 = " + valAll0+", valBigAngleDot = " + valBigAngleDot);
     }
 

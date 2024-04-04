@@ -42,7 +42,7 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
     }
 
     @Override
-    public double getCriticOut(StateI<VariablesPole> state) {
+    public double criticOut(StateI<VariablesPole> state) {
         return critic.getOutValue(state);
     }
 

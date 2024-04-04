@@ -12,18 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TestTrainerMultiStepActorCriticLossPPO {
 
     TrainerMultiStepActorCriticPole trainer;
-    AgentActorCriticPolePPO agent;
+    AgentActorICriticPolePPO agent;
     EnvironmentPole environment;
     ParametersPole parametersPole=ParametersPole.newDefault();
 
     @BeforeEach
     void init() {
         environment = EnvironmentPole.newDefault();
-        agent = AgentActorCriticPolePPO.newDefault(StatePole.newUprightAndStill(parametersPole));
+        agent = AgentActorICriticPolePPO.newDefault(StatePole.newUprightAndStill(parametersPole));
         createTrainer(environment, agent);
     }
 
-    private void createTrainer(EnvironmentPole environment, AgentActorCriticPolePPO agent) {
+    private void createTrainer(EnvironmentPole environment, AgentActorICriticPolePPO agent) {
         trainer = TrainerMultiStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
@@ -50,8 +50,8 @@ class TestTrainerMultiStepActorCriticLossPPO {
     private void somePrinting(int nofSteps) {
         System.out.println("nofSteps = " + nofSteps);
         StatePole uprightAndStill = StatePole.newUprightAndStill(parametersPole);
-        double valAll0=agent.getCriticOut(uprightAndStill);
-        double valBigAngleDot=agent.getCriticOut(uprightAndStill.copyWithAngleDot(0.2));
+        double valAll0=agent.criticOut(uprightAndStill);
+        double valBigAngleDot=agent.criticOut(uprightAndStill.copyWithAngleDot(0.2));
         System.out.println("valAll0 = " + valAll0+", valBigAngleDot = " + valBigAngleDot);
     }
 
@@ -63,7 +63,7 @@ class TestTrainerMultiStepActorCriticLossPPO {
     private void printMemories() {
         for (int i = 0; i < 5 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
-            double valueCritic=agent.getCriticOut(statePole);
+            double valueCritic=agent.criticOut(statePole);
 
             agent.setState(statePole);
             var probs=agent.getActionProbabilities();

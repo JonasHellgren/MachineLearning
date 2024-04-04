@@ -7,11 +7,12 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.abstract_classes.StateI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 
 import java.util.List;
 
-public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
+public class AgentBanditNeuralActorI extends AgentA<VariablesBandit> implements AgentNeuralActorII<VariablesBandit> {
 
     static final int numInput = 1;
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
@@ -22,11 +23,11 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     NetSettings netSettings;
     Dl4JNetFitter netFitter;
 
-    public static AgentBanditNeuralActor newDefault(double learningRate) {
-        return new AgentBanditNeuralActor(learningRate);
+    public static AgentBanditNeuralActorI newDefault(double learningRate) {
+        return new AgentBanditNeuralActorI(learningRate);
     }
 
-    public AgentBanditNeuralActor(double learningRate) {
+    public AgentBanditNeuralActorI(double learningRate) {
         super(DUMMY_STATE);
         this.actor =createNetwork(learningRate);
         this.netSettings=getNetSettings(learningRate);
@@ -41,6 +42,12 @@ public class AgentBanditNeuralActor extends AgentA<VariablesBandit> implements A
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> outList) {
         fit(outList);
+    }
+
+    @Override
+    public List<Double> actorOut(StateI<VariablesBandit> state) {
+        return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
+
     }
 
     double lossLastFit() {

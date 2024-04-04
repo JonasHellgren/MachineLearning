@@ -7,15 +7,15 @@ import policy_gradient_problems.environments.short_corridor.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- class TestTrainerNeuralActorNeuralCriticSC {
+ class TestTrainerNeuralActorNeuralCriticSCI {
 
     TrainerNeuralActorNeuralCriticSC trainer;
-    static AgentActorCriticSCLossCEM agent;
+    static AgentActorICriticSCLossCEM agent;
 
     @BeforeEach
      void init() {
         var environment = new EnvironmentSC();
-        agent = AgentActorCriticSCLossCEM.newDefault();
+        agent = AgentActorICriticSCLossCEM.newDefault();
         createTrainer(environment);
     }
 
@@ -64,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.*;
         System.out.println("policy");
         for (int pos = 0; pos < EnvironmentSC.NOF_NON_TERMINAL_OBSERVABLE_STATES; pos++) {
             System.out.println("s = " + pos +
-                    ", agent.actionProb() = " + agent.calcActionProbabilitiesInObsState(pos) +
+                    ", agent.actionProb() = " + agent.actorOut(StateSC.newFromRealPos(pos)) +
                     ", value = " + getCriticOutValue(pos));
         }
     }

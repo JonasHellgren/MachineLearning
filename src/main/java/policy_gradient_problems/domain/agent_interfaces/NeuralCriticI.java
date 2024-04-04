@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface NeuralCriticI<V> {
     void fitCritic(List<List<Double>> stateValuesList, List<Double> valueTarList);
-    double getCriticOut(StateI<V> state);
+    double criticOut(StateI<V> state);
 }

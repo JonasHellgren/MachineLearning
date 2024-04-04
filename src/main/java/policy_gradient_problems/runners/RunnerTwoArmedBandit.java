@@ -1,8 +1,5 @@
 package policy_gradient_problems.runners;
 
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
 import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.*;
@@ -47,7 +44,7 @@ public class RunnerTwoArmedBandit {
     private static TrainerBanditNeuralActorCEM createTrainerNeural() {
         return TrainerBanditNeuralActorCEM.builder()
                 .environment(getEnvironment())
-                .agent(AgentBanditNeuralActor.newDefault(getTrainerParametersNeural().learningRateNonNeuralActor()))
+                .agent(AgentBanditNeuralActorI.newDefault(getTrainerParametersNeural().learningRateNonNeuralActor()))
                 .parameters(getTrainerParametersNeural())
                 .build();
     }

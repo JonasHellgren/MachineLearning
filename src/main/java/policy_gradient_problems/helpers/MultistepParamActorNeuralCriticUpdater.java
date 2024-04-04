@@ -24,7 +24,7 @@ public class MultistepParamActorNeuralCriticUpdater<V> {
 
     public void updateActor(List<Experience<V>> experiences) {
         var nri = new MultiStepReturnEvaluator<>(parameters,experiences);
-        var ac=new AdvantageCalculator<V>(parameters, s -> agent.getCriticOut(s));
+        var ac=new AdvantageCalculator<V>(parameters, s -> agent.criticOut(s));
         int nofExp = experiences.size();
         for (int tau = 0; tau < nofExp; tau++) {
             var expAtTau = nri.getExperience(tau);

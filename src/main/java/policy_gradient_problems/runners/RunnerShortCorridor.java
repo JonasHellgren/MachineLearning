@@ -29,13 +29,13 @@ public class RunnerShortCorridor {
         log.info("Parameter trained");
         addDataToPlotLists(trainer, "Param");
 
-        var trainerCEM = createTrainerCEM(AgentActorCriticSCLossCEM.newDefault());
+        var trainerCEM = createTrainerCEM(AgentActorICriticSCLossCEM.newDefault());
         trainerCEM.train();
         log.info("Neural AC trained");
         addDataToPlotLists(trainerCEM, "NeuralAC");
         trainerCEM.getRecorderTrainingProgress().plot("AC CEM");
 
-        var trainerPPO = createTrainerCEM(AgentActorCriticSCLossCEM.newDefault());
+        var trainerPPO = createTrainerCEM(AgentActorICriticSCLossCEM.newDefault());
         trainerPPO.train();
         log.info("PPO trained");
         addDataToPlotLists(trainerPPO, "PPO");
@@ -79,7 +79,7 @@ public class RunnerShortCorridor {
                 .build();
     }
 
-    private static TrainerNeuralActorNeuralCriticSC createTrainerCEM(AgentActorCriticSCLossCEM agent) {
+    private static TrainerNeuralActorNeuralCriticSC createTrainerCEM(AgentActorICriticSCLossCEM agent) {
         return TrainerNeuralActorNeuralCriticSC.builder()
                 .environment(EnvironmentSC.create())
                 .agent(agent)

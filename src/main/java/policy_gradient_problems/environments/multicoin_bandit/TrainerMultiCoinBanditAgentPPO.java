@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 import policy_gradient_problems.domain.common_episode_trainers.NeuralActorTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
@@ -36,7 +36,7 @@ public class TrainerMultiCoinBanditAgentPPO extends TrainerAbstractMultiCoinBand
     @Override
     public void train() {
 
-        BiFunction<Experience<VariablesBandit>, AgentNeuralActorI<VariablesBandit>, List<Double>> labels =
+        BiFunction<Experience<VariablesBandit>, AgentNeuralActorII<VariablesBandit>, List<Double>> labels =
                 (exp, a) -> {
                     int actionInt = exp.action().asInt();
                     int nA = EnvironmentBandit.NOF_ACTIONS;

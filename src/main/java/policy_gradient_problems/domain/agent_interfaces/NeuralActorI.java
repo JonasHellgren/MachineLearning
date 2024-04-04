@@ -1,9 +1,10 @@
 package policy_gradient_problems.domain.agent_interfaces;
 
-import org.apache.commons.math3.util.Pair;
+import policy_gradient_problems.domain.abstract_classes.StateI;
 
 import java.util.List;
 
-public interface NeuralActor<V> {
+public interface NeuralActorI<V> {
     void fitActor(List<List<Double>> inList, List<List<Double>> outList);
+    List<Double> actorOut(StateI<V> state);
 }

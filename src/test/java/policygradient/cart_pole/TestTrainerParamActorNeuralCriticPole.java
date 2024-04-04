@@ -50,15 +50,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
         System.out.println("nofSteps = " + nofSteps);
 
-        double valAll0=agent.getCriticOut(StatePole.newUprightAndStill(parametersPole));
-        double valBigAngle=agent.getCriticOut(StatePole.builder().angle(0.2).build());
+        double valAll0=agent.criticOut(StatePole.newUprightAndStill(parametersPole));
+        double valBigAngle=agent.criticOut(StatePole.builder().angle(0.2).build());
 
         System.out.println("valAll0 = " + valAll0);
         System.out.println("valBigAngle = " + valBigAngle);
 
         for (int i = 0; i < 10 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
-            double valAllRandom=agent.getCriticOut(statePole);
+            double valAllRandom=agent.criticOut(statePole);
             System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
         }
 

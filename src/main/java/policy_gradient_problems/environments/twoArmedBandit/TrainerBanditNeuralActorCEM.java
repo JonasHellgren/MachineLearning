@@ -5,7 +5,7 @@ import common.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 import policy_gradient_problems.domain.common_episode_trainers.NeuralActorTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
@@ -20,20 +20,20 @@ public final class TrainerBanditNeuralActorCEM extends TrainerAbstractBandit {
 
     public static final int NUM_IN = 1;
     public static final double LEARNING_RATE = 0.01;
-    AgentBanditNeuralActor agent;
+    AgentBanditNeuralActorI agent;
 
     @Builder
     public TrainerBanditNeuralActorCEM(EnvironmentBandit environment,
-                                       AgentBanditNeuralActor agent,
+                                       AgentBanditNeuralActorI agent,
                                        TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
-        this.agent = new AgentBanditNeuralActor(LEARNING_RATE);
+        this.agent = new AgentBanditNeuralActorI(LEARNING_RATE);
     }
 
     @Override
     public void train() {
-        BiFunction<Experience<VariablesBandit>, AgentNeuralActorI<VariablesBandit>, List<Double>> labels =
+        BiFunction<Experience<VariablesBandit>, AgentNeuralActorII<VariablesBandit>, List<Double>> labels =
                 (exp, a) -> {
                     int actionInt = exp.action().asInt();
                     int nofActions = EnvironmentBandit.NOF_ACTIONS;

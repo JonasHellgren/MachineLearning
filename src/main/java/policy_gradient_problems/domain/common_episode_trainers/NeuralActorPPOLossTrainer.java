@@ -2,7 +2,7 @@ package policy_gradient_problems.domain.common_episode_trainers;
 
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NeuralActorPPOLossTrainer<V> {
 
-    AgentNeuralActorI<V> agent;
+    AgentNeuralActorII<V> agent;
     TrainerParameters parameters;
     int nofActions;
 

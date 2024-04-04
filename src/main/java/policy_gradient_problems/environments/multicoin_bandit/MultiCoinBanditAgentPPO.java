@@ -2,13 +2,13 @@ package policy_gradient_problems.environments.multicoin_bandit;
 
 import common.ListUtils;
 import common_dl4j.*;
-import org.bytedeco.opencv.presets.opencv_core;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorI;
+import policy_gradient_problems.domain.abstract_classes.StateI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorII;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  * A smaller epsPPO means less policy change <=> smoother convergence
  */
 
-public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements AgentNeuralActorI<VariablesBandit> {
+public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements AgentNeuralActorII<VariablesBandit> {
 
     static final int numInput = 1;
     static final INDArray DUMMY_IN = Nd4j.zeros(1, numInput);
@@ -46,11 +46,17 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
     @Override
     public List<Double> getActionProbabilities() {
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
+        //return actorOut(DUMMY_STATE); //todo
     }
 
     @Override
     public void fitActor(List<List<Double>> inList, List<List<Double>> labelList) {
         fit(labelList);
+    }
+
+    @Override
+    public List<Double> actorOut(StateI<VariablesBandit> state) {
+        return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
 
     double lossLastFit() {

@@ -17,7 +17,7 @@ import java.util.Map;
  * Probabilities converges badly for negative Gt, tries to change more despite prob already is 0 or 1.
  */
 
-public class TestNeuralActorMemorySCLossCEM {
+public class TestNeuralActorIMemorySCLossCEM {
 
     static final int N_ACTIONS = 2;
     public static final int NOF_STEPS = 1_000;

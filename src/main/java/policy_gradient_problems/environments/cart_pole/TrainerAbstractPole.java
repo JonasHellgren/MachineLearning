@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.ReturnCalculator;
@@ -38,7 +38,7 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
 
     void updateTracker(List<Experience<VariablesPole>> experienceList,
-                       AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
+                       AgentNeuralActorNeuralCriticII<VariablesPole> agent) {
         double sumRewards = experienceList.stream().mapToDouble(e -> e.reward()).sum();
         super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
                 .nSteps(experienceList.size())
