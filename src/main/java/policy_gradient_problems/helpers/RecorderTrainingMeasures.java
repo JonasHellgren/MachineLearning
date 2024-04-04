@@ -18,12 +18,16 @@ public class RecorderTrainingMeasures {
         measuresList.clear();
     }
 
-    public void addMeasures(TrainingMeasures measures) {
+    public void add(TrainingMeasures measures) {
         measuresList.add(measures);
     }
 
     public int size() {
         return measuresList.size();
+    }
+
+    public boolean isEmpty() {
+        return measuresList.isEmpty();
     }
 
     public List<Integer> nStepsTraj() {

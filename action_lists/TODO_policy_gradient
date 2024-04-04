@@ -285,7 +285,7 @@ entropy på PPO loss beta = 0.1;  //todo in constructior  x
 förklara Weighted cross entropy loss  x
 döm om klasser med CntropyLoss  -> CEM  x
 
-Training Recoders
+Training Recoders x
 Probability   Lik nuvarande x
 implemetera ovan  MultiCoinBandit TwoBandit SC x
 RecorderStateValues  x
