@@ -293,8 +293,11 @@ TrainerAbstractShip med RecorderStateValues  x
 episodeMeasuresMap -> List<Map<Integer, List<Double>>   episodeProbabilitiesList   // every list element is a map <state,probabilities >  x
 
 Training.   sumRewards nSteps criticLoss actorLoss etc
-RecorderTrainingMeasures
-TestRecorderTrainingMeasures
+RecorderTrainingMeasures x
+TestRecorderTrainingMeasures x
+införliva RecorderTrainingMeasures x
+RecorderEvaluationProgress  x
+TestRecorderEvaluationProgress  x
 Evaluation   sumRewards etc  - extractField hjälper
 
 fler Rl measures

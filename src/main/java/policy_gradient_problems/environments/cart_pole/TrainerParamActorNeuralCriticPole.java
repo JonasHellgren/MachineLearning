@@ -52,7 +52,7 @@ public final class TrainerParamActorNeuralCriticPole extends TrainerAbstractPole
             cu.updateCritic(multiStepResults);
             au.updateActor(experiences);
             printIfSuccessFul(ei, experiences);
-            updateTracker(ei, experiences);
+            updateTracker(experiences);
         }
     }
 

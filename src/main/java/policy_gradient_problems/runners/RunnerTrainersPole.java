@@ -7,19 +7,18 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.helpers.NeuralActorUpdaterCEMLoss;
 import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
-import policy_gradient_problems.helpers.TrainingTracker;
+import policy_gradient_problems.helpers.RecorderTrainingProgress;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import java.util.List;
 
-//todo add ppo
 
 @Log
 public class RunnerTrainersPole {
 
     static final int LENGTH_WINDOW = 5;
     static final int NOF_STEPS_MAX = 100;
-    static final int NOF_EPISODES = 200;
+    static final int NOF_EPISODES = 20;
      static final TrainerParameters PARAMETERS_TRAINER = TrainerParameters.builder()
             .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX).gamma(0.99).stepHorizon(5).build();
 
@@ -48,14 +47,14 @@ public class RunnerTrainersPole {
         var trainerVanilla = TrainerParamActorPole.builder()
                 .environment(environment).agent(agent.copy()).parameters(PARAMETERS_TRAINER).build();
         trainerVanilla.train();
-        return getFilteredNofSteps(trainerVanilla.getTracker());
+        return getFilteredNofSteps(trainerVanilla.getRecorderTrainingProgress());
     }
 
     private static List<Double> getNofStepsListBaseline(AgentParamActorPole agent, EnvironmentPole environment) {
         var trainerBaseline = TrainerParamActorParamCriticPole.builder()
                 .environment(environment).agent(agent).parameters(PARAMETERS_TRAINER).build();
         trainerBaseline.train();
-        return getFilteredNofSteps(trainerBaseline.getTracker());
+        return getFilteredNofSteps(trainerBaseline.getRecorderTrainingProgress());
     }
 
     private static List<Double> getNofStepsListAC(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
@@ -67,7 +66,7 @@ public class RunnerTrainersPole {
         log.info("training ac");
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));
-        return getFilteredNofSteps(trainerAC.getTracker());
+        return getFilteredNofSteps(trainerAC.getRecorderTrainingProgress());
     }
 
     private static List<Double> getNofStepsListPPO(AgentNeuralActorNeuralCriticI<VariablesPole> agent,
@@ -79,7 +78,7 @@ public class RunnerTrainersPole {
         log.info("training ppo");
         trainerAC.train();
         trainerAC.getAgent().setState(StatePole.newUprightAndStill(parameters));
-        return getFilteredNofSteps(trainerAC.getTracker());
+        return getFilteredNofSteps(trainerAC.getRecorderTrainingProgress());
     }
 
     private static void plotNofStepsVersusEpisode(List<List<Double>> listList, List<String> titles) {
@@ -110,8 +109,8 @@ public class RunnerTrainersPole {
         System.out.println("valAll0 = " + valAll0+", valBigAngleDot = " + valBigAngleDot);
     }
 
-    private static List<Double> getFilteredNofSteps(TrainingTracker tracker) {
-        var nofStepsList = tracker.getMeasureTrajectoriesForState(0).get(0);
+    private static List<Double> getFilteredNofSteps(RecorderTrainingProgress recorder) {
+        var nofStepsList = recorder.nStepsTraj().stream().map(Number::doubleValue).toList();
         var movingAverage = new MovingAverage(LENGTH_WINDOW, nofStepsList);
         return movingAverage.getFiltered();
     }

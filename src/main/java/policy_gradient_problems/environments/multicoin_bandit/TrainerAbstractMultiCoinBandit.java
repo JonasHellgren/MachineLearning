@@ -9,7 +9,6 @@ import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
-import policy_gradient_problems.helpers.TrainingTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,16 +35,4 @@ public abstract  class TrainerAbstractMultiCoinBandit extends TrainerA<Variables
         return experienceList;
     }
 
-    @Override
-    public TrainingTracker getTracker() {
-        logIfEmptyTracker();
-        return super.tracker;
-    }
-
-
-    private void logIfEmptyTracker() {
-        if (tracker.isEmpty()) {
-            log.warning("Need to train first");
-        }
-    }
 }

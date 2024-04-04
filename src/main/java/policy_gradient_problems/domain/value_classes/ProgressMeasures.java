@@ -6,7 +6,7 @@ import lombok.With;
 import static common.MyFunctions.defaultIfNullDouble;
 import static common.MyFunctions.defaultIfNullInteger;
 
-public record TrainingMeasures(
+public record ProgressMeasures(
         @With Double sumRewards,
         @With Integer nSteps,
         @With Double criticLoss,
@@ -16,12 +16,12 @@ public record TrainingMeasures(
     public static final int N_STEPS = 0;
     public static final double DEFAULT_VALUE = 0d;
 
-    public static TrainingMeasures ofAllZero() {
-        return TrainingMeasures.builder().build();
+    public static ProgressMeasures ofAllZero() {
+        return ProgressMeasures.builder().build();
     }
 
     @Builder
-    public TrainingMeasures(Double sumRewards, Integer nSteps, Double criticLoss, Double actorLoss) {
+    public ProgressMeasures(Double sumRewards, Integer nSteps, Double criticLoss, Double actorLoss) {
         this.sumRewards = defaultIfNullDouble.apply(sumRewards, DEFAULT_VALUE);
         this.nSteps = defaultIfNullInteger.apply(nSteps, N_STEPS);
         this.criticLoss = defaultIfNullDouble.apply(criticLoss,DEFAULT_VALUE);

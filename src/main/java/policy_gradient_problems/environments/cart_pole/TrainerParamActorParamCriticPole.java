@@ -50,7 +50,7 @@ public final class TrainerParamActorParamCriticPole extends TrainerAbstractPole 
                 var changeInThetaVector = gradLogVector.mapMultiplyToSelf(parameters.learningRateNonNeuralActor() * delta);
                 agent.changeActor(changeInThetaVector);
             }
-            updateTracker(ei, experienceList);
+            updateTracker(experienceList);
         }
     }
 

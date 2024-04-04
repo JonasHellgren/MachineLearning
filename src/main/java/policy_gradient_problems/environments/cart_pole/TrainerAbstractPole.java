@@ -9,6 +9,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.ReturnCalculator;
 import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
@@ -23,15 +24,14 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
     EnvironmentPole environment;
     ReturnCalculator<VariablesPole> returnCalculator=new ReturnCalculator<>();
 
-    public TrainerAbstractPole(@NonNull EnvironmentPole environment,
+    TrainerAbstractPole(@NonNull EnvironmentPole environment,
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
         super.parameters=parameters;
     }
 
-    void updateTracker(int ei, List<Experience<VariablesPole>> experienceList) {
-        List<Double> nofSteps=List.of((double) experienceList.size());
-        tracker.addMeasures(ei,0, nofSteps);
+    void updateTracker(List<Experience<VariablesPole>> experienceList) {
+        recorderTrainingProgress.add(ProgressMeasures.ofAllZero().withNSteps(experienceList.size()));
     }
 
 

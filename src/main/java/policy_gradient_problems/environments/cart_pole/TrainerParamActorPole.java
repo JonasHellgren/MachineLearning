@@ -26,7 +26,7 @@ public final class TrainerParamActorPole extends TrainerAbstractPole {
             agent.setState(StatePole.newAngleAndPosRandom(environment.getParameters()));
             var experiences = getExperiences(agent);
             episodeTrainer.trainFromEpisode(experiences);
-            updateTracker(ei, experiences);
+            updateTracker(experiences);
         }
     }
 

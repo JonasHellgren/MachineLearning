@@ -53,7 +53,7 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
                 cu.updateCritic(msr);
                 actorUpdater.updateActor(msr,agent);
                 printIfSuccessful(ei, experiences);
-                updateTracker(ei, experiences);
+                updateTracker(experiences);
         }
     }
 

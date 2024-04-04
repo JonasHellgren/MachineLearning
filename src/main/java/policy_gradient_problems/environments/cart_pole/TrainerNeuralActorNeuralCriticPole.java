@@ -39,7 +39,7 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
             agent.setState(StatePole.newAngleAndPosRandom(parametersPole));
             List<Experience<VariablesPole>> experList = getExperiences(agent);
             episodeTrainer.trainAgentFromExperiences(experList);
-            updateTracker(ei,experList);
+            updateTracker(experList);
 
             if (experList.size() > 50) {
                     log.info("Episode = "+ei+", nof steps = " + experList.size());
