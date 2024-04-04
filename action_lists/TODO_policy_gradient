@@ -301,11 +301,11 @@ TestRecorderEvaluationProgress  x
 införliva fler Rl measures
 införliva RecorderEvaluationProgress i sc x
 införliva RecorderEvaluationProgress i cart pole x
-
 NeuralActorMemoryPolePPOLoss  NeuralActorMemoryPoleCrossEntropyLoss  lika  x
 
-AgentNeuralActorNeuralCriticSCCEM
-RunnerShortCorridor  lägg till PPO
+NeuralActorMemorySC -> NeuralActorMemorySCLossCEM  NeuralActorMemorySCLossPPO  x
+AgentActorCriticSCLossPPO
+RunnerShortCorridor lägg till PPO
 
 maze with ppo
 - kolla av korrekt value

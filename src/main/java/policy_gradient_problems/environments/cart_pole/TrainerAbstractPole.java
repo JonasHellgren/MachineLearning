@@ -39,13 +39,14 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
 
     void updateTracker(List<Experience<VariablesPole>> experienceList,
                        AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
+        double sumRewards = experienceList.stream().mapToDouble(e -> e.reward()).sum();
         super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
                 .nSteps(experienceList.size())
+                .sumRewards(sumRewards)
                 .actorLoss(Math.abs(agent.lossActorAndCritic().getFirst()))
                 .criticLoss(agent.lossActorAndCritic().getSecond())
                 .build());
     }
-
 
     @SneakyThrows
     protected List<Experience<VariablesPole>> getExperiences(AgentI<VariablesPole> agent) {

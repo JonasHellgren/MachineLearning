@@ -1,29 +1,28 @@
 package policy_gradient_problems.environments.short_corridor;
 
-import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
+
 import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
-@Getter
-public class AgentNeuralActorNeuralCriticSCCEM extends AgentA<VariablesSC>
+public class AgentActorCriticSCLossPPO extends AgentA<VariablesSC>
         implements AgentNeuralActorNeuralCriticI<VariablesSC> {
 
-    NeuralActorMemorySCCEMLoss actor;
+    NeuralActorMemorySCLossPPO actor;
     NeuralCriticMemorySC critic;
 
-    public static AgentNeuralActorNeuralCriticSCCEM newDefault() {
-        return new AgentNeuralActorNeuralCriticSCCEM(StateSC.newFromRealPos(0));
+    public static AgentActorCriticSCLossCEM newDefault() {
+        return new AgentActorCriticSCLossCEM(StateSC.newFromRealPos(0));
     }
 
-    public AgentNeuralActorNeuralCriticSCCEM(StateI<VariablesSC> state) {
+    public AgentActorCriticSCLossPPO(StateI<VariablesSC> state) {
         super(state);
-        this.actor= NeuralActorMemorySCCEMLoss.newDefault();
+        this.actor= NeuralActorMemorySCLossPPO.newDefault();
         this.critic=NeuralCriticMemorySC.newDefault();
     }
 
@@ -32,7 +31,6 @@ public class AgentNeuralActorNeuralCriticSCCEM extends AgentA<VariablesSC>
         StateSC stateAsObs=(StateSC) getState();
         return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
     }
-
 
     public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
         double[] outArr = actor.getOutValue(new double[]{stateObserved});
@@ -59,6 +57,5 @@ public class AgentNeuralActorNeuralCriticSCCEM extends AgentA<VariablesSC>
     public double getCriticOut(StateI<VariablesSC> state) {
         return critic.getOutValue(state);
     }
-
 
 }

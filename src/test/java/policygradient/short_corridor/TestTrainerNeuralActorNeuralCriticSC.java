@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
  class TestTrainerNeuralActorNeuralCriticSC {
 
     TrainerNeuralActorNeuralCriticSC trainer;
-    static AgentNeuralActorNeuralCriticSCCEM agent;
+    static AgentActorCriticSCLossCEM agent;
 
     @BeforeEach
      void init() {
         var environment = new EnvironmentSC();
-        agent = AgentNeuralActorNeuralCriticSCCEM.newDefault();
+        agent = AgentActorCriticSCLossCEM.newDefault();
         createTrainer(environment);
     }
 

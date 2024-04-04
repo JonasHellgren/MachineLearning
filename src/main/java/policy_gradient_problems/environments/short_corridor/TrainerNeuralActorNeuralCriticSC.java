@@ -7,13 +7,13 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
 
-    AgentNeuralActorNeuralCriticSCCEM agent;
+    AgentActorCriticSCLossCEM agent;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
     public TrainerNeuralActorNeuralCriticSC(@NonNull EnvironmentSC environment,
-                                        @NonNull AgentNeuralActorNeuralCriticSCCEM agent,
+                                        @NonNull AgentActorCriticSCLossCEM agent,
                                         @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;

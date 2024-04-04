@@ -29,9 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(100).nofStepsMax(100).gamma(0.95)
-                        .stepHorizon(10)
-                        //.relativeNofFitsPerBatch(0.5)
+                        .nofEpisodes(100).nofStepsMax(100).gamma(0.95).stepHorizon(10)
                         .build())
                 .actorUpdater(new NeuralActorUpdaterCEMLoss<>())
                 .build();
