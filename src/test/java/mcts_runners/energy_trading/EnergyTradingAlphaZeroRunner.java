@@ -13,7 +13,7 @@ import monte_carlo_tree_search.interfaces.*;
 import monte_carlo_tree_search.network_training.Experience;
 import monte_carlo_tree_search.network_training.ReplayBuffer;
 import monte_carlo_tree_search.network_training.ReplayBufferValueSetter;
-import plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterMultiplePanelsTrajectory;
 
 import java.util.*;
 

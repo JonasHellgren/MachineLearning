@@ -3,7 +3,7 @@ package policy_gradient_problems.sandbox;
 import common.BestPairFinder;
 import common.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import plotters.PlotterMultiplePanelsPairs;
+import common.plotters.PlotterMultiplePanelsPairs;
 import common.SoftMaxEvaluator;
 
 import java.util.*;

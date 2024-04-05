@@ -1,5 +1,5 @@
 package mcts_runners.cart_pole;
-import plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterMultiplePanelsTrajectory;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
 import monte_carlo_tree_search.domains.cart_pole.*;

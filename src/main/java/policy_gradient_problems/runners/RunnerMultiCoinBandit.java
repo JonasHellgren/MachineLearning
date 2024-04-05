@@ -1,10 +1,8 @@
 package policy_gradient_problems.runners;
 
-import plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.multicoin_bandit.EnvironmentMultiCoinBandit;
 import policy_gradient_problems.environments.multicoin_bandit.TrainerMultiCoinBanditAgentPPO;
-import java.util.List;
 
 public class RunnerMultiCoinBandit {
 
@@ -24,8 +22,6 @@ public class RunnerMultiCoinBandit {
     }
 
     private static void plotRecorders(TrainerMultiCoinBanditAgentPPO trainer) {
-//        var plotter = new PlotterMultiplePanelsTrajectory("ppo", List.of("pi(0)", "pi(1)"), "episode");
- //       plotter.plot(trainer.getRecorderActionProbabilities().probTrajectoryForEachAction(0));
         trainer.getRecorderActionProbabilities().plot("Action probs - Multicoin bandit");
         trainer.getRecorderTrainingProgress().plot("Multi coin bandit - PPO");
     }

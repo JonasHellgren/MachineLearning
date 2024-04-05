@@ -1,7 +1,7 @@
 package mcts_runners.cart_pole;
 
 import common.Conditionals;
-import plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterMultiplePanelsTrajectory;
 import common.RandUtils;
 import common.ScalerLinear;
 import lombok.extern.java.Log;

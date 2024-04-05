@@ -1,7 +1,7 @@
 package policy_gradient_problems.runners;
 
 import lombok.extern.java.Log;
-import plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.sink_the_ship.AgentShip;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;

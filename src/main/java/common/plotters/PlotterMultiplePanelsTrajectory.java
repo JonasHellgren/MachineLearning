@@ -1,4 +1,4 @@
-package plotters;
+package common.plotters;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;

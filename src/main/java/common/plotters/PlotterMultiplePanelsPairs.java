@@ -1,4 +1,4 @@
-package plotters;
+package common.plotters;
 
 import lombok.Builder;
 import lombok.NonNull;

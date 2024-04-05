@@ -1,7 +1,7 @@
 package plotters;
 
 import org.apache.commons.lang3.tuple.Pair;
-import plotters.PlotterScatter;
+import common.plotters.PlotterScatter;
 
 import java.util.List;
 

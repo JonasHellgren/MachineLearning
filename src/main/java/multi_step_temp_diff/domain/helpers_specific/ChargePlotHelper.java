@@ -11,9 +11,9 @@ import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.helpers_common.AgentInfo;
 import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
 import org.apache.commons.lang3.tuple.Pair;
-import plotters.PlotterMultiplePanelsPairs;
-import plotters.PlotterMultiplePanelsTrajectory;
-import plotters.PlotterScatter;
+import common.plotters.PlotterMultiplePanelsPairs;
+import common.plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterScatter;
 
 import java.util.ArrayList;
 import java.util.Collections;

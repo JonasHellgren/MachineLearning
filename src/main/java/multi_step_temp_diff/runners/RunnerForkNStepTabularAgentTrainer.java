@@ -1,6 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import plotters.PlotterMultiplePanelsTrajectory;
+import common.plotters.PlotterMultiplePanelsTrajectory;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironment;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -9,12 +9,9 @@ import multi_step_temp_diff.domain.trainer.NStepTabularAgentTrainer;
 import multi_step_temp_diff.domain.agents.fork.AgentForkTabular;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSettings;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /***
  * This runner shows that td error decreases more rapidly with many steps learning
