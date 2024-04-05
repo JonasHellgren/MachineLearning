@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     private static boolean isProbMovingRightLarger() {
-        return agent.getActionProbabilities().get(0) < agent.getActionProbabilities().get(1);
+        return agent.actionProbabilitiesInPresentState().get(0) < agent.actionProbabilitiesInPresentState().get(1);
     }
 
     private static Double getCriticOutValue(int pos) {

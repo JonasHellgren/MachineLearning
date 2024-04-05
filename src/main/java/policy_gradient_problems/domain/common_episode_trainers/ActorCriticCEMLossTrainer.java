@@ -1,16 +1,17 @@
 package policy_gradient_problems.domain.common_episode_trainers;
 
+import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.helpers.ExperienceHelper;
-
+import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
-    @NonNull AgentNeuralActorNeuralCriticII<V> agent;
+@Builder
+public class NeuralActorNeuralCriticCEMTrainer<V> {
+    @NonNull AgentNeuralActorNeuralCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;
     @NonNull Integer nofActions;
@@ -18,7 +19,7 @@ public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {
         List<List<Double>> inList = new ArrayList<>();
         List<Double> outList = new ArrayList<>();
-        List<List<Double>> ppoLabelList = new ArrayList<>();
+        List<List<Double>> oneHotList = new ArrayList<>();
 
         var helper= ExperienceHelper.<V>builder()
                 .valueTermState(valueTermState).nofActions(nofActions).criticOut((s) -> agent.criticOut(s)).build();
@@ -30,14 +31,11 @@ public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
             outList.add(returnAtTime);
             double v=agent.criticOut(experience.state());
             double adv = returnAtTime - v;
-            //ppoLabelList.add(helper.createOneHot(experience, adv));
-            int action = experience.action().intValue().orElseThrow();
-            double probOld=agent.getActionProbabilities().get(action);
-            ppoLabelList.add(List.of((double) action,adv,probOld));
-
+            oneHotList.add(helper.createOneHot(experience, adv));
         }
 
         agent.fitCritic(inList, outList);
-        agent.fitActor(inList, ppoLabelList);
+        agent.fitActor(inList, oneHotList);
     }
+
 }
