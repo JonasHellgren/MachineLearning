@@ -312,7 +312,7 @@ TrainerNeuralActorNeuralCriticSC flexibel agent x
 fimpa getActionProbabilities i interface  x
 RunnerShortCorridor lägg till PPO  x
 
-RecorderActionProbabilities add plot()
+RecorderActionProbabilities add plot()  x
 
 maze with ppo
 - kolla av korrekt value

@@ -15,7 +15,7 @@ import java.util.List;
 public class RunnerShortCorridor {
 
     public static final int PLOTTED_ACTION = 0;
-    public static final int NOF_EPISODES = 500;  //5000 for convergence
+    public static final int NOF_EPISODES = 500;
     static List<List<Double>> probA0S0Lists=new ArrayList<>();
     static List<String> probA0S0TitlesLists=new ArrayList<>();
     static List<List<Double>> probA0S1Lists=new ArrayList<>();

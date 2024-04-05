@@ -19,13 +19,14 @@ public class RunnerMultiCoinBandit {
         return TrainerMultiCoinBanditAgentPPO.builder()
                 .environment(environment)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(1000).nofStepsMax(1).gamma(1d).build())
+                        .nofEpisodes(100).nofStepsMax(1).gamma(1d).build())
                 .build();
     }
 
     private static void plotRecorders(TrainerMultiCoinBanditAgentPPO trainer) {
-        var plotter = new PlotterMultiplePanelsTrajectory("ppo", List.of("pi(0)", "pi(1)"), "episode");
-        plotter.plot(trainer.getRecorderActionProbabilities().probTrajectoryForEachAction(0));
+//        var plotter = new PlotterMultiplePanelsTrajectory("ppo", List.of("pi(0)", "pi(1)"), "episode");
+ //       plotter.plot(trainer.getRecorderActionProbabilities().probTrajectoryForEachAction(0));
+        trainer.getRecorderActionProbabilities().plot("Action probs - Multicoin bandit");
         trainer.getRecorderTrainingProgress().plot("Multi coin bandit - PPO");
     }
 

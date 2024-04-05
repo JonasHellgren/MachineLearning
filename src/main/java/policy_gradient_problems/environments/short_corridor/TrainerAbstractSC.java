@@ -22,7 +22,7 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
     public static final int PROB_ACTION = 1;
     EnvironmentSC environment;
 
-    public TrainerAbstractSC(@NonNull EnvironmentSC environment,
+    TrainerAbstractSC(@NonNull EnvironmentSC environment,
                              @NonNull TrainerParameters parameters) {
         this.environment = environment;
         super.parameters = parameters;
@@ -34,7 +34,7 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
                 .stream().collect(Collectors.toMap(s -> s, apFcn));
         super.recorderActionProbabilities.addStateProbabilitiesMap(map);
         super.recorderTrainingProgress.add(ProgressMeasures.builder()
-                .actorLoss(lossActorCritic.getFirst())
+                .actorLoss(Math.abs(lossActorCritic.getFirst()))
                 .criticLoss(lossActorCritic.getSecond())
                 .build());
     }

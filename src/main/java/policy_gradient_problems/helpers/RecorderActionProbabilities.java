@@ -2,7 +2,13 @@ package policy_gradient_problems.helpers;
 
 import common.Conditionals;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,7 +16,10 @@ import java.util.stream.IntStream;
 
 import static org.nd4j.shade.protobuf.common.base.Preconditions.checkArgument;
 
+@Log
 public class RecorderActionProbabilities {
+    public static final int WIDTH = 300;
+    public static final int HEIGHT = 150;
 
     public static final String ERROR_MESSAGE = "Non compatible new probability map";
     List<Map<Integer, List<Double>>> episodeProbabilitiesList;   // every list element is a map <state,actionProbs >
@@ -84,7 +93,27 @@ public class RecorderActionProbabilities {
         checkArgument(probMap.keySet().containsAll(firstRecording.keySet()), ERROR_MESSAGE);
         int anyState = getAnyState(probMap);
         checkArgument(probMap.get(anyState).size() == nActions(), ERROR_MESSAGE);
+    }
 
+    public void plot(String title) {
+        if (isEmpty()) {
+            log.warning("No training progress data to plot");
+            return;
+        }
+        var charts = IntStream.range(0, nStates()).mapToObj(this::createChart).toList();
+        var frame = new SwingWrapper<>(charts).displayChartMatrix();
+        frame.setTitle(title);
+    }
+
+    XYChart createChart(int si) {
+        var chart = new XYChartBuilder()
+                .xAxisTitle("episode").yAxisTitle("state=" + si).width(WIDTH).height(HEIGHT).build();
+        IntStream.range(0, nActions()).forEach(a -> {
+            var yData = probabilityTrajectoryForStateAndAction(si, a);
+            var series = chart.addSeries("a=" + a, null, yData);
+            series.setMarker(SeriesMarkers.NONE);
+        });
+        return chart;
     }
 
 
