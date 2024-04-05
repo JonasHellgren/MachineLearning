@@ -10,5 +10,4 @@ import java.util.List;
 public interface ParamActorI<V> {
     void changeActor(RealVector change);
     ArrayRealVector calcGradLogVector(StateI<V> state, Action action);
-    List<Double> getActionProbabilities();
 }

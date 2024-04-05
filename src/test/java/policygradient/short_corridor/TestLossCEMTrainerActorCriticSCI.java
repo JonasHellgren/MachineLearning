@@ -7,9 +7,9 @@ import policy_gradient_problems.environments.short_corridor.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- class TestTrainerNeuralActorNeuralCriticSCI {
+ class TestLossCEMTrainerActorCriticSCI {
 
-    TrainerNeuralActorNeuralCriticSC trainer;
+    TrainerActorCriticSCLossCEM trainer;
     static AgentActorICriticSCLossCEM agent;
 
     @BeforeEach
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     private void createTrainer(EnvironmentSC environment) {
-        trainer = TrainerNeuralActorNeuralCriticSC.builder()
+        trainer = TrainerActorCriticSCLossCEM.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

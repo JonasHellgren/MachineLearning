@@ -309,12 +309,16 @@ NeuralActorI - ny method actorOut(state)  x
 VariablesSC add observedPos  x
 fixa TestNeuralCriticMemorySC  x
 TrainerNeuralActorNeuralCriticSC flexibel agent x
-fimpa getActionProbabilities i interface
-RunnerShortCorridor lägg till PPO
+fimpa getActionProbabilities i interface  x
+RunnerShortCorridor lägg till PPO  x
+
+RecorderActionProbabilities add plot()
 
 maze with ppo
 - kolla av korrekt value
 
+pole med random start state och eval recorder
+AgentParamActorSCHelper - gör för mkt
 safe cannon with ppo
 
 simplified battery trading with safe RL ppo

@@ -51,10 +51,10 @@ public class AgentBanditParamActor extends AgentA<VariablesBandit> implements Ag
     }
 
     public ArrayRealVector calcGradLogVector(StateI<VariablesBandit> state, Action action) {
-        return new ArrayRealVector(calculateGradLog(action.asInt(), getActionProbabilities()));
+        return new ArrayRealVector(calculateGradLog(action.asInt(), actionProbabilitiesInPresentState()));
     }
 
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return actionProbabilities(actor.toArray());
     }
 

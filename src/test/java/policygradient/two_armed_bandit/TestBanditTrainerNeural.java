@@ -47,7 +47,7 @@ import policy_gradient_problems.environments.twoArmedBandit.*;
 
     private void printPolicy() {
         agent=trainer.getAgent();
-        System.out.println("action probs() = " + agent.getActionProbabilities());
+        System.out.println("action probs() = " + agent.actionProbabilitiesInPresentState());
     }
 
 

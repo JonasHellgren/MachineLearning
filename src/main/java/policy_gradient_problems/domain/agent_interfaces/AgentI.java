@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public interface AgentI<V> {
-     List<Double> getActionProbabilities();
+     List<Double> actionProbabilitiesInPresentState();
      Action chooseAction();
      StateI<V> getState();
      void setState(StateI<V> state);

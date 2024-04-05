@@ -43,7 +43,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return helper.calcActionProbsInObsState(EnvironmentSC.getObservedPos(getState()));
     }
 

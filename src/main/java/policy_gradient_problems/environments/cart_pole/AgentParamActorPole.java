@@ -62,7 +62,7 @@ import java.util.List;
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return helper.calcActionProbabilitiesInState(getState());
     }
 

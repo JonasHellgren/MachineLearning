@@ -3,7 +3,7 @@ package policy_gradient_problems.environments.cart_pole;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCEMTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.ActorCriticCEMLossTrainer;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.List;
@@ -27,8 +27,8 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
     @Override
     public void train() {
-        NeuralActorNeuralCriticCEMTrainer<VariablesPole> episodeTrainer =
-                NeuralActorNeuralCriticCEMTrainer.<VariablesPole>builder()
+        ActorCriticCEMLossTrainer<VariablesPole> episodeTrainer =
+                ActorCriticCEMLossTrainer.<VariablesPole>builder()
                         .agent(agent)
                         .parameters(parameters)
                         .valueTermState(VALUE_TERMINAL_STATE)

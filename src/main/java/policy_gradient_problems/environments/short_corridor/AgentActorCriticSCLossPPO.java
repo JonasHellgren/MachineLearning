@@ -10,17 +10,17 @@ import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
-public class AgentActorICriticSCLossPPO extends AgentA<VariablesSC>
+public class AgentActorCriticSCLossPPO extends AgentA<VariablesSC>
         implements AgentNeuralActorNeuralCriticI<VariablesSC> {
 
     NeuralActorMemorySCLossPPO actor;
     NeuralCriticMemorySC critic;
 
-    public static AgentActorICriticSCLossPPO newDefault() {
-        return new AgentActorICriticSCLossPPO(StateSC.newFromObsPos(0));
+    public static AgentActorCriticSCLossPPO newDefault() {
+        return new AgentActorCriticSCLossPPO(StateSC.newFromObsPos(0));
     }
 
-    public AgentActorICriticSCLossPPO(StateI<VariablesSC> state) {
+    public AgentActorCriticSCLossPPO(StateI<VariablesSC> state) {
         super(state);
         this.actor= NeuralActorMemorySCLossPPO.newDefault();
         this.critic=NeuralCriticMemorySC.newDefault();

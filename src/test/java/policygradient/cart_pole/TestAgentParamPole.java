@@ -23,7 +23,7 @@ class TestAgentParamPole {
 
     @Test
      void whenAllStatesZero_thenCorrectActionProbs() {
-        var actionProbs=agent.getActionProbabilities();
+        var actionProbs=agent.actionProbabilitiesInPresentState();
         System.out.println("actionProbs = " + actionProbs);
         assertEquals(0.5,actionProbs.get(0));
         assertEquals(0.5,actionProbs.get(1));
@@ -43,7 +43,7 @@ class TestAgentParamPole {
         agent.setState(StatePole.newFromVariables(
                 VariablesPole.builder().angle(0).angleDot(0).x(1).xDot(0).build(),
                 parametersPole));
-        var actionProbs=agent.getActionProbabilities();
+        var actionProbs=agent.actionProbabilitiesInPresentState();
         System.out.println("actionProbs = " + actionProbs);
         assertEquals(actionProbs.get(0), Math.exp(1) / (1 + Math.exp(1)), TOL);
     }

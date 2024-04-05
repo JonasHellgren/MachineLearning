@@ -47,7 +47,7 @@ import policy_gradient_problems.environments.twoArmedBandit.TrainerBanditParamAc
 
 
     private void printPolicy() {
-        System.out.println("agent.piTheta() = " + agent.getActionProbabilities());
+        System.out.println("agent.piTheta() = " + agent.actionProbabilitiesInPresentState());
     }
 
 

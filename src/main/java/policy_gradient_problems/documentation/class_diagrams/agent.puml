@@ -3,6 +3,7 @@
 
 interface AgentI<V=generic state variables> {
 + Action chooseAction(double probRandom)  //todo int generic
++ List<Double> actionProbabilitiesInState()
 + setState(StateI<<V>> state);
 + StateI<<V>> getState()
 '/ + double readValue(StateI<<V>> state);  //todo needed?
@@ -11,7 +12,7 @@ interface AgentI<V=generic state variables> {
 interface ParamActorI {
 + changeActor(change);
 + ArrayRealVector calcGradLogVector(state, action);
-+ List<Double> getActionProbabilities()
+
 }
 
 

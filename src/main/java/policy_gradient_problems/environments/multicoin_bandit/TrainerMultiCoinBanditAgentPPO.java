@@ -41,7 +41,7 @@ public class TrainerMultiCoinBanditAgentPPO extends TrainerAbstractMultiCoinBand
                     int actionInt = exp.action().asInt();
                     int nA = EnvironmentBandit.NOF_ACTIONS;
                     Preconditions.checkArgument(actionInt < nA, "Non valid action, actionInt =" + actionInt);
-                    double probOld = a.getActionProbabilities().get(actionInt);
+                    double probOld = a.actionProbabilitiesInPresentState().get(actionInt);
                     double adv = exp.value();
                     return List.of((double) actionInt, adv, probOld);
                 };
@@ -54,7 +54,7 @@ public class TrainerMultiCoinBanditAgentPPO extends TrainerAbstractMultiCoinBand
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             episodeTrainer.trainFromEpisode(super.getExperiences(agent));
             super.getRecorderActionProbabilities().addStateProbabilitiesMap(
-                    Map.of(agent.getState().getVariables().arm(), agent.getActionProbabilities()));
+                    Map.of(agent.getState().getVariables().arm(), agent.actionProbabilitiesInPresentState()));
             super.getRecorderTrainingProgress().add(ProgressMeasures.ofAllZero().withActorLoss(agent.lossLastFit()));
         }
     }

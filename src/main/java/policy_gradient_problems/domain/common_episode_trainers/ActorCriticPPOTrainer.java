@@ -1,5 +1,6 @@
 package policy_gradient_problems.domain.common_episode_trainers;
 
+import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
@@ -9,7 +10,8 @@ import policy_gradient_problems.helpers.ExperienceHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
+@Builder
+public class ActorCriticPPOTrainer<V> {
     @NonNull AgentNeuralActorNeuralCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;
@@ -32,7 +34,9 @@ public class NeuralActorNeuralCriticCrossPPOTrainer<V> {
             double adv = returnAtTime - v;
             //ppoLabelList.add(helper.createOneHot(experience, adv));
             int action = experience.action().intValue().orElseThrow();
-            double probOld=agent.actionProbabilitiesInPresentState().get(action);
+//            double probOld=agent.actionProbabilitiesInPresentState().get(action);
+            double probOld=agent.actorOut(experience.state()).get(action);
+
             ppoLabelList.add(List.of((double) action,adv,probOld));
 
         }

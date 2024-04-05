@@ -5,11 +5,11 @@ import lombok.Builder;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
 public class AgentActorICriticPoleCEM extends AgentA<VariablesPole>
-        implements AgentNeuralActorNeuralCriticII<VariablesPole> {
+        implements AgentNeuralActorNeuralCriticI<VariablesPole> {
 
     NeuralActorMemoryPoleCEMLoss actor;
     NeuralCriticMemoryPole critic;
@@ -33,7 +33,7 @@ public class AgentActorICriticPoleCEM extends AgentA<VariablesPole>
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return actor.getOutValue(getState().asList());
 //        return actorOut(getState());  //todo
     }

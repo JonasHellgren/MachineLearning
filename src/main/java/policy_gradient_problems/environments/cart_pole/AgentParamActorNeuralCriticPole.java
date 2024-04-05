@@ -57,7 +57,7 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return helper.calcActionProbabilitiesInState(getState());
     }
 

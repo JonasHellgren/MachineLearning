@@ -72,7 +72,7 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorT
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         var thetaArr= actor.toArray();
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }

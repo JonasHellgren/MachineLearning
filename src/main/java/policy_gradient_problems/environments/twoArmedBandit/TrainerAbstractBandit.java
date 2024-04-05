@@ -35,7 +35,7 @@ public abstract class TrainerAbstractBandit extends TrainerA<VariablesBandit> {
 
 
     public void updateActionProbsRecorder(AgentI<VariablesBandit> agent) {
-        var map = Map.of(agent.getState().getVariables().arm(), agent.getActionProbabilities());
+        var map = Map.of(agent.getState().getVariables().arm(), agent.actionProbabilitiesInPresentState());
         super.recorderActionProbabilities.addStateProbabilitiesMap(map);
     }
 

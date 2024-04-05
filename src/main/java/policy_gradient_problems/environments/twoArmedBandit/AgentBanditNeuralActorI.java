@@ -35,7 +35,7 @@ public class AgentBanditNeuralActorI extends AgentA<VariablesBandit> implements 
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
     }
 

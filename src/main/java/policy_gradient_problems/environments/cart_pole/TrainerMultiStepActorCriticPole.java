@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.abstract_classes.ActorUpdaterI;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.helpers.NeuralCriticUpdater;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.helpers.MultiStepResultsGenerator;
@@ -26,12 +26,12 @@ import static common.Conditionals.executeIfTrue;
 @Getter
 public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
 
-    AgentNeuralActorNeuralCriticII<VariablesPole> agent;
+    AgentNeuralActorNeuralCriticI<VariablesPole> agent;
     ActorUpdaterI<VariablesPole> actorUpdater;
 
     @Builder
     public TrainerMultiStepActorCriticPole(@NonNull EnvironmentPole environment,
-                                           @NonNull AgentNeuralActorNeuralCriticII<VariablesPole> agent,
+                                           @NonNull AgentNeuralActorNeuralCriticI<VariablesPole> agent,
                                            @NonNull TrainerParameters parameters,
                                            @NonNull ActorUpdaterI<VariablesPole> actorUpdater) {
         super(environment, parameters);

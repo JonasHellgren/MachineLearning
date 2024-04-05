@@ -61,7 +61,7 @@ public class NeuralCriticMemorySC {
 
     private static NetSettings getDefaultNetSettings() {
         return NetSettings.builder()
-                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(10).nOutput(NOF_OUTPUTS)
+                .nInput(NOF_INPUTS).nHiddenLayers(1).nHidden(5).nOutput(NOF_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .learningRate(1e-3).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())

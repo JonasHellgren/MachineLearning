@@ -5,14 +5,14 @@ import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticII;
+import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 @Getter
 public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>
-        implements AgentNeuralActorNeuralCriticII<VariablesSC> {
+        implements AgentNeuralActorNeuralCriticI<VariablesSC> {
 
     NeuralActorMemorySCLossCEM actor;
     NeuralCriticMemorySC critic;
@@ -28,15 +28,9 @@ public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>
     }
 
     @Override
-    public List<Double> getActionProbabilities() {
+    public List<Double> actionProbabilitiesInPresentState() {
         StateSC state=(StateSC) getState();
-        //return calcActionProbabilitiesInObsState(stateAsObs.asObserved().getPos());
         return actorOut(state);
-    }
-
-    public List<Double> calcActionProbabilitiesInObsState(int stateObserved) {
-        double[] outArr = actor.getOutValue(new double[]{stateObserved});
-        return arrayPrimitiveDoublesToList(outArr);
     }
 
     @Override

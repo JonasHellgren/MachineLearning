@@ -29,13 +29,14 @@ public class RunnerShortCorridor {
         log.info("Parameter trained");
         addDataToPlotLists(trainer, "Param");
 
+
         var trainerCEM = createTrainerCEM(AgentActorICriticSCLossCEM.newDefault());
         trainerCEM.train();
-        log.info("Neural AC trained");
-        addDataToPlotLists(trainerCEM, "NeuralAC");
-        trainerCEM.getRecorderTrainingProgress().plot("AC CEM");
+        log.info("CEM trained");
+        addDataToPlotLists(trainerCEM, "CEM");
+        trainerCEM.getRecorderTrainingProgress().plot("CEM");
 
-        var trainerPPO = createTrainerCEM(AgentActorICriticSCLossCEM.newDefault()); //todo ppo
+        var trainerPPO = createTrainerPPO(AgentActorCriticSCLossPPO.newDefault());
         trainerPPO.train();
         log.info("PPO trained");
         addDataToPlotLists(trainerPPO, "PPO");
@@ -79,16 +80,23 @@ public class RunnerShortCorridor {
                 .build();
     }
 
-    private static TrainerNeuralActorNeuralCriticSC createTrainerCEM(AgentActorICriticSCLossCEM agent) {
-        return TrainerNeuralActorNeuralCriticSC.builder()
+    private static TrainerActorCriticSCLossCEM createTrainerCEM(AgentActorICriticSCLossCEM agent) {
+        return TrainerActorCriticSCLossCEM.builder()
                 .environment(EnvironmentSC.create())
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(NOF_EPISODES).gamma(0.5)
-                        .nofStepsMax(5).build())
+                        .nofEpisodes(NOF_EPISODES).gamma(0.5).nofStepsMax(5).build())
                 .build();
     }
 
 
+    private static TrainerActorCriticSCLossPPO createTrainerPPO(AgentActorCriticSCLossPPO agent) {
+        return TrainerActorCriticSCLossPPO.builder()
+                .environment(EnvironmentSC.create())
+                .agent(agent)
+                .parameters(TrainerParameters.builder()
+                        .nofEpisodes(NOF_EPISODES).gamma(0.5).nofStepsMax(5).build())
+                .build();
+    }
 
 }

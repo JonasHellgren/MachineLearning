@@ -8,8 +8,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 
-import java.util.List;
-
 import static common.IndexFinder.findBucket;
 import static common.BucketLimitsHandler.getLimits;
 import static common.BucketLimitsHandler.throwIfBadLimits;
@@ -29,7 +27,7 @@ public abstract class AgentA<V> implements AgentI<V> {
     @SneakyThrows
     @Override
     public Action chooseAction() {
-        var limits = getLimits(getActionProbabilities());
+        var limits = getLimits(actionProbabilitiesInPresentState());
         throwIfBadLimits(limits);
         return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
     }

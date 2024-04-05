@@ -3,26 +3,26 @@ package policy_gradient_problems.environments.short_corridor;
 import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.NeuralActorNeuralCriticCEMTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.ActorCriticCEMLossTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
-public class TrainerNeuralActorNeuralCriticSC extends TrainerAbstractSC {
+public class TrainerActorCriticSCLossCEM extends TrainerAbstractSC {
 
     AgentNeuralActorNeuralCriticI<VariablesSC> agent;
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
-    public TrainerNeuralActorNeuralCriticSC(@NonNull EnvironmentSC environment,
-                                            @NonNull AgentNeuralActorNeuralCriticI<VariablesSC> agent,
-                                            @NonNull TrainerParameters parameters) {
+    public TrainerActorCriticSCLossCEM(@NonNull EnvironmentSC environment,
+                                       @NonNull AgentNeuralActorNeuralCriticI<VariablesSC> agent,
+                                       @NonNull TrainerParameters parameters) {
         super(environment, parameters);
         this.agent = agent;
     }
 
     @Override
     public void train() {
-        var episodeTrainer = NeuralActorNeuralCriticCEMTrainer.<VariablesSC>builder()
+        var episodeTrainer = ActorCriticCEMLossTrainer.<VariablesSC>builder()
                 .agent(agent)
                 .parameters(parameters)
                 .valueTermState(VALUE_TERMINAL_STATE)
