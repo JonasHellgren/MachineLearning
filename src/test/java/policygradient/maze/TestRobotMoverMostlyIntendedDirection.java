@@ -4,11 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.environments.maze.Direction;
-import policy_gradient_problems.environments.maze.MazeSetting;
+import policy_gradient_problems.environments.maze.MazeSettings;
 import policy_gradient_problems.environments.maze.RobotMover;
 
 import java.awt.geom.Point2D;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,7 +22,7 @@ public class TestRobotMoverMostlyIntendedDirection {
 
     @BeforeEach
     void init() {
-        MazeSetting settings = MazeSetting.newDefault();
+        MazeSettings settings = MazeSettings.newDefault();
         mover = new RobotMover(settings);
     }
 
