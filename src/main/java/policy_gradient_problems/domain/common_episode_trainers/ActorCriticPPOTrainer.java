@@ -32,13 +32,9 @@ public class ActorCriticPPOTrainer<V> {
             outList.add(returnAtTime);
             double v=agent.criticOut(experience.state());
             double adv = returnAtTime - v;
-            //ppoLabelList.add(helper.createOneHot(experience, adv));
             int action = experience.action().intValue().orElseThrow();
-//            double probOld=agent.actionProbabilitiesInPresentState().get(action);
             double probOld=agent.actorOut(experience.state()).get(action);
-
             ppoLabelList.add(List.of((double) action,adv,probOld));
-
         }
 
         agent.fitCritic(inList, outList);

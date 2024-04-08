@@ -316,6 +316,8 @@ RecorderActionProbabilities add plot()  x
 
 maze with ppo
 - TestRobotMover
+- EnvironmentMaze
+- TestEnvironmentMaze
 - kolla av korrekt value
 
 pole med random start state och eval recorder
