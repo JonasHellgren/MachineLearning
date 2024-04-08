@@ -315,6 +315,7 @@ RunnerShortCorridor lägg till PPO  x
 RecorderActionProbabilities add plot()  x
 
 maze with ppo
+- TestRobotMover
 - kolla av korrekt value
 
 pole med random start state och eval recorder
