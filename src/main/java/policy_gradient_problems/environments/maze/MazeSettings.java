@@ -31,4 +31,7 @@ public record MazeSettings(
         return List.of(posTerminalGood,posTerminalBad);
     }
 
+    public int nNetInputs() {
+        return gridWidth+gridHeight;
+    }
 }

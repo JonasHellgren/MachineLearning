@@ -13,9 +13,9 @@ import static org.junit.Assert.assertTrue;
 
 public class TestRobotMoverMostlyIntendedDirection {
 
-    public static final Action UP = Action.ofInteger(Direction.up.getInt());
-    public static final Action RIGHT = Action.ofInteger(Direction.right.getInt());
-    public static final Action LEFT = Action.ofInteger(Direction.left.getInt());
+    public static final Action UP = Action.ofInteger(Direction.UP.getInt());
+    public static final Action RIGHT = Action.ofInteger(Direction.RIGHT.getInt());
+    public static final Action LEFT = Action.ofInteger(Direction.LEFT.getInt());
     public static final int N_REPS = 100;
 
     RobotMover mover;

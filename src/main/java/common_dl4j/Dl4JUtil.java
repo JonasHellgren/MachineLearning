@@ -1,5 +1,6 @@
 package common_dl4j;
 
+import com.google.common.base.Preconditions;
 import common.ListUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
@@ -78,9 +79,18 @@ public class Dl4JUtil {
         return new ListDataSetIterator<>(listDs, input.rows());
     }
 
-    public static INDArray createOneHot(int nofInputs, int hotIndex) {
+    public static INDArray createOneHotOld(int nofInputs, int hotIndex) {
         List<Double> onHot = createListWithOneHot(nofInputs, hotIndex);
         return Nd4j.create(onHot);
+    }
+
+
+    public static INDArray createOneHot(int nofInputs, int hotIndex) {
+        // Ensure the hotIndex is within the array bounds
+        Preconditions.checkArgument(hotIndex < nofInputs && hotIndex >= 0,"hotIndex out of bounds.");
+        INDArray oneHot = Nd4j.zeros(nofInputs);
+        oneHot.putScalar(hotIndex, 1);
+        return oneHot;
     }
 
     public static List<Double> createListWithOneHot(int nofInputs, int hotIndex) {

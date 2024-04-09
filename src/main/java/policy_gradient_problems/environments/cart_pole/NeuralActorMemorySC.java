@@ -53,7 +53,7 @@ public class NeuralActorMemorySC {
     }
 
     private static INDArray getOneHot(List<List<Double>> inList, int i) {
-        return Dl4JUtil.createOneHot(NOF_INPUTS, inList.get(i).get(0).intValue());
+        return Dl4JUtil.createOneHotOld(NOF_INPUTS, inList.get(i).get(0).intValue());
     }
 
 

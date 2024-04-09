@@ -22,10 +22,10 @@ public class RobotMover {
     final List<Double> probLimits;
 
     final Map<Integer, Point2D> actionDPosMap = Map.of(
-            Direction.up.getInt(), Direction.up.direction(),
-            Direction.right.getInt(), Direction.right.direction(),
-            Direction.down.getInt(), Direction.down.direction(),
-            Direction.left.getInt(), Direction.left.direction());
+            Direction.UP.getInt(), Direction.UP.direction(),
+            Direction.RIGHT.getInt(), Direction.RIGHT.direction(),
+            Direction.DOWN.getInt(), Direction.DOWN.direction(),
+            Direction.LEFT.getInt(), Direction.LEFT.direction());
 
     public RobotMover(MazeSettings settings) {
         this.settings = settings;

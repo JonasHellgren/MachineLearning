@@ -315,9 +315,15 @@ RunnerShortCorridor lägg till PPO  x
 RecorderActionProbabilities add plot()  x
 
 maze with ppo
-- TestRobotMover
-- EnvironmentMaze
-- TestEnvironmentMaze
+- TestRobotMover x
+- EnvironmentMaze x
+- TestEnvironmentMaze x
+- clean up  x
+- NeuralActorMemoryMaze x
+- NeuralActorMemoryMazeLossPPO
+- TestNeuralActorMemoryMazeLossPPO
+- MazeAgentPPO
+- TrainerMazeAgentPPO
 - kolla av korrekt value
 
 pole med random start state och eval recorder

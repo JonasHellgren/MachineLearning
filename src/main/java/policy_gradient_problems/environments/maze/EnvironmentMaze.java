@@ -1,10 +1,11 @@
 package policy_gradient_problems.environments.maze;
 
-import com.google.common.base.Preconditions;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.value_classes.StepReturn;
+
+import static org.nd4j.shade.guava.base.Preconditions.checkArgument;
 
 public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
 
@@ -17,12 +18,12 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
 
     public EnvironmentMaze(MazeSettings settings) {
         this.settings = settings;
-        this.mover=new RobotMover(settings);
+        this.mover = new RobotMover(settings);
     }
 
     public StepReturn<VariablesMaze> step(StateI<VariablesMaze> state0, Action action) {
-        StateMaze state=(StateMaze) state0;
-        StateMaze stateNew=StateMaze.newFromPoint(mover.newPos(state.point(),action));
+        var state = (StateMaze) state0;
+        var stateNew = StateMaze.newFromPoint(mover.newPos(state.point(), action));
         boolean isTerminal = isTerminal(stateNew);
         double reward = isTerminal
                 ? rewardAtTerminal(stateNew)
@@ -36,7 +37,7 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
     }
 
     private double rewardAtTerminal(StateMaze state) {
-        Preconditions.checkArgument(isTerminal(state),"Not terminal state");
+        checkArgument(isTerminal(state), "Not terminal state");
         return settings.posTerminalGood().equals(state.point())
                 ? settings.rewardTerminalGood()
                 : settings.rewardTerminalBad();

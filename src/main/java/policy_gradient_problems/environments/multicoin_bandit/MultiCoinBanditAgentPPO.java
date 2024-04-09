@@ -46,7 +46,6 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
     @Override
     public List<Double> actionProbabilitiesInPresentState() {
         return ListUtils.arrayPrimitiveDoublesToList(actor.output(DUMMY_IN).toDoubleVector());
-        //return actorOut(DUMMY_STATE); //todo
     }
 
     @Override

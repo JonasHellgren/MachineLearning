@@ -14,7 +14,7 @@ public class TestEnvironmentMaze {
 
     public static final int N_REPS = 100;
     public static final double DELTA = 1e-4;
-    public static final Action UP = Action.ofInteger(Direction.up.getInt());
+    public static final Action UP = Action.ofInteger(Direction.UP.getInt());
 
 
     EnvironmentMaze environment;
