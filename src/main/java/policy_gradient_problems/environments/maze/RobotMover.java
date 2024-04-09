@@ -55,7 +55,8 @@ public class RobotMover {
         int x = (int) clip(posNew.getX(), 0, (double) settings.gridWidth() - 1); // Clip x [0, gridWidth - 1]
         int y = (int) clip(posNew.getY(), 0, (double) settings.gridHeight() - 1); // Clip y [0, gridHeight - 1]
 
-        return (x == 1 && y == 1)
+        //return (x == 1 && y == 1)
+        return (settings.isObstacle(StateMaze.newFromPoint(posNew)))
                 ? posOld  //hitting walls inside the grid, reset to previous position
                 : new Point2D.Double(x, y);
     }

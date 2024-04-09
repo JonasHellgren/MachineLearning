@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Array2ListConverter {
 
+    private Array2ListConverter() {
+    }
 
     public static List<Double> convertDoubleArrToList(double[] inVec) {
         // Initialize the list with the capacity equal to the length of inVec for efficiency

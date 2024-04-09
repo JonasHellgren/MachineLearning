@@ -60,13 +60,6 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
                 environment.isTerminalObserved(sr.state().getVariables().posObserved()));
 
     }
-/*
-
-    private static StateSC asObserved(StateI<VariablesSC> state) {
-        StateSC stateCasted = (StateSC) state;
-        return stateCasted.asObserved();
-    }
-*/
 
     private boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<VariablesSC> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();

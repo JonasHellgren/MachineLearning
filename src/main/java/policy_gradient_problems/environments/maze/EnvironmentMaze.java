@@ -44,6 +44,7 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
     }
 
     private boolean isTerminal(StateI<VariablesMaze> state) {
-        return settings.terminalPositions().contains(state.getVariables().pos());
+        //return settings.terminalPositions().contains(state.getVariables().pos());
+        return settings.isTerminal(state);
     }
 }

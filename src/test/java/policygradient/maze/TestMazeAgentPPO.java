@@ -10,7 +10,6 @@ import policy_gradient_problems.environments.maze.Direction;
 import policy_gradient_problems.environments.maze.MazeAgentPPO;
 import policy_gradient_problems.environments.maze.MazeSettings;
 import policy_gradient_problems.environments.maze.StateMaze;
-
 import java.awt.geom.Point2D;
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
+import common.RandUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -13,6 +14,18 @@ public class StateMaze implements StateI<VariablesMaze> {
 
     VariablesMaze variables;
 
+    public static StateMaze randomFeasible(MazeSettings mazeSettings) {
+        boolean isObstacleOrTerminal;
+        StateMaze state;
+        do  {
+            int x= RandUtils.getRandomIntNumber(0,mazeSettings.gridWidth());
+            int y= RandUtils.getRandomIntNumber(0,mazeSettings.gridHeight());
+            state=newFromPoint(new Point2D.Double(x,y));
+            isObstacleOrTerminal=mazeSettings.isObstacle(state) || mazeSettings.isTerminal(state);
+        } while (isObstacleOrTerminal);
+        return state;
+    }
+
     public static StateMaze newFromPoint(Point2D pos) {
         return new StateMaze(new VariablesMaze(pos));
     }
@@ -24,7 +37,6 @@ public class StateMaze implements StateI<VariablesMaze> {
     public void setPoint(Point2D point) {
         setVariables(new VariablesMaze(point));
     }
-
 
     @Override
     public VariablesMaze getVariables() {
