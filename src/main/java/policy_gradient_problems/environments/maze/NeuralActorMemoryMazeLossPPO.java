@@ -15,17 +15,17 @@ public class NeuralActorMemoryMazeLossPPO {
 
     public NeuralActorMemoryMazeLossPPO(MazeSettings mazeSettings, NetSettings netSettings) {
         this.mazeSettings = mazeSettings;
-        this.memory = new NeuralActorMemoryMaze(netSettings);
+        this.memory = new NeuralActorMemoryMaze(mazeSettings,netSettings);
     }
 
     private static NetSettings getDefaultNetSettings(MazeSettings mazeSettings) {
         return NetSettings.builder()
-                .nInput(mazeSettings.nNetInputs()).nHiddenLayers(1).nHidden(20)
+                .nInput(mazeSettings.nNetInputs()).nHiddenLayers(1).nHidden(5)
                 .nOutput(Direction.values().length)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
-                .learningRate(1e-4).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsilonPPO(0.1))
-                .sizeBatch(10).isNofFitsAbsolute(false).relativeNofFitsPerBatch(3.0)  //4 10
+                .learningRate(1e-3).momentum(0.9).seed(1234)
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffbetaEntropy(0.5,1e-3,1e-3))
+                .sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)  //4 10
                 .build();
     }
 

@@ -8,9 +8,6 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import java.util.List;
-
-import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 /**
  generates one-hot encoded vectors for the x and y positions separately, then concat them
@@ -19,13 +16,13 @@ import static common.ListUtils.arrayPrimitiveDoublesToList;
 
 public class NeuralActorMemoryMaze {
 
-
     MultiLayerNetwork net;
     NetSettings netSettings;
     MazeSettings mazeSettings;
     Dl4JNetFitter netFitter;
 
-    public NeuralActorMemoryMaze(NetSettings netSettings) {
+    public NeuralActorMemoryMaze(MazeSettings mazeSettings,NetSettings netSettings) {
+        this.mazeSettings=mazeSettings;
         this.netSettings = netSettings;
         this.net = MultiLayerNetworkCreator.create(netSettings);
         net.init();
@@ -40,12 +37,13 @@ public class NeuralActorMemoryMaze {
 
 
     public double[] getOutValue(double[] inData) {
-        return net.output(hotEncoding(inData)).toDoubleVector();
+        INDArray input = hotEncoding(inData);
+        INDArray reshaped = input.reshape(1, input.columns());
+        return net.output(reshaped).toDoubleVector();
     }
 
 
     private INDArray getManyOneHot(double[][] inMat) {
-
         int numRows=inMat.length;
         int numColumns=mazeSettings.nNetInputs();
         INDArray indArray=  Nd4j.create(numRows, numColumns);
