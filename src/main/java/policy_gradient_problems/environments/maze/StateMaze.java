@@ -46,6 +46,10 @@ public class StateMaze implements StateI<VariablesMaze> {
         return List.of(variables.pos().getX(),variables.pos().getY());
     }
 
+    public double[] asArray() {
+        return new double[]{variables.pos().getX(),variables.pos().getY()};
+    }
+
     @SneakyThrows
     @Override
     public RealVector asRealVector() {

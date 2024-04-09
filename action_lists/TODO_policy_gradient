@@ -320,8 +320,9 @@ maze with ppo
 - TestEnvironmentMaze x
 - clean up  x
 - NeuralActorMemoryMaze x
-- NeuralActorMemoryMazeLossPPO
-- TestNeuralActorMemoryMazeLossPPO
+- NeuralActorMemoryMazeLossPPO x
+- TestNeuralActorMemoryMazeLossPPO x
+- TestNeuralCriticMemoryMazeLossPPO
 - MazeAgentPPO
 - TrainerMazeAgentPPO
 - kolla av korrekt value

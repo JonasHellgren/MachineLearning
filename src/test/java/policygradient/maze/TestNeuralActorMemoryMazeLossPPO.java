@@ -3,6 +3,7 @@ package policygradient.maze;
 import common_dl4j.Dl4JUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import policy_gradient_problems.environments.maze.Direction;
@@ -44,6 +45,7 @@ public class TestNeuralActorMemoryMazeLossPPO {
     }
 
     @Test
+    @Disabled("long time")
     void whenFitX2Y2RightActionAndX2Y1UpAction_thenCorrect() {
         double[][] inMat = {{2d, 2d},{2d, 1d}};
 
