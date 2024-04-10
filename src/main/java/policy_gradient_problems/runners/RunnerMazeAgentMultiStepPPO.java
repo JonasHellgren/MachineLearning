@@ -1,7 +1,5 @@
 package policy_gradient_problems.runners;
 
-import common.Counter;
-import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.maze.*;
 import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
@@ -10,8 +8,10 @@ import java.awt.geom.Point2D;
 
 public class RunnerMazeAgentMultiStepPPO {
 
-    //static EnvironmentMaze environment= EnvironmentMaze.newDefault();
-    static EnvironmentMaze environment= EnvironmentMaze.newOneRow();
+   // static EnvironmentMaze environment= EnvironmentMaze.newDefault();
+  //  static EnvironmentMaze environment= EnvironmentMaze.newOneRowMoveAsIntended();
+    static EnvironmentMaze environment= EnvironmentMaze.new4x3MoveAsIntended();
+
     static MazeAgentPPO agent=MazeAgentPPO.newDefaultAtX0Y0();
     static TrainerMazeAgentMultiStepPPO trainer=createTrainer();
 
@@ -32,7 +32,7 @@ public class RunnerMazeAgentMultiStepPPO {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(50).nofStepsMax(10).gamma(1.00)  //0.95
+                        .nofEpisodes(2000).nofStepsMax(10).gamma(1.00)
                         .stepHorizon(3)
                         .build())
                 .mazeSettings(environment.getSettings())

@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 public class RunnerMazeAgentSingleStepPPO {
 
     //static EnvironmentMaze environment= EnvironmentMaze.newDefault();
-    static EnvironmentMaze environment= EnvironmentMaze.newOneRow();
+    static EnvironmentMaze environment= EnvironmentMaze.newOneRowMoveAsIntended();
 
     static MazeAgentPPO agent=MazeAgentPPO.newDefaultAtX0Y0();
 

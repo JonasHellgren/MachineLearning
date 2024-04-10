@@ -333,9 +333,11 @@ maze with ppo
  - testa ovan x
 - TrainerMazeAgentPPO på enkel settings x
 - BUGG - TrainerMazeAgentMultiStepPPO - för stor critic value  x
-- intented
-- kolla av korrekt value
+- newOneRowMoveAsIntended  x
+- new4x3MoveAsIntended x
+- kolla av korrekt value  x
 
+plotta entropy pole
 pole med random start state och eval recorder
 AgentParamActorSCHelper - gör för mkt
 safe cannon with ppo

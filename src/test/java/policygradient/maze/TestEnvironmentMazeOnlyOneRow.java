@@ -25,7 +25,7 @@ public class TestEnvironmentMazeOnlyOneRow {
 
     @BeforeEach
     void init() {
-        settings = MazeSettings.newOneRow();
+        settings = MazeSettings.newOneRowMoveAsIntended();
         environment=new EnvironmentMaze(settings);
         state=StateMaze.newFromPoint(new Point2D.Double(0,0));
     }

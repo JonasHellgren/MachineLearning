@@ -30,16 +30,29 @@ public record MazeSettings(
                 .build();
     }
 
-    public static MazeSettings newOneRow() {
+    public static MazeSettings newOneRowMoveAsIntended() {
         return MazeSettings.builder()
                 .gridHeight(1).gridWidth(4)
-                .probabilityIntendedDirection(0.8)
+                .probabilityIntendedDirection(1.0)
                 .costMove(0.04)
                 .posTerminalGood(new Point2D.Double(3, 0)).rewardTerminalGood(1)
                 .posTerminalBad(new Point2D.Double(3, 1)).rewardTerminalBad(-1)  //outside
                 .obstacles(new ArrayList<>())
                 .build();
     }
+
+    public static MazeSettings new4x3MoveAsIntended() {
+        return MazeSettings.builder()
+                .gridHeight(3).gridWidth(4)
+                .probabilityIntendedDirection(1.0)
+                .costMove(0.04)
+                .posTerminalGood(new Point2D.Double(3, 2)).rewardTerminalGood(1)
+                .posTerminalBad(new Point2D.Double(3, 1)).rewardTerminalBad(-1)
+                .obstacles(List.of(new Point2D.Double(1, 1)))
+                .build();
+
+    }
+
 
     public boolean isTerminal(StateI<VariablesMaze> state) {
             return terminalPositions().contains(state.getVariables().pos());

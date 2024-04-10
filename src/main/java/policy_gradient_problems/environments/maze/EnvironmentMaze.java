@@ -18,9 +18,15 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
         return new EnvironmentMaze(MazeSettings.newDefault());
     }
 
-    public static EnvironmentMaze newOneRow() {
-        return new EnvironmentMaze(MazeSettings.newOneRow());
+    public static EnvironmentMaze newOneRowMoveAsIntended() {
+        return new EnvironmentMaze(MazeSettings.newOneRowMoveAsIntended());
     }
+
+
+    public static EnvironmentMaze new4x3MoveAsIntended() {
+        return new EnvironmentMaze(MazeSettings.new4x3MoveAsIntended());
+    }
+
 
     public EnvironmentMaze(MazeSettings settings) {
         this.settings = settings;
@@ -50,7 +56,6 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
     }
 
     private boolean isTerminal(StateI<VariablesMaze> state) {
-        //return settings.terminalPositions().contains(state.getVariables().pos());
         return settings.isTerminal(state);
     }
 }

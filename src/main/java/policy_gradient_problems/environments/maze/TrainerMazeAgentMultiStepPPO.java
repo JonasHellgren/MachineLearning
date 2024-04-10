@@ -45,12 +45,6 @@ public class TrainerMazeAgentMultiStepPPO extends TrainerAbstractMaze {
                 log.fine(experiences.toString());
                 log.fine(msr.toString());
             } else {
-
-                //System.out.println("msr.valueTarList().get(msr.tEnd()-1) = " + msr.valueTarList().get(msr.tEnd() - 1));
-
-                System.out.println("msr.valueTarList() = " + msr.valueTarList());
-
-
                 cu.updateCritic(msr);
                 actorUpdater.updateActor(msr, agent);
                 updateRecorders(agent.lossActorAndCritic());
@@ -59,20 +53,6 @@ public class TrainerMazeAgentMultiStepPPO extends TrainerAbstractMaze {
         }
     }
 
-    public void trainOld() {
-        var episodeTrainer = ActorCriticPPOTrainer.<VariablesMaze>builder()
-                .agent(agent)
-                .parameters(parameters)
-                .valueTermState(VALUE_TERMINAL_STATE)
-                .nofActions(EnvironmentSC.NOF_ACTIONS)
-                .build();
-
-        for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            setStartStateInAgent();
-            episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
-            updateRecorders(agent.lossActorAndCritic());
-        }
-    }
 
     private void setStartStateInAgent() {
         agent.setState(StateMaze.randomNotObstacleAndNotTerm(mazeSettings));
