@@ -20,9 +20,13 @@ import static common.ArrayUtil.transposeMatrix;
 @AllArgsConstructor
 public class MazeAgentPlotter {
 
+    public static final int WIDTH = 300;
+    public static final int HEIGHT = 300;
     AgentNeuralActorNeuralCriticI<VariablesMaze> agent;
     MazeSettings settings;
-    final SwingShowHeatMap valueMapPlotter =SwingShowHeatMap.builder().build();
+    final SwingShowHeatMap valueMapPlotter =SwingShowHeatMap.builder()
+            .width(WIDTH).height(HEIGHT)
+            .build();
 
     public void plotValues() {
         double[][] data = getValueData();
@@ -54,6 +58,7 @@ public class MazeAgentPlotter {
         Map<Integer,String> actions= Map.of(0,"u",1,"r",2,"d",3,"l");
         for (int y = 0; y < settings.gridHeight(); y++) {
             for (int x = 0; x < settings.gridWidth(); x++) {
+                agent.setState(StateMaze.newFromPoint(new Point2D.Double(x,y)));
                 var probs=agent.actionProbabilitiesInPresentState();
                 OptionalInt indexOpt = IntStream.range(0, probs.size())
                         .reduce((i, j) -> probs.get(i) < probs.get(j) ? j : i);
@@ -69,7 +74,7 @@ public class MazeAgentPlotter {
         var chart = new HeatMapChartBuilder()
                 .title("Sample HeatMap")
                 .xAxisTitle("X Axis").yAxisTitle("Y Axis")
-                .width(300).height(300)
+                .width(WIDTH).height(HEIGHT)
                 .build();
         chart.getStyler().setChartTitleVisible(true).setLegendVisible(false);
         chart.getStyler().setMin(0).setMax(100).setRangeColors(new Color[]{Color.LIGHT_GRAY,Color.WHITE});

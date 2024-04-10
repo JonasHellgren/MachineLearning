@@ -7,13 +7,12 @@ import policy_gradient_problems.domain.abstract_classes.ActorUpdaterI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.common_episode_trainers.ActorCriticPPOTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.cart_pole.VariablesPole;
 import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
 import policy_gradient_problems.helpers.MultiStepResultsGenerator;
 import policy_gradient_problems.helpers.NeuralCriticUpdater;
 
 @Log
-public class TrainerMazeAgentPPO extends TrainerAbstractMaze {
+public class TrainerMazeAgentMultiStepPPO extends TrainerAbstractMaze {
     public static final double VALUE_TERMINAL_STATE = 0;
 
     AgentNeuralActorNeuralCriticI<VariablesMaze> agent;
@@ -21,11 +20,11 @@ public class TrainerMazeAgentPPO extends TrainerAbstractMaze {
     ActorUpdaterI<VariablesMaze> actorUpdater;
 
     @Builder
-    public TrainerMazeAgentPPO(@NonNull EnvironmentMaze environment,
-                               @NonNull AgentNeuralActorNeuralCriticI<VariablesMaze> agent,
-                               @NonNull TrainerParameters parameters,
-                               @NonNull MazeSettings mazeSettings,
-                               @NonNull ActorUpdaterI<VariablesMaze> actorUpdater) {
+    public TrainerMazeAgentMultiStepPPO(@NonNull EnvironmentMaze environment,
+                                        @NonNull AgentNeuralActorNeuralCriticI<VariablesMaze> agent,
+                                        @NonNull TrainerParameters parameters,
+                                        @NonNull MazeSettings mazeSettings,
+                                        @NonNull ActorUpdaterI<VariablesMaze> actorUpdater) {
         super(environment, parameters);
         this.agent = agent;
         this.mazeSettings = mazeSettings;

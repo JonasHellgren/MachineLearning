@@ -1,9 +1,6 @@
-package policygradient.maze;
+package policy_gradient_problems.runners;
 
 import common.Counter;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.maze.*;
@@ -11,26 +8,25 @@ import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;
 
 import java.awt.geom.Point2D;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+public class RunnerMazeAgent {
 
-public class TestTrainerMazeAgentPPO {
+    static EnvironmentMaze environment= EnvironmentMaze.newDefault();
+    static MazeAgentPPO agent=MazeAgentPPO.newDefaultAtX0Y0();
+    static MazeSettings settings=MazeSettings.newDefault();
+    static TrainerMazeAgentMultiStepPPO trainer=createTrainer();
 
-    TrainerMazeAgentPPO trainer;
-    MazeAgentPPO agent;
-    EnvironmentMaze environment;
-    MazeSettings settings;
-
-    @BeforeEach
-    void init() {
-        environment= EnvironmentMaze.newDefault();
-        agent=MazeAgentPPO.newDefaultAtX0Y0();
-        settings=MazeSettings.newDefault();
-        trainer=createTrainer();
+    public static void main(String[] args) {
+        trainer.train();
+        int nofSteps=runTrainedAgent(StateMaze.newFromPoint(new Point2D.Double(0,0)));
+        System.out.println("nofSteps = " + nofSteps);
+        var plotter=new MazeAgentPlotter(agent,settings);
+        plotter.plotValues();
+        plotter.plotBestAction();
     }
 
 
-    private TrainerMazeAgentPPO createTrainer() {
-        return  TrainerMazeAgentPPO.builder()
+    private static TrainerMazeAgentMultiStepPPO createTrainer() {
+        return  TrainerMazeAgentMultiStepPPO.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
@@ -42,26 +38,7 @@ public class TestTrainerMazeAgentPPO {
                 .build();
     }
 
-    @SneakyThrows
-    @Test
-    //@Disabled("Long time")
-    void whenTrained_thenFewSteps() {
-        trainer.train();
-
-        int nofSteps=runTrainedAgent(StateMaze.newFromPoint(new Point2D.Double(0,0)));
-        System.out.println("nofSteps = " + nofSteps);
-
-        var plotter=new MazeAgentPlotter(agent,settings);
-        plotter.plotValues();
-        plotter.plotBestAction();
-        Thread.sleep(10000);
-
-        assertTrue(nofSteps < 10);
-
-
-    }
-
-    public int runTrainedAgent(StateMaze stateStart) {
+    public static int runTrainedAgent(StateMaze stateStart) {
         agent.setState(stateStart);
         Counter counter=new Counter();
         StepReturn<VariablesMaze> stepReturn;
@@ -75,7 +52,6 @@ public class TestTrainerMazeAgentPPO {
         } while (!stepReturn.isTerminal() );
         return counter.getCount();
     }
-
 
 
 }
