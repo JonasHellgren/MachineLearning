@@ -323,8 +323,14 @@ maze with ppo
 - NeuralActorMemoryMazeLossPPO x
 - TestNeuralActorMemoryMazeLossPPO x
 - TestNeuralCriticMemoryMazeLossPPO
+-  double probAction=0;  //todo  x
+- plotta critic maze
+- plotta policy maze
 - MazeAgentPPO
-- TrainerMazeAgentPPO
+ -  settings konstuktor för enklare miljö
+ - testa ovan
+- TrainerMazeAgentPPO på enkel settings
+- TrainerMazeAgentPPO strular
 - kolla av korrekt value
 
 pole med random start state och eval recorder

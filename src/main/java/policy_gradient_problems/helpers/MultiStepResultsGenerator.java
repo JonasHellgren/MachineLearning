@@ -25,13 +25,23 @@ import static common.Conditionals.executeOneOfTwo;
 public class MultiStepResultsGenerator<V> {
     @NonNull TrainerParameters parameters;
     @NonNull NeuralCriticI<V> agent;
+    @NonNull Boolean isUseAllExperiences;
+
+    public MultiStepResultsGenerator(@NonNull TrainerParameters parameters, @NonNull NeuralCriticI<V> agent) {
+        this.parameters = parameters;
+        this.agent = agent;
+        this.isUseAllExperiences=Boolean.FALSE;
+    }
+
 
     public MultiStepResults generate(List<Experience<V>> experiences) {
         Integer n = parameters.stepHorizon();
         int nofExperiences = experiences.size();  //can also be named T
         var mse = new MultiStepReturnEvaluator<>(parameters, experiences);
-        int tEnd = mse.isEndExperienceFail() ? nofExperiences : nofExperiences - n + 1;
-        executeIfTrue(!mse.isEndExperienceFail(), () -> log.fine("Non ending in fail"));
+        int tEnd = mse.isEndExperienceFail() || Boolean.TRUE.equals(isUseAllExperiences)
+                ? nofExperiences
+                : nofExperiences - n + 1;
+        executeIfTrue(!mse.isEndExperienceFail(), () -> log.fine("Not ending in fail"));
         var results = MultiStepResults.create(tEnd, nofExperiences);
         double gammaPowN = Math.pow(parameters.gamma(), n);
         IntStream.range(0, tEnd).forEach(t -> {

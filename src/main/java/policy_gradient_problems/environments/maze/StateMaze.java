@@ -3,7 +3,6 @@ package policy_gradient_problems.environments.maze;
 import common.RandUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.ToString;
 import org.apache.commons.math3.linear.RealVector;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import java.awt.geom.Point2D;
@@ -14,7 +13,7 @@ public class StateMaze implements StateI<VariablesMaze> {
 
     VariablesMaze variables;
 
-    public static StateMaze randomFeasible(MazeSettings mazeSettings) {
+    public static StateMaze randomNotObstacleAndNotTerm(MazeSettings mazeSettings) {
         boolean isObstacleOrTerminal;
         StateMaze state;
         do  {

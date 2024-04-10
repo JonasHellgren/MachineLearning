@@ -50,7 +50,7 @@ public abstract class TrainerAbstractMaze extends TrainerA<VariablesMaze> {
     private Experience<VariablesMaze> createExperience(AgentI<VariablesMaze> agent,
                                                      StepReturn<VariablesMaze> sr,
                                                      Action action) {
-        double probAction=0;  //todo
+        double probAction=agent.actionProbabilitiesInPresentState().get(action.asInt());
          return Experience.ofWithIsTerminal(agent.getState(), action, sr.reward(), sr.state(),
                 probAction, sr.isTerminal());
 
