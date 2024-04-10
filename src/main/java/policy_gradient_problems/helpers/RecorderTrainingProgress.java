@@ -59,6 +59,15 @@ public class RecorderTrainingProgress {
         return getMeasure(ProgressMeasures::criticLoss);
     }
 
+    public List<Double> entropyTraj() {
+        return getMeasure(ProgressMeasures::entropy);
+    }
+
+    public List<Double> tbdTraj() {
+        return getMeasure(ProgressMeasures::tbd);
+    }
+
+
     List<Double> getMeasure(Function<ProgressMeasures, Double> function) {
         return measuresList.stream().map(function).toList();
     }
@@ -73,6 +82,9 @@ public class RecorderTrainingProgress {
         charts.add(createChart("accum reward", doubles2NumList(sumRewardsTraj())));
         charts.add(createChart("actor loss", doubles2NumList(actorLossTraj())));
         charts.add(createChart("critic loss", doubles2NumList(criticLossTraj())));
+        charts.add(createChart("entropy", doubles2NumList(entropyTraj())));
+        charts.add(createChart("tbd", doubles2NumList(tbdTraj())));
+
         var frame= new SwingWrapper<>(charts).displayChartMatrix();
         frame.setTitle(title);
     }

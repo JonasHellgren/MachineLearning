@@ -1,7 +1,10 @@
 package common_dl4j;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.ops.transforms.Transforms;
+
+import java.util.List;
 
 public class EntropyCalculator {
 
@@ -16,6 +19,10 @@ public class EntropyCalculator {
         INDArray logP = Transforms.log(adjustedProbToAvoidLogZero);
         INDArray vec= realProb.mul(logP);
         return  -vec.sumNumber().doubleValue();
+    }
+
+    public static double calcEntropy(List<Double> estProb) {
+        return calcEntropy(Nd4j.create(estProb),EPS);
     }
 
     public static double calcEntropy(INDArray estProb) {

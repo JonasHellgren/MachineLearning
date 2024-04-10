@@ -10,8 +10,12 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-
 import static policy_gradient_problems.environments.maze.MazeInputEncoder.manyOneHotEncodings;
+
+/***
+ * nHidden important, shall not be to small
+ * learningRate important, shall be smaller than for the actor
+ */
 
 public class NeuralCriticMemoryMazeLossPPO {
 
@@ -34,7 +38,7 @@ public class NeuralCriticMemoryMazeLossPPO {
     public void fit(double[][] inMat,double[] out) {
         INDArray indMatIn = manyOneHotEncodings(inMat, mazeSettings);
         INDArray indVectorOut = Nd4j.create(out);
-        net.fit(indMatIn,indVectorOut.reshape(out.length,N_OUTPUT));
+        fitter.fit(indMatIn,indVectorOut.reshape(out.length,N_OUTPUT));
         indVectorOut.close();
     }
 
@@ -45,7 +49,7 @@ public class NeuralCriticMemoryMazeLossPPO {
     }
 
     public double getError() {
-        return net.gradientAndScore().getSecond();
+        return fitter.getLossLastFit();
     }
 
     private Double getOutValue(INDArray inData) {
@@ -56,12 +60,12 @@ public class NeuralCriticMemoryMazeLossPPO {
 
     private static NetSettings getDefaultNetSettings(MazeSettings mazeSettings) {
         return NetSettings.builder()
-                .nInput(mazeSettings.nNetInputs()).nHiddenLayers(2).nHidden(5)
+                .nInput(mazeSettings.nNetInputs()).nHiddenLayers(2).nHidden(20)
                 .nOutput(N_OUTPUT)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .learningRate(1e-3).momentum(0.9).seed(1234)
+                .learningRate(1e-4).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
-                .sizeBatch(32).isNofFitsAbsolute(true).absNoFit(1)
+                .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)
                 .weightInit(WeightInit.RELU)
                 .build();
     }

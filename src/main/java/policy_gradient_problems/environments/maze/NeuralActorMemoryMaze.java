@@ -40,7 +40,7 @@ public class NeuralActorMemoryMaze {
     }
 
     public double getError() {
-        return net.gradientAndScore().getSecond();
+        return netFitter.getLossLastFit();
     }
 
 

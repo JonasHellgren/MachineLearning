@@ -32,7 +32,7 @@ public class RunnerMazeAgentSingleStepPPO {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(500).nofStepsMax(10).gamma(1.00)  //0.95
+                        .nofEpisodes(200).nofStepsMax(10).gamma(1.00)  //0.95
                         .build())
                 .mazeSettings(environment.getSettings())
                 .build();

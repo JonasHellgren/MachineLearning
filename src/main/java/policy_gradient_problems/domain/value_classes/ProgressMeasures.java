@@ -10,7 +10,9 @@ public record ProgressMeasures(
         @With Double sumRewards,
         @With Integer nSteps,
         @With Double criticLoss,
-        @With Double actorLoss
+        @With Double actorLoss,
+        @With Double entropy,
+        @With Double tbd
 )
 {
     public static final int N_STEPS = 0;
@@ -21,10 +23,14 @@ public record ProgressMeasures(
     }
 
     @Builder
-    public ProgressMeasures(Double sumRewards, Integer nSteps, Double criticLoss, Double actorLoss) {
+    public ProgressMeasures(Double sumRewards, Integer nSteps, Double criticLoss, Double actorLoss,
+                            Double entropy, Double tbd) {
         this.sumRewards = defaultIfNullDouble.apply(sumRewards, DEFAULT_VALUE);
         this.nSteps = defaultIfNullInteger.apply(nSteps, N_STEPS);
         this.criticLoss = defaultIfNullDouble.apply(criticLoss,DEFAULT_VALUE);
         this.actorLoss = defaultIfNullDouble.apply(actorLoss,DEFAULT_VALUE);
+        this.entropy = defaultIfNullDouble.apply(entropy,DEFAULT_VALUE);
+        this.tbd = defaultIfNullDouble.apply(tbd,DEFAULT_VALUE);
+
     }
 }
