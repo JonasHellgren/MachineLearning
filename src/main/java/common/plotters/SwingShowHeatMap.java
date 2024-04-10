@@ -14,6 +14,8 @@ public class SwingShowHeatMap {
 
     public static final int MIN_DARKNESS = 100;
     @Builder.Default
+    String textPrecision = "%.2f";
+    @Builder.Default
     int width=300;
     @Builder.Default
     int height=200;
@@ -65,7 +67,7 @@ public class SwingShowHeatMap {
 
                 // Draw value in cell
                 g2d.setColor(Color.BLACK);
-                String text = String.format("%.1f", value);
+                String text = String.format(textPrecision, value);
                 FontMetrics metrics = g2d.getFontMetrics();
                 int textX = x + (cellWidth - metrics.stringWidth(text)) / 2;
                 int textY = y + ((cellHeight - metrics.getHeight()) / 2) + metrics.getAscent();

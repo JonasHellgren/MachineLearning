@@ -1,5 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
+import lombok.Getter;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
@@ -7,6 +8,7 @@ import policy_gradient_problems.domain.value_classes.StepReturn;
 
 import static org.nd4j.shade.guava.base.Preconditions.checkArgument;
 
+@Getter
 public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
 
     MazeSettings settings;
@@ -14,6 +16,10 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
 
     public static EnvironmentMaze newDefault() {
         return new EnvironmentMaze(MazeSettings.newDefault());
+    }
+
+    public static EnvironmentMaze newOneRow() {
+        return new EnvironmentMaze(MazeSettings.newOneRow());
     }
 
     public EnvironmentMaze(MazeSettings settings) {

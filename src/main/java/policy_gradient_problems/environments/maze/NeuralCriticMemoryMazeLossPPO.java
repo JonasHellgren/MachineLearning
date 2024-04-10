@@ -61,7 +61,7 @@ public class NeuralCriticMemoryMazeLossPPO {
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .learningRate(1e-3).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
-                .sizeBatch(32).isNofFitsAbsolute(true).absNoFit(5)
+                .sizeBatch(32).isNofFitsAbsolute(true).absNoFit(1)
                 .weightInit(WeightInit.RELU)
                 .build();
     }

@@ -11,6 +11,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
@@ -36,8 +37,9 @@ public class MazeAgentPlotter {
 
     public void plotBestAction() {
         HeatMapChart chart = createChart();
-        String[][] data = getBestActionData();
         addData(chart,transposeMatrix(new int[settings.gridHeight()][settings.gridWidth()]));
+        String[][] data = getBestActionData();
+        System.out.println("data = " + Arrays.deepToString(data));
         addCellText(chart, data);
         new SwingWrapper<>(chart).displayChart();
     }
@@ -83,9 +85,9 @@ public class MazeAgentPlotter {
         return chart;
     }
 
-    private static void addData(HeatMapChart chart, int[][] data) {
-        int[] xData = IntStream.range(0, 4).toArray();
-        int[] yData=IntStream.range(0, 3).toArray();
+    private  void addData(HeatMapChart chart, int[][] data) {
+        int[] xData = IntStream.range(0, settings.gridWidth() ).toArray();
+        int[] yData=IntStream.range(0, settings.gridHeight()).toArray();
         chart.addSeries("a", xData, yData, data);
     }
 

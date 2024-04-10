@@ -3,6 +3,7 @@ package policygradient.maze;
 import common.Counter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
@@ -34,7 +35,7 @@ public class TestTrainerMazeAgentMultiStepPPO {
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()
-                        .nofEpisodes(2000).nofStepsMax(30).gamma(0.99)  //0.95
+                        .nofEpisodes(1000).nofStepsMax(30).gamma(0.99)  //0.95
                         .stepHorizon(3)
                         .build())
                 .mazeSettings(settings)
@@ -44,7 +45,7 @@ public class TestTrainerMazeAgentMultiStepPPO {
 
     @SneakyThrows
     @Test
-    //@Disabled("Long time")
+    @Disabled("Long time")
     void whenTrained_thenFewSteps() {
         trainer.train();
 

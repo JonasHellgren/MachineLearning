@@ -321,11 +321,13 @@ maze with ppo
 - clean up  x
 - NeuralActorMemoryMaze x
 - NeuralActorMemoryMazeLossPPO x
-- TestNeuralActorMemoryMazeLossPPO x
+- TestNeuralActorMemoryMazeLossPPO x x
 - TestNeuralCriticMemoryMazeLossPPO
 -  double probAction=0;  //todo  x
-- plotta critic maze
-- plotta policy maze
+- plotta critic maze  x
+- plotta policy maze x
+- TrainerMazeAgentSingleStepPPO  x
+- bara lära sig om term state  x
 - MazeAgentPPO
  -  settings konstuktor för enklare miljö
  - testa ovan
