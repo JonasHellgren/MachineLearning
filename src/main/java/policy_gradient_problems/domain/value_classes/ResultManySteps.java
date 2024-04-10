@@ -7,6 +7,7 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 public  record ResultManySteps<V> (
         Double sumRewardsNSteps,
         StateI<V> stateFuture,
-        boolean isFutureStateOutside)
+        boolean isFutureStateOutside,
+        boolean isFutureTerminal)
 {
 }

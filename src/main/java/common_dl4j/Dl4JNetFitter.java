@@ -51,11 +51,11 @@ public class Dl4JNetFitter {
                 INDArray features = miniBatch.getFeatures();
                 INDArray labels = miniBatch.getLabels();
                 net.fit(features, labels); // Fit the model on each mini-batch
-                sumLoss+=net.score();
+                sumLoss+=Math.abs(net.score());
                // miniBatch.shuffle();  //optional
             }
         }
-        lossLastFit=sumLoss/(sizeBatch*nFitsPerBatch);
+        lossLastFit=sumLoss;  ///(sizeBatch*nFitsPerBatch);
     }
 
     public double getLossLastFit() {

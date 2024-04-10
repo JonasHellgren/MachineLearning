@@ -329,10 +329,11 @@ maze with ppo
 - TrainerMazeAgentSingleStepPPO  x
 - bara lära sig om term state  x
 - MazeAgentPPO
- -  settings konstuktor för enklare miljö
- - testa ovan
-- TrainerMazeAgentPPO på enkel settings
-- TrainerMazeAgentPPO strular
+ -  settings konstuktor för enklare miljö  x
+ - testa ovan x
+- TrainerMazeAgentPPO på enkel settings x
+- BUGG - TrainerMazeAgentMultiStepPPO - för stor critic value  x
+- intented
 - kolla av korrekt value
 
 pole med random start state och eval recorder

@@ -31,6 +31,7 @@ public class MazeAgentPlotter {
 
     public void plotValues() {
         double[][] data = getValueData();
+        System.out.println("data = " + Arrays.deepToString(data));
         valueMapPlotter.showMap(data,"");
     }
 

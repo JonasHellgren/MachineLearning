@@ -10,8 +10,6 @@ public class RunnerMazeAgentSingleStepPPO {
     static EnvironmentMaze environment= EnvironmentMaze.newOneRow();
 
     static MazeAgentPPO agent=MazeAgentPPO.newDefaultAtX0Y0();
-    //static MazeSettings settings=MazeSettings.newDefault();
-    //static MazeSettings settings=MazeSettings.newDefault();
 
     static TrainerMazeAgentSingleStepPPO trainer=createTrainer();
 

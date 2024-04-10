@@ -41,10 +41,12 @@ public class MultiStepReturnEvaluator<V> {
         Conditionals.executeIfTrue(isEndOutSide, () ->
                 log.fine("Index end experience is outside, idxEndExperience="+idxEndExperience+", sizeExpList= "+sizeExpList));
         StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(idxEndExperience - 1).stateNext();
+        boolean isFutureTerminal= stateFuture == null || experienceList.get(idxEndExperience - 1).isTerminal();
         return ResultManySteps.<V>builder()
                 .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)
                 .isFutureStateOutside(isEndOutSide)
+                .isFutureTerminal(isFutureTerminal)
                 .build();
     }
 

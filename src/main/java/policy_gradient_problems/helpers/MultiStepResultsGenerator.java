@@ -33,7 +33,6 @@ public class MultiStepResultsGenerator<V> {
         this.isUseAllExperiences=Boolean.FALSE;
     }
 
-
     public MultiStepResults generate(List<Experience<V>> experiences) {
         Integer n = parameters.stepHorizon();
         int nofExperiences = experiences.size();  //can also be named T
@@ -54,7 +53,14 @@ public class MultiStepResultsGenerator<V> {
 
     private void addValueTarget(double gammaPowN, MultiStepResults results, ResultManySteps<V> resMS) {
         double sumRewards = resMS.sumRewardsNSteps();
-        executeOneOfTwo(resMS.isFutureStateOutside(),
+        boolean isFutureOutsideOrTerminal = resMS.isFutureStateOutside() || resMS.isFutureTerminal();
+        /*
+        System.out.println("isFutureOutsideOrTerminal = " + isFutureOutsideOrTerminal+", sumRewards="+sumRewards);
+        if (!resMS.isFutureStateOutside()) {
+            System.out.println(gammaPowN * agent.criticOut(resMS.stateFuture()));
+        }
+*/
+        executeOneOfTwo(isFutureOutsideOrTerminal,
                 () -> results.addValueTarget(sumRewards),
                 () -> results.addValueTarget(sumRewards + gammaPowN * agent.criticOut(resMS.stateFuture())));
     }

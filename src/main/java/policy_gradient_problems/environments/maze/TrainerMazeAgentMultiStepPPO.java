@@ -38,13 +38,19 @@ public class TrainerMazeAgentMultiStepPPO extends TrainerAbstractMaze {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             setStartStateInAgent();
             var experiences = super.getExperiences(agent);
+            var endExp=experiences.get(experiences.size()-1);
             var msr = msg.generate(experiences);
-            if (msr.tEnd()<1) {
-                log.warning("tEnd zero or below");
+            if (msr.tEnd()<1 || !endExp.isTerminal()) {
+                log.warning("tEnd zero or below or not ending in terminal, ei="+ei);
                 log.fine(experiences.toString());
                 log.fine(msr.toString());
             } else {
-              //  System.out.println("msr = " + msr);
+
+                //System.out.println("msr.valueTarList().get(msr.tEnd()-1) = " + msr.valueTarList().get(msr.tEnd() - 1));
+
+                System.out.println("msr.valueTarList() = " + msr.valueTarList());
+
+
                 cu.updateCritic(msr);
                 actorUpdater.updateActor(msr, agent);
                 updateRecorders(agent.lossActorAndCritic());
