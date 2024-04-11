@@ -36,34 +36,33 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
                                            @NonNull ActorUpdaterI<VariablesPole> actorUpdater) {
         super(environment, parameters);
         this.agent = agent;
-        this.actorUpdater=actorUpdater;
+        this.actorUpdater = actorUpdater;
     }
 
     @Override
     public void train() {
-        var msg=new MultiStepResultsGenerator<>(parameters,agent);
+        var msg = new MultiStepResultsGenerator<>(parameters, agent);
         var cu = new NeuralCriticUpdater<>(agent);
+        ParametersPole envPar = environment.getParameters();
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            setStartStateInAgent();
+            agent.setState(StatePole.newAngleAndPosRandom(envPar));
             var experiences = super.getExperiences(agent);
             var msr = msg.generate(experiences);
-            if (msr.tEnd()<1) {
+            if (msr.tEnd() < 1) {
                 log.warning("tEnd zero or below");
             }
-                cu.updateCritic(msr);
-                actorUpdater.updateActor(msr,agent);
-                printIfSuccessful(ei, experiences);
-                updateTracker(experiences,agent);
+            cu.updateCritic(msr);
+            actorUpdater.updateActor(msr, agent);
+            printIfSuccessful(ei, experiences);
+            var episodeRunner = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+            int nStepsEval= episodeRunner.runTrainedAgent(StatePole.newUprightAndStill(envPar));
+            updateRecorder(experiences, nStepsEval, agent);
         }
-    }
-
-    private void setStartStateInAgent() {
-        agent.setState(StatePole.newUprightAndStill(environment.getParameters()));
-    }
+   }
 
 
     void printIfSuccessful(int ei, List<Experience<VariablesPole>> experiences) {
-        var elInfo = new MultiStepReturnEvaluator<>(parameters,experiences);
+        var elInfo = new MultiStepReturnEvaluator<>(parameters, experiences);
         executeIfTrue(!elInfo.isEndExperienceFail(), () ->
                 log.info("Episode successful, ei = " + ei + ", n steps = " + experiences.size()));
     }

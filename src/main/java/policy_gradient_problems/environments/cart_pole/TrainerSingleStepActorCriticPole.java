@@ -4,12 +4,10 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.common_episode_trainers.ActorCriticCEMLossTrainer;
-import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import java.util.List;
 
 @Log
-public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
+public class TrainerSingleStepActorCriticPole extends TrainerAbstractPole {
 
     AgentActorICriticPoleCEM agent;
     ParametersPole parametersPole;
@@ -17,7 +15,7 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
-    public TrainerNeuralActorNeuralCriticPole(@NonNull EnvironmentPole environment,
+    public TrainerSingleStepActorCriticPole(@NonNull EnvironmentPole environment,
                                             @NonNull AgentActorICriticPoleCEM agent,
                                             @NonNull TrainerParameters parameters) {
         super(environment, parameters);
@@ -37,10 +35,11 @@ public class TrainerNeuralActorNeuralCriticPole extends TrainerAbstractPole {
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(parametersPole));
-            List<Experience<VariablesPole>> experList = getExperiences(agent);
+            var experList = getExperiences(agent);
             episodeTrainer.trainAgentFromExperiences(experList);
-            updateTracker(experList,agent);
-
+            var episodeRunner = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+            int nStepsEval= episodeRunner.runTrainedAgent(StatePole.newUprightAndStill(environment.getParameters()));
+            updateRecorder(experList,nStepsEval,agent);
             if (experList.size() > 50) {
                     log.info("Episode = "+ei+", nof steps = " + experList.size());
             }

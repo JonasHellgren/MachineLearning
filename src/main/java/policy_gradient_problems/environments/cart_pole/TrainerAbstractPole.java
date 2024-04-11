@@ -1,5 +1,7 @@
 package policy_gradient_problems.environments.cart_pole;
 
+import common.ListUtils;
+import common_dl4j.EntropyCalculator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -24,6 +26,7 @@ import java.util.zip.DataFormatException;
 public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
     EnvironmentPole environment;
     ReturnCalculator<VariablesPole> returnCalculator = new ReturnCalculator<>();
+    double avgEntropy;
 
     TrainerAbstractPole(@NonNull EnvironmentPole environment,
                         @NonNull TrainerParameters parameters) {
@@ -31,20 +34,23 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
         super.parameters = parameters;
     }
 
-    void updateTracker(List<Experience<VariablesPole>> experienceList) {
+    void updateRecorder(List<Experience<VariablesPole>> experienceList) {
         super.getRecorderTrainingProgress().add(
                 ProgressMeasures.ofAllZero().withNSteps(experienceList.size()));
     }
 
 
-    void updateTracker(List<Experience<VariablesPole>> experienceList,
-                       AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
+    void updateRecorder(List<Experience<VariablesPole>> experienceList,
+                        int nStepsEval,
+                        AgentNeuralActorNeuralCriticI<VariablesPole> agent) {
         double sumRewards = experienceList.stream().mapToDouble(e -> e.reward()).sum();
         super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
                 .nSteps(experienceList.size())
                 .sumRewards(sumRewards)
+                .tbd((double) nStepsEval)
                 .actorLoss(Math.abs(agent.lossActorAndCritic().getFirst()))
                 .criticLoss(agent.lossActorAndCritic().getSecond())
+                .entropy(avgEntropy)
                 .build());
     }
 
@@ -53,19 +59,23 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
         List<Experience<VariablesPole>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<VariablesPole> sr;
+        List<Double> entrList = new ArrayList<>();
         do {
-            StateI<VariablesPole> stateOld = agent.getState();
-            Action action = agent.chooseAction();
+            var stateOld = agent.getState();
+            var action = agent.chooseAction();
             sr = environment.step(agent.getState(), action);
             agent.setState(sr.state());
-            List<Double> actionProbabilities = agent.actionProbabilitiesInPresentState();
+            var actionProbabilities = agent.actionProbabilitiesInPresentState();
             throwIfBadAction(action, actionProbabilities);
             double probAction = actionProbabilities.get(action.asInt());
-            Experience<VariablesPole> exp =
-                    Experience.ofWithIsFail(stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
+            var exp = Experience.ofWithIsFail(
+                    stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
             experienceList.add(exp);
+            double entropy = EntropyCalculator.calcEntropy(agent.actionProbabilitiesInPresentState());
+            entrList.add(entropy);
             si++;
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
+        avgEntropy = ListUtils.findAverage(entrList).orElseThrow();
         return experienceList;
     }
 

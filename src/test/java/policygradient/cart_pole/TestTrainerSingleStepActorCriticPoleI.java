@@ -7,9 +7,9 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerNeuralActorNeuralCriticPoleI {
+ class TestTrainerSingleStepActorCriticPoleI {
 
-    TrainerNeuralActorNeuralCriticPole trainer;
+    TrainerSingleStepActorCriticPole trainer;
     AgentActorICriticPoleCEM agent;
     EnvironmentPole environment;
      ParametersPole parametersPole=ParametersPole.newDefault();
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     private void createTrainer(EnvironmentPole environment, AgentActorICriticPoleCEM agent) {
-        trainer = TrainerNeuralActorNeuralCriticPole.builder()
+        trainer = TrainerSingleStepActorCriticPole.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

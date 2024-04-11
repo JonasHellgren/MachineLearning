@@ -337,14 +337,12 @@ maze with ppo
 - new4x3MoveAsIntended x
 - kolla av korrekt value  x
 
-plotta entropy pole
-pole med random start state och eval recorder
+plotta entropy pole  x
+pole med random start state och eval recorder  x
 AgentParamActorSCHelper - gör för mkt
 safe cannon with ppo
 
 simplified battery trading with safe RL ppo
-
-
 
 bubblare/ned prioriterat:
 dokumentera public methoder etc
