@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.environments.sink_the_ship.AgentShip;
+import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.environments.sink_the_ship.StateShip;
 
@@ -17,19 +17,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestAgentShip {
+ class TestAgentShipParam {
 
      static final int PROB_DIRECT_TO_TERMINAL = 0;
      static final double DELTA = 0.1;
      static final double MEAN_S0 = 0.3, MEAN_S1 = 0.5, THETA_STD0 = -2,THETA_STD1 = 0;
      static final int NOF_SAMPLES = 1000;
     EnvironmentShip environment;
-    AgentShip agent;
+    AgentShipParam agent;
 
     @BeforeEach
      void init() {
         environment = new EnvironmentShip();
-        agent = AgentShip.newWithRandomStartStateAndGivenThetas(new double[]{MEAN_S0, THETA_STD0, MEAN_S1, THETA_STD1});
+        agent = AgentShipParam.newWithRandomStartStateAndGivenThetas(new double[]{MEAN_S0, THETA_STD0, MEAN_S1, THETA_STD1});
     }
 
     @ParameterizedTest   //state, mean, std

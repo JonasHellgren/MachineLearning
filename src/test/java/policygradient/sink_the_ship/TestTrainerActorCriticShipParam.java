@@ -3,30 +3,30 @@ package policygradient.sink_the_ship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.sink_the_ship.AgentShip;
+import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShip;
+import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class TestTrainerActorCriticShip {
+ class TestTrainerActorCriticShipParam {
 
      static final double EXPECTED_ACTION0 = 0.2871;
      static final double EXPECTED_ACTION1 = 0.6711;
      static final double DELTA = 0.1;
-    TrainerActorCriticShip trainer;
-    AgentShip agent;
+    TrainerActorCriticShipParam trainer;
+    AgentShipParam agent;
 
     @BeforeEach
      void init() {
-        agent = AgentShip.newRandomStartStateDefaultThetas();
+        agent = AgentShipParam.newRandomStartStateDefaultThetas();
         var environment= new EnvironmentShip();
         createTrainer(environment);
     }
 
     private void createTrainer(EnvironmentShip environment) {
-        trainer = TrainerActorCriticShip.builder()
+        trainer = TrainerActorCriticShipParam.builder()
                 .environment(environment)
                 .agent(agent)
                 .parameters(TrainerParameters.builder()

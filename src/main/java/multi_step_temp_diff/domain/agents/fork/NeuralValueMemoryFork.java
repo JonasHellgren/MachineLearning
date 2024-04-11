@@ -19,7 +19,7 @@ public class NeuralValueMemoryFork<S> extends ValueMemoryNeuralAbstract<S> {
     /*
     public NeuralValueMemoryFork() {  //todo, remove confusing with envSettings
         this(NetSettings.builder()
-                .inputSize(envSettings.nofStates()).nofNeuronsHidden(envSettings.nofStates())
+                .inputSize(envSettings.nStates()).nofNeuronsHidden(envSettings.nStates())
                 .minOut(envSettings.rewardHell()).maxOut(envSettings.rewardHeaven())
                 .nofHiddenLayers(1).transferFunctionType(TransferFunctionType.TANH)
                 .normalizer(new NormalizeMinMax(envSettings.rewardHell(),envSettings.rewardHeaven())).build());

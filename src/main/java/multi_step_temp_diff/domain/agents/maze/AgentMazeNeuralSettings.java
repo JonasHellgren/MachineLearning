@@ -47,7 +47,7 @@ implements AgentSettingsInterface {
         this.maxValue = envSettings.rewardGoal();
         this.discountFactor = defaultIfNullDouble.apply(discountFactor, DISCOUNT_FACTOR);
         this.learningRate = defaultIfNullDouble.apply(learningRate, LEARNING_RATE);
-        //this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nofStates);
+        //this.nofNeuronsHidden = defaultIfNullInteger.apply(nofNeuronsHidden, nStates);
         //this.normalizer=new NormalizeMinMax(0,envSettings.rewardGoal()*2);
         this.normalizer= (NormalizerInterface) defaultIfNullObject.apply(normalizer,new NormalizerMeanStd(VALUE_LIST));
     }

@@ -41,7 +41,7 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
 
     @Override
     public void train() {
-        var msg = new MultiStepResultsGenerator<>(parameters, agent);
+        var msg = new MultiStepResultsGenerator<>(parameters, agent,true);
         var cu = new NeuralCriticUpdater<>(agent);
         ParametersPole envPar = environment.getParameters();
         var episodeRunner =  PoleAgentOneEpisodeRunner.newOf(environment,agent);

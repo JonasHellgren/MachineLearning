@@ -32,7 +32,7 @@ public class TestNStepNeuralAgentTrainerForkPrioritizedExperienceBuffer {
 
     private static final int START_STATE = 0;
     public static final double LEARNING_RATE = 1e-1;
-   // private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates(), NOF_NEURONS_HIDDEN = INPUT_SIZE;
+   // private static final int INPUT_SIZE = ForkEnvironment.envSettings.nStates(), NOF_NEURONS_HIDDEN = INPUT_SIZE;
     public static final double DISCOUNT_FACTOR = 1.0;
     public static final int NOF_EXPERIENCE_ADDING_BETWEEN_PROBABILITY_SETTING = 10;
 

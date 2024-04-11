@@ -35,7 +35,7 @@ public class TestNStepNeuralAgentTrainerForkUniformExperienceBuffer {
     private static final int NOF_EPIS = 100;
     private static final int START_STATE = 0;
     public static final double LEARNING_RATE = 1e-1;
-   // private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates();
+   // private static final int INPUT_SIZE = ForkEnvironment.envSettings.nStates();
   //  private static final int NOF_NEURONS_HIDDEN = INPUT_SIZE;
 
     NStepNeuralAgentTrainer<ForkVariables> trainer;

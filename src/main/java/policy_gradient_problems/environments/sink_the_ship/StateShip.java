@@ -40,4 +40,9 @@ public class StateShip implements StateI<VariablesShip> {
     public RealVector asRealVector() {
         throw new NoSuchMethodException();
     }
+
+    public double[] asArray() {
+        return new double[]{getPos()};
+    }
+
 }

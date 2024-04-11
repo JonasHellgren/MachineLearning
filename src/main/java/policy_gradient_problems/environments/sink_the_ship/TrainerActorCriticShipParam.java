@@ -7,27 +7,26 @@ import policy_gradient_problems.domain.common_episode_trainers.ParamActorTabCrit
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 @Getter
-public final class TrainerActorCriticShip extends TrainerAbstractShip {
+public final class TrainerActorCriticShipParam extends TrainerAbstractShip {
 
     public static final double VALUE_TERMINAL_STATE = 0;
 
     @Builder
-    public TrainerActorCriticShip(@NonNull EnvironmentShip environment,
-                                  @NonNull AgentShip agent,
-                                  @NonNull TrainerParameters parameters) {
+    public TrainerActorCriticShipParam(@NonNull EnvironmentShip environment,
+                                       @NonNull AgentShipParam agent,
+                                       @NonNull TrainerParameters parameters) {
         super(environment, agent, parameters);
     }
 
     @Override
     public void train() {
-        ParamActorTabCriticEpisodeTrainer<VariablesShip> episodeTrainer =
-                ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
-                        .agent(agent)
-                        .parameters(parameters)
-                        .valueTermState(VALUE_TERMINAL_STATE)
-                        .tabularCoder((v) -> v.pos())
-                        .isTerminal((s) -> false)
-                        .build();
+        var episodeTrainer = ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
+                .agent(agent)
+                .parameters(parameters)
+                .valueTermState(VALUE_TERMINAL_STATE)
+                .tabularCoder((v) -> v.pos())
+                .isTerminal((s) -> false)
+                .build();
 
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setRandomState();

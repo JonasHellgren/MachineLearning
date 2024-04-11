@@ -3,14 +3,14 @@ package policy_gradient_problems.runners;
 import lombok.extern.java.Log;
 import common.plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.sink_the_ship.AgentShip;
+import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShip;
+import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
 
 import java.util.List;
 
 @Log
-public class RunnerTrainerActorCriticShip {
+public class RunnerActorCriticShipParam {
 
     public static final int NOF_EPISODES = 5_000;
     static final int NOF_STEPS_MAX = 100;
@@ -19,14 +19,14 @@ public class RunnerTrainerActorCriticShip {
 
     public static void main(String[] args) {
         var trainerActorCritic = createTrainerActorCritic(
-                new EnvironmentShip(),AgentShip.newRandomStartStateDefaultThetas());
+                new EnvironmentShip(), AgentShipParam.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
         plotActionProbabilitiesDuringTraining(trainerActorCritic);
         log.info("Training finished");
     }
 
 
-    private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShip trainer) {
+    private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShipParam trainer) {
         for (int s: EnvironmentShip.POSITIONS) {
             var plotter = new PlotterMultiplePanelsTrajectory(
                     "ActorCritic",
@@ -36,8 +36,8 @@ public class RunnerTrainerActorCriticShip {
         }
     }
 
-    private static TrainerActorCriticShip createTrainerActorCritic(EnvironmentShip environment, AgentShip agent) {
-        return TrainerActorCriticShip.builder()
+    private static TrainerActorCriticShipParam createTrainerActorCritic(EnvironmentShip environment, AgentShipParam agent) {
+        return TrainerActorCriticShipParam.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())
                 .build();

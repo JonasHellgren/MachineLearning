@@ -340,9 +340,21 @@ maze with ppo
 plotta entropy pole  x
 pole med random start state och eval recorder  x
 AgentParamActorSCHelper - gör för mkt  x
+
 safe cannon with ppo
 
+RunnerActorCriticShipPPO
+AgentShipPPO x
+    NeuralActorMemoryShip actor;  x
+    NeuralCriticMemoryShip critic; x
+TestAgentShipPPO
+
+
+
 simplified battery trading with safe RL ppo
+
+StateI asArray
+MultiStepResultsGenerator - fimpa : nofExperiences - n + 1;
 
 bubblare/ned prioriterat:
 dokumentera public methoder etc

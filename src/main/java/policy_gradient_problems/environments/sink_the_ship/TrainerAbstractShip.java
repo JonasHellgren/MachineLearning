@@ -2,7 +2,6 @@ package policy_gradient_problems.environments.sink_the_ship;
 
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
@@ -14,7 +13,6 @@ import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,10 +20,10 @@ import java.util.stream.Collectors;
 @Log
 public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
     @NonNull EnvironmentShip environment;
-    @NonNull AgentShip agent;
+    @NonNull AgentShipParam agent;
 
     protected TrainerAbstractShip(@NonNull EnvironmentShip environment,
-                                  @NonNull AgentShip agent,
+                                  @NonNull AgentShipParam agent,
                                   @NonNull TrainerParameters parameters) {
         this.environment = environment;
         this.agent = agent;
@@ -37,7 +35,7 @@ public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
                 .collect(Collectors.toMap(
                         s -> s,
                         s -> {
-                            Pair<Double, Double> msPair = agent.getMeanAndStdFromThetaVector(s);
+                            var msPair = agent.getMeanAndStdFromThetaVector(s);
                             double valueState = valueFunction.getValue(s);
                             return List.of(msPair.getFirst(), msPair.getSecond(), valueState);
                         }
@@ -45,7 +43,7 @@ public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {
         super.getRecorderStateValues().addStateValuesMap(map);
     }
 
-    public void setAgent(@NotNull AgentShip agent) {
+    public void setAgent(@NotNull AgentShipParam agent) {
         this.agent = agent;
     }
 

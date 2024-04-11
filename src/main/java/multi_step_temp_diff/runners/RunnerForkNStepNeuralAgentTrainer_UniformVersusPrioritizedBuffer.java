@@ -27,7 +27,7 @@ public class RunnerForkNStepNeuralAgentTrainer_UniformVersusPrioritizedBuffer {
     private static final double DISCOUNT_FACTOR = 1;
 
     public static final double LEARNING_RATE = 1e-2;
-    //private static final int INPUT_SIZE = ForkEnvironment.envSettings.nofStates();
+    //private static final int INPUT_SIZE = ForkEnvironment.envSettings.nStates();
    public static final int NOF_HIDDEN_LAYERS = 2;
 
   //  NOF_NEURONS_HIDDEN = INPUT_SIZE;

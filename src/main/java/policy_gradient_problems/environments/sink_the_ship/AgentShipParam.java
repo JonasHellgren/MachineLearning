@@ -29,7 +29,7 @@ import static common.SoftMaxEvaluator.getProbabilities;
 
 @Getter
 @Setter
-public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorTabCriticI<VariablesShip> {
+public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamActorTabCriticI<VariablesShip> {
 
     public static final double THETA_MEAN = 0.5,THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
     public static final int NOF_THETAS_PER_STATE = 2;
@@ -41,16 +41,16 @@ public class AgentShip extends AgentA<VariablesShip> implements AgentParamActorT
     NormDistributionSampler sampler;
     SubArrayExtractor subArrayExtractor;
 
-    public static AgentShip newRandomStartStateDefaultThetas() {
+    public static AgentShipParam newRandomStartStateDefaultThetas() {
         return newWithRandomStartStateAndGivenThetas(
                 new double[]{THETA_MEAN,THETA_STD,THETA_MEAN,THETA_STD});
     }
 
-    public static AgentShip newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
-        return new AgentShip(EnvironmentShip.getRandomPos(), thetaArray);
+    public static AgentShipParam newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
+        return new AgentShipParam(EnvironmentShip.getRandomPos(), thetaArray);
     }
 
-    public AgentShip(int stateStart, double[] thetaArray) {
+    public AgentShipParam(int stateStart, double[] thetaArray) {
         super(new StateShip(new VariablesShip(stateStart)));
         this.actor = new ActorMemoryParam(thetaArray);
         this.critic =new CriticMemoryParamOneHot(EnvironmentShip.POSITIONS.size());

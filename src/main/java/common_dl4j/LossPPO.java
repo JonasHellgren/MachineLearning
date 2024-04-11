@@ -17,7 +17,7 @@ import static common_dl4j.FiniteDifferenceCalculator.calculateGradient;
 public class LossPPO implements ILossFunction  {
 
     public static final double DEF_EPSILON = 0.1;
-    public static final double EPSILON_FIN_DIFF = 1e-1;
+    public static final double EPSILON_FIN_DIFF = 1e-3;
     public static final double BETA_ENTROPY = 1e-2;
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
