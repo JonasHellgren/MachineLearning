@@ -12,14 +12,14 @@ Bas klass för agent tabular x
 Bas klass för agent nn  x
 skapa method för "INDArray inputNetwork = node.getStateVariablesAsNetworkInput(envParams)"  x
 Warning: Initializing ND4J with Generic x86 binary on a CPU with AVX/AVX2 support
-testa med regel baserad action för MountainCar, tex 2 om pos>tbd och 0 om pos<tbd  X
+testa med regel baserad action för MountainCar, tex 2 om pos>eval och 0 om pos<eval  X
 startPosition verkar fel x
 printa pos and speed i panel  x
 förstå varför grafik ej visas ibland x
 MountainCar agent
 ---------------
 inte behöva träna nn varje steg  x
-ibland vissa policy för episode med start i tbd  x
+ibland vissa policy för episode med start i eval  x
 träna olika värden olika states x
 learnAtDifferentInputsZeroGamma  FUCKAR  !!
 skap PanelMountainCarPlot  x

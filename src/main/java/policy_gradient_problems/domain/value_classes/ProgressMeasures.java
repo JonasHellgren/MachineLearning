@@ -9,11 +9,10 @@ import static common.MyFunctions.defaultIfNullInteger;
 public record ProgressMeasures(
         @With Double sumRewards,
         @With Integer nSteps,
+        @With Double eval,
         @With Double criticLoss,
         @With Double actorLoss,
-        @With Double entropy,
-        @With Double tbd
-)
+        @With Double entropy)
 {
     public static final int N_STEPS = 0;
     public static final double DEFAULT_VALUE = 0d;
@@ -23,14 +22,13 @@ public record ProgressMeasures(
     }
 
     @Builder
-    public ProgressMeasures(Double sumRewards, Integer nSteps, Double criticLoss, Double actorLoss,
-                            Double entropy, Double tbd) {
+    public ProgressMeasures(Double sumRewards, Integer nSteps, Double eval,
+                            Double criticLoss, Double actorLoss,  Double entropy) {
         this.sumRewards = defaultIfNullDouble.apply(sumRewards, DEFAULT_VALUE);
         this.nSteps = defaultIfNullInteger.apply(nSteps, N_STEPS);
+        this.eval = defaultIfNullDouble.apply(eval,DEFAULT_VALUE);
         this.criticLoss = defaultIfNullDouble.apply(criticLoss,DEFAULT_VALUE);
         this.actorLoss = defaultIfNullDouble.apply(actorLoss,DEFAULT_VALUE);
         this.entropy = defaultIfNullDouble.apply(entropy,DEFAULT_VALUE);
-        this.tbd = defaultIfNullDouble.apply(tbd,DEFAULT_VALUE);
-
     }
 }

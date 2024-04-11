@@ -56,7 +56,7 @@ class TestTrainerMultiStepActorCriticLossPPO {
     }
 
     private int getNofSteps() {
-        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+        var helper =PoleAgentOneEpisodeRunner.newOf(environment,agent);
         return helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
     }
 

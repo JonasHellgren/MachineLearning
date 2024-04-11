@@ -47,7 +47,7 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
         super.getRecorderTrainingProgress().add(ProgressMeasures.builder()
                 .nSteps(experienceList.size())
                 .sumRewards(sumRewards)
-                .tbd((double) nStepsEval)
+                .eval((double) nStepsEval)
                 .actorLoss(Math.abs(agent.lossActorAndCritic().getFirst()))
                 .criticLoss(agent.lossActorAndCritic().getSecond())
                 .entropy(avgEntropy)

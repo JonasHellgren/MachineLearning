@@ -40,7 +40,8 @@ class TestTrainerParamActorParamCriticPole {
 
     @Test
     void whenTrained_thenManySteps() {
-        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.newOf(environment,agent);
+
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
         System.out.println("nofSteps = " + nofSteps);
         assertTrue(nofSteps > 50);

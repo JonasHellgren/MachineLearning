@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @Test
     @Disabled("long time")
      void whenTrained_thenManySteps() {
-        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+        var helper =PoleAgentOneEpisodeRunner.newOf(environment,agent);
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
 
         System.out.println("nofSteps = " + nofSteps);

@@ -37,7 +37,7 @@ public class TrainerSingleStepActorCriticPole extends TrainerAbstractPole {
             agent.setState(StatePole.newAngleAndPosRandom(parametersPole));
             var experList = getExperiences(agent);
             episodeTrainer.trainAgentFromExperiences(experList);
-            var episodeRunner = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
+            var episodeRunner =  PoleAgentOneEpisodeRunner.newOf(environment,agent);
             int nStepsEval= episodeRunner.runTrainedAgent(StatePole.newUprightAndStill(environment.getParameters()));
             updateRecorder(experList,nStepsEval,agent);
             if (experList.size() > 50) {

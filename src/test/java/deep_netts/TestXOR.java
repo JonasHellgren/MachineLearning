@@ -19,7 +19,7 @@ public class TestXOR {
     float[][] outputs = {{0}, {1}, {1}, {0}};
 
     @Test
-    public void tbd() {
+    public void eval() {
 
       // TabularDataSet dataSet = new TabularDataSet(2,1);  //TabularDataSet.create(inputs, targets);
 

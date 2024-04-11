@@ -3,7 +3,6 @@ package policy_gradient_problems.helpers;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
-import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 
@@ -63,8 +62,8 @@ public class RecorderTrainingProgress {
         return getMeasure(ProgressMeasures::entropy);
     }
 
-    public List<Double> tbdTraj() {
-        return getMeasure(ProgressMeasures::tbd);
+    public List<Double> evalTraj() {
+        return getMeasure(ProgressMeasures::eval);
     }
 
 
@@ -80,7 +79,7 @@ public class RecorderTrainingProgress {
         List<XYChart> charts = new ArrayList<>();
         charts.add(createChart("nSteps", ints2NumList(nStepsTraj())));
         charts.add(createChart("accum reward", doubles2NumList(sumRewardsTraj())));
-        charts.add(createChart("tbd", doubles2NumList(tbdTraj())));
+        charts.add(createChart("eval", doubles2NumList(evalTraj())));
         charts.add(createChart("actor loss", doubles2NumList(actorLossTraj())));
         charts.add(createChart("critic loss", doubles2NumList(criticLossTraj())));
         charts.add(createChart("entropy", doubles2NumList(entropyTraj())));

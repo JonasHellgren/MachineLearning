@@ -39,8 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         printMemories();
         trainer.train();
         System.out.println("After trained");
-        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.builder()
-                .environment(environment).agent(agent).build();
+        PoleAgentOneEpisodeRunner helper = PoleAgentOneEpisodeRunner.newOf(environment,agent);
         int nofSteps = helper.runTrainedAgent(StatePole.newUprightAndStill(parametersPole));
 
         System.out.println("nofSteps = " + nofSteps);

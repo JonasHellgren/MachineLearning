@@ -44,6 +44,7 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
         var msg = new MultiStepResultsGenerator<>(parameters, agent);
         var cu = new NeuralCriticUpdater<>(agent);
         ParametersPole envPar = environment.getParameters();
+        var episodeRunner =  PoleAgentOneEpisodeRunner.newOf(environment,agent);
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
             agent.setState(StatePole.newAngleAndPosRandom(envPar));
             var experiences = super.getExperiences(agent);
@@ -54,7 +55,6 @@ public class TrainerMultiStepActorCriticPole extends TrainerAbstractPole {
             cu.updateCritic(msr);
             actorUpdater.updateActor(msr, agent);
             printIfSuccessful(ei, experiences);
-            var episodeRunner = PoleAgentOneEpisodeRunner.builder().environment(environment).agent(agent).build();
             int nStepsEval= episodeRunner.runTrainedAgent(StatePole.newUprightAndStill(envPar));
             updateRecorder(experiences, nStepsEval, agent);
         }
