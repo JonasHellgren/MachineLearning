@@ -37,13 +37,13 @@ public class AgentParamActorTabCriticSC extends AgentA<VariablesSC> implements A
     }
 
     public static AgentParamActorTabCriticSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
-        return new AgentParamActorTabCriticSC(AgentParamActorSCHelper.getRandomNonTerminalState(), thetaArray);
+        return new AgentParamActorTabCriticSC(EnvironmentSC.getRandomNonTerminalState(), thetaArray);
     }
 
     public AgentParamActorTabCriticSC(int posStart, double[] thetaArray) {
         super(StateSC.newFromRealPos(posStart));
         this.actor = new ActorMemoryParam(thetaArray);
-        this.critic = new CriticMemoryParamOneHot(EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL.size());
+        this.critic = new CriticMemoryParamOneHot(EnvironmentSC.OBSERVABLE_NON_TERMINAL.size());
         this.helper = new AgentParamActorSCHelper(actor);
     }
 

@@ -339,7 +339,7 @@ maze with ppo
 
 plotta entropy pole  x
 pole med random start state och eval recorder  x
-AgentParamActorSCHelper - gör för mkt
+AgentParamActorSCHelper - gör för mkt  x
 safe cannon with ppo
 
 simplified battery trading with safe RL ppo

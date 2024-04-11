@@ -1,11 +1,13 @@
 package policy_gradient_problems.environments.short_corridor;
 
 import common.MathUtils;
+import common.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.value_classes.StepReturn;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,14 +28,13 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     static final double REWARD_FOR_NON417STATE = -0.1;
 
     public static final Map<Integer, Double> STATE_REWARD_MAP = Map.of(4, 1d, 1, -1d, 7, -1d);
-    final static Map<Integer, Integer> STATE_OBSERVEDSTATE_MAP = Map.of(1, -1, 2, 0, 3, 1, 4, -1, 5, 1, 6, 2, 7, -1);
-    public final Set<Integer> SET_TERMINAL_STATES = Set.of(1, 4, 7);
-    public static final Set<Integer> SET_NON_TERMINAL_STATES = Set.of(2, 3, 5, 6);
-    public static final Set<Integer> SET_OBSERVABLE_STATES = Set.of(-1, 0, 1, 2);
-    public static final Set<Integer> SET_OBSERVABLE_STATES_NON_TERMINAL =
+    static final Map<Integer, Integer> STATE_OBSERVEDSTATE_MAP = Map.of(1, -1, 2, 0, 3, 1, 4, -1, 5, 1, 6, 2, 7, -1);
+    final Set<Integer> TERMINAL = Set.of(1, 4, 7);
+    public static final Set<Integer> NON_TERMINAL = Set.of(2, 3, 5, 6);
+    public static final Set<Integer> OBSERVABLE = Set.of(-1, 0, 1, 2);
+    static final Set<Integer> OBSERVABLE_NON_TERMINAL =
             getSetFromRange(0, NOF_NON_TERMINAL_OBSERVABLE_STATES);
-
-    public double probDirectToTerminal;
+    double probDirectToTerminal;
 
     public EnvironmentSC(double probDirectToTerminal) {
         this();
@@ -55,7 +56,7 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     }
 
     public boolean isTerminalObserved(int stateObserved) {
-        return !SET_OBSERVABLE_STATES_NON_TERMINAL.contains(stateObserved);
+        return !OBSERVABLE_NON_TERMINAL.contains(stateObserved);
     }
 
     public static int getObservedPos(StateI<VariablesSC> state) {
@@ -66,13 +67,18 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
         return state.getVariables().posReal();
     }
 
+    public static int getRandomNonTerminalState() {
+        RandUtils<Integer> randUtils = new RandUtils<>();
+        return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.NON_TERMINAL));
+    }
+
     public static int getObservedPos(int pos) {
         throwIfBadState(pos);
         return STATE_OBSERVEDSTATE_MAP.get(pos);
     }
 
     private boolean isTerminal(int stateNew) {
-        return SET_TERMINAL_STATES.contains(stateNew);
+        return TERMINAL.contains(stateNew);
     }
 
     private static void throwIfBadState(int state) {

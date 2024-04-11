@@ -30,7 +30,7 @@ public abstract class TrainerAbstractSC extends TrainerA<VariablesSC> {
 
     void updateRecorders(Function<Integer, List<Double>> apFcn, Pair<Double, Double> lossActorCritic) {
 
-        Map<Integer, List<Double>> map = EnvironmentSC.SET_OBSERVABLE_STATES_NON_TERMINAL
+        Map<Integer, List<Double>> map = EnvironmentSC.OBSERVABLE_NON_TERMINAL
                 .stream().collect(Collectors.toMap(s -> s, apFcn));
         super.recorderActionProbabilities.addStateProbabilitiesMap(map);
         super.recorderTrainingProgress.add(ProgressMeasures.builder()

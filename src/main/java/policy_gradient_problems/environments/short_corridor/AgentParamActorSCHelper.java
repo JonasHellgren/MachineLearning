@@ -1,14 +1,12 @@
 package policy_gradient_problems.environments.short_corridor;
 
 import common.ListUtils;
-import common.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
 import common.SubArrayExtractor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static common.ArrayUtil.createArrayWithSameDoubleNumber;
@@ -56,23 +54,17 @@ public class AgentParamActorSCHelper {
     }
 
     void throwIfBadObsState(int stateObserved) {
-        if (!EnvironmentSC.SET_OBSERVABLE_STATES.contains(stateObserved)) {
+        if (!EnvironmentSC.OBSERVABLE.contains(stateObserved)) {
             throw new IllegalArgumentException("Non valid obs state, state = " + stateObserved);
         }
     }
 
-    static int getRandomNonTerminalState() {  //todo move to env
-        RandUtils<Integer> randUtils = new RandUtils<>();
-        return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.SET_NON_TERMINAL_STATES));
-    }
 
     private List<Double> actionProbabilities(double[] thetaArr) {
         return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
 
     public Action chooseAction(StateI<VariablesSC> state) {
-        //int observedStateOld = EnvironmentSC.getObservedPos(state);
-
         StateSC stateAsObs=(StateSC) state;
         int observedStateOld = stateAsObs.getVariables().posObserved();
         throwIfBadObsState(observedStateOld);

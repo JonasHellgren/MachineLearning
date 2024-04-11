@@ -22,7 +22,7 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     }
 
     public static AgentParamActorSC newWithRandomStartStateAndGivenThetas(double[] thetaArray) {
-        return new AgentParamActorSC(AgentParamActorSCHelper.getRandomNonTerminalState(), thetaArray);
+        return new AgentParamActorSC(EnvironmentSC.getRandomNonTerminalState(), thetaArray);
     }
 
     public AgentParamActorSC(int posStart, double[] thetaArray) {
