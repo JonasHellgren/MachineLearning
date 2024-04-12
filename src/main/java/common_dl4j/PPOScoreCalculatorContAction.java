@@ -28,7 +28,8 @@ public class PPOScoreCalculatorContAction implements  PPOScoreCalculatorI {
         var meanStdPair= Pair.create(estMeanAndStd.getDouble(0),estMeanAndStd.getDouble(1));
         double pdfNew=MathUtils.pdf(action,meanStdPair);
 
-        System.out.println("pdfOld = " + pdfOld+", meanStdPair="+meanStdPair+", pdfNew = " + pdfNew);
+
+       //System.out.println("pdfOld = " + pdfOld+", meanStdPair="+meanStdPair+", pdfNew = " + pdfNew);
 
         double probRatio=pdfNew/Math.max(pdfOld, SMALL);
         double clippedProbRatio= MathUtils.clip(probRatio,1-epsilon,1+epsilon);

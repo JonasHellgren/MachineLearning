@@ -4,6 +4,7 @@ import common.Array2ListConverter;
 import common.MathUtils;
 import common.NormDistributionSampler;
 import common.RandUtils;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -18,10 +19,13 @@ import policy_gradient_problems.environments.sink_the_ship.StateShip;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Log
 public class TestAgentShipPPO {
     public static final double TOL = 0.3;
     public static final double HIT_ANGLE_POS0 = 0.3;
-    public static final double HIT_ANGLE_POS1 = 0.6;
+    public static final double HIT_ANGLE_POS1 = 0.65;
+    public static final double DELTA = 0.05;
 
 
     AgentShipPPO agent;
@@ -30,12 +34,12 @@ public class TestAgentShipPPO {
     @BeforeEach
     void init() {
         agent = AgentShipPPO.newDefault();
-        shipSettings = ShipSettings.newDefault().withDevMaxMeter(200);
+        shipSettings = ShipSettings.newDefault(); //.withDevMaxMeter(500);
     }
 
     @Test
     void whenActorOut_thenMeanAndStd() {
-        var ms = agent.actorOut(StateShip.newFromPos(0));
+        var ms = getOut(0);
         System.out.println("ms = " + ms);
         Assertions.assertEquals(2, ms.size());
     }
@@ -101,25 +105,41 @@ public class TestAgentShipPPO {
 
 
     @Test
-    @Disabled("long time")
+    //@Disabled("long time")
     void whenFitActor_thenCorrect() {
 
 
+        System.out.println("out0 = " + getOut(0));
+
         var inAndOutMat = createInOutMatWithAtLeastOneHit();
-        for (int i = 0; i < 0; i++) {
+        inAndOutMat.getSecond().forEach(System.out::println);
+
+        for (int i = 0; i < 1; i++) {
             agent.fitActor(inAndOutMat.getFirst(), inAndOutMat.getSecond());
         }
 
+        log.info("fitted");
+
+
+        var out0 = getOut(0);
+        var out1 = getOut(1);
+
+        System.out.println("out0 = " + getOut(0));
+        System.out.println("out1 = " + getOut(1));
+
+//        Assertions.assertTrue(out1.get(1)>out0.get(0));
+        Assertions.assertEquals(HIT_ANGLE_POS0,out0.get(0), DELTA);
+  //      Assertions.assertEquals(HIT_ANGLE_POS1,out1.get(0),TOL);
+
+
 /*
-        var out22 = getOutValue(inMat, 0);
-        var out21 = getOutValue(inMat, 1);
-
-        System.out.println("out22 = " + out22);
-        System.out.println("out21 = " + out21);
-
         Assertions.assertEquals(1, out22.get(RIGHT), TOL);
         Assertions.assertEquals(1, out21.get(UP), TOL);
 */
+    }
+
+    private List<Double> getOut(int pos) {
+        return agent.actorOut(StateShip.newFromPos(pos));
     }
 
     public Pair<List<List<Double>>, List<List<Double>>> createInOutMatWithAtLeastOneHit() {
@@ -129,24 +149,27 @@ public class TestAgentShipPPO {
         List<List<Double>> outMat = new ArrayList<>(new ArrayList<>());
         NormDistributionSampler sampler = new NormDistributionSampler();
         boolean isHitting;
-        int minBufferSIze = 5;
+        int minSize = 1;
+        int nHits=0, nNonHits=0;
+
         do {
-            int pos = randomPos();
+            int pos = 0; //randomPos();
             var meanAndStd = agent.meanAndStd(StateShip.newFromPos(pos));
-            double sampleAngle = sampler.sampleFromNormDistribution(meanAndStd);
-            double pdfOld = MathUtils.pdf(sampleAngle, meanAndStd);
-            isHitting = env.isHitting(pos, sampleAngle);
+            double a = sampler.sampleFromNormDistribution(meanAndStd);
+            double pdfOld = MathUtils.pdf(a, meanAndStd);
+            isHitting = env.isHitting(pos, a);
             double adv = isHitting ? 1 : 0;
             var inList = List.of((double) pos);
-            var outList = List.of(sampleAngle, adv, pdfOld);
-            inMat.add(inList);
-            outMat.add(outList);
-            System.out.println("inList = " + inList);
-            System.out.println("outList = " + outList);
-            System.out.println("inMat.size() = " + inMat.size());
-            System.out.println("isHitting = " + isHitting);
+            var outList = List.of(a, adv, pdfOld);
 
-        } while (!isHitting || inMat.size() <= minBufferSIze);
+            if (isHitting && nHits<minSize || !isHitting && nNonHits<minSize) {
+                inMat.add(inList);
+                outMat.add(outList);
+                nHits+=isHitting?1:0;
+                nNonHits+=!isHitting?1:0;
+            }
+
+        } while (nHits<minSize);
         return Pair.create(inMat,outMat);
     }
 

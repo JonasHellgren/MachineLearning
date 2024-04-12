@@ -35,7 +35,7 @@ public class NeuralActorMemoryShip {
 
 
     public double[] getOutValue(double[] inData) {
-        INDArray input =    oneHotEncoding(inData, shipSettings);
+        INDArray input = oneHotEncoding(inData, shipSettings);
         INDArray reshaped = input.reshape(1, input.columns());
         return net.output(reshaped).toDoubleVector();
     }

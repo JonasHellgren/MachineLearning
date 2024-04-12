@@ -21,12 +21,13 @@ public class NeuralActorMemoryShipLossPPO {
 
     private static NetSettings getDefaultNetSettings(ShipSettings shipSettings) {
         return NetSettings.builder()
-                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(5)
+                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(20)
                 .nOutput(N_OUTPUT)
-                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)  //cont action <=> identity
                 .learningRate(1e-4).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsilonPPODiscrete(0.2))
-                .sizeBatch(10).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyCont(0.2,1e-3,0))
+                //.sizeBatch(10).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
+                .sizeBatch(32).isNofFitsAbsolute(true).absNoFit(1)  //4 10
                 .build();
     }
 

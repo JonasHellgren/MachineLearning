@@ -31,7 +31,9 @@ public class FiniteDifferenceCalculator {
             double derivative = (fPlusEpsilon - fMinusEpsilon) / (2 * epsilon);
             gradient.putScalar(i, derivative);
         }
+        System.out.println("gradient = " + gradient);
         return gradient;
     }
-}
 
+
+}

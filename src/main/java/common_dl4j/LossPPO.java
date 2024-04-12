@@ -48,6 +48,10 @@ public class LossPPO implements ILossFunction  {
         return new LossPPO(EPSILON_FIN_DIFF,beta,new PPOScoreCalculatorContAction(epsPPO));
     }
 
+    public static LossPPO newWithEpsPPOEpsFinDiffBetaEntropyCont(double epsPPO, double epsilonFinDiff, double beta) {
+        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorContAction(epsPPO));
+    }
+
     @Override
     public double computeScore(INDArray labels,
                                INDArray preOut,
@@ -116,6 +120,10 @@ public class LossPPO implements ILossFunction  {
         INDArray estProbabilities = activationFn.getActivation(z, false);
         double entropy = EntropyCalculator.calcEntropy(estProbabilities);
         double ppoScore = scoreCalculator.calcScore(label, estProbabilities);
+
+       System.out.println("label = " + label+", estProbabilities = " + estProbabilities+", ppoScore = " + ppoScore);
+        System.out.println("entropy = " + entropy);
+
         return -(ppoScore+ beta *entropy);  //Negative for maximization in optimization context
     }
 
