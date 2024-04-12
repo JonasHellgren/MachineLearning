@@ -28,7 +28,7 @@ public class TestLossPPO {
 
     @BeforeEach
     public void init() {
-        net = getNet(LossPPO.newDefault());
+        net = getNet(LossPPO.newDefaultDiscrete());
     }
 
     @NotNull

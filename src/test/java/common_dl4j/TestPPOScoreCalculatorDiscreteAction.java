@@ -14,16 +14,16 @@ import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
 import static common_dl4j.Dl4JUtil.createListWithOneHotWithValue;
 
-public class TestPPOScoreCalculator {
+public class TestPPOScoreCalculatorDiscreteAction {
 
     public static final double EPSILON = 0.2;
     public static final double TOL = 0.01;
     public static final double EPS = 1e-2;
-    PPOScoreCalculator scoreCalculator;
+    PPOScoreCalculatorDiscreteAction scoreCalculator;
 
     @BeforeEach
     void init() {
-        scoreCalculator=new PPOScoreCalculator(EPSILON);
+        scoreCalculator=new PPOScoreCalculatorDiscreteAction(EPSILON);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TestPPOScoreCalculator {
             "2,-1.0,0.5,1.0",
             "2,10.0,0.1,1.0",
             "2,-10.0,0.01,1.0"})
-    void personIsNotBelow20(ArgumentsAccessor arguments) {
+    void whenLabel_thenClipping(ArgumentsAccessor arguments) {
         double a= arguments.getDouble(0);
         double adv= arguments.getDouble(1);
         double pOld= arguments.getDouble(2);

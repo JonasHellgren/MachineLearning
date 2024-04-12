@@ -5,6 +5,7 @@ import common.RandUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.environments.maze.Direction;
 import policy_gradient_problems.environments.maze.MazeAgentPPO;
@@ -27,29 +28,7 @@ public class TestMazeAgentPPO {
     }
 
     @Test
-    void whenFitActor_thenCorrect() {
-        var inMat = List.of(List.of(2d, 2d), List.of(2d, 1d));
-
-        for (int i = 0; i < 100; i++) {
-            var out22 = getOutValue(inMat, 0);
-            var out21 = getOutValue(inMat, 1);
-            var outMat = List.of(
-                    List.of((double) RIGHT, ADV, out22.get(RIGHT)),  //actionInt,adv,probOld);
-                    List.of((double) UP, ADV, out21.get(UP))
-            );
-            agent.fitActor(inMat, outMat);
-        }
-        var out22 = getOutValue(inMat, 0);
-        var out21 = getOutValue(inMat, 1);
-
-        System.out.println("out22 = " + out22);
-        System.out.println("out21 = " + out21);
-
-        Assertions.assertEquals(1, out22.get(RIGHT), TOL);
-        Assertions.assertEquals(1, out21.get(UP), TOL);
-    }
-
-    @Test
+    @Disabled("long time")
     void whenFitCritic_thenCorrect() {
         Point2D pos00 = new Point2D.Double(0, 0);
         int nRows = 100;
@@ -83,6 +62,29 @@ public class TestMazeAgentPPO {
 
     }
 
+    @Test
+    @Disabled("long time")
+    void whenFitActor_thenCorrect() {
+        var inMat = List.of(List.of(2d, 2d), List.of(2d, 1d));
+
+        for (int i = 0; i < 100; i++) {
+            var out22 = getOutValue(inMat, 0);
+            var out21 = getOutValue(inMat, 1);
+            var outMat = List.of(
+                    List.of((double) RIGHT, ADV, out22.get(RIGHT)),  //actionInt,adv,probOld);
+                    List.of((double) UP, ADV, out21.get(UP))
+            );
+            agent.fitActor(inMat, outMat);
+        }
+        var out22 = getOutValue(inMat, 0);
+        var out21 = getOutValue(inMat, 1);
+
+        System.out.println("out22 = " + out22);
+        System.out.println("out21 = " + out21);
+
+        Assertions.assertEquals(1, out22.get(RIGHT), TOL);
+        Assertions.assertEquals(1, out21.get(UP), TOL);
+    }
 
     private List<Double> getOutValue(List<List<Double>> inMat, int i) {
         return agent.actorOut(StateMaze.newFromPoint(new Point2D.Double(

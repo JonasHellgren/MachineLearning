@@ -30,10 +30,14 @@ public class AgentShipPPO extends AgentA<VariablesShip>
         this.critic=NeuralCriticMemoryShip.newDefault(shipSettings);
     }
 
+    @SneakyThrows
     @Override
     public List<Double> actionProbabilitiesInPresentState() {
+        throw  new NoSuchMethodException();
+/*
         StateShip state=(StateShip) getState();
         return actorOut(state);
+*/
     }
 
     @Override
@@ -65,5 +69,7 @@ public class AgentShipPPO extends AgentA<VariablesShip>
         StateShip stateCasted = (StateShip) state;  //todo fimpa nr Statei har asArray
         return critic.getOutValue(stateCasted.asArray());
     }
+
+
     
 }

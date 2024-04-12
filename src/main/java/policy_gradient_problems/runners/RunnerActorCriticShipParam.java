@@ -5,6 +5,7 @@ import common.plotters.PlotterMultiplePanelsTrajectory;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class RunnerActorCriticShipParam {
 
     public static void main(String[] args) {
         var trainerActorCritic = createTrainerActorCritic(
-                new EnvironmentShip(), AgentShipParam.newRandomStartStateDefaultThetas());
+                new EnvironmentShip(ShipSettings.newDefault()), AgentShipParam.newRandomStartStateDefaultThetas());
         trainerActorCritic.train();
         plotActionProbabilitiesDuringTraining(trainerActorCritic);
         log.info("Training finished");

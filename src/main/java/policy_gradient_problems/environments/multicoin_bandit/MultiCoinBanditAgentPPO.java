@@ -72,7 +72,7 @@ public class MultiCoinBanditAgentPPO extends AgentA<VariablesBandit> implements 
                 .nHiddenLayers(1).nInput(numInput).nHidden(3).nOutput(2)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .nofFitsPerEpoch(1).learningRate(learningRate).momentum(0.5).seed(1234)
-                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiff(1e-2,1e-1))
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffDiscrete(1e-2,1e-1))
                 .build();
     }
 

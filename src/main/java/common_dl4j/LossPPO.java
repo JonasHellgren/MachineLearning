@@ -16,34 +16,36 @@ import static common_dl4j.FiniteDifferenceCalculator.calculateGradient;
 @AllArgsConstructor
 public class LossPPO implements ILossFunction  {
 
+    public static final int ACTION_INDEX = 0;
+    public static final int ADV_INDEX = 1;
+    public static final int PROB_OLD_INDEX = 2;
+
     public static final double DEF_EPSILON = 0.1;
     public static final double EPSILON_FIN_DIFF = 1e-3;
     public static final double BETA_ENTROPY = 1e-2;
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
     double beta;
-    PPOScoreCalculator  scoreCalculator;
+    PPOScoreCalculatorI scoreCalculator;
 
-    public static LossPPO newDefault() {
-        return new LossPPO(DEF_EPSILON, EPSILON_FIN_DIFF, BETA_ENTROPY);
+    public static LossPPO newDefaultDiscrete() {
+        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(DEF_EPSILON));
     }
 
-    public static LossPPO newWithEpsilonPPO(double epsilon) {
-        return new LossPPO(epsilon,EPSILON_FIN_DIFF, BETA_ENTROPY);
+    public static LossPPO newWithEpsilonPPODiscrete(double epsilon) {
+        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsilon));
     }
 
-    public static LossPPO newWithEpsPPOEpsFinDiff(double epsPPO, double epsilonFinDiff) {
-        return new LossPPO(epsPPO,epsilonFinDiff,BETA_ENTROPY);
+    public static LossPPO newWithEpsPPOEpsFinDiffDiscrete(double epsPPO, double epsilonFinDiff) {
+        return new LossPPO(epsilonFinDiff,BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsPPO));
     }
 
-    public static LossPPO newWithEpsPPOEpsFinDiffbetaEntropy(double epsPPO, double epsilonFinDiff, double beta) {
-        return new LossPPO(epsPPO,epsilonFinDiff,beta);
+    public static LossPPO newWithEpsPPOEpsFinDiffBetaEntropyDiscrete(double epsPPO, double epsilonFinDiff, double beta) {
+        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorDiscreteAction(epsPPO));
     }
 
-    private LossPPO(double epsilonPPO, double epsilonFinDiff, double beta) {
-        this.epsilonFinDiff=epsilonFinDiff;
-        this.beta=beta;
-        this.scoreCalculator=new PPOScoreCalculator(epsilonPPO);
+    public static LossPPO newWithEpsPPOBetaEntropyCont(double epsPPO, double beta) {
+        return new LossPPO(EPSILON_FIN_DIFF,beta,new PPOScoreCalculatorContAction(epsPPO));
     }
 
     @Override

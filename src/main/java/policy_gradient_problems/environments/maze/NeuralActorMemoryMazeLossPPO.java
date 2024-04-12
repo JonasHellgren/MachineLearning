@@ -28,7 +28,7 @@ public class NeuralActorMemoryMazeLossPPO {
                 .nOutput(Direction.values().length)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-3).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffbetaEntropy(0.1,1e-5,1e-3))
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyDiscrete(0.1,1e-5,1e-3))
                 //.sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)  //4 10
                 .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
                 .build();

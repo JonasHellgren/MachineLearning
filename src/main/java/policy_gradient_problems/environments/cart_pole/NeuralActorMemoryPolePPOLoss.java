@@ -5,7 +5,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
-import org.nd4j.linalg.factory.Nd4j;
+
 import java.util.List;
 import static common.ListUtils.arrayPrimitiveDoublesToList;
 import static policy_gradient_problems.environments.cart_pole.InNetNormalizer.createNormalizerIn;
@@ -63,7 +63,7 @@ public class NeuralActorMemoryPolePPOLoss {
                 .nInput(N_INPUTS).nHiddenLayers(2).nHidden(64).nOutput(N_OUTPUTS)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-4).momentum(0.9).seed(1234)   //1e-3
-                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiff(0.5,1e-5))  //0.9,1e-5
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffDiscrete(0.5,1e-5))  //0.9,1e-5
                 .sizeBatch(64).isNofFitsAbsolute(true).absNoFit(4)  //relativeNofFitsPerBatch(0.01)
                 .build();
     }

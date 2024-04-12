@@ -9,12 +9,8 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.environments.maze.*;
-
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.manyOneHotEncodings;
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.oneHotEncoding;
-
 
 public class NeuralCriticMemoryShip {
 
@@ -58,7 +54,7 @@ public class NeuralCriticMemoryShip {
 
     private static NetSettings getDefaultNetSettings(ShipSettings shipSettings) {
         return NetSettings.builder()
-                .nInput(shipSettings.nStates()).nHiddenLayers(2).nHidden(20)
+                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(5)
                 .nOutput(N_OUTPUT)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
                 .learningRate(1e-4).momentum(0.9).seed(1234)

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.StateShip;
 import policy_gradient_problems.environments.sink_the_ship.VariablesShip;
 
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     @BeforeEach
      void init() {
-        environment=new EnvironmentShip();
+        environment=new EnvironmentShip(ShipSettings.newDefault());
     }
 
     @Test

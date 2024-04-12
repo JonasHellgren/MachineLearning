@@ -25,7 +25,7 @@ public class NeuralActorMemoryShipLossPPO {
                 .nOutput(N_OUTPUT)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTMAX)
                 .learningRate(1e-4).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsilonPPO(0.2))
+                .lossFunction(LossPPO.newWithEpsilonPPODiscrete(0.2))
                 .sizeBatch(10).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
                 .build();
     }

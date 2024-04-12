@@ -347,9 +347,11 @@ RunnerActorCriticShipPPO
 AgentShipPPO x
     NeuralActorMemoryShip actor;  x
     NeuralCriticMemoryShip critic; x
-TestAgentShipPPO
-
-
+TestAgentShipPPO x
+PPOScoreCalculatorContAction x
+TestPPOScoreCalculatorContAction x
+whenFitActor_thenCorrect
+entropy i PPOLoss
 
 simplified battery trading with safe RL ppo
 

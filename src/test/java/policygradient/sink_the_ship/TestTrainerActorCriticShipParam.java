@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @BeforeEach
      void init() {
         agent = AgentShipParam.newRandomStartStateDefaultThetas();
-        var environment= new EnvironmentShip();
+        var environment= new EnvironmentShip(ShipSettings.newDefault());
         createTrainer(environment);
     }
 

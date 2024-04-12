@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.StateShip;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     @BeforeEach
      void init() {
-        environment = new EnvironmentShip();
+        environment = new EnvironmentShip(ShipSettings.newDefault());
         agent = AgentShipParam.newWithRandomStartStateAndGivenThetas(new double[]{MEAN_S0, THETA_STD0, MEAN_S1, THETA_STD1});
     }
 
