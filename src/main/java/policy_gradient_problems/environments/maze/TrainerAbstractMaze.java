@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.maze;
 
 import common.ListUtils;
-import common_dl4j.EntropyCalculator;
+import common_dl4j.EntropyCalculatorDiscreteActions;
 import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
@@ -45,7 +45,7 @@ public abstract class TrainerAbstractMaze extends TrainerA<VariablesMaze> {
             var action = agent.chooseAction();
             sr = environment.step(agent.getState(), action);
             experienceList.add(createExperience(agent, sr, action));
-            double entropy = EntropyCalculator.calcEntropy(agent.actionProbabilitiesInPresentState());
+            double entropy = new EntropyCalculatorDiscreteActions().calcEntropy(agent.actionProbabilitiesInPresentState());
             entrList.add(entropy);
             si++;
             agent.setState(sr.state());

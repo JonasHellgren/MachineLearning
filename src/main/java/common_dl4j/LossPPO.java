@@ -19,37 +19,43 @@ public class LossPPO implements ILossFunction  {
     public static final int ACTION_INDEX = 0;
     public static final int ADV_INDEX = 1;
     public static final int PROB_OLD_INDEX = 2;
+    public static final double MIN_STD = 0.01;
+    public static final int MAX_STD = 10;
+    public static final int STD_CONT = 1;
 
     public static final double DEF_EPSILON = 0.1;
     public static final double EPSILON_FIN_DIFF = 1e-3;
     public static final double BETA_ENTROPY = 1e-2;
+    public static final EntropyCalculatorDiscreteActions ENTROPY_DISC = new EntropyCalculatorDiscreteActions();
+    public static final EntropyCalculatorContActions ENTROPY_CONT = new EntropyCalculatorContActions();
 
     double epsilonFinDiff; // Epsilon value for finite difference calculation
     double beta;
     PPOScoreCalculatorI scoreCalculator;
+    EntropyCalculatorI entropyCalculator;
 
     public static LossPPO newDefaultDiscrete() {
-        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(DEF_EPSILON));
+        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(DEF_EPSILON), ENTROPY_DISC);
     }
 
     public static LossPPO newWithEpsilonPPODiscrete(double epsilon) {
-        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsilon));
+        return new LossPPO(EPSILON_FIN_DIFF, BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsilon), ENTROPY_DISC);
     }
 
     public static LossPPO newWithEpsPPOEpsFinDiffDiscrete(double epsPPO, double epsilonFinDiff) {
-        return new LossPPO(epsilonFinDiff,BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsPPO));
+        return new LossPPO(epsilonFinDiff,BETA_ENTROPY,new PPOScoreCalculatorDiscreteAction(epsPPO), ENTROPY_DISC);
     }
 
     public static LossPPO newWithEpsPPOEpsFinDiffBetaEntropyDiscrete(double epsPPO, double epsilonFinDiff, double beta) {
-        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorDiscreteAction(epsPPO));
+        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorDiscreteAction(epsPPO), ENTROPY_DISC);
     }
 
     public static LossPPO newWithEpsPPOBetaEntropyCont(double epsPPO, double beta) {
-        return new LossPPO(EPSILON_FIN_DIFF,beta,new PPOScoreCalculatorContAction(epsPPO));
+        return new LossPPO(EPSILON_FIN_DIFF,beta,new PPOScoreCalculatorContAction(epsPPO),ENTROPY_CONT);
     }
 
     public static LossPPO newWithEpsPPOEpsFinDiffBetaEntropyCont(double epsPPO, double epsilonFinDiff, double beta) {
-        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorContAction(epsPPO));
+        return new LossPPO(epsilonFinDiff,beta,new PPOScoreCalculatorContAction(epsPPO),ENTROPY_CONT);
     }
 
     @Override
@@ -118,11 +124,11 @@ public class LossPPO implements ILossFunction  {
         int nofOut = label.columns();
         Preconditions.checkArgument(nofOut==3,"Wrong label definition PPO custom loss, label="+label);
         INDArray estProbabilities = activationFn.getActivation(z, false);
-        double entropy = EntropyCalculator.calcEntropy(estProbabilities);
+        double entropy = entropyCalculator.calcEntropy(estProbabilities);
         double ppoScore = scoreCalculator.calcScore(label, estProbabilities);
 
-       System.out.println("label = " + label+", estProbabilities = " + estProbabilities+", ppoScore = " + ppoScore);
-        System.out.println("entropy = " + entropy);
+       //System.out.println("label = " + label+", estProbabilities = " + estProbabilities+", ppoScore = " + ppoScore);
+       // System.out.println("entropy = " + entropy);
 
         return -(ppoScore+ beta *entropy);  //Negative for maximization in optimization context
     }

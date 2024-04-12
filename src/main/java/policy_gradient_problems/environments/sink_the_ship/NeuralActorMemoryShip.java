@@ -1,17 +1,20 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
+import common.Conditionals;
+import common.MathUtils;
 import common_dl4j.Dl4JNetFitter;
-import common_dl4j.Dl4JUtil;
 import common_dl4j.MultiLayerNetworkCreator;
 import common_dl4j.NetSettings;
+import lombok.extern.java.Log;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import java.util.stream.IntStream;
 
+import static common_dl4j.LossPPO.*;
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.manyOneHotEncodings;
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.oneHotEncoding;
 
+@Log
 public class NeuralActorMemoryShip {
 
     MultiLayerNetwork net;
@@ -37,6 +40,10 @@ public class NeuralActorMemoryShip {
     public double[] getOutValue(double[] inData) {
         INDArray input = oneHotEncoding(inData, shipSettings);
         INDArray reshaped = input.reshape(1, input.columns());
+
+        Conditionals.executeIfTrue(reshaped.getDouble(STD_CONT)< MIN_STD,
+                () -> log.fine("Small/negative standard deviation from actor - clipping"));
+        reshaped.putScalar(1, MathUtils.clip(reshaped.getDouble(STD_CONT),MIN_STD, MAX_STD));
         return net.output(reshaped).toDoubleVector();
     }
 

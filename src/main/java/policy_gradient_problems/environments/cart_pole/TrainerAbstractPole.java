@@ -1,14 +1,13 @@
 package policy_gradient_problems.environments.cart_pole;
 
 import common.ListUtils;
-import common_dl4j.EntropyCalculator;
+import common_dl4j.EntropyCalculatorDiscreteActions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
-import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
@@ -71,7 +70,7 @@ public abstract class TrainerAbstractPole extends TrainerA<VariablesPole> {
             var exp = Experience.ofWithIsFail(
                     stateOld, action, sr.reward(), sr.state(), probAction, sr.isFail());
             experienceList.add(exp);
-            double entropy = EntropyCalculator.calcEntropy(agent.actionProbabilitiesInPresentState());
+            double entropy = new EntropyCalculatorDiscreteActions().calcEntropy(agent.actionProbabilitiesInPresentState());
             entrList.add(entropy);
             si++;
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));

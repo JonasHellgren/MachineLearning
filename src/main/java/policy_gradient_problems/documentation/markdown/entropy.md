@@ -32,6 +32,12 @@ Cross-entropy is widely used as a loss function in supervised learning, especial
 KL divergence is more common in measuring the difference between two distributions in statistical models and 
 is often used in unsupervised learning or as a regularization term.
 
+
+The differential entropy for a Gaussian distribution is a well-known result and is particularly convenient because it 
+only depends on the standard deviation σ
+
+    1/2*log(2*PI*e*s^2)
+
 ## Entropy example
 The true probabilities (TP=[TP(x0) TP(x1)]) are
 

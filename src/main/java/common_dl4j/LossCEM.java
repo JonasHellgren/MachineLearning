@@ -89,8 +89,8 @@ public class LossCEM implements ILossFunction {
 
     private double scoreOnePoint(INDArray label, INDArray z, IActivation activationFn) {
         INDArray estProbabilities = activationFn.getActivation(z, false);
-        double ce = EntropyCalculator.calcCrossEntropy(label, estProbabilities);
-        double entropy = EntropyCalculator.calcEntropy(estProbabilities);
+        double ce = CrossEntropyCalculator.calcCrossEntropy(label, estProbabilities);
+        double entropy = new EntropyCalculatorDiscreteActions().calcEntropy(estProbabilities);
         return ce - beta  * entropy;
     }
 

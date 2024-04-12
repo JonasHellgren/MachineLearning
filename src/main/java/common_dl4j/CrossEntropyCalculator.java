@@ -6,7 +6,7 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 import java.util.List;
 
-public class EntropyCalculator {
+public class CrossEntropyCalculator {
 
     public static final double EPS = 1e-10;
 
@@ -21,20 +21,5 @@ public class EntropyCalculator {
         return  -vec.sumNumber().doubleValue();
     }
 
-    public static double calcEntropy(List<Double> estProb) {
-        return calcEntropy(Nd4j.create(estProb),EPS);
-    }
-
-    public static double calcEntropy(INDArray estProb) {
-        return calcEntropy(estProb,EPS);
-    }
-
-    public static double calcEntropy(INDArray estProb, double eps) {
-        INDArray adjustedProbToAvoidDivZero = estProb.add(eps);
-        INDArray invP = adjustedProbToAvoidDivZero.rdiv(1.0);
-        INDArray surprise = Transforms.log(invP);
-        INDArray vec= estProb.mul(surprise);
-        return  vec.sumNumber().doubleValue();
-    }
 
 }

@@ -108,17 +108,14 @@ public class TestAgentShipPPO {
     //@Disabled("long time")
     void whenFitActor_thenCorrect() {
 
-
-        System.out.println("out0 = " + getOut(0));
-
-        var inAndOutMat = createInOutMatWithAtLeastOneHit();
-        inAndOutMat.getSecond().forEach(System.out::println);
-
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 20; i++) {
+            System.out.println("out0 = " + getOut(0));
+            var inAndOutMat = createInOutMatWithAtLeastOneHit();
+            inAndOutMat.getSecond().forEach(System.out::println);
             agent.fitActor(inAndOutMat.getFirst(), inAndOutMat.getSecond());
+            log.info("fitted");
         }
 
-        log.info("fitted");
 
 
         var out0 = getOut(0);
@@ -149,7 +146,7 @@ public class TestAgentShipPPO {
         List<List<Double>> outMat = new ArrayList<>(new ArrayList<>());
         NormDistributionSampler sampler = new NormDistributionSampler();
         boolean isHitting;
-        int minSize = 1;
+        int minSize = 3;
         int nHits=0, nNonHits=0;
 
         do {

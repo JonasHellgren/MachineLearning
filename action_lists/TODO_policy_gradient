@@ -350,8 +350,9 @@ AgentShipPPO x
 TestAgentShipPPO x
 PPOScoreCalculatorContAction x
 TestPPOScoreCalculatorContAction x
-whenFitActor_thenCorrect
-entropy i PPOLoss
+whenFitActor_thenCorrect x
+entropy i PPOLoss x
+RunnerCannonPPO
 
 simplified battery trading with safe RL ppo
 
