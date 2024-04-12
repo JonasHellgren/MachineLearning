@@ -2,31 +2,30 @@ package policy_gradient_problems.runners;
 
 import common.plotters.PlotterMultiplePanelsTrajectory;
 import lombok.extern.java.Log;
+import policy_gradient_problems.domain.common_episode_trainers.ActorCriticEpisodeTrainerPPOCont;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
-import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
+import policy_gradient_problems.environments.short_corridor.TrainerActorCriticSCLossPPO;
+import policy_gradient_problems.environments.sink_the_ship.*;
 
 import java.util.List;
 
 @Log
 public class RunnerActorCriticShipPPO {
 
-    public static final int NOF_EPISODES = 5_000;
+    public static final int NOF_EPISODES = 1000;
     static final int NOF_STEPS_MAX = 100;
-    public static final double LEARNING_RATE = 1e-3;
-    static final double GAMMA = 1.0;
+    static final double GAMMA = 0.0;
 
-/*    public static void main(String[] args) {
-        var trainerActorCritic = createTrainerActorCritic(
-                new EnvironmentShip(), AgentShipPPO.newDefault());
-        trainerActorCritic.train();
-        plotActionProbabilitiesDuringTraining(trainerActorCritic);
+    public static void main(String[] args) {
+        var trainer = createTrainerActorCritic(
+                 EnvironmentShip.newDefault(), AgentShipPPO.newDefault());
+        trainer.train();
+        plotActionProbabilitiesDuringTraining(trainer);
         log.info("Training finished");
     }
 
 
-    private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShipParam trainer) {
+    private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShipPPO trainer) {
         for (int s: EnvironmentShip.POSITIONS) {
             var plotter = new PlotterMultiplePanelsTrajectory(
                     "ActorCritic",
@@ -35,12 +34,15 @@ public class RunnerActorCriticShipPPO {
         }
     }
 
-    private static TrainerActorCriticShipParam createTrainerActorCritic(EnvironmentShip environment, AgentShipParam agent) {
+    private static TrainerActorCriticShipPPO createTrainerActorCritic(EnvironmentShip environment, AgentShipPPO agent) {
         return TrainerActorCriticShipPPO.builder()
                 .environment(environment).agent(agent)
+                .shipSettings(ShipSettings.newDefault())
                 .parameters(getTrainerParameters())
+                .episodeTrainer(ActorCriticEpisodeTrainerPPOCont.<VariablesShip>builder()
+                        .valueTermState(0d).agent(agent).parameters(getTrainerParameters()).build())
                 .build();
-    }*/
+    }
 
 
     private static TrainerParameters getTrainerParameters() {

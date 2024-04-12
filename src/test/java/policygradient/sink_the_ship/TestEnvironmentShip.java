@@ -1,6 +1,8 @@
 package policygradient.sink_the_ship;
 
 import common.Counter;
+import common.MathUtils;
+import common.RandUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,18 +49,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
     private void assertHitInState(int state) {
         StepReturn<VariablesShip> sr;
-        double normAngle;
+        double angle;
         Counter counter=new Counter(10_000);
         do {
-            normAngle = randomNumberBetweenZeroAndOne();
-            sr=environment.step(StateShip.newFromPos(state), Action.ofDouble(normAngle));
+            angle = RandUtils.getRandomDouble(-5,10);
+            sr=environment.step(StateShip.newFromPos(state), Action.ofDouble(angle));
             counter.increase();
         } while (!sr.isTerminal() && !counter.isExceeded());
 
-        System.out.println("normAngle = " + normAngle);
+        System.out.println("angle = " + angle);
+
 
         Double expectedDistance = EnvironmentShip.DISTANCE_TO_SHIP_MAP.get(state);
-        double actualDistance = environment.calcDistanceProjectile(normAngle);
+        double actualDistance = environment.calcDistanceProjectile(angle);
+
+        Assertions.assertTrue(MathUtils.isInRange(angle,0,1));
         Assertions.assertTrue(sr.isTerminal());
         Assertions.assertEquals(expectedDistance, actualDistance, DIST_TOL);
     }

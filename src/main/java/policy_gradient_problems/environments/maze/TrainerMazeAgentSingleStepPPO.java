@@ -4,10 +4,9 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.ActorCriticPPOTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.ActorCriticEpisodeTrainerPPODiscrete;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class TrainerMazeAgentSingleStepPPO  extends TrainerAbstractMaze {
 
     @Override
     public void train() {
-        var episodeTrainer = ActorCriticPPOTrainer.<VariablesMaze>builder()
+        var episodeTrainer = ActorCriticEpisodeTrainerPPODiscrete.<VariablesMaze>builder()
                 .agent(agent)
                 .parameters(parameters)
                 .valueTermState(0d)

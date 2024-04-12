@@ -13,7 +13,7 @@ import java.util.function.Function;
 public class ExperienceHelper<V> {
 
     @NonNull Double valueTermState;
-    @NonNull Integer nofActions;
+    Integer nofActions;
     @NonNull Function<StateI<V>, Double> criticOut;
 
     public List<Double> createOneHot(Experience<V> experience, double adv) {

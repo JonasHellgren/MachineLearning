@@ -1,7 +1,10 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
+import common.MathUtils;
+import common.NormDistributionSampler;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
+import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
@@ -19,6 +22,8 @@ public class AgentShipPPO extends AgentA<VariablesShip>
 
     NeuralActorMemoryShipLossPPO actor;
     NeuralCriticMemoryShip critic;
+    NormDistributionSampler sampler = new NormDistributionSampler();
+
 
     public static AgentShipPPO newDefault() {
         return new AgentShipPPO(StateShip.newFromPos(EnvironmentShip.getRandomPos()),ShipSettings.newDefault());
@@ -28,6 +33,12 @@ public class AgentShipPPO extends AgentA<VariablesShip>
         super(state);
         this.actor= NeuralActorMemoryShipLossPPO.newDefault(shipSettings);
         this.critic=NeuralCriticMemoryShip.newDefault(shipSettings);
+    }
+
+    @Override
+    public Action chooseAction() {
+        double a = sampler.sampleFromNormDistribution(this.meanAndStd(getState()));
+        return Action.ofDouble(MathUtils.clip(a,0,1));
     }
 
     @SneakyThrows

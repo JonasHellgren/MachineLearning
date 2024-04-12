@@ -2,17 +2,16 @@ package policy_gradient_problems.runners;
 
 import lombok.extern.java.Log;
 import common.plotters.PlotterMultiplePanelsTrajectory;
+import policy_gradient_problems.domain.common_episode_trainers.ParamActorTabCriticEpisodeTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
-import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
-import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
+import policy_gradient_problems.environments.sink_the_ship.*;
 
 import java.util.List;
 
 @Log
 public class RunnerActorCriticShipParam {
 
+    public static final double VALUE_TERMINAL_STATE = 0;
     public static final int NOF_EPISODES = 5_000;
     static final int NOF_STEPS_MAX = 100;
     public static final double LEARNING_RATE = 1e-3;
@@ -33,7 +32,6 @@ public class RunnerActorCriticShipParam {
                     "ActorCritic",
                     List.of("state = "+s+", mean", "std","value"), "episode");
           plotter.plot(trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s));
-             //plotter.plot(trainer.getTracker().getMeasureTrajectoriesForState(s));
         }
     }
 
@@ -41,6 +39,13 @@ public class RunnerActorCriticShipParam {
         return TrainerActorCriticShipParam.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())
+                .episodeTrainer(ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
+                        .agent(agent)
+                        .parameters(getTrainerParameters())
+                        .valueTermState(VALUE_TERMINAL_STATE)
+                        .tabularCoder((v) -> v.pos())
+                        .isTerminal((s) -> false)
+                        .build())
                 .build();
     }
 

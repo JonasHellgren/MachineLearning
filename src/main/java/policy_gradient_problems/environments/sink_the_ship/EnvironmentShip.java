@@ -25,6 +25,10 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
 
     @NonNull  ShipSettings shipSettings;
 
+    public static EnvironmentShip newDefault() {
+        return new EnvironmentShip(ShipSettings.newDefault());
+    }
+
     @Override
     public StepReturn<VariablesShip> step(StateI<VariablesShip> state, Action action) {
         int pos = state.getVariables().pos();
@@ -55,6 +59,7 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     }
 
     public boolean isHitting(int state, double normalizedAngle) {
+
         double distanceProjectile=calcDistanceProjectile(MathUtils.clipBetwenZeroAndOne(normalizedAngle));
         double distanceToShip=DISTANCE_TO_SHIP_MAP.get(state);
         double projectileShipDistanceDeviation=Math.abs(distanceToShip-distanceProjectile);

@@ -3,8 +3,7 @@ package policy_gradient_problems.environments.short_corridor;
 import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.ActorCriticCEMLossTrainer;
-import policy_gradient_problems.domain.common_episode_trainers.ActorCriticPPOTrainer;
+import policy_gradient_problems.domain.common_episode_trainers.ActorCriticEpisodeTrainerPPODiscrete;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 public class TrainerActorCriticSCLossPPO extends TrainerAbstractSC{
@@ -23,7 +22,7 @@ public class TrainerActorCriticSCLossPPO extends TrainerAbstractSC{
 
     @Override
     public void train() {
-        var episodeTrainer = ActorCriticPPOTrainer.<VariablesSC>builder()
+        var episodeTrainer = ActorCriticEpisodeTrainerPPODiscrete.<VariablesSC>builder()
                 .agent(agent)
                 .parameters(parameters)
                 .valueTermState(VALUE_TERMINAL_STATE)

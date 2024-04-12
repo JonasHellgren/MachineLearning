@@ -5,9 +5,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.abstract_classes.ActorUpdaterI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.domain.common_episode_trainers.ActorCriticPPOTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
 import policy_gradient_problems.helpers.MultiStepResultsGenerator;
 import policy_gradient_problems.helpers.NeuralCriticUpdater;
 

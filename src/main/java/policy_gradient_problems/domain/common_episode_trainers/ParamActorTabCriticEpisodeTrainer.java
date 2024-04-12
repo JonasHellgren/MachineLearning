@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.function.Function;
 
 @Builder
-public class ParamActorTabCriticEpisodeTrainer<V> {
+public class ParamActorTabCriticEpisodeTrainer<V> implements EpisodeTrainerI<V> {
     @NonNull AgentParamActorTabCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;
     @NonNull Function<V, Integer> tabularCoder;  //transforms state to key used by critic function
     @NonNull Function<StateI<V>, Boolean> isTerminal;
 
+    @Override
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());

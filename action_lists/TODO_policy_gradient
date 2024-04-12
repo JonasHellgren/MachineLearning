@@ -352,7 +352,10 @@ PPOScoreCalculatorContAction x
 TestPPOScoreCalculatorContAction x
 whenFitActor_thenCorrect x
 entropy i PPOLoss x
-RunnerCannonPPO
+RunnerCannonPPO x
+ActorCriticPPOTrainerContAction
+AgentShipPPO chooseAction
+ActorCriticEpisodeTrainerPPODiscrete ActorCriticEpisodeTrainerPPODCOnt like
 
 simplified battery trading with safe RL ppo
 

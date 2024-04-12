@@ -10,6 +10,8 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.util.Arrays;
+
 import static common_dl4j.LossPPO.*;
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.manyOneHotEncodings;
 import static policy_gradient_problems.environments.sink_the_ship.ShipInputDecoder.oneHotEncoding;
@@ -41,6 +43,7 @@ public class NeuralActorMemoryShip {
         INDArray input = oneHotEncoding(inData, shipSettings);
         INDArray reshaped = input.reshape(1, input.columns());
 
+       // reshaped.putScalar(0, reshaped.getDouble(0)+2);
         Conditionals.executeIfTrue(reshaped.getDouble(STD_CONT)< MIN_STD,
                 () -> log.fine("Small/negative standard deviation from actor - clipping"));
         reshaped.putScalar(1, MathUtils.clip(reshaped.getDouble(STD_CONT),MIN_STD, MAX_STD));

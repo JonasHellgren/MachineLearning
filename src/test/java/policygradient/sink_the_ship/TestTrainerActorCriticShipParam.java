@@ -2,21 +2,25 @@ package policygradient.sink_the_ship;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import policy_gradient_problems.domain.common_episode_trainers.ParamActorTabCriticEpisodeTrainer;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.sink_the_ship.AgentShipParam;
-import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
-import policy_gradient_problems.environments.sink_the_ship.TrainerActorCriticShipParam;
+import policy_gradient_problems.environments.sink_the_ship.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
  class TestTrainerActorCriticShipParam {
 
+     public static final double VALUE_TERMINAL_STATE = 0;
      static final double EXPECTED_ACTION0 = 0.2871;
      static final double EXPECTED_ACTION1 = 0.6711;
      static final double DELTA = 0.1;
-    TrainerActorCriticShipParam trainer;
+     public static final int NOF_EPISODES = 5_000;
+     static final int NOF_STEPS_MAX = 100;
+     public static final double LEARNING_RATE = 1e-3;
+     static final double GAMMA = 1.0;
+
+     TrainerActorCriticShipParam trainer;
     AgentShipParam agent;
 
     @BeforeEach
@@ -34,6 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                         .nofEpisodes(1000).nofStepsMax(100).gamma(0.99d)
                         .learningRateNonNeuralActor(1e-3)
                         .build())
+                .episodeTrainer(ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
+                .agent(agent)
+                .parameters(getTrainerParameters())
+                .valueTermState(VALUE_TERMINAL_STATE)
+                .tabularCoder((v) -> v.pos())
+                .isTerminal((s) -> false)
+                .build())
                 .build();
     }
 
@@ -58,7 +69,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
         }
-
     }
+
+     private static TrainerParameters getTrainerParameters() {
+         return TrainerParameters.builder()
+                 .nofEpisodes(NOF_EPISODES).nofStepsMax(NOF_STEPS_MAX)
+                 .gamma(GAMMA).learningRateNonNeuralActor(LEARNING_RATE)
+                 .build();
+     }
 
 }
