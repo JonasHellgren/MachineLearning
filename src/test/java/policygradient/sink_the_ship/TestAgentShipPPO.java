@@ -104,17 +104,14 @@ public class TestAgentShipPPO {
 
     }
 
-
     @Test
     //@Disabled("long time")
     void whenFitActor_thenCorrect() {
-
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 250; i++) {
             System.out.println("out0 = " + getOut(0));
             var inAndOutMat = createInOutMatWithAtLeastOneHit();
             agent.fitActor(inAndOutMat.getFirst(), inAndOutMat.getSecond());
         }
-
         log.info("fitted");
         var out0 = getOut(0);
         Assertions.assertEquals(HIT_ANGLE_POS0,out0.get(0), DELTA);
@@ -144,17 +141,17 @@ public class TestAgentShipPPO {
             var inList = List.of((double) pos);
             var outList = List.of(a, adv, pdfOld);
 
-        //    if (isHitting || nNonHits < minSize) {
+     //       if (isHitting || nNonHits < minSize) {
                 inMat.add(inList);
                 outMat.add(outList);
                 nHits+=isHitting?1:0;
                 nNonHits+=!isHitting?1:0;
-          //  }
+       //     }
 
-        //} while (nHits<minSize);
+   //     } while (nHits<minSize);
     } while (nHits<1);
 
-        outMat.forEach(System.out::println);
+       // outMat.forEach(System.out::println);
 
         return Pair.create(inMat,outMat);
     }

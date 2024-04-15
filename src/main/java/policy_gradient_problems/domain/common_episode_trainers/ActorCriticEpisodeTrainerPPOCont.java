@@ -34,7 +34,7 @@ public class ActorCriticEpisodeTrainerPPOCont<V> implements EpisodeTrainerI<V> {
             inList.add(stateAsList);
             outList.add(returnAtTime);
             double v=agent.criticOut(experience.state());
-            double adv = returnAtTime - 0*v;  //todo
+            double adv = returnAtTime - v;
             double action = experience.action().doubleValue().orElseThrow();
             double pdfOld=MathUtils.pdf(action, agent.meanAndStd(experience.state()));
             ppoLabelList.add(List.of(action,adv,pdfOld));

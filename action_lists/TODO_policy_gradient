@@ -356,6 +356,20 @@ RunnerCannonPPO x
 ActorCriticPPOTrainerContAction
 AgentShipPPO chooseAction
 ActorCriticEpisodeTrainerPPODiscrete ActorCriticEpisodeTrainerPPODCOnt like
+soft plus activ för cont ppo
+lägre/avtagande entropy
+
+linear regression md  x
+LinerFitter
+TestLinerFitter
+
+LinerActorNeuralCriticSafeContAgentCannon
+
+battery buying with safe RL ppo
+beskriva i md fil
+BuyingElEnvironment
+TestBuyingElEnvironment
+
 
 simplified battery trading with safe RL ppo
 

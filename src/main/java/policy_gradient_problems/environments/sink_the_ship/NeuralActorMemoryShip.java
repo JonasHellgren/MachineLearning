@@ -44,9 +44,9 @@ public class NeuralActorMemoryShip {
         INDArray reshaped = input.reshape(1, input.columns());
 
        // reshaped.putScalar(0, reshaped.getDouble(0)+2);
-        Conditionals.executeIfTrue(reshaped.getDouble(STD_CONT)< MIN_STD,
-                () -> log.fine("Small/negative standard deviation from actor - clipping"));
-        reshaped.putScalar(1, MathUtils.clip(reshaped.getDouble(STD_CONT),MIN_STD, MAX_STD));
+
+       // reshaped.putScalar(STD_CONT, MathUtils.clip(reshaped.getDouble(STD_CONT),MIN_STD, MAX_STD));
+
         return net.output(reshaped).toDoubleVector();
     }
 

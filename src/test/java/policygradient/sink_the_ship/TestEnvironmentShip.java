@@ -52,12 +52,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         double angle;
         Counter counter=new Counter(10_000);
         do {
-            angle = RandUtils.getRandomDouble(-5,10);
+            //angle = RandUtils.getRandomDouble(-5,10);
+            angle = RandUtils.getRandomDouble(0,1);
+
             sr=environment.step(StateShip.newFromPos(state), Action.ofDouble(angle));
             counter.increase();
+
+            System.out.println("angle = " + angle);
+            System.out.println("sr.reward() = " + sr.reward());
         } while (!sr.isTerminal() && !counter.isExceeded());
 
-        System.out.println("angle = " + angle);
 
 
         Double expectedDistance = EnvironmentShip.DISTANCE_TO_SHIP_MAP.get(state);

@@ -33,7 +33,8 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     public StepReturn<VariablesShip> step(StateI<VariablesShip> state, Action action) {
         int pos = state.getVariables().pos();
         boolean isHit=isHitting(pos,action.asDouble());
-        double reward = getReward(isHit);
+        double projectileShipDistanceDeviation = getProjectileShipDistanceDeviation(pos, action.asDouble());
+        double reward = getReward(isHit)+10/(projectileShipDistanceDeviation+1);
         var stateNew=StateShip.newFromPos(getStateNew(pos));
         return new StepReturn<>(stateNew, IS_FAIL, isHit, reward);
     }
@@ -58,12 +59,15 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
         return isHit ? REWARD_HIT : REWARD_MISS;
     }
 
-    public boolean isHitting(int state, double normalizedAngle) {
+    public boolean isHitting(int pos, double normalizedAngle) {
+        double projectileShipDistanceDeviation = getProjectileShipDistanceDeviation(pos, normalizedAngle);
+        return projectileShipDistanceDeviation< shipSettings.devMaxMeter();
+    }
 
+    private double getProjectileShipDistanceDeviation(int state, double normalizedAngle) {
         double distanceProjectile=calcDistanceProjectile(MathUtils.clipBetwenZeroAndOne(normalizedAngle));
         double distanceToShip=DISTANCE_TO_SHIP_MAP.get(state);
-        double projectileShipDistanceDeviation=Math.abs(distanceToShip-distanceProjectile);
-        return projectileShipDistanceDeviation< shipSettings.devMaxMeter();
+        return Math.abs(distanceToShip-distanceProjectile);
     }
 
     private int getStateNew(int state) {

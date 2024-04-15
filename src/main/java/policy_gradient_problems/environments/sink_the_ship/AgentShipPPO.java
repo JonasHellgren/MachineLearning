@@ -11,6 +11,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 import policy_gradient_problems.environments.maze.StateMaze;
 import policy_gradient_problems.environments.short_corridor.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static common.List2ArrayConverter.convertListToDoubleArr;
@@ -66,7 +67,8 @@ public class AgentShipPPO extends AgentA<VariablesShip>
     @Override
     public List<Double> actorOut(StateI<VariablesShip> state) {
         StateShip stateCasted = (StateShip) state;  //todo fimpa nr Statei har asArray
-        return arrayPrimitiveDoublesToList(actor.getOutValue(stateCasted.asArray()));
+        double[] outValue = actor.getOutValue(stateCasted.asArray());
+        return arrayPrimitiveDoublesToList(outValue);
     }
 
     @Override
