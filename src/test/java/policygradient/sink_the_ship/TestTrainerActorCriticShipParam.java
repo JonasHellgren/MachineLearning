@@ -53,8 +53,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         trainer.train();
         printPolicy();
 
-        var meansStd0 = agent.getMeanAndStdFromThetaVector(0);
-        var meansStd1 = agent.getMeanAndStdFromThetaVector(1);
+        var meansStd0 = agent.meanAndStd(0);
+        var meansStd1 = agent.meanAndStd(1);
 
         assertEquals(EXPECTED_ACTION0, meansStd0.getFirst(),DELTA);
         assertEquals(EXPECTED_ACTION1, meansStd1.getFirst(),DELTA);
@@ -64,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     private void printPolicy() {
         System.out.println("policy");
         for (int s: EnvironmentShip.POSITIONS) {
-            System.out.println("s = "+s+", agent{mean,std} = " + agent.getMeanAndStdFromThetaVector(s));
+            System.out.println("s = "+s+", agent{mean,std} = " + agent.meanAndStd(s));
             System.out.println("s = "+s+", trainer value = " + agent.getCritic().getValue(s));
 
 

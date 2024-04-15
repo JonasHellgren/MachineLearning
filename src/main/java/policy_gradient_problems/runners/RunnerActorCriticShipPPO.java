@@ -11,7 +11,7 @@ import java.util.List;
 @Log
 public class RunnerActorCriticShipPPO {
 
-    public static final int NOF_EPISODES = 100;
+    public static final int NOF_EPISODES = 1000;
     static final int NOF_STEPS_MAX = 100;
     static final double GAMMA = 0.0;
 

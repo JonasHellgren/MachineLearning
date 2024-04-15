@@ -1,8 +1,10 @@
 package policy_gradient_problems.environments.short_corridor;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorI;
 import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
@@ -53,4 +55,9 @@ public class AgentParamActorSC extends AgentA<VariablesSC> implements AgentParam
     }
 
 
+    @SneakyThrows
+    @Override
+    public Pair<Double, Double> meanAndStd(int state) {
+        throw new NoSuchMethodException();
+    }
 }

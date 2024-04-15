@@ -2,8 +2,10 @@ package policy_gradient_problems.environments.cart_pole;
 
 import common_dl4j.NetSettings;
 import lombok.Builder;
+import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorNeuralCriticI;
 import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
@@ -61,4 +63,9 @@ public class AgentParamActorNeuralCriticPole extends AgentA<VariablesPole> imple
         return helper.calcActionProbabilitiesInState(getState());
     }
 
+    @SneakyThrows
+    @Override
+    public Pair<Double, Double> meanAndStd(int state) {
+        throw new NoSuchMethodException();
+    }
 }

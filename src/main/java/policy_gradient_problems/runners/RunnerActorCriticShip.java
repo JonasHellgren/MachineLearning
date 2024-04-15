@@ -27,16 +27,23 @@ public class RunnerActorCriticShip {
     public static void main(String[] args) {
         Table<String, Integer, List<List<Double>>> tableData= HashBasedTable.create();  //type, pos -> trajectories
 
-        var trainerParam = createTrainerPPO(
+        var trainerParam = createTrainerParam(
                 new EnvironmentShip(ShipSettings.newDefault()), AgentShipParam.newRandomStartStateDefaultThetas());
         trainerParam.train();
         putTrajInTable(tableData, "param", trainerParam);
         log.info("Training finished param");
+/*
 
         var trainerPPO = createTrainerPPO(EnvironmentShip.newDefault(), AgentShipPPO.newDefault());
         trainerPPO.train();
         putTrajInTable(tableData, "ppo", trainerPPO);
         log.info("Training finished ppo");
+*/
+
+        var trainerSafe = createTrainerSafe(EnvironmentShip.newDefault(), AgentACShipSafe.newRandomStartStateDefaultThetas());
+        trainerSafe.train();
+        putTrajInTable(tableData, "safe", trainerSafe);
+        log.info("Training finished safe");
 
         for (Integer pos : EnvironmentShip.POSITIONS) {
             plotTable(tableData, pos);
@@ -58,7 +65,22 @@ public class RunnerActorCriticShip {
         return trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s);
     }
 
-    private static TrainerActorCriticShipParam createTrainerPPO(EnvironmentShip environment, AgentShipParam agent) {
+    private static TrainerActorCriticShipParam createTrainerParam(EnvironmentShip environment, AgentShipParam agent) {
+        return TrainerActorCriticShipParam.builder()
+                .environment(environment).agent(agent)
+                .parameters(getTrainerParameters())
+                .episodeTrainer(ParamActorTabCriticEpisodeTrainer.<VariablesShip>builder()
+                        .agent(agent)
+                        .parameters(getTrainerParameters())
+                        .valueTermState(VALUE_TERMINAL_STATE)
+                        .tabularCoder((v) -> v.pos())
+                        .isTerminal((s) -> false)
+                        .build())
+                .build();
+    }
+
+
+    private static TrainerActorCriticShipParam createTrainerSafe(EnvironmentShip environment, AgentACShipSafe agent) {
         return TrainerActorCriticShipParam.builder()
                 .environment(environment).agent(agent)
                 .parameters(getTrainerParameters())
@@ -93,10 +115,11 @@ public class RunnerActorCriticShip {
 
 
     private static void plotTable(Table<String, Integer, List<List<Double>>> table,int s) {
-        List<String> types = List.of("param", "ppo");
+        List<String> types = List.of("param", "safe");
 
         for (String measure : MEASURES_RECORDED) {
             var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle(measure).width(350).height(200).build();
+            chart.getStyler().setYAxisDecimalPattern("0.00");  // Set Y-axis to show 2 decimal places
             chart.setTitle("state="+s);
             for (String type:types) {
                 List<List<Double>> trajs = table.get(type, s);

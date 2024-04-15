@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         double mean = arguments.getDouble(1);
         double std = arguments.getDouble(2);
 
-        var msPair = agent.getMeanAndStdFromThetaVector(s);
+        var msPair = agent.meanAndStd(s);
 
         System.out.println("msPair = " + msPair);
 

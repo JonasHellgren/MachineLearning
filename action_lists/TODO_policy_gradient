@@ -363,10 +363,19 @@ linear regression md  x
 LinerFitter   x
 TestLinerFitter  x
 
+snygga upp AgentShipParam
+- ActorMemoryParam göra mer
+- CriticMemoryParamOneHot ej one hot
+
 AgentACShipSafe
+Action - nytt fält isSafeCorected
+Experience - nytt fält ExperienceSafe
+TrainerActorCriticShipParamSafe
+ny klass ParamACTrainerSafe
 
 
-battery buying with safe RL ppo
+
+battery buying with safe RL param
 beskriva i md fil
 BuyingElEnvironment
 TestBuyingElEnvironment

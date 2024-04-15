@@ -1,10 +1,10 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
 import common.ArrayUtil;
-import common.ListUtils;
 import common.NormDistributionSampler;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
@@ -62,7 +62,7 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
     public Action chooseAction() {
         int pos = getState().getVariables().pos();
         throwIfBadState(pos);
-        Pair<Double,Double> meanStdPair = getMeanAndStdFromThetaVector(pos);
+        Pair<Double,Double> meanStdPair = meanAndStd(pos);
         return Action.ofDouble(sampler.sampleFromNormDistribution(meanStdPair));
     }
 
@@ -71,10 +71,12 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
         actor.change(change);
     }
 
+    @SneakyThrows
     @Override
     public List<Double> actionProbabilitiesInPresentState() {
-        var thetaArr= actor.toArray();
-        return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
+        throw new NoSuchMethodException();
+        //var thetaArr= actor.toArray();
+       // return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
 
     @Override
@@ -92,7 +94,7 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
     BiFunction<Double,Double,Double> scaleToAccountThatStdIsExpTheta= (g,k) -> g*k;
 
     private double[] calculateGradLogForState(int state, double action) {
-        var meanAndStd=getMeanAndStdFromThetaVector(state);
+        var meanAndStd= meanAndStd(state);
         double mean=meanAndStd.getFirst();
         double std=meanAndStd.getSecond();
         double denom = secondArgIfSmaller.apply(sqr2.apply(std), SMALLEST_DENOM);
@@ -102,7 +104,7 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
         return new double[]{gradMean,gradStdTheta};
     }
 
-    public Pair<Double,Double> getMeanAndStdFromThetaVector(int state) {
+    public Pair<Double,Double> meanAndStd(int state) {
         throwIfBadState(state);
         int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(state);
         double mean = actor.getEntry(indexFirstTheta);
