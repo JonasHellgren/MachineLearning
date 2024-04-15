@@ -107,7 +107,7 @@ public class TestAgentShipPPO {
     @Test
   //  @Disabled("long time")
     void whenFitActor_thenCorrect() {
-        int nIter = 150;
+        int nIter = 200;
         for (int i = 0; i < nIter; i++) {
             System.out.println("out0 = " + getOut(0));
             var inAndOutMat = createInOutMatWithAtLeastOneHit();

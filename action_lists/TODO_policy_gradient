@@ -353,11 +353,11 @@ TestPPOScoreCalculatorContAction x
 whenFitActor_thenCorrect x
 entropy i PPOLoss x
 RunnerCannonPPO x
-ActorCriticPPOTrainerContAction
-AgentShipPPO chooseAction
-ActorCriticEpisodeTrainerPPODiscrete ActorCriticEpisodeTrainerPPODCOnt like
-soft plus activ för cont ppo
-lägre/avtagande entropy
+ActorCriticPPOTrainerContAction x
+AgentShipPPO chooseAction  x
+ActorCriticEpisodeTrainerPPODiscrete ActorCriticEpisodeTrainerPPODCOnt like  x
+soft plus activ för cont ppo  x
+straff om entropy blir mindre än limit x
 
 linear regression md  x
 LinerFitter   x
