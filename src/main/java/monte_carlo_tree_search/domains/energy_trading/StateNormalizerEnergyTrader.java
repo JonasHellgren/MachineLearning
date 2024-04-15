@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.ScalerLinear;
+import common.math.ScalerLinear;
 import lombok.Builder;
 
 public class StateNormalizerEnergyTrader<S> {

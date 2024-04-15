@@ -1,7 +1,7 @@
 package multi_step_temp_diff.domain.agent_parts.action_selector;
 
 import common.Conditionals;
-import common.MathUtils;
+import common.math.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;

@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.create_tree;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.models_and_support_classes.Counter;

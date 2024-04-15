@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import common.NormDistributionSampler;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
@@ -8,10 +8,7 @@ import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
-import policy_gradient_problems.environments.maze.StateMaze;
-import policy_gradient_problems.environments.short_corridor.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static common.List2ArrayConverter.convertListToDoubleArr;

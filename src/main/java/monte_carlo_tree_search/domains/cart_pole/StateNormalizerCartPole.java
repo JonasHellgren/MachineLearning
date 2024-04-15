@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import common.ScalerLinear;
+import common.math.ScalerLinear;
 
 public class StateNormalizerCartPole<S> {
 

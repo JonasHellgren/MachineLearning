@@ -1,6 +1,6 @@
 package policy_gradient_problems.sandbox;
 
-import common.BestPairFinder;
+import common.math.BestPairFinder;
 import common.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import common.plotters.PlotterMultiplePanelsPairs;

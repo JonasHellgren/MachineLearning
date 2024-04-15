@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import lombok.extern.java.Log;
 

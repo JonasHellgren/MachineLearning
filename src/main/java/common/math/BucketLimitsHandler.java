@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import common.ListUtils;
 import org.jetbrains.annotations.NotNull;
@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static common.MathUtils.accumulatedSum;
+import static common.math.MathUtils.accumulatedSum;
 
 /****
  * In the agent method chooseAction() limits as follows are defined. In this example the limits are [0,0.5,0.75,1]

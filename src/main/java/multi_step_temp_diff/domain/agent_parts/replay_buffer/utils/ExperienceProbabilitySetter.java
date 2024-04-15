@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.agent_parts.replay_buffer.utils;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.java.Log;

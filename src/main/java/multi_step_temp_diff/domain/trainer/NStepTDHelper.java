@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.trainer;
 
 import common.Counter;
 import common.ListUtils;
-import common.LogarithmicDecay;
+import common.math.LogarithmicDecay;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

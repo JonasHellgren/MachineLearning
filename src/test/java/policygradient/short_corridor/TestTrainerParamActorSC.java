@@ -1,6 +1,6 @@
 package policygradient.short_corridor;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;

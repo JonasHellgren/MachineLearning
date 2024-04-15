@@ -2,7 +2,7 @@ package monte_carlo_tree_search.models_and_support_classes;
 
 import common.Conditionals;
 import common.ListUtils;
-import common.ScalerLinear;
+import common.math.ScalerLinear;
 import lombok.Builder;
 import lombok.Getter;
 import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;

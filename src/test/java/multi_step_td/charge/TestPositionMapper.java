@@ -1,6 +1,6 @@
 package multi_step_td.charge;
 
-import common.DifferenceCalculator;
+import common.math.DifferenceCalculator;
 import multi_step_temp_diff.domain.agents.charge.AgentChargeNeuralSettings;
 import multi_step_temp_diff.domain.agents.charge.input_vector_setter.PositionMapper;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;

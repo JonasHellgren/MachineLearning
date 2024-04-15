@@ -14,8 +14,8 @@ import static common.IndexFinder.findBucket;
 import static common.ListUtils.toArray;
 import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static common.BucketLimitsHandler.getLimits;
-import static common.BucketLimitsHandler.throwIfBadLimits;
+import static common.math.BucketLimitsHandler.getLimits;
+import static common.math.BucketLimitsHandler.throwIfBadLimits;
 import static policy_gradient_problems.helpers.GradLogCalculator.calculateGradLog;
 import static common.SoftMaxEvaluator.getProbabilities;
 

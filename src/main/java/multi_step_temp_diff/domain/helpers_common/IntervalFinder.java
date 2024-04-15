@@ -2,9 +2,9 @@ package multi_step_temp_diff.domain.helpers_common;
 
 
 import common.Counter;
-import common.DifferenceCalculator;
+import common.math.DifferenceCalculator;
 import common.ListUtils;
-import common.MathUtils;
+import common.math.MathUtils;
 
 import java.util.List;
 import java.util.function.BiFunction;

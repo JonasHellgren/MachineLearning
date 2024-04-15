@@ -9,8 +9,8 @@ import lombok.SneakyThrows;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 
 import static common.IndexFinder.findBucket;
-import static common.BucketLimitsHandler.getLimits;
-import static common.BucketLimitsHandler.throwIfBadLimits;
+import static common.math.BucketLimitsHandler.getLimits;
+import static common.math.BucketLimitsHandler.throwIfBadLimits;
 
 /**
  * Generic abstract agent, handles a state with variables V

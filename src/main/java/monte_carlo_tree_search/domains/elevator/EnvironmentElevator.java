@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;

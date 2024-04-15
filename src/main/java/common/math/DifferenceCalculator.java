@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import lombok.NonNull;
 import java.util.ArrayList;

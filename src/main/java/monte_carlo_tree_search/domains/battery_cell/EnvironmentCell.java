@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
-import common.Interpolator;
+import common.math.Interpolator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

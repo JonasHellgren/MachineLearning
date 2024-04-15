@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.charge;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;

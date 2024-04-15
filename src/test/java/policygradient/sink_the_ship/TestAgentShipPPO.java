@@ -1,7 +1,7 @@
 package policygradient.sink_the_ship;
 
 import common.Array2ListConverter;
-import common.MathUtils;
+import common.math.MathUtils;
 import common.NormDistributionSampler;
 import common.RandUtils;
 import lombok.extern.java.Log;

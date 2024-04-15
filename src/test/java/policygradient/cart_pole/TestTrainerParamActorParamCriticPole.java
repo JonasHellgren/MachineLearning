@@ -1,6 +1,6 @@
 package policygradient.cart_pole;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;

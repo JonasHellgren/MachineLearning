@@ -1,6 +1,6 @@
 package common.plotters;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Builder;
 
 import javax.swing.*;

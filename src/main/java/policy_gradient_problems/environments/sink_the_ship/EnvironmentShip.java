@@ -1,5 +1,5 @@
 package policy_gradient_problems.environments.sink_the_ship;
-import common.MathUtils;
+import common.math.MathUtils;
 import common.RandUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

@@ -1,7 +1,7 @@
 package policygradient.sink_the_ship;
 
 import common.Counter;
-import common.MathUtils;
+import common.math.MathUtils;
 import common.RandUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,6 @@ import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.StateShip;
 import policy_gradient_problems.environments.sink_the_ship.VariablesShip;
 
-import static common.RandUtils.randomNumberBetweenZeroAndOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

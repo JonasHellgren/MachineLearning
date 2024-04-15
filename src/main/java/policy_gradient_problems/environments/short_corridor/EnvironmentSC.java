@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.short_corridor;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import common.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;

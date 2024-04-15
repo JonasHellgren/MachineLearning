@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.search_tree_node_models;
 
 import common.Conditionals;
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;

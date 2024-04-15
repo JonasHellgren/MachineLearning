@@ -1,7 +1,7 @@
 package common_dl4j;
 
 import com.google.common.base.Preconditions;
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.java.Log;

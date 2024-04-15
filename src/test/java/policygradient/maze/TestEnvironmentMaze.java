@@ -1,6 +1,6 @@
 package policygradient.maze;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;

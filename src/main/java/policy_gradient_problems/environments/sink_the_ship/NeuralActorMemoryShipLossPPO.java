@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import common_dl4j.LossPPO;
 import common_dl4j.NetSettings;
 import org.nd4j.linalg.activations.Activation;

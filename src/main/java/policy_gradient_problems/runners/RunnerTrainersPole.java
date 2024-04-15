@@ -1,6 +1,6 @@
 package policy_gradient_problems.runners;
 
-import common.MovingAverage;
+import common.math.MovingAverage;
 import lombok.extern.java.Log;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;

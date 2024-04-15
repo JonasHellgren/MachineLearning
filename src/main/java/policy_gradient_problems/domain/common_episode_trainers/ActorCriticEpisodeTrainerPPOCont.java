@@ -1,9 +1,8 @@
 package policy_gradient_problems.domain.common_episode_trainers;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Builder;
 import lombok.NonNull;
-import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;

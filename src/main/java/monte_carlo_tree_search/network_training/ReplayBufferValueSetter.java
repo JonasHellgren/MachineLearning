@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.network_training;
 
 import common.ListUtils;
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;

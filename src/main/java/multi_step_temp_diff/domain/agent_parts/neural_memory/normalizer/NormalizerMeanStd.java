@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.java.Log;

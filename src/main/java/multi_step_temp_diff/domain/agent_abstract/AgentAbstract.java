@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.agent_abstract;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.*;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;

@@ -2,7 +2,7 @@ package common_dl4j;
 
 import common.Conditionals;
 import common.ListUtils;
-import common.MathUtils;
+import common.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

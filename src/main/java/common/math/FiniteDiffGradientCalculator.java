@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import lombok.Setter;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;

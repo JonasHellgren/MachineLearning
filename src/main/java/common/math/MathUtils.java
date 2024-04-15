@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import org.apache.commons.math3.util.Pair;
 

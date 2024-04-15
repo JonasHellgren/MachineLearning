@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
 import common.Conditionals;
-import common.MathUtils;
+import common.math.MathUtils;
 import common.RandUtils;
 import lombok.Builder;
 import lombok.ToString;

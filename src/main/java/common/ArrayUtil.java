@@ -1,11 +1,10 @@
 package common;
 
+import common.math.MathUtils;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
-
-import static java.lang.System.arraycopy;
 
 public class ArrayUtil {
 

@@ -1,5 +1,6 @@
 package common;
 
+import common.math.MovingAverage;
 import org.junit.Assert;
 import org.junit.Test;
 

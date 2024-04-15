@@ -1,6 +1,6 @@
 package multi_step_td.maze;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import    lombok.SneakyThrows;
 import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeTabular;

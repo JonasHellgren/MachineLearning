@@ -1,5 +1,6 @@
 package common;
 
+import common.math.LogarithmicDecay;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

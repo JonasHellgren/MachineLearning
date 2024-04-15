@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Builder;
 import lombok.ToString;
 

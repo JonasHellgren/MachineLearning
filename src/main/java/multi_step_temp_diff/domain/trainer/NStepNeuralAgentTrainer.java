@@ -1,6 +1,8 @@
 package multi_step_temp_diff.domain.trainer;
 
 import common.*;
+import common.math.LogarithmicDecay;
+import common.math.MathUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

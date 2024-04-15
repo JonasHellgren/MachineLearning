@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 import java.util.function.Function;
 

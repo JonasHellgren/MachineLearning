@@ -1,6 +1,6 @@
 package policy_gradient_problems.sandbox;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 

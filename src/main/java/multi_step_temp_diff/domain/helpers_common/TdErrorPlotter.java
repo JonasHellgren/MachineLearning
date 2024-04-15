@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_common;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import common.plotters.PlotterMultiplePanelsTrajectory;

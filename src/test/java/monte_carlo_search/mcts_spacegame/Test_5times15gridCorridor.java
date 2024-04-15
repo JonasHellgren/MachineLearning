@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_spacegame;
 
-import common.MathUtils;
+import common.math.MathUtils;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.models_and_support_classes.*;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;

@@ -1,7 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.ScalerLinear;
-import org.mapdb.Atomic;
+import common.math.ScalerLinear;
 
 public class StateNormalizerElevator<SSV> {
 

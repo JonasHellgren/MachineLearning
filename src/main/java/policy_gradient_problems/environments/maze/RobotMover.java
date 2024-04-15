@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.maze;
 import java.awt.geom.Point2D;
 
-import common.BucketLimitsHandler;
+import common.math.BucketLimitsHandler;
 import common.IndexFinder;
 import common.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static common.ListUtils.toArray;
-import static common.MathUtils.clip;
+import static common.math.MathUtils.clip;
 
 /***
  * newIntendedPos, method to calculate new intended position

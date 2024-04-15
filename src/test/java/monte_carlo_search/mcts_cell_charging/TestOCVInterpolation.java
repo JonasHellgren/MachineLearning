@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_cell_charging;
 
-import common.Interpolator;
+import common.math.Interpolator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

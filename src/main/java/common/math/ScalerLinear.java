@@ -1,4 +1,4 @@
-package common;
+package common.math;
 
 /***
  * This class uses linear scaling, out=m*in+b, to relate output to input
