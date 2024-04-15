@@ -7,14 +7,19 @@ import java.util.Optional;
  * Generic action, handles both discrete and continuous actions, only one of the arguments can be non-empty
  */
 
-public record Action(Optional<Integer> intValue, Optional<Double> doubleValue) {
+public record Action(Optional<Integer> intValue, Optional<Double> doubleValue, boolean isSafeCorrected) {
 
     public static Action ofInteger(Integer intAction) {
-        return new Action(Optional.of(intAction), Optional.empty());
+        return new Action(Optional.of(intAction), Optional.empty(),false);
     }
 
     public static Action ofDouble(Double doubleAction) {
-        return new Action(Optional.empty(), Optional.of(doubleAction));
+        return new Action(Optional.empty(), Optional.of(doubleAction),false);
+    }
+
+
+    public static Action ofDoubleSafeCorrected(Double doubleAction) {
+        return new Action(Optional.empty(), Optional.of(doubleAction),true);
     }
 
     public Action {

@@ -5,10 +5,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.value_classes.Experience;
+import policy_gradient_problems.domain.value_classes.ExperienceSafe;
 import policy_gradient_problems.environments.twoArmedBandit.StateBandit;
 import policy_gradient_problems.environments.twoArmedBandit.VariablesBandit;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestExperience {
 
@@ -22,6 +26,7 @@ class TestExperience {
                 .reward(0d)
                 .stateNext(StateBandit.newDefault())
                 .value(0d)
+                .experienceSafe(Optional.empty())
                 .build();
     }
 
@@ -38,6 +43,17 @@ class TestExperience {
      void givenExperience_whenNewWithValue_thenCorrect() {
         experience=experience.copyWithValue(10);
         assertEquals(10,experience.value());
+    }
+
+    @Test
+    void givenExperienceWithSafeCorrected_thenCorrect() {
+        experience=Experience.ofWithIsSafeCorrected(StateBandit.newDefault(),Action.ofInteger(0),0.1,
+                ExperienceSafe.<VariablesBandit>builder()
+                        .action(Action.ofInteger(1))
+                        .reward(0.5).stateNext(StateBandit.newDefault()).probAction(0.5).isTerminal(false)
+                        .build());
+        assertTrue(experience.isSafeCorrected());
+        assertEquals(1d,experience.experienceSafe().orElseThrow().action().asInt());
     }
 
 }

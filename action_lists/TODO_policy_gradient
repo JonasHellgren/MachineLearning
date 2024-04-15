@@ -363,11 +363,11 @@ linear regression md  x
 LinerFitter   x
 TestLinerFitter  x
 
-snygga upp AgentShipParam
+snygga upp AgentShipParam  x
 - ActorMemoryParam göra mer  x
-AgentACShipSafe
-Action - nytt fält isSafeCorected
-Experience - nytt fält ExperienceSafe
+AgentACShipSafe  x
+Action - nytt fält isSafeCorrected  x
+Experience - nytt fält ExperienceSafe  x
 TrainerActorCriticShipParamSafe
 ny klass ParamACTrainerSafe
 
