@@ -36,7 +36,7 @@ public class AgentShipPPO extends AgentA<VariablesShip>
     @Override
     public Action chooseAction() {
         double a = sampler.sampleFromNormDistribution(this.meanAndStd(getState()));
-        return Action.ofDouble(MathUtils.clip(a,0,1));
+        return Action.ofDouble(a);  //MathUtils.clip(a,0,1)
     }
 
     @SneakyThrows

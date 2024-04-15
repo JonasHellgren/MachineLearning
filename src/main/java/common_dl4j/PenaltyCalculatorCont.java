@@ -6,14 +6,15 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import static common_dl4j.LossPPO.STD_CONT_INDEX;
 
 /***
- * WHen below theshold, penaly starts to increase towards maxPen
+ * Logic to avoid to small sigma
+ * When approaching theshold from larger sigma, penalty starts to increase towards maxPen
  */
 
 @AllArgsConstructor
 public class PenaltyCalculatorCont implements PenaltyCalculatorI{
 
     static final double THRESHOLD_DEF = common_dl4j.LossPPO.MIN_STD;
-    static final double MAX_PEN = 100;
+    static final double MAX_PEN = 1;
     static final double STEEPNESS = 1000;
 
     double threshold;
@@ -26,6 +27,6 @@ public class PenaltyCalculatorCont implements PenaltyCalculatorI{
     @Override
     public double penalty(INDArray estProb) {
         double sigma=estProb.getDouble(STD_CONT_INDEX);
-         return MAX_PEN / (1 + Math.exp(STEEPNESS * (sigma - threshold)));
+         return MAX_PEN*1 / (1 + Math.exp(STEEPNESS * (sigma - threshold)));
     }
 }

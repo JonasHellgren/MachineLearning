@@ -41,12 +41,11 @@ public class TrainerActorCriticShipPPO extends TrainerAbstractShip {
             setStartStateInAgent();
             var experiences = getExperiences(agent);
 
-            //experiences.forEach(System.out::println);
+           // experiences.forEach(System.out::println);
 
             var endExp=experiences.get(experiences.size()-1);
             if ( !endExp.isTerminal()) {
                 log.warning("Not ending in terminal, ei="+ei);
-                //log.fine(experiences.toString());
             } else {
                 episodeTrainer.trainAgentFromExperiences(experiences);
                 updateTracker( getStateAngleMap(agent));
@@ -56,8 +55,8 @@ public class TrainerActorCriticShipPPO extends TrainerAbstractShip {
     }
 
     private void setStartStateInAgent() {
-        //agent.setState(StateShip.newFromPos(RandUtils.getRandomIntNumber(0,shipSettings.nStates())));
-        agent.setState(StateShip.newFromPos(0));
+        agent.setState(StateShip.newFromPos(RandUtils.getRandomIntNumber(0,shipSettings.nStates())));
+        //agent.setState(StateShip.newFromPos());
 
     }
 

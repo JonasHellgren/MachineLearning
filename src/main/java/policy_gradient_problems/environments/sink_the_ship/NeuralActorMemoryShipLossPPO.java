@@ -10,6 +10,7 @@ import static common_dl4j.LossPPO.*;
 /**
  * activOutLayer(Activation.SOFTPLUS)  very important, ensures positive std
  * also beta entropy for ppo shall not be to large
+ * very sensitive to learningRate(3e-3)
  */
 
 public class NeuralActorMemoryShipLossPPO {
@@ -29,19 +30,18 @@ public class NeuralActorMemoryShipLossPPO {
 
     private static NetSettings getDefaultNetSettings(ShipSettings shipSettings) {
         return NetSettings.builder()
-                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(10)
+                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(20)
                 .nOutput(N_OUTPUT)
                 .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTPLUS)  //cont action <=> soft plus
-                .learningRate(1e-3).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyCont(0.3,1e-5,1e-3))
+                .learningRate(3e-3).momentum(0.9).seed(1234)
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyCont(0.1,1e-5,1e-3))
                 .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
-                //.sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)  //4 10
                 .build();
     }
 
     public double[] getOutValue(double[] doubles) {
         double[] outValue = memory.getOutValue(doubles);
-        outValue[STD_CONT_INDEX]= MathUtils.clip(outValue[STD_CONT_INDEX],0, MAX_STD);
+        outValue[STD_CONT_INDEX]= MathUtils.clip(outValue[STD_CONT_INDEX],MIN_STD, MAX_STD);
         return outValue;
     }
 

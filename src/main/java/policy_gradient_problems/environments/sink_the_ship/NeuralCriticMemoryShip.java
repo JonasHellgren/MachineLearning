@@ -56,11 +56,11 @@ public class NeuralCriticMemoryShip {
         return NetSettings.builder()
                 .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(5)
                 .nOutput(N_OUTPUT)
-                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)
-                .learningRate(1e-3).momentum(0.9).seed(1234)
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTPLUS)
+                .learningRate(1e-4).momentum(0.9).seed(1234)
                 .lossFunction(LossFunctions.LossFunction.MSE.getILossFunction())
                 //.sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)
-                .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)
+                .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.1)
                 .weightInit(WeightInit.RELU)
                 .build();
     }

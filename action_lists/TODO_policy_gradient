@@ -363,7 +363,8 @@ linear regression md  x
 LinerFitter   x
 TestLinerFitter  x
 
-LinerActorNeuralCriticSafeContAgentCannon
+AgentACShipSafe
+
 
 battery buying with safe RL ppo
 beskriva i md fil

@@ -4,7 +4,6 @@ import common.plotters.PlotterMultiplePanelsTrajectory;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.common_episode_trainers.ActorCriticEpisodeTrainerPPOCont;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
-import policy_gradient_problems.environments.short_corridor.TrainerActorCriticSCLossPPO;
 import policy_gradient_problems.environments.sink_the_ship.*;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 @Log
 public class RunnerActorCriticShipPPO {
 
-    public static final int NOF_EPISODES = 1000;
+    public static final int NOF_EPISODES = 100;
     static final int NOF_STEPS_MAX = 100;
     static final double GAMMA = 0.0;
 
@@ -28,9 +27,10 @@ public class RunnerActorCriticShipPPO {
     private static void plotActionProbabilitiesDuringTraining(TrainerActorCriticShipPPO trainer) {
         for (int s: EnvironmentShip.POSITIONS) {
             var plotter = new PlotterMultiplePanelsTrajectory(
-                    "ActorCritic",
+                    "PPO",
                     List.of("state = "+s+", mean", "std","value"), "episode");
-            plotter.plot(trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s));
+            List<List<Double>> listOfTrajectories = trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s);
+            plotter.plot(listOfTrajectories);
         }
     }
 

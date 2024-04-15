@@ -12,6 +12,6 @@ public record ShipSettings(
 
 
     public static ShipSettings newDefault() {
-        return ShipSettings.builder().nStates(2).nFeatures(1).devMaxMeter(20).build();
+        return ShipSettings.builder().nStates(2).nFeatures(1).devMaxMeter(50).build();
     }
 }
