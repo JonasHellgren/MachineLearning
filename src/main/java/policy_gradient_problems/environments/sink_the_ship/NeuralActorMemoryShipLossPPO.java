@@ -7,6 +7,11 @@ import org.nd4j.linalg.activations.Activation;
 
 import static common_dl4j.LossPPO.*;
 
+/**
+ * activOutLayer(Activation.SOFTPLUS)  very important, ensures positive std
+ * also eps for ppo shall not be to large
+ */
+
 public class NeuralActorMemoryShipLossPPO {
 
     public static final int N_OUTPUT = 2;
@@ -24,12 +29,12 @@ public class NeuralActorMemoryShipLossPPO {
 
     private static NetSettings getDefaultNetSettings(ShipSettings shipSettings) {
         return NetSettings.builder()
-                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(20)
+                .nInput(shipSettings.nStates()).nHiddenLayers(1).nHidden(10)
                 .nOutput(N_OUTPUT)
-                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.IDENTITY)  //cont action <=> identity
-                .learningRate(1e-4).momentum(0.9).seed(1234)
-                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyCont(0.3,1e-5,1e-1))
-                .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.3)  //4 10
+                .activHiddenLayer(Activation.RELU).activOutLayer(Activation.SOFTPLUS)  //cont action <=> soft plus
+                .learningRate(1e-3).momentum(0.9).seed(1234)
+                .lossFunction(LossPPO.newWithEpsPPOEpsFinDiffBetaEntropyCont(0.1,1e-5,1e-3))
+                .sizeBatch(32).isNofFitsAbsolute(false).relativeNofFitsPerBatch(0.5)  //4 10
                 //.sizeBatch(1).isNofFitsAbsolute(true).absNoFit(1)  //4 10
                 .build();
     }

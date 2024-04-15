@@ -19,7 +19,7 @@ public class LossPPO implements ILossFunction  {
     public static final int ACTION_INDEX = 0;
     public static final int ADV_INDEX = 1;
     public static final int PROB_OLD_INDEX = 2;
-    public static final double MIN_STD = 0.1;
+    public static final double MIN_STD = 0.05;
     public static final int MAX_STD = 10;
     public static final int STD_CONT = 1;
 

@@ -16,12 +16,12 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     public static final Set<Integer> POSITIONS =Set.of(0,1);
     public static final boolean IS_FAIL = false;
 
-    final double ANGLE_MAX = Math.PI / 4,CONSTANCE_OF_GRAVITY = 9.81;
-    final double SPEED_PROJECTILE_MPS = 150.0;
+    static final double ANGLE_MAX = Math.PI / 4,CONSTANCE_OF_GRAVITY = 9.81;
+    static final double SPEED_PROJECTILE_MPS = 150.0;
 
 
     public static final Map<Integer,Double> DISTANCE_TO_SHIP_MAP = Map.of(0,1000d, 1,2000d);  //<state, distance>
-    final double REWARD_HIT = 1, REWARD_MISS = 0;
+    static final double REWARD_HIT = 1, REWARD_MISS = 0;
 
     @NonNull  ShipSettings shipSettings;
 
@@ -33,8 +33,7 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     public StepReturn<VariablesShip> step(StateI<VariablesShip> state, Action action) {
         int pos = state.getVariables().pos();
         boolean isHit=isHitting(pos,action.asDouble());
-        double projectileShipDistanceDeviation = getProjectileShipDistanceDeviation(pos, action.asDouble());
-        double reward = getReward(isHit)+10/(projectileShipDistanceDeviation+1);
+        double reward = getReward(isHit);
         var stateNew=StateShip.newFromPos(getStateNew(pos));
         return new StepReturn<>(stateNew, IS_FAIL, isHit, reward);
     }

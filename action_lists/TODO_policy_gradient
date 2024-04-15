@@ -360,8 +360,8 @@ soft plus activ för cont ppo
 lägre/avtagande entropy
 
 linear regression md  x
-LinerFitter
-TestLinerFitter
+LinerFitter   x
+TestLinerFitter  x
 
 LinerActorNeuralCriticSafeContAgentCannon
 

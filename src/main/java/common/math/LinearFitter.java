@@ -9,7 +9,7 @@ import org.apache.commons.math3.util.Pair;
       where xn is 1, because θn is bias/intercept term
       Using x0 as bias is more "traditional" but complicates code
 
- *    Parameter updating:     θi=θi+αLearn*e*xi
+ *    Parameter updating:     θi <- θi+αLearn*e*xi
  */
 
 public class LinearFitter {

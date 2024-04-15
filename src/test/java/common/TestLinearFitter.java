@@ -5,9 +5,7 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
-import java.util.List;
 
 public class TestLinearFitter {
     public static final int K = 5;
