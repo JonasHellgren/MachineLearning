@@ -42,7 +42,7 @@ Result plots are given below. The optimal policy is to take a random action in o
 ![siimVanillaCorridor.png](..%2Fpics%2FsiimVanillaCorridor.png)
 
 ### Reinforce with Baseline
-The corresponding code is [pseudocode](pseudocode_pgrl.md)
+The corresponding code is [pseudocode](../markdown/pseudocode_pgrl.md)
 
 ### One step Actor-Critic
 
@@ -51,7 +51,7 @@ REINFORCE with baseline is unbiased and will converge asymptotically to a local 
 it tends to learn slowly, produce estimates of high variance. With temporal-difference methods we can eliminate these inconveniences.
 
 The is very similar to the base line case, but method for delta calculation is changed as follows
-[pseudocode](pseudocode_pgrl.md).
+[pseudocode](../markdown/pseudocode_pgrl.md).
 The code, applies a bootstrapping critic. Simulations plots below, especially in state 1 is the lower variance, compared to Vanilla REINFORCE, obvious.
 
 ![simACCorridor.png](..%2Fpics%2FsimACCorridor.png)

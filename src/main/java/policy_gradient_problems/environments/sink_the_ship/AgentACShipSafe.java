@@ -8,11 +8,16 @@ import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
-
 import java.util.List;
+
+/**
+ * Light version of safe RL, just clipping action
+ */
 
 public class AgentACShipSafe  implements AgentParamActorTabCriticI<VariablesShip>  {
 
+    public static final double MIN_ACTION = 0.1;
+    public static final double MAX_ACTION = 0.8;
     AgentShipParam agentNonSafe;
 
     public static AgentACShipSafe newRandomStartStateDefaultThetas() {
@@ -32,7 +37,7 @@ public class AgentACShipSafe  implements AgentParamActorTabCriticI<VariablesShip
     @Override
     public Action chooseAction() {
         Action a=agentNonSafe.chooseAction();
-        return  Action.ofDouble(MathUtils.clip(a.doubleValue().orElseThrow(),0.1,0.8));
+        return  Action.ofDouble(MathUtils.clip(a.doubleValue().orElseThrow(), MIN_ACTION, MAX_ACTION));
     }
 
     @Override

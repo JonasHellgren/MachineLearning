@@ -12,7 +12,7 @@
     only if a is safe (a is executed).
 
 
-## PPO training using safe action learning    
+## Training using safe action learning    
 
     Compute returns G_t for each time step t in the episode using multi-step returns
     For each step, 

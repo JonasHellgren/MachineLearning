@@ -368,18 +368,19 @@ snygga upp AgentShipParam  x
 AgentACShipSafe  x
 Action - nytt fält isSafeCorrected  x
 Experience - nytt fält ExperienceSafe  x
-TrainerActorCriticShipParamSafe
-ny klass ParamACTrainerSafe
 
 
+battery buying with safe RL param   -  eskriva i md fil
+BuyingEnvironment
+TestBuyingEnvironment
+LinRegressMemory
+TestLinRegressMemory
+ny klass SafetLayer
+TestSafetLayer
+TrainerACBuyerLinRegressSafe
+ny klass LinRegressSafeEpisodeTrainer
 
-battery buying with safe RL param
-beskriva i md fil
-BuyingElEnvironment
-TestBuyingElEnvironment
-
-
-simplified battery trading with safe RL ppo
+simplified battery trading with safe RL
 
 StateI asArray
 MultiStepResultsGenerator - fimpa : nofExperiences - n + 1;
