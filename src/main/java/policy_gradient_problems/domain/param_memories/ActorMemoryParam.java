@@ -37,8 +37,13 @@ public class ActorMemoryParam {
         return params;
     }
 
-    public double getEntry(int i) {
+    public double getValue(int i) {
         return params.getEntry(i);
     }
+
+    public double getValue(int i,int offest) {
+        return params.getEntry(i+offest);
+    }
+
 
 }

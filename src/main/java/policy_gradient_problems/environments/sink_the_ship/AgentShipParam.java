@@ -2,6 +2,7 @@ package policy_gradient_problems.environments.sink_the_ship;
 
 import common.ArrayUtil;
 import common.NormDistributionSampler;
+import common_dl4j.LossPPO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -17,7 +18,7 @@ import common.SubArrayExtractor;
 import policy_gradient_problems.domain.param_memories.CriticMemoryParamOneHot;
 
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.DoubleBinaryOperator;
 
 import static common.MyFunctions.*;
 import static common.SoftMaxEvaluator.getProbabilities;
@@ -31,9 +32,12 @@ import static common.SoftMaxEvaluator.getProbabilities;
 @Setter
 public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamActorTabCriticI<VariablesShip> {
 
-    public static final double THETA_MEAN = 0.5,THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
+    public static final double THETA_MEAN = 0.5;
+    public static final double THETA_STD = Math.log(0.5);  //std=exp(log(0.5)=0.5 => a ~ N(0.5,0.5)
     public static final int NOF_THETAS_PER_STATE = 2;
-    public static final double STD_MIN = 2.5e-2,  SMALLEST_DENOM = 1e-2,  MAX_GRAD_ELEMENT = 1;
+    public static final double STD_MIN = 2.5e-2;
+    public static final double SMALLEST_DENOM = 1e-2;
+    public static final double MAX_GRAD_ELEMENT = 1;
 
     ActorMemoryParam actor;
     CriticMemoryParamOneHot critic;
@@ -75,8 +79,6 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
     @Override
     public List<Double> actionProbabilitiesInPresentState() {
         throw new NoSuchMethodException();
-        //var thetaArr= actor.toArray();
-       // return getProbabilities(ListUtils.arrayPrimitiveDoublesToList(thetaArr));
     }
 
     @Override
@@ -87,11 +89,8 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
         return new ArrayRealVector(ArrayUtil.clip(gradLogAllStates,-MAX_GRAD_ELEMENT,MAX_GRAD_ELEMENT));
     }
 
-    public void setRandomState() {
-        setState(StateShip.newFromPos(EnvironmentShip.getRandomPos()));
-    }
 
-    BiFunction<Double,Double,Double> scaleToAccountThatStdIsExpTheta= (g,k) -> g*k;
+    DoubleBinaryOperator scaleToAccountThatStdIsExpTheta= (g, k) -> g*k;
 
     private double[] calculateGradLogForState(int state, double action) {
         var meanAndStd= meanAndStd(state);
@@ -100,15 +99,15 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
         double denom = secondArgIfSmaller.apply(sqr2.apply(std), SMALLEST_DENOM);
         double gradMean=1/denom*(action-mean);
         double gradStd=zeroIfTrueElseNum.apply(std<STD_MIN,sqr2.apply(action-mean)/sqr3.apply(std)-1d/std);
-        double gradStdTheta=scaleToAccountThatStdIsExpTheta.apply(gradStd,1d/std);
+        double gradStdTheta=scaleToAccountThatStdIsExpTheta.applyAsDouble(gradStd,1d/std);
         return new double[]{gradMean,gradStdTheta};
     }
 
     public Pair<Double,Double> meanAndStd(int state) {
         throwIfBadState(state);
         int indexFirstTheta = subArrayExtractor.getIndexFirstThetaForSubArray(state);
-        double mean = actor.getEntry(indexFirstTheta);
-        double std = Math.exp(actor.getEntry(indexFirstTheta+NOF_THETAS_PER_STATE-1));
+        double mean = actor.getValue(indexFirstTheta, LossPPO.MEAN_CONT_INDEX);
+        double std = Math.exp(actor.getValue(indexFirstTheta,LossPPO.STD_CONT_INDEX));
         return Pair.create(mean, std);
     }
 

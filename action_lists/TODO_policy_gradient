@@ -364,9 +364,7 @@ LinerFitter   x
 TestLinerFitter  x
 
 snygga upp AgentShipParam
-- ActorMemoryParam göra mer
-- CriticMemoryParamOneHot ej one hot
-
+- ActorMemoryParam göra mer  x
 AgentACShipSafe
 Action - nytt fält isSafeCorected
 Experience - nytt fält ExperienceSafe
