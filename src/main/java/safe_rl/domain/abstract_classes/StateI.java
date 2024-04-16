@@ -11,6 +11,8 @@ public interface StateI<V> {
     double[]  continousFeatures();
     int nContinousFeatures();
     int[]  discretFeatures();
+    void setContinousFeatures(double[] features);
+    void  setDiscretFeatures(int[] feautures);
     int hashCode();
     boolean equals(Object o);
 

@@ -48,6 +48,16 @@ public class StateBuying implements StateI<VariablesBuying> {
     }
 
     @Override
+    public void setContinousFeatures(double[] features) {
+        variables=variables.withSoc(features[0]);
+    }
+
+    @Override
+    public void setDiscretFeatures(int[] features) {
+        variables=variables.withTime(features[0]);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || o.getClass() != this.getClass()) {
             return false;

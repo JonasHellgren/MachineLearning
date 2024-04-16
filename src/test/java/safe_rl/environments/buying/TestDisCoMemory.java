@@ -36,9 +36,7 @@ class TestDisCoMemory {
     @Test
     void givenEmpty_whenRead_thenCorrect() {
         double[] theta = memory.read(state);
-        System.out.println("theta = " + Arrays.toString(theta));
         assertTrue(isDoubleArraysEqual(new double[]{0, 0}, memory.read(state), TOL));
-
     }
 
     @Test

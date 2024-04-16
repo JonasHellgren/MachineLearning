@@ -24,6 +24,23 @@ class TestStateBuyingZero {
         Assertions.assertEquals(0,stateCopy.getVariables().time());
     }
 
+    @Test
+    void whenCopyModBySetContFeat_thenCorrect() {
+        var stateCopy=state.copy();
+        state.setContinousFeatures(new double[]{0.5});  //does not affect stateCopy
+        Assertions.assertEquals(0.5,state.getVariables().soc());
+        Assertions.assertEquals(0,stateCopy.getVariables().soc());
+        Assertions.assertEquals(0,stateCopy.getVariables().time());
+    }
+
+    @Test
+    void whenCopyModBySetDiscreteFeat_thenCorrect() {
+        var stateCopy=state.copy();
+        state.setDiscretFeatures(new int[]{2});  //does not affect stateCopy
+        Assertions.assertEquals(2,state.getVariables().time());
+        Assertions.assertEquals(0,stateCopy.getVariables().time());
+    }
+
 
     @Test
     void whenContFeat_thenCorrect() {
