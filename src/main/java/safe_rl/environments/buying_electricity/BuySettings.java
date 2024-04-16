@@ -19,7 +19,7 @@ public record BuySettings(
         return BuySettings.builder()
                 .dt(1)
                 .energyBatt(10)
-                .powerBattMax(2)
+                .powerBattMax(3)
                 .socMax(1)
                 .priceEnd(10)
                 .priceTraj(new double[]{1,2,3,4,5})

@@ -4,8 +4,8 @@ tanka över klasser  x
 moddda action och exp i pol gradient  x
 battery buying with safe RL param   -  eskriva i md fil  x
 Experience snyggare  x
-BuyingEnvironment
-TestBuyingEnvironment
+BuyingEnvironment  x
+TestBuyingEnvironment  x
 LinRegressMemory
 TestLinRegressMemory
 ny klass SafetLayer

@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.environments.buying_electricity.*;
 
-public class TestEnvironmentBuying {
+public class TestEnvironmentBuying5HoursIncreasingPrice {
 
     public static final double REWARD_TOL = 1e-5;
 
@@ -49,23 +49,12 @@ public class TestEnvironmentBuying {
         stateTime4 =StateBuying.of(VariablesBuying.builder().soc(0.1).time(4.0).build());
     }
 
-    @Test
-    void givenZeroState_whenOnePower_thenCorrect() {
-        var sr=environment.step(stateAllZero, Action.ofDouble(1d));
-        System.out.println("sr = " + sr);
-
-        Assertions.assertFalse(sr.isFail());
-        Assertions.assertEquals(0.1,sr.state().getVariables().soc());
-        Assertions.assertEquals(1,sr.state().getVariables().time());
-
-    }
-
     @ParameterizedTest
     @CsvSource({
             "0,     1,0.0,0,false",
             "1,     1,0.1,-1,false",
-            "2.0,     1,0.2,-2,false",
-            "2.1,     1,0.21,-12.1,true",
+            "3.0,     1,0.3,-3,false",
+            "3.1,     1,0.31,-13.1,true",  //power exceeded
             "-1,    1,-0.1,-10,true"})
     void givenZeroState_thenCorrect(ArgumentsAccessor arguments) {
         var pa=ParArg.newOf(arguments);
