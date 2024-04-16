@@ -23,6 +23,7 @@ public class LinearFitter {
     @Getter
     @Setter
     double[] theta;
+    LinearDecoder decoder;
 
     public static LinearFitter ofLearningRateAndNDim(double alphaLearning, Integer nDim) {
         return new LinearFitter(alphaLearning, nDim);
@@ -36,6 +37,7 @@ public class LinearFitter {
         this.alphaLearning = alphaLearning;
         this.nDim = nDim;
         this.theta = new double[nDim + 1];
+        this.decoder=new LinearDecoder(nDim);
     }
 
     public void fit(Pair<Double, double[]> point) {
@@ -44,10 +46,9 @@ public class LinearFitter {
 
     public void fit(double y, double[] xArr) {
         Preconditions.checkArgument(xArr.length == nDim, ARGUMENT_ERROR_MSG + xArr.length);
-        double yPred = predict(xArr);
+        double yPred = decoder.read(xArr,theta);
         double e = y - yPred;
         fitFromError(xArr, e);
-
     }
 
     public void fitFromError(double[] xArr, double e) {
@@ -57,13 +58,10 @@ public class LinearFitter {
         }
     }
 
-    public double predict(double[] x) {
-        Preconditions.checkArgument(x.length == nDim, ARGUMENT_ERROR_MSG + x.length);
-        double yPred = theta[nDim] * 1;  //xn=1
-        for (int i = 0; i < nDim; i++) {
-            yPred += yPred + theta[i] * x[i];
-        }
-        return yPred;
+    public double predict(double[] xArr) {
+        return decoder.read(xArr,theta);
     }
+
+
 
 }

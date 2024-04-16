@@ -9,7 +9,8 @@ TestBuyingEnvironment  x
 TestStateBuying  x
 DisCoMemory x
 TestDisCoMemory x
-DisCoMemoryInitializer
+DisCoMemoryInitializer x
+TestDisCoMemoryInitializer
 ny klass SafetyLayer
 TestSafetyLayer
 TrainerACBuyerSafe

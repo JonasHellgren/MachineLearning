@@ -13,7 +13,7 @@ import safe_rl.environments.buying_electricity.VariablesBuying;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
+class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
 
     EnvironmentBuying environment;
     StateBuying stateAllZero;

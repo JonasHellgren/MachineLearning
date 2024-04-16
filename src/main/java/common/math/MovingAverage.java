@@ -12,26 +12,34 @@ public class MovingAverage {
     List<Double> inList;
     Deque<Double> deque;
 
-    public MovingAverage(int lengthWindow,List<Double> inList) {
+    public MovingAverage(int lengthWindow, List<Double> inList) {
         this.lengthWindow = lengthWindow;
-        this.inList=inList;
-        this.deque=new LinkedList<>();
+        this.inList = inList;
+        this.deque = new LinkedList<>();
     }
 
     public List<Double> getFiltered() {
-        List<Double> outList=new ArrayList<>();
-        for (double value:inList) {
-            outList.add(next(value));
+        List<Double> outList = new ArrayList<>();
+        for (double value : inList) {
+            outList.add(addValue(value));
         }
         return outList;
     }
 
-    private double next(double value) {
-        if (deque.size() == lengthWindow) {
+    public double addValue(double value) {
+        if (filled()) {
             deque.removeFirst();
         }
         deque.addLast(value);
-        return sumOfQue(deque)/deque.size();
+        return average();
+    }
+
+    public double average() {
+        return sumOfQue(deque) / deque.size();
+    }
+
+    public boolean filled() {
+        return deque.size() == lengthWindow;
     }
 
 

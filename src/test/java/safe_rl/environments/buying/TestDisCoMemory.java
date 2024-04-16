@@ -1,6 +1,5 @@
 package safe_rl.environments.buying;
 
-import common.list_arrays.ArrayUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +7,6 @@ import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
-
-import java.util.Arrays;
 
 import static common.list_arrays.ArrayUtil.isDoubleArraysEqual;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,15 +32,15 @@ class TestDisCoMemory {
 
     @Test
     void givenEmpty_whenRead_thenCorrect() {
-        double[] theta = memory.read(state);
-        assertTrue(isDoubleArraysEqual(new double[]{0, 0}, memory.read(state), TOL));
+        double[] theta = memory.readThetas(state);
+        assertTrue(isDoubleArraysEqual(new double[]{0, 0}, memory.readThetas(state), TOL));
     }
 
     @Test
     void whenSaveAndRead_thenCorrect() {
         double[] thetas = {1, 1};
         memory.save(state, thetas);
-        assertTrue(isDoubleArraysEqual(thetas, memory.read(state), TOL));
+        assertTrue(isDoubleArraysEqual(thetas, memory.readThetas(state), TOL));
     }
 
     @Test
@@ -64,8 +61,8 @@ class TestDisCoMemory {
         double[] theta2 = {2, 2};
         memory.save(stateMod, theta2);
         assertEquals(2,memory.size());
-        assertTrue(isDoubleArraysEqual(theta0, memory.read(state), TOL));
-        assertTrue(isDoubleArraysEqual(theta2, memory.read(stateMod), TOL));
+        assertTrue(isDoubleArraysEqual(theta0, memory.readThetas(state), TOL));
+        assertTrue(isDoubleArraysEqual(theta2, memory.readThetas(stateMod), TOL));
     }
 
 

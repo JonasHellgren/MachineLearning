@@ -1,10 +1,12 @@
 package safe_rl.domain.memories;
 
 import common.list_arrays.ArrayUtil;
+import common.math.LinearDecoder;
 import safe_rl.domain.abstract_classes.StateI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /***
@@ -15,21 +17,27 @@ public class DisCoMemory<V> {
 
     public static final double VALUE_PAR_DEFAULT = 0d;
     Map<StateI<V>, double[]> stateParMap;
-    int nParams;
+    int nThetaPerKey;  //one more theta than nContFeatures, one theta is bias
+    LinearDecoder decoder;
 
     public DisCoMemory(int nThetaPerKey) {
         this.stateParMap = new HashMap<>();
-        this.nParams = nThetaPerKey;
+        this.nThetaPerKey = nThetaPerKey;
+        this.decoder=new LinearDecoder(nThetaPerKey-1);
     }
 
     public void save(StateI<V> state, double[] thetas) {
         stateParMap.put(state, thetas);
     }
 
-    public double[] read(StateI<V> state) {
+    public double read(StateI<V> state) {
+        return decoder.read(state.continousFeatures(),readThetas(state));
+    }
+
+    public double[] readThetas(StateI<V> state) {
         return contains(state)
                 ? stateParMap.get(state)
-                : ArrayUtil.createArrayWithSameDoubleNumber(nParams, VALUE_PAR_DEFAULT);
+                : ArrayUtil.createArrayWithSameDoubleNumber(nThetaPerKey, VALUE_PAR_DEFAULT);
     }
 
     public boolean contains(StateI<V> state) {
@@ -38,6 +46,10 @@ public class DisCoMemory<V> {
 
     public int size() {
         return stateParMap.size();
+    }
+
+    public Set<StateI<V>> keys() {
+        return stateParMap.keySet();
     }
 
     @Override
