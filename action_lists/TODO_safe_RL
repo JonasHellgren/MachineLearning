@@ -9,9 +9,10 @@ TestBuyingEnvironment  x
 TestStateBuying  x
 DisCoMemory x
 TestDisCoMemory x
+DisCoMemoryInitializer
 ny klass SafetyLayer
 TestSafetyLayer
-TrainerACBuyerLinRegressSafe
-ny klass LinRegressSafeEpisodeTrainer
+TrainerACBuyerSafe
+ny klass SafeEpisodeTrainer
 
 simplified battery trading with safe RL

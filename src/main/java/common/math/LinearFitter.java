@@ -2,13 +2,13 @@ package common.math;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.util.Pair;
 
 /***
  *    yPred=θ0*x0+θ1*x1..+θn*xn
-      where xn is 1, because θn is bias/intercept term
-      Using x0 as bias is more "traditional" but complicates code
-
+ where xn is 1, because θn is bias/intercept term
+ Using x0 as bias is more "traditional" but complicates code
  *    Parameter updating:     θi <- θi+αLearn*e*xi
  */
 
@@ -21,6 +21,7 @@ public class LinearFitter {
     Integer nDim;
 
     @Getter
+    @Setter
     double[] theta;
 
     public static LinearFitter ofLearningRateAndNDim(double alphaLearning, Integer nDim) {
@@ -38,7 +39,7 @@ public class LinearFitter {
     }
 
     public void fit(Pair<Double, double[]> point) {
-        fit(point.getFirst(),point.getSecond());
+        fit(point.getFirst(), point.getSecond());
     }
 
     public void fit(double y, double[] xArr) {
@@ -51,8 +52,8 @@ public class LinearFitter {
 
     public void fitFromError(double[] xArr, double e) {
         for (int i = 0; i < nDim + 1; i++) {
-            double x = i == nDim  ? 1 : xArr[i];
-            theta[i]=theta[i] + alphaLearning * e * x;
+            double x = i == nDim ? 1 : xArr[i];
+            theta[i] = theta[i] + alphaLearning * e * x;
         }
     }
 
