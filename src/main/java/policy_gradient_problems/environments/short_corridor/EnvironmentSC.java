@@ -5,7 +5,7 @@ import common.other.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import common.reinforcment_learning.value_classes.StepReturn;
+import policy_gradient_problems.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
 import java.util.Map;

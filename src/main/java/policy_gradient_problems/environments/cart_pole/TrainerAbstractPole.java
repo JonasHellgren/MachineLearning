@@ -13,7 +13,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.ReturnCalculator;
-import common.reinforcment_learning.value_classes.StepReturn;
+import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;

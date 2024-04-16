@@ -7,7 +7,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
 import policy_gradient_problems.domain.value_classes.Experience;
-import common.reinforcment_learning.value_classes.StepReturn;
+import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;

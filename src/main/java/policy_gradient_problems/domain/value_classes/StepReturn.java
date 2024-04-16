@@ -1,4 +1,4 @@
-package common.reinforcment_learning.value_classes;
+package policy_gradient_problems.domain.value_classes;
 
 import lombok.Builder;
 import policy_gradient_problems.domain.abstract_classes.StateI;

@@ -5,7 +5,7 @@ import common.other.RandUtils;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import common.reinforcment_learning.value_classes.StepReturn;
+import policy_gradient_problems.domain.value_classes.StepReturn;
 import policy_gradient_problems.environments.cart_pole.*;
 
 import java.util.ArrayList;

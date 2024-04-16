@@ -2,7 +2,7 @@ package policy_gradient_problems.environments.maze;
 
 import common.other.Counter;
 import lombok.Builder;
-import common.reinforcment_learning.value_classes.StepReturn;
+import policy_gradient_problems.domain.value_classes.StepReturn;
 
 @Builder
 public class AgentRunner {

@@ -17,7 +17,7 @@ class TestExperience {
     @BeforeEach
      void init() {
         experience=Experience.notSafeCorrected(
-                StateBuying.newDefault(),Action.ofInteger(0),0d,StateBuying.newDefault()
+                StateBuying.newZero(),Action.ofInteger(0),0d,StateBuying.newZero()
                 ,false);
     }
 
@@ -39,8 +39,8 @@ class TestExperience {
     @Test
     void givenExperienceWithSafeCorrected_thenCorrect() {
         experience=Experience.safeCorrected(
-                StateBuying.newDefault(),Action.ofInteger(0),Action.ofInteger(1),
-                0d,StateBuying.newDefault()
+                StateBuying.newZero(),Action.ofInteger(0),Action.ofInteger(1),
+                0d,StateBuying.newZero()
                 ,false);
 
         assertTrue(experience.isSafeCorrected());
