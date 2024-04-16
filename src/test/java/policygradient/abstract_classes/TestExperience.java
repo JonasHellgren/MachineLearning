@@ -26,7 +26,6 @@ class TestExperience {
                 .reward(0d)
                 .stateNext(StateBandit.newDefault())
                 .value(0d)
-                .experienceSafe(Optional.empty())
                 .build();
     }
 
@@ -45,7 +44,7 @@ class TestExperience {
         assertEquals(10,experience.value());
     }
 
-    @Test
+/*    @Test
     void givenExperienceWithSafeCorrected_thenCorrect() {
         experience=Experience.ofWithIsSafeCorrected(StateBandit.newDefault(),Action.ofInteger(0),0.1,
                 ExperienceSafe.<VariablesBandit>builder()
@@ -54,6 +53,6 @@ class TestExperience {
                         .build());
         assertTrue(experience.isSafeCorrected());
         assertEquals(1d,experience.experienceSafe().orElseThrow().action().asInt());
-    }
+    }*/
 
 }

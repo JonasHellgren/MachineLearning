@@ -105,7 +105,7 @@ public class TestAgentShipPPO {
     }
 
     @Test
-  //  @Disabled("long time")
+    @Disabled("long time")
     void whenFitActor_thenCorrect() {
         int nIter = 300;
         for (int i = 0; i < nIter; i++) {

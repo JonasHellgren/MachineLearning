@@ -2,8 +2,9 @@ package safe_rl.domain.value_classes;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.abstract_classes.StateI;
+import safe_rl.domain.value_classes.*;
+import safe_rl.domain.abstract_classes.*;
+
 
 /***
  * Relevant in safe RL

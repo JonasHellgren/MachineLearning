@@ -11,7 +11,7 @@ class TestAction {
     @Test
     void whenActionBothInAndDouble_thenThrows() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> new Action(Optional.of(1), Optional.of(1d),false));
+                () -> new Action(Optional.of(1), Optional.of(1d)));
     }
 
     @Test
@@ -24,14 +24,6 @@ class TestAction {
      void whenDoubleAction_thenCorrect() {
         Action action = Action.ofDouble(1d);
         Assertions.assertEquals(1d, action.asDouble());
-    }
-
-    @Test
-    void whenDoubleActionAndSafeCorrected_thenCorrect() {
-        Action action = Action.ofDoubleSafeCorrected(1d);
-        Assertions.assertEquals(1d, action.asDouble());
-        Assertions.assertTrue(action.isSafeCorrected());
-
     }
 
     @Test

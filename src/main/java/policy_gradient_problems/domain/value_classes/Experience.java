@@ -20,8 +20,7 @@ public record Experience<V>(
         double probAction,
         boolean isFail,
         boolean isTerminal,
-        double value,
-        @NonNull Optional<ExperienceSafe<V>> experienceSafe) {
+        double value) {
 
     public static final double DEFAULT_VALUE = 0d;
     public static final int PROB_ACTION = 1;
@@ -31,7 +30,7 @@ public record Experience<V>(
                                        double reward,
                                        StateI<V> stateNext
     ) {
-        return new Experience<>(state, action, reward, stateNext, PROB_ACTION, false, false, DEFAULT_VALUE,Optional.empty());
+        return new Experience<>(state, action, reward, stateNext, PROB_ACTION, false, false, DEFAULT_VALUE);
     }
 
 
@@ -42,7 +41,7 @@ public record Experience<V>(
                                                double probAction,
                                                boolean isFail
     ) {
-        return new Experience<>(state, action, reward, stateNext, probAction, isFail, false, DEFAULT_VALUE,Optional.empty());
+        return new Experience<>(state, action, reward, stateNext, probAction, isFail, false, DEFAULT_VALUE);
     }
 
     public static <V> Experience<V> ofWithIsTerminal(StateI<V> state,
@@ -52,7 +51,7 @@ public record Experience<V>(
                                                  double probAction,
                                                  boolean isTerminal
     ) {
-        return new Experience<>(state, action, reward, stateNext, probAction, false, isTerminal, DEFAULT_VALUE,Optional.empty());
+        return new Experience<>(state, action, reward, stateNext, probAction, false, isTerminal, DEFAULT_VALUE);
     }
 
     public static <V> Experience<V> ofWithIsSafeCorrected(StateI<V> state,
@@ -62,11 +61,7 @@ public record Experience<V>(
     ) {
         return Experience.<V>builder()
                 .state(state).action(actionNotSafe).probAction(probActionNotSafe)
-                .experienceSafe(Optional.of(experienceSafe)).build();
-    }
-
-    public boolean isSafeCorrected() {
-        return experienceSafe().isPresent();
+                .build();
     }
 
     public Experience<V> copyWithValue(double value) {
@@ -74,7 +69,6 @@ public record Experience<V>(
                 .state(state).action(action).reward(reward).stateNext(stateNext)
                 .probAction(probAction).isFail(isFail).isTerminal(isTerminal)
                 .value(value)
-                .experienceSafe(isSafeCorrected()? Optional.ofNullable(experienceSafe.orElseThrow().copy()) :Optional.empty())
                 .build();
     }
 }

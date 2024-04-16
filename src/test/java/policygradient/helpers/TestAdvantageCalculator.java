@@ -40,7 +40,6 @@ class TestAdvantageCalculator {
         int reward = 0;
         Experience<VariablesPole> exp = Experience.<VariablesPole>builder()
                 .isFail(true).state(STATE).action(Action.ofInteger(1)).reward(reward)
-                .experienceSafe(Optional.empty())
                 .build();
         Assertions.assertEquals(reward, advantageCalculator.calcAdvantage(exp));
     }
@@ -50,7 +49,6 @@ class TestAdvantageCalculator {
         int reward = 0;
         Experience<VariablesPole> exp = Experience.<VariablesPole>builder()
                 .isFail(false).state(STATE).action(Action.ofInteger(1)).stateNext(STATE).reward(reward)
-                .experienceSafe(Optional.empty())
                 .build();
         Assertions.assertNotEquals(reward, advantageCalculator.calcAdvantage(exp));
     }

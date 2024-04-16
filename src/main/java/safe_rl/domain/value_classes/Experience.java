@@ -2,10 +2,8 @@ package safe_rl.domain.value_classes;
 
 import lombok.Builder;
 import lombok.NonNull;
-import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.domain.value_classes.ExperienceSafe;
-
+import safe_rl.domain.value_classes.*;
+import safe_rl.domain.abstract_classes.*;
 import java.util.Optional;
 
 /**
@@ -22,7 +20,7 @@ public record Experience<V>(
         boolean isFail,
         boolean isTerminal,
         double value,
-        @NonNull Optional<policy_gradient_problems.domain.value_classes.ExperienceSafe<V>> experienceSafe) {
+        @NonNull Optional<ExperienceSafe<V>> experienceSafe) {
 
     public static final double DEFAULT_VALUE = 0d;
     public static final int PROB_ACTION = 1;

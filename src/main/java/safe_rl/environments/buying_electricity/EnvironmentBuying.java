@@ -1,9 +1,10 @@
-package policy_gradient_problems.environments.buying_electricity;
+package safe_rl.environments.buying_electricity;
 
-import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
-import policy_gradient_problems.domain.abstract_classes.StateI;
+
 import common.reinforcment_learning.value_classes.StepReturn;
+import safe_rl.domain.abstract_classes.EnvironmentI;
+import safe_rl.domain.abstract_classes.*;
+
 
 public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
 
