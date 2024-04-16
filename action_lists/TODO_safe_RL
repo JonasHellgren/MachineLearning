@@ -6,8 +6,9 @@ battery buying with safe RL param   -  eskriva i md fil  x
 Experience snyggare  x
 BuyingEnvironment  x
 TestBuyingEnvironment  x
-DisCoMemory
-TestDisCoMemory
+TestStateBuying  x
+DisCoMemory x
+TestDisCoMemory x
 ny klass SafetyLayer
 TestSafetyLayer
 TrainerACBuyerLinRegressSafe

@@ -29,7 +29,7 @@ public class StateBuying implements StateI<VariablesBuying> {
 
     @Override
     public StateI<VariablesBuying> copy() {
-        return new StateBuying(variables);
+        return new StateBuying(variables.copy());
     }
 
     @Override
@@ -53,12 +53,12 @@ public class StateBuying implements StateI<VariablesBuying> {
             return false;
         }
         var v=((StateBuying) o).variables;
-        return variables.equals(v);
+        return variables.equalDiscrete(v);
     }
 
     @Override
     public int hashCode() {
-        return variables.hashCode();
+        return variables.hashDiscrete();
     }
 
     public double time() {
