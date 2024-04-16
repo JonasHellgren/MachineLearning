@@ -1,7 +1,7 @@
 package policy_gradient_problems.helpers;
 
-import common.Conditionals;
-import common.ListUtils;
+import common.other.Conditionals;
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import policy_gradient_problems.domain.abstract_classes.StateI;

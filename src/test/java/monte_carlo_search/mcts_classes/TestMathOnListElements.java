@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_classes;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

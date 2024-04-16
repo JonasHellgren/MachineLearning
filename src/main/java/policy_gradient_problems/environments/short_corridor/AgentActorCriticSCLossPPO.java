@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 
 import java.util.List;
 
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 
 public class AgentActorCriticSCLossPPO extends AgentA<VariablesSC>
         implements AgentNeuralActorNeuralCriticI<VariablesSC> {

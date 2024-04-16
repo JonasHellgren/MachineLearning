@@ -4,8 +4,8 @@ package monte_carlo_tree_search.swing;
 import lombok.Setter;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import swing.Position2D;
-import swing.ScaleLinear;
+import common.swing.Position2D;
+import common.swing.ScaleLinear;
 
 import javax.swing.*;
 import java.awt.*;

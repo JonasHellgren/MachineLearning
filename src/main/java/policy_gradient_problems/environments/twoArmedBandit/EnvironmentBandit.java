@@ -1,11 +1,11 @@
 package policy_gradient_problems.environments.twoArmedBandit;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 
 
 /**

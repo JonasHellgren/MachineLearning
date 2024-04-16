@@ -14,7 +14,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;
 
-import static common.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeIfTrue;
 
 /***
  * Start state for every episode is deterministic to enable interpretation training evolution,

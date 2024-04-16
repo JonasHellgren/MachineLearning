@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.twoArmedBandit;
 
-import common.*;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +15,9 @@ import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 
 import java.util.List;
-import static common.MyFunctions.*;
+import static common.other.MyFunctions.*;
 import static policy_gradient_problems.helpers.GradLogCalculator.calculateGradLog;
-import static common.SoftMaxEvaluator.getProbabilities;
+import static common.other.SoftMaxEvaluator.getProbabilities;
 
 
 /***

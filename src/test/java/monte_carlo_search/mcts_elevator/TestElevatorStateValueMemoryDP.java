@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_elevator;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.domains.elevator.ElevatorValueMemoryNetwork;
 import monte_carlo_tree_search.domains.elevator.StateElevator;

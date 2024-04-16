@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common_dl4j.Dl4JUtil;
+import common.dl4j.Dl4JUtil;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 

@@ -1,7 +1,7 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.Conditionals;
-import common.ListUtils;
+import common.other.Conditionals;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;

@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
-import static common.ArrayUtil.transposeMatrix;
+import static common.list_arrays.ArrayUtil.transposeMatrix;
 
 @AllArgsConstructor
 public class MazeAgentPlotter {

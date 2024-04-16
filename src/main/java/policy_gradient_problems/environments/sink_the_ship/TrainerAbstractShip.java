@@ -2,21 +2,17 @@ package policy_gradient_problems.environments.sink_the_ship;
 
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.abstract_classes.TrainerA;
-import policy_gradient_problems.domain.param_memories.CriticMemoryParamOneHot;
 import policy_gradient_problems.domain.value_classes.Experience;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Log
 public abstract class TrainerAbstractShip extends TrainerA<VariablesShip> {

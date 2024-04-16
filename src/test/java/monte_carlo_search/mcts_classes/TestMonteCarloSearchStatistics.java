@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_classes;
 
-import common.CpuTimer;
+import common.other.CpuTimer;
 import monte_carlo_tree_search.domains.models_space.*;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics;

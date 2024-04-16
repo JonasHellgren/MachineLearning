@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.With;
 
 @Builder
-public record ShipSettings(
+public record ShipSettings (
         int nStates,
         int nFeatures,
         @With  double devMaxMeter

@@ -1,6 +1,6 @@
 package policy_gradient_problems.domain.abstract_classes;
 
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 
 public interface EnvironmentI<V> {
 

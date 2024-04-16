@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.trainer_valueobj;
 
 import lombok.Builder;
 
-import static common.MyFunctions.*;
+import static common.other.MyFunctions.*;
 
 public record NStepNeuralAgentTrainerSettings(
         Integer nofStepsBetweenUpdatedAndBackuped,

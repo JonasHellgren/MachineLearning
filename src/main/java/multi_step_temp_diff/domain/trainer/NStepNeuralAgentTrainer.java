@@ -1,8 +1,9 @@
 package multi_step_temp_diff.domain.trainer;
 
-import common.*;
+import common.list_arrays.ListUtils;
 import common.math.LogarithmicDecay;
 import common.math.MathUtils;
+import common.other.CpuTimer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -22,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import static common.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPredicates.*;
 
 /**

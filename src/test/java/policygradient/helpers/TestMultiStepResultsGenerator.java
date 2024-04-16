@@ -1,6 +1,6 @@
 package policygradient.helpers;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

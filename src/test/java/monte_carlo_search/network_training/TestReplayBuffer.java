@@ -1,6 +1,6 @@
 package monte_carlo_search.network_training;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.StateCartPole;
 import monte_carlo_tree_search.network_training.Experience;

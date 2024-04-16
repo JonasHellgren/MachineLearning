@@ -1,7 +1,11 @@
 package multi_step_temp_diff.domain.agent_parts.replay_buffer;
 
-import common.*;
+import common.list_arrays.ListUtils;
 import common.math.MathUtils;
+import common.other.Conditionals;
+import common.other.Counter;
+import common.other.CpuTimer;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -78,7 +82,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
      */
 
     @Override
-    public void addExperience(NstepExperience<S> experience,CpuTimer timer) {
+    public void addExperience(NstepExperience<S> experience, CpuTimer timer) {
         boolean isRemoved=removeRandomItemIfFull();
         buffer.add(experience);
         double beta=BETA0+(BETA1-BETA0)*timer.relativeProgress();

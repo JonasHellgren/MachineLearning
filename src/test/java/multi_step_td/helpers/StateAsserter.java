@@ -1,6 +1,6 @@
 package multi_step_td.helpers;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

@@ -1,13 +1,12 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import policy_gradient_problems.domain.common_episode_trainers.EpisodeTrainerI;
-import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.List;

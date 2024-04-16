@@ -6,8 +6,8 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 
 import java.util.List;
 
-import static common_dl4j.LossPPO.MEAN_CONT_INDEX;
-import static common_dl4j.LossPPO.STD_CONT_INDEX;
+import static common.dl4j.LossPPO.MEAN_CONT_INDEX;
+import static common.dl4j.LossPPO.STD_CONT_INDEX;
 
 public interface NeuralActorI<V> {
     void fitActor(List<List<Double>> inList, List<List<Double>> outList);

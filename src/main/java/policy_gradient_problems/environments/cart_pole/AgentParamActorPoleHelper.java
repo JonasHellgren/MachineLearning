@@ -9,7 +9,7 @@ import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
 import java.util.List;
 import java.util.function.Function;
 
-import static common.ArrayUtil.createArrayWithSameDoubleNumber;
+import static common.list_arrays.ArrayUtil.createArrayWithSameDoubleNumber;
 
 @AllArgsConstructor
 public class AgentParamActorPoleHelper {

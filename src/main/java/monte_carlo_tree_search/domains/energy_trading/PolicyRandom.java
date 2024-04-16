@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;

@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.twoArmedBandit;
 
 import com.google.common.base.Preconditions;
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;

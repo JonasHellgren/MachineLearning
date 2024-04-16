@@ -1,11 +1,11 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
 import common.math.MathUtils;
-import common_dl4j.LossPPO;
-import common_dl4j.NetSettings;
+import common.dl4j.LossPPO;
+import common.dl4j.NetSettings;
 import org.nd4j.linalg.activations.Activation;
 
-import static common_dl4j.LossPPO.*;
+import static common.dl4j.LossPPO.*;
 
 /**
  * activOutLayer(Activation.SOFTPLUS)  very important, ensures positive std

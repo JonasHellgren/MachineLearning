@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common_dl4j.Dl4JUtil;
+import common.dl4j.Dl4JUtil;
 import org.apache.commons.math3.util.Pair;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;

@@ -1,7 +1,7 @@
 package multi_step_temp_diff.domain.environments.fork;
 
-import common.Conditionals;
-import common.MySetUtils;
+import common.other.Conditionals;
+import common.other.MySetUtils;
 import lombok.Setter;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

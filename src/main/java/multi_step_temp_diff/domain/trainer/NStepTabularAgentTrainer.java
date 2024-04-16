@@ -13,7 +13,7 @@ import multi_step_temp_diff.domain.trainer_valueobj.NStepTabularAgentTrainerSett
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static common.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPredicates.*;
 
 /**

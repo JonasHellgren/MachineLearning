@@ -1,7 +1,7 @@
 package policygradient.short_corridor;
 
-import common.ListUtils;
-import common.RandUtils;
+import common.list_arrays.ListUtils;
+import common.other.RandUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

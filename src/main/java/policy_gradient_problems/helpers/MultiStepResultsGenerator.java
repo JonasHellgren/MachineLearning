@@ -12,8 +12,8 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static common.Conditionals.executeIfTrue;
-import static common.Conditionals.executeOneOfTwo;
+import static common.other.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeOneOfTwo;
 
 /***
  This class evaluates an episode to derive data/results used to train an agent.

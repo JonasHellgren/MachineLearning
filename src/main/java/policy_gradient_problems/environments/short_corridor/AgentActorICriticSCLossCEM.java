@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCriticI;
 import java.util.List;
 
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 
 @Getter
 public class AgentActorICriticSCLossCEM extends AgentA<VariablesSC>

@@ -1,7 +1,7 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.CpuTimer;
-import common.ListUtils;
+import common.other.CpuTimer;
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;

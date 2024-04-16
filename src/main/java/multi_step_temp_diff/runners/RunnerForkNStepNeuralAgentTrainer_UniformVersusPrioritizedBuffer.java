@@ -1,6 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.prio_strategy.PrioritizationProportional;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepPrioritized;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferNStepUniform;

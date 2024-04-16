@@ -1,5 +1,6 @@
 package common_dl4j;
 
+import common.dl4j.EntropyCalculatorContActions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

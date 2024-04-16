@@ -1,6 +1,6 @@
 package dynamic_programming.domain;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import lombok.Builder;
 import lombok.extern.java.Log;
 

@@ -1,0 +1,15 @@
+
+skapa folder  x
+tanka över klasser  x
+moddda action och exp i pol gradient
+battery buying with safe RL param   -  eskriva i md fil
+BuyingEnvironment
+TestBuyingEnvironment
+LinRegressMemory
+TestLinRegressMemory
+ny klass SafetLayer
+TestSafetLayer
+TrainerACBuyerLinRegressSafe
+ny klass LinRegressSafeEpisodeTrainer
+
+simplified battery trading with safe RL

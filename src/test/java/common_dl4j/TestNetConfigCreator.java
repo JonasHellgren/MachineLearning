@@ -1,6 +1,9 @@
 package common_dl4j;
 
-import dl4j.regression_2023.classes.SumDataGenerator;
+import common.dl4j.Dl4JUtil;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
+import super_vised.dl4j.regression_2023.classes.SumDataGenerator;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

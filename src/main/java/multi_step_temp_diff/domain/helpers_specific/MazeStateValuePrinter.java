@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.MySetUtils;
+import common.other.MySetUtils;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.agents.maze.AgentMazeNeural;
 import multi_step_temp_diff.domain.environments.maze.MazeEnvironment;

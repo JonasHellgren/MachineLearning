@@ -2,8 +2,8 @@ package multi_step_temp_diff.domain.trainer_valueobj;
 
 import lombok.Builder;
 
-import static common.MyFunctions.defaultIfNullDouble;
-import static common.MyFunctions.defaultIfNullInteger;
+import static common.other.MyFunctions.defaultIfNullDouble;
+import static common.other.MyFunctions.defaultIfNullInteger;
 
 public record NStepTabularAgentTrainerSettings  (
         Double alpha,

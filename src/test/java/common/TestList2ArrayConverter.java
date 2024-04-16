@@ -1,5 +1,6 @@
 package common;
 
+import common.list_arrays.List2ArrayConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class TestList2ArrayConverter {
     @Test
     void whenList_thenCorrect() {
         List<Double> inList=List.of(0d,1d);
-        double [] arrVec=List2ArrayConverter.convertListToDoubleArr(inList);
+        double [] arrVec= List2ArrayConverter.convertListToDoubleArr(inList);
         Assertions.assertEquals(0,arrVec[0]);
         Assertions.assertEquals(1,arrVec[1]);
     }

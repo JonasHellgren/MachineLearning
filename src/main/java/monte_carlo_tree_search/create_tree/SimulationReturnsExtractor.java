@@ -1,5 +1,5 @@
 package monte_carlo_tree_search.create_tree;
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;

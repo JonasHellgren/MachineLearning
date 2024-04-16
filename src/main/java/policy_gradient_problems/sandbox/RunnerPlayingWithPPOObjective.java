@@ -1,10 +1,10 @@
 package policy_gradient_problems.sandbox;
 
 import common.math.BestPairFinder;
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import common.plotters.PlotterMultiplePanelsPairs;
-import common.SoftMaxEvaluator;
+import common.other.SoftMaxEvaluator;
 
 import java.util.*;
 

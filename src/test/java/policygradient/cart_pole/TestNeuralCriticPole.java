@@ -1,6 +1,6 @@
 package policygradient.cart_pole;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

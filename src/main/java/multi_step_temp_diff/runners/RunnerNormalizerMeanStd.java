@@ -1,6 +1,6 @@
 package multi_step_temp_diff.runners;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerInterface;
 import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.NormalizerMeanStd;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;

@@ -1,6 +1,6 @@
 package policygradient.maze;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

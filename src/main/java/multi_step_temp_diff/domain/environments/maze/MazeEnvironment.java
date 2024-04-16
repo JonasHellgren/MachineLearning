@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.maze;
 
-import common.MySetUtils;
+import common.other.MySetUtils;
 import lombok.SneakyThrows;
 import multi_step_temp_diff.domain.environment_abstract.EnvironmentInterface;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

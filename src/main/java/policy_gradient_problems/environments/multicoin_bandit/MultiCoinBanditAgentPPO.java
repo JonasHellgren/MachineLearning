@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.multicoin_bandit;
 
-import common.ListUtils;
-import common_dl4j.*;
+import common.dl4j.*;
+import common.list_arrays.ListUtils;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;

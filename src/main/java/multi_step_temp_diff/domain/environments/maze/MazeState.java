@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.maze;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;

@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;

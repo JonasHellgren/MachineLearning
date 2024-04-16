@@ -1,6 +1,7 @@
 package policy_gradient_problems.environments.short_corridor;
 
-import common_dl4j.*;
+import common.dl4j.LossCEM;
+import common.dl4j.NetSettings;
 import org.nd4j.linalg.activations.Activation;
 import policy_gradient_problems.environments.cart_pole.NeuralActorMemorySC;
 

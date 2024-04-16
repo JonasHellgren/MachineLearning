@@ -6,7 +6,7 @@ import lombok.extern.java.Log;
 import policy_gradient_problems.domain.agent_interfaces.NeuralCriticI;
 import policy_gradient_problems.domain.value_classes.MultiStepResults;
 
-import static common.Conditionals.executeOneOfTwo;
+import static common.other.Conditionals.executeOneOfTwo;
 
 /**
  * An episode gives a set of experiences: e0, e1, e2, ei,.....,e_i+n

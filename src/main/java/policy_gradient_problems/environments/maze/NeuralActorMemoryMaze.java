@@ -1,8 +1,8 @@
 package policy_gradient_problems.environments.maze;
 
-import common_dl4j.Dl4JNetFitter;
-import common_dl4j.MultiLayerNetworkCreator;
-import common_dl4j.NetSettings;
+import common.dl4j.Dl4JNetFitter;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;

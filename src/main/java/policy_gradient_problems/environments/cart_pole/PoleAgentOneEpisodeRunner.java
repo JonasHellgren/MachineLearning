@@ -1,10 +1,9 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common.Counter;
+import common.other.Counter;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import policy_gradient_problems.domain.agent_interfaces.AgentI;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 
 @AllArgsConstructor
 public class PoleAgentOneEpisodeRunner {

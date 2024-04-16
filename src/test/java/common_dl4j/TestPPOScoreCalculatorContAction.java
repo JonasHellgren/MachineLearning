@@ -1,5 +1,7 @@
 package common_dl4j;
 
+import common.dl4j.PPOScoreCalculatorContAction;
+import common.dl4j.PPOScoreCalculatorI;
 import common.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

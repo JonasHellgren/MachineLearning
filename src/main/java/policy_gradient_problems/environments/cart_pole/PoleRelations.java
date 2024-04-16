@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.With;
 
-import static common.MyFunctions.sqr2;
+import static common.other.MyFunctions.sqr2;
 
 /**
  * TempVariables is inner record to decrease nof arguments

@@ -1,9 +1,9 @@
 package policygradient.sink_the_ship;
 
-import common.Array2ListConverter;
+import common.list_arrays.Array2ListConverter;
 import common.math.MathUtils;
-import common.NormDistributionSampler;
-import common.RandUtils;
+import common.other.NormDistributionSampler;
+import common.other.RandUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.util.Pair;

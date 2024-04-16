@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.agent_parts.neural_memory;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import common.math.MathUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;

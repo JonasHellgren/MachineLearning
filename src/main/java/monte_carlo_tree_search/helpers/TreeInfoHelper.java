@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.helpers;
 
-import common.Conditionals;
-import common.ListUtils;
+import common.other.Conditionals;
+import common.list_arrays.ListUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;

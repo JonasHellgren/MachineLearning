@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.CpuTimer;
+import common.other.CpuTimer;
 import lombok.NonNull;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_abstract.AgentNeuralInterface;

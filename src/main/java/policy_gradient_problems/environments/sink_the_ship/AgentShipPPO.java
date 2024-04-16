@@ -1,7 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.math.MathUtils;
-import common.NormDistributionSampler;
+import common.other.NormDistributionSampler;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.Action;
@@ -11,9 +10,9 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 
 import java.util.List;
 
-import static common.List2ArrayConverter.convertListToDoubleArr;
-import static common.List2ArrayConverter.convertListWithListToDoubleMat;
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.List2ArrayConverter.convertListToDoubleArr;
+import static common.list_arrays.List2ArrayConverter.convertListWithListToDoubleMat;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 
 public class AgentShipPPO extends AgentA<VariablesShip>
         implements AgentNeuralActorNeuralCriticI<VariablesShip> {

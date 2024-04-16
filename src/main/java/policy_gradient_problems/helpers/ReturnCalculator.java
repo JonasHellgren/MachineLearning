@@ -3,7 +3,7 @@ package policy_gradient_problems.helpers;
 import lombok.NonNull;
 import policy_gradient_problems.domain.value_classes.Experience;
 import java.util.*;
-import static common.ListUtils.*;
+import static common.list_arrays.ListUtils.*;
 
 /**
  *  Fills in value field in experience

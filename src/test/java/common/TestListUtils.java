@@ -1,5 +1,6 @@
 package common;
 
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.Assert;
@@ -37,7 +38,7 @@ public class TestListUtils {
         list.add(new Dummy(1, "a"));
         list.add(new Dummy(2, "b"));
 
-        List<Integer> intList=ListUtils.getListOfField(list,"a");
+        List<Integer> intList= ListUtils.getListOfField(list,"a");
         List<String> stringList=ListUtils.getListOfField(list,"b");
         System.out.println("intList = " + intList);
         System.out.println("stringList = " + stringList);

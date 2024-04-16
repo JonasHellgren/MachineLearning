@@ -1,7 +1,7 @@
 package policygradient.maze;
 
-import common.Array2ListConverter;
-import common.RandUtils;
+import common.list_arrays.Array2ListConverter;
+import common.other.RandUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

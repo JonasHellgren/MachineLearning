@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

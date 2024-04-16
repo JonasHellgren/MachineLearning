@@ -1,9 +1,9 @@
 package common;
 
+import common.list_arrays.Array2ListConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TestArray2ListConverter {
@@ -11,7 +11,7 @@ public class TestArray2ListConverter {
     @Test
     void whenList_thenCorrect() {
         double[] inArr=new double[]{0d,1d};
-        List<Double> list=Array2ListConverter.convertDoubleArrToList(inArr);
+        List<Double> list= Array2ListConverter.convertDoubleArrToList(inArr);
         Assertions.assertEquals(0,list.get(0));
         Assertions.assertEquals(1,list.get(1));
     }

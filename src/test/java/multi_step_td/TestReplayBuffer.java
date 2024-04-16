@@ -1,7 +1,7 @@
 package multi_step_td;
 
-import common.CpuTimer;
-import common.RandUtils;
+import common.other.CpuTimer;
+import common.other.RandUtils;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferInterface;

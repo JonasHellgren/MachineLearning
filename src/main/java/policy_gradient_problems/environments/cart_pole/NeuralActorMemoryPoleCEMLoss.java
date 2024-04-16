@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common_dl4j.*;
+import common.dl4j.*;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
@@ -8,7 +8,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import java.util.List;
 
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 import static policy_gradient_problems.environments.cart_pole.InNetNormalizer.createNormalizerIn;
 import static policy_gradient_problems.environments.cart_pole.InNetNormalizer.getInAsNormalized;
 

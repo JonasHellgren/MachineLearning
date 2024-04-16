@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_energy_trading;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloSimulator;

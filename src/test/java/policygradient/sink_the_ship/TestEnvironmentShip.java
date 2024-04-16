@@ -1,13 +1,13 @@
 package policygradient.sink_the_ship;
 
-import common.Counter;
+import common.other.Counter;
 import common.math.MathUtils;
-import common.RandUtils;
+import common.other.RandUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import policy_gradient_problems.domain.abstract_classes.Action;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
 import policy_gradient_problems.environments.sink_the_ship.ShipSettings;
 import policy_gradient_problems.environments.sink_the_ship.StateShip;

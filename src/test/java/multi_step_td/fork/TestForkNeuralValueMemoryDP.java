@@ -1,6 +1,6 @@
 package multi_step_td.fork;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;

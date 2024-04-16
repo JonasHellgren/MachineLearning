@@ -8,7 +8,7 @@ import multi_step_temp_diff.domain.agent_parts.neural_memory.normalizer.Normaliz
 
 import java.util.Arrays;
 import java.util.Optional;
-import static common.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeIfTrue;
 import static multi_step_temp_diff.domain.environments.charge.ChargeState.*;
 
 public class HotEncodingSoCAtOccupiedElseValue implements InputVectorSetterChargeInterface {

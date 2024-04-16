@@ -1,6 +1,6 @@
 package policygradient.short_corridor;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;

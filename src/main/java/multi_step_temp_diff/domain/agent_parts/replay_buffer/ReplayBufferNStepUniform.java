@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.agent_parts.replay_buffer;
 
-import common.CpuTimer;
+import common.other.CpuTimer;
 import lombok.Builder;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveBufferExperienceStrategyInterface;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyRandom;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static common.Conditionals.executeIfTrue;
+import static common.other.Conditionals.executeIfTrue;
 import static it.unimi.dsi.fastutil.io.TextIO.BUFFER_SIZE;
 
 

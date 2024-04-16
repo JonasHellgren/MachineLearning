@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common_dl4j.NetSettings;
+import common.dl4j.NetSettings;
 import lombok.Builder;
 import org.apache.commons.math3.util.Pair;
 import policy_gradient_problems.domain.abstract_classes.AgentA;

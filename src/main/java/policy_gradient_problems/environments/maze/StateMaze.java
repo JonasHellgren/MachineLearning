@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.RealVector;

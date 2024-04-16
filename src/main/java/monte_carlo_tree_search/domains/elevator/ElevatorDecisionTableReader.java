@@ -1,13 +1,10 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.RandUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 

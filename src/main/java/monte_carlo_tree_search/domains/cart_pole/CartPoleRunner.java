@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import common.plotters.PlotterMultiplePanelsTrajectory;
 import lombok.SneakyThrows;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;

@@ -1,5 +1,9 @@
 package common_dl4j;
 
+import common.dl4j.Dl4JUtil;
+import common.dl4j.LossCEM;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.layers.BaseOutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;

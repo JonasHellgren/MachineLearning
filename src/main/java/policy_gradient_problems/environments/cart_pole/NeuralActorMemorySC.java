@@ -1,12 +1,15 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common_dl4j.*;
+import common.dl4j.Dl4JNetFitter;
+import common.dl4j.Dl4JUtil;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import policy_gradient_problems.environments.short_corridor.EnvironmentSC;
 import java.util.List;
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 
 /**
   State, observed position, is transformed to one hot representation, vector with zeros and one 1-element

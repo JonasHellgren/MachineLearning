@@ -1,7 +1,7 @@
 package multi_step_temp_diff.domain.agent_parts.replay_buffer.utils;
 
 import com.codepoetics.protonpack.functions.TriFunction;
-import common.Conditionals;
+import common.other.Conditionals;
 import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

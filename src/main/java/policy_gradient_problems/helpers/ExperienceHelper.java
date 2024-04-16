@@ -1,6 +1,6 @@
 package policy_gradient_problems.helpers;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import policy_gradient_problems.domain.abstract_classes.StateI;

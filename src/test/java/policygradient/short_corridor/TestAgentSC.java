@@ -14,8 +14,8 @@ import policy_gradient_problems.environments.short_corridor.StateSC;
 import java.util.ArrayList;
 import java.util.List;
 
-import static common.ArrayUtil.isDoubleArraysEqual;
-import static common.ListUtils.toArray;
+import static common.list_arrays.ArrayUtil.isDoubleArraysEqual;
+import static common.list_arrays.ListUtils.toArray;
 import static org.junit.jupiter.api.Assertions.*;
 
  class TestAgentSC {

@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.AllArgsConstructor;
 import java.awt.geom.Point2D;
 import java.util.List;

@@ -1,6 +1,6 @@
 package common.math;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

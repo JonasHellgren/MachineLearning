@@ -1,5 +1,5 @@
 package monte_carlo_tree_search.create_tree;
-import common.CpuTimer;
+import common.other.CpuTimer;
 import lombok.Getter;
 import lombok.NonNull;
 import monte_carlo_tree_search.helpers.TreeInfoHelper;

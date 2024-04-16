@@ -1,7 +1,6 @@
 package multi_step_td.charge;
 
-import common.RandUtils;
-import multi_step_temp_diff.domain.environments.charge.ChargeEnvironment;
+import common.other.RandUtils;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;

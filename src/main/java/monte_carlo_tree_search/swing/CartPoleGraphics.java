@@ -3,8 +3,8 @@ package monte_carlo_tree_search.swing;
 import monte_carlo_tree_search.domains.cart_pole.CartPoleVariables;
 import monte_carlo_tree_search.domains.cart_pole.EnvironmentCartPole;
 import monte_carlo_tree_search.interfaces.StateInterface;
-import swing.FrameEnvironment;
-import swing.ScaleLinear;
+import common.swing.FrameEnvironment;
+import common.swing.ScaleLinear;
 
 public class CartPoleGraphics {
 

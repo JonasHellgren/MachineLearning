@@ -1,5 +1,7 @@
 package common_dl4j;
 
+import common.dl4j.CrossEntropyCalculator;
+import common.dl4j.EntropyCalculatorDiscreteActions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;

@@ -1,8 +1,8 @@
 package policygradient.cart_pole;
 
-import common.ListUtils;
-import common.RandUtils;
-import common_dl4j.Dl4JUtil;
+import common.list_arrays.ListUtils;
+import common.other.RandUtils;
+import common.dl4j.Dl4JUtil;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.environments.cart_pole.*;
 import java.util.List;

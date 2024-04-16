@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_common;
 
-import common.Counter;
+import common.other.Counter;
 import multi_step_temp_diff.domain.trainer_valueobj.NStepNeuralAgentTrainerSettings;
 
 import java.util.function.BiFunction;

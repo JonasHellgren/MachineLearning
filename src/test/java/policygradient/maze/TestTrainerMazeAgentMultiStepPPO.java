@@ -1,11 +1,11 @@
 package policygradient.maze;
 
-import common.Counter;
+import common.other.Counter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.maze.*;
 import policy_gradient_problems.helpers.NeuralActorUpdaterPPOLoss;

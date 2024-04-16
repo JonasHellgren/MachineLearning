@@ -8,9 +8,9 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 import java.awt.geom.Point2D;
 import java.util.List;
 
-import static common.List2ArrayConverter.convertListToDoubleArr;
-import static common.List2ArrayConverter.convertListWithListToDoubleMat;
-import static common.ListUtils.arrayPrimitiveDoublesToList;
+import static common.list_arrays.List2ArrayConverter.convertListToDoubleArr;
+import static common.list_arrays.List2ArrayConverter.convertListWithListToDoubleMat;
+import static common.list_arrays.ListUtils.arrayPrimitiveDoublesToList;
 
 public class MazeAgentPPO extends AgentA<VariablesMaze>
         implements AgentNeuralActorNeuralCriticI<VariablesMaze> {

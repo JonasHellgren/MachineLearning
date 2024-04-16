@@ -16,7 +16,7 @@ import policy_gradient_problems.domain.param_memories.CriticMemoryParamOneHot;
 import java.util.List;
 
 import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static common.SoftMaxEvaluator.getProbabilities;
+import static common.other.SoftMaxEvaluator.getProbabilities;
 
 /***
  * See shortCorridor.md for description

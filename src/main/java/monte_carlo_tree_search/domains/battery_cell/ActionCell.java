@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import common.math.MathUtils;
 import lombok.Builder;
 import lombok.Getter;

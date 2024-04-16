@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;

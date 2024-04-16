@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.create_tree;
 
-import common.Conditionals;
-import common.CpuTimer;
+import common.other.Conditionals;
+import common.other.CpuTimer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;

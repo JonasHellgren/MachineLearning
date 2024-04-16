@@ -1,19 +1,19 @@
 package policy_gradient_problems.environments.short_corridor;
 
 import common.math.MathUtils;
-import common.RandUtils;
+import common.other.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-import static common.MySetUtils.getSetFromRange;
-import static common.RandUtils.getRandomDouble;
-import static common.RandUtils.randomNumberBetweenZeroAndOne;
+import static common.other.MySetUtils.getSetFromRange;
+import static common.other.RandUtils.getRandomDouble;
+import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 
 /***
  * See shortCorridor.md for description

@@ -1,8 +1,8 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.ArrayUtil;
-import common.NormDistributionSampler;
-import common_dl4j.LossPPO;
+import common.list_arrays.ArrayUtil;
+import common.other.NormDistributionSampler;
+import common.dl4j.LossPPO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -14,14 +14,14 @@ import policy_gradient_problems.domain.abstract_classes.AgentA;
 import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
 import policy_gradient_problems.domain.param_memories.ActorMemoryParam;
-import common.SubArrayExtractor;
+import common.list_arrays.SubArrayExtractor;
 import policy_gradient_problems.domain.param_memories.CriticMemoryParamOneHot;
 
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 
-import static common.MyFunctions.*;
-import static common.SoftMaxEvaluator.getProbabilities;
+import static common.other.MyFunctions.*;
+import static common.other.SoftMaxEvaluator.getProbabilities;
 
 
 /***

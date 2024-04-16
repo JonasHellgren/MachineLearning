@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.network_training;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import common.math.MathUtils;
 import lombok.Getter;
 import lombok.extern.java.Log;

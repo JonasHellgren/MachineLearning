@@ -1,6 +1,5 @@
 package dl4j_aux;
 
-import common.ListUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;

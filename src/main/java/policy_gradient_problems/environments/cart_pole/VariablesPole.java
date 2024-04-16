@@ -7,8 +7,7 @@ import org.apache.commons.math3.linear.RealVector;
 
 import java.util.List;
 
-import static common.MyFunctions.sqr2;
-import static common.RandUtils.getRandomDouble;
+import static common.other.RandUtils.getRandomDouble;
 
 @Builder
 public record VariablesPole(

@@ -2,14 +2,14 @@ package policy_gradient_problems.environments.maze;
 import java.awt.geom.Point2D;
 
 import common.math.BucketLimitsHandler;
-import common.IndexFinder;
-import common.RandUtils;
+import common.list_arrays.IndexFinder;
+import common.other.RandUtils;
 import policy_gradient_problems.domain.abstract_classes.Action;
 
 import java.util.List;
 import java.util.Map;
 
-import static common.ListUtils.toArray;
+import static common.list_arrays.ListUtils.toArray;
 import static common.math.MathUtils.clip;
 
 /***

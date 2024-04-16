@@ -2,6 +2,7 @@ package weka_tree;
 
 import org.junit.Before;
 import org.junit.Test;
+import super_vised.weka_tree.TreeHelper;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 

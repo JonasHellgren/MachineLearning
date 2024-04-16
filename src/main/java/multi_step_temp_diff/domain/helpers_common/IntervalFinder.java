@@ -1,9 +1,9 @@
 package multi_step_temp_diff.domain.helpers_common;
 
 
-import common.Counter;
+import common.other.Counter;
 import common.math.DifferenceCalculator;
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import common.math.MathUtils;
 
 import java.util.List;

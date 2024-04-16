@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common.ListUtils;
-import common_dl4j.EntropyCalculatorDiscreteActions;
+import common.list_arrays.ListUtils;
+import common.dl4j.EntropyCalculatorDiscreteActions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ import policy_gradient_problems.domain.agent_interfaces.AgentNeuralActorNeuralCr
 import policy_gradient_problems.domain.value_classes.Experience;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.ReturnCalculator;
-import policy_gradient_problems.domain.value_classes.StepReturn;
+import common.reinforcment_learning.value_classes.StepReturn;
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 import java.util.ArrayList;

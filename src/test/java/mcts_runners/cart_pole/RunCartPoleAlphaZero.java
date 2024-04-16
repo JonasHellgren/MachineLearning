@@ -1,8 +1,8 @@
 package mcts_runners.cart_pole;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import common.plotters.PlotterMultiplePanelsTrajectory;
-import common.RandUtils;
+import common.other.RandUtils;
 import common.math.ScalerLinear;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;

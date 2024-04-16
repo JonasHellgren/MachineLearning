@@ -1,7 +1,10 @@
 package policy_gradient_problems.environments.cart_pole;
 
-import common.ListUtils;
-import common_dl4j.*;
+import common.dl4j.Dl4JNetFitter;
+import common.dl4j.Dl4JUtil;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
+import common.list_arrays.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.activations.Activation;
@@ -36,7 +39,7 @@ public class NeuralCriticMemoryPole {
     }
 
     public NeuralCriticMemoryPole(NetSettings netSettings, ParametersPole parameters) {
-        this.net=MultiLayerNetworkCreator.create(netSettings);
+        this.net= MultiLayerNetworkCreator.create(netSettings);
         net.init();
         this.normalizerIn = createNormalizerIn(parameters);
         this.normalizerOut = createNormalizerOut(parameters);

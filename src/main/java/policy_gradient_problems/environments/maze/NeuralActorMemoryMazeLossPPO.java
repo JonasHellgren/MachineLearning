@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.maze;
 
-import common_dl4j.LossPPO;
-import common_dl4j.NetSettings;
+import common.dl4j.LossPPO;
+import common.dl4j.NetSettings;
 import org.nd4j.linalg.activations.Activation;
 
 /***

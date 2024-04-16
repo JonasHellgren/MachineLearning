@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.value_classes.TrainerParameters;
 import policy_gradient_problems.environments.cart_pole.*;
 import java.util.ArrayList;
 import java.util.List;
-import static common.ListUtils.*;
+import static common.list_arrays.ListUtils.*;
 
  class TestNStepReturnInfoPole {
 

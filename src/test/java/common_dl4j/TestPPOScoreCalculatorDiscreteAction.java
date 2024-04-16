@@ -1,7 +1,8 @@
 package common_dl4j;
 
-import common.Conditionals;
-import common.ListUtils;
+import common.dl4j.PPOScoreCalculatorDiscreteAction;
+import common.other.Conditionals;
+import common.list_arrays.ListUtils;
 import common.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import java.util.List;
-import static common_dl4j.Dl4JUtil.createListWithOneHotWithValue;
+import static common.dl4j.Dl4JUtil.createListWithOneHotWithValue;
 
 public class TestPPOScoreCalculatorDiscreteAction {
 

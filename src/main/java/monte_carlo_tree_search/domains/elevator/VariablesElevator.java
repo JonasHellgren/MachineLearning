@@ -1,8 +1,8 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import common.math.MathUtils;
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.ToString;
 

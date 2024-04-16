@@ -1,6 +1,6 @@
 package policygradient.short_corridor;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

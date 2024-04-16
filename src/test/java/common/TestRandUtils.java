@@ -1,6 +1,6 @@
 package common;
 
-import org.apache.arrow.flatbuf.Int;
+import common.other.RandUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ public class TestRandUtils {
     @Test
     public void getRandomItemFromStringList() {
         List<String> list= Arrays.asList("a","b");
-        String string=RandUtils.getRandomItemFromStringList(list);
+        String string= RandUtils.getRandomItemFromStringList(list);
         System.out.println("string = " + string);
         Assert.assertTrue(list.contains(string));
     }

@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_elevator;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import monte_carlo_tree_search.create_tree.MonteCarloSearchStatistics;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
 import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;

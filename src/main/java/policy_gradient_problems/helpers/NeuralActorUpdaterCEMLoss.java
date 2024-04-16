@@ -1,6 +1,6 @@
 package policy_gradient_problems.helpers;
 
-import common_dl4j.Dl4JUtil;
+import common.dl4j.Dl4JUtil;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import policy_gradient_problems.domain.abstract_classes.ActorUpdaterI;

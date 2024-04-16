@@ -1,7 +1,7 @@
 package monte_carlo_tree_search.domains.elevator;
 
 import black_jack.result_drawer.GridPanel;
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.models_and_support_classes.*;

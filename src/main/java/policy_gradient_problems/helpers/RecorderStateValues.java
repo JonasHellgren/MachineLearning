@@ -1,6 +1,6 @@
 package policy_gradient_problems.helpers;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import lombok.NonNull;
 
 import java.util.*;

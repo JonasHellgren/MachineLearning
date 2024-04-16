@@ -6,7 +6,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
 
-import static common.MyFunctions.*;
+import static common.other.MyFunctions.*;
 
 public record ParametersPole(
         double g,

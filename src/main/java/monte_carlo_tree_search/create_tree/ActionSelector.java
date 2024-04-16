@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.create_tree;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.search_tree_node_models.NodeInterface;

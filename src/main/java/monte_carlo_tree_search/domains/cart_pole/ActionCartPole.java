@@ -1,8 +1,8 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import common.math.MathUtils;
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.extern.java.Log;

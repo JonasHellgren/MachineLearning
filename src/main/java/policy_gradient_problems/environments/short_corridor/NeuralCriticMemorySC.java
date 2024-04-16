@@ -1,7 +1,10 @@
 package policy_gradient_problems.environments.short_corridor;
 
-import common.ListUtils;
-import common_dl4j.*;
+import common.dl4j.Dl4JNetFitter;
+import common.dl4j.Dl4JUtil;
+import common.dl4j.MultiLayerNetworkCreator;
+import common.dl4j.NetSettings;
+import common.list_arrays.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
@@ -14,8 +17,8 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static common.ListUtils.findMax;
-import static common.ListUtils.findMin;
+import static common.list_arrays.ListUtils.findMax;
+import static common.list_arrays.ListUtils.findMin;
 
 public class NeuralCriticMemorySC {
 

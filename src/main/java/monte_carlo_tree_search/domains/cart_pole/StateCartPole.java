@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import common.RandUtils;
+import common.other.RandUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,6 +1,6 @@
 package dynamic_programming.domain;
 
-import common.CpuTimer;
+import common.other.CpuTimer;
 import dynamic_programming.helpers.ActionSelectorDP;
 import lombok.extern.java.Log;
 

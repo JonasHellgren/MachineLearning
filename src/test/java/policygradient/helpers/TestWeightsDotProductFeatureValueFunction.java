@@ -1,7 +1,7 @@
 package policygradient.helpers;
 
-import common.ArrayUtil;
-import common.RandUtils;
+import common.list_arrays.ArrayUtil;
+import common.other.RandUtils;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;

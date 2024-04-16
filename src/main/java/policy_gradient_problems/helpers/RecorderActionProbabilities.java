@@ -1,13 +1,12 @@
 package policy_gradient_problems.helpers;
 
-import common.Conditionals;
+import common.other.Conditionals;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.util.*;

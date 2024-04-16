@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.helpers;
 
-import common.ListUtils;
+import common.list_arrays.ListUtils;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
