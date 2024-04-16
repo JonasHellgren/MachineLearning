@@ -6,10 +6,10 @@ battery buying with safe RL param   -  eskriva i md fil  x
 Experience snyggare  x
 BuyingEnvironment  x
 TestBuyingEnvironment  x
-LinRegressMemory
-TestLinRegressMemory
-ny klass SafetLayer
-TestSafetLayer
+DisCoMemory
+TestDisCoMemory
+ny klass SafetyLayer
+TestSafetyLayer
 TrainerACBuyerLinRegressSafe
 ny klass LinRegressSafeEpisodeTrainer
 

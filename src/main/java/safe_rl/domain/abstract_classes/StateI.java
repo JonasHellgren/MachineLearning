@@ -8,6 +8,10 @@ public interface StateI<V> {
     V getVariables();
     void setVariables(V variables);
     StateI<V> copy();
- /*   List<Double> asList();
-    RealVector asRealVector();*/
+    double[]  continousFeatures();
+    int nContinousFeatures();
+    int[]  discretFeatures();
+    int hashCode();
+    boolean equals(Object o);
+
 }

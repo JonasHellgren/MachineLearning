@@ -18,4 +18,5 @@ public record VariablesBuying (
         return new VariablesBuying(0d,soc,soc);
     }
 
+
 }

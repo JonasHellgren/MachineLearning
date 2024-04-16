@@ -20,7 +20,6 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
     public StepReturn<VariablesBuying> step(StateI<VariablesBuying> state0, Action action) {
         StateBuying s0=(StateBuying) state0;
         double dt=settings.dt();
-
         double timeNew=s0.time()+dt;
         boolean isTerminal=timeNew>settings.timeEnd();
         double power=(isTerminal)?0:action.asDouble();
@@ -32,7 +31,6 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
                 : min(0,-power*dt*priceAtTime);  //can't sell energy before end
         double[] constraints=getConstraints(power,socNew);
         boolean isFail= Arrays.stream(constraints).anyMatch(c -> c>0);
-
         reward+=(isFail)?-FAIL_PENALTY :0;
 
         return StepReturn.<VariablesBuying>builder()

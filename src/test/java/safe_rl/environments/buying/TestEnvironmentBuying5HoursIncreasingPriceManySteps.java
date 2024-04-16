@@ -38,10 +38,9 @@ public class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
     }
 
     @Test
-    void givenZeroState_whenManyStepsEqualPowerWorse_thenCorrect() {
+    void givenZeroState_whenManySteps_thenEqualPowerWorse() {
         double revenueOpt = ListUtils.sumList(applyPowerList(List.of(3d,2d,0d,0d,0d)));
         double revenueNonOpt = ListUtils.sumList(applyPowerList(List.of(1d,1d,1d,0d,0d)));
-
         Assertions.assertTrue(revenueOpt > revenueNonOpt);
     }
 
