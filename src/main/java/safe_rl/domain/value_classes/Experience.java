@@ -2,8 +2,10 @@ package safe_rl.domain.value_classes;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.With;
 import safe_rl.domain.value_classes.*;
 import safe_rl.domain.abstract_classes.*;
+
 import java.util.Optional;
 
 /**
@@ -13,67 +15,48 @@ import java.util.Optional;
 @Builder
 public record Experience<V>(
         @NonNull StateI<V> state,
-        @NonNull Action action,
-        double reward,
-        StateI<V> stateNext,
-        double probAction,
-        boolean isFail,
-        boolean isTerminal,
-        double value,
-        @NonNull Optional<ExperienceSafe<V>> experienceSafe) {
+        @NonNull ActionRewardStateNew<V> ars,
+        @With double value,
+        @NonNull Optional<ActionRewardStateNew<V>> arsCorrected) {
 
     public static final double DEFAULT_VALUE = 0d;
     public static final int PROB_ACTION = 1;
 
-    public static <V> Experience<V> of(StateI<V> state,
-                                       Action action,
-                                       double reward,
-                                       StateI<V> stateNext
-    ) {
-        return new Experience<>(state, action, reward, stateNext, PROB_ACTION, false, false, DEFAULT_VALUE,Optional.empty());
-    }
-
-
-    public static <V> Experience<V> ofWithIsFail(StateI<V> state,
-                                               Action action,
-                                               double reward,
-                                               StateI<V> stateNext,
-                                               double probAction,
-                                               boolean isFail
-    ) {
-        return new Experience<>(state, action, reward, stateNext, probAction, isFail, false, DEFAULT_VALUE,Optional.empty());
-    }
-
-    public static <V> Experience<V> ofWithIsTerminal(StateI<V> state,
-                                                 Action action,
-                                                 double reward,
-                                                 StateI<V> stateNext,
-                                                 double probAction,
-                                                 boolean isTerminal
-    ) {
-        return new Experience<>(state, action, reward, stateNext, probAction, false, isTerminal, DEFAULT_VALUE,Optional.empty());
-    }
-
-    public static <V> Experience<V> ofWithIsSafeCorrected(StateI<V> state,
-                                                     Action actionNotSafe,
-                                                     double probActionNotSafe,
-                                                     ExperienceSafe<V> experienceSafe
+    public static <V> Experience<V> notSafeCorrected(StateI<V> state,
+                                                     Action action,
+                                                     double reward,
+                                                     StateI<V> stateNext,
+                                                     Boolean isTerminal
     ) {
         return Experience.<V>builder()
-                .state(state).action(actionNotSafe).probAction(probActionNotSafe)
-                .experienceSafe(Optional.of(experienceSafe)).build();
+                .state(state)
+                .ars(new ActionRewardStateNew<>(action, reward, stateNext, isTerminal))
+                .value(0)
+                .arsCorrected(Optional.empty())
+                .build();
     }
 
+    public static <V> Experience<V> safeCorrected(StateI<V> state,
+                                                  Action action,
+                                                  Action actionSafeCorrected,
+                                                  double reward,
+                                                  StateI<V> stateNext,
+                                                  Boolean isTerminal
+    ) {
+        return Experience.<V>builder()
+                .state(state)
+                .ars(new ActionRewardStateNew<>(action, 0d, null, false))
+                .value(0)
+                .arsCorrected(Optional.of(new ActionRewardStateNew<>(actionSafeCorrected,reward,stateNext,isTerminal)))
+                .build();
+    }
+
+
     public boolean isSafeCorrected() {
-        return experienceSafe().isPresent();
+        return arsCorrected().isPresent();
     }
 
     public Experience<V> copyWithValue(double value) {
-        return Experience.<V>builder()
-                .state(state).action(action).reward(reward).stateNext(stateNext)
-                .probAction(probAction).isFail(isFail).isTerminal(isTerminal)
-                .value(value)
-                .experienceSafe(isSafeCorrected()? Optional.ofNullable(experienceSafe.orElseThrow().copy()) :Optional.empty())
-                .build();
+        return this.withValue(value);
     }
 }

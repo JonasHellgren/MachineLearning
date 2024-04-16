@@ -6,7 +6,6 @@ import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
 import safe_rl.domain.value_classes.*;
 import safe_rl.domain.abstract_classes.*;
-import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,22 +16,17 @@ class TestExperience {
 
     @BeforeEach
      void init() {
-        experience=Experience.<VariablesBuying>builder()
-                .state(StateBuying.newDefault())
-                .action(Action.ofInteger(0))
-                .reward(0d)
-                .stateNext(StateBuying.newDefault())
-                .value(0d)
-                .experienceSafe(Optional.empty())
-                .build();
+        experience=Experience.notSafeCorrected(
+                StateBuying.newDefault(),Action.ofInteger(0),0d,StateBuying.newDefault()
+                ,false);
     }
 
     @Test
      void givenExperience_thenCorrect() {
         System.out.println("experience = " + experience);
         assertEquals(0,experience.state().getVariables().time());
-        assertEquals(0d,experience.reward());
-        assertEquals(0,experience.stateNext().getVariables().time());
+        assertEquals(0d,experience.ars().reward());
+        assertEquals(0,experience.ars().stateNext().getVariables().time());
         assertEquals(0,experience.value());
     }
 
@@ -44,13 +38,13 @@ class TestExperience {
 
     @Test
     void givenExperienceWithSafeCorrected_thenCorrect() {
-        experience=Experience.ofWithIsSafeCorrected(StateBuying.newDefault(),Action.ofInteger(0),0.1,
-                ExperienceSafe.<VariablesBuying>builder()
-                        .action(Action.ofInteger(1))
-                        .reward(0.5).stateNext(StateBuying.newDefault()).probAction(0.5).isTerminal(false)
-                        .build());
+        experience=Experience.safeCorrected(
+                StateBuying.newDefault(),Action.ofInteger(0),Action.ofInteger(1),
+                0d,StateBuying.newDefault()
+                ,false);
+
         assertTrue(experience.isSafeCorrected());
-        assertEquals(1d,experience.experienceSafe().orElseThrow().action().asInt());
+        assertEquals(1d,experience.arsCorrected().orElseThrow().action().asInt());
     }
 
 
