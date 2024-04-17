@@ -1,11 +1,14 @@
 package safe_rl.environments.buying_electricity;
 
+import common.other.Conditionals;
+import lombok.extern.java.Log;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.*;
 import safe_rl.helpers.PriceInterpolator;
 import java.util.Arrays;
 import static java.lang.Math.min;
 
+@Log
 public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
     public static final double FAIL_PENALTY = 10;
     BuySettings settings;
@@ -32,13 +35,18 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
         double[] constraints=getConstraints(power,socNew);
         boolean isFail= Arrays.stream(constraints).anyMatch(c -> c>0);
         reward+=(isFail)?-FAIL_PENALTY :0;
-
+        logIfFail(constraints, isFail);
         return StepReturn.<VariablesBuying>builder()
                 .state(stateNew)
                 .reward(reward)
                 .isFail(isFail)
                 .isTerminal(isTerminal)
                 .build();
+    }
+
+    private static void logIfFail(double[] constraints, boolean isFail) {
+        Conditionals.executeIfTrue(isFail, () ->
+            log.info("Failed step, constraints="+ Arrays.toString(constraints)));
     }
 
     private double[] getConstraints(double power, double socNew) {

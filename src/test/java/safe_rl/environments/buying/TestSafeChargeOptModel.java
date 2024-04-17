@@ -14,36 +14,44 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * Draft test shows isAnyViolation is approx 1k faster than correctedPower
+ */
+
 public class TestSafeChargeOptModel {
 
     public static final int SOC_VIOL_INDEX = 2;
     public static final double TOL_POWER = 1e-1;
+    public static final double SOC = 0.5;
     SafeChargeOptModel model;
 
     @BeforeEach
     void init() {
-    model= getModelWithSocAndProposedPower(0.5, 1d);
+    model= createModel();
     }
 
     @Test
     void whenZeroPower_thenNoViolation() {
-        Assertions.assertFalse(model.isAnyViolation(0));
+        model.setSoCAndPowerProposed(SOC,0d);
+        Assertions.assertFalse(model.isAnyViolation());
     }
 
     @Test
     void whenNegPower_thenViolation() {
-        Assertions.assertTrue(model.isAnyViolation(-1));
+        model.setSoCAndPowerProposed(SOC,-1d);
+        Assertions.assertTrue(model.isAnyViolation());
     }
 
     @Test
     void whenHighPower_thenViolation() {
-        Assertions.assertTrue(model.isAnyViolation(4));
+        model.setSoCAndPowerProposed(SOC,4d);
+        Assertions.assertTrue(model.isAnyViolation());
     }
 
     @Test
     void givenHighSoC_whenPower1_thenViolation() {
-        model= getModelWithSocAndProposedPower(0.95, 1d);
-        List<Double> list = model.getConstraintValues(2);
+        model.setSoCAndPowerProposed(0.95,1d);
+        List<Double> list = model.getConstraintValues();
         Assertions.assertTrue(getMaxConstraint(list) >0);
         Assertions.assertTrue(list.get(SOC_VIOL_INDEX)>0);
     }
@@ -71,10 +79,10 @@ public class TestSafeChargeOptModel {
     void whenSoCAndNotOkPower_thenChangedInCorrected(ArgumentsAccessor arguments) {
         double powerProposed = setModel(arguments);
         double powerCorrected= arguments.getDouble(2);
-        for (int  i = 0; i < 100 ; i++) {
-            model.correctedPower();
-            assertNotEquals(powerProposed,model.correctedPower(), TOL_POWER);
-            assertEquals(powerCorrected,model.correctedPower(), TOL_POWER);
+        for (int  i = 0; i < 10000 ; i++) {
+            double correctedPower=model.correctedPower();
+            assertNotEquals(powerProposed,correctedPower, TOL_POWER);
+            assertEquals(powerCorrected,correctedPower, TOL_POWER);
         }
     }
 
@@ -90,12 +98,11 @@ public class TestSafeChargeOptModel {
         return ListUtils.findMax(list).orElseThrow();
     }
 
-
-    private static SafeChargeOptModel getModelWithSocAndProposedPower(double soc, double powerProposed) {
+    private static SafeChargeOptModel createModel() {
         return SafeChargeOptModel.builder()
-                .powerProposed(powerProposed).powerMax(3d)
+                .powerProposed(0d).powerMax(3d)
                 .settings(BuySettings.new5HoursIncreasingPrice())
-                .soc(soc)
+                .soc(SOC)
                 .build();
     }
 

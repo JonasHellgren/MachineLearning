@@ -29,17 +29,20 @@ import java.util.List;
 @Builder
 public class SafeChargeOptModel {
     public static final int N_VARIABLES = 1;
+    public static final int MAX_ITERATION = 10_000;
 
     Double powerProposed;
     @Builder.Default
     Double powerMin = 0d;
     Double powerMax;
     @Builder.Default
-    Double powerInit=1e-5;
+    Double powerInit=1e-25;
     BuySettings settings;
     @Builder.Default
     Double socMax = 1d;
     Double soc;
+    @Builder.Default
+    Double toleranceOptimization = 1e-5;
 
     final OptimizationRequest or = new OptimizationRequest();
     final JOptimizer optimizer = new JOptimizer();
@@ -56,15 +59,15 @@ public class SafeChargeOptModel {
         this.soc = soc;
     }
 
-    public boolean isAnyViolation(double power) {
-        double constraintMax = ListUtils.findMax(getConstraintValues(power)).orElseThrow();
+    public boolean isAnyViolation() {
+        double constraintMax = ListUtils.findMax(getConstraintValues()).orElseThrow();
         return constraintMax > 0;
     }
 
-    public List<Double> getConstraintValues(double power) {
+    public List<Double> getConstraintValues() {
         var constraints = constraints();
         var vector = new DenseDoubleMatrix1D(N_VARIABLES);
-        vector.set(0, power);
+        vector.set(0, powerProposed);
         return Arrays.stream(constraints).map(f -> f.value(vector)).toList();
     }
 
@@ -92,12 +95,12 @@ public class SafeChargeOptModel {
     }
 
     void defineRequest(OptimizationRequest or,double[] initialPoint) {
-        or.setMaxIteration(10_000);
+        or.setMaxIteration(MAX_ITERATION);
         or.setF0(costFunction()); // Set the objective function
         or.setFi(constraints());
         or.setInitialPoint(initialPoint); // Optional: initial guess
-        or.setToleranceFeas(1e-3); // Tolerance on feasibility
-        or.setTolerance(1e-3); // Tolerance on optimization
+        or.setToleranceFeas(toleranceOptimization); // Tolerance on feasibility
+        or.setTolerance(toleranceOptimization); // Tolerance on optimization
     }
 
 
