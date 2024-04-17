@@ -38,8 +38,11 @@ public class DisCoMemory<V> {
         this.alphaLearning = alphaLearning;
     }
 
+    /**
+     * copy to not mess up keys in map if state changes outside
+     */
     public void save(StateI<V> state, double[] thetas) {
-        stateParMap.put(state, thetas);
+        stateParMap.put(state.copy(), thetas);
     }
 
     public double read(StateI<V> state) {
@@ -57,8 +60,11 @@ public class DisCoMemory<V> {
     }
 
     public void fit(StateI<V> state, double targetValue, int nFits) {
-        fitter.setTheta(readThetas(state));
+        double[] thetas = readThetas(state);
+        fitter.setTheta(thetas);
         double[] features=state.continousFeatures();
+        //System.out.println("thetas = " + Arrays.toString(thetas));
+       // System.out.println("features = " + Arrays.toString(features));
         IntStream.range(0, nFits).forEach(i -> fitter.fit(targetValue, features));
         save(state, fitter.getTheta());
     }

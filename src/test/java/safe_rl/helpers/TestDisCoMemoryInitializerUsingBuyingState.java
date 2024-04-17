@@ -1,4 +1,4 @@
-package safe_rl.environments.buying;
+package safe_rl.helpers;
 
 import common.list_arrays.ListUtils;
 import org.apache.commons.math3.util.Pair;

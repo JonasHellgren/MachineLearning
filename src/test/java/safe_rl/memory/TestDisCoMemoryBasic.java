@@ -1,4 +1,4 @@
-package safe_rl.environments.buying;
+package safe_rl.memory;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import safe_rl.environments.buying_electricity.VariablesBuying;
 import static common.list_arrays.ArrayUtil.isDoubleArraysEqual;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDisCoMemory {
+class TestDisCoMemoryBasic {
 
     public static final int N_BIAS_THETAS = 1;
     public static final double TOL = 1e-5;
@@ -23,8 +23,8 @@ class TestDisCoMemory {
     @BeforeEach
     void init() {
         state = StateBuying.newZero();
-        memory = new DisCoMemory<>(
-                state.nContinousFeatures() + N_BIAS_THETAS, ALPHA_LEARNING);
+        int nThetaPerKey = state.nContinousFeatures() + N_BIAS_THETAS;
+        memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING);
     }
 
     @Test

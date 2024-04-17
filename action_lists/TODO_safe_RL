@@ -12,6 +12,7 @@ TestDisCoMemory x
 DisCoMemoryInitializer x
 TestDisCoMemoryInitializer  x
 fitter i DisCoMemory  x
+TestDisCoMemoryMockedData x
 ny klass SafetyLayer
 TestSafetyLayer
 TrainerACBuyerSafe

@@ -18,7 +18,11 @@ public record VariablesBuying (
     }
 
     public static VariablesBuying newSoc(double soc) {
-        return new VariablesBuying(0d,soc,soc);
+        return VariablesBuying.newTimeSoc(0d,soc);
+    }
+
+    public static VariablesBuying newTimeSoc(double time, double soc) {
+        return new VariablesBuying(time,soc,soc);
     }
 
     public VariablesBuying copy() {
