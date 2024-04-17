@@ -33,11 +33,12 @@ public class LinearFitter {
         return new LinearFitter(ALPHA, nDim);
     }
 
-    public LinearFitter(Double alphaLearning, Integer nDim) {
+    public LinearFitter(Double alphaLearning, Integer nContFeatures) {
         this.alphaLearning = alphaLearning;
-        this.nDim = nDim;
-        this.theta = new double[nDim + 1];
-        this.decoder=new LinearDecoder(nDim);
+        this.nDim = nContFeatures;
+        int nThetas = nContFeatures + 1;
+        this.theta = new double[nThetas];
+        this.decoder=new LinearDecoder(nContFeatures);
     }
 
     public void fit(Pair<Double, double[]> point) {

@@ -10,7 +10,8 @@ TestStateBuying  x
 DisCoMemory x
 TestDisCoMemory x
 DisCoMemoryInitializer x
-TestDisCoMemoryInitializer
+TestDisCoMemoryInitializer  x
+fitter i DisCoMemory  x
 ny klass SafetyLayer
 TestSafetyLayer
 TrainerACBuyerSafe

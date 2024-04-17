@@ -13,9 +13,13 @@ import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
-
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Fills DiscoMemory with init values
+ * MovingAverage/filteredError is to ensure not a single low error prematurely breaks the loop
+ */
 
 @Log
 public class DisCoMemoryInitializer<V> {

@@ -15,13 +15,16 @@ class TestDisCoMemory {
 
     public static final int N_BIAS_THETAS = 1;
     public static final double TOL = 1e-5;
+    public static final double TOL_VALUE = 1e-3;
+    public static final double ALPHA_LEARNING = 1e-1;
     DisCoMemory<VariablesBuying> memory;
     StateI<VariablesBuying> state;
 
     @BeforeEach
     void init() {
         state = StateBuying.newZero();
-        memory = new DisCoMemory<>(state.nContinousFeatures() + N_BIAS_THETAS);
+        memory = new DisCoMemory<>(
+                state.nContinousFeatures() + N_BIAS_THETAS, ALPHA_LEARNING);
     }
 
     @Test
@@ -32,8 +35,8 @@ class TestDisCoMemory {
 
     @Test
     void givenEmpty_whenRead_thenCorrect() {
-        double[] theta = memory.readThetas(state);
-        assertTrue(isDoubleArraysEqual(new double[]{0, 0}, memory.readThetas(state), TOL));
+        assertTrue(isDoubleArraysEqual(
+                new double[]{0, 0}, memory.readThetas(state), TOL));
     }
 
     @Test
@@ -63,6 +66,19 @@ class TestDisCoMemory {
         assertEquals(2,memory.size());
         assertTrue(isDoubleArraysEqual(theta0, memory.readThetas(state), TOL));
         assertTrue(isDoubleArraysEqual(theta2, memory.readThetas(stateMod), TOL));
+    }
+
+    @Test
+    void whenFit_thenCorrect() {
+        int targetValue0 = 1;
+        int nFits = 100;
+        memory.fit(state, targetValue0, nFits);
+        var stateMod=state.copy();
+        stateMod.setVariables(stateMod.getVariables().withTime(2));
+        int targetValue2 = 1;
+        memory.fit(stateMod, targetValue2, nFits);
+        Assertions.assertEquals(targetValue0,memory.read(state), TOL_VALUE);
+        Assertions.assertEquals(targetValue2,memory.read(stateMod),TOL_VALUE);
     }
 
 
