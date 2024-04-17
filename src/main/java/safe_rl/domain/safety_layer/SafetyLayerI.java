@@ -5,4 +5,5 @@ import safe_rl.domain.abstract_classes.StateI;
 
 public interface SafetyLayerI<V> {
     Action correctAction(StateI<V> state, Action action);
+    boolean isAnyViolation(StateI<V> state, Action action);
 }

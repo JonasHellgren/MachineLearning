@@ -89,7 +89,6 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
         return new ArrayRealVector(ArrayUtil.clip(gradLogAllStates,-MAX_GRAD_ELEMENT,MAX_GRAD_ELEMENT));
     }
 
-
     DoubleBinaryOperator scaleToAccountThatStdIsExpTheta= (g, k) -> g*k;
 
     private double[] calculateGradLogForState(int state, double action) {

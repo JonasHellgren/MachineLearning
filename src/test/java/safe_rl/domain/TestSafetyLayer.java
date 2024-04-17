@@ -2,15 +2,12 @@ package safe_rl.domain;
 
 import common.other.RandUtils;
 import lombok.extern.java.Log;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.environments.buying_electricity.*;
-
 import java.util.stream.IntStream;
-
 import static common.other.Conditionals.executeIfTrue;
 import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 

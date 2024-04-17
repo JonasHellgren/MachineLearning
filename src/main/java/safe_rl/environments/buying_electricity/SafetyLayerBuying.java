@@ -5,6 +5,11 @@ import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.safety_layer.SafetyLayerI;
 
+/***
+ * Corrects action value if needed
+ * Method correctedPower is computationally heavy so only executed when needed
+ */
+
 public class SafetyLayerBuying<V> implements SafetyLayerI<V> {
 
     public static final double SOC_DUMMY = 0.5;
@@ -20,6 +25,7 @@ public class SafetyLayerBuying<V> implements SafetyLayerI<V> {
     }
 
     @SneakyThrows
+    @Override
     public Action correctAction(StateI<V> state, Action action) {
         double correctedPower= isAnyViolation(state,action)
                 ? model.correctedPower()
@@ -27,6 +33,7 @@ public class SafetyLayerBuying<V> implements SafetyLayerI<V> {
         return Action.ofDouble(correctedPower);
     }
 
+    @Override
     public boolean isAnyViolation(StateI<V> state, Action action) {
         setModel((StateBuying) state, action);
         return model.isAnyViolation();

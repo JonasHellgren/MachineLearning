@@ -1,5 +1,6 @@
 package safe_rl.domain.memories;
 
+import com.google.common.base.Preconditions;
 import common.list_arrays.ArrayUtil;
 import common.math.LinearDecoder;
 import common.math.LinearFitter;
@@ -31,6 +32,7 @@ public class DisCoMemory<V> {
     }
 
     public DisCoMemory(int nThetaPerKey, Double alphaLearning) {
+        Preconditions.checkArgument(nThetaPerKey>0,"To small nThetaPerKey");
         this.stateParMap = new HashMap<>();
         this.nThetaPerKey = nThetaPerKey;
         this.decoder = new LinearDecoder(nThetaPerKey - 1);
@@ -62,12 +64,22 @@ public class DisCoMemory<V> {
     public void fit(StateI<V> state, double targetValue, int nFits) {
         double[] thetas = readThetas(state);
         fitter.setTheta(thetas);
-        double[] features=state.continousFeatures();
-        //System.out.println("thetas = " + Arrays.toString(thetas));
-       // System.out.println("features = " + Arrays.toString(features));
+        double[] features = state.continousFeatures();
         IntStream.range(0, nFits).forEach(i -> fitter.fit(targetValue, features));
         save(state, fitter.getTheta());
     }
+
+    public void fitFromError(StateI<V> state, double error) {
+        fitFromError(state, error, 1);
+    }
+
+    public void fitFromError(StateI<V> state, double error, int nFits) {
+        fitter.setTheta(readThetas(state));
+        IntStream.range(0, nFits).forEach(i ->
+                fitter.fitFromError(state.continousFeatures(), error));
+        save(state, fitter.getTheta());
+    }
+
 
     public boolean contains(StateI<V> state) {
         return stateParMap.containsKey(state);

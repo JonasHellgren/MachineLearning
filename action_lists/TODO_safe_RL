@@ -13,9 +13,10 @@ DisCoMemoryInitializer x
 TestDisCoMemoryInitializer  x
 fitter i DisCoMemory  x
 TestDisCoMemoryMockedData x
-ny klass SafetyLayer
-TestSafetyLayer
-TrainerACBuyerSafe
+ny klass SafetyLayer  x
+TestSafetyLayer  x
+AgentACDiscoBuyer
+TrainerOneStepACSafeBuyer
 ny klass SafeEpisodeTrainer
 
 simplified battery trading with safe RL

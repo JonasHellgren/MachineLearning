@@ -52,7 +52,7 @@ public class LinearFitter {
         fitFromError(xArr, e);
     }
 
-    public void fitFromError(double[] xArr, double e) {
+    public void fitFromError(double[] xArr, double e) {  //todo ändra ordning arg
         for (int i = 0; i < nDim + 1; i++) {
             double x = i == nDim ? 1 : xArr[i];
             theta[i] = theta[i] + alphaLearning * e * x;
