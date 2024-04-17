@@ -15,7 +15,8 @@ fitter i DisCoMemory  x
 TestDisCoMemoryMockedData x
 ny klass SafetyLayer  x
 TestSafetyLayer  x
-AgentACDiscoBuyer
+AgentACDiscoBuyer  x
+TestAgentACDCSafeBuyer
 TrainerOneStepACSafeBuyer
 ny klass SafeEpisodeTrainer
 

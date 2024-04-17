@@ -25,9 +25,9 @@ import java.util.List;
 public class DisCoMemoryInitializer<V> {
 
     public static final int N_ITER_MAX = 1000;
-    public static final double TOL_VAL = 0.1;
-    public static final double ALPHA = 1e-3;
-    public static final int LENGTH_AVG_WINDOW = 10;
+    public static final double TOL_VAL = 1e-3;
+    public static final double ALPHA = 1e-1;
+    public static final int LENGTH_AVG_WINDOW = 100;
     DisCoMemory<V> memory;
     List<List<Double>> discreteFeatSet;
     Pair<List<Double>, List<Double>> contFeatMinMax;
@@ -106,7 +106,7 @@ public class DisCoMemoryInitializer<V> {
     }
 
     private void someLogging(double errorFiltered, Counter counter) {
-        log.info("Nof iter="+ counter);
+        log.fine("Nof iter="+ counter);
         Conditionals.executeIfTrue(counter.getCount()==nIterMax,
                 () -> log.warning("Nof iterations exceeded, probably tough tolValueFitting, error="+ errorFiltered));
     }

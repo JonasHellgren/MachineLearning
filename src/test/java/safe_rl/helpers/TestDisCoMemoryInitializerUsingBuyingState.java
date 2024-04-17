@@ -1,6 +1,5 @@
 package safe_rl.helpers;
 
-import common.list_arrays.ListUtils;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +8,6 @@ import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.environments.buying_electricity.BuySettings;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
-import safe_rl.helpers.DisCoMemoryInitializer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,14 +29,20 @@ class TestDisCoMemoryInitializerUsingBuyingState {
         var state = StateBuying.newZero();
         settings = BuySettings.new5HoursIncreasingPrice();
         memory = new DisCoMemory<>(state.nContinousFeatures() + 1);
-        initializer = DisCoMemoryInitializer.<VariablesBuying>builder()
-                .memory(memory)
-                .discreteFeatSet(List.of(createDoubleListStartEndStep(0, settings.timeEnd() , settings.dt())))
+        initializer = getInitializer(state, memory, TAR_VALUE, 0d);
+    }
+
+    private DisCoMemoryInitializer<VariablesBuying> getInitializer(StateBuying state,
+                                                                   DisCoMemory<VariablesBuying> memory1,
+                                                                   double tarValue,
+                                                                   double stdTar) {
+        return DisCoMemoryInitializer.<VariablesBuying>builder()
+                .memory(memory1)
+                .discreteFeatSet(List.of(
+                        createDoubleListStartEndStep(0, settings.timeEnd(), settings.dt())))
                 .contFeatMinMax(Pair.create(List.of(SOC_MIN), List.of(SOC_MAX)))
-                .valTarMeanStd(Pair.create(TAR_VALUE, 0d))
+                .valTarMeanStd(Pair.create(tarValue, stdTar))
                 .state(state)
-                .alphaLearning(0.9)
-                .nIterMax(10000).tolValueFitting(TOL_VALUE_FITTING).lengthMeanAvgWindow(100)
                 .build();
     }
 
