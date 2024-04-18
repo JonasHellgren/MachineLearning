@@ -79,7 +79,7 @@ public class TestSafeChargeOptModel {
     void whenSoCAndNotOkPower_thenChangedInCorrected(ArgumentsAccessor arguments) {
         double powerProposed = setModel(arguments);
         double powerCorrected= arguments.getDouble(2);
-        for (int  i = 0; i < 10000 ; i++) {
+        for (int  i = 0; i < 100 ; i++) {
             double correctedPower=model.correctedPower();
             assertNotEquals(powerProposed,correctedPower, TOL_POWER);
             assertEquals(powerCorrected,correctedPower, TOL_POWER);

@@ -45,9 +45,10 @@ public class TestRandomSearchNew3HoursSamePrice {
             Assertions.assertTrue(settings3.timeEnd() < simRes.getLeft().getVariables().time());
         }
 
-        Assertions.assertEquals(3, bestRes.getRight().get(0), TOL_POWER);
-        Assertions.assertEquals(3, bestRes.getRight().get(1), TOL_POWER);
-
+        double powerMax = settings3.powerBattMax();
+        List<Double> powerList = bestRes.getRight();
+        Assertions.assertEquals(powerMax, powerList.get(0), TOL_POWER);
+        Assertions.assertEquals(powerMax, powerList.get(1), TOL_POWER);
     }
 
     Pair<Double, List<Double>> getBestRes(Pair<Double, List<Double>> bestReturnPowerList,

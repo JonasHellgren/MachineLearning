@@ -17,11 +17,11 @@ ny klass SafetyLayer  x
 TestSafetyLayer  x
 AgentACDiscoBuyer  x
 TestAgentACDCSafeBuyer x
-
-new3HoursSamePrice
-TestRandomSearchNew3HoursSamePrice
+new3HoursSamePrice  x
+TestRandomSearchNew3HoursSamePrice  x
 
 TrainerOneStepACSafeBuyer
 ny klass SafeEpisodeTrainer
+TrainerI
 
 simplified battery trading with safe RL

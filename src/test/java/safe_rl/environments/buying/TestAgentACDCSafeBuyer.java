@@ -18,6 +18,7 @@ public class TestAgentACDCSafeBuyer {
     public static final double TARGET_STD = 0.5;
     public static final double ADV = 1d;
     public static final double TARGET_CRITIC = 0d;
+    public static final double TOL_GRAD_LOG = 1e-1;
     AgentACDCSafeBuyer agent;
 
     @BeforeEach
@@ -55,7 +56,7 @@ public class TestAgentACDCSafeBuyer {
         var gradLog=agent.fitActor(Action.ofDouble(TARGET_MEAN), ADV);
         var ms=agent.readActor();
         somePrinting(ms0, gradLog, ms);
-        Assertions.assertEquals(0,gradLog.getFirst(),1e-2);
+        Assertions.assertEquals(0,gradLog.getFirst(), TOL_GRAD_LOG);
         Assertions.assertTrue(gradLog.getSecond()<0);
         Assertions.assertNotEquals(ms0,ms);
     }

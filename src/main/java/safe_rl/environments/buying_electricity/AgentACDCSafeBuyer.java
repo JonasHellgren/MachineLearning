@@ -111,6 +111,11 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public double readCritic() {
+        return readCritic(state);
+    }
+
+    @Override
+    public double readCritic(StateI<VariablesBuying> state) {
         return critic.read(state);
     }
 

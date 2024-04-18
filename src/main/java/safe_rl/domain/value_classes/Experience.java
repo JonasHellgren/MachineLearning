@@ -3,7 +3,6 @@ package safe_rl.domain.value_classes;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.With;
-import safe_rl.domain.value_classes.*;
 import safe_rl.domain.abstract_classes.*;
 
 import java.util.Optional;
@@ -21,6 +20,7 @@ public record Experience<V>(
 
     public static final double DEFAULT_VALUE = 0d;
     public static final int PROB_ACTION = 1;
+    public static final int VALUE_DUMMY = 0;
 
     public static <V> Experience<V> notSafeCorrected(StateI<V> state,
                                                      Action action,
@@ -31,7 +31,7 @@ public record Experience<V>(
         return Experience.<V>builder()
                 .state(state)
                 .ars(new ActionRewardStateNew<>(action, reward, stateNext, isTerminal))
-                .value(0)
+                .value(VALUE_DUMMY)
                 .arsCorrected(Optional.empty())
                 .build();
     }
@@ -46,7 +46,7 @@ public record Experience<V>(
         return Experience.<V>builder()
                 .state(state)
                 .ars(new ActionRewardStateNew<>(action, 0d, null, false))
-                .value(0)
+                .value(VALUE_DUMMY)
                 .arsCorrected(Optional.of(new ActionRewardStateNew<>(actionSafeCorrected,reward,stateNext,isTerminal)))
                 .build();
     }
@@ -59,4 +59,21 @@ public record Experience<V>(
     public Experience<V> copyWithValue(double value) {
         return this.withValue(value);
     }
+
+    public Action actionApplied() {
+        return isSafeCorrected()?arsCorrected.orElseThrow().action():ars.action();
+    }
+
+    public StateI<V> stateNextApplied() {
+        return isSafeCorrected()?arsCorrected.orElseThrow().stateNext():ars.stateNext();
+    }
+
+    public double rewardApplied() {
+        return isSafeCorrected()?arsCorrected.orElseThrow().reward():ars.reward();
+    }
+
+    public boolean isTerminalApplied() {
+        return isSafeCorrected()?arsCorrected.orElseThrow().isTerminal():ars.isTerminal();
+    }
+
 }

@@ -27,10 +27,13 @@ public class SafetyLayerBuying<V> implements SafetyLayerI<V> {
     @SneakyThrows
     @Override
     public Action correctAction(StateI<V> state, Action action) {
-        double correctedPower= isAnyViolation(state,action)
+        boolean anyViolation = isAnyViolation(state, action);
+        double correctedPower= anyViolation
                 ? model.correctedPower()
                 : action.asDouble();
-        return Action.ofDouble(correctedPower);
+        return anyViolation
+                ? Action.ofDoubleSafeCorrected(correctedPower)
+                : Action.ofDouble(correctedPower);
     }
 
     @Override
