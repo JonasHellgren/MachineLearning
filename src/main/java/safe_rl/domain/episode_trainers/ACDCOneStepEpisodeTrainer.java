@@ -14,8 +14,6 @@ public class ACDCOneStepEpisodeTrainer<V> {
     public static final double VALUE_TERM = 0d;
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
-    @NonNull Double valueTermState;
-    @NonNull Function<V, Integer> tabularCoder;  //transforms state to key used by critic function
 
     //@Override
     public void trainAgentFromExperiences(List<Experience<V>> experienceList) {

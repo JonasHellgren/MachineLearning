@@ -32,7 +32,7 @@ public class ExperienceCreator<V> {
             StateI<V> state = agent.getState();
             var actionMaybeCorrected = safetyLayer.correctAction(state, action);
             sr = environment.step(state, actionMaybeCorrected);
-            experienceList.add(createExperience(agent.getState(), sr, action,actionMaybeCorrected));
+            experienceList.add(createExperience(agent.getState(), sr, action, actionMaybeCorrected));
             si++;
             agent.setState(sr.state());
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
@@ -40,18 +40,19 @@ public class ExperienceCreator<V> {
     }
 
     private Experience<V> createExperience(StateI<V> state,
-                                   StepReturn<V> sr,
-                                   Action action, Action actionMaybeCorrected) {
+                                           StepReturn<V> sr,
+                                           Action action, Action actionMaybeCorrected) {
 
-        var ars=actionMaybeCorrected.isSafeCorrected()
+        var ars = actionMaybeCorrected.isSafeCorrected()
                 ? ActionRewardStateNew.<V>ofAction(action)
                 : ActionRewardStateNew.<V>builder()
                 .action(action).reward(sr.reward()).stateNext(sr.state()).isTerminal(sr.isTerminal()).build();
 
-        var arsCorrected=actionMaybeCorrected.isSafeCorrected()
+        var arsCorrected = actionMaybeCorrected.isSafeCorrected()
                 ? Optional.of(ActionRewardStateNew.<V>builder()
-                .action(action).reward(sr.reward()).stateNext(sr.state()).isTerminal(sr.isTerminal()).build())
-                : Optional.<ActionRewardStateNew<V>>empty();  //a bit tricky
+                .action(actionMaybeCorrected).reward(sr.reward()).stateNext(sr.state())
+                .isTerminal(sr.isTerminal()).build())
+                : Optional.<ActionRewardStateNew<V>>empty();  //a bit tricky generics
 
         return Experience.<V>builder()
                 .state(state)

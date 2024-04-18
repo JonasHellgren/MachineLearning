@@ -3,6 +3,7 @@ package safe_rl.environments.buying_electricity;
 import common.math.MathUtils;
 import lombok.Builder;
 import lombok.With;
+import common.other.NumberFormatterUtil;
 
 @Builder
 public record VariablesBuying (
@@ -38,5 +39,12 @@ public record VariablesBuying (
     public boolean equalDiscrete(VariablesBuying v) {
             return MathUtils.isEqualDoubles(time,v.time, TOL);
     }
+
+    @Override
+    public String toString() {
+        var f= NumberFormatterUtil.formatterOneDigit;
+        return "[t = "+ time+", soc = "+ f.format(soc)+", socStart = "+ socStart+"]";
+    }
+
 
 }

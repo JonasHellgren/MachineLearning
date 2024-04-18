@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
+import common.other.NumberFormatterUtil;
 
 @Builder
 public record ActionRewardStateNew<V> (
@@ -18,5 +19,16 @@ public record ActionRewardStateNew<V> (
     public static <V> ActionRewardStateNew<V> ofAction(Action action) {
         return new ActionRewardStateNew<>(action, 0.0, null, false);
     }
+
+
+    @Override
+    public String toString() {
+        var f=NumberFormatterUtil.formatterOneDigit;
+       return "[a = "+ action+
+               ", r = "+ f.format(reward)+
+               ", sNext = "+ stateNext+
+               ", isTerm. = "+ isTerminal+"]";
+    }
+
 
 }

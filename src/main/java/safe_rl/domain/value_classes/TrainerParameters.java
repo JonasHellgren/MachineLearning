@@ -7,7 +7,7 @@ import static common.other.MyFunctions.defaultIfNullDouble;
 import static common.other.MyFunctions.defaultIfNullInteger;
 
 public record TrainerParameters(
-        Integer nofEpisodes,
+        @With Integer nofEpisodes,
         Integer nofStepsMax,
         @With Double gamma,
         Double learningRateNonNeuralActor,

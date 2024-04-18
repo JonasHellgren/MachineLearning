@@ -19,7 +19,7 @@ AgentACDiscoBuyer  x
 TestAgentACDCSafeBuyer x
 new3HoursSamePrice  x
 TestRandomSearchNew3HoursSamePrice  x
-
+TestExperienceCreator x
 TrainerOneStepACSafeBuyer
 ny klass SafeEpisodeTrainer
 TrainerI

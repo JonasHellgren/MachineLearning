@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.With;
 import safe_rl.domain.abstract_classes.*;
+import safe_rl.environments.buying_electricity.StateBuying;
 
 import java.util.Optional;
 
@@ -18,9 +19,8 @@ public record Experience<V>(
         @With double value,
         @NonNull Optional<ActionRewardStateNew<V>> arsCorrected) {
 
-    public static final double DEFAULT_VALUE = 0d;
-    public static final int PROB_ACTION = 1;
     public static final int VALUE_DUMMY = 0;
+    public static final double REWARD_DUMMY = 0d;
 
     public static <V> Experience<V> notSafeCorrected(StateI<V> state,
                                                      Action action,
@@ -45,7 +45,7 @@ public record Experience<V>(
     ) {
         return Experience.<V>builder()
                 .state(state)
-                .ars(new ActionRewardStateNew<>(action, 0d, null, false))
+                .ars(new ActionRewardStateNew<>(action, REWARD_DUMMY, null, false))
                 .value(VALUE_DUMMY)
                 .arsCorrected(Optional.of(new ActionRewardStateNew<>(actionSafeCorrected,reward,stateNext,isTerminal)))
                 .build();

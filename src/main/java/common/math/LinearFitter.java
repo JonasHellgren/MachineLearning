@@ -25,13 +25,15 @@ public class LinearFitter {
     double[] theta;
     LinearDecoder decoder;
 
-    public static LinearFitter ofLearningRateAndNDim(double alphaLearning, Integer nDim) {
-        return new LinearFitter(alphaLearning, nDim);
-    }
 
     public static LinearFitter ofNDim(Integer nDim) {
         return new LinearFitter(ALPHA, nDim);
     }
+
+    public static LinearFitter ofLearningRateAndNDim(double alphaLearning, Integer nDim) {
+        return new LinearFitter(alphaLearning, nDim);
+    }
+
 
     public LinearFitter(Double alphaLearning, Integer nContFeatures) {
         this.alphaLearning = alphaLearning;

@@ -10,6 +10,9 @@ import safe_rl.environments.buying_electricity.*;
 
 class TestExperienceCreator {
 
+    public static final double TARGET_MEAN = 2d;
+    public static final double TARGET_STD = 2d;
+    public static final double MIN_ACTION = 0;
     ExperienceCreator<VariablesBuying> experienceCreator;
     BuySettings settings3 = BuySettings.new3HoursSamePrice();
     EnvironmentBuying environment;
@@ -24,7 +27,8 @@ class TestExperienceCreator {
         safetyLayer = new SafetyLayerBuying<>(settings3);
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafeBuyer.builder()
-                .targetMean(2d).targetStd(2d).settings(BuySettings.new3HoursSamePrice())
+                .targetMean(TARGET_MEAN).targetStd(TARGET_STD)
+                .settings(BuySettings.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
         experienceCreator = ExperienceCreator.<VariablesBuying>builder()
@@ -35,6 +39,13 @@ class TestExperienceCreator {
     @Test
     void whenGettingExperiences_thenCorrect() {
         var experiences = experienceCreator.getExperiences(agent);
+        var ei=new EpisodeInfo<>(experiences);
+        var minMax=ei.minMaxAppliedAction();
+        System.out.println("minMax = " + minMax);
+
+        experiences.forEach(System.out::println);
+
+
         experiences.forEach(e -> Conditionals.executeOneOfTwo(e.isSafeCorrected(),
                 () -> {
                     Assertions.assertTrue(e.arsCorrected().isPresent());
@@ -44,6 +55,13 @@ class TestExperienceCreator {
                     Assertions.assertTrue(e.arsCorrected().isEmpty());
                     Assertions.assertNotNull(e.ars().stateNext());
                 }));
+
+        Assertions.assertEquals(ei.size(),ei.nCorrected()+ei.nNotCorrected());
+        Assertions.assertEquals(ei.size(),ei.nZeroValued());
+        Assertions.assertEquals(1,ei.nIsTerminal());
+        Assertions.assertTrue(ei.minMaxAppliedAction().getFirst()> MIN_ACTION);
+        Assertions.assertTrue(ei.minMaxAppliedAction().getSecond()<TARGET_MEAN+TARGET_STD*2);
+
     }
 
 

@@ -1,5 +1,7 @@
 package safe_rl.domain.abstract_classes;
 
+import common.other.NumberFormatterUtil;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -38,9 +40,12 @@ public record Action(Optional<Integer> intValue, Optional<Double> doubleValue, b
         return doubleValue.orElseThrow(() -> new NoSuchElementException("Double value not present"));
     }
 
+
+
     @Override
     public String toString() {
-        return intValue.map(Object::toString).orElseGet(() -> doubleValue.orElseThrow().toString());
+        var f= NumberFormatterUtil.formatterOneDigit;
+        return intValue.map(Object::toString).orElseGet(() -> f.format(doubleValue.orElseThrow()));
     }
 
 }

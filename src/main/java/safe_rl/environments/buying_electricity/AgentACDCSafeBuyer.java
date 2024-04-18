@@ -94,6 +94,8 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     @Override
     public Pair<Double, Double> fitActor(Action action, double adv) {
         var gradLogMenAndStd = calcGradLog(state, action.asDouble());
+        System.out.println("gradLogMenAndStd = " + gradLogMenAndStd);
+        System.out.println("adv = " + adv);
         actorMean.fitFromError(state, gradLogMenAndStd.getFirst() * adv);
         actorStd.fitFromError(state, gradLogMenAndStd.getSecond() * adv);
         return gradLogMenAndStd;
