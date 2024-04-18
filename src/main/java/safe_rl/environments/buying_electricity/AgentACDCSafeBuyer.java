@@ -135,7 +135,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     //todo below in sep class
     DoubleBinaryOperator scaleToAccountThatStdIsExpTheta = (g, k) -> g * k;
 
-    Pair<Double, Double> calcGradLog(StateI<VariablesBuying> state, double action) {
+    Pair<Double, Double>    calcGradLog(StateI<VariablesBuying> state, double action) {
         var meanAndStd = actorMeanAndStd(state);
         double mean = meanAndStd.getFirst();
         double std = meanAndStd.getSecond();

@@ -1,21 +1,23 @@
 package safe_rl.domain;
 
-import common.other.RandUtils;
 import lombok.extern.java.Log;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.Action;
+import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.helpers.RandomActionSimulator;
+
 import java.util.stream.IntStream;
-import static common.other.Conditionals.executeIfTrue;
+
 import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Log
 class TestSafetyLayer {
     SafetyLayerBuying<VariablesBuying> safetyLayer;
     BuySettings settings;
-    EnvironmentBuying environment;
+    EnvironmentI<VariablesBuying> environment;
 
     @BeforeEach
     void init() {
@@ -26,40 +28,16 @@ class TestSafetyLayer {
 
     @Test
     void whenManySimulations_thenAllSucceeds() {
-        IntStream.range(0, 300).forEach((i) -> {
-            StateBuying state = simulate();
-            log.fine("Simulation finished, state=" + state);
-            Assertions.assertTrue(settings.timeEnd() < state.getVariables().time());
-        });
-    }
-
-    private StateBuying simulate() {
         double soc = randomNumberBetweenZeroAndOne();
-        var state = StateBuying.of(VariablesBuying.newSoc(soc));
-        boolean isTerminalOrFail = false;
-        while (!isTerminalOrFail) {
-            double power = RandUtils.getRandomDouble(-5, 5);
-            var action = Action.ofDouble(power);
-            log.fine("state = " + state + ", action = " + action);
-            var actionCorrected = safetyLayer.correctAction(state, action);
-            var sr = environment.step(state, actionCorrected);
-            maybeLog(state, action, actionCorrected, sr);
-            state.setVariables(sr.state().getVariables());
-            isTerminalOrFail = sr.isTerminal() || sr.isFail();
-        }
-        return state;
-    }
+        var simulator = RandomActionSimulator.<VariablesBuying>builder()
+                .environment(environment).safetyLayer(safetyLayer).settings(settings)
+                .minMaxAction(Pair.of(-5d, -5d)).build();
 
-    private void maybeLog(StateBuying state,
-                          Action action,
-                          Action actionCorrected,
-                          StepReturn<VariablesBuying> sr) {
-        executeIfTrue(safetyLayer.isAnyViolation(state, action), () ->
-                log.fine("Non safe action - correcting, " +
-                        "actionCorrected=" + actionCorrected));
-        executeIfTrue(sr.isFail(), () -> {
-            log.warning("Failing");
-            log.info("sr = " + sr);
+        IntStream.range(0, 300).forEach((i) -> {
+            var stateStart = StateBuying.of(VariablesBuying.newSoc(soc));
+            var simRes = simulator.simulate(stateStart.copy());
+            log.fine("Simulation finished, simRes=" + simRes);
+            Assertions.assertTrue(settings.timeEnd() < simRes.getLeft().getVariables().time());
         });
     }
 

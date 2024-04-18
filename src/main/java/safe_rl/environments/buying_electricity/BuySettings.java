@@ -2,6 +2,7 @@ package safe_rl.environments.buying_electricity;
 
 import com.google.common.base.Preconditions;
 import lombok.Builder;
+import lombok.With;
 
 import java.util.Arrays;
 
@@ -12,20 +13,22 @@ public record BuySettings(
         double powerBattMax,
         double socMax,
         double priceEnd,
-        double[] priceTraj
+        @With double[] priceTraj
 ) {
 
     public static BuySettings new5HoursIncreasingPrice() {
         return BuySettings.builder()
                 .dt(1)
-                .energyBatt(10)
-                .powerBattMax(3)
-                .socMax(1)
-                .priceEnd(10)
-                .priceTraj(new double[]{1,2,3,4,5})
+                .energyBatt(10).powerBattMax(3).socMax(1)
+                .priceEnd(10).priceTraj(new double[]{1,2,3,4,5})
                 .build();
-
     }
+
+    public static BuySettings new3HoursSamePrice() {
+        return new5HoursIncreasingPrice().withPriceTraj(new double[]{1,1,1});
+            }
+
+
 
     //time for final price item in priceTraj
     public double timeEnd() {

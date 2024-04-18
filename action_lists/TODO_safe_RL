@@ -16,7 +16,11 @@ TestDisCoMemoryMockedData x
 ny klass SafetyLayer  x
 TestSafetyLayer  x
 AgentACDiscoBuyer  x
-TestAgentACDCSafeBuyer
+TestAgentACDCSafeBuyer x
+
+new3HoursSamePrice
+TestRandomSearchNew3HoursSamePrice
+
 TrainerOneStepACSafeBuyer
 ny klass SafeEpisodeTrainer
 

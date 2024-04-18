@@ -16,13 +16,12 @@ import java.util.List;
 class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
 
     EnvironmentBuying environment;
-    StateBuying stateAllZero;
-
+    StateBuying state;
 
     @BeforeEach
     void init() {
         environment=new EnvironmentBuying(BuySettings.new5HoursIncreasingPrice());
-        stateAllZero=StateBuying.of(VariablesBuying.newSoc(0.5));
+        state =StateBuying.of(VariablesBuying.newSoc(0.5));
     }
 
     @Test
@@ -46,7 +45,7 @@ class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
 
     private List<Double> applyPowerList(List<Double> powerList) {
         List<Double> rewardList=new ArrayList<>();
-        var state=stateAllZero.copy();
+        var state= this.state.copy();
         for (double power: powerList) {
             var sr=environment.step(state, Action.ofDouble(power));
             rewardList.add(sr.reward());
