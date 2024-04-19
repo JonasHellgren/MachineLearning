@@ -36,7 +36,7 @@ grad log i egen klass  x
 
 multistep på 5 h buying x
 kopiera MultiStepResults MultiStepResultsGenerator MultiStepReturnEvaluator x
-skelletkod ACDCMultiStepEpisodeTrainer
+skelletkod ACDCMultiStepEpisodeTrainer  x
 skapa MultiStepActorUpdater skelletkod
 skapa MultiStepCriticUpdater skelletkod
 fitActor(state,...

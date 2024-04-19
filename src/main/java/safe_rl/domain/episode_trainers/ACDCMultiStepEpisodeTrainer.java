@@ -7,6 +7,7 @@ import lombok.NonNull;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.helpers.MultiStepResultsGenerator;
 import safe_rl.helpers.ReturnCalculator;
 
 import java.util.List;
@@ -20,6 +21,17 @@ public class ACDCMultiStepEpisodeTrainer<V> {
 
     //@Override
     public void trainAgentFromExperiences(List<Experience<V>> experienceList, List<Double> lossCritic) {
+//        double avgCriticLoss= ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
+        var msResGen=new MultiStepResultsGenerator<V>(parameters,agent,true);
+        var msActorUpdater=new MultiStepActorUpdater(agent,parameters,lossCritic);
+        var msCriticUpdater=new MultiStepCriticUpdater(agent,parameters);
+
+        var msr=msResGen.generate(experienceList);
+        msActorUpdater.update(msr);
+        msCriticUpdater.update(msr);
+    }
+
+    public void trainAgentFromExperiencesOld(List<Experience<V>> experienceList, List<Double> lossCritic) {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         double avgCriticLoss= ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
