@@ -19,12 +19,13 @@ public class Runner3HoursBuying {
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
-                .targetMean(2d).targetLogStd(Math.log(1d)).targetCritic(0d)
+                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
+                .deltaThetaMax(10d)
                 .state(startState)
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(2000).withGamma(1.0);
+                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(2d);
         return TrainerOneStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

@@ -35,7 +35,7 @@ public class MovingAverage {
     }
 
     public double average() {
-        return sumOfQue(deque) / deque.size();
+        return deque.isEmpty() ? 0 : sumOfQue(deque) / deque.size();
     }
 
     public boolean filled() {

@@ -38,7 +38,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double TAR_LOG_STD = 5d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
-    public static final double DELTA_BETA_MAX = 10d;
+    public static final double DELTA_THETA_MAX = 10d;
 
 
     StateI<VariablesBuying> state;
@@ -68,6 +68,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                               Double targetMean,
                               Double targetLogStd,
                               Double targetCritic,
+                              Double deltaThetaMax,
                               @NonNull StateBuying state) {
         this.state = state;
         this.settings = settings;
@@ -75,9 +76,10 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        this.actorMean = new DisCoMemory<>(nThetas, lram, DELTA_BETA_MAX);
-        this.actorLogStd = new DisCoMemory<>(nThetas, lras, DELTA_BETA_MAX);
-        this.critic = new DisCoMemory<>(nThetas, lrc, DELTA_BETA_MAX);
+        double dThetaMax=defaultIfNullDouble.apply(deltaThetaMax, DELTA_THETA_MAX);
+        this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
+        this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
+        this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);
         double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
         tarStdInit=Math.exp(tarLogStdInit);

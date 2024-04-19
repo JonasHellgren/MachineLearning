@@ -59,7 +59,8 @@ public class TrainerOneStepACDC<V> {
     private void processEpisode(int episodeIndex) {
         setStartState();
         var experiences = getExperiences();
-        episodeTrainer.trainAgentFromExperiences(experiences);
+        var errorList=recorders.recorderTrainingProgress.criticLossTraj();
+        episodeTrainer.trainAgentFromExperiences(experiences,errorList);
         updateRecorder(experiences);
     }
 
