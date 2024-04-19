@@ -7,6 +7,7 @@ import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.episode_trainers.ACDCMultiStepEpisodeTrainer;
 import safe_rl.domain.episode_trainers.ACDCOneStepEpisodeTrainer;
 import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
@@ -18,21 +19,19 @@ import safe_rl.recorders.Recorders;
 import java.util.List;
 import java.util.stream.IntStream;
 
-//todo TrainerI
 @Log
-public class TrainerOneStepACDC<V> {
-
+public class TrainerMultiStepACDC<V> {
     EnvironmentI<V> environment;
     @Getter
     AgentACDiscoI<V> agent;
     TrainerParameters trainerParameters;
     StateI<V> startState;
     ExperienceCreator<V> experienceCreator;
-    ACDCOneStepEpisodeTrainer<V> episodeTrainer;
+    ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
     public final Recorders recorders=new Recorders();
 
     @Builder
-    public TrainerOneStepACDC(EnvironmentI<V> environment,
+    public TrainerMultiStepACDC(EnvironmentI<V> environment,
                               AgentACDiscoI<V> agent,
                               SafetyLayerI<V> safetyLayer,
                               TrainerParameters trainerParameters,
@@ -44,7 +43,7 @@ public class TrainerOneStepACDC<V> {
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();
         this.startState=startState;
-        this.episodeTrainer = ACDCOneStepEpisodeTrainer
+        this.episodeTrainer = ACDCMultiStepEpisodeTrainer
                 .<V>builder()
                 .agent(agent).parameters(trainerParameters)
                 .build();
@@ -90,14 +89,13 @@ public class TrainerOneStepACDC<V> {
     void updateRecorder(List<Experience<V>> experiences) {
         var ei=new EpisodeInfo<>(experiences);
         recorders.recorderTrainingProgress.add(ProgressMeasures.builder()
-                        .nSteps(ei.size())
-                        .sumRewards(ei.sumRewards())
-                        .criticLoss(agent.lossCriticLastUpdate())
-                        .actorLoss(agent.lossActorLastUpdate())
-                        .entropy(agent.entropy())
+                .nSteps(ei.size())
+                .sumRewards(ei.sumRewards())
+                .criticLoss(agent.lossCriticLastUpdate())
+                .actorLoss(agent.lossActorLastUpdate())
+                .entropy(agent.entropy())
                 .build());
     }
-
 
 
 }

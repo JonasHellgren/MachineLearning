@@ -32,11 +32,17 @@ LR std ej noll  x
 log std i minne  x
 fixa failande test x
 straffa corrected action  x
-grad log i egen klass
+grad log i egen klass  x
 
+multistep på 5 h buying x
+kopiera MultiStepResults MultiStepResultsGenerator MultiStepReturnEvaluator x
+skelletkod ACDCMultiStepEpisodeTrainer
+skapa MultiStepActorUpdater skelletkod
+skapa MultiStepCriticUpdater skelletkod
+fitActor(state,...
+fitCritic((state,....
 
-multistep på 5 h buying
-
+clean up när funkar
 
 TrainerI
 

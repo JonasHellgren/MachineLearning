@@ -2,6 +2,7 @@ package safe_rl.environments.buying_electricity;
 
 import common.dl4j.EntropyCalculatorContActions;
 import common.math.MathUtils;
+import common.math.NormalDistributionGradientCalculator;
 import common.other.NormDistributionSampler;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +49,8 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     DisCoMemory<VariablesBuying> critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator=new EntropyCalculatorContActions();
+    NormalDistributionGradientCalculator gradientCalulator=
+            new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     double tarStdInit;
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
@@ -110,7 +113,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public Pair<Double, Double> fitActor(Action action, double adv) {
-        var gradMeanAndLogStd = calcGradLog(state, action.asDouble());
+        var gradMeanAndLogStd=gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));
         actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
         actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
         return gradMeanAndLogStd;
@@ -176,15 +179,6 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                 .build();
     }
 
-    Pair<Double, Double> calcGradLog(StateI<VariablesBuying> state, double action) {
-        var meanAndStd = actorMeanAndStd(state);
-        double mean = meanAndStd.getFirst();
-        double std = meanAndStd.getSecond();
-        double denom = Math.max(sqr2.apply(std), SMALLEST_DENOM);
-        double gradMean = 1 / denom * (action - mean);
-        double gradLogStd = sqr2.apply(action - mean) /denom - 1d;
-        return Pair.create(gradMean, gradLogStd);
-    }
 
 
 

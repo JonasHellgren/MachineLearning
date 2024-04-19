@@ -4,6 +4,7 @@ import common.list_arrays.ListUtils;
 import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math3.util.Pair;
+import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.value_classes.Experience;
 
 import java.util.List;
@@ -35,10 +36,12 @@ public class EpisodeInfo<V> {
                 .filter(e -> MathUtils.isEqualDoubles(e.value(), 0, VAL_TOL)).count();
     }
 
-
     public double sumRewards() {
-        var list = experiences.stream().map(e -> e.rewardApplied()).toList();
-        return ListUtils.sumList(list);
+        return ListUtils.sumList(rewards());
+    }
+
+    public List<Double> rewards() {
+        return experiences.stream().map(e -> e.rewardApplied()).toList();
     }
 
 
