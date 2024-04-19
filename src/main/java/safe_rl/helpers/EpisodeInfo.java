@@ -35,6 +35,13 @@ public class EpisodeInfo<V> {
                 .filter(e -> MathUtils.isEqualDoubles(e.value(), 0, VAL_TOL)).count();
     }
 
+
+    public double sumRewards() {
+        var list = experiences.stream().map(e -> e.rewardApplied()).toList();
+        return ListUtils.sumList(list);
+    }
+
+
     public Pair<Double, Double> minMaxAppliedAction() {
         return Pair.create(
                 ListUtils.findMin(actionsApplied()).orElseThrow(),

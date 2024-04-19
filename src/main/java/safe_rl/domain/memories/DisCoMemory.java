@@ -22,23 +22,29 @@ public class DisCoMemory<V> {
     public static final double VALUE_PAR_DEFAULT = 0d;
     public static final double ALPHA_LEARNING = 1e-2;
     public static final double DELTA_BETA_MAX = 1d;
+    public static final double LOSS_INIT = 0;
     Map<StateI<V>, double[]> stateParMap;
     int nThetaPerKey;  //one more theta than nContFeatures, one theta is bias
     LinearDecoder decoder;
     LinearFitter fitter;
     Double alphaLearning;
+    double lossLastUpdate = LOSS_INIT;
 
     public DisCoMemory(int nThetaPerKey) {
-        this(nThetaPerKey, ALPHA_LEARNING,DELTA_BETA_MAX );
+        this(nThetaPerKey, ALPHA_LEARNING, DELTA_BETA_MAX);
     }
 
     public DisCoMemory(int nThetaPerKey, Double alphaLearning, double deltaBetaMax) {
-        Preconditions.checkArgument(nThetaPerKey>0,"To small nThetaPerKey");
+        Preconditions.checkArgument(nThetaPerKey > 0, "To small nThetaPerKey");
         this.stateParMap = new HashMap<>();
         this.nThetaPerKey = nThetaPerKey;
         this.decoder = new LinearDecoder(nThetaPerKey - 1);
         this.fitter = new LinearFitter(alphaLearning, deltaBetaMax, nThetaPerKey - 1);
         this.alphaLearning = alphaLearning;
+    }
+
+    public double lossLastUpdate() {
+        return lossLastUpdate;
     }
 
     /**
@@ -76,8 +82,11 @@ public class DisCoMemory<V> {
 
     public void fitFromError(StateI<V> state, double error, int nFits) {
         fitter.setTheta(readThetas(state));
-        IntStream.range(0, nFits).forEach(i ->
-                fitter.fitFromError(state.continousFeatures(), error));
+        lossLastUpdate = 0;
+        IntStream.range(0, nFits).forEach(i -> {
+            double loss = fitter.fitFromError(state.continousFeatures(), error);
+            lossLastUpdate += loss;
+        });
         save(state, fitter.getTheta());
     }
 

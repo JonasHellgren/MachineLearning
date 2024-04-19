@@ -25,11 +25,17 @@ LinearFitter med beta clipper x
 ny klass SafeEpisodeTrainer x
 
 sep LR std memory x
+Runner3HoursBuying x
+recorders x
+plotta training progress x
+LR std ej noll
 straffa corrected action
 log std i minne
 grad log i egen klass
-Runner3HoursBuying
-recorders
+
+
+multistep på 5 h buying
+
 
 TrainerI
 

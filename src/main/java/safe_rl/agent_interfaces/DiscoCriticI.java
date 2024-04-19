@@ -6,4 +6,5 @@ public interface DiscoCriticI<V> {
     void fitCritic(double error);
     double readCritic();
     double readCritic(StateI<V> state);
+    double lossCriticLastUpdate();
 }

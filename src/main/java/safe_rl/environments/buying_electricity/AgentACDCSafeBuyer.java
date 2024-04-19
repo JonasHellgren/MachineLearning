@@ -1,5 +1,6 @@
 package safe_rl.environments.buying_electricity;
 
+import common.dl4j.EntropyCalculatorContActions;
 import common.other.NormDistributionSampler;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     DisCoMemory<VariablesBuying> actorStd;
     DisCoMemory<VariablesBuying> critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
+    EntropyCalculatorContActions entropyCalculator=new EntropyCalculatorContActions();
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
         return AgentACDCSafeBuyer.builder()
@@ -108,7 +110,12 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public Pair<Double, Double> readActor() {
-        return actorMeanAndStd(state);
+        return readActor(state);
+    }
+
+    @Override
+    public Pair<Double, Double> readActor(StateI<VariablesBuying> state) {
+        return  actorMeanAndStd(state);
     }
 
     @Override
@@ -124,6 +131,22 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     @Override
     public double readCritic(StateI<VariablesBuying> state) {
         return critic.read(state);
+    }
+
+    @Override
+    public double lossCriticLastUpdate() {
+        return critic.lossLastUpdate();
+    }
+
+    @Override
+    public double lossActorLastUpdate() {
+        return actorMean.lossLastUpdate();
+    }
+
+    @Override
+    public double entropy() {
+        var mAndS=actorMeanAndStd(state);
+        return entropyCalculator.entropy(mAndS.getSecond());
     }
 
     Pair<Double, Double> actorMeanAndStd(StateI<VariablesBuying> state) {

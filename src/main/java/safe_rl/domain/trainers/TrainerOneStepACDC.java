@@ -2,6 +2,10 @@ package safe_rl.domain.trainers;
 
 import lombok.Builder;
 import lombok.Getter;
+import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
+import policy_gradient_problems.domain.value_classes.ProgressMeasures;
+import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
+import policy_gradient_problems.environments.sink_the_ship.VariablesShip;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
@@ -10,9 +14,16 @@ import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
+import safe_rl.environments.buying_electricity.StateBuying;
+import safe_rl.environments.buying_electricity.VariablesBuying;
 import safe_rl.helpers.EpisodeInfo;
+import safe_rl.recorders.Recorders;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 //todo TrainerI
 public class TrainerOneStepACDC<V> {
@@ -23,7 +34,8 @@ public class TrainerOneStepACDC<V> {
     TrainerParameters trainerParameters;
     StateI<V> startState;
     ExperienceCreator<V> experienceCreator;
-    //Recorders recorders;
+    ACDCOneStepEpisodeTrainer<V> episodeTrainer;
+    public Recorders recorders=new Recorders();
 
 
     @Builder
@@ -39,27 +51,25 @@ public class TrainerOneStepACDC<V> {
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();
         this.startState=startState;
-    }
-
-    public void train() {
-        var episodeTrainer = ACDCOneStepEpisodeTrainer
+        this.episodeTrainer = ACDCOneStepEpisodeTrainer
                 .<V>builder()
                 .agent(agent).parameters(trainerParameters)
                 .build();
+    }
 
-        for (int ei = 0; ei < trainerParameters.nofEpisodes(); ei++) {
-            setStartState();
+    public void train() {
+        IntStream.range(0, trainerParameters.nofEpisodes()).forEach(this::processEpisode);
+        printing();
+    }
 
-          //  System.out.println("ei = " + ei);
+    private void processEpisode(int episodeIndex) {
+        setStartState();
+        var experiences = getExperiences();
+        episodeTrainer.trainAgentFromExperiences(experiences);
+        updateRecorder(experiences);
+    }
 
-            var experiences = getExperiences();
-            episodeTrainer.trainAgentFromExperiences(experiences);
-
-
-            //var eexpInfo=new EpisodeInfo<>(experiences);
-            //experiences.forEach(System.out::println);
-
-        }
+    private void printing() {
         AgentACDCSafeBuyer ac=(AgentACDCSafeBuyer) agent;
         System.out.println("ac.getCritic() = " + ac.getCritic());
         System.out.println("ac.getActorMean() = " + ac.getActorMean());
@@ -80,7 +90,15 @@ public class TrainerOneStepACDC<V> {
     }
 
 
-    //updateRecorders((s) -> agent.getHelper().calcActionProbsInObsState(s),lossActorAndCritic);
+    void updateRecorder(List<Experience<V>> experiences) {
+        var ei=new EpisodeInfo<>(experiences);
+        recorders.recorderTrainingProgress.add(ProgressMeasures.builder()
+                        .sumRewards(ei.sumRewards())
+                        .criticLoss(agent.lossCriticLastUpdate())
+                        .actorLoss(agent.lossActorLastUpdate())
+                        .entropy(agent.entropy())
+                .build());
+    }
 
 
 

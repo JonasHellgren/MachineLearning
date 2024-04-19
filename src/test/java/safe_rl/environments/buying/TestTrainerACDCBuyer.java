@@ -10,16 +10,14 @@ import safe_rl.helpers.EpisodeInfo;
 
 /***
  * Optimal behavior in this test is max power two first steps
+ *
+ * critical params:  targetMean(2d).targetStd(3d).targetCritic(0d)
  */
 
 public class TestTrainerACDCBuyer {
 
     public static final double SOC_START = 0.2;
-    public static final double MEAN_INIT = 2d;
-    public static final double STD_INIT = 3;
-    public static final double CRITIC_INIT = 10d;
     public static final double TOL_POWER = 1e-1;
-    public static final int NOF_EPISODES = 1000;
     public static final double SOC_END = 1.0;
 
     BuySettings settings3;
@@ -33,11 +31,12 @@ public class TestTrainerACDCBuyer {
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
-                .targetMean(MEAN_INIT).targetStd(STD_INIT).targetCritic(CRITIC_INIT)
+                .targetMean(2d).targetStd(3d).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(0e-1).learningRateCritic(1e-1)
                 .state(startState)
                 .build();
-        var trainerParameters=TrainerParameters.newDefault().withNofEpisodes(NOF_EPISODES).withGamma(1.0);
+        var trainerParameters=TrainerParameters.newDefault()
+                .withNofEpisodes(1000).withGamma(1.0);
         trainer= TrainerOneStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

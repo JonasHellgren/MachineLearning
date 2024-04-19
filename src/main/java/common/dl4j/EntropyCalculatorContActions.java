@@ -19,6 +19,10 @@ public class EntropyCalculatorContActions implements EntropyCalculatorI {
 
     public double calcEntropy(INDArray estProb,double eps) {
         double sigma=estProb.getDouble(LossPPO.STD_CONT_INDEX);
+        return entropy(sigma);
+    }
+
+    public  double entropy(double sigma) {
         return 0.5 * Math.log(2 * Math.PI * Math.E * sigma * sigma);
     }
 
