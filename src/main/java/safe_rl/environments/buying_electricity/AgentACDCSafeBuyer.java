@@ -14,13 +14,16 @@ import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.helpers.DisCoMemoryInitializer;
 
 import java.util.List;
-import java.util.function.DoubleBinaryOperator;
 
 import static common.list_arrays.ListUtils.doublesStartEndStep;
 import static common.other.MyFunctions.*;
 
 /**
  * ACDC = actor critic with discrete and continuous memory
+ *
+ * Memorize log std instead of the std directly in continuous action methods provides critical benefits,
+ * particularly in ensuring that std remains always positive, enhancing numerical stability,
+ * and improving the efficiency of learning gradients.
  */
 
 @Getter
@@ -32,7 +35,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double MAX_GRAD_ELEMENT = 1;
     public static final double SOC_MIN = 0d;
     public static final double TAR_MEAN = 1d;
-    public static final double TAR_STD = 10d;
+    public static final double TAR_LOG_STD = 5d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
     public static final double DELTA_BETA_MAX = 10d;
@@ -63,7 +66,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                               Double learningRateCritic,
                               @NonNull BuySettings settings,
                               Double targetMean,
-                              Double targetStd,
+                              Double targetLogStd,
                               Double targetCritic,
                               @NonNull StateBuying state) {
         this.state = state;
@@ -76,7 +79,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, DELTA_BETA_MAX);
         this.critic = new DisCoMemory<>(nThetas, lrc, DELTA_BETA_MAX);
         double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
-        double tarLogStdInit = defaultIfNullDouble.apply(targetStd, TAR_STD);
+        double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
         tarStdInit=Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
         var initializer = getInitializer(state, actorMean, tarM);
@@ -178,23 +181,9 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double denom = Math.max(sqr2.apply(std), SMALLEST_DENOM);
         double gradMean = 1 / denom * (action - mean);
         double gradLogStd = sqr2.apply(action - mean) /denom - 1d;
-      //  double gradStdTheta = scaleToAccountThatStdIsExpTheta.applyAsDouble(gradStd, 1d / std);
         return Pair.create(gradMean, gradLogStd);
     }
 
-    //todo below in sep class
-    DoubleBinaryOperator scaleToAccountThatStdIsExpTheta = (g, k) -> g * k;
 
-    Pair<Double, Double> calcGradLogOld(StateI<VariablesBuying> state, double action) {
-        var meanAndStd = actorMeanAndStd(state);
-        double mean = meanAndStd.getFirst();
-        double std = meanAndStd.getSecond();
-        double denom = secondArgIfSmaller.apply(sqr2.apply(std), SMALLEST_DENOM);
-        double gradMean = 1 / denom * (action - mean);
-        double gradStd = zeroIfTrueElseNum.apply(
-                std < STD_MIN, sqr2.apply(action - mean) / sqr3.apply(std) - 1d / std);
-        double gradStdTheta = scaleToAccountThatStdIsExpTheta.applyAsDouble(gradStd, 1d / std);
-        return Pair.create(gradMean, gradStdTheta);
-    }
 
 }

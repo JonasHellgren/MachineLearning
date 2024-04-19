@@ -27,7 +27,7 @@ class TestExperienceCreator {
         safetyLayer = new SafetyLayerBuying<>(settings3);
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafeBuyer.builder()
-                .targetMean(TARGET_MEAN).targetStd(TARGET_STD)
+                .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
                 .settings(BuySettings.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();

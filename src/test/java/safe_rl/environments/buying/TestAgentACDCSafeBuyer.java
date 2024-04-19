@@ -16,6 +16,7 @@ public class TestAgentACDCSafeBuyer {
     public static final double TOL = 1e-1;
     public static final double TARGET_MEAN = 1d;
     public static final double TARGET_STD = 0.5;
+    public static final double LOG_STD_TAR = Math.log(TARGET_STD);
     public static final double ADV = 1d;
     public static final double TARGET_CRITIC = 0d;
     public static final double TOL_GRAD_LOG = 1e-1;
@@ -25,7 +26,7 @@ public class TestAgentACDCSafeBuyer {
     void init() {
         agent=AgentACDCSafeBuyer.builder()
                 .settings(BuySettings.new5HoursIncreasingPrice())
-                .targetMean(TARGET_MEAN).targetStd(TARGET_STD).targetCritic(TARGET_CRITIC)
+                .targetMean(TARGET_MEAN).targetLogStd(LOG_STD_TAR).targetCritic(TARGET_CRITIC)
                 .state(StateBuying.newZero())
                 .build();
     }
@@ -34,9 +35,6 @@ public class TestAgentACDCSafeBuyer {
     void whenInit_thenCanRead() {
         var meanStd=agent.readActor();
         var value=agent.readCritic();
-
-        System.out.println("meanStd = " + meanStd);
-        System.out.println("value = " + value);
 
         Assertions.assertEquals(TARGET_MEAN,meanStd.getFirst(), TOL);
         Assertions.assertEquals(TARGET_STD,meanStd.getSecond(), TOL);
@@ -47,20 +45,21 @@ public class TestAgentACDCSafeBuyer {
     @Test
     void whenChooseAction_thenCanRead() {
         double action=agent.chooseAction().asDouble();
+        System.out.println("action = " + action);
         Assertions.assertTrue(MathUtils.isInRange(action,-1,2));
     }
 
     @Test
     void whenActionEqualToMean_thenCorrectGradLog() {
         var ms0=agent.readActor();
-        var gradLog=agent.fitActor(Action.ofDouble(TARGET_MEAN), ADV);
+        var gradMAndLogS=agent.fitActor(Action.ofDouble(TARGET_MEAN), ADV);
         var ms=agent.readActor();
-        somePrinting(ms0, gradLog, ms);
-        Assertions.assertEquals(0,gradLog.getFirst(), TOL_GRAD_LOG);
-        Assertions.assertTrue(gradLog.getSecond()<0);
+        double derStd = getDerStd(gradMAndLogS);
+        somePrinting(ms0, gradMAndLogS, ms);
+        Assertions.assertEquals(0,gradMAndLogS.getFirst(), TOL_GRAD_LOG);
+        Assertions.assertTrue(derStd<0);
         Assertions.assertNotEquals(ms0,ms);
     }
-
 
     @Test
     void whenActionFarBelowMean_thenCorrectGradLog() {
@@ -100,5 +99,11 @@ public class TestAgentACDCSafeBuyer {
         System.out.println("gradLog = " + gradLog);
         System.out.println("ms0 = " + ms0 +", ms = " + ms);
     }
+
+
+    private double getDerStd(Pair<Double, Double> gradMAndLogS) {
+        return agent.readActor().getSecond()* gradMAndLogS.getSecond();
+    }
+
 
 }

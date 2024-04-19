@@ -19,7 +19,7 @@ public class Runner3HoursBuying {
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
-                .targetMean(2d).targetStd(1d).targetCritic(0d)
+                .targetMean(2d).targetLogStd(Math.log(1d)).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
                 .state(startState)
                 .build();

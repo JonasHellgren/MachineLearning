@@ -31,7 +31,7 @@ public class TestTrainerACDCBuyer {
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
-                .targetMean(2d).targetStd(3d).targetCritic(0d)
+                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(0e-1).learningRateCritic(1e-1)
                 .state(startState)
                 .build();
