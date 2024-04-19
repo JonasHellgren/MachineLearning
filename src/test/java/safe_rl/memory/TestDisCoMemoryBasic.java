@@ -17,6 +17,7 @@ class TestDisCoMemoryBasic {
     public static final double TOL = 1e-5;
     public static final double TOL_VALUE = 1e-3;
     public static final double ALPHA_LEARNING = 1e-1;
+    public static final double DELTA_BETA_MAX = 1d;
     DisCoMemory<VariablesBuying> memory;
     StateI<VariablesBuying> state;
 
@@ -24,7 +25,7 @@ class TestDisCoMemoryBasic {
     void init() {
         state = StateBuying.newZero();
         int nThetaPerKey = state.nContinousFeatures() + N_BIAS_THETAS;
-        memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING);
+        memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING,DELTA_BETA_MAX);
     }
 
     @Test

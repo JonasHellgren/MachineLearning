@@ -1,8 +1,8 @@
 package safe_rl.environments.buying_electricity;
 
-import common.other.MyFunctions;
 import common.other.NormDistributionSampler;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
@@ -14,13 +14,14 @@ import safe_rl.helpers.DisCoMemoryInitializer;
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 
-import static common.list_arrays.ListUtils.createDoubleListStartEndStep;
+import static common.list_arrays.ListUtils.doublesStartEndStep;
 import static common.other.MyFunctions.*;
 
 /**
  * ACDC = actor critic with discrete and continuous memory
  */
 
+@Getter
 public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     public static final double LEARNING_RATE = 1e-2;
@@ -32,6 +33,8 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double TAR_STD = 0.5d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
+    public static final double DELTA_BETA_MAX = 100d;
+
 
     StateI<VariablesBuying> state;
     BuySettings settings;
@@ -42,14 +45,17 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
         return AgentACDCSafeBuyer.builder()
-                .learningRateActor(LEARNING_RATE).learningRateCritic(LEARNING_RATE)
+                .learningRateActorMean(LEARNING_RATE)
+                .learningRateActorStd(LEARNING_RATE)
+                .learningRateCritic(LEARNING_RATE)
                 .settings(settings)
                 .state(StateBuying.newZero())
                 .build();
     }
 
     @Builder
-    public AgentACDCSafeBuyer(Double learningRateActor,
+    public AgentACDCSafeBuyer(Double learningRateActorMean,
+                              Double learningRateActorStd,
                               Double learningRateCritic,
                               @NonNull BuySettings settings,
                               Double targetMean,
@@ -59,14 +65,15 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinousFeatures() + 1;
-        double lra= defaultIfNullDouble.apply(learningRateActor,LEARNING_RATE);
-        double lrc= defaultIfNullDouble.apply(learningRateCritic,LEARNING_RATE);
-        this.actorMean = new DisCoMemory<>(nThetas, lra);
-        this.actorStd = new DisCoMemory<>(nThetas, lrc);
-        this.critic = new DisCoMemory<>(nThetas, lrc);
-        double tarM= defaultIfNullDouble.apply(targetMean,TAR_MEAN);
-        double tarS= defaultIfNullDouble.apply(targetStd,TAR_STD);
-        double tarC= defaultIfNullDouble.apply(targetCritic,TAR_CRITIC);
+        double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
+        double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
+        double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
+        this.actorMean = new DisCoMemory<>(nThetas, lram, DELTA_BETA_MAX);
+        this.actorStd = new DisCoMemory<>(nThetas, lras, DELTA_BETA_MAX);
+        this.critic = new DisCoMemory<>(nThetas, lrc, DELTA_BETA_MAX);
+        double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        double tarS = defaultIfNullDouble.apply(targetStd, TAR_STD);
+        double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
         var initializer = getInitializer(state, actorMean, tarM);
         initializer.initialize();
         initializer = getInitializer(state, actorStd, tarS);
@@ -94,8 +101,6 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     @Override
     public Pair<Double, Double> fitActor(Action action, double adv) {
         var gradLogMenAndStd = calcGradLog(state, action.asDouble());
-        System.out.println("gradLogMenAndStd = " + gradLogMenAndStd);
-        System.out.println("adv = " + adv);
         actorMean.fitFromError(state, gradLogMenAndStd.getFirst() * adv);
         actorStd.fitFromError(state, gradLogMenAndStd.getSecond() * adv);
         return gradLogMenAndStd;
@@ -131,7 +136,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         return DisCoMemoryInitializer.<VariablesBuying>builder()
                 .memory(memory1)
                 .discreteFeatSet(List.of(
-                        createDoubleListStartEndStep(0, settings.timeEnd(), settings.dt())))
+                        doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
                 .contFeatMinMax(Pair.create(List.of(SOC_MIN), List.of(settings.socMax())))
                 .valTarMeanStd(Pair.create(tarValue, STD_TAR))
                 .state(state)
@@ -142,7 +147,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     //todo below in sep class
     DoubleBinaryOperator scaleToAccountThatStdIsExpTheta = (g, k) -> g * k;
 
-    Pair<Double, Double>    calcGradLog(StateI<VariablesBuying> state, double action) {
+    Pair<Double, Double> calcGradLog(StateI<VariablesBuying> state, double action) {
         var meanAndStd = actorMeanAndStd(state);
         double mean = meanAndStd.getFirst();
         double std = meanAndStd.getSecond();

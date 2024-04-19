@@ -28,6 +28,7 @@ public class DisCoMemoryInitializer<V> {
     public static final double TOL_VAL = 1e-3;
     public static final double ALPHA = 1e-1;
     public static final int LENGTH_AVG_WINDOW = 100;
+    public static final double DELTA_BETA_MAX = 1d;
     DisCoMemory<V> memory;
     List<List<Double>> discreteFeatSet;
     Pair<List<Double>, List<Double>> contFeatMinMax;
@@ -65,7 +66,7 @@ public class DisCoMemoryInitializer<V> {
         this.lengthMeanAvgWindow= MyFunctions.defaultIfNullInteger.apply(lengthMeanAvgWindow, LENGTH_AVG_WINDOW);
         double alpha=MyFunctions.defaultIfNullDouble.apply(alphaLearning, ALPHA);
         this.nContinuousFeatures =contFeatMinMax.getFirst().size();
-        this.fitter=new LinearFitter(alpha, nContinuousFeatures);
+        this.fitter=new LinearFitter(alpha, DELTA_BETA_MAX, nContinuousFeatures);
         this.sampler=new NormDistributionSampler();
     }
 

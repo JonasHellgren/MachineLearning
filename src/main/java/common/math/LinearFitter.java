@@ -1,6 +1,7 @@
 package common.math;
 
 import com.google.common.base.Preconditions;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math3.util.Pair;
@@ -15,10 +16,13 @@ import org.apache.commons.math3.util.Pair;
 public class LinearFitter {
 
     public static final double ALPHA = 1e-1;
+    public static final double DELTA_THETA_MAX = 1e-1;
+
     public static final String ARGUMENT_ERROR_MSG = "Bad dimension x, nDim x=";
 
     Double alphaLearning;
     Integer nDim;
+    Double deltaThetaMax;
 
     @Getter
     @Setter
@@ -27,17 +31,18 @@ public class LinearFitter {
 
 
     public static LinearFitter ofNDim(Integer nDim) {
-        return new LinearFitter(ALPHA, nDim);
+        return new LinearFitter(ALPHA,DELTA_THETA_MAX, nDim);
     }
 
-    public static LinearFitter ofLearningRateAndNDim(double alphaLearning, Integer nDim) {
-        return new LinearFitter(alphaLearning, nDim);
+    public static LinearFitter ofLearningRateAndNDim(double alphaLearning,  Integer nDim) {
+        return new LinearFitter(alphaLearning, DELTA_THETA_MAX, nDim);
     }
 
-
-    public LinearFitter(Double alphaLearning, Integer nContFeatures) {
+    @Builder
+    public LinearFitter(Double alphaLearning, Double deltaBetaMax, Integer nContFeatures) {
         this.alphaLearning = alphaLearning;
         this.nDim = nContFeatures;
+        this.deltaThetaMax =deltaBetaMax;
         int nThetas = nContFeatures + 1;
         this.theta = new double[nThetas];
         this.decoder=new LinearDecoder(nContFeatures);
@@ -57,7 +62,7 @@ public class LinearFitter {
     public void fitFromError(double[] xArr, double e) {  //todo ändra ordning arg
         for (int i = 0; i < nDim + 1; i++) {
             double x = i == nDim ? 1 : xArr[i];
-            theta[i] = theta[i] + alphaLearning * e * x;
+            theta[i] = theta[i] + MathUtils.clip(alphaLearning * e * x,-deltaThetaMax,deltaThetaMax);
         }
     }
 

@@ -20,8 +20,13 @@ TestAgentACDCSafeBuyer x
 new3HoursSamePrice  x
 TestRandomSearchNew3HoursSamePrice  x
 TestExperienceCreator x
-TrainerOneStepACSafeBuyer
-ny klass SafeEpisodeTrainer
+TrainerOneStepACSafeBuyer x
+LinearFitter med beta clipper x
+ny klass SafeEpisodeTrainer x
+
+sep LR std memory
+log std i minne
+
 TrainerI
 
 simplified battery trading with safe RL

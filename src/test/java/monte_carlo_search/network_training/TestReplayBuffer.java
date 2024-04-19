@@ -54,7 +54,7 @@ public class TestReplayBuffer {
 
         System.out.println("buffer = " + buffer);
 
-        List<Double> doubleList0to9=ListUtils.createDoubleListStartEndStep(0,BUFFER_SIZE-1,1);
+        List<Double> doubleList0to9=ListUtils.doublesStartEndStep(0,BUFFER_SIZE-1,1);
         List<Double> thetas=buffer.getBuffer().stream().map(e -> e.stateVariables.theta).collect(Collectors.toList());
 
         System.out.println("doubleList0to9 = " + doubleList0to9);

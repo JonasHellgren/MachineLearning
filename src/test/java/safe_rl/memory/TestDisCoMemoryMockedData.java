@@ -23,18 +23,19 @@ public class TestDisCoMemoryMockedData {
     public static final int N_BIAS_THETAS = 1;
     public static final double TOL_VAL = 1e-2;
     public static final double ALPHA_LEARNING = 1e-1;
+    public static final double DELTA_BETA_MAX = 1d;
     public static final int N_FITS = 100;
     public static final int N_FITS_PER_FEATURE = 1;
     DisCoMemory<VariablesBuying> memory;
     StateI<VariablesBuying> state;
     List<Integer> timeList = List.of(0, 1);
-    List<Double> socList = ListUtils.createDoubleListStartEndStep(0, 1, 0.1);
+    List<Double> socList = ListUtils.doublesStartEndStep(0, 1, 0.1);
 
     @BeforeEach
     void init() {
         state = StateBuying.newZero();
         int nThetaPerKey = state.nContinousFeatures() + N_BIAS_THETAS;
-        memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING);
+        memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING,DELTA_BETA_MAX);
     }
 
     @Test
@@ -54,12 +55,12 @@ public class TestDisCoMemoryMockedData {
             Double soc =  (Double) c.get(1);
             double value = getValue(time, soc);
             state.setVariables(VariablesBuying.newTimeSoc(time, soc));
-            memory.fit(state.copy(), value, N_FITS_PER_FEATURE);
+            memory.fit(state, value, N_FITS_PER_FEATURE);
         } );
     }
 
     private static double getValue(Integer time, Double soc) {
-        return time * 10 + soc * 1;
+        return time*0.1 + soc * 10;
     }
 
 

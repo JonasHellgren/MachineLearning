@@ -9,6 +9,8 @@ import safe_rl.domain.episode_trainers.ACDCOneStepEpisodeTrainer;
 import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
+import safe_rl.helpers.EpisodeInfo;
 
 import java.util.List;
 
@@ -46,13 +48,35 @@ public class TrainerOneStepACDC<V> {
                 .build();
 
         for (int ei = 0; ei < trainerParameters.nofEpisodes(); ei++) {
-            agent.setState(startState.copy());
-            var experiences = experienceCreator.getExperiences(agent);
+            setStartState();
+
+          //  System.out.println("ei = " + ei);
+
+            var experiences = getExperiences();
             episodeTrainer.trainAgentFromExperiences(experiences);
 
-            experiences.forEach(System.out::println);
+
+            //var eexpInfo=new EpisodeInfo<>(experiences);
+            //experiences.forEach(System.out::println);
 
         }
+        AgentACDCSafeBuyer ac=(AgentACDCSafeBuyer) agent;
+        System.out.println("ac.getCritic() = " + ac.getCritic());
+        System.out.println("ac.getActorMean() = " + ac.getActorMean());
+    }
+
+    public List<Experience<V>> evaluate() {
+        setStartState();
+        return getExperiences();
+    }
+
+
+    void setStartState() {
+        agent.setState(startState.copy());
+    }
+
+    List<Experience<V>> getExperiences() {
+        return experienceCreator.getExperiences(agent);
     }
 
 

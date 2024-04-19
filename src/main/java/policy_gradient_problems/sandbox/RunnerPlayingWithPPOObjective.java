@@ -13,7 +13,7 @@ public class RunnerPlayingWithPPOObjective {
     public static final double EPSILON = 0.2;
     public static final double A0 = -0.5, A1 = -0.3;
     public static final double THETA0OLD = 0d, THETA1OLD=THETA0OLD;
-    static  List<Double> theta0List=ListUtils.createDoubleListStartEndStep(-1d,1d,0.25);
+    static  List<Double> theta0List=ListUtils.doublesStartEndStep(-1d,1d,0.25);
     static PPOSandboxHelper helper= PPOSandboxHelper.newDefault();
 
     public static void main(String[] args) {

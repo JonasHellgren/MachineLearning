@@ -23,7 +23,7 @@ public class TestLinearFitter {
     @BeforeEach
     void init() {
         fitter=LinearFitter.ofLearningRateAndNDim(0.9,1);
-        var xList = ListUtils.createDoubleListStartEndStep(0, 1, 0.01);
+        var xList = ListUtils.doublesStartEndStep(0, 1, 0.01);
         int nPoints = xList.size();
         yArr = new double[nPoints];
         xMat = new double[nPoints][nDim];

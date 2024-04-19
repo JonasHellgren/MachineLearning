@@ -12,7 +12,7 @@ import safe_rl.environments.buying_electricity.VariablesBuying;
 import java.util.Arrays;
 import java.util.List;
 
-import static common.list_arrays.ListUtils.createDoubleListStartEndStep;
+import static common.list_arrays.ListUtils.doublesStartEndStep;
 
 class TestDisCoMemoryInitializerUsingBuyingState {
 
@@ -39,7 +39,7 @@ class TestDisCoMemoryInitializerUsingBuyingState {
         return DisCoMemoryInitializer.<VariablesBuying>builder()
                 .memory(memory1)
                 .discreteFeatSet(List.of(
-                        createDoubleListStartEndStep(0, settings.timeEnd(), settings.dt())))
+                        doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
                 .contFeatMinMax(Pair.create(List.of(SOC_MIN), List.of(SOC_MAX)))
                 .valTarMeanStd(Pair.create(tarValue, stdTar))
                 .state(state)

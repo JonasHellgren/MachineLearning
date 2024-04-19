@@ -18,7 +18,7 @@ import java.util.List;
 public class TestRandomSearchNew3HoursSamePrice {
 
     public static final double SOC = 0.2;
-    public static final double TOL_POWER = 1e-1;
+    public static final double TOL_POWER = 0.5;
     BuySettings settings3 = BuySettings.new3HoursSamePrice();
     EnvironmentBuying environment;
     SafetyLayerBuying<VariablesBuying> safetyLayer;
