@@ -2,10 +2,8 @@ package safe_rl.domain.trainers;
 
 import lombok.Builder;
 import lombok.Getter;
-import policy_gradient_problems.domain.agent_interfaces.AgentParamActorTabCriticI;
+import lombok.extern.java.Log;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
-import policy_gradient_problems.environments.sink_the_ship.EnvironmentShip;
-import policy_gradient_problems.environments.sink_the_ship.VariablesShip;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
@@ -14,18 +12,14 @@ import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
-import safe_rl.environments.buying_electricity.StateBuying;
-import safe_rl.environments.buying_electricity.VariablesBuying;
 import safe_rl.helpers.EpisodeInfo;
 import safe_rl.recorders.Recorders;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //todo TrainerI
+@Log
 public class TrainerOneStepACDC<V> {
 
     EnvironmentI<V> environment;
@@ -59,7 +53,7 @@ public class TrainerOneStepACDC<V> {
 
     public void train() {
         IntStream.range(0, trainerParameters.nofEpisodes()).forEach(this::processEpisode);
-        printing();
+        logging();
     }
 
     private void processEpisode(int episodeIndex) {
@@ -69,10 +63,12 @@ public class TrainerOneStepACDC<V> {
         updateRecorder(experiences);
     }
 
-    private void printing() {
+    private void logging() {
         AgentACDCSafeBuyer ac=(AgentACDCSafeBuyer) agent;
-        System.out.println("ac.getCritic() = " + ac.getCritic());
-        System.out.println("ac.getActorMean() = " + ac.getActorMean());
+        log.info("critic() = " + ac.getCritic());
+        log.info("actor mean() = " + ac.getActorMean());
+        log.info("actor std() = " + ac.getActorStd());
+
     }
 
     public List<Experience<V>> evaluate() {
@@ -93,6 +89,7 @@ public class TrainerOneStepACDC<V> {
     void updateRecorder(List<Experience<V>> experiences) {
         var ei=new EpisodeInfo<>(experiences);
         recorders.recorderTrainingProgress.add(ProgressMeasures.builder()
+                        .nSteps(ei.size())
                         .sumRewards(ei.sumRewards())
                         .criticLoss(agent.lossCriticLastUpdate())
                         .actorLoss(agent.lossActorLastUpdate())
