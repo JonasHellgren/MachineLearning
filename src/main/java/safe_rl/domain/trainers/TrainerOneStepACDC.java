@@ -67,7 +67,7 @@ public class TrainerOneStepACDC<V> {
         AgentACDCSafeBuyer ac=(AgentACDCSafeBuyer) agent;
         log.info("critic() = " + ac.getCritic());
         log.info("actor mean() = " + ac.getActorMean());
-        log.info("actor std() = " + ac.getActorStd());
+        log.info("actor logStd() = " + ac.getActorLogStd());
 
     }
 

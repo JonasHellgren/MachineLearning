@@ -1,6 +1,7 @@
 package safe_rl.environments.buying_electricity;
 
 import common.dl4j.EntropyCalculatorContActions;
+import common.math.MathUtils;
 import common.other.NormDistributionSampler;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,12 +27,12 @@ import static common.other.MyFunctions.*;
 public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     public static final double LEARNING_RATE = 1e-2;
-    public static final double STD_MIN = 2.5e-2;
+    public static final double STD_MIN = 0.05;
     public static final double SMALLEST_DENOM = 1e-2;
     public static final double MAX_GRAD_ELEMENT = 1;
     public static final double SOC_MIN = 0d;
     public static final double TAR_MEAN = 1d;
-    public static final double TAR_STD = 0.5d;
+    public static final double TAR_STD = 10d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
     public static final double DELTA_BETA_MAX = 10d;
@@ -40,10 +41,11 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     StateI<VariablesBuying> state;
     BuySettings settings;
     DisCoMemory<VariablesBuying> actorMean;
-    DisCoMemory<VariablesBuying> actorStd;
+    DisCoMemory<VariablesBuying> actorLogStd;
     DisCoMemory<VariablesBuying> critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator=new EntropyCalculatorContActions();
+    double tarStdInit;
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
         return AgentACDCSafeBuyer.builder()
@@ -71,14 +73,15 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
         this.actorMean = new DisCoMemory<>(nThetas, lram, DELTA_BETA_MAX);
-        this.actorStd = new DisCoMemory<>(nThetas, lras, DELTA_BETA_MAX);
+        this.actorLogStd = new DisCoMemory<>(nThetas, lras, DELTA_BETA_MAX);
         this.critic = new DisCoMemory<>(nThetas, lrc, DELTA_BETA_MAX);
         double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
-        double tarS = defaultIfNullDouble.apply(targetStd, TAR_STD);
+        double tarLogStdInit = defaultIfNullDouble.apply(targetStd, TAR_STD);
+        tarStdInit=Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
         var initializer = getInitializer(state, actorMean, tarM);
         initializer.initialize();
-        initializer = getInitializer(state, actorStd, tarS);
+        initializer = getInitializer(state, actorLogStd, tarLogStdInit);
         initializer.initialize();
         initializer = getInitializer(state, critic, tarC);
         initializer.initialize();
@@ -102,10 +105,10 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public Pair<Double, Double> fitActor(Action action, double adv) {
-        var gradLogMenAndStd = calcGradLog(state, action.asDouble());
-        actorMean.fitFromError(state, gradLogMenAndStd.getFirst() * adv);
-        actorStd.fitFromError(state, gradLogMenAndStd.getSecond() * adv);
-        return gradLogMenAndStd;
+        var gradMeanAndLogStd = calcGradLog(state, action.asDouble());
+        actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
+        actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
+        return gradMeanAndLogStd;
     }
 
     @Override
@@ -150,7 +153,9 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     Pair<Double, Double> actorMeanAndStd(StateI<VariablesBuying> state) {
-        return Pair.create(actorMean.read(state), actorStd.read(state));
+        return Pair.create(
+                actorMean.read(state),
+                MathUtils.clip(Math.exp(actorLogStd.read(state)),STD_MIN, tarStdInit));
     }
 
     private DisCoMemoryInitializer<VariablesBuying> getInitializer(StateBuying state,
@@ -166,11 +171,21 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                 .build();
     }
 
+    Pair<Double, Double> calcGradLog(StateI<VariablesBuying> state, double action) {
+        var meanAndStd = actorMeanAndStd(state);
+        double mean = meanAndStd.getFirst();
+        double std = meanAndStd.getSecond();
+        double denom = Math.max(sqr2.apply(std), SMALLEST_DENOM);
+        double gradMean = 1 / denom * (action - mean);
+        double gradLogStd = sqr2.apply(action - mean) /denom - 1d;
+      //  double gradStdTheta = scaleToAccountThatStdIsExpTheta.applyAsDouble(gradStd, 1d / std);
+        return Pair.create(gradMean, gradLogStd);
+    }
 
     //todo below in sep class
     DoubleBinaryOperator scaleToAccountThatStdIsExpTheta = (g, k) -> g * k;
 
-    Pair<Double, Double> calcGradLog(StateI<VariablesBuying> state, double action) {
+    Pair<Double, Double> calcGradLogOld(StateI<VariablesBuying> state, double action) {
         var meanAndStd = actorMeanAndStd(state);
         double mean = meanAndStd.getFirst();
         double std = meanAndStd.getSecond();
