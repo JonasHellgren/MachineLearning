@@ -8,15 +8,19 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 import safe_rl.helpers.EpisodeInfo;
 
+/***
+ * Optimal behavior in this test is max power two first steps
+ */
+
 public class TestTrainerACDCBuyer {
 
-    public static final double SOC = 0.2;
-    public static final double TARGET_MEAN = 2d;
-    public static final double TARGET_STD = 3;
-    public static final double ADV = 1d;
-    public static final double TARGET_CRITIC = 0d;
+    public static final double SOC_START = 0.2;
+    public static final double MEAN_INIT = 2d;
+    public static final double STD_INIT = 3;
+    public static final double CRITIC_INIT = 10d;
     public static final double TOL_POWER = 1e-1;
-    public static final int NOF_EPISODES = 500;
+    public static final int NOF_EPISODES = 1000;
+    public static final double SOC_END = 1.0;
 
     BuySettings settings3;
     TrainerOneStepACDC<VariablesBuying> trainer;
@@ -25,11 +29,11 @@ public class TestTrainerACDCBuyer {
     void init() {
         settings3 = BuySettings.new3HoursSamePrice();
         var environment = new EnvironmentBuying(settings3);
-        var startState = StateBuying.of(VariablesBuying.newSoc(SOC));
+        var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
-                .targetMean(TARGET_MEAN).targetStd(TARGET_STD).targetCritic(TARGET_CRITIC)
+                .targetMean(MEAN_INIT).targetStd(STD_INIT).targetCritic(CRITIC_INIT)
                 .learningRateActorMean(1e-2).learningRateActorStd(0e-1).learningRateCritic(1e-1)
                 .state(startState)
                 .build();
@@ -46,17 +50,21 @@ public class TestTrainerACDCBuyer {
     void whenTrained_thenCorrect() {
 
         trainer.train();
-        var agent=trainer.getAgent();
-
         var experiences = trainer.evaluate();
 
         var ei=new EpisodeInfo<>(experiences);
-
         var powerList=ei.actionsApplied();
+        var ac=(AgentACDCSafeBuyer) trainer.getAgent();
+        var memMean=ac.getActorMean();
+        var memCrit=ac.getCritic();
+        double vc2=memCrit.read(StateBuying.of(VariablesBuying.newTimeSoc(2, SOC_END)));
+        double va0=memMean.read(StateBuying.of(VariablesBuying.newTime(0)));
+        double powerExpected = settings3.powerBattMax();
 
-        System.out.println("powerList = " + powerList);
-
-        Assertions.assertEquals(settings3.powerBattMax(),powerList.get(0),1e-3);
+        Assertions.assertEquals(powerExpected,powerList.get(0), TOL_POWER);
+        Assertions.assertEquals(settings3.priceEnd()*(SOC_END- SOC_START)*settings3.energyBatt(),vc2,10);
+        Assertions.assertEquals(powerExpected,powerList.get(0), TOL_POWER);
+        Assertions.assertEquals(powerExpected,va0, TOL_POWER);
 
     }
 

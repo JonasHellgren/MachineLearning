@@ -13,6 +13,7 @@ public record VariablesBuying (
 ) {
 
     public static final double TOL = 1e-5;
+    public static final double SOC_DUMMY = 0.0;
 
     public static VariablesBuying newZero() {
         return new VariablesBuying(0d,0.0,0.0);
@@ -25,6 +26,11 @@ public record VariablesBuying (
     public static VariablesBuying newTimeSoc(double time, double soc) {
         return new VariablesBuying(time,soc,soc);
     }
+
+    public static VariablesBuying newTime(double time) {
+        return new VariablesBuying(time, SOC_DUMMY,SOC_DUMMY);
+    }
+
 
     public VariablesBuying copy() {
         return VariablesBuying.builder()

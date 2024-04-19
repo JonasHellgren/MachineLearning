@@ -33,7 +33,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double TAR_STD = 0.5d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
-    public static final double DELTA_BETA_MAX = 100d;
+    public static final double DELTA_BETA_MAX = 10d;
 
 
     StateI<VariablesBuying> state;

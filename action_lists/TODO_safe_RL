@@ -24,8 +24,12 @@ TrainerOneStepACSafeBuyer x
 LinearFitter med beta clipper x
 ny klass SafeEpisodeTrainer x
 
-sep LR std memory
+sep LR std memory x
+straffa corrected action
 log std i minne
+grad log i egen klass
+Runner3HoursBuying
+recorders
 
 TrainerI
 
