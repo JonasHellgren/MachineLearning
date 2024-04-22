@@ -43,10 +43,7 @@ public class TrainerMultiStepACDC<V> {
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();
         this.startState=startState;
-        this.episodeTrainer = ACDCMultiStepEpisodeTrainer
-                .<V>builder()
-                .agent(agent).parameters(trainerParameters)
-                .build();
+        this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent,trainerParameters);
     }
 
     public void train() {

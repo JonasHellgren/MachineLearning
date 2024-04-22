@@ -30,18 +30,20 @@ public class MultiStepReturnEvaluator<V> {
     TrainerParameters parameters;
     List<Experience<V>> experiences;
 
-    public SingleResultMultiStepper<V> getResultManySteps(int tStart) {
+    public SingleResultMultiStepper<V> evaluate(int tStart) {
         var informer=new EpisodeInfo<>(experiences);
         int nExperiences = informer.size();
-        Preconditions.checkArgument(tStart > nExperiences - 1,"Non valid start index, tStart=" + tStart);
-        int idxEndExperience = tStart + parameters.stepHorizon();
-        var rewards = IntStream.range(tStart, Math.min(idxEndExperience, nExperiences))  //range -> end exclusive
+        Preconditions.checkArgument(tStart < nExperiences,"Non valid start index, tStart=" + tStart);
+        int idxEnd = tStart + parameters.stepHorizon();
+        var rewards = IntStream.rangeClosed(tStart, Math.min(idxEnd, nExperiences-1))  //end inclusive
                 .mapToObj(t -> informer.experienceAtTime(t).rewardApplied()).toList();
         double rewardSumDiscounted = ListUtils.discountedSum(rewards, parameters.gamma());
-        boolean isEndOutSide = idxEndExperience > nExperiences;
-        maybeLog(nExperiences, idxEndExperience, isEndOutSide);
-        StateI<V> stateFuture = isEndOutSide ? null : informer.experienceAtTime(idxEndExperience - 1).stateNextApplied();
-        boolean isFutureTerminal= stateFuture == null || informer.experienceAtTime(idxEndExperience - 1).isTerminalApplied();
+        boolean isEndOutSide = idxEnd > nExperiences-1;
+        maybeLog(nExperiences, idxEnd, isEndOutSide);
+        StateI<V> stateFuture = isEndOutSide
+                ? null
+                : informer.experienceAtTime(idxEnd - 1).stateNextApplied();
+        boolean isFutureTerminal= !isEndOutSide && informer.experienceAtTime(idxEnd).isTerminalApplied();
         return SingleResultMultiStepper.<V>builder()
                 .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)

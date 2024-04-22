@@ -44,7 +44,7 @@ public class MultiStepResultsGenerator<V> {
                                       EpisodeInfo<V> episodeInfo,
                                       int t) {
         Experience<V> experience=episodeInfo.experienceAtTime(t);
-        var resMS = evaluator.getResultManySteps(t);
+        var resMS = evaluator.evaluate(t);
         addValueTarget(results, resMS);
         results.addState(experience.state());
         addAdvantage(results, experience);

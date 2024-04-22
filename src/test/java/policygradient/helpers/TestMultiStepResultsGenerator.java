@@ -42,7 +42,6 @@ public class TestMultiStepResultsGenerator {
         experiences.add(Experience.of(stateRandom, Action.ofInteger(INT_ACTION), REWARD,stateUp));
         experiences.add(Experience.of(stateUp, Action.ofInteger(INT_ACTION), REWARD,stateUp));
         experiences.add(Experience.of(stateRandom, Action.ofInteger(INT_ACTION), REWARD,stateUp));
-
     }
 
     @Test

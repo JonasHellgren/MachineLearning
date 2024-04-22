@@ -22,7 +22,7 @@ public class MultiStepActorUpdater<V> {
         double avgCriticLoss= ListUtils.findAverage(lossCriticList)
                 .orElse(0)*parameters.ratioPenCorrectedAction();
 
-        for (int step = 0; step < msr.tEnd() ; step++) {
+        for (int step = 0; step < msr.nExperiences() ; step++) {
             agent.setState(msr.stateAtStep(step));
             penalizeAgentProposedActionIfSafeCorrected(avgCriticLoss, msr,step);
             agent.fitActor(msr.actionAppliedAtStep(step),msr.advantageAtStep(step));

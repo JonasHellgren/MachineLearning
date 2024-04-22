@@ -13,11 +13,9 @@ import safe_rl.helpers.MultiStepResultsGenerator;
 import safe_rl.helpers.ReturnCalculator;
 
 import java.util.List;
-@Builder
 public class ACDCMultiStepEpisodeTrainer<V> {
 
     public static final double VALUE_TERM = 0d;
-    public static final int LENGTH_WINDOW = 100;
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
 
