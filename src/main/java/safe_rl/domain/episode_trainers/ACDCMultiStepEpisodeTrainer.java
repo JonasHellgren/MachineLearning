@@ -7,6 +7,8 @@ import lombok.NonNull;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.helpers.MultiStepActorUpdater;
+import safe_rl.helpers.MultiStepCriticUpdater;
 import safe_rl.helpers.MultiStepResultsGenerator;
 import safe_rl.helpers.ReturnCalculator;
 
@@ -19,19 +21,29 @@ public class ACDCMultiStepEpisodeTrainer<V> {
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
 
-    //@Override
-    public void trainAgentFromExperiences(List<Experience<V>> experienceList, List<Double> lossCritic) {
-//        double avgCriticLoss= ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
-        var msResGen=new MultiStepResultsGenerator<V>(parameters,agent,true);
-        var msActorUpdater=new MultiStepActorUpdater(agent,parameters,lossCritic);
-        var msCriticUpdater=new MultiStepCriticUpdater(agent,parameters);
+    MultiStepResultsGenerator<V> generator;
+    MultiStepActorUpdater<V> actorUpdater;
+    MultiStepCriticUpdater<V> criticUpdater;
 
-        var msr=msResGen.generate(experienceList);
-        msActorUpdater.update(msr);
-        msCriticUpdater.update(msr);
+    public ACDCMultiStepEpisodeTrainer(@NonNull AgentACDiscoI<V> agent,
+                                       @NonNull TrainerParameters parameters) {
+        this.agent = agent;
+        this.parameters = parameters;
+        generator=new MultiStepResultsGenerator<>(parameters,agent);
+        actorUpdater=new MultiStepActorUpdater<>(agent,parameters);
+        criticUpdater=new MultiStepCriticUpdater<>(agent,parameters);
     }
 
-    public void trainAgentFromExperiencesOld(List<Experience<V>> experienceList, List<Double> lossCritic) {
+    //@Override
+    public void trainAgentFromExperiences(List<Experience<V>> experienceList,
+                                          List<Double> lossCritic) {
+        var msr=generator.generate(experienceList);
+        actorUpdater.update(msr,lossCritic);
+        criticUpdater.update(msr);
+    }
+
+    public void trainAgentFromExperiencesOld(List<Experience<V>> experienceList,
+                                             List<Double> lossCritic) {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         double avgCriticLoss= ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
@@ -44,7 +56,8 @@ public class ACDCMultiStepEpisodeTrainer<V> {
         }
     }
 
-    private  void penalizeAgentProposedActionIfSafeCorrected(double avgCriticLoss, Experience<V> e) {
+    private  void penalizeAgentProposedActionIfSafeCorrected(double avgCriticLoss,
+                                                             Experience<V> e) {
         Conditionals.executeIfTrue(e.isSafeCorrected(),
                 () -> agent.fitActor(e.ars().action(), -avgCriticLoss));
     }

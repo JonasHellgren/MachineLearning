@@ -37,10 +37,16 @@ grad log i egen klass  x
 multistep på 5 h buying x
 kopiera MultiStepResults MultiStepResultsGenerator MultiStepReturnEvaluator x
 skelletkod ACDCMultiStepEpisodeTrainer  x
-skapa MultiStepActorUpdater skelletkod
-skapa MultiStepCriticUpdater skelletkod
+skapa MultiStepActorUpdater skelletkod x
+skapa MultiStepCriticUpdater skelletkod x
+MultiStepReturnEvaluator x
+TestMultiStepReturnEvaluator
+MultiStepResultsGenerator
+TestMultiStepResultsGenerator
+
 fitActor(state,...
 fitCritic((state,....
+aCcorr pen som i mail
 
 clean up när funkar
 

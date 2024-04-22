@@ -33,6 +33,7 @@ public class ACDCOneStepEpisodeTrainer<V> {
         }
     }
 
+    //todo ändra logik ev egen klass
     private  void penalizeAgentProposedActionIfSafeCorrected(double avgCriticLoss, Experience<V> e) {
         Conditionals.executeIfTrue(e.isSafeCorrected(),
                 () -> agent.fitActor(e.ars().action(), -avgCriticLoss));

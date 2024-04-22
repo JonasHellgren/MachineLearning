@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.google.common.base.Preconditions;
 import common.list_arrays.ListUtils;
 import common.other.Conditionals;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,6 @@ import safe_rl.domain.value_classes.SingleResultMultiStepper;
 import safe_rl.domain.value_classes.TrainerParameters;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 /***
@@ -28,21 +28,20 @@ import java.util.stream.IntStream;
 @Log
 public class MultiStepReturnEvaluator<V> {
     TrainerParameters parameters;
-    List<Experience<V>> experienceList;
+    List<Experience<V>> experiences;
 
     public SingleResultMultiStepper<V> getResultManySteps(int tStart) {
-        int sizeExpList = experienceList.size();
-        throwIfBadArgument(tStart, sizeExpList);
+        var informer=new EpisodeInfo<>(experiences);
+        int nExperiences = informer.size();
+        Preconditions.checkArgument(tStart > nExperiences - 1,"Non valid start index, tStart=" + tStart);
         int idxEndExperience = tStart + parameters.stepHorizon();
-        List<Double> rewardList = IntStream.range(tStart, Math.min(idxEndExperience, sizeExpList))  //range -> end exclusive
-                .mapToObj(t -> experienceList.get(t).rewardApplied())
-                .toList();
-        double rewardSumDiscounted = ListUtils.discountedSum(rewardList, parameters.gamma());
-        boolean isEndOutSide = idxEndExperience > sizeExpList;
-        Conditionals.executeIfTrue(isEndOutSide, () ->
-                log.fine("Index end experience is outside, idxEndExperience="+idxEndExperience+", sizeExpList= "+sizeExpList));
-        StateI<V> stateFuture = isEndOutSide ? null : experienceList.get(idxEndExperience - 1).stateNextApplied();
-        boolean isFutureTerminal= stateFuture == null || experienceList.get(idxEndExperience - 1).isTerminalApplied();
+        var rewards = IntStream.range(tStart, Math.min(idxEndExperience, nExperiences))  //range -> end exclusive
+                .mapToObj(t -> informer.experienceAtTime(t).rewardApplied()).toList();
+        double rewardSumDiscounted = ListUtils.discountedSum(rewards, parameters.gamma());
+        boolean isEndOutSide = idxEndExperience > nExperiences;
+        maybeLog(nExperiences, idxEndExperience, isEndOutSide);
+        StateI<V> stateFuture = isEndOutSide ? null : informer.experienceAtTime(idxEndExperience - 1).stateNextApplied();
+        boolean isFutureTerminal= stateFuture == null || informer.experienceAtTime(idxEndExperience - 1).isTerminalApplied();
         return SingleResultMultiStepper.<V>builder()
                 .sumRewardsNSteps(rewardSumDiscounted)
                 .stateFuture(stateFuture)
@@ -51,33 +50,9 @@ public class MultiStepReturnEvaluator<V> {
                 .build();
     }
 
-    public Experience<V> getExperience(int t) {
-        int sizeExpList = experienceList.size();
-        throwIfBadArgument(t, sizeExpList);
-        return experienceList.get(t);
+    private static void maybeLog(int nExperiences, int idxEndExperience, boolean isEndOutSide) {
+        Conditionals.executeIfTrue(isEndOutSide, () ->
+                log.fine("Index end experience is outside, idxEndExperience="+ idxEndExperience +", nExperiences= "+ nExperiences));
     }
 
-
-    public Optional<Experience<V>> getEndExperience() {
-        int sizeExpList = experienceList.size();
-        return (experienceList.isEmpty())
-                ? Optional.empty()
-                : Optional.of(experienceList.get(sizeExpList - 1));
-    }
-
-
-    public boolean isEndExperienceFail() {
-        return false;
-        /*var expEnd = getEndExperience();
-//      return expEnd.isPresent() && (expEnd.orElseThrow().isFail() || expEnd.orElseThrow().isTerminal());
-        return expEnd.isPresent() && expEnd.orElseThrow().isFail();
-*/
-
-    }
-
-    private static void throwIfBadArgument(int tStart, int sizeExpList) {
-        if (tStart > sizeExpList - 1) {
-            throw new IllegalArgumentException("Non valid start index, tStart=" + tStart);
-        }
-    }
 }
