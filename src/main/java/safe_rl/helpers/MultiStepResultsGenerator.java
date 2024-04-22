@@ -7,7 +7,6 @@ import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.MultiStepResults;
-import safe_rl.domain.value_classes.SingleResultMultiStepper;
 import safe_rl.domain.value_classes.TrainerParameters;
 
 import java.util.List;
@@ -26,39 +25,40 @@ public class MultiStepResultsGenerator<V> {
     @NonNull TrainerParameters parameters;
     @NonNull AgentACDiscoI<V> agent;
 
+    final MultiStepReturnEvaluator<V> evaluator=new MultiStepReturnEvaluator<>();
 
     @SneakyThrows
     public MultiStepResults<V> generate(List<Experience<V>> experiences) {
-        int nExperiences = experiences.size();  //can also be named T
+        int nExperiences = experiences.size();  //in literature often named T
         var informer=new EpisodeInfo<>(experiences);
-        var evaluator = new MultiStepReturnEvaluator<>(parameters, experiences);
+        evaluator.setParametersAndExperiences(parameters, experiences);
         var results = MultiStepResults.<V>create(nExperiences);
-        IntStream.range(0, nExperiences).forEach(
-                t -> addResultsAtTimeStep(results, evaluator, informer, t));
+        IntStream.range(0, nExperiences).forEach(  //end exclusive
+                t -> addResultsAtStep(results,informer, t));
         throwIfBadResultFormat(results);
         return results;
     }
 
-    void addResultsAtTimeStep(MultiStepResults<V> results,
-                                      MultiStepReturnEvaluator<V> evaluator,
-                                      EpisodeInfo<V> episodeInfo,
-                                      int t) {
-        Experience<V> experience=episodeInfo.experienceAtTime(t);
-        var resMS = evaluator.evaluate(t);
-        addValueTarget(results, resMS);
+    void addResultsAtStep(MultiStepResults<V> results,
+                          EpisodeInfo<V> informer,
+                          int t) {
+        var experience=informer.experienceAtTime(t);
         results.addState(experience.state());
+        addIsOutAndValueTarget(results,t);
         addAdvantage(results, experience);
         results.addActionApplied(experience.actionApplied());
         results.addActionPolicy(experience.ars().action());
         results.addIsSafeCorrect(experience.isSafeCorrected());
     }
 
-    void addValueTarget(MultiStepResults<V> results, SingleResultMultiStepper<V> resMS) {
+    void addIsOutAndValueTarget(MultiStepResults<V> results, int t) {
+        var resMS = evaluator.evaluate(t);
         double sumRewards = resMS.sumRewardsNSteps();
         Integer n = parameters.stepHorizon();
         double gammaPowN = Math.pow(parameters.gamma(), n);
         boolean isFutureOutsideOrTerminal =
                 resMS.isFutureStateOutside() || resMS.isFutureTerminal();
+        results.addIsFutureOutsideOrTerminal(isFutureOutsideOrTerminal);
         executeOneOfTwo(isFutureOutsideOrTerminal,
                 () -> results.addValueTarget(sumRewards),
                 () -> results.addValueTarget(sumRewards +
@@ -73,8 +73,8 @@ public class MultiStepResultsGenerator<V> {
     }
 
     private void throwIfBadResultFormat(MultiStepResults<V> results) {
-        if (!results.isEqualListLength()) {
-            throw new IllegalArgumentException("Non equal list lengths");
+        if (!results.isEqualListLength() || results.nExperiences()!=results.stateList().size()) {
+            throw new IllegalArgumentException("Non correct list(s) length");
         }
     }
 

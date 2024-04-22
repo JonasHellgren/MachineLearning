@@ -12,6 +12,7 @@ import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
+import safe_rl.environments.buying_electricity.VariablesBuying;
 import safe_rl.helpers.EpisodeInfo;
 import safe_rl.recorders.Recorders;
 
@@ -60,7 +61,7 @@ public class TrainerOneStepACDC<V> {
         var experiences = getExperiences();
         var errorList=recorders.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);
-        updateRecorder(experiences);
+        updateRecorder(experiences,startState);
     }
 
     //todo in other common class
@@ -87,14 +88,14 @@ public class TrainerOneStepACDC<V> {
     }
 
     //todo in other common class
-    void updateRecorder(List<Experience<V>> experiences) {
+    void updateRecorder(List<Experience<V>> experiences, StateI<V> startState) {
         var ei=new EpisodeInfo<>(experiences);
         recorders.recorderTrainingProgress.add(ProgressMeasures.builder()
                         .nSteps(ei.size())
                         .sumRewards(ei.sumRewards())
                         .criticLoss(agent.lossCriticLastUpdate())
                         .actorLoss(agent.lossActorLastUpdate())
-                        .entropy(agent.entropy())
+                        .entropy(agent.entropy(startState))
                 .build());
     }
 

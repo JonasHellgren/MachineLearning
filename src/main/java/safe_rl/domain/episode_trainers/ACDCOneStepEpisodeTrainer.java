@@ -25,23 +25,23 @@ public class ACDCOneStepEpisodeTrainer<V> {
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         double avgCriticLoss=ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
         for (Experience<V> e : elwr) {
-            agent.setState(e.state());
+            //agent.setState(e.state());
             double tdError = calcTdError(e);
             penalizeAgentProposedActionIfSafeCorrected(avgCriticLoss, e);
-            agent.fitActor(e.actionApplied(), tdError);
-            agent.fitCritic(tdError);
+            agent.fitActor(e.state(),e.actionApplied(), tdError);
+            agent.fitCritic(e.state(),tdError);
         }
     }
 
     //todo ändra logik ev egen klass
     private  void penalizeAgentProposedActionIfSafeCorrected(double avgCriticLoss, Experience<V> e) {
         Conditionals.executeIfTrue(e.isSafeCorrected(),
-                () -> agent.fitActor(e.ars().action(), -avgCriticLoss));
+                () -> agent.fitActor(e.state(),e.ars().action(), -avgCriticLoss));
     }
 
 
     private double calcTdError(Experience<V> experience) {
-        double v = agent.readCritic();
+        double v = agent.readCritic(experience.state());
         double vNext = experience.isTerminalApplied()
                 ? VALUE_TERM
                 : agent.readCritic(experience.stateNextApplied());
@@ -56,7 +56,7 @@ public class ACDCOneStepEpisodeTrainer<V> {
         System.out.println("ms = " + ms);
 
         System.out.println("a=" + e.actionApplied() + ", tdError = " + f.format(tdError) +
-                ",r=" + f.format(e.rewardApplied()) + ",g*vNext=" + f.format(parameters.gamma() * vNext) + ",v=" + f.format(agent.readCritic()) +
+                ",r=" + f.format(e.rewardApplied()) + ",g*vNext=" + f.format(parameters.gamma() * vNext) + ",v=" + f.format(agent.readCritic(e.state())) +
 
                 ", gradLog = " + gradLog);
     }

@@ -40,12 +40,15 @@ skelletkod ACDCMultiStepEpisodeTrainer  x
 skapa MultiStepActorUpdater skelletkod x
 skapa MultiStepCriticUpdater skelletkod x
 MultiStepReturnEvaluator x
-TestMultiStepReturnEvaluator
-MultiStepResultsGenerator
-TestMultiStepResultsGenerator
+TestMultiStepReturnEvaluator   x
+MultiStepResultsGenerator x
+TestMultiStepResultsGenerator  x
 
-fitActor(state,...
-fitCritic((state,....
+fitActor(state,...  x
+fitCritic((state,....  x
+
+
+
 aCcorr pen som i mail
 
 clean up när funkar

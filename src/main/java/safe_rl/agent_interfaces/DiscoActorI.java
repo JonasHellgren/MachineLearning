@@ -10,9 +10,8 @@ import safe_rl.environments.buying_electricity.VariablesBuying;
  */
 
 public interface DiscoActorI<V> {
-    Pair<Double,Double> fitActor(Action action, double adv);
-    Pair<Double,Double> readActor();
+    Pair<Double,Double> fitActor(StateI<V> state,Action action, double adv);
     Pair<Double,Double> readActor(StateI<V> state);
     double lossActorLastUpdate();
-    double entropy();
+    double entropy(StateI<V> state);
 }

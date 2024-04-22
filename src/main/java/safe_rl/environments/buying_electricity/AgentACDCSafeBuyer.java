@@ -112,32 +112,32 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public Pair<Double, Double> fitActor(Action action, double adv) {
+    public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
         var gradMeanAndLogStd=gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));
         actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
         actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
         return gradMeanAndLogStd;
     }
 
-    @Override
+  /*  @Override
     public Pair<Double, Double> readActor() {
         return readActor(state);
     }
-
+*/
     @Override
     public Pair<Double, Double> readActor(StateI<VariablesBuying> state) {
         return  actorMeanAndStd(state);
     }
 
     @Override
-    public void fitCritic(double error) {
+    public void fitCritic(StateI<VariablesBuying> state, double error) {
         critic.fitFromError(state, error);
     }
 
-    @Override
-    public double readCritic() {
-        return readCritic(state);
-    }
+  //  @Override
+  //  public double readCritic() {
+        //return readCritic(state);
+   // }
 
     @Override
     public double readCritic(StateI<VariablesBuying> state) {
@@ -155,7 +155,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public double entropy() {
+    public double entropy(StateI<VariablesBuying> state) {
         var mAndS=actorMeanAndStd(state);
         return entropyCalculator.entropy(mAndS.getSecond());
     }

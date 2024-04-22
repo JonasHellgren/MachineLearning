@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import common.list_arrays.ListUtils;
 import common.other.Conditionals;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.value_classes.Experience;
@@ -22,13 +23,27 @@ import java.util.stream.IntStream;
  *  therefore
  *  Gk=(k=0,1=2, gamma=1)=R0+V(stateNew(0))   (standard TD)
  *  Gk=(k=0,n=2, gamma=1)=R0+R1+V(stateNew(1))
+ *
+ *  A basic principle is that reward for stepping into terminal is inclulded but value
+ *  of terminal state is zero
  */
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Log
 public class MultiStepReturnEvaluator<V> {
     TrainerParameters parameters;
     List<Experience<V>> experiences;
+
+    public void setParametersAndExperiences(TrainerParameters parameters,
+                                            List<Experience<V>> experiences) {
+        this.parameters = parameters;
+        this.experiences=experiences;
+    }
+
+    public void setExperiences(List<Experience<V>> experiences) {
+        this.experiences = experiences;
+    }
 
     public SingleResultMultiStepper<V> evaluate(int tStart) {
         var informer=new EpisodeInfo<>(experiences);
@@ -54,7 +69,8 @@ public class MultiStepReturnEvaluator<V> {
 
     private static void maybeLog(int nExperiences, int idxEndExperience, boolean isEndOutSide) {
         Conditionals.executeIfTrue(isEndOutSide, () ->
-                log.fine("Index end experience is outside, idxEndExperience="+ idxEndExperience +", nExperiences= "+ nExperiences));
+                log.fine("Index end experience is outside, idxEndExperience="+
+                        idxEndExperience +", nExperiences= "+ nExperiences));
     }
 
 }

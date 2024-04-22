@@ -15,8 +15,8 @@ public class MultiStepCriticUpdater<V> {
 
     public void update(MultiStepResults<V> msr)  {
         for (int step = 0; step < msr.nExperiences() ; step++) {
-            agent.setState(msr.stateAtStep(step));
-            agent.fitCritic(msr.valueTarAtStep(step)- agent.readCritic(msr.stateAtStep(step)));
+            //agent.setState(msr.stateAtStep(step));
+            agent.fitCritic(msr.stateAtStep(step),msr.valueTarAtStep(step)- agent.readCritic(msr.stateAtStep(step)));
         }
     }
 }

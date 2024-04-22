@@ -16,6 +16,7 @@ import java.util.List;
 public record MultiStepResults<V>(
         int nExperiences,  //equal to length of below lists
         List<StateI<V>> stateList,
+        List<Boolean> isFutureOutsideOrTerminal,
         List<Double> valueTargetList,
         List<Double> advantageList,
         List<Action> actionAppliedList,
@@ -27,6 +28,7 @@ public record MultiStepResults<V>(
         return MultiStepResults.<V>builder()
                 .nExperiences(nExp)
                 .stateList(new ArrayList<>(nExp))
+                .isFutureOutsideOrTerminal(new ArrayList<>())
                 .valueTargetList(new ArrayList<>(nExp))
                 .advantageList(new ArrayList<>(nExp))
                 .actionAppliedList(new ArrayList<>(nExp))
@@ -37,6 +39,10 @@ public record MultiStepResults<V>(
 
     public StateI<V> stateAtStep(int step) {return stateList.get(step); }
 
+    public boolean isFutureOutsideOrTerminalAtStep(int step) {
+        return isFutureOutsideOrTerminal.get(step);
+    }
+
     public double valueTarAtStep(int step) {return valueTargetList.get(step); }
 
     public double advantageAtStep(int step) {return advantageList.get(step); }
@@ -45,10 +51,15 @@ public record MultiStepResults<V>(
 
     public Action actionPolicyAtStep(int step) {return actionPolicyList.get(step); }
 
-    public boolean isSafeCorrectedAtStep(int step) {return isSafeCorrectedList.get(step); }
+    public boolean isSafeCorrectedAtStep(int step) {
+        return isSafeCorrectedList.get(step); }
 
     public void addState(StateI<V> state) {
         stateList.add(state);
+    }
+
+    public void addIsFutureOutsideOrTerminal(boolean isOut) {
+        isFutureOutsideOrTerminal.add(isOut);
     }
 
     public void addValueTarget(double valTar) {
@@ -75,6 +86,7 @@ public record MultiStepResults<V>(
         List<Integer> lengthList=List.of(
                 stateList.size(),
                 valueTargetList.size(),
+                isFutureOutsideOrTerminal.size(),
                 advantageList.size(),
                 actionAppliedList.size(),
                 actionPolicyList.size(),
