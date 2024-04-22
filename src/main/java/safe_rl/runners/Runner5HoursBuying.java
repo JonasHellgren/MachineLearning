@@ -6,7 +6,7 @@ import safe_rl.domain.trainers.TrainerMultiStepACDC;
 import safe_rl.domain.value_classes.SimulationResult;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
-import safe_rl.helpers.AgentActionSimulator;
+import safe_rl.helpers.AgentSimulator;
 
 public class Runner5HoursBuying {
 
@@ -24,13 +24,11 @@ public class Runner5HoursBuying {
         double sumRew= SimulationResult.sumRewards(simRes);
         simRes.forEach(System.out::println);
         System.out.println("sumRew = " + sumRew);
-
-
     }
 
     private static Pair<
             TrainerMultiStepACDC<VariablesBuying>
-            ,AgentActionSimulator<VariablesBuying>> createTrainerAndSimulator() {
+            , AgentSimulator<VariablesBuying>> createTrainerAndSimulator() {
         var settings5 = BuySettings.new5HoursIncreasingPrice();
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
@@ -38,7 +36,7 @@ public class Runner5HoursBuying {
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-4).learningRateCritic(1e-1)
+                .learningRateActorMean(1e-2).learningRateActorStd(3e-5).learningRateCritic(1e-1)
                 .deltaThetaMax(10d)
                 .state((StateBuying) startState.copy())
                 .build();
@@ -50,7 +48,7 @@ public class Runner5HoursBuying {
                 .trainerParameters(trainerParameters)
                 .startState(startState.copy())
                 .build();
-        var simulator= AgentActionSimulator.<VariablesBuying>builder()
+        var simulator= AgentSimulator.<VariablesBuying>builder()
                 .agent(agent).safetyLayer(safetyLayer).settings(settings5)
                 .environment(environment).build();
 

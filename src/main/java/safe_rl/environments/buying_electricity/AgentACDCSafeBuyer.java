@@ -41,7 +41,6 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double STD_TAR = 0d;
     public static final double DELTA_THETA_MAX = 10d;
 
-
     StateI<VariablesBuying> state;
     BuySettings settings;
     DisCoMemory<VariablesBuying> actorMean;
@@ -96,21 +95,21 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public Action chooseAction() {
+    public Action chooseAction(StateI<VariablesBuying> state) {
         double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state));
         return Action.ofDouble(a);
     }
+    /*
+        @Override
+        public StateI<VariablesBuying> getState() {
+            return state;
+        }
 
-    @Override
-    public StateI<VariablesBuying> getState() {
-        return state;
-    }
-
-    @Override
-    public void setState(StateI<VariablesBuying> state) {
-        this.state = state;
-    }
-
+        @Override
+        public void setState(StateI<VariablesBuying> state) {
+            this.state = state;
+        }
+    */
     @Override
     public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
         var gradMeanAndLogStd=gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));

@@ -23,18 +23,18 @@ public class ExperienceCreator<V> {
     TrainerParameters parameters;
     SafetyLayerI<V> safetyLayer;
 
-    public List<Experience<V>> getExperiences(AgentI<V> agent) {
+    public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) {
         List<Experience<V>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<V> sr;
+        var state=stateStart.copy();
         do {
-            var action = agent.chooseAction();
-            StateI<V> state = agent.getState();
+            var action = agent.chooseAction(state);
             var actionMaybeCorrected = safetyLayer.correctAction(state, action);
             sr = environment.step(state, actionMaybeCorrected);
-            experienceList.add(createExperience(agent.getState(), sr, action, actionMaybeCorrected));
+            experienceList.add(createExperience(state, sr, action, actionMaybeCorrected));
             si++;
-            agent.setState(sr.state());
+            state=sr.state();
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
         return experienceList;
     }

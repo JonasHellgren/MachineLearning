@@ -46,7 +46,7 @@ public class TestAgentACDCSafeBuyer {
 
     @Test
     void whenChooseAction_thenCanRead() {
-        double action=agent.chooseAction().asDouble();
+        double action=agent.chooseAction(state0).asDouble();
         System.out.println("action = " + action);
         Assertions.assertTrue(MathUtils.isInRange(action,-1,2));
     }
@@ -81,7 +81,6 @@ public class TestAgentACDCSafeBuyer {
         Assertions.assertTrue(gradLog.getFirst()>0); //increase mean
         Assertions.assertTrue(gradLog.getSecond()>0);
         Assertions.assertNotEquals(ms0,ms);
-
     }
 
     @Test
@@ -90,7 +89,6 @@ public class TestAgentACDCSafeBuyer {
         agent.fitCritic(StateBuying.newZero(),1);
         double v1=agent.readCritic(state0);
         StateBuying state2 = StateBuying.of(VariablesBuying.newTimeSoc(2, 0));
-        agent.setState(state2);
         double vTime2=agent.readCritic(state2);
         Assertions.assertEquals(TARGET_CRITIC,v0);
         Assertions.assertNotEquals(v0,v1);

@@ -43,11 +43,12 @@ MultiStepReturnEvaluator x
 TestMultiStepReturnEvaluator   x
 MultiStepResultsGenerator x
 TestMultiStepResultsGenerator  x
-
 fitActor(state,...  x
 fitCritic((state,....  x
 
-
+Runner5HoursBuying rullar
+chooseAction(state)  x
+entropy för flera states  x
 
 aCcorr pen som i mail
 

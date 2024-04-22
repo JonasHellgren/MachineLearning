@@ -38,7 +38,7 @@ class TestExperienceCreator {
 
     @Test
     void whenGettingExperiences_thenCorrect() {
-        var experiences = experienceCreator.getExperiences(agent);
+        var experiences = experienceCreator.getExperiences(agent,state);
         var ei=new EpisodeInfo<>(experiences);
         var minMax=ei.minMaxAppliedAction();
         System.out.println("minMax = " + minMax);

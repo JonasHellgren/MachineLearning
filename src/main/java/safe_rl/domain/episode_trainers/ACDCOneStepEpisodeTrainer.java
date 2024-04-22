@@ -25,7 +25,6 @@ public class ACDCOneStepEpisodeTrainer<V> {
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
         double avgCriticLoss=ListUtils.findAverage(lossCritic).orElse(0)*parameters.ratioPenCorrectedAction();
         for (Experience<V> e : elwr) {
-            //agent.setState(e.state());
             double tdError = calcTdError(e);
             penalizeAgentProposedActionIfSafeCorrected(avgCriticLoss, e);
             agent.fitActor(e.state(),e.actionApplied(), tdError);
@@ -64,9 +63,3 @@ public class ACDCOneStepEpisodeTrainer<V> {
 }
 
 
-/*
-
-            System.out.println("state="+experience.state()+"a="+experience.actionApplied()+
-                    ", tdError = " + tdError+",v="+agent.readCritic()+", gradLog = " + gradLog+
-                    "ms = " + ms);
- */

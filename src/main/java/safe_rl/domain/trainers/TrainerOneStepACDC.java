@@ -1,5 +1,6 @@
 package safe_rl.domain.trainers;
 
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -57,11 +58,10 @@ public class TrainerOneStepACDC<V> {
     }
 
     private void processEpisode(int episodeIndex) {
-        setStartState();
         var experiences = getExperiences();
         var errorList=recorders.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);
-        updateRecorder(experiences,startState);
+        updateRecorder(experiences);
     }
 
     //todo in other common class
@@ -74,28 +74,25 @@ public class TrainerOneStepACDC<V> {
     }
 
     public List<Experience<V>> evaluate() {
-        setStartState();
         return getExperiences();
     }
 
 
-    void setStartState() {
-        agent.setState(startState.copy());
-    }
-
     List<Experience<V>> getExperiences() {
-        return experienceCreator.getExperiences(agent);
+        return experienceCreator.getExperiences(agent,startState.copy());
     }
 
     //todo in other common class
-    void updateRecorder(List<Experience<V>> experiences, StateI<V> startState) {
+    void updateRecorder(List<Experience<V>> experiences) {
         var ei=new EpisodeInfo<>(experiences);
+        List<Double> entropies=experiences.stream()
+                .map(e -> agent.entropy(e.state())).toList();
         recorders.recorderTrainingProgress.add(ProgressMeasures.builder()
                         .nSteps(ei.size())
                         .sumRewards(ei.sumRewards())
                         .criticLoss(agent.lossCriticLastUpdate())
                         .actorLoss(agent.lossActorLastUpdate())
-                        .entropy(agent.entropy(startState))
+                        .entropy(ListUtils.findAverage(entropies).orElseThrow())
                 .build());
     }
 
