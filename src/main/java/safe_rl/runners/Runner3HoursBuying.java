@@ -1,5 +1,6 @@
 package safe_rl.runners;
 
+import lombok.extern.java.Log;
 import safe_rl.domain.trainers.TrainerOneStepACDC;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
@@ -8,12 +9,14 @@ import safe_rl.environments.buying_electricity.*;
  * targetLogStd: very important, good enough init exploration needed
  */
 
+@Log
 public class Runner3HoursBuying {
     public static final double SOC_START = 0.2;
     public static void main(String[] args) {
         var trainer = createTrainer();
         trainer.train();
-        trainer.recorders.recorderTrainingProgress.plot("One step ACDC");
+        trainer.recorder.recorderTrainingProgress.plot("One step ACDC");
+        log.info("agent = " + trainer.getAgent());
     }
 
     private static TrainerOneStepACDC<VariablesBuying> createTrainer() {

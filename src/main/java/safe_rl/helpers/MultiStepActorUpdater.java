@@ -6,12 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import safe_rl.agent_interfaces.AgentACDiscoI;
-import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.MultiStepResults;
 import safe_rl.domain.value_classes.TrainerParameters;
-
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 @AllArgsConstructor
 public class MultiStepActorUpdater<V> {

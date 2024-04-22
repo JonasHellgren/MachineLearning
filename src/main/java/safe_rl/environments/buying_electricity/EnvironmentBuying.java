@@ -4,6 +4,7 @@ import common.other.Conditionals;
 import lombok.extern.java.Log;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.*;
+import safe_rl.domain.value_classes.StepReturn;
 import safe_rl.helpers.PriceInterpolator;
 import java.util.Arrays;
 import static java.lang.Math.min;

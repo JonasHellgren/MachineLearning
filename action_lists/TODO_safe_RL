@@ -49,11 +49,15 @@ fitCritic((state,....  x
 Runner5HoursBuying rullar
 chooseAction(state)  x
 entropy för flera states  x
+grov clean up x
 
-aCcorr pen som i mail
-
+trainers printa log isf logStd
+startStateSupplier i trainers
+eval trajectory i recorder - kanske mha simulator - ev liten std
+aCorr pen som i mail
+smoothing std
+Runner5HoursBuying tuna hyper par
+new5HoursDecreasingPrice
 clean up när funkar
-
 TrainerI
-
 simplified battery trading with safe RL

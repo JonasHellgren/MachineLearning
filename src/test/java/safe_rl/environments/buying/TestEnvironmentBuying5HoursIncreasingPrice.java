@@ -3,11 +3,11 @@ package safe_rl.environments.buying;
 import lombok.Builder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import safe_rl.domain.abstract_classes.Action;
+import safe_rl.domain.value_classes.StepReturn;
 import safe_rl.environments.buying_electricity.*;
 
 public class TestEnvironmentBuying5HoursIncreasingPrice {

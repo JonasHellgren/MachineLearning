@@ -1,4 +1,4 @@
-package safe_rl.environments.buying_electricity;
+package safe_rl.domain.value_classes;
 
 import lombok.Builder;
 import safe_rl.domain.abstract_classes.StateI;

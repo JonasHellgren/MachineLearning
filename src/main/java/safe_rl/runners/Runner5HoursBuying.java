@@ -17,7 +17,10 @@ public class Runner5HoursBuying {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
         trainer.train();
-        trainer.recorders.recorderTrainingProgress.plot("Multi step ACDC");
+        trainer.recorder.recorderTrainingProgress.plot("Multi step ACDC");
+
+        System.out.println("agent = " + trainer.getAgent());
+
         var simulator=trainerAndSimulator.getSecond();
         var simRes=simulator.simulate(startState.copy());
         System.out.println("startState = " + startState);
@@ -36,12 +39,12 @@ public class Runner5HoursBuying {
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
-                .learningRateActorMean(1e-2).learningRateActorStd(3e-5).learningRateCritic(1e-1)
+                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
                 .deltaThetaMax(10d)
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(2d).withStepHorizon(3);
+                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(2d).withStepHorizon(4);
         TrainerMultiStepACDC<VariablesBuying> trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

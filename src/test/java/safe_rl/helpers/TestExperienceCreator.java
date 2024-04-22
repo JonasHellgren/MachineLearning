@@ -4,7 +4,6 @@ import common.other.Conditionals;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.trainers.ExperienceCreator;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 

@@ -1,4 +1,4 @@
-package safe_rl.domain.trainers;
+package safe_rl.helpers;
 
 
 import lombok.Builder;
@@ -10,7 +10,7 @@ import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.ActionRewardStateNew;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
-import safe_rl.environments.buying_electricity.StepReturn;
+import safe_rl.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
 import java.util.List;

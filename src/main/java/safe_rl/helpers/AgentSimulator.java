@@ -24,7 +24,6 @@ public class AgentSimulator<V> {
     public List<SimulationResult<V>> simulate(StateI<V> startState) {
         boolean isTerminalOrFail = false;
         var state = startState.copy();
-      //  agent.setState(state);
         List<SimulationResult<V>> simulationResults=new ArrayList<>();
 
         while (!isTerminalOrFail) {
@@ -35,7 +34,6 @@ public class AgentSimulator<V> {
             var sr = environment.step(state, actionCorrected);
             state.setVariables(sr.state().getVariables());
             isTerminalOrFail = sr.isTerminal() || sr.isFail();
-        //    agent.setState(state);
             simulationResults.add(
                     new SimulationResult<>(state0, sr.reward(), actionCorrected));
         }

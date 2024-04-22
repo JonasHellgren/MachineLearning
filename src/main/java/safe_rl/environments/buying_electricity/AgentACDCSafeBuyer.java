@@ -21,7 +21,7 @@ import static common.other.MyFunctions.*;
 
 /**
  * ACDC = actor critic with discrete and continuous memory
- *
+ * <p>
  * Memorize log std instead of the std directly in continuous action methods provides critical benefits,
  * particularly in ensuring that std remains always positive, enhancing numerical stability,
  * and improving the efficiency of learning gradients.
@@ -47,8 +47,8 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     DisCoMemory<VariablesBuying> actorLogStd;
     DisCoMemory<VariablesBuying> critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
-    EntropyCalculatorContActions entropyCalculator=new EntropyCalculatorContActions();
-    NormalDistributionGradientCalculator gradientCalulator=
+    EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
+    NormalDistributionGradientCalculator gradientCalulator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     double tarStdInit;
 
@@ -78,13 +78,13 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        double dThetaMax=defaultIfNullDouble.apply(deltaThetaMax, DELTA_THETA_MAX);
+        double dThetaMax = defaultIfNullDouble.apply(deltaThetaMax, DELTA_THETA_MAX);
         this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
         this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);
         double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
-        tarStdInit=Math.exp(tarLogStdInit);
+        tarStdInit = Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
         var initializer = getInitializer(state, actorMean, tarM);
         initializer.initialize();
@@ -99,44 +99,24 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state));
         return Action.ofDouble(a);
     }
-    /*
-        @Override
-        public StateI<VariablesBuying> getState() {
-            return state;
-        }
 
-        @Override
-        public void setState(StateI<VariablesBuying> state) {
-            this.state = state;
-        }
-    */
     @Override
     public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
-        var gradMeanAndLogStd=gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));
+        var gradMeanAndLogStd = gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));
         actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
         actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
         return gradMeanAndLogStd;
     }
 
-  /*  @Override
-    public Pair<Double, Double> readActor() {
-        return readActor(state);
-    }
-*/
     @Override
     public Pair<Double, Double> readActor(StateI<VariablesBuying> state) {
-        return  actorMeanAndStd(state);
+        return actorMeanAndStd(state);
     }
 
     @Override
     public void fitCritic(StateI<VariablesBuying> state, double error) {
         critic.fitFromError(state, error);
     }
-
-  //  @Override
-  //  public double readCritic() {
-        //return readCritic(state);
-   // }
 
     @Override
     public double readCritic(StateI<VariablesBuying> state) {
@@ -155,14 +135,14 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public double entropy(StateI<VariablesBuying> state) {
-        var mAndS=actorMeanAndStd(state);
+        var mAndS = actorMeanAndStd(state);
         return entropyCalculator.entropy(mAndS.getSecond());
     }
 
     Pair<Double, Double> actorMeanAndStd(StateI<VariablesBuying> state) {
         return Pair.create(
                 actorMean.read(state),
-                MathUtils.clip(Math.exp(actorLogStd.read(state)),STD_MIN, tarStdInit));
+                MathUtils.clip(Math.exp(actorLogStd.read(state)), STD_MIN, tarStdInit));
     }
 
     private DisCoMemoryInitializer<VariablesBuying> getInitializer(StateBuying state,
@@ -178,7 +158,14 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return  System.lineSeparator() +
+                "critic() = " + getCritic() + System.lineSeparator() +
+                "actor mean() = " + getActorMean() + System.lineSeparator() +
+                "actor logStd() = " + getActorLogStd();
 
 
+    }
 
 }

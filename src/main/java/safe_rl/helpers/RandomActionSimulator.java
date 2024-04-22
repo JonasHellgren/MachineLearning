@@ -10,7 +10,7 @@ import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.environments.buying_electricity.BuySettings;
 import safe_rl.environments.buying_electricity.SafetyLayerBuying;
-import safe_rl.environments.buying_electricity.StepReturn;
+import safe_rl.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
 import java.util.List;

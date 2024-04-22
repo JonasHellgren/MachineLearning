@@ -13,16 +13,16 @@ import static common.list_arrays.ListUtils.getReturns;
  *  See corresponding test for more
  */
 
-public class ReturnCalculator<S> {
+public class ReturnCalculator<V> {
 
-    public List<Experience<S>>  createExperienceListWithReturns(@NonNull List<Experience<S>> experienceList,
+    public List<Experience<V>>  createExperienceListWithReturns(@NonNull List<Experience<V>> experienceList,
                                                                 double gamma) {
-        List<Experience<S>> experienceListNew=new ArrayList<>();
+        List<Experience<V>> experienceListNew=new ArrayList<>();
         List<Double> rewards=experienceList.stream()
                 .map(e-> e.isSafeCorrected()? e.arsCorrected().orElseThrow().reward(): e.ars().reward())
                 .toList();
         ListIterator<Double> returnsIterator=calcReturns(rewards,gamma).listIterator();
-        for (Experience<S> exp:experienceList) {
+        for (Experience<V> exp:experienceList) {
             experienceListNew.add(exp.copyWithValue(returnsIterator.next()));
         }
         return experienceListNew;
