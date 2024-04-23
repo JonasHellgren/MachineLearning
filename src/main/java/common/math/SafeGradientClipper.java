@@ -6,18 +6,22 @@ import lombok.Builder;
  *  Argument grad0 is potentially changed
  *  It is always bounded to [gradMin,gradMax]
  *  If motivated the bound can be more drastic
- *  If for example value is 10 and valueMax is 11, then the upper gradient bound is 1
- *  If value is -10 and valueMax is -11, then the upper gradient bound is -11-10=-1
+ *  If for example value is 9 and valueMax is 10, then the upper gradient bound is 1
+ *  If value is -9 and valueMin is -10, then the upper gradient bound is -10-9=-1
  *  When value is below valueMin or above valueMax then gradient is modified to zero
  */
 
 @Builder
 public class SafeGradientClipper {
 
-    double valueMax;
-    double valueMin;
-    double gradMax;
-    double gradMin;
+    @Builder.Default
+    Double valueMax=Double.MAX_VALUE;
+    @Builder.Default
+    Double valueMin=-Double.MAX_VALUE;
+    @Builder.Default
+    Double gradMax=Double.MAX_VALUE;
+    @Builder.Default
+    Double gradMin=-Double.MAX_VALUE;
 
     public double modify(double grad0, double value) {
         double deltaValueMax=valueMax-value;
