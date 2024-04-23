@@ -48,7 +48,7 @@ public record VariablesBuying (
 
     @Override
     public String toString() {
-        var f= NumberFormatterUtil.formatterOneDigit;
+        var f= NumberFormatterUtil.formatterTwoDigits;
         return "[t = "+ time+", soc = "+ f.format(soc)+", socStart = "+ socStart+"]";
     }
 

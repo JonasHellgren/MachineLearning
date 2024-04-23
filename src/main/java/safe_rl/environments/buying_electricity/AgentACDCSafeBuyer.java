@@ -41,7 +41,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double TAR_LOG_STD = 5d;
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
-    public static final double DELTA_THETA_MAX = 10d;
+    public static final double GRADIENT_MAX = 10d;
 
     StateI<VariablesBuying> state;
     BuySettings settings;
@@ -73,7 +73,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                               Double targetMean,
                               Double targetLogStd,
                               Double targetCritic,
-                              Double deltaThetaMax,
+                              Double gradMax,
                               @NonNull StateBuying state) {
         this.state = state;
         this.settings = settings;
@@ -81,7 +81,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        double dThetaMax = defaultIfNullDouble.apply(deltaThetaMax, DELTA_THETA_MAX);
+        double dThetaMax = defaultIfNullDouble.apply(gradMax, GRADIENT_MAX);
         this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
         this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);

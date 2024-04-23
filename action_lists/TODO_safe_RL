@@ -62,5 +62,6 @@ smoothing std - skippa x
 Runner5HoursBuying tuna hyper par x
 new5HoursDecreasingPrice
 clean up när funkar
+withNofEpisodes(10_000) börjar avta
 TrainerI
 simplified battery trading with safe RL

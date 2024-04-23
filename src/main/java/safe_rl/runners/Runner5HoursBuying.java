@@ -1,5 +1,6 @@
 package safe_rl.runners;
 
+import common.other.RandUtils;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.trainers.TrainerMultiStepACDC;
@@ -11,7 +12,7 @@ import safe_rl.helpers.AgentSimulator;
 import java.util.List;
 
 /**
- * small withStepHorizon => bad convergence
+ * moderate withStepHorizon => better convergence
  * learning rates very critical
  */
 
@@ -40,19 +41,19 @@ public class Runner5HoursBuying {
     private static Pair<
             TrainerMultiStepACDC<VariablesBuying>
             , AgentSimulator<VariablesBuying>> createTrainerAndSimulator() {
-        var settings5 = BuySettings.new5HoursDecreasingPrice();
+        var settings5 = BuySettings.new5HoursIncreasingPrice();
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings5);
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
-                .targetMean(2d).targetLogStd(Math.log(5d)).targetCritic(0d)
+                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
-                .deltaThetaMax(10d)
+                .gradMax(1d)
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(5000).withGamma(1.0).withRatioPenCorrectedAction(10d).withStepHorizon(4);
+                .withNofEpisodes(10_000).withGamma(1.0).withRatioPenCorrectedAction(10d).withStepHorizon(3);
         TrainerMultiStepACDC<VariablesBuying> trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
@@ -60,10 +61,19 @@ public class Runner5HoursBuying {
                 .startStateSupplier(() -> startState.copy())
                 .build();
         var simulator= AgentSimulator.<VariablesBuying>builder()
-                .agent(agent).safetyLayer(safetyLayer).startStateSupplier(() -> startState.copy())
+                .agent(agent).safetyLayer(safetyLayer)
+                .startStateSupplier(() -> startState.copy())
                 .environment(environment).build();
 
         return Pair.create(trainer,simulator);
     }
 
 }
+
+/****
+ * kasst med slump start
+ *                 .startStateSupplier(() ->
+ *                         StateBuying.of(VariablesBuying.newTimeSoc(
+ *                                 RandUtils.getRandomIntNumber(0,(int) settings5.timeEnd()),
+ *                                 RandUtils.randomNumberBetweenZeroAndOne())))
+ */

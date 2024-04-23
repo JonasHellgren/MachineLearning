@@ -23,7 +23,7 @@ public record ActionRewardStateNew<V> (
 
     @Override
     public String toString() {
-        var f=NumberFormatterUtil.formatterOneDigit;
+        var f=NumberFormatterUtil.formatterTwoDigits;
        return "[a = "+ action+
                ", r = "+ f.format(reward)+
                ", sNext = "+ stateNext+

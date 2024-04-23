@@ -28,7 +28,7 @@ public class Runner3HoursBuying {
                 .settings(settings3)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
-                .deltaThetaMax(10d)
+                .gradMax(10d)
                 .state(startState)
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
