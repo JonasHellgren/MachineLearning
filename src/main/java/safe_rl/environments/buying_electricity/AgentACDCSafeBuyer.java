@@ -1,7 +1,6 @@
 package safe_rl.environments.buying_electricity;
 
 import common.dl4j.EntropyCalculatorContActions;
-import common.math.MathUtils;
 import common.math.NormalDistributionGradientCalculator;
 import common.math.SafeGradientClipper;
 import common.other.NormDistributionSampler;
@@ -18,7 +17,6 @@ import safe_rl.helpers.LossTracker;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static common.list_arrays.ListUtils.doublesStartEndStep;
 import static common.other.MyFunctions.*;
@@ -52,7 +50,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-    double tarStdInit;
+    double tarStdInit, tarMeanInit;
     LossTracker lossTracker=new LossTracker();
     SafeGradientClipper meanGradClipper, stdGradClipper;
 
@@ -87,16 +85,16 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
         this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);
-        double tarM = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
         tarStdInit = Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
-        getInitializer(state, actorMean, tarM).initialize();
+        getInitializer(state, actorMean, tarMeanInit).initialize();
         getInitializer(state, actorLogStd, tarLogStdInit).initialize();
         getInitializer(state, critic, tarC).initialize();
         meanGradClipper=SafeGradientClipper.builder()
                 .gradMin(-dThetaMax).gradMax(dThetaMax)
-                .valueMin(tarM-2*tarStdInit).valueMax(tarM+2*tarStdInit) //debatable use 2 std
+                .valueMin(tarMeanInit -2*tarStdInit).valueMax(tarMeanInit +2*tarStdInit) //debatable use 2 std
                 .build();
         stdGradClipper=SafeGradientClipper.builder()
                 .gradMin(-dThetaMax).gradMax(dThetaMax)
@@ -108,6 +106,11 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public Action chooseAction(StateI<VariablesBuying> state) {
         double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state));
         return Action.ofDouble(a);
+    }
+
+    @Override
+    public Action chooseActionNominal(StateI<VariablesBuying> state) {
+        return Action.ofDouble(tarMeanInit);
     }
 
     @Override
@@ -170,9 +173,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     Pair<Double, Double> actorMeanAndStd(StateI<VariablesBuying> state) {
-        return Pair.create(
-                actorMean.read(state),
-                MathUtils.clip(Math.exp(actorLogStd.read(state)), STD_MIN, tarStdInit));
+        return Pair.create(actorMean.read(state),Math.exp(actorLogStd.read(state)));
     }
 
     private DisCoMemoryInitializer<VariablesBuying> getInitializer(StateBuying state,

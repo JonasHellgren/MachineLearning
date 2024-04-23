@@ -17,4 +17,9 @@ public record SimulationResult<V>(
         return simResList.stream().map(sr -> sr.reward).reduce(0d,Double::sum);
     }
 
+    public static <V> void print(List<SimulationResult<V>> simResList) {
+        simResList.forEach(System.out::println);
+        System.out.println("sumRew = " + sumRewards(simResList));
+    }
+
 }

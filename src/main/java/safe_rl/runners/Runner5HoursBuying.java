@@ -8,6 +8,13 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 import safe_rl.helpers.AgentSimulator;
 
+import java.util.List;
+
+/**
+ * small withStepHorizon => bad convergence
+ * learning rates very critical
+ */
+
 public class Runner5HoursBuying {
 
     static StateI<VariablesBuying> startState;
@@ -18,15 +25,16 @@ public class Runner5HoursBuying {
         var trainer=trainerAndSimulator.getFirst();
         trainer.train();
         trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC");
-
-        System.out.println("agent = " + trainer.getAgent());
-
         var simulator=trainerAndSimulator.getSecond();
         var simRes=simulator.simulateWithNoExploration();
-        System.out.println("startState = " + startState);
-        double sumRew= SimulationResult.sumRewards(simRes);
-        simRes.forEach(System.out::println);
-        System.out.println("sumRew = " + sumRew);
+        printing(trainer, simRes);
+    }
+
+    private static void printing(
+            TrainerMultiStepACDC<VariablesBuying> trainer, List<SimulationResult<VariablesBuying>> simRes) {
+        System.out.println("agent = " + trainer.getAgent());
+        SimulationResult.sumRewards(simRes);
+        SimulationResult.print(simRes);
     }
 
     private static Pair<
@@ -44,7 +52,7 @@ public class Runner5HoursBuying {
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(3000).withGamma(1.0).withRatioPenCorrectedAction(2d).withStepHorizon(4);
+                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(10d).withStepHorizon(4);
         TrainerMultiStepACDC<VariablesBuying> trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
