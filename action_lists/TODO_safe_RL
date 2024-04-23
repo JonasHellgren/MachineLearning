@@ -56,9 +56,10 @@ Loss på hela episoden x
 startStateSupplier i trainers  x
 eval trajectory i recorder - kanske mha simulator - ev liten std  x
 safe gradient som i mail - succe x
-aCorr pen som i mail  x
-smoothing std
-Runner5HoursBuying tuna hyper par
+aCorr pen som i mail  - succe x
+även i one step trainer x
+smoothing std - skippa x
+Runner5HoursBuying tuna hyper par x
 new5HoursDecreasingPrice
 clean up när funkar
 TrainerI

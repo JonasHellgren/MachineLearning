@@ -32,7 +32,7 @@ public class Runner3HoursBuying {
                 .state(startState)
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(2d);
+                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(10d);
         return TrainerOneStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
