@@ -3,6 +3,7 @@ package safe_rl.environments.buying_electricity;
 import common.dl4j.EntropyCalculatorContActions;
 import common.math.MathUtils;
 import common.math.NormalDistributionGradientCalculator;
+import common.math.SafeGradientClipper;
 import common.other.NormDistributionSampler;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,8 +35,8 @@ import static common.other.MyFunctions.*;
 public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     public static final double LEARNING_RATE = 1e-2;
-    public static final double STD_MIN = 0.05;
-    public static final double SMALLEST_DENOM = 1e-2;
+    public static final double STD_MIN = 0.01;
+    public static final double SMALLEST_DENOM = 1e-5;
     public static final double MAX_GRAD_ELEMENT = 1;
     public static final double SOC_MIN = 0d;
     public static final double TAR_MEAN = 1d;
@@ -46,15 +47,15 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     StateI<VariablesBuying> state;
     BuySettings settings;
-    DisCoMemory<VariablesBuying> actorMean;
-    DisCoMemory<VariablesBuying> actorLogStd;
-    DisCoMemory<VariablesBuying> critic;
+    DisCoMemory<VariablesBuying> actorMean, actorLogStd, critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     double tarStdInit;
     LossTracker lossTracker=new LossTracker();
+    SafeGradientClipper meanGradClipper, stdGradClipper;
+
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
         return AgentACDCSafeBuyer.builder()
@@ -90,12 +91,17 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
         tarStdInit = Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
-        var initializer = getInitializer(state, actorMean, tarM);
-        initializer.initialize();
-        initializer = getInitializer(state, actorLogStd, tarLogStdInit);
-        initializer.initialize();
-        initializer = getInitializer(state, critic, tarC);
-        initializer.initialize();
+        getInitializer(state, actorMean, tarM).initialize();
+        getInitializer(state, actorLogStd, tarLogStdInit).initialize();
+        getInitializer(state, critic, tarC).initialize();
+        meanGradClipper=SafeGradientClipper.builder()
+                .gradMin(-dThetaMax).gradMax(dThetaMax)
+                .valueMin(tarM-2*tarStdInit).valueMax(tarM+2*tarStdInit) //debatable use 2 std
+                .build();
+        stdGradClipper=SafeGradientClipper.builder()
+                .gradMin(-dThetaMax).gradMax(dThetaMax)
+                .valueMin(Math.log(STD_MIN)).valueMax(tarLogStdInit)
+                .build();
     }
 
     @Override
@@ -113,8 +119,10 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     @Override
     public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
         var gradMeanAndLogStd = gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
-        actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
-        actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
+        double gradMean0=gradMeanAndLogStd.getFirst() * adv;
+        double gradStd0=gradMeanAndLogStd.getSecond() * adv;
+        actorMean.fitFromError(state, meanGradClipper.modify(gradMean0,actorMean.read(state)));
+        actorLogStd.fitFromError(state, stdGradClipper.modify(gradStd0,actorLogStd.read(state)));
         lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(),actorLogStd.lossLastUpdate());
         return gradMeanAndLogStd;
     }

@@ -55,7 +55,7 @@ trainers printa log isf logStd x
 Loss på hela episoden x
 startStateSupplier i trainers  x
 eval trajectory i recorder - kanske mha simulator - ev liten std  x
-safe gradient som i mail
+safe gradient som i mail - succe x
 aCorr pen som i mail
 smoothing std
 Runner5HoursBuying tuna hyper par

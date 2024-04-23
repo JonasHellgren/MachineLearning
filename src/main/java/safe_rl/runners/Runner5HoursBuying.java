@@ -39,7 +39,7 @@ public class Runner5HoursBuying {
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
-                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-1)
+                .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
                 .deltaThetaMax(10d)
                 .state((StateBuying) startState.copy())
                 .build();
