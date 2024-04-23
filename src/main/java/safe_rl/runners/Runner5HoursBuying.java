@@ -1,5 +1,6 @@
 package safe_rl.runners;
 
+import common.other.CpuTimer;
 import common.other.RandUtils;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
@@ -13,7 +14,8 @@ import java.util.List;
 
 /**
  * moderate withStepHorizon => better convergence
- * learning rates very critical
+ * learning rates and gradMax very critical
+ * gamma<1 seems to improve convergence
  */
 
 public class Runner5HoursBuying {
@@ -24,24 +26,30 @@ public class Runner5HoursBuying {
     public static void main(String[] args) {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
+        var timer=CpuTimer.newWithTimeBudgetInMilliSec(0);
         trainer.train();
         trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC");
         var simulator=trainerAndSimulator.getSecond();
         var simRes=simulator.simulateWithNoExploration();
-        printing(trainer, simRes);
+        printing(trainer, simRes,timer);
     }
 
     private static void printing(
-            TrainerMultiStepACDC<VariablesBuying> trainer, List<SimulationResult<VariablesBuying>> simRes) {
+            TrainerMultiStepACDC<VariablesBuying> trainer,
+            List<SimulationResult<VariablesBuying>> simRes,
+            CpuTimer timer) {
         System.out.println("agent = " + trainer.getAgent());
         SimulationResult.sumRewards(simRes);
         SimulationResult.print(simRes);
+        timer.stop();
+        System.out.println("timer (ms) = " + timer.getAbsoluteProgress());
+
     }
 
     private static Pair<
             TrainerMultiStepACDC<VariablesBuying>
             , AgentSimulator<VariablesBuying>> createTrainerAndSimulator() {
-        var settings5 = BuySettings.new5HoursIncreasingPrice();
+        var settings5 = BuySettings.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings5);
@@ -49,12 +57,12 @@ public class Runner5HoursBuying {
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
-                .gradMax(1d)
+                .gradMax(2d)
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10_000).withGamma(1.0).withRatioPenCorrectedAction(10d).withStepHorizon(3);
-        TrainerMultiStepACDC<VariablesBuying> trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
+                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(10d).withStepHorizon(3);
+       var trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
                 .trainerParameters(trainerParameters)
