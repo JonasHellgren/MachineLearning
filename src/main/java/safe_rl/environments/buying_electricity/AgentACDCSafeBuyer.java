@@ -13,6 +13,7 @@ import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.helpers.DisCoMemoryInitializer;
+import safe_rl.helpers.LossTracker;
 
 import java.util.List;
 
@@ -48,9 +49,10 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     DisCoMemory<VariablesBuying> critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
-    NormalDistributionGradientCalculator gradientCalulator =
+    NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     double tarStdInit;
+    LossTracker lossTracker=new LossTracker();
 
     public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
         return AgentACDCSafeBuyer.builder()
@@ -102,9 +104,10 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
 
     @Override
     public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
-        var gradMeanAndLogStd = gradientCalulator.gradient(action.asDouble(), actorMeanAndStd(state));
+        var gradMeanAndLogStd = gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
         actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
         actorLogStd.fitFromError(state, gradMeanAndLogStd.getSecond() * adv);
+        lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(),actorLogStd.lossLastUpdate());
         return gradMeanAndLogStd;
     }
 
@@ -116,6 +119,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     @Override
     public void fitCritic(StateI<VariablesBuying> state, double error) {
         critic.fitFromError(state, error);
+        lossTracker.addCriticLoss(critic.lossLastUpdate());
     }
 
     @Override
@@ -124,13 +128,23 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public double lossCriticLastUpdate() {
-        return critic.lossLastUpdate();
+    public double lossCriticLastUpdates() {
+        return lossTracker.averageCriticLosses();
     }
 
     @Override
-    public double lossActorLastUpdate() {
-        return actorMean.lossLastUpdate();
+    public void clearCriticLosses() {
+        lossTracker.clearCriticLosses();
+    }
+
+    @Override
+    public double lossActorLastUpdates() {
+        return lossTracker.averageMeanLosses()+lossTracker.averageStdLosses();
+    }
+
+    @Override
+    public void clearActorLosses() {
+        lossTracker.clearActorLosses();
     }
 
     @Override

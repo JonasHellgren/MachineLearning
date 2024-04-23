@@ -24,10 +24,12 @@ public class Recorders<V> {
         recorderTrainingProgress.add(ProgressMeasures.builder()
                 .nSteps(ei.size())
                 .sumRewards(ei.sumRewards())
-                .criticLoss(agent.lossCriticLastUpdate())
-                .actorLoss(agent.lossActorLastUpdate())
+                .criticLoss(agent.lossCriticLastUpdates())
+                .actorLoss(agent.lossActorLastUpdates())
                 .entropy(ListUtils.findAverage(entropies).orElseThrow())
                 .build());
+        agent.clearActorLosses();
+        agent.clearCriticLosses();
     }
 
 

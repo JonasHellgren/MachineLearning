@@ -39,12 +39,12 @@ public class Runner5HoursBuying {
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
-                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
+                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-1)
                 .deltaThetaMax(10d)
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(2d).withStepHorizon(4);
+                .withNofEpisodes(3000).withGamma(1.0).withRatioPenCorrectedAction(2d).withStepHorizon(4);
         TrainerMultiStepACDC<VariablesBuying> trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

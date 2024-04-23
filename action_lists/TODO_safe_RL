@@ -52,8 +52,10 @@ entropy för flera states  x
 grov clean up x
 
 trainers printa log isf logStd
+Loss på hela episoden
 startStateSupplier i trainers
 eval trajectory i recorder - kanske mha simulator - ev liten std
+safe gradient som i mail
 aCorr pen som i mail
 smoothing std
 Runner5HoursBuying tuna hyper par
