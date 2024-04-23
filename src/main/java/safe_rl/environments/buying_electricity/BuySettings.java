@@ -28,6 +28,10 @@ public record BuySettings(
         return new5HoursIncreasingPrice().withPriceTraj(new double[]{1,1,1});
             }
 
+    public static BuySettings new5HoursDecreasingPrice() {
+        return new5HoursIncreasingPrice().withPriceTraj(new double[]{5,4,3,2,1});
+    }
+
 
 
     //time for final price item in priceTraj
