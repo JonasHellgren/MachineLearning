@@ -15,7 +15,9 @@ import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.helpers.DisCoMemoryInitializer;
 import safe_rl.helpers.LossTracker;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static common.list_arrays.ListUtils.doublesStartEndStep;
 import static common.other.MyFunctions.*;
@@ -103,6 +105,12 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
+    public Action chooseActionNoExploration(StateI<VariablesBuying> state) {
+        double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state).getFirst(),0);
+        return Action.ofDouble(a);
+    }
+
+    @Override
     public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
         var gradMeanAndLogStd = gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
         actorMean.fitFromError(state, gradMeanAndLogStd.getFirst() * adv);
@@ -172,12 +180,17 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                 .build();
     }
 
+    /**
+     * std memory stores log std, to print std, exp(log std) is needed for each element
+     */
+
     @Override
     public String toString() {
         return  System.lineSeparator() +
-                "critic() = " + getCritic() + System.lineSeparator() +
-                "actor mean() = " + getActorMean() + System.lineSeparator() +
-                "actor logStd() = " + getActorLogStd();
+                "critic() = " + critic + System.lineSeparator() +
+                "actor mean() = " + actorMean + System.lineSeparator() +
+                "actor std() = " + actorLogStd.toStringWithValueMapper(arr ->
+             Arrays.stream(arr, 0, arr.length).map(Math::exp).toArray());
 
 
     }

@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -105,11 +107,14 @@ public class DisCoMemory<V> {
 
     @Override
     public String toString() {
+        return toStringWithValueMapper(arr -> arr);
+    }
+
+    public String toStringWithValueMapper(UnaryOperator<double[]> valueMapper) {
         return "\n" + stateParMap.entrySet().stream()
                 .map(e -> Arrays.toString(e.getKey().discretFeatures()) +
-                        " = " + Arrays.toString(e.getValue()))
+                        " = " + Arrays.toString(valueMapper.apply(e.getValue())))
                 .collect(Collectors.joining("\n"));
-
     }
 
 }

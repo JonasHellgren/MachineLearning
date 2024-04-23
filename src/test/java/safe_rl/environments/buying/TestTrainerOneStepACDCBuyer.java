@@ -41,7 +41,7 @@ public class TestTrainerOneStepACDCBuyer {
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
                 .trainerParameters(trainerParameters)
-                .startState(startState)
+                .startStateSupplier(() -> startState.copy() )
                 .build();
     }
 

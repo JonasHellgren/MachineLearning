@@ -15,7 +15,7 @@ public class Runner3HoursBuying {
     public static void main(String[] args) {
         var trainer = createTrainer();
         trainer.train();
-        trainer.recorder.recorderTrainingProgress.plot("One step ACDC");
+        trainer.getRecorder().recorderTrainingProgress.plot("One step ACDC");
         log.info("agent = " + trainer.getAgent());
     }
 
@@ -37,7 +37,7 @@ public class Runner3HoursBuying {
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
                 .trainerParameters(trainerParameters)
-                .startState(startState)
+                .startStateSupplier(() -> startState.copy() )
                 .build();
     }
 

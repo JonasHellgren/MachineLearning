@@ -10,6 +10,5 @@ import safe_rl.domain.abstract_classes.StateI;
 
 public interface AgentI<V> {
      Action chooseAction(StateI<V> state);
-   //  StateI<V> getState();
-    // void setState(StateI<V> state);
+     Action chooseActionNoExploration(StateI<V> state);
 }

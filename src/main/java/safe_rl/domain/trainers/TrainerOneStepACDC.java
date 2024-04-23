@@ -10,10 +10,12 @@ import safe_rl.domain.episode_trainers.ACDCOneStepEpisodeTrainer;
 import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 //todo TrainerI
@@ -21,31 +23,32 @@ import java.util.stream.IntStream;
 public class TrainerOneStepACDC<V> {
 
     EnvironmentI<V> environment;
-    @Getter
-    AgentACDiscoI<V> agent;
+    @Getter AgentACDiscoI<V> agent;
     TrainerParameters trainerParameters;
-    StateI<V> startState;
+    Supplier<StateI<V>> startStateSupplier;
     ExperienceCreator<V> experienceCreator;
     ACDCOneStepEpisodeTrainer<V> episodeTrainer;
-    public final Recorders<V> recorder=new Recorders<>();
+    @Getter Recorders<V> recorder;
 
     @Builder
     public TrainerOneStepACDC(EnvironmentI<V> environment,
                               AgentACDiscoI<V> agent,
                               SafetyLayerI<V> safetyLayer,
                               TrainerParameters trainerParameters,
-                              StateI<V> startState) {
+                              Supplier<StateI<V>> startStateSupplier) {
         this.environment = environment;
         this.agent = agent;
         this.trainerParameters = trainerParameters;
         this.experienceCreator= ExperienceCreator.<V>builder()
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();
-        this.startState=startState;
+        this.startStateSupplier=startStateSupplier;
         this.episodeTrainer = ACDCOneStepEpisodeTrainer
                 .<V>builder()
                 .agent(agent).parameters(trainerParameters)
                 .build();
+        recorder=new Recorders<>(new AgentSimulator<>(
+                agent,safetyLayer,startStateSupplier,environment));
     }
 
     public void train() {
@@ -53,7 +56,7 @@ public class TrainerOneStepACDC<V> {
     }
 
     public List<Experience<V>> evaluate() {
-        return experienceCreator.getExperiences(agent,startState.copy());
+        return experienceCreator.getExperiences(agent,startStateSupplier.get());
     }
 
     private void processEpisode(int episodeIndex) {

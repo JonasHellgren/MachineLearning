@@ -17,12 +17,12 @@ public class Runner5HoursBuying {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
         trainer.train();
-        trainer.recorder.recorderTrainingProgress.plot("Multi step ACDC");
+        trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC");
 
         System.out.println("agent = " + trainer.getAgent());
 
         var simulator=trainerAndSimulator.getSecond();
-        var simRes=simulator.simulate(startState.copy());
+        var simRes=simulator.simulateWithNoExploration();
         System.out.println("startState = " + startState);
         double sumRew= SimulationResult.sumRewards(simRes);
         simRes.forEach(System.out::println);
@@ -49,10 +49,10 @@ public class Runner5HoursBuying {
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
                 .trainerParameters(trainerParameters)
-                .startState(startState.copy())
+                .startStateSupplier(() -> startState.copy())
                 .build();
         var simulator= AgentSimulator.<VariablesBuying>builder()
-                .agent(agent).safetyLayer(safetyLayer).settings(settings5)
+                .agent(agent).safetyLayer(safetyLayer).startStateSupplier(() -> startState.copy())
                 .environment(environment).build();
 
         return Pair.create(trainer,simulator);
