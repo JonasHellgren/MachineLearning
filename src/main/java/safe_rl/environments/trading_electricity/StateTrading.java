@@ -85,8 +85,16 @@ public class StateTrading implements StateI<VariablesTrading> {
         return  variables.soc();
     }
 
+    public double soh() {
+        return  variables.soh();
+    }
+
     public double socStart() {
         return  variables.socStart();
+    }
+
+    public double dSohSinceStart() {
+        return variables.soh()- variables.sohStart();
     }
 
     @Override

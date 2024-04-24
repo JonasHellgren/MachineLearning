@@ -65,10 +65,12 @@ clean up när funkar  x
 
 
 simplified battery trading with safe RL
-EnvironmentTrading
-VariablesTrading
-StateTrading
-SettingsTrading
+EnvironmentTradin x
+VariablesTrading x
+StateTrading x
+SettingsTrading x
+TestEnvironmentTrading5h x
+TestEnvironmentTrading5hWithFCR
 SafetyLayerTrading
 SafeTradeOptModel
 AgentACDCTrading

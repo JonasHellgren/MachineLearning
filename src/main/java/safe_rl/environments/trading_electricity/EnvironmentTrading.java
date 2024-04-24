@@ -37,7 +37,7 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         double aFcrLumped=sampler.sampleFromNormDistribution(0, s.stdActivationFCR());
         double powerFcrAvg= s.powerFcrAvg(aFcrLumped);
         double dSoc=(power+powerFcrAvg)*dt/s.energyBatt();
-        double dSoh=abs(power*dt)/(s.energyBatt()*s.nCyclesLifetime());
+        double dSoh=-abs(power*dt)/(s.energyBatt()*s.nCyclesLifetime());
         var stateNew=s0.copyWithDtimeDsocDsoh(dt,dSoc,dSoh);
         double reward = calculateReward(s0, power, dSoh);
         double[] constraints=getConstraints(power,s0, stateNew);
@@ -59,7 +59,7 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         double energyBuy=max(0, power * s.dt());  //pos if power is positive (buying)
         double priceEnergy=interpolator.priceAtTime(s0.time());
         return s.priceFCR()* s.powerCapacityFcr()+priceEnergy*energySell-
-                (priceEnergy*energyBuy+ s.priceBattery()* dSoh);
+                (priceEnergy*energyBuy+ s.priceBattery()* Math.abs(dSoh));
     }
 
 
@@ -83,7 +83,7 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         c[1]=(power+powerFcrLumped)-s.powerBattMax();   //power+powerFcrLumped<powerBattMax
         c[2]=s.socMin()-(s0.soc()+g*(power-powerFcrLumped));   //soc0+-->socMin
         c[3]=(s0.soc()+g*(power+powerFcrLumped))-s.socMax();   //soc0+..<socMax
-        c[4]=settings.socTerminalMin()-(s0.soc()+g*(power-powerFcrLumped)+dSocMax);
+        c[4]=s.socTerminalMin()-(s0.soc()+g*(power-powerFcrLumped)+dSocMax);
         //soc+g*(...)+dSocMax>socTerminalMin
         return c;
     }
