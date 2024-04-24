@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 
 class TestExperienceCreator {
 
@@ -16,14 +17,14 @@ class TestExperienceCreator {
     BuySettings settings3 = BuySettings.new3HoursSamePrice();
     EnvironmentBuying environment;
     AgentACDCSafeBuyer agent;
-    SafetyLayerBuying<VariablesBuying> safetyLayer;
+    SafetyLayer<VariablesBuying> safetyLayer;
     StateBuying state;
 
     @BeforeEach
     void init() {
         environment = new EnvironmentBuying(settings3);
         state = StateBuying.of(VariablesBuying.newSoc(0.5));
-        safetyLayer = new SafetyLayerBuying<>(settings3);
+        safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafeBuyer.builder()
                 .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))

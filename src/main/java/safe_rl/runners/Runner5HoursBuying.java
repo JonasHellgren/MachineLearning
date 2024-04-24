@@ -1,7 +1,6 @@
 package safe_rl.runners;
 
 import common.other.CpuTimer;
-import common.other.RandUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
@@ -9,6 +8,7 @@ import safe_rl.domain.trainers.TrainerMultiStepACDC;
 import safe_rl.domain.value_classes.SimulationResult;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.helpers.AgentSimulator;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class Runner5HoursBuying {
         var settings5 = BuySettings.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings5);
+        var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings5));
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)

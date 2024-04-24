@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.helpers.RandomActionSimulator;
 
 import java.util.stream.IntStream;
@@ -15,14 +16,14 @@ import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Log
 class TestSafetyLayer {
-    SafetyLayerBuying<VariablesBuying> safetyLayer;
+    SafetyLayer<VariablesBuying> safetyLayer;
     BuySettings settings;
     EnvironmentI<VariablesBuying> environment;
 
     @BeforeEach
     void init() {
         settings = BuySettings.new5HoursIncreasingPrice();
-        safetyLayer = new SafetyLayerBuying<>(settings);
+        safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings));
         environment = new EnvironmentBuying(settings);
     }
 

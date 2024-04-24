@@ -7,8 +7,8 @@ import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.SimulationResult;
+import safe_rl.environments.buying_electricity.SafetyLayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 @Log
 public class AgentSimulator<V> {
     @NonNull AgentI<V> agent;
-    @NonNull SafetyLayerI<V> safetyLayer;
+    @NonNull SafetyLayer<V> safetyLayer;
     @NonNull Supplier<StateI<V>> startStateSupplier;
     @NonNull EnvironmentI<V> environment;
 

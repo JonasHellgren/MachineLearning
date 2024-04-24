@@ -8,8 +8,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.environments.buying_electricity.BuySettings;
-import safe_rl.environments.buying_electricity.SafetyLayerBuying;
+import safe_rl.environments.buying_electricity.SafetyLayer;
 import safe_rl.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import static common.other.Conditionals.executeIfTrue;
 @Log
 public class RandomActionSimulator<V> {
 
-    SafetyLayerBuying<V> safetyLayer;
+    SafetyLayer<V> safetyLayer;
     EnvironmentI<V> environment;
     Pair<Double, Double> minMaxAction;
 

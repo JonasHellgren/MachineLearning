@@ -7,9 +7,9 @@ import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.episode_trainers.ACDCOneStepEpisodeTrainer;
-import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.environments.buying_electricity.SafetyLayer;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
@@ -33,7 +33,7 @@ public class TrainerOneStepACDC<V> {
     @Builder
     public TrainerOneStepACDC(EnvironmentI<V> environment,
                               AgentACDiscoI<V> agent,
-                              SafetyLayerI<V> safetyLayer,
+                              SafetyLayer<V> safetyLayer,
                               TrainerParameters trainerParameters,
                               Supplier<StateI<V>> startStateSupplier) {
         this.environment = environment;

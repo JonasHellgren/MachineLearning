@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import safe_rl.domain.trainers.TrainerOneStepACDC;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.helpers.EpisodeInfo;
 
 /***
@@ -28,7 +29,7 @@ public class TestTrainerOneStepACDCBuyer {
         settings3hours = BuySettings.new3HoursSamePrice();
         var environment = new EnvironmentBuying(settings3hours);
         var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3hours);
+        var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings3hours));
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3hours)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)

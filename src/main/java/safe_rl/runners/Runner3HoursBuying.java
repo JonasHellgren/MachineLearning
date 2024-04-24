@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import safe_rl.domain.trainers.TrainerOneStepACDC;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 
 /***
  * targetLogStd: very important, good enough init exploration needed
@@ -23,7 +24,7 @@ public class Runner3HoursBuying {
         var settings3 = BuySettings.new3HoursSamePrice();
         var environment = new EnvironmentBuying(settings3);
         var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayerBuying<VariablesBuying>(settings3);
+        var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings3));
         var agent=AgentACDCSafeBuyer.builder()
                 .settings(settings3)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)

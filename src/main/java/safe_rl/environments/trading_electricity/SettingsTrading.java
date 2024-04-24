@@ -69,5 +69,15 @@ public record SettingsTrading(
         return powerCapacityFcr() * aFcrLumped;
     }
 
+    public double gFunction() {
+        return dt/energyBatt;
+    }
+
+
+    public double dSocMax(double time) {
+        double dEnergyMax=(timeTerminal() - time) * (powerBattMax - powerAvgFcrExtreme());
+        return dEnergyMax/energyBatt;
+    }
+
 
 }

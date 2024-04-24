@@ -6,11 +6,11 @@ import safe_rl.agent_interfaces.AgentI;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.ActionRewardStateNew;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.domain.value_classes.StepReturn;
+import safe_rl.environments.buying_electricity.SafetyLayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ExperienceCreator<V> {
     public static final int VALUE_DUMMY = 0;
     EnvironmentI<V> environment;
     TrainerParameters parameters;
-    SafetyLayerI<V> safetyLayer;
+    SafetyLayer<V> safetyLayer;
 
     public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) {
         List<Experience<V>> experienceList = new ArrayList<>();

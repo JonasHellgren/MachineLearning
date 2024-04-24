@@ -71,9 +71,10 @@ StateTrading x
 SettingsTrading x
 TestEnvironmentTrading5h x
 TestEnvironmentTrading5hWithFCR  x
-SafetyLayer
-SafetyLayerTrading
+SafetyLayer  x
 SafeTradeOptModel
+OptModelHelper
+Test SafetyLayer SafeTradeOptModel
 TestEnvironmentTrading5hRandomSearch
 AgentACDCTrading
 Runner5HoursTrading
@@ -81,6 +82,7 @@ Runner5HoursTrading
 gradMax sep för actor resp critic
 lin regr update
 replay buffer critic
+
 
 kanske senare:
 TrainerI

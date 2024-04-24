@@ -1,4 +1,4 @@
-package safe_rl.environments.buying_electricity;
+package safe_rl.environments.trading_electricity;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import com.joptimizer.exception.JOptimizerException;
@@ -11,7 +11,7 @@ import common.joptimizer.LowerBoundConstraint;
 import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
-import lombok.Setter;
+import lombok.NonNull;
 import safe_rl.domain.abstract_classes.OptModelI;
 
 import java.util.Arrays;
@@ -19,29 +19,31 @@ import java.util.List;
 
 /**
  * min f=1/2*(power-powerProposed)^2  w.r.t.
- * power>powerMin
- * power<powerMax
- * soc+power*g<socMax
- * <p>
+  constraints expressed below (jsut above method constraints)
+
  * f=1/2*x*M*x+k*x+r=1/2*(power^2-2*powerProposed)+powerProposed^2=
  * 1/2*power^2-1*powerProposed+1/2*powerProposed^2
  */
 
 @Builder
-public class SafeChargeOptModel implements OptModelI {
+public class SafeTradeOptModel implements OptModelI {
     public static final int N_VARIABLES = 1;
     public static final int MAX_ITERATION = 10_000;
+    public static final int N_CONSTRAINTS = 5;
 
-    Double powerProposed;
-    @Builder.Default
-    Double powerMin = 0d;
-    Double powerMax;
+    @NonNull Double powerProposed;
+    @NonNull Double powerMin;
+    @NonNull Double powerMax;
     @Builder.Default
     Double powerInit=1e-25;
-    BuySettings settings;
+    @NonNull SettingsTrading settings;
+    @Builder.Default
+    Double socMin = 0d;
     @Builder.Default
     Double socMax = 1d;
-    Double soc;
+    @NonNull Double socTerminalMin;
+    @NonNull Double soc;
+    @NonNull Double timeNew;
     @Builder.Default
     Double toleranceOptimization = 1e-5;
 
@@ -82,14 +84,28 @@ public class SafeChargeOptModel implements OptModelI {
         return Arrays.stream(constraints).map(f -> f.value(vector)).toList();
     }
 
-
+    /**
+     *   powerFcr can be both neg and pos, hence "worst sign" considered in each constraint
+     *  [0] power>powerMin+powerFcr
+     *  [1] power<powerMax-powerFcr
+     *  [2] soc+g*(power-powerFcr)>socMin  =>
+     *              power-powerFcr>(socMin-soc)/g => power>(socMin-soc)/g+powerFcr
+     *  [3] soc+g*(power+powerFcr)<socMax  =>
+     *              power+powerFcr>(socMax-soc)/g => power>(socMin-soc)/g-powerFcr
+     *  [4] soc+dSocMax+g*(power-powerFcr)>socTerminalMin =>
+                    power-powerFcr>(socTerminalMin-soc-dSocMax)/g => power>....+powerFcr
+     */
 
     ConvexMultivariateRealFunction[] constraints() {
-        var inequalities = new ConvexMultivariateRealFunction[3];
-        double powerMaxSoc = calcPowerMaxSoc();
-        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin);
-        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax);
-        inequalities[2] = UpperBoundConstraint.ofSingle(powerMaxSoc);
+        var s=settings;
+        double powerFcr=s.powerCapacityFcr();
+        var inequalities = new ConvexMultivariateRealFunction[N_CONSTRAINTS];
+        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+powerFcr);
+        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-powerFcr);
+        inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin)+powerFcr);
+        inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax)-powerFcr);
+        double powerMinSoCTerminal=(socTerminalMin-soc-s.dSocMax(timeNew))/s.gFunction()+powerFcr;
+        inequalities[4] = LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
         return inequalities;
     }
 
@@ -110,9 +126,8 @@ public class SafeChargeOptModel implements OptModelI {
     }
 
 
-    private double calcPowerMaxSoc() {
-        double gFunction = settings.dt() / settings.energyBatt();
-        return (socMax - soc) / gFunction;
+    private double powerToHitSocLimit(Double socMinOrMax) {
+        return (socMinOrMax - soc) / settings.gFunction();
     }
 
 

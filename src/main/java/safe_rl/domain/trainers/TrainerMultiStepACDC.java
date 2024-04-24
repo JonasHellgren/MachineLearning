@@ -6,8 +6,8 @@ import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.*;
 import safe_rl.domain.episode_trainers.ACDCMultiStepEpisodeTrainer;
-import safe_rl.domain.safety_layer.SafetyLayerI;
 import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.environments.buying_electricity.SafetyLayer;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
@@ -27,7 +27,7 @@ public class TrainerMultiStepACDC<V> {
     @Builder
     public TrainerMultiStepACDC(EnvironmentI<V> environment,
                               AgentACDiscoI<V> agent,
-                              SafetyLayerI<V> safetyLayer,
+                              SafetyLayer<V> safetyLayer,
                               TrainerParameters trainerParameters,
                               Supplier<StateI<V>> startStateSupplier) {
         this.environment = environment;

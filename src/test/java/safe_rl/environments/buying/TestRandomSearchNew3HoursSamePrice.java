@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.helpers.RandomActionSimulator;
 
 import java.util.ArrayList;
@@ -21,14 +22,14 @@ public class TestRandomSearchNew3HoursSamePrice {
     public static final double TOL_POWER = 0.5;
     BuySettings settings3 = BuySettings.new3HoursSamePrice();
     EnvironmentBuying environment;
-    SafetyLayerBuying<VariablesBuying> safetyLayer;
+    SafetyLayer<VariablesBuying> safetyLayer;
     StateBuying state;
 
     @BeforeEach
     void init() {
         environment = new EnvironmentBuying(settings3);
         state = StateBuying.of(VariablesBuying.newSoc(SOC));
-        safetyLayer = new SafetyLayerBuying<>(settings3);
+        safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
     }
 
     @Test

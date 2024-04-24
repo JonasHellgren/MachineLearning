@@ -23,7 +23,7 @@ public class TestEnvironmentTrading5hRandomSearch {
     public static final double SOC = 0.2;
     public static final double TOL_POWER = 0.5;
     SettingsTrading settingsNonZeroFCR;
-    SafetyLayerBuying<VariablesTrading> safetyLayer;
+    SafetyLayer<VariablesTrading> safetyLayer;
     StateBuying state;
 
 

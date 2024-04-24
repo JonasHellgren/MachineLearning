@@ -74,16 +74,14 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
     private double[] getConstraints(double power, StateTrading s0, StateI<VariablesTrading> stateNew) {
         StateTrading s1=(StateTrading) stateNew;
         var s=settings;
-        double powerFcrLumped= s.powerAvgFcrExtreme();
+        double powerFcr= s.powerAvgFcrExtreme();
         double[] c=new double[N_CONSTRAINTS];
-        double g=s.dt()/s.energyBatt();
-        double dEnergyMax=(s.timeTerminal()-s1.time())*(s.powerBattMax()-powerFcrLumped);
-        double dSocMax=dEnergyMax/s.energyBatt();
-        c[0]=(-s.powerBattMax())-(power-powerFcrLumped);   //power-powerFcrLumped>-powerBattMax
-        c[1]=(power+powerFcrLumped)-s.powerBattMax();   //power+powerFcrLumped<powerBattMax
-        c[2]=s.socMin()-(s0.soc()+g*(power-powerFcrLumped));   //soc0+-->socMin
-        c[3]=(s0.soc()+g*(power+powerFcrLumped))-s.socMax();   //soc0+..<socMax
-        c[4]=s.socTerminalMin()-(s0.soc()+g*(power-powerFcrLumped)+dSocMax);
+        double g=s.gFunction();
+        c[0]=(-s.powerBattMax())-(power-powerFcr);   //power-powerFcr>-powerBattMax
+        c[1]=(power+powerFcr)-s.powerBattMax();   //power+powerFcr<powerBattMax
+        c[2]=s.socMin()-(s0.soc()+g*(power-powerFcr));   //soc0+-->socMin
+        c[3]=(s0.soc()+g*(power+powerFcr))-s.socMax();   //soc0+..<socMax
+        c[4]=s.socTerminalMin()-(s0.soc()+g*(power-powerFcr)+s.dSocMax(s1.time()));
         //soc+g*(...)+dSocMax>socTerminalMin
         return c;
     }
