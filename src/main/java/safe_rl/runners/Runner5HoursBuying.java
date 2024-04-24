@@ -2,6 +2,7 @@ package safe_rl.runners;
 
 import common.other.CpuTimer;
 import common.other.RandUtils;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.trainers.TrainerMultiStepACDC;
@@ -16,8 +17,11 @@ import java.util.List;
  * moderate withStepHorizon => better convergence
  * learning rates and gradMax very critical
  * gamma<1 seems to improve convergence
+
+ * BuySettings: decreasing price shall give high power in end, increasing price high power in start
  */
 
+@Log
 public class Runner5HoursBuying {
 
     static StateI<VariablesBuying> startState;
@@ -38,11 +42,11 @@ public class Runner5HoursBuying {
             TrainerMultiStepACDC<VariablesBuying> trainer,
             List<SimulationResult<VariablesBuying>> simRes,
             CpuTimer timer) {
-        System.out.println("agent = " + trainer.getAgent());
+        log.info("agent = " + trainer.getAgent());
         SimulationResult.sumRewards(simRes);
         SimulationResult.print(simRes);
         timer.stop();
-        System.out.println("timer (ms) = " + timer.getAbsoluteProgress());
+        log.info("timer (ms) = " + timer.getAbsoluteProgress());
 
     }
 
@@ -57,11 +61,11 @@ public class Runner5HoursBuying {
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
-                .gradMax(2d)
+                .gradMax(1d)
                 .state((StateBuying) startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(10d).withStepHorizon(3);
+                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
        var trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

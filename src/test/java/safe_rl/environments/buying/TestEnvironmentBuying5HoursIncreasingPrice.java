@@ -13,6 +13,7 @@ import safe_rl.environments.buying_electricity.*;
 public class TestEnvironmentBuying5HoursIncreasingPrice {
 
     public static final double REWARD_TOL = 1e-5;
+    public static final double SOC_TOL = 1e-5;
 
     @Builder
     record ParArg(
@@ -34,7 +35,6 @@ public class TestEnvironmentBuying5HoursIncreasingPrice {
         }
     }
 
-    public static final double SOC_TOL = 1e-5;
     EnvironmentBuying environment;
     StateBuying stateAllZero;
     StateBuying stateSoC0d9;

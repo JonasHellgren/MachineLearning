@@ -60,8 +60,24 @@ aCorr pen som i mail  - succe x
 även i one step trainer x
 smoothing std - skippa x
 Runner5HoursBuying tuna hyper par x
-new5HoursDecreasingPrice
-clean up när funkar
-withNofEpisodes(10_000) börjar avta
-TrainerI
+new5HoursDecreasingPrice x
+clean up när funkar  x
+
+
 simplified battery trading with safe RL
+EnvironmentTrading
+VariablesTrading
+StateTrading
+SettingsTrading
+SafetyLayerTrading
+SafeTradeOptModel
+AgentACDCTrading
+
+gradMax sep för actor resp critic
+lin regr update
+replay buffer critic
+
+kanske senare:
+
+TrainerI
+går fitActor göra snabbare

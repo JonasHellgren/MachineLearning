@@ -17,8 +17,7 @@ import java.util.stream.IntStream;
 @Log
 public class TrainerMultiStepACDC<V> {
     EnvironmentI<V> environment;
-    @Getter
-    AgentACDiscoI<V> agent;
+    @Getter AgentACDiscoI<V> agent;
     TrainerParameters trainerParameters;
     Supplier<StateI<V>> startStateSupplier;
     ExperienceCreator<V> experienceCreator;
