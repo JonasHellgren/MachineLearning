@@ -22,7 +22,6 @@ import static common.other.Conditionals.executeIfTrue;
 public class RandomActionSimulator<V> {
 
     SafetyLayerBuying<V> safetyLayer;
-    BuySettings settings;
     EnvironmentI<V> environment;
     Pair<Double, Double> minMaxAction;
 

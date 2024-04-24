@@ -5,13 +5,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,6 +20,7 @@ public class TestEnvironmentTrading5hWithFCR {
     EnvironmentTrading environmentZeroPC, environmentNonZeroPC;
     EnvironmentTrading environmentZeroPriceBatt, environmentNonZeroPriceBatt;
     StateTrading stateAllZero, stateTime3SoC0d5,stateTime2SoC0d5,stateTime4SoC0d5;
+    Action actionPower1;
 
     @BeforeEach
     void init() {
@@ -33,7 +31,7 @@ public class TestEnvironmentTrading5hWithFCR {
 
         var settingsZeroPriceBatt = SettingsTrading.new5HoursIncreasingPrice().withPriceBattery(0);
         var settingsNonZeroPriceBatt = SettingsTrading.new5HoursIncreasingPrice();
-
+        actionPower1 =Action.ofDouble(1d);
         environmentZeroPC=new EnvironmentTrading(settingsZeroPC);
         environmentNonZeroPC=new EnvironmentTrading(settingsNonZeroPC);
         environmentZeroPriceBatt=new EnvironmentTrading(settingsZeroPriceBatt);
@@ -45,11 +43,10 @@ public class TestEnvironmentTrading5hWithFCR {
 
     @Test
     void whenNonZeroPC_thenSoCSmallerOrLargerComparedToZeroPC() {
-        var a1=Action.ofDouble(1d);
-        var sr0=environmentZeroPC.step(stateAllZero,a1);
+        var sr0=environmentZeroPC.step(stateAllZero, actionPower1);
         int nSocsGenerated = 100;
         List<Double> socList = IntStream.range(0, nSocsGenerated)
-                .mapToObj(i -> environmentNonZeroPC.step(stateAllZero, a1))
+                .mapToObj(i -> environmentNonZeroPC.step(stateAllZero, actionPower1))
                 .map(sr -> sr.state().getVariables().soc())
                 .toList();
         double soc0=sr0.state().getVariables().soc();
@@ -71,17 +68,15 @@ public class TestEnvironmentTrading5hWithFCR {
 
     @Test
     void whenNonZeroPC_thenLargerRewardComparedToZeroPC() {
-        var a1 = Action.ofDouble(1d);
-        var sr0PC = environmentZeroPC.step(stateAllZero, a1);
-        var srNon0PC = environmentNonZeroPC.step(stateAllZero, a1);
+        var sr0PC = environmentZeroPC.step(stateAllZero, actionPower1);
+        var srNon0PC = environmentNonZeroPC.step(stateAllZero, actionPower1);
         Assertions.assertTrue(srNon0PC.reward()>sr0PC.reward());
     }
 
     @Test
     void whenNonZeroPriceBatter_thenSmallerRewardComparedToZero() {
-        var a1 = Action.ofDouble(1d);
-        var sr0Price = environmentZeroPriceBatt.step(stateAllZero, a1);
-        var srNon0Price = environmentNonZeroPriceBatt.step(stateAllZero, a1);
+        var sr0Price = environmentZeroPriceBatt.step(stateAllZero, actionPower1);
+        var srNon0Price = environmentNonZeroPriceBatt.step(stateAllZero, actionPower1);
         StateTrading state = (StateTrading) sr0Price.state();
         Assertions.assertTrue(srNon0Price.reward()<sr0Price.reward());
         Assertions.assertTrue(state.soh()<1);

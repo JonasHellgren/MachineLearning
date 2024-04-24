@@ -30,7 +30,7 @@ class TestSafetyLayer {
     void whenManySimulations_thenAllSucceeds() {
         double soc = randomNumberBetweenZeroAndOne();
         var simulator = RandomActionSimulator.<VariablesBuying>builder()
-                .environment(environment).safetyLayer(safetyLayer).settings(settings)
+                .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(-5d, -5d)).build();
 
         IntStream.range(0, 300).forEach((i) -> {
