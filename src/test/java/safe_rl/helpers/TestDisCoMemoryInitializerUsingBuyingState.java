@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.memories.DisCoMemory;
-import safe_rl.environments.buying_electricity.BuySettings;
+import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
 
@@ -21,13 +21,13 @@ class TestDisCoMemoryInitializerUsingBuyingState {
     public static final double SOC_MIN = 0d;
     public static final double SOC_MAX = 1d;
     DisCoMemory<VariablesBuying> memory;
-    BuySettings settings;
+    SettingsBuying settings;
     DisCoMemoryInitializer<VariablesBuying> initializer;
 
     @BeforeEach
     void init() {
         var state = StateBuying.newZero();
-        settings = BuySettings.new5HoursIncreasingPrice();
+        settings = SettingsBuying.new5HoursIncreasingPrice();
         memory = new DisCoMemory<>(state.nContinousFeatures() + 1);
         initializer = getInitializer(state, memory, TAR_VALUE, 0d);
     }

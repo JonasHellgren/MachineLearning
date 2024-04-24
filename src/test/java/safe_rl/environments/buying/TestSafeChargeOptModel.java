@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import safe_rl.environments.buying_electricity.BuySettings;
+import safe_rl.domain.abstract_classes.Action;
+import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.SafeChargeOptModel;
+import safe_rl.environments.buying_electricity.StateBuying;
+import safe_rl.environments.buying_electricity.VariablesBuying;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -23,7 +27,7 @@ public class TestSafeChargeOptModel {
     public static final int SOC_VIOL_INDEX = 2;
     public static final double TOL_POWER = 1e-1;
     public static final double SOC = 0.5;
-    SafeChargeOptModel model;
+    SafeChargeOptModel<VariablesBuying> model;
 
     @BeforeEach
     void init() {
@@ -32,25 +36,30 @@ public class TestSafeChargeOptModel {
 
     @Test
     void whenZeroPower_thenNoViolation() {
-        model.setSoCAndPowerProposed(SOC,0d);
+        //model.setSoCAndPowerProposed(SOC,0d);
+        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(0d));
+
         Assertions.assertFalse(model.isAnyViolation());
     }
 
     @Test
     void whenNegPower_thenViolation() {
-        model.setSoCAndPowerProposed(SOC,-1d);
+        //model.setSoCAndPowerProposed(SOC,-1d);
+        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(-1d));
         Assertions.assertTrue(model.isAnyViolation());
     }
 
     @Test
     void whenHighPower_thenViolation() {
-        model.setSoCAndPowerProposed(SOC,4d);
+        //model.setSoCAndPowerProposed(SOC,4d);
+        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(4d));
         Assertions.assertTrue(model.isAnyViolation());
     }
 
     @Test
     void givenHighSoC_whenPower1_thenViolation() {
-        model.setSoCAndPowerProposed(0.95,1d);
+        //model.setSoCAndPowerProposed(0.95,1d);
+        model.setModel(StateBuying.newSoc(0.95), Action.ofDouble(1d));
         List<Double> list = model.getConstraintValues();
         Assertions.assertTrue(getMaxConstraint(list) >0);
         Assertions.assertTrue(list.get(SOC_VIOL_INDEX)>0);
@@ -90,7 +99,9 @@ public class TestSafeChargeOptModel {
     private double setModel(ArgumentsAccessor arguments) {
         double soc= arguments.getDouble(0);
         double powerProposed= arguments.getDouble(1);
-        model.setSoCAndPowerProposed(soc,powerProposed);
+        //model.setSoCAndPowerProposed(soc,powerProposed);
+        model.setModel(StateBuying.newSoc(soc), Action.ofDouble(powerProposed));
+
         return powerProposed;
     }
 
@@ -98,10 +109,10 @@ public class TestSafeChargeOptModel {
         return ListUtils.findMax(list).orElseThrow();
     }
 
-    private static SafeChargeOptModel createModel() {
-        return SafeChargeOptModel.builder()
+    private static SafeChargeOptModel<VariablesBuying> createModel() {
+        return SafeChargeOptModel.<VariablesBuying>builder()
                 .powerProposed(0d).powerMax(3d)
-                .settings(BuySettings.new5HoursIncreasingPrice())
+                .settings(SettingsBuying.new5HoursIncreasingPrice())
                 .soc(SOC)
                 .build();
     }

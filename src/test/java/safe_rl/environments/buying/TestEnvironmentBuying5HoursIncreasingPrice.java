@@ -43,7 +43,7 @@ public class TestEnvironmentBuying5HoursIncreasingPrice {
 
     @BeforeEach
     void init() {
-        environment=new EnvironmentBuying(BuySettings.new5HoursIncreasingPrice());
+        environment=new EnvironmentBuying(SettingsBuying.new5HoursIncreasingPrice());
         stateAllZero=StateBuying.newZero();
         stateSoC0d9=StateBuying.of(VariablesBuying.builder().soc(0.9).build());
         stateTime4 =StateBuying.of(VariablesBuying.builder().soc(0.1).time(4.0).build());

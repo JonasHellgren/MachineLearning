@@ -12,8 +12,10 @@ import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.extern.java.Log;
+import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
-
+import safe_rl.domain.abstract_classes.StateI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +28,8 @@ import java.util.List;
  */
 
 @Builder
-public class SafeTradeOptModel implements OptModelI {
+@Log
+public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_VARIABLES = 1;
     public static final int MAX_ITERATION = 10_000;
     public static final int N_CONSTRAINTS = 5;
@@ -58,9 +61,12 @@ public class SafeTradeOptModel implements OptModelI {
     }
 
     @Override
-    public void setSoCAndPowerProposed(Double soc, Double powerPropose) {
-        this.powerProposed = powerPropose;
-        this.soc = soc;
+    public void setModel(StateI<V> state0, Action action) {
+        log.warning("setModel, state0="+state0 );
+        StateTrading state= (StateTrading) state0;
+        this.powerProposed = action.asDouble();
+        this.soc = state.soc();
+        this.timeNew=state.time()+settings.dt();
     }
 
     @Override
@@ -98,13 +104,15 @@ public class SafeTradeOptModel implements OptModelI {
 
     ConvexMultivariateRealFunction[] constraints() {
         var s=settings;
-        double powerFcr=s.powerCapacityFcr();
+        double powerFcr=s.powerAvgFcrExtreme();
         var inequalities = new ConvexMultivariateRealFunction[N_CONSTRAINTS];
         inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+powerFcr);
         inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-powerFcr);
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax)-powerFcr);
         double powerMinSoCTerminal=(socTerminalMin-soc-s.dSocMax(timeNew))/s.gFunction()+powerFcr;
+        log.info("timeNew="+timeNew+", soc = " + soc);
+        log.info("powerMinSoCTerminal = " + powerMinSoCTerminal+", dSocMax = "+s.dSocMax(timeNew));
         inequalities[4] = LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
         return inequalities;
     }

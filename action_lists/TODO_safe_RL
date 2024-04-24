@@ -72,9 +72,12 @@ SettingsTrading x
 TestEnvironmentTrading5h x
 TestEnvironmentTrading5hWithFCR  x
 SafetyLayer  x
-SafeTradeOptModel
-OptModelHelper
+SafeTradeOptModel  x
+setModel generisk x
+SafeTradeOptModel strular - troligen c4
+TestSafeTradeOptModel
 Test SafetyLayer SafeTradeOptModel
+OptModelHelper
 TestEnvironmentTrading5hRandomSearch
 AgentACDCTrading
 Runner5HoursTrading

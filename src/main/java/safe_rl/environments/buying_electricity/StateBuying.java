@@ -13,6 +13,11 @@ public class StateBuying implements StateI<VariablesBuying> {
         return new StateBuying(VariablesBuying.newZero());
     }
 
+
+    public static StateBuying newSoc(double soc) {
+        return new StateBuying(VariablesBuying.newSoc(soc));
+    }
+
     public static StateBuying of(VariablesBuying variables) {
         return new StateBuying(variables);
     }

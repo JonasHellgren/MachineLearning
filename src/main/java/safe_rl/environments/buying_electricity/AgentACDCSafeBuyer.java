@@ -44,7 +44,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double GRADIENT_MAX = 10d;
 
     StateI<VariablesBuying> state;
-    BuySettings settings;
+    SettingsBuying settings;
     DisCoMemory<VariablesBuying> actorMean, actorLogStd, critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
@@ -55,7 +55,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     SafeGradientClipper meanGradClipper, stdGradClipper;
 
 
-    public static AgentACDCSafeBuyer newDefault(BuySettings settings) {
+    public static AgentACDCSafeBuyer newDefault(SettingsBuying settings) {
         return AgentACDCSafeBuyer.builder()
                 .learningRateActorMean(LEARNING_RATE)
                 .learningRateActorStd(LEARNING_RATE)
@@ -69,7 +69,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public AgentACDCSafeBuyer(Double learningRateActorMean,
                               Double learningRateActorStd,
                               Double learningRateCritic,
-                              @NonNull BuySettings settings,
+                              @NonNull SettingsBuying settings,
                               Double targetMean,
                               Double targetLogStd,
                               Double targetCritic,

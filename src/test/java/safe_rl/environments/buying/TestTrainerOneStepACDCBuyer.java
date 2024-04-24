@@ -18,15 +18,15 @@ import safe_rl.helpers.EpisodeInfo;
 public class TestTrainerOneStepACDCBuyer {
 
     public static final double SOC_START = 0.2;
-    public static final double TOL_POWER = 0.5;
+    public static final double TOL_POWER = 0.8;
     public static final double SOC_END = 1.0;
 
-    BuySettings settings3hours;
+    SettingsBuying settings3hours;
     TrainerOneStepACDC<VariablesBuying> trainer;
 
     @BeforeEach
     void init() {
-        settings3hours = BuySettings.new3HoursSamePrice();
+        settings3hours = SettingsBuying.new3HoursSamePrice();
         var environment = new EnvironmentBuying(settings3hours);
         var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings3hours));

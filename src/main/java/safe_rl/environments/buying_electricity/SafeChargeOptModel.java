@@ -11,8 +11,10 @@ import common.joptimizer.LowerBoundConstraint;
 import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
-import lombok.Setter;
+import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
+import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.environments.trading_electricity.StateTrading;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +30,7 @@ import java.util.List;
  */
 
 @Builder
-public class SafeChargeOptModel implements OptModelI {
+public class SafeChargeOptModel<V> implements OptModelI<V> {
     public static final int N_VARIABLES = 1;
     public static final int MAX_ITERATION = 10_000;
 
@@ -38,7 +40,7 @@ public class SafeChargeOptModel implements OptModelI {
     Double powerMax;
     @Builder.Default
     Double powerInit=1e-25;
-    BuySettings settings;
+    SettingsBuying settings;
     @Builder.Default
     Double socMax = 1d;
     Double soc;
@@ -56,9 +58,10 @@ public class SafeChargeOptModel implements OptModelI {
     }
 
     @Override
-    public void setSoCAndPowerProposed(Double soc, Double powerPropose) {
-        this.powerProposed = powerPropose;
-        this.soc = soc;
+    public void setModel(StateI<V> state0, Action action) {
+        StateBuying state= (StateBuying) state0;
+        this.powerProposed = action.asDouble();
+        this.soc = state.soc();
     }
 
     @Override

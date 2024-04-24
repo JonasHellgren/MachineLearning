@@ -54,7 +54,8 @@ public record VariablesTrading(
     @Override
     public String toString() {
         var f= NumberFormatterUtil.formatterTwoDigits;
-        return "[t = "+ time+", soc = "+ f.format(soc)+", socStart = "+ socStart+"dSoh="+(soc-socStart)+"]";
+        return "[t = "+ time+", soc = "+ f.format(soc)+", socStart = "+ f.format(socStart)+
+                "dSoh="+f.format((soc-socStart))+"]";
     }
 
 

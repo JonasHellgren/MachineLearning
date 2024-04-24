@@ -2,12 +2,12 @@ package safe_rl.environments.buying;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import safe_rl.environments.buying_electricity.BuySettings;
+import safe_rl.environments.buying_electricity.SettingsBuying;
 
 public class TestBuySettings {
 
-    BuySettings settings5 =BuySettings.new5HoursIncreasingPrice();
-    BuySettings settings3 =BuySettings.new3HoursSamePrice();
+    SettingsBuying settings5 = SettingsBuying.new5HoursIncreasingPrice();
+    SettingsBuying settings3 = SettingsBuying.new3HoursSamePrice();
 
     @Test
     void whenCreated5h_thenCorrectTimeEnd() {

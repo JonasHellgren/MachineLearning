@@ -14,7 +14,7 @@ class TestExperienceCreator {
     public static final double TARGET_STD = 2d;
     public static final double MIN_ACTION = 0;
     ExperienceCreator<VariablesBuying> experienceCreator;
-    BuySettings settings3 = BuySettings.new3HoursSamePrice();
+    SettingsBuying settings3 = SettingsBuying.new3HoursSamePrice();
     EnvironmentBuying environment;
     AgentACDCSafeBuyer agent;
     SafetyLayer<VariablesBuying> safetyLayer;
@@ -28,7 +28,7 @@ class TestExperienceCreator {
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafeBuyer.builder()
                 .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
-                .settings(BuySettings.new3HoursSamePrice())
+                .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
         experienceCreator = ExperienceCreator.<VariablesBuying>builder()

@@ -20,7 +20,7 @@ public class TestRandomSearchNew3HoursSamePrice {
 
     public static final double SOC = 0.2;
     public static final double TOL_POWER = 0.5;
-    BuySettings settings3 = BuySettings.new3HoursSamePrice();
+    SettingsBuying settings3 = SettingsBuying.new3HoursSamePrice();
     EnvironmentBuying environment;
     SafetyLayer<VariablesBuying> safetyLayer;
     StateBuying state;

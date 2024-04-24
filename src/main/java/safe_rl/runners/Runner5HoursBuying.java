@@ -53,7 +53,7 @@ public class Runner5HoursBuying {
     private static Pair<
             TrainerMultiStepACDC<VariablesBuying>
             , AgentSimulator<VariablesBuying>> createTrainerAndSimulator() {
-        var settings5 = BuySettings.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
+        var settings5 = SettingsBuying.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings5));

@@ -7,7 +7,7 @@ import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
-import safe_rl.environments.buying_electricity.BuySettings;
+import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
 
@@ -23,7 +23,7 @@ class TestMultiStepResultsGenerator {
     @BeforeEach
     void init() {
         var parameters= TrainerParameters.newDefault().withGamma(1d).withStepHorizon(3);
-        agent= AgentACDCSafeBuyer.newDefault(BuySettings.new3HoursSamePrice());
+        agent= AgentACDCSafeBuyer.newDefault(SettingsBuying.new3HoursSamePrice());
         generator=new MultiStepResultsGenerator<>(parameters,agent);
         var exp0=getExpWithReward(0, false);
         var exp1=getExpWithReward(1, false);

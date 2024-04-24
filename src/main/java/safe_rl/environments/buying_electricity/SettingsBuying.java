@@ -4,10 +4,8 @@ import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.With;
 
-import java.util.Arrays;
-
 @Builder
-public record BuySettings(
+public record SettingsBuying(
         double dt,
         double energyBatt,
         double powerBattMax,
@@ -16,19 +14,19 @@ public record BuySettings(
         @With double[] priceTraj
 ) {
 
-    public static BuySettings new5HoursIncreasingPrice() {
-        return BuySettings.builder()
+    public static SettingsBuying new5HoursIncreasingPrice() {
+        return SettingsBuying.builder()
                 .dt(1)
                 .energyBatt(10).powerBattMax(3).socMax(1)
                 .priceEnd(10).priceTraj(new double[]{1,2,3,4,5})
                 .build();
     }
 
-    public static BuySettings new3HoursSamePrice() {
+    public static SettingsBuying new3HoursSamePrice() {
         return new5HoursIncreasingPrice().withPriceTraj(new double[]{1,1,1});
             }
 
-    public static BuySettings new5HoursDecreasingPrice() {
+    public static SettingsBuying new5HoursDecreasingPrice() {
         return new5HoursIncreasingPrice().withPriceTraj(new double[]{5,4,3,2,1});
     }
 

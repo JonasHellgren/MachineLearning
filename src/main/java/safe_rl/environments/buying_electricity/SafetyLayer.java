@@ -5,15 +5,17 @@ import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
 import safe_rl.domain.abstract_classes.StateI;
 
+import java.util.function.Consumer;
+
 /***
  * Corrects action value if needed
  * Method correctedPower is computationally heavy so only executed when needed
  */
 
 public class SafetyLayer<V>  {
-    OptModelI model;
+    OptModelI<V> model;
 
-    public SafetyLayer(OptModelI model) {
+    public SafetyLayer(OptModelI<V> model) {
         this.model=model;
     }
 
@@ -29,12 +31,8 @@ public class SafetyLayer<V>  {
     }
 
     public boolean isAnyViolation(StateI<V> state, Action action) {
-        setModel((StateBuying) state, action);
+        model.setModel(state, action);
         return model.isAnyViolation();
-    }
-
-    private  void setModel(StateBuying state, Action action) {
-        model.setSoCAndPowerProposed(state.soc(), action.asDouble());
     }
 
 }

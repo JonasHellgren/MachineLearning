@@ -12,10 +12,10 @@ import static java.lang.Math.min;
 @Log
 public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
     public static final double FAIL_PENALTY = 10;
-    BuySettings settings;
+    SettingsBuying settings;
     PriceInterpolator interpolator;
 
-    public EnvironmentBuying(BuySettings settings) {
+    public EnvironmentBuying(SettingsBuying settings) {
         this.settings = settings;
         this.interpolator=new PriceInterpolator(settings.dt(),settings.priceTraj());
     }

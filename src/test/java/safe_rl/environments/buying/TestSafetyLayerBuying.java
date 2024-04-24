@@ -1,4 +1,4 @@
-package safe_rl.domain;
+package safe_rl.environments.buying;
 
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
@@ -15,14 +15,14 @@ import java.util.stream.IntStream;
 import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Log
-class TestSafetyLayer {
+class TestSafetyLayerBuying {
     SafetyLayer<VariablesBuying> safetyLayer;
-    BuySettings settings;
+    SettingsBuying settings;
     EnvironmentI<VariablesBuying> environment;
 
     @BeforeEach
     void init() {
-        settings = BuySettings.new5HoursIncreasingPrice();
+        settings = SettingsBuying.new5HoursIncreasingPrice();
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings));
         environment = new EnvironmentBuying(settings);
     }

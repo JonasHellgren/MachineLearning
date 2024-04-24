@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.Action;
-import safe_rl.environments.buying_electricity.BuySettings;
+import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.EnvironmentBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
@@ -20,7 +20,7 @@ class TestEnvironmentBuying5HoursIncreasingPriceManySteps {
 
     @BeforeEach
     void init() {
-        environment=new EnvironmentBuying(BuySettings.new5HoursIncreasingPrice());
+        environment=new EnvironmentBuying(SettingsBuying.new5HoursIncreasingPrice());
         state =StateBuying.of(VariablesBuying.newSoc(0.5));
     }
 
