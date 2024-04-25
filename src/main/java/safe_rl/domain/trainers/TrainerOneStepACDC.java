@@ -1,5 +1,6 @@
 package safe_rl.domain.trainers;
 
+import com.joptimizer.exception.JOptimizerException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -51,15 +52,18 @@ public class TrainerOneStepACDC<V> {
                 agent,safetyLayer,startStateSupplier,environment));
     }
 
-    public void train() {
-        IntStream.range(0, trainerParameters.nofEpisodes()).forEach(this::processEpisode);
+    public void train() throws JOptimizerException {
+        int bound = trainerParameters.nofEpisodes();
+        for (int i = 0; i < bound; i++) {
+            processEpisode();
+        }
     }
 
-    public List<Experience<V>> evaluate() {
+    public List<Experience<V>> evaluate() throws JOptimizerException {
         return experienceCreator.getExperiences(agent,startStateSupplier.get());
     }
 
-    private void processEpisode(int episodeIndex) {
+    private void processEpisode() throws JOptimizerException {
         var experiences = evaluate();
         var errorList= recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);

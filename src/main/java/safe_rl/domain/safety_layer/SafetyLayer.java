@@ -1,5 +1,6 @@
 package safe_rl.domain.safety_layer;
 
+import com.joptimizer.exception.JOptimizerException;
 import lombok.SneakyThrows;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
@@ -17,8 +18,7 @@ public class SafetyLayer<V>  {
         this.model=model;
     }
 
-    @SneakyThrows
-    public Action correctAction(StateI<V> state, Action action) {
+    public Action correctAction(StateI<V> state, Action action) throws JOptimizerException {
         boolean anyViolation = isAnyViolation(state, action);
         double correctedPower= anyViolation
                 ? model.correctedPower(action.asDouble())

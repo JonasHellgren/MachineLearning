@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.joptimizer.exception.JOptimizerException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
@@ -23,15 +24,15 @@ public class AgentSimulator<V> {
     @NonNull Supplier<StateI<V>> startStateSupplier;
     @NonNull EnvironmentI<V> environment;
 
-    public List<SimulationResult<V>> simulateWithExploration() {
+    public List<SimulationResult<V>> simulateWithExploration() throws JOptimizerException {
         return simulate(true);
     }
 
-    public List<SimulationResult<V>> simulateWithNoExploration() {
+    public List<SimulationResult<V>> simulateWithNoExploration() throws JOptimizerException {
         return simulate(false);
     }
 
-    List<SimulationResult<V>> simulate(boolean exploration) {
+    List<SimulationResult<V>> simulate(boolean exploration) throws JOptimizerException {
         boolean isTerminalOrFail = false;
         var state = startStateSupplier.get().copy();
         List<SimulationResult<V>> simulationResults = new ArrayList<>();

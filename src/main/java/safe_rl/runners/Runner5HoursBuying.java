@@ -1,6 +1,7 @@
 package safe_rl.runners;
 
 import common.other.CpuTimer;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
@@ -28,6 +29,7 @@ public class Runner5HoursBuying {
     static StateI<VariablesBuying> startState;
 
     public static final double SOC_START = 0.0;
+    @SneakyThrows
     public static void main(String[] args) {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
@@ -62,7 +64,7 @@ public class Runner5HoursBuying {
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
-                .gradMax(1d)
+                .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state( startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()

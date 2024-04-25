@@ -75,7 +75,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
                          Double absActionNominal,
                          Double targetLogStd,
                          Double targetCritic,
-                         Double gradMax,
+                         Double gradMaxActor0, Double gradMaxCritic0,
                          @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
@@ -83,10 +83,12 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        double dThetaMax = defaultIfNullDouble.apply(gradMax, GRADIENT_MAX);
-        this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
-        this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
-        this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);
+        double gradMaxActor = defaultIfNullDouble.apply(gradMaxActor0, GRADIENT_MAX);
+        double gradMaxCritic = defaultIfNullDouble.apply(gradMaxCritic0, GRADIENT_MAX);
+
+        this.actorMean = new DisCoMemory<>(nThetas, lram, gradMaxActor);
+        this.actorLogStd = new DisCoMemory<>(nThetas, lras, gradMaxActor);
+        this.critic = new DisCoMemory<>(nThetas, lrc, gradMaxCritic);
         this.tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
@@ -96,11 +98,11 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         getInitializer(state, actorLogStd, tarLogStdInit).initialize();
         getInitializer(state, critic, tarC).initialize();
         meanGradClipper=SafeGradientClipper.builder()
-                .gradMin(-dThetaMax).gradMax(dThetaMax)
+                .gradMin(-gradMaxActor).gradMax(gradMaxActor)
                 .valueMin(tarMeanInit -2*tarStdInit).valueMax(tarMeanInit +2*tarStdInit) //debatable use 2 std
                 .build();
         stdGradClipper=SafeGradientClipper.builder()
-                .gradMin(-dThetaMax).gradMax(dThetaMax)
+                .gradMin(-gradMaxActor).gradMax(gradMaxActor)
                 .valueMin(Math.log(STD_MIN)).valueMax(tarLogStdInit)
                 .build();
     }

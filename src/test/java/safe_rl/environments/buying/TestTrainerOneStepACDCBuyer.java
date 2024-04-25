@@ -1,5 +1,6 @@
 package safe_rl.environments.buying;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,7 @@ public class TestTrainerOneStepACDCBuyer {
     }
 
     @Test
+    @SneakyThrows
     void whenTrained_thenCorrect() {
 
         trainer.train();

@@ -2,6 +2,7 @@ package safe_rl.recorders;
 
 import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.RecorderStateValues;
 import policy_gradient_problems.helpers.RecorderTrainingProgress;
@@ -21,6 +22,7 @@ public class Recorders<V> {
     AgentSimulator<V> simulator;
 
 
+    @SneakyThrows
     public void recordTrainingProgress(List<Experience<V>> experiences,
                                        AgentACDiscoI<V> agent) {
         var ei = new EpisodeInfo<>(experiences);

@@ -83,13 +83,14 @@ TestEnvironmentTrading5hRandomSearch  x
 AgentACD generisk x
 SettingsI  x
 targetMean(0d) ger NaN x
-tester fcr
-Runner5HoursTrading
+gradMax sep för actor resp critic  x
+Runner5HoursTrading x
+tester fcr x
 
-gradMax sep för actor resp critic
 lin regr update
 replay buffer critic
 
+för vidare  @SneakyThrows SafetLayer
 
 kanske senare:
 TrainerI

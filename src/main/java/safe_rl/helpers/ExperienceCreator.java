@@ -1,6 +1,7 @@
 package safe_rl.helpers;
 
 
+import com.joptimizer.exception.JOptimizerException;
 import lombok.Builder;
 import safe_rl.agent_interfaces.AgentI;
 import safe_rl.domain.abstract_classes.Action;
@@ -23,7 +24,7 @@ public class ExperienceCreator<V> {
     TrainerParameters parameters;
     SafetyLayer<V> safetyLayer;
 
-    public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) {
+    public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) throws JOptimizerException {
         List<Experience<V>> experienceList = new ArrayList<>();
         int si = 0;
         StepReturn<V> sr;

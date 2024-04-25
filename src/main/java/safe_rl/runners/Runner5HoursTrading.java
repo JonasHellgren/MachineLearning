@@ -1,6 +1,7 @@
 package safe_rl.runners;
 
 import common.other.CpuTimer;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
@@ -20,15 +21,19 @@ import java.util.List;
 @Log
 public class Runner5HoursTrading {
 
+    public static final double PRICE_BATTERY = 0e3;
     static StateI<VariablesTrading> startState;
 
     public static final double SOC_START = 0.5;
+    public static final double SOC_INCREASE = 0.0;
+
+    @SneakyThrows
     public static void main(String[] args) {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
         var timer= CpuTimer.newWithTimeBudgetInMilliSec(0);
         trainer.train();
-        trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC");
+        trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC trading");
         var simulator=trainerAndSimulator.getSecond();
         var simRes=simulator.simulateWithNoExploration();
         printing(trainer, simRes,timer);
@@ -52,19 +57,19 @@ public class Runner5HoursTrading {
         //interesting to change, decreasing vs increasing price
 
         var settings5 = SettingsTrading.new5HoursIncreasingPrice()
-                .withPriceFCR(0).withSocTerminalMin(SOC_START).withPriceBattery(0e3);
+                .withPriceFCR(0).withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
-                .targetMean(0.0d).targetLogStd(Math.log(5d)).targetCritic(0d).absActionNominal(1d)
-                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
-                .gradMax(1d)
+                .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
+                .learningRateActorMean(1e-3).learningRateActorStd(1e-3).learningRateCritic(1e-2)
+                .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(15000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
+                .withNofEpisodes(30_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

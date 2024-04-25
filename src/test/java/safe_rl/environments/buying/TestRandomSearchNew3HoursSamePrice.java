@@ -1,6 +1,7 @@
 package safe_rl.environments.buying;
 
 import common.list_arrays.ListUtils;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -33,6 +34,7 @@ public class TestRandomSearchNew3HoursSamePrice {
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
     }
 
+    @SneakyThrows
     @Test
     void whenManySteps_thenHighPowerGood() {
         var simulator = RandomActionSimulator.<VariablesBuying>builder()

@@ -1,7 +1,9 @@
 package safe_rl.helpers;
 
+import com.joptimizer.exception.JOptimizerException;
 import common.other.RandUtils;
 import lombok.Builder;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -24,7 +26,8 @@ public class RandomActionSimulator<V> {
     EnvironmentI<V> environment;
     Pair<Double, Double> minMaxAction;
 
-    public Triple<StateI<V>, List<Double>, List<Double>> simulate(StateI<V> startState) {
+    @SneakyThrows
+    public Triple<StateI<V>, List<Double>, List<Double>> simulate(StateI<V> startState) throws JOptimizerException {
         boolean isTerminalOrFail = false;
         var state = startState.copy();
         List<Double> rewardList = new ArrayList<>();

@@ -96,10 +96,9 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
 
     private void throwIfFailedInitPointSearch(double randPower, Counter counter) throws IterationsLimitException, InfeasibleProblemException {
         if (counter.isExceeded()) {
-            var c=getConstraintValues(randPower);
-            System.out.println("soc = " + soc);
-            System.out.println("timeNew = " + timeNew);
-            throw new IterationsLimitException("Nof random init power guesses exceeded, try decrease socTerminalMin");
+            log.fine("timeNew = " + timeNew+", soc = " + soc);
+            throw new IterationsLimitException("Nof random init power guesses exceeded, " +
+                    "try decrease socTerminalMin and/orpowerCapacityFcr");
         }
         if (isAnyViolation(randPower)) {
             throw new InfeasibleProblemException("Nof feasible init guess found, constraints = "

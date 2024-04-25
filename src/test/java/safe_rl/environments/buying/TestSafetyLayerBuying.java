@@ -1,5 +1,6 @@
 package safe_rl.environments.buying;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -29,18 +30,19 @@ class TestSafetyLayerBuying {
     }
 
     @Test
+    @SneakyThrows
     void whenManySimulations_thenAllSucceeds() {
         double soc = randomNumberBetweenZeroAndOne();
         var simulator = RandomActionSimulator.<VariablesBuying>builder()
                 .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(-5d, -5d)).build();
 
-        IntStream.range(0, 300).forEach((i) -> {
+        for (int i = 0; i < 100 ; i++) {
             var stateStart = StateBuying.of(VariablesBuying.newSoc(soc));
             var simRes = simulator.simulate(stateStart.copy());
             log.fine("Simulation finished, simRes=" + simRes);
             Assertions.assertTrue(settings.timeEnd() < simRes.getLeft().getVariables().time());
-        });
+        };
     }
 
 

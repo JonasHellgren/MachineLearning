@@ -1,5 +1,6 @@
 package safe_rl.runners;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainers.TrainerOneStepACDC;
@@ -14,6 +15,7 @@ import safe_rl.environments.factories.FactoryOptModel;
 @Log
 public class Runner3HoursBuying {
     public static final double SOC_START = 0.2;
+    @SneakyThrows
     public static void main(String[] args) {
         var trainer = createTrainer();
         trainer.train();
@@ -30,7 +32,7 @@ public class Runner3HoursBuying {
                 .settings(settings3)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
-                .gradMax(10d)
+                .gradMaxActor0(10d).gradMaxCritic0(10d)
                 .state(startState)
                 .build();
         var trainerParameters= TrainerParameters.newDefault()

@@ -1,5 +1,6 @@
 package safe_rl.environments.trading;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -34,12 +35,13 @@ class TestSafetyLayerTrading {
     }
 
     @Test
+    @SneakyThrows
     void whenManySimulations_thenAllSucceeds() {
         var simulator = RandomActionSimulator.<VariablesTrading>builder()
                 .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(-5d, 5d)).build();
 
-        IntStream.range(0, N_SIMULATIONS).forEach((i) -> {
+        for (int i = 0; i <  N_SIMULATIONS; i++) {
             double soc = randomNumberBetweenZeroAndOne();
             var stateStart = StateTrading.of(VariablesTrading.newSoc(soc));
             System.out.println("stateStart = " + stateStart);
@@ -47,7 +49,7 @@ class TestSafetyLayerTrading {
             log.info("Simulation finished, simRes=" + simRes);
             Assertions.assertTrue(settings.timeEnd() < simRes.getLeft().getVariables().time());
             Assertions.assertTrue(simRes.getLeft().getVariables().soc()>settings.socTerminalMin()- TOL_SOC);
-        });
+        };
     }
 
 

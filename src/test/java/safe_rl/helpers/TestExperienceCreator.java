@@ -1,6 +1,7 @@
 package safe_rl.helpers;
 
 import common.other.Conditionals;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ class TestExperienceCreator {
     }
 
     @Test
+    @SneakyThrows
     void whenGettingExperiences_thenCorrect() {
         var experiences = experienceCreator.getExperiences(agent,state);
         var ei= new EpisodeInfo<>(experiences);

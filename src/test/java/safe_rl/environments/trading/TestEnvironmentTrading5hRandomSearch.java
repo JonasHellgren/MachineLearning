@@ -1,6 +1,7 @@
 package safe_rl.environments.trading;
 
 import common.list_arrays.ListUtils;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.safety_layer.SafetyLayer;
-import safe_rl.environments.buying_electricity.*;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
@@ -25,32 +25,33 @@ public class TestEnvironmentTrading5hRandomSearch {
     public static final int N_SIMULATIONS = 1000;
     EnvironmentTrading environment;
     public static final double SOC = 0.5;
-    SettingsTrading settingsNonZeroFCR;
+    SettingsTrading settings;
     SafetyLayer<VariablesTrading> safetyLayer;
 
     @BeforeEach
     void init() {
-        settingsNonZeroFCR = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(0).withSocTerminalMin(SOC).withPriceBattery(5e3);
-        safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settingsNonZeroFCR));
-        environment = new EnvironmentTrading(settingsNonZeroFCR);
+        settings = SettingsTrading.new5HoursIncreasingPrice()
+                .withPowerCapacityFcr(1).withPriceFCR(1).withSocTerminalMin(SOC).withPriceBattery(5e3);
+        safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
+        environment = new EnvironmentTrading(settings);
     }
 
 
     @Test
+    @SneakyThrows
     void whenRandomSearch_thenSomePositiveRevenue() {
         var simulator = RandomActionSimulator.<VariablesTrading>builder()
                 .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(
-                        -settingsNonZeroFCR.powerBattMax(),
-                        settingsNonZeroFCR.powerBattMax())).build();
+                        -settings.powerBattMax(),
+                        settings.powerBattMax())).build();
 
         Pair<Double, List<Double>> bestRes = Pair.of(-Double.MAX_VALUE, new ArrayList<>());
         for (int i = 0; i < N_SIMULATIONS; i++) {
             var stateStart = StateTrading.of(VariablesTrading.newSoc(SOC));
             var simRes = simulator.simulate(stateStart);
             bestRes = getBestRes(bestRes, simRes);
-            Assertions.assertTrue(settingsNonZeroFCR.timeEnd() < simRes.getLeft().getVariables().time());
+            Assertions.assertTrue(settings.timeEnd() < simRes.getLeft().getVariables().time());
         }
 
         List<Double> powerList = bestRes.getRight();
