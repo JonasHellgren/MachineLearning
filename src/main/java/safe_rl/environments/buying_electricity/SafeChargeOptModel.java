@@ -11,10 +11,10 @@ import common.joptimizer.LowerBoundConstraint;
 import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
+import lombok.NonNull;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
 import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.environments.trading_electricity.StateTrading;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,30 +58,31 @@ public class SafeChargeOptModel<V> implements OptModelI<V> {
     }
 
     @Override
-    public void setModel(StateI<V> state0, Action action) {
+    public void setModel(StateI<V> state0) {
         StateBuying state= (StateBuying) state0;
-        this.powerProposed = action.asDouble();
+        //this.powerProposed = action.asDouble();
         this.soc = state.soc();
     }
 
     @Override
-    public boolean isAnyViolation() {
-        double constraintMax = ListUtils.findMax(getConstraintValues()).orElseThrow();
+    public boolean isAnyViolation(@NonNull Double power) {
+        double constraintMax = ListUtils.findMax(getConstraintValues(power)).orElseThrow();
         return constraintMax > 0;
     }
 
 
     @Override
-    public double correctedPower() throws JOptimizerException {
+    public double correctedPower(@NonNull Double power) throws JOptimizerException {
         double[] initialPoint = {powerInit};
+        this.powerProposed=power;
         var response = getOptimizationResponse(initialPoint);
         return response.getSolution()[0];
     }
 
-    public List<Double> getConstraintValues() {
+    public List<Double> getConstraintValues(@NonNull Double power) {
         var constraints = constraints();
         var vector = new DenseDoubleMatrix1D(N_VARIABLES);
-        vector.set(0, powerProposed);
+        vector.set(0, power);
         return Arrays.stream(constraints).map(f -> f.value(vector)).toList();
     }
 

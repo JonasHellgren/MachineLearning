@@ -1,6 +1,7 @@
 package safe_rl.runners;
 
 import lombok.extern.java.Log;
+import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainers.TrainerOneStepACDC;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;

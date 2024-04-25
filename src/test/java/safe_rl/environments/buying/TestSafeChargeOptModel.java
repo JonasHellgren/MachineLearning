@@ -37,30 +37,30 @@ public class TestSafeChargeOptModel {
     @Test
     void whenZeroPower_thenNoViolation() {
         //model.setSoCAndPowerProposed(SOC,0d);
-        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(0d));
+        model.setModel(StateBuying.newSoc(SOC));
 
-        Assertions.assertFalse(model.isAnyViolation());
+        Assertions.assertFalse(model.isAnyViolation(0d));
     }
 
     @Test
     void whenNegPower_thenViolation() {
         //model.setSoCAndPowerProposed(SOC,-1d);
-        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(-1d));
-        Assertions.assertTrue(model.isAnyViolation());
+        model.setModel(StateBuying.newSoc(SOC));
+        Assertions.assertTrue(model.isAnyViolation(-1d));
     }
 
     @Test
     void whenHighPower_thenViolation() {
         //model.setSoCAndPowerProposed(SOC,4d);
-        model.setModel(StateBuying.newSoc(SOC), Action.ofDouble(4d));
-        Assertions.assertTrue(model.isAnyViolation());
+        model.setModel(StateBuying.newSoc(SOC));
+        Assertions.assertTrue(model.isAnyViolation(4d));
     }
 
     @Test
     void givenHighSoC_whenPower1_thenViolation() {
         //model.setSoCAndPowerProposed(0.95,1d);
-        model.setModel(StateBuying.newSoc(0.95), Action.ofDouble(1d));
-        List<Double> list = model.getConstraintValues();
+        model.setModel(StateBuying.newSoc(0.95));
+        List<Double> list = model.getConstraintValues(1d);
         Assertions.assertTrue(getMaxConstraint(list) >0);
         Assertions.assertTrue(list.get(SOC_VIOL_INDEX)>0);
     }
@@ -75,7 +75,7 @@ public class TestSafeChargeOptModel {
     })
     void whenSoCAndOkPower_thenNoChangedInCorrected(ArgumentsAccessor arguments) {
         double powerProposed = setModel(arguments);
-        assertEquals(powerProposed,model.correctedPower(), TOL_POWER);
+        assertEquals(powerProposed,model.correctedPower(powerProposed), TOL_POWER);
     }
 
     @SneakyThrows
@@ -89,7 +89,7 @@ public class TestSafeChargeOptModel {
         double powerProposed = setModel(arguments);
         double powerCorrected= arguments.getDouble(2);
         for (int  i = 0; i < 100 ; i++) {
-            double correctedPower=model.correctedPower();
+            double correctedPower=model.correctedPower(arguments.getDouble(1));
             assertNotEquals(powerProposed,correctedPower, TOL_POWER);
             assertEquals(powerCorrected,correctedPower, TOL_POWER);
         }
@@ -100,7 +100,7 @@ public class TestSafeChargeOptModel {
         double soc= arguments.getDouble(0);
         double powerProposed= arguments.getDouble(1);
         //model.setSoCAndPowerProposed(soc,powerProposed);
-        model.setModel(StateBuying.newSoc(soc), Action.ofDouble(powerProposed));
+        model.setModel(StateBuying.newSoc(soc));
 
         return powerProposed;
     }

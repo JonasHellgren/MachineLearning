@@ -10,7 +10,7 @@ import safe_rl.domain.value_classes.ActionRewardStateNew;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.domain.value_classes.StepReturn;
-import safe_rl.environments.buying_electricity.SafetyLayer;
+import safe_rl.domain.safety_layer.SafetyLayer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@ import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.episode_trainers.ACDCOneStepEpisodeTrainer;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
-import safe_rl.environments.buying_electricity.SafetyLayer;
+import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;

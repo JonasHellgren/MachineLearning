@@ -8,7 +8,7 @@ import safe_rl.agent_interfaces.AgentI;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.value_classes.SimulationResult;
-import safe_rl.environments.buying_electricity.SafetyLayer;
+import safe_rl.domain.safety_layer.SafetyLayer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.environments.buying_electricity.SafetyLayer;
+import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ public class RandomActionSimulator<V> {
         while (!isTerminalOrFail) {
             double power = RandUtils.getRandomDouble(minMaxAction.getLeft(), minMaxAction.getRight());
             action = Action.ofDouble(power);
+            log.fine("state = " + state);
             actionCorrected = safetyLayer.correctAction(state, action);
            // maybeLog(state, action, actionCorrected);
             logStateAndAction(state, action, actionCorrected);

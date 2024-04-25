@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.EnvironmentI;
-import safe_rl.environments.buying_electricity.*;
+import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
@@ -26,7 +26,7 @@ class TestSafetyLayerTrading {
 
     @BeforeEach
     void init() {
-        settings = SettingsTrading.new5HoursIncreasingPrice();
+        settings = SettingsTrading.new5HoursIncreasingPrice().withSocTerminalMin(0d);
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
     }

@@ -1,6 +1,8 @@
 package safe_rl.environments.trading_electricity;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import com.joptimizer.exception.InfeasibleProblemException;
+import com.joptimizer.exception.IterationsLimitException;
 import com.joptimizer.exception.JOptimizerException;
 import com.joptimizer.functions.ConvexMultivariateRealFunction;
 import com.joptimizer.functions.PDQuadraticMultivariateRealFunction;
@@ -10,6 +12,8 @@ import com.joptimizer.optimizers.OptimizationResponse;
 import common.joptimizer.LowerBoundConstraint;
 import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
+import common.other.Counter;
+import common.other.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -33,8 +37,8 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_VARIABLES = 1;
     public static final int MAX_ITERATION = 10_000;
     public static final int N_CONSTRAINTS = 5;
+    public static final int MAX_NOF_INIT_GUESSES = 10_000;
 
-    @NonNull Double powerProposed;
     @NonNull Double powerMin;
     @NonNull Double powerMax;
     @Builder.Default
@@ -53,7 +57,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     final OptimizationRequest or = new OptimizationRequest();
     final JOptimizer optimizer = new JOptimizer();
 
-    public ConvexMultivariateRealFunction costFunction() {
+    public ConvexMultivariateRealFunction costFunction(double powerProposed) {
         double[][] pMatrix = {{1}};
         double[] kVector = new double[]{-powerProposed};
         double r = 1d / 2d * powerProposed * powerProposed;
@@ -61,32 +65,49 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     }
 
     @Override
-    public void setModel(StateI<V> state0, Action action) {
-        log.warning("setModel, state0="+state0 );
+    public void setModel(StateI<V> state0) {
+        log.fine("setModel, state0="+state0 );
         StateTrading state= (StateTrading) state0;
-        this.powerProposed = action.asDouble();
         this.soc = state.soc();
         this.timeNew=state.time()+settings.dt();
     }
 
     @Override
-    public boolean isAnyViolation() {
-        double constraintMax = ListUtils.findMax(getConstraintValues()).orElseThrow();
+    public boolean isAnyViolation(@NonNull Double power) {
+        double constraintMax = ListUtils.findMax(getConstraintValues(power)).orElseThrow();
         return constraintMax > 0;
     }
 
-
     @Override
-    public double correctedPower() throws JOptimizerException {
-        double[] initialPoint = {powerInit};
-        var response = getOptimizationResponse(initialPoint);
+    public double correctedPower(@NonNull Double powerProposed) throws JOptimizerException {
+        Counter counter = new Counter(MAX_NOF_INIT_GUESSES);
+        double randPower;
+        boolean violation;
+        double powerBattMax = settings.powerBattMax();
+        do {
+            randPower = RandUtils.getRandomDouble(-powerBattMax, powerBattMax);
+            violation = isAnyViolation(randPower);
+            counter.increase();
+        } while (violation && !counter.isExceeded());
+        throwIfFailedInitPointSearch(randPower, counter);
+        var response = getOptimizationResponse(randPower,powerProposed);
         return response.getSolution()[0];
     }
 
-    public List<Double> getConstraintValues() {
+    private void throwIfFailedInitPointSearch(double randPower, Counter counter) throws IterationsLimitException, InfeasibleProblemException {
+        if (counter.isExceeded()) {
+            throw new IterationsLimitException("Nof random init power guesses exceeded");
+        }
+        if (isAnyViolation(randPower)) {
+            throw new InfeasibleProblemException("Nof feasible init guess found, constraints = "
+                    + getConstraintValues(randPower));
+        }
+    }
+
+    public List<Double> getConstraintValues(@NonNull Double powerProposed1) {
         var constraints = constraints();
         var vector = new DenseDoubleMatrix1D(N_VARIABLES);
-        vector.set(0, powerProposed);
+        vector.set(0, powerProposed1);
         return Arrays.stream(constraints).map(f -> f.value(vector)).toList();
     }
 
@@ -111,22 +132,21 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax)-powerFcr);
         double powerMinSoCTerminal=(socTerminalMin-soc-s.dSocMax(timeNew))/s.gFunction()+powerFcr;
-        log.info("timeNew="+timeNew+", soc = " + soc);
-        log.info("powerMinSoCTerminal = " + powerMinSoCTerminal+", dSocMax = "+s.dSocMax(timeNew));
         inequalities[4] = LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
         return inequalities;
     }
 
-    OptimizationResponse getOptimizationResponse(double[] initialPoint) throws JOptimizerException {
-        defineRequest(or, initialPoint);
+    OptimizationResponse getOptimizationResponse(double powerInit, double powerProposed) throws JOptimizerException {
+        defineRequest(or, powerInit, powerProposed);
         optimizer.setOptimizationRequest(or);
         optimizer.optimize();
         return optimizer.getOptimizationResponse();
     }
 
-    void defineRequest(OptimizationRequest or,double[] initialPoint) {
+    void defineRequest(OptimizationRequest or,double powerInit, double powerProposed) {
+        double[] initialPoint = {powerInit};
         or.setMaxIteration(MAX_ITERATION);
-        or.setF0(costFunction()); // Set the objective function
+        or.setF0(costFunction(powerProposed)); // Set the objective function
         or.setFi(constraints());
         or.setInitialPoint(initialPoint); // Optional: initial guess
         or.setToleranceFeas(toleranceOptimization); // Tolerance on feasibility

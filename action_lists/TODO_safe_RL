@@ -74,9 +74,10 @@ TestEnvironmentTrading5hWithFCR  x
 SafetyLayer  x
 SafeTradeOptModel  x
 setModel generisk x
-SafeTradeOptModel strular - troligen c4
-TestSafeTradeOptModel
-Test SafetyLayer SafeTradeOptModel
+SafeTradeOptModel strular  x
+setModel(StateI<V> state0, Action action)  - flytta action x
+TestSafeTradeOptModel  x
+Test SafetyLayer SafeTradeOptModel x
 OptModelHelper
 TestEnvironmentTrading5hRandomSearch
 AgentACDCTrading
