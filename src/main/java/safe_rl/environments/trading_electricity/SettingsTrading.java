@@ -3,6 +3,7 @@ package safe_rl.environments.trading_electricity;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.With;
+import safe_rl.domain.abstract_classes.SettingsI;
 
 @Builder
 public record SettingsTrading(
@@ -17,7 +18,7 @@ public record SettingsTrading(
         @With double powerCapacityFcr,
         @With double priceFCR,
         @With double nCyclesLifetime
-) {
+) implements SettingsI  {
 
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()

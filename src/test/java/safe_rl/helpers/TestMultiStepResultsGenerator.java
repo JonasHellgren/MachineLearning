@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
-import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
+import safe_rl.environments.buying_electricity.AgentACDCSafe;
 import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
@@ -17,13 +17,13 @@ class TestMultiStepResultsGenerator {
 
 
     MultiStepResultsGenerator<VariablesBuying> generator;
-    AgentACDCSafeBuyer<VariablesBuying> agent;
+    AgentACDCSafe<VariablesBuying> agent;
     List<Experience<VariablesBuying>> experiences;
 
     @BeforeEach
     void init() {
         var parameters= TrainerParameters.newDefault().withGamma(1d).withStepHorizon(3);
-        agent= AgentACDCSafeBuyer.newDefault(SettingsBuying.new3HoursSamePrice(),StateBuying.newZero());
+        agent= AgentACDCSafe.newDefault(SettingsBuying.new3HoursSamePrice(),StateBuying.newZero());
         generator=new MultiStepResultsGenerator<>(parameters,agent);
         var exp0=getExpWithReward(0, false);
         var exp1=getExpWithReward(1, false);

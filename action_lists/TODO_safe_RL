@@ -80,7 +80,10 @@ TestSafeTradeOptModel  x
 Test SafetyLayer SafeTradeOptModel x
 OptModelHelper - fimpa vinner lite x
 TestEnvironmentTrading5hRandomSearch  x
-AgentACD generisk
+AgentACD generisk x
+SettingsI  x
+targetMean(0d) ger NaN x
+tester fcr
 Runner5HoursTrading
 
 gradMax sep för actor resp critic

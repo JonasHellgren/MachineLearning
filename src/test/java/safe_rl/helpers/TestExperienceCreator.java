@@ -17,7 +17,7 @@ class TestExperienceCreator {
     ExperienceCreator<VariablesBuying> experienceCreator;
     SettingsBuying settings3 = SettingsBuying.new3HoursSamePrice();
     EnvironmentBuying environment;
-    AgentACDCSafeBuyer<VariablesBuying> agent;
+    AgentACDCSafe<VariablesBuying> agent;
     SafetyLayer<VariablesBuying> safetyLayer;
     StateBuying state;
 
@@ -27,7 +27,7 @@ class TestExperienceCreator {
         state = StateBuying.of(VariablesBuying.newSoc(0.5));
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
-        agent = AgentACDCSafeBuyer.<VariablesBuying>builder()
+        agent = AgentACDCSafe.<VariablesBuying>builder()
                 .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())

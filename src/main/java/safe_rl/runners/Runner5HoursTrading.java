@@ -16,13 +16,13 @@ import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.helpers.AgentSimulator;
 import java.util.List;
-/*
+
 @Log
 public class Runner5HoursTrading {
 
     static StateI<VariablesTrading> startState;
 
-    public static final double SOC_START = 0.0;
+    public static final double SOC_START = 0.5;
     public static void main(String[] args) {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
@@ -49,19 +49,22 @@ public class Runner5HoursTrading {
     private static Pair<
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
-        var settings5 = SettingsTrading.new5HoursIncreasingPrice();  //interesting to change, decreasing vs increasing price
+        //interesting to change, decreasing vs increasing price
+
+        var settings5 = SettingsTrading.new5HoursIncreasingPrice()
+                .withPriceFCR(0).withSocTerminalMin(SOC_START).withPriceBattery(0e3);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayer<VariablesTrading>(FactoryOptModel.createTradeModel(settings5));
-        var agent= AgentACDCSafeBuyer.builder()
+        var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
+        var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
-                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
+                .targetMean(0.0d).targetLogStd(Math.log(5d)).targetCritic(0d).absActionNominal(1d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
                 .gradMax(1d)
-                .state((StateTrading) startState.copy())
+                .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
+                .withNofEpisodes(15000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
@@ -77,4 +80,3 @@ public class Runner5HoursTrading {
     }
     
 }
-*/

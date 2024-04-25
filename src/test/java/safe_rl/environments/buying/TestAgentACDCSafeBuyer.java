@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.abstract_classes.Action;
-import safe_rl.environments.buying_electricity.AgentACDCSafeBuyer;
+import safe_rl.environments.buying_electricity.AgentACDCSafe;
 import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
@@ -20,13 +20,13 @@ public class TestAgentACDCSafeBuyer {
     public static final double ADV = 1d;
     public static final double TARGET_CRITIC = 0d;
     public static final double TOL_GRAD_LOG = 1e-1;
-    AgentACDCSafeBuyer<VariablesBuying> agent;
+    AgentACDCSafe<VariablesBuying> agent;
     StateBuying state0;
 
     @BeforeEach
     void init() {
         state0 = StateBuying.newZero();
-        agent=AgentACDCSafeBuyer.<VariablesBuying>builder()
+        agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(SettingsBuying.new5HoursIncreasingPrice())
                 .targetMean(TARGET_MEAN).targetLogStd(LOG_STD_TAR).targetCritic(TARGET_CRITIC)
                 .state(state0)

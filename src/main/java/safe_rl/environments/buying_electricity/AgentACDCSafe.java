@@ -10,6 +10,7 @@ import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.Action;
+import safe_rl.domain.abstract_classes.SettingsI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.helpers.DisCoMemoryInitializer;
@@ -29,7 +30,7 @@ import static common.other.MyFunctions.*;
  */
 
 @Getter
-public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
+public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     public static final double LEARNING_RATE = 1e-2;
     public static final double STD_MIN = 0.01;
@@ -41,20 +42,22 @@ public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
     public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
     public static final double GRADIENT_MAX = 10d;
+    public static final double ABS_TAR_MEAN = 1d;
 
     StateI<V> state;
-    SettingsBuying settings;
+    SettingsI settings;
     DisCoMemory<V> actorMean, actorLogStd, critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     double tarStdInit, tarMeanInit;
+    double absActionNominal;
     LossTracker lossTracker=new LossTracker();
     SafeGradientClipper meanGradClipper, stdGradClipper;
 
-    public static <V> AgentACDCSafeBuyer<V> newDefault(SettingsBuying settings, StateI<V> state) {
-        return AgentACDCSafeBuyer.<V>builder()
+    public static <V> AgentACDCSafe<V> newDefault(SettingsI settings, StateI<V> state) {
+        return AgentACDCSafe.<V>builder()
                 .learningRateActorMean(LEARNING_RATE)
                 .learningRateActorStd(LEARNING_RATE)
                 .learningRateCritic(LEARNING_RATE)
@@ -64,15 +67,16 @@ public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
     }
 
     @Builder
-    public AgentACDCSafeBuyer(Double learningRateActorMean,
-                              Double learningRateActorStd,
-                              Double learningRateCritic,
-                              @NonNull SettingsBuying settings,
-                              Double targetMean,
-                              Double targetLogStd,
-                              Double targetCritic,
-                              Double gradMax,
-                              @NonNull StateI<V> state) {
+    public AgentACDCSafe(Double learningRateActorMean,
+                         Double learningRateActorStd,
+                         Double learningRateCritic,
+                         @NonNull SettingsI settings,
+                         Double targetMean,
+                         Double absActionNominal,
+                         Double targetLogStd,
+                         Double targetCritic,
+                         Double gradMax,
+                         @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinousFeatures() + 1;
@@ -83,7 +87,8 @@ public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
         this.actorMean = new DisCoMemory<>(nThetas, lram, dThetaMax);
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, dThetaMax);
         this.critic = new DisCoMemory<>(nThetas, lrc, dThetaMax);
-        tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        this.tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
         tarStdInit = Math.exp(tarLogStdInit);
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
@@ -108,7 +113,7 @@ public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
 
     @Override
     public Action chooseActionNominal(StateI<V> state) {
-        return Action.ofDouble(tarMeanInit);
+        return Action.ofDouble(absActionNominal);
     }
 
     @Override

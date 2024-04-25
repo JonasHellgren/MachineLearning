@@ -25,10 +25,10 @@ public class Runner3HoursBuying {
         var settings3 = SettingsBuying.new3HoursSamePrice();
         var environment = new EnvironmentBuying(settings3);
         var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings3));
-        var agent=AgentACDCSafeBuyer.<VariablesBuying>builder()
+        var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
+        var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3)
-                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
+                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
                 .gradMax(10d)
                 .state(startState)

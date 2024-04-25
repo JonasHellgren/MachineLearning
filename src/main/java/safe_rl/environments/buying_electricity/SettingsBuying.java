@@ -3,16 +3,18 @@ package safe_rl.environments.buying_electricity;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.With;
+import safe_rl.domain.abstract_classes.SettingsI;
 
 @Builder
-public record SettingsBuying(
+public record SettingsBuying  (
         double dt,
         double energyBatt,
         double powerBattMax,
         double socMax,
         double priceEnd,
         @With double[] priceTraj
-) {
+) implements SettingsI
+{
 
     public static SettingsBuying new5HoursIncreasingPrice() {
         return SettingsBuying.builder()
@@ -29,8 +31,6 @@ public record SettingsBuying(
     public static SettingsBuying new5HoursDecreasingPrice() {
         return new5HoursIncreasingPrice().withPriceTraj(new double[]{5,4,3,2,1});
     }
-
-
 
     //time for final price item in priceTraj
     public double timeEnd() {
