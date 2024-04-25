@@ -57,13 +57,13 @@ public class Runner5HoursBuying {
         var settings5 = SettingsBuying.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayer<VariablesBuying>(FactoryOptModel.createChargeModel(settings5));
-        var agent=AgentACDCSafeBuyer.builder()
+        var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings5));
+        var agent=AgentACDCSafeBuyer.<VariablesBuying>builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
                 .gradMax(1d)
-                .state((StateBuying) startState.copy())
+                .state( startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
                 .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);

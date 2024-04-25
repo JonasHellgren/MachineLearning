@@ -17,7 +17,7 @@ class TestExperienceCreator {
     ExperienceCreator<VariablesBuying> experienceCreator;
     SettingsBuying settings3 = SettingsBuying.new3HoursSamePrice();
     EnvironmentBuying environment;
-    AgentACDCSafeBuyer agent;
+    AgentACDCSafeBuyer<VariablesBuying> agent;
     SafetyLayer<VariablesBuying> safetyLayer;
     StateBuying state;
 
@@ -27,7 +27,7 @@ class TestExperienceCreator {
         state = StateBuying.of(VariablesBuying.newSoc(0.5));
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
-        agent = AgentACDCSafeBuyer.builder()
+        agent = AgentACDCSafeBuyer.<VariablesBuying>builder()
                 .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
@@ -40,7 +40,7 @@ class TestExperienceCreator {
     @Test
     void whenGettingExperiences_thenCorrect() {
         var experiences = experienceCreator.getExperiences(agent,state);
-        var ei=new EpisodeInfo<>(experiences);
+        var ei= new EpisodeInfo<>(experiences);
         var minMax=ei.minMaxAppliedAction();
         System.out.println("minMax = " + minMax);
 

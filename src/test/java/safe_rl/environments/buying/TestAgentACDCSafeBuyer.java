@@ -20,13 +20,13 @@ public class TestAgentACDCSafeBuyer {
     public static final double ADV = 1d;
     public static final double TARGET_CRITIC = 0d;
     public static final double TOL_GRAD_LOG = 1e-1;
-    AgentACDCSafeBuyer agent;
+    AgentACDCSafeBuyer<VariablesBuying> agent;
     StateBuying state0;
 
     @BeforeEach
     void init() {
         state0 = StateBuying.newZero();
-        agent=AgentACDCSafeBuyer.builder()
+        agent=AgentACDCSafeBuyer.<VariablesBuying>builder()
                 .settings(SettingsBuying.new5HoursIncreasingPrice())
                 .targetMean(TARGET_MEAN).targetLogStd(LOG_STD_TAR).targetCritic(TARGET_CRITIC)
                 .state(state0)

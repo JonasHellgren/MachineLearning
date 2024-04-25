@@ -17,13 +17,13 @@ class TestMultiStepResultsGenerator {
 
 
     MultiStepResultsGenerator<VariablesBuying> generator;
-    AgentACDCSafeBuyer agent;
+    AgentACDCSafeBuyer<VariablesBuying> agent;
     List<Experience<VariablesBuying>> experiences;
 
     @BeforeEach
     void init() {
         var parameters= TrainerParameters.newDefault().withGamma(1d).withStepHorizon(3);
-        agent= AgentACDCSafeBuyer.newDefault(SettingsBuying.new3HoursSamePrice());
+        agent= AgentACDCSafeBuyer.newDefault(SettingsBuying.new3HoursSamePrice(),StateBuying.newZero());
         generator=new MultiStepResultsGenerator<>(parameters,agent);
         var exp0=getExpWithReward(0, false);
         var exp1=getExpWithReward(1, false);
@@ -43,7 +43,6 @@ class TestMultiStepResultsGenerator {
         Assertions.assertEquals(5,multiStepResults.nExperiences());
         Assertions.assertTrue(multiStepResults.isEqualListLength());
     }
-
 
     @Test
     void whenGenerating_thenCorrectResStep0() {

@@ -14,7 +14,6 @@ import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.helpers.DisCoMemoryInitializer;
 import safe_rl.helpers.LossTracker;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import static common.other.MyFunctions.*;
  */
 
 @Getter
-public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
+public class AgentACDCSafeBuyer<V> implements AgentACDiscoI<V> {
 
     public static final double LEARNING_RATE = 1e-2;
     public static final double STD_MIN = 0.01;
@@ -43,9 +42,9 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     public static final double STD_TAR = 0d;
     public static final double GRADIENT_MAX = 10d;
 
-    StateI<VariablesBuying> state;
+    StateI<V> state;
     SettingsBuying settings;
-    DisCoMemory<VariablesBuying> actorMean, actorLogStd, critic;
+    DisCoMemory<V> actorMean, actorLogStd, critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
@@ -54,14 +53,13 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     LossTracker lossTracker=new LossTracker();
     SafeGradientClipper meanGradClipper, stdGradClipper;
 
-
-    public static AgentACDCSafeBuyer newDefault(SettingsBuying settings) {
-        return AgentACDCSafeBuyer.builder()
+    public static <V> AgentACDCSafeBuyer<V> newDefault(SettingsBuying settings, StateI<V> state) {
+        return AgentACDCSafeBuyer.<V>builder()
                 .learningRateActorMean(LEARNING_RATE)
                 .learningRateActorStd(LEARNING_RATE)
                 .learningRateCritic(LEARNING_RATE)
                 .settings(settings)
-                .state(StateBuying.newZero())
+                .state(state)
                 .build();
     }
 
@@ -74,7 +72,7 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
                               Double targetLogStd,
                               Double targetCritic,
                               Double gradMax,
-                              @NonNull StateBuying state) {
+                              @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinousFeatures() + 1;
@@ -103,24 +101,24 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public Action chooseAction(StateI<VariablesBuying> state) {
+    public Action chooseAction(StateI<V> state) {
         double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state));
         return Action.ofDouble(a);
     }
 
     @Override
-    public Action chooseActionNominal(StateI<VariablesBuying> state) {
+    public Action chooseActionNominal(StateI<V> state) {
         return Action.ofDouble(tarMeanInit);
     }
 
     @Override
-    public Action chooseActionNoExploration(StateI<VariablesBuying> state) {
+    public Action chooseActionNoExploration(StateI<V> state) {
         double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state).getFirst(),0);
         return Action.ofDouble(a);
     }
 
     @Override
-    public Pair<Double, Double> fitActor(StateI<VariablesBuying> state, Action action, double adv) {
+    public Pair<Double, Double> fitActor(StateI<V> state, Action action, double adv) {
         var gradMeanAndLogStd = gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
         double gradMean0=gradMeanAndLogStd.getFirst() * adv;
         double gradStd0=gradMeanAndLogStd.getSecond() * adv;
@@ -131,18 +129,18 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public Pair<Double, Double> readActor(StateI<VariablesBuying> state) {
+    public Pair<Double, Double> readActor(StateI<V> state) {
         return actorMeanAndStd(state);
     }
 
     @Override
-    public void fitCritic(StateI<VariablesBuying> state, double error) {
+    public void fitCritic(StateI<V> state, double error) {
         critic.fitFromError(state, error);
         lossTracker.addCriticLoss(critic.lossLastUpdate());
     }
 
     @Override
-    public double readCritic(StateI<VariablesBuying> state) {
+    public double readCritic(StateI<V> state) {
         return critic.read(state);
     }
 
@@ -167,19 +165,19 @@ public class AgentACDCSafeBuyer implements AgentACDiscoI<VariablesBuying> {
     }
 
     @Override
-    public double entropy(StateI<VariablesBuying> state) {
+    public double entropy(StateI<V> state) {
         var mAndS = actorMeanAndStd(state);
         return entropyCalculator.entropy(mAndS.getSecond());
     }
 
-    Pair<Double, Double> actorMeanAndStd(StateI<VariablesBuying> state) {
+    Pair<Double, Double> actorMeanAndStd(StateI<V> state) {
         return Pair.create(actorMean.read(state),Math.exp(actorLogStd.read(state)));
     }
 
-    private DisCoMemoryInitializer<VariablesBuying> getInitializer(StateBuying state,
-                                                                   DisCoMemory<VariablesBuying> memory1,
+    private DisCoMemoryInitializer<V> getInitializer(StateI<V> state,
+                                                                   DisCoMemory<V> memory1,
                                                                    double tarValue) {
-        return DisCoMemoryInitializer.<VariablesBuying>builder()
+        return DisCoMemoryInitializer.<V>builder()
                 .memory(memory1)
                 .discreteFeatSet(List.of(
                         doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
