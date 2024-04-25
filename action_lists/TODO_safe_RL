@@ -78,8 +78,8 @@ SafeTradeOptModel strular  x
 setModel(StateI<V> state0, Action action)  - flytta action x
 TestSafeTradeOptModel  x
 Test SafetyLayer SafeTradeOptModel x
-OptModelHelper
-TestEnvironmentTrading5hRandomSearch
+OptModelHelper - fimpa vinner lite x
+TestEnvironmentTrading5hRandomSearch  x
 AgentACDCTrading
 Runner5HoursTrading
 

@@ -17,7 +17,6 @@ import common.other.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.OptModelI;
 import safe_rl.domain.abstract_classes.StateI;
 import java.util.Arrays;
@@ -35,20 +34,21 @@ import java.util.List;
 @Log
 public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_VARIABLES = 1;
-    public static final int MAX_ITERATION = 10_000;
+    public static final int MAX_ITERATION = 100;
     public static final int N_CONSTRAINTS = 5;
-    public static final int MAX_NOF_INIT_GUESSES = 10_000;
+    public static final int MAX_NOF_INIT_GUESSES = 1000;
+    public static final double K_MARGIN_SOC_MAX = 0.7;  //smaller than 1 <=> underestimation of dSoCMax => safer opt
 
     @NonNull Double powerMin;
     @NonNull Double powerMax;
-    @Builder.Default
-    Double powerInit=1e-25;
     @NonNull SettingsTrading settings;
     @Builder.Default
     Double socMin = 0d;
     @Builder.Default
     Double socMax = 1d;
     @NonNull Double socTerminalMin;
+    @Builder.Default
+    Double kMargindSocMax= K_MARGIN_SOC_MAX;
     @NonNull Double soc;
     @NonNull Double timeNew;
     @Builder.Default
@@ -96,7 +96,10 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
 
     private void throwIfFailedInitPointSearch(double randPower, Counter counter) throws IterationsLimitException, InfeasibleProblemException {
         if (counter.isExceeded()) {
-            throw new IterationsLimitException("Nof random init power guesses exceeded");
+            var c=getConstraintValues(randPower);
+            System.out.println("soc = " + soc);
+            System.out.println("timeNew = " + timeNew);
+            throw new IterationsLimitException("Nof random init power guesses exceeded, try decrease socTerminalMin");
         }
         if (isAnyViolation(randPower)) {
             throw new InfeasibleProblemException("Nof feasible init guess found, constraints = "
@@ -131,12 +134,14 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-powerFcr);
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax)-powerFcr);
-        double powerMinSoCTerminal=(socTerminalMin-soc-s.dSocMax(timeNew))/s.gFunction()+powerFcr;
+        double powerMinSoCTerminal=(socTerminalMin-soc-kMargindSocMax*s.dSocMax(timeNew))/s.gFunction()+powerFcr;
+       // System.out.println("powerFcr = " + powerFcr+", powerMax = " + powerMax+", dSocMax"+s.dSocMax(timeNew)+", powerMinSoCTerminal = " + powerMinSoCTerminal);
         inequalities[4] = LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
         return inequalities;
     }
 
-    OptimizationResponse getOptimizationResponse(double powerInit, double powerProposed) throws JOptimizerException {
+    OptimizationResponse getOptimizationResponse(
+            double powerInit, double powerProposed) throws JOptimizerException {
         defineRequest(or, powerInit, powerProposed);
         optimizer.setOptimizationRequest(or);
         optimizer.optimize();

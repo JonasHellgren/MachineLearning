@@ -60,7 +60,6 @@ public class SafeChargeOptModel<V> implements OptModelI<V> {
     @Override
     public void setModel(StateI<V> state0) {
         StateBuying state= (StateBuying) state0;
-        //this.powerProposed = action.asDouble();
         this.soc = state.soc();
     }
 
@@ -86,8 +85,6 @@ public class SafeChargeOptModel<V> implements OptModelI<V> {
         return Arrays.stream(constraints).map(f -> f.value(vector)).toList();
     }
 
-
-
     ConvexMultivariateRealFunction[] constraints() {
         var inequalities = new ConvexMultivariateRealFunction[3];
         double powerMaxSoc = calcPowerMaxSoc();
@@ -104,7 +101,7 @@ public class SafeChargeOptModel<V> implements OptModelI<V> {
         return optimizer.getOptimizationResponse();
     }
 
-    void defineRequest(OptimizationRequest or,double[] initialPoint) {
+    void defineRequest(OptimizationRequest or, double[] initialPoint) {
         or.setMaxIteration(MAX_ITERATION);
         or.setF0(costFunction()); // Set the objective function
         or.setFi(constraints());

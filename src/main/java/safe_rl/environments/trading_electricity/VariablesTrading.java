@@ -5,6 +5,10 @@ import common.other.NumberFormatterUtil;
 import lombok.Builder;
 import lombok.With;
 
+import java.text.DecimalFormat;
+
+import static common.other.NumberFormatterUtil.SYMBOLS;
+
 @Builder
 public record VariablesTrading(
         @With double time,
@@ -53,9 +57,9 @@ public record VariablesTrading(
 
     @Override
     public String toString() {
-        var f= NumberFormatterUtil.formatterTwoDigits;
-        return "[t = "+ time+", soc = "+ f.format(soc)+", socStart = "+ f.format(socStart)+
-                ", dSoh="+f.format((soc-socStart))+"]";
+        var f2= NumberFormatterUtil.formatterTwoDigits;
+        var f5 = new DecimalFormat("#.#####", SYMBOLS);
+        return "[t = "+ time+", soc = "+ f2.format(soc)+", dSoh="+f5.format(sohStart-soh)+"]";
     }
 
 

@@ -35,24 +35,23 @@ public class RandomActionSimulator<V> {
         while (!isTerminalOrFail) {
             double power = RandUtils.getRandomDouble(minMaxAction.getLeft(), minMaxAction.getRight());
             action = Action.ofDouble(power);
-            log.fine("state = " + state);
+            logStateAndAction(state, action);
             actionCorrected = safetyLayer.correctAction(state, action);
-           // maybeLog(state, action, actionCorrected);
-            logStateAndAction(state, action, actionCorrected);
             var sr = environment.step(state, actionCorrected);
+            log.fine("actionCorrected = " + actionCorrected);
             maybeLogSr(sr);
             rewardList.add(sr.reward());
             actionList.add((actionCorrected.asDouble()));
             state.setVariables(sr.state().getVariables());
             isTerminalOrFail = sr.isTerminal() || sr.isFail();
         }
-        logStateAndAction(state, action, actionCorrected);
+        logStateAndAction(state, action);
 
         return Triple.of(state, rewardList, actionList);
     }
 
-    private  void logStateAndAction(StateI<V> state, Action action, Action actionCorrected) {
-        log.info("state = " + state + ", action = " + action + ", actionCorrected = " + actionCorrected);
+    private  void logStateAndAction(StateI<V> state, Action action) {
+        log.fine("state = " + state + ", action = " + action);
     }
 
     private void maybeLog(StateI<V> state,

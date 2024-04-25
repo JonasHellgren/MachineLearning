@@ -30,7 +30,7 @@ public class FactoryOptModel {
         return SafeTradeOptModel.<VariablesTrading>builder()
                 .powerMin(-settings.powerBattMax()).powerMax(settings.powerBattMax())
                 .settings(settings)
-                .socTerminalMin(0d)
+                .socTerminalMin(settings.socTerminalMin())
                 .timeNew(TIME_NEW_DUMMY)
                 .soc(SOC_DUMMY)
                 .toleranceOptimization(TOLERANCE_OPTIMIZATION)
