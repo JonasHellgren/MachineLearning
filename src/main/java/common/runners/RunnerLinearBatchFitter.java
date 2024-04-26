@@ -59,7 +59,7 @@ public class RunnerLinearBatchFitter {
 
 
     static Pair<RealMatrix, RealVector> createData() {
-        var xMat = new Array2DRowRealMatrix(N_POINTS, 2);
+        var xMat = new Array2DRowRealMatrix(N_POINTS, N_FEAT);
         var yVec = new ArrayRealVector(N_POINTS);
         var trueWeights = new ArrayRealVector(new double[]{W0, W1});
         for (int i = 0; i < N_POINTS; i++) {

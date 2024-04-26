@@ -7,7 +7,6 @@ import safe_rl.helpers.*;
 import java.util.List;
 public class ACDCMultiStepEpisodeTrainer<V> {
 
-    public static final double VALUE_TERM = 0d;
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
 
@@ -31,6 +30,5 @@ public class ACDCMultiStepEpisodeTrainer<V> {
         actorUpdater.update(msr,lossCritic);
         criticUpdater.update(msr);
     }
-
 
 }

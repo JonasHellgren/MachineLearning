@@ -49,10 +49,11 @@ public class TestReplayBuffer {
     @Test
     public void whenGetMiniBatch_thenCorrect() {
         addMany(10);
-        var miniBuffer=buffer.getMiniBatch(5);
+        int batchLength = 5;
+        var miniBuffer=buffer.getMiniBatch(batchLength);
         System.out.println("buffer = " + buffer);
         miniBuffer.forEach(System.out::println);
-        Assert.assertEquals(5,miniBuffer.size());
+        Assert.assertEquals(batchLength,miniBuffer.size());
     }
 
 

@@ -88,7 +88,10 @@ Runner5HoursTrading x
 tester fcr x
 
 lin regr toy example x
-replay buffer critic
+replay buffer critic x
+CriticTrainerUsingBuffer x
+TestCriticTrainerUsingReplayBuffer
+få in replay buffer TrainerMultiStepACDC
 lin regr update
 
 Fcr d up och n

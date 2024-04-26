@@ -13,7 +13,6 @@ import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 @Log
 public class TrainerMultiStepACDC<V> {
@@ -45,11 +44,12 @@ public class TrainerMultiStepACDC<V> {
 
     public void train() throws JOptimizerException {
         for (int i = 0; i <  trainerParameters.nofEpisodes(); i++) {
-            processEpisode(i);
+            processEpisode();
+          //  bufferTrainer.train(buffer);
         }
     }
 
-    private void processEpisode(int episodeIndex) throws JOptimizerException {
+    private void processEpisode() throws JOptimizerException {
         var experiences = experienceCreator.getExperiences(agent,startStateSupplier.get());
         var errorList= recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);

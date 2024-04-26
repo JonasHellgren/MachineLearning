@@ -1,4 +1,4 @@
-package safe_rl.environments.buying_electricity;
+package safe_rl.domain.agents;
 
 import common.dl4j.EntropyCalculatorContActions;
 import common.math.NormalDistributionGradientCalculator;
