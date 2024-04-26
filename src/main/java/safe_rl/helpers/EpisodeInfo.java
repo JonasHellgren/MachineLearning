@@ -5,8 +5,9 @@ import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.value_classes.Experience;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 public class EpisodeInfo<V> {
@@ -57,5 +58,19 @@ public class EpisodeInfo<V> {
         return experiences.stream()
                 .map(e -> e.actionApplied().asDouble()).toList();
     }
+
+
+    public   Set<Integer> getValuesOfSpecificDiscreteFeature(int featureIndex) {
+        List<Integer> grossList = experiences.stream()
+                .map(e -> e.state().discretFeatures()[featureIndex]).toList();
+        return new HashSet<>(grossList);
+    }
+
+
+    public   List<Experience<V>> getExperiencesWithDiscreteFeatureValue(int timeChosen, int featureIndex) {
+        return experiences.stream()
+                .filter(e -> e.state().discretFeatures()[featureIndex]== timeChosen).toList();
+    }
+
 
 }
