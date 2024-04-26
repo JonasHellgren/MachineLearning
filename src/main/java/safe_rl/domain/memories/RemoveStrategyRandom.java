@@ -1,13 +1,13 @@
-package multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy;
+package safe_rl.domain.memories;
 
 import common.other.RandUtils;
-import multi_step_temp_diff.domain.agent_parts.replay_buffer.NstepExperience;
+import safe_rl.domain.value_classes.Experience;
 
 import java.util.List;
 
 public class RemoveStrategyRandom<S> implements RemoveStrategyI<S> {
     @Override
-    public void remove(List<NstepExperience<S>> buffer) {
+    public void remove(List<Experience<S>> buffer) {
         int indexToRemove = RandUtils.getRandomIntNumber(0, buffer.size());
         buffer.remove(indexToRemove);
     }

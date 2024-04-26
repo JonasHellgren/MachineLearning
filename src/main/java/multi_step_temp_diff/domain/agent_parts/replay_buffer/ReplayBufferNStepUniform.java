@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.agent_parts.replay_buffer;
 
 import common.other.CpuTimer;
 import lombok.Builder;
-import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveBufferExperienceStrategyInterface;
+import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyI;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.remove_strategy.RemoveStrategyRandom;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ReplayBufferNStepUniform<S> implements ReplayBufferInterface<S> {
     @Builder.Default
     public final List<NstepExperience<S>> buffer = new ArrayList<>();
     @Builder.Default
-    RemoveBufferExperienceStrategyInterface<S> removeStrategy=new RemoveStrategyRandom<>();
+    RemoveStrategyI<S> removeStrategy=new RemoveStrategyRandom<>();
 
     public static <S> ReplayBufferNStepUniform<S> newDefault() {  //todo remove?
         return ReplayBufferNStepUniform.<S>builder().build();

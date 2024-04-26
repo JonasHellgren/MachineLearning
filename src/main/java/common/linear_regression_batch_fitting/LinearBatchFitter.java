@@ -11,10 +11,13 @@ import org.apache.commons.math3.util.Pair;
 import java.util.Arrays;
 
 /**
- *  This class with  w and b in yi=xi*w+b, where xi and w are vectors, i is data point index
+ * This class with  w and b in yi=xi*w+b, where xi and w are vectors, i is data point index
  * Argument: batchData includes a matrix and a vector, every row in matrix is feature values (x).
  * In vector a row is value (y)
- *
+ * applied update rule
+ *  w <- w-learningRate*gradW,    gradW=xMat'*errors*2/batchSize
+ *  b <- b-learningRate*gradB,    gradB=sum(errors)*2/batchSize
+ *  where errors=xMat*w-y
  */
 
 @AllArgsConstructor
@@ -55,17 +58,22 @@ public class LinearBatchFitter {
         return weightsAndBias.getDimension() - 1;
     }
 
+    public static int nFeatures(RealMatrix xMat) {
+        Preconditions.checkArgument(xMat.getRowDimension()>0,"No rows in data matrix");
+        return xMat.getRow(0).length;
+    }
+
     public static RealVector weights(RealVector weightsAndBias) {
         return weights(weightsAndBias, nFeatures(weightsAndBias));
     }
 
 
     public static Pair<RealMatrix, RealVector> createBatch(Pair<RealMatrix, RealVector> dataSet, int batchSize) {
-        Preconditions.checkArgument(batchSize>0,"BatchSize must be larger than 0");
+        Preconditions.checkArgument(batchSize > 0, "BatchSize must be larger than 0");
         var xMat = dataSet.getFirst();
         var yVec = dataSet.getSecond();
         int[] indices = rand.ints(0, yVec.getDimension()).distinct().limit(batchSize).toArray();
-        var xMatBatch = new Array2DRowRealMatrix(batchSize, 2);
+        var xMatBatch = new Array2DRowRealMatrix(batchSize, nFeatures(xMat));
         var yVecBatch = new ArrayRealVector(batchSize);
         int bi = 0;
         for (int j = 0; j < batchSize; j++) {
@@ -73,8 +81,6 @@ public class LinearBatchFitter {
             yVecBatch.setEntry(bi, bias(yVec, indices[j]));
             bi++;
         }
-
-
         return Pair.create(xMatBatch, yVecBatch);
     }
 

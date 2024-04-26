@@ -88,8 +88,8 @@ Runner5HoursTrading x
 tester fcr x
 
 lin regr toy example x
-lin regr update
 replay buffer critic
+lin regr update
 
 Fcr d up och n
 printa minnen med färre decimaler
