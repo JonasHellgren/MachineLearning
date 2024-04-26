@@ -87,11 +87,15 @@ gradMax sep för actor resp critic  x
 Runner5HoursTrading x
 tester fcr x
 
+lin regr toy example
 lin regr update
 replay buffer critic
 
-för vidare  @SneakyThrows SafetLayer
+Fcr d up och n
+printa minnen med färre decimaler
+plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
+
 
 kanske senare:
 TrainerI
-går fitActor göra snabbare
+går fitActor göra snabbare - kopieras ju data nu
