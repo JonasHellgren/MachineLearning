@@ -15,44 +15,50 @@ import java.util.List;
 @Builder
 public record MultiStepResults<V>(
         int nExperiences,  //equal to length of below lists
-        List<StateI<V>> stateList,
+        List<ExperienceMultiStep<V>> experienceList
+/*        List<StateI<V>> stateList,
         List<Boolean> isFutureOutsideOrTerminal,
         List<Double> valueTargetList,
         List<Double> advantageList,
         List<Action> actionAppliedList,
         List<Action> actionPolicyList,
-        List<Boolean> isSafeCorrectedList
+        List<Boolean> isSafeCorrectedList*/
 ) {
 
     public static <V> MultiStepResults<V> create(int nExp) {
         return MultiStepResults.<V>builder()
                 .nExperiences(nExp)
-                .stateList(new ArrayList<>(nExp))
-                .isFutureOutsideOrTerminal(new ArrayList<>())
-                .valueTargetList(new ArrayList<>(nExp))
-                .advantageList(new ArrayList<>(nExp))
-                .actionAppliedList(new ArrayList<>(nExp))
-                .actionPolicyList(new ArrayList<>(nExp))
-                .isSafeCorrectedList(new ArrayList<>(nExp))
+                .experienceList(new ArrayList<>(nExp))
                 .build();
     }
 
-    public StateI<V> stateAtStep(int step) {return stateList.get(step); }
-
-    public boolean isFutureOutsideOrTerminalAtStep(int step) {
-        return isFutureOutsideOrTerminal.get(step);
+    public ExperienceMultiStep<V> experienceAtStep(int step) {
+        return experienceList.get(step);
     }
 
-    public double valueTarAtStep(int step) {return valueTargetList.get(step); }
+    public StateI<V> stateAtStep(int step) {return experienceAtStep(step).state(); }
 
-    public double advantageAtStep(int step) {return advantageList.get(step); }
+    public boolean isFutureOutsideOrTerminalAtStep(int step) {
+        return experienceAtStep(step).isStateFutureTerminalOrNotPresent();
+    }
 
-    public Action actionAppliedAtStep(int step) {return actionAppliedList.get(step); }
+    public double valueTarAtStep(int step) {return experienceAtStep(step).valueTarget(); }
 
-    public Action actionPolicyAtStep(int step) {return actionPolicyList.get(step); }
+    public double advantageAtStep(int step) {return experienceAtStep(step).advantage(); }
+
+    public Action actionAppliedAtStep(int step) {return experienceAtStep(step).actionApplied(); }
+
+    public Action actionPolicyAtStep(int step) {return experienceAtStep(step).actionPolicy(); }
 
     public boolean isSafeCorrectedAtStep(int step) {
-        return isSafeCorrectedList.get(step); }
+        return experienceAtStep(step).isSafeCorrected(); }
+
+    public void add(ExperienceMultiStep<V> experience) {
+        experienceList.add(experience);
+    }
+
+
+/*
 
     public void addState(StateI<V> state) {
         stateList.add(state);
@@ -93,5 +99,6 @@ public record MultiStepResults<V>(
                 isSafeCorrectedList.size());
         return lengthList.stream().distinct().limit(2).count() <= 1;
     }
+*/
 
 }

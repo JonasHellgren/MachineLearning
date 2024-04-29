@@ -7,11 +7,17 @@ import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.*;
 import safe_rl.domain.episode_trainers.ACDCMultiStepEpisodeTrainer;
+import safe_rl.domain.memories.ReplayBufferMultiStepExp;
+import safe_rl.domain.value_classes.Experience;
+import safe_rl.domain.value_classes.ExperienceMultiStep;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
+import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
+
+import java.util.List;
 import java.util.function.Supplier;
 
 @Log
@@ -22,6 +28,9 @@ public class TrainerMultiStepACDC<V> {
     Supplier<StateI<V>> startStateSupplier;
     ExperienceCreator<V> experienceCreator;
     ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
+    ReplayBufferMultiStepExp<V> buffer;
+    CriticFitterUsingReplayBuffer<V> fitter;
+
     @Getter Recorders<V> recorder;
 
     @Builder
@@ -38,19 +47,31 @@ public class TrainerMultiStepACDC<V> {
                 .build();
         this.startStateSupplier=startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent,trainerParameters);
+        buffer = ReplayBufferMultiStepExp.newFromMaxSize(trainerParameters.replayBufferSize());
+        this.fitter= new CriticFitterUsingReplayBuffer<>(agent.getCritic(), trainerParameters);
+
         recorder=new Recorders<>(new AgentSimulator<>(
                 agent,safetyLayer,startStateSupplier,environment));
     }
 
     public void train() throws JOptimizerException {
         for (int i = 0; i <  trainerParameters.nofEpisodes(); i++) {
-            processEpisode();
-          //  bufferTrainer.train(buffer);
+            var experiences = experienceCreator.getExperiences(agent,startStateSupplier.get());
+            processEpisode(experiences);
+/*              fitter.fit(buffer);
+
+          for (Experience experience:experiences) {
+                var expMs= ExperienceMultiStep.<V>builder()
+                        .state(experience.state())
+                        .a
+            }
+            */
+
+
         }
     }
 
-    private void processEpisode() throws JOptimizerException {
-        var experiences = experienceCreator.getExperiences(agent,startStateSupplier.get());
+    private void processEpisode(List<Experience<V>> experiences) throws JOptimizerException {
         var errorList= recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);
         recorder.recordTrainingProgress(experiences,agent);

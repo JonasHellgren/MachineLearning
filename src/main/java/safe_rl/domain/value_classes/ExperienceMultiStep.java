@@ -1,24 +1,37 @@
 package safe_rl.domain.value_classes;
 
-import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
 
-import java.util.List;
-
 @Builder
 public record ExperienceMultiStep<V>(
         @NonNull StateI<V> state,
-        List<Action> actions,
-        @NonNull List<Double> rewards,
+        Action actionApplied,
+        @NonNull Double sumRewards,
         StateI<V> stateFuture,
-        @NonNull Boolean isStateFutureTerminalOrNotPresent
+        @NonNull Boolean isStateFutureTerminalOrNotPresent,
+        Double valueTarget,
+        Double advantage,
+        Action actionPolicy,
+        Boolean isSafeCorrected
 ) {
 
  public double sumOfRewards () {
-     return  ListUtils.sumList(rewards());
+     return  sumRewards;
+ }
+
+ public static <V> ExperienceMultiStep<V> of(@NonNull StateI<V> state,
+                                             @NonNull Double sumRewards,
+                                             StateI<V> stateFut,
+                                             @NonNull Boolean isStateFutureTerminalOrNotPresent) {
+     return ExperienceMultiStep.<V>builder()
+             .state(state)
+             .sumRewards(sumRewards)
+             .stateFuture(stateFut)
+             .isStateFutureTerminalOrNotPresent(isStateFutureTerminalOrNotPresent)
+             .build();
  }
 
 

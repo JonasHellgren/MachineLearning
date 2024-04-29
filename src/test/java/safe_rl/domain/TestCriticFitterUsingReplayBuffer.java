@@ -1,6 +1,7 @@
 package safe_rl.domain;
 
 import com.beust.jcommander.internal.Lists;
+import common.list_arrays.ListUtils;
 import common.other.RandUtils;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -104,13 +105,16 @@ public class TestCriticFitterUsingReplayBuffer {
                 ? null
                 : StateTrading.of(VariablesTrading.newTimeSoc(timeNext, soc)).copy();
 
-        return ExperienceMultiStep.<VariablesTrading>builder()
+        return ExperienceMultiStep.of(state0, ListUtils.sumList(rewardList),stateFuture,isTerminal);
+
+                /*
+                ExperienceMultiStep.<VariablesTrading>builder()
                 .state(state0)
                 .actions(actionList)
                 .rewards(rewardList)
                 .stateFuture(stateFuture)
                 .isStateFutureTerminalOrNotPresent(isTerminal)
-                .build();
+                .build();*/
     }
 
     private static int getRandomTime() {

@@ -69,7 +69,8 @@ public class Runner5HoursTrading {
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(30_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
+                .withNofEpisodes(30_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
+                .withLearningRateReplayBufferCritic(1e-2);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

@@ -11,6 +11,7 @@ public record TrainerParameters(
         Integer nofStepsMax,
         @With Double gamma,
         @With Double learningRateReplayBufferCritic,
+        Integer replayBufferSize,
         Integer miniBatchSize,
         @With  Double ratioPenCorrectedAction,
         @With Integer stepHorizon) {
@@ -22,6 +23,7 @@ public record TrainerParameters(
     public static final int STEP_HORIZON = 10;
     public static final double RATIO_PEN_ACTION = 1d;
     public static final int BATCH_SIZE = 10;
+    public static final int REPLAY_BUFFER_SIZE = 1000;
 
 
     public static TrainerParameters newDefault() {
@@ -33,12 +35,14 @@ public record TrainerParameters(
                              Integer nofStepsMax,
                              Double gamma,
                              Double learningRateReplayBufferCritic,
+                             Integer replayBufferSize,
                              Integer miniBatchSize,
                              Double ratioPenCorrectedAction,
                              Integer stepHorizon) {
         this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
         this.nofStepsMax = defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
         this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
+        this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
         this.ratioPenCorrectedAction = defaultIfNullDouble.apply(ratioPenCorrectedAction, RATIO_PEN_ACTION);
         this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(learningRateReplayBufferCritic, LEARNING_RATE);
