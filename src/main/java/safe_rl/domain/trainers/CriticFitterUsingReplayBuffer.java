@@ -2,7 +2,9 @@ package safe_rl.domain.trainers;
 
 import com.google.common.collect.*;
 import common.linear_regression_batch_fitting.LinearBatchFitter;
+import common.other.Conditionals;
 import common.other.RandUtils;
+import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -20,10 +22,12 @@ import java.util.List;
  * Using linear regression from multiple data points stabilizes fitting
  */
 
+@Log
 public class CriticFitterUsingReplayBuffer<V> {
 
     public static final int N_FEAT = 1;
     public static final int FEATURE_INDEX_SOC = 0;
+    public static final int MIN_NOF_POINTS = 2;
     DisCoMemory<V> critic;
     TrainerParameters trainerParameters;
 
@@ -57,6 +61,8 @@ public class CriticFitterUsingReplayBuffer<V> {
         Multiset<Integer> multiset = HashMultiset.create(presentTimes);
         var maxEntry = multiset.entrySet().stream()
                 .max(Ordering.natural().onResultOf(Multiset.Entry::getCount));
+        Conditionals.executeIfTrue(maxEntry.orElseThrow().getCount()< MIN_NOF_POINTS, () ->
+                log.warning("Few items in time step for fitting"));
         return maxEntry.orElseThrow().getElement();
     }
 

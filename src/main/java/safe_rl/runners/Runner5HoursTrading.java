@@ -64,13 +64,13 @@ public class Runner5HoursTrading {
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
                 .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
-                .learningRateActorMean(1e-3).learningRateActorStd(1e-3).learningRateCritic(1e-5)
+                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
-                .withLearningRateReplayBufferCritic(1e-1).withReplayBufferSize(1000).withMiniBatchSize(20);
+                .withNofEpisodes(3_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
+                .withLearningRateReplayBufferCritic(1e-1).withReplayBufferSize(1_000).withMiniBatchSize(10);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
