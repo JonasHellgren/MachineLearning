@@ -1,4 +1,5 @@
 package safe_rl.domain.trainers;
+import com.google.common.collect.*;
 import common.linear_regression_batch_fitting.LinearBatchFitter;
 import common.other.RandUtils;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -15,6 +16,7 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CriticFitterUsingReplayBuffer<V> {
 
@@ -38,13 +40,32 @@ public class CriticFitterUsingReplayBuffer<V> {
         var batch=buffer.getMiniBatch(trainerParameters.miniBatchSize());
         var ei=new EpisodeInfo<>(batch);
         List<Integer> presentTimes = ei.getValuesOfSpecificDiscreteFeature(0).stream().toList();
-        int timeChosen= intRand.getRandomItemFromList(presentTimes);
+        int timeChosen = getMostFrequentTime(presentTimes);
+
+        batch.forEach(System.out::println);
+        System.out.println("presentTimes = " + presentTimes);
+        System.out.println("timeChosen = " + timeChosen);
         List<Experience<V>> experiencesAtChosenTime = ei.getExperiencesWithDiscreteFeatureValue(timeChosen, 0);
         StateI<V> stateWithTimeChosen=experiencesAtChosenTime.stream().findAny().map(e -> e.state()).orElseThrow();
         RealVector weightsAndBias=new ArrayRealVector(critic.readThetas(stateWithTimeChosen));
+
+        experiencesAtChosenTime.forEach(System.out::println);
+        System.out.println("stateWithTimeChosen = " + stateWithTimeChosen);
+
         Pair<RealMatrix, RealVector> batchData=createData(N_FEAT,experiencesAtChosenTime);
+
+        System.out.println("xMat = " + batchData.getFirst());
+        System.out.println("yPred = " + batchData.getSecond());
+
         weightsAndBias=linearFitter.fit(weightsAndBias,batchData);
         critic.save(stateWithTimeChosen,weightsAndBias.toArray());
+    }
+
+    private static int getMostFrequentTime(List<Integer> presentTimes) {
+        Multiset<Integer> multiset = HashMultiset.create(presentTimes);
+        var maxEntry = multiset.entrySet().stream()
+                .max(Ordering.natural().onResultOf(Multiset.Entry::getCount));
+        return maxEntry.orElseThrow().getElement();
     }
 
 

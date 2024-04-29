@@ -90,14 +90,24 @@ tester fcr x
 lin regr toy example x
 replay buffer critic x
 CriticTrainerUsingBuffer x
-TestCriticTrainerUsingReplayBuffer
+TestCriticTrainerUsingReplayBuffer  x
+MultiStepExperience
+TestCriticTrainerUsingReplayBuffer få funka
 få in replay buffer TrainerMultiStepACDC
 lin regr update
 
+multistep advantage update
+
 Fcr d up och n
 printa minnen med färre decimaler
+plotta minnnen
 plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
 
+ide om 2 faster. 1 mc critic preproc. 2 ac
+
+clean up:
+Lists.newArrayList()   isf new
+guava isf ListUtil
 
 kanske senare:
 TrainerI
