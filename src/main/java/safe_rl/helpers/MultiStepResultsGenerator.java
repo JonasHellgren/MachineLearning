@@ -52,8 +52,7 @@ public class MultiStepResultsGenerator<V> {
                 ? sumRewards
                 : sumRewards + parameters.gammaPowN() * agent.readCritic(resMS.stateFuture());
         double vState = agent.readCritic(experience.state());
-        var vStateFut = agent.readCritic(experience.stateNextApplied());
-        double adv=experience.rewardApplied() + parameters.gamma() * vStateFut - vState;
+        double advantage=valueTarget-vState;
 
         var expMs= ExperienceMultiStep.<V>builder()
                 .state(experience.state())
@@ -62,7 +61,7 @@ public class MultiStepResultsGenerator<V> {
                 .stateFuture(isFutureOutsideOrTerminal?null: resMS.stateFuture())
                 .isStateFutureTerminalOrNotPresent(isFutureOutsideOrTerminal)
                 .valueTarget(valueTarget)
-                .advantage(adv)
+                .advantage(advantage)
                 .actionPolicy(experience.ars().action())
                 .isSafeCorrected(experience.isSafeCorrected())
                 .build();
