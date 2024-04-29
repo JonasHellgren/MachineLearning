@@ -6,7 +6,7 @@ import policy_gradient_problems.domain.common_episode_trainers.ParamActorEpisode
 import policy_gradient_problems.domain.value_classes.TrainerParameters;
 
 /***
-  agent.theta <- agent.theta+learningRateNonNeuralActor*gradLog*vt;
+  agent.theta <- agent.theta+learningRateReplayBufferCritic*gradLog*vt;
  */
 
 @Log

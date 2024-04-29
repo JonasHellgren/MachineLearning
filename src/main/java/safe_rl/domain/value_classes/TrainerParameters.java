@@ -2,7 +2,6 @@ package safe_rl.domain.value_classes;
 
 import lombok.Builder;
 import lombok.With;
-import org.apache.arrow.flatbuf.Int;
 
 import static common.other.MyFunctions.defaultIfNullDouble;
 import static common.other.MyFunctions.defaultIfNullInteger;
@@ -11,7 +10,7 @@ public record TrainerParameters(
         @With Integer nofEpisodes,
         Integer nofStepsMax,
         @With Double gamma,
-        Double learningRateNonNeuralActor,  //todo remove
+        @With Double learningRateReplayBufferCritic,
         Integer miniBatchSize,
         @With  Double ratioPenCorrectedAction,
         @With Integer stepHorizon) {
@@ -33,7 +32,7 @@ public record TrainerParameters(
     public TrainerParameters(Integer nofEpisodes,
                              Integer nofStepsMax,
                              Double gamma,
-                             Double learningRateNonNeuralActor,
+                             Double learningRateReplayBufferCritic,
                              Integer miniBatchSize,
                              Double ratioPenCorrectedAction,
                              Integer stepHorizon) {
@@ -42,8 +41,12 @@ public record TrainerParameters(
         this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
         this.ratioPenCorrectedAction = defaultIfNullDouble.apply(ratioPenCorrectedAction, RATIO_PEN_ACTION);
-        this.learningRateNonNeuralActor = defaultIfNullDouble.apply(learningRateNonNeuralActor, LEARNING_RATE);
+        this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(learningRateReplayBufferCritic, LEARNING_RATE);
         this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
+    }
+
+    public double gammaPowN() {
+        return Math.pow(gamma(), stepHorizon);
     }
 
 

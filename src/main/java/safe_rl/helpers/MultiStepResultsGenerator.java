@@ -55,7 +55,7 @@ public class MultiStepResultsGenerator<V> {
         var resMS = evaluator.evaluate(t);
         double sumRewards = resMS.sumRewardsNSteps();
         Integer n = parameters.stepHorizon();
-        double gammaPowN = Math.pow(parameters.gamma(), n);
+        double gammaPowN = Math.pow(parameters.gamma(), n);   //todo parameters.gammaPowN()
         boolean isFutureOutsideOrTerminal =
                 resMS.isFutureStateOutside() || resMS.isFutureTerminal();
         results.addIsFutureOutsideOrTerminal(isFutureOutsideOrTerminal);

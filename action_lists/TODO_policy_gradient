@@ -103,7 +103,7 @@ correct AC x
 
 uppdatera pseudocode AC  x
 pseudocode andra  x
-beta -> learningRateCritic, learningRateNonNeuralActor -> learningRateNonNeuralActor  x
+beta -> learningRateCritic, learningRateReplayBufferCritic -> learningRateReplayBufferCritic  x
 ParametersPole clean with builder consttuccotr  x
 trainer AC konvergerar ej bra x
 

@@ -1,40 +1,42 @@
 package safe_rl.domain.memories;
 
 import lombok.Builder;
-import safe_rl.domain.value_classes.Experience;
+import safe_rl.domain.value_classes.ExperienceMultiStep;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import static common.other.Conditionals.executeIfTrue;
 
 @Builder
-public class ReplayBuffer<V> {  //todo TA VECK??
+public class ReplayBufferMultiStepExp<V> {
 
     public static final int BUFFER_SIZE = 1000;
     @Builder.Default
     int maxSize= BUFFER_SIZE;
     @Builder.Default
-    public final List<Experience<V>> buffer = new ArrayList<>();
+    public final List<ExperienceMultiStep<V>> buffer = new ArrayList<>();
     @Builder.Default
-    RemoveStrategyI<V> removeStrategy=new RemoveStrategyRandom<>();
+    RemoveStrategyMultiStepExpI<V> removeStrategy=new RemoveStrategyRandomMultiStepExp<>();
 
-    public static <V> ReplayBuffer<V> newDefault() {  
-        return ReplayBuffer.<V>builder().build();
+    public static <V> ReplayBufferMultiStepExp<V> newDefault() {
+        return ReplayBufferMultiStepExp.<V>builder().build();
     }
 
-    public static <V> ReplayBuffer<V> newFromMaxSize(int maxSize) {
-        return ReplayBuffer.<V>builder().maxSize(maxSize).build();
+    public static <V> ReplayBufferMultiStepExp<V> newFromMaxSize(int maxSize) {
+        return ReplayBufferMultiStepExp.<V>builder().maxSize(maxSize).build();
     }
 
-    public void addExperience(Experience<V> experience) {
+    public void addExperience(ExperienceMultiStep<V> experience) {
         executeIfTrue(size()>=maxSize, () -> removeStrategy.remove(buffer));
         buffer.add(experience);
     }
 
-    public List<Experience<V>> getMiniBatch(int batchLength) {
-        List<Experience<V>> miniBatch = new ArrayList<>();
+    public List<ExperienceMultiStep<V>> getMiniBatch(int batchLength) {
+        List<ExperienceMultiStep<V>> miniBatch = new ArrayList<>();
 
         List<Integer> indexes = IntStream.rangeClosed(0, size() - 1)
                 .boxed().collect(Collectors.toList());
@@ -44,6 +46,7 @@ public class ReplayBuffer<V> {  //todo TA VECK??
             miniBatch.add(buffer.get(indexes.get(i)));
         return miniBatch;
     }
+
 
     public int size() {
         return buffer.size();
@@ -56,7 +59,7 @@ public class ReplayBuffer<V> {  //todo TA VECK??
     @Override
     public String toString() {
         StringBuilder sb=new StringBuilder();
-        for (Experience<V> exp:buffer) {
+        for (ExperienceMultiStep<V> exp:buffer) {
             sb.append(exp.toString());
             sb.append(System.lineSeparator());
         }

@@ -21,7 +21,7 @@ NStepNeuralAgentTrainer - setValuesInExperiencesInMiniBatch  x
 NStepNeuralAgentTrainer - trainAgentFromExperiencesInMiniBatch x
 TestNStepNeuralAgentTrainer x
 Uppdatera nn varje steg  x
-cvarför låser sig ibland  - behöver clip, learningRateNonNeuralActor viktigt x
+cvarför låser sig ibland  - behöver clip, learningRateReplayBufferCritic viktigt x
 ForkNeuralValueMemory konstruktor  x
 studera några episoder så verkligen korrekt experience  x
 ändra steps - studera epis x

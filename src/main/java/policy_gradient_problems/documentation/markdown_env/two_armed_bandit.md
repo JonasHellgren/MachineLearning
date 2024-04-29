@@ -10,7 +10,7 @@ The policy pi= (p0,p1) = probability of taking each action, where p0+p1=1. The t
 The trainer code is given below. The gradLogVector, for a specific action, is from an 
 analytic expression. The important update is
         
-    agent.theta <- agent.theta+learningRateNonNeuralActor*gradLog*vt
+    agent.theta <- agent.theta+learningRateReplayBufferCritic*gradLog*vt
 
 ![bandit_trainercode.png](..%2Fpics%2Fbandit_trainercode.png)
 
