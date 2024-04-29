@@ -11,8 +11,8 @@ public record TrainerParameters(
         Integer nofStepsMax,
         @With Double gamma,
         @With Double learningRateReplayBufferCritic,
-        Integer replayBufferSize,
-        Integer miniBatchSize,
+        @With Integer replayBufferSize,
+        @With Integer miniBatchSize,
         @With  Double ratioPenCorrectedAction,
         @With Integer stepHorizon) {
 

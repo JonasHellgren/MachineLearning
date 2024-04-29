@@ -95,7 +95,7 @@ MultiStepExperience
 TestCriticTrainerUsingReplayBuffer få funka  x
 få in replay buffer TrainerMultiStepACDC
 MultiStepResults använd ExperienceMS  x
-lin regr update
+lin regr update  x
 
 multistep advantage update
 

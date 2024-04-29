@@ -50,7 +50,7 @@ public class TestCriticFitterUsingReplayBuffer {
         buffer = ReplayBufferMultiStepExp.newFromMaxSize(MAX_SIZE);
         for (int i = 0; i < MAX_SIZE; i++) {
             var experience = getExperience(paramsTrainer);
-            buffer.addExperience(experience);
+            buffer.add(experience);
         }
         settingsTrading = SettingsTrading.new5HoursIncreasingPrice();
         StateTrading state = StateTrading.newFullAndFresh();

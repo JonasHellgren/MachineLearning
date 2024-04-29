@@ -9,20 +9,13 @@ import java.util.List;
 
 /**
  * Data container for episode results
- * Every item in lists is for specific time step
+ * Every item in experience list is for specific time step
  */
 
 @Builder
 public record MultiStepResults<V>(
         int nExperiences,  //equal to length of below lists
         List<ExperienceMultiStep<V>> experienceList
-/*        List<StateI<V>> stateList,
-        List<Boolean> isFutureOutsideOrTerminal,
-        List<Double> valueTargetList,
-        List<Double> advantageList,
-        List<Action> actionAppliedList,
-        List<Action> actionPolicyList,
-        List<Boolean> isSafeCorrectedList*/
 ) {
 
     public static <V> MultiStepResults<V> create(int nExp) {
@@ -30,6 +23,14 @@ public record MultiStepResults<V>(
                 .nExperiences(nExp)
                 .experienceList(new ArrayList<>(nExp))
                 .build();
+    }
+
+    public List<ExperienceMultiStep<V>> experienceList() {
+        return experienceList;
+    }
+
+    public boolean isEmpty() {
+        return nExperiences==0;
     }
 
     public ExperienceMultiStep<V> experienceAtStep(int step) {
@@ -57,48 +58,5 @@ public record MultiStepResults<V>(
         experienceList.add(experience);
     }
 
-
-/*
-
-    public void addState(StateI<V> state) {
-        stateList.add(state);
-    }
-
-    public void addIsFutureOutsideOrTerminal(boolean isOut) {
-        isFutureOutsideOrTerminal.add(isOut);
-    }
-
-    public void addValueTarget(double valTar) {
-        valueTargetList.add(valTar);
-    }
-
-    public void addAdvantage(double adv) {
-        advantageList.add(adv);
-    }
-
-    public void addActionApplied(Action action) {
-        actionAppliedList.add(action);
-    }
-
-    public void addActionPolicy(Action action) {
-        actionPolicyList.add(action);
-    }
-
-    public void addIsSafeCorrect(boolean isCorrected) {
-        isSafeCorrectedList.add(isCorrected);
-    }
-
-    public boolean isEqualListLength() {
-        List<Integer> lengthList=List.of(
-                stateList.size(),
-                valueTargetList.size(),
-                isFutureOutsideOrTerminal.size(),
-                advantageList.size(),
-                actionAppliedList.size(),
-                actionPolicyList.size(),
-                isSafeCorrectedList.size());
-        return lengthList.stream().distinct().limit(2).count() <= 1;
-    }
-*/
 
 }

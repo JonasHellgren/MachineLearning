@@ -16,11 +16,11 @@ public class ReplayBufferMultiStepExp<V> {
 
     public static final int BUFFER_SIZE = 1000;
     @Builder.Default
-    int maxSize= BUFFER_SIZE;
+    int maxSize = BUFFER_SIZE;
     @Builder.Default
     public final List<ExperienceMultiStep<V>> buffer = new ArrayList<>();
     @Builder.Default
-    RemoveStrategyMultiStepExpI<V> removeStrategy=new RemoveStrategyRandomMultiStepExp<>();
+    RemoveStrategyMultiStepExpI<V> removeStrategy = new RemoveStrategyRandomMultiStepExp<>();
 
     public static <V> ReplayBufferMultiStepExp<V> newDefault() {
         return ReplayBufferMultiStepExp.<V>builder().build();
@@ -30,8 +30,12 @@ public class ReplayBufferMultiStepExp<V> {
         return ReplayBufferMultiStepExp.<V>builder().maxSize(maxSize).build();
     }
 
-    public void addExperience(ExperienceMultiStep<V> experience) {
-        executeIfTrue(size()>=maxSize, () -> removeStrategy.remove(buffer));
+    public void addAll(List<ExperienceMultiStep<V>> experiences) {
+        experiences.forEach(e -> add(e));
+    }
+
+    public void add(ExperienceMultiStep<V> experience) {
+        executeIfTrue(size() >= maxSize, () -> removeStrategy.remove(buffer));
         buffer.add(experience);
     }
 
@@ -42,7 +46,7 @@ public class ReplayBufferMultiStepExp<V> {
                 .boxed().collect(Collectors.toList());
         Collections.shuffle(indexes);
 
-        for (int i = 0; i < Math.min(batchLength,indexes.size()); i++)
+        for (int i = 0; i < Math.min(batchLength, indexes.size()); i++)
             miniBatch.add(buffer.get(indexes.get(i)));
         return miniBatch;
     }
@@ -53,13 +57,18 @@ public class ReplayBufferMultiStepExp<V> {
     }
 
     public boolean isFull() {
-        return size()==maxSize;
+        return size() == maxSize;
     }
+
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
 
     @Override
     public String toString() {
-        StringBuilder sb=new StringBuilder();
-        for (ExperienceMultiStep<V> exp:buffer) {
+        StringBuilder sb = new StringBuilder();
+        for (ExperienceMultiStep<V> exp : buffer) {
             sb.append(exp.toString());
             sb.append(System.lineSeparator());
         }
@@ -67,5 +76,5 @@ public class ReplayBufferMultiStepExp<V> {
 
 
     }
-    
+
 }

@@ -28,7 +28,7 @@ public class TestReplayBufferMultiStep {
 
     @Test
     public void whenAddingOneExperience_thenExists() {
-        buffer.addExperience(experience);
+        buffer.add(experience);
         System.out.println("buffer = " + buffer);
         Assert.assertEquals(1,buffer.size());
     }
@@ -43,7 +43,7 @@ public class TestReplayBufferMultiStep {
     public void whenAddingAndFull_thenCorrect() {
         addMany(MAX_SIZE);
         Assertions.assertTrue(buffer.isFull());
-        buffer.addExperience(experience);
+        buffer.add(experience);
         Assert.assertEquals(MAX_SIZE,buffer.size());
     }
 
@@ -61,7 +61,7 @@ public class TestReplayBufferMultiStep {
 
     private void addMany(int nofExp) {
         for (int i = 0; i < nofExp; i++) {
-            buffer.addExperience(experience);;
+            buffer.add(experience);;
         }
     }
 
