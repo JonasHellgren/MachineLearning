@@ -34,36 +34,35 @@ public class MultiStepResultsGenerator<V> {
         var informer=new EpisodeInfo<>(experiences);
         evaluator.setParametersAndExperiences(parameters, experiences);
         var results = MultiStepResults.<V>create(nExperiences);
-        IntStream.range(0, nExperiences).forEach(  //end exclusive
+        IntStream.range(0, nExperiences).forEach(   //end exclusive
                 t -> addResultsAtStep(results,informer, t));
-        //throwIfBadResultFormat(results);
         return results;
     }
 
     void addResultsAtStep(MultiStepResults<V> results,
                           EpisodeInfo<V> informer,
                           int t) {
-        var experience=informer.experienceAtTime(t);
-
+        var singleStepExperience=informer.experienceAtTime(t);
         var resMS = evaluator.evaluate(t);
         double sumRewards = resMS.sumRewardsNSteps();
-        boolean isFutureOutsideOrTerminal=resMS.isFutureTerminal() || resMS.isFutureStateOutside();
+        boolean isFutureOutsideOrTerminal=resMS.isFutureTerminal() ||
+                resMS.isFutureStateOutside();
         double valueTarget=isFutureOutsideOrTerminal
                 ? sumRewards
                 : sumRewards + parameters.gammaPowN() * agent.readCritic(resMS.stateFuture());
-        double vState = agent.readCritic(experience.state());
+        double vState = agent.readCritic(singleStepExperience.state());
         double advantage=valueTarget-vState;
 
         var expMs= ExperienceMultiStep.<V>builder()
-                .state(experience.state())
-                .actionApplied(experience.actionApplied())
+                .state(singleStepExperience.state())
+                .actionApplied(singleStepExperience.actionApplied())
                 .sumRewards(resMS.sumRewardsNSteps())
                 .stateFuture(isFutureOutsideOrTerminal?null: resMS.stateFuture())
                 .isStateFutureTerminalOrNotPresent(isFutureOutsideOrTerminal)
                 .valueTarget(valueTarget)
                 .advantage(advantage)
-                .actionPolicy(experience.ars().action())
-                .isSafeCorrected(experience.isSafeCorrected())
+                .actionPolicy(singleStepExperience.ars().action())
+                .isSafeCorrected(singleStepExperience.isSafeCorrected())
                 .build();
         results.add(expMs);
 

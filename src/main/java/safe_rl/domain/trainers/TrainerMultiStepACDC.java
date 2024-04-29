@@ -57,18 +57,24 @@ public class TrainerMultiStepACDC<V> {
 
     public void train() throws JOptimizerException {
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
-            var experiences = experienceCreator.getExperiences(agent, startStateSupplier.get());
-            processEpisode(experiences);
-
-            var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
-            Conditionals.executeIfTrue(!msRes.orElseThrow().isEmpty(), () ->
-                    buffer.addAll(msRes.orElseThrow().experienceList()));
-            Conditionals.executeIfTrue(!buffer.isEmpty(), () -> fitter.fit(buffer));
-
+            var experiences = getExperiences();
+            trainAgentAndUpdateRecorder(experiences);
+            addNewExperienceToBufferAndFitCriticMemoryFromBufferExperience();
         }
     }
 
-    private void processEpisode(List<Experience<V>> experiences) throws JOptimizerException {
+    private List<Experience<V>> getExperiences() throws JOptimizerException {
+        return experienceCreator.getExperiences(agent, startStateSupplier.get());
+    }
+
+    private void addNewExperienceToBufferAndFitCriticMemoryFromBufferExperience() {
+        var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
+        Conditionals.executeIfTrue(!msRes.orElseThrow().isEmpty(), () ->
+                buffer.addAll(msRes.orElseThrow().experienceList()));
+        Conditionals.executeIfTrue(!buffer.isEmpty(), () -> fitter.fit(buffer));
+    }
+
+    private void trainAgentAndUpdateRecorder(List<Experience<V>> experiences) {
         var errorList = recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences, errorList);
         recorder.recordTrainingProgress(experiences, agent);
