@@ -73,7 +73,7 @@ public class Runner5HoursTrading {
         //interesting to change, decreasing vs increasing price
 
         settings5 = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1.0).withPriceFCR(0.1).withStdActivationFCR(0.2)
+                .withPowerCapacityFcr(1.0).withPriceFCR(0.1).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
@@ -87,7 +87,8 @@ public class Runner5HoursTrading {
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
                 .withNofEpisodes(3_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
-                .withLearningRateReplayBufferCritic(1e-1).withReplayBufferSize(200).withMiniBatchSize(10);
+                .withLearningRateReplayBufferCritic(1e-1).withReplayBufferSize(200)
+                .withMiniBatchSize(10).withNReplayBufferFitsPerEpisode(10);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

@@ -18,6 +18,7 @@ import safe_rl.recorders.Recorders;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 @Log
 public class TrainerMultiStepACDC<V> {
@@ -71,7 +72,9 @@ public class TrainerMultiStepACDC<V> {
         var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
         Conditionals.executeIfTrue(!msRes.orElseThrow().isEmpty(), () ->
                 buffer.addAll(msRes.orElseThrow().experienceList()));
-        Conditionals.executeIfTrue(!buffer.isEmpty(), () -> fitter.fit(buffer));
+        Conditionals.executeIfTrue(!buffer.isEmpty(), () ->
+                IntStream.range(0, trainerParameters.nReplayBufferFitsPerEpisode())
+                        .forEach(i -> fitter.fit(buffer)));
     }
 
     private void trainAgentAndUpdateRecorder(List<Experience<V>> experiences) {

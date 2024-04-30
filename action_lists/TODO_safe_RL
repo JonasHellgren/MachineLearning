@@ -100,13 +100,11 @@ multistep advantage update x
 plotta minnnen x
 
 TradeSimulationPlotter x
-Not fits per episode
+withNReplayBufferFitsPerEpisode - ingen större påv
 batch även för actor fit
 Runner25HoursTrading
 
 Fcr d up och n
-
-
 
 clean up:
 Lists.newArrayList()   isf new
