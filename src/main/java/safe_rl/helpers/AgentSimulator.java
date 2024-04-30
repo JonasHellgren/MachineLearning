@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentI;
+import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.EnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.value_classes.SimulationResult;
 import safe_rl.domain.safety_layer.SafetyLayer;
+import safe_rl.domain.value_classes.StepReturn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class AgentSimulator<V> {
         var state = startStateSupplier.get().copy();
         List<SimulationResult<V>> simulationResults = new ArrayList<>();
 
+        StepReturn<V> sr=null;
         while (!isTerminalOrFail) {
             var action = exploration
                     ? agent.chooseAction(state)
@@ -44,12 +47,14 @@ public class AgentSimulator<V> {
             var state0 = state.copy();
             log.fine("state = " + state + ", action = " + action);
             var actionCorrected = safetyLayer.correctAction(state, action);
-            var sr = environment.step(state, actionCorrected);
+            sr = environment.step(state, actionCorrected);
             state.setVariables(sr.state().getVariables());
             isTerminalOrFail = sr.isTerminal() || sr.isFail();
             simulationResults.add(
                     new SimulationResult<>(state0, sr.reward(), actionCorrected));
         }
+        simulationResults.add(
+                new SimulationResult<>(sr.state(), sr.reward(), Action.ofDouble(0d)));
         return simulationResults;
     }
 

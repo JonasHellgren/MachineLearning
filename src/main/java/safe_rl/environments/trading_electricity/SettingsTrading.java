@@ -1,6 +1,7 @@
 package safe_rl.environments.trading_electricity;
 
 import com.google.common.base.Preconditions;
+import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.abstract_classes.SettingsI;
@@ -45,6 +46,21 @@ public record SettingsTrading(
         settings.check();
         return settings;
     }
+
+
+    public static SettingsTrading new24HoursIncreasingPrice() {
+        var settings = SettingsTrading.builder()
+                .dt(1)
+                .energyBatt(100).powerBattMax(100).priceBattery(5e3)
+                .socMin(0.0).socMax(1).socTerminalMin(0.5)
+                .priceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1,0.1,24)))
+                .stdActivationFCR(0.1).powerCapacityFcr(1).priceFCR(1)
+                .nCyclesLifetime(5000)
+                .build();
+        settings.check();
+        return settings;
+    }
+
 
     public void check() {
         Preconditions.checkArgument(powerAvgFcrExtreme()<powerBattMax(),

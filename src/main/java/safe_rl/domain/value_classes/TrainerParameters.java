@@ -3,8 +3,7 @@ package safe_rl.domain.value_classes;
 import lombok.Builder;
 import lombok.With;
 
-import static common.other.MyFunctions.defaultIfNullDouble;
-import static common.other.MyFunctions.defaultIfNullInteger;
+import static common.other.MyFunctions.*;
 
 public record TrainerParameters(
         @With Integer nofEpisodes,
@@ -16,6 +15,7 @@ public record TrainerParameters(
         @With Integer replayBufferSize,
         @With Integer miniBatchSize,
         @With Integer nReplayBufferFitsPerEpisode,
+        @With Boolean isRemoveOldest,
         @With  Double ratioPenCorrectedAction,
         @With Integer stepHorizon) {
 
@@ -25,12 +25,12 @@ public record TrainerParameters(
     static final double LEARNING_RATE = 0.01;
     static final double LEARNING_RATE_SMALL = 1e-4;
     public static final int STEP_HORIZON = 10;
-    public static final double RATIO_PEN_ACTION = 1d;
+    public static final double RATIO_PEN_ACTION = 0.1d;
     public static final int BATCH_SIZE = 10;
     public static final int REPLAY_BUFFER_SIZE = 1000;
-    public static final int N_RP_FITS = 1;
+    public static final int N_RP_FITS = 3;
     public static final double GRAD_MAX = 1e-3;
-
+    public static final boolean IS_REMOVE_OLDEST = true;
 
     public static TrainerParameters newDefault() {
         return TrainerParameters.builder().build();
@@ -46,6 +46,7 @@ public record TrainerParameters(
                              Integer replayBufferSize,
                              Integer miniBatchSize,
                              Integer nReplayBufferFitsPerEpisode,
+                             Boolean isRemoveOldest,
                              Double ratioPenCorrectedAction,
                              Integer stepHorizon) {
         this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
@@ -57,12 +58,13 @@ public record TrainerParameters(
         this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
         this.nReplayBufferFitsPerEpisode = defaultIfNullInteger.apply(nReplayBufferFitsPerEpisode, N_RP_FITS);
+        this.isRemoveOldest = (Boolean) defaultIfNullObject.apply(isRemoveOldest, IS_REMOVE_OLDEST);
         this.ratioPenCorrectedAction = defaultIfNullDouble.apply(ratioPenCorrectedAction, RATIO_PEN_ACTION);
         this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
     }
 
     public double gammaPowN() {
-        return Math.pow(gamma(), stepHorizon);
+        return Math.pow(gamma, stepHorizon);
     }
 
 

@@ -17,7 +17,7 @@ import safe_rl.helpers.AgentSimulator;
 import java.util.List;
 
 /**
- * moderate withStepHorizon => better convergence
+ * high withStepHorizon => better convergence
  * learning rates and gradMax very critical
  * gamma<1 seems to improve convergence
 
@@ -64,12 +64,14 @@ public class Runner5HoursBuying {
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings5)
                 .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
-                .learningRateActorMean(1e-3).learningRateActorStd(1e-4).learningRateCritic(1e-2)
+                .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state( startState.copy())
                 .build();
-        var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3);
+        var trainerParameters = TrainerParameters.newDefault()
+                .withNofEpisodes(5000).withGamma(1.00).withRatioPenCorrectedAction(0.1d).withStepHorizon(5)
+                .withLearningRateReplayBufferCritic(1e-1)
+                .withLearningRateReplayBufferActor(1e-4).withGradMeanActorMaxBufferFitting(1e-3);
        var trainer = TrainerMultiStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

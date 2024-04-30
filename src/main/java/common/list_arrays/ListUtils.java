@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ListUtils {
 
@@ -113,8 +114,13 @@ public class ListUtils {
 
     public static List<Double> doublesStartEndStep(double start, double end, double step) {
         return DoubleStream.iterate(start, d -> d <= end, d -> d + step)
-                .boxed()
-                .collect(Collectors.toList());
+                .boxed().toList();
+    }
+
+    public static List<Double> doublesStartStepNitems(double start, double step, int nItems) {
+        return Stream.iterate(start, value -> value + step) // Start with 'start' and add 'step' for each subsequent element
+                .limit(nItems)                        // Limit the sequence to 'nItems' elements
+                .toList();
     }
 
     public static double[] toArray(List<Double> list) {

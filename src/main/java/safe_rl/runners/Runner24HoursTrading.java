@@ -1,29 +1,24 @@
 package safe_rl.runners;
 
-import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.agents.AgentACDCSafe;
-import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainers.TrainerMultiStepACDC;
-import safe_rl.domain.value_classes.SimulationResult;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.factories.FactoryOptModel;
-import safe_rl.environments.trading_electricity.*;
+import safe_rl.environments.trading_electricity.EnvironmentTrading;
+import safe_rl.environments.trading_electricity.SettingsTrading;
+import safe_rl.environments.trading_electricity.StateTrading;
+import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.helpers.AgentSimulator;
 
-/***
- * withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting needs to be small
- */
+import java.util.Arrays;
 
-@Log
-public class Runner5HoursTrading {
-
-    public static final double PRICE_BATTERY = 1e3;
+public class Runner24HoursTrading {
+    public static final double PRICE_BATTERY = 10e3;
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
     static SettingsTrading settings5;
@@ -52,21 +47,27 @@ public class Runner5HoursTrading {
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
 
-        settings5 = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1.0).withPriceFCR(0.1).withStdActivationFCR(0.1)
+        settings5 = SettingsTrading.new24HoursIncreasingPrice()
+                .withPowerCapacityFcr(10.0).withPriceFCR(0.03).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
+
+
+        System.out.println("settings5.priceTraj() = " + Arrays.toString(settings5.priceTraj()));
+
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
+        double powerNom=settings5.powerBattMax()/10;
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
-                .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
+                .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
+                .targetCritic(0d).absActionNominal(powerNom)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-                .gradMaxActor0(1d).gradMaxCritic0(1d)
+                .gradMaxActor0(1d).gradMaxCritic0(10d)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(3000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
+                .withNofEpisodes(5000).withGamma(0.99).withStepHorizon(10)
                 .withLearningRateReplayBufferCritic(1e-1)
                 .withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting(1e-3)
                 .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(2);
@@ -83,5 +84,4 @@ public class Runner5HoursTrading {
 
         return Pair.create(trainer,simulator);
     }
-    
 }

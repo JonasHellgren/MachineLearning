@@ -102,7 +102,10 @@ plotta minnnen x
 TradeSimulationPlotter x
 withNReplayBufferFitsPerEpisode - ingen större påv x
 batch även för actor fit - ingen större påv x
-Runner25HoursTrading
+RemoveStrategy x
+Runner24HoursTrading x
+plotta dSoC och revenue FCR i simulering
+rb actor fit - stammer action
 
 Fcr d up och n
 

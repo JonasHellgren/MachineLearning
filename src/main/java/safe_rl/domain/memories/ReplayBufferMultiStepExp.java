@@ -30,6 +30,15 @@ public class ReplayBufferMultiStepExp<V> {
         return ReplayBufferMultiStepExp.<V>builder().maxSize(maxSize).build();
     }
 
+    public static <V> ReplayBufferMultiStepExp<V> newFromSizeAndIsRemoveOldest(
+            int maxSize, boolean isRemoveOldest) {
+        RemoveStrategyMultiStepExpI<V>  strategy=isRemoveOldest
+                ? new RemoveStrategyOldestMultiStepExp<>()
+                : new RemoveStrategyRandomMultiStepExp<>();
+        return ReplayBufferMultiStepExp.<V>builder().maxSize(maxSize).removeStrategy(strategy).build();
+    }
+
+
     public void addAll(List<ExperienceMultiStep<V>> experiences) {
         experiences.forEach(e -> add(e));
     }

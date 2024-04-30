@@ -49,7 +49,8 @@ public class TrainerMultiStepACDC<V> {
                 .build();
         this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
-        buffer = ReplayBufferMultiStepExp.newFromMaxSize(trainerParameters.replayBufferSize());
+        buffer = ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
+                trainerParameters.replayBufferSize(), trainerParameters.isRemoveOldest());
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters);
         recorder = new Recorders<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
