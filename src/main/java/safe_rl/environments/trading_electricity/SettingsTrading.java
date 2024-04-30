@@ -96,5 +96,12 @@ public record SettingsTrading(
         return dEnergyMax/energyBatt;
     }
 
+    public int nTimeSteps() {
+        return priceTraj.length;
+    }
+
+    public double revFCRPerTimeStep() {
+        return priceFCR()*powerCapacityFcr();
+    }
 
 }
