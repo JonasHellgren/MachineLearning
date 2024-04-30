@@ -7,8 +7,10 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.agents.AgentACDCSafe;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainers.CriticFitterUsingReplayBuffer;
@@ -54,10 +56,17 @@ public class TestCriticFitterUsingReplayBuffer {
         }
         settingsTrading = SettingsTrading.new5HoursIncreasingPrice();
         StateTrading state = StateTrading.newFullAndFresh();
-        critic = new DisCoMemory<>(state.nContinousFeatures() + 1);
+        AgentACDiscoI<VariablesTrading> agent= AgentACDCSafe.<VariablesTrading>builder()
+                .settings(settingsTrading)
+                .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
+                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
+                .gradMaxActor0(1d).gradMaxCritic0(1d)
+                .state(state.copy())
+                .build();
+        critic=agent.getCritic();
         var initializer = getInitializer(state, critic, TAR_VALUE_INIT, STD_TAR);
         initializer.initialize();
-        fitter = new CriticFitterUsingReplayBuffer<>(critic, paramsTrainer);
+        fitter = new CriticFitterUsingReplayBuffer<>(agent, paramsTrainer);
     }
 
 

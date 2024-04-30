@@ -126,13 +126,18 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Override
     public Pair<Double, Double> fitActor(StateI<V> state, Action action, double adv) {
-        var gradMeanAndLogStd = gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
-        double gradMean0=gradMeanAndLogStd.getFirst() * adv;
-        double gradStd0=gradMeanAndLogStd.getSecond() * adv;
+        var grad = gradientMeanAndStd(state, action);
+        double gradMean0=grad.getFirst() * adv;
+        double gradStd0=grad.getSecond() * adv;
         actorMean.fitFromError(state, meanGradClipper.modify(gradMean0,actorMean.read(state)));
         actorLogStd.fitFromError(state, stdGradClipper.modify(gradStd0,actorLogStd.read(state)));
         lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(),actorLogStd.lossLastUpdate());
-        return gradMeanAndLogStd;
+        return grad;
+    }
+
+    @Override
+    public Pair<Double, Double> gradientMeanAndStd(StateI<V> state, Action action) {
+        return gradientCalculator.gradient(action.asDouble(), actorMeanAndStd(state));
     }
 
     @Override

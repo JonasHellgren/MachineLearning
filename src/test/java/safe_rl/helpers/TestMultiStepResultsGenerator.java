@@ -49,7 +49,7 @@ class TestMultiStepResultsGenerator {
         int step = 0;
         var msr=generator.generate(experiences);
         Assertions.assertEquals(3,msr.valueTarAtStep(step));
-        Assertions.assertEquals(1+1*0-0,msr.advantageAtStep(step));
+        Assertions.assertEquals(3-0,msr.advantageAtStep(step));
         Assertions.assertFalse(msr.isSafeCorrectedAtStep(step));
         Assertions.assertFalse(msr.isFutureOutsideOrTerminalAtStep(step));
     }
@@ -59,7 +59,7 @@ class TestMultiStepResultsGenerator {
         int step = 1;
         var msr=generator.generate(experiences);
         Assertions.assertEquals(3,msr.valueTarAtStep(step));  //up to terminal
-        Assertions.assertEquals(0+1*0-0,msr.advantageAtStep(step));
+        Assertions.assertEquals(3-0,msr.advantageAtStep(step));
         Assertions.assertTrue(msr.isFutureOutsideOrTerminalAtStep(step));
     }
 
@@ -68,7 +68,7 @@ class TestMultiStepResultsGenerator {
         int step = 3;
         var msr=generator.generate(experiences);
         Assertions.assertEquals(2,msr.valueTarAtStep(step));
-        Assertions.assertEquals(1+1*0-0,msr.advantageAtStep(step));
+        Assertions.assertEquals(2-0,msr.advantageAtStep(step));
         Assertions.assertTrue(msr.isFutureOutsideOrTerminalAtStep(step));
     }
 

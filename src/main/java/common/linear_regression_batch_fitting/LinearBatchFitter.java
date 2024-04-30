@@ -23,6 +23,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class LinearBatchFitter {
     public static final double LEARNING_RATE = 1e-3;
+    public static final int N_BIAS_FEAT = 1;
     static java.util.Random rand = new java.util.Random(42);
 
     double learningRate;
@@ -44,18 +45,37 @@ public class LinearBatchFitter {
         double gradientBias = Arrays.stream(errors.toArray()).sum() * 2 / batchSize;
         w = w.subtract(gradientsW.mapMultiply(learningRate));
         b -= learningRate * gradientBias;
-        RealVector weightsAndBiasNew = new ArrayRealVector(nFeat + 1, 0.0);
+        RealVector weightsAndBiasNew = new ArrayRealVector(nFeat + N_BIAS_FEAT, 0.0);
         weightsAndBiasNew.setSubVector(0, w);
         weightsAndBiasNew.setEntry(nFeat, b);
         return weightsAndBiasNew;
     }
+
+    public RealVector fitFromErrors(RealVector weightsAndBias, Pair<RealMatrix, RealVector> batchData) {
+        int nFeat = nFeatures(weightsAndBias);
+        RealVector w = weights(weightsAndBias, nFeat);
+        double b = bias(weightsAndBias, nFeat);
+        var xMatBatch = batchData.getFirst();
+        var errors = batchData.getSecond();
+        int batchSize = errors.getDimension();
+        var gradientsW = xMatBatch.transpose().operate(errors).mapMultiply(2.0 / batchSize);
+        double gradientBias = Arrays.stream(errors.toArray()).sum() * 2 / batchSize;
+        w = w.subtract(gradientsW.mapMultiply(learningRate));
+        b -= learningRate * gradientBias;
+        RealVector weightsAndBiasNew = new ArrayRealVector(nFeat + N_BIAS_FEAT, 0.0);
+        weightsAndBiasNew.setSubVector(0, w);
+        weightsAndBiasNew.setEntry(nFeat, b);
+        return weightsAndBiasNew;
+    }
+
+
 
     public static double bias(RealVector weightsAndBias) {
         return bias(weightsAndBias, nFeatures(weightsAndBias));
     }
 
     public static int nFeatures(RealVector weightsAndBias) {
-        return weightsAndBias.getDimension() - 1;
+        return weightsAndBias.getDimension() - N_BIAS_FEAT;
     }
 
     public static int nFeatures(RealMatrix xMat) {

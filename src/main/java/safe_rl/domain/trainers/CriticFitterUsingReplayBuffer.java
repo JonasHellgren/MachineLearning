@@ -10,6 +10,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.value_classes.ExperienceMultiStep;
@@ -28,14 +29,15 @@ public class CriticFitterUsingReplayBuffer<V> {
     public static final int N_FEAT = 1;
     public static final int FEATURE_INDEX_SOC = 0;
     public static final int MIN_NOF_POINTS = 2;
-    DisCoMemory<V> critic;
+    //DisCoMemory<V> critic;
+    AgentACDiscoI<V> agent;
     TrainerParameters trainerParameters;
 
     LinearBatchFitter linearFitter;
     RandUtils<Integer> intRand;
 
-    public CriticFitterUsingReplayBuffer(DisCoMemory<V> critic, TrainerParameters trainerParameters) {
-        this.critic = critic;
+    public CriticFitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters) {
+        this.agent = agent;
         this.trainerParameters = trainerParameters;
         this.linearFitter = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
         this.intRand = new RandUtils<>();
@@ -51,10 +53,19 @@ public class CriticFitterUsingReplayBuffer<V> {
                 ei.getExperiencesWithDiscreteFeatureValue(timeChosen, FEATURE_INDEX_SOC);
         var anyStateWithTimeChosen = experiencesAtChosenTime.stream()
                 .findAny().map(e -> e.state()).orElseThrow();
+
+        DisCoMemory<V> critic=agent.getCritic();
         RealVector weightsAndBias = new ArrayRealVector(critic.readThetas(anyStateWithTimeChosen));
-        var batchData = createData(N_FEAT, experiencesAtChosenTime);
+        var batchData = createCriticData(N_FEAT, experiencesAtChosenTime);
         weightsAndBias = linearFitter.fit(weightsAndBias, batchData);
         critic.save(anyStateWithTimeChosen, weightsAndBias.toArray());
+
+  /*      DisCoMemory<V> actorMean=agent.getActorMean();
+        RealVector weightsAndBiasActor = new ArrayRealVector(actorMean.readThetas(anyStateWithTimeChosen));
+        var batchDataActor = createCriticData(N_FEAT, experiencesAtChosenTime);
+        weightsAndBiasActor = linearFitter.fit(weightsAndBiasActor, batchDataActor);
+        actorMean.save(anyStateWithTimeChosen, weightsAndBiasActor.toArray());*/
+
     }
 
     private static int getMostFrequentTime(List<Integer> presentTimes) {
@@ -67,22 +78,46 @@ public class CriticFitterUsingReplayBuffer<V> {
     }
 
 
-    Pair<RealMatrix, RealVector> createData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
+    Pair<RealMatrix, RealVector> createCriticData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
+        int nPoints = experiencesAtChosenTime.size();
+        var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
+        var yVec = new ArrayRealVector(nPoints);
+        DisCoMemory<V> critic=agent.getCritic();
+        int i = FEATURE_INDEX_SOC;
+        for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
+            double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
+            xMat.setRow(i, features);
+            yVec.setEntry(i, valueTarget(critic, experience));
+            i++;
+        }
+        return Pair.create(xMat, yVec);
+    }
+
+    private double valueTarget(DisCoMemory<V> critic, ExperienceMultiStep<V> experience) {
+        return experience.isStateFutureTerminalOrNotPresent()
+                ? experience.sumOfRewards()
+                : experience.sumOfRewards() + trainerParameters.gammaPowN()* critic.read(experience.stateFuture());
+    }
+
+    Pair<RealMatrix, RealVector> createActorData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
         int nPoints = experiencesAtChosenTime.size();
         var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
         var yVec = new ArrayRealVector(nPoints);
         int i = FEATURE_INDEX_SOC;
         for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
             double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
-            double target = experience.isStateFutureTerminalOrNotPresent()
-                    ? experience.sumOfRewards()
-                    : experience.sumOfRewards() + trainerParameters.gammaPowN()* critic.read(experience.stateFuture());
+            var grad = agent.gradientMeanAndStd(experience.state(), experience.actionApplied());
+            double vState = agent.readCritic(experience.state());
+            double advantage=valueTarget(agent.getCritic(), experience)-vState;
+            double error=grad.getFirst()*advantage;
             xMat.setRow(i, features);
-            yVec.setEntry(i, target);
+            yVec.setEntry(i, error);
             i++;
         }
         return Pair.create(xMat, yVec);
     }
+
+
 
 
 }

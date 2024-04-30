@@ -50,8 +50,7 @@ public class TrainerMultiStepACDC<V> {
         this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         buffer = ReplayBufferMultiStepExp.newFromMaxSize(trainerParameters.replayBufferSize());
-        this.fitter = new CriticFitterUsingReplayBuffer<>(agent.getCritic(), trainerParameters);
-
+        this.fitter = new CriticFitterUsingReplayBuffer<>(agent, trainerParameters);
         recorder = new Recorders<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
     }
@@ -59,8 +58,9 @@ public class TrainerMultiStepACDC<V> {
     public void train() throws JOptimizerException {
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
             var experiences = getExperiences();
-            trainAgentAndUpdateRecorder(experiences);
+            trainAgent(experiences);
             addNewExperienceToBufferAndFitCriticMemoryFromBufferExperience();
+            updateRecorder(experiences);
         }
     }
 
@@ -77,9 +77,12 @@ public class TrainerMultiStepACDC<V> {
                         .forEach(i -> fitter.fit(buffer)));
     }
 
-    private void trainAgentAndUpdateRecorder(List<Experience<V>> experiences) {
+    private void trainAgent(List<Experience<V>> experiences) {
         var errorList = recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences, errorList);
+    }
+
+    private void updateRecorder(List<Experience<V>> experiences) {
         recorder.recordTrainingProgress(experiences, agent);
     }
 
