@@ -99,7 +99,9 @@ lin regr update  x
 multistep advantage update x
 plotta minnnen x
 
-SimulationPlotter
+TradeSimulationPlotter x
+Not fits per episode
+batch även för actor fit
 Runner25HoursTrading
 
 Fcr d up och n

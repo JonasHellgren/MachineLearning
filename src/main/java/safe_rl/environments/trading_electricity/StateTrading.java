@@ -5,6 +5,7 @@ import safe_rl.domain.abstract_classes.StateI;
 @AllArgsConstructor
 public class StateTrading implements StateI<VariablesTrading> {
     public static final int N_CONT_FEAT = 1;
+    public static final int INDEX_SOC=0;
     VariablesTrading variables;
 
     public static StateTrading newFullAndFresh() {

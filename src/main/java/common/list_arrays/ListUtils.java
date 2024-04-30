@@ -1,6 +1,8 @@
 package common.list_arrays;
 
 
+import com.beust.jcommander.internal.Lists;
+
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -197,6 +199,16 @@ public class ListUtils {
 
     public static List<Double> arrayPrimitiveDoublesToList(double[] arr) {
         return DoubleStream.of(arr).boxed().collect(Collectors.toList());
+    }
+
+    public static List<Double> cumulativeSum(List<Double> values) {
+        double sum=0;
+        List<Double> accumValues= Lists.newArrayList();
+        for (Double value : values) {
+            sum += value;  // Update the running sum
+            accumValues.add(sum);  // Add the running sum to the accumValues list
+        }
+        return accumValues;
     }
 
 }
