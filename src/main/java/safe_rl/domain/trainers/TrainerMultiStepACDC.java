@@ -30,7 +30,7 @@ public class TrainerMultiStepACDC<V> {
     ExperienceCreator<V> experienceCreator;
     ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
     ReplayBufferMultiStepExp<V> buffer;
-    CriticFitterUsingReplayBuffer<V> fitter;
+    FitterUsingReplayBuffer<V> fitter;
 
     @Getter
     Recorders<V> recorder;
@@ -50,7 +50,7 @@ public class TrainerMultiStepACDC<V> {
         this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         buffer = ReplayBufferMultiStepExp.newFromMaxSize(trainerParameters.replayBufferSize());
-        this.fitter = new CriticFitterUsingReplayBuffer<>(agent, trainerParameters);
+        this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters);
         recorder = new Recorders<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
     }

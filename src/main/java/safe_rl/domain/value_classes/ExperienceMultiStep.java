@@ -23,11 +23,13 @@ public record ExperienceMultiStep<V>(
  }
 
  public static <V> ExperienceMultiStep<V> of(@NonNull StateI<V> state,
+                                             @NonNull Action action,
                                              @NonNull Double sumRewards,
                                              StateI<V> stateFut,
                                              @NonNull Boolean isStateFutureTerminalOrNotPresent) {
      return ExperienceMultiStep.<V>builder()
              .state(state)
+             .actionApplied(action)
              .sumRewards(sumRewards)
              .stateFuture(stateFut)
              .isStateFutureTerminalOrNotPresent(isStateFutureTerminalOrNotPresent)

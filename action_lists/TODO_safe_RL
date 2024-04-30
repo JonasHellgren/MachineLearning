@@ -100,8 +100,8 @@ multistep advantage update x
 plotta minnnen x
 
 TradeSimulationPlotter x
-withNReplayBufferFitsPerEpisode - ingen större påv
-batch även för actor fit
+withNReplayBufferFitsPerEpisode - ingen större påv x
+batch även för actor fit - ingen större påv x
 Runner25HoursTrading
 
 Fcr d up och n

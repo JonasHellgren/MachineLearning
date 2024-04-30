@@ -13,7 +13,7 @@ import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.agents.AgentACDCSafe;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
-import safe_rl.domain.trainers.CriticFitterUsingReplayBuffer;
+import safe_rl.domain.trainers.FitterUsingReplayBuffer;
 import safe_rl.domain.value_classes.ExperienceMultiStep;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.trading_electricity.SettingsTrading;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static common.list_arrays.ListUtils.doublesStartEndStep;
 
-public class TestCriticFitterUsingReplayBuffer {
+public class TestFitterUsingReplayBuffer {
 
     public static final double SOC_MIN = 0d;
     public static final double SOC_MAX = 1d;
@@ -39,7 +39,7 @@ public class TestCriticFitterUsingReplayBuffer {
     public static final int N_ASSERTS = 10;
     public static final int STEP_HORIZON = 3;
     SettingsTrading settingsTrading;
-    CriticFitterUsingReplayBuffer<VariablesTrading> fitter;
+    FitterUsingReplayBuffer<VariablesTrading> fitter;
     ReplayBufferMultiStepExp<VariablesTrading> buffer;
     DisCoMemory<VariablesTrading> critic;
 
@@ -66,7 +66,7 @@ public class TestCriticFitterUsingReplayBuffer {
         critic=agent.getCritic();
         var initializer = getInitializer(state, critic, TAR_VALUE_INIT, STD_TAR);
         initializer.initialize();
-        fitter = new CriticFitterUsingReplayBuffer<>(agent, paramsTrainer);
+        fitter = new FitterUsingReplayBuffer<>(agent, paramsTrainer);
     }
 
 
@@ -114,7 +114,7 @@ public class TestCriticFitterUsingReplayBuffer {
                 ? null
                 : StateTrading.of(VariablesTrading.newTimeSoc(timeNext, soc)).copy();
 
-        return ExperienceMultiStep.of(state0, ListUtils.sumList(rewardList),stateFuture,isTerminal);
+        return ExperienceMultiStep.of(state0, Action.ofDouble(0d), ListUtils.sumList(rewardList),stateFuture,isTerminal);
 
                 /*
                 ExperienceMultiStep.<VariablesTrading>builder()

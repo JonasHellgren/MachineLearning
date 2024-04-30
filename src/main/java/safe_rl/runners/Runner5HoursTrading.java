@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+/***
+ * withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting needs to be small
+ */
+
 @Log
 public class Runner5HoursTrading {
 
@@ -86,9 +90,10 @@ public class Runner5HoursTrading {
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(3_000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
-                .withLearningRateReplayBufferCritic(1e-1).withReplayBufferSize(200)
-                .withMiniBatchSize(10).withNReplayBufferFitsPerEpisode(2);
+                .withNofEpisodes(3000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
+                .withLearningRateReplayBufferCritic(1e-1)
+                .withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting(1e-3)
+                .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(2);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

@@ -2,6 +2,7 @@ package safe_rl.domain.trainers;
 
 import com.google.common.collect.*;
 import common.linear_regression_batch_fitting.LinearBatchFitter;
+import common.math.MathUtils;
 import common.other.Conditionals;
 import common.other.RandUtils;
 import lombok.extern.java.Log;
@@ -24,22 +25,22 @@ import java.util.List;
  */
 
 @Log
-public class CriticFitterUsingReplayBuffer<V> {
+public class FitterUsingReplayBuffer<V> {
 
     public static final int N_FEAT = 1;
     public static final int FEATURE_INDEX_SOC = 0;
     public static final int MIN_NOF_POINTS = 2;
-    //DisCoMemory<V> critic;
     AgentACDiscoI<V> agent;
     TrainerParameters trainerParameters;
 
-    LinearBatchFitter linearFitter;
+    LinearBatchFitter linearFitterCritic, linearFitterActor;
     RandUtils<Integer> intRand;
 
-    public CriticFitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters) {
+    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters) {
         this.agent = agent;
         this.trainerParameters = trainerParameters;
-        this.linearFitter = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
+        this.linearFitterCritic = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
+        this.linearFitterActor = new LinearBatchFitter(trainerParameters.learningRateReplayBufferActor());
         this.intRand = new RandUtils<>();
     }
 
@@ -57,14 +58,14 @@ public class CriticFitterUsingReplayBuffer<V> {
         DisCoMemory<V> critic=agent.getCritic();
         RealVector weightsAndBias = new ArrayRealVector(critic.readThetas(anyStateWithTimeChosen));
         var batchData = createCriticData(N_FEAT, experiencesAtChosenTime);
-        weightsAndBias = linearFitter.fit(weightsAndBias, batchData);
+        weightsAndBias = linearFitterCritic.fit(weightsAndBias, batchData);
         critic.save(anyStateWithTimeChosen, weightsAndBias.toArray());
 
-  /*      DisCoMemory<V> actorMean=agent.getActorMean();
+        DisCoMemory<V> actorMean=agent.getActorMean();
         RealVector weightsAndBiasActor = new ArrayRealVector(actorMean.readThetas(anyStateWithTimeChosen));
-        var batchDataActor = createCriticData(N_FEAT, experiencesAtChosenTime);
-        weightsAndBiasActor = linearFitter.fit(weightsAndBiasActor, batchDataActor);
-        actorMean.save(anyStateWithTimeChosen, weightsAndBiasActor.toArray());*/
+        var batchDataActor = createActorData(N_FEAT, experiencesAtChosenTime);
+        weightsAndBiasActor = linearFitterActor.fitFromErrors(weightsAndBiasActor, batchDataActor);
+        actorMean.save(anyStateWithTimeChosen, weightsAndBiasActor.toArray());
 
     }
 
@@ -83,7 +84,7 @@ public class CriticFitterUsingReplayBuffer<V> {
         var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
         var yVec = new ArrayRealVector(nPoints);
         DisCoMemory<V> critic=agent.getCritic();
-        int i = FEATURE_INDEX_SOC;
+        int i = 0;
         for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
             double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
             xMat.setRow(i, features);
@@ -103,13 +104,14 @@ public class CriticFitterUsingReplayBuffer<V> {
         int nPoints = experiencesAtChosenTime.size();
         var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
         var yVec = new ArrayRealVector(nPoints);
-        int i = FEATURE_INDEX_SOC;
+        int i = 0;
+        double gradMax=trainerParameters.gradMeanActorMaxBufferFitting();
         for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
             double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
             var grad = agent.gradientMeanAndStd(experience.state(), experience.actionApplied());
             double vState = agent.readCritic(experience.state());
             double advantage=valueTarget(agent.getCritic(), experience)-vState;
-            double error=grad.getFirst()*advantage;
+            double error= MathUtils.clip(grad.getFirst()*advantage,-gradMax,gradMax);
             xMat.setRow(i, features);
             yVec.setEntry(i, error);
             i++;
