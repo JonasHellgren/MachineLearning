@@ -108,7 +108,10 @@ plotta dSoC och revenue FCR i simulering  x
 rb actor fit - stammer action x
 
 snygga upp FitterUsingReplayBuffer x
-createActorStdData
+createActorStdData x
+std clipper
+bara lära från buffer - fimpa motsvarande hyper param
+snygga upp LinearBatchFitter
 plotta dSoh med enhet ppm
 annan skala effekt
 skirv ut slitage kost i sim plot

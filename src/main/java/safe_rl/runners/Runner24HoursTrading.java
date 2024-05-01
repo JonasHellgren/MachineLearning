@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public class Runner24HoursTrading {
     public static final double PRICE_BATTERY = 30e3;
-    public static final double POWER_CAPACITY_FCR = 30.0;
+    public static final double POWER_CAPACITY_FCR = 10.0;
 
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
@@ -62,7 +62,7 @@ public class Runner24HoursTrading {
                 .settings(settings5)
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
+                .learningRateActorMean(0e-2).learningRateActorStd(0e-2).learningRateCritic(0e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(POWER_CAPACITY_FCR)
                 .state(startState.copy())
                 .build();

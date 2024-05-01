@@ -11,6 +11,7 @@ import safe_rl.domain.memories.DisCoMemory;
 
 public interface DiscoActorI<V> {
     DisCoMemory<V> getActorMean();
+    DisCoMemory<V> getActorLogStd();
     Pair<Double,Double> fitActor(StateI<V> state,Action action, double adv);
     Pair<Double,Double> readActor(StateI<V> state);
     Pair<Double, Double> gradientMeanAndStd(StateI<V> state, Action action);

@@ -34,28 +34,24 @@ public class FitterUsingReplayBuffer<V> {
     int indexFeature;
     LinearBatchFitter fitterCritic, fitterActor;
 
-    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters, int indexFeature) {
+    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
+                                   TrainerParameters trainerParameters,
+                                   int indexFeature) {
         this.agent = agent;
         this.parameters = trainerParameters;
-        this.fitterCritic = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
-        this.fitterActor = new LinearBatchFitter(trainerParameters.learningRateReplayBufferActor());
+        this.indexFeature=indexFeature;
+        this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
+        this.fitterActor = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
     }
 
     public void fit(ReplayBufferMultiStepExp<V> buffer) {
         var experiences = getExperiencesAtRandomTime(buffer);
-        var stateAtTime = experiences.stream()
-                .findAny().map(e -> e.state()).orElseThrow();
+        var stateAtTime = experiences.stream().findAny().map(e -> e.state()).orElseThrow();
         fitCritic(experiences, stateAtTime);
         fitActorMean(experiences, stateAtTime);
+        fitActorStd(experiences,stateAtTime);
     }
 
-    private void fitActorMean(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
-        var actorMean=agent.getActorMean();
-        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
-        var batchDataActor = createData(experiences,lossFcn);
-        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
-        actorMean.save(stateAtTime, paramsActor.toArray());
-    }
 
     private void fitCritic(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
         var critic=agent.getCritic();
@@ -63,6 +59,23 @@ public class FitterUsingReplayBuffer<V> {
         var batchData = createData(experiences,targetFcn);
         paramsCritic = fitterCritic.fit(paramsCritic, batchData);
         critic.save(stateAtTime, paramsCritic.toArray());
+    }
+
+
+    private void fitActorMean(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean=agent.getActorMean();
+        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
+        var batchDataActor = createData(experiences, lossMean);
+        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        actorMean.save(stateAtTime, paramsActor.toArray());
+    }
+
+    private void fitActorStd(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean=agent.getActorLogStd();
+        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
+        var batchDataActor = createData(experiences,lossStd);
+        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
     private  List<ExperienceMultiStep<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
@@ -78,7 +91,7 @@ public class FitterUsingReplayBuffer<V> {
             ? exp.sumOfRewards()
             : exp.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(exp.stateFuture());
 
-    ToDoubleFunction<ExperienceMultiStep<V>> lossFcn=exp -> {
+    ToDoubleFunction<ExperienceMultiStep<V>> lossMean = exp -> {
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
         double vState = agent.readCritic(exp.state());
         double advantage=valueTarget(exp)-vState;
@@ -86,6 +99,13 @@ public class FitterUsingReplayBuffer<V> {
         return clip(-grad.getFirst()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
     };
 
+    ToDoubleFunction<ExperienceMultiStep<V>> lossStd = exp -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        return clip(-grad.getSecond()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
 
     private static int getMostFrequentTime(List<Integer> presentTimes) {
         Multiset<Integer> multiset = HashMultiset.create(presentTimes);

@@ -124,6 +124,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         return Action.ofDouble(a);
     }
 
+
     @Override
     public Pair<Double, Double> fitActor(StateI<V> state, Action action, double adv) {
         var grad = gradientMeanAndStd(state, action);

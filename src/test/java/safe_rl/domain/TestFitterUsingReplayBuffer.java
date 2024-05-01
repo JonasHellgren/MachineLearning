@@ -77,7 +77,6 @@ public class TestFitterUsingReplayBuffer {
         }
 
         System.out.println("critic = " + critic);
-
         for (int i = 0; i < N_ASSERTS; i++) {
             double soc = RandUtils.randomNumberBetweenZeroAndOne();
             int randomTime = getRandomTime();
@@ -85,8 +84,6 @@ public class TestFitterUsingReplayBuffer {
                     getaRewardForSoc(soc),
                     critic.read(StateTrading.of(VariablesTrading.newTimeSoc(randomTime, soc))), TOL_VALUE);
         }
-
-
     }
 
 
