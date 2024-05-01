@@ -66,7 +66,7 @@ public class TestFitterUsingReplayBuffer {
         critic=agent.getCritic();
         var initializer = getInitializer(state, critic, TAR_VALUE_INIT, STD_TAR);
         initializer.initialize();
-        fitter = new FitterUsingReplayBuffer<>(agent, paramsTrainer);
+        fitter = new FitterUsingReplayBuffer<>(agent, paramsTrainer,StateTrading.INDEX_SOC);
     }
 
 

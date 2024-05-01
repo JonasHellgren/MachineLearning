@@ -12,6 +12,7 @@ import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
+import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
 import safe_rl.recorders.Recorders;
@@ -51,7 +52,7 @@ public class TrainerMultiStepACDC<V> {
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         buffer = ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
                 trainerParameters.replayBufferSize(), trainerParameters.isRemoveOldest());
-        this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters);
+        this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
         recorder = new Recorders<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
     }

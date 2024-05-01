@@ -2,9 +2,7 @@ package safe_rl.domain.trainers;
 
 import com.google.common.collect.*;
 import common.linear_regression_batch_fitting.LinearBatchFitter;
-import common.math.MathUtils;
 import common.other.Conditionals;
-import common.other.RandUtils;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -12,13 +10,13 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
-import safe_rl.domain.memories.DisCoMemory;
+import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.value_classes.ExperienceMultiStep;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
 import java.util.List;
-
+import java.util.function.ToDoubleFunction;
 import static common.math.MathUtils.clip;
 
 /***
@@ -30,46 +28,64 @@ import static common.math.MathUtils.clip;
 public class FitterUsingReplayBuffer<V> {
 
     public static final int N_FEAT = 1;
-    public static final int FEATURE_INDEX_SOC = 0;
     public static final int MIN_NOF_POINTS = 2;
     AgentACDiscoI<V> agent;
-    TrainerParameters trainerParameters;
+    TrainerParameters parameters;
+    int indexFeature;
+    LinearBatchFitter fitterCritic, fitterActor;
 
-    LinearBatchFitter linearFitterCritic, linearFitterActor;
-    RandUtils<Integer> intRand;
-
-    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters) {
+    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent, TrainerParameters trainerParameters, int indexFeature) {
         this.agent = agent;
-        this.trainerParameters = trainerParameters;
-        this.linearFitterCritic = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
-        this.linearFitterActor = new LinearBatchFitter(trainerParameters.learningRateReplayBufferActor());
-        this.intRand = new RandUtils<>();
+        this.parameters = trainerParameters;
+        this.fitterCritic = new LinearBatchFitter(trainerParameters.learningRateReplayBufferCritic());
+        this.fitterActor = new LinearBatchFitter(trainerParameters.learningRateReplayBufferActor());
     }
 
     public void fit(ReplayBufferMultiStepExp<V> buffer) {
-        var batch = buffer.getMiniBatch(trainerParameters.miniBatchSize());
+        var experiences = getExperiencesAtRandomTime(buffer);
+        var stateAtTime = experiences.stream()
+                .findAny().map(e -> e.state()).orElseThrow();
+        fitCritic(experiences, stateAtTime);
+        fitActorMean(experiences, stateAtTime);
+    }
+
+    private void fitActorMean(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean=agent.getActorMean();
+        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
+        var batchDataActor = createData(experiences,lossFcn);
+        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        actorMean.save(stateAtTime, paramsActor.toArray());
+    }
+
+    private void fitCritic(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var critic=agent.getCritic();
+        RealVector paramsCritic = new ArrayRealVector(critic.readThetas(stateAtTime));
+        var batchData = createData(experiences,targetFcn);
+        paramsCritic = fitterCritic.fit(paramsCritic, batchData);
+        critic.save(stateAtTime, paramsCritic.toArray());
+    }
+
+    private  List<ExperienceMultiStep<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
+        var batch = buffer.getMiniBatch(parameters.miniBatchSize());
         var ei = new EpisodeInfoMultiStep<>(batch);
-        var presentTimes = ei.getValuesOfSpecificDiscreteFeature(FEATURE_INDEX_SOC)
+        var presentTimes = ei.getValuesOfSpecificDiscreteFeature(indexFeature)
                 .stream().toList();
         int timeChosen = getMostFrequentTime(presentTimes);
-        var experiencesAtChosenTime =
-                ei.getExperiencesWithDiscreteFeatureValue(timeChosen, FEATURE_INDEX_SOC);
-        var anyStateWithTimeChosen = experiencesAtChosenTime.stream()
-                .findAny().map(e -> e.state()).orElseThrow();
-
-        DisCoMemory<V> critic=agent.getCritic();
-        RealVector weightsAndBias = new ArrayRealVector(critic.readThetas(anyStateWithTimeChosen));
-        var batchData = createCriticData(N_FEAT, experiencesAtChosenTime);
-        weightsAndBias = linearFitterCritic.fit(weightsAndBias, batchData);
-        critic.save(anyStateWithTimeChosen, weightsAndBias.toArray());
-
-        DisCoMemory<V> actorMean=agent.getActorMean();
-        RealVector weightsAndBiasActor = new ArrayRealVector(actorMean.readThetas(anyStateWithTimeChosen));
-        var batchDataActor = createActorMeanData(N_FEAT, experiencesAtChosenTime);
-        weightsAndBiasActor = linearFitterActor.fitFromErrors(weightsAndBiasActor, batchDataActor);
-        actorMean.save(anyStateWithTimeChosen, weightsAndBiasActor.toArray());
-
+        return ei.getExperiencesWithDiscreteFeatureValue(timeChosen, indexFeature);
     }
+
+    ToDoubleFunction<ExperienceMultiStep<V>> targetFcn=exp -> exp.isStateFutureTerminalOrNotPresent()
+            ? exp.sumOfRewards()
+            : exp.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(exp.stateFuture());
+
+    ToDoubleFunction<ExperienceMultiStep<V>> lossFcn=exp -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        return clip(-grad.getFirst()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
+
 
     private static int getMostFrequentTime(List<Integer> presentTimes) {
         Multiset<Integer> multiset = HashMultiset.create(presentTimes);
@@ -80,48 +96,29 @@ public class FitterUsingReplayBuffer<V> {
         return maxEntry.orElseThrow().getElement();
     }
 
-
-    Pair<RealMatrix, RealVector> createCriticData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
+    Pair<RealMatrix, RealVector> createData(List<ExperienceMultiStep<V>> experiencesAtChosenTime,
+                                            ToDoubleFunction<ExperienceMultiStep<V>> entry) {
         int nPoints = experiencesAtChosenTime.size();
-        var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
+        var xMat = new Array2DRowRealMatrix(nPoints, N_FEAT);
         var yVec = new ArrayRealVector(nPoints);
-        DisCoMemory<V> critic=agent.getCritic();
         int i = 0;
         for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
-            double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
-            xMat.setRow(i, features);
-            yVec.setEntry(i, valueTarget(critic, experience));
+            xMat.setRow(i, getFeatures(experience));
+            yVec.setEntry(i, entry.applyAsDouble(experience));
             i++;
         }
         return Pair.create(xMat, yVec);
     }
 
-    private double valueTarget(DisCoMemory<V> critic, ExperienceMultiStep<V> experience) {
+    double[] getFeatures(ExperienceMultiStep<V> experience) {
+        return new double[]{experience.state().continousFeatures()[indexFeature]};
+    }
+
+    private double valueTarget(ExperienceMultiStep<V> experience) {
         return experience.isStateFutureTerminalOrNotPresent()
                 ? experience.sumOfRewards()
-                : experience.sumOfRewards() + trainerParameters.gammaPowN()* critic.read(experience.stateFuture());
+                : experience.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(experience.stateFuture());
     }
-
-    Pair<RealMatrix, RealVector> createActorMeanData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
-        int nPoints = experiencesAtChosenTime.size();
-        var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
-        var yVec = new ArrayRealVector(nPoints);
-        int i = 0;
-        double gradMax=trainerParameters.gradMeanActorMaxBufferFitting();
-        for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
-            double[] features = {experience.state().continousFeatures()[FEATURE_INDEX_SOC]};
-            var grad = agent.gradientMeanAndStd(experience.state(), experience.actionApplied());
-            double vState = agent.readCritic(experience.state());
-            double advantage=valueTarget(agent.getCritic(), experience)-vState;
-            double loss= clip(-grad.getFirst()*advantage,-gradMax,gradMax);  //MINUS <=> maximize loss
-            xMat.setRow(i, features);
-            yVec.setEntry(i, loss);
-            i++;
-        }
-        return Pair.create(xMat, yVec);
-    }
-
-
 
 
 }
