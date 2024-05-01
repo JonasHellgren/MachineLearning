@@ -11,6 +11,7 @@ public record TrainerParameters(
         @With Double gamma,
         @With Double learningRateReplayBufferCritic,
         @With Double learningRateReplayBufferActor,
+        @With Double learningRateReplayBufferActorStd,
         @With Double gradMeanActorMaxBufferFitting,
         @With Integer replayBufferSize,
         @With Integer miniBatchSize,
@@ -42,6 +43,7 @@ public record TrainerParameters(
                              Double gamma,
                              Double learningRateReplayBufferCritic,
                              Double learningRateReplayBufferActor,
+                             Double learningRateReplayBufferActorStd,
                              Double gradMeanActorMaxBufferFitting,
                              Integer replayBufferSize,
                              Integer miniBatchSize,
@@ -54,6 +56,8 @@ public record TrainerParameters(
         this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
         this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(learningRateReplayBufferCritic, LEARNING_RATE);
         this.learningRateReplayBufferActor = defaultIfNullDouble.apply(learningRateReplayBufferActor, LEARNING_RATE_SMALL);
+        this.learningRateReplayBufferActorStd = defaultIfNullDouble.apply(learningRateReplayBufferActorStd, LEARNING_RATE_SMALL);
+
         this.gradMeanActorMaxBufferFitting = defaultIfNullDouble.apply(gradMeanActorMaxBufferFitting, GRAD_MAX);
         this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);

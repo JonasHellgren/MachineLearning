@@ -62,15 +62,18 @@ public class Runner24HoursTrading {
                 .settings(settings5)
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)
-                .learningRateActorMean(0e-2).learningRateActorStd(0e-2).learningRateCritic(0e-3)
+                .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-2)
+                //.learningRateActorMean(1e-3).learningRateActorStd(1e-2).learningRateCritic(1e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(POWER_CAPACITY_FCR)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
                 .withNofEpisodes(3000).withGamma(1.00).withStepHorizon(10)
+                .withLearningRateReplayBufferActor(1e-1)
+                .withLearningRateReplayBufferActorStd(1e-2)
                 .withLearningRateReplayBufferCritic(1e-1)
-                .withLearningRateReplayBufferActor(1e-1).withGradMeanActorMaxBufferFitting(1d)
-                .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(3);
+                .withGradMeanActorMaxBufferFitting(1d)
+                .withReplayBufferSize(1000).withMiniBatchSize(50).withNReplayBufferFitsPerEpisode(3);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

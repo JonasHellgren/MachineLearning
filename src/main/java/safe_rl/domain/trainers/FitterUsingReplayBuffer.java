@@ -16,6 +16,7 @@ import safe_rl.domain.value_classes.ExperienceMultiStep;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;
 import static common.math.MathUtils.clip;
 
@@ -32,7 +33,7 @@ public class FitterUsingReplayBuffer<V> {
     AgentACDiscoI<V> agent;
     TrainerParameters parameters;
     int indexFeature;
-    LinearBatchFitter fitterCritic, fitterActor;
+    LinearBatchFitter fitterCritic, fitterActorMean, fitterActorStd;
 
     public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
                                    TrainerParameters trainerParameters,
@@ -41,7 +42,9 @@ public class FitterUsingReplayBuffer<V> {
         this.parameters = trainerParameters;
         this.indexFeature=indexFeature;
         this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
-        this.fitterActor = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
+        this.fitterActorMean = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
+        this.fitterActorStd = new LinearBatchFitter(parameters.learningRateReplayBufferActorStd());
+
     }
 
     public void fit(ReplayBufferMultiStepExp<V> buffer) {
@@ -66,7 +69,7 @@ public class FitterUsingReplayBuffer<V> {
         var actorMean=agent.getActorMean();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
         var batchDataActor = createData(experiences, lossMean);
-        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        paramsActor = fitterActorMean.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
@@ -74,7 +77,7 @@ public class FitterUsingReplayBuffer<V> {
         var actorMean=agent.getActorLogStd();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
         var batchDataActor = createData(experiences,lossStd);
-        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        paramsActor = fitterActorStd.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
@@ -90,6 +93,14 @@ public class FitterUsingReplayBuffer<V> {
     ToDoubleFunction<ExperienceMultiStep<V>> targetFcn=exp -> exp.isStateFutureTerminalOrNotPresent()
             ? exp.sumOfRewards()
             : exp.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(exp.stateFuture());
+
+    ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> loss = (exp,isMean) -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        return clip(-grad.getFirst()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
 
     ToDoubleFunction<ExperienceMultiStep<V>> lossMean = exp -> {
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());

@@ -1,127 +1,159 @@
+package safe_rl.domain.trainers;
 
+import com.google.common.collect.*;
+import common.linear_regression_batch_fitting.LinearBatchFitter;
+import common.other.Conditionals;
+import lombok.extern.java.Log;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.util.Pair;
+import safe_rl.agent_interfaces.AgentACDiscoI;
+import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.memories.ReplayBufferMultiStepExp;
+import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.helpers.EpisodeInfoMultiStep;
+import java.util.List;
+import java.util.function.ToDoubleBiFunction;
+import java.util.function.ToDoubleFunction;
+import static common.math.MathUtils.clip;
 
+/***
+ * This class extracts mini batch for any time, weights in critic memory at this time is fitted
+ * Using linear regression from multiple data points stabilizes fitting
+ */
 
-undvika calcOutX calcOutY, sätt flip som klass parameter  x
-marginal i Frame  X
-skapa separat package: Java based open GYM  x
+@Log
+public class FitterUsingReplayBuffer<V> {
 
-Environment som abstract isf interface x
-getParameters();  //polymorphism: can return any sub class of EnvironmentParametersAbstract  stämmer?? behövs getParameters? onödig  X
-Agent interface döps om till Learnable x
-Bas klass för agent tabular x
-Bas klass för agent nn  x
-skapa method för "INDArray inputNetwork = node.getStateVariablesAsNetworkInput(envParams)"  x
-Warning: Initializing ND4J with Generic x86 binary on a CPU with AVX/AVX2 support
-testa med regel baserad action för MountainCar, tex 2 om pos>eval och 0 om pos<eval  X
-startPosition verkar fel x
-printa pos and speed i panel  x
-förstå varför grafik ej visas ibland x
-MountainCar agent
----------------
-inte behöva träna nn varje steg  x
-ibland vissa policy för episode med start i eval  x
-träna olika värden olika states x
-learnAtDifferentInputsZeroGamma  FUCKAR  !!
-skap PanelMountainCarPlot  x
-plotta policy x
-antal steg isf antal episoder avgör networkTarget uppdatering etc x
-prova SixRooms  x
-learnAtSameInputStandardRewardNonZeroGamma verkar krångla   x
-kolla av nof steps, nollställa vid rätt tillfälla. totalNofSteps i node, nofFits i AgentNetwork, nofSteps i "specific" State.
-snygga upp kod, tex några metoder från test klass in i andra klasser,   x
-stepReturn.reward=-1 för learnAtSameInputStandardRewardNonZeroGamma
-undvika kalla createContinuousVariable flera ggr x
-skapa seperata test för funk approx  resp inlärning  x
-alternativ reward
-lära sig Q för regelabserad, väl lika mellan actions x
-nofFits:2376, totalNofSteps:1227936 stämmer inte  x
-nyanlända experience, prioritet?  x
-normalisiering   x
-ändra range  x
-annan nn arkitekur, testat LEAKRELU, funkar sämre  x
+    public static final int N_FEAT = 1;
+    public static final int MIN_NOF_POINTS = 2;
+    public static final boolean DUMMY_TRUE = true;
+    public static final boolean MEAN = true;
+    public static final boolean STD = false;
+    AgentACDiscoI<V> agent;
+    TrainerParameters parameters;
+    int indexFeature;
+    LinearBatchFitter fitterCritic, fitterActor;
 
-testa SixRooms  x
-
-code clean up:
-- agent.node.totalNofSteps % agent.NOF_STEPS_BETWEEN_FITS == 0 som function  x
-- flytta node.totalNofSteps++;   VET EJ HUR
-- render function  x
-- render function i abstract class
-minska q learning rate   x
-animera under träning   x
-färga circle sfa action i animering  x
-pusha till repo  x
-
-snyggare textning i anim fönster  x
-mer info i anim fönster, tex max Qsa   x
-0 <=> uniform distribution  = 0.9
-testPolicy printa mer än succes ratio, tex bellman error, antal steg
-plotta policy, prickar med olika färg
-
-code clean up
-- bantad ScaleLinear: LinearScaler i ModelsCommon
-- förklara RB_EPS etc
-
-eps decay  x
-momentum x  verkar bra med stort, typ 0.99
-mer clipping  olika BE_ERROR_MAX
-minska ALPHA
-studera minibatch
-minibatch ej exp rep
-annan w init
-min avg max på weights
-exploderar w utan gradientNormalization?
-
-
-annan environment, tex chart pole  x
-cart pole agent  x
-pole reward från fail node  x
-göra test policy mer flexibel  nja, verker ej gå   x
-långsammare slutanimering  x
-spara bästa policy hittils x
-hyper par från artikel
-annan skalning på input    x
-prova mindre massa cart   verkar ej påverka nämnvärt, mest försvåra x
-enkom cart ändra färg sfa action  x
-mer exp replay x
-
-clean up
-- node isf agent till render  x
-- animatePolicy till Environment  x
-- newState och stepReturn, flytta från step  skippar  x
-- döp om badstate till fail node Environment  x
-- load and save methoder i base NnAgentClass  x
-- diverse tex calcRandomFromIntervall til class MathUtils  x
-
-
-spara bästa policy hittils även för mountain car  x
-fail node fcn för mountain car  x
-
-printa [min,avg,max] nofSteps  x
-plantuml  x
-setNetworkInput(node, envParams)     envParams verkar inte behövas här och på andra ställen
-beskrivande .md fil
-pong environment
-
-när tid:
-test fcn approx på six rooms
-binary string variable i State   https://stackoverflow.com/questions/7602665/store-an-array-in-hashmap/7602742
-prova relu som activ function för six rooms
-GPU vs CPU för riktigt stor nn/batch
-normalize regression examples
-udemu ai4 bandit example
-Test saving fail states-actions
-
-    //  somePrinting(i, actionInSelected, sr, simulationResults, nodeSelected);
-    private void somePrinting(int i, Optional<ActionInterface<A>> actionInSelected, StepReturnGeneric<S> sr, SimulationResults simulationResults, NodeWithChildrenInterface<S, A> nodeSelected) {
-
-        List<Integer> actionList = new ArrayList<>();
-        actionsToSelected.forEach(a -> actionList.add((Integer) a.getValue()));
-        System.out.println("actionList = " + actionList);
-        System.out.println("actionTemplate = " + actionTemplate);
-        System.out.println("nodeSelected.getState() = " + nodeSelected.getState());
-        System.out.println("actionInSelected = " + actionInSelected.orElseThrow().getValue() + ", sr.isFail = " + sr.isFail);
-        System.out.println("sr.newState = " + sr.newState);
-        TreeInfoHelper<S, A> tih = new TreeInfoHelper<>(nodeRoot, settings);
-        System.out.println("nofNodes = " + tih.nofNodes());
+    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
+                                   TrainerParameters trainerParameters,
+                                   int indexFeature) {
+        this.agent = agent;
+        this.parameters = trainerParameters;
+        this.indexFeature=indexFeature;
+        this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
+        this.fitterActor = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
     }
+
+    public void fit(ReplayBufferMultiStepExp<V> buffer) {
+        var experiences = getExperiencesAtRandomTime(buffer);
+        var stateAtTime = experiences.stream().findAny().map(e -> e.state()).orElseThrow();
+        fitCritic(experiences, stateAtTime);
+        fitActorMean(experiences, stateAtTime);
+        fitActorStd(experiences,stateAtTime);
+    }
+
+
+    private void fitCritic(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var critic=agent.getCritic();
+        RealVector paramsCritic = new ArrayRealVector(critic.readThetas(stateAtTime));
+        var batchData = createData(experiences,targetFcn, DUMMY_TRUE);
+        paramsCritic = fitterCritic.fit(paramsCritic, batchData);
+        critic.save(stateAtTime, paramsCritic.toArray());
+    }
+
+
+    private void fitActorMean(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean=agent.getActorMean();
+        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
+        var batchDataActor = createData(experiences, loss, MEAN);
+        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        actorMean.save(stateAtTime, paramsActor.toArray());
+    }
+
+    private void fitActorStd(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean=agent.getActorLogStd();
+        RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
+        var batchDataActor = createData(experiences,loss, STD);
+        paramsActor = fitterActor.fitFromErrors(paramsActor, batchDataActor);
+        actorMean.save(stateAtTime, paramsActor.toArray());
+    }
+
+    private  List<ExperienceMultiStep<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
+        var batch = buffer.getMiniBatch(parameters.miniBatchSize());
+        var ei = new EpisodeInfoMultiStep<>(batch);
+        var presentTimes = ei.getValuesOfSpecificDiscreteFeature(indexFeature)
+                .stream().toList();
+        int timeChosen = getMostFrequentTime(presentTimes);
+        return ei.getExperiencesWithDiscreteFeatureValue(timeChosen, indexFeature);
+    }
+
+    ToDoubleBiFunction<ExperienceMultiStep<V>, Boolean> targetFcn=(exp,noUsed) ->
+            exp.isStateFutureTerminalOrNotPresent()
+            ? exp.sumOfRewards()
+            : exp.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(exp.stateFuture());
+
+    ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> loss = (exp,isMean) -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        double gradVal=Boolean.TRUE.equals(isMean)?grad.getFirst():grad.getSecond();
+        return clip(-gradVal*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
+
+    ToDoubleFunction<ExperienceMultiStep<V>> lossMean = exp -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        return clip(-grad.getFirst()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
+
+    ToDoubleFunction<ExperienceMultiStep<V>> lossStd = exp -> {
+        var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
+        double vState = agent.readCritic(exp.state());
+        double advantage=valueTarget(exp)-vState;
+        double gradMax= parameters.gradMeanActorMaxBufferFitting();
+        return clip(-grad.getSecond()*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+    };
+
+    private static int getMostFrequentTime(List<Integer> presentTimes) {
+        Multiset<Integer> multiset = HashMultiset.create(presentTimes);
+        var maxEntry = multiset.entrySet().stream()
+                .max(Ordering.natural().onResultOf(Multiset.Entry::getCount));
+        Conditionals.executeIfTrue(maxEntry.orElseThrow().getCount()< MIN_NOF_POINTS, () ->
+                log.warning("Few items in time step for fitting"));
+        return maxEntry.orElseThrow().getElement();
+    }
+
+    Pair<RealMatrix, RealVector> createData(List<ExperienceMultiStep<V>> experiencesAtChosenTime,
+                                            ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> entry,
+                                            boolean isMean) {
+        int nPoints = experiencesAtChosenTime.size();
+        var xMat = new Array2DRowRealMatrix(nPoints, N_FEAT);
+        var yVec = new ArrayRealVector(nPoints);
+        int i = 0;
+        for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
+            xMat.setRow(i, getFeatures(experience));
+            yVec.setEntry(i, entry.applyAsDouble(experience,isMean));
+            i++;
+        }
+        return Pair.create(xMat, yVec);
+    }
+
+    double[] getFeatures(ExperienceMultiStep<V> experience) {
+        return new double[]{experience.state().continousFeatures()[indexFeature]};
+    }
+
+    private double valueTarget(ExperienceMultiStep<V> experience) {
+        return experience.isStateFutureTerminalOrNotPresent()
+                ? experience.sumOfRewards()
+                : experience.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(experience.stateFuture());
+    }
+
+
+}
