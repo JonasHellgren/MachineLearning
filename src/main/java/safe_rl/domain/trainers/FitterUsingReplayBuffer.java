@@ -19,6 +19,8 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
 import java.util.List;
 
+import static common.math.MathUtils.clip;
+
 /***
  * This class extracts mini batch for any time, weights in critic memory at this time is fitted
  * Using linear regression from multiple data points stabilizes fitting
@@ -63,7 +65,7 @@ public class FitterUsingReplayBuffer<V> {
 
         DisCoMemory<V> actorMean=agent.getActorMean();
         RealVector weightsAndBiasActor = new ArrayRealVector(actorMean.readThetas(anyStateWithTimeChosen));
-        var batchDataActor = createActorData(N_FEAT, experiencesAtChosenTime);
+        var batchDataActor = createActorMeanData(N_FEAT, experiencesAtChosenTime);
         weightsAndBiasActor = linearFitterActor.fitFromErrors(weightsAndBiasActor, batchDataActor);
         actorMean.save(anyStateWithTimeChosen, weightsAndBiasActor.toArray());
 
@@ -100,7 +102,7 @@ public class FitterUsingReplayBuffer<V> {
                 : experience.sumOfRewards() + trainerParameters.gammaPowN()* critic.read(experience.stateFuture());
     }
 
-    Pair<RealMatrix, RealVector> createActorData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
+    Pair<RealMatrix, RealVector> createActorMeanData(int nFeat, List<ExperienceMultiStep<V>> experiencesAtChosenTime) {
         int nPoints = experiencesAtChosenTime.size();
         var xMat = new Array2DRowRealMatrix(nPoints, nFeat);
         var yVec = new ArrayRealVector(nPoints);
@@ -111,9 +113,9 @@ public class FitterUsingReplayBuffer<V> {
             var grad = agent.gradientMeanAndStd(experience.state(), experience.actionApplied());
             double vState = agent.readCritic(experience.state());
             double advantage=valueTarget(agent.getCritic(), experience)-vState;
-            double error= MathUtils.clip(grad.getFirst()*advantage,-gradMax,gradMax);
+            double loss= clip(-grad.getFirst()*advantage,-gradMax,gradMax);  //MINUS <=> maximize loss
             xMat.setRow(i, features);
-            yVec.setEntry(i, error);
+            yVec.setEntry(i, loss);
             i++;
         }
         return Pair.create(xMat, yVec);

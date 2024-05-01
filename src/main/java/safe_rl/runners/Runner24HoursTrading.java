@@ -18,7 +18,9 @@ import safe_rl.helpers.AgentSimulator;
 import java.util.Arrays;
 
 public class Runner24HoursTrading {
-    public static final double PRICE_BATTERY = 10e3;
+    public static final double PRICE_BATTERY = 30e3;
+    public static final double POWER_CAPACITY_FCR = 30.0;
+
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
     static SettingsTrading settings5;
@@ -40,15 +42,13 @@ public class Runner24HoursTrading {
         helper.plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
 
-
-
     private static Pair<
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
 
         settings5 = SettingsTrading.new24HoursIncreasingPrice()
-                .withPowerCapacityFcr(10.0).withPriceFCR(0.03).withStdActivationFCR(0.1)
+                .withPowerCapacityFcr(POWER_CAPACITY_FCR).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
 
 
@@ -63,14 +63,14 @@ public class Runner24HoursTrading {
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-                .gradMaxActor0(1d).gradMaxCritic0(10d)
+                .gradMaxActor0(1d).gradMaxCritic0(POWER_CAPACITY_FCR)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(5000).withGamma(0.99).withStepHorizon(10)
+                .withNofEpisodes(3000).withGamma(1.00).withStepHorizon(10)
                 .withLearningRateReplayBufferCritic(1e-1)
-                .withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting(1e-3)
-                .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(2);
+                .withLearningRateReplayBufferActor(1e-1).withGradMeanActorMaxBufferFitting(1d)
+                .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(3);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

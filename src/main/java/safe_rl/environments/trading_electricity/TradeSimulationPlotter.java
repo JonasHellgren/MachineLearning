@@ -31,8 +31,8 @@ public class TradeSimulationPlotter<V> {
         addActionChart(simulationResultsMap, charts);
         addSocChart(simulationResultsMap, charts);
         Function<SimulationResult<V>, Double> extractorRev = sr -> sr.reward();
-        addRevenueChart(simulationResultsMap, charts, extractorRev);
         addAccRevChart(simulationResultsMap, charts, extractorRev);
+        addRevenueChart(simulationResultsMap, charts, extractorRev);
         addSohChart(simulationResultsMap, charts);
         addAccRevFCR(simulationResultsMap, charts);
         new SwingWrapper<>(charts).displayChartMatrix();
@@ -119,9 +119,9 @@ public class TradeSimulationPlotter<V> {
         return allValues;
     }
 
-    private void setYMinMax(XYChart chartAction, double yAxisMin, double yAxisMax) {
-        chartAction.getStyler().setYAxisMin(yAxisMin);
-        chartAction.getStyler().setYAxisMax(yAxisMax);
+    private void setYMinMax(XYChart chart, double yAxisMin, double yAxisMax) {
+        chart.getStyler().setYAxisMin(yAxisMin);
+        chart.getStyler().setYAxisMax(yAxisMax);
     }
 
     private void addDataToChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,

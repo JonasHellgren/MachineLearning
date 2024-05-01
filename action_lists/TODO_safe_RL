@@ -105,7 +105,16 @@ batch även för actor fit - ingen större påv x
 RemoveStrategy x
 Runner24HoursTrading x
 plotta dSoC och revenue FCR i simulering  x
-rb actor fit - stammer action
+rb actor fit - stammer action x
+
+snygga upp FitterUsingReplayBuffer
+createActorStdData
+plotta dSoh med enhet ppm
+annan skala effekt
+skirv ut slitage kost i sim plot
+plotta SettingsTrading
+
+dokumentera
 
 Fcr d up och n
 
@@ -114,6 +123,7 @@ Lists.newArrayList()   isf new
 guava isf ListUtil
 
 kanske senare:
+test FitterUsingReplayBuffer actor update
 plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
 ide om 2 faster. 1 mc critic preproc. 2 ac
 TrainerI
