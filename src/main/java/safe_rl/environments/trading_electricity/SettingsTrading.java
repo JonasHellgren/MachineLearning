@@ -101,7 +101,11 @@ public record SettingsTrading(
     }
 
     public double revFCRPerTimeStep() {
-        return priceFCR() * powerCapacityFcr();
+        return priceFCR * powerCapacityFcr;
+    }
+
+    public double dSoCPC() {
+        return powerCapacityFcr* dt/ energyBatt;
     }
 
 }

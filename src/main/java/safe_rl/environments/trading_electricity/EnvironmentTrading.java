@@ -75,12 +75,13 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         StateTrading s1=(StateTrading) stateNew;
         var s=settings;
         double powerFcr= s.powerAvgFcrExtreme();
+        double dSoCPC = s.dSoCPC();
         double[] c=new double[N_CONSTRAINTS];
         double g=s.gFunction();
         c[0]=(-s.powerBattMax())-(power-powerFcr);   //power-powerFcr>-powerBattMax
         c[1]=(power+powerFcr)-s.powerBattMax();   //power+powerFcr<powerBattMax
-        c[2]=s.socMin()-(s0.soc()+g*(power-powerFcr));   //soc0+-->socMin
-        c[3]=(s0.soc()+g*(power+powerFcr))-s.socMax();   //soc0+..<socMax
+        c[2]=s.socMin()-(s0.soc()+g*(power-powerFcr)-dSoCPC);   //soc0+-->socMin
+        c[3]=(s0.soc()+g*(power+powerFcr)+dSoCPC)-s.socMax();   //soc0+..<socMax
         c[4]=s.socTerminalMin()-(s0.soc()+g*(power-powerFcr)+s.dSocMax(s1.time()));
         //soc+g*(...)+dSocMax>socTerminalMin
         return c;

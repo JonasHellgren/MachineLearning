@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public class Runner24HoursTrading {
     public static final double PRICE_BATTERY = 30e3;
-    public static final double POWER_CAPACITY_FCR = 10.0;
+    public static final double POWER_CAPACITY_FCR = 00.0;
 
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
