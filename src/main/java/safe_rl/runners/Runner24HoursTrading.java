@@ -18,7 +18,7 @@ import safe_rl.helpers.AgentSimulator;
 import java.util.Arrays;
 
 public class Runner24HoursTrading {
-    public static final double PRICE_BATTERY = 1e3;
+    public static final double PRICE_BATTERY = 30e3;
     public static final double POWER_CAPACITY_FCR = 10.0;
 
     public static final int N_SIMULATIONS = 5;

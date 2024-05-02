@@ -19,7 +19,7 @@ public record SettingsTrading(
         @With double powerCapacityFcr,
         @With double priceFCR,
         @With double nCyclesLifetime
-) implements SettingsI  {
+) implements SettingsI {
 
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
@@ -38,7 +38,7 @@ public record SettingsTrading(
         var settings = new5HoursIncreasingPrice().withPriceTraj(new double[]{1, 1, 1});
         settings.check();
         return settings;
-            }
+    }
 
     public static SettingsTrading new5HoursDecreasingPrice() {
         var settings = new5HoursIncreasingPrice()
@@ -53,7 +53,7 @@ public record SettingsTrading(
                 .dt(1)
                 .energyBatt(100).powerBattMax(100).priceBattery(30e3)
                 .socMin(0.0).socMax(1).socTerminalMin(0.5)
-                .priceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1,0.0,24)))
+                .priceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1, 0.1, 24)))
                 .stdActivationFCR(0.1).powerCapacityFcr(1).priceFCR(0.03)
                 .nCyclesLifetime(2000)
                 .build();
@@ -63,18 +63,18 @@ public record SettingsTrading(
 
 
     public void check() {
-        Preconditions.checkArgument(powerAvgFcrExtreme()<powerBattMax(),
+        Preconditions.checkArgument(powerAvgFcrExtreme() < powerBattMax(),
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
-        Preconditions.checkArgument(priceTraj.length>0,"Empty price trajectory");
+        Preconditions.checkArgument(priceTraj.length > 0, "Empty price trajectory");
     }
 
     //time for final price item in priceTraj
     public double timeEnd() {
-        return (priceTraj.length-1)*dt;
+        return (priceTraj.length - 1) * dt;
     }
 
     public double timeTerminal() {
-        return priceTraj.length*dt;
+        return priceTraj.length * dt;
     }
 
 
@@ -87,13 +87,13 @@ public record SettingsTrading(
     }
 
     public double gFunction() {
-        return dt/energyBatt;
+        return dt / energyBatt;
     }
 
 
     public double dSocMax(double time) {
-        double dEnergyMax=(timeTerminal() - time) * (powerBattMax - powerAvgFcrExtreme());
-        return dEnergyMax/energyBatt;
+        double dEnergyMax = (timeTerminal() - time) * (powerBattMax - powerAvgFcrExtreme());
+        return dEnergyMax / energyBatt;
     }
 
     public int nTimeSteps() {
@@ -101,7 +101,7 @@ public record SettingsTrading(
     }
 
     public double revFCRPerTimeStep() {
-        return priceFCR()*powerCapacityFcr();
+        return priceFCR() * powerCapacityFcr();
     }
 
 }

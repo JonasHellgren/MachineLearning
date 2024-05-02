@@ -111,14 +111,17 @@ snygga upp FitterUsingReplayBuffer x
 createActorStdData x
 std clipper  x
 plotta slitage kost skrif ut dSoh x
-plotta SettingsTrading
+plotta SettingsTrading  x
+
+ytterligare constrain - klara PC ett tidsstan utal slå i soc gräns x
+ovan även i env
+visa value i time 0 soc start i plot
 
 dokumentera
 
 
 whenFCR_thenHigherRevenueAndSoCEndDeviation krashar ibland
 
-ytterligare constrain - klara PC ett tidsstan utal slå i soc gräns
 Fcr d up och n
 
 clean up:
