@@ -109,22 +109,23 @@ rb actor fit - stammer action x
 
 snygga upp FitterUsingReplayBuffer x
 createActorStdData x
-std clipper
-bara lära från buffer - fimpa motsvarande hyper param
-snygga upp LinearBatchFitter
-plotta dSoh med enhet ppm
-annan skala effekt
-skirv ut slitage kost i sim plot
+std clipper  x
+plotta slitage kost skrif ut dSoh x
 plotta SettingsTrading
-whenFCR_thenHigherRevenueAndSoCEndDeviation krashar ibland
 
 dokumentera
 
+
+whenFCR_thenHigherRevenueAndSoCEndDeviation krashar ibland
+
+ytterligare constrain - klara PC ett tidsstan utal slå i soc gräns
 Fcr d up och n
 
 clean up:
 Lists.newArrayList()   isf new
 guava isf ListUtil
+snygga upp LinearBatchFitter
+
 
 kanske senare:
 test FitterUsingReplayBuffer actor update

@@ -53,7 +53,7 @@ public record SettingsTrading(
                 .dt(1)
                 .energyBatt(100).powerBattMax(100).priceBattery(30e3)
                 .socMin(0.0).socMax(1).socTerminalMin(0.5)
-                .priceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1,0.1,24)))
+                .priceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1,0.0,24)))
                 .stdActivationFCR(0.1).powerCapacityFcr(1).priceFCR(0.03)
                 .nCyclesLifetime(2000)
                 .build();

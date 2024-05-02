@@ -2,6 +2,7 @@ package safe_rl.environments.trading_electricity;
 
 import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
+import common.other.NumberFormatterUtil;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
@@ -11,10 +12,8 @@ import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import safe_rl.domain.value_classes.SimulationResult;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormat;
+import java.util.*;
 import java.util.function.Function;
 
 @AllArgsConstructor
@@ -39,7 +38,7 @@ public class TradeSimulationPlotter<V> {
     }
 
     private  void addAccRevFCR(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        XYChart chartAccumRevFcr= getXyChart("Acc rev. FCR");
+        XYChart chartAccumRevFcr= getXyChart("","Acc rev. FCR");
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
             List<Double> revFcrList = ListUtils.createListWithEqualElementValues(
                     settings.nTimeSteps(),settings.revFCRPerTimeStep());
@@ -53,19 +52,22 @@ public class TradeSimulationPlotter<V> {
     }
 
     private void addSohChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        XYChart chartdSoh= getXyChart("soh");
-        Function<SimulationResult<V>, Double> extractorDsoh = sr -> {
+        Function<SimulationResult<V>, Double> extractorCostDsoh = sr -> {
             StateTrading stateCasted = (StateTrading) sr.state();
-            return stateCasted.soh();
+            double dSoh = 1 - stateCasted.soh();
+            return dSoh * settings.priceBattery();
         };
-        var allValuesSoh = getAllValues(simulationResultsMap, extractorDsoh);
-        setYMinMax(chartdSoh, Collections.min(allValuesSoh), Collections.max(allValuesSoh));
-        addDataToChart(simulationResultsMap, chartdSoh, extractorDsoh);
+        var allValuesCostSoh = getAllValues(simulationResultsMap, extractorCostDsoh);
+        DecimalFormat formatter=NumberFormatterUtil.formatterTwoDigits;
+        double dSohMaxInPercentage = Collections.max(allValuesCostSoh) / settings.priceBattery()*100;
+        XYChart chartdSoh= getXyChart("dSoh(%)="+ formatter.format(dSohMaxInPercentage),"cost soh (Euro)");
+        setYMinMax(chartdSoh, Collections.min(allValuesCostSoh), Collections.max(allValuesCostSoh));
+        addDataToChart(simulationResultsMap, chartdSoh, extractorCostDsoh);
         charts.add(chartdSoh);
     }
 
     private void addAccRevChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts, Function<SimulationResult<V>, Double> extractorRev) {
-        XYChart chartAccumRev= getXyChart("Acc revenue (Euro)");
+        XYChart chartAccumRev= getXyChart("","Acc revenue (Euro)");
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
             List<Double> revenues = entry.getValue().stream().map(extractorRev).toList();
             XYSeries series = chartAccumRev.addSeries(
@@ -79,14 +81,14 @@ public class TradeSimulationPlotter<V> {
 
     private void addRevenueChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts, Function<SimulationResult<V>, Double> extractorRev) {
         List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
-        XYChart chartRev= getXyChart("Revenue (Euro)");
+        XYChart chartRev= getXyChart("","Revenue (Euro)");
         setYMinMax(chartRev, Collections.min(allValues), Collections.max(allValues));
         addDataToChart(simulationResultsMap, chartRev, extractorRev);
         charts.add(chartRev);
     }
 
     private void addSocChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        XYChart chartSoc = getXyChart("Soc");
+        XYChart chartSoc = getXyChart("","Soc");
         setYMinMax(chartSoc, 0, 1);
         Function<SimulationResult<V>, Double> extractorSoc = sr ->
                 sr.state().continousFeatures()[StateTrading.INDEX_SOC];
@@ -94,9 +96,10 @@ public class TradeSimulationPlotter<V> {
         charts.add(chartSoc);
     }
 
-    private static XYChart getXyChart(String title) {
+    private static XYChart getXyChart(String title,String titleAxis) {
         XYChart chart = new XYChartBuilder()
-                .xAxisTitle(AXIS_TITLE).yAxisTitle(title).width(WIDTH).height(HEIGHT).build();
+                .title(title).xAxisTitle(AXIS_TITLE).yAxisTitle(titleAxis)
+                .width(WIDTH).height(HEIGHT).build();
         chart.getStyler().setYAxisDecimalPattern("#.####"); // Set Y-axis to display numbers with 2 decimal places
         return chart;
     }
