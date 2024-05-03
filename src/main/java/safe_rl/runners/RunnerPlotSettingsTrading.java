@@ -8,7 +8,7 @@ public class RunnerPlotSettingsTrading {
 
     public static void main(String[] args) {
         SettingsTradingPlotter plotter=new SettingsTradingPlotter();
-        var settings= SettingsTrading.new24HoursIncreasingPrice();
+        var settings= SettingsTrading.new24HoursZigSawPrice();
         plotter.plot(settings);
     }
 

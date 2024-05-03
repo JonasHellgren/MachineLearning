@@ -11,6 +11,5 @@ import safe_rl.domain.abstract_classes.StateI;
 public interface AgentI<V> {
      Action chooseAction(StateI<V> state);
      Action chooseActionNominal(StateI<V> state);
-
      Action chooseActionNoExploration(StateI<V> state);
 }

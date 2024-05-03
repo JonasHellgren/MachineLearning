@@ -30,7 +30,8 @@ public class RunnerHelper {
         for (int i = 0; i < nSim; i++) {
             simulationResultsMap.put(i, simulator.simulateWithNoExploration());
         }
-        new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap);
+        double valueInStartState=simulator.valueInStartState();
+        new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap,valueInStartState);
     }
 
     public  void plotMemory(DisCoMemory<VariablesTrading> critic, String name) {

@@ -117,12 +117,14 @@ ytterligare constrain - klara PC ett tidsstan utal slå i soc gräns x
 ovan även i env x
 visa value i time 0 soc start i plot
 
-dokumentera
-
+dokumentera x
+beskriv actor critic övergriplig i dok x
 
 whenFCR_thenHigherRevenueAndSoCEndDeviation krashar ibland
+priser som har 2 peakar på en dag - sågtand - succe x
 
-Fcr d up och n
+class diagrams agent x
+diagram trainer agent env
 
 clean up:
 Lists.newArrayList()   isf new
@@ -131,6 +133,7 @@ snygga upp LinearBatchFitter
 
 
 kanske senare:
+Fcr d up och n
 test FitterUsingReplayBuffer actor update
 plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
 ide om 2 faster. 1 mc critic preproc. 2 ac

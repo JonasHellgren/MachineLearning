@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.abstract_classes.SettingsI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 public record SettingsTrading(
         double dt,
@@ -57,6 +60,19 @@ public record SettingsTrading(
                 .stdActivationFCR(0.1).powerCapacityFcr(1).priceFCR(0.03)
                 .nCyclesLifetime(2000)
                 .build();
+        settings.check();
+        return settings;
+    }
+
+    public static SettingsTrading new24HoursZigSawPrice() {
+        List<Double> list = ListUtils.doublesStartStepNitems(0.1, 0.1, 12);
+        List<Double> listZigSaw=new ArrayList<>();
+        listZigSaw.addAll(list);
+        listZigSaw.addAll(list);
+
+        System.out.println("listZigSaw = " + listZigSaw);
+        double[] priceTraj = ListUtils.toArray(listZigSaw);
+        var settings = new24HoursIncreasingPrice().withPriceTraj(priceTraj);
         settings.check();
         return settings;
     }

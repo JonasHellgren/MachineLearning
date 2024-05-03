@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public class Runner24HoursTrading {
     public static final double PRICE_BATTERY = 30e3;
-    public static final double POWER_CAPACITY_FCR = 00.0;
+    public static final double POWER_CAPACITY_FCR = 10.0;
 
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
@@ -47,7 +47,7 @@ public class Runner24HoursTrading {
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
 
-        settings5 = SettingsTrading.new24HoursIncreasingPrice()
+        settings5 = SettingsTrading.new24HoursZigSawPrice()
                 .withPowerCapacityFcr(POWER_CAPACITY_FCR).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
 
@@ -68,7 +68,7 @@ public class Runner24HoursTrading {
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(5000).withGamma(1.00).withStepHorizon(10)
+                .withNofEpisodes(10000).withGamma(1.00).withStepHorizon(10)
                 .withLearningRateReplayBufferActor(1e-2)
                 .withLearningRateReplayBufferActorStd(1e-2)
                 .withLearningRateReplayBufferCritic(1e-1)

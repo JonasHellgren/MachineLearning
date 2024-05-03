@@ -40,7 +40,7 @@ public class TestSimulationTradingWithFCR {
     void whenFCR_thenHigherRevenueAndSoCEndDeviation() {
         init(0, 1);
         var noFCR = getRevSocAvgPair();
-        init(4, 1);
+        init(1, 1);
         var FCR = getRevSocAvgPair();
         Assertions.assertTrue(noFCR.getLeft()<FCR.getLeft());
         Assertions.assertTrue(noFCR.getRight()<FCR.getRight());
@@ -51,7 +51,7 @@ public class TestSimulationTradingWithFCR {
     void whenFCRAndLowFCRPrice_thenLowerRevenueAndHigherSoCEndDeviation() {
         init(0, 1);
         var noFCR = getRevSocAvgPair();
-        init(4, 1e-3);
+        init(1, 1e-3);
         var FCR = getRevSocAvgPair();
         Assertions.assertTrue(noFCR.getLeft()>FCR.getLeft());
         Assertions.assertTrue(noFCR.getRight()<FCR.getRight());

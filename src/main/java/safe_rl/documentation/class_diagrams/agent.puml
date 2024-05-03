@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface AgentI<V=generic state variables> {
+  + Action chooseAction(StateI<V> s);
+  + Action chooseActionNoExploration(StateI<V> s);
+}
+
+interface DiscoActorI {
+ + fitActor(StateI<V> s,Action a, double adv);
+ + Pair<Double,Double> readActor(StateI<V> s);
+ + Pair<Double, Double> gradientMeanAndStd(StateI<V> s, Action a);
+}
+
+
+interface DiscoCriticI {
+ + void fitCritic(StateI<V> s, double error);
+ + double readCritic(StateI<V> s);
+}
+
+
+
+interface AgentACDiscoI extends AgentI, DiscoActorI, DiscoCriticI {
+}
+
+
+
+AgentACDiscoI  <|-- AgentACDCSafe
+
+
+@enduml

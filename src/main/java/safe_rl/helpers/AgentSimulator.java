@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.agent_interfaces.AgentI;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.EnvironmentI;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor
 @Log
 public class AgentSimulator<V> {
-    @NonNull AgentI<V> agent;
+    @NonNull AgentACDiscoI<V> agent;
     @NonNull SafetyLayer<V> safetyLayer;
     @NonNull Supplier<StateI<V>> startStateSupplier;
     @NonNull EnvironmentI<V> environment;
@@ -32,6 +33,10 @@ public class AgentSimulator<V> {
 
     public List<SimulationResult<V>> simulateWithNoExploration() throws JOptimizerException {
         return simulate(false);
+    }
+
+    public double valueInStartState() {
+        return agent.readCritic(startStateSupplier.get());
     }
 
     List<SimulationResult<V>> simulate(boolean exploration) throws JOptimizerException {

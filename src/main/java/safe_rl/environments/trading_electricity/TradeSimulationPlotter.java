@@ -25,12 +25,12 @@ public class TradeSimulationPlotter<V> {
     SettingsTrading settings;
 
 
-    public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap) {
+    public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, double valueInStartState) {
         List<XYChart> charts = new ArrayList<>();
         addActionChart(simulationResultsMap, charts);
         addSocChart(simulationResultsMap, charts);
         Function<SimulationResult<V>, Double> extractorRev = sr -> sr.reward();
-        addAccRevChart(simulationResultsMap, charts, extractorRev);
+        addAccRevChart(simulationResultsMap, charts, extractorRev,valueInStartState);
         addRevenueChart(simulationResultsMap, charts, extractorRev);
         addSohChart(simulationResultsMap, charts);
         addAccRevFCR(simulationResultsMap, charts);
@@ -66,8 +66,14 @@ public class TradeSimulationPlotter<V> {
         charts.add(chartdSoh);
     }
 
-    private void addAccRevChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts, Function<SimulationResult<V>, Double> extractorRev) {
-        XYChart chartAccumRev= getXyChart("","Acc revenue (Euro)");
+    private void addAccRevChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
+                                List<XYChart> charts,
+                                Function<SimulationResult<V>, Double> extractorRev,
+                                double valueInStartState) {
+        DecimalFormat formatter=NumberFormatterUtil.formatterTwoDigits;
+        XYChart chartAccumRev= getXyChart(
+                "valueInStartState(Euro)="+formatter.format(valueInStartState),
+                "Acc revenue (Euro)");
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
             List<Double> revenues = entry.getValue().stream().map(extractorRev).toList();
             XYSeries series = chartAccumRev.addSeries(
