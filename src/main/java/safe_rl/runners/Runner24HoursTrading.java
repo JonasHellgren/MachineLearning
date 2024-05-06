@@ -31,9 +31,9 @@ public class Runner24HoursTrading {
     @SneakyThrows
     public static void main(String[] args) {
         var trainerAndSimulator = createTrainerAndSimulator();
-        var trainer=trainerAndSimulator.getFirst();
-        var timer= CpuTimer.newWithTimeBudgetInMilliSec(0);
-        var helper= RunnerHelper.builder().nSim(N_SIMULATIONS).settings(settings5).build();
+        var trainer = trainerAndSimulator.getFirst();
+        var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
+        var helper = RunnerHelper.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         trainer.train();
         trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC trading");
         helper.printing(trainer, timer);
@@ -45,22 +45,19 @@ public class Runner24HoursTrading {
     private static Pair<
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
-        //interesting to change, decreasing vs increasing price
-
         settings5 = SettingsTrading.new24HoursZigSawPrice()
                 .withPowerCapacityFcr(POWER_CAPACITY_FCR).withStdActivationFCR(0.1)
-                .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
-
+                .withSocTerminalMin(SOC_START + SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
 
         System.out.println("settings5.priceTraj() = " + Arrays.toString(settings5.priceTraj()));
 
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
-        double powerNom=settings5.powerBattMax()/10;
+        double powerNom = settings5.powerBattMax() / 10;
 
-        var trainerParameters= TrainerParameters.builder()
-                .nofEpisodes(4000).gamma(1.00).stepHorizon(10)
+        var trainerParameters = TrainerParameters.builder()
+                .nofEpisodes(8000).gamma(1.00).stepHorizon(10)
                 .learningRateReplayBufferCritic(1e-1)
                 .learningRateReplayBufferActor(1e-2)
                 .learningRateReplayBufferActorStd(1e-3)
@@ -69,18 +66,18 @@ public class Runner24HoursTrading {
                 .targetCritic(0d).absActionNominal(powerNom)
                 .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
                 .build();
-        var agent=AgentACDCSafe.newFromTrainerParams(trainerParameters,settings5,startState.copy());
+        var agent = AgentACDCSafe.newFromTrainerParams(trainerParameters, settings5, startState.copy());
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
                 .trainerParameters(trainerParameters)
                 .startStateSupplier(() -> startState.copy())
                 .build();
-        var simulator= AgentSimulator.<VariablesTrading>builder()
+        var simulator = AgentSimulator.<VariablesTrading>builder()
                 .agent(agent).safetyLayer(safetyLayer)
                 .startStateSupplier(() -> startState.copy())
                 .environment(environment).build();
 
-        return Pair.create(trainer,simulator);
+        return Pair.create(trainer, simulator);
     }
 }
