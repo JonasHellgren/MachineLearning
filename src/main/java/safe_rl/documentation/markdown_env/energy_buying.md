@@ -1,6 +1,7 @@
 # Energy buying
-In this environment the objective is to buy and sell energy (electricity) optimally under varying price conditions. 
-This kind of environment is typical in energy management systems, especially those that integrate battery storage technologies. Here’s a more detailed breakdown of the various components and constraints of such an RL environment:
+In this environment the objective is to buy energy (electricity) optimally under varying price conditions. 
+This kind of environment is typical in energy management systems, especially those that integrate battery storage technologies.
+Here’s a more detailed breakdown of the various components and constraints of such an RL environment:
 
 ## 1. State Space:
 The state of the environment at any time step could include:

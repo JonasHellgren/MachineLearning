@@ -67,5 +67,4 @@ public class ExperienceCreator<V> {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 
-
 }
