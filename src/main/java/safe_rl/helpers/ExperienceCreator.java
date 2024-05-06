@@ -1,6 +1,7 @@
 package safe_rl.helpers;
 
 
+import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
 import lombok.Builder;
 import safe_rl.agent_interfaces.AgentI;
@@ -25,7 +26,7 @@ public class ExperienceCreator<V> {
     SafetyLayer<V> safetyLayer;
 
     public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) throws JOptimizerException {
-        List<Experience<V>> experienceList = new ArrayList<>();
+        List<Experience<V>> experienceList = Lists.newArrayList();
         int si = 0;
         StepReturn<V> sr;
         var state=stateStart.copy();

@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
 import common.other.RandUtils;
 import lombok.Builder;
@@ -30,8 +31,8 @@ public class RandomActionSimulator<V> {
     public Triple<StateI<V>, List<Double>, List<Double>> simulate(StateI<V> startState) throws JOptimizerException {
         boolean isTerminalOrFail = false;
         var state = startState.copy();
-        List<Double> rewardList = new ArrayList<>();
-        List<Double> actionList = new ArrayList<>();
+        List<Double> rewardList = Lists.newArrayList();
+        List<Double> actionList = Lists.newArrayList();
 
         Action action=null;
         Action actionCorrected=null;

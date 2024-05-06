@@ -1,5 +1,6 @@
 package safe_rl.domain.memories;
 
+import com.beust.jcommander.internal.Lists;
 import lombok.Builder;
 import safe_rl.domain.value_classes.MultiStepResultItem;
 
@@ -18,7 +19,7 @@ public class ReplayBufferMultiStepExp<V> {
     @Builder.Default
     int maxSize = BUFFER_SIZE;
     @Builder.Default
-    public final List<MultiStepResultItem<V>> buffer = new ArrayList<>();
+    public final List<MultiStepResultItem<V>> buffer = Lists.newArrayList();
     @Builder.Default
     RemoveStrategyMultiStepExpI<V> removeStrategy = new RemoveStrategyRandomMultiStepExp<>();
 
@@ -49,7 +50,7 @@ public class ReplayBufferMultiStepExp<V> {
     }
 
     public List<MultiStepResultItem<V>> getMiniBatch(int batchLength) {
-        List<MultiStepResultItem<V>> miniBatch = new ArrayList<>();
+        List<MultiStepResultItem<V>> miniBatch = Lists.newArrayList();
 
         List<Integer> indexes = IntStream.rangeClosed(0, size() - 1)
                 .boxed().collect(Collectors.toList());

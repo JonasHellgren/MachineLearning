@@ -1,5 +1,6 @@
 package safe_rl.recorders;
 
+import com.beust.jcommander.internal.Lists;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
@@ -23,11 +24,8 @@ public class RecorderTrainingProgress {
 
     public static final int WIDTH = 300;
     public static final int HEIGHT = 150;
-    List<ProgressMeasures> measuresList;
+    List<ProgressMeasures> measuresList= Lists.newArrayList();
 
-    public RecorderTrainingProgress() {
-        this.measuresList = new ArrayList<>();
-    }
 
     public void clear() {
         measuresList.clear();
@@ -79,7 +77,7 @@ public class RecorderTrainingProgress {
             log.warning("No training progress data to plot");
             return;
         }
-        List<XYChart> charts = new ArrayList<>();
+        List<XYChart> charts = Lists.newArrayList();
         charts.add(createChart("nSteps", ints2NumList(nStepsTraj())));
         charts.add(createChart("accum reward", doubles2NumList(sumRewardsTraj())));
         charts.add(createChart("eval", doubles2NumList(evalTraj())));

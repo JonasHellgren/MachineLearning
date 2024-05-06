@@ -1,5 +1,6 @@
 package safe_rl.domain.value_classes;
 
+import com.google.common.collect.Lists;
 import lombok.Builder;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
@@ -21,7 +22,7 @@ public record MultiStepResults<V>(
     public static <V> MultiStepResults<V> create(int nExp) {
         return MultiStepResults.<V>builder()
                 .nExperiences(nExp)
-                .experienceList(new ArrayList<>(nExp))
+                .experienceList(Lists.newArrayListWithCapacity(nExp))
                 .build();
     }
 

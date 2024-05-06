@@ -1,5 +1,6 @@
 package safe_rl.environments.trading_electricity;
 
+import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
@@ -66,7 +67,7 @@ public record SettingsTrading(
 
     public static SettingsTrading new24HoursZigSawPrice() {
         List<Double> list = ListUtils.doublesStartStepNitems(0.1, 0.1, 12);
-        List<Double> listZigSaw=new ArrayList<>();
+        List<Double> listZigSaw= Lists.newArrayList();
         listZigSaw.addAll(list);
         listZigSaw.addAll(list);
 

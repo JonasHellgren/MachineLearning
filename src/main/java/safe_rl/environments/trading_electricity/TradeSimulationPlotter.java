@@ -24,7 +24,7 @@ public class TradeSimulationPlotter<V> {
     SettingsTrading settings;
 
     public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, double valueInStartState) {
-        List<XYChart> charts = new ArrayList<>();
+        List<XYChart> charts = Lists.newArrayList();
         addActionChart(simulationResultsMap, charts);
         addSocChart(simulationResultsMap, charts);
         Function<SimulationResult<V>, Double> extractorRev = sr -> sr.reward();

@@ -1,5 +1,6 @@
 package safe_rl.recorders;
 
+import com.beust.jcommander.internal.Lists;
 import common.other.Conditionals;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -24,7 +25,7 @@ public class RecorderActionProbabilities {
     List<Map<Integer, List<Double>>> episodeProbabilitiesList;   // every list element is a map <state,actionProbs >
 
     public RecorderActionProbabilities() {
-        this.episodeProbabilitiesList = new ArrayList<>();
+        this.episodeProbabilitiesList = Lists.newArrayList();
     }
 
     public void clear() {

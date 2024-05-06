@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
 import common.other.Conditionals;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,9 @@ import java.util.List;
 @Log
 public class LossTracker {
 
-    List<Double> meanLosses=new ArrayList<>();
-    List<Double> stdLosses=new ArrayList<>();
-    List<Double> criticLosses=new ArrayList<>();
+    List<Double> meanLosses= Lists.newArrayList();
+    List<Double> stdLosses=Lists.newArrayList();
+    List<Double> criticLosses=Lists.newArrayList();
 
     public void addMeanAndStdLoss(double mean, double std) {
         meanLosses.add(mean);

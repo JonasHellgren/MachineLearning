@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +43,7 @@ public class AgentSimulator<V> {
     List<SimulationResult<V>> simulate(boolean exploration) throws JOptimizerException {
         boolean isTerminalOrFail = false;
         var state = startStateSupplier.get().copy();
-        List<SimulationResult<V>> simulationResults = new ArrayList<>();
+        List<SimulationResult<V>> simulationResults = Lists.newArrayList();
 
         StepReturn<V> sr=null;
         while (!isTerminalOrFail) {

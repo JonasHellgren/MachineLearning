@@ -1,5 +1,6 @@
 package safe_rl.helpers;
 
+import com.beust.jcommander.internal.Lists;
 import lombok.NonNull;
 import safe_rl.domain.value_classes.Experience;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ReturnCalculator<V> {
 
     public List<Experience<V>>  createExperienceListWithReturns(@NonNull List<Experience<V>> experienceList,
                                                                 double gamma) {
-        List<Experience<V>> experienceListNew=new ArrayList<>();
+        List<Experience<V>> experienceListNew= Lists.newArrayList();
         List<Double> rewards=experienceList.stream()
                 .map(e-> e.isSafeCorrected()? e.arsCorrected().orElseThrow().reward(): e.ars().reward())
                 .toList();
