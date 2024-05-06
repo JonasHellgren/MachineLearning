@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
  *  Gk=(k=0,1=2, gamma=1)=R0+V(stateNew(0))   (standard TD)
  *  Gk=(k=0,n=2, gamma=1)=R0+R1+V(stateNew(1))
  *
- *  A basic principle is that reward for stepping into terminal is inclulded but value
+ *  A basic principle is that reward for stepping into terminal is included but value
  *  of terminal state is zero
  */
 

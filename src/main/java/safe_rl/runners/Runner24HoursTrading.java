@@ -58,22 +58,18 @@ public class Runner24HoursTrading {
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
         double powerNom=settings5.powerBattMax()/10;
-        var agent= AgentACDCSafe.<VariablesTrading>builder()
-                .settings(settings5)
+
+        var trainerParameters= TrainerParameters.builder()
+                .nofEpisodes(4000).gamma(1.00).stepHorizon(10)
+                .learningRateReplayBufferCritic(1e-1)
+                .learningRateReplayBufferActor(1e-2)
+                .learningRateReplayBufferActorStd(1e-3)
+                .gradActorMax(1d).gradCriticMax(POWER_CAPACITY_FCR)
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-1)
-               // .learningRateActorMean(1e-3).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-                .gradMaxActor0(1d).gradMaxCritic0(POWER_CAPACITY_FCR)
-                .state(startState.copy())
+                .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
                 .build();
-        var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(10000).withGamma(1.00).withStepHorizon(10)
-                .withLearningRateReplayBufferActor(1e-2)
-                .withLearningRateReplayBufferActorStd(1e-2)
-                .withLearningRateReplayBufferCritic(1e-1)
-                .withGradMeanActorMaxBufferFitting(1d)
-                .withReplayBufferSize(100).withMiniBatchSize(50).withNReplayBufferFitsPerEpisode(10);
+        var agent=AgentACDCSafe.newFromTrainerParams(trainerParameters,settings5,startState.copy());
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

@@ -18,7 +18,6 @@ public class ACDCOneStepEpisodeTrainer<V> {
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
 
-    //@Override
     public void trainAgentFromExperiences(List<Experience<V>> experienceList, List<Double> lossCriticList) {
         var rc = new ReturnCalculator<V>();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());

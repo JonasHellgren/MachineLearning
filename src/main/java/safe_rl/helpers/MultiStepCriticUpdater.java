@@ -6,6 +6,10 @@ import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.value_classes.MultiStepResults;
 import safe_rl.domain.value_classes.TrainerParameters;
 
+/**
+For learning directly from latest episode
+ */
+
 @AllArgsConstructor
 public class MultiStepCriticUpdater<V> {
 

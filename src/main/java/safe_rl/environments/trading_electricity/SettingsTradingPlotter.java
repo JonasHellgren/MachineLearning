@@ -40,7 +40,6 @@ public class SettingsTradingPlotter {
 
     @NotNull
     private static JPanel getTextPanel(SettingsTrading settings) {
-        // Left panel with text
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.add(createLabel("Energy batt. (kWh):" + settings.energyBatt()));

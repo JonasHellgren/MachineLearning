@@ -3,7 +3,7 @@ package safe_rl.environments.buying_electricity;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.With;
-import safe_rl.domain.abstract_classes.SettingsI;
+import safe_rl.domain.abstract_classes.SettingsEnvironmentI;
 
 @Builder
 public record SettingsBuying  (
@@ -13,7 +13,7 @@ public record SettingsBuying  (
         double socMax,
         double priceEnd,
         @With double[] priceTraj
-) implements SettingsI
+) implements SettingsEnvironmentI
 {
 
     public static SettingsBuying new5HoursIncreasingPrice() {

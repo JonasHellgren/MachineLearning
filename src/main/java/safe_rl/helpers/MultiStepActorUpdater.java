@@ -8,6 +8,10 @@ import safe_rl.domain.value_classes.MultiStepResults;
 import safe_rl.domain.value_classes.TrainerParameters;
 import java.util.List;
 
+/**
+  For learning directly from latest episode
+ */
+
 @AllArgsConstructor
 public class MultiStepActorUpdater<V> {
 

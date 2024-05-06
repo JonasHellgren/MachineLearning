@@ -5,8 +5,12 @@ import lombok.NonNull;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.abstract_classes.StateI;
 
+/***
+ * Item in MultiStepResults list
+ */
+
 @Builder
-public record ExperienceMultiStep<V>(
+public record MultiStepResultItem<V>(
         @NonNull StateI<V> state,
         Action actionApplied,
         @NonNull Double sumRewards,
@@ -22,12 +26,12 @@ public record ExperienceMultiStep<V>(
      return  sumRewards;
  }
 
- public static <V> ExperienceMultiStep<V> of(@NonNull StateI<V> state,
+ public static <V> MultiStepResultItem<V> of(@NonNull StateI<V> state,
                                              @NonNull Action action,
                                              @NonNull Double sumRewards,
                                              StateI<V> stateFut,
                                              @NonNull Boolean isStateFutureTerminalOrNotPresent) {
-     return ExperienceMultiStep.<V>builder()
+     return MultiStepResultItem.<V>builder()
              .state(state)
              .actionApplied(action)
              .sumRewards(sumRewards)

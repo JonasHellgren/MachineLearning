@@ -6,14 +6,12 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.value_classes.Experience;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 import safe_rl.domain.value_classes.MultiStepResults;
 import safe_rl.domain.value_classes.TrainerParameters;
 
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static common.other.Conditionals.executeOneOfTwo;
 
 /***
  This class evaluates an episode to derive data/results used to train an agent.
@@ -53,7 +51,7 @@ public class MultiStepResultsGenerator<V> {
         double vState = agent.readCritic(singleStepExperience.state());
         double advantage=valueTarget-vState;
 
-        var expMs= ExperienceMultiStep.<V>builder()
+        var expMs= MultiStepResultItem.<V>builder()
                 .state(singleStepExperience.state())
                 .actionApplied(singleStepExperience.actionApplied())
                 .sumRewards(resMS.sumRewardsNSteps())

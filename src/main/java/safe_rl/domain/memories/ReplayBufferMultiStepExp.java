@@ -1,7 +1,7 @@
 package safe_rl.domain.memories;
 
 import lombok.Builder;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class ReplayBufferMultiStepExp<V> {
     @Builder.Default
     int maxSize = BUFFER_SIZE;
     @Builder.Default
-    public final List<ExperienceMultiStep<V>> buffer = new ArrayList<>();
+    public final List<MultiStepResultItem<V>> buffer = new ArrayList<>();
     @Builder.Default
     RemoveStrategyMultiStepExpI<V> removeStrategy = new RemoveStrategyRandomMultiStepExp<>();
 
@@ -39,17 +39,17 @@ public class ReplayBufferMultiStepExp<V> {
     }
 
 
-    public void addAll(List<ExperienceMultiStep<V>> experiences) {
+    public void addAll(List<MultiStepResultItem<V>> experiences) {
         experiences.forEach(e -> add(e));
     }
 
-    public void add(ExperienceMultiStep<V> experience) {
+    public void add(MultiStepResultItem<V> experience) {
         executeIfTrue(size() >= maxSize, () -> removeStrategy.remove(buffer));
         buffer.add(experience);
     }
 
-    public List<ExperienceMultiStep<V>> getMiniBatch(int batchLength) {
-        List<ExperienceMultiStep<V>> miniBatch = new ArrayList<>();
+    public List<MultiStepResultItem<V>> getMiniBatch(int batchLength) {
+        List<MultiStepResultItem<V>> miniBatch = new ArrayList<>();
 
         List<Integer> indexes = IntStream.rangeClosed(0, size() - 1)
                 .boxed().collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class ReplayBufferMultiStepExp<V> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (ExperienceMultiStep<V> exp : buffer) {
+        for (MultiStepResultItem<V> exp : buffer) {
             sb.append(exp.toString());
             sb.append(System.lineSeparator());
         }

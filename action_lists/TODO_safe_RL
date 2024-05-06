@@ -127,6 +127,7 @@ class diagrams agent x
 diagram trainer agent env  x
 
 clean up:
+TrainerParameters in i AgentACDCSafe  - newFromTrainerParams  x
 Lists.newArrayList()   isf new
 guava isf ListUtil
 snygga upp LinearBatchFitter

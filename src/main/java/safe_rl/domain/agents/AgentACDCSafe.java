@@ -10,9 +10,10 @@ import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.abstract_classes.SettingsI;
+import safe_rl.domain.abstract_classes.SettingsEnvironmentI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.DisCoMemory;
+import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.DisCoMemoryInitializer;
 import safe_rl.helpers.LossTracker;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     public static final double ABS_TAR_MEAN = 1d;
 
     StateI<V> state;
-    SettingsI settings;
+    SettingsEnvironmentI settings;
     DisCoMemory<V> actorMean, actorLogStd, critic;
     NormDistributionSampler sampler = new NormDistributionSampler();
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
@@ -56,7 +57,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     LossTracker lossTracker=new LossTracker();
     SafeGradientClipper meanGradClipper, stdGradClipper;
 
-    public static <V> AgentACDCSafe<V> newDefault(SettingsI settings, StateI<V> state) {
+    public static <V> AgentACDCSafe<V> newDefault(SettingsEnvironmentI settings, StateI<V> state) {
         return AgentACDCSafe.<V>builder()
                 .learningRateActorMean(LEARNING_RATE)
                 .learningRateActorStd(LEARNING_RATE)
@@ -66,11 +67,29 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
                 .build();
     }
 
+    public static <V> AgentACDCSafe<V> newFromTrainerParams(TrainerParameters trainerParameters,
+                                                             SettingsEnvironmentI settings,
+                                                             StateI<V> state) {
+        return AgentACDCSafe.<V>builder()
+                .learningRateActorMean(trainerParameters.learningRateReplayBufferActor())
+                .learningRateActorStd(trainerParameters.learningRateReplayBufferActor())
+                .learningRateCritic(trainerParameters.learningRateReplayBufferCritic())
+                .targetMean(trainerParameters.targetMean())
+                .absActionNominal(trainerParameters.absActionNominal())
+                .targetLogStd(trainerParameters.targetLogStd())
+                .targetCritic(trainerParameters.targetCritic())
+                .gradMaxActor0(trainerParameters.gradActorMax())
+                .gradMaxCritic0(trainerParameters.gradCriticMax())
+                .settings(settings)
+                .state(state)
+                .build();
+    }
+
     @Builder
-    public AgentACDCSafe(Double learningRateActorMean,
+    AgentACDCSafe(Double learningRateActorMean,
                          Double learningRateActorStd,
                          Double learningRateCritic,
-                         @NonNull SettingsI settings,
+                         @NonNull SettingsEnvironmentI settings,
                          Double targetMean,
                          Double absActionNominal,
                          Double targetLogStd,

@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public record MultiStepResults<V>(
         int nExperiences,  //equal to length of below lists
-        List<ExperienceMultiStep<V>> experienceList
+        List<MultiStepResultItem<V>> experienceList
 ) {
 
     public static <V> MultiStepResults<V> create(int nExp) {
@@ -25,15 +25,12 @@ public record MultiStepResults<V>(
                 .build();
     }
 
-    public List<ExperienceMultiStep<V>> experienceList() {
-        return experienceList;
-    }
 
     public boolean isEmpty() {
         return nExperiences==0;
     }
 
-    public ExperienceMultiStep<V> experienceAtStep(int step) {
+    public MultiStepResultItem<V> experienceAtStep(int step) {
         return experienceList.get(step);
     }
 
@@ -54,7 +51,7 @@ public record MultiStepResults<V>(
     public boolean isSafeCorrectedAtStep(int step) {
         return experienceAtStep(step).isSafeCorrected(); }
 
-    public void add(ExperienceMultiStep<V> experience) {
+    public void add(MultiStepResultItem<V> experience) {
         experienceList.add(experience);
     }
 

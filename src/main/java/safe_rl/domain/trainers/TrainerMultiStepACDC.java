@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+
+/**
+ * Doing agent training
+ */
+
 @Log
 public class TrainerMultiStepACDC<V> {
     EnvironmentI<V> environment;
@@ -60,33 +65,33 @@ public class TrainerMultiStepACDC<V> {
             var experiences = getExperiences();
             trainAgentFromNewExperiences(experiences);
             addNewExperienceToBuffer();
-            trainAgentFromOldExperience();
+            trainAgentFromOldExperiences();
             updateRecorder(experiences);
         }
     }
 
-    private List<Experience<V>> getExperiences() throws JOptimizerException {
+    List<Experience<V>> getExperiences() throws JOptimizerException {
         return experienceCreator.getExperiences(agent, startStateSupplier.get());
     }
 
-    private void addNewExperienceToBuffer() {
+    void addNewExperienceToBuffer() {
         var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
         Conditionals.executeIfFalse(msRes.orElseThrow().isEmpty(), () ->
                 buffer.addAll(msRes.orElseThrow().experienceList()));
     }
 
-    private void trainAgentFromOldExperience() {
+    void trainAgentFromOldExperiences() {
         Conditionals.executeIfFalse(buffer.isEmpty(), () ->
                 IntStream.range(0, trainerParameters.nReplayBufferFitsPerEpisode())
                         .forEach(i -> fitter.fit(buffer)));
     }
 
-    private void trainAgentFromNewExperiences(List<Experience<V>> experiences) {
+    void trainAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList = recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }
 
-    private void updateRecorder(List<Experience<V>> experiences) {
+    void updateRecorder(List<Experience<V>> experiences) {
         recorder.recordTrainingProgress(experiences, agent);
     }
 

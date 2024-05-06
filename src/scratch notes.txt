@@ -12,7 +12,7 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
 import java.util.List;

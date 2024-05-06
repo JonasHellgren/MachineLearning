@@ -1,13 +1,12 @@
 package safe_rl.domain.memories;
 
-import common.other.RandUtils;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 
 import java.util.List;
 
 public class RemoveStrategyOldestMultiStepExp<S> implements RemoveStrategyMultiStepExpI<S> {
     @Override
-    public void remove(List<ExperienceMultiStep<S>> buffer) {
+    public void remove(List<MultiStepResultItem<S>> buffer) {
         buffer.remove(0);
     }
 }

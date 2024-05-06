@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import safe_rl.domain.abstract_classes.Action;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 
@@ -14,12 +14,12 @@ public class TestReplayBufferMultiStep {
 
     public static final int MAX_SIZE = 100;
     ReplayBufferMultiStepExp<VariablesTrading> buffer;
-    ExperienceMultiStep<VariablesTrading> experience;
+    MultiStepResultItem<VariablesTrading> experience;
 
     @Before
     public void init() {
         buffer= ReplayBufferMultiStepExp.newFromMaxSize(MAX_SIZE);
-        experience= ExperienceMultiStep.of(
+        experience= MultiStepResultItem.of(
                 StateTrading.newFullAndFresh(), Action.ofDouble(0d),0d,StateTrading.newFullAndFresh(),false);
 
                 /*new ExperienceMultiStep<>(StateTrading.newFullAndFresh(),

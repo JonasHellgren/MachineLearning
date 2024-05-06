@@ -94,7 +94,8 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         return response.getSolution()[0];
     }
 
-    private void throwIfFailedInitPointSearch(double randPower, Counter counter) throws IterationsLimitException, InfeasibleProblemException {
+    private void throwIfFailedInitPointSearch(double randPower, Counter counter)
+            throws IterationsLimitException, InfeasibleProblemException {
         if (counter.isExceeded()) {
             log.fine("timeNew = " + timeNew+", soc = " + soc);
             throw new IterationsLimitException("Nof random init power guesses exceeded, " +

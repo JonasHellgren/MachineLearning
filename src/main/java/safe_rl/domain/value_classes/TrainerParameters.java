@@ -12,12 +12,17 @@ public record TrainerParameters(
         @With Double learningRateReplayBufferCritic,
         @With Double learningRateReplayBufferActor,
         @With Double learningRateReplayBufferActorStd,
-        @With Double gradMeanActorMaxBufferFitting,
+        @With Double gradActorMax,
+        @With Double gradCriticMax,
+        Double targetMean,
+        Double absActionNominal,
+        Double targetLogStd,
+        Double targetCritic,
         @With Integer replayBufferSize,
         @With Integer miniBatchSize,
         @With Integer nReplayBufferFitsPerEpisode,
         @With Boolean isRemoveOldest,
-        @With  Double ratioPenCorrectedAction,
+        @With Double ratioPenCorrectedAction,
         @With Integer stepHorizon) {
 
     static final int NOF_EPISODES = 2000;
@@ -32,6 +37,10 @@ public record TrainerParameters(
     public static final int N_RP_FITS = 3;
     public static final double GRAD_MAX = 1e-3;
     public static final boolean IS_REMOVE_OLDEST = true;
+    public static final double TAR_MEAN = 1d;
+    public static final double TAR_LOG = Math.log(1);
+    public static final double TAR_CRIT = 0d;
+    public static final double ABS_NOM = 1d;
 
     public static TrainerParameters newDefault() {
         return TrainerParameters.builder().build();
@@ -44,7 +53,12 @@ public record TrainerParameters(
                              Double learningRateReplayBufferCritic,
                              Double learningRateReplayBufferActor,
                              Double learningRateReplayBufferActorStd,
-                             Double gradMeanActorMaxBufferFitting,
+                             Double gradActorMax,
+                             Double gradCriticMax,
+                             Double targetMean,
+                             Double absActionNominal,
+                             Double targetLogStd,
+                             Double targetCritic,
                              Integer replayBufferSize,
                              Integer miniBatchSize,
                              Integer nReplayBufferFitsPerEpisode,
@@ -54,11 +68,19 @@ public record TrainerParameters(
         this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
         this.nofStepsMax = defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
         this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
-        this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(learningRateReplayBufferCritic, LEARNING_RATE);
-        this.learningRateReplayBufferActor = defaultIfNullDouble.apply(learningRateReplayBufferActor, LEARNING_RATE_SMALL);
-        this.learningRateReplayBufferActorStd = defaultIfNullDouble.apply(learningRateReplayBufferActorStd, LEARNING_RATE_SMALL);
+        this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(
+                learningRateReplayBufferCritic, LEARNING_RATE);
+        this.learningRateReplayBufferActor = defaultIfNullDouble.apply(
+                learningRateReplayBufferActor, LEARNING_RATE_SMALL);
+        this.learningRateReplayBufferActorStd = defaultIfNullDouble.apply(
+                learningRateReplayBufferActorStd, LEARNING_RATE_SMALL);
 
-        this.gradMeanActorMaxBufferFitting = defaultIfNullDouble.apply(gradMeanActorMaxBufferFitting, GRAD_MAX);
+        this.gradActorMax = defaultIfNullDouble.apply(gradActorMax, GRAD_MAX);
+        this.gradCriticMax = defaultIfNullDouble.apply(gradCriticMax, GRAD_MAX);
+        this.targetMean = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_NOM);
+        this.targetLogStd = defaultIfNullDouble.apply(targetLogStd, TAR_LOG);
+        this.targetCritic = defaultIfNullDouble.apply(targetCritic, TAR_CRIT);
         this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
         this.nReplayBufferFitsPerEpisode = defaultIfNullInteger.apply(nReplayBufferFitsPerEpisode, N_RP_FITS);

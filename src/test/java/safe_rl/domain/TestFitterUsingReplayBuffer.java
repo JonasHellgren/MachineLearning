@@ -14,7 +14,7 @@ import safe_rl.domain.agents.AgentACDCSafe;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainers.FitterUsingReplayBuffer;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -87,7 +87,7 @@ public class TestFitterUsingReplayBuffer {
     }
 
 
-    private static ExperienceMultiStep<VariablesTrading> getExperience(TrainerParameters paramsTrainer) {
+    private static MultiStepResultItem<VariablesTrading> getExperience(TrainerParameters paramsTrainer) {
         int time = getRandomTime();
         double soc = RandUtils.randomNumberBetweenZeroAndOne();
         boolean isTerminal;
@@ -111,7 +111,7 @@ public class TestFitterUsingReplayBuffer {
                 ? null
                 : StateTrading.of(VariablesTrading.newTimeSoc(timeNext, soc)).copy();
 
-        return ExperienceMultiStep.of(state0, Action.ofDouble(0d), ListUtils.sumList(rewardList),stateFuture,isTerminal);
+        return MultiStepResultItem.of(state0, Action.ofDouble(0d), ListUtils.sumList(rewardList),stateFuture,isTerminal);
 
                 /*
                 ExperienceMultiStep.<VariablesTrading>builder()

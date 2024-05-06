@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.With;
-import safe_rl.domain.abstract_classes.SettingsI;
+import safe_rl.domain.abstract_classes.SettingsEnvironmentI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public record SettingsTrading(
         @With double powerCapacityFcr,
         @With double priceFCR,
         @With double nCyclesLifetime
-) implements SettingsI {
+) implements SettingsEnvironmentI {
 
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()

@@ -5,6 +5,9 @@ import safe_rl.domain.abstract_classes.StateI;
 
 import java.util.List;
 
+/**
+ * Used by simulator
+ */
 
 public record SimulationResult<V>(
         StateI<V> state,

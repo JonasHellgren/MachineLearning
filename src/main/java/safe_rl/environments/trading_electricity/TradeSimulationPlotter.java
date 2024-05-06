@@ -23,7 +23,6 @@ public class TradeSimulationPlotter<V> {
 
     SettingsTrading settings;
 
-
     public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, double valueInStartState) {
         List<XYChart> charts = new ArrayList<>();
         addActionChart(simulationResultsMap, charts);
@@ -84,7 +83,9 @@ public class TradeSimulationPlotter<V> {
         charts.add(chartAccumRev);
     }
 
-    private void addRevenueChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts, Function<SimulationResult<V>, Double> extractorRev) {
+    private void addRevenueChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
+                                 List<XYChart> charts,
+                                 Function<SimulationResult<V>, Double> extractorRev) {
         List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
         XYChart chartRev= getXyChart("","Revenue (Euro)");
         setYMinMax(chartRev, Collections.min(allValues), Collections.max(allValues));
@@ -118,7 +119,8 @@ public class TradeSimulationPlotter<V> {
         charts.add(chartAction);
     }
 
-    List<Double> getAllValues(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, Function<SimulationResult<V>, Double> extractorRev) {
+    List<Double> getAllValues(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
+                              Function<SimulationResult<V>, Double> extractorRev) {
         List<Double> allValues = Lists.newArrayList();
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
             List<Double> values = entry.getValue().stream().map(extractorRev).toList();

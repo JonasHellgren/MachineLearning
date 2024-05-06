@@ -62,5 +62,4 @@ public record VariablesTrading(
         return "[t = "+ time+", soc = "+ f2.format(soc)+", dSoh="+f5.format(sohStart-soh)+"]";
     }
 
-
 }

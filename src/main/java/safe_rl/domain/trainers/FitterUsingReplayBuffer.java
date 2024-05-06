@@ -13,9 +13,10 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.StateI;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
-import safe_rl.domain.value_classes.ExperienceMultiStep;
+import safe_rl.domain.value_classes.MultiStepResultItem;
 import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
+
 import java.util.List;
 import java.util.function.ToDoubleBiFunction;
 
@@ -41,7 +42,7 @@ public class FitterUsingReplayBuffer<V> {
                                    int indexFeature) {
         this.agent = agent;
         this.parameters = trainerParameters;
-        this.indexFeature=indexFeature;
+        this.indexFeature = indexFeature;
         this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
         this.fitterActorMean = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
         this.fitterActorStd = new LinearBatchFitter(parameters.learningRateReplayBufferActorStd());
@@ -53,36 +54,36 @@ public class FitterUsingReplayBuffer<V> {
         var stateAtTime = experiences.stream().findAny().map(e -> e.state()).orElseThrow();
         fitCritic(experiences, stateAtTime);
         fitActorMean(experiences, stateAtTime);
-       fitActorStd(experiences,stateAtTime);
+        fitActorStd(experiences, stateAtTime);
     }
 
 
-    private void fitCritic(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
-        var critic=agent.getCritic();
+    private void fitCritic(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
+        var critic = agent.getCritic();
         RealVector paramsCritic = new ArrayRealVector(critic.readThetas(stateAtTime));
-        var batchData = createData(experiences,targetFcn,false);
+        var batchData = createData(experiences, targetFcn, false);
         paramsCritic = fitterCritic.fit(paramsCritic, batchData);
         critic.save(stateAtTime, paramsCritic.toArray());
     }
 
 
-    private void fitActorMean(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
-        var actorMean=agent.getActorMean();
+    private void fitActorMean(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean = agent.getActorMean();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
-        var batchDataActor = createData(experiences, loss,true);
+        var batchDataActor = createData(experiences, loss, true);
         paramsActor = fitterActorMean.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
-    private void fitActorStd(List<ExperienceMultiStep<V>> experiences, StateI<V> stateAtTime) {
-        var actorMean=agent.getActorLogStd();
+    private void fitActorStd(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
+        var actorMean = agent.getActorLogStd();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
-        var batchDataActor = createData(experiences,lossAdvClipper,false);
+        var batchDataActor = createData(experiences, lossAdvClipper, false);
         paramsActor = fitterActorStd.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
-    private  List<ExperienceMultiStep<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
+    private List<MultiStepResultItem<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
         var batch = buffer.getMiniBatch(parameters.miniBatchSize());
         var ei = new EpisodeInfoMultiStep<>(batch);
         var presentTimes = ei.getValuesOfSpecificDiscreteFeature(indexFeature)
@@ -91,32 +92,32 @@ public class FitterUsingReplayBuffer<V> {
         return ei.getExperiencesWithDiscreteFeatureValue(timeChosen, indexFeature);
     }
 
-    ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> targetFcn=(exp,isMean) ->
+    ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> targetFcn = (exp, isMean) ->
             exp.isStateFutureTerminalOrNotPresent()
-            ? exp.sumOfRewards()
-            : exp.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(exp.stateFuture());
+                    ? exp.sumOfRewards()
+                    : exp.sumOfRewards() + parameters.gammaPowN() * agent.readCritic(exp.stateFuture());
 
-    ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> loss = (exp,isMean) -> {
+    ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> loss = (exp, isMean) -> {
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
-        double advantage=valueTarget(exp)-agent.readCritic(exp.state());
-        double gradMax= parameters.gradMeanActorMaxBufferFitting();
-        double gradVal=isMean?grad.getFirst():grad.getSecond();
-        return clip(-gradVal*advantage,-gradMax, gradMax);  //MINUS <=> maximize loss
+        double advantage = valueTarget(exp) - agent.readCritic(exp.state());
+        double gradMax = parameters.gradActorMax();
+        double gradVal = isMean ? grad.getFirst() : grad.getSecond();
+        return clip(-gradVal * advantage, -gradMax, gradMax);  //MINUS <=> maximize loss
     };
 
     /**
      * This loss with alt clipper is slower hence only used for std (more motivated)
      */
 
-    ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> lossAdvClipper = (exp,isMean) -> {
+    ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> lossAdvClipper = (exp, isMean) -> {
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
-        double advantage=valueTarget(exp)-agent.readCritic(exp.state());
-        double gradVal=isMean?grad.getFirst():grad.getSecond();
-        SafeGradientClipper clipper=isMean?agent.getMeanGradClipper():agent.getStdGradClipper();
-        double actorMemValue=isMean
+        double advantage = valueTarget(exp) - agent.readCritic(exp.state());
+        double gradVal = isMean ? grad.getFirst() : grad.getSecond();
+        SafeGradientClipper clipper = isMean ? agent.getMeanGradClipper() : agent.getStdGradClipper();
+        double actorMemValue = isMean
                 ? agent.getActorMean().read(exp.state())
                 : Math.exp(agent.getActorLogStd().read(exp.state()));
-        return -clipper.modify(gradVal*advantage,actorMemValue);
+        return -clipper.modify(gradVal * advantage, actorMemValue);
     };
 
 
@@ -124,38 +125,35 @@ public class FitterUsingReplayBuffer<V> {
         Multiset<Integer> multiset = HashMultiset.create(presentTimes);
         var maxEntry = multiset.entrySet().stream()
                 .max(Ordering.natural().onResultOf(Multiset.Entry::getCount));
-        Conditionals.executeIfTrue(maxEntry.orElseThrow().getCount()< MIN_NOF_POINTS, () ->
+        Conditionals.executeIfTrue(maxEntry.orElseThrow().getCount() < MIN_NOF_POINTS, () ->
                 log.warning("Few items in time step for fitting"));
         return maxEntry.orElseThrow().getElement();
     }
 
-    Pair<RealMatrix, RealVector> createData(List<ExperienceMultiStep<V>> experiencesAtChosenTime,
-                                            ToDoubleBiFunction<ExperienceMultiStep<V>,Boolean> entry,
+    Pair<RealMatrix, RealVector> createData(List<MultiStepResultItem<V>> experiencesAtChosenTime,
+                                            ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> entry,
                                             boolean isMean) {
         int nPoints = experiencesAtChosenTime.size();
         var xMat = new Array2DRowRealMatrix(nPoints, N_FEAT);
         var yVec = new ArrayRealVector(nPoints);
         int i = 0;
-        for (ExperienceMultiStep<V> experience : experiencesAtChosenTime) {
+        for (MultiStepResultItem<V> experience : experiencesAtChosenTime) {
             xMat.setRow(i, getFeatures(experience));
-            yVec.setEntry(i, entry.applyAsDouble(experience,isMean));
+            yVec.setEntry(i, entry.applyAsDouble(experience, isMean));
             i++;
         }
         return Pair.create(xMat, yVec);
     }
 
-    double[] getFeatures(ExperienceMultiStep<V> experience) {
+    double[] getFeatures(MultiStepResultItem<V> experience) {
         return new double[]{experience.state().continuousFeatures()[indexFeature]};
     }
 
-    private double valueTarget(ExperienceMultiStep<V> experience) {
+    private double valueTarget(MultiStepResultItem<V> experience) {
         return experience.isStateFutureTerminalOrNotPresent()
                 ? experience.sumOfRewards()
-                : experience.sumOfRewards() + parameters.gammaPowN()* agent.readCritic(experience.stateFuture());
+                : experience.sumOfRewards() + parameters.gammaPowN() * agent.readCritic(experience.stateFuture());
     }
-
-
-
 
 
 }

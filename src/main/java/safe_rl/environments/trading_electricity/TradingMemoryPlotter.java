@@ -13,6 +13,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import safe_rl.domain.memories.DisCoMemory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collections;
@@ -31,37 +32,41 @@ public class TradingMemoryPlotter<V> {
 
 
     public void plot() {
-
         // Create datasets and charts for each series
         JFrame frame = new JFrame(yLabel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout(FlowLayout.LEFT));
-        List<Double> socs= ListUtils.doublesStartEndStep(0.0,1.0,0.1);
-
-        // Process each series
+        List<Double> socs = ListUtils.doublesStartEndStep(0.0, 1.0, 0.1);
         List<Double> valueSpace = getValueSpace(socs);
         for (int ti = 0; ti <= tEnd; ti++) {
-            var series = new XYSeries("Time="+ti);
-            defineDataInSeries(socs, ti, series);
-            JFreeChart chart = createChart(valueSpace, series);
-            ChartPanel panel = new ChartPanel(chart);
-            panel.setPreferredSize(new Dimension(WEIGHT, HEIGHT));
+            ChartPanel panel = getChartPanel(socs, valueSpace, ti);
             frame.add(panel);
         }
         displayFrame(frame);
     }
 
-    private static void displayFrame(JFrame frame) {
+    ChartPanel getChartPanel(List<Double> socs, List<Double> valueSpace, int ti) {
+        var series = new XYSeries("Time=" + ti);
+        defineDataInSeries(socs, ti, series);
+        JFreeChart chart = createChart(valueSpace, series);
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setPreferredSize(new Dimension(WEIGHT, HEIGHT));
+        return panel;
+    }
+
+    static void displayFrame(JFrame frame) {
         frame.setVisible(true);
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
 
-    @NotNull
-    private List<Double> getValueSpace(List<Double> socs) {
-        List<Double> valueSpace= Lists.newArrayList();
+    /**
+     *  Extract all values to get min max
+     */
+    List<Double> getValueSpace(List<Double> socs) {
+        List<Double> valueSpace = Lists.newArrayList();
         for (int ti = 0; ti <= tEnd; ti++) {
-            for (Double soc: socs) {
+            for (Double soc : socs) {
                 StateTrading state = StateTrading.of(VariablesTrading.newTimeSoc(ti, soc));
                 valueSpace.add(memory.read(state));
             }
@@ -69,8 +74,7 @@ public class TradingMemoryPlotter<V> {
         return valueSpace;
     }
 
-    @NotNull
-    private JFreeChart createChart(List<Double> values, XYSeries series) {
+    JFreeChart createChart(List<Double> values, XYSeries series) {
         JFreeChart chart = getChart(series);
         chart.removeLegend();
         XYPlot plot = chart.getXYPlot();
@@ -88,7 +92,7 @@ public class TradingMemoryPlotter<V> {
     }
 
     private void defineDataInSeries(List<Double> socs, int ti, XYSeries series) {
-        for (Double soc: socs) {
+        for (Double soc : socs) {
             StateTrading state = StateTrading.of(VariablesTrading.newTimeSoc(ti, soc));
             series.add((double) soc, memory.read(state));
         }
@@ -108,7 +112,6 @@ public class TradingMemoryPlotter<V> {
                 false                        // Configure chart to generate URLs?
         );
     }
-
 
 
 }
