@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import safe_rl.agent_interfaces.AgentACDiscoI;
 import safe_rl.domain.abstract_classes.*;
-import safe_rl.domain.episode_trainers.ACDCMultiStepEpisodeTrainer;
 import safe_rl.domain.memories.ReplayBufferMultiStepExp;
 import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.TrainerParameters;

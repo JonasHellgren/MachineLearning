@@ -40,27 +40,27 @@ public class StateTrading implements StateI<VariablesTrading> {
     }
 
     @Override
-    public double[] continousFeatures() {
+    public double[] continuousFeatures() {
         return new double[]{soc()};
     }
 
     @Override
-    public int nContinousFeatures() {
+    public int nContinuousFeatures() {
         return N_CONT_FEAT;
     }
 
     @Override
-    public int[] discretFeatures() {
+    public int[] discreteFeatures() {
         return new int[]{(int) time()};
     }
 
     @Override
-    public void setContinousFeatures(double[] features) {
+    public void setContinuousFeatures(double[] features) {
         variables=variables.withSoc(features[0]);
     }
 
     @Override
-    public void setDiscretFeatures(int[] features) {
+    public void setDiscreteFeatures(int[] features) {
         variables=variables.withTime(features[0]);
     }
 

@@ -18,7 +18,7 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.helpers.EpisodeInfoMultiStep;
 import java.util.List;
 import java.util.function.ToDoubleBiFunction;
-import java.util.function.ToDoubleFunction;
+
 import static common.math.MathUtils.clip;
 
 /***
@@ -145,7 +145,7 @@ public class FitterUsingReplayBuffer<V> {
     }
 
     double[] getFeatures(ExperienceMultiStep<V> experience) {
-        return new double[]{experience.state().continousFeatures()[indexFeature]};
+        return new double[]{experience.state().continuousFeatures()[indexFeature]};
     }
 
     private double valueTarget(ExperienceMultiStep<V> experience) {

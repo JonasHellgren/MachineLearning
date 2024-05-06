@@ -24,7 +24,7 @@ class TestDisCoMemoryBasic {
     @BeforeEach
     void init() {
         state = StateBuying.newZero();
-        int nThetaPerKey = state.nContinousFeatures() + N_BIAS_THETAS;
+        int nThetaPerKey = state.nContinuousFeatures() + N_BIAS_THETAS;
         memory = new DisCoMemory<>(nThetaPerKey, ALPHA_LEARNING,DELTA_BETA_MAX);
     }
 

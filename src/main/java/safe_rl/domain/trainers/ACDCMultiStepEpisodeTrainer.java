@@ -1,4 +1,4 @@
-package safe_rl.domain.episode_trainers;
+package safe_rl.domain.trainers;
 
 import lombok.NonNull;
 import safe_rl.agent_interfaces.AgentACDiscoI;

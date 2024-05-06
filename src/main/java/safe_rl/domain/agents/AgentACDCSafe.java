@@ -79,7 +79,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
                          @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
-        int nThetas = state.nContinousFeatures() + 1;
+        int nThetas = state.nContinuousFeatures() + 1;
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);

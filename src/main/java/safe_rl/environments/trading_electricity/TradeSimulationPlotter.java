@@ -4,7 +4,6 @@ import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
 import common.other.NumberFormatterUtil;
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
@@ -97,7 +96,7 @@ public class TradeSimulationPlotter<V> {
         XYChart chartSoc = getXyChart("","Soc");
         setYMinMax(chartSoc, 0, 1);
         Function<SimulationResult<V>, Double> extractorSoc = sr ->
-                sr.state().continousFeatures()[StateTrading.INDEX_SOC];
+                sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
         addDataToChart(simulationResultsMap, chartSoc, extractorSoc);
         charts.add(chartSoc);
     }

@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -57,7 +56,7 @@ public class DisCoMemory<V> {
     }
 
     public double read(StateI<V> state) {
-        return decoder.read(state.continousFeatures(), readThetas(state));
+        return decoder.read(state.continuousFeatures(), readThetas(state));
     }
 
     public double[] readThetas(StateI<V> state) {
@@ -73,7 +72,7 @@ public class DisCoMemory<V> {
     public void fit(StateI<V> state, double targetValue, int nFits) {
         double[] thetas = readThetas(state);
         fitter.setTheta(thetas);
-        double[] features = state.continousFeatures();
+        double[] features = state.continuousFeatures();
         IntStream.range(0, nFits).forEach(i -> fitter.fit(targetValue, features));
         save(state, fitter.getTheta());
     }
@@ -86,7 +85,7 @@ public class DisCoMemory<V> {
         fitter.setTheta(readThetas(state));
         lossLastUpdate = 0;
         IntStream.range(0, nFits).forEach(i -> {
-            double loss = fitter.fitFromError(state.continousFeatures(), error);
+            double loss = fitter.fitFromError(state.continuousFeatures(), error);
             lossLastUpdate += loss;
         });
         save(state, fitter.getTheta());
@@ -112,7 +111,7 @@ public class DisCoMemory<V> {
 
     public String toStringWithValueMapper(UnaryOperator<double[]> valueMapper) {
         return "\n" + stateParMap.entrySet().stream()
-                .map(e -> Arrays.toString(e.getKey().discretFeatures()) +
+                .map(e -> Arrays.toString(e.getKey().discreteFeatures()) +
                         " = " + Arrays.toString(valueMapper.apply(e.getValue())))
                 .collect(Collectors.joining("\n"));
     }

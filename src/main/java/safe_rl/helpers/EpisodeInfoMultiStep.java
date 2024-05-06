@@ -1,15 +1,9 @@
 package safe_rl.helpers;
 
-import common.list_arrays.ListUtils;
-import common.math.MathUtils;
 import lombok.AllArgsConstructor;
-import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.value_classes.Experience;
 import safe_rl.domain.value_classes.ExperienceMultiStep;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 public class EpisodeInfoMultiStep<V> {
@@ -25,13 +19,13 @@ public class EpisodeInfoMultiStep<V> {
 
     public   List<Integer> getValuesOfSpecificDiscreteFeature(int featureIndex) {
         return experiences.stream()
-                .map(e -> e.state().discretFeatures()[featureIndex]).toList();
+                .map(e -> e.state().discreteFeatures()[featureIndex]).toList();
     }
 
 
     public   List<ExperienceMultiStep<V>> getExperiencesWithDiscreteFeatureValue(int timeChosen, int featureIndex) {
         return experiences.stream()
-                .filter(e -> e.state().discretFeatures()[featureIndex]== timeChosen).toList();
+                .filter(e -> e.state().discreteFeatures()[featureIndex]== timeChosen).toList();
     }
 
 

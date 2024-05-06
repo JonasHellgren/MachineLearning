@@ -28,7 +28,7 @@ class TestDisCoMemoryInitializerUsingBuyingState {
     void init() {
         var state = StateBuying.newZero();
         settings = SettingsBuying.new5HoursIncreasingPrice();
-        memory = new DisCoMemory<>(state.nContinousFeatures() + 1);
+        memory = new DisCoMemory<>(state.nContinuousFeatures() + 1);
         initializer = getInitializer(state, memory, TAR_VALUE, 0d);
     }
 
@@ -52,7 +52,7 @@ class TestDisCoMemoryInitializerUsingBuyingState {
         initializer.initialize();
         System.out.println("memory = " + memory);
         StateBuying state = StateBuying.newZero();
-        System.out.println("state.continousFeatures() = " + Arrays.toString(state.continousFeatures()));
+        System.out.println("state.continousFeatures() = " + Arrays.toString(state.continuousFeatures()));
 
         //Assertions.assertEquals(settings.priceTraj().length,memory.size());
         Assertions.assertEquals(TAR_VALUE,memory.read(state),TOL_VALUE_FITTING*10);

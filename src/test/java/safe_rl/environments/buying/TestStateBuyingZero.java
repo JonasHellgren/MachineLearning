@@ -27,7 +27,7 @@ class TestStateBuyingZero {
     @Test
     void whenCopyModBySetContFeat_thenCorrect() {
         var stateCopy=state.copy();
-        state.setContinousFeatures(new double[]{0.5});  //does not affect stateCopy
+        state.setContinuousFeatures(new double[]{0.5});  //does not affect stateCopy
         Assertions.assertEquals(0.5,state.getVariables().soc());
         Assertions.assertEquals(0,stateCopy.getVariables().soc());
         Assertions.assertEquals(0,stateCopy.getVariables().time());
@@ -36,7 +36,7 @@ class TestStateBuyingZero {
     @Test
     void whenCopyModBySetDiscreteFeat_thenCorrect() {
         var stateCopy=state.copy();
-        state.setDiscretFeatures(new int[]{2});  //does not affect stateCopy
+        state.setDiscreteFeatures(new int[]{2});  //does not affect stateCopy
         Assertions.assertEquals(2,state.getVariables().time());
         Assertions.assertEquals(0,stateCopy.getVariables().time());
     }
@@ -44,14 +44,14 @@ class TestStateBuyingZero {
 
     @Test
     void whenContFeat_thenCorrect() {
-        var contFeat = state.continousFeatures();
+        var contFeat = state.continuousFeatures();
         Assertions.assertEquals(0, contFeat[0]);
-        Assertions.assertEquals(1, state.nContinousFeatures());
+        Assertions.assertEquals(1, state.nContinuousFeatures());
     }
 
     @Test
     void whenDiscFeat_thenCorrect() {
-        var discFeat = state.discretFeatures();
+        var discFeat = state.discreteFeatures();
         Assertions.assertEquals(0, discFeat[0]);
         Assertions.assertEquals(1, discFeat.length);
     }

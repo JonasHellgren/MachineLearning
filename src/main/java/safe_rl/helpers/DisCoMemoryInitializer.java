@@ -74,7 +74,7 @@ public class DisCoMemoryInitializer<V> {
         var featureCombinations = Lists.cartesianProduct(discreteFeatSet);
         for (List<Double> combo:featureCombinations) {
             var stateCopy=state.copy();
-            stateCopy.setDiscretFeatures(combo.stream().mapToInt(Number::intValue).toArray());
+            stateCopy.setDiscreteFeatures(combo.stream().mapToInt(Number::intValue).toArray());
             fitter.setTheta(memory.readThetas(stateCopy));
             double[] thetas= identifyFittedTheta(fitter);
             memory.save(stateCopy, thetas);
