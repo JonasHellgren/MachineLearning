@@ -15,7 +15,7 @@ import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
-import safe_rl.recorders.Recorders;
+import safe_rl.recorders.Recorder;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -32,9 +32,8 @@ public class TrainerMultiStepACDC<V> {
     ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
     ReplayBufferMultiStepExp<V> buffer;
     FitterUsingReplayBuffer<V> fitter;
-
     @Getter
-    Recorders<V> recorder;
+    Recorder<V> recorder;
 
     @Builder
     public TrainerMultiStepACDC(EnvironmentI<V> environment,
@@ -53,15 +52,16 @@ public class TrainerMultiStepACDC<V> {
         buffer = ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
                 trainerParameters.replayBufferSize(), trainerParameters.isRemoveOldest());
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
-        recorder = new Recorders<>(new AgentSimulator<>(
+        recorder = new Recorder<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
     }
 
     public void train() throws JOptimizerException {
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
             var experiences = getExperiences();
-            trainAgent(experiences);
-            addNewExperienceToBufferAndFitCriticMemoryFromBufferExperience();
+            trainAgentFromNewExperiences(experiences);
+            addNewExperienceToBuffer();
+            trainAgentFromOldExperience();
             updateRecorder(experiences);
         }
     }
@@ -70,16 +70,19 @@ public class TrainerMultiStepACDC<V> {
         return experienceCreator.getExperiences(agent, startStateSupplier.get());
     }
 
-    private void addNewExperienceToBufferAndFitCriticMemoryFromBufferExperience() {
+    private void addNewExperienceToBuffer() {
         var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
-        Conditionals.executeIfTrue(!msRes.orElseThrow().isEmpty(), () ->
+        Conditionals.executeIfFalse(msRes.orElseThrow().isEmpty(), () ->
                 buffer.addAll(msRes.orElseThrow().experienceList()));
-        Conditionals.executeIfTrue(!buffer.isEmpty(), () ->
+    }
+
+    private void trainAgentFromOldExperience() {
+        Conditionals.executeIfFalse(buffer.isEmpty(), () ->
                 IntStream.range(0, trainerParameters.nReplayBufferFitsPerEpisode())
                         .forEach(i -> fitter.fit(buffer)));
     }
 
-    private void trainAgent(List<Experience<V>> experiences) {
+    private void trainAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList = recorder.recorderTrainingProgress.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }

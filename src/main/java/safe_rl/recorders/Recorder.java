@@ -15,7 +15,7 @@ import safe_rl.helpers.EpisodeInfo;
 import java.util.List;
 
 @AllArgsConstructor
-public class Recorders<V> {
+public class Recorder<V> {
 
     public final RecorderStateValues recorderStateValues = new RecorderStateValues();
     public final RecorderTrainingProgress recorderTrainingProgress = new RecorderTrainingProgress();

@@ -13,11 +13,10 @@ import safe_rl.domain.value_classes.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.helpers.AgentSimulator;
 import safe_rl.helpers.ExperienceCreator;
-import safe_rl.recorders.Recorders;
+import safe_rl.recorders.Recorder;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 //todo TrainerI
 @Log
@@ -29,7 +28,8 @@ public class TrainerOneStepACDC<V> {
     Supplier<StateI<V>> startStateSupplier;
     ExperienceCreator<V> experienceCreator;
     ACDCOneStepEpisodeTrainer<V> episodeTrainer;
-    @Getter Recorders<V> recorder;
+    @Getter
+    Recorder<V> recorder;
 
     @Builder
     public TrainerOneStepACDC(EnvironmentI<V> environment,
@@ -48,7 +48,7 @@ public class TrainerOneStepACDC<V> {
                 .<V>builder()
                 .agent(agent).parameters(trainerParameters)
                 .build();
-        recorder=new Recorders<>(new AgentSimulator<>(
+        recorder=new Recorder<>(new AgentSimulator<>(
                 agent,safetyLayer,startStateSupplier,environment));
     }
 

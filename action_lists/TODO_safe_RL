@@ -124,7 +124,7 @@ whenFCR_thenHigherRevenueAndSoCEndDeviation krashar ibland
 priser som har 2 peakar på en dag - sågtand - succe x
 
 class diagrams agent x
-diagram trainer agent env
+diagram trainer agent env  x
 
 clean up:
 Lists.newArrayList()   isf new
