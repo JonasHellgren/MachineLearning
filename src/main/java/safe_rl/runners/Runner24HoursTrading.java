@@ -1,5 +1,6 @@
 package safe_rl.runners;
 
+import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
@@ -33,9 +34,13 @@ public class Runner24HoursTrading {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer = trainerAndSimulator.getFirst();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
-        var helper = RunnerHelper.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         trainer.train();
+        plotAndPrint(trainerAndSimulator, trainer, timer);
+    }
+
+    private static void plotAndPrint(Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator, TrainerMultiStepACDC<VariablesTrading> trainer, CpuTimer timer) throws JOptimizerException {
         trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC trading");
+        var helper = RunnerHelper.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         helper.printing(trainer, timer);
         helper.simulateAndPlot(trainerAndSimulator.getSecond());
         helper.plotMemory(trainer.getAgent().getCritic(), "critic");
@@ -48,8 +53,6 @@ public class Runner24HoursTrading {
         settings5 = SettingsTrading.new24HoursZigSawPrice()
                 .withPowerCapacityFcr(POWER_CAPACITY_FCR).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START + SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
-
-        System.out.println("settings5.priceTraj() = " + Arrays.toString(settings5.priceTraj()));
 
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
