@@ -4,6 +4,7 @@ public interface StateI<V> {
     V getVariables();
     void setVariables(V variables);
     StateI<V> copy();
+/*
     double[] continuousFeatures();
     int nContinuousFeatures();
     int[] discreteFeatures();
@@ -11,5 +12,6 @@ public interface StateI<V> {
     void setDiscreteFeatures(int[] features);
     int hashCode();
     boolean equals(Object o);
+*/
 
 }
