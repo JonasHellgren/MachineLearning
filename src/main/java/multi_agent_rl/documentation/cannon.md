@@ -1,10 +1,8 @@
-# Cannon 
-
-
+# Cannon
 A cannon has the objective to shoot a projectile to hit a target at position (x,y). The projectile hit position is 
 determined from two angles, aYaw and aPitch. The angles are defined in the figures below.
 Two agents controls the angles. Agent Y controls the yaw angle of the projectile.  Agent P controls the pitch angle 
-of the projectile. 
+of the projectile. Pitch angle can been seen as controlling the shooting length.
 
 Both agents should learn to coordinate their angle adjustments to successfully hit the target.
 
@@ -39,6 +37,8 @@ Yaw angle is updated by
 and pitch angle is updated by
 
     aPitch <- clip(aPitch+daPitch,aPitchMin,aPitchMax)        
+
+Episode ends when both angles have zero change, when projectile is shoot with current angles and distance from target can be calculated.
 
 ## Reward function
 
