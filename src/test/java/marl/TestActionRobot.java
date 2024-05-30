@@ -14,27 +14,27 @@ class TestActionRobot {
     static ActionRobot stop = ActionRobot.fromInt(4);
 
     @Test
-    void whenNorthTheCorrect() {
+    void whenNorth_thenCorrect() {
         Assertions.assertTrue(north.getDirection().equals(Discrete2DVector.of(0,1)));
     }
 
     @Test
-    void whenEastTheCorrect() {
+    void whenEast_thenCorrect() {
         Assertions.assertTrue(east.getDirection().equals(Discrete2DVector.of(1,0)));
     }
 
     @Test
-    void whenSouthTheCorrect() {
+    void whenSouth_thenCorrect() {
         Assertions.assertTrue(south.getDirection().equals(Discrete2DVector.of(0,-1)));
     }
 
     @Test
-    void whenWestTheCorrect() {
+    void whenWest_thenCorrect() {
         Assertions.assertTrue(west.getDirection().equals(Discrete2DVector.of(-1,0)));
     }
 
     @Test
-    void whenStopTheCorrect() {
+    void whenStop_thenCorrect() {
         Assertions.assertTrue(stop.getDirection().equals(Discrete2DVector.of(0,0)));
     }
 

@@ -12,10 +12,6 @@ public record Discrete2DPos(
         return new Discrete2DPos(x,y);
     }
 
-    public boolean equals(Discrete2DPos other) {
-        return x==other.x && y==other.y;
-    }
-
     public Discrete2DPos copy() {
         return  Discrete2DPos.of(x,y);
     }

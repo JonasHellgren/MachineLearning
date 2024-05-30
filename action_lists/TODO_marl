@@ -2,9 +2,9 @@
 cannon x
 collecting_apples  x
 ActionRobot x
-TestActionRobot
+TestActionRobot x
 
-EnvironmentApple
+EnvironmentApple x
 TestEnvironmentApple
 
 

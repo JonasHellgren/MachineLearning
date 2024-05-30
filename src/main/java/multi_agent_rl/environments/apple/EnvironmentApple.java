@@ -6,7 +6,6 @@ import multi_agent_rl.domain.abstract_classes.Action;
 import multi_agent_rl.domain.abstract_classes.EnvironmentI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.domain.value_classes.StepReturn;
-import java.util.Optional;
 import static common.other.MyFunctions.numIfTrueElseZero;
 
 @AllArgsConstructor
@@ -18,10 +17,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
     AppleSettings settings;
 
     public static EnvironmentApple newDefault() {
-        return new EnvironmentApple(AppleSettings.builder()
-                .minPos(Discrete2DPos.of(0, 0))
-                .maxPos(Discrete2DPos.of(4, 4))
-                .build());
+        return new EnvironmentApple(AppleSettings.newDefault());
     }
 
     @Override
