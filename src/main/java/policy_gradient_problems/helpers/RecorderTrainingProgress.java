@@ -1,14 +1,19 @@
 package policy_gradient_problems.helpers;
 
+import common.list_arrays.ListUtils;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import static org.knowm.xchart.BitmapEncoder.saveBitmapWithDPI;
 
 /**
  * During training, it is good to keep track of nof steps, accumulated rewards per episode, etc
@@ -18,9 +23,11 @@ import java.util.function.Function;
 @Log
 public class RecorderTrainingProgress {
 
-    public static final int WIDTH = 300;
+    public static final int WIDTH = 200;
     public static final int HEIGHT = 150;
     List<ProgressMeasures> measuresList;
+    public static final BitmapEncoder.BitmapFormat FORMAT = BitmapEncoder.BitmapFormat.PNG;
+    public static final int DPI = 300;
 
     public RecorderTrainingProgress() {
         this.measuresList = new ArrayList<>();
@@ -88,6 +95,33 @@ public class RecorderTrainingProgress {
         frame.setTitle(title);
     }
 
+    @SneakyThrows
+    public void saveCharts(String path) {
+        var chartAccRew=createChart("Acc. reward", doubles2NumList(sumRewardsTraj()));
+        styleChart(chartAccRew);
+        saveBitmapWithDPI(chartAccRew, path+"/"+"accReward", FORMAT, DPI);
+        var chartCriticLoss=createChart("Critic loss", doubles2NumList(criticLossTraj()));
+        styleChart(chartCriticLoss);
+        saveBitmapWithDPI(chartCriticLoss, path+"/"+"criticLoss", FORMAT, DPI);
+    }
+
+    private static void styleChart(XYChart chart) {
+        chart.getStyler().setChartBackgroundColor(Color.WHITE);
+        chart.getStyler().setPlotBorderVisible(false);
+        reduceXAxisTicksClutter(chart, 1000);
+    }
+
+    private static void reduceXAxisTicksClutter(XYChart chart, int i) {
+        chart.setCustomXAxisTickLabelsFormatter(value -> {
+            int intValue = value.intValue();
+            if (intValue % i == 0) {
+                return String.valueOf(intValue);
+            } else {
+                return ""; // Skip labels for other values
+            }
+        });
+    }
+
     private List<Number> ints2NumList(List<Integer> intList) {
         return intList.stream().map(i -> (Number) i).toList();
     }
@@ -99,8 +133,9 @@ public class RecorderTrainingProgress {
     @NotNull
     private static XYChart createChart(String name, List<Number> yData) {
         XYChart chart = new XYChartBuilder()
-                .xAxisTitle("episode").yAxisTitle(name).width(WIDTH).height(HEIGHT).build();
-        XYSeries series = chart.addSeries(name, null, yData);
+                .xAxisTitle("Episode").yAxisTitle(name).width(WIDTH).height(HEIGHT).build();
+        List<Double> xList= ListUtils.doublesStartStepNitems(0,1,yData.size());
+        XYSeries series = chart.addSeries(name, xList, yData);
         chart.getStyler().setLegendVisible(false);
         series.setMarker(SeriesMarkers.NONE);
         return chart;

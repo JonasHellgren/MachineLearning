@@ -6,7 +6,6 @@ import multi_agent_rl.domain.abstract_classes.Action;
 import multi_agent_rl.domain.abstract_classes.EnvironmentI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.domain.value_classes.StepReturn;
-import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import static common.other.MyFunctions.numIfTrueElseZero;
 
@@ -29,35 +28,33 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
     public StepReturn<VariablesApple> step(StateI<VariablesApple> state0, Action action) {
         StateApple stateApple = (StateApple) state0;
         var newState = getNewState(action, stateApple);
-        boolean isAppleBetween = isAppleBetween(stateApple);
-        boolean isAtSamePos = isAtSamePos(stateApple);
+        boolean isAppleBetween = isAppleBetweenRobots(stateApple);
         return StepReturn.<VariablesApple>builder()
                 .state(newState)
                 .isFail(false)
                 .isTerminal(isAppleBetween)
-                .reward(getReward(isAppleBetween, isAtSamePos))
+                .reward(getReward(isAppleBetween, isRobotsAtSamePos(stateApple)))
                 .build();
     }
 
-    private static boolean isAtSamePos(StateApple stateApple) {
+    static boolean isRobotsAtSamePos(StateApple stateApple) {
         return stateApple.posA().equals(stateApple.posB());
     }
 
-    private static boolean isAppleBetween(StateApple stateApple) {
-        Optional<Discrete2DPos> posBetween = stateApple.posA().midPos(stateApple.posB());
+    static boolean isAppleBetweenRobots(StateApple stateApple) {
+        var posBetween = stateApple.posA().midPos(stateApple.posB());
         return posBetween
                 .map(discrete2DPos -> discrete2DPos.equals(stateApple.posApple()))
                 .orElse(false);
     }
 
-    private static double getReward(boolean isAppleBetween, boolean isAtSamePos) {
+    static double getReward(boolean isAppleBetween, boolean isAtSamePos) {
         return numIfTrueElseZero.apply(isAppleBetween, REWARD_COLLECTED) +
                 numIfTrueElseZero.apply(isAtSamePos, REWARD_SAME_POS) +
                 REWARD_MOVE;
     }
 
-    @NotNull
-    private StateI<VariablesApple> getNewState(Action action, StateApple stateApple) {
+    StateI<VariablesApple> getNewState(Action action, StateApple stateApple) {
         var actionList = action.asInts();
         var actionA = ActionRobot.fromInt(actionList.get(INDEX_A));
         var actionB = ActionRobot.fromInt(actionList.get(INDEX_B));

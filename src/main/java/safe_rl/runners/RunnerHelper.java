@@ -4,6 +4,7 @@ import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
 import lombok.Builder;
 import lombok.extern.java.Log;
+import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.memories.DisCoMemory;
 import safe_rl.domain.trainers.TrainerMultiStepACDC;
 import safe_rl.domain.value_classes.SimulationResult;
@@ -25,13 +26,27 @@ public class RunnerHelper {
     SettingsTrading settings;
     int nSim;
 
-    public   void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
+    public  static final String PICS="src/main/java/safe_rl/runners/pics";
+
+    public void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
+        var simulationResultsMap =  getSimulationResultsMap(simulator);
+        double valueInStartState=simulator.valueInStartState();
+        new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap,valueInStartState);
+    }
+
+    public void simulateAndSavePlots(AgentSimulator<VariablesTrading> simulator,
+                                     String caseName) throws JOptimizerException {
+        var simulationResultsMap =  getSimulationResultsMap(simulator);
+        new TradeSimulationPlotter<VariablesTrading>(settings).savePlots(simulationResultsMap,PICS,caseName);
+    }
+
+    Map<Integer, List<SimulationResult<VariablesTrading>>> getSimulationResultsMap(
+            AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
         Map<Integer, List<SimulationResult<VariablesTrading>>> simulationResultsMap=new HashMap<>();
         for (int i = 0; i < nSim; i++) {
             simulationResultsMap.put(i, simulator.simulateWithNoExploration());
         }
-        double valueInStartState=simulator.valueInStartState();
-        new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap,valueInStartState);
+        return simulationResultsMap;
     }
 
     public  void plotMemory(DisCoMemory<VariablesTrading> critic, String name) {
