@@ -2,6 +2,7 @@ package multi_agent_rl.environments.apple;
 
 import common.math.Discrete2DPos;
 import lombok.Builder;
+import lombok.ToString;
 
 @Builder
 public record VariablesApple(

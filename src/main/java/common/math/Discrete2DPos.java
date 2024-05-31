@@ -37,4 +37,15 @@ public record Discrete2DPos(
 
     }
 
+    public double distance(Discrete2DPos other) {
+        return distance(this,other);
+    }
+
+    public static double distance(Discrete2DPos posA, Discrete2DPos posB) {
+        int dx=posB.x-posA.x;
+        int dy=posB.y-posA.y;
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
+
 }

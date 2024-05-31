@@ -2,6 +2,7 @@ package multi_agent_rl.environments.apple;
 
 import com.google.common.base.Preconditions;
 import common.math.Discrete2DVector;
+import common.other.RandUtils;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -37,6 +38,12 @@ public enum ActionRobot {
                 INTEGER_ACTION_ROBOT_MAP.containsKey(i),"Action index not present");
         return INTEGER_ACTION_ROBOT_MAP.get(i);
     }
+
+    public static ActionRobot random() {
+        int randIdx= RandUtils.getRandomIntNumber(0,ActionRobot.INTEGER_ACTION_ROBOT_MAP.size()-1);
+        return INTEGER_ACTION_ROBOT_MAP.get(randIdx);
+    }
+
 
 
 }

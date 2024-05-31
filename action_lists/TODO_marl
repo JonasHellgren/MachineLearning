@@ -5,6 +5,7 @@ ActionRobot x
 TestActionRobot x
 
 EnvironmentApple x
+whenInEachCorner_thenNotCollected  x
 TestEnvironmentApple
 
 

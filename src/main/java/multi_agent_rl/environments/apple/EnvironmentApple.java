@@ -6,6 +6,8 @@ import multi_agent_rl.domain.abstract_classes.Action;
 import multi_agent_rl.domain.abstract_classes.EnvironmentI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.domain.value_classes.StepReturn;
+
+import static common.math.MathUtils.isEqualDoubles;
 import static common.other.MyFunctions.numIfTrueElseZero;
 
 @AllArgsConstructor
@@ -13,7 +15,10 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
 
     public static final double REWARD_COLLECTED = 10d, REWARD_SAME_POS = -1, REWARD_MOVE = -0.1;
     public static final int INDEX_A = 0, INDEX_B = 1;
-
+    public static final double DIST_SMALL = 1e-2;
+    public static final int DIST_2CELLS = 2;
+    public static final double DIAGONAL_TRIANGLE = Discrete2DPos.of(0,0)
+            .distance(Discrete2DPos.of(DIST_2CELLS,DIST_2CELLS));
     AppleSettings settings;
 
     public static EnvironmentApple newDefault() {
@@ -24,13 +29,20 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
     public StepReturn<VariablesApple> step(StateI<VariablesApple> state0, Action action) {
         StateApple stateApple = (StateApple) state0;
         var newState = getNewState(action, stateApple);
-        boolean isAppleBetween = isAppleBetweenRobots(stateApple);
+        boolean isAppleCollected = isAppleBetweenRobots(newState) &&
+                isCorrectDistanceCollected(newState);
         return StepReturn.<VariablesApple>builder()
                 .state(newState)
                 .isFail(false)
-                .isTerminal(isAppleBetween)
-                .reward(getReward(isAppleBetween, isRobotsAtSamePos(stateApple)))
+                .isTerminal(isAppleCollected)
+                .reward(getReward(isAppleCollected, isRobotsAtSamePos(newState)))
                 .build();
+    }
+
+    static boolean isCorrectDistanceCollected(StateApple newState) {
+        double dist=newState.posA().distance(newState.posB());
+        return isEqualDoubles(DIST_2CELLS,dist, DIST_SMALL) ||
+                isEqualDoubles(DIAGONAL_TRIANGLE,dist, DIST_SMALL);
     }
 
     static boolean isRobotsAtSamePos(StateApple stateApple) {
@@ -50,7 +62,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
                 REWARD_MOVE;
     }
 
-    StateI<VariablesApple> getNewState(Action action, StateApple stateApple) {
+    StateApple getNewState(Action action, StateApple stateApple) {
         var actionList = action.asInts();
         var actionA = ActionRobot.fromInt(actionList.get(INDEX_A));
         var actionB = ActionRobot.fromInt(actionList.get(INDEX_B));
@@ -59,6 +71,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
         return new StateApple(VariablesApple.builder()
                 .posA(stateApple.posA().move(actionA.getDirection()).clip(minPos, maxPos))
                 .posB(stateApple.posB().move(actionB.getDirection()).clip(minPos, maxPos))
+                .posApple(stateApple.posApple())
                 .build());
     }
 }

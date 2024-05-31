@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import multi_agent_rl.domain.abstract_classes.StateI;
-import org.bytedeco.libfreenect._freenect_context;
 
 @AllArgsConstructor
 public class StateApple implements StateI<VariablesApple> {
@@ -27,7 +26,6 @@ public class StateApple implements StateI<VariablesApple> {
         return VariablesApple.isPosInBounds(pos,settings);
     }
 
-
     @Override
     public StateI<VariablesApple> copy() {
         return new StateApple(variables.copy());
@@ -43,6 +41,19 @@ public class StateApple implements StateI<VariablesApple> {
 
     public Discrete2DPos posApple() {
         return variables.posApple();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        StateApple other=(StateApple) o;
+        return posA().equals(other.posA()) &&
+                posB().equals(other.posB()) &&
+                posApple().equals(other.posApple());
+    }
+
+    @Override
+    public String toString() {
+        return variables.toString();
     }
 
 }
