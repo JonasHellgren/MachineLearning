@@ -41,6 +41,10 @@ public class TrainerMarlIL<V> {
     public void train()  {
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
             var experiences = getExperiences();
+
+            System.out.println("experiences.size() = " + experiences.size());
+
+
             trainAgentFromNewExperiences(experiences);
 //            addNewExperienceToBuffer();
         //    trainAgentFromOldExperiences();

@@ -24,11 +24,11 @@ public class TestEnvironmentApple {
     public static final Discrete2DPos POS_APPLE = Discrete2DPos.of(2, 2);
     public static final Discrete2DPos POS_A = Discrete2DPos.of(1, 3);
     public static final Discrete2DPos POS_B = Discrete2DPos.of(3, 3);
-    public static final int STOP = ActionRobot.STOP.getIndex();
-    public static final int WEST = ActionRobot.W.getIndex();
-    public static final int EAST = ActionRobot.E.getIndex();
-    public static final int SOUTH = ActionRobot.S.getIndex();
-    public static final int NORTH = ActionRobot.N.getIndex();
+    public static final int STOP = ActionAppleRobot.STOP.getIndex();
+    public static final int WEST = ActionAppleRobot.W.getIndex();
+    public static final int EAST = ActionAppleRobot.E.getIndex();
+    public static final int SOUTH = ActionAppleRobot.S.getIndex();
+    public static final int NORTH = ActionAppleRobot.N.getIndex();
 
     EnvironmentApple environment;
     AppleSettings settings=AppleSettings.newDefault();
@@ -138,8 +138,8 @@ public class TestEnvironmentApple {
         StateI<VariablesApple> state=startState;
         while (!collected) {
             ActionJoint action = ActionJoint.ofInteger(List.of(
-                    ActionRobot.random().getIndex(),
-                    ActionRobot.random().getIndex()));
+                    ActionAppleRobot.random().getIndex(),
+                    ActionAppleRobot.random().getIndex()));
             var sr=environment.step(state, action);
             state=sr.state();
             collected=sr.isTerminal();

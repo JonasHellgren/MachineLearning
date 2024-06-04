@@ -1,17 +1,17 @@
 package marl;
 
 import common.math.Discrete2DVector;
-import multi_agent_rl.environments.apple.ActionRobot;
+import multi_agent_rl.environments.apple.ActionAppleRobot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TestActionRobot {
+class TestActionAppleRobot {
 
-    static ActionRobot north = ActionRobot.fromInt(0);
-    static ActionRobot east = ActionRobot.fromInt(1);
-    static ActionRobot south = ActionRobot.fromInt(2);
-    static ActionRobot west = ActionRobot.fromInt(3);
-    static ActionRobot stop = ActionRobot.fromInt(4);
+    static ActionAppleRobot north = ActionAppleRobot.fromInt(0);
+    static ActionAppleRobot east = ActionAppleRobot.fromInt(1);
+    static ActionAppleRobot south = ActionAppleRobot.fromInt(2);
+    static ActionAppleRobot west = ActionAppleRobot.fromInt(3);
+    static ActionAppleRobot stop = ActionAppleRobot.fromInt(4);
 
     @Test
     void whenNorth_thenCorrect() {

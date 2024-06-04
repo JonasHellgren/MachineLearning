@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ActionRobot {
+public enum ActionAppleRobot {
     N(0,Discrete2DVector.of(0,1)),
     E(1, Discrete2DVector.of(1,0)),
     S(2, Discrete2DVector.of(0,-1)),
@@ -18,32 +18,35 @@ public enum ActionRobot {
     @Getter  private final int index;
     @Getter private final Discrete2DVector direction;
 
-    private static final Map<Integer, ActionRobot> INTEGER_ACTION_ROBOT_MAP
+    private static final Map<Integer, ActionAppleRobot> INTEGER_ACTION_ROBOT_MAP
             = new HashMap<>();
 
     // Static block to populate the map
     static {
-        for (ActionRobot myEnum : ActionRobot.values()) {
+        for (ActionAppleRobot myEnum : ActionAppleRobot.values()) {
             INTEGER_ACTION_ROBOT_MAP.put(myEnum.index, myEnum);
         }
     }
 
-    ActionRobot(int value, Discrete2DVector direction) {
+    ActionAppleRobot(int value, Discrete2DVector direction) {
         this.index = value;
         this.direction = direction;
     }
 
-    public static ActionRobot fromInt(int i) {
+    public static ActionAppleRobot fromInt(int i) {
         Preconditions.checkArgument(
                 INTEGER_ACTION_ROBOT_MAP.containsKey(i),"Action index not present");
         return INTEGER_ACTION_ROBOT_MAP.get(i);
     }
 
-    public static ActionRobot random() {
-        int randIdx= RandUtils.getRandomIntNumber(0,ActionRobot.INTEGER_ACTION_ROBOT_MAP.size()-1);
+    public static ActionAppleRobot random() {
+        int randIdx= RandUtils.getRandomIntNumber(0, nActions() -1);
         return INTEGER_ACTION_ROBOT_MAP.get(randIdx);
     }
 
+    public static int nActions() {
+        return ActionAppleRobot.INTEGER_ACTION_ROBOT_MAP.size();
+    }
 
 
 }

@@ -8,6 +8,7 @@ import multi_agent_rl.domain.value_classes.TrainerParameters;
 import multi_agent_rl.environments.apple.*;
 import multi_agent_rl.factories.StartStateSupplierFactoryApple;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,7 +26,7 @@ public class TestTrainerMarlIL {
     @BeforeEach
     void init() {
         environment=new EnvironmentApple(settings);
-        List<AgentI<VariablesApple>> agents=null;
+        List<AgentI<VariablesApple>> agents=List.of(new AgentApple<>(),new AgentApple<>());
         startStateSupplier=new StartStateSupplierFactoryApple(settings).create(POS_APPLE);
 
         trainer= TrainerMarlIL.<VariablesApple>builder()
@@ -34,6 +35,13 @@ public class TestTrainerMarlIL {
                 .trainerParameters(TrainerParameters.newDefault().withNofEpisodes(10))
                 .startStateSupplier(startStateSupplier)
                 .build();
+    }
+
+    @Test
+    void whenTrained_thenOkCritic() {
+
+        trainer.train();
+
     }
 
 
