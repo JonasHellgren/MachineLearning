@@ -92,8 +92,24 @@ public class TestEnvironmentApple {
     }
 
     @Test
+    void whenASouthAndEast_thenNotAtApple() {
+        Action action0 = Action.ofInteger(List.of(SOUTH, STOP));
+        Action action1 = Action.ofInteger(List.of(EAST, STOP));
+
+        var sr0=environment.step(startState, action0);
+        var sr1=environment.step(sr0.state(), action1);
+        Assertions.assertFalse(sr1.isTerminal());
+        Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr1.reward());
+        Assertions.assertEquals(Discrete2DPos.of(1, 2),sr1.state().getVariables().posA());
+    }
+
+    @Test
     void whenManyRandomActions_thenFinallyCollected() {
-        var state = getStateCollected();
+
+        StateI<VariablesApple> state=null;
+        for (int i = 0; i < 10000; i++) {
+             state = getStateCollected();
+        }
         var posA = state.getVariables().posA();
         var posB = state.getVariables().posB();
         var xList= List.of(posA.x(),posB.x());

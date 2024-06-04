@@ -6,6 +6,14 @@ TestActionRobot x
 
 EnvironmentApple x
 whenInEachCorner_thenNotCollected  x
-TestEnvironmentApple
+TestEnvironmentApple x
+
+Inte kunna gå in i äpple  x
+Hot encoding. 4 bitar om riktning andra agent. 4 om riktning äpple. Samma igen men tänt bara om agent resp äpple precis jämte.
+
+pseudocode iac
+pseudocode CLDE
+
+AgentACApple
 
 

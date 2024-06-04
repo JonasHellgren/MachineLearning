@@ -66,12 +66,22 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
         var actionList = action.asInts();
         var actionA = ActionRobot.fromInt(actionList.get(INDEX_A));
         var actionB = ActionRobot.fromInt(actionList.get(INDEX_B));
-        var minPos = settings.minPos();
-        var maxPos = settings.maxPos();
+        var clipPosA = moveAndClipPos(stateApple.posA(), actionA);
+        var clipPosB = moveAndClipPos(stateApple.posB(),actionB);
+        var posANew= getNewPosNotAtApple(clipPosA, stateApple.posA(), stateApple.posApple());
+        var posBNew= getNewPosNotAtApple(clipPosB, stateApple.posB(), stateApple.posApple());
         return new StateApple(VariablesApple.builder()
-                .posA(stateApple.posA().move(actionA.getDirection()).clip(minPos, maxPos))
-                .posB(stateApple.posB().move(actionB.getDirection()).clip(minPos, maxPos))
+                .posA(posANew)
+                .posB(posBNew)
                 .posApple(stateApple.posApple())
                 .build());
+    }
+
+    Discrete2DPos getNewPosNotAtApple(Discrete2DPos clipPosA, Discrete2DPos pos, Discrete2DPos posApple) {
+        return clipPosA.equals(posApple) ? pos : clipPosA;
+    }
+
+    Discrete2DPos moveAndClipPos(Discrete2DPos pos,ActionRobot actionA) {
+        return pos.move(actionA.getDirection()).clip(settings.minPos(), settings.maxPos());
     }
 }
