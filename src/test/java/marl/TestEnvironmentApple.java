@@ -1,7 +1,7 @@
 package marl;
 
 import common.math.Discrete2DPos;
-import multi_agent_rl.domain.abstract_classes.Action;
+import multi_agent_rl.domain.abstract_classes.ActionJoint;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.environments.apple.*;
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +42,7 @@ public class TestEnvironmentApple {
 
     @Test
     void whenStill_thenCorrect() {
-        var sr=environment.step(startState, Action.ofInteger(List.of(STOP,STOP)));
+        var sr=environment.step(startState, ActionJoint.ofInteger(List.of(STOP,STOP)));
         Assertions.assertFalse(sr.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr.reward());
         Assertions.assertEquals(startState,sr.state());
@@ -50,14 +50,14 @@ public class TestEnvironmentApple {
 
     @Test
     void whenBothToPos21_thenCorrect() {
-        var sr=environment.step(startState, Action.ofInteger(List.of(EAST,WEST)));
+        var sr=environment.step(startState, ActionJoint.ofInteger(List.of(EAST,WEST)));
         Assertions.assertFalse(sr.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE+EnvironmentApple.REWARD_SAME_POS,sr.reward());
     }
 
     @Test
     void whenBothSouth_thenCorrect() {
-        var sr=environment.step(startState, Action.ofInteger(List.of(SOUTH,SOUTH)));
+        var sr=environment.step(startState, ActionJoint.ofInteger(List.of(SOUTH,SOUTH)));
         Assertions.assertTrue(sr.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE+EnvironmentApple.REWARD_COLLECTED,sr.reward());
     }
@@ -67,14 +67,14 @@ public class TestEnvironmentApple {
         Discrete2DPos cornerA = Discrete2DPos.of(0, 4);
         Discrete2DPos cornerB = Discrete2DPos.of(4, 0);
         StateI<VariablesApple> state=StateApple.of(POS_APPLE,cornerA,cornerB,settings);
-        var sr=environment.step(state, Action.ofInteger(List.of(STOP,STOP)));
+        var sr=environment.step(state, ActionJoint.ofInteger(List.of(STOP,STOP)));
         Assertions.assertFalse(sr.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr.reward());
     }
 
     @Test
     void whenASouth2Times_thenCollected() {
-        Action action = Action.ofInteger(List.of(SOUTH, STOP));
+        ActionJoint action = ActionJoint.ofInteger(List.of(SOUTH, STOP));
         var sr0=environment.step(startState, action);
         var sr1=environment.step(sr0.state(), action);
         Assertions.assertTrue(sr1.isTerminal());
@@ -83,7 +83,7 @@ public class TestEnvironmentApple {
 
     @Test
     void whenANorth2Times_thenHittingWall() {
-        Action action = Action.ofInteger(List.of(NORTH, STOP));
+        ActionJoint action = ActionJoint.ofInteger(List.of(NORTH, STOP));
         var sr0=environment.step(startState, action);
         var sr1=environment.step(sr0.state(), action);
         Assertions.assertFalse(sr1.isTerminal());
@@ -93,15 +93,27 @@ public class TestEnvironmentApple {
 
     @Test
     void whenASouthAndEast_thenNotAtApple() {
-        Action action0 = Action.ofInteger(List.of(SOUTH, STOP));
-        Action action1 = Action.ofInteger(List.of(EAST, STOP));
-
+        ActionJoint action0 = ActionJoint.ofInteger(List.of(SOUTH, STOP));
+        ActionJoint action1 = ActionJoint.ofInteger(List.of(EAST, STOP));
         var sr0=environment.step(startState, action0);
         var sr1=environment.step(sr0.state(), action1);
         Assertions.assertFalse(sr1.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr1.reward());
         Assertions.assertEquals(Discrete2DPos.of(1, 2),sr1.state().getVariables().posA());
     }
+
+    @Test
+    void whenBSouthAndWest_thenNotAtApple() {
+        ActionJoint action0 = ActionJoint.ofInteger(List.of(STOP,SOUTH));
+        ActionJoint action1 = ActionJoint.ofInteger(List.of(STOP,WEST));
+
+        var sr0=environment.step(startState, action0);
+        var sr1=environment.step(sr0.state(), action1);
+        Assertions.assertFalse(sr1.isTerminal());
+        Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr1.reward());
+        Assertions.assertEquals(Discrete2DPos.of(3, 2),sr1.state().getVariables().posB());
+    }
+
 
     @Test
     void whenManyRandomActions_thenFinallyCollected() {
@@ -125,7 +137,7 @@ public class TestEnvironmentApple {
         boolean collected=false;
         StateI<VariablesApple> state=startState;
         while (!collected) {
-            Action action = Action.ofInteger(List.of(
+            ActionJoint action = ActionJoint.ofInteger(List.of(
                     ActionRobot.random().getIndex(),
                     ActionRobot.random().getIndex()));
             var sr=environment.step(state, action);

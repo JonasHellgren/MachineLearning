@@ -2,7 +2,7 @@ package multi_agent_rl.environments.apple;
 
 import common.math.Discrete2DPos;
 import lombok.AllArgsConstructor;
-import multi_agent_rl.domain.abstract_classes.Action;
+import multi_agent_rl.domain.abstract_classes.ActionJoint;
 import multi_agent_rl.domain.abstract_classes.EnvironmentI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.domain.value_classes.StepReturn;
@@ -26,7 +26,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
     }
 
     @Override
-    public StepReturn<VariablesApple> step(StateI<VariablesApple> state0, Action action) {
+    public StepReturn<VariablesApple> step(StateI<VariablesApple> state0, ActionJoint action) {
         StateApple stateApple = (StateApple) state0;
         var newState = getNewState(action, stateApple);
         boolean isAppleCollected = isAppleBetweenRobots(newState) &&
@@ -62,7 +62,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
                 REWARD_MOVE;
     }
 
-    StateApple getNewState(Action action, StateApple stateApple) {
+    StateApple getNewState(ActionJoint action, StateApple stateApple) {
         var actionList = action.asInts();
         var actionA = ActionRobot.fromInt(actionList.get(INDEX_A));
         var actionB = ActionRobot.fromInt(actionList.get(INDEX_B));

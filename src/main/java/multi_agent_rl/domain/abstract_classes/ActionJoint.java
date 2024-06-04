@@ -10,19 +10,19 @@ import java.util.Optional;
  * Generic action, handles both discrete and continuous actions, only one of the arguments can be non-empty
  */
 
-public record Action(Optional<List<Integer>> intValues, Optional<List<Double>> doubleValues) {
+public record ActionJoint(Optional<List<Integer>> intValues, Optional<List<Double>> doubleValues) {
 
-    public static Action ofInteger(List<Integer> intValues) {
-        return new Action(Optional.of(intValues), Optional.empty());
+    public static ActionJoint ofInteger(List<Integer> intValues) {
+        return new ActionJoint(Optional.of(intValues), Optional.empty());
     }
 
-    public static Action ofDouble(List<Double> doubleValues) {
-        return new Action(Optional.empty(), Optional.of(doubleValues));
+    public static ActionJoint ofDouble(List<Double> doubleValues) {
+        return new ActionJoint(Optional.empty(), Optional.of(doubleValues));
     }
 
 
 
-    public Action {
+    public ActionJoint {
         long nofInt = intValues.isPresent() ? 1 : 0;
         long nofDouble = doubleValues.isPresent() ? 1 : 0;
         if (nofInt + nofDouble != 1) {
