@@ -1,14 +1,12 @@
 package multi_agent_rl.domain.trainers;
 
-import com.joptimizer.exception.JOptimizerException;
-import common.other.Conditionals;
+import lombok.Builder;
 import multi_agent_rl.domain.abstract_classes.AgentI;
 import multi_agent_rl.domain.abstract_classes.EnvironmentI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 import multi_agent_rl.domain.value_classes.Experience;
 import multi_agent_rl.domain.value_classes.TrainerParameters;
 import multi_agent_rl.helpers.*;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -28,7 +26,19 @@ public class TrainerMarlIL<V> {
     MultiStepActorUpdater<V> actorUpdater;
     MultiStepCriticUpdater<V> criticUpdater;
 
-    public void train() throws JOptimizerException {
+    @Builder
+    public TrainerMarlIL(EnvironmentI<V> environment,
+                         List<AgentI<V>> agents,
+                         TrainerParameters trainerParameters,
+                         Supplier<StateI<V>> startStateSupplier) {
+        this.environment = environment;
+        this.agents = agents;
+        this.trainerParameters = trainerParameters;
+        this.startStateSupplier = startStateSupplier;
+        this.experienceCreator=new ExperienceCreator<>(environment,trainerParameters);
+    }
+
+    public void train()  {
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
             var experiences = getExperiences();
             trainAgentFromNewExperiences(experiences);

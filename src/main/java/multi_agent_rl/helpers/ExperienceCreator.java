@@ -2,12 +2,13 @@ package multi_agent_rl.helpers;
 
 
 import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import multi_agent_rl.domain.abstract_classes.*;
 import multi_agent_rl.domain.value_classes.*;
 import java.util.List;
 
-@Builder
+@AllArgsConstructor
 public class ExperienceCreator<V> {
     public static final int VALUE_DUMMY = 0;
     EnvironmentI<V> environment;
