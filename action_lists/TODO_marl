@@ -18,13 +18,14 @@ state.getObservation()
 
 check multiStepResults in TrainerMarlIL  x
 
-
-få in Map<String,ActionAgent> agentIdActionMap i Experience
-få in Map<String,ActionAgent> agentIdActionMap i MultiStepResultItem
-
+AgentActions x
 Critic i AgentILApple
 
+pseudo code gradlog, se short corridor
 
+pseudo code parameter matrix updating(se chat gpt)  dm=gradLog * f
+klass som gör yttre produkt
+Actor i AgentILApple
 
 
 pseudocode iac

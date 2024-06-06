@@ -16,11 +16,8 @@ import static common.math.BucketLimitsHandler.throwIfBadLimits;
 
 @AllArgsConstructor
 public class AgentILApple<O> implements AgentI<O> {
-
-
     @Getter
     String id;
-
 
     @Override
     public ActionAgent chooseAction(ObservationI<O> obs) {

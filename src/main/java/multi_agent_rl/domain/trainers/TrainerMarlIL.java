@@ -42,7 +42,7 @@ public class TrainerMarlIL<V,O> {
             var experiences = getExperiences();
             System.out.println("experiences.size() = " + experiences.size());
 
-            trainAgentFromNewExperiences(experiences);
+            trainAgentsFromNewExperiences(experiences);
 
 
 //            addNewExperienceToBuffer();
@@ -63,7 +63,7 @@ public class TrainerMarlIL<V,O> {
     }
 */
 
-    void trainAgentFromNewExperiences(List<Experience<V,O>> experiences) {
+    void trainAgentsFromNewExperiences(List<Experience<V,O>> experiences) {
         //var errorList = recorder.recorderTrainingProgress.criticLossTraj();
 
         for (AgentI<O> agent:agents) {

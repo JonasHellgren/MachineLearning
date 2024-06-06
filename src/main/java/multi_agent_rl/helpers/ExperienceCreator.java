@@ -5,7 +5,10 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import multi_agent_rl.domain.abstract_classes.*;
 import multi_agent_rl.domain.value_classes.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 public class ExperienceCreator<V,O> {
@@ -19,12 +22,18 @@ public class ExperienceCreator<V,O> {
         StepReturn<V,O> sr;
         var state=stateStart.copy();
         do {
-            StateI<V,O> finalState = state;
-            List<ActionAgent> actions=agents.stream()
+  /*          List<ActionAgent> actions=agents.stream()
                     .map(a -> a.chooseAction(finalState.getObservation(a.getId()))).toList();
-            ActionJoint action=ActionJoint.ofInteger(actions.stream().map(a -> a.asInt()).toList());
+  */
+            AgentActions<V,O> agentActions=AgentActions.empty();
+            agentActions.addActions(agents,state);
+
+//            ActionJoint action=ActionJoint.ofInteger(actions.stream().map(a -> a.asInt()).toList());
+
+            ActionJoint action=agentActions.jointAction();
+
             sr = environment.step(state, action);
-            experienceList.add(createExperience(state,action, sr));
+            experienceList.add(createExperience(state,action,sr,agentActions));
             si++;
             state=sr.state();
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));
@@ -33,12 +42,15 @@ public class ExperienceCreator<V,O> {
 
     private Experience<V,O> createExperience(StateI<V,O> state,
                                            ActionJoint action,
-                                           StepReturn<V,O> sr) {
+                                           StepReturn<V,O> sr,
+                                          AgentActions<V,O> agentActions
+                                             ) {
         return Experience.<V,O>builder()
                 .state(state)
                 .action(action)
                 .reward(sr.reward())
                 .stateNew(sr.state())
+                .agentActions(agentActions)
                 .isTerminal(sr.isTerminal())
                 .value(VALUE_DUMMY)
                 .build();

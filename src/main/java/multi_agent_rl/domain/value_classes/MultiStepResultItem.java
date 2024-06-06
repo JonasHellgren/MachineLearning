@@ -5,6 +5,8 @@ import lombok.NonNull;
 import multi_agent_rl.domain.abstract_classes.ActionJoint;
 import multi_agent_rl.domain.abstract_classes.StateI;
 
+import java.util.Map;
+
 /***
  * Item in MultiStepResults list
  */
@@ -15,6 +17,7 @@ public record MultiStepResultItem<V,O>(
         ActionJoint action,
         @NonNull Double sumRewards,
         StateI<V,O> stateFuture,
+        AgentActions<V,O> agentActions,
         @NonNull Boolean isStateFutureTerminalOrNotPresent,
         Double valueTarget,
         Double advantage
