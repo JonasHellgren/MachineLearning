@@ -11,7 +11,7 @@ import static common.math.MathUtils.isEqualDoubles;
 import static common.other.MyFunctions.numIfTrueElseZero;
 
 @AllArgsConstructor
-public class EnvironmentApple implements EnvironmentI<VariablesApple> {
+public class EnvironmentApple implements EnvironmentI<VariablesStateApple,VariablesObservationApple> {
 
     public static final double REWARD_COLLECTED = 10d, REWARD_SAME_POS = -1, REWARD_MOVE = -0.1;
     public static final int INDEX_A = 0, INDEX_B = 1;
@@ -26,12 +26,13 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
     }
 
     @Override
-    public StepReturn<VariablesApple> step(StateI<VariablesApple> state0, ActionJoint action) {
+    public StepReturn<VariablesStateApple,VariablesObservationApple>
+    step(StateI<VariablesStateApple,VariablesObservationApple> state0, ActionJoint action) {
         StateApple stateApple = (StateApple) state0;
         var newState = getNewState(action, stateApple);
         boolean isAppleCollected = isAppleBetweenRobots(newState) &&
                 isCorrectDistanceCollected(newState);
-        return StepReturn.<VariablesApple>builder()
+        return StepReturn.<VariablesStateApple,VariablesObservationApple>builder()
                 .state(newState)
                 .isFail(false)
                 .isTerminal(isAppleCollected)
@@ -70,7 +71,7 @@ public class EnvironmentApple implements EnvironmentI<VariablesApple> {
         var clipPosB = moveAndClipPos(stateApple.posB(),actionB);
         var posANew= getNewPosNotAtApple(clipPosA, stateApple.posA(), stateApple.posApple());
         var posBNew= getNewPosNotAtApple(clipPosB, stateApple.posB(), stateApple.posApple());
-        return new StateApple(VariablesApple.builder()
+        return new StateApple(VariablesStateApple.builder()
                 .posA(posANew)
                 .posB(posBNew)
                 .posApple(stateApple.posApple())

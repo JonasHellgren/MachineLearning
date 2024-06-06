@@ -1,9 +1,11 @@
 package multi_agent_rl.domain.abstract_classes;
 
-public interface StateI<V> {
+public interface StateI<V,O> {
     V getVariables();
     void setVariables(V variables);
-    StateI<V> copy();
+    StateI<V,O> copy();
+
+     ObservationI<O> getObservation(String id);
 
 /*
     double[] continuousFeatures();

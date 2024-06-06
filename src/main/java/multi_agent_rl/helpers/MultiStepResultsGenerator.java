@@ -4,13 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import safe_rl.agent_interfaces.AgentACDiscoI;
-import safe_rl.domain.value_classes.Experience;
-import safe_rl.domain.value_classes.MultiStepResultItem;
-import safe_rl.domain.value_classes.MultiStepResults;
-import safe_rl.domain.value_classes.TrainerParameters;
-import safe_rl.helpers.EpisodeInfo;
-import safe_rl.helpers.MultiStepReturnEvaluator;
+import multi_agent_rl.domain.abstract_classes.AgentI;
+import multi_agent_rl.domain.value_classes.*;
+import multi_agent_rl.helpers.*;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -22,25 +18,25 @@ import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @Log
-public class MultiStepResultsGenerator<V> {
+public class MultiStepResultsGenerator<V,O> {
     @NonNull TrainerParameters parameters;
-    @NonNull AgentACDiscoI<V> agent;
+    @NonNull AgentI<O> agent;
 
-    final MultiStepReturnEvaluator<V> evaluator=new MultiStepReturnEvaluator<>();
+    final MultiStepReturnEvaluator<V,O> evaluator=new MultiStepReturnEvaluator<>();
 
     @SneakyThrows
-    public MultiStepResults<V> generate(List<Experience<V>> experiences) {
+    public MultiStepResults<V,O> generate(List<Experience<V,O>> experiences) {
         int nExperiences = experiences.size();  //in literature often named T
         var informer=new EpisodeInfo<>(experiences);
         evaluator.setParametersAndExperiences(parameters, experiences);
-        var results = MultiStepResults.<V>create(nExperiences);
+        var results = MultiStepResults.<V,O>create(nExperiences);
         IntStream.range(0, nExperiences).forEach(   //end exclusive
                 t -> addResultsAtStep(results,informer, t));
         return results;
     }
 
-    void addResultsAtStep(MultiStepResults<V> results,
-                          EpisodeInfo<V> informer,
+    void addResultsAtStep(MultiStepResults<V,O> results,
+                          EpisodeInfo<V,O> informer,
                           int t) {
         var singleStepExperience=informer.experienceAtTime(t);
         var resMS = evaluator.evaluate(t);
@@ -49,20 +45,18 @@ public class MultiStepResultsGenerator<V> {
                 resMS.isFutureStateOutside();
         double valueTarget=isFutureOutsideOrTerminal
                 ? sumRewards
-                : sumRewards + parameters.gammaPowN() * agent.readCritic(resMS.stateFuture());
-        double vState = agent.readCritic(singleStepExperience.state());
+                : sumRewards + parameters.gammaPowN() * agent.criticOut(resMS.stateFuture().getObservation(agent.getId()));
+        double vState = agent.criticOut(singleStepExperience.state().getObservation(agent.getId()));
         double advantage=valueTarget-vState;
 
-        var expMs= MultiStepResultItem.<V>builder()
+        var expMs= MultiStepResultItem.<V,O>builder()
                 .state(singleStepExperience.state())
-                .actionApplied(singleStepExperience.actionApplied())
+                .action(singleStepExperience.action())
                 .sumRewards(resMS.sumRewardsNSteps())
                 .stateFuture(isFutureOutsideOrTerminal?null: resMS.stateFuture())
                 .isStateFutureTerminalOrNotPresent(isFutureOutsideOrTerminal)
                 .valueTarget(valueTarget)
                 .advantage(advantage)
-                .actionPolicy(singleStepExperience.ars().action())
-                .isSafeCorrected(singleStepExperience.isSafeCorrected())
                 .build();
         results.add(expMs);
 

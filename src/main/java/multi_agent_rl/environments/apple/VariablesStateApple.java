@@ -2,17 +2,16 @@ package multi_agent_rl.environments.apple;
 
 import common.math.Discrete2DPos;
 import lombok.Builder;
-import lombok.ToString;
 
 @Builder
-public record VariablesApple(
+public record VariablesStateApple(
         Discrete2DPos posA,
         Discrete2DPos posB,
         Discrete2DPos posApple
 ) {
 
-    public VariablesApple copy() {
-        return VariablesApple.builder()
+    public VariablesStateApple copy() {
+        return VariablesStateApple.builder()
                 .posA(posA.copy())
                 .posB(posB.copy())
                 .posApple(posApple.copy())

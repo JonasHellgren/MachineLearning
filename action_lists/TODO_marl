@@ -14,11 +14,20 @@ Hot encoding. 4 bitar om riktning andra agent. 4 om riktning äpple. Samma igen 
 StartStateSupplierFactoryApple x
 AgentApple
 
+state.getObservation()
+
+check multiStepResults in TrainerMarlIL  x
+
+
+få in Map<String,ActionAgent> agentIdActionMap i Experience
+få in Map<String,ActionAgent> agentIdActionMap i MultiStepResultItem
+
+Critic i AgentILApple
+
+
 
 
 pseudocode iac
 pseudocode CLDE
-
-AgentACApple
 
 

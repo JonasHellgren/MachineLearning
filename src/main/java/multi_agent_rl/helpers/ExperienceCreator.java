@@ -3,25 +3,25 @@ package multi_agent_rl.helpers;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import multi_agent_rl.domain.abstract_classes.*;
 import multi_agent_rl.domain.value_classes.*;
 import java.util.List;
 
 @AllArgsConstructor
-public class ExperienceCreator<V> {
+public class ExperienceCreator<V,O> {
     public static final int VALUE_DUMMY = 0;
-    EnvironmentI<V> environment;
+    EnvironmentI<V,O> environment;
     TrainerParameters parameters;
 
-    public List<Experience<V>> getExperiences(List<AgentI<V>> agents, StateI<V> stateStart) {
-        List<Experience<V>> experienceList = Lists.newArrayList();
+    public List<Experience<V,O>> getExperiences(List<AgentI<O>> agents, StateI<V,O> stateStart) {
+        List<Experience<V,O>> experienceList = Lists.newArrayList();
         int si = 0;
-        StepReturn<V> sr;
+        StepReturn<V,O> sr;
         var state=stateStart.copy();
         do {
-            StateI<V> finalState = state;
-            List<ActionAgent> actions=agents.stream().map(a -> a.chooseAction(finalState)).toList();
+            StateI<V,O> finalState = state;
+            List<ActionAgent> actions=agents.stream()
+                    .map(a -> a.chooseAction(finalState.getObservation(a.getId()))).toList();
             ActionJoint action=ActionJoint.ofInteger(actions.stream().map(a -> a.asInt()).toList());
             sr = environment.step(state, action);
             experienceList.add(createExperience(state,action, sr));
@@ -31,19 +31,20 @@ public class ExperienceCreator<V> {
         return experienceList;
     }
 
-    private Experience<V> createExperience(StateI<V> state,
+    private Experience<V,O> createExperience(StateI<V,O> state,
                                            ActionJoint action,
-                                           StepReturn<V> sr) {
-        return Experience.<V>builder()
+                                           StepReturn<V,O> sr) {
+        return Experience.<V,O>builder()
                 .state(state)
                 .action(action)
                 .reward(sr.reward())
                 .stateNew(sr.state())
+                .isTerminal(sr.isTerminal())
                 .value(VALUE_DUMMY)
                 .build();
     }
 
-    boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<V> sr) {
+    boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<V,O> sr) {
         return !sr.isTerminal() && si < parameters.nofStepsMax();
     }
 

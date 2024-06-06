@@ -66,7 +66,7 @@ public class TestEnvironmentApple {
     void whenInEachCorner_thenNotCollected() {
         Discrete2DPos cornerA = Discrete2DPos.of(0, 4);
         Discrete2DPos cornerB = Discrete2DPos.of(4, 0);
-        StateI<VariablesApple> state=StateApple.of(POS_APPLE,cornerA,cornerB,settings);
+        StateI<VariablesStateApple,VariablesObservationApple> state=StateApple.of(POS_APPLE,cornerA,cornerB,settings);
         var sr=environment.step(state, ActionJoint.ofInteger(List.of(STOP,STOP)));
         Assertions.assertFalse(sr.isTerminal());
         Assertions.assertEquals(EnvironmentApple.REWARD_MOVE,sr.reward());
@@ -118,7 +118,7 @@ public class TestEnvironmentApple {
     @Test
     void whenManyRandomActions_thenFinallyCollected() {
 
-        StateI<VariablesApple> state=null;
+        StateI<VariablesStateApple,VariablesObservationApple> state=null;
         for (int i = 0; i < 10000; i++) {
              state = getStateCollected();
         }
@@ -133,9 +133,9 @@ public class TestEnvironmentApple {
         Assertions.assertTrue(possibleYCollectPos.stream().anyMatch(y -> yList.contains(y)));
     }
 
-    private StateI<VariablesApple> getStateCollected() {
+    private StateI<VariablesStateApple,VariablesObservationApple> getStateCollected() {
         boolean collected=false;
-        StateI<VariablesApple> state=startState;
+        StateI<VariablesStateApple,VariablesObservationApple> state=startState;
         while (!collected) {
             ActionJoint action = ActionJoint.ofInteger(List.of(
                     ActionAppleRobot.random().getIndex(),

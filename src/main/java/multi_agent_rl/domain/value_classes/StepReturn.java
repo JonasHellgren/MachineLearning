@@ -8,8 +8,8 @@ import multi_agent_rl.domain.abstract_classes.StateI;
  */
 
 @Builder
-public record StepReturn<V>(
-        StateI<V> state,
+public record StepReturn<V,O>(
+        StateI<V,O> state,
         boolean isFail,
         boolean isTerminal,
         double reward

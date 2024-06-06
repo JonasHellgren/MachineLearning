@@ -41,10 +41,22 @@ public record Discrete2DPos(
         return distance(this,other);
     }
 
+    public Discrete2DVector vector(Discrete2DPos other) {
+        return Discrete2DVector.of(getDx(this, other),getDy(this, other));
+    }
+
     public static double distance(Discrete2DPos posA, Discrete2DPos posB) {
-        int dx=posB.x-posA.x;
-        int dy=posB.y-posA.y;
+        int dx= getDx(posA, posB);
+        int dy= getDy(posA, posB);
         return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
+    private static int getDy(Discrete2DPos posA, Discrete2DPos posB) {
+        return posB.y - posA.y;
+    }
+
+    private static int getDx(Discrete2DPos posA, Discrete2DPos posB) {
+        return posB.x - posA.x;
     }
 
 

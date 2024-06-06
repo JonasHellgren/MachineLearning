@@ -5,17 +5,18 @@ import common.math.Discrete2DPos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import multi_agent_rl.domain.abstract_classes.ObservationI;
 import multi_agent_rl.domain.abstract_classes.StateI;
 
 @AllArgsConstructor
-public class StateApple implements StateI<VariablesApple> {
+public class StateApple implements StateI<VariablesStateApple,VariablesObservationApple> {
 
     @Setter
     @Getter
-    VariablesApple variables;
+    VariablesStateApple variables;
 
     public static StateApple of(Discrete2DPos posApple, Discrete2DPos posA, Discrete2DPos posB, AppleSettings settings) {
-        VariablesApple variablesApple = VariablesApple.builder()
+        VariablesStateApple variablesApple = VariablesStateApple.builder()
                 .posApple(posApple).posA(posA).posB(posB)
                 .build();
         Preconditions.checkArgument(variablesApple.isInBounds(settings),"Non correct position");
@@ -23,13 +24,19 @@ public class StateApple implements StateI<VariablesApple> {
     }
 
     public static boolean posInBounds(Discrete2DPos pos, AppleSettings settings) {
-        return VariablesApple.isPosInBounds(pos,settings);
+        return VariablesStateApple.isPosInBounds(pos,settings);
     }
 
     @Override
-    public StateI<VariablesApple> copy() {
+    public StateI<VariablesStateApple,VariablesObservationApple> copy() {
         return new StateApple(variables.copy());
     }
+
+    @Override
+    public ObservationI<VariablesObservationApple> getObservation(String id) {
+        return ObservationApple.of(this,id.equals("A"));
+    }
+
 
     public Discrete2DPos posA() {
         return variables.posA();
@@ -55,5 +62,7 @@ public class StateApple implements StateI<VariablesApple> {
     public String toString() {
         return variables.toString();
     }
+
+
 
 }

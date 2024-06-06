@@ -10,11 +10,12 @@ import multi_agent_rl.domain.abstract_classes.*;
  */
 
 @Builder
-public record Experience<V>(
-        @NonNull StateI<V> state,
+public record Experience<V,O>(
+        @NonNull StateI<V,O> state,
         @NonNull ActionJoint action,
         @With double reward,
-        @NonNull StateI<V> stateNew,
+        @NonNull StateI<V,O> stateNew,
+        boolean isTerminal,
         @With double value) {
 
     public static final int VALUE_DUMMY = 0;
