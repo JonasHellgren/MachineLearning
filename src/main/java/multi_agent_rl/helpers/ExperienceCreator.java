@@ -1,14 +1,10 @@
 package multi_agent_rl.helpers;
 
-
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import multi_agent_rl.domain.abstract_classes.*;
 import multi_agent_rl.domain.value_classes.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @AllArgsConstructor
 public class ExperienceCreator<V,O> {
@@ -22,18 +18,11 @@ public class ExperienceCreator<V,O> {
         StepReturn<V,O> sr;
         var state=stateStart.copy();
         do {
-  /*          List<ActionAgent> actions=agents.stream()
-                    .map(a -> a.chooseAction(finalState.getObservation(a.getId()))).toList();
-  */
             AgentActions<V,O> agentActions=AgentActions.empty();
-            agentActions.addActions(agents,state);
-
-//            ActionJoint action=ActionJoint.ofInteger(actions.stream().map(a -> a.asInt()).toList());
-
-            ActionJoint action=agentActions.jointAction();
-
-            sr = environment.step(state, action);
-            experienceList.add(createExperience(state,action,sr,agentActions));
+            agentActions.addChosenActions(agents,state);
+            ActionJoint actionJoint=agentActions.jointAction();
+            sr = environment.step(state, actionJoint);
+            experienceList.add(createExperience(state,actionJoint,sr,agentActions));
             si++;
             state=sr.state();
         } while (isNotTerminalAndNofStepsNotExceeded(si, sr));

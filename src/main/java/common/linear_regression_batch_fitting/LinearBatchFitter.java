@@ -74,6 +74,11 @@ public class LinearBatchFitter {
         return weightsAndBiasNew;
     }
 
+    public double predict(RealMatrix x,RealVector weightsAndBias) {
+        int nFeat=nFeatures(weightsAndBias);
+        return x.operate(weights(weightsAndBias, nFeat)).mapAdd(bias(weightsAndBias, nFeat)).getEntry(0);
+    }
+
 
     public static double bias(RealVector weightsAndBias) {
         return bias(weightsAndBias, nFeatures(weightsAndBias));
@@ -95,9 +100,12 @@ public class LinearBatchFitter {
 
     public static Pair<RealMatrix, RealVector> createBatch(Pair<RealMatrix, RealVector> dataSet, int batchSize) {
         Preconditions.checkArgument(batchSize > 0, "BatchSize must be larger than 0");
+        int nofPoints=dataSet.getSecond().getDimension();
+        Preconditions.checkArgument(batchSize <= nofPoints, "BatchSize must be smaller than n points");
+
         var xMat = dataSet.getFirst();
         var yVec = dataSet.getSecond();
-        int[] indices = rand.ints(0, yVec.getDimension()).distinct().limit(batchSize).toArray();
+        int[] indices = rand.ints(0, nofPoints).distinct().limit(batchSize).toArray();
         var xMatBatch = new Array2DRowRealMatrix(batchSize, nFeatures(xMat));
         var yVecBatch = new ArrayRealVector(batchSize);
         int bi = 0;

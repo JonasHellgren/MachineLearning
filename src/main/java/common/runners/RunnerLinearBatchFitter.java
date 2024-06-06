@@ -27,7 +27,7 @@ public class RunnerLinearBatchFitter {
     public static void main(String[] args) {
         var dataSet = createData();
         var w0VecForSize1=getW0Evolution(dataSet,1);
-        var w0VecForSize10=getW0Evolution(dataSet,10);
+        var w0VecForSize10=getW0Evolution(dataSet,100);
         plot(w0VecForSize1, w0VecForSize10);
     }
 
