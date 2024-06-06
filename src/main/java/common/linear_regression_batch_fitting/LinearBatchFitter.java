@@ -7,7 +7,6 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -43,10 +42,9 @@ public class LinearBatchFitter {
         double b = bias(weightsAndBias, nFeat);
         var xMatBatch = batchData.getFirst();
         var yVecBatch = batchData.getSecond();
-        int batchSize = yVecBatch.getDimension();
         var predictions = xMatBatch.operate(w).mapAdd(b);
         var errors = predictions.subtract(yVecBatch);
-        return getWeightAndBias(nFeat, w, b, xMatBatch, batchSize, errors);
+        return getNewWeightAndBias(weightsAndBias, xMatBatch, errors);
     }
 
     /**
@@ -54,16 +52,16 @@ public class LinearBatchFitter {
      */
 
     public RealVector fitFromErrors(RealVector weightsAndBias, Pair<RealMatrix, RealVector> batchData) {
+        var xMatBatch = batchData.getFirst();
+        var errors = batchData.getSecond();
+        return getNewWeightAndBias(weightsAndBias,xMatBatch, errors);
+    }
+
+    RealVector getNewWeightAndBias(RealVector weightsAndBias, RealMatrix xMatBatch, RealVector errors) {
+        int batchSize = errors.getDimension();
         int nFeat = nFeatures(weightsAndBias);
         RealVector w = weights(weightsAndBias, nFeat);
         double b = bias(weightsAndBias, nFeat);
-        var xMatBatch = batchData.getFirst();
-        var errors = batchData.getSecond();
-        int batchSize = errors.getDimension();
-        return getWeightAndBias(nFeat, w, b, xMatBatch, batchSize, errors);
-    }
-
-    RealVector getWeightAndBias(int nFeat, RealVector w, double b, RealMatrix xMatBatch, int batchSize, RealVector errors) {
         var gradientsW = xMatBatch.transpose().operate(errors).mapMultiply(2.0 / batchSize);
         double gradientBias = Arrays.stream(errors.toArray()).sum() * 2 / batchSize;
         w = w.subtract(gradientsW.mapMultiply(learningRate));
@@ -74,9 +72,11 @@ public class LinearBatchFitter {
         return weightsAndBiasNew;
     }
 
-    public double predict(RealMatrix x,RealVector weightsAndBias) {
+    public double predict(double[] x,RealVector weightsAndBias) {
         int nFeat=nFeatures(weightsAndBias);
-        return x.operate(weights(weightsAndBias, nFeat)).mapAdd(bias(weightsAndBias, nFeat)).getEntry(0);
+        double[][] matrixData = {x};
+        RealMatrix matrix = new Array2DRowRealMatrix(matrixData);
+        return matrix.operate(weights(weightsAndBias, nFeat)).mapAdd(bias(weightsAndBias, nFeat)).getEntry(0);
     }
 
 
@@ -102,7 +102,6 @@ public class LinearBatchFitter {
         Preconditions.checkArgument(batchSize > 0, "BatchSize must be larger than 0");
         int nofPoints=dataSet.getSecond().getDimension();
         Preconditions.checkArgument(batchSize <= nofPoints, "BatchSize must be smaller than n points");
-
         var xMat = dataSet.getFirst();
         var yVec = dataSet.getSecond();
         int[] indices = rand.ints(0, nofPoints).distinct().limit(batchSize).toArray();

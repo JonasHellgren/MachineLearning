@@ -15,22 +15,28 @@ public class CriticLinear {
     RealVector wAndBias;
     LinearBatchFitter fitter;
 
+
     public CriticLinear(int nFeatures, double learningRate) {
-        this.nFeatures = nFeatures;
-        this.wAndBias=new ArrayRealVector(nFeatures + N_BIAS_TERMS, VALUE_DEFAULT);
-        this.fitter=new LinearBatchFitter(learningRate);
+        this(nFeatures, learningRate, VALUE_DEFAULT);
     }
 
-    //todo constructor with value supplier
+    public CriticLinear(int nFeatures, double learningRate, double valueBias0) {
+        this.nFeatures = nFeatures;
+        this.wAndBias = new ArrayRealVector(nFeatures + N_BIAS_TERMS, VALUE_DEFAULT);
+        this.wAndBias.setEntry(nFeatures,valueBias0);
+        this.fitter = new LinearBatchFitter(learningRate);
+    }
+
 
     public void fit(Pair<RealMatrix, RealVector> dataSet) {
-        int batchSize=dataSet.getSecond().getDimension();
+        int batchSize = dataSet.getSecond().getDimension();
         var batchData = LinearBatchFitter.createBatch(dataSet, batchSize);
         wAndBias = fitter.fit(wAndBias, batchData);
     }
 
-    public double predict(RealMatrix x) {
-        return fitter.predict(x,wAndBias);
+    public double predict(double[] x) {
+        return fitter.predict(x, wAndBias);
     }
+
 
 }

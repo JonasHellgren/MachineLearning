@@ -54,7 +54,13 @@ public class RunnerLinearBatchFitter {
         }
         log.info("Final weights: " + LinearBatchFitter.weights(wAndBias));
         log.info("Final b: " + LinearBatchFitter.bias(wAndBias));
+        log.info("x=[0,0], y="+ getPredict(wAndBias,fitter,0d,0d)+
+                "x=[10,0], y="+ getPredict(wAndBias,fitter,10d,0d));
         return w0Arr;
+    }
+
+    private static double getPredict(RealVector wAndBias, LinearBatchFitter fitter, double x0, double x1) {
+        return fitter.predict(new double[]{x0, x1}, wAndBias);
     }
 
 
