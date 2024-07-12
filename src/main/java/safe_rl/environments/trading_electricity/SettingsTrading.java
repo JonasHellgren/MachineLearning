@@ -2,6 +2,7 @@ package safe_rl.environments.trading_electricity;
 
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
+import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.With;
@@ -76,6 +77,26 @@ public record SettingsTrading(
         var settings = new24HoursIncreasingPrice().withPriceTraj(priceTraj);
         settings.check();
         return settings;
+    }
+
+    public static SettingsTrading new15Hours1Jan2024() {
+        double[] priceTraj = new double[]{64.9900, 61.7400, 55.0700, 48.0100, 44.0100, 45.2000, 38.0000, 38.0000,
+                33.5600, 32.0300, 32.2900, 36.7000, 41.7200, 49.1800, 58.7500};
+        var settings = new24HoursIncreasingPrice().withPriceTraj(convertPerMWhtoPerKWh(priceTraj));
+        settings.check();
+        return settings;
+    }
+
+    public static SettingsTrading new15Hours5Jan2024() {
+        double[] priceTraj = new double[]{    526.2500, 349.9500, 181.9100, 149.6000, 112.8200, 100.1000, 92.8700, 84.8800,
+                83.2000, 82.0300, 82.1800, 82.5300, 84.1300, 84.4800, 87.4300};
+        var settings = new24HoursIncreasingPrice().withPriceTraj(convertPerMWhtoPerKWh(priceTraj));
+        settings.check();
+        return settings;
+    }
+
+    private static double[] convertPerMWhtoPerKWh(double[] priceTraj) {
+        return ArrayUtil.multWithValue(priceTraj, 1 / 1000d);
     }
 
 

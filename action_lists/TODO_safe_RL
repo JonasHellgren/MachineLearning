@@ -131,6 +131,10 @@ TrainerParameters in i AgentACDCSafe  - newFromTrainerParams  x
 Lists.newArrayList()   isf new  x
 snygga upp LinearBatchFitter  x
 
+settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy
+
+learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
+critic loss alltid noll
 
 kanske senare:
 Fcr d up och n

@@ -18,18 +18,18 @@ import safe_rl.helpers.AgentSimulator;
 
 import java.util.List;
 
-public class Runner24HoursTrading {
+public class Runner24HoursTradingRealData {
     public static final double PRICE_BATTERY = 30e3;
 
-    public static int CASE_NR = 0;
-    public static List<String> CASES = List.of("zeroCap90Tar", "30Cap50Tar", "zigZaw");
-    public static final List<Double> POWER_CAPACITY_FCR_LIST = List.of(0d, 30.0, 10.0);
-    public static final List<Double> SOC_INCREASE_LSIT = List.of(0.4, 0.0, 0.0);
+    static String DAY="1_Jan";
+    public static int CASE_NR =1;
+    public static final List<Double> POWER_CAPACITY_FCR_LIST = List.of(0d, 10.0, 20.0, 30.0, 40.0);
 
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
     static SettingsTrading settings5;
     public static final double SOC_START = 0.5;
+    public static final double SOC_END_MIN = 0.6;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -52,7 +52,7 @@ public class Runner24HoursTrading {
         helper.printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();
         helper.simulateAndPlot(simulator);
-        helper.simulateAndSavePlots(simulator, CASES.get(CASE_NR));
+        helper.simulateAndSavePlots(simulator, DAY);
         helper.plotMemory(trainer.getAgent().getCritic(), "critic");
         helper.plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
@@ -60,10 +60,9 @@ public class Runner24HoursTrading {
     private static Pair<
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
-        //settings5 = SettingsTrading.new24HoursZigSawPrice()  //case 2
-        settings5 = SettingsTrading.new24HoursIncreasingPrice()  //case 0 and 1
-                .withPowerCapacityFcr(POWER_CAPACITY_FCR_LIST.get(CASE_NR)).withStdActivationFCR(0.1)
-                .withSocTerminalMin(SOC_START + SOC_INCREASE_LSIT.get(CASE_NR)).withPriceBattery(PRICE_BATTERY);
+        settings5 = SettingsTrading.new15Hours1Jan2024()
+                .withPowerCapacityFcr(POWER_CAPACITY_FCR_LIST.get(CASE_NR))
+                .withSocTerminalMin(SOC_END_MIN);
 
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));

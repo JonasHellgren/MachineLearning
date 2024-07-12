@@ -5,6 +5,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 public class ArrayUtil {
 
@@ -65,6 +66,12 @@ public class ArrayUtil {
         int numberOfRows = data.length;
         int numberOfColumns = data[0].length; // Assuming a rectangular matrix
         return new Pair<>(numberOfRows, numberOfColumns);
+    }
+
+    public static double[]  multWithValue(double[] x,  double multiplier) {
+       return   DoubleStream.of(x)
+                .map(v -> v * multiplier)
+                .toArray();
     }
 
 

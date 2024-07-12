@@ -13,8 +13,6 @@ import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 public class TestCriticLinear {
-
-
     public static final int N_FEATURES = 2;
     public static final int BATCH_SIZE = 10;
     public static final double MIN_X = 0d;
@@ -26,40 +24,34 @@ public class TestCriticLinear {
 
     @BeforeEach
     void init() {
-        critic=new CriticLinear(N_FEATURES, LEARNING_RATE);
+        critic = new CriticLinear(N_FEATURES, LEARNING_RATE);
     }
 
     @Test
     void givenW0Is1AndW1Is0_whenTrained_thenCorrect() {
-        BiFunction<Double,Double,Double> function = (x0, x1) -> x0 * 1 + x1 * 0;
+        BiFunction<Double, Double, Double> function = (x0, x1) -> x0 * 1 + x1 * 0;
         createDataAndFitCritic(function);
-        Assertions.assertEquals(0,predict(0d, 0d), DELTA);
-        Assertions.assertEquals(1,predict(1d, 0d), DELTA);
-
+        Assertions.assertEquals(0, predict(0d, 0d), DELTA);
+        Assertions.assertEquals(1, predict(1d, 0d), DELTA);
     }
 
     @Test
     void givenW0Is0AndW1Is1_whenTrained_thenCorrect() {
-        BiFunction<Double,Double,Double> function = (x0, x1) -> x0 * 0 + x1 * 1;
+        BiFunction<Double, Double, Double> function = (x0, x1) -> x0 * 0 + x1 * 1;
         createDataAndFitCritic(function);
-        Assertions.assertEquals(0,predict(0d,0d), DELTA);
-        Assertions.assertEquals(1,predict(0d,1d), DELTA);
+        Assertions.assertEquals(0, predict(0d, 0d), DELTA);
+        Assertions.assertEquals(1, predict(0d, 1d), DELTA);
     }
 
     @Test
     void givenIncreasingIfCloser_whenTrained_thenCorrect() {
         int valueBias0 = 10;  //speeds up fitting
-        critic=new CriticLinear(N_FEATURES, LEARNING_RATE, valueBias0);
-        BiFunction<Double,Double,Double> function = (x0, x1) -> 10- x0 * 1 - x1 * 1;
+        critic = new CriticLinear(N_FEATURES, LEARNING_RATE, valueBias0);
+        BiFunction<Double, Double, Double> function = (x0, x1) -> 10 - x0 * 1 - x1 * 1;
         createDataAndFitCritic(function);
-
-        System.out.println("predict(0d,0d) = " + predict(0d, 0d));
-        System.out.println("predict(1d,1d) = " + predict(1d, 1d));
-
-        Assertions.assertEquals(10,predict(0d,0d), DELTA);
-        Assertions.assertEquals(8,predict(1d,1d), DELTA);
+        Assertions.assertEquals(10, predict(0d, 0d), DELTA);
+        Assertions.assertEquals(8, predict(1d, 1d), DELTA);
     }
-
 
     private void createDataAndFitCritic(BiFunction<Double, Double, Double> function) {
         var dataSet = getDataSet(function);
@@ -67,14 +59,16 @@ public class TestCriticLinear {
     }
 
     private static Pair<RealMatrix, RealVector> getDataSet(BiFunction<Double, Double, Double> function) {
-        DataSetCreator creator=new DataSetCreator();
-        for (int i = 0; i < BATCH_SIZE ; i++) {
-            double x0= getRandomX();
-            double x1= getRandomX();
-            double y= function.apply(x0,x1);
-            creator.addPoint(new double[]{x0,x1},y);
-        }
+        var creator = new DataSetCreator();
+        IntStream.range(0, BATCH_SIZE).forEach(i -> addPoint(function, creator));
         return creator.createDataSet();
+    }
+
+    private static void addPoint(BiFunction<Double, Double, Double> function, DataSetCreator creator) {
+        double x0 = getRandomX();
+        double x1 = getRandomX();
+        double y = function.apply(x0, x1);
+        creator.addPoint(new double[]{x0, x1}, y);
     }
 
     private double predict(double x0, double x1) {
@@ -84,6 +78,5 @@ public class TestCriticLinear {
     private static double getRandomX() {
         return RandUtils.getRandomDouble(MIN_X, MAX_X);
     }
-
 
 }

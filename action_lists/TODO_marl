@@ -19,7 +19,8 @@ state.getObservation()
 check multiStepResults in TrainerMarlIL  x
 
 AgentActions x
-Critic i AgentILApple
+Critic i AgentILApple x
+TestCriticLinear  x
 
 pseudo code gradlog, se short corridor
 
