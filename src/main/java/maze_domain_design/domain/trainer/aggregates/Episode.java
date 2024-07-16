@@ -27,12 +27,23 @@ public class Episode {
         experiences.clear();
     }
 
-    public int idMax() {
-        return experiences.largestId();
+    public int nextId() {
+        return size()==0
+        ? 0
+        :experiences.largestId()+1;
     }
 
     public int size() {
         return experiences.size();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        sb.append(System.lineSeparator());
+        experiences.getAll().forEach( e ->
+            sb.append(e).append(System.lineSeparator()));
+        return sb.toString();
     }
 
 }

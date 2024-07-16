@@ -37,7 +37,7 @@ class TestEpisode {
         episode.addExp(EXPERIENCE0);
         Assertions.assertEquals(1,episode.size());
         Assertions.assertTrue(episode.getIds().contains(0));
-        Assertions.assertEquals(0,episode.idMax());
+        Assertions.assertEquals(0,episode.nextId());
     }
 
     @Test

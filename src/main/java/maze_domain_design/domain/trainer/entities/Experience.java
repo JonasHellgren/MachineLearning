@@ -10,7 +10,6 @@ import maze_domain_design.domain.trainer.value_objects.ExperienceType;
 import maze_domain_design.domain.trainer.value_objects.SARS;
 @AllArgsConstructor
 @Getter
-@ToString
 public class Experience {
     int id;
     SARS sars;
@@ -26,5 +25,9 @@ public class Experience {
         return new Experience(id,new SARS(s,a,r,sNext),ExperienceType.nonTerminal());
     }
 
+    @Override
+    public String toString() {
+        return "time="+id+", "+sars+", "+type;
+    }
 
 }

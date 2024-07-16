@@ -24,8 +24,7 @@ public class Mediator implements MediatorI {
         this.properties = properties;
         this.startStateSupplier=new StartStateSupplier(
                 properties,environment.getProperties());
-        this.episodeCreator=new EpisodeCreator();
-        episodeCreator.setMediator(this);
+        this.episodeCreator=new EpisodeCreator(this);
     }
 
     @Override
@@ -35,7 +34,8 @@ public class Mediator implements MediatorI {
 
     @Override
     public Episode createEpisode() {
-        return episodeCreator.runEpisode();
+        double trainingProgress=1;
+        return episodeCreator.runEpisode(trainingProgress);
     }
 
     @Override

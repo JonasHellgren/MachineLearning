@@ -1,6 +1,7 @@
 package maze_domain_design.domain.environment.value_objects;
 
 import common.math.MathUtils;
+import lombok.ToString;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.util.Pair;
 
@@ -45,5 +46,10 @@ public record State(
 
     private static int getRand(Pair<Integer, Integer> pair) {
         return RandomUtils.nextInt(pair.getFirst(), pair.getSecond()+1);
+    }
+
+    @Override
+    public String toString() {
+        return "(x,y)=("+x+","+y+")";
     }
 }
