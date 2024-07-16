@@ -30,34 +30,34 @@ public class TestAgent {
     @Test
     void givenNotDefinedMemory_whenStateWithXMax1_thenActionSame() {
         int maxX = 1;
-        var s= State.random(envProps.withMinMaxX(Pair.create(0, maxX)));
+        var s= State.ofRandom(envProps.withMinMaxX(Pair.create(0, maxX)));
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
         Assertions.assertEquals(Action.SAME,ba);
     }
 
     @Test
     void givenNotDefinedMemory_whenState21_thenActionDown() {
-        var s= State.of(2,1);
+        var s= State.of(2,1,envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
         Assertions.assertEquals(Action.DOWN,ba);
     }
 
     @Test
     void givenBadValueInState21_whenState11_thenActionDown() {
-        var s21= State.of(2,1);
+        var s21= State.of(2,1,envProps);
         Arrays.stream(properties.actions()).toList().forEach(
                 a -> {
                     double badValue = -100;
                     agent.getMemory().write(StateAction.of(s21,a), badValue);
                 });
-        var s11= State.of(1,1);
+        var s11= State.of(1,1,envProps);
         var ba=agent.chooseAction(s11, PROB_RANDOM_IS_ZERO);
         Assertions.assertEquals(Action.DOWN,ba);
     }
 
     @Test
     void givenOneProbRandomAction_whenStateRandom_thenAnyAction() {
-        var s= State.random(envProps);
+        var s= State.ofRandom(envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ONE);
         Assertions.assertTrue(Arrays.asList(Action.values()).contains(ba));
     }

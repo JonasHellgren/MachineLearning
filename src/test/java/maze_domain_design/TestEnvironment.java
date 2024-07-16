@@ -53,7 +53,7 @@ class TestEnvironment {
     State getStateDes(ArgumentsAccessor arguments) {
         int xDes = arguments.getInteger(3);
         int yDes = arguments.getInteger(4);
-        return State.of(xDes, yDes);
+        return State.of(xDes, yDes, environment.getProperties());
     }
 
     Action getAction(ArgumentsAccessor arguments) {
@@ -64,7 +64,7 @@ class TestEnvironment {
     State getState(ArgumentsAccessor arguments) {
         int x = arguments.getInteger(0);
         int y = arguments.getInteger(1);
-        return State.of(x, y);
+        return State.of(x, y, environment.getProperties());
     }
 
     double getRewardDes(ArgumentsAccessor arguments) {

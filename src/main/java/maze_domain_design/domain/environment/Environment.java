@@ -1,6 +1,7 @@
 package maze_domain_design.domain.environment;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
 import maze_domain_design.domain.environment.value_objects.State;
@@ -10,7 +11,8 @@ import java.util.function.BiFunction;
 @AllArgsConstructor
 public class Environment {
 
-    EnvironmentProperties properties;
+   @Getter
+   EnvironmentProperties properties;
 
     public static Environment roadMaze() {
         return new Environment(EnvironmentProperties.roadMaze());
@@ -18,7 +20,7 @@ public class Environment {
 
     public StepReturn step(State s, Action a) {
         var sNext = getNextState(s, a);
-        var isTerminal = sNext.isTerminal(properties);
+        var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail(properties);
         var isMove = a.isMove();
         var reward = getReward(isTerminal, isFail, isMove);
@@ -39,6 +41,6 @@ public class Environment {
     State getNextState(State s, Action a) {
         var xNext = s.x() + 1;
         var yNext = s.y() + a.deltaY;
-        return new State(xNext, yNext).clip(properties);
+        return new State(xNext, yNext,properties).clip();
     }
 }

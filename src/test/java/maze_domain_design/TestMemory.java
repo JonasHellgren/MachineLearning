@@ -68,7 +68,7 @@ public class TestMemory {
 
 
     StateAction getRandomSa() {
-        var s= State.random(envProps);
+        var s= State.ofRandom(envProps);
         var a= Action.random();
         return new StateAction(s,a);
     }
