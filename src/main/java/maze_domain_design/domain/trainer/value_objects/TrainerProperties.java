@@ -1,11 +1,12 @@
 package maze_domain_design.domain.trainer.value_objects;
 
 import lombok.Builder;
+import lombok.With;
 import org.apache.commons.math3.util.Pair;
 
 @Builder
 public record TrainerProperties(
-        int nEpisodes,
+        @With int nEpisodes,
         Pair<Integer, Integer> startXMinMax,
         Pair<Integer, Integer> startYMinMax,
         Pair<Double, Double> probRandomAction

@@ -9,13 +9,14 @@ import maze_domain_design.domain.trainer.entities.Experience;
 public class EpisodeCreator {
     MediatorI mediator;
 
-    public Episode runEpisode(double trainingProgress) {
+    public Episode runEpisode() {
         var agent = mediator.getExternal().agent();
         var env = mediator.getExternal().environment();
         var props = mediator.getProperties();
 
         var episode = new Episode();
         var s = mediator.getStartState();
+        double trainingProgress= mediator.getRecorder().size()/ (double) props.nEpisodes();
         double pRandomAction=props.probRandomAction(trainingProgress);
         while (!s.isTerminal()) {
             Action a = agent.chooseAction(s, pRandomAction);
@@ -23,6 +24,7 @@ public class EpisodeCreator {
             int t=episode.nextId();
             var e = Experience.ofIdStateActionStepReturn(t, s, a, sr);
             episode.addExp(e);
+            mediator.fitAgentMemoryFromExperience(e);
             s = sr.sNext();
         }
 

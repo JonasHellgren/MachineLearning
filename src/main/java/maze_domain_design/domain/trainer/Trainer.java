@@ -4,7 +4,6 @@ import lombok.Getter;
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
-import maze_domain_design.domain.trainer.value_objects.TrainerExternal;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
 
 public class Trainer {
@@ -18,7 +17,7 @@ public class Trainer {
     }
 
     public void train() {
-   // mediator.train();
+    mediator.train();
 }
 
 }

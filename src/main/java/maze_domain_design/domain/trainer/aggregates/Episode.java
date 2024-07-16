@@ -37,6 +37,10 @@ public class Episode {
         return experiences.size();
     }
 
+    public double sumRewards() {
+        return experiences.getAll().stream().mapToDouble(e -> e.getSars().r()).sum();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb=new StringBuilder();

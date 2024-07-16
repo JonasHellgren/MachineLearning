@@ -47,7 +47,7 @@ public class TestMemory {
     @Test
     void whenFitting_thenCorrect() {
         var sa=getRandomSa();
-        IntStream.range(0,100).forEach((n) -> memory.fit(sa, VALUE_TAR));
+        IntStream.range(0,1000).forEach((n) -> memory.fit(sa, VALUE_TAR));
         Assertions.assertEquals(VALUE_TAR,memory.read(sa), TOL);
 
     }

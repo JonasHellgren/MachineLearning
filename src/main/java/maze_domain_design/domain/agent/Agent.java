@@ -10,13 +10,15 @@ import maze_domain_design.domain.environment.value_objects.State;
 import org.apache.commons.lang3.RandomUtils;
 
 
-
+@Getter
 public class Agent {
-    @Getter Memory memory;
+     Memory memory;
+    AgentProperties properties;
     BestActionSelector actionSelector;
 
     public Agent(AgentProperties properties, Environment environment) {
         this.memory=Memory.withProperties(properties);
+        this.properties=properties;
         this.actionSelector=new BestActionSelector(properties,environment,memory);
     }
 

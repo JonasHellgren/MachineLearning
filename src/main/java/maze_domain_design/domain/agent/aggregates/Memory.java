@@ -37,7 +37,6 @@ public class Memory {
         mapValue.put(sa,value);
     }
 
-
     public double valueOfState(State s) {
         var aValueMap = Stream.of(properties.actions())
                 .collect(Collectors.toMap(
@@ -47,5 +46,14 @@ public class Memory {
                 .stream()
                 .max(Map.Entry.comparingByValue());
         return entryWithMaxValue.orElseThrow().getValue();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        mapValue.forEach((key, value) ->
+                sb.append("sa=").append(key)
+                .append(", value=").append(value).append(System.lineSeparator()));
+        return sb.toString();
     }
 }
