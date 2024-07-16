@@ -1,0 +1,25 @@
+@startuml
+
+class TrainingService #yellow {
+Environment environment;
+Trainer trainer;
+Agent agent;
+  + train {trainer.train()}
+}
+
+class AnimationService #yellow {
+Environment environment;
+Agent agent;
+Renderer renderer;
+  + animate {renderer.animate()}
+}
+
+class PlottingService #yellow {
+Trainer trainer;
+Agent agent;
+TrainerPlotter trainerPlotter;
+AgentPlotter agentPlotter;
+  + plotAgent {agentPlotter.plot()}
+}
+
+@endtuml

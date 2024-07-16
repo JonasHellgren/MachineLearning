@@ -1,0 +1,116 @@
+@startuml
+
+
+together {
+  class Environment
+  class StepReturn
+}
+
+Environment -[hidden] StepReturn
+
+
+class Environment {
+EnvironmentProperties properties;
++StepReturn step(State s, Action a)
+}
+
+class StepReturn #grey {
+State sNext;
+Double reward;
+Boolean isTerminal;
+Boolean isFail;
+}
+
+together {
+  class Agent
+  class Memory
+  class StateAction
+}
+
+Environment -[hidden]-> Agent
+Agent -[hidden] StateAction
+Agent -[hidden] Memory
+
+
+class Agent {
+AgentProperties properties;
+Memory memory;
++ Action chooseAction(State s)
+}
+
+class Memory  {
+Map<StateAction,Value> mapValue;
++ Double value(StateAction sa)
++ void fit(StateAction sa, double valueTar)
+}
+
+class StateAction #grey {
+State s;
+Action a;
+}
+
+together {
+  class Trainer
+  class Mediator
+  class Episode
+  entity Experience
+  class ExperienceType
+}
+
+Agent -[hidden]-> Trainer
+Trainer -down-> Mediator
+Mediator -down-> TrainerExternal
+Trainer -[hidden] Episode
+Episode -right-> Experience
+Experience -down-> SARS
+Experience -down-> ExperienceType
+
+class Trainer {
+Mediator mediator;
++ void train()  {mediator.train()}
+}
+
+class Mediator {
+TrainerExternal external;
+TrainerProperties properties;
+Recorder recorder;
+EpisodeCreator episodeCreator;
+AgentFitter fitter;
+RecorderUpdater recUpdater
+
++ train()
++ createEpisode()
++ fitAgentMemoryFromEpisode()
++ updateRecorder()
+}
+
+class TrainerExternal #grey {
+Environment environment;
+Agent agent;
+}
+
+class Episode {
+ExperienceDataBase experiences;
++ addExper(Experience e)
++ Experience getExper(Integer id)
++ List<Integer> getIds();
++ void clear()
+}
+
+entity Experience {
+Integer id;
+SARS sars;
+ExperienceType type
+}
+
+class SARS #grey {
+State s;
+Action a;
+Double reward;
+State sNext;
+}
+class ExperienceType #grey {
+ Boolean isTerminal, isFail;
+}
+
+@endtuml
