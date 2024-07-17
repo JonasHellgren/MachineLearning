@@ -1,5 +1,7 @@
 package maze_domain_design.domain.trainer.aggregates;
 
+import lombok.Getter;
+import lombok.Setter;
 import maze_domain_design.domain.trainer.entities.Experience;
 import maze_domain_design.persistance.ExperienceDataBase;
 
@@ -7,6 +9,8 @@ import java.util.List;
 
 public class Episode {
     ExperienceDataBase experiences;
+    @Setter @Getter
+    double pRandomAction;
 
     public Episode() {
         this.experiences = new ExperienceDataBase();

@@ -2,16 +2,22 @@ package maze_domain_design;
 
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
+import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.domain.environment.value_objects.Action;
+import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
+import maze_domain_design.domain.environment.value_objects.State;
 import maze_domain_design.domain.trainer.Trainer;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestTrainer {
 
+    public static final int PROB_RANDOM_ZERO = 0;
     Trainer trainer;
     Environment environment;
     Agent agent;
@@ -19,16 +25,16 @@ class TestTrainer {
 
     @BeforeEach
     void init() {
-        trainerProperties=TrainerProperties.roadMaze().withNEpisodes(1_000);
+        trainerProperties = TrainerProperties.roadMaze();
         environment = Environment.roadMaze();
-        agent=new Agent(AgentProperties.roadMaze(), environment);
-        trainer=new Trainer(environment,agent,trainerProperties);
+        agent = new Agent(AgentProperties.roadMaze(), environment);
+        trainer = new Trainer(environment, agent, trainerProperties);
     }
 
     @Test
     void whenRunningEpisode_thenEpisodeCreated() {
-        var epis=trainer.getMediator().runEpisode();
-        Assertions.assertTrue(epis.size()>0);
+        var epis = trainer.getMediator().runEpisode();
+        Assertions.assertTrue(epis.size() > 0);
     }
 
     @Test
@@ -37,8 +43,23 @@ class TestTrainer {
         Mediator mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
-        //  System.out.println("mediator.getRecorder() = " + mediator.getRecorder());
-        Assertions.assertTrue(mediator.getRecorder().size()>0);
+        var val21Same = getVal21(Action.SAME);
+        var val21Down = getVal21(Action.DOWN);
+        var bestAction21 = agent.chooseAction(getState(2, 1), PROB_RANDOM_ZERO);
+        var bestAction00 = agent.chooseAction(getState(0, 0), PROB_RANDOM_ZERO);
+        Assertions.assertTrue(mediator.getRecorder().size() > PROB_RANDOM_ZERO);
+        Assertions.assertTrue(val21Same < val21Down);
+        Assertions.assertEquals(Action.DOWN, bestAction21);
+        Assertions.assertEquals(Action.SAME, bestAction00);
+    }
+
+    Double getVal21(Action a) {
+        return agent.getMemory().read(StateAction.of(getState(2, 1), a));
+    }
+
+    State getState(int x, int y) {
+        var ep = environment.getProperties();
+        return State.of(x, y, ep);
     }
 
 

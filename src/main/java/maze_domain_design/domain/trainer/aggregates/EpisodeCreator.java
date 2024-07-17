@@ -17,9 +17,10 @@ public class EpisodeCreator {
         var episode = new Episode();
         var s = mediator.getStartState();
         double trainingProgress= mediator.getRecorder().size()/ (double) props.nEpisodes();
-        double pRandomAction=props.probRandomAction(trainingProgress);
+        episode.pRandomAction=mediator.getExternal().agent()
+                .getProperties().probRandomAction(trainingProgress);
         while (!s.isTerminal()) {
-            Action a = agent.chooseAction(s, pRandomAction);
+            Action a = agent.chooseAction(s, episode.pRandomAction);
             var sr = env.step(s, a);
             int t=episode.nextId();
             var e = Experience.ofIdStateActionStepReturn(t, s, a, sr);

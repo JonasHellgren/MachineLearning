@@ -43,7 +43,6 @@ public class Mediator implements MediatorI {
 
     @Override
     public Episode runEpisode() {
-
         return episodeCreator.runEpisode();
     }
 
