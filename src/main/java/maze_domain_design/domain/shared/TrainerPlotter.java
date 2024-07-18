@@ -26,7 +26,7 @@ public class TrainerPlotter {
     }
 
     public void plot() {
-        var charts = new ArrayList<>();
+        List<XYChart> charts = new ArrayList<>();
         var recorder = trainer.getMediator().getRecorder();
         var sumRewardsList = getSumRewardsList(recorder);
         var pRandActionList = getPRandActionList(recorder);

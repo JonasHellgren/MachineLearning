@@ -4,6 +4,7 @@ import common.math.MathUtils;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -74,5 +75,19 @@ public class ArrayUtil {
                 .toArray();
     }
 
+    public static Double findMin(Double[][] data) {
+        return Arrays.stream(data)       // Stream<Double[]>
+                .flatMap(Arrays::stream)  // Stream<Double>
+                .filter(n -> !Objects.isNull(n))
+                .min(Double::compareTo)   // Optional<Double>
+                .orElseThrow(() -> new IllegalArgumentException("The array must not be null or empty"));
+    }
 
+    public static Double findMax(Double[][] data) {
+        return Arrays.stream(data)       // Stream<Double[]>
+                .flatMap(Arrays::stream)  // Stream<Double>
+                .filter(n -> !Objects.isNull(n))
+                .max(Double::compareTo)   // Optional<Double>
+                .orElseThrow(() -> new IllegalArgumentException("The array must not be null or empty"));
+    }
 }

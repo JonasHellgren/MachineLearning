@@ -12,7 +12,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 @Getter
 public class Agent {
-     Memory memory;
+    Memory memory;
     AgentProperties properties;
     BestActionSelector actionSelector;
 

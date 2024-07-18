@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
-import common.plotters.SwingShowHeatMap;
+import common.plotters.SwingShowHeatMapOld;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.AnnotationText;
@@ -25,7 +25,7 @@ public class MazeAgentPlotter {
     public static final int HEIGHT = 300;
     AgentNeuralActorNeuralCriticI<VariablesMaze> agent;
     MazeSettings settings;
-    final SwingShowHeatMap valueMapPlotter =SwingShowHeatMap.builder()
+    final SwingShowHeatMapOld valueMapPlotter = SwingShowHeatMapOld.builder()
             .width(WIDTH).height(HEIGHT)
             .build();
 
