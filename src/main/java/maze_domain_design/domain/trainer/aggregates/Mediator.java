@@ -52,20 +52,14 @@ public class Mediator implements MediatorI {
     }
 
     @Override
-    public void fitAgentMemoryFromEpisode(Episode episode) {
-        throw new UnsupportedOperationException("Not applied");
-    }
-
-
-    @Override
-    public void fitAgentMemoryFromExperience(Experience e) {
-        fitter.fitAgentFromExperience(e);
-
+    public double pRandomAction() {
+        double trainingProgress= getRecorder().size()/ (double) properties.nEpisodes();
+        return  external.agent().getProperties().probRandomAction(trainingProgress);
     }
 
     @Override
-    public void updateRecorder() {
-
+    public double fitAgentMemoryFromExperience(Experience e) {
+        return fitter.fitAgentFromExperience(e);
     }
 
-}
+    }

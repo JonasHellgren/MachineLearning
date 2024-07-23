@@ -3,16 +3,15 @@ package maze_domain_design.domain.shared;
 import lombok.AllArgsConstructor;
 import maze_domain_design.domain.trainer.Trainer;
 import maze_domain_design.domain.trainer.aggregates.Recorder;
+import maze_domain_design.domain.trainer.value_objects.EpisodeInfoForRecording;
 import maze_domain_design.services.TrainingService;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 @AllArgsConstructor
 public class TrainerPlotter {
@@ -28,23 +27,27 @@ public class TrainerPlotter {
     public void plot() {
         List<XYChart> charts = new ArrayList<>();
         var recorder = trainer.getMediator().getRecorder();
-        var sumRewardsList = getSumRewardsList(recorder);
-        var pRandActionList = getPRandActionList(recorder);
-        XYChart chart0 = getChart("sumRewards", sumRewardsList);
-        XYChart chart1 = getChart("pRandAction", pRandActionList);
-        charts.add(chart0);
-        charts.add(chart1);
+        var pRandActionList = getListWithInfoValues(recorder, ei -> ei.pRandomAction() );
+        var tdErrorList = getListWithInfoValues(recorder, ei -> ei.tdErrorAvg() );
+        charts.add(getChart("sumRewards", getSumRewardsList(recorder)));
+        charts.add(getChart("pRandAction", pRandActionList));
+        charts.add(getChart("tdError", tdErrorList));
+        charts.add(getChart("nSTeps", getNStepsList(recorder)));
         new SwingWrapper<>(charts).displayChartMatrix();
     }
 
     List<Double> getSumRewardsList(Recorder recorder) {
         return recorder.getIds().stream()
                 .map(id -> recorder.getExp(id).getSumRewards()).toList();
+
+    }List<Double> getNStepsList(Recorder recorder) {
+        return recorder.getIds().stream()
+                .map(id -> (double) recorder.getExp(id).getNSteps()).toList();
     }
 
-    List<Double> getPRandActionList(Recorder recorder) {
+    List<Double> getListWithInfoValues(Recorder recorder, ToDoubleFunction<EpisodeInfoForRecording> fcn) {
         return recorder.getIds().stream()
-                .map(id -> recorder.getExp(id).getPRandomAction()).toList();
+                .map(id -> fcn.applyAsDouble(recorder.getExp(id).getEpisodeInfoForRecording())).toList();
     }
 
     XYChart getChart(String sumRewards, List<Double> valList) {

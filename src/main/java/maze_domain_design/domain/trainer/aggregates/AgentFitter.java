@@ -14,7 +14,7 @@ import maze_domain_design.domain.trainer.entities.Experience;
 public class AgentFitter {
     MediatorI mediator;
 
-    public void fitAgentFromExperience(Experience e) {
+    public double fitAgentFromExperience(Experience e) {
         var agent = mediator.getExternal().agent();
         var memory= agent.getMemory();
         var sa = StateAction.ofSars(e);
@@ -22,6 +22,6 @@ public class AgentFitter {
         double r=e.getSars().r();
         double v=memory.valueOfState(e.getSars().sNext());
         double qSaTar=r+pa.gamma()*v;
-        agent.getMemory().fit(sa,qSaTar);
+        return agent.getMemory().fit(sa,qSaTar);
     }
 }

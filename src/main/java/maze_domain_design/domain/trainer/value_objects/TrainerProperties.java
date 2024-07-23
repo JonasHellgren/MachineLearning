@@ -13,7 +13,7 @@ public record TrainerProperties(
 
     public static TrainerProperties roadMaze() {
         return TrainerProperties.builder()
-                .nEpisodes(500)
+                .nEpisodes(1500)
                 .startXMinMax(Pair.create(0, 0))
                 .startYMinMax(Pair.create(0, 1))
                 .build();

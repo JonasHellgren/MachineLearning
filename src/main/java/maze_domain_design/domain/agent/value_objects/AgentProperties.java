@@ -26,6 +26,6 @@ public record AgentProperties(
     public double probRandomAction(double progress) {
         Double p0 = probRandomActionStartEnd.getFirst();
         Double p1 = probRandomActionStartEnd.getSecond();
-        return p0 +progress*(p1-p0);
+        return p0+progress*(p1-p0);
     }
 }

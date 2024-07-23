@@ -3,6 +3,7 @@ package maze_domain_design.domain.trainer.aggregates;
 import lombok.Getter;
 import lombok.Setter;
 import maze_domain_design.domain.trainer.entities.Experience;
+import maze_domain_design.domain.trainer.value_objects.EpisodeInfoForRecording;
 import maze_domain_design.persistance.ExperienceDataBase;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Episode {
     ExperienceDataBase experiences;
     @Setter @Getter
-    double pRandomAction;
+    EpisodeInfoForRecording infoForRecording;
 
     public Episode() {
         this.experiences = new ExperienceDataBase();

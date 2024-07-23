@@ -4,5 +4,10 @@ plotAccumRew x
 runner som visar values och actions - använder services x
 bild kvalitet MapPlotter x
 plot arrows x
-plotta td error
+plotta td error   x
+plotta tabell x
+plotta sa values
+beskriva road maze i md mer
 clean up
+generisk state o action
+split road env

@@ -1,5 +1,6 @@
 package maze_domain_design.domain.environment;
 
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import maze_domain_design.domain.environment.value_objects.Action;
@@ -28,6 +29,7 @@ public class Environment {
                 .sNext(sNext).reward(reward)
                 .isFail(isFail).isTerminal(isTerminal)
                 .build();
+
     }
 
     static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;

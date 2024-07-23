@@ -7,15 +7,15 @@ import lombok.Builder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
 @Builder
-public class SwingShowHeatMap {
+public class SwingShow2DArray {
 
     public static final int IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
     public static final String FORMAT = "%.2f";
+    public static final String FONT_NAME = "Serif";
 
     @Builder
     record WidthAndHeight(int width, int height, int margin, int marginTitle, int nCols, int nRows) {
@@ -44,7 +44,11 @@ public class SwingShowHeatMap {
         private int getY() {
             return wh.marginTitle+(wh.nRows - 1 - row) * wh.cellHeight();
         }
+    }
 
+    record ImageCreator(int width, int height, int imageType) {
+        BufferedImage image() {return new BufferedImage(width, height, IMAGE_TYPE); }
+        Graphics2D graphics2D(BufferedImage im) {return im.createGraphics();}
     }
 
     public static final int MIN_DARKNESS = 100;
@@ -73,28 +77,28 @@ public class SwingShowHeatMap {
     }
 
     private   BufferedImage createHeatMapImage(Double[][] data,String title) {
-        var image = new BufferedImage(width, height, IMAGE_TYPE);
-        var g2d = image.createGraphics();
+        var ic=new ImageCreator(width,height,IMAGE_TYPE);
+        var image=ic.image();
+        var g2d=ic.graphics2D(image);
         var wh= getWidthAndHeight(data[0].length, data.length);
         drawMap(data, g2d,wh);
         drawLabels(g2d, wh);
         drawTitle(title, g2d,wh);
-        g2d.dispose();
         return image;
     }
 
     private   BufferedImage createHeatMapImage(String[][] data,String title) {
-        var image = new BufferedImage(width, height, IMAGE_TYPE);
-        var g2d = image.createGraphics();
+        var ic=new ImageCreator(width,height,IMAGE_TYPE);
+        var image=ic.image();
+        var g2d=ic.graphics2D(image);
         var wh= getWidthAndHeight(data[0].length, data.length);
         drawMap(data, g2d, wh);
         drawLabels(g2d, wh);
         drawTitle(title, g2d,wh);
-        g2d.dispose();
         return image;
     }
 
-    private WidthAndHeight getWidthAndHeight(int nCols, int nRows) {
+    WidthAndHeight getWidthAndHeight(int nCols, int nRows) {
         return WidthAndHeight.builder()
                 .width(width).height(height).margin(margin).marginTitle(marginTitle)
                 .nCols(nCols).nRows(nRows)
@@ -104,49 +108,41 @@ public class SwingShowHeatMap {
     private void drawMap(String[][] data,Graphics2D g2d,  WidthAndHeight wh) {
         for (int row = 0; row < data.length; row++) {
             for (int col = 0; col < data[row].length; col++) {
-                String txt0 = data[row][col];
-                String text = Objects.isNull(txt0)?"":txt0;
-                setG2d(g2d, wh);
-                TextXY xy= TextXY.builder()
-                        .col(col).row(row).g2d(g2d).text(text).wh(wh).build();
-                g2d.drawString(text, xy.textX(), xy.textY());
+                String text = data[row][col];
+                if (!Objects.isNull(text)) {
+                    printText(g2d, wh, row, col, text);
+                }
             }
         }
+    }
+
+    private void drawMap(Double[][] data, Graphics2D g2d,  WidthAndHeight wh) {
+        for (int row = 0; row < data.length; row++) {
+            for (int col = 0; col < data[row].length; col++) {
+                Double value = data[row][col];
+                if (!Objects.isNull(value)) {
+                    String text = String.format(FORMAT, value);
+                    printText(g2d, wh, row, col, text);
+                }
+            }
+        }
+    }
+
+    private static void printText(Graphics2D g2d, WidthAndHeight wh, int row, int col, String text) {
+        TextXY xy = TextXY.builder()
+                .col(col).row(row).g2d(g2d).text(text).wh(wh).build();
+        setG2d(g2d, wh);
+        g2d.drawString(text, xy.textX(), xy.textY());
     }
 
     private static void setG2d(Graphics2D g2d, WidthAndHeight wh) {
         g2d.setColor(Color.BLACK);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setFont(new Font("Serif", Font.PLAIN, wh.fontSize()));
+        g2d.setFont(new Font(FONT_NAME, Font.PLAIN, wh.fontSize()));
     }
-
-    private void drawMap(Double[][] data, Graphics2D g2d,  WidthAndHeight wh) {
-        // Calculate min and max values for color scaling
-        double min = ArrayUtil.findMin(data);
-        double max = ArrayUtil.findMax(data);
-
-        // Draw heatmap cells with y-axis inverted
-        for (int row = 0; row < data.length; row++) {
-            for (int col = 0; col < data[row].length; col++) {
-                Double value = data[row][col];
-                if (!Objects.isNull(value)) {
-                    Color color = calculateColor(value, min, max);
-                    g2d.setColor(color);
-                    // Invert y-axis for cell drawing
-                    String text = String.format(FORMAT, value);
-                    TextXY xy = TextXY.builder()
-                            .col(col).row(row).g2d(g2d).text(text).wh(wh).build();
-                    g2d.fillRect(xy.getX(), xy.getY(), wh.cellWidth(), wh.cellHeight());
-                    setG2d(g2d, wh);
-                    g2d.drawString(text, xy.textX(), xy.textY());
-                }
-            }
-        }
-    }
-
     private void drawTitle(String title, Graphics2D g2d, WidthAndHeight wh) {
-        g2d.setFont(new Font("Serif", Font.BOLD, wh.fontSize()));
+        g2d.setFont(new Font(FONT_NAME, Font.BOLD, wh.fontSize()));
         FontMetrics titleMetrics = g2d.getFontMetrics();
         int titleX = (width - titleMetrics.stringWidth(title)) / 2;
         int titleY = titleMetrics.getAscent();
@@ -154,23 +150,16 @@ public class SwingShowHeatMap {
     }
 
     private void drawLabels(Graphics2D g2d, WidthAndHeight wh) {
-        // Draw x-labels
-
         if (!isLabels) {
             return;
         }
+        drawXlabels(g2d, wh);
+        drawYlabels(g2d, wh);
+    }
 
-        if (xLabels==null) {
-            xLabels=  IntStream.range(0,wh.nCols).mapToObj(Integer::toString).toArray(String[]::new);
-        }
-        for (int i = 0; i < xLabels.length; i++) {
-            String label = xLabels[i];
-            g2d.drawString(label, i * wh.cellWidth() + wh.cellWidth() / 2 + margin - g2d.getFontMetrics().stringWidth(label) / 2, wh.usableHeight() + 20);
-        }
-
-        // Draw y-labels with inversion in mind
+    private void drawYlabels(Graphics2D g2d, WidthAndHeight wh) {
         if (yLabels==null) {
-            yLabels= IntStream.range(0,wh.nRows).mapToObj(Integer::toString).toArray(String[]::new);
+            yLabels= IntStream.range(0, wh.nRows).mapToObj(Integer::toString).toArray(String[]::new);
         }
 
         for (int i = 0; i < yLabels.length; i++) {
@@ -180,13 +169,17 @@ public class SwingShowHeatMap {
         }
     }
 
-    private  Color calculateColor(double value, double min, double max) {
-        double ratio = (value - min) / (max - min);
-        int r= MathUtils.clip((int) (ratio*255)+ MIN_DARKNESS,0,255);
-        return new Color(r,r,r);
+    private void drawXlabels(Graphics2D g2d, WidthAndHeight wh) {
+        if (xLabels==null) {
+            xLabels=  IntStream.range(0, wh.nCols).mapToObj(Integer::toString).toArray(String[]::new);
+        }
+        for (int i = 0; i < xLabels.length; i++) {
+            String label = xLabels[i];
+            g2d.drawString(label, i * wh.cellWidth() + wh.cellWidth() / 2 + margin - g2d.getFontMetrics().stringWidth(label) / 2, wh.usableHeight() + 20);
+        }
     }
 
-    private void displayImage(BufferedImage image) {
+     private void displayImage(BufferedImage image) {
         SwingUtilities.invokeLater(() -> {
             ImageIcon icon = new ImageIcon(image);
             JFrame frame = new JFrame();

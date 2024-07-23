@@ -28,9 +28,11 @@ public class Memory {
                 : properties.defaultValue();
     }
 
-    public void fit(StateAction sa, double valueTar) {
+    public double fit(StateAction sa, double valueTar) {
         var valOld= read(sa);
-        write(sa,valOld+properties.learningRate()*(valueTar-valOld));
+        double err = valueTar - valOld;
+        write(sa,valOld+properties.learningRate()* err);
+        return err;
     }
 
     public void write(StateAction sa, double value) {

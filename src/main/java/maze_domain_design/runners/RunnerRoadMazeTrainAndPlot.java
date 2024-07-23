@@ -10,12 +10,10 @@ public class RunnerRoadMazeTrainAndPlot {
     static PlottingService plotting;
 
     public static void main(String[] args) {
-
-        training=TrainingServiceFactory.createRoadMaze();
+        training = TrainingServiceFactory.createRoadMaze();
         training.train();
-        plotting =PlottingService.ofTrainingService(training);
+        plotting = PlottingService.ofTrainingService(training);
         plotting.plotTrainer();
         plotting.plotAgent();
-
     }
 }

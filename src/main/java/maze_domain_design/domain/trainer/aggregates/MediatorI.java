@@ -13,7 +13,7 @@ public interface MediatorI {
     void train();
     Episode runEpisode();
     State getStartState();
-    void fitAgentMemoryFromEpisode(Episode episode);
-    void fitAgentMemoryFromExperience(Experience experience);
-    void updateRecorder();
+    double pRandomAction();
+   // void fitAgentMemoryFromEpisode(Episode episode);
+    double fitAgentMemoryFromExperience(Experience experience);
 }
