@@ -102,10 +102,13 @@ public class AgentPlotter {
     @NotNull
     private Map<TableShower, TableDataI> getShowerSettingsMap(GridSizeExtractor nXnY, Tables tables) {
         Map<TableShower, TableDataI> showerSettingsMap=new HashMap<>();
-        var settingsValues = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY()).withName("State values");
-        var settingsActions = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY()).withName("Actions");
+        var settingsValues = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY())
+                .withName("State values").withFormatTicks("%.0f");
+        var settingsActions = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY())
+                .withName("Actions").withFormatTicks("%.0f");
         var settingsStateActionValues = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY())
-                .withName("State action values").withMaxCharsPerCell(settings.maxCharsPerStateActionCell());
+                .withName("State action values").withFormatTicks("%.0f")
+                .withMaxCharsPerCell(settings.maxCharsPerStateActionCell());
         var tableDataValues = TableDataString.ofMat(tables.values);
         var tableDataActions = TableDataString.ofMat(tables.actions);
         var tableDataSaValues = TableDataString.ofMat(tables.stateActionValues);

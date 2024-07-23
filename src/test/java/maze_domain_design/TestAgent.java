@@ -32,14 +32,14 @@ public class TestAgent {
         int maxX = 1;
         var s= State.ofRandom(envProps.withMinMaxX(Pair.create(0, maxX)));
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.SAME,ba);
+        Assertions.assertEquals(Action.E,ba);
     }
 
     @Test
     void givenNotDefinedMemory_whenState21_thenActionDown() {
         var s= State.of(2,1,envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.DOWN,ba);
+        Assertions.assertEquals(Action.S,ba);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TestAgent {
                 });
         var s11= State.of(1,1,envProps);
         var ba=agent.chooseAction(s11, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.DOWN,ba);
+        Assertions.assertEquals(Action.S,ba);
     }
 
     @Test

@@ -3,7 +3,7 @@ package maze_domain_design.domain.environment.value_objects;
 import org.apache.commons.lang3.RandomUtils;
 
 public enum Action {
-    UP(1,"↑"), SAME(0,"→"), DOWN(-1,"↓");
+    N(1,"↑"), E(0,"→"), S(-1,"↓");
 
     public final int deltaY;
     public final String arrow;
@@ -19,7 +19,7 @@ public enum Action {
     }
 
     public boolean isMove() {
-        return this.equals(UP) || this.equals(DOWN);
+        return this.equals(N) || this.equals(S);
     }
 
 

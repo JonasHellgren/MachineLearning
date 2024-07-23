@@ -57,7 +57,8 @@ public class EnvironmentPlotter {
     }
 
      TableShower createTableShower(GridSizeExtractor e) {
-        var settingsValues = TableSettings.ofNxNy(e.nX(), e.nY()).withName("State properties");
+        var settingsValues = TableSettings.ofNxNy(e.nX(), e.nY())
+                .withName("Environment").withFormatTicks("%.0f");
         return new TableShower(settingsValues);
     }
 

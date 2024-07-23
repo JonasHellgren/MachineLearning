@@ -5,12 +5,10 @@ import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
 import maze_domain_design.domain.environment.value_objects.State;
 import maze_domain_design.domain.trainer.Trainer;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,14 +41,14 @@ class TestTrainer {
         Mediator mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
-        var val21Same = getVal21(Action.SAME);
-        var val21Down = getVal21(Action.DOWN);
+        var val21Same = getVal21(Action.E);
+        var val21Down = getVal21(Action.S);
         var bestAction21 = agent.chooseAction(getState(2, 1), PROB_RANDOM_ZERO);
         var bestAction00 = agent.chooseAction(getState(0, 0), PROB_RANDOM_ZERO);
         Assertions.assertTrue(mediator.getRecorder().size() > PROB_RANDOM_ZERO);
         Assertions.assertTrue(val21Same < val21Down);
-        Assertions.assertEquals(Action.DOWN, bestAction21);
-        Assertions.assertEquals(Action.SAME, bestAction00);
+        Assertions.assertEquals(Action.S, bestAction21);
+        Assertions.assertEquals(Action.E, bestAction00);
     }
 
     Double getVal21(Action a) {

@@ -20,12 +20,12 @@ class TestEnvironment {
 
     @ParameterizedTest
     @CsvSource({
-            "0,0,SAME, 1,0",  //x,y,action, xDes,yDes
-            "0,0,UP, 1,1",
-            "0,0,DOWN, 1,0",
-            "2,0,SAME, 3,0",
-            "2,0,UP, 3,1",
-            "2,0,DOWN, 3,0"})
+            "0,0,E, 1,0",  //x,y,action, xDes,yDes
+            "0,0,N, 1,1",
+            "0,0,S, 1,0",
+            "2,0,E, 3,0",
+            "2,0,N, 3,1",
+            "2,0,S, 3,0"})
     void whenStep_thenCorrectStateNext(ArgumentsAccessor arguments) {
         var s = getState(arguments);
         var a = getAction(arguments);
@@ -36,12 +36,12 @@ class TestEnvironment {
 
     @ParameterizedTest
     @CsvSource({
-            "0,0,SAME, 0",  //x,y,action, rewardDes
-            "0,0,UP, -1",
-            "0,0,DOWN, -1",
-            "2,0,SAME, 0",
-            "2,0,UP, -101",
-            "2,0,DOWN, -1"})
+            "0,0,E, 0",  //x,y,action, rewardDes
+            "0,0,N, -1",
+            "0,0,S, -1",
+            "2,0,E, 0",
+            "2,0,N, -101",
+            "2,0,S, -1"})
     void whenStep_thenCorrectReward(ArgumentsAccessor arguments) {
         var s = getState(arguments);
         var a = getAction(arguments);
