@@ -6,7 +6,6 @@ import maze_domain_design.services.TrainingService;
 import maze_domain_design.services.TrainingServiceFactory;
 
 public class RunnerRoadMazeTrainAndPlot {
-
     static TrainingService training;
     static PlottingService plotting;
 
@@ -16,6 +15,7 @@ public class RunnerRoadMazeTrainAndPlot {
 
         PlottingSettings settings= PlottingSettings.newRunnerRoad();
         plotting = PlottingService.ofTrainingService(training,settings);
+        plotting.plotEnvironment();
         plotting.plotTrainer();
         plotting.plotAgent();
     }
