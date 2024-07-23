@@ -6,7 +6,8 @@ bild kvalitet MapPlotter x
 plot arrows x
 plotta td error   x
 plotta tabell x
-plotta sa values
+plotta sa values  x
+plotta states - kanske T F etc
 beskriva road maze i md mer
 clean up
 generisk state o action

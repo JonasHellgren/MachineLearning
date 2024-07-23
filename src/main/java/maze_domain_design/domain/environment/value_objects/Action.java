@@ -21,4 +21,6 @@ public enum Action {
     public boolean isMove() {
         return this.equals(UP) || this.equals(DOWN);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package maze_domain_design.runners;
 
+import maze_domain_design.services.PlottingSettings;
 import maze_domain_design.services.PlottingService;
 import maze_domain_design.services.TrainingService;
 import maze_domain_design.services.TrainingServiceFactory;
@@ -12,7 +13,9 @@ public class RunnerRoadMazeTrainAndPlot {
     public static void main(String[] args) {
         training = TrainingServiceFactory.createRoadMaze();
         training.train();
-        plotting = PlottingService.ofTrainingService(training);
+
+        PlottingSettings settings= PlottingSettings.newRunnerRoad();
+        plotting = PlottingService.ofTrainingService(training,settings);
         plotting.plotTrainer();
         plotting.plotAgent();
     }

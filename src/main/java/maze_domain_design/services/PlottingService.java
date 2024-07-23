@@ -13,15 +13,15 @@ public class PlottingService {
     TrainerPlotter trainerPlotter;
     AgentPlotter agentPlotter;
 
-    public PlottingService(Trainer trainer, Agent agent,Environment environment) {
+    public PlottingService(Trainer trainer, Agent agent,Environment environment, PlottingSettings settings) {
         this.trainer = trainer;
         this.agent = agent;
         this.trainerPlotter = new TrainerPlotter(trainer);
-        this.agentPlotter = new AgentPlotter(agent,environment);
+        this.agentPlotter = new AgentPlotter(agent,environment,settings);
     }
 
-    public static PlottingService ofTrainingService(TrainingService service) {
-        return new PlottingService(service.getTrainer(),service.getAgent(),service.getEnvironment());
+    public static PlottingService ofTrainingService(TrainingService service, PlottingSettings settings) {
+        return new PlottingService(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
     }
 
     public void plotTrainer() {
