@@ -7,6 +7,8 @@ import maze_domain_design.domain.shared.EnvironmentPlotter;
 import maze_domain_design.domain.shared.TrainerPlotter;
 import maze_domain_design.domain.trainer.Trainer;
 
+import java.io.IOException;
+
 public class PlottingService {
 
     EnvironmentPlotter environmentPlotter;
@@ -36,4 +38,15 @@ public class PlottingService {
         agentPlotter.plot();
     }
 
+    public void saveEnvironmentChart(String dir, String fileName, String fileEnd) throws IOException {
+        environmentPlotter.savePlot(dir,fileName,fileEnd);
+    }
+
+    public void saveTrainingCharts(String dir, String fileName, String fileEnd) throws IOException {
+        trainerPlotter.saveCharts(dir,fileName,fileEnd);
+    }
+
+    public void saveAgentCharts(String dir, String fileName, String fileEnd) throws IOException {
+        agentPlotter.saveCharts(dir,fileName,fileEnd);
+    }
 }

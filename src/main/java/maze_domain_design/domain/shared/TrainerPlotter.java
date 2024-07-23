@@ -8,10 +8,13 @@ import maze_domain_design.services.TrainingService;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
+
+import static org.knowm.xchart.BitmapEncoder.*;
 
 @AllArgsConstructor
 public class TrainerPlotter {
@@ -25,6 +28,11 @@ public class TrainerPlotter {
     }
 
     public void plot() {
+        List<XYChart> charts = getCharts();
+        new SwingWrapper<>(charts).displayChartMatrix();
+    }
+
+     List<XYChart> getCharts() {
         List<XYChart> charts = new ArrayList<>();
         var recorder = trainer.getMediator().getRecorder();
         var pRandActionList = getListWithInfoValues(recorder, ei -> ei.pRandomAction() );
@@ -33,7 +41,7 @@ public class TrainerPlotter {
         charts.add(getChart("pRandAction", pRandActionList));
         charts.add(getChart("tdError", tdErrorList));
         charts.add(getChart("nSTeps", getNStepsList(recorder)));
-        new SwingWrapper<>(charts).displayChartMatrix();
+        return charts;
     }
 
     List<Double> getSumRewardsList(Recorder recorder) {
@@ -50,17 +58,23 @@ public class TrainerPlotter {
                 .map(id -> fcn.applyAsDouble(recorder.getExp(id).getEpisodeInfoForRecording())).toList();
     }
 
-    XYChart getChart(String sumRewards, List<Double> valList) {
+    XYChart getChart(String name, List<Double> valList) {
         var recorder = trainer.getMediator().getRecorder();
         var episodeList = recorder.getIds();
         XYChart chart = new XYChartBuilder()
-                .xAxisTitle(X_AXIS_TITLE).yAxisTitle(sumRewards)
+                .xAxisTitle(X_AXIS_TITLE).yAxisTitle(name)
                 .width(WIDTH).height(HEIGHT).build();
         chart.getStyler().setYAxisMin(Collections.min(valList));
         chart.getStyler().setYAxisMax(Collections.max(valList));
         chart.getStyler().setLegendVisible(false);
-        XYSeries series = chart.addSeries(sumRewards, episodeList, valList);
+        XYSeries series = chart.addSeries(name, episodeList, valList);
         series.setMarker(SeriesMarkers.NONE);
         return chart;
+    }
+
+    public void saveCharts(String dir, String fileName,String fileEnd) throws IOException {
+        for (XYChart c:getCharts()) {
+            saveBitmap(c, dir+fileName+c.getYAxisTitle()+fileEnd, BitmapFormat.PNG);
+        }
     }
 }

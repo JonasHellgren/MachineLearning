@@ -1,6 +1,7 @@
 package common.plotters.table_shower;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class TableShower {
 
+    @Getter
     TableSettings settings;
     XYAxisTicksCreator xyAxisTicks;
     FrameAndTableCreator creator;

@@ -8,6 +8,7 @@ plotta td error   x
 plotta tabell x
 plotta sa values  x
 EnvironmentPlotter - plotta states - kanske T F etc  x
+spara charts x
 beskriva road maze i md mer
 clean up
 generisk state o action

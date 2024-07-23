@@ -1,6 +1,7 @@
 package maze_domain_design.domain.shared;
 
 import common.other.Conditionals;
+import common.plotters.table_shower.TableDataI;
 import common.plotters.table_shower.TableDataString;
 import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
@@ -11,10 +12,16 @@ import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.domain.environment.value_objects.State;
 import maze_domain_design.services.PlottingSettings;
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @AllArgsConstructor
 public class AgentPlotter {
+
 
     //inner class to ease data transfer between methods
     record Tables(
@@ -28,13 +35,25 @@ public class AgentPlotter {
     }
 
     Agent agent;
-        Environment environment;
-        PlottingSettings settings;
+    Environment environment;
+    PlottingSettings settings;
 
-        public void plot() {
-        var nXnY=new GridSizeExtractor(environment.getProperties());
+    public void plot() {
+        var nXnY = new GridSizeExtractor(environment.getProperties());
         Tables tables = createTables(nXnY);
         showTables(nXnY, tables);
+    }
+
+
+    public void saveCharts(String dir, String fileName, String fileEnd) throws IOException {
+        var nXnY = new GridSizeExtractor(environment.getProperties());
+        Tables tables = createTables(nXnY);
+        var ssMap = getShowerSettingsMap(nXnY, tables);
+        for(Map.Entry<TableShower, TableDataI> e: ssMap.entrySet()) {
+            var frame = e.getKey().createTableFrame(e.getValue());
+            e.getKey().saveTableFrame(frame, dir, fileName + e.getKey().getSettings().name() + fileEnd);
+        };
+
     }
 
     Tables createTables(GridSizeExtractor e) {
@@ -47,8 +66,8 @@ public class AgentPlotter {
                 int finalY = y;
                 int finalX = x;
                 Conditionals.executeIfFalse(state.isTerminal(), () ->
-                    fillTablesFromState(tables, finalY, finalX, state));
-                }
+                        fillTablesFromState(tables, finalY, finalX, state));
+            }
         }
         return tables;
     }
@@ -76,6 +95,13 @@ public class AgentPlotter {
 
 
     void showTables(GridSizeExtractor nXnY, Tables tables) {
+        var ssMap = getShowerSettingsMap(nXnY, tables);
+        ssMap.forEach((key, value) -> SwingUtilities.invokeLater(() -> key.showTable(value)));
+    }
+
+    @NotNull
+    private Map<TableShower, TableDataI> getShowerSettingsMap(GridSizeExtractor nXnY, Tables tables) {
+        Map<TableShower, TableDataI> showerSettingsMap=new HashMap<>();
         var settingsValues = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY()).withName("State values");
         var settingsActions = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY()).withName("Actions");
         var settingsStateActionValues = TableSettings.ofNxNy(nXnY.nX(), nXnY.nY())
@@ -83,13 +109,10 @@ public class AgentPlotter {
         var tableDataValues = TableDataString.ofMat(tables.values);
         var tableDataActions = TableDataString.ofMat(tables.actions);
         var tableDataSaValues = TableDataString.ofMat(tables.stateActionValues);
-        var tableShower1 = new TableShower(settingsValues);
-        var tableShower2 = new TableShower(settingsActions);
-        var tableShower3 = new TableShower(settingsStateActionValues);
-
-        SwingUtilities.invokeLater(() -> tableShower1.showTable(tableDataValues));
-        SwingUtilities.invokeLater(() -> tableShower2.showTable(tableDataActions));
-        SwingUtilities.invokeLater(() -> tableShower3.showTable(tableDataSaValues));
+        showerSettingsMap.put(new TableShower(settingsValues),tableDataValues);
+        showerSettingsMap.put(new TableShower(settingsActions),tableDataActions);
+        showerSettingsMap.put(new TableShower(settingsStateActionValues),tableDataSaValues);
+        return showerSettingsMap;
     }
 
 
