@@ -4,7 +4,7 @@ import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
@@ -33,14 +33,14 @@ public class TestAgent {
         int maxX = 1;
         var s= StateRoad.ofRandom(envProps.withMinMaxX(Pair.create(0, maxX)));
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.E,ba);
+        Assertions.assertEquals(ActionRoad.E,ba);
     }
 
     @Test
     void givenNotDefinedMemory_whenState21_thenActionDown() {
         var s= StateRoad.of(2,1,envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.S,ba);
+        Assertions.assertEquals(ActionRoad.S,ba);
     }
 
     @Test
@@ -53,14 +53,14 @@ public class TestAgent {
                 });
         var s11= StateRoad.of(1,1,envProps);
         var ba=agent.chooseAction(s11, PROB_RANDOM_IS_ZERO);
-        Assertions.assertEquals(Action.S,ba);
+        Assertions.assertEquals(ActionRoad.S,ba);
     }
 
     @Test
     void givenOneProbRandomAction_whenStateRandom_thenAnyAction() {
         var s= StateRoad.ofRandom(envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ONE);
-        Assertions.assertTrue(Arrays.asList(Action.values()).contains(ba));
+        Assertions.assertTrue(Arrays.asList(ActionRoad.values()).contains(ba));
     }
 
 }

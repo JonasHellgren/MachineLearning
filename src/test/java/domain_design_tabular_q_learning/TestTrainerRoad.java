@@ -4,7 +4,7 @@ import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
@@ -42,17 +42,17 @@ class TestTrainerRoad {
         Mediator<GridVariables> mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
-        var val21Same = getVal21(Action.E);
-        var val21Down = getVal21(Action.S);
+        var val21Same = getVal21(ActionRoad.E);
+        var val21Down = getVal21(ActionRoad.S);
         var bestAction21 = agent.chooseAction(getState(2, 1), PROB_RANDOM_ZERO);
         var bestAction00 = agent.chooseAction(getState(0, 0), PROB_RANDOM_ZERO);
         Assertions.assertTrue(mediator.getRecorder().size() > PROB_RANDOM_ZERO);
         Assertions.assertTrue(val21Same < val21Down);
-        Assertions.assertEquals(Action.S, bestAction21);
-        Assertions.assertEquals(Action.E, bestAction00);
+        Assertions.assertEquals(ActionRoad.S, bestAction21);
+        Assertions.assertEquals(ActionRoad.E, bestAction00);
     }
 
-    Double getVal21(Action a) {
+    Double getVal21(ActionRoad a) {
         return agent.getMemory().read(StateAction.of(getState(2, 1), a));
     }
 

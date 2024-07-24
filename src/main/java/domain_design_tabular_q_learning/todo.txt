@@ -25,5 +25,7 @@ agent o trainer så opev som möjligt
 - StepReturn generisk
 - Experience generisk
 - ActionI - values() random()
+- GridActionProperties
 - Action -> ActionRoadMaze
+- ActionRoadMaze gemerosl
 split road env

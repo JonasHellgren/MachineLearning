@@ -5,7 +5,7 @@ import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.SARS;
@@ -28,20 +28,20 @@ public class BestActionSelector<V> {
     EnvironmentI<V> environment;
     Memory<V> memory;
 
-    public Action chooseBestAction(StateI<V> s) {
+    public ActionRoad chooseBestAction(StateI<V> s) {
         var expList = getExperienceList(s);
         var aQsaMap = getActionQsaMap(expList);
         var entry = getEntryWithMaxValue(aQsaMap);
         return entry.orElseThrow().getKey();
     }
 
-    Optional<Map.Entry<Action, Double>> getEntryWithMaxValue(
-            Map<Action, Double> aQsaMap) {
+    Optional<Map.Entry<ActionRoad, Double>> getEntryWithMaxValue(
+            Map<ActionRoad, Double> aQsaMap) {
         return aQsaMap.entrySet().stream()
                 .max(Map.Entry.comparingByValue());
     }
 
-    Map<Action, Double> getActionQsaMap(List<Experience<V>> expList) {
+    Map<ActionRoad, Double> getActionQsaMap(List<Experience<V>> expList) {
         return expList.stream().collect(Collectors.toMap(
                 e -> e.getSars().a(),
                 e -> {

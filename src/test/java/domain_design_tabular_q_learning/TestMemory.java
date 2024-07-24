@@ -1,11 +1,12 @@
 package domain_design_tabular_q_learning;
 
 import common.other.Conditionals;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import lombok.extern.java.Log;
 import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
@@ -24,12 +25,14 @@ public class TestMemory {
     Memory memory;
     AgentProperties properties;
     PropertiesRoad envProps;
+    EnvironmentRoad environment;
 
     @BeforeEach
     void init() {
         properties = AgentProperties.roadMaze();
         envProps= PropertiesRoad.roadMaze();
         memory=Memory.withProperties(properties);
+        environment=new EnvironmentRoad(envProps);
     }
 
     @Test
@@ -69,7 +72,7 @@ public class TestMemory {
 
     StateAction getRandomSa() {
         var s= StateRoad.ofRandom(envProps);
-        var a= Action.random();
+        var a= environment.randomAction(); // ActionRoad.random();
         return new StateAction(s,a);
     }
 

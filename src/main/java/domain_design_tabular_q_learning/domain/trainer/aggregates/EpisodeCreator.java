@@ -2,7 +2,7 @@ package domain_design_tabular_q_learning.domain.trainer.aggregates;
 
 import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.EpisodeInfoForRecording;
 
@@ -21,7 +21,7 @@ public class EpisodeCreator<V> {
         var pRandomAction = mediator.pRandomAction();
         List<Double> tdErrors = new ArrayList<>();
         while (!s.isTerminal()) {
-            Action a = agent.chooseAction(s, pRandomAction);
+            ActionRoad a = agent.chooseAction(s, pRandomAction);
             var sr = env.step(s, a);
             int t = episode.nextId();
             var e = Experience.ofIdStateActionStepReturn(t, s, a, sr);

@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import org.jetbrains.annotations.NotNull;
@@ -80,9 +80,9 @@ public class AgentPlotter {
         tables.actions[x][y] = agent.chooseAction(state, 0d).arrow;
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        Action[] actionArr = agent.getProperties().actions();
+        ActionRoad[] actionArr = agent.getProperties().actions();
         var aEnd = actionArr[nActions - 1];
-        for (Action a : actionArr) {
+        for (ActionRoad a : actionArr) {
             StateAction sa = StateAction.of(state, a);
             var txt = String.format(settings.tableCellFormatActionValues()
                     , agent.getMemory().read(sa));

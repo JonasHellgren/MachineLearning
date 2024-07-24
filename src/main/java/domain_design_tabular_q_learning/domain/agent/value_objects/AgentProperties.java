@@ -1,7 +1,7 @@
 package domain_design_tabular_q_learning.domain.agent.value_objects;
 
 import lombok.Builder;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import org.apache.commons.math3.util.Pair;
 
 @Builder
@@ -10,7 +10,7 @@ public record AgentProperties(
         double learningRate,
         double defaultValue,
         double gamma,
-        Action[] actions
+        ActionRoad[] actions
 ) {
 
     public static AgentProperties roadMaze() {
@@ -19,7 +19,7 @@ public record AgentProperties(
                 .learningRate(0.1)
                 .defaultValue(0)
                 .gamma(1.0)
-                .actions(Action.values())
+                .actions(ActionRoad.values())
                 .build();
     }
 

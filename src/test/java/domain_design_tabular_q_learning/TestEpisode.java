@@ -1,6 +1,6 @@
 package domain_design_tabular_q_learning;
 
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Episode;
@@ -15,9 +15,9 @@ class TestEpisode {
     public static final StateRoad S00 = StateRoad.of(0, 0,envp);
     public static final StateRoad S11 = StateRoad.of(1,1,envp);
     public static final Experience EXPERIENCE0 =
-            Experience.nonTermWithIdAndSars(0, S00, Action.random(), 0d, S00);
+            Experience.nonTermWithIdAndSars(0, S00, ActionRoad.S, 0d, S00);
     public static final Experience EXPERIENCE1 =
-            Experience.nonTermWithIdAndSars(1, S11, Action.random(), 0d, S11);
+            Experience.nonTermWithIdAndSars(1, S11, ActionRoad.S, 0d, S11);
 
     Episode episode;
 

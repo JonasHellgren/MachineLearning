@@ -3,7 +3,6 @@ package domain_design_tabular_q_learning.environments.obstacle_on_road;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
-import domain_design_tabular_q_learning.domain.environment.value_objects.Action;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 import org.apache.commons.lang3.RandomUtils;
@@ -20,11 +19,11 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables> {
     }
 
     @Override
-    public StepReturn<GridVariables> step(StateI<GridVariables> s, Action a) {
+    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionRoad a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail();
-        var isMove = a.isMove();
+        var isMove = isMove(a);
         var reward = getReward(isTerminal, isFail, isMove);
         return StepReturn.<GridVariables>builder()
                 .sNext(sNext).reward(reward)
@@ -42,6 +41,17 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables> {
                 properties);
     }
 
+    public  ActionRoad randomAction() {
+        int randIdx= RandomUtils.nextInt(0, ActionRoad.values().length);
+        return ActionRoad.values()[randIdx];
+    }
+
+    public boolean isMove(ActionRoad a) {
+        return a.equals(ActionRoad.N) || a.equals(ActionRoad.S);
+    }
+
+
+
     static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
 
     double getReward(boolean isTerminal, boolean isFail, boolean isMove) {
@@ -50,7 +60,7 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables> {
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
 
-    StateRoad getNextState(StateI<GridVariables> s, Action a) {
+    StateRoad getNextState(StateI<GridVariables> s, ActionRoad a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.deltaY;
         return StateRoad.of(xNext, yNext,properties).clip();
