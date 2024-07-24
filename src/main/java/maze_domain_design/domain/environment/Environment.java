@@ -1,25 +1,24 @@
 package maze_domain_design.domain.environment;
 
-import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
 import java.util.function.BiFunction;
 
 @AllArgsConstructor
-public class Environment {
+public class Environment {  //todo flytta till folder environments
 
    @Getter
-   EnvironmentProperties properties;
+   PropertiesRoadMaze properties;
 
     public static Environment roadMaze() {
-        return new Environment(EnvironmentProperties.roadMaze());
+        return new Environment(PropertiesRoadMaze.roadMaze());
     }
 
-    public StepReturn step(State s, Action a) {
+    public StepReturn step(StateRoad s, Action a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail(properties);
@@ -40,9 +39,9 @@ public class Environment {
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
 
-    State getNextState(State s, Action a) {
-        var xNext = s.x() + 1;
-        var yNext = s.y() + a.deltaY;
-        return new State(xNext, yNext,properties).clip();
+    StateRoad getNextState(StateRoad s, Action a) {
+        var xNext = s.getVariables().x() + 1;
+        var yNext = s.getVariables().y() + a.deltaY;
+        return StateRoad.of(xNext, yNext,properties).clip();
     }
 }

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import qlearning_objoriented_class_sceleton.models.State;
 
-public class TestState {
+public class TestStateRoad {
     State state = new State();
 
     @Test

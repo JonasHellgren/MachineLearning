@@ -6,8 +6,8 @@ import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ public class TestMemory {
     public static final double TOL = 1e-2;
     Memory memory;
     AgentProperties properties;
-    EnvironmentProperties envProps;
+    PropertiesRoadMaze envProps;
 
     @BeforeEach
     void init() {
         properties = AgentProperties.roadMaze();
-        envProps=EnvironmentProperties.roadMaze();
+        envProps= PropertiesRoadMaze.roadMaze();
         memory=Memory.withProperties(properties);
     }
 
@@ -68,7 +68,7 @@ public class TestMemory {
 
 
     StateAction getRandomSa() {
-        var s= State.ofRandom(envProps);
+        var s= StateRoad.ofRandom(envProps);
         var a= Action.random();
         return new StateAction(s,a);
     }

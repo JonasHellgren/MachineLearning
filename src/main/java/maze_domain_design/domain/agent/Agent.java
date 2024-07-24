@@ -6,7 +6,7 @@ import maze_domain_design.domain.agent.helpers.BestActionSelector;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
 
 
@@ -22,7 +22,7 @@ public class Agent {
         this.actionSelector=new BestActionSelector(properties,environment,memory);
     }
 
-    public Action chooseAction(State s, double probRandom) {
+    public Action chooseAction(StateRoad s, double probRandom) {
         if (RandomUtils.nextDouble(0, 1) < probRandom) {
             return Action.random();
         }

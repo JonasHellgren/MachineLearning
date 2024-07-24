@@ -5,9 +5,8 @@ import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
 import lombok.AllArgsConstructor;
 import maze_domain_design.domain.environment.Environment;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.services.PlottingSettings;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class EnvironmentPlotter {
         var ep = environment.getProperties();
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                State state = State.of(x, y, ep);
+                StateRoad state = StateRoad.of(x, y, ep);
                 StringBuilder sb = new StringBuilder();
                 executeIfTrue(state.isTerminal(), () -> sb.append("T"));
                 executeIfTrue(state.isFail(ep), () -> sb.append("F"));

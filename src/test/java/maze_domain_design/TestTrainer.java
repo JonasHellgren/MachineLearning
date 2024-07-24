@@ -5,7 +5,7 @@ import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.Trainer;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
@@ -55,9 +55,9 @@ class TestTrainer {
         return agent.getMemory().read(StateAction.of(getState(2, 1), a));
     }
 
-    State getState(int x, int y) {
+    StateRoad getState(int x, int y) {
         var ep = environment.getProperties();
-        return State.of(x, y, ep);
+        return StateRoad.of(x, y, ep);
     }
 
 

@@ -10,7 +10,8 @@ public record ExperienceType(
 ) {
 
     public static ExperienceType ofStepReturn(StepReturn sr) {
-        return ExperienceType.builder().isTerminal(sr.isTerminal()).isFail(sr.isFail()).build();
+        return ExperienceType.builder()
+                .isTerminal(sr.isTerminal()).isFail(sr.isFail()).build();
     }
 
     public static ExperienceType nonTerminal() {

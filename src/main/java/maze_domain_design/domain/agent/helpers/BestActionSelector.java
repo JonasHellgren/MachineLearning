@@ -5,7 +5,7 @@ import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
 import maze_domain_design.domain.trainer.entities.Experience;
 import maze_domain_design.domain.trainer.value_objects.SARS;
@@ -28,7 +28,7 @@ public class BestActionSelector {
     Environment environment;
     Memory memory;
 
-    public Action chooseBestAction(State s) {
+    public Action chooseBestAction(StateRoad s) {
         var expList = getExperienceList(s);
         var aQsaMap = getActionQsaMap(expList);
         var entry = getEntryWithMaxValue(aQsaMap);
@@ -53,7 +53,7 @@ public class BestActionSelector {
                 }));
     }
 
-    List<Experience> getExperienceList(State s) {
+    List<Experience> getExperienceList(StateRoad s) {
         return Stream.of(properties.actions()).map(a -> {
             StepReturn sr = environment.step(s, a);
             return Experience.ofIdStateActionStepReturn(a.ordinal(),s, a, sr);

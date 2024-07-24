@@ -10,7 +10,7 @@ import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.services.PlottingSettings;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +62,7 @@ public class AgentPlotter {
 
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                State state = State.of(x, y, ep);
+                StateRoad state = StateRoad.of(x, y, ep);
                 int finalY = y;
                 int finalX = x;
                 Conditionals.executeIfFalse(state.isTerminal(), () ->
@@ -72,7 +72,7 @@ public class AgentPlotter {
         return tables;
     }
 
-    void fillTablesFromState(Tables tables, int y, int x, State state) {
+    void fillTablesFromState(Tables tables, int y, int x, StateRoad state) {
         int nActions = agent.getProperties().actions().length;
         tables.values[x][y] = String.format(
                 settings.tableCellFormatValues(),

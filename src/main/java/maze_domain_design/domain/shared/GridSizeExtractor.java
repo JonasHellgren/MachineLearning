@@ -1,9 +1,9 @@
 package maze_domain_design.domain.shared;
 
-import maze_domain_design.domain.environment.value_objects.EnvironmentProperties;
+import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
 
 public record GridSizeExtractor(
-        EnvironmentProperties ep
+        PropertiesRoadMaze ep
 ) {
 
     public int nX() {

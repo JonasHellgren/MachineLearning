@@ -2,7 +2,7 @@ package maze_domain_design;
 
 import maze_domain_design.domain.environment.Environment;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -50,10 +50,10 @@ class TestEnvironment {
         assertEquals(rewardDes, sr.reward());
     }
 
-    State getStateDes(ArgumentsAccessor arguments) {
+    StateRoad getStateDes(ArgumentsAccessor arguments) {
         int xDes = arguments.getInteger(3);
         int yDes = arguments.getInteger(4);
-        return State.of(xDes, yDes, environment.getProperties());
+        return StateRoad.of(xDes, yDes, environment.getProperties());
     }
 
     Action getAction(ArgumentsAccessor arguments) {
@@ -61,10 +61,10 @@ class TestEnvironment {
         return Action.valueOf(aName);
     }
 
-    State getState(ArgumentsAccessor arguments) {
+    StateRoad getState(ArgumentsAccessor arguments) {
         int x = arguments.getInteger(0);
         int y = arguments.getInteger(1);
-        return State.of(x, y, environment.getProperties());
+        return StateRoad.of(x, y, environment.getProperties());
     }
 
     double getRewardDes(ArgumentsAccessor arguments) {

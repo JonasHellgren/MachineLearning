@@ -11,5 +11,19 @@ EnvironmentPlotter - plotta states - kanske T F etc  x
 spara charts x
 beskriva road maze i md mer x
 clean up
+-
+
 generisk state o action
+domain env blir abstract - flera interface classer - konkreta env till resp folder
+agent o trainer så opev som möjligt
+- döp om Mediator till MediatorTabularQLearning
+-  StateI - random etc och generisk
+- State ->  GridVariables isf x y och generisk
+- State -> StateRoadMaze
+- Environment -> EnvironmentRoadMaze och generisk
+- EnvironmentProperties -> EnvironmentPropertiesRoadMaze
+- StepReturn generisk
+- Experience generisk
+- ActionI - values() random()
+- Action -> ActionRoadMaze
 split road env

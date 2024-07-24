@@ -2,7 +2,7 @@ package maze_domain_design.domain.agent.aggregates;
 
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
-import maze_domain_design.domain.environment.value_objects.State;
+import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,7 +39,7 @@ public class Memory {
         mapValue.put(sa,value);
     }
 
-    public double valueOfState(State s) {
+    public double valueOfState(StateRoad s) {
         var aValueMap = Stream.of(properties.actions())
                 .collect(Collectors.toMap(
                         a -> a,
