@@ -1,8 +1,10 @@
 package domain_design_tabular_q_learning.runners;
 
+import domain_design_tabular_q_learning.environments.obstacle_on_road.GridActionProperties;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import lombok.SneakyThrows;
 import domain_design_tabular_q_learning.services.PlottingSettings;
-import domain_design_tabular_q_learning.services.PlottingService;
+import domain_design_tabular_q_learning.services.RoadPlottingService;
 import domain_design_tabular_q_learning.services.TrainingService;
 import domain_design_tabular_q_learning.services.TrainingServiceFactory;
 
@@ -12,7 +14,7 @@ public class RunnerRoadMazeTrainAndPlot {
     public static final String PNG = ".png";
 
     static TrainingService training;
-    static PlottingService plotting;
+    static RoadPlottingService<GridVariables, GridActionProperties> plotting;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -20,7 +22,7 @@ public class RunnerRoadMazeTrainAndPlot {
         training.train();
 
         PlottingSettings settings= PlottingSettings.newRunnerRoad();
-        plotting = PlottingService.ofTrainingService(training,settings);
+        plotting = RoadPlottingService.ofTrainingService(training,settings);
         plotting.plotEnvironment();
         plotting.plotTrainer();
         plotting.plotAgent();

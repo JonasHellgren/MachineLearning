@@ -20,20 +20,20 @@ public class RoadEnvironmentPlotter {
     PlottingSettings settings;
 
     public void plot() {
-        var e = new GridSizeExtractor(environment.getProperties());
+        var e = new GridSizeInformer(environment.getProperties());
         var table = createTable(e);
         showTable(e, table);
     }
 
     public void savePlot(String dir, String fileName, String fileEnd) throws IOException {
-        var e = new GridSizeExtractor(environment.getProperties());
+        var e = new GridSizeInformer(environment.getProperties());
         var tableShower = createTableShower(e);
         var tableDataValues = TableDataString.ofMat(createTable(e));
         var frame=tableShower.createTableFrame(tableDataValues);
         tableShower.saveTableFrame(frame,dir,fileName+fileEnd);
     }
 
-    String[][] createTable(GridSizeExtractor e) {
+    String[][] createTable(GridSizeInformer e) {
         String[][] values = new String[e.nX()][e.nY()];
         var ep = environment.getProperties();
         for (int y = e.minY(); y <= e.maxY(); y++) {
@@ -49,13 +49,13 @@ public class RoadEnvironmentPlotter {
     }
 
 
-    void showTable(GridSizeExtractor e, String[][] table) {
+    void showTable(GridSizeInformer e, String[][] table) {
         TableShower tableShower = createTableShower(e);
         var tableDataValues = TableDataString.ofMat(table);
         SwingUtilities.invokeLater(() -> tableShower.showTable(tableDataValues));
     }
 
-     TableShower createTableShower(GridSizeExtractor e) {
+     TableShower createTableShower(GridSizeInformer e) {
         var settingsValues = TableSettings.ofNxNy(e.nX(), e.nY())
                 .withName("Environment").withFormatTicks("%.0f");
         return new TableShower(settingsValues);

@@ -20,6 +20,10 @@ public enum ActionRoad implements ActionI<GridActionProperties> {
         this.properties=properties;
     }
 
+    @Override
+    public String toString() {
+        return properties.arrow();
+    }
 
 
 }

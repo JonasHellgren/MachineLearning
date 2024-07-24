@@ -27,7 +27,7 @@ public record StateRoad  (
 
     @Override
     public StateI<GridVariables> newWithVariables(GridVariables gridVariables) {
-        return new StateRoad(variables,properties);
+        return new StateRoad(gridVariables,properties);
     }
 
     @Override

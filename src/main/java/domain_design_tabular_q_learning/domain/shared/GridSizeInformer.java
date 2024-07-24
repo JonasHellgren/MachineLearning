@@ -2,7 +2,7 @@ package domain_design_tabular_q_learning.domain.shared;
 
 import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
 
-public record GridSizeExtractor(
+public record GridSizeInformer(
         PropertiesRoad ep
 ) {
 

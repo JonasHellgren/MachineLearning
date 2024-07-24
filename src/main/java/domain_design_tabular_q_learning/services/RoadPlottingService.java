@@ -10,27 +10,26 @@ import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentP
 
 import java.io.IOException;
 
-public class PlottingService<V,A> {
+public class RoadPlottingService<V,A> {
 
     RoadEnvironmentPlotter environmentPlotter;
     TrainerPlotter trainerPlotter;
     AgentPlotter<V,A> agentPlotter;
 
-    public PlottingService(Trainer<V,A> trainer,
-                           Agent<V,A> agent,
-                           EnvironmentRoad environment,
-                           PlottingSettings settings) {
+    public RoadPlottingService(Trainer<V,A> trainer,
+                               Agent<V,A> agent,
+                               EnvironmentRoad environment,
+                               PlottingSettings settings) {
         this.trainerPlotter = new TrainerPlotter(trainer);
         this.agentPlotter = new RoadAgentPlotter<>(
                 agent,
                 environment,
-                settings,
-                environment.getStartState());
+                settings);
         this.environmentPlotter=new RoadEnvironmentPlotter(environment,settings);
     }
 
-    public static  PlottingService ofTrainingService(TrainingService service, PlottingSettings settings) {
-        return new PlottingService(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
+    public static <V,A> RoadPlottingService<V,A> ofTrainingService(TrainingService service, PlottingSettings settings) {
+        return new RoadPlottingService<V,A>(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
     }
 
     public void plotEnvironment() {

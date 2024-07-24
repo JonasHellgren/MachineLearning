@@ -5,7 +5,7 @@ public record Tables(
         String[][] stateActionValues,
         String[][] actions
 ) {
-    public Tables(GridSizeExtractor e) {
+    public Tables(GridSizeInformer e) {
         this(new String[e.nX()][e.nY()], new String[e.nX()][e.nY()], new String[e.nX()][e.nY()]);
     }
 }
