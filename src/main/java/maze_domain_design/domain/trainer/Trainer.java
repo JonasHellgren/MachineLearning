@@ -2,18 +2,18 @@ package maze_domain_design.domain.trainer;
 
 import lombok.Getter;
 import maze_domain_design.domain.agent.Agent;
-import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
+import maze_domain_design.domain.environment.EnvironmentI;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
 
-public class Trainer {
+public class Trainer<V> {
    @Getter
-   Mediator mediator;
+   Mediator<V> mediator;
 
-    public Trainer(EnvironmentRoad environment,
-                   Agent agent,
+    public Trainer(EnvironmentI<V> environment,
+                   Agent<V> agent,
                    TrainerProperties properties) {
-        this.mediator=new Mediator(environment,agent,properties);
+        this.mediator= new Mediator<>(environment, agent, properties);
     }
 
     public void train() {

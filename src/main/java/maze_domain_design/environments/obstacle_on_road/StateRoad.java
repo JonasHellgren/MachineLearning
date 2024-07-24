@@ -43,11 +43,13 @@ public record StateRoad  (
         return StateRoad.of(xClipped, yClipped,properties);
     }
 
+    @Override
     public boolean isTerminal() {
         return Objects.equals(variables.x(), properties.xTerminal());
     }
 
-    public boolean isFail(PropertiesRoad properties) {
+    @Override
+    public boolean isFail() {
         return Objects.equals(variables.y(), properties.yFailTerminal()) &&
                 isTerminal();
     }

@@ -2,13 +2,14 @@ package maze_domain_design.domain.agent.aggregates;
 
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
+import maze_domain_design.domain.environment.value_objects.StateI;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Memory {
+public class Memory<S> {
 
     Map<StateAction, Double> mapValue;
     AgentProperties properties;
@@ -18,28 +19,28 @@ public class Memory {
         this.properties=properties;
     }
 
-    public static Memory withProperties(AgentProperties properties) {
-        return new Memory(properties);
+    public static <S> Memory<S> withProperties(AgentProperties properties) {
+        return new Memory<>(properties);
     }
 
-    public Double read(StateAction sa) {
+    public Double read(StateAction<S> sa) {
         return mapValue.containsKey(sa)
                 ? mapValue.get(sa)
                 : properties.defaultValue();
     }
 
-    public double fit(StateAction sa, double valueTar) {
+    public double fit(StateAction<S> sa, double valueTar) {
         var valOld= read(sa);
         double err = valueTar - valOld;
         write(sa,valOld+properties.learningRate()* err);
         return err;
     }
 
-    public void write(StateAction sa, double value) {
+    public void write(StateAction<S> sa, double value) {
         mapValue.put(sa,value);
     }
 
-    public double valueOfState(StateRoad s) {
+    public double valueOfState(StateI<S> s) {
         var aValueMap = Stream.of(properties.actions())
                 .collect(Collectors.toMap(
                         a -> a,

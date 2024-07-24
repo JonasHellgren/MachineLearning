@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
-public class EpisodeCreator {
-    MediatorI mediator;
+public class EpisodeCreator<V> {
+    MediatorI<V> mediator;
 
     public Episode runEpisode() {
         var agent = mediator.getExternal().agent();

@@ -3,9 +3,9 @@ package maze_domain_design.domain.agent.helpers;
 import lombok.AllArgsConstructor;
 import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
-import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
+import maze_domain_design.domain.environment.EnvironmentI;
+import maze_domain_design.domain.environment.value_objects.StateI;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
 import maze_domain_design.domain.trainer.entities.Experience;
 import maze_domain_design.domain.trainer.value_objects.SARS;
@@ -23,12 +23,12 @@ import java.util.stream.Stream;
  */
 
 @AllArgsConstructor
-public class BestActionSelector {
+public class BestActionSelector<V> {
     AgentProperties properties;
-    EnvironmentRoad environment;
-    Memory memory;
+    EnvironmentI<V> environment;
+    Memory<V> memory;
 
-    public Action chooseBestAction(StateRoad s) {
+    public Action chooseBestAction(StateI<V> s) {
         var expList = getExperienceList(s);
         var aQsaMap = getActionQsaMap(expList);
         var entry = getEntryWithMaxValue(aQsaMap);
@@ -41,11 +41,11 @@ public class BestActionSelector {
                 .max(Map.Entry.comparingByValue());
     }
 
-    Map<Action, Double> getActionQsaMap(List<Experience> expList) {
+    Map<Action, Double> getActionQsaMap(List<Experience<V>> expList) {
         return expList.stream().collect(Collectors.toMap(
                 e -> e.getSars().a(),
                 e -> {
-                    SARS sars = e.getSars();
+                    SARS<V> sars = e.getSars();
                     return e.getType().isTerminal()
                             ? sars.r()
                             : sars.r() + properties.gamma() *
@@ -53,9 +53,9 @@ public class BestActionSelector {
                 }));
     }
 
-    List<Experience> getExperienceList(StateRoad s) {
+    List<Experience<V>> getExperienceList(StateI<V> s) {
         return Stream.of(properties.actions()).map(a -> {
-            StepReturn sr = environment.step(s, a);
+            StepReturn<V> sr = environment.step(s, a);
             return Experience.ofIdStateActionStepReturn(a.ordinal(),s, a, sr);
         }).toList();
     }

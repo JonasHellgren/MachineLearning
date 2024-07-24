@@ -20,8 +20,8 @@ agent o trainer så opev som möjligt
 -  StateI - random etc och generisk  x
 - State ->  GridVariables isf x y och generisk  x
 - State -> StateRoadMaze  x
-- Environment -> EnvironmentRoadMaze och generisk
-- EnvironmentProperties -> EnvironmentPropertiesRoadMaze
+- Environment -> EnvironmentRoadMaze och generisk x
+- EnvironmentProperties -> EnvironmentPropertiesRoadMaze x
 - StepReturn generisk
 - Experience generisk
 - ActionI - values() random()

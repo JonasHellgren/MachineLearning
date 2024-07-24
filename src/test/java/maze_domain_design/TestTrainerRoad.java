@@ -5,6 +5,7 @@ import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
+import maze_domain_design.environments.obstacle_on_road.GridVariables;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.Trainer;
 import maze_domain_design.domain.trainer.aggregates.Mediator;
@@ -13,20 +14,20 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestTrainer {
+class TestTrainerRoad {
 
     public static final int PROB_RANDOM_ZERO = 0;
-    Trainer trainer;
+    Trainer<GridVariables> trainer;
     EnvironmentRoad environment;
-    Agent agent;
+    Agent<GridVariables> agent;
     TrainerProperties trainerProperties;
 
     @BeforeEach
     void init() {
         trainerProperties = TrainerProperties.roadMaze();
         environment = EnvironmentRoad.roadMaze();
-        agent = new Agent(AgentProperties.roadMaze(), environment);
-        trainer = new Trainer(environment, agent, trainerProperties);
+        agent = new Agent<>(AgentProperties.roadMaze(), environment);
+        trainer = new Trainer<>(environment, agent, trainerProperties);
     }
 
     @Test
@@ -38,7 +39,7 @@ class TestTrainer {
     @Test
     void whenTraining_thenCorrect() {
         trainer.train();
-        Mediator mediator = trainer.getMediator();
+        Mediator<GridVariables> mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
         var val21Same = getVal21(Action.E);

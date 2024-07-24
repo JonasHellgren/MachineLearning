@@ -4,6 +4,7 @@ import lombok.Getter;
 import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.helpers.BestActionSelector;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
+import maze_domain_design.domain.environment.value_objects.StateI;
 import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 
 @Getter
-public class Agent {
+public class Agent<S> {
     Memory memory;
     AgentProperties properties;
     BestActionSelector actionSelector;
@@ -22,7 +23,7 @@ public class Agent {
         this.actionSelector=new BestActionSelector(properties,environment,memory);
     }
 
-    public Action chooseAction(StateRoad s, double probRandom) {
+    public Action chooseAction(StateI<S> s, double probRandom) {
         if (RandomUtils.nextDouble(0, 1) < probRandom) {
             return Action.random();
         }

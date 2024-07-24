@@ -41,7 +41,7 @@ public class EnvironmentPlotter {
                 StateRoad state = StateRoad.of(x, y, ep);
                 StringBuilder sb = new StringBuilder();
                 executeIfTrue(state.isTerminal(), () -> sb.append("T"));
-                executeIfTrue(state.isFail(ep), () -> sb.append("F"));
+                executeIfTrue(state.isFail(), () -> sb.append("F"));
                 values[x][y] = sb.toString();
             }
         }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import maze_domain_design.domain.environment.EnvironmentI;
 import maze_domain_design.domain.environment.value_objects.Action;
+import maze_domain_design.domain.environment.value_objects.StateI;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
 import java.util.function.BiFunction;
 
@@ -17,17 +18,16 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables> {
         return new EnvironmentRoad(PropertiesRoad.roadMaze());
     }
 
-    public StepReturn step(StateRoad s, Action a) {
+    public StepReturn<GridVariables> step(StateI<GridVariables> s, Action a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
-        var isFail = sNext.isFail(properties);
+        var isFail = sNext.isFail();
         var isMove = a.isMove();
         var reward = getReward(isTerminal, isFail, isMove);
-        return StepReturn.builder()
+        return StepReturn.<GridVariables>builder()
                 .sNext(sNext).reward(reward)
                 .isFail(isFail).isTerminal(isTerminal)
                 .build();
-
     }
 
     static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
@@ -38,7 +38,7 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables> {
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
 
-    StateRoad getNextState(StateRoad s, Action a) {
+    StateI<GridVariables> getNextState(StateI<GridVariables> s, Action a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.deltaY;
         return StateRoad.of(xNext, yNext,properties).clip();
