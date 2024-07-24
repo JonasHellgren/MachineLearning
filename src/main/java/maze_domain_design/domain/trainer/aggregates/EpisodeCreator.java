@@ -21,16 +21,17 @@ public class EpisodeCreator<V> {
         var env = mediator.getExternal().environment();
 
         var episode = new Episode();
-        var s = mediator.getStartState();
-        var pRandomAction=mediator.pRandomAction();
-        List<Double> tdErrors= new ArrayList<>();
+        //        var s = mediator.getStartState();
+        var s = env.getStartState();
+        var pRandomAction = mediator.pRandomAction();
+        List<Double> tdErrors = new ArrayList<>();
         while (!s.isTerminal()) {
             Action a = agent.chooseAction(s, pRandomAction);
             var sr = env.step(s, a);
-            int t=episode.nextId();
+            int t = episode.nextId();
             var e = Experience.ofIdStateActionStepReturn(t, s, a, sr);
             episode.addExp(e);
-            double err=mediator.fitAgentMemoryFromExperience(e);
+            double err = mediator.fitAgentMemoryFromExperience(e);
             tdErrors.add(Math.abs(err));
             s = sr.sNext();
         }
@@ -40,7 +41,7 @@ public class EpisodeCreator<V> {
     }
 
     private static void setEpisodeInfo(Episode episode, double pRandomAction, double tdErrorAvg) {
-        episode.infoForRecording= EpisodeInfoForRecording.builder()
+        episode.infoForRecording = EpisodeInfoForRecording.builder()
                 .pRandomAction(pRandomAction).tdErrorAvg(tdErrorAvg)
                 .build();
     }

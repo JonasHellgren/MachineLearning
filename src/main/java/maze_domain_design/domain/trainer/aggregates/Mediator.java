@@ -3,13 +3,8 @@ package maze_domain_design.domain.trainer.aggregates;
 import lombok.Getter;
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.environment.EnvironmentI;
-import maze_domain_design.domain.environment.value_objects.StateI;
-import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
-import maze_domain_design.environments.obstacle_on_road.GridVariables;
-import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.entities.Experience;
 import maze_domain_design.domain.trainer.entities.Recording;
-import maze_domain_design.domain.trainer.value_objects.StartStateSupplier;
 import maze_domain_design.domain.trainer.value_objects.TrainerExternal;
 import maze_domain_design.domain.trainer.value_objects.TrainerProperties;
 import java.util.stream.IntStream;
@@ -21,7 +16,6 @@ public class Mediator<V> implements MediatorI<V> {
     TrainerProperties properties;
     @Getter
     Recorder recorder;
-    StartStateSupplier<V> startStateSupplier;
     EpisodeCreator<V> episodeCreator;
     AgentFitter fitter;
 
@@ -31,8 +25,6 @@ public class Mediator<V> implements MediatorI<V> {
         this.external = new TrainerExternal<>(environment, agent);
         this.properties = properties;
         this.recorder = new Recorder();
-        this.startStateSupplier = new StartStateSupplier<>(
-                properties, environment.getProperties());
         this.episodeCreator = new EpisodeCreator<>(this);
         this.fitter = new AgentFitter(this);
     }
@@ -49,11 +41,6 @@ public class Mediator<V> implements MediatorI<V> {
     @Override
     public Episode runEpisode() {
         return episodeCreator.runEpisode();
-    }
-
-    @Override
-    public StateI<V> getStartState() {
-        return (StateI<V>) startStateSupplier.getStartState();
     }
 
     @Override

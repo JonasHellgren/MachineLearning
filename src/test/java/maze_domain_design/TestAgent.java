@@ -5,6 +5,7 @@ import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
+import maze_domain_design.environments.obstacle_on_road.GridVariables;
 import maze_domain_design.environments.obstacle_on_road.PropertiesRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.math3.util.Pair;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 public class TestAgent {
     public static final int PROB_RANDOM_IS_ZERO = 0;
     public static final double PROB_RANDOM_IS_ONE = 1d;
-    Agent agent;
+    Agent<GridVariables> agent;
     AgentProperties properties;
     PropertiesRoad envProps;
 
@@ -24,7 +25,7 @@ public class TestAgent {
     void init() {
         properties = AgentProperties.roadMaze();
         envProps= PropertiesRoad.roadMaze();
-        agent=new Agent(properties, EnvironmentRoad.roadMaze());
+        agent=new Agent<>(properties, EnvironmentRoad.roadMaze());
     }
 
     @Test

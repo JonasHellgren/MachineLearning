@@ -13,7 +13,9 @@ public record PropertiesRoad(  //flytta till env
                                Double rewardMove,
                                Integer xTerminal,
                                Integer yFailTerminal,
-                               Integer yNonFailTerminal
+                               Integer yNonFailTerminal,
+                               Pair<Integer, Integer> startXMinMax,
+                               Pair<Integer, Integer> startYMinMax
 ) {
 
     public static PropertiesRoad roadMaze() {
@@ -21,6 +23,8 @@ public record PropertiesRoad(  //flytta till env
                 .minMaxX(Pair.create(0,3)).minMaxY(Pair.create(0,1))
                 .rewardFailTerminal(-100d).rewardNonFailTerminal(0d).rewardMove(-1d)
                 .xTerminal(3).yFailTerminal(1).yNonFailTerminal(0)
+                .startXMinMax(Pair.create(0, 0))
+                .startYMinMax(Pair.create(0, 1))
                 .build();
     }
 
