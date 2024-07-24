@@ -17,9 +17,9 @@ generisk state o action
 domain env blir abstract - flera interface classer - konkreta env till resp folder
 agent o trainer så opev som möjligt
 - döp om Mediator till MediatorTabularQLearning
--  StateI - random etc och generisk
-- State ->  GridVariables isf x y och generisk
-- State -> StateRoadMaze
+-  StateI - random etc och generisk  x
+- State ->  GridVariables isf x y och generisk  x
+- State -> StateRoadMaze  x
 - Environment -> EnvironmentRoadMaze och generisk
 - EnvironmentProperties -> EnvironmentPropertiesRoadMaze
 - StepReturn generisk

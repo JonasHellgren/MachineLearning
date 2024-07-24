@@ -1,7 +1,7 @@
 package maze_domain_design;
 
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.PropertiesRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.aggregates.Episode;
 import maze_domain_design.domain.trainer.entities.Experience;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class TestEpisode {
 
-    static PropertiesRoadMaze envp= PropertiesRoadMaze.roadMaze();
+    static PropertiesRoad envp= PropertiesRoad.roadMaze();
     public static final StateRoad S00 = StateRoad.of(0, 0,envp);
     public static final StateRoad S11 = StateRoad.of(1,1,envp);
     public static final Experience EXPERIENCE0 =

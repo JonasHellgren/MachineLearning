@@ -1,21 +1,20 @@
-package maze_domain_design.domain.environment;
+package maze_domain_design.environments.obstacle_on_road;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import maze_domain_design.domain.environment.EnvironmentI;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
-import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
 import java.util.function.BiFunction;
 
 @AllArgsConstructor
-public class Environment {  //todo flytta till folder environments
+public class EnvironmentRoad implements EnvironmentI<GridVariables> {
 
    @Getter
-   PropertiesRoadMaze properties;
+   PropertiesRoad properties;
 
-    public static Environment roadMaze() {
-        return new Environment(PropertiesRoadMaze.roadMaze());
+    public static EnvironmentRoad roadMaze() {
+        return new EnvironmentRoad(PropertiesRoad.roadMaze());
     }
 
     public StepReturn step(StateRoad s, Action a) {

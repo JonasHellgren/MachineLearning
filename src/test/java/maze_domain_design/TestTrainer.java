@@ -3,7 +3,7 @@ package maze_domain_design;
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.Trainer;
@@ -17,14 +17,14 @@ class TestTrainer {
 
     public static final int PROB_RANDOM_ZERO = 0;
     Trainer trainer;
-    Environment environment;
+    EnvironmentRoad environment;
     Agent agent;
     TrainerProperties trainerProperties;
 
     @BeforeEach
     void init() {
         trainerProperties = TrainerProperties.roadMaze();
-        environment = Environment.roadMaze();
+        environment = EnvironmentRoad.roadMaze();
         agent = new Agent(AgentProperties.roadMaze(), environment);
         trainer = new Trainer(environment, agent, trainerProperties);
     }

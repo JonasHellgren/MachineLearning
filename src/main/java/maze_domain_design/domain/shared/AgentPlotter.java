@@ -8,7 +8,7 @@ import common.plotters.table_shower.TableShower;
 import lombok.AllArgsConstructor;
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.agent.value_objects.StateAction;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.services.PlottingSettings;
@@ -35,7 +35,7 @@ public class AgentPlotter {
     }
 
     Agent agent;
-    Environment environment;
+    EnvironmentRoad environment;
     PlottingSettings settings;
 
     public void plot() {

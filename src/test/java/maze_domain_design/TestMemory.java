@@ -6,7 +6,7 @@ import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.PropertiesRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
@@ -23,12 +23,12 @@ public class TestMemory {
     public static final double TOL = 1e-2;
     Memory memory;
     AgentProperties properties;
-    PropertiesRoadMaze envProps;
+    PropertiesRoad envProps;
 
     @BeforeEach
     void init() {
         properties = AgentProperties.roadMaze();
-        envProps= PropertiesRoadMaze.roadMaze();
+        envProps= PropertiesRoad.roadMaze();
         memory=Memory.withProperties(properties);
     }
 

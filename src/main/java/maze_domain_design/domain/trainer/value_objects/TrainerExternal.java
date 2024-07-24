@@ -1,10 +1,10 @@
 package maze_domain_design.domain.trainer.value_objects;
 
 import maze_domain_design.domain.agent.Agent;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 
 public record TrainerExternal(
-        Environment environment,
+        EnvironmentRoad environment,
         Agent agent
 ) {
 }

@@ -1,6 +1,6 @@
 package maze_domain_design;
 
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,13 +9,13 @@ import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestEnvironment {
+class TestEnvironmentRoad {
 
-    Environment environment;
+    EnvironmentRoad environment;
 
     @BeforeEach
     void init() {
-        environment = Environment.roadMaze();
+        environment = EnvironmentRoad.roadMaze();
     }
 
     @ParameterizedTest

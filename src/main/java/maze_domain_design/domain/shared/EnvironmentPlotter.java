@@ -4,7 +4,7 @@ import common.plotters.table_shower.TableDataString;
 import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
 import lombok.AllArgsConstructor;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.services.PlottingSettings;
 
@@ -16,7 +16,7 @@ import static common.other.Conditionals.executeIfTrue;
 @AllArgsConstructor
 public class EnvironmentPlotter {
 
-    Environment environment;
+    EnvironmentRoad environment;
     PlottingSettings settings;
 
     public void plot() {

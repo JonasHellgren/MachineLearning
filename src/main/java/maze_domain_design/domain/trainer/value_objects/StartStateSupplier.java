@@ -1,12 +1,12 @@
 package maze_domain_design.domain.trainer.value_objects;
 
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.PropertiesRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
 
 public record StartStateSupplier(
         TrainerProperties properties,
-        PropertiesRoadMaze envProperties
+        PropertiesRoad envProperties
 ) {
 
     public StateRoad getStartState() {

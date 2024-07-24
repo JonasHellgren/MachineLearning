@@ -1,7 +1,6 @@
 package maze_domain_design.environments.obstacle_on_road;
 
 import common.math.MathUtils;
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
 import maze_domain_design.domain.environment.value_objects.StateI;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.util.Pair;
@@ -10,14 +9,14 @@ import java.util.Objects;
 
 public record StateRoad  (
                                GridVariables variables,
-                               PropertiesRoadMaze properties
+                               PropertiesRoad properties
 ) implements StateI<GridVariables> {
 
-    public static  StateRoad of(Integer x, Integer y, PropertiesRoadMaze p) {
+    public static  StateRoad of(Integer x, Integer y, PropertiesRoad p) {
         return new StateRoad(GridVariables.of(x,y),p);
     }
 
-    public static  StateRoad ofRandom(PropertiesRoadMaze p) {
+    public static  StateRoad ofRandom(PropertiesRoad p) {
         return new StateRoad(GridVariables.of(0,0),p).random();
     }
 
@@ -48,7 +47,7 @@ public record StateRoad  (
         return Objects.equals(variables.x(), properties.xTerminal());
     }
 
-    public boolean isFail(PropertiesRoadMaze properties) {
+    public boolean isFail(PropertiesRoad properties) {
         return Objects.equals(variables.y(), properties.yFailTerminal()) &&
                 isTerminal();
     }

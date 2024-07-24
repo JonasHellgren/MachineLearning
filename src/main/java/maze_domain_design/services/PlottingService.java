@@ -1,7 +1,7 @@
 package maze_domain_design.services;
 
 import maze_domain_design.domain.agent.Agent;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.shared.AgentPlotter;
 import maze_domain_design.domain.shared.EnvironmentPlotter;
 import maze_domain_design.domain.shared.TrainerPlotter;
@@ -16,7 +16,7 @@ public class PlottingService {
     AgentPlotter agentPlotter;
 
 
-    public PlottingService(Trainer trainer, Agent agent,Environment environment, PlottingSettings settings) {
+    public PlottingService(Trainer trainer, Agent agent, EnvironmentRoad environment, PlottingSettings settings) {
         this.trainerPlotter = new TrainerPlotter(trainer);
         this.agentPlotter = new AgentPlotter(agent,environment,settings);
         this.environmentPlotter=new EnvironmentPlotter(environment,settings);

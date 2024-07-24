@@ -3,7 +3,7 @@ package maze_domain_design.domain.agent.helpers;
 import lombok.AllArgsConstructor;
 import maze_domain_design.domain.agent.aggregates.Memory;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.environment.value_objects.StepReturn;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class BestActionSelector {
     AgentProperties properties;
-    Environment environment;
+    EnvironmentRoad environment;
     Memory memory;
 
     public Action chooseBestAction(StateRoad s) {

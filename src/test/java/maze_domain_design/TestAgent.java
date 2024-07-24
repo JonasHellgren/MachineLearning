@@ -3,9 +3,9 @@ package maze_domain_design;
 import maze_domain_design.domain.agent.Agent;
 import maze_domain_design.domain.agent.value_objects.AgentProperties;
 import maze_domain_design.domain.agent.value_objects.StateAction;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.domain.environment.value_objects.Action;
-import maze_domain_design.domain.environment.value_objects.PropertiesRoadMaze;
+import maze_domain_design.environments.obstacle_on_road.PropertiesRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -18,13 +18,13 @@ public class TestAgent {
     public static final double PROB_RANDOM_IS_ONE = 1d;
     Agent agent;
     AgentProperties properties;
-    PropertiesRoadMaze envProps;
+    PropertiesRoad envProps;
 
     @BeforeEach
     void init() {
         properties = AgentProperties.roadMaze();
-        envProps= PropertiesRoadMaze.roadMaze();
-        agent=new Agent(properties, Environment.roadMaze());
+        envProps= PropertiesRoad.roadMaze();
+        agent=new Agent(properties, EnvironmentRoad.roadMaze());
     }
 
     @Test

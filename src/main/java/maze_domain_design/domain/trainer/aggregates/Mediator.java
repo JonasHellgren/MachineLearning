@@ -2,7 +2,7 @@ package maze_domain_design.domain.trainer.aggregates;
 
 import lombok.Getter;
 import maze_domain_design.domain.agent.Agent;
-import maze_domain_design.domain.environment.Environment;
+import maze_domain_design.environments.obstacle_on_road.EnvironmentRoad;
 import maze_domain_design.environments.obstacle_on_road.StateRoad;
 import maze_domain_design.domain.trainer.entities.Experience;
 import maze_domain_design.domain.trainer.entities.Recording;
@@ -22,7 +22,7 @@ public class Mediator implements MediatorI {
     EpisodeCreator episodeCreator;
     AgentFitter fitter;
 
-    public Mediator(Environment environment,
+    public Mediator(EnvironmentRoad environment,
                     Agent agent,
                     TrainerProperties properties) {
         this.external = new TrainerExternal(environment, agent);
