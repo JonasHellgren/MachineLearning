@@ -4,4 +4,9 @@ public record GridActionProperties(
         int deltaY,
         String arrow
 ) {
+
+    public static GridActionProperties of(int deltaY,String arrow) {
+        return new GridActionProperties(deltaY,arrow);
+    }
+
 }

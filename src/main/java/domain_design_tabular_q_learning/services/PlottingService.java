@@ -1,28 +1,35 @@
 package domain_design_tabular_q_learning.services;
 
 import domain_design_tabular_q_learning.domain.agent.Agent;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.domain.shared.AgentPlotter;
-import domain_design_tabular_q_learning.domain.shared.EnvironmentPlotter;
+import domain_design_tabular_q_learning.domain.shared.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.shared.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentPlotter;
 
 import java.io.IOException;
 
-public class PlottingService {
+public class PlottingService<V,A> {
 
-    EnvironmentPlotter environmentPlotter;
+    RoadEnvironmentPlotter environmentPlotter;
     TrainerPlotter trainerPlotter;
-    AgentPlotter agentPlotter;
+    AgentPlotter<V,A> agentPlotter;
 
-
-    public PlottingService(Trainer trainer, Agent agent, EnvironmentRoad environment, PlottingSettings settings) {
+    public PlottingService(Trainer<V,A> trainer,
+                           Agent<V,A> agent,
+                           EnvironmentRoad environment,
+                           PlottingSettings settings) {
         this.trainerPlotter = new TrainerPlotter(trainer);
-        this.agentPlotter = new AgentPlotter(agent,environment,settings);
-        this.environmentPlotter=new EnvironmentPlotter(environment,settings);
+        this.agentPlotter = new RoadAgentPlotter<>(
+                agent,
+                environment,
+                settings,
+                environment.getStartState());
+        this.environmentPlotter=new RoadEnvironmentPlotter(environment,settings);
     }
 
-    public static PlottingService ofTrainingService(TrainingService service, PlottingSettings settings) {
+    public static  PlottingService ofTrainingService(TrainingService service, PlottingSettings settings) {
         return new PlottingService(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
     }
 

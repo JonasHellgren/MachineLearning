@@ -9,8 +9,8 @@ public record AgentProperties(
         Pair<Double,Double> probRandomActionStartEnd,
         double learningRate,
         double defaultValue,
-        double gamma,
-        ActionRoad[] actions
+        double gamma
+       // ActionRoad[] actions
 ) {
 
     public static AgentProperties roadMaze() {
@@ -19,7 +19,7 @@ public record AgentProperties(
                 .learningRate(0.1)
                 .defaultValue(0)
                 .gamma(1.0)
-                .actions(ActionRoad.values())
+                //.actions(ActionRoad.values())
                 .build();
     }
 

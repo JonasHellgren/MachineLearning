@@ -6,4 +6,8 @@ public interface ActionI<A> {
 /*    ActionI<A> random();
     List<ActionI<A>> values();
     boolean isMove(); //todo veck*/
+
+    A getProperties();
+    int ordinal();
+
 }

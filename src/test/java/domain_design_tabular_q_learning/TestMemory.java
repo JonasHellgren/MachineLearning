@@ -1,14 +1,11 @@
 package domain_design_tabular_q_learning;
 
 import common.other.Conditionals;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
 import lombok.extern.java.Log;
 import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +19,7 @@ public class TestMemory {
     public static final int MAX_VALUE = 100;
     public static final int VALUE_TAR = 1;
     public static final double TOL = 1e-2;
-    Memory memory;
+    Memory<GridVariables, GridActionProperties> memory;
     AgentProperties properties;
     PropertiesRoad envProps;
     EnvironmentRoad environment;
@@ -31,8 +28,8 @@ public class TestMemory {
     void init() {
         properties = AgentProperties.roadMaze();
         envProps= PropertiesRoad.roadMaze();
-        memory=Memory.withProperties(properties);
         environment=new EnvironmentRoad(envProps);
+        memory=Memory.of(properties, environment.actions());
     }
 
     @Test

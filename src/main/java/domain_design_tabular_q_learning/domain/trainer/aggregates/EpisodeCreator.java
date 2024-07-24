@@ -1,6 +1,7 @@
 package domain_design_tabular_q_learning.domain.trainer.aggregates;
 
 import common.list_arrays.ListUtils;
+import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
@@ -10,18 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class EpisodeCreator<V> {
-    MediatorI<V> mediator;
+public class EpisodeCreator<V,A> {
+    MediatorI<V,A> mediator;
 
-    public Episode runEpisode() {
+    public Episode<V,A> runEpisode() {
         var agent = mediator.getExternal().agent();
         var env = mediator.getExternal().environment();
-        var episode = new Episode();
+        var episode = new Episode<V,A>();
         var s = env.getStartState();
         var pRandomAction = mediator.pRandomAction();
         List<Double> tdErrors = new ArrayList<>();
         while (!s.isTerminal()) {
-            ActionRoad a = agent.chooseAction(s, pRandomAction);
+            ActionI<A> a = agent.chooseAction(s, pRandomAction);
             var sr = env.step(s, a);
             int t = episode.nextId();
             var e = Experience.ofIdStateActionStepReturn(t, s, a, sr);

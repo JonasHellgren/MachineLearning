@@ -26,6 +26,11 @@ public record StateRoad  (
     }
 
     @Override
+    public StateI<GridVariables> newWithVariables(GridVariables gridVariables) {
+        return new StateRoad(variables,properties);
+    }
+
+    @Override
     public StateRoad random() {
         return StateRoad.of(
                 getRand(properties.minMaxX()),

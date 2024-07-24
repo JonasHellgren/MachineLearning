@@ -14,7 +14,7 @@ import java.io.IOException;
 import static common.other.Conditionals.executeIfTrue;
 
 @AllArgsConstructor
-public class EnvironmentPlotter {
+public class RoadEnvironmentPlotter {
 
     EnvironmentRoad environment;
     PlottingSettings settings;

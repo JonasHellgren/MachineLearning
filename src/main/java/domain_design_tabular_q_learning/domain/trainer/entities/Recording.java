@@ -15,7 +15,7 @@ public class Recording{
         EpisodeInfoForRecording episodeInfoForRecording;
         int nSteps;
 
-        public static <V> Recording ofIdAndEpisode(int id,Episode<V> episode) {
+        public static <V,A> Recording ofIdAndEpisode(int id,Episode<V,A> episode) {
                 var infoForRecording = episode.getInfoForRecording();
                 return Recording.builder()
                         .id(id)

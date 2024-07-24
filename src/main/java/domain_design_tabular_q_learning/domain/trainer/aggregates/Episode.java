@@ -8,8 +8,8 @@ import domain_design_tabular_q_learning.persistance.ExperienceDataBase;
 
 import java.util.List;
 
-public class Episode<V> {
-    ExperienceDataBase<V> experiences;
+public class Episode<V,A> {
+    ExperienceDataBase<V,A> experiences;
     @Setter @Getter
     EpisodeInfoForRecording infoForRecording;
 
@@ -17,11 +17,11 @@ public class Episode<V> {
         this.experiences = new ExperienceDataBase();
     }
 
-    public void addExp(Experience<V> e) {
+    public void addExp(Experience<V,A> e) {
         experiences.create(e);
     }
 
-    public Experience<V> getExp(Integer id) {
+    public Experience<V,A> getExp(Integer id) {
         return experiences.read(id);
     }
     public List<Integer> getIds() {

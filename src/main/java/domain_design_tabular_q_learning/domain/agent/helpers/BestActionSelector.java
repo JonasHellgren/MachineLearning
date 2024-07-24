@@ -1,5 +1,6 @@
 package domain_design_tabular_q_learning.domain.agent.helpers;
 
+import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
@@ -23,29 +24,29 @@ import java.util.stream.Stream;
  */
 
 @AllArgsConstructor
-public class BestActionSelector<V> {
+public class BestActionSelector<V,A> {
     AgentProperties properties;
-    EnvironmentI<V> environment;
-    Memory<V> memory;
+    EnvironmentI<V,A> environment;
+    Memory<V,A> memory;
 
-    public ActionRoad chooseBestAction(StateI<V> s) {
+    public ActionI<A> chooseBestAction(StateI<V> s) {
         var expList = getExperienceList(s);
         var aQsaMap = getActionQsaMap(expList);
         var entry = getEntryWithMaxValue(aQsaMap);
         return entry.orElseThrow().getKey();
     }
 
-    Optional<Map.Entry<ActionRoad, Double>> getEntryWithMaxValue(
-            Map<ActionRoad, Double> aQsaMap) {
+    Optional<Map.Entry<ActionI<A>, Double>> getEntryWithMaxValue(
+            Map<ActionI<A>, Double> aQsaMap) {
         return aQsaMap.entrySet().stream()
                 .max(Map.Entry.comparingByValue());
     }
 
-    Map<ActionRoad, Double> getActionQsaMap(List<Experience<V>> expList) {
+    Map<ActionI<A>, Double> getActionQsaMap(List<Experience<V,A>> expList) {
         return expList.stream().collect(Collectors.toMap(
                 e -> e.getSars().a(),
                 e -> {
-                    SARS<V> sars = e.getSars();
+                    SARS<V,A> sars = e.getSars();
                     return e.getType().isTerminal()
                             ? sars.r()
                             : sars.r() + properties.gamma() *
@@ -53,8 +54,8 @@ public class BestActionSelector<V> {
                 }));
     }
 
-    List<Experience<V>> getExperienceList(StateI<V> s) {
-        return Stream.of(properties.actions()).map(a -> {
+    List<Experience<V,A>> getExperienceList(StateI<V> s) {
+        return Stream.of(environment.actions()).map(a -> {
             StepReturn<V> sr = environment.step(s, a);
             return Experience.ofIdStateActionStepReturn(a.ordinal(),s, a, sr);
         }).toList();

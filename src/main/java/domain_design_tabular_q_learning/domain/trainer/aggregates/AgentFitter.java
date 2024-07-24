@@ -10,10 +10,10 @@ import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
  */
 
 @AllArgsConstructor
-public class AgentFitter<V> {
-    MediatorI<V> mediator;
+public class AgentFitter<V,A> {
+    MediatorI<V,A> mediator;
 
-    public double fitAgentFromExperience(Experience<V> e) {
+    public double fitAgentFromExperience(Experience<V,A> e) {
         var agent = mediator.getExternal().agent();
         var memory= agent.getMemory();
         var sa = StateAction.ofSars(e);

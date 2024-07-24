@@ -1,5 +1,6 @@
 package domain_design_tabular_q_learning.domain.trainer.entities;
 
+import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
@@ -9,18 +10,18 @@ import domain_design_tabular_q_learning.domain.trainer.value_objects.ExperienceT
 import domain_design_tabular_q_learning.domain.trainer.value_objects.SARS;
 @AllArgsConstructor
 @Getter
-public class Experience<V> {
+public class Experience<V,A> {
     int id;
-    SARS<V> sars;
+    SARS<V,A> sars;
     ExperienceType type;
 
-    public static <V> Experience<V> ofIdStateActionStepReturn(int id, StateI<V> s, ActionRoad a, StepReturn<V> sr) {
+    public static <V,A> Experience<V,A> ofIdStateActionStepReturn(int id, StateI<V> s, ActionI<A> a, StepReturn<V> sr) {
         var sars= SARS.ofStateActionStepReturn(s,a,sr);
         var expType= ExperienceType.ofStepReturn(sr);
         return new Experience<>(id,sars,expType);
     }
 
-    public static <V> Experience<V> nonTermWithIdAndSars(int id, StateI<V> s, ActionRoad a, double r, StateI<V> sNext) {
+    public static <V,A> Experience<V,A> nonTermWithIdAndSars(int id, StateI<V> s, ActionI<A> a, double r, StateI<V> sNext) {
         return new Experience<>(id,new SARS<>(s,a,r,sNext),ExperienceType.nonTerminal());
     }
 

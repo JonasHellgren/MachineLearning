@@ -4,24 +4,24 @@ import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 
 import java.util.*;
 
-public class ExperienceDataBase<V> implements DataBaseI<Experience<V>> {
-    Map<Integer,Experience<V>> map;
+public class ExperienceDataBase<V,A> implements DataBaseI<Experience<V,A>> {
+    Map<Integer,Experience<V,A>> map;
 
     public  ExperienceDataBase() {  //todo singleton
         this.map = new HashMap<>();
     }
 
-    public static <V> ExperienceDataBase<V> empty() {
+    public static <V, A> ExperienceDataBase<V, A> empty() {
         return new ExperienceDataBase<>();
     }
 
     @Override
-    public void create(Experience<V> booking) {
+    public void create(Experience<V,A> booking) {
         this.map.put(booking.getId(),booking);
     }
 
     @Override
-    public Experience<V> read(Integer id) {
+    public Experience<V,A> read(Integer id) {
         return map.get(id);
     }
 
@@ -31,7 +31,7 @@ public class ExperienceDataBase<V> implements DataBaseI<Experience<V>> {
     }
 
     @Override
-    public List<Experience<V>> getAll() {
+    public List<Experience<V,A>> getAll() {
         return new ArrayList<>(map.values());
     }
 

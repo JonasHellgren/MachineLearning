@@ -28,4 +28,5 @@ agent o trainer så opev som möjligt
 - GridActionProperties
 - Action -> ActionRoadMaze
 - ActionRoadMaze gemerosl
+Episode med iterator
 split road env

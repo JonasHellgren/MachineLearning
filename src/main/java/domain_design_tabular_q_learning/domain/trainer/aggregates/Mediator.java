@@ -9,18 +9,18 @@ import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerExte
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;
 import java.util.stream.IntStream;
 
-public class Mediator<V> implements MediatorI<V> {
+public class Mediator<V,A> implements MediatorI<V,A> {
     @Getter
-    TrainerExternal<V> external;
+    TrainerExternal<V,A> external;
     @Getter
     TrainerProperties properties;
     @Getter
     Recorder recorder;
-    EpisodeCreator<V> episodeCreator;
-    AgentFitter<V> fitter;
+    EpisodeCreator<V,A> episodeCreator;
+    AgentFitter<V,A> fitter;
 
-    public Mediator(EnvironmentI<V> environment,
-                    Agent<V> agent,
+    public Mediator(EnvironmentI<V,A> environment,
+                    Agent<V,A> agent,
                     TrainerProperties properties) {
         this.external = new TrainerExternal<>(environment, agent);
         this.properties = properties;
@@ -50,7 +50,7 @@ public class Mediator<V> implements MediatorI<V> {
     }
 
     @Override
-    public double fitAgentMemoryFromExperience(Experience<V> e) {
+    public double fitAgentMemoryFromExperience(Experience<V,A> e) {
         return fitter.fitAgentFromExperience(e);
     }
 
