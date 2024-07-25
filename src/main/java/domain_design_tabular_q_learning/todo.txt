@@ -28,7 +28,7 @@ agent o trainer så opev som möjligt
 - GridActionProperties
 - Action -> ActionRoadMaze
 - ActionRoadMaze gemerosl
-StateRoad metoder returnerar StateI
+StateRoad metoder returnerar StateI x
 fixa tester
 Episode med iterator
 jämna ticks plottar

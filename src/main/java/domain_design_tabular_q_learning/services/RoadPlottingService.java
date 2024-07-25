@@ -1,21 +1,18 @@
 package domain_design_tabular_q_learning.services;
 
 import domain_design_tabular_q_learning.domain.agent.Agent;
-import domain_design_tabular_q_learning.domain.shared.TwoDimMemAgentPlotter;
 import domain_design_tabular_q_learning.domain.shared.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.shared.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentPlotter;
-
 import java.io.IOException;
 
 public class RoadPlottingService<V,A> {
 
     RoadEnvironmentPlotter environmentPlotter;
     TrainerPlotter trainerPlotter;
-    TwoDimMemAgentPlotter<V,A> agentPlotter;
+    RoadAgentPlotter<V,A> agentPlotter;
 
     public RoadPlottingService(Trainer<V,A> trainer,
                                Agent<V,A> agent,

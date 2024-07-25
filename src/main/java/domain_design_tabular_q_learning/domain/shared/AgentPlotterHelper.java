@@ -8,28 +8,21 @@ import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
-public abstract class TwoDimMemAgentPlotter<V,A> {
+public class AgentPlotterHelper<V,A> {
 
     public final Agent<V,A> agent;
     public final PlottingSettings settings;
-    public final GridSizeInformer gridInfo;
-
-    protected abstract Tables createTables();
-
-    public void plot() {
-        Tables tables = createTables();
-        showTables(tables);
-    }
+    GridSizeInformer gridInfo;
 
 
-    public void saveCharts(String dir, String fileName, String fileEnd) throws IOException {
-        Tables tables = createTables();
+    public void saveCharts(Tables tables,String dir, String fileName, String fileEnd) throws IOException {
         var ssMap = getShowerSettingsMap(tables);
         for(Map.Entry<TableShower, TableDataI> e: ssMap.entrySet()) {
             var frame = e.getKey().createTableFrame(e.getValue());
@@ -38,7 +31,7 @@ public abstract class TwoDimMemAgentPlotter<V,A> {
 
     }
 
-    void showTables( Tables tables) {
+    public void showTables( Tables tables) {
         var ssMap = getShowerSettingsMap(tables);
         ssMap.forEach((key, value) -> SwingUtilities.invokeLater(() -> key.showTable(value)));
     }
@@ -61,6 +54,4 @@ public abstract class TwoDimMemAgentPlotter<V,A> {
         showerSettingsMap.put(new TableShower(settingsStateActionValues),tableDataSaValues);
         return showerSettingsMap;
     }
-
-
 }

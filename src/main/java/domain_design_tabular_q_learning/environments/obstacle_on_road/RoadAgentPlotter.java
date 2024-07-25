@@ -4,42 +4,56 @@ import common.other.Conditionals;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.domain.shared.TwoDimMemAgentPlotter;
+import domain_design_tabular_q_learning.domain.shared.AgentPlotterHelper;
 import domain_design_tabular_q_learning.domain.shared.GridSizeInformer;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import domain_design_tabular_q_learning.domain.shared.Tables;
 
-public class RoadAgentPlotter<V,A> extends TwoDimMemAgentPlotter<V,A> {
+import java.io.IOException;
 
+public class RoadAgentPlotter<V,A> {
+    public final Agent<V,A> agent;
     EnvironmentRoad environment;
+    public final PlottingSettings settings;
+    GridSizeInformer gridInfo;
+    AgentPlotterHelper<V,A> helper;
 
     public RoadAgentPlotter(Agent<V, A> agent,
                             EnvironmentRoad environment,
                             PlottingSettings settings) {
-        super(agent, settings,new GridSizeInformer(environment.properties));
+        this.agent=agent;
         this.environment=environment;
+        this.settings=settings;
+        this.gridInfo = new GridSizeInformer(environment.properties);
+        this.helper=new AgentPlotterHelper<>(agent,settings, gridInfo);
     }
 
-    public Tables createTables() {
+    public void plot() {
+        helper.showTables(createTables());
+    }
+
+    public void saveCharts(String dir, String fileName, String fileEnd) throws IOException {
+        helper.saveCharts(createTables(),dir,fileName,fileEnd);
+    }
+
+    Tables createTables() {
         var ep=environment.properties;
-        var e=super.gridInfo;
+        var e=gridInfo;
         var tables = new Tables(e);
 
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
                 var state = (StateI<V>) StateRoad.of(x, y, ep);
-              //  var state =  StateRoad.of(x, y, ep);
-                int finalY = y;
-                int finalX = x;
-                Conditionals.executeIfFalse(state.isTerminal(), () ->
-                        fillTablesFromState(tables, finalY, finalX, state));
+                if(!state.isTerminal()) {
+                        fillTablesFromState(tables, y, x, state);
+                }
             }
         }
         return tables;
     }
 
     void fillTablesFromState(Tables tables, int y, int x, StateI<V> state) {
-         ActionRoad[] actionArr = environment.actions();
+        ActionRoad[] actionArr = environment.actions();
         int nActions = actionArr.length;
         tables.values()[x][y] = String.format(
                 settings.tableCellFormatValues(),
