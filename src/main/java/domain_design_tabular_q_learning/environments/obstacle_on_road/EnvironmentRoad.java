@@ -33,7 +33,7 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionPro
     }
 
     @Override
-    public StateRoad getStartState() {
+    public StateI<GridVariables> getStartState() {
         var xMinMax=properties.startXMinMax();
         var yMinMax=properties.startYMinMax();
         return  StateRoad.of(
@@ -65,7 +65,7 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionPro
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
 
-    StateRoad getNextState(StateI<GridVariables> s, ActionI<GridActionProperties> a) {
+    StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<GridActionProperties> a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.getProperties().deltaY();
         return StateRoad.of(xNext, yNext,properties).clip();

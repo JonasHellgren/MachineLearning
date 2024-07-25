@@ -3,6 +3,7 @@ package domain_design_tabular_q_learning;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
+import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Mediator;
@@ -53,7 +54,7 @@ class TestTrainerRoad {
         return agent.getMemory().read(StateAction.of(getState(2, 1), a));
     }
 
-    StateRoad getState(int x, int y) {
+    StateI<GridVariables> getState(int x, int y) {
         var ep = environment.getProperties();
         return StateRoad.of(x, y, ep);
     }

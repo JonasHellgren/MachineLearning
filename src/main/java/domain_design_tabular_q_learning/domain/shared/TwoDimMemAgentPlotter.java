@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
-public abstract class AgentPlotter<V,A> {
+public abstract class TwoDimMemAgentPlotter<V,A> {
 
     public final Agent<V,A> agent;
     public final PlottingSettings settings;

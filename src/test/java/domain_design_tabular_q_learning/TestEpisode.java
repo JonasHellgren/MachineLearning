@@ -1,5 +1,6 @@
 package domain_design_tabular_q_learning;
 
+import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Episode;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
@@ -10,8 +11,8 @@ import org.junit.jupiter.api.Test;
 class TestEpisode {
 
     static PropertiesRoad envp= PropertiesRoad.roadMaze();
-    public static final StateRoad S00 = StateRoad.of(0, 0,envp);
-    public static final StateRoad S11 = StateRoad.of(1,1,envp);
+    public static final StateI<GridVariables> S00 = StateRoad.of(0, 0,envp);
+    public static final StateI<GridVariables> S11 = StateRoad.of(1,1,envp);
     public static final Experience<GridVariables, GridActionProperties> EXPERIENCE0 =
             Experience.nonTermWithIdAndSars(0, S00, ActionRoad.S, 0d, S00);
     public static final Experience<GridVariables, GridActionProperties> EXPERIENCE1 =

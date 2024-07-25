@@ -3,6 +3,8 @@ package domain_design_tabular_q_learning.domain.shared;
 import common.plotters.table_shower.TableDataString;
 import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
+import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
@@ -38,7 +40,7 @@ public class RoadEnvironmentPlotter {
         var ep = environment.getProperties();
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                StateRoad state = StateRoad.of(x, y, ep);
+                StateI<GridVariables> state = StateRoad.of(x, y, ep);
                 StringBuilder sb = new StringBuilder();
                 executeIfTrue(state.isTerminal(), () -> sb.append("T"));
                 executeIfTrue(state.isFail(), () -> sb.append("F"));

@@ -4,12 +4,12 @@ import common.other.Conditionals;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.domain.shared.AgentPlotter;
+import domain_design_tabular_q_learning.domain.shared.TwoDimMemAgentPlotter;
 import domain_design_tabular_q_learning.domain.shared.GridSizeInformer;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import domain_design_tabular_q_learning.domain.shared.Tables;
 
-public class RoadAgentPlotter<V,A> extends AgentPlotter<V,A> {
+public class RoadAgentPlotter<V,A> extends TwoDimMemAgentPlotter<V,A> {
 
     EnvironmentRoad environment;
 

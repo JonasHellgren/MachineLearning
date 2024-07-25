@@ -1,7 +1,9 @@
 package domain_design_tabular_q_learning;
 
+import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
+import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,7 +52,7 @@ class TestEnvironmentRoad {
         assertEquals(rewardDes, sr.reward());
     }
 
-    StateRoad getStateDes(ArgumentsAccessor arguments) {
+    StateI<GridVariables> getStateDes(ArgumentsAccessor arguments) {
         int xDes = arguments.getInteger(3);
         int yDes = arguments.getInteger(4);
         return StateRoad.of(xDes, yDes, environment.getProperties());
@@ -61,7 +63,7 @@ class TestEnvironmentRoad {
         return ActionRoad.valueOf(aName);
     }
 
-    StateRoad getState(ArgumentsAccessor arguments) {
+    StateI<GridVariables> getState(ArgumentsAccessor arguments) {
         int x = arguments.getInteger(0);
         int y = arguments.getInteger(1);
         return StateRoad.of(x, y, environment.getProperties());
