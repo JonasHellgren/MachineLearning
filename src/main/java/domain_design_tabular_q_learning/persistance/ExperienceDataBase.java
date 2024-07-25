@@ -7,7 +7,7 @@ import java.util.*;
 public class ExperienceDataBase<V,A> implements DataBaseI<Experience<V,A>> {
     Map<Integer,Experience<V,A>> map;
 
-    public  ExperienceDataBase() {  //todo singleton
+    public  ExperienceDataBase() {
         this.map = new HashMap<>();
     }
 

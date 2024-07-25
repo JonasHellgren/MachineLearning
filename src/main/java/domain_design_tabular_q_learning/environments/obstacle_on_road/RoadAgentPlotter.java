@@ -3,41 +3,43 @@ package domain_design_tabular_q_learning.environments.obstacle_on_road;
 import common.other.Conditionals;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
+import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.domain.shared.AgentPlotterHelper;
-import domain_design_tabular_q_learning.domain.shared.GridSizeInformer;
+import domain_design_tabular_q_learning.domain.plotting.Agent2dMemPlotterHelper;
+import domain_design_tabular_q_learning.domain.plotting.FileDirName;
+import domain_design_tabular_q_learning.domain.plotting.GridSizeInformer;
 import domain_design_tabular_q_learning.services.PlottingSettings;
-import domain_design_tabular_q_learning.domain.shared.Tables;
+import domain_design_tabular_q_learning.domain.plotting.Tables;
 
 import java.io.IOException;
 
 public class RoadAgentPlotter<V,A> {
     public final Agent<V,A> agent;
-    EnvironmentRoad environment;
+    EnvironmentI<V,A> environment;
     public final PlottingSettings settings;
     GridSizeInformer gridInfo;
-    AgentPlotterHelper<V,A> helper;
+    Agent2dMemPlotterHelper<V,A> helper;
 
     public RoadAgentPlotter(Agent<V, A> agent,
-                            EnvironmentRoad environment,
+                            EnvironmentI<V,A> environment,
                             PlottingSettings settings) {
         this.agent=agent;
         this.environment=environment;
         this.settings=settings;
-        this.gridInfo = new GridSizeInformer(environment.properties);
-        this.helper=new AgentPlotterHelper<>(agent,settings, gridInfo);
+        this.gridInfo = new GridSizeInformer(environment.getProperties());
+        this.helper=new Agent2dMemPlotterHelper<>(agent,settings, gridInfo);
     }
 
     public void plot() {
         helper.showTables(createTables());
     }
 
-    public void saveCharts(String dir, String fileName, String fileEnd) throws IOException {
-        helper.saveCharts(createTables(),dir,fileName,fileEnd);
+    public void saveCharts(FileDirName file) throws IOException {
+        helper.saveCharts(createTables(),file);
     }
 
     Tables createTables() {
-        var ep=environment.properties;
+        var ep=environment.getProperties();
         var e=gridInfo;
         var tables = new Tables(e);
 
@@ -53,7 +55,7 @@ public class RoadAgentPlotter<V,A> {
     }
 
     void fillTablesFromState(Tables tables, int y, int x, StateI<V> state) {
-        ActionRoad[] actionArr = environment.actions();
+        ActionRoad[] actionArr = (ActionRoad[]) environment.actions();
         int nActions = actionArr.length;
         tables.values()[x][y] = String.format(
                 settings.tableCellFormatValues(),

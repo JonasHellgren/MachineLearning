@@ -26,7 +26,7 @@ public class Mediator<V,A> implements MediatorI<V,A> {
         this.properties = properties;
         this.recorder = new Recorder();
         this.episodeCreator = new EpisodeCreator<>(this);
-        this.fitter = new AgentFitter(this);
+        this.fitter = new AgentFitter<>(this);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Mediator<V,A> implements MediatorI<V,A> {
     }
 
     @Override
-    public Episode runEpisode() {
+    public Episode<V,A> runEpisode() {
         return episodeCreator.runEpisode();
     }
 

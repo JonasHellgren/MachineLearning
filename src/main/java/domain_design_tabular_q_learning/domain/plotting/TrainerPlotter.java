@@ -1,4 +1,4 @@
-package domain_design_tabular_q_learning.domain.shared;
+package domain_design_tabular_q_learning.domain.plotting;
 
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
@@ -17,14 +17,15 @@ import java.util.function.ToDoubleFunction;
 import static org.knowm.xchart.BitmapEncoder.*;
 
 @AllArgsConstructor
-public class TrainerPlotter {
+public class TrainerPlotter<V,A> {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 200;
     public static final String X_AXIS_TITLE = "episode";
-    Trainer trainer;
+    Trainer<V,A> trainer;
 
-    public static TrainerPlotter ofTrainingService(TrainingService trainingService) {
-        return new TrainerPlotter(trainingService.getTrainer());
+    public static <V,A> TrainerPlotter<V,A> ofTrainingService(
+            TrainingService<V,A> trainingService) {
+        return new TrainerPlotter<>(trainingService.getTrainer());
     }
 
     public void plot() {
@@ -72,9 +73,12 @@ public class TrainerPlotter {
         return chart;
     }
 
-    public void saveCharts(String dir, String fileName,String fileEnd) throws IOException {
+    public void saveCharts(FileDirName file) throws IOException {
         for (XYChart c:getCharts()) {
-            saveBitmap(c, dir+fileName+c.getYAxisTitle()+fileEnd, BitmapFormat.PNG);
+            saveBitmap(
+                    c,
+                    file.dir()+file.fileName()+c.getYAxisTitle()+file.fileEnd(),
+                    BitmapFormat.PNG);
         }
     }
 }

@@ -7,12 +7,12 @@ import java.util.*;
 public class RecordingDataBase implements DataBaseI<Recording> {
     Map<Integer, Recording> map;
 
-    public RecordingDataBase() {  //todo singleton
+    public RecordingDataBase() {
         this.map = new HashMap<>();
     }
 
-    public static ExperienceDataBase empty() {
-        return new ExperienceDataBase();
+    public static RecordingDataBase empty() {
+        return new RecordingDataBase();
     }
 
     @Override

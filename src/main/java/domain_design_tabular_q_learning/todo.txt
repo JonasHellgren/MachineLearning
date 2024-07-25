@@ -29,7 +29,7 @@ agent o trainer så opev som möjligt
 - Action -> ActionRoadMaze
 - ActionRoadMaze gemerosl
 StateRoad metoder returnerar StateI x
-fixa tester
+fixa tester x
 Episode med iterator
 jämna ticks plottar
 clean up

@@ -1,5 +1,6 @@
 package domain_design_tabular_q_learning.runners;
 
+import domain_design_tabular_q_learning.domain.plotting.FileDirName;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.GridActionProperties;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import lombok.SneakyThrows;
@@ -13,7 +14,7 @@ public class RunnerRoadMazeTrainAndPlot {
     static final String DIR="src/main/java/domain_design_tabular_q_learning/documentation/pics/";
     public static final String PNG = ".png";
 
-    static TrainingService training;
+    static TrainingService<GridVariables,GridActionProperties> training;
     static RoadPlottingService<GridVariables, GridActionProperties> plotting;
 
     @SneakyThrows
@@ -27,8 +28,8 @@ public class RunnerRoadMazeTrainAndPlot {
         plotting.plotTrainer();
         plotting.plotAgent();
 
-        plotting.saveEnvironmentChart(DIR,"roadMazeEnv", PNG);
-        plotting.saveTrainingCharts(DIR,"training", PNG);
-        plotting.saveAgentCharts(DIR,"agent", PNG);
+        plotting.saveEnvironmentChart(FileDirName.of(DIR,"roadMazeEnv", PNG));
+        plotting.saveTrainingCharts(FileDirName.of(DIR,"training", PNG));
+        plotting.saveAgentCharts(FileDirName.of(DIR,"agent", PNG));
     }
 }

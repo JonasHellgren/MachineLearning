@@ -36,7 +36,9 @@ public class EpisodeCreator<V,A> {
         return episode;
     }
 
-    private static void setEpisodeInfo(Episode episode, double pRandomAction, double tdErrorAvg) {
+    private static <V,A> void setEpisodeInfo(Episode<V,A> episode,
+                                             double pRandomAction,
+                                             double tdErrorAvg) {
         episode.infoForRecording = EpisodeInfoForRecording.builder()
                 .pRandomAction(pRandomAction).tdErrorAvg(tdErrorAvg)
                 .build();

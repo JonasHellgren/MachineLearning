@@ -66,10 +66,10 @@ public class TestMemory {
                 () -> Assertions.assertNotEquals(memory.read(sa0),memory.read(sa1)));
     }
 
-    StateAction getRandomSa() {
+    StateAction<GridVariables,GridActionProperties> getRandomSa() {
         var s= StateRoad.ofRandom(envProps);
         var a= environment.randomAction(); // ActionRoad.random();
-        return new StateAction(s,a);
+        return new StateAction<>(s,a);
     }
 
 

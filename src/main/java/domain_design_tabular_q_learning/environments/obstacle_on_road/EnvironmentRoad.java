@@ -43,7 +43,6 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionPro
     }
 
     @Override
-//    public ActionI<GridActionProperties>[] actions() {
     public ActionRoad[] actions() {
         return ActionRoad.values();
     }

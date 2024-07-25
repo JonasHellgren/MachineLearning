@@ -9,7 +9,7 @@ public interface MediatorI<V,A> {
     TrainerProperties getProperties();
     Recorder getRecorder();
     void train();
-    Episode runEpisode();
+    Episode<V,A> runEpisode();
     double pRandomAction();
     double fitAgentMemoryFromExperience(Experience<V,A> experience);
 }

@@ -14,7 +14,7 @@ public class Episode<V,A> {
     EpisodeInfoForRecording infoForRecording;
 
     public Episode() {
-        this.experiences = new ExperienceDataBase();
+        this.experiences = new ExperienceDataBase<>();
     }
 
     public void addExp(Experience<V,A> e) {

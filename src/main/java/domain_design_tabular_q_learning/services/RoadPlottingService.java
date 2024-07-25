@@ -1,8 +1,10 @@
 package domain_design_tabular_q_learning.services;
 
 import domain_design_tabular_q_learning.domain.agent.Agent;
-import domain_design_tabular_q_learning.domain.shared.RoadEnvironmentPlotter;
-import domain_design_tabular_q_learning.domain.shared.TrainerPlotter;
+import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
+import domain_design_tabular_q_learning.domain.plotting.FileDirName;
+import domain_design_tabular_q_learning.domain.plotting.RoadEnvironmentPlotter;
+import domain_design_tabular_q_learning.domain.plotting.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentPlotter;
@@ -11,22 +13,22 @@ import java.io.IOException;
 public class RoadPlottingService<V,A> {
 
     RoadEnvironmentPlotter environmentPlotter;
-    TrainerPlotter trainerPlotter;
+    TrainerPlotter<V,A> trainerPlotter;
     RoadAgentPlotter<V,A> agentPlotter;
 
     public RoadPlottingService(Trainer<V,A> trainer,
                                Agent<V,A> agent,
-                               EnvironmentRoad environment,
+                               EnvironmentI<V,A> environment,
                                PlottingSettings settings) {
-        this.trainerPlotter = new TrainerPlotter(trainer);
+        this.trainerPlotter = new TrainerPlotter<>(trainer);
         this.agentPlotter = new RoadAgentPlotter<>(
                 agent,
                 environment,
                 settings);
-        this.environmentPlotter=new RoadEnvironmentPlotter(environment,settings);
+        this.environmentPlotter=new RoadEnvironmentPlotter<>(environment,settings);
     }
 
-    public static <V,A> RoadPlottingService<V,A> ofTrainingService(TrainingService service, PlottingSettings settings) {
+    public static <V,A> RoadPlottingService<V,A> ofTrainingService(TrainingService<V,A> service, PlottingSettings settings) {
         return new RoadPlottingService<V,A>(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
     }
 
@@ -42,15 +44,15 @@ public class RoadPlottingService<V,A> {
         agentPlotter.plot();
     }
 
-    public void saveEnvironmentChart(String dir, String fileName, String fileEnd) throws IOException {
-        environmentPlotter.savePlot(dir,fileName,fileEnd);
+    public void saveEnvironmentChart(FileDirName file) throws IOException {
+        environmentPlotter.savePlot(file);
     }
 
-    public void saveTrainingCharts(String dir, String fileName, String fileEnd) throws IOException {
-        trainerPlotter.saveCharts(dir,fileName,fileEnd);
+    public void saveTrainingCharts(FileDirName file) throws IOException {
+        trainerPlotter.saveCharts(file);
     }
 
-    public void saveAgentCharts(String dir, String fileName, String fileEnd) throws IOException {
-        agentPlotter.saveCharts(dir,fileName,fileEnd);
+    public void saveAgentCharts(FileDirName file) throws IOException {
+        agentPlotter.saveCharts(file);
     }
 }

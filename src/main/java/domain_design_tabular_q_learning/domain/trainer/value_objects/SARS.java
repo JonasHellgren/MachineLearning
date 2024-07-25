@@ -2,7 +2,6 @@ package domain_design_tabular_q_learning.domain.trainer.value_objects;
 
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.Builder;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 

@@ -1,4 +1,4 @@
-package domain_design_tabular_q_learning.domain.shared;
+package domain_design_tabular_q_learning.domain.plotting;
 
 import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
 

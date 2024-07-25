@@ -1,8 +1,9 @@
-package domain_design_tabular_q_learning.domain.shared;
+package domain_design_tabular_q_learning.domain.plotting;
 
 import common.plotters.table_shower.TableDataString;
 import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
+import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,9 @@ import java.io.IOException;
 import static common.other.Conditionals.executeIfTrue;
 
 @AllArgsConstructor
-public class RoadEnvironmentPlotter {
+public class RoadEnvironmentPlotter<V,A> {
 
-    EnvironmentRoad environment;
+    EnvironmentI<V,A> environment;
     PlottingSettings settings;
 
     public void plot() {
@@ -27,12 +28,12 @@ public class RoadEnvironmentPlotter {
         showTable(e, table);
     }
 
-    public void savePlot(String dir, String fileName, String fileEnd) throws IOException {
+    public void savePlot(FileDirName file) throws IOException {
         var e = new GridSizeInformer(environment.getProperties());
         var tableShower = createTableShower(e);
         var tableDataValues = TableDataString.ofMat(createTable(e));
         var frame=tableShower.createTableFrame(tableDataValues);
-        tableShower.saveTableFrame(frame,dir,fileName+fileEnd);
+        tableShower.saveTableFrame(frame,file.dir(),file.fileName()+file.fileEnd());
     }
 
     String[][] createTable(GridSizeInformer e) {
