@@ -3,7 +3,7 @@ package domain_design_tabular_q_learning;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.EnvironmentRoad;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.ActionRoad;
-import domain_design_tabular_q_learning.environments.avoid_obstacle.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.GridVariables;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.StateRoad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,15 +1,17 @@
-package domain_design_tabular_q_learning.environments.avoid_obstacle;
+package domain_design_tabular_q_learning.environments.tunnels;
 
 import common.math.NormalSampler;
+import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
+import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
+import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import domain_design_tabular_q_learning.environments.shared.GridVariables;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
-import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
+
 import java.util.function.BiFunction;
 
 /**
@@ -17,21 +19,50 @@ import java.util.function.BiFunction;
  */
 
 @AllArgsConstructor
-public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionProperties> {
-
-   @Getter @Setter
-   PropertiesRoad properties;
-
-    public static  EnvironmentRoad roadMaze() {
-        return new EnvironmentRoad(PropertiesRoad.roadMaze());
-    }
-
-    public static <V, A> EnvironmentI<V, A> roadMazeI() {
-        return (EnvironmentI<V, A>) new EnvironmentRoad(PropertiesRoad.roadMaze());
+public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelActionProperties> {
+    @Override
+    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
+        return null;
     }
 
     @Override
-    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<RoadActionProperties> a) {
+    public StateI<GridVariables> getStartState() {
+        return null;
+    }
+
+    @Override
+    public PropertiesRoad getProperties() {
+        return null;
+    }
+
+    @Override
+    public void setProperties(PropertiesRoad p) {
+
+    }
+
+    @Override
+    public ActionI<TunnelActionProperties>[] actions() {
+        return new ActionI[0];
+    }
+
+    @Override
+    public ActionI<TunnelActionProperties> randomAction() {
+        return null;
+    }
+
+  /* @Getter @Setter
+   PropertiesTunnels properties;
+
+    public static EnvironmentTunnels tunnels() {
+        return new EnvironmentTunnels(PropertiesTunnels.newDefault());
+    }
+
+    public static <V, A> EnvironmentI<V, A> tunnelsI() {
+        return (EnvironmentI<V, A>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
+    }
+
+    @Override
+    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail();
@@ -47,24 +78,24 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionPr
     public StateI<GridVariables> getStartState() {
         var xMinMax=properties.startXMinMax();
         var yMinMax=properties.startYMinMax();
-        return  StateRoad.of(
+        return  StateTunnels.of(
                 RandomUtils.nextInt(xMinMax.getFirst(),xMinMax.getSecond()+1),
                 RandomUtils.nextInt(yMinMax.getFirst(),yMinMax.getSecond()+1),
                 properties);
     }
 
     @Override
-    public ActionRoad[] actions() {
-        return ActionRoad.values();
+    public ActionTunnel[] actions() {
+        return ActionTunnel.values();
     }
 
-    public  ActionRoad randomAction() {
-        int randIdx= RandomUtils.nextInt(0, ActionRoad.values().length);
-        return ActionRoad.values()[randIdx];
+    public ActionTunnel randomAction() {
+        int randIdx= RandomUtils.nextInt(0, ActionTunnel.values().length);
+        return ActionTunnel.values()[randIdx];
     }
 
-    public boolean isMove(ActionI<RoadActionProperties> a) {
-        return a.equals(ActionRoad.N) || a.equals(ActionRoad.S);
+    public boolean isMove(ActionI<TunnelActionProperties> a) {
+        return a.equals(ActionTunnel.N) || a.equals(ActionTunnel.S);
     }
 
     static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
@@ -81,9 +112,9 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionPr
     }
 
 
-    StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<RoadActionProperties> a) {
+    StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.getProperties().deltaY();
         return StateRoad.of(xNext, yNext,properties).clip();
-    }
+    }*/
 }

@@ -2,6 +2,7 @@ package domain_design_tabular_q_learning;
 
 import common.other.Conditionals;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
+import domain_design_tabular_q_learning.environments.shared.GridVariables;
 import lombok.extern.java.Log;
 import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
@@ -19,7 +20,7 @@ public class TestMemory {
     public static final int MAX_VALUE = 100;
     public static final int VALUE_TAR = 1;
     public static final double TOL = 1e-2;
-    Memory<GridVariables, GridActionProperties> memory;
+    Memory<GridVariables, RoadActionProperties> memory;
     AgentProperties properties;
     PropertiesRoad envProps;
     EnvironmentRoad environment;
@@ -66,7 +67,7 @@ public class TestMemory {
                 () -> Assertions.assertNotEquals(memory.read(sa0),memory.read(sa1)));
     }
 
-    StateAction<GridVariables,GridActionProperties> getRandomSa() {
+    StateAction<GridVariables, RoadActionProperties> getRandomSa() {
         var s= StateRoad.ofRandom(envProps);
         var a= environment.randomAction(); // ActionRoad.random();
         return new StateAction<>(s,a);

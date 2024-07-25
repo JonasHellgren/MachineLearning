@@ -5,7 +5,7 @@ import common.plotters.table_shower.TableSettings;
 import common.plotters.table_shower.TableShower;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.environments.avoid_obstacle.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.GridVariables;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.StateRoad;
 import domain_design_tabular_q_learning.services.PlottingSettings;

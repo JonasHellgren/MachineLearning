@@ -8,6 +8,7 @@ import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Mediator;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;
+import domain_design_tabular_q_learning.environments.shared.GridVariables;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,9 @@ import org.junit.jupiter.api.Test;
 class TestTrainerRoad {
 
     public static final int PROB_RANDOM_ZERO = 0;
-    Trainer<GridVariables, GridActionProperties> trainer;
+    Trainer<GridVariables, RoadActionProperties> trainer;
     EnvironmentRoad environment;
-    Agent<GridVariables, GridActionProperties> agent;
+    Agent<GridVariables, RoadActionProperties> agent;
     TrainerProperties trainerProperties;
 
     @BeforeEach
@@ -37,7 +38,7 @@ class TestTrainerRoad {
     @Test
     void whenTraining_thenCorrect() {
         trainer.train();
-        Mediator<GridVariables, GridActionProperties> mediator = trainer.getMediator();
+        Mediator<GridVariables, RoadActionProperties> mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
         var val21Same = getVal21(ActionRoad.E);

@@ -1,4 +1,4 @@
-package domain_design_tabular_q_learning.environments.avoid_obstacle;
+package domain_design_tabular_q_learning.environments.tunnels;
 
 import common.math.MathUtils;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
@@ -8,17 +8,17 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.Objects;
 
-public record StateRoad  (
+public record StateTunnels(
                                GridVariables variables,
-                               PropertiesRoad properties
+                               PropertiesTunnels properties
 ) implements StateI<GridVariables> {
 
-    public static  StateI<GridVariables> of(Integer x, Integer y, PropertiesRoad p) {
-        return new StateRoad(GridVariables.of(x,y),p);
+    public static  StateI<GridVariables> of(Integer x, Integer y, PropertiesTunnels p) {
+        return new StateTunnels(GridVariables.of(x,y),p);
     }
 
-    public static  StateI<GridVariables> ofRandom(PropertiesRoad p) {
-        return new StateRoad(GridVariables.of(0,0),p).random();
+    public static  StateI<GridVariables> ofRandom(PropertiesTunnels p) {
+        return new StateTunnels(GridVariables.of(0,0),p).random();
     }
 
     @Override
@@ -28,12 +28,12 @@ public record StateRoad  (
 
     @Override
     public StateI<GridVariables> newWithVariables(GridVariables gridVariables) {
-        return new StateRoad(gridVariables,properties);
+        return new StateTunnels(gridVariables,properties);
     }
 
     @Override
     public StateI<GridVariables> random() {
-        return StateRoad.of(
+        return StateTunnels.of(
                 getRand(properties.minMaxX()),
                 getRand(properties.minMaxY()),
                 properties);
@@ -46,7 +46,7 @@ public record StateRoad  (
         var xClipped = MathUtils.clip(variables.x(), minMaxX.getFirst(), minMaxX.getSecond());
         var minMaxY = properties.minMaxY();
         var yClipped = MathUtils.clip(variables.y(), minMaxY.getFirst(), minMaxY.getSecond());
-        return StateRoad.of(xClipped, yClipped,properties);
+        return StateTunnels.of(xClipped, yClipped,properties);
     }
 
     @Override

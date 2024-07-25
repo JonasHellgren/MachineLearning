@@ -30,6 +30,7 @@ public class TrainerPlotter<V,A> {
 
     public void plot() {
         List<XYChart> charts = getCharts();
+        charts.forEach(c -> reduceXAxisTicksClutter(c,100));
         new SwingWrapper<>(charts).displayChartMatrix();
     }
 
@@ -80,5 +81,16 @@ public class TrainerPlotter<V,A> {
                     file.dir()+file.fileName()+c.getYAxisTitle()+file.fileEnd(),
                     BitmapFormat.PNG);
         }
+    }
+
+    private static void reduceXAxisTicksClutter(XYChart chart, int i) {
+        chart.setCustomXAxisTickLabelsFormatter(value -> {
+            int intValue = value.intValue();
+            if (intValue % i == 0) {
+                return String.valueOf(intValue);
+            } else {
+                return ""; // Skip labels for other values
+            }
+        });
     }
 }
