@@ -1,10 +1,10 @@
 package domain_design_tabular_q_learning;
 
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.StateRoad;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.EnvironmentRoad;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.ActionRoad;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.GridVariables;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.StateRoad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;

@@ -1,7 +1,7 @@
 package domain_design_tabular_q_learning;
 
 import common.other.Conditionals;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import lombok.extern.java.Log;
 import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;

@@ -1,10 +1,7 @@
-package domain_design_tabular_q_learning.environments.obstacle_on_road;
+package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
-import common.other.Conditionals;
 import domain_design_tabular_q_learning.domain.agent.Agent;
-import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
-import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.plotting.Agent2dMemPlotterHelper;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;

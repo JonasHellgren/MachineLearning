@@ -1,4 +1,4 @@
-package domain_design_tabular_q_learning.environments.obstacle_on_road;
+package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
 public record GridVariables(Integer x, Integer y) {
 

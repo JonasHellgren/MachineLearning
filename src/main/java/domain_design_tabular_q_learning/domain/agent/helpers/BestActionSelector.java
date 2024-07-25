@@ -6,7 +6,6 @@ import domain_design_tabular_q_learning.domain.agent.aggregates.Memory;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.SARS;

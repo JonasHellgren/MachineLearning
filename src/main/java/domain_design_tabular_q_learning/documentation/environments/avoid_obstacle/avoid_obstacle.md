@@ -1,4 +1,4 @@
-# Road maze environment
+# Avoid abstacle
 
 The road maze environment reflects driving on a road with two lanes.
 In the upper lane there is an obstacle at position (x,y)=(3,1).

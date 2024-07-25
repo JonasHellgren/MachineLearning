@@ -1,6 +1,6 @@
 package domain_design_tabular_q_learning.domain.plotting;
 
-import domain_design_tabular_q_learning.environments.obstacle_on_road.PropertiesRoad;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.PropertiesRoad;
 
 public record GridSizeInformer(
         PropertiesRoad ep

@@ -1,7 +1,7 @@
 package domain_design_tabular_q_learning;
 
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Episode;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 import org.junit.jupiter.api.Assertions;

@@ -1,11 +1,13 @@
-package domain_design_tabular_q_learning.environments.obstacle_on_road;
+package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
+import common.math.NormalSampler;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
+import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
 import java.util.function.BiFunction;
 
@@ -16,7 +18,7 @@ import java.util.function.BiFunction;
 @AllArgsConstructor
 public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionProperties> {
 
-   @Getter
+   @Getter @Setter
    PropertiesRoad properties;
 
     public static  EnvironmentRoad roadMaze() {
@@ -68,9 +70,15 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionPro
 
     double getReward(boolean isTerminal, boolean isFail, boolean isMove) {
         return valueIfTrue.apply(isTerminal, properties.rewardNonFailTerminal()) +
-                valueIfTrue.apply(isFail, properties.rewardFailTerminal()) +
+                valueIfTrue.apply(isFail, getFailReward()) +
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
+
+    private double getFailReward() {
+        var sampler= new NormalSampler(properties.rewardFailTerminalExp(), properties.rewardFailTerminalStd());
+        return sampler.generateSample();
+    }
+
 
     StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<GridActionProperties> a) {
         var xNext = s.getVariables().x() + 1;

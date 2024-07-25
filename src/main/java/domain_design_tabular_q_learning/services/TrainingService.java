@@ -4,7 +4,6 @@ import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import lombok.Builder;
 import lombok.Getter;
 import domain_design_tabular_q_learning.domain.agent.Agent;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 
 @Builder

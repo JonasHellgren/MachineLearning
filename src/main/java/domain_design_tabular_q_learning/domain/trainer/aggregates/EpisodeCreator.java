@@ -3,7 +3,6 @@ package domain_design_tabular_q_learning.domain.trainer.aggregates;
 import common.list_arrays.ListUtils;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import lombok.AllArgsConstructor;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.ActionRoad;
 import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.EpisodeInfoForRecording;
 

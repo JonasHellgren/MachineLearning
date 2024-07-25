@@ -3,11 +3,9 @@ package domain_design_tabular_q_learning.services;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.EnvironmentRoad;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.GridActionProperties;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.GridVariables;
 
 public class TrainingServiceFactory {
 

@@ -4,7 +4,7 @@ import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Mediator;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;

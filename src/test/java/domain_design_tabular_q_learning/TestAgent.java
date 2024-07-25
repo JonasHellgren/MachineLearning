@@ -3,7 +3,7 @@ package domain_design_tabular_q_learning;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.*;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

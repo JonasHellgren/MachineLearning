@@ -6,7 +6,7 @@ import domain_design_tabular_q_learning.domain.plotting.FileDirName;
 import domain_design_tabular_q_learning.domain.plotting.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.plotting.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentPlotter;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadAgentPlotter;
 import java.io.IOException;
 
 public class RoadPlottingService<V,A> {
