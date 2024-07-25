@@ -9,14 +9,22 @@ import domain_design_tabular_q_learning.domain.environment.value_objects.StepRet
 import org.apache.commons.lang3.RandomUtils;
 import java.util.function.BiFunction;
 
+/**
+ * Not optimal with the casting in roadMazeI(), method needed to comply with TrainingService:createRoadMaze()
+ */
+
 @AllArgsConstructor
 public class EnvironmentRoad implements EnvironmentI<GridVariables,GridActionProperties> {
 
    @Getter
    PropertiesRoad properties;
 
-    public static EnvironmentRoad roadMaze() {
+    public static  EnvironmentRoad roadMaze() {
         return new EnvironmentRoad(PropertiesRoad.roadMaze());
+    }
+
+    public static <V, A> EnvironmentI<V, A> roadMazeI() {
+        return (EnvironmentI<V, A>) new EnvironmentRoad(PropertiesRoad.roadMaze());
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class RunnerShowTable {
 
-    public static final String CHART_DIR = "src/main/java/plotting/saved_charts/";
+    public static final String CHART_DIR = "src/main/java/common/plotters/table_shower";
 
     @SneakyThrows
     public static void main(String[] args) {

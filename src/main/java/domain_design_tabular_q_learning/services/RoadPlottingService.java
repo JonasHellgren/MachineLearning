@@ -6,13 +6,12 @@ import domain_design_tabular_q_learning.domain.plotting.FileDirName;
 import domain_design_tabular_q_learning.domain.plotting.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.plotting.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
-import domain_design_tabular_q_learning.environments.obstacle_on_road.EnvironmentRoad;
 import domain_design_tabular_q_learning.environments.obstacle_on_road.RoadAgentPlotter;
 import java.io.IOException;
 
 public class RoadPlottingService<V,A> {
 
-    RoadEnvironmentPlotter environmentPlotter;
+    RoadEnvironmentPlotter<V,A> environmentPlotter;
     TrainerPlotter<V,A> trainerPlotter;
     RoadAgentPlotter<V,A> agentPlotter;
 
@@ -29,7 +28,7 @@ public class RoadPlottingService<V,A> {
     }
 
     public static <V,A> RoadPlottingService<V,A> ofTrainingService(TrainingService<V,A> service, PlottingSettings settings) {
-        return new RoadPlottingService<V,A>(service.getTrainer(),service.getAgent(),service.getEnvironment(),settings);
+        return new RoadPlottingService<>(service.getTrainer(), service.getAgent(), service.getEnvironment(), settings);
     }
 
     public void plotEnvironment() {
