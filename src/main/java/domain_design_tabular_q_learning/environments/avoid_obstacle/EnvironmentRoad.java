@@ -67,8 +67,6 @@ public class EnvironmentRoad implements EnvironmentI<XyPos, RoadActionProperties
         return a.equals(ActionRoad.N) || a.equals(ActionRoad.S);
     }
 
-    static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
-
     double getReward(boolean isTerminal, boolean isFail, boolean isMove) {
         return valueIfTrue.apply(isTerminal, properties.rewardNonFailTerminal()) +
                 valueIfTrue.apply(isFail, getFailReward()) +

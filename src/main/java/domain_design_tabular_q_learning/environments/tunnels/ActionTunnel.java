@@ -5,10 +5,10 @@ import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadActionPr
 import lombok.Getter;
 
 public enum ActionTunnel implements ActionI<TunnelActionProperties> {
-    N(TunnelActionProperties.of(1,"↑")),
-    E(TunnelActionProperties.of(0,"→")),
-    S(TunnelActionProperties.of(-1,"↓")),
-    W(TunnelActionProperties.of(0,"←"));
+    N(TunnelActionProperties.of(0,1,"↑")),
+    E(TunnelActionProperties.of(1,0,"→")),
+    S(TunnelActionProperties.of(0,-1,"↓")),
+    W(TunnelActionProperties.of(-1,0,"←"));
 
     @Getter  final TunnelActionProperties properties;
 

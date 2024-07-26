@@ -6,8 +6,6 @@ import domain_design_tabular_q_learning.environments.shared.XyPos;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.Objects;
-
 public record StateTunnels(
                                XyPos variables,
                                PropertiesTunnels properties
@@ -51,12 +49,12 @@ public record StateTunnels(
 
     @Override
     public boolean isTerminal() {
-        return true; //Objects.equals(variables.x(), properties.xTerminal());
+        return properties().isTerminalNonFail(variables) || isFail();
     }
 
     @Override
     public boolean isFail() {
-        return true; //Objects.equals(variables.y(), properties.yFailTerminal()) &&          isTerminal();
+        return properties().isTermFail(variables);
     }
 
 

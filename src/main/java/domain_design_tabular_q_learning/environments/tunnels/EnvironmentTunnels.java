@@ -1,6 +1,5 @@
 package domain_design_tabular_q_learning.environments.tunnels;
 
-import common.other.RandUtils;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
@@ -11,48 +10,50 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
-
 /**
+ *       0  1  2  3  4  5  6  7  8
+ * 3   |##|##|##|##|  | F|##|##|##|                  F <=> reward = -10
+ * 2   |##| F|  |  |  |##|##|##|##|
+ * 1   |  |  |  |##|  |  |  |  |+10|
+ * 0   |##| F|  |+9|##|##|##|##|##|
+
  * Not optimal with the casting in tunnelsI(), potential future refactoring to avoid
  */
 
 @AllArgsConstructor
-public class EnvironmentTunnels implements EnvironmentI<XyPos,TunnelActionProperties,PropertiesTunnels> {
+public class EnvironmentTunnels implements EnvironmentI<XyPos, TunnelActionProperties, PropertiesTunnels> {
 
-   @Getter @Setter
-   PropertiesTunnels properties;
+    @Getter
+    @Setter
+    PropertiesTunnels properties;
 
     public static EnvironmentTunnels tunnels() {
         return new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 
     public static <V, A, P> EnvironmentI<V, A, P> tunnelsI() {
-        return (EnvironmentI<V, A,P>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
+        return (EnvironmentI<V, A, P>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 
     @Override
     public StepReturn<XyPos> step(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
-        var isFail = sNext.isFail();
-        var isMove = isMove(a);
-        var reward = getReward(isTerminal, isFail, isMove);
+        var isTermFail = properties.isTermFail(sNext.getVariables());
+        var isTermNonFail = properties.isTerminalNonFail(sNext.getVariables());
+        var reward = getReward(sNext.getVariables(), isTermNonFail, isTermFail);
         return StepReturn.<XyPos>builder()
                 .sNext(sNext).reward(reward)
-                .isFail(isFail).isTerminal(isTerminal)
+                .isFail(isTermFail).isTerminal(isTerminal)
                 .build();
     }
 
     @Override
     public StateI<XyPos> getStartState() {
-        List<XyPos> startList=new ArrayList<>(properties.startPositions());
-        int randIdx= RandUtils.getRandomIntNumber(0,startList.size());
-        XyPos randPos = startList.get(randIdx);
-        return  StateTunnels.of(randPos.x(),randPos.y(),properties);
+        XyPos randPos = properties.getRandStartPos();
+        return StateTunnels.of(randPos.x(), randPos.y(), properties);
     }
+
 
     @Override
     public ActionTunnel[] actions() {
@@ -60,27 +61,31 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos,TunnelActionProper
     }
 
     public ActionTunnel randomAction() {
-        int randIdx= RandomUtils.nextInt(0, ActionTunnel.values().length);
+        int randIdx = RandomUtils.nextInt(0, ActionTunnel.values().length);
         return ActionTunnel.values()[randIdx];
     }
 
-    public boolean isMove(ActionI<TunnelActionProperties> a) {
-        return a.equals(ActionTunnel.N) || a.equals(ActionTunnel.S);
+
+    double getReward(XyPos pos, boolean isTermNonFail, boolean isTermFail) {
+        Double termNonFailValue = isTermNonFail?properties.rewardOfTerminalNonFail(pos).orElseThrow():0;
+        Double termFailValue = isTermFail?properties.rewardOfFail(pos).orElseThrow():0;
+        return valueIfTrue.apply(isTermNonFail, termNonFailValue) +
+                properties.rewardMove() +
+                valueIfTrue.apply(isTermFail, termFailValue);
     }
-
-    static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
-
-    double getReward(boolean isTerminal, boolean isFail, boolean isMove) {
-        return valueIfTrue.apply(isTerminal, 0d) +
-                valueIfTrue.apply(isFail, 0d) +
-                valueIfTrue.apply(isMove, properties.rewardMove());
-    }
-
 
 
     StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {
-        var xNext = s.getVariables().x() + 1;
-        var yNext = s.getVariables().y() + a.getProperties().deltaY();
-        return StateTunnels.of(xNext, yNext,properties).clip();
+        XyPos pos = s.getVariables();
+        XyPos newPos = getNewPosKeepOldIfEntersBlockedPos(a, pos);
+        return StateTunnels.of(newPos.x(), newPos.y(), properties).clip();
+    }
+
+    XyPos getNewPosKeepOldIfEntersBlockedPos(ActionI<TunnelActionProperties> a, XyPos pos) {
+        TunnelActionProperties p = a.getProperties();
+        XyPos newPos0 = XyPos.of(pos.x() + p.deltaX(), pos.y() + p.deltaY());
+        return properties.blockedPositions().contains(newPos0)
+                ? pos
+                : newPos0;
     }
 }

@@ -24,12 +24,20 @@ class TestEnvironmentTunnels {
 
     @ParameterizedTest
     @CsvSource({
-            "0,0,E, 1,0",  //x,y,action, xDes,yDes
-            "0,0,N, 1,1",
-            "0,0,S, 1,0",
-            "2,0,E, 3,0",
-            "2,0,N, 3,1",
-            "2,0,S, 3,0"})
+            "0,1,E, 1,1",  //x,y,action, xDes,yDes
+            "0,1,N, 0,1",
+            "0,1,S, 0,1",
+            "0,1,W, 0,1", //state clip <=> same pos (can't go outside map)
+            "1,1,E, 2,1",
+            "1,1,N, 1,2",
+            "1,1,W, 0,1",
+            "1,1,N, 1,2",
+            "2,1,E, 2,1",
+            "3,2,E, 4,2",
+            "4,2,N, 4,3",
+            "4,3,N, 4,3",  //state clip
+            "7,1,E, 8,1",
+    })
     void whenStep_thenCorrectStateNext(ArgumentsAccessor arguments) {
         var s = getState(arguments);
         var a = getAction(arguments);
@@ -40,12 +48,15 @@ class TestEnvironmentTunnels {
 
     @ParameterizedTest
     @CsvSource({
-            "0,0,E, 0",  //x,y,action, rewardDes
-            "0,0,N, -1",
-            "0,0,S, -1",
-            "2,0,E, 0",
-            "2,0,N, -101",
-            "2,0,S, -1"})
+            "0,1,E, -1",  //x,y,action, rewardDes
+            "0,1,W, -1",
+            "0,1,N, -1",
+            "0,1,S, -1",
+            "1,1,N, -11",
+            "2,0,E, 8",
+            "2,0,S, -1",
+            "4,3,E, -11",
+            "7,1,E, 9"})
     void whenStep_thenCorrectReward(ArgumentsAccessor arguments) {
         var s = getState(arguments);
         var a = getAction(arguments);

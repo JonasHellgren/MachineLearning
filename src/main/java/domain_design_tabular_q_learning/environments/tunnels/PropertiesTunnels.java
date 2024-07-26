@@ -1,10 +1,10 @@
 package domain_design_tabular_q_learning.environments.tunnels;
 
-import common.list_arrays.ArrayUtil;
 import domain_design_tabular_q_learning.environments.shared.XyPos;
 import lombok.Builder;
 import lombok.With;
 import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
@@ -39,6 +39,12 @@ public record PropertiesTunnels(
                 .build();
     }
 
+    public XyPos getRandStartPos() {
+        List<XyPos> randPosList = new ArrayList<>(startPositions());
+        int randIdx= RandomUtils.nextInt(0, randPosList.size());
+        return randPosList.get(randIdx);
+    }
+
 
 
     private static Map<XyPos, Double> getFailPositionsRewardMap() {
@@ -64,6 +70,7 @@ public record PropertiesTunnels(
     }
 
 
+
     public static Set<XyPos> getAllPositions(Pair<Integer, Integer> minMaxX, Pair<Integer, Integer> minMaxY) {
         int xMin = minMaxX.getFirst();
         int xMax = minMaxX.getSecond();
@@ -85,13 +92,14 @@ public record PropertiesTunnels(
     public static  Set<XyPos> getFreePositions() {
         Set<XyPos> posSet = new HashSet<>();
         IntStream.rangeClosed(1,3).forEach(x -> posSet.add(XyPos.of(x,0)));
-        IntStream.rangeClosed(0,8).forEach(x -> posSet.add(XyPos.of(x,1)));
-        IntStream.rangeClosed(1,3).forEach(x -> posSet.add(XyPos.of(x,2)));
+        IntStream.rangeClosed(0,2).forEach(x -> posSet.add(XyPos.of(x,1)));
+        IntStream.rangeClosed(4,8).forEach(x -> posSet.add(XyPos.of(x,1)));
+        IntStream.rangeClosed(1,4).forEach(x -> posSet.add(XyPos.of(x,2)));
         IntStream.rangeClosed(4,5).forEach(x -> posSet.add(XyPos.of(x,3)));
         return posSet;
     }
 
-    public boolean isFail(XyPos pos) {
+    public boolean isTermFail(XyPos pos) {
         return getFailPositionsRewardMap().containsKey(pos);
     }
 
@@ -105,7 +113,7 @@ public record PropertiesTunnels(
         return getTerminalPositionsRewardMap().containsKey(pos);
     }
 
-    public Optional<Object> rewardOfTerminalNonFail(XyPos pos) {
+    public Optional<Double> rewardOfTerminalNonFail(XyPos pos) {
         return getTerminalPositionsRewardMap().containsKey(pos)
                 ? Optional.of(getTerminalPositionsRewardMap().get(pos))
                 : Optional.empty();

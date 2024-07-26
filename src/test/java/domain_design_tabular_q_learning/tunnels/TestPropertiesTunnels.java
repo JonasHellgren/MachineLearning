@@ -43,7 +43,7 @@ class TestPropertiesTunnels {
         var pos=fpm.keySet();
         Assertions.assertTrue(pos.containsAll(
                 List.of(XyPos.of(1,0),XyPos.of(1,2),XyPos.of(5,3))));
-        Assertions.assertTrue(properties.isFail(XyPos.of(1,0)));
+        Assertions.assertTrue(properties.isTermFail(XyPos.of(1,0)));
         Assertions.assertEquals(-10d,properties.rewardOfFail(XyPos.of(1,0)).orElseThrow());
     }
 
