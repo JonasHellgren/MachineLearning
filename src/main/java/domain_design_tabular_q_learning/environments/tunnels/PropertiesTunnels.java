@@ -7,10 +7,7 @@ import lombok.With;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Builder
@@ -94,4 +91,24 @@ public record PropertiesTunnels(
         return posSet;
     }
 
+    public boolean isFail(XyPos pos) {
+        return getFailPositionsRewardMap().containsKey(pos);
+    }
+
+    public Optional<Double> rewardOfFail(XyPos pos) {
+        return getFailPositionsRewardMap().containsKey(pos)
+                ? Optional.of(getFailPositionsRewardMap().get(pos))
+                : Optional.empty();
+    }
+
+    public boolean isTerminalNonFail(XyPos pos) {
+        return getTerminalPositionsRewardMap().containsKey(pos);
+    }
+
+    public Optional<Object> rewardOfTerminalNonFail(XyPos pos) {
+        return getTerminalPositionsRewardMap().containsKey(pos)
+                ? Optional.of(getTerminalPositionsRewardMap().get(pos))
+                : Optional.empty();
+
+    }
 }

@@ -1,6 +1,6 @@
 package domain_design_tabular_q_learning.environments.tunnels;
 
-import common.math.NormalSampler;
+import common.other.RandUtils;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -46,12 +48,10 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos,TunnelActionProper
 
     @Override
     public StateI<XyPos> getStartState() {
-        var xMinMax=properties.startXMinMax();
-        var yMinMax=properties.startYMinMax();
-        return  StateTunnels.of(
-                RandomUtils.nextInt(xMinMax.getFirst(),xMinMax.getSecond()+1),
-                RandomUtils.nextInt(yMinMax.getFirst(),yMinMax.getSecond()+1),
-                properties);
+        List<XyPos> startList=new ArrayList<>(properties.startPositions());
+        int randIdx= RandUtils.getRandomIntNumber(0,startList.size());
+        XyPos randPos = startList.get(randIdx);
+        return  StateTunnels.of(randPos.x(),randPos.y(),properties);
     }
 
     @Override
@@ -71,15 +71,11 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos,TunnelActionProper
     static BiFunction<Boolean, Double, Double> valueIfTrue = (c, v) -> c ? v : 0d;
 
     double getReward(boolean isTerminal, boolean isFail, boolean isMove) {
-        return valueIfTrue.apply(isTerminal, properties.rewardNonFailTerminal()) +
-                valueIfTrue.apply(isFail, getFailReward()) +
+        return valueIfTrue.apply(isTerminal, 0d) +
+                valueIfTrue.apply(isFail, 0d) +
                 valueIfTrue.apply(isMove, properties.rewardMove());
     }
 
-    private double getFailReward() {
-        var sampler= new NormalSampler(properties.rewardFailTerminalExp(), properties.rewardFailTerminalStd());
-        return sampler.generateSample();
-    }
 
 
     StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {

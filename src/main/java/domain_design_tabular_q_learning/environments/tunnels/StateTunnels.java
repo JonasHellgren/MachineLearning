@@ -51,13 +51,12 @@ public record StateTunnels(
 
     @Override
     public boolean isTerminal() {
-        return Objects.equals(variables.x(), properties.xTerminal());
+        return true; //Objects.equals(variables.x(), properties.xTerminal());
     }
 
     @Override
     public boolean isFail() {
-        return Objects.equals(variables.y(), properties.yFailTerminal()) &&
-                isTerminal();
+        return true; //Objects.equals(variables.y(), properties.yFailTerminal()) &&          isTerminal();
     }
 
 
