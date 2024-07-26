@@ -1,4 +1,4 @@
-package domain_design_tabular_q_learning;
+package domain_design_tabular_q_learning.obstacle;
 
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.AgentProperties;
@@ -8,7 +8,7 @@ import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Mediator;
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;
-import domain_design_tabular_q_learning.environments.shared.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.XyPos;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 class TestTrainerRoad {
 
     public static final int PROB_RANDOM_ZERO = 0;
-    Trainer<GridVariables, RoadActionProperties,PropertiesRoad> trainer;
+    Trainer<XyPos, RoadActionProperties,PropertiesRoad> trainer;
     EnvironmentRoad environment;
-    Agent<GridVariables, RoadActionProperties,PropertiesRoad> agent;
+    Agent<XyPos, RoadActionProperties,PropertiesRoad> agent;
     TrainerProperties trainerProperties;
 
     @BeforeEach
@@ -38,7 +38,7 @@ class TestTrainerRoad {
     @Test
     void whenTraining_thenCorrect() {
         trainer.train();
-        Mediator<GridVariables, RoadActionProperties,PropertiesRoad> mediator = trainer.getMediator();
+        Mediator<XyPos, RoadActionProperties,PropertiesRoad> mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
         var val21Same = getVal21(ActionRoad.E);
@@ -55,7 +55,7 @@ class TestTrainerRoad {
         return agent.getMemory().read(StateAction.of(getState(2, 1), a));
     }
 
-    StateI<GridVariables> getState(int x, int y) {
+    StateI<XyPos> getState(int x, int y) {
         var ep = environment.getProperties();
         return StateRoad.of(x, y, ep);
     }

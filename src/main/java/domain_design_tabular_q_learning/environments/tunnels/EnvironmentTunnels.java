@@ -5,8 +5,7 @@ import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
-import domain_design_tabular_q_learning.environments.avoid_obstacle.*;
-import domain_design_tabular_q_learning.environments.shared.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.XyPos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,67 +14,38 @@ import org.apache.commons.lang3.RandomUtils;
 import java.util.function.BiFunction;
 
 /**
- * Not optimal with the casting in roadMazeI(), method needed to comply with TrainingService:createRoadMaze()
+ * Not optimal with the casting in tunnelsI(), potential future refactoring to avoid
  */
 
 @AllArgsConstructor
-public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelActionProperties,PropertiesTunnels> {
-    @Override
-    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
-        return null;
-    }
+public class EnvironmentTunnels implements EnvironmentI<XyPos,TunnelActionProperties,PropertiesTunnels> {
 
-    @Override
-    public StateI<GridVariables> getStartState() {
-        return null;
-    }
-
-    @Override
-    public PropertiesTunnels getProperties() {
-        return null;
-    }
-
-    @Override
-    public void setProperties(PropertiesTunnels propertiesTunnels) {
-
-    }
-
-    @Override
-    public ActionI<TunnelActionProperties>[] actions() {
-        return new ActionI[0];
-    }
-
-    @Override
-    public ActionI<TunnelActionProperties> randomAction() {
-        return null;
-    }
-
-  /* @Getter @Setter
+   @Getter @Setter
    PropertiesTunnels properties;
 
     public static EnvironmentTunnels tunnels() {
         return new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 
-    public static <V, A> EnvironmentI<V, A> tunnelsI() {
-        return (EnvironmentI<V, A>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
+    public static <V, A, P> EnvironmentI<V, A, P> tunnelsI() {
+        return (EnvironmentI<V, A,P>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 
     @Override
-    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
+    public StepReturn<XyPos> step(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail();
         var isMove = isMove(a);
         var reward = getReward(isTerminal, isFail, isMove);
-        return StepReturn.<GridVariables>builder()
+        return StepReturn.<XyPos>builder()
                 .sNext(sNext).reward(reward)
                 .isFail(isFail).isTerminal(isTerminal)
                 .build();
     }
 
     @Override
-    public StateI<GridVariables> getStartState() {
+    public StateI<XyPos> getStartState() {
         var xMinMax=properties.startXMinMax();
         var yMinMax=properties.startYMinMax();
         return  StateTunnels.of(
@@ -112,9 +82,9 @@ public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelAct
     }
 
 
-    StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
+    StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.getProperties().deltaY();
-        return StateRoad.of(xNext, yNext,properties).clip();
-    }*/
+        return StateTunnels.of(xNext, yNext,properties).clip();
+    }
 }

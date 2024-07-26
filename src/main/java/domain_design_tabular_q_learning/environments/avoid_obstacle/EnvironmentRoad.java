@@ -2,7 +2,7 @@ package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
 import common.math.NormalSampler;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
-import domain_design_tabular_q_learning.environments.shared.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.XyPos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
  */
 
 @AllArgsConstructor
-public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionProperties,PropertiesRoad> {
+public class EnvironmentRoad implements EnvironmentI<XyPos, RoadActionProperties,PropertiesRoad> {
 
    @Getter @Setter
    PropertiesRoad properties;
@@ -31,20 +31,20 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionPr
     }
 
     @Override
-    public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<RoadActionProperties> a) {
+    public StepReturn<XyPos> step(StateI<XyPos> s, ActionI<RoadActionProperties> a) {
         var sNext = getNextState(s, a);
         var isTerminal = sNext.isTerminal();
         var isFail = sNext.isFail();
         var isMove = isMove(a);
         var reward = getReward(isTerminal, isFail, isMove);
-        return StepReturn.<GridVariables>builder()
+        return StepReturn.<XyPos>builder()
                 .sNext(sNext).reward(reward)
                 .isFail(isFail).isTerminal(isTerminal)
                 .build();
     }
 
     @Override
-    public StateI<GridVariables> getStartState() {
+    public StateI<XyPos> getStartState() {
         var xMinMax=properties.startXMinMax();
         var yMinMax=properties.startYMinMax();
         return  StateRoad.of(
@@ -81,7 +81,7 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionPr
     }
 
 
-    StateI<GridVariables> getNextState(StateI<GridVariables> s, ActionI<RoadActionProperties> a) {
+    StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<RoadActionProperties> a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.getProperties().deltaY();
         return StateRoad.of(xNext, yNext,properties).clip();

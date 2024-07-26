@@ -3,13 +3,14 @@ package domain_design_tabular_q_learning.services;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;
+import domain_design_tabular_q_learning.domain.plotting.PlottingServiceI;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.plotting.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadAgentPlotter;
 import java.io.IOException;
 
-public class RoadPlottingService<V,A,P> {
+public class RoadPlottingService<V,A,P> implements PlottingServiceI {
 
     RoadEnvironmentPlotter<V,A,P> environmentPlotter;
     TrainerPlotter<V,A,P> trainerPlotter;

@@ -3,7 +3,7 @@ package domain_design_tabular_q_learning.runners;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.PropertiesRoad;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadActionProperties;
-import domain_design_tabular_q_learning.environments.shared.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.XyPos;
 import lombok.SneakyThrows;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import domain_design_tabular_q_learning.services.RoadPlottingService;
@@ -16,8 +16,8 @@ public class RunnerAvoidObstacleTrainAndPlot {
             "src/main/java/domain_design_tabular_q_learning/documentation/environments/avoid_obstacle/pics";
     public static final String PNG = ".png";
 
-    static TrainingService<GridVariables, RoadActionProperties, PropertiesRoad> training;
-    static RoadPlottingService<GridVariables, RoadActionProperties,PropertiesRoad> plotting;
+    static TrainingService<XyPos, RoadActionProperties, PropertiesRoad> training;
+    static RoadPlottingService<XyPos, RoadActionProperties,PropertiesRoad> plotting;
 
     @SneakyThrows
     public static void main(String[] args) {

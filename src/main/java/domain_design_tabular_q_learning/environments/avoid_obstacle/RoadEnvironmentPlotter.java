@@ -1,15 +1,13 @@
 package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
 import common.plotters.table_shower.TableDataString;
-import common.plotters.table_shower.TableSettings;
-import common.plotters.table_shower.TableShower;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.environment.helpers.GridInformerI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.plotting.Environment2dPlotterI;
 import domain_design_tabular_q_learning.domain.plotting.EnvironmentPlotterHelper;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;
-import domain_design_tabular_q_learning.environments.shared.GridVariables;
+import domain_design_tabular_q_learning.environments.shared.XyPos;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import java.io.IOException;
@@ -48,7 +46,7 @@ public class RoadEnvironmentPlotter<V,A,P> implements Environment2dPlotterI {
         var ep = environment.getProperties();
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                StateI<GridVariables> state = StateRoad.of(x, y, (PropertiesRoad) ep);
+                StateI<XyPos> state = StateRoad.of(x, y, (PropertiesRoad) ep);
                 StringBuilder sb = new StringBuilder();
                 executeIfTrue(state.isTerminal(), () -> sb.append("T"));
                 executeIfTrue(state.isFail(), () -> sb.append("F"));

@@ -38,5 +38,8 @@ P i EnvironmentI<V,A> x
 helper för RoadEnvironmentPlotter x
 interface för RoadEnvironmentPlotter x
 förklara <V,A,P> i md fil
-PlottingServiceI
+PlottingServiceI x
+TestPropertiesTunnels
+Pair<Integer,Integer> -> XyPos
+Env clip() i properties
 split road env
