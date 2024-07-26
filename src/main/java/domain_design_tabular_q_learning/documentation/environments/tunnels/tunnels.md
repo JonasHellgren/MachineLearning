@@ -5,7 +5,7 @@ There are three terminal states, with specific reward.
 The challenge is to develop a policy that navigates to the most rewarding terminal state.
 
 ## States
-
+![tunnelsEnv.png](pics%2FtunnelsEnv.png)
 
 ## Actions
 

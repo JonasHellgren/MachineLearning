@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
-public class TestAgent {
+public class TestAgentRoad {
     public static final int PROB_RANDOM_IS_ZERO = 0;
     public static final double PROB_RANDOM_IS_ONE = 1d;
     Agent<XyPos, RoadActionProperties,PropertiesRoad> agent;

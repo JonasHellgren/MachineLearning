@@ -43,4 +43,8 @@ TestPropertiesTunnels x
 Pair<Integer,Integer> -> XyPos x
 Env clip() i XyPos x
 EnvTunnelPlotter
-split road env
+TestAgentTunnels x
+RunnerTunnelsTrainAndPlot
+RunnerTunnelsTrainAndPlot train
+GrinInformerI
+AgentI

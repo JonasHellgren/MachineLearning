@@ -19,7 +19,7 @@ class TestEnvironmentTunnels {
 
     @BeforeEach
     void init() {
-        environment = EnvironmentTunnels.tunnels();
+        environment = EnvironmentTunnels.newDefault();
     }
 
     @ParameterizedTest

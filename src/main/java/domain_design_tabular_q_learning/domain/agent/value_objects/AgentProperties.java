@@ -1,14 +1,15 @@
 package domain_design_tabular_q_learning.domain.agent.value_objects;
 
 import lombok.Builder;
+import lombok.With;
 import org.apache.commons.math3.util.Pair;
 
 @Builder
 public record AgentProperties(
-        Pair<Double,Double> probRandomActionStartEnd,
-        double learningRate,
+        @With Pair<Double,Double> probRandomActionStartEnd,
+        @With double learningRate,
         double defaultValue,
-        double gamma
+        @With  double gamma
        // ActionRoad[] actions
 ) {
 
@@ -18,8 +19,11 @@ public record AgentProperties(
                 .learningRate(0.1)
                 .defaultValue(0)
                 .gamma(1.0)
-                //.actions(ActionRoad.values())
                 .build();
+    }
+
+    public static AgentProperties tunnels() {
+        return roadMaze();
     }
 
     public double probRandomAction(double progress) {

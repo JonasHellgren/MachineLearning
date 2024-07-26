@@ -27,11 +27,11 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos, TunnelActionPrope
     @Setter
     PropertiesTunnels properties;
 
-    public static EnvironmentTunnels tunnels() {
+    public static EnvironmentTunnels newDefault() {
         return new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 
-    public static <V, A, P> EnvironmentI<V, A, P> tunnelsI() {
+    public static <V, A, P> EnvironmentI<V, A, P> newDefaultI() {
         return (EnvironmentI<V, A, P>) new EnvironmentTunnels(PropertiesTunnels.newDefault());
     }
 

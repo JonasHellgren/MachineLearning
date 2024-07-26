@@ -14,5 +14,9 @@ public record TrainerProperties(
                 .build();
     }
 
+    public static TrainerProperties tunnels() {
+        return roadObstacle().withNEpisodes(3000);
+    }
+
 
 }

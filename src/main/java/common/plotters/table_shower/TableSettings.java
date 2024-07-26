@@ -34,7 +34,7 @@ public record TableSettings(
     public static TableSettings ofNxNy(int nX, int nY) {
         return TableSettings.builder()
                 .nX(nX).nY(nY)
-                .fontSize(20).fontName("Serif").formatCell("%.2f")
+                .fontSize(30).fontName("Serif").formatCell("%.2f")
                 .maxCharsPerCell(5).padding(20)
                 .name("")
                 .xName("x").yName("y").formatTicks("%.1f")
