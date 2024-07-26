@@ -46,7 +46,7 @@ public class RoadAgentPlotter<V,A,P> {
         var tables = new Tables(e);
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                var state = (StateI<V>) StateRoad.of(x, y,castProperties());
+                var state = (StateI<V>) StateRoad.ofXy(x, y,castProperties());
                 if(!state.isTerminal()) {
                         helper.fillTablesFromState(tables, y, x, state);
                 }

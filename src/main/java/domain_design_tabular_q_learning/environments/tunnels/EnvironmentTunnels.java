@@ -51,7 +51,7 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos, TunnelActionPrope
     @Override
     public StateI<XyPos> getStartState() {
         XyPos randPos = properties.getRandStartPos();
-        return StateTunnels.of(randPos.x(), randPos.y(), properties);
+        return StateTunnels.ofXy(randPos.x(), randPos.y(), properties);
     }
 
 
@@ -74,11 +74,14 @@ public class EnvironmentTunnels implements EnvironmentI<XyPos, TunnelActionPrope
                 valueIfTrue.apply(isTermFail, termFailValue);
     }
 
+    /**
+     * clip() <=> keep inside map
+     */
 
     StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<TunnelActionProperties> a) {
         XyPos pos = s.getVariables();
         XyPos newPos = getNewPosKeepOldIfEntersBlockedPos(a, pos);
-        return StateTunnels.of(newPos.x(), newPos.y(), properties).clip();
+        return StateTunnels.ofXy(newPos.x(), newPos.y(), properties).clip();
     }
 
     XyPos getNewPosKeepOldIfEntersBlockedPos(ActionI<TunnelActionProperties> a, XyPos pos) {

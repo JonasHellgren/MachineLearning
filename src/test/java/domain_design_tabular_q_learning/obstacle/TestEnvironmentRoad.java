@@ -55,7 +55,7 @@ class TestEnvironmentRoad {
     StateI<XyPos> getStateDes(ArgumentsAccessor arguments) {
         int xDes = arguments.getInteger(3);
         int yDes = arguments.getInteger(4);
-        return StateRoad.of(xDes, yDes, environment.getProperties());
+        return StateRoad.ofXy(xDes, yDes, environment.getProperties());
     }
 
     ActionRoad getAction(ArgumentsAccessor arguments) {
@@ -66,7 +66,7 @@ class TestEnvironmentRoad {
     StateI<XyPos> getState(ArgumentsAccessor arguments) {
         int x = arguments.getInteger(0);
         int y = arguments.getInteger(1);
-        return StateRoad.of(x, y, environment.getProperties());
+        return StateRoad.ofXy(x, y, environment.getProperties());
     }
 
     double getRewardDes(ArgumentsAccessor arguments) {

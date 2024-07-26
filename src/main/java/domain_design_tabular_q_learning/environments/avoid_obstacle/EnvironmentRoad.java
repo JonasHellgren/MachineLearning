@@ -10,7 +10,6 @@ import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StepReturn;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
-import java.util.function.BiFunction;
 
 /**
  * Not optimal with the casting in roadMazeI(), method needed to comply with TrainingService:createRoadMaze()
@@ -47,7 +46,7 @@ public class EnvironmentRoad implements EnvironmentI<XyPos, RoadActionProperties
     public StateI<XyPos> getStartState() {
         var xMinMax=properties.startXMinMax();
         var yMinMax=properties.startYMinMax();
-        return  StateRoad.of(
+        return  StateRoad.ofXy(
                 RandomUtils.nextInt(xMinMax.getFirst(),xMinMax.getSecond()+1),
                 RandomUtils.nextInt(yMinMax.getFirst(),yMinMax.getSecond()+1),
                 properties);
@@ -82,6 +81,6 @@ public class EnvironmentRoad implements EnvironmentI<XyPos, RoadActionProperties
     StateI<XyPos> getNextState(StateI<XyPos> s, ActionI<RoadActionProperties> a) {
         var xNext = s.getVariables().x() + 1;
         var yNext = s.getVariables().y() + a.getProperties().deltaY();
-        return StateRoad.of(xNext, yNext,properties).clip();
+        return StateRoad.ofXy(xNext, yNext,properties).clip();
     }
 }

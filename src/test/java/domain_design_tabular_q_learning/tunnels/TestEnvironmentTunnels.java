@@ -68,7 +68,7 @@ class TestEnvironmentTunnels {
     StateI<XyPos> getStateDes(ArgumentsAccessor arguments) {
         int xDes = arguments.getInteger(3);
         int yDes = arguments.getInteger(4);
-        return StateTunnels.of(xDes, yDes, environment.getProperties());
+        return StateTunnels.ofXy(xDes, yDes, environment.getProperties());
     }
 
     ActionTunnel getAction(ArgumentsAccessor arguments) {
@@ -79,7 +79,7 @@ class TestEnvironmentTunnels {
     StateI<XyPos> getState(ArgumentsAccessor arguments) {
         int x = arguments.getInteger(0);
         int y = arguments.getInteger(1);
-        return StateTunnels.of(x, y, environment.getProperties());
+        return StateTunnels.ofXy(x, y, environment.getProperties());
     }
 
     double getRewardDes(ArgumentsAccessor arguments) {

@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 class TestEpisode {
 
     static PropertiesRoad envp= PropertiesRoad.roadMaze();
-    public static final StateI<XyPos> S00 = StateRoad.of(0, 0,envp);
-    public static final StateI<XyPos> S11 = StateRoad.of(1,1,envp);
+    public static final StateI<XyPos> S00 = StateRoad.ofXy(0, 0,envp);
+    public static final StateI<XyPos> S11 = StateRoad.ofXy(1,1,envp);
     public static final Experience<XyPos, RoadActionProperties> EXPERIENCE0 =
             Experience.nonTermWithIdAndSars(0, S00, ActionRoad.S, 0d, S00);
     public static final Experience<XyPos, RoadActionProperties> EXPERIENCE1 =

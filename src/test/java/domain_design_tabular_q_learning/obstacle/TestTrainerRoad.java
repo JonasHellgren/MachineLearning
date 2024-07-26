@@ -57,7 +57,7 @@ class TestTrainerRoad {
 
     StateI<XyPos> getState(int x, int y) {
         var ep = environment.getProperties();
-        return StateRoad.of(x, y, ep);
+        return StateRoad.ofXy(x, y, ep);
     }
 
 

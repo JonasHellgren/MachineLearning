@@ -37,20 +37,20 @@ public class TestAgent {
 
     @Test
     void givenNotDefinedMemory_whenState21_thenActionDown() {
-        var s= StateRoad.of(2,1,envProps);
+        var s= StateRoad.ofXy(2,1,envProps);
         var ba=agent.chooseAction(s, PROB_RANDOM_IS_ZERO);
         Assertions.assertEquals(ActionRoad.S,ba);
     }
 
     @Test
     void givenBadValueInState21_whenState11_thenActionDown() {
-        var s21= StateRoad.of(2,1,envProps);
+        var s21= StateRoad.ofXy(2,1,envProps);
         Arrays.stream(environment.actions()).toList().forEach(
                 a -> {
                     double badValue = -100;
                     agent.getMemory().write(StateAction.of(s21,a), badValue);
                 });
-        var s11= StateRoad.of(1,1,envProps);
+        var s11= StateRoad.ofXy(1,1,envProps);
         var ba=agent.chooseAction(s11, PROB_RANDOM_IS_ZERO);
         Assertions.assertEquals(ActionRoad.S,ba);
     }

@@ -46,7 +46,7 @@ public class RoadEnvironmentPlotter<V,A,P> implements Environment2dPlotterI {
         var ep = environment.getProperties();
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                StateI<XyPos> state = StateRoad.of(x, y, (PropertiesRoad) ep);
+                StateI<XyPos> state = StateRoad.ofXy(x, y, (PropertiesRoad) ep);
                 StringBuilder sb = new StringBuilder();
                 executeIfTrue(state.isTerminal(), () -> sb.append("T"));
                 executeIfTrue(state.isFail(), () -> sb.append("F"));

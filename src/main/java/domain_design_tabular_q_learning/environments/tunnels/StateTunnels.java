@@ -1,6 +1,5 @@
 package domain_design_tabular_q_learning.environments.tunnels;
 
-import common.math.MathUtils;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.environments.shared.XyPos;
 import org.apache.commons.lang3.RandomUtils;
@@ -11,8 +10,12 @@ public record StateTunnels(
                                PropertiesTunnels properties
 ) implements StateI<XyPos> {
 
-    public static  StateI<XyPos> of(Integer x, Integer y, PropertiesTunnels p) {
+    public static  StateI<XyPos> ofXy(Integer x, Integer y, PropertiesTunnels p) {
         return new StateTunnels(XyPos.of(x,y),p);
+    }
+
+    public static  StateI<XyPos> ofPos(XyPos pos, PropertiesTunnels p) {
+        return new StateTunnels(pos,p);
     }
 
     public static  StateI<XyPos> ofRandom(PropertiesTunnels p) {
@@ -31,7 +34,7 @@ public record StateTunnels(
 
     @Override
     public StateI<XyPos> random() {
-        return StateTunnels.of(
+        return StateTunnels.ofXy(
                 getRand(properties.minMaxX()),
                 getRand(properties.minMaxY()),
                 properties);
@@ -40,11 +43,9 @@ public record StateTunnels(
 
     @Override
     public StateI<XyPos> clip() {
-        var minMaxX = properties.minMaxX();
-        var xClipped = MathUtils.clip(variables.x(), minMaxX.getFirst(), minMaxX.getSecond());
-        var minMaxY = properties.minMaxY();
-        var yClipped = MathUtils.clip(variables.y(), minMaxY.getFirst(), minMaxY.getSecond());
-        return StateTunnels.of(xClipped, yClipped,properties);
+        return StateTunnels.ofPos(
+                variables.posClipped(properties.minMaxX(), properties.minMaxY()),
+                properties);
     }
 
     @Override
