@@ -9,18 +9,18 @@ import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerExte
 import domain_design_tabular_q_learning.domain.trainer.value_objects.TrainerProperties;
 import java.util.stream.IntStream;
 
-public class Mediator<V,A> implements MediatorI<V,A> {
+public class Mediator<V,A,P> implements MediatorI<V,A,P> {
     @Getter
-    TrainerExternal<V,A> external;
+    TrainerExternal<V,A,P> external;
     @Getter
     TrainerProperties properties;
     @Getter
     Recorder recorder;
-    EpisodeCreator<V,A> episodeCreator;
-    AgentFitter<V,A> fitter;
+    EpisodeCreator<V,A,P> episodeCreator;
+    AgentFitter<V,A,P> fitter;
 
-    public Mediator(EnvironmentI<V,A> environment,
-                    Agent<V,A> agent,
+    public Mediator(EnvironmentI<V,A,P> environment,
+                    Agent<V,A,P> agent,
                     TrainerProperties properties) {
         this.external = new TrainerExternal<>(environment, agent);
         this.properties = properties;

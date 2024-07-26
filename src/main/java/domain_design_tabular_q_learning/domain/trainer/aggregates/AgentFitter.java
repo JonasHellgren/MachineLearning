@@ -10,8 +10,8 @@ import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
  */
 
 @AllArgsConstructor
-public class AgentFitter<V,A> {
-    MediatorI<V,A> mediator;
+public class AgentFitter<V,A,P> {
+    MediatorI<V,A,P> mediator;
 
     public double fitAgentFromExperience(Experience<V,A> e) {
         var agent = mediator.getExternal().agent();

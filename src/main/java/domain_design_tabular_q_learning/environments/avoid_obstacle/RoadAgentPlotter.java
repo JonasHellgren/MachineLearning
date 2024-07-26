@@ -2,10 +2,10 @@ package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
+import domain_design_tabular_q_learning.domain.environment.helpers.GridInformerI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
 import domain_design_tabular_q_learning.domain.plotting.Agent2dMemPlotterHelper;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;
-import domain_design_tabular_q_learning.domain.plotting.GridSizeInformer;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import domain_design_tabular_q_learning.domain.plotting.Tables;
 import java.io.IOException;
@@ -16,20 +16,20 @@ import java.io.IOException;
  *  Agent2dMemPlotterHelper does the heavy/general work
  */
 
-public class RoadAgentPlotter<V,A> {
-    public final Agent<V,A> agent;
-    EnvironmentI<V,A> environment;
+public class RoadAgentPlotter<V,A,P> {
+    public final Agent<V,A,P> agent;
+    EnvironmentI<V,A,P> environment;
     public final PlottingSettings settings;
-    GridSizeInformer gridInfo;
-    Agent2dMemPlotterHelper<V,A> helper;
+    GridInformerI<P> gridInfo;
+    Agent2dMemPlotterHelper<V,A,P> helper;
 
-    public RoadAgentPlotter(Agent<V, A> agent,
-                            EnvironmentI<V,A> environment,
+    public RoadAgentPlotter(Agent<V, A,P> agent,
+                            EnvironmentI<V,A,P> environment,
                             PlottingSettings settings) {
         this.agent=agent;
         this.environment=environment;
         this.settings=settings;
-        this.gridInfo = new GridSizeInformer(environment.getProperties());
+        this.gridInfo = (GridInformerI<P>) new RoadGridInformer(castProperties());
         this.helper=new Agent2dMemPlotterHelper<>(agent,environment,settings, gridInfo);
     }
 
@@ -42,12 +42,11 @@ public class RoadAgentPlotter<V,A> {
     }
 
     Tables createTables() {
-        var ep=environment.getProperties();
         var e=gridInfo;
         var tables = new Tables(e);
         for (int y = e.minY(); y <= e.maxY(); y++) {
             for (int x = e.minX(); x <= e.maxX(); x++) {
-                var state = (StateI<V>) StateRoad.of(x, y, ep);
+                var state = (StateI<V>) StateRoad.of(x, y,castProperties());
                 if(!state.isTerminal()) {
                         helper.fillTablesFromState(tables, y, x, state);
                 }
@@ -56,6 +55,9 @@ public class RoadAgentPlotter<V,A> {
         return tables;
     }
 
+    private PropertiesRoad castProperties() {
+        return (PropertiesRoad) environment.getProperties();
+    }
 
 
 }

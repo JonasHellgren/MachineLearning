@@ -8,8 +8,10 @@ import common.plotters.table_shower.TableShower;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.agent.value_objects.StateAction;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
+import domain_design_tabular_q_learning.domain.environment.helpers.GridInformerI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.ActionI;
 import domain_design_tabular_q_learning.domain.environment.value_objects.StateI;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadGridInformer;
 import domain_design_tabular_q_learning.services.PlottingSettings;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math3.util.Pair;
@@ -20,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class Agent2dMemPlotterHelper<V, A> {
+public class Agent2dMemPlotterHelper<V, A,P> {
 
-    public final Agent<V, A> agent;
-    EnvironmentI<V,A> environment;
+    public final Agent<V, A,P> agent;
+    EnvironmentI<V,A,P> environment;
     public final PlottingSettings settings;
-    GridSizeInformer gridInfo;
+    GridInformerI<P> gridInfo;
 
 
     public void saveCharts(Tables tables, FileDirName file) throws IOException {

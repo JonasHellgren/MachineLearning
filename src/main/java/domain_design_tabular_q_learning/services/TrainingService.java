@@ -8,10 +8,10 @@ import domain_design_tabular_q_learning.domain.trainer.Trainer;
 
 @Builder
 @Getter
-public class TrainingService<V,A> {
-    EnvironmentI<V,A> environment;
-    Trainer<V,A> trainer;
-    Agent<V,A> agent;
+public class TrainingService<V,A,P> {
+    EnvironmentI<V,A,P> environment;
+    Trainer<V,A,P> trainer;
+    Agent<V,A,P> agent;
 
    public void train() {
        trainer.train();

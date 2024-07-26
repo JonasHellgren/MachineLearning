@@ -17,14 +17,14 @@ import java.util.function.ToDoubleFunction;
 import static org.knowm.xchart.BitmapEncoder.*;
 
 @AllArgsConstructor
-public class TrainerPlotter<V,A> {
+public class TrainerPlotter<V,A,P> {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 200;
     public static final String X_AXIS_TITLE = "episode";
-    Trainer<V,A> trainer;
+    Trainer<V,A,P> trainer;
 
-    public static <V,A> TrainerPlotter<V,A> ofTrainingService(
-            TrainingService<V,A> trainingService) {
+    public static <V,A,P> TrainerPlotter<V,A,P> ofTrainingService(
+            TrainingService<V,A,P> trainingService) {
         return new TrainerPlotter<>(trainingService.getTrainer());
     }
 

@@ -12,13 +12,13 @@ public class TrainingServiceFactory {
     private TrainingServiceFactory() {
     }
 
-    public static <V,A> TrainingService<V,A> createRoadMaze() {
-        EnvironmentI<V,A> environment =
+    public static <V,A,P> TrainingService<V,A,P> createRoadMaze() {
+        EnvironmentI<V,A,P> environment =
                  EnvironmentRoad.roadMazeI();
         var trainerProperties = TrainerProperties.roadObstacle();
         var agent = new Agent<>(AgentProperties.roadMaze(), environment);
         var trainer = new Trainer<>(environment, agent, trainerProperties);
-        return TrainingService.<V,A>builder()
+        return TrainingService.<V,A,P>builder()
                 .environment(environment)
                 .trainer(trainer)
                 .agent(agent)

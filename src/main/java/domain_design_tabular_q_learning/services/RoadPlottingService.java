@@ -3,21 +3,21 @@ package domain_design_tabular_q_learning.services;
 import domain_design_tabular_q_learning.domain.agent.Agent;
 import domain_design_tabular_q_learning.domain.environment.EnvironmentI;
 import domain_design_tabular_q_learning.domain.plotting.FileDirName;
-import domain_design_tabular_q_learning.domain.plotting.RoadEnvironmentPlotter;
+import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadEnvironmentPlotter;
 import domain_design_tabular_q_learning.domain.plotting.TrainerPlotter;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.RoadAgentPlotter;
 import java.io.IOException;
 
-public class RoadPlottingService<V,A> {
+public class RoadPlottingService<V,A,P> {
 
-    RoadEnvironmentPlotter<V,A> environmentPlotter;
-    TrainerPlotter<V,A> trainerPlotter;
-    RoadAgentPlotter<V,A> agentPlotter;
+    RoadEnvironmentPlotter<V,A,P> environmentPlotter;
+    TrainerPlotter<V,A,P> trainerPlotter;
+    RoadAgentPlotter<V,A,P> agentPlotter;
 
-    public RoadPlottingService(Trainer<V,A> trainer,
-                               Agent<V,A> agent,
-                               EnvironmentI<V,A> environment,
+    public RoadPlottingService(Trainer<V,A,P> trainer,
+                               Agent<V,A,P> agent,
+                               EnvironmentI<V,A,P> environment,
                                PlottingSettings settings) {
         this.trainerPlotter = new TrainerPlotter<>(trainer);
         this.agentPlotter = new RoadAgentPlotter<>(
@@ -27,7 +27,7 @@ public class RoadPlottingService<V,A> {
         this.environmentPlotter=new RoadEnvironmentPlotter<>(environment,settings);
     }
 
-    public static <V,A> RoadPlottingService<V,A> ofTrainingService(TrainingService<V,A> service, PlottingSettings settings) {
+    public static <V,A,P> RoadPlottingService<V,A,P> ofTrainingService(TrainingService<V,A,P> service, PlottingSettings settings) {
         return new RoadPlottingService<>(service.getTrainer(), service.getAgent(), service.getEnvironment(), settings);
     }
 

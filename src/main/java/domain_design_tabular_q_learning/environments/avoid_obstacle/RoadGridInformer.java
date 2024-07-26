@@ -1,10 +1,11 @@
-package domain_design_tabular_q_learning.domain.plotting;
+package domain_design_tabular_q_learning.environments.avoid_obstacle;
 
+import domain_design_tabular_q_learning.domain.environment.helpers.GridInformerI;
 import domain_design_tabular_q_learning.environments.avoid_obstacle.PropertiesRoad;
 
-public record GridSizeInformer(
+public record RoadGridInformer(
         PropertiesRoad ep
-) {
+) implements GridInformerI<PropertiesRoad> {
 
     public int nX() {
         return  maxX() - minX() + 1;

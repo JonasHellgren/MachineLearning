@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
  */
 
 @AllArgsConstructor
-public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionProperties> {
+public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionProperties,PropertiesRoad> {
 
    @Getter @Setter
    PropertiesRoad properties;
@@ -26,8 +26,8 @@ public class EnvironmentRoad implements EnvironmentI<GridVariables, RoadActionPr
         return new EnvironmentRoad(PropertiesRoad.roadMaze());
     }
 
-    public static <V, A> EnvironmentI<V, A> roadMazeI() {
-        return (EnvironmentI<V, A>) new EnvironmentRoad(PropertiesRoad.roadMaze());
+    public static <V, A,P> EnvironmentI<V, A, P> roadMazeI() {
+        return (EnvironmentI<V, A,P>) new EnvironmentRoad(PropertiesRoad.roadMaze());
     }
 
     @Override

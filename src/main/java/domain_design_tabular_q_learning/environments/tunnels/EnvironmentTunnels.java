@@ -19,7 +19,7 @@ import java.util.function.BiFunction;
  */
 
 @AllArgsConstructor
-public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelActionProperties> {
+public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelActionProperties,PropertiesTunnels> {
     @Override
     public StepReturn<GridVariables> step(StateI<GridVariables> s, ActionI<TunnelActionProperties> a) {
         return null;
@@ -31,12 +31,12 @@ public class EnvironmentTunnels implements EnvironmentI<GridVariables, TunnelAct
     }
 
     @Override
-    public PropertiesRoad getProperties() {
+    public PropertiesTunnels getProperties() {
         return null;
     }
 
     @Override
-    public void setProperties(PropertiesRoad p) {
+    public void setProperties(PropertiesTunnels propertiesTunnels) {
 
     }
 

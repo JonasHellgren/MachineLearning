@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class EpisodeCreator<V,A> {
-    MediatorI<V,A> mediator;
+public class EpisodeCreator<V,A,P> {
+    MediatorI<V,A,P> mediator;
 
     public Episode<V,A> runEpisode() {
         var agent = mediator.getExternal().agent();

@@ -23,9 +23,9 @@ import java.util.stream.Stream;
  */
 
 @AllArgsConstructor
-public class BestActionSelector<V,A> {
+public class BestActionSelector<V,A,P> {
     AgentProperties properties;
-    EnvironmentI<V,A> environment;
+    EnvironmentI<V,A,P> environment;
     Memory<V,A> memory;
 
     public ActionI<A> chooseBestAction(StateI<V> s) {

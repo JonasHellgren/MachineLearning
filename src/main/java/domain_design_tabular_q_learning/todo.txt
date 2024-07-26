@@ -31,7 +31,12 @@ agent o trainer så opev som möjligt
 StateRoad metoder returnerar StateI x
 fixa tester x
 jämna ticks plottar x
-Episode med iterator
-clean up
+Episode med iterator x
+clean up x
 
+P i EnvironmentI<V,A> x
+helper för RoadEnvironmentPlotter x
+interface för RoadEnvironmentPlotter x
+förklara <V,A,P> i md fil
+PlottingServiceI
 split road env

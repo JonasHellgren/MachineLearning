@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 class TestTrainerRoad {
 
     public static final int PROB_RANDOM_ZERO = 0;
-    Trainer<GridVariables, RoadActionProperties> trainer;
+    Trainer<GridVariables, RoadActionProperties,PropertiesRoad> trainer;
     EnvironmentRoad environment;
-    Agent<GridVariables, RoadActionProperties> agent;
+    Agent<GridVariables, RoadActionProperties,PropertiesRoad> agent;
     TrainerProperties trainerProperties;
 
     @BeforeEach
@@ -38,7 +38,7 @@ class TestTrainerRoad {
     @Test
     void whenTraining_thenCorrect() {
         trainer.train();
-        Mediator<GridVariables, RoadActionProperties> mediator = trainer.getMediator();
+        Mediator<GridVariables, RoadActionProperties,PropertiesRoad> mediator = trainer.getMediator();
 
         System.out.println("agent.getMemory() = " + agent.getMemory());
         var val21Same = getVal21(ActionRoad.E);

@@ -11,13 +11,13 @@ import org.apache.commons.lang3.RandomUtils;
 
 
 @Getter
-public class Agent<S,A> {
+public class Agent<S,A,P> {
     Memory<S,A> memory;
     AgentProperties properties;
-    EnvironmentI<S,A> environment;
-    BestActionSelector<S,A> actionSelector;
+    EnvironmentI<S,A,P> environment;
+    BestActionSelector<S,A,P> actionSelector;
 
-    public Agent(AgentProperties properties, EnvironmentI<S,A> environment) {
+    public Agent(AgentProperties properties, EnvironmentI<S,A,P> environment) {
         this.memory=Memory.of(properties,environment.actions());
         this.properties=properties;
         this.environment=environment;

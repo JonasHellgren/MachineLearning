@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class TestAgent {
     public static final int PROB_RANDOM_IS_ZERO = 0;
     public static final double PROB_RANDOM_IS_ONE = 1d;
-    Agent<GridVariables, RoadActionProperties> agent;
+    Agent<GridVariables, RoadActionProperties,PropertiesRoad> agent;
     AgentProperties properties;
     PropertiesRoad envProps;
     EnvironmentRoad environment;
