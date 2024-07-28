@@ -13,7 +13,7 @@ import domain_design_tabular_q_learning.services.TrainingServiceFactory;
 public class RunnerAvoidObstacleTrainAndPlot {
 
     static final String DIR=
-            "src/main/java/domain_design_tabular_q_learning/documentation/environments/avoid_obstacle/pics";
+            "src/main/java/domain_design_tabular_q_learning/documentation/environments/avoid_obstacle/pics/";
     public static final String PNG = ".png";
 
     static TrainingService<XyPos, RoadActionProperties, PropertiesRoad> training;
@@ -23,7 +23,7 @@ public class RunnerAvoidObstacleTrainAndPlot {
     public static void main(String[] args) {
         training = TrainingServiceFactory.createRoadMaze();
         training.getEnvironment().setProperties(
-                training.getEnvironment().getProperties().withRewardFailTerminalStd(30d));
+                training.getEnvironment().getProperties().withRewardFailTerminalStd(0d)); //0,30
         training.train();
 
         PlottingSettings settings= PlottingSettings.newRunnerRoad();

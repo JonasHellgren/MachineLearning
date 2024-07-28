@@ -30,7 +30,6 @@ public class TrainerPlotter<V,A,P> {
 
     public void plot() {
         List<XYChart> charts = getCharts();
-        charts.forEach(c -> reduceXAxisTicksClutter(c,100));
         new SwingWrapper<>(charts).displayChartMatrix();
     }
 
@@ -39,10 +38,11 @@ public class TrainerPlotter<V,A,P> {
         var recorder = trainer.getMediator().getRecorder();
         var pRandActionList = getListWithInfoValues(recorder, ei -> ei.pRandomAction() );
         var tdErrorList = getListWithInfoValues(recorder, ei -> ei.tdErrorAvg() );
-        charts.add(getChart("sumRewards", getSumRewardsList(recorder)));
-        charts.add(getChart("pRandAction", pRandActionList));
-        charts.add(getChart("tdError", tdErrorList));
-        charts.add(getChart("nSTeps", getNStepsList(recorder)));
+        charts.add(getChart("Acc. rewards", getSumRewardsList(recorder)));
+        charts.add(getChart("Prob. randAction", pRandActionList));
+        charts.add(getChart("T.d. error", tdErrorList));
+        charts.add(getChart("Nof. steps", getNStepsList(recorder)));
+        charts.forEach(c -> reduceXAxisTicksClutter(c,100));
         return charts;
     }
 

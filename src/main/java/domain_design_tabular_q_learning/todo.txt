@@ -48,3 +48,5 @@ RunnerTunnelsTrainAndPlot
 RunnerTunnelsTrainAndPlot train
 GrinInformerI
 AgentI
+clean up
+-Range isf pair minmaxX
