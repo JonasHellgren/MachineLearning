@@ -10,7 +10,9 @@ import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
+import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -68,10 +70,10 @@ public class Runner24HoursTradingRealData {
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
-        double powerNom = settings5.powerBattMax() / 10;
+ //       double powerNom = settings5.powerBattMax() / 10;
 
         Double gradCriticMax = POWER_CAPACITY_FCR_LIST.get(CASE_NR);
-        var trainerParameters = TrainerParameters.builder()
+ /*       var trainerParameters = TrainerParameters.builder()
                 .nofEpisodes(3000).gamma(1.00).stepHorizon(10)   //8k
                 .learningRateReplayBufferCritic(1e-1)
                 .learningRateReplayBufferActor(1e-2)
@@ -82,6 +84,10 @@ public class Runner24HoursTradingRealData {
                 .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
                 .build();
         var agentParameters= AgentParameters.newDefault().withGradMaxCritic(gradCriticMax);
+*/
+        var trainerParameters = TrainerParametersFactory.trading24Hours();
+        var agentParameters= AgentParametersFactory.trading24Hours(settings5,gradCriticMax);
+
         var agent = AgentACDCSafe.of(agentParameters, settings5, startState.copy());
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)

@@ -48,7 +48,6 @@ public class Runner5HoursTrading {
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
-
         settings5 = SettingsTrading.new5HoursIncreasingPrice()
                 .withPowerCapacityFcr(1.0).withPriceFCR(0.1).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
@@ -58,22 +57,17 @@ public class Runner5HoursTrading {
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
                 .parameters(AgentParameters.newDefault()
-                //.trainerParameters(TrainerParameters.newDefault()
                         .withTargetMean(0d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
                         .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(1d)
                         .withLearningRateActorMean(1e-2).withLearningRateActorStd(1e-2)
                         .withLearningRateCritic(1e-3)
                         .withGradMaxActor(1d).withGradMaxCritic(1d))
-              //  .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
-              //  .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-              //  .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()
                 .withNofEpisodes(3000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
                 .withLearningRateReplayBufferCritic(1e-1)
                 .withLearningRateReplayBufferActor(1e-2)
-                //.withGradActorMax(1e-3)
                 .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(2);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)

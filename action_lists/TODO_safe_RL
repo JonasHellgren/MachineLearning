@@ -147,9 +147,9 @@ följande i både agent och trainer params (nya erf+rep buff):
                                                    Double learningRateActorStd,
                                                    Double learningRateCritic,
 
-snygga upp TrainerParameters
-TrainerParametersFactory
-AgentParametersFactory
+snygga upp TrainerParameters x
+TrainerParametersFactory x
+AgentParametersFactory x
 
 få till variererande priceFCR
 läsa in prisdata från xls

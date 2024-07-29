@@ -35,7 +35,6 @@ public class TestTrainerOneStepACDCBuyer {
         var startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3hours));
         TrainerParameters trainerParams = TrainerParameters.newDefault()
-                .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
                 .withLearningRateReplayBufferActor(1e-3)  //1e-3
                 .withLearningRateReplayBufferActorStd(1e-3)  //1e-3
                 .withLearningRateReplayBufferCritic(1e-1)  //1e-1
@@ -43,12 +42,11 @@ public class TestTrainerOneStepACDCBuyer {
                 ;
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3hours)
-                //.trainerParameters(trainerParams)
                 .parameters(AgentParameters.newDefault()
                         .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
-                                .withLearningRateActorMean(1e-3)  //1e-3
-                                .withLearningRateActorStd(1e-3)  //1e-3
-                                .withLearningRateCritic(1e-1)  //1e-1
+                                .withLearningRateActorMean(1e-3)
+                                .withLearningRateActorStd(1e-3)
+                                .withLearningRateCritic(1e-1)
                 )
                 .state(startState)
                 .build();
