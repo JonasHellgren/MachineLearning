@@ -58,9 +58,15 @@ public class Runner5HoursTrading {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
-                .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-                .gradMaxActor0(1d).gradMaxCritic0(1d)
+                .trainerParameters(TrainerParameters.newDefault()
+                        .withTargetMean(0d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
+                        .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(1d)
+                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-2)
+                        .withLearningRateReplayBufferCritic(1e-3)
+                        .withGradActorMax(1d).withGradCriticMax(1d))
+              //  .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
+              //  .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
+              //  .gradMaxActor0(1d).gradMaxCritic0(1d)
                 .state(startState.copy())
                 .build();
         var trainerParameters= TrainerParameters.newDefault()

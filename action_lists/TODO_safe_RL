@@ -134,7 +134,20 @@ Fyra Domain foldrar: env, agent, trainer, safety lager  x
 Dela in dessa enligt ddd x
 Flytta in Helpers , value obj x
 plantuml på major_domain_components  x
-AgntDisco mindre, tex man ActorUpdater
+AgntDisco mindre, tex man ActorUpdater x
+skapa AgentParameters - rörigt med lr för RB och agent
+följnade från TrainerParam till AgentParams:        @With Double gradActorMax,
+                                                    @With Double gradCriticMax,
+                                                    @With Double targetMean,
+                                                    @With Double absActionNominal,
+                                                    @With Double targetLogStd,
+                                                    @With Double targetCritic,
+följande i både agent och trainer params (nya erf+rep buff):
+                                                   Double learningRateActorMean,
+                                                   Double learningRateActorStd,
+                                                   Double learningRateCritic,
+TrainerParametersFactory
+AgentParametersFactory
 
 få till variererande priceFCR
 läsa in prisdata från xls

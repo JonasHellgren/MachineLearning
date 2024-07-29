@@ -31,9 +31,17 @@ public class Runner3HoursBuying {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3)
-                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
-                .gradMaxActor0(10d).gradMaxCritic0(10d)
+                .trainerParameters(TrainerParameters.newDefault()
+                        .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
+                        .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(2d)
+                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-3)
+                        .withLearningRateReplayBufferCritic(1e-1)
+                        .withGradActorMax(10d).withGradCriticMax(10d)
+                )
+
+                //.targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)
+                //.learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
+                //.gradMaxActor0(10d).gradMaxCritic0(10d)
                 .state(startState)
                 .build();
         var trainerParameters= TrainerParameters.newDefault()

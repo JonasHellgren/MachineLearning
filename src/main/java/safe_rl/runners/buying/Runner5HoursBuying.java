@@ -56,15 +56,25 @@ public class Runner5HoursBuying {
     private static Pair<
             TrainerMultiStepACDC<VariablesBuying>
             , AgentSimulator<VariablesBuying>> createTrainerAndSimulator() {
-        var settings5 = SettingsBuying.new5HoursDecreasingPrice();  //interesting to change, decreasing vs increasing price
+        var settings5 = SettingsBuying.new5HoursIncreasingPrice();  //interesting to change, decreasing vs increasing price
         var environment = new EnvironmentBuying(settings5);
         startState = StateBuying.of(VariablesBuying.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings5));
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings5)
-                .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
+                .trainerParameters(TrainerParameters.newDefault()
+                        .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
+                        .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(2d)
+                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-3)
+                        .withLearningRateReplayBufferCritic(1e-1)
+                        .withGradActorMax(1d).withGradCriticMax(1d))
+
+
+/*
+                        .targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(1d)
+*/
                 .state( startState.copy())
                 .build();
         var trainerParameters = TrainerParameters.newDefault()

@@ -73,15 +73,6 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
                                                              StateI<V> state) {
         return AgentACDCSafe.<V>builder()
                 .trainerParameters(trainerParameters)
-                .learningRateActorMean(trainerParameters.learningRateReplayBufferActor())
-                .learningRateActorStd(trainerParameters.learningRateReplayBufferActor())
-                .learningRateCritic(trainerParameters.learningRateReplayBufferCritic())
-                .targetMean(trainerParameters.targetMean())
-                .absActionNominal(trainerParameters.absActionNominal())
-                .targetLogStd(trainerParameters.targetLogStd())
-                .targetCritic(trainerParameters.targetCritic())
-                .gradMaxActor0(trainerParameters.gradActorMax())
-                .gradMaxCritic0(trainerParameters.gradCriticMax())
                 .settings(settings)
                 .state(state)
                 .build();
@@ -89,40 +80,19 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Builder
     AgentACDCSafe(@NonNull  TrainerParameters trainerParameters,
-                  Double learningRateActorMean,
-                         Double learningRateActorStd,
-                         Double learningRateCritic,
                          @NonNull SettingsEnvironmentI settings,
-                         Double targetMean,
-                         Double absActionNominal,
-                         Double targetLogStd,
-                         Double targetCritic,
-                         Double gradMaxActor0, Double gradMaxCritic0,
                          @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinuousFeatures() + 1;
-
-        System.out.println("trainerParameters = " + trainerParameters);
         this.parameters=TrainerParametersInterpreter.ofTrainerParams(trainerParameters);
         var p=parameters;
-       /* System.out.println("p = " + p);
-        double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
-        double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
-        double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
-        double gradMaxActor = defaultIfNullDouble.apply(gradMaxActor0, GRADIENT_MAX);
-        double gradMaxCritic = defaultIfNullDouble.apply(gradMaxCritic0, GRADIENT_MAX);
-        double tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
-        double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
-
-*/
         this.actorMean = new DisCoMemory<>(nThetas, p.learningRateActorMean(), p.gradMaxActor());
         this.actorLogStd = new DisCoMemory<>(nThetas, p.learningRateActorStd(), p.gradMaxActor());
         this.critic = new DisCoMemory<>(nThetas, p.learningRateCritic(), p.gradMaxCritic());
-      //  this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
 
         this.actorMemoryUpdater=new ActorMemoryUpdater<>(actorMean, actorLogStd, parameters);
-        initMemories(targetCritic, state, p.targetMean(), p.targetLogStd());
+        initMemories(p.targetCritic(), state, p.targetMean(), p.targetLogStd());
 
     }
 

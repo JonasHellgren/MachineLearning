@@ -2,8 +2,11 @@ package safe_rl.domain.agent.value_objects;
 
 import lombok.Builder;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
-
 import static common.other.MyFunctions.defaultIfNullDouble;
+
+/***
+ *  Dummy class, just replaces value with default if field is null
+ */
 
 @Builder
 public record TrainerParametersInterpreter(
