@@ -9,7 +9,8 @@
 ;
 **:Environment
 <code>
-•	Executes the given action and return the next state, reward, and a flag indicating whether the episode is done.
+•	Executes the given action and return the next state, reward, and a flag indicating
+whether the episode is done.
 •	Provides available actions that the agent can take in the current state.
 </code>
 ;
@@ -18,14 +19,16 @@
 <code>
 •	Initializes the agent and environment.
 •	Runs training episodes where the agent interacts with the environment.
-•	Helps the agent to learn from these episodes by updating its policy based on the accumulated experiences.
+•	Helps the agent to learn from these episodes by updating its policy based on
+the accumulated experiences.
 •	Defines the degree of exploration, i.e. the probability for taking a random action.
 </code>
 ;
 
 **:Safety layer
 <code>
-•	Corrects the agent proposed action if it not is feasible. The modified action is as close as possible to the proposed action.
+•	Corrects the agent proposed action if it not is feasible. The modified action is
+ as close as possible to the proposed action.
 </code>
 ;
 
