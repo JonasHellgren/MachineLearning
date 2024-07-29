@@ -11,6 +11,7 @@ import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.agent.aggregates.ActorMemoryUpdater;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
+import safe_rl.domain.agent.value_objects.TrainerParametersInterpreter;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
 import safe_rl.domain.environment.aggregates.StateI;
@@ -54,6 +55,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
+    TrainerParametersInterpreter parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
     double absActionNominal;
     LossTracker lossTracker=new LossTracker();
@@ -72,6 +74,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
                                                              SettingsEnvironmentI settings,
                                                              StateI<V> state) {
         return AgentACDCSafe.<V>builder()
+                .trainerParameters(trainerParameters)
                 .learningRateActorMean(trainerParameters.learningRateReplayBufferActor())
                 .learningRateActorStd(trainerParameters.learningRateReplayBufferActor())
                 .learningRateCritic(trainerParameters.learningRateReplayBufferCritic())
@@ -87,7 +90,8 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     }
 
     @Builder
-    AgentACDCSafe(Double learningRateActorMean,
+    AgentACDCSafe(TrainerParameters trainerParameters,
+                  Double learningRateActorMean,
                          Double learningRateActorStd,
                          Double learningRateCritic,
                          @NonNull SettingsEnvironmentI settings,
@@ -100,6 +104,9 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinuousFeatures() + 1;
+
+        this.parameters=TrainerParametersInterpreter.ofTrainerParams(trainerParameters);
+        System.out.println("parameters = " + parameters);
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
