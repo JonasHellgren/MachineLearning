@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.math3.util.Pair;
+import org.jetbrains.annotations.NotNull;
+import safe_rl.domain.agent.aggregates.ActorMemoryUpdater;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
@@ -52,10 +54,9 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-    double tarStdInit, tarMeanInit;
+    ActorMemoryUpdater<V> actorMemoryUpdater;
     double absActionNominal;
     LossTracker lossTracker=new LossTracker();
-    SafeGradientClipper meanGradClipper, stdGradClipper;
 
     public static <V> AgentACDCSafe<V> newDefault(SettingsEnvironmentI settings, StateI<V> state) {
         return AgentACDCSafe.<V>builder()
@@ -104,26 +105,24 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
         double gradMaxActor = defaultIfNullDouble.apply(gradMaxActor0, GRADIENT_MAX);
         double gradMaxCritic = defaultIfNullDouble.apply(gradMaxCritic0, GRADIENT_MAX);
+        double tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
+        double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
 
         this.actorMean = new DisCoMemory<>(nThetas, lram, gradMaxActor);
         this.actorLogStd = new DisCoMemory<>(nThetas, lras, gradMaxActor);
         this.critic = new DisCoMemory<>(nThetas, lrc, gradMaxCritic);
-        this.tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
-        double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
-        tarStdInit = Math.exp(tarLogStdInit);
+
+        this.actorMemoryUpdater=new ActorMemoryUpdater<>(actorMean, actorLogStd, gradMaxActor, tarMeanInit,  tarLogStdInit);
+        initMemories(targetCritic, state, tarMeanInit, tarLogStdInit);
+
+    }
+
+    private void initMemories(Double targetCritic, @NotNull StateI<V> state, double tarMeanInit, double tarLogStdInit) {
         double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
         getInitializer(state, actorMean, tarMeanInit).initialize();
         getInitializer(state, actorLogStd, tarLogStdInit).initialize();
         getInitializer(state, critic, tarC).initialize();
-        meanGradClipper=SafeGradientClipper.builder()
-                .gradMin(-gradMaxActor).gradMax(gradMaxActor)
-                .valueMin(tarMeanInit -2*tarStdInit).valueMax(tarMeanInit +2*tarStdInit) //debatable use 2 std
-                .build();
-        stdGradClipper=SafeGradientClipper.builder()
-                .gradMin(-gradMaxActor).gradMax(gradMaxActor)
-                .valueMin(Math.log(STD_MIN)).valueMax(tarLogStdInit)
-                .build();
     }
 
     @Override
@@ -146,15 +145,24 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
 
     @Override
+    public SafeGradientClipper getMeanGradClipper() {
+        return actorMemoryUpdater.getMeanGradClipper();
+    }
+
+    @Override
+    public SafeGradientClipper getStdGradClipper() {
+        return actorMemoryUpdater.getStdGradClipper();
+    }
+
+    @Override
     public Pair<Double, Double> fitActor(StateI<V> state, Action action, double adv) {
         var grad = gradientMeanAndStd(state, action);
-        double gradMean0=grad.getFirst() * adv;
-        double gradStd0=grad.getSecond() * adv;
-        actorMean.fitFromError(state, meanGradClipper.modify(gradMean0,actorMean.read(state)));
-        actorLogStd.fitFromError(state, stdGradClipper.modify(gradStd0,actorLogStd.read(state)));
+        actorMemoryUpdater.fitActorMemory(state, adv, grad);
         lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(),actorLogStd.lossLastUpdate());
         return grad;
     }
+
+
 
     @Override
     public Pair<Double, Double> gradientMeanAndStd(StateI<V> state, Action action) {
