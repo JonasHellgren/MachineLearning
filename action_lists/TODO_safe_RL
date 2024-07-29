@@ -147,11 +147,14 @@ följande i både agent och trainer params (nya erf+rep buff):
                                                    Double learningRateActorStd,
                                                    Double learningRateCritic,
 
-snygga upp TrainerParameters x
 TrainerParametersFactory x
 AgentParametersFactory x
+snygga upp TrainerParameters
+
 
 få till variererande priceFCR
+TradeStateUpdater i StateEnv
+kunna hantera start-slut tid
 läsa in prisdata från xls
 mest repr elpris data genom klustring - 4 fall
 

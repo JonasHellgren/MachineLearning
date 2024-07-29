@@ -8,13 +8,12 @@ public class TrainerParametersFactory {
     }
 
     public static TrainerParameters trading24Hours() {
-       return TrainerParameters.builder()
-               .nofEpisodes(3000).gamma(1.00).stepHorizon(10)   //8k
-               .learningRateReplayBufferCritic(1e-1)
-               .learningRateReplayBufferActor(1e-2)
-               .learningRateReplayBufferActorStd(1e-2)
-               .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
-               .build();
+        return TrainerParameters.newDefault()
+                .withNofEpisodes(3000).withGamma(1.0)
+                .withMiniBatchSize(50).withNReplayBufferFitsPerEpisode(5)
+                .withLearningRateReplayBufferCritic(1e-1)
+                .withLearningRateReplayBufferActor(1e-2)
+                .withLearningRateReplayBufferActorStd(1e-2);
     }
 
     public static TrainerParameters buying5Hours() {

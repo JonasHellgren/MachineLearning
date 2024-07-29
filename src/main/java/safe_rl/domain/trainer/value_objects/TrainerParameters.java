@@ -1,29 +1,27 @@
 package safe_rl.domain.trainer.value_objects;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.With;
 
 import static common.other.MyFunctions.*;
 
+@Builder
+@With
+@NonNull
 public record TrainerParameters(
-        @With Integer nofEpisodes,
-        @With Integer nofStepsMax,
-        @With Double gamma,
-        @With Double learningRateReplayBufferCritic,
-        @With Double learningRateReplayBufferActor,
-        @With Double learningRateReplayBufferActorStd,
-/*        @With Double gradActorMax,
-        @With Double gradCriticMax,
-        @With Double targetMean,
-        @With Double absActionNominal,
-        @With Double targetLogStd,
-        @With Double targetCritic,*/
-        @With Integer replayBufferSize,
-        @With Integer miniBatchSize,
-        @With Integer nReplayBufferFitsPerEpisode,
-        @With Boolean isRemoveOldest,
-        @With Double ratioPenCorrectedAction,
-        @With Integer stepHorizon) {
+        Integer nofEpisodes,
+        Integer nofStepsMax,
+        Integer stepHorizon,
+        Double gamma,
+        Double learningRateReplayBufferCritic,
+        Double learningRateReplayBufferActor,
+        Double learningRateReplayBufferActorStd,
+        Integer replayBufferSize,
+        Integer miniBatchSize,
+        Integer nReplayBufferFitsPerEpisode,
+        Boolean isRemoveOldest,
+        Double ratioPenCorrectedAction) {
 
     static final int NOF_EPISODES = 2000;
     static final int NOF_STEPS = 100;
@@ -43,52 +41,20 @@ public record TrainerParameters(
     public static final double ABS_NOM = 1d;
 
     public static TrainerParameters newDefault() {
-        return TrainerParameters.builder().build();
-    }
-
-    @Builder
-    public TrainerParameters(Integer nofEpisodes,
-                             Integer nofStepsMax,
-                             Double gamma,
-                             Double learningRateReplayBufferCritic,
-                             Double learningRateReplayBufferActor,
-                             Double learningRateReplayBufferActorStd,
-                             /*Double gradActorMax,
-                             Double gradCriticMax,
-                             Double targetMean,
-                             Double absActionNominal,
-                             Double targetLogStd,
-                             Double targetCritic,
-                             */Integer replayBufferSize,
-                             Integer miniBatchSize,
-                             Integer nReplayBufferFitsPerEpisode,
-                             Boolean isRemoveOldest,
-                             Double ratioPenCorrectedAction,
-                             Integer stepHorizon) {
-        this.nofEpisodes = defaultIfNullInteger.apply(nofEpisodes, NOF_EPISODES);
-        this.nofStepsMax = defaultIfNullInteger.apply(nofStepsMax, NOF_STEPS);
-        this.gamma = defaultIfNullDouble.apply(gamma, DEF_GAMMA);
-        this.learningRateReplayBufferCritic = defaultIfNullDouble.apply(
-                learningRateReplayBufferCritic, LEARNING_RATE);
-        this.learningRateReplayBufferActor = defaultIfNullDouble.apply(
-                learningRateReplayBufferActor, LEARNING_RATE_SMALL);
-        this.learningRateReplayBufferActorStd = defaultIfNullDouble.apply(
-                learningRateReplayBufferActorStd, LEARNING_RATE_SMALL);
-
-/*
-        this.gradActorMax = defaultIfNullDouble.apply(gradActorMax, GRAD_MAX);
-        this.gradCriticMax = defaultIfNullDouble.apply(gradCriticMax, GRAD_MAX);
-        this.targetMean = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
-        this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_NOM);
-        this.targetLogStd = defaultIfNullDouble.apply(targetLogStd, TAR_LOG);
-        this.targetCritic = defaultIfNullDouble.apply(targetCritic, TAR_CRIT);
-*/
-        this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
-        this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
-        this.nReplayBufferFitsPerEpisode = defaultIfNullInteger.apply(nReplayBufferFitsPerEpisode, N_RP_FITS);
-        this.isRemoveOldest = (Boolean) defaultIfNullObject.apply(isRemoveOldest, IS_REMOVE_OLDEST);
-        this.ratioPenCorrectedAction = defaultIfNullDouble.apply(ratioPenCorrectedAction, RATIO_PEN_ACTION);
-        this.stepHorizon = defaultIfNullInteger.apply(stepHorizon, STEP_HORIZON);
+        return TrainerParameters.builder()
+                .nofEpisodes(NOF_EPISODES)
+                .nofStepsMax(NOF_STEPS)
+                .stepHorizon(STEP_HORIZON)
+                .gamma(DEF_GAMMA)
+                .learningRateReplayBufferCritic(LEARNING_RATE)
+                .learningRateReplayBufferActor(LEARNING_RATE_SMALL)
+                .learningRateReplayBufferActorStd(LEARNING_RATE_SMALL)
+                .replayBufferSize(REPLAY_BUFFER_SIZE)
+                .miniBatchSize(BATCH_SIZE)
+                .nReplayBufferFitsPerEpisode(N_RP_FITS)
+                .isRemoveOldest(IS_REMOVE_OLDEST)
+                .ratioPenCorrectedAction(RATIO_PEN_ACTION)
+                .build();
     }
 
     public double gammaPowN() {
