@@ -9,14 +9,14 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-import safe_rl.helpers.RandomActionSimulator;
+import safe_rl.domain.simulator.RandomActionSimulator;
 
 import java.util.ArrayList;
 import java.util.List;

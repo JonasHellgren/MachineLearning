@@ -6,16 +6,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.EnvironmentI;
+import safe_rl.domain.environment.EnvironmentI;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-import safe_rl.helpers.RandomActionSimulator;
-
-import java.util.stream.IntStream;
+import safe_rl.domain.simulator.RandomActionSimulator;
 
 import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 

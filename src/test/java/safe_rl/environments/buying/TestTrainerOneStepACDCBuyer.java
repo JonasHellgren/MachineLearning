@@ -4,13 +4,13 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.agents.AgentACDCSafe;
+import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
-import safe_rl.domain.trainers.TrainerOneStepACDC;
-import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.domain.trainer.TrainerOneStepACDC;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 import safe_rl.environments.factories.FactoryOptModel;
-import safe_rl.helpers.EpisodeInfo;
+import safe_rl.domain.trainer.helpers.EpisodeInfo;
 
 /***
  * Optimal behavior in this test is max power two first steps

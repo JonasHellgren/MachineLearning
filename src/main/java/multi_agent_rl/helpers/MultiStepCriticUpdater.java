@@ -2,9 +2,9 @@ package multi_agent_rl.helpers;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import safe_rl.agent_interfaces.AgentACDiscoI;
-import safe_rl.domain.value_classes.MultiStepResults;
-import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.domain.agent.interfaces.AgentACDiscoI;
+import safe_rl.domain.trainer.value_objects.MultiStepResults;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
 /**
 For learning directly from latest episode

@@ -12,9 +12,8 @@ import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.NonNull;
-import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.abstract_classes.OptModelI;
-import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.safety_layer.aggregates.OptModelI;
+import safe_rl.domain.environment.aggregates.StateI;
 
 import java.util.Arrays;
 import java.util.List;

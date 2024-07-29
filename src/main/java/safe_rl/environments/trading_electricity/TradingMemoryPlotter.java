@@ -3,7 +3,6 @@ package safe_rl.environments.trading_electricity;
 import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -12,7 +11,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import safe_rl.domain.memories.DisCoMemory;
+import safe_rl.domain.agent.aggregates.DisCoMemory;
 
 import javax.swing.*;
 import java.awt.*;

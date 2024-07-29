@@ -2,10 +2,11 @@ package safe_rl.environments.buying_electricity;
 
 import common.other.Conditionals;
 import lombok.extern.java.Log;
-import safe_rl.domain.abstract_classes.EnvironmentI;
-import safe_rl.domain.abstract_classes.*;
-import safe_rl.domain.value_classes.StepReturn;
-import safe_rl.helpers.PriceInterpolator;
+import safe_rl.domain.environment.EnvironmentI;
+import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.environment.value_objects.StepReturn;
+import safe_rl.domain.environment.helpers.PriceInterpolator;
 import java.util.Arrays;
 import static java.lang.Math.min;
 

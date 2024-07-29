@@ -6,9 +6,8 @@ import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.With;
-import safe_rl.domain.abstract_classes.SettingsEnvironmentI;
+import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder

@@ -3,7 +3,7 @@ package safe_rl.environments.buying_electricity;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.With;
-import safe_rl.domain.abstract_classes.SettingsEnvironmentI;
+import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
 
 @Builder
 public record SettingsBuying  (

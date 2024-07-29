@@ -1,9 +1,9 @@
 package safe_rl.helpers;
 
-import common.list_arrays.ArrayUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import safe_rl.domain.environment.helpers.PriceInterpolator;
 
 import static common.list_arrays.ArrayUtil.isDoubleArraysEqual;
 

@@ -1,7 +1,7 @@
 package safe_rl.environments.buying_electricity;
 
 import lombok.AllArgsConstructor;
-import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.environment.aggregates.StateI;
 
 @AllArgsConstructor
 public class StateBuying implements StateI<VariablesBuying> {

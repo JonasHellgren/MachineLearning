@@ -1,10 +1,9 @@
 package safe_rl.domain.safety_layer;
 
 import com.joptimizer.exception.JOptimizerException;
-import lombok.SneakyThrows;
-import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.abstract_classes.OptModelI;
-import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.safety_layer.aggregates.OptModelI;
+import safe_rl.domain.environment.aggregates.StateI;
 
 /***
  * Corrects action value if needed

@@ -4,7 +4,7 @@ import common.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.Action;
+import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;

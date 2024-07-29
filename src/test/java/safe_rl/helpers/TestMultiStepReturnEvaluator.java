@@ -2,9 +2,10 @@ package safe_rl.helpers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.value_classes.Experience;
-import safe_rl.domain.value_classes.TrainerParameters;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.trainer.helpers.MultiStepReturnEvaluator;
+import safe_rl.domain.trainer.value_objects.Experience;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
 

@@ -4,7 +4,7 @@ import common.list_arrays.ListUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.Action;
+import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.EnvironmentBuying;
 import safe_rl.environments.buying_electricity.StateBuying;

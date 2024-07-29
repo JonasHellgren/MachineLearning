@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.memories.ReplayBufferMultiStepExp;
-import safe_rl.domain.value_classes.MultiStepResultItem;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
+import safe_rl.domain.trainer.value_objects.MultiStepResultItem;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 

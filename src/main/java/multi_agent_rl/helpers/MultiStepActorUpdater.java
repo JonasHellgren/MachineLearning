@@ -3,10 +3,10 @@ package multi_agent_rl.helpers;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import safe_rl.agent_interfaces.AgentACDiscoI;
-import safe_rl.domain.value_classes.MultiStepResults;
-import safe_rl.domain.value_classes.TrainerParameters;
-import safe_rl.helpers.CorrectedActionPenalizer;
+import safe_rl.domain.agent.interfaces.AgentACDiscoI;
+import safe_rl.domain.trainer.value_objects.MultiStepResults;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
+import safe_rl.domain.trainer.helpers.CorrectedActionPenalizer;
 
 import java.util.List;
 

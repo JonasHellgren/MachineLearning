@@ -1,0 +1,33 @@
+
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+class  TrainerMultiStepACDC<V=generic state variables> {
+          EnvironmentI<V> environment;
+          AgentACDiscoI<V> agent;
+          EpisodeCreator<V> experienceCreator;
+          ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
+          ReplayBufferMultiStepExp<V> buffer;
+          FitterUsingReplayBuffer<V> fitter;
+
+          + train()
+}
+
+
+note bottom of  TrainerMultiStepACDC : Executed every episode, in train: \n experiences = getExperiences() \n trainAgentFromNewExperiences(experiences); \n addNewExperienceToBuffer(); \n trainAgentFromOldExperience();  \n
+
+
+class EpisodeCreator<V=generic state variables> {
+    EnvironmentI<V> environment;
+    SafetyLayer<V> safetyLayer;
+
+    + List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart)
+   }
+
+
+note bottom of  EpisodeCreator : Executed every step, in getExperiences: \n action = agent.chooseAction(state) \n actionMaybeCorrected = safetyLayer.correctAction(state, action) \n sr = environment.step(state, actionMaybeCorrected) \n experienceList.add(...) \n
+
+
+@enduml

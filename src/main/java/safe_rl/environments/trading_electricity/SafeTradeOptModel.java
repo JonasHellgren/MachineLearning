@@ -17,8 +17,8 @@ import common.other.RandUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import safe_rl.domain.abstract_classes.OptModelI;
-import safe_rl.domain.abstract_classes.StateI;
+import safe_rl.domain.safety_layer.aggregates.OptModelI;
+import safe_rl.domain.environment.aggregates.StateI;
 import java.util.Arrays;
 import java.util.List;
 

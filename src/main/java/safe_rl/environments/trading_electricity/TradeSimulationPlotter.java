@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import safe_rl.domain.value_classes.SimulationResult;
+import safe_rl.domain.simulator.value_objects.SimulationResult;
 
 import java.awt.*;
 import java.text.DecimalFormat;

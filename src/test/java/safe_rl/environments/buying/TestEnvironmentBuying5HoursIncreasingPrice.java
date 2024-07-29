@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import safe_rl.domain.abstract_classes.Action;
-import safe_rl.domain.value_classes.StepReturn;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.environment.value_objects.StepReturn;
 import safe_rl.environments.buying_electricity.*;
 
 public class TestEnvironmentBuying5HoursIncreasingPrice {

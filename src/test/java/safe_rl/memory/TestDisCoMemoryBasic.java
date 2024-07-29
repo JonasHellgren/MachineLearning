@@ -3,8 +3,8 @@ package safe_rl.memory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.domain.abstract_classes.StateI;
-import safe_rl.domain.memories.DisCoMemory;
+import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.agent.aggregates.DisCoMemory;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
 
