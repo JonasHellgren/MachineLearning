@@ -8,7 +8,9 @@ import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerOneStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
+import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.TrainerParametersFactory;
 
 /***
  * targetLogStd: very important, good enough init exploration needed
@@ -32,25 +34,13 @@ public class Runner3HoursBuying {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3)
-                .parameters(AgentParameters.newDefault().newDefault()
-                        .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
-                        .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(2d)
-                        .withLearningRateActorMean(1e-2).withLearningRateActorStd(1e-3)
-                        .withLearningRateCritic(1e-1)
-                        .withGradMaxActor(10d).withGradMaxCritic(10d)
-                )
-
-                //.targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)
-                //.learningRateActorMean(1e-2).learningRateActorStd(1e-3).learningRateCritic(1e-1)
-                //.gradMaxActor0(10d).gradMaxCritic0(10d)
+                .parameters(AgentParametersFactory.buying3Hours())
                 .state(startState)
                 .build();
-        var trainerParameters= TrainerParameters.newDefault()
-                .withNofEpisodes(2000).withGamma(1.0).withRatioPenCorrectedAction(10d);
         return TrainerOneStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
-                .trainerParameters(trainerParameters)
+                .trainerParameters(TrainerParametersFactory.buying3Hours())
                 .startStateSupplier(() -> startState.copy() )
                 .build();
     }

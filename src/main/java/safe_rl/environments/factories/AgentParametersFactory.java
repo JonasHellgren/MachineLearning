@@ -18,6 +18,10 @@ public class AgentParametersFactory {
                 .withGradMaxActor(1d).withGradMaxCritic(1d);
     }
 
+    public static AgentParameters buying3Hours() {
+    return buying5Hours().withGradMaxActor(10d).withGradMaxCritic(10d);
+    }
+
     public static AgentParameters trading24Hours(SettingsTrading settings, Double gradCriticMax) {
         double powerNom = settings.powerBattMax() / 10;
         return  AgentParameters.newDefault()

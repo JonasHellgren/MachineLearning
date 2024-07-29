@@ -18,9 +18,14 @@ public class TrainerParametersFactory {
 
     public static TrainerParameters buying5Hours() {
         return TrainerParameters.newDefault()
-                .withNofEpisodes(5000).withGamma(1.00).withRatioPenCorrectedAction(0.1d).withStepHorizon(5)
+                .withNofEpisodes(5000).withGamma(1.00)
+                .withRatioPenCorrectedAction(0.1d).withStepHorizon(5)
                 .withLearningRateReplayBufferCritic(1e-1)
                 .withLearningRateReplayBufferActor(1e-4);
+    }
+
+    public static TrainerParameters buying3Hours() {
+        return buying5Hours().withNofEpisodes(2000);
     }
 
 }
