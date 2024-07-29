@@ -12,12 +12,12 @@ public record TrainerParameters(
         @With Double learningRateReplayBufferCritic,
         @With Double learningRateReplayBufferActor,
         @With Double learningRateReplayBufferActorStd,
-        @With Double gradActorMax,
+/*        @With Double gradActorMax,
         @With Double gradCriticMax,
         @With Double targetMean,
         @With Double absActionNominal,
         @With Double targetLogStd,
-        @With Double targetCritic,
+        @With Double targetCritic,*/
         @With Integer replayBufferSize,
         @With Integer miniBatchSize,
         @With Integer nReplayBufferFitsPerEpisode,
@@ -53,13 +53,13 @@ public record TrainerParameters(
                              Double learningRateReplayBufferCritic,
                              Double learningRateReplayBufferActor,
                              Double learningRateReplayBufferActorStd,
-                             Double gradActorMax,
+                             /*Double gradActorMax,
                              Double gradCriticMax,
                              Double targetMean,
                              Double absActionNominal,
                              Double targetLogStd,
                              Double targetCritic,
-                             Integer replayBufferSize,
+                             */Integer replayBufferSize,
                              Integer miniBatchSize,
                              Integer nReplayBufferFitsPerEpisode,
                              Boolean isRemoveOldest,
@@ -75,12 +75,14 @@ public record TrainerParameters(
         this.learningRateReplayBufferActorStd = defaultIfNullDouble.apply(
                 learningRateReplayBufferActorStd, LEARNING_RATE_SMALL);
 
+/*
         this.gradActorMax = defaultIfNullDouble.apply(gradActorMax, GRAD_MAX);
         this.gradCriticMax = defaultIfNullDouble.apply(gradCriticMax, GRAD_MAX);
         this.targetMean = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_NOM);
         this.targetLogStd = defaultIfNullDouble.apply(targetLogStd, TAR_LOG);
         this.targetCritic = defaultIfNullDouble.apply(targetCritic, TAR_CRIT);
+*/
         this.replayBufferSize = defaultIfNullInteger.apply(replayBufferSize, REPLAY_BUFFER_SIZE);
         this.miniBatchSize = defaultIfNullInteger.apply(miniBatchSize, BATCH_SIZE);
         this.nReplayBufferFitsPerEpisode = defaultIfNullInteger.apply(nReplayBufferFitsPerEpisode, N_RP_FITS);

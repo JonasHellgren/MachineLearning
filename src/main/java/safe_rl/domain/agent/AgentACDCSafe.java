@@ -56,7 +56,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-    AgentParameters parameters;
+   @Getter AgentParameters parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
     LossTracker lossTracker=new LossTracker();
 

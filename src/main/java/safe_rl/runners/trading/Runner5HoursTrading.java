@@ -72,7 +72,8 @@ public class Runner5HoursTrading {
         var trainerParameters= TrainerParameters.newDefault()
                 .withNofEpisodes(3000).withGamma(0.99).withRatioPenCorrectedAction(0.1d).withStepHorizon(3)
                 .withLearningRateReplayBufferCritic(1e-1)
-                .withLearningRateReplayBufferActor(1e-2).withGradActorMax(1e-3)
+                .withLearningRateReplayBufferActor(1e-2)
+                //.withGradActorMax(1e-3)
                 .withReplayBufferSize(1000).withMiniBatchSize(100).withNReplayBufferFitsPerEpisode(2);
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)

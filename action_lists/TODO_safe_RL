@@ -146,6 +146,8 @@ följande i både agent och trainer params (nya erf+rep buff):
                                                    Double learningRateActorMean,
                                                    Double learningRateActorStd,
                                                    Double learningRateCritic,
+
+snygga upp TrainerParameters
 TrainerParametersFactory
 AgentParametersFactory
 

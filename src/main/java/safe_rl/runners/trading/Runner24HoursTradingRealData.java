@@ -76,9 +76,9 @@ public class Runner24HoursTradingRealData {
                 .learningRateReplayBufferCritic(1e-1)
                 .learningRateReplayBufferActor(1e-2)
                 .learningRateReplayBufferActorStd(1e-3)
-                .gradActorMax(1d).gradCriticMax(gradCriticMax)
-                .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
-                .targetCritic(0d).absActionNominal(powerNom)
+                //.gradActorMax(1d).gradCriticMax(gradCriticMax)
+                //.targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
+                //.targetCritic(0d).absActionNominal(powerNom)
                 .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
                 .build();
         var agentParameters= AgentParameters.newDefault().withGradMaxCritic(gradCriticMax);

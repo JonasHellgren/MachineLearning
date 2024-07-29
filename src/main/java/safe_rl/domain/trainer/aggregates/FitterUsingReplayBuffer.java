@@ -99,7 +99,8 @@ public class FitterUsingReplayBuffer<V> {
     ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> loss = (exp, isMean) -> {
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
         double advantage = valueTarget(exp) - agent.readCritic(exp.state());
-        double gradMax = parameters.gradActorMax();
+        //double gradMax = parameters.gradActorMax();
+        double gradMax = agent.getParameters().gradMaxActor();
         double gradVal = isMean ? grad.getFirst() : grad.getSecond();
         return clip(-gradVal * advantage, -gradMax, gradMax);  //MINUS <=> maximize loss
     };

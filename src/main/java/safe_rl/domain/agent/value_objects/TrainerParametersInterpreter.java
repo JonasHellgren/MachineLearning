@@ -38,13 +38,13 @@ public record TrainerParametersInterpreter(
                 .learningRateActorMean(defaultIfNullDouble.apply(p.learningRateReplayBufferActor(), LEARNING_RATE))
                 .learningRateActorStd(defaultIfNullDouble.apply(p.learningRateReplayBufferActorStd(), LEARNING_RATE))
                 .learningRateCritic(defaultIfNullDouble.apply(p.learningRateReplayBufferCritic(), LEARNING_RATE))
-                .targetMean(defaultIfNullDouble.apply(p.targetMean(), TAR_MEAN))
+          /*      .targetMean(defaultIfNullDouble.apply(p.targetMean(), TAR_MEAN))
                 .absActionNominal(defaultIfNullDouble.apply(p.absActionNominal(), ABS_TAR_MEAN))
                 .targetLogStd(defaultIfNullDouble.apply(p.targetLogStd(), TAR_LOG_STD))
                 .targetCritic(defaultIfNullDouble.apply(p.targetCritic(), TAR_CRITIC))
                 .gradMaxActor(defaultIfNullDouble.apply(p.gradActorMax(), GRADIENT_MAX))
                 .gradMaxCritic(defaultIfNullDouble.apply(p.gradCriticMax(), GRADIENT_MAX))
-                .build();
+         */       .build();
     }
 
 }
