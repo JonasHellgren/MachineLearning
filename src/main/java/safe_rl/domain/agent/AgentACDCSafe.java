@@ -57,14 +57,12 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
     TrainerParametersInterpreter parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
-    double absActionNominal;
+//    double absActionNominal;
     LossTracker lossTracker=new LossTracker();
 
     public static <V> AgentACDCSafe<V> newDefault(SettingsEnvironmentI settings, StateI<V> state) {
         return AgentACDCSafe.<V>builder()
-                .learningRateActorMean(LEARNING_RATE)
-                .learningRateActorStd(LEARNING_RATE)
-                .learningRateCritic(LEARNING_RATE)
+                .trainerParameters(TrainerParameters.newDefault())
                 .settings(settings)
                 .state(state)
                 .build();
@@ -90,7 +88,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     }
 
     @Builder
-    AgentACDCSafe(TrainerParameters trainerParameters,
+    AgentACDCSafe(@NonNull  TrainerParameters trainerParameters,
                   Double learningRateActorMean,
                          Double learningRateActorStd,
                          Double learningRateCritic,
@@ -105,8 +103,10 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         this.settings = settings;
         int nThetas = state.nContinuousFeatures() + 1;
 
+        System.out.println("trainerParameters = " + trainerParameters);
         this.parameters=TrainerParametersInterpreter.ofTrainerParams(trainerParameters);
-        System.out.println("parameters = " + parameters);
+        var p=parameters;
+       /* System.out.println("p = " + p);
         double lram = defaultIfNullDouble.apply(learningRateActorMean, LEARNING_RATE);
         double lras = defaultIfNullDouble.apply(learningRateActorStd, LEARNING_RATE);
         double lrc = defaultIfNullDouble.apply(learningRateCritic, LEARNING_RATE);
@@ -115,13 +115,14 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         double tarMeanInit = defaultIfNullDouble.apply(targetMean, TAR_MEAN);
         double tarLogStdInit = defaultIfNullDouble.apply(targetLogStd, TAR_LOG_STD);
 
-        this.actorMean = new DisCoMemory<>(nThetas, lram, gradMaxActor);
-        this.actorLogStd = new DisCoMemory<>(nThetas, lras, gradMaxActor);
-        this.critic = new DisCoMemory<>(nThetas, lrc, gradMaxCritic);
-        this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
+*/
+        this.actorMean = new DisCoMemory<>(nThetas, p.learningRateActorMean(), p.gradMaxActor());
+        this.actorLogStd = new DisCoMemory<>(nThetas, p.learningRateActorStd(), p.gradMaxActor());
+        this.critic = new DisCoMemory<>(nThetas, p.learningRateCritic(), p.gradMaxCritic());
+      //  this.absActionNominal = defaultIfNullDouble.apply(absActionNominal, ABS_TAR_MEAN);
 
-        this.actorMemoryUpdater=new ActorMemoryUpdater<>(actorMean, actorLogStd, gradMaxActor, tarMeanInit,  tarLogStdInit);
-        initMemories(targetCritic, state, tarMeanInit, tarLogStdInit);
+        this.actorMemoryUpdater=new ActorMemoryUpdater<>(actorMean, actorLogStd, parameters);
+        initMemories(targetCritic, state, p.targetMean(), p.targetLogStd());
 
     }
 
@@ -140,7 +141,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Override
     public Action chooseActionNominal(StateI<V> state) {
-        return Action.ofDouble(absActionNominal);
+        return Action.ofDouble(parameters.absActionNominal());
     }
 
     @Override

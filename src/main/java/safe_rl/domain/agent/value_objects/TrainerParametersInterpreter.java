@@ -42,7 +42,6 @@ public record TrainerParametersInterpreter(
                 .gradMaxActor(defaultIfNullDouble.apply(p.gradActorMax(), GRADIENT_MAX))
                 .gradMaxCritic(defaultIfNullDouble.apply(p.gradCriticMax(), GRADIENT_MAX))
                 .build();
-
     }
 
 }

@@ -58,10 +58,11 @@ public class TestFitterUsingReplayBuffer {
         StateTrading state = StateTrading.newFullAndFresh();
         AgentACDiscoI<VariablesTrading> agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settingsTrading)
-                .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
+                .trainerParameters(TrainerParameters.newDefault())
+              /*  .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
                 .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
                 .gradMaxActor0(1d).gradMaxCritic0(1d)
-                .state(state.copy())
+              */  .state(state.copy())
                 .build();
         critic=agent.getCritic();
         var initializer = getInitializer(state, critic, TAR_VALUE_INIT, STD_TAR);

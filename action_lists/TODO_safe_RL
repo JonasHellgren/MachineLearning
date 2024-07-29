@@ -149,6 +149,7 @@ critic loss alltid noll
 
 kanske senare:
 snygga upp trainer mha mediator
+TestTrainerOneStepACDCBuyer fuckar ibland
 Fcr d up och n
 test FitterUsingReplayBuffer actor update
 plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången

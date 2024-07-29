@@ -75,7 +75,7 @@ public class Runner24HoursTrading {
                 .nofEpisodes(3000).gamma(1.00).stepHorizon(10)   //8k
                 .learningRateReplayBufferCritic(1e-1)
                 .learningRateReplayBufferActor(1e-2)
-                .learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
+                .learningRateReplayBufferActorStd(1e-2)  //verkar inte påv
                 .gradActorMax(1d).gradCriticMax(POWER_CAPACITY_FCR_LIST.get(CASE_NR))
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)

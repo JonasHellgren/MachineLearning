@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.agent.AgentACDCSafe;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.SettingsBuying;
 import safe_rl.environments.buying_electricity.StateBuying;
 import safe_rl.environments.buying_electricity.VariablesBuying;
@@ -28,7 +29,8 @@ public class TestAgentACDCSafeBuyer {
         state0 = StateBuying.newZero();
         agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(SettingsBuying.new5HoursIncreasingPrice())
-                .targetMean(TARGET_MEAN).targetLogStd(LOG_STD_TAR).targetCritic(TARGET_CRITIC)
+                .trainerParameters(TrainerParameters.newDefault()
+                        .withTargetMean(TARGET_MEAN).withTargetLogStd(LOG_STD_TAR).withTargetCritic(TARGET_CRITIC))
                 .state(state0)
                 .build();
     }
@@ -38,6 +40,7 @@ public class TestAgentACDCSafeBuyer {
         var meanStd=agent.readActor(state0);
         var value=agent.readCritic(StateBuying.newZero());
 
+        System.out.println("meanStd = " + meanStd);
         Assertions.assertEquals(TARGET_MEAN,meanStd.getFirst(), TOL);
         Assertions.assertEquals(TARGET_STD,meanStd.getSecond(), TOL);
         Assertions.assertEquals(0,value, TOL);

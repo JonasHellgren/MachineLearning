@@ -32,7 +32,8 @@ class TestEpisodeCreator {
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafe.<VariablesBuying>builder()
-                .targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
+                .trainerParameters(TrainerParameters.newDefault())
+        //.targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
