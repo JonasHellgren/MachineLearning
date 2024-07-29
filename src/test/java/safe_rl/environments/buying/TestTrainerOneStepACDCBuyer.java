@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.agent.AgentACDCSafe;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerOneStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
@@ -42,7 +43,13 @@ public class TestTrainerOneStepACDCBuyer {
                 ;
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3hours)
-                .trainerParameters(trainerParams)
+                //.trainerParameters(trainerParams)
+                .parameters(AgentParameters.newDefault()
+                        .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
+                                .withLearningRateActorMean(1e-3)  //1e-3
+                                .withLearningRateActorStd(1e-3)  //1e-3
+                                .withLearningRateCritic(1e-1)  //1e-1
+                )
                 .state(startState)
                 .build();
         trainer= TrainerOneStepACDC.<VariablesBuying>builder()

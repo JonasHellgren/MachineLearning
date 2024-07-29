@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.agent.AgentACDCSafe;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.aggregates.EpisodeCreator;
 import safe_rl.domain.trainer.helpers.EpisodeInfo;
@@ -32,8 +33,9 @@ class TestEpisodeCreator {
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafe.<VariablesBuying>builder()
-                .trainerParameters(TrainerParameters.newDefault())
-        //.targetMean(TARGET_MEAN).targetLogStd(Math.log(TARGET_STD))
+                //.trainerParameters(TrainerParameters.newDefault())
+                .parameters(AgentParameters.newDefault()
+                        .withTargetMean(TARGET_MEAN).withTargetLogStd(Math.log(TARGET_STD)))
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
@@ -45,9 +47,9 @@ class TestEpisodeCreator {
     @Test
     @SneakyThrows
     void whenGettingExperiences_thenCorrect() {
-        var experiences = episodeCreator.getExperiences(agent,state);
-        var ei= new EpisodeInfo<>(experiences);
-        var minMax=ei.minMaxAppliedAction();
+        var experiences = episodeCreator.getExperiences(agent, state);
+        var ei = new EpisodeInfo<>(experiences);
+        var minMax = ei.minMaxAppliedAction();
         System.out.println("minMax = " + minMax);
 
         experiences.forEach(System.out::println);
@@ -63,11 +65,11 @@ class TestEpisodeCreator {
                     Assertions.assertNotNull(e.ars().stateNext());
                 }));
 
-        Assertions.assertEquals(ei.size(),ei.nCorrected()+ei.nNotCorrected());
-        Assertions.assertEquals(ei.size(),ei.nZeroValued());
-        Assertions.assertEquals(1,ei.nIsTerminal());
-        Assertions.assertTrue(ei.minMaxAppliedAction().getFirst()> MIN_ACTION);
-        Assertions.assertTrue(ei.minMaxAppliedAction().getSecond()<TARGET_MEAN+TARGET_STD*2);
+        Assertions.assertEquals(ei.size(), ei.nCorrected() + ei.nNotCorrected());
+        Assertions.assertEquals(ei.size(), ei.nZeroValued());
+        Assertions.assertEquals(1, ei.nIsTerminal());
+        Assertions.assertTrue(ei.minMaxAppliedAction().getFirst() > MIN_ACTION);
+        Assertions.assertTrue(ei.minMaxAppliedAction().getSecond() < TARGET_MEAN + TARGET_STD * 2);
 
     }
 

@@ -4,6 +4,7 @@ import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
@@ -62,12 +63,15 @@ public class Runner5HoursBuying {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings5));
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings5)
-                .trainerParameters(TrainerParameters.newDefault()
+                .parameters(AgentParameters.newDefault()
                         .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
                         .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(2d)
-                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-3)
-                        .withLearningRateReplayBufferCritic(1e-1)
-                        .withGradActorMax(1d).withGradCriticMax(1d))
+                        //.withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-3)
+                       // .withLearningRateReplayBufferCritic(1e-1)
+                       // .withGradActorMax(1d).withGradCriticMax(1d))
+                .withLearningRateActorMean(1e-2).withLearningRateActorStd(1e-3)
+                .withLearningRateCritic(1e-1)
+                .withGradMaxActor(1d).withGradMaxCritic(1d))
 
 
 /*

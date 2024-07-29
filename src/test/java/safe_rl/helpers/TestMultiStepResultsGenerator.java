@@ -3,6 +3,7 @@ package safe_rl.helpers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.trainer.helpers.MultiStepResultsGenerator;
 import safe_rl.domain.trainer.value_objects.Experience;
@@ -24,7 +25,7 @@ class TestMultiStepResultsGenerator {
     @BeforeEach
     void init() {
         var parameters= TrainerParameters.newDefault().withGamma(1d).withStepHorizon(3);
-        agent= AgentACDCSafe.newDefault(SettingsBuying.new3HoursSamePrice(),StateBuying.newZero());
+        agent= AgentACDCSafe.of(AgentParameters.newDefault(),SettingsBuying.new3HoursSamePrice(),StateBuying.newZero());
         generator=new MultiStepResultsGenerator<>(parameters,agent);
         var exp0=getExpWithReward(0, false);
         var exp1=getExpWithReward(1, false);

@@ -3,6 +3,7 @@ package safe_rl.runners.buying;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import safe_rl.domain.agent.AgentACDCSafe;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerOneStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
@@ -31,12 +32,12 @@ public class Runner3HoursBuying {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3)
-                .trainerParameters(TrainerParameters.newDefault()
+                .parameters(AgentParameters.newDefault().newDefault()
                         .withTargetMean(2d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
                         .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(2d)
-                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-3)
-                        .withLearningRateReplayBufferCritic(1e-1)
-                        .withGradActorMax(10d).withGradCriticMax(10d)
+                        .withLearningRateActorMean(1e-2).withLearningRateActorStd(1e-3)
+                        .withLearningRateCritic(1e-1)
+                        .withGradMaxActor(10d).withGradMaxCritic(10d)
                 )
 
                 //.targetMean(2d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(2d)

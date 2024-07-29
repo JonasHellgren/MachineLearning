@@ -3,7 +3,7 @@ package safe_rl.domain.agent.aggregates;
 import common.math.SafeGradientClipper;
 import lombok.Getter;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.agent.value_objects.TrainerParametersInterpreter;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 
 public class ActorMemoryUpdater<V> {
@@ -15,7 +15,7 @@ public class ActorMemoryUpdater<V> {
 
     public ActorMemoryUpdater(DisCoMemory<V> actorMean,
                               DisCoMemory<V> actorLogStd,
-                              TrainerParametersInterpreter parameters) {
+                              AgentParameters parameters) {
         this.actorMean = actorMean;
         this.actorLogStd = actorLogStd;
         double tarStdInit = Math.exp(parameters.targetLogStd());

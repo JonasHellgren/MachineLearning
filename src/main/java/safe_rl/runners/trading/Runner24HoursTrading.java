@@ -4,6 +4,7 @@ import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
@@ -15,7 +16,6 @@ import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.domain.simulator.AgentSimulator;
-import safe_rl.runners.trading.RunnerHelper;
 
 import java.util.List;
 
@@ -62,8 +62,9 @@ public class Runner24HoursTrading {
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //settings5 = SettingsTrading.new24HoursZigSawPrice()  //case 2
+        Double gradCriticMax = POWER_CAPACITY_FCR_LIST.get(CASE_NR);
         settings5 = SettingsTrading.new24HoursIncreasingPrice()  //case 0 and 1
-                .withPowerCapacityFcr(POWER_CAPACITY_FCR_LIST.get(CASE_NR)).withStdActivationFCR(0.1)
+                .withPowerCapacityFcr(gradCriticMax).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START + SOC_INCREASE_LSIT.get(CASE_NR)).withPriceBattery(PRICE_BATTERY);
 
         var environment = new EnvironmentTrading(settings5);
@@ -76,12 +77,22 @@ public class Runner24HoursTrading {
                 .learningRateReplayBufferCritic(1e-1)
                 .learningRateReplayBufferActor(1e-2)
                 .learningRateReplayBufferActorStd(1e-2)
-                .gradActorMax(1d).gradCriticMax(POWER_CAPACITY_FCR_LIST.get(CASE_NR))
+                .gradActorMax(1d).gradCriticMax(gradCriticMax)
                 .targetMean(0.0d).targetLogStd(Math.log(settings5.powerBattMax()))
                 .targetCritic(0d).absActionNominal(powerNom)
                 .replayBufferSize(1000).miniBatchSize(50).nReplayBufferFitsPerEpisode(5)
                 .build();
-        var agent = AgentACDCSafe.newFromTrainerParams(trainerParameters, settings5, startState.copy());
+        var agentParameters= AgentParameters.newDefault()
+                .withTargetMean(0d).withTargetLogStd(Math.log(settings5.powerBattMax()))
+                .withTargetCritic(0d)
+                .withAbsActionNominal(1d)
+                .withLearningRateCritic(1e-1)
+                .withLearningRateActorMean(1e-2)
+                .withLearningRateActorStd(1e-2)
+                .withGradMaxActor(1d).withGradMaxCritic(gradCriticMax);
+
+
+        var agent = AgentACDCSafe.of(agentParameters, settings5, startState.copy());
         var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)

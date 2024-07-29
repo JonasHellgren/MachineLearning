@@ -11,6 +11,7 @@ import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.agent.aggregates.ActorMemoryUpdater;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.agent.value_objects.TrainerParametersInterpreter;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
@@ -55,37 +56,37 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-    TrainerParametersInterpreter parameters;
+    AgentParameters parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
-//    double absActionNominal;
     LossTracker lossTracker=new LossTracker();
 
+    /*
     public static <V> AgentACDCSafe<V> newDefault(SettingsEnvironmentI settings, StateI<V> state) {
         return AgentACDCSafe.<V>builder()
-                .trainerParameters(TrainerParameters.newDefault())
+                .parameters(AgentParameters.newDefault())
                 .settings(settings)
                 .state(state)
                 .build();
-    }
+    }*/
 
-    public static <V> AgentACDCSafe<V> newFromTrainerParams(TrainerParameters trainerParameters,
-                                                             SettingsEnvironmentI settings,
-                                                             StateI<V> state) {
+    public static <V> AgentACDCSafe<V> of(AgentParameters parameters,
+                                          SettingsEnvironmentI settings,
+                                          StateI<V> state) {
         return AgentACDCSafe.<V>builder()
-                .trainerParameters(trainerParameters)
+                .parameters(parameters)
                 .settings(settings)
                 .state(state)
                 .build();
     }
 
     @Builder
-    AgentACDCSafe(@NonNull  TrainerParameters trainerParameters,
+    AgentACDCSafe(@NonNull  AgentParameters parameters,
                          @NonNull SettingsEnvironmentI settings,
                          @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinuousFeatures() + 1;
-        this.parameters=TrainerParametersInterpreter.ofTrainerParams(trainerParameters);
+        this.parameters=parameters;
         var p=parameters;
         this.actorMean = new DisCoMemory<>(nThetas, p.learningRateActorMean(), p.gradMaxActor());
         this.actorLogStd = new DisCoMemory<>(nThetas, p.learningRateActorStd(), p.gradMaxActor());

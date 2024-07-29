@@ -4,6 +4,7 @@ import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
@@ -43,8 +44,6 @@ public class Runner5HoursTrading {
         helper.plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
 
-
-
     private static Pair<
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
@@ -58,12 +57,13 @@ public class Runner5HoursTrading {
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
         var agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settings5)
-                .trainerParameters(TrainerParameters.newDefault()
+                .parameters(AgentParameters.newDefault()
+                //.trainerParameters(TrainerParameters.newDefault()
                         .withTargetMean(0d).withTargetLogStd(Math.log(3d)).withTargetCritic(0d)
                         .withTargetLogStd(Math.log(3d)).withTargetCritic(0d).withAbsActionNominal(1d)
-                        .withLearningRateReplayBufferActor(1e-2).withLearningRateReplayBufferActorStd(1e-2)
-                        .withLearningRateReplayBufferCritic(1e-3)
-                        .withGradActorMax(1d).withGradCriticMax(1d))
+                        .withLearningRateActorMean(1e-2).withLearningRateActorStd(1e-2)
+                        .withLearningRateCritic(1e-3)
+                        .withGradMaxActor(1d).withGradMaxCritic(1d))
               //  .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
               //  .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
               //  .gradMaxActor0(1d).gradMaxCritic0(1d)

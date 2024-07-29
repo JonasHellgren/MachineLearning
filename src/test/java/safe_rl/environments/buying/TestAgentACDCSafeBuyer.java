@@ -5,6 +5,7 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
@@ -29,7 +30,10 @@ public class TestAgentACDCSafeBuyer {
         state0 = StateBuying.newZero();
         agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(SettingsBuying.new5HoursIncreasingPrice())
-                .trainerParameters(TrainerParameters.newDefault()
+                //.trainerParameters(TrainerParameters.newDefault()
+                //        .withTargetMean(TARGET_MEAN).withTargetLogStd(LOG_STD_TAR).withTargetCritic(TARGET_CRITIC))
+
+                .parameters(AgentParameters.newDefault()
                         .withTargetMean(TARGET_MEAN).withTargetLogStd(LOG_STD_TAR).withTargetCritic(TARGET_CRITIC))
                 .state(state0)
                 .build();
