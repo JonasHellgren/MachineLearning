@@ -133,6 +133,7 @@ snygga upp LinearBatchFitter  x
 Fyra Domain foldrar: env, agent, trainer, safety lager  x
 Dela in dessa enligt ddd x
 Flytta in Helpers , value obj x
+plantuml på major_domain_components  x
 AgntDisco mindre, tex man ActorUpdater
 
 få till variererande priceFCR
@@ -147,6 +148,7 @@ learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
 critic loss alltid noll
 
 kanske senare:
+snygga upp trainer mha mediator
 Fcr d up och n
 test FitterUsingReplayBuffer actor update
 plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
