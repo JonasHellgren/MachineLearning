@@ -32,7 +32,7 @@ public class DisCoMemoryInitializer<V> {
     List<List<Double>> discreteFeatSet;
     Pair<List<Double>, List<Double>> contFeatMinMax;
     Pair<Double,Double> valTarMeanStd;
-    StateI<V> state;  //state to play with
+    StateI<V> state;  //stateNew to play with
     Integer nIterMax;
     Double tolValueFitting;
     Integer lengthMeanAvgWindow;

@@ -13,8 +13,8 @@ import static common.math.BucketLimitsHandler.getLimits;
 import static common.math.BucketLimitsHandler.throwIfBadLimits;
 
 /**
- * Generic abstract agent, handles a state with variables V
- * All agents contains state
+ * Generic abstract agent, handles a stateNew with variables V
+ * All agents contains stateNew
  */
 
 @Setter

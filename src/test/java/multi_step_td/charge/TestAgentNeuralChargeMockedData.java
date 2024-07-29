@@ -138,7 +138,7 @@ public class TestAgentNeuralChargeMockedData {
 
         for (int i = 0; i < 10; i++) {
             ChargeState state = suppliers.randomDifferentSitePositionsAndRandomSoCs();
-            System.out.println("i = "+ i+" - " +"state = "+state.getVariables());
+            System.out.println("i = "+ i+" - " +"stateNew = "+state.getVariables());
             double valueLearned = agent.readValue(state);
             valueMap.put(i, new Pair<>(stateToValueFunction.apply(state),valueLearned));
         }

@@ -18,7 +18,7 @@ import java.util.Arrays;
 /**
  * This tests shows the power of defensive backup
  * With a large exploration factor and large (absolute) reward for fail states backups can be miss-leading
- * In this environment path leading to +10 goal is best but path at y=0 is trap hence down action in start state
+ * In this environment path leading to +10 goal is best but path at y=0 is trap hence down action in start stateNew
  * is misinterpreted as bad without defensive backup
  */
 

@@ -59,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         for (int i = 0; i < 10 ; i++) {
             StatePole statePole = StatePole.newAllRandom(environment.getParameters());
             double valAllRandom=agent.criticOut(statePole);
-            System.out.println("state = "+statePole+", valAllRandom = " + valAllRandom);
+            System.out.println("stateNew = "+statePole+", valAllRandom = " + valAllRandom);
         }
 
         assertTrue(nofSteps > 20);

@@ -1,7 +1,7 @@
 package dynamic_programming.domain;
 
 /***
- * Corresponds to a state, for speed control of a vehicle y can be speed and x position
+ * Corresponds to a stateNew, for speed control of a vehicle y can be speed and x position
  *
  */
 

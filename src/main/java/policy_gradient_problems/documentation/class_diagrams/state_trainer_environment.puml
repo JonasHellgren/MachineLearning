@@ -31,7 +31,7 @@ abstract class TrainerTbdA<for specific environment> {
 
 interface EnvironmentI<V=generic state variables> {
 +  StepReturn<<V>> step(StateI<<V>> state,Action action);
-'/ +  boolean isTerminalState(StateI<<V>> state);
+'/ +  boolean isTerminalState(StateI<<V>> stateNew);
 }
 
 

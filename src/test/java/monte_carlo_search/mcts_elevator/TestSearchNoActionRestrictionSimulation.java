@@ -24,7 +24,7 @@ import java.util.List;
  *   The explanation is probably that simulations here is a more reliable signal.
  *   So backups from steps is not really needed but gives "better"/more expected root node values
  *
- *   maxSimulationDepth must be restricted, probably because high values puts the system in fail state, i.e.
+ *   maxSimulationDepth must be restricted, probably because high values puts the system in fail stateNew, i.e.
  *   backup of future big negative numbers.
  *
 

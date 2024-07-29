@@ -10,7 +10,7 @@ import static common.other.Conditionals.executeOneOfTwo;
 
 /**
  * An episode gives a set of experiences: e0, e1, e2, ei,.....,e_i+n
- * Two cases are present for e_end: 1) it is fail state 2) not fail state
+ * Two cases are present for e_end: 1) it is fail stateNew 2) not fail stateNew
  * In the first case the actor should learn from the entire episode, it shall learn from the mistake resulting in fail
  * But in the second case it shall stop learning after e_end-n. The reason is that the experiences after end-n are
  * "miss leading". They indicate few rewards remaining, but that is not due to failure but due to non-fail terminal

@@ -172,7 +172,7 @@ public class TreeInfoHelper<S, A> {
         evalRecursive(rootTree,counter,nofChildrenThatEqualsState);
 
         Conditionals.executeIfTrue(counter.getCount()>1, () ->
-            log.warning("More than one node has state = "+state));
+            log.warning("More than one node has stateNew = "+state));
 
         return counter.getCount()>0;
     }

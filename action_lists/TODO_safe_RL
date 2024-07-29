@@ -152,15 +152,17 @@ AgentParametersFactory x
 snygga upp TrainerParameters  x
 få till variererande priceFCR x
 SettingsTradingFactory x
-TradeStateUpdater i StateEnv
+TradeStateUpdater i TradeEnv x
 kunna hantera start-slut tid
-läsa in prisdata från xls
+läsa in prisdata från xls  XlsPriceDataReader
 mest repr elpris data genom klustring - 4 fall
 fixa TradeSimulationPlotter addAccRevFCR
 
 optimera powerFCR - gärna med parallesiering
 
 settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
+eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge
+
 
 learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
 critic loss alltid noll

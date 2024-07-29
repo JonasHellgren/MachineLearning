@@ -45,8 +45,8 @@ public class RunnerChargeScenariosEvaluatorNeural {
     }
 
     private static void printStateAndValue(StateInterface<ChargeVariables> state) {
-        System.out.println("state = " + state);
-        System.out.println("value BatPosSplit_AatPos40_BothModerateSoC.state= " + agent.readValue(state));
+        System.out.println("stateNew = " + state);
+        System.out.println("value BatPosSplit_AatPos40_BothModerateSoC.stateNew= " + agent.readValue(state));
     }
 
 

@@ -43,8 +43,8 @@ public class AgentShipPPO extends AgentA<VariablesShip>
     public List<Double> actionProbabilitiesInPresentState() {
         throw  new NoSuchMethodException();
 /*
-        StateShip state=(StateShip) getState();
-        return actorOut(state);
+        StateShip stateNew=(StateShip) getState();
+        return actorOut(stateNew);
 */
     }
 

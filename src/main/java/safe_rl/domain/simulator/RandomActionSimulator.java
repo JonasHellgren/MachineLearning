@@ -54,7 +54,7 @@ public class RandomActionSimulator<V> {
     }
 
     private  void logStateAndAction(StateI<V> state, Action action) {
-        log.fine("state = " + state + ", action = " + action);
+        log.fine("stateNew = " + state + ", action = " + action);
     }
 
     private void maybeLog(StateI<V> state,

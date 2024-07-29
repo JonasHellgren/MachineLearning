@@ -39,8 +39,8 @@ class TestRecorderActionProbabilities {
     @Test
     void givenFilledTwoStates_thenCorrect() {
         List<Double> t00 = List.of(0.1, 0.9);
-        List<Double> t01 = List.of(0.4, 0.6);  //state 1 time 0
-        List<Double> t10 = List.of(0.2, 0.8);  //state 0 time 1
+        List<Double> t01 = List.of(0.4, 0.6);  //stateNew 1 time 0
+        List<Double> t10 = List.of(0.2, 0.8);  //stateNew 0 time 1
         List<Double> t11 = List.of(0.5, 0.5);
 
         recorder.addStateProbabilitiesMap(Map.of(0, t00,1, t01));

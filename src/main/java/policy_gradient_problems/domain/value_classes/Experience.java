@@ -8,7 +8,7 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import java.util.Optional;
 
 /**
- * The consequence of taking action in state, value is/can be defined later from list of experiences
+ * The consequence of taking action in stateNew, value is/can be defined later from list of experiences
  */
 
 @Builder

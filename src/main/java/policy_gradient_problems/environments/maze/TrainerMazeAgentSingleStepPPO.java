@@ -43,7 +43,7 @@ public class TrainerMazeAgentSingleStepPPO  extends TrainerAbstractMaze {
                 episodeTrainer.trainAgentFromExperiences(experiences);
                 updateRecorders(agent.lossActorAndCritic());
             } else {
-                log.info("Skipped training - not ending in terminal state, ei="+ei);
+                log.info("Skipped training - not ending in terminal stateNew, ei="+ei);
             }
         }
     }

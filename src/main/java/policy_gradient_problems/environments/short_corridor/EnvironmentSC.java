@@ -83,7 +83,7 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
 
     private static void throwIfBadState(int state) {
         if (!STATE_OBSERVEDSTATE_MAP.containsKey(state)) {
-            throw new IllegalArgumentException("Non valid state, state = " + state);
+            throw new IllegalArgumentException("Non valid stateNew, stateNew = " + state);
         }
     }
 

@@ -9,7 +9,7 @@ import multi_step_temp_diff.domain.agent_parts.neural_memory.ValueMemoryNeuralAb
 import java.util.Arrays;
 
 /**
- * Input is a binary vector with zeros except at active state. Much more stable than one double input.
+ * Input is a binary vector with zeros except at active stateNew. Much more stable than one double input.
  */
 
 public class NeuralValueMemoryFork<S> extends ValueMemoryNeuralAbstract<S> {

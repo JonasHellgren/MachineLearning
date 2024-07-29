@@ -17,7 +17,7 @@ import java.util.List;
 import static common.other.Conditionals.executeIfTrue;
 
 /***
- * Start state for every episode is deterministic to enable interpretation training evolution,
+ * Start stateNew for every episode is deterministic to enable interpretation training evolution,
  * i.e. of nof-steps vs episode.
  *
  */

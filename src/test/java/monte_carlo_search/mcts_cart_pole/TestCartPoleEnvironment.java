@@ -47,7 +47,7 @@ public class TestCartPoleEnvironment {
         ActionCartPole action= ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         applyActionUntilTermination(action);
 
-        System.out.println("state.getVariables() = " + stateUpRight.getVariables());
+        System.out.println("stateNew.getVariables() = " + stateUpRight.getVariables());
 
         Assert.assertTrue(stateUpRight.getVariables().x<X_INIT);
         Assert.assertTrue(stateUpRight.getVariables().theta>THETA_INIT);
@@ -59,7 +59,7 @@ public class TestCartPoleEnvironment {
         ActionCartPole action= ActionCartPole.builder().rawValue(VALUE_RIGHT).build();
         applyActionUntilTermination(action);
 
-        System.out.println("state.getVariables() = " + stateUpRight.getVariables());
+        System.out.println("stateNew.getVariables() = " + stateUpRight.getVariables());
 
         Assert.assertTrue(stateUpRight.getVariables().x>X_INIT);
         Assert.assertTrue(stateUpRight.getVariables().theta<THETA_INIT);

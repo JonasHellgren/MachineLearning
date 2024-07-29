@@ -55,7 +55,7 @@ public class AgentParamActorSCHelper {
 
     void throwIfBadObsState(int stateObserved) {
         if (!EnvironmentSC.OBSERVABLE.contains(stateObserved)) {
-            throw new IllegalArgumentException("Non valid obs state, state = " + stateObserved);
+            throw new IllegalArgumentException("Non valid obs stateNew, stateNew = " + stateObserved);
         }
     }
 

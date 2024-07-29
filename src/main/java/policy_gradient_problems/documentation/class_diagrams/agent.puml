@@ -6,7 +6,7 @@ interface AgentI<V=generic state variables> {
 + List<Double> actionProbabilitiesInState()
 + setState(StateI<<V>> state);
 + StateI<<V>> getState()
-'/ + double readValue(StateI<<V>> state);  //todo needed?
+'/ + double readValue(StateI<<V>> stateNew);  //todo needed?
 }
 
 interface ParamActorI {

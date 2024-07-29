@@ -6,7 +6,7 @@ import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.aggregates.StateI;
 
 /**
- * Generic top-level agent interface, handles a state with variables V
+ * Generic top-level agent interface, handles a stateNew with variables V
  */
 
 public interface AgentI<V> {

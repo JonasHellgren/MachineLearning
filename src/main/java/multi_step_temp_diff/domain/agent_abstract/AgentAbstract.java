@@ -14,7 +14,7 @@ import java.util.List;
 /***
  *  The concrete implementation of this class is adapted for an environment
  *  To avoid code duplication in concrete classes, this class includes fields such as an environment reference
- *  The method readValue is abstract and reads the state value approximation from memory
+ *  The method readValue is abstract and reads the stateNew value approximation from memory
  *
  */
 

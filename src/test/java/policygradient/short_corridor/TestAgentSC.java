@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
         agent = AgentParamActorTabCriticSC.newWithRandomStartStateAndGivenThetas(new double[]{-10, 10, 0.5, 0.5, 10, -10,});
     }
 
-    @ParameterizedTest   //obs state, p0, p1
+    @ParameterizedTest   //obs stateNew, p0, p1
     @CsvSource({
             "0, 0,1", "1, 0.5,0.5", "2, 1.0,0.0"
     })
@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
 
-    @ParameterizedTest   //obs state,action, g0,g1,g2,g3,g4,g5
+    @ParameterizedTest   //obs stateNew,action, g0,g1,g2,g3,g4,g5
     @CsvSource({
             "0,0, 0.5,-0.5,0,0,0,0",
             "0,1, -0.5,0.5,0,0,0,0",
@@ -64,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertTrue(isDoubleArraysEqual(toArray(gradThetaDesired), gradLogVector.toArray(), 0.1));
     }
 
-    @ParameterizedTest   //real state, action
+    @ParameterizedTest   //real stateNew, action
     @CsvSource({
             "2, 1",
             "3, 1",
@@ -77,7 +77,7 @@ import static org.junit.jupiter.api.Assertions.*;
         agent.setState(StateSC.newFromRealPos(s));
 
         var choosenAction = agent.chooseAction();
-        if (s == 3) {  //obs state of 3 is 1, so best action is 0 or 1
+        if (s == 3) {  //obs stateNew of 3 is 1, so best action is 0 or 1
             assertTrue(choosenAction.asInt() == 0 || choosenAction.asInt() == 1);
         } else {
             assertEquals(a, choosenAction.asInt());

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * The parameter fractionToInclude controls the portion of the episode experiences to regard. If small,
  * only the very first experience(s) will be regarded. The motivation is that for some domain, cart pole, for ex
  * the return in the end of the episode is faulty/miss leading. In the cart pole domain, for ex, a episode
- * can terminated due to failure or after a specific number of steps. In the later case, a good state
+ * can terminated due to failure or after a specific number of steps. In the later case, a good stateNew
  * can erroneously labeled as bad (low return).
  *
  */

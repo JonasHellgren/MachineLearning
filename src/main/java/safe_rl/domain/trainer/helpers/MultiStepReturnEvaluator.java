@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
  *  Gk=(k=0,n=2, gamma=1)=R0+R1+V(stateNew(1))
  *
  *  A basic principle is that reward for stepping into terminal is included but value
- *  of terminal state is zero
+ *  of terminal stateNew is zero
  */
 
 @AllArgsConstructor

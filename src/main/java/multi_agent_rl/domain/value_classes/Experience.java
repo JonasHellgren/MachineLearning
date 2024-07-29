@@ -8,7 +8,7 @@ import multi_agent_rl.domain.abstract_classes.*;
 import java.util.Map;
 
 /**
- * The consequence of taking action in state, value is/can be defined later from list of experiences
+ * The consequence of taking action in stateNew, value is/can be defined later from list of experiences
  */
 
 @Builder

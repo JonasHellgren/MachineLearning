@@ -6,7 +6,7 @@ import policy_gradient_problems.domain.abstract_classes.StateI;
 import java.util.List;
 
 /**
- * Generic top-level agent interface, handles a state with variables V
+ * Generic top-level agent interface, handles a stateNew with variables V
  */
 
 public interface AgentI<V> {

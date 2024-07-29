@@ -8,7 +8,7 @@ public Boolean done;
     @Override
     public String toString() {
         return "StepReturnAbstract{" +
-                "state=" + state +
+                "stateNew=" + state +
                 ", reward=" + reward +
                 ", done=" + done +
                 '}';

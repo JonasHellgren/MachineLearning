@@ -68,7 +68,7 @@ public class TestCartPoleEnvironmentMinusOneRewardAtFail {
         ActionCartPole action= ActionCartPole.builder().rawValue(VALUE_LEFT).build();
         applyActionUntilTermination(action);
 
-        System.out.println("state.getVariables() = " + state.getVariables());
+        System.out.println("stateNew.getVariables() = " + state.getVariables());
 
         Assert.assertEquals(-1,stepReturn.reward, DELTA);
 

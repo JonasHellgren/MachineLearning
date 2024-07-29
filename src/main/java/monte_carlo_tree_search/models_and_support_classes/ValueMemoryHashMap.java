@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /***
- * Memory based on hash map for storing state values
+ * Memory based on hash map for storing stateNew values
  */
 
 public class ValueMemoryHashMap<S> implements MapMemoryInterface<S> {

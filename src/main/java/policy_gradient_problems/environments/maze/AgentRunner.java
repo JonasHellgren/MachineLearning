@@ -24,7 +24,7 @@ public class AgentRunner {
     }
 
     private void printStep() {
-        System.out.println("state = " + agent.getState().getVariables().pos());
+        System.out.println("stateNew = " + agent.getState().getVariables().pos());
         System.out.println("probs = " + agent.actionProbabilitiesInPresentState());
         System.out.println("criticOut = " + agent.criticOut(agent.getState()));
     }

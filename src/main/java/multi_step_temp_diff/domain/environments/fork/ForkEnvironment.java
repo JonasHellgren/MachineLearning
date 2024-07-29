@@ -49,7 +49,7 @@ public class ForkEnvironment implements EnvironmentInterface<ForkVariables> {
 
         Conditionals.executeIfTrue(isNonValidState.test(state), () ->
         {
-            throw new IllegalArgumentException("Non valid state");
+            throw new IllegalArgumentException("Non valid stateNew");
         });
     }
 

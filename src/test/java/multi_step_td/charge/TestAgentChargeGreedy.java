@@ -124,7 +124,7 @@ public class TestAgentChargeGreedy {
     private boolean simulate(StateInterface<ChargeVariables> state, int simSteps) {
         for (int i = 0; i < simSteps; i++) {
             int action = createAgentAndGetAction(state);
-            out.println("state = " + state);
+            out.println("stateNew = " + state);
             stepReturn=environment.step(state,action);
             state.setFromReturn(stepReturn);
             if (stepReturn.isNewStateTerminal) {

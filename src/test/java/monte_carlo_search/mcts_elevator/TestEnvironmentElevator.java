@@ -110,7 +110,7 @@ public class TestEnvironmentElevator {
         StateInterface<VariablesElevator> state = StateElevator.newFromVariables(
                 VariablesElevator.builder().SoE(HALF_SOE).speed(0).pos(1).build());
         Assert.assertTrue(getVariablesElevatorAfterStep(state, ACTION_STILL).pos == 1);
-        //Assert.assertTrue(getVariablesElevatorAfterStep(state, ACTION_UP).SoE < SOE_FULL);
+        //Assert.assertTrue(getVariablesElevatorAfterStep(stateNew, ACTION_UP).SoE < SOE_FULL);
     }
 
     private VariablesElevator getVariablesElevatorAfterStep(StateInterface<VariablesElevator> state, int actionValue) {

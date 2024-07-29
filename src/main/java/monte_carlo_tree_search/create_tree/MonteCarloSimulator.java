@@ -80,12 +80,12 @@ public class MonteCarloSimulator<S, A> {
             rewards.add(stepReturn.reward);
 
             if (stepReturn.isFail) {
-                log.warning("Stepped into fail state");
+                log.warning("Stepped into fail stateNew");
                 break;
             }
 
             if (stepReturn.isTerminal) {
-                log.info("Stepped into terminal state");
+                log.info("Stepped into terminal stateNew");
                 break;
             }
 

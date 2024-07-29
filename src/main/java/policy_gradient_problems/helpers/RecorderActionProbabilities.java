@@ -21,7 +21,7 @@ public class RecorderActionProbabilities {
     public static final int HEIGHT = 150;
 
     public static final String ERROR_MESSAGE = "Non compatible new probability map";
-    List<Map<Integer, List<Double>>> episodeProbabilitiesList;   // every list element is a map <state,actionProbs >
+    List<Map<Integer, List<Double>>> episodeProbabilitiesList;   // every list element is a map <stateNew,actionProbs >
 
     public RecorderActionProbabilities() {
         this.episodeProbabilitiesList = new ArrayList<>();
@@ -106,7 +106,7 @@ public class RecorderActionProbabilities {
 
     XYChart createChart(int si) {
         var chart = new XYChartBuilder()
-                .xAxisTitle("episode").yAxisTitle("state=" + si).width(WIDTH).height(HEIGHT).build();
+                .xAxisTitle("episode").yAxisTitle("stateNew=" + si).width(WIDTH).height(HEIGHT).build();
         IntStream.range(0, nActions()).forEach(a -> {
             var yData = probabilityTrajectoryForStateAndAction(si, a);
             var series = chart.addSeries("a=" + a, null, yData);

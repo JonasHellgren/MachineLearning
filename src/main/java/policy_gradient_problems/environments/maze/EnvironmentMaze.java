@@ -49,7 +49,7 @@ public class EnvironmentMaze implements EnvironmentI<VariablesMaze> {
     }
 
     private double rewardAtTerminal(StateMaze state) {
-        checkArgument(isTerminal(state), "Not terminal state");
+        checkArgument(isTerminal(state), "Not terminal stateNew");
         return settings.posTerminalGood().equals(state.point())
                 ? settings.rewardTerminalGood()
                 : settings.rewardTerminalBad();

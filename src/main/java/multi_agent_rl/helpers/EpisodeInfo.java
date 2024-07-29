@@ -59,14 +59,14 @@ public class EpisodeInfo<V,O> {
 
     public   Set<Integer> getValuesOfSpecificDiscreteFeature(int featureIndex) {
         List<Integer> grossList = experiences.stream()
-                .map(e -> e.state().discreteFeatures()[featureIndex]).toList();
+                .map(e -> e.stateNew().discreteFeatures()[featureIndex]).toList();
         return new HashSet<>(grossList);
     }
 
 
     public   List<Experience<V>> getExperiencesWithDiscreteFeatureValue(int timeChosen, int featureIndex) {
         return experiences.stream()
-                .filter(e -> e.state().discreteFeatures()[featureIndex]== timeChosen).toList();
+                .filter(e -> e.stateNew().discreteFeatures()[featureIndex]== timeChosen).toList();
     }
 */
 

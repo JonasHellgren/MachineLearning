@@ -23,7 +23,8 @@ public record SettingsTrading(
         @With double[] capacityPriceTraj,
         @With double stdActivationFCR,
         @With double powerCapacityFcr,
-        @With double nCyclesLifetime
+        @With double nCyclesLifetime,
+        @With double failPenalty
 ) implements SettingsEnvironmentI {
 
 

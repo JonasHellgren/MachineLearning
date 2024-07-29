@@ -49,7 +49,7 @@ public class DisCoMemory<V> {
     }
 
     /**
-     * copy to not mess up keys in map if state changes outside
+     * copy to not mess up keys in map if stateNew changes outside
      */
     public void save(StateI<V> state, double[] thetas) {
         stateParMap.put(state.copy(), thetas);

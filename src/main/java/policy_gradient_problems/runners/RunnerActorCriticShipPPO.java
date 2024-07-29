@@ -28,7 +28,7 @@ public class RunnerActorCriticShipPPO {
         for (int s: EnvironmentShip.POSITIONS) {
             var plotter = new PlotterMultiplePanelsTrajectory(
                     "PPO",
-                    List.of("state = "+s+", mean", "std","value"), "episode");
+                    List.of("stateNew = "+s+", mean", "std","value"), "episode");
             List<List<Double>> listOfTrajectories = trainer.getRecorderStateValues().valuesTrajectoryForEachAction(s);
             plotter.plot(listOfTrajectories);
         }

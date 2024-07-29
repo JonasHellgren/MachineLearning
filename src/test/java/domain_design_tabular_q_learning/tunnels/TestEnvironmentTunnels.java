@@ -27,7 +27,7 @@ class TestEnvironmentTunnels {
             "0,1,E, 1,1",  //x,y,action, xDes,yDes
             "0,1,N, 0,1",
             "0,1,S, 0,1",
-            "0,1,W, 0,1", //state clip <=> same pos (can't go outside map)
+            "0,1,W, 0,1", //stateNew clip <=> same pos (can't go outside map)
             "1,1,E, 2,1",
             "1,1,N, 1,2",
             "1,1,W, 0,1",
@@ -35,7 +35,7 @@ class TestEnvironmentTunnels {
             "2,1,E, 2,1",
             "3,2,E, 4,2",
             "4,2,N, 4,3",
-            "4,3,N, 4,3",  //state clip
+            "4,3,N, 4,3",  //stateNew clip
             "7,1,E, 8,1",
     })
     void whenStep_thenCorrectStateNext(ArgumentsAccessor arguments) {

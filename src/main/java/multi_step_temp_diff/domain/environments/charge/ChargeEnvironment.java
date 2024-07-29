@@ -79,9 +79,9 @@ import static multi_step_temp_diff.domain.environments.charge.SiteState.*;
  *  collisionPenalty =  | R_BAD  (isTwoAtSamePosition)
  *                      | R_BAD  (isTwoCharging, i.e. two in CHARGE_NODES)
  *                      | 0     (else)
- * A state is terminal according to following logic
+ * A stateNew is terminal according to following logic
  * isTerminalState=isAnySoCBad or isTwoAtSamePosition or isTwoCharging or isTimeUp
- * Terms in isTerminalState consider the state AFTER transition. So action leading to for example collision can be
+ * Terms in isTerminalState consider the stateNew AFTER transition. So action leading to for example collision can be
  * excluded directly
  * isAnySoCBad is true if any soC is below 0.1, isTwoCharging ís true if both vehicles are at CHARGE_NODES
  * isTimeUp is true if time>TIME_MAX
@@ -167,7 +167,7 @@ public class ChargeEnvironment implements EnvironmentInterface<ChargeVariables> 
                 lambdas.isNonValidSoC.test(socA.apply(state)) || lambdas.isNonValidSoC.test(socB.apply(state)) ||
                 isNonValidTime.test(time.apply(state))
         ) {
-            throw new IllegalArgumentException("Non valid action or state. State = " + state + ", action = " + action);
+            throw new IllegalArgumentException("Non valid action or stateNew. State = " + state + ", action = " + action);
         }
     }
 

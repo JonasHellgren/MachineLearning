@@ -120,7 +120,7 @@ public class RunnerActorCriticShip {
         for (String measure : MEASURES_RECORDED) {
             var chart = new XYChartBuilder().xAxisTitle("Episode").yAxisTitle(measure).width(350).height(200).build();
             chart.getStyler().setYAxisDecimalPattern("0.00");  // Set Y-axis to show 2 decimal places
-            chart.setTitle("state="+s);
+            chart.setTitle("stateNew="+s);
             for (String type:types) {
                 List<List<Double>> trajs = table.get(type, s);
                 var series = chart.addSeries(type, null, trajs.get(MEASURES_RECORDED.indexOf(measure)));

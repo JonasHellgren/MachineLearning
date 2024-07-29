@@ -66,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
             agent.setState(statePole);
             var probs=agent.actionProbabilitiesInPresentState();
-            System.out.println("state = "+statePole+", valueCritic = " + valueCritic+", probs = "+probs);
+            System.out.println("stateNew = "+statePole+", valueCritic = " + valueCritic+", probs = "+probs);
         }
     }
 

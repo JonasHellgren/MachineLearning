@@ -26,7 +26,7 @@ public class CriticMemoryParamDotProduct {
     public  void update(ArrayRealVector state, double valueRef) {
         double delta=valueRef-getValue(state);
         RealVector deltaVector = state.copy().mapMultiplyToSelf(alpha * delta);
-        wVector=wVector.add(deltaVector);  //w+alpha*delta*state
+        wVector=wVector.add(deltaVector);  //w+alpha*delta*stateNew
     }
 
 }

@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         agent = AgentShipParam.newWithRandomStartStateAndGivenThetas(new double[]{MEAN_S0, THETA_STD0, MEAN_S1, THETA_STD1});
     }
 
-    @ParameterizedTest   //state, mean, std
+    @ParameterizedTest   //stateNew, mean, std
     @CsvSource({
             "0, 0.3,0.1", "1, 0.5,1.0"
     })

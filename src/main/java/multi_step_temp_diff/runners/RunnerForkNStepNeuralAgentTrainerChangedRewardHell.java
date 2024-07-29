@@ -18,7 +18,7 @@ import multi_step_temp_diff.domain.trainer.NStepNeuralAgentTrainer;
  * - Backup från framförvarande "gissat" value minskar/fösrvinner med stor N
 
  * defaultavgError ökar för default med ökande PROB_START
- * - Fler felaktiga experiences i buffer, tar hell från tidig state
+ * - Fler felaktiga experiences i buffer, tar hell från tidig stateNew
  *
  * defaultavgError typ noll när reward hell equal to heaven
  *

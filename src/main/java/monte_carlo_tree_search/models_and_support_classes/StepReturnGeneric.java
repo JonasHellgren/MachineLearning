@@ -5,7 +5,7 @@ import lombok.ToString;
 import monte_carlo_tree_search.interfaces.StateInterface;
 
 /**
- * This class holds the result of a step in the environment, S is the set of state variables.
+ * This class holds the result of a step in the environment, S is the set of stateNew variables.
  */
 
 @Builder

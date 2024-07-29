@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * Needs to be specific for environment due to
- *  var state = (StateI<V>) StateRoad.of(x, y, ep)
+ *  var stateNew = (StateI<V>) StateRoad.of(x, y, ep)
  *  Agent2dMemPlotterHelper does the heavy/general work
  */
 

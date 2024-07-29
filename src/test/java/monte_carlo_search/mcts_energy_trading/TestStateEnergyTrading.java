@@ -13,7 +13,7 @@ public class TestStateEnergyTrading {
     @Test
     public void givenStateDefaultVariables_thenCorrect() {
         StateInterface<VariablesEnergyTrading> state=StateEnergyTrading.newFromVariables(VariablesEnergyTrading.newDefault());
-        System.out.println("state = " + state);
+        System.out.println("stateNew = " + state);
         Assert.assertEquals(0,state.getVariables().time);
         Assert.assertEquals(VariablesEnergyTrading.DEFAULT_SOE,state.getVariables().SoE, DELTA);
     }

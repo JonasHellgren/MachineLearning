@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * leaf node = node that can/shall be expanded, i.e. not tried "all" actions
  *
  * The method selectNonFailChildWithHighestUCT() returns an Optional, this is empty if no child is found.
- * Probably due to only children of type fail state.
+ * Probably due to only children of type fail stateNew.
  *
  * 1. Leaf Node. At least one non tested action. Can therefore be expanded.
  * 2. Non leaf node. Non fail. All actions tested and not all fail. Can not be expanded.

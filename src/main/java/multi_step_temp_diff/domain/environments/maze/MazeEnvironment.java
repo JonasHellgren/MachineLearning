@@ -85,7 +85,7 @@ public class MazeEnvironment implements EnvironmentInterface<MazeVariables> {
         Predicate<StateInterface<MazeVariables> > isNonValidX = (s) -> MazeState.getX.apply(s) > settings.nofCols() - 1;
         Predicate<StateInterface<MazeVariables> > isNonValidY = (s) -> MazeState.getX.apply(s) > settings.nofRows() - 1;
         if (isNonValidAction.test(action) || isNonValidX.or(isNonValidY).test(state)) {
-            throw new IllegalArgumentException("Non valid action or state. State = " + state+ ", action = " + action);
+            throw new IllegalArgumentException("Non valid action or stateNew. State = " + state+ ", action = " + action);
         }
     }
 

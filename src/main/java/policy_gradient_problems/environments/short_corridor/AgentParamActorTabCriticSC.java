@@ -21,8 +21,8 @@ import static common.other.SoftMaxEvaluator.getProbabilities;
 /***
  * See shortCorridor.md for description
  *
- * State in AgentA is real state, state in an Experience is observed state, what training is based on
- * Action probabilities are based on observed state
+ * State in AgentA is real stateNew, stateNew in an Experience is observed stateNew, what training is based on
+ * Action probabilities are based on observed stateNew
  */
 
 @Getter

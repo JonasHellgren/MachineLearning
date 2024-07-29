@@ -20,7 +20,7 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     static final double SPEED_PROJECTILE_MPS = 150.0;
 
 
-    public static final Map<Integer,Double> DISTANCE_TO_SHIP_MAP = Map.of(0,1000d, 1,2000d);  //<state, distance>
+    public static final Map<Integer,Double> DISTANCE_TO_SHIP_MAP = Map.of(0,1000d, 1,2000d);  //<stateNew, distance>
     static final double REWARD_HIT = 1, REWARD_MISS = 0;
 
     @NonNull  ShipSettings shipSettings;

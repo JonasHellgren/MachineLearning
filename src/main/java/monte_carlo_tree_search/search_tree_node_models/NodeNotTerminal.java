@@ -101,7 +101,7 @@ public final class NodeNotTerminal<SSV,AV>
     }
 
     /***
-     * Q (s,a) is the mean outcome of all simulations in which action a was selected in state s
+     * Q (s,a) is the mean outcome of all simulations in which action a was selected in stateNew s
      * https://www.lamsade.dauphine.fr/~cazenave/mcts-gelly-silver.pdf
      */
 
@@ -137,7 +137,7 @@ public final class NodeNotTerminal<SSV,AV>
     @Override
     public String toString() {
         return super.toString() +
-                ", state visits = " + nofVisits +
+                ", stateNew visits = " + nofVisits +
                 ", values =" + qSA.entrySet() +
                 ", visits =" + nSA.entrySet()+
                 ", rewards = "+actionRewardMap.entrySet();

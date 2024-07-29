@@ -9,7 +9,7 @@ import java.util.Map;
  */
 
 public record MeasuresAllStatesAtEpisode(
-        Map<Integer, List<Double>> stateMeasuresMap  //state, measures
+        Map<Integer, List<Double>> stateMeasuresMap  //stateNew, measures
 ) {
 
     public MeasuresAllStatesAtEpisode(Integer state, List<Double> measures) {

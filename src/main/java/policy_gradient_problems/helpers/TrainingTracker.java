@@ -45,7 +45,7 @@ public class TrainingTracker {
             return emptyListOfTrajectories;
         }
         if (state > getNofStates() - 1) {
-            log.warning("Non existing state");
+            log.warning("Non existing stateNew");
             return emptyListOfTrajectories;
         }
 
@@ -94,7 +94,7 @@ public class TrainingTracker {
 
     private static void throwIfStateNotPresent(int state, MeasuresAllStatesAtEpisode ap) {
         if (!ap.stateMeasuresMap().containsKey(state)) {
-            throw new IllegalArgumentException("State not present in tracker, state = " + state);
+            throw new IllegalArgumentException("State not present in tracker, stateNew = " + state);
         }
     }
 

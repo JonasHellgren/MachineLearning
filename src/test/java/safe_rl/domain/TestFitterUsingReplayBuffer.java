@@ -120,7 +120,7 @@ public class TestFitterUsingReplayBuffer {
 
                 /*
                 ExperienceMultiStep.<VariablesTrading>builder()
-                .state(state0)
+                .stateNew(state0)
                 .actions(actionList)
                 .rewards(rewardList)
                 .stateFuture(stateFuture)

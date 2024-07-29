@@ -20,7 +20,7 @@ import static multi_step_temp_diff.domain.helpers_common.NStepTDFunctionsAndPred
  * https://www.cs.ubc.ca/labs/lci/mlrg/slides/Multi-step_Bootstrapping.pdf
  * https://lcalem.github.io/blog/2018/11/19/sutton-chap07-nstep
  * <p>
- * a potential improvement is to check that start state is valid
+ * a potential improvement is to check that start stateNew is valid
  */
 
 @Builder

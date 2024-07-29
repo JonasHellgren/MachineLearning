@@ -174,7 +174,7 @@ public class RunCartPoleAlphaZero {
         try {
             mcForSearch.run();
         } catch (StartStateIsTrapException ignored) {
-            log.fine("Bad start state");
+            log.fine("Bad start stateNew");
             return ActionCartPole.newRandom();
         }
 

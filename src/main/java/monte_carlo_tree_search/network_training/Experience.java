@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.ToString;
 
 /**
- *  An experience is achieved when taking step with specific action in state s and transiting to sNew. The step
- *  gives a reward and the state s has value value.
+ *  An experience is achieved when taking step with specific action in stateNew s and transiting to sNew. The step
+ *  gives a reward and the stateNew s has value value.
  */
 
 @Builder

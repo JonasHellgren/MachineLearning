@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * This class is for during training keep track of evaluation runs
- * These runs typically starts in a "stable" start state
+ * These runs typically starts in a "stable" start stateNew
  * Similar to RecorderTrainingProgress but another use case, hence wrapping RecorderTrainingProgress
  */
 

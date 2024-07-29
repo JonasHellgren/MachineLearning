@@ -33,7 +33,7 @@ public class NStepTDHelper<S> {
     @Builder.Default
     public int T= MAX_VALUE;  //time for termination
     @Builder.Default
-    public int tau= TAU;  //the state visited at this time gets updated
+    public int tau= TAU;  //the stateNew visited at this time gets updated
     @Builder.Default
     public Map<Integer,StepReturn<S>> timeReturnMap= new HashMap<>(); //in episode experienced returns
     @Builder.Default

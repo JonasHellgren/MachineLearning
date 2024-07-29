@@ -112,7 +112,7 @@ public class AgentShipParam extends AgentA<VariablesShip> implements AgentParamA
 
     private static void throwIfBadState(int state) {
         if (!EnvironmentShip.POSITIONS.contains(state)) {
-            throw new IllegalArgumentException("Non valid state, state = " + state);
+            throw new IllegalArgumentException("Non valid stateNew, stateNew = " + state);
         }
     }
 

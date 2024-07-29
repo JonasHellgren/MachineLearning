@@ -8,8 +8,8 @@ import java.util.function.Function;
 
 /**
  * advantage=Q(s,a)-V(s)=r+γ*V(s')-V(s')
- * If an action leads to a fail or terminal state, the advantage calculation focus on the immediate reward,
- * value of future state can be regarded as not possible to define/irrelevant due to the fail state.
+ * If an action leads to a fail or terminal stateNew, the advantage calculation focus on the immediate reward,
+ * value of future stateNew can be regarded as not possible to define/irrelevant due to the fail stateNew.
  */
 
 @AllArgsConstructor

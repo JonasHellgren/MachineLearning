@@ -15,7 +15,7 @@ public class ParamActorTabCriticEpisodeTrainer<V> implements EpisodeTrainerI<V> 
     @NonNull AgentParamActorTabCriticI<V> agent;
     @NonNull TrainerParameters parameters;
     @NonNull Double valueTermState;
-    @NonNull Function<V, Integer> tabularCoder;  //transforms state to key used by critic function
+    @NonNull Function<V, Integer> tabularCoder;  //transforms stateNew to key used by critic function
     @NonNull Function<StateI<V>, Boolean> isTerminal;
 
     @Override

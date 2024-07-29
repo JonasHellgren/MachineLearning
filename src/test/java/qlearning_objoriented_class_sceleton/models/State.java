@@ -28,7 +28,7 @@ public class State {
     public void setVariable(String name,Integer value) {
 
         if (!discreteVariables.containsKey(name))
-            logger.warning("Error when setting state variable, following variable does not exist:"+name);
+            logger.warning("Error when setting stateNew variable, following variable does not exist:"+name);
         else
             discreteVariables.replace(name,value);
     }
@@ -36,7 +36,7 @@ public class State {
     public Integer getDiscreteVariable(String name) {
 
         if (!discreteVariables.containsKey(name)) {
-            logger.warning("Error when getting state variable, following variable does not exist:" + name);
+            logger.warning("Error when getting stateNew variable, following variable does not exist:" + name);
             return null;
         }
         else
@@ -50,7 +50,7 @@ public class State {
     public void setVariable(String name,Double value) {
 
         if (!continuousVariables.containsKey(name))
-            logger.warning("Error when setting state variable, following variable does not exist:"+name);
+            logger.warning("Error when setting stateNew variable, following variable does not exist:"+name);
         else
             continuousVariables.replace(name,value);
     }
@@ -58,7 +58,7 @@ public class State {
     public Double getContinuousVariable(String name) {
 
         if (!continuousVariables.containsKey(name)) {
-            logger.warning("Error when getting state variable, following variable does not exist:" + name);
+            logger.warning("Error when getting stateNew variable, following variable does not exist:" + name);
             return null;
         }
         else

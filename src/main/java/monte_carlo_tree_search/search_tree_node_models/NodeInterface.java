@@ -7,8 +7,8 @@ import monte_carlo_tree_search.interfaces.StateInterface;
 import java.util.*;
 
 /***
- * A terminal node has no children and represents a terminal state, for ex reached goal.
- * A node is expandable if it represents a non-terminal state and if it has unvisited children.
+ * A terminal node has no children and represents a terminal stateNew, for ex reached goal.
+ * A node is expandable if it represents a non-terminal stateNew and if it has unvisited children.
  *
  *                                   NodeInterface
  *                                /        |     \

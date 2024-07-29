@@ -65,7 +65,7 @@ public class EnvironmentCartPole implements EnvironmentGenericInterface<CartPole
     public static final double Y_MIN = -0.5;
     public final double POLE_MASS_TIMES_LENGTH = MASS_POLE * LENGTH;
     public final double FORCE_MAG = 10.0;
-    public final double TAU = 0.02;  // seconds between state updates  0.02
+    public final double TAU = 0.02;  // seconds between stateNew updates  0.02
     private static final double PI = 3.141592;
     public static final double THETA_THRESHOLD_RADIANS  = 12 * 2 * PI / 360;
     public static final double X_TRESHOLD = 2;

@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SettingsTradingFactory {
 
+    public static final int FAIL_PENALTY = 10;
+
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
                 .dt(1)
@@ -21,6 +23,7 @@ public class SettingsTradingFactory {
                 //.priceFCR(1)
                 .stdActivationFCR(0.1).powerCapacityFcr(1)
                 .nCyclesLifetime(5000)
+                .failPenalty(FAIL_PENALTY)
                 .build();
         settings.check();
         return settings;
@@ -39,9 +42,6 @@ public class SettingsTradingFactory {
         return settings;
     }
 
-
-
-
     public static SettingsTrading new24HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
                 .dt(1)
@@ -52,6 +52,7 @@ public class SettingsTradingFactory {
                 //.priceFCR(0.03)
                 .stdActivationFCR(0.1).powerCapacityFcr(1)
                 .nCyclesLifetime(2000)
+                .failPenalty(FAIL_PENALTY)
                 .build();
         settings.check();
         return settings;

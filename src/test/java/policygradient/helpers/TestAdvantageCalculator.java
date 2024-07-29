@@ -24,7 +24,7 @@ class TestAdvantageCalculator {
 
     Function<StateI<VariablesPole>, Double> criticOut = state -> {
         if (state == null) {
-            return Double.NaN; // Returning NaN as an indicator of an invalid state.
+            return Double.NaN; // Returning NaN as an indicator of an invalid stateNew.
         }
         return VALUE;
     };

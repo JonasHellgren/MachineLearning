@@ -46,7 +46,7 @@ public class ElevatorRunner {
         boolean isFail;
         GridPanel panel=FrameAndPanelCreatorElevator.createPanel("","","");
         ElevatorPanelUpdater panelUpdater=new ElevatorPanelUpdater(state,panel);
-        //todo state=state.copy()
+        //todo stateNew=stateNew.copy()
         do {
             mcForSearch.setStartState(state);
             mcForSearch.run();
@@ -61,7 +61,7 @@ public class ElevatorRunner {
             ActionInterface<Integer> actionCartPole = mcForSearch.getFirstAction();
             StepReturnGeneric<VariablesElevator> sr = environment.step(actionCartPole, state);
             state.setFromReturn(sr);
-            //double value = memory.read(state);
+            //double value = memory.read(stateNew);
             double rootNodeValue= ListUtils.findEnd(mcForSearch.getPlotData()).orElse(TreePlotData.builder().build()).maxValue;
             isFail = sr.isFail;
             i++;

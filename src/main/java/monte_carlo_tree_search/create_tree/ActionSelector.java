@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * expansion.
  * <p>
  * The most critical method is selectRandomNonTestedAction. The selected action is determined by the action
- * selection policy. This policy can, for a specific state, provide an action set smaller than the set according
+ * selection policy. This policy can, for a specific stateNew, provide an action set smaller than the set according
  * to the environment of the domain. The elevator domain is a clear example, if moving between two floors, only
  * one action is available, the present speed. This "trick" can lead no enormous search tree branching factor decrease.
  */
