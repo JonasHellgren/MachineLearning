@@ -11,6 +11,7 @@ import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
 import safe_rl.runners.trading.RunnerHelper;
@@ -48,8 +49,8 @@ public class Runner5HoursTrading {
             TrainerMultiStepACDC<VariablesTrading>
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
-        settings5 = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1.0).withPriceFCR(0.1).withStdActivationFCR(0.1)
+        settings5 = SettingsTradingFactory.new5HoursIncreasingPrice()
+                .withPowerCapacityFcr(1.0).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));

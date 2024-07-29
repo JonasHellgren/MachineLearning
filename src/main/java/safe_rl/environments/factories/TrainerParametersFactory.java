@@ -1,11 +1,10 @@
 package safe_rl.environments.factories;
 
+import lombok.NoArgsConstructor;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
+@NoArgsConstructor
 public class TrainerParametersFactory {
-
-    private TrainerParametersFactory() {
-    }
 
     public static TrainerParameters trading24Hours() {
         return TrainerParameters.newDefault()

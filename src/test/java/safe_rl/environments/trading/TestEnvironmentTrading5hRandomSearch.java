@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -30,8 +31,9 @@ public class TestEnvironmentTrading5hRandomSearch {
 
     @BeforeEach
     void init() {
-        settings = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1).withPriceFCR(1).withSocTerminalMin(SOC).withPriceBattery(5e3);
+        settings = SettingsTradingFactory.new5HoursIncreasingPrice()
+                .withPowerCapacityFcr(1).withSocTerminalMin(SOC).withPriceBattery(5e3);
+        //.withPriceFCR(1)
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
     }

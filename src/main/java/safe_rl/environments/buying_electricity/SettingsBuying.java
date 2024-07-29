@@ -32,7 +32,7 @@ public record SettingsBuying  (
         return new5HoursIncreasingPrice().withPriceTraj(new double[]{5,4,3,2,1});
     }
 
-    //time for final price item in priceTraj
+    //time for final price item in energyPriceTraj
     public double timeEnd() {
         Preconditions.checkArgument(priceTraj.length>0,"Empty price trajectory");
         return (priceTraj.length-1)*dt;

@@ -18,12 +18,14 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
     public static final double FAIL_PENALTY = 10;
     public static final int N_CONSTRAINTS = 5;
     SettingsTrading settings;
-    PriceInterpolator interpolator;
+    PriceInterpolator energyPriceInterpolator;
+    PriceInterpolator capacityPriceInterpolator;
     NormDistributionSampler sampler;
 
     public EnvironmentTrading(SettingsTrading settings) {
         this.settings = settings;
-        this.interpolator=new PriceInterpolator(settings.dt(), settings.priceTraj());
+        this.energyPriceInterpolator =new PriceInterpolator(settings.dt(), settings.energyPriceTraj());
+        this.capacityPriceInterpolator =new PriceInterpolator(settings.dt(), settings.capacityPriceTraj());
         this.sampler=new NormDistributionSampler();
     }
 
@@ -57,8 +59,9 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         var s=settings;
         double energySell=max(0, -power * s.dt());  //pos if power is neg (selling)
         double energyBuy=max(0, power * s.dt());  //pos if power is positive (buying)
-        double priceEnergy=interpolator.priceAtTime(s0.time());
-        return s.priceFCR()* s.powerCapacityFcr()+priceEnergy*energySell-
+        double priceEnergy= energyPriceInterpolator.priceAtTime(s0.time());
+        double priceCap= capacityPriceInterpolator.priceAtTime(s0.time());
+        return priceCap* s.powerCapacityFcr()+priceEnergy*energySell-
                 (priceEnergy*energyBuy+ s.priceBattery()* Math.abs(dSoh));
     }
 

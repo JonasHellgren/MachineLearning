@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -24,13 +25,13 @@ public class TestEnvironmentTrading5hWithFCR {
 
     @BeforeEach
     void init() {
-        var settingsZeroPC = SettingsTrading.new5HoursIncreasingPrice()
+        var settingsZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcr(0).withPriceBattery(0);
-        var settingsNonZeroPC = SettingsTrading.new5HoursIncreasingPrice()
+        var settingsNonZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcr(0.1).withPriceBattery(0).withSocTerminalMin(SOC_TERMINAL_MIN);
 
-        var settingsZeroPriceBatt = SettingsTrading.new5HoursIncreasingPrice().withPriceBattery(0);
-        var settingsNonZeroPriceBatt = SettingsTrading.new5HoursIncreasingPrice();
+        var settingsZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice().withPriceBattery(0);
+        var settingsNonZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice();
         actionPower1 =Action.ofDouble(1d);
         environmentZeroPC=new EnvironmentTrading(settingsZeroPC);
         environmentNonZeroPC=new EnvironmentTrading(settingsNonZeroPC);

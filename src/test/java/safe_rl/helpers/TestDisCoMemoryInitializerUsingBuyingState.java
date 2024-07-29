@@ -55,7 +55,7 @@ class TestDisCoMemoryInitializerUsingBuyingState {
         StateBuying state = StateBuying.newZero();
         System.out.println("state.continousFeatures() = " + Arrays.toString(state.continuousFeatures()));
 
-        //Assertions.assertEquals(settings.priceTraj().length,memory.size());
+        //Assertions.assertEquals(settings.energyPriceTraj().length,memory.size());
         Assertions.assertEquals(TAR_VALUE,memory.read(state),TOL_VALUE_FITTING*10);
 
 

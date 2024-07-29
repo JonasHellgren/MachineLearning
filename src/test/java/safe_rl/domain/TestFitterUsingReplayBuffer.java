@@ -17,6 +17,7 @@ import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
 import safe_rl.domain.trainer.value_objects.MultiStepResultItem;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
@@ -55,7 +56,7 @@ public class TestFitterUsingReplayBuffer {
             var experience = getExperience(paramsTrainer);
             buffer.add(experience);
         }
-        settingsTrading = SettingsTrading.new5HoursIncreasingPrice();
+        settingsTrading = SettingsTradingFactory.new5HoursIncreasingPrice();
         StateTrading state = StateTrading.newFullAndFresh();
         AgentACDiscoI<VariablesTrading> agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settingsTrading)

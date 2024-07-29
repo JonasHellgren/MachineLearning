@@ -12,6 +12,7 @@ import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
@@ -48,7 +49,7 @@ public class Runner24HoursTrading {
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //settings5 = SettingsTrading.new24HoursZigSawPrice()  //case 2
         Double gradCriticMax = POWER_CAPACITY_FCR_LIST.get(CASE_NR);
-        settings5 = SettingsTrading.new24HoursIncreasingPrice()  //case 0 and 1
+        settings5 = SettingsTradingFactory.new24HoursIncreasingPrice()  //case 0 and 1
                 .withPowerCapacityFcr(gradCriticMax).withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START + SOC_INCREASE_LSIT.get(CASE_NR)).withPriceBattery(PRICE_BATTERY);
 

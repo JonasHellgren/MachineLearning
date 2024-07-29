@@ -1,12 +1,12 @@
 package safe_rl.environments.factories;
 
+import lombok.NoArgsConstructor;
 import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 
+@NoArgsConstructor
 public class AgentParametersFactory {
 
-    private AgentParametersFactory() {
-    }
 
     public static AgentParameters buying5Hours() {
         return AgentParameters.newDefault()

@@ -1,8 +1,10 @@
 package safe_rl.environments.trading;
 
 import com.joptimizer.exception.JOptimizerException;
+import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -80,8 +83,9 @@ public class TestSimulationTradingWithFCR {
     }
 
     void init(int powerCapacityFcr, double priceFCR) {
-        settings = SettingsTrading.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(powerCapacityFcr).withPriceFCR(priceFCR).withSocTerminalMin(SOC).withPriceBattery(5e3);
+        settings = SettingsTradingFactory.new5HoursIncreasingPrice()
+                .withPowerCapacityFcr(powerCapacityFcr).withSocTerminalMin(SOC).withPriceBattery(5e3)
+        .withCapacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,priceFCR));
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
         simulator = RandomActionSimulator.<VariablesTrading>builder()

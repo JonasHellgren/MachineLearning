@@ -67,8 +67,12 @@ public class TradeSimulationPlotter<V> {
     private  void addAccRevFCR(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         XYChart chartAccumRevFcr= getXyChart("","Acc rev. FCR");
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
+
+            //todo fix below, not correct relation
             List<Double> revFcrList = ListUtils.createListWithEqualElementValues(
                     settings.nTimeSteps(),settings.revFCRPerTimeStep());
+
+
             XYSeries series = chartAccumRevFcr.addSeries(
                     "" + entry.getKey(),
                     getTimes(revFcrList),

@@ -9,6 +9,7 @@ import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.value_objects.StepReturn;
+import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.EnvironmentTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -44,7 +45,7 @@ class TestEnvironmentTrading5h {
 
     @BeforeEach
     void init() {
-        settingsZeroPC = SettingsTrading.new5HoursIncreasingPrice()
+        settingsZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcr(0).withPriceBattery(0);
         stateAllZero=StateTrading.allZero();
         stateTime3SoC0d5 =StateTrading.of(VariablesTrading.newTimeSoc(3,0.5));
