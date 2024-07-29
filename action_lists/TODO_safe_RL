@@ -130,8 +130,18 @@ clean up:
 TrainerParameters in i AgentACDCSafe  - newFromTrainerParams  x
 Lists.newArrayList()   isf new  x
 snygga upp LinearBatchFitter  x
+Fyra Domain foldrar: env, agent, trainer, safety lager
+Dela in dessa enligt ddd
+Flytta in Helpers , value obj
+AgntDisco mindre, tex man ActorUpdater
 
-settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy
+få till variererande priceFCR
+läsa in prisdata från xls
+mest repr elpris data genom klustring - 4 fall
+
+optimera powerFCR - gärna med parallesiering
+
+settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
 
 learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
 critic loss alltid noll

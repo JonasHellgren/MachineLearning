@@ -21,7 +21,7 @@ import static org.knowm.xchart.BitmapEncoder.saveBitmapWithDPI;
 @AllArgsConstructor
 public class TradeSimulationPlotter<V> {
     public static final String AXIS_TITLE = "Time (h)";
-    public static final int WIDTH = 200;
+    public static final int WIDTH = 250;
     public static final int HEIGHT = 200;
     public static final BitmapEncoder.BitmapFormat FORMAT = BitmapEncoder.BitmapFormat.PNG;
     public static final int DPI = 300;

@@ -22,7 +22,7 @@ public class Runner24HoursTradingRealData {
     public static final double PRICE_BATTERY = 30e3;
 
     static String DAY="1_Jan";
-    public static int CASE_NR =1;
+    public static int CASE_NR =2;
     public static final List<Double> POWER_CAPACITY_FCR_LIST = List.of(0d, 10.0, 20.0, 30.0, 40.0);
 
     public static final int N_SIMULATIONS = 5;
