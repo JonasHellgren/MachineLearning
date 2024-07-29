@@ -18,6 +18,7 @@ import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.aggregates.DisCoMemory;
 import safe_rl.domain.agent.aggregates.DisCoMemoryInitializer;
 import safe_rl.domain.agent.helpers.LossTracker;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,17 +36,9 @@ import static common.other.MyFunctions.*;
 @Getter
 public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
-    public static final double LEARNING_RATE = 1e-2;
-    public static final double STD_MIN = 0.01;
     public static final double SMALLEST_DENOM = 1e-5;
-    public static final double MAX_GRAD_ELEMENT = 1;
     public static final double SOC_MIN = 0d;
-    public static final double TAR_MEAN = 1d;
-    public static final double TAR_LOG_STD = 5d;
-    public static final double TAR_CRITIC = 0d;
     public static final double STD_TAR = 0d;
-    public static final double GRADIENT_MAX = 10d;
-    public static final double ABS_TAR_MEAN = 1d;
 
     StateI<V> state;
     SettingsEnvironmentI settings;
@@ -54,18 +47,10 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-   @Getter AgentParameters parameters;
+    @Getter
+    AgentParameters parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
-    LossTracker lossTracker=new LossTracker();
-
-    /*
-    public static <V> AgentACDCSafe<V> newDefault(SettingsEnvironmentI settings, StateI<V> state) {
-        return AgentACDCSafe.<V>builder()
-                .parameters(AgentParameters.newDefault())
-                .settings(settings)
-                .state(state)
-                .build();
-    }*/
+    LossTracker lossTracker = new LossTracker();
 
     public static <V> AgentACDCSafe<V> of(AgentParameters parameters,
                                           SettingsEnvironmentI settings,
@@ -78,28 +63,25 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     }
 
     @Builder
-    AgentACDCSafe(@NonNull  AgentParameters parameters,
-                         @NonNull SettingsEnvironmentI settings,
-                         @NonNull StateI<V> state) {
+    AgentACDCSafe(@NonNull AgentParameters parameters,
+                  @NonNull SettingsEnvironmentI settings,
+                  @NonNull StateI<V> state) {
         this.state = state;
         this.settings = settings;
         int nThetas = state.nContinuousFeatures() + 1;
-        this.parameters=parameters;
-        var p=parameters;
+        this.parameters = parameters;
+        var p = parameters;
         this.actorMean = new DisCoMemory<>(nThetas, p.learningRateActorMean(), p.gradMaxActor());
         this.actorLogStd = new DisCoMemory<>(nThetas, p.learningRateActorStd(), p.gradMaxActor());
         this.critic = new DisCoMemory<>(nThetas, p.learningRateCritic(), p.gradMaxCritic());
-
-        this.actorMemoryUpdater=new ActorMemoryUpdater<>(actorMean, actorLogStd, parameters);
-        initMemories(p.targetCritic(), state, p.targetMean(), p.targetLogStd());
-
+        this.actorMemoryUpdater = new ActorMemoryUpdater<>(actorMean, actorLogStd, parameters);
+        initMemories(state);
     }
 
-    private void initMemories(Double targetCritic, @NotNull StateI<V> state, double tarMeanInit, double tarLogStdInit) {
-        double tarC = defaultIfNullDouble.apply(targetCritic, TAR_CRITIC);
-        getInitializer(state, actorMean, tarMeanInit).initialize();
-        getInitializer(state, actorLogStd, tarLogStdInit).initialize();
-        getInitializer(state, critic, tarC).initialize();
+    private void initMemories(@NotNull StateI<V> state) {
+        getInitializer(state, actorMean, parameters.targetMean()).initialize();
+        getInitializer(state, actorLogStd, parameters.targetLogStd()).initialize();
+        getInitializer(state, critic, parameters.targetCritic()).initialize();
     }
 
     @Override
@@ -120,7 +102,6 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         return Action.ofDouble(a);
     }
 
-
     @Override
     public SafeGradientClipper getMeanGradClipper() {
         return actorMemoryUpdater.getMeanGradClipper();
@@ -135,11 +116,9 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     public Pair<Double, Double> fitActor(StateI<V> state, Action action, double adv) {
         var grad = gradientMeanAndStd(state, action);
         actorMemoryUpdater.fitActorMemory(state, adv, grad);
-        lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(),actorLogStd.lossLastUpdate());
+        lossTracker.addMeanAndStdLoss(actorMean.lossLastUpdate(), actorLogStd.lossLastUpdate());
         return grad;
     }
-
-
 
     @Override
     public Pair<Double, Double> gradientMeanAndStd(StateI<V> state, Action action) {
@@ -174,7 +153,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Override
     public double lossActorLastUpdates() {
-        return lossTracker.averageMeanLosses()+lossTracker.averageStdLosses();
+        return lossTracker.averageMeanLosses() + lossTracker.averageStdLosses();
     }
 
     @Override
@@ -189,18 +168,18 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     }
 
     Pair<Double, Double> actorMeanAndStd(StateI<V> state) {
-        return Pair.create(actorMean.read(state),Math.exp(actorLogStd.read(state)));
+        return Pair.create(actorMean.read(state), Math.exp(actorLogStd.read(state)));
     }
 
     private DisCoMemoryInitializer<V> getInitializer(StateI<V> state,
-                                                                   DisCoMemory<V> memory1,
-                                                                   double tarValue) {
+                                                     DisCoMemory<V> memory1,
+                                                     double tarValue) {
         return DisCoMemoryInitializer.<V>builder()
                 .memory(memory1)
                 .discreteFeatSet(List.of(
                         doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
                 .contFeatMinMax(Pair.create(List.of(SOC_MIN), List.of(settings.socMax())))
-                .valTarMeanStd(Pair.create(tarValue, STD_TAR))
+                .valTarMeanStd(Pair.create(tarValue,STD_TAR))
                 .state(state)
                 .build();
     }
@@ -211,11 +190,11 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Override
     public String toString() {
-        return  System.lineSeparator() +
+        return System.lineSeparator() +
                 "critic() = " + critic + System.lineSeparator() +
                 "actor mean() = " + actorMean + System.lineSeparator() +
                 "actor std() = " + actorLogStd.toStringWithValueMapper(arr ->
-             Arrays.stream(arr, 0, arr.length).map(Math::exp).toArray());
+                Arrays.stream(arr, 0, arr.length).map(Math::exp).toArray());
 
 
     }
