@@ -153,11 +153,22 @@ snygga upp TrainerParameters  x
 få till variererande priceFCR x
 SettingsTradingFactory x
 TradeStateUpdater i TradeEnv x
-bordein tep använda updaterRes.stateNew() i text constraints
-kunna hantera start-slut tid
+
+DataBaseI x
+ElPriceDataBase x
+TestElPriceDataBase
+ElPriceRepo
+TestElPriceRepo
+ElPriceXlsRead
+TestElPriceXlsRead
+
+
 läsa in prisdata från xls  XlsPriceDataReader
 TestXlsPriceDataReader
 utvärdera godtycklga dagar i XlsPriceDataReader
+
+TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints
+
 
 mest repr elpris data genom klustring - 4 fall
 fixa TradeSimulationPlotter addAccRevFCR
