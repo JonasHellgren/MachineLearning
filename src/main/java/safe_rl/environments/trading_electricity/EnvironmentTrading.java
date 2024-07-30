@@ -27,12 +27,12 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
     @Override
     public StepReturn<VariablesTrading> step(StateI<VariablesTrading> state0, Action action) {
         var s0=(StateTrading) state0;
-        boolean isTerminal = stateUpdater.isTerminal(s0);
         double power=action.asDouble();
         double aFcrLumped=sampler.sampleFromNormDistribution(0, settings.stdActivationFCR());
         var updaterRes=stateUpdater.update((StateTrading) state0,aFcrLumped,power);
         double reward = evaluator.calculateReward(s0, power, updaterRes.dSoh());
-        var constraints=evaluator.evaluateConstraints(power,s0, updaterRes.stateNew());
+        var constraints=evaluator.evaluateConstraints(s0,power, updaterRes.stateNew());
+        boolean isTerminal = stateUpdater.isTerminal(updaterRes.stateNew());
         boolean isFail = evaluator.isAnyConstraintViolated(constraints);
         reward = evaluator.maybeAddFailPenaltyToReward(reward, isFail);
         logIfFail(constraints, isFail);

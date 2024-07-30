@@ -153,8 +153,12 @@ snygga upp TrainerParameters  x
 få till variererande priceFCR x
 SettingsTradingFactory x
 TradeStateUpdater i TradeEnv x
+bordein tep använda updaterRes.stateNew() i text constraints
 kunna hantera start-slut tid
 läsa in prisdata från xls  XlsPriceDataReader
+TestXlsPriceDataReader
+utvärdera godtycklga dagar i XlsPriceDataReader
+
 mest repr elpris data genom klustring - 4 fall
 fixa TradeSimulationPlotter addAccRevFCR
 
@@ -163,8 +167,6 @@ optimera powerFCR - gärna med parallesiering
 settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
 eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge
 
-
-learningRateReplayBufferActorStd(1e-3)  //verkar inte påv
 critic loss alltid noll
 
 kanske senare:

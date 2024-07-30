@@ -26,8 +26,12 @@ public class TradeStateUpdater {
                 .build();
     }
 
-    public boolean isTerminal(StateTrading s0) {
+    public boolean isTerminalOld(StateTrading s0) {
         return s0.time()+ settings.dt() > settings.timeEnd();
+    }
+
+    public boolean isTerminal(StateTrading s) {
+        return s.time() > settings.timeEnd();
     }
 
 

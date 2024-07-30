@@ -37,7 +37,7 @@ public class RewardAndConstraintEvaluator {
      *    x<xMax <=> x-xMax<0;  x>xMin <=> -(x-xMin)<0 <=> (xMin-x)<0
      */
 
-    public double[] evaluateConstraints(double power, StateTrading s0, StateI<VariablesTrading> stateNew) {
+    public double[] evaluateConstraints(StateTrading s0, double power, StateI<VariablesTrading> stateNew) {
         StateTrading s1=(StateTrading) stateNew;
         var s=settings;
         double powerFcr= s.powerAvgFcrExtreme();
