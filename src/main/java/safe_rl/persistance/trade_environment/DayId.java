@@ -1,7 +1,5 @@
 package safe_rl.persistance.trade_environment;
 
-import lombok.Builder;
-
 public record DayId(
         int year,
         int month,

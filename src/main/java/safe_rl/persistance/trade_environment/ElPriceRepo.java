@@ -43,7 +43,15 @@ public class ElPriceRepo {
     }
 
     public boolean check() {
-        return energyPriceDatabase.size() == fcrPriceDatabase.size();
+        return sizeEnergyDB() == sizeFcrDB();
+    }
+
+    public int sizeEnergyDB() {
+        return energyPriceDatabase.size();
+    }
+
+    public int sizeFcrDB() {
+        return fcrPriceDatabase.size();
     }
 
     public List<DayId> idsAll() {
