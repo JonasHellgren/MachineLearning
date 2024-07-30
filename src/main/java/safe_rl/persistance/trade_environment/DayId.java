@@ -15,5 +15,9 @@ public record DayId(
                                     String region) {
         return new DayId(year,month,day,region);
     }
+
+    public DayId nextDay() {
+        return DayId.of(year,month,day+1,region);
+    }
     
 }
