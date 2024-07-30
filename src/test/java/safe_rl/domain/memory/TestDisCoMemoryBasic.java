@@ -1,4 +1,4 @@
-package safe_rl.memory;
+package safe_rl.domain.memory;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

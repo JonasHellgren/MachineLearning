@@ -1,4 +1,4 @@
-package safe_rl.helpers;
+package safe_rl.domain.helpers;
 
 import common.other.Conditionals;
 import lombok.SneakyThrows;

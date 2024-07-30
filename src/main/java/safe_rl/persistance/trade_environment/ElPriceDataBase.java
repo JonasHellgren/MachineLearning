@@ -5,11 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class ElPriceDataBase implements DataBaseI<DayId,PriceData> {
 
     Map<DayId,PriceData> priceDataMap;
 
-    public ElPriceDataBase() {
+    public static ElPriceDataBase empty() {
+        return new ElPriceDataBase();
+    }
+
+    private ElPriceDataBase() {
         priceDataMap=new HashMap<>();
     }
 

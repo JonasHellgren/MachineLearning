@@ -1,4 +1,4 @@
-package safe_rl.memory;
+package safe_rl.domain.memory;
 
 import com.google.common.collect.Lists;
 import common.list_arrays.ListUtils;

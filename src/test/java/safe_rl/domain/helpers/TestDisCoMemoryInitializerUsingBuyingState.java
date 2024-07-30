@@ -1,4 +1,4 @@
-package safe_rl.helpers;
+package safe_rl.domain.helpers;
 
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;

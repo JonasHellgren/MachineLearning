@@ -1,16 +1,18 @@
 package safe_rl.persistance.trade_environment;
 
 import com.google.common.base.Preconditions;
-import lombok.Getter;
-
 import java.util.List;
 
-@Getter
 public record PriceData(
         DayId id,
         ElType type,
         List<Double> pricesAllHours) {
 
+    public static PriceData of(DayId id,
+                               ElType type,
+                               List<Double> pricesAllHours) {
+        return new PriceData(id, type, pricesAllHours);
+    }
 
     public List<Double> prices00ToHour(int toHour) {
         checkHour(toHour);
