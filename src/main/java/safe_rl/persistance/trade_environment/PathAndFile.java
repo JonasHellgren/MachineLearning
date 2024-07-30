@@ -8,7 +8,10 @@ public record PathAndFile(
 
     public static PathAndFile xlsOf(String path, String name) {
         return new PathAndFile(path,name,"xlsx");
+    }
 
+    public String fullName() {
+        return path+name+fileType;
     }
 
 }
