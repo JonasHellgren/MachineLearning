@@ -6,11 +6,13 @@ import common.other.Conditionals;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
-import java.util.Objects;
 
 /***
- *   fromHour=17, toHour=20  => same day
- *   fromHour=17, toHour=8  =>  (8<17) to hour is at next day
+ *   Repository for storing energy (day-ahead) and FCR prices
+
+ *  Logic for time windows:
+ *  fromHour=17, toHour=20  => same day
+ *  fromHour=17, toHour=8  =>  (8<17) toHour is at next day
  *
  */
 
@@ -33,6 +35,11 @@ public class ElPriceRepo {
         Conditionals.executeOneOfTwo(priceData.type().equals(ElType.ENERGY),
                 () -> energyPriceDatabase.create(priceData),
                 () -> fcrPriceDatabase.create(priceData));
+    }
+
+    public void clear() {
+        energyPriceDatabase.clear();
+        fcrPriceDatabase.clear();
     }
 
     public boolean check() {

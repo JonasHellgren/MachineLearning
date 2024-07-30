@@ -157,11 +157,12 @@ TradeStateUpdater i TradeEnv x
 DataBaseI x
 ElPriceDataBase x
 TestElPriceDataBase x
-ElPriceRepo
-TestElPriceRepo
+ElPriceRepo  x
+TestElPriceRepo x
 ElPriceXlsRead
 TestElPriceXlsRead
-
+ElPriceRepoPlotter
+RunnerElPriceRepoPlotter
 
 läsa in prisdata från xls  XlsPriceDataReader
 TestXlsPriceDataReader
