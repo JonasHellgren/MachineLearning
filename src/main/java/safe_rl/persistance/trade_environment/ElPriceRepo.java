@@ -42,7 +42,7 @@ public class ElPriceRepo {
         fcrPriceDatabase.clear();
     }
 
-    public boolean check() {
+    public boolean checkIsOk() {
         return sizeEnergyDB() == sizeFcrDB();
     }
 

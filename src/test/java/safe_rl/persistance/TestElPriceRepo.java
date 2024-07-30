@@ -37,7 +37,7 @@ class TestElPriceRepo {
 
     @Test
     void checkIsOk() {
-        Assertions.assertTrue(repo.check());
+        Assertions.assertTrue(repo.checkIsOk());
     }
 
     @Test

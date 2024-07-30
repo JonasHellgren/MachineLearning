@@ -50,7 +50,7 @@ public class ElPriceXlsReader {
                 var prices = table.column(day);
                 List<Double> pricesAllHours = prices.values().stream().toList();
                 var priceData = PriceData.of(id, type, pricesAllHours);
-                log.info("..for day="+day);
+                log.fine("..for day="+day);
                 repo.addDataForDay(priceData);
             }
         }
