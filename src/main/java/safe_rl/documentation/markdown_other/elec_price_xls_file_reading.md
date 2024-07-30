@@ -23,6 +23,8 @@ Provides low-level CRUD operations (Create, Read, Update, Delete). Beside CRUD f
 * void clear();
 * int size();
 
+where DayId includes (year, month, day,region)
+
 The database implementation for one data type (energy or FCR) is the following map
 * Map<DayId,PriceData>  priceDataMap
 
@@ -48,7 +50,6 @@ The databases are of type ElPriceDataBase
 Major methods:
 * List<DayId> getAllIds()
 * List<DayId> getIdsHasNextDay()
-* PriceData getPriceDataForDay(DayId id, ElType type)
 * PriceData getPriceDataForDay(DayId id, ElType type)
 * List<Double> pricesFromHourToHour(DayId id, Range<> fromToHour, ElType type)
 * addDataForDay(PriceData,ElType type)

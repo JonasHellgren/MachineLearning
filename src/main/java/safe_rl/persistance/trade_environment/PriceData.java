@@ -19,7 +19,7 @@ public record PriceData(
         return pricesAllHours.subList(0, toHour);
     }
 
-    public List<Double> pricesHourTo00(int fromHour) {
+    public List<Double> pricesFromHourTo00(int fromHour) {
         checkHour(fromHour);
         return pricesAllHours.subList(fromHour, pricesAllHours.size());
     }

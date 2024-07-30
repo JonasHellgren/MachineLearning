@@ -156,7 +156,7 @@ TradeStateUpdater i TradeEnv x
 
 DataBaseI x
 ElPriceDataBase x
-TestElPriceDataBase
+TestElPriceDataBase x
 ElPriceRepo
 TestElPriceRepo
 ElPriceXlsRead
