@@ -16,10 +16,12 @@ public class SettingsTradingFactory {
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
                 .dt(1)
-                .energyBatt(10).powerBattMax(3).priceBattery(5e3)
+                .energyBatt(10)  //kWh
+                .powerBattMax(3)  //kW
+                .priceBattery(5e3)
                 .socMin(0.0).socMax(1).socTerminalMin(0.5)
-                .energyPriceTraj(new double[]{0.1, 0.2, 0.3, 0.4, 0.5})
-                .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,0.11))
+                .energyPriceTraj(new double[]{0.1, 0.2, 0.3, 0.4, 0.5})  //Eur/kWh
+                .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,0.11))  //Eur/kW
                 //.priceFCR(1)
                 .stdActivationFCR(0.1).powerCapacityFcr(1)
                 .nCyclesLifetime(5000)

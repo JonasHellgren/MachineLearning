@@ -1,26 +1,21 @@
 package safe_rl.environments.trading_electricity;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
-import common.list_arrays.ArrayUtil;
-import common.list_arrays.ListUtils;
 import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
-
 import java.util.Arrays;
-import java.util.List;
 
 @Builder
 public record SettingsTrading(
         double dt,
-        double energyBatt,
-        double powerBattMax,
-        @With double priceBattery,
+        double energyBatt,  //kWh
+        double powerBattMax,  //kW
+        @With double priceBattery,  //Euro
         double socMin, double socMax,
         @With double socTerminalMin,
-        @With double[] energyPriceTraj,
-        @With double[] capacityPriceTraj,
+        @With double[] energyPriceTraj,  //Euro/kWh
+        @With double[] capacityPriceTraj,  //Euro/kW
         @With double stdActivationFCR,
         @With double powerCapacityFcr,
         @With double nCyclesLifetime,

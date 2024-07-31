@@ -8,7 +8,6 @@ import java.util.List;
 public class RunnerElPriceRepoPlotter {
 
     static final String PATH = "src/main/java/safe_rl/persistance/data/";
-   // static final String REGION = "se3";
     public static final ElPriceRepoPlotter.Settings NO_LEGEND_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault().withIsLegend(false);
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =

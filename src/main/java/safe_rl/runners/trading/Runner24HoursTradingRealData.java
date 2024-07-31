@@ -4,12 +4,10 @@ import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
-import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.factories.SettingsTradingFactory;
@@ -51,8 +49,8 @@ public class Runner24HoursTradingRealData {
             CpuTimer timer) throws JOptimizerException {
         var trainingProgress = trainer.getRecorder().recorderTrainingProgress;
         trainingProgress.plot("Multi step ACDC trading");
-        trainingProgress.saveCharts(RunnerHelper.PICS);
-        var helper = RunnerHelper.builder().nSim(N_SIMULATIONS).settings(settings5).build();
+        trainingProgress.saveCharts(RunnerHelperTrading.PICS);
+        var helper = RunnerHelperTrading.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         helper.printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();
         helper.simulateAndPlot(simulator);

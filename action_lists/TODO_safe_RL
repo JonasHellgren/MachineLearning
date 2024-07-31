@@ -169,6 +169,7 @@ ClosestPointToClusterCenterFinder x
 RepoInformer - hitta dag som motsvarar closes point  x
 TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints  - x stämmer
 
+snygga upp Runner24HoursTrading
 prova utvärdera godtycklga dagar från XlsPriceDataReader - kolla på enheter
 
 cleaner:
