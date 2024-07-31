@@ -162,12 +162,16 @@ TestElPriceRepo x
 ElPriceXlsRead x
 TestElPriceXlsRead x
 ElPriceRepoPlotter plotTrajectories x
-ElPriceRepoPlotter plotScatter
-RunnerElPriceRepoPlotter
-prova utvärdera godtycklga dagar från XlsPriceDataReader
+ElPriceRepoPlotter plotScatter  x
+RunnerElPriceRepoPlotter x
+
+plotScatterWithAddedPoints()
+mest repr elpris data genom klustring - 3 fall
 
 TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints
-mest repr elpris data genom klustring - 4 fall
+
+prova utvärdera godtycklga dagar från XlsPriceDataReader - kolla på enheter
+
 
 cleaner:
 Agent getLosstracker nu 2

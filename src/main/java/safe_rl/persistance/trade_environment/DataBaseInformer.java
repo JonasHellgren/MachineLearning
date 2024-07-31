@@ -2,9 +2,8 @@ package safe_rl.persistance.trade_environment;
 
 import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -35,8 +34,31 @@ public class DataBaseInformer {
 
     List<Double> getAllPricesAllDays() {
         return dataBase.getIds().stream()
-                .flatMap(id -> dataBase.read(id).pricesAllHours().stream())
+                .flatMap(id -> getAllHours(id).stream())
                 .toList();
+    }
+
+    public List<Double> averagePriceEachDay() {
+        return dataBase.getIds().stream()
+                .map(id -> ListUtils.findAverage(getAllHours(id)).orElseThrow())
+                .toList();
+    }
+
+    public List<Double> stdOfPriceEachDay() {
+        return dataBase.getIds().stream()
+                .map(id -> calculateStd(getAllHours(id)))
+                .toList();
+    }
+
+
+    List<Double> getAllHours(DayId id) {
+        return dataBase.read(id).pricesAllHours();
+    }
+
+    double calculateStd(List<Double> valuesList) {
+        var ds = new DescriptiveStatistics();
+        valuesList.forEach(ds::addValue);
+        return ds.getStandardDeviation();
     }
 
 }

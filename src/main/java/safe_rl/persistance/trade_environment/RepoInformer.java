@@ -1,5 +1,7 @@
 package safe_rl.persistance.trade_environment;
 
+import java.util.List;
+
 public class RepoInformer {
 
     ElPriceRepo repo;
@@ -22,6 +24,18 @@ public class RepoInformer {
         return type.equals(ElType.ENERGY)
                 ? energyInformer.minPrice()
                 : fcrInformer.minPrice();
+    }
+
+    public List<Double> averagePriceEachDay (ElType type) {
+        return type.equals(ElType.ENERGY)
+                ? energyInformer.averagePriceEachDay()
+                : fcrInformer.averagePriceEachDay();
+    }
+
+    public List<Double> stdPriceEachDay(ElType type) {
+        return type.equals(ElType.ENERGY)
+                ? energyInformer.stdOfPriceEachDay()
+                : fcrInformer.stdOfPriceEachDay();
     }
 
 }
