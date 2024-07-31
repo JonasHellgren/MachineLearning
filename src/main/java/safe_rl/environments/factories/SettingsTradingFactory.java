@@ -12,6 +12,7 @@ import java.util.List;
 public class SettingsTradingFactory {
 
     public static final int FAIL_PENALTY = 10;
+    public static final double[] EMPTY_ARR = {};
 
     public static SettingsTrading new5HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
@@ -43,6 +44,20 @@ public class SettingsTradingFactory {
         settings.check();
         return settings;
     }
+
+    public static SettingsTrading new100kWhVehicleEmptyPrices() {
+        return SettingsTrading.builder()
+                .dt(1)
+                .energyBatt(100).powerBattMax(100).priceBattery(30e3)
+                .socMin(0.0).socMax(1).socTerminalMin(0.5)
+                .energyPriceTraj(EMPTY_ARR).capacityPriceTraj(EMPTY_ARR)
+                .stdActivationFCR(0.1).powerCapacityFcr(1)
+                .nCyclesLifetime(2000)
+                .failPenalty(FAIL_PENALTY)
+                .build();
+    }
+
+
 
     public static SettingsTrading new24HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()

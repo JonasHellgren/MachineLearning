@@ -1,6 +1,7 @@
 package safe_rl.runners.trading;
 
 import com.joptimizer.exception.JOptimizerException;
+import common.list_arrays.ListUtils;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
@@ -17,75 +18,59 @@ import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.domain.simulator.AgentSimulator;
+import safe_rl.persistance.trade_environment.*;
 
 import java.util.List;
 
 public class Runner24HoursTradingRealData {
-    public static final double PRICE_BATTERY = 30e3;
 
-    static String DAY="1_Jan";
-    public static int CASE_NR =0;
-    public static final List<Double> POWER_CAPACITY_FCR_LIST = List.of(0d, 10.0, 20.0, 30.0, 40.0);
+    static final String PATH = "src/main/java/safe_rl/persistance/data/";
+    public static final ElPriceRepoPlotter.Settings NO_LEGEND_SETTINGS =
+            ElPriceRepoPlotter.Settings.newDefault().withIsLegend(false);
+    public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
+            ElPriceRepoPlotter.Settings.newDefault();
+    public static final int N_CLUSTERS = 3;
+    public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
+    public static final double SOC_TERMINAL_MIN = 0.8;
+    public static final int POWER_CAPACITY_FCR = 10;
 
+    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
+    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
+
+
+    public static int DAY_IDX = 0;
+    public static List<DayId> DAYS = List.of(
+            DayId.of(24,0,0,"se3"),
+            DayId.of(24,0,4,"se3")
+    );
     public static final int N_SIMULATIONS = 5;
-    static StateI<VariablesTrading> startState;
-    static SettingsTrading settings5;
     public static final double SOC_START = 0.5;
-    public static final double SOC_END_MIN = 0.6;
 
     @SneakyThrows
     public static void main(String[] args) {
-        var trainerAndSimulator = createTrainerAndSimulator();
-        var trainer = trainerAndSimulator.getFirst();
-        var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
-        trainer.train();
-        plotAndPrint(trainerAndSimulator, trainer, timer);
-    }
-
-    private static void plotAndPrint(
-            Pair<TrainerMultiStepACDC<VariablesTrading>,
-                    AgentSimulator<VariablesTrading>> trainerAndSimulator,
-            TrainerMultiStepACDC<VariablesTrading> trainer,
-            CpuTimer timer) throws JOptimizerException {
-        var trainingProgress = trainer.getRecorder().recorderTrainingProgress;
-        trainingProgress.plot("Multi step ACDC trading");
-        trainingProgress.saveCharts(RunnerHelperTrading.PICS);
-        var helper = RunnerHelperTrading.builder().nSim(N_SIMULATIONS).settings(settings5).build();
-        helper.printing(trainer, timer);
-        var simulator = trainerAndSimulator.getSecond();
-        helper.simulateAndPlot(simulator);
-        helper.simulateAndSavePlots(simulator, DAY);
-        helper.plotMemory(trainer.getAgent().getCritic(), "critic");
-        helper.plotMemory(trainer.getAgent().getActorMean(), "actor mean");
-    }
-
-    private static Pair<
-            TrainerMultiStepACDC<VariablesTrading>
-            , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
-        settings5 = SettingsTradingFactory.new15Hours1Jan2024()
-                .withPowerCapacityFcr(POWER_CAPACITY_FCR_LIST.get(CASE_NR))
-                .withSocTerminalMin(SOC_END_MIN);
-
-        var environment = new EnvironmentTrading(settings5);
-        startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
-        var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));
-        Double gradCriticMax = POWER_CAPACITY_FCR_LIST.get(CASE_NR);
-
-        var trainerParameters = TrainerParametersFactory.trading24Hours();
-        var agentParameters= AgentParametersFactory.trading24Hours(settings5,gradCriticMax);
-
-        var agent = AgentACDCSafe.of(agentParameters, settings5, startState.copy());
-        var trainer = TrainerMultiStepACDC.<VariablesTrading>builder()
-                .environment(environment).agent(agent)
-                .safetyLayer(safetyLayer)
-                .trainerParameters(trainerParameters)
-                .startStateSupplier(() -> startState.copy())
+        var dayId=DAYS.get(DAY_IDX);
+        ElPriceRepo repo = ElPriceRepo.empty();
+        ElPriceXlsReader reader = ElPriceXlsReader.of(repo);
+        reader.readDataFromFile(fileEnergy, ElType.ENERGY);
+        reader.readDataFromFile(fileFcr, ElType.FCR);
+        var elDataEnergyEuroPerMwh=repo.pricesFromHourToHour(dayId, FROM_TO_HOUR,ElType.ENERGY);
+        var elDataFcrEuroPerMW=repo.pricesFromHourToHour(dayId, FROM_TO_HOUR,ElType.FCR);
+        var elDataEnergyEuroPerKwh=repo.fromPerMegaToPerKilo(elDataEnergyEuroPerMwh);
+        var elDataFCREuroPerKW=repo.fromPerMegaToPerKilo(elDataFcrEuroPerMW);
+        var settings =SettingsTradingFactory.new100kWhVehicleEmptyPrices()
+                .withPowerCapacityFcr(POWER_CAPACITY_FCR)
+                .withEnergyPriceTraj(ListUtils.toArray(elDataEnergyEuroPerKwh))
+                .withCapacityPriceTraj(ListUtils.toArray(elDataFCREuroPerKW))
+                .withSocTerminalMin(SOC_TERMINAL_MIN);
+        settings.check();
+        var helper = RunnerHelperTrading.<VariablesTrading>builder()
+                .nSim(N_SIMULATIONS).settings(settings)
+                .socStart(SOC_START)
                 .build();
-        var simulator = AgentSimulator.<VariablesTrading>builder()
-                .agent(agent).safetyLayer(safetyLayer)
-                .startStateSupplier(() -> startState.copy())
-                .environment(environment).build();
-
-        return Pair.create(trainer, simulator);
+        var trainerAndSimulator = helper.createTrainerAndSimulator();
+        var trainer = trainerAndSimulator.getFirst();
+        trainer.train();
+        var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
+        helper.plotAndPrint(trainerAndSimulator,timer,dayId.toDateString());
     }
 }

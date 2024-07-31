@@ -82,6 +82,11 @@ public class ElPriceRepo {
 
     }
 
+    public List<Double> fromPerMegaToPerKilo(List<Double> pricesInPerMega) {
+       return pricesInPerMega.stream().map(p -> p/1e3).toList();
+
+    }
+
     private List<Double> pricesSameDayFromHourToHour(DayId id, Pair<Integer, Integer> fromToHour, ElType type) {
         return type.equals(ElType.ENERGY)
                 ? energyPriceDatabase.read(id).pricesFromHourToHourThisDay(fromToHour)
