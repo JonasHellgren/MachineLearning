@@ -38,4 +38,9 @@ public class RepoInformer {
                 : fcrInformer.stdOfPriceEachDay();
     }
 
+    public List<String> uniqueRegions(ElType type) {
+        return type.equals(ElType.ENERGY)
+                ? energyInformer.uniqueRegions()
+                : fcrInformer.uniqueRegions();
+    }
 }

@@ -3,20 +3,27 @@ package safe_rl.persistance.trade_environment;
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.With;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.XYStyler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
+
+import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
 
 @AllArgsConstructor
 public class ElPriceRepoPlotter {
 
+    public static final Color MARKER_COLOR_ADDED = Color.RED;
+
     @Builder
+    @With
     public record  Settings(
-            boolean isLegend) {
+            Boolean isLegend,
+            Integer markerSize) {
         public static  Settings newDefault() {
-            return Settings.builder().isLegend(true).build();
+            return Settings.builder().isLegend(true).markerSize(5).build();
         }
     }
 
@@ -31,14 +38,17 @@ public class ElPriceRepoPlotter {
         return new ElPriceRepoPlotter(repo,Settings.newDefault());
     }
 
-    public static ElPriceRepoPlotter withSeetings(ElPriceRepo repo, Settings settings) {
+    public static ElPriceRepoPlotter withSettings(ElPriceRepo repo, Settings settings) {
         return new ElPriceRepoPlotter(repo,settings);
     }
 
     public void plotTrajectories(ElType type) {
         checkOkRepo();
         var informer=new RepoInformer(repo);
-        var chart = createChart(type.toString(),"Time (h)", "Price"+putParAround.apply(type.unit));
+        var chart = createChart(
+                type.toString()+informer.uniqueRegions(type),
+                "Time"+putParAround.apply("h"),
+                "Price"+putParAround.apply(type.unit));
         styleLineChart(chart);
         setYAxisRange(chart, informer.minPriceAllDays(type), informer.maxPriceAllDays(type));
         fillChartWithPriceData(type, chart);
@@ -46,6 +56,20 @@ public class ElPriceRepoPlotter {
     }
 
     public void plotScatter() {
+        XYChart chart = getScatterChartDay();
+        new SwingWrapper<>(chart).displayChart();
+    }
+
+
+    public void plotScatterWithAddedPoints(List<Double> avgList, List<Double> stdList) {
+        Preconditions.checkArgument(!avgList.isEmpty() && avgList.size()==stdList.size(),"Non correct list(s)");
+        XYChart chart = getScatterChartDay();
+        var series=chart.addSeries("Close to cluster", avgList, stdList);
+        series.setMarkerColor(MARKER_COLOR_ADDED);
+        new SwingWrapper<>(chart).displayChart();
+    }
+
+    XYChart getScatterChartDay() {
         checkOkRepo();
         var informer=new RepoInformer(repo);
         var chart = createChart(
@@ -55,9 +79,10 @@ public class ElPriceRepoPlotter {
         styleScatterChart(chart);
         var avgList=informer.averagePriceEachDay(ElType.FCR);
         var stdList=informer.stdPriceEachDay(ElType.ENERGY);
-        chart.addSeries("Scatter", avgList, stdList);
-        new SwingWrapper<>(chart).displayChart();
+        chart.addSeries("Days", avgList, stdList);
+        return chart;
     }
+
 
     private static XYChart createChart(String title, String xAxisTitle, String yAxisTitle) {
         return new XYChartBuilder()
@@ -86,7 +111,7 @@ public class ElPriceRepoPlotter {
         XYStyler styler = chart.getStyler();
         styler.setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
         styler.setLegendVisible(settings.isLegend);
-        styler.setMarkerSize(5);
+        styler.setMarkerSize(settings.markerSize);
     }
 
 
