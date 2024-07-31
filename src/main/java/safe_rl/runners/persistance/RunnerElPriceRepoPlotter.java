@@ -19,7 +19,6 @@ public class RunnerElPriceRepoPlotter {
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
 
     public static void main(String[] args) {
-
         ElPriceRepo repo = ElPriceRepo.empty();
         ElPriceXlsReader reader = ElPriceXlsReader.of(repo);
         reader.readDataFromFile(fileEnergy, ElType.ENERGY);
@@ -27,13 +26,20 @@ public class RunnerElPriceRepoPlotter {
         ElPriceRepoPlotter plotter= ElPriceRepoPlotter.withSettings(repo, DEF_SETTINGS);
         plotter.plotTrajectories(ElType.ENERGY);
         plotter.plotTrajectories(ElType.FCR);
-
         plotter.plotScatter();
         var xy = getAddedPoints(repo);
         plotter.plotScatterWithAddedPoints(xy.getFirst(),xy.getSecond());
+        printDaysForAddedPoints(repo, xy);
+    }
 
-
-
+    private static void printDaysForAddedPoints(ElPriceRepo repo, Pair<List<Double>, List<Double>> xy) {
+        var informer=new RepoInformer(repo);
+        var stdList= xy.getSecond();
+        stdList.forEach(stdPrice -> {
+            DayId id = informer.findDayWithEqualStdPrice(stdPrice, ElType.ENERGY)
+                    .orElseThrow(() -> new RuntimeException("DayId not found for stdPrice: " + stdPrice));
+            System.out.println("stdPrice=" + stdPrice + ", id = " + id);
+        });
     }
 
     private static Pair<List<Double>, List<Double>> getAddedPoints(ElPriceRepo repo) {

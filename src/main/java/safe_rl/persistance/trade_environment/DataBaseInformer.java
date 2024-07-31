@@ -3,7 +3,9 @@ package safe_rl.persistance.trade_environment;
 import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
+
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
@@ -15,13 +17,13 @@ public class DataBaseInformer {
         return new DataBaseInformer(dataBase);
     }
 
-  public  boolean isDatePresent(int year, int month, int day) {
-      return getDayIdStream()
-              .anyMatch(id -> id.year()==year && id.month()==month && id.day()==day);
-  }
+    public boolean isDatePresent(int year, int month, int day) {
+        return getDayIdStream()
+                .anyMatch(id -> id.year() == year && id.month() == month && id.day() == day);
+    }
 
 
-    public  boolean hasNextDay(DayId id) {
+    public boolean hasNextDay(DayId id) {
         return isDatePresent(id.year(), id.month(), id.day() + 1);
     }
 
@@ -41,7 +43,7 @@ public class DataBaseInformer {
 
     public List<Double> averagePriceEachDay() {
         return getDayIdStream()
-                .map(id -> ListUtils.findAverage(getAllHours(id)).orElseThrow())
+                .map(id -> avgPrice(id).orElseThrow())
                 .toList();
     }
 
@@ -51,8 +53,24 @@ public class DataBaseInformer {
                 .toList();
     }
 
+    public List<String> uniqueRegions() {
+        return getDayIdStream().map(DayId::region).distinct().toList();
+    }
 
-    private Stream<DayId> getDayIdStream() {
+    public double averagePrice(DayId id) {
+        return avgPrice(id).orElseThrow();
+    }
+
+
+    public double stdPrice(DayId id) {
+        return calculateStd(getAllHours(id));
+    }
+
+    OptionalDouble avgPrice(DayId id) {
+        return ListUtils.findAverage(getAllHours(id));
+    }
+
+    Stream<DayId> getDayIdStream() {
         return dataBase.getIds().stream();
     }
 
@@ -66,7 +84,4 @@ public class DataBaseInformer {
         return ds.getStandardDeviation();
     }
 
-    public List<String> uniqueRegions() {
-        return getDayIdStream().map(DayId::region).distinct().toList();
-    }
 }

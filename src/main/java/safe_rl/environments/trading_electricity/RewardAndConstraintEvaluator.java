@@ -11,7 +11,6 @@ public class RewardAndConstraintEvaluator {
     public static final int N_CONSTRAINTS = 5;
 
     SettingsTrading settings;
-
     PriceInterpolator energyPriceInterpolator;
     PriceInterpolator capacityPriceInterpolator;
 
@@ -28,7 +27,7 @@ public class RewardAndConstraintEvaluator {
         double energyBuy=max(0, power * s.dt());  //pos if power is positive (buying)
         double priceEnergy= energyPriceInterpolator.priceAtTime(s0.time());
         double priceCap= capacityPriceInterpolator.priceAtTime(s0.time());
-        return priceCap* s.powerCapacityFcr()+priceEnergy*energySell-
+        return priceCap*s.powerCapacityFcr()+priceEnergy*energySell-
                 (priceEnergy*energyBuy+ s.priceBattery()* Math.abs(dSoh));
     }
 

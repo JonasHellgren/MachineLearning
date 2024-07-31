@@ -1,9 +1,13 @@
 package safe_rl.persistance.trade_environment;
 
+import com.google.common.primitives.Doubles;
+
 import java.util.List;
+import java.util.Optional;
 
 public class RepoInformer {
 
+    public static final double TOL = 1e-4;
     ElPriceRepo repo;
     DataBaseInformer energyInformer;
     DataBaseInformer fcrInformer;
@@ -38,9 +42,38 @@ public class RepoInformer {
                 : fcrInformer.stdOfPriceEachDay();
     }
 
+    public Optional<DayId> findDayWithEqualAvgPrice(double avgPrice, ElType type)  {
+        return repo.idsAll().stream()
+                .filter(id -> areDoublesSimilar(averagePrice(id,type),avgPrice, TOL))
+                .findFirst();
+    }
+
+    public Optional<DayId> findDayWithEqualStdPrice(double avgPrice, ElType type)  {
+        return repo.idsAll().stream()
+                .filter(id -> areDoublesSimilar(stdPrice(id,type),avgPrice, TOL))
+                .findFirst();
+    }
+
+    private double stdPrice(DayId id, ElType type) {
+        return type.equals(ElType.ENERGY)
+                ? energyInformer.stdPrice(id)
+                : fcrInformer.stdPrice(id);
+    }
+
+    private double averagePrice(DayId id, ElType type) {
+        return type.equals(ElType.ENERGY)
+                ? energyInformer.averagePrice(id)
+                : fcrInformer.averagePrice(id);
+    }
+
     public List<String> uniqueRegions(ElType type) {
         return type.equals(ElType.ENERGY)
                 ? energyInformer.uniqueRegions()
                 : fcrInformer.uniqueRegions();
     }
+
+    public static boolean areDoublesSimilar(double a, double b, double tol) {
+        return Math.abs(a - b) <= tol;
+    }
+
 }

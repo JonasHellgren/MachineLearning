@@ -165,13 +165,11 @@ ElPriceRepoPlotter plotTrajectories x
 ElPriceRepoPlotter plotScatter  x
 RunnerElPriceRepoPlotter x
 
-plotScatterWithAddedPoints()
-mest repr elpris data genom klustring - 3 fall
-
-TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints
+ClosestPointToClusterCenterFinder x
+RepoInformer - hitta dag som motsvarar closes point  x
+TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints  - x stämmer
 
 prova utvärdera godtycklga dagar från XlsPriceDataReader - kolla på enheter
-
 
 cleaner:
 Agent getLosstracker nu 2
