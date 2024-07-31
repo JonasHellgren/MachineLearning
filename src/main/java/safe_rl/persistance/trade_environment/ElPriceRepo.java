@@ -109,4 +109,10 @@ public class ElPriceRepo {
                 : fcrPriceDatabase.read(id).prices00ToHour(hour);
     }
 
+    @Override
+    public String toString() {
+        return "energyDB="+System.lineSeparator()+energyPriceDatabase.toString()+
+         "fcrDB="+System.lineSeparator()+fcrPriceDatabase.toString();
+    }
+
 }

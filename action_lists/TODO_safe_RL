@@ -159,27 +159,35 @@ ElPriceDataBase x
 TestElPriceDataBase x
 ElPriceRepo  x
 TestElPriceRepo x
-ElPriceXlsRead
-TestElPriceXlsRead
-ElPriceRepoPlotter
+ElPriceXlsRead x
+TestElPriceXlsRead x
+ElPriceRepoPlotter plotTrajectories x
+ElPriceRepoPlotter plotScatter
 RunnerElPriceRepoPlotter
-
-läsa in prisdata från xls  XlsPriceDataReader
-TestXlsPriceDataReader
-utvärdera godtycklga dagar i XlsPriceDataReader
+prova utvärdera godtycklga dagar från XlsPriceDataReader
 
 TraderEnvironemnt - borde tex använda updaterRes.stateNew() i tex constraints
-
-
 mest repr elpris data genom klustring - 4 fall
-fixa TradeSimulationPlotter addAccRevFCR
 
+cleaner:
+Agent getLosstracker nu 2
+Agent. Val manga metodrr. Ersatt SOCMIN
+Trainer train() fler argument in I metoder
+EpisodeTrainer public void trainAgentFromExperiences låt returnera Multistepredults
+MultiStepResultsGenerator rörig evaluate(), evaluator ej som fält
+Dokumentation MultiStepResultsGenerator spec hur använder evaluator
+
+
+fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max
 optimera powerFCR - gärna med parallesiering
 
 settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
 eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge
 
 critic loss alltid noll
+fixa TradeSimulationPlotter addAccRevFCR
+
+
 
 kanske senare:
 snygga upp trainer mha mediator

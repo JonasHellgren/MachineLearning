@@ -17,5 +17,9 @@ public record DayId(
     public DayId nextDay() {
         return DayId.of(year,month,day+1,region);
     }
+
+    public String toDateString() {
+        return year +"-"+ month+"-"+ day;
+    }
     
 }

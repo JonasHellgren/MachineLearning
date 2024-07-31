@@ -1,6 +1,11 @@
 package safe_rl.persistance.trade_environment;
 
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 public class DataBaseInformer {
@@ -18,6 +23,20 @@ public class DataBaseInformer {
 
     public  boolean hasNextDay(DayId id) {
         return isDatePresent(id.year(), id.month(), id.day() + 1);
+    }
+
+    public double maxPrice() {
+        return ListUtils.findMax(getAllPricesAllDays()).orElseThrow();
+    }
+
+    public double minPrice() {
+        return ListUtils.findMin(getAllPricesAllDays()).orElseThrow();
+    }
+
+    List<Double> getAllPricesAllDays() {
+        return dataBase.getIds().stream()
+                .flatMap(id -> dataBase.read(id).pricesAllHours().stream())
+                .toList();
     }
 
 }

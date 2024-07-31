@@ -47,4 +47,13 @@ public class ElPriceDataBase implements DataBaseI<DayId,PriceData> {
     public int size() {
         return priceDataMap.size();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        priceDataMap.keySet().forEach(key ->
+                sb.append(key).append(priceDataMap.get(key).pricesAllHours())
+                        .append(System.lineSeparator()));
+        return  sb.toString();
+    }
 }

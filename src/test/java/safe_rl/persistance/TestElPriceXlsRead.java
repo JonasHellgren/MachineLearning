@@ -11,8 +11,8 @@ import java.util.List;
 class TestElPriceXlsRead {
 
     final static String PATH = "src/main/java/safe_rl/persistance/data/";
-    public static final String REGION = "se3";
-    public static final DayId DAY0_JAN = DayId.of(24, 0, 0, REGION);
+    static final String REGION = "se3";
+    static final DayId DAY0_JAN = DayId.of(24, 0, 0, REGION);
     PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
     PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
     ElPriceXlsReader reader;
