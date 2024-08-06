@@ -7,6 +7,6 @@ public interface DiscoCriticI<V> {
     DisCoMemory<V> getCritic();
     void fitCritic(StateI<V> state, double error);
     double readCritic(StateI<V> state);
-    double lossCriticLastUpdates();
-    void clearCriticLosses();
+   // double lossCriticLastUpdates();
+    //void clearCriticLosses();
 }

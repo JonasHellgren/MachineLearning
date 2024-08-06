@@ -23,6 +23,8 @@ public record PropertiesTunnels(
         Set<XyPos> startPositions
 ) {
 
+    public static final double FAIL = -100d;
+
     public static PropertiesTunnels newDefault() {
         Pair<Integer, Integer> minMaxX = Pair.create(0, 8);
         Pair<Integer, Integer> minMaxY = Pair.create(0, 3);
@@ -49,16 +51,16 @@ public record PropertiesTunnels(
 
     private static Map<XyPos, Double> getFailPositionsRewardMap() {
         Map<XyPos,Double> fpm=new HashMap<>();
-        fpm.put(XyPos.of(1,0),-10d);
-        fpm.put(XyPos.of(1,2),-10d);
-        fpm.put(XyPos.of(5,3),-10d);
+        fpm.put(XyPos.of(1,0),FAIL);
+        fpm.put(XyPos.of(1,2),FAIL);
+        fpm.put(XyPos.of(5,3),FAIL);
         return fpm;
     }
 
     private static Map<XyPos, Double> getTerminalPositionsRewardMap() {
         Map<XyPos,Double> fpm=new HashMap<>();
-        fpm.put(XyPos.of(3,0),9d);
-        fpm.put(XyPos.of(8,1),10d);
+        fpm.put(XyPos.of(3,0),10d);
+        fpm.put(XyPos.of(8,1),20d);
         return fpm;
     }
 

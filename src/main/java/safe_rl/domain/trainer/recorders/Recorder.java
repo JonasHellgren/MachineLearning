@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import policy_gradient_problems.helpers.RecorderStateValues;
 import policy_gradient_problems.helpers.RecorderTrainingProgress;
+import safe_rl.domain.agent.helpers.LossTracker;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Recorder<V> {
 
-    public final RecorderStateValues recorderStateValues = new RecorderStateValues();
+    //public final RecorderStateValues recorderStateValues = new RecorderStateValues();
     public final RecorderTrainingProgress recorderTrainingProgress = new RecorderTrainingProgress();
     AgentSimulator<V> simulator;
 
@@ -29,16 +30,29 @@ public class Recorder<V> {
         List<Double> entropies = experiences.stream()
                 .map(e -> agent.entropy(e.state())).toList();
         var simulationResults = simulator.simulateWithNoExploration();
+        var lossTracker = agent.getLossTracker();
         recorderTrainingProgress.add(ProgressMeasures.builder()
                 .nSteps(ei.size())
                 .sumRewards(ei.sumRewards())
                 .eval(SimulationResult.sumRewards(simulationResults))
-                .criticLoss(agent.lossCriticLastUpdates())
-                .actorLoss(agent.lossActorLastUpdates())
+                .criticLoss(lossCriticLastUpdates(lossTracker))
+                .actorLoss(lossActorLastUpdates(lossTracker))
                 .entropy(ListUtils.findAverage(entropies).orElseThrow())
                 .build());
-        agent.clearActorLosses();
-        agent.clearCriticLosses();
+        clearLossesRecording(lossTracker);
+    }
+
+    public double lossCriticLastUpdates(LossTracker lossTracker) {
+        return lossTracker.averageCriticLosses();
+    }
+
+    public double lossActorLastUpdates(LossTracker lossTracker) {
+        return lossTracker.averageMeanLosses() + lossTracker.averageStdLosses();
+    }
+
+    public void clearLossesRecording(LossTracker lossTracker) {
+        lossTracker.clearCriticLosses();
+        lossTracker.clearActorLosses();
     }
 
 

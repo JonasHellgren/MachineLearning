@@ -173,13 +173,14 @@ snygga upp Runner24HoursTrading x
 prova utvärdera godtycklga dagar från XlsPriceDataReader - kolla på enheter  x
 
 cleaner:
-Agent getLosstracker nu 2
+Agent getLosstracker nu 2 x
 Agent. Val manga metodrr. Ersatt SOCMIN
 Trainer train() fler argument in I metoder
 EpisodeTrainer public void trainAgentFromExperiences låt returnera Multistepredults
 MultiStepResultsGenerator rörig evaluate(), evaluator ej som fält
 Dokumentation MultiStepResultsGenerator spec hur använder evaluator
 
+data fråm C
 
 fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max
 optimera powerFCR - gärna med parallesiering

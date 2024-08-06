@@ -47,10 +47,9 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     EntropyCalculatorContActions entropyCalculator = new EntropyCalculatorContActions();
     NormalDistributionGradientCalculator gradientCalculator =
             new NormalDistributionGradientCalculator(SMALLEST_DENOM);
-    @Getter
-    AgentParameters parameters;
+    @Getter AgentParameters parameters;
     ActorMemoryUpdater<V> actorMemoryUpdater;
-    LossTracker lossTracker = new LossTracker();
+    @Getter LossTracker lossTracker = new LossTracker();
 
     public static <V> AgentACDCSafe<V> of(AgentParameters parameters,
                                           SettingsEnvironmentI settings,
@@ -141,25 +140,6 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         return critic.read(state);
     }
 
-    @Override
-    public double lossCriticLastUpdates() {
-        return lossTracker.averageCriticLosses();
-    }
-
-    @Override
-    public void clearCriticLosses() {
-        lossTracker.clearCriticLosses();
-    }
-
-    @Override
-    public double lossActorLastUpdates() {
-        return lossTracker.averageMeanLosses() + lossTracker.averageStdLosses();
-    }
-
-    @Override
-    public void clearActorLosses() {
-        lossTracker.clearActorLosses();
-    }
 
     @Override
     public double entropy(StateI<V> state) {

@@ -11,7 +11,7 @@ public class Runner24HoursTrading {
     public static final double PRICE_BATTERY = 30e3;
     public static final double STD_ACTIVATION_FCR = 0.1;
 
-    public static int CASE_NR = 0;
+    public static int CASE_NR = 2;
     public static List<String> CASES = List.of("zeroCap90Tar", "30Cap50Tar", "zigZaw");
     public static final List<Double> POWER_CAPACITY_FCR_LIST = List.of(0d, 30.0, 10.0);
     public static final List<Double> SOC_INCREASE_LIST = List.of(0.4, 0.0, 0.0);

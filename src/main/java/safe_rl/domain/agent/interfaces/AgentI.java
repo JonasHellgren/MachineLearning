@@ -1,6 +1,7 @@
 package safe_rl.domain.agent.interfaces;
 
 
+import safe_rl.domain.agent.helpers.LossTracker;
 import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.aggregates.StateI;
@@ -14,4 +15,7 @@ public interface AgentI<V> {
      Action chooseActionNominal(StateI<V> state);
      Action chooseActionNoExploration(StateI<V> state);
      AgentParameters getParameters();
+
+     //void clearLossesRecording();
+     LossTracker getLossTracker();
 }
