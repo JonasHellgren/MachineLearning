@@ -176,8 +176,8 @@ cleaner:
 Agent getLosstracker nu 2 x
 Agent. Val manga metodrr. Ersatt SOCMIN x
 Trainer train() fler argument in I metoder  x
-EpisodeTrainer public void trainAgentFromExperiences låt returnera Multistepredults
-MultiStepResultsGenerator rörig evaluate(), evaluator ej som fält
+EpisodeTrainer public void trainAgentFromExperiences låt returnera Multistepredults  x
+MultiStepResultsGenerator rörig evaluate(), evaluator ej som fält x
 Dokumentation MultiStepResultsGenerator spec hur använder evaluator
 
 data fråm C
