@@ -3,6 +3,7 @@ package safe_rl.persistance.trade_environment;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import common.other.Conditionals;
+import lombok.Builder;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
@@ -17,6 +18,21 @@ import java.util.List;
  */
 
 public class ElPriceRepo {
+
+    @Builder
+    record CheckData (
+            boolean isDifferentSize,
+            boolean isDifferentIds
+    )  {
+        public boolean isSomeFail() {
+            return isDifferentSize || isDifferentIds;
+        }
+
+        public boolean isAllOk() {
+            return !isSomeFail();
+        }
+    }
+
     DataBaseI<DayId, PriceData> energyPriceDatabase;
     DataBaseI<DayId, PriceData> fcrPriceDatabase;
     DataBaseInformer informer;
@@ -42,8 +58,21 @@ public class ElPriceRepo {
         fcrPriceDatabase.clear();
     }
 
-    public boolean checkIsOk() {
-        return sizeEnergyDB() == sizeFcrDB();
+    public  void throwIfNotOkRepoData() {
+        Preconditions.checkArgument(isOkRepoData(),"Non correct repo data, fail="+getCheckData());
+    }
+
+    public boolean isOkRepoData() {
+        return getCheckData().isAllOk();
+    }
+
+    private CheckData getCheckData() {
+        var idsEnergy=energyPriceDatabase.getIds();
+        var idsFcr=fcrPriceDatabase.getIds();
+        return CheckData.builder()
+                .isDifferentSize(sizeEnergyDB() != sizeFcrDB())
+                .isDifferentIds(!idsEnergy.equals(idsFcr))
+                .build();
     }
 
     public int sizeEnergyDB() {

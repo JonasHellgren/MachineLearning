@@ -123,7 +123,7 @@ public class ElPriceRepoPlotter {
 
 
     private void checkOkRepo() {
-        Preconditions.checkArgument(repo.checkIsOk(),
+        Preconditions.checkArgument(repo.isOkRepoData(),
                 "Non correct repo, may for ex be different size of data bases");
     }
 

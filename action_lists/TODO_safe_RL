@@ -178,9 +178,9 @@ Agent. Val manga metodrr. Ersatt SOCMIN x
 Trainer train() fler argument in I metoder  x
 EpisodeTrainer public void trainAgentFromExperiences låt returnera Multistepredults  x
 MultiStepResultsGenerator rörig evaluate(), evaluator ej som fält x
-Dokumentation MultiStepResultsGenerator spec hur använder evaluator
+Dokumentation MultiStepResultsGenerator spec hur använder evaluator  x
 
-data fråm C
+data fråm C  x
 
 fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max
 optimera powerFCR - gärna med parallesiering

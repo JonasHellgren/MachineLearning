@@ -17,7 +17,7 @@ public record SheetNameDecoder(
     }
 
     public int month() {
-        var monthStr=splitName()[POS_MONTH];
+        var monthStr=splitName()[POS_MONTH].toLowerCase();
         var map=monthMap();
         Integer month = map.get(monthStr);
 
@@ -46,6 +46,7 @@ public record SheetNameDecoder(
         map.put("mar", 2);
         map.put("apr", 3);
         map.put("may", 4);
+        map.put("maj", 4);
         map.put("jun", 5);
         map.put("jul", 6);
         map.put("aug", 7);

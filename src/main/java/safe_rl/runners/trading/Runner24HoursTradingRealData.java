@@ -34,14 +34,21 @@ public class Runner24HoursTradingRealData {
     public static final double SOC_TERMINAL_MIN = 0.8;
     public static final int POWER_CAPACITY_FCR = 10;
 
+/*
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
+*/
 
 
-    public static int DAY_IDX = 0;
+    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
+    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
+
+
+    public static int DAY_IDX = 2;
     public static List<DayId> DAYS = List.of(
             DayId.of(24,0,0,"se3"),
-            DayId.of(24,0,4,"se3")
+            DayId.of(24,0,4,"se3"),
+            DayId.of(24,3,8,"se3")  //high fcr price
     );
     public static final int N_SIMULATIONS = 5;
     public static final double SOC_START = 0.5;

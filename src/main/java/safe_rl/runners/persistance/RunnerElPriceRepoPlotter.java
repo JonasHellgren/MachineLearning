@@ -12,16 +12,25 @@ public class RunnerElPriceRepoPlotter {
             ElPriceRepoPlotter.Settings.newDefault().withIsLegend(false);
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault();
-    public static final int N_CLUSTERS = 3;
+    public static final int N_CLUSTERS = 4;
 
+
+/*
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
+*/
+
+
+    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
+    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
+
 
     public static void main(String[] args) {
         ElPriceRepo repo = ElPriceRepo.empty();
         ElPriceXlsReader reader = ElPriceXlsReader.of(repo);
         reader.readDataFromFile(fileEnergy, ElType.ENERGY);
         reader.readDataFromFile(fileFcr, ElType.FCR);
+        repo.throwIfNotOkRepoData();
         ElPriceRepoPlotter plotter= ElPriceRepoPlotter.withSettings(repo, DEF_SETTINGS);
         plotter.plotTrajectories(ElType.ENERGY);
         plotter.plotTrajectories(ElType.FCR);

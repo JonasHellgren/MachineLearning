@@ -28,7 +28,7 @@ class TestElPriceXlsRead {
 
     @Test
     void whenReading_thenFilledRepo() {
-        Assertions.assertTrue(repo.checkIsOk());
+        Assertions.assertTrue(repo.isOkRepoData());
         Assertions.assertNotEquals(0, repo.sizeEnergyDB());
     }
 
