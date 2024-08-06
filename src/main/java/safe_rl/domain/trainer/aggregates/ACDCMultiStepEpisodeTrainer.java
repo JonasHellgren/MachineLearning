@@ -32,16 +32,12 @@ public class ACDCMultiStepEpisodeTrainer<V> {
         criticUpdater=new MultiStepCriticUpdater<>(agent,parameters);
     }
 
-    public Optional<MultiStepResults<V>> getMultiStepResultsFromPrevFit() {
-        return multiStepResults==null?Optional.empty():Optional.of(multiStepResults);
-    }
-
-    //@Override
-    public void trainAgentFromExperiences(List<Experience<V>> experienceList,
+    public MultiStepResults<V> trainAgentFromExperiences(List<Experience<V>> experienceList,
                                           List<Double> lossCritic) {
         multiStepResults=generator.generate(experienceList);
         actorUpdater.update(multiStepResults,lossCritic);
         criticUpdater.update(multiStepResults);
+        return multiStepResults;
     }
 
 }

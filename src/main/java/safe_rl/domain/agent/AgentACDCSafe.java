@@ -90,8 +90,7 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     @Override
     public Action chooseActionNoExploration(StateI<V> state) {
-        double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state).getFirst(),
-                0);
+        double a = sampler.sampleFromNormDistribution(actorMeanAndStd(state).getFirst(), 0);
         return Action.ofDouble(a);
     }
 

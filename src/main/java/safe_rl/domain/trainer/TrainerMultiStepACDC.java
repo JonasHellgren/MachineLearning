@@ -12,6 +12,7 @@ import safe_rl.domain.trainer.aggregates.ACDCMultiStepEpisodeTrainer;
 import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
 import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainer.value_objects.Experience;
+import safe_rl.domain.trainer.value_objects.MultiStepResults;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.trading_electricity.StateTrading;
@@ -37,7 +38,6 @@ public class TrainerMultiStepACDC<V> {
     Supplier<StateI<V>> startStateSupplier;
     EpisodeCreator<V> episodeCreator;
     ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
-    ReplayBufferMultiStepExp<V> buffer;
     FitterUsingReplayBuffer<V> fitter;
     @Getter
     Recorder<V> recorder;
@@ -56,42 +56,46 @@ public class TrainerMultiStepACDC<V> {
                 .build();
         this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
-        buffer = ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
-                trainerParameters.replayBufferSize(), trainerParameters.isRemoveOldest());
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
         recorder = new Recorder<>(new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment));
     }
 
     public void train() throws JOptimizerException {
+        ReplayBufferMultiStepExp<V> buffer = createReplayBuffer(trainerParameters);
         for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
             var experiences = getExperiences();
-            trainAgentFromNewExperiences(experiences);
-            addNewExperienceToBuffer();
-            trainAgentFromOldExperiences();
+            var msr = trainAgentFromNewExperiences(experiences);
+            addNewExperienceToBuffer(msr, buffer);
+            trainAgentFromOldExperiences(buffer);
             updateRecorder(experiences);
         }
+    }
+
+    private static <V> ReplayBufferMultiStepExp<V> createReplayBuffer(TrainerParameters parameters) {
+        return ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
+                parameters.replayBufferSize(), parameters.isRemoveOldest());
     }
 
     List<Experience<V>> getExperiences() throws JOptimizerException {
         return episodeCreator.getExperiences(agent, startStateSupplier.get());
     }
 
-    void addNewExperienceToBuffer() {
-        var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
-        Conditionals.executeIfFalse(msRes.orElseThrow().isEmpty(), () ->
-                buffer.addAll(msRes.orElseThrow().experienceList()));
+
+    MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
+        var errorList = recorder.recorderTrainingProgress.criticLossTraj();
+        return episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }
 
-    void trainAgentFromOldExperiences() {
+    void addNewExperienceToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer) {
+        Conditionals.executeIfFalse(msr.isEmpty(), () ->
+                buffer.addAll(msr.experienceList()));
+    }
+
+    void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
         Conditionals.executeIfFalse(buffer.isEmpty(), () ->
                 IntStream.range(0, trainerParameters.nReplayBufferFitsPerEpisode())
                         .forEach(i -> fitter.fit(buffer)));
-    }
-
-    void trainAgentFromNewExperiences(List<Experience<V>> experiences) {
-        var errorList = recorder.recorderTrainingProgress.criticLossTraj();
-        episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }
 
     void updateRecorder(List<Experience<V>> experiences) {
