@@ -37,7 +37,7 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
         double[] constraints=getConstraints(power,socNew);
         boolean isFail= Arrays.stream(constraints).anyMatch(c -> c>0);
         reward+=(isFail)?-FAIL_PENALTY :0;
-        logIfFail(constraints, isFail);
+        logIfFail(constraints, isFail,s0);
         return StepReturn.<VariablesBuying>builder()
                 .state(stateNew)
                 .reward(reward)
@@ -46,15 +46,16 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
                 .build();
     }
 
-    private static void logIfFail(double[] constraints, boolean isFail) {
+    private static void logIfFail(double[] constraints, boolean isFail, StateBuying s) {
         Conditionals.executeIfTrue(isFail, () ->
-            log.info("Failed step, constraints="+ Arrays.toString(constraints)));
+            log.info("Failed step, constraints="+ Arrays.toString(constraints)+
+                    ", time="+s.variables.time()));
     }
 
     private double[] getConstraints(double power, double socNew) {
         double[] c=new double[3];
         c[0]=-power;   //power>0
-        c[1]=power-settings.powerBattMax();   //power<powerBattMax
+        c[1]=power-settings.powerBattMax();   //power<powerChargeMax
         c[2]=socNew-settings.socRange().upperEndpoint();   //soc<socMax
         return c;
     }

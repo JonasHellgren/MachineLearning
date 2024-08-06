@@ -97,7 +97,7 @@ public class ElPriceXlsReader {
                 switch (cell.getCellType()) {
                     case STRING -> log.info("String data excluded, sheet=" + sheet.getSheetName() + ", cell=" + cell);
                     case NUMERIC -> table.put(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
-                    default -> log.warning("Unknown cell type, sheet=" + sheet.getSheetName());
+                    default -> log.fine("Unknown cell type, sheet=" + sheet.getSheetName());
                 }
             }
         }

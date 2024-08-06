@@ -11,22 +11,22 @@ import java.util.Arrays;
 public record SettingsTrading(
         double dt,
         double energyBatt,  //kWh
-        double powerBattMax,  //kW
+        double powerChargeMax,  //kW
         @With double priceBattery,  //Euro
-        //double socMin, double socMax,
         Range<Double> socRange,
         @With double socTerminalMin,
         @With double[] energyPriceTraj,  //Euro/kWh
         @With double[] capacityPriceTraj,  //Euro/kW
         @With double stdActivationFCR,
-        @With double powerCapacityFcr,
+        @With Range<Double> powerCapacityFcrRange,
         @With double nCyclesLifetime,
         @With double failPenalty
 ) implements SettingsEnvironmentI {
 
 
     public void check() {
-        Preconditions.checkArgument(powerAvgFcrExtreme() < powerBattMax(),
+        double powerCapExt=powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
+        Preconditions.checkArgument(powerAvgFcrExtreme(powerCapExt) < powerChargeMax(),
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
         Preconditions.checkArgument(energyPriceTraj.length > 0, "Empty energy price trajectory");
         Preconditions.checkArgument(capacityPriceTraj.length > 0, "Empty cap price trajectory");
@@ -41,21 +41,48 @@ public record SettingsTrading(
         return capacityPriceTraj.length * dt;
     }
 
-    public double powerAvgFcrExtreme() {
-        return powerCapacityFcr() * 2 * stdActivationFCR();
+    public double powerCapacityFcr(double soC) {
+        double nsr=Math.min(Math.abs(socMax()-soC),Math.abs(socMin()-soC))/normalizedSoCReserve();
+        return capacityFcrMax()*nsr+capacityFcrMin() *(1-nsr);
     }
 
-    public double powerFcrAvg(double aFcrLumped) {
-        return powerCapacityFcr() * aFcrLumped;
+    Double socMax() {
+        return socRange.upperEndpoint();
+    }
+
+    double socMin() {
+        return  socRange.lowerEndpoint();
+    }
+
+    private double normalizedSoCReserve() {
+        return Math.abs(socMax()-socMin())/2;
+    }
+
+    public double powerAvgFcrExtreme(double soC) {
+        return powerAvgExtremeFromPowerCapacity(powerCapacityFcr(soC));
+    }
+
+    private double powerAvgExtremeFromPowerCapacity(double powerCap) {
+        return powerCap * 2 * stdActivationFCR();
+    }
+
+    public double powerFcrAvg(double aFcrLumped,double soC) {
+        return powerCapacityFcr(soC) * aFcrLumped;
     }
 
     public double gFunction() {
         return dt / energyBatt;
     }
 
+    /**
+     *  The estimated max possible change in SoC for charging capacity is set in a conservative manner
+     *  Assumes capacity reduction is due to the maximum FCR capacity
+     */
 
-    public double dSocMax(double time) {
-        double dEnergyMax = (timeTerminal() - time) * (powerBattMax - powerAvgFcrExtreme());
+    public double dSocMax(double time,double soC) {
+        double capacityReduction = capacityFcrMax();
+        double powerLosses = powerAvgExtremeFromPowerCapacity(capacityReduction);
+        double dEnergyMax = (timeTerminal() - time) * (powerChargeMax - capacityReduction - powerLosses);
         return dEnergyMax / energyBatt;
     }
 
@@ -63,13 +90,21 @@ public record SettingsTrading(
         return capacityPriceTraj.length;
     }
 
-   public double revFCRPerTimeStep() {
+   public double revFCRPerTimeStep(double soC) {
         double priceFCR= Arrays.stream(capacityPriceTraj()).average().orElseThrow();
-       return priceFCR * powerCapacityFcr;
+       return priceFCR * powerCapacityFcr(soC);
     }
 
-    public double dSoCPC() {
-        return powerCapacityFcr* dt/ energyBatt;
+    public double dSoCPC(double soC) {
+        return powerCapacityFcr(soC)* dt/ energyBatt;
+    }
+
+    private Double capacityFcrMin() {
+        return powerCapacityFcrRange.lowerEndpoint();
+    }
+
+    private Double capacityFcrMax() {
+        return powerCapacityFcrRange.upperEndpoint();
     }
 
 }

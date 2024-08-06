@@ -1,5 +1,6 @@
 package safe_rl.environments.trading;
 
+import com.google.common.collect.Range;
 import lombok.Builder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,8 @@ class TestEnvironmentTrading5h {
     @BeforeEach
     void init() {
         settingsZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(0).withPriceBattery(0);
+                .withPowerCapacityFcrRange(Range.closed(0d,0d))
+                .withPriceBattery(0);
         stateAllZero=StateTrading.allZero();
         stateTime3SoC0d5 =StateTrading.of(VariablesTrading.newTimeSoc(3,0.5));
         stateTime2SoC0d5 =StateTrading.of(VariablesTrading.newTimeSoc(2,0.5));

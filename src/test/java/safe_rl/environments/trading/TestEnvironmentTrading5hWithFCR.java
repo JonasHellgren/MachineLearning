@@ -1,5 +1,6 @@
 package safe_rl.environments.trading;
 
+import com.google.common.collect.Range;
 import common.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +27,11 @@ public class TestEnvironmentTrading5hWithFCR {
     @BeforeEach
     void init() {
         var settingsZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(0).withPriceBattery(0);
+                .withPowerCapacityFcrRange(Range.closed(0d,0d))
+                .withPriceBattery(0);
         var settingsNonZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(0.1).withPriceBattery(0).withSocTerminalMin(SOC_TERMINAL_MIN);
+                .withPowerCapacityFcrRange(Range.closed(0.1d,0.1d))
+                .withPriceBattery(0).withSocTerminalMin(SOC_TERMINAL_MIN);
 
         var settingsZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice().withPriceBattery(0);
         var settingsNonZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice();

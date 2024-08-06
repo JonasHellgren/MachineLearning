@@ -17,7 +17,7 @@ public class TradeStateUpdater {
 
     public UpdaterRes update(StateTrading s0, double aFcrLumped, double power) {
         var s=settings;
-        double powerFcrAvg= s.powerFcrAvg(aFcrLumped);
+        double powerFcrAvg= s.powerFcrAvg(aFcrLumped, s0.soc());
         double dSoc=(power+powerFcrAvg)*s.dt()/s.energyBatt();
         double dSoh=-abs(power*s.dt())/(s.energyBatt()*s.nCyclesLifetime());
         var stateNew=(StateTrading)  s0.copyWithDtimeDsocDsoh(s.dt(),dSoc,dSoh);

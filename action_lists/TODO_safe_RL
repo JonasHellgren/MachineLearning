@@ -182,9 +182,16 @@ Dokumentation MultiStepResultsGenerator spec hur använder evaluator  x
 
 data fråm C  x
 
-fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max
-optimera powerFCR - gärna med parallesiering
+fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max x
+PC_FCR i constraint 0 och 1  x
+action = -4.3, actionCorr = 7.6   - väl olika
 
+effekt plot som stairs
+plotta PC och om corrected
+optimera powerFCR - gärna med parallesiering
+powerBattMax -> powerChargeMax
+
+fixa addAccRevFCR
 settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
 eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge
 

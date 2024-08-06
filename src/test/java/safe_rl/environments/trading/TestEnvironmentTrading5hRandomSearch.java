@@ -1,5 +1,6 @@
 package safe_rl.environments.trading;
 
+import com.google.common.collect.Range;
 import common.list_arrays.ListUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -32,8 +33,8 @@ public class TestEnvironmentTrading5hRandomSearch {
     @BeforeEach
     void init() {
         settings = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1).withSocTerminalMin(SOC).withPriceBattery(5e3);
-        //.withPriceFCR(1)
+                .withPowerCapacityFcrRange(Range.closed(1d,1d))
+                .withSocTerminalMin(SOC).withPriceBattery(5e3);
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
     }
@@ -45,8 +46,8 @@ public class TestEnvironmentTrading5hRandomSearch {
         var simulator = RandomActionSimulator.<VariablesTrading>builder()
                 .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(
-                        -settings.powerBattMax(),
-                        settings.powerBattMax())).build();
+                        -settings.powerChargeMax(),
+                        settings.powerChargeMax())).build();
 
         Pair<Double, List<Double>> bestRes = Pair.of(-Double.MAX_VALUE, new ArrayList<>());
         for (int i = 0; i < N_SIMULATIONS; i++) {

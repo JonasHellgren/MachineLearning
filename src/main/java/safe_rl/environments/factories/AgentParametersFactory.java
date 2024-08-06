@@ -23,10 +23,10 @@ public class AgentParametersFactory {
     }
 
     public static AgentParameters trading24Hours(SettingsTrading settings, Double gradCriticMax) {
-        double powerNom = settings.powerBattMax() / 10;
+        double powerNom = settings.powerChargeMax() / 10;
         return  AgentParameters.newDefault()
                 .withTargetMean(0d)
-                .withTargetLogStd(Math.log(settings.powerBattMax()))
+                .withTargetLogStd(Math.log(settings.powerChargeMax()))
                 .withTargetCritic(0d)
                 .withAbsActionNominal(powerNom) //1
                 .withLearningRateCritic(1e-1)

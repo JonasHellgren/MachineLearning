@@ -1,5 +1,6 @@
 package safe_rl.runners.trading;
 
+import com.google.common.collect.Range;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -49,7 +50,8 @@ public class Runner5HoursTrading {
             , AgentSimulator<VariablesTrading>> createTrainerAndSimulator() {
         //interesting to change, decreasing vs increasing price
         settings5 = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(1.0).withStdActivationFCR(0.1)
+                .withPowerCapacityFcrRange(Range.closed(0d,1d))
+                .withStdActivationFCR(0.1)
                 .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));

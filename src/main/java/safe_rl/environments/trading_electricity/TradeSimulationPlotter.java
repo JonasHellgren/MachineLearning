@@ -30,7 +30,7 @@ public class TradeSimulationPlotter<V> {
 
     public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, double valueInStartState) {
         List<XYChart> charts = Lists.newArrayList();
-        addActionChart(simulationResultsMap, charts);
+        addPowerChart(simulationResultsMap, charts);
         addSocChart(simulationResultsMap, charts);
         Function<SimulationResult<V>, Double> extractorRev = sr -> sr.reward();
         addAccRevChart(simulationResultsMap, charts, extractorRev,valueInStartState);
@@ -44,7 +44,7 @@ public class TradeSimulationPlotter<V> {
     @SneakyThrows
     public void savePlots(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, String path, String caseName) {
         List<XYChart> charts = Lists.newArrayList();
-        addActionChart(simulationResultsMap, charts);
+        addPowerChart(simulationResultsMap, charts);
         addSocChart(simulationResultsMap, charts);
         styleCharts(charts);
         saveBitmapWithDPI(charts.get(0), getFileName(path, "power", caseName), FORMAT, DPI);
@@ -69,9 +69,9 @@ public class TradeSimulationPlotter<V> {
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
 
             //todo fix below, not correct relation
+            double soCGuess = 0.5;
             List<Double> revFcrList = ListUtils.createListWithEqualElementValues(
-                    settings.nTimeSteps(),settings.revFCRPerTimeStep());
-
+                    settings.nTimeSteps(),settings.revFCRPerTimeStep(soCGuess));
 
             XYSeries series = chartAccumRevFcr.addSeries(
                     "" + entry.getKey(),
@@ -116,11 +116,12 @@ public class TradeSimulationPlotter<V> {
         charts.add(chartAccumRev);
     }
 
-    private void addActionChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+    private void addPowerChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+        Function<SimulationResult<V>, Double> extractor = sr -> sr.action().asDouble();
+        List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         XYChart chartAction = new XYChartBuilder()
                 .xAxisTitle(AXIS_TITLE).yAxisTitle("Power (kW)").width(WIDTH).height(HEIGHT).build();
-        setYMinMax(chartAction, -settings.powerBattMax()/4, settings.powerBattMax()/4);
-        Function<SimulationResult<V>, Double> extractor = sr -> sr.action().asDouble();
+        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
         addDataToChart(simulationResultsMap, chartAction, extractor);
         charts.add(chartAction);
     }

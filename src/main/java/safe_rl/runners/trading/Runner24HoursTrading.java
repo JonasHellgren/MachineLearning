@@ -1,5 +1,6 @@
 package safe_rl.runners.trading;
 
+import com.google.common.collect.Range;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import safe_rl.environments.factories.SettingsTradingFactory;
@@ -24,7 +25,8 @@ public class Runner24HoursTrading {
         var settings = CASE_NR == 2
                 ? SettingsTradingFactory.new24HoursZigSawPrice()  //case 2
                 : SettingsTradingFactory.new24HoursIncreasingPrice()  //case 0 and 1
-                .withPowerCapacityFcr(powerCapacityFCR).withStdActivationFCR(STD_ACTIVATION_FCR)
+                .withPowerCapacityFcrRange(Range.closed(0d,powerCapacityFCR))
+                .withStdActivationFCR(STD_ACTIVATION_FCR)
                 .withSocTerminalMin(SOC_START + SOC_INCREASE_LIST.get(CASE_NR))
                 .withPriceBattery(PRICE_BATTERY);
 

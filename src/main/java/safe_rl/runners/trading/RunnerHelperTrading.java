@@ -40,7 +40,9 @@ public class RunnerHelperTrading<V> {
         SafetyLayer<V> safetyLayer = (SafetyLayer<V>) new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
 
         AgentACDiscoI<V> agent = AgentACDCSafe.of(
-                AgentParametersFactory.trading24Hours(settings, settings.powerCapacityFcr()),
+                AgentParametersFactory.trading24Hours(
+                        settings,
+                        settings.powerCapacityFcrRange().upperEndpoint()),
                 settings,
                 startState.copy());
         var trainer = TrainerMultiStepACDC.<V>builder()

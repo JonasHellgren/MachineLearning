@@ -36,7 +36,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_VARIABLES = 1;
     public static final int MAX_ITERATION = 100;
     public static final int N_CONSTRAINTS = 5;
-    public static final int MAX_NOF_INIT_GUESSES = 1000;
+    public static final int MAX_NOF_INIT_GUESSES = 1_000;
     public static final double K_MARGIN_SOC_MAX = 0.7;  //smaller than 1 <=> underestimation of dSoCMax => safer opt
 
     @NonNull Double powerMin;
@@ -83,7 +83,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         Counter counter = new Counter(MAX_NOF_INIT_GUESSES);
         double randPower;
         boolean violation;
-        double powerBattMax = settings.powerBattMax();
+        double powerBattMax = settings.powerChargeMax();
         do {
             randPower = RandUtils.getRandomDouble(-powerBattMax, powerBattMax);
             violation = isAnyViolation(randPower);
@@ -116,8 +116,8 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
 
     /**
      *   powerFcr can be both neg and pos, hence "worst sign" considered in each constraint
-     *  [0] power>powerMin+powerFcr
-     *  [1] power<powerMax-powerFcr
+     *  [0] power>powerMin+PCfcr
+     *  [1] power<powerMax-PCfcr
      *  [2] soc+g*(power-powerFcr)-dSoCPC>socMin  =>
      *              power-powerFcr>(socMin-soc+dSoCPC)/g => power>(socMin+dSoCPC-soc)/g+powerFcr
      *  [3] soc+g*(power+powerFcr)+dSoCPC<socMax  =>
@@ -128,15 +128,25 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
 
     ConvexMultivariateRealFunction[] constraints() {
         var s=settings;
-        double powerFcr=s.powerAvgFcrExtreme();
-        double dSoCPC = s.dSoCPC();
+        double powerFcr=s.powerAvgFcrExtreme(soc);
+        double PCfcr=s.powerCapacityFcr(soc);
+        double dSoCPC = s.dSoCPC(soc);
+
+        var dea=LowerBoundConstraint.ofSingle(-1);
+
         var inequalities = new ConvexMultivariateRealFunction[N_CONSTRAINTS];
-        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+powerFcr);
-        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-powerFcr);
+/*
+        inequalities[0] = dea; //LowerBoundConstraint.ofSingle(powerMin+powerFcr);
+        inequalities[1] = dea; // UpperBoundConstraint.ofSingle(powerMax-powerFcr);
+*/
+
+        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+PCfcr);
+        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-PCfcr);
+
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin+dSoCPC)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax-dSoCPC)-powerFcr);
-        double powerMinSoCTerminal=(socTerminalMin-soc-kMargindSocMax*s.dSocMax(timeNew))/s.gFunction()+powerFcr;
-        inequalities[4] = LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
+        double powerMinSoCTerminal=(socTerminalMin-soc-kMargindSocMax*s.dSocMax(timeNew,soc))/s.gFunction()+powerFcr;
+        inequalities[4] =  LowerBoundConstraint.ofSingle(powerMinSoCTerminal);
         return inequalities;
     }
 

@@ -18,15 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestEvaluateRewardsSumInMultiStepResultsGenerator {
 
+    public static final int REWARD = 0;
     MultiStepResultsGenerator<VariablesBuying> generator;
     List<Experience<VariablesBuying>> experiences;
 
     @BeforeEach
     void init() {
         var parameter= TrainerParameters.newDefault().withGamma(1d).withStepHorizon(3);
-        var exp0 = getExpWithReward(0);
+        var exp0 = getExpWithReward(REWARD);
         var exp1 = getExpWithReward(1);
-        Experience<VariablesBuying> exp0Term = getNotCorrectedExpWithReward(0);
+        Experience<VariablesBuying> exp0Term = getNotCorrectedExpWithReward(REWARD);
         experiences=List.of(exp1,exp0,exp1,exp1,exp0Term);
         var notUsedAgent= AgentACDCSafe.of(
                 AgentParameters.newDefault(),
@@ -37,7 +38,7 @@ class TestEvaluateRewardsSumInMultiStepResultsGenerator {
 
     @Test
     void whenTStartIsZero_whenCorrect() {
-        var result=generator.evaluateRewardsSum(0,experiences);
+        var result=generator.evaluateRewardsSum(REWARD,experiences);
         assertEquals(3,result.sumRewardsNSteps());
         assertFalse(result.isFutureStateOutside());
         assertFalse(result.isFutureTerminal());

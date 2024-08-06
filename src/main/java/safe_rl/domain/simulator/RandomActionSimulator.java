@@ -41,7 +41,7 @@ public class RandomActionSimulator<V> {
             logStateAndAction(state, action);
             actionCorrected = safetyLayer.correctAction(state, action);
             var sr = environment.step(state, actionCorrected);
-            log.fine("actionCorrected = " + actionCorrected);
+            log.fine("action="+action+", actionCorrected = " + actionCorrected);
             maybeLogSr(sr);
             rewardList.add(sr.reward());
             actionList.add((actionCorrected.asDouble()));

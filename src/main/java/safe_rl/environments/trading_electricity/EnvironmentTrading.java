@@ -35,7 +35,7 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
         boolean isTerminal = stateUpdater.isTerminal(updaterRes.stateNew());
         boolean isFail = evaluator.isAnyConstraintViolated(constraints);
         reward = evaluator.maybeAddFailPenaltyToReward(reward, isFail);
-        logIfFail(constraints, isFail);
+        logIfFail(constraints, isFail,s0);
 
         return StepReturn.<VariablesTrading>builder()
                 .state(updaterRes.stateNew())
@@ -45,9 +45,10 @@ public class EnvironmentTrading implements EnvironmentI<VariablesTrading> {
                 .build();
     }
 
-    private static void logIfFail(double[] constraints, boolean isFail) {
+    private static void logIfFail(double[] constraints, boolean isFail, StateTrading s) {
         Conditionals.executeIfTrue(isFail, () ->
-                log.info("Failed step, constraints="+ Arrays.toString(constraints)));
+                log.info("Failed step, constraints="+ Arrays.toString(constraints)+
+                        ", time="+s.variables.time()));
     }
 
 

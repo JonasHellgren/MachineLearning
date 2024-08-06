@@ -1,5 +1,6 @@
 package safe_rl.runners.trading;
 
+import com.google.common.collect.Range;
 import com.joptimizer.exception.JOptimizerException;
 import common.list_arrays.ListUtils;
 import common.other.CpuTimer;
@@ -31,20 +32,18 @@ public class Runner24HoursTradingRealData {
             ElPriceRepoPlotter.Settings.newDefault();
     public static final int N_CLUSTERS = 3;
     public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
-    public static final double SOC_TERMINAL_MIN = 0.8;
-    public static final int POWER_CAPACITY_FCR = 10;
+    public static final double SOC_TERMINAL_MIN = 0.95;
+    public static final double POWER_CAPACITY_FCR = 10d;
 
 /*
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
 */
 
-
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
 
-
-    public static int DAY_IDX = 2;
+    public static int DAY_IDX = 0;
     public static List<DayId> DAYS = List.of(
             DayId.of(24,0,0,"se3"),
             DayId.of(24,0,4,"se3"),
@@ -65,7 +64,7 @@ public class Runner24HoursTradingRealData {
         var elDataEnergyEuroPerKwh=repo.fromPerMegaToPerKilo(elDataEnergyEuroPerMwh);
         var elDataFCREuroPerKW=repo.fromPerMegaToPerKilo(elDataFcrEuroPerMW);
         var settings =SettingsTradingFactory.new100kWhVehicleEmptyPrices()
-                .withPowerCapacityFcr(POWER_CAPACITY_FCR)
+                .withPowerCapacityFcrRange(Range.closed(0d,POWER_CAPACITY_FCR))
                 .withEnergyPriceTraj(ListUtils.toArray(elDataEnergyEuroPerKwh))
                 .withCapacityPriceTraj(ListUtils.toArray(elDataFCREuroPerKW))
                 .withSocTerminalMin(SOC_TERMINAL_MIN);
@@ -76,8 +75,8 @@ public class Runner24HoursTradingRealData {
                 .build();
         var trainerAndSimulator = helper.createTrainerAndSimulator();
         var trainer = trainerAndSimulator.getFirst();
-        trainer.train();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
+        trainer.train();
         helper.plotAndPrint(trainerAndSimulator,timer,dayId.toDateString());
     }
 }

@@ -1,5 +1,6 @@
 package safe_rl.environments.trading;
 
+import com.google.common.collect.Range;
 import com.joptimizer.exception.JOptimizerException;
 import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
@@ -82,9 +83,12 @@ public class TestSimulationTradingWithFCR {
         return Pair.of(ListUtils.findAverage(revList).orElseThrow(),ds.getStandardDeviation());
     }
 
-    void init(int powerCapacityFcr, double priceFCR) {
+    void init(double powerCapacityFcr, double priceFCR) {
         settings = SettingsTradingFactory.new5HoursIncreasingPrice()
-                .withPowerCapacityFcr(powerCapacityFcr).withSocTerminalMin(SOC).withPriceBattery(5e3)
+                //.withPowerCapacityFcr(powerCapacityFcr)
+                .withPowerCapacityFcrRange(Range.closed(0d,powerCapacityFcr))
+
+                .withSocTerminalMin(SOC).withPriceBattery(5e3)
         .withCapacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,priceFCR));
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);

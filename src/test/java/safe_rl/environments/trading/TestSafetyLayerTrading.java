@@ -20,7 +20,7 @@ import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
 
 @Log
 class TestSafetyLayerTrading {
-    public static final int N_SIMULATIONS = 1_000;
+    public static final int N_SIMULATIONS =  1_000;
     public static final double TOL_SOC = 0.05;
     SafetyLayer<VariablesTrading> safetyLayer;
     SettingsTrading settings;
@@ -43,9 +43,9 @@ class TestSafetyLayerTrading {
         for (int i = 0; i <  N_SIMULATIONS; i++) {
             double soc = randomNumberBetweenZeroAndOne();
             var stateStart = StateTrading.of(VariablesTrading.newSoc(soc));
-            System.out.println("stateStart = " + stateStart);
             var simRes = simulator.simulate(stateStart.copy());
-            log.info("Simulation finished, simRes=" + simRes);
+            log.fine("Simulation finished, simRes=" + simRes);
+
             Assertions.assertTrue(settings.timeEnd() < simRes.getLeft().getVariables().time());
             Assertions.assertTrue(simRes.getLeft().getVariables().soc()>settings.socTerminalMin()- TOL_SOC);
         };

@@ -19,7 +19,7 @@ public class SettingsTradingFactory {
         var settings = SettingsTrading.builder()
                 .dt(1)
                 .energyBatt(10)  //kWh
-                .powerBattMax(3)  //kW
+                .powerChargeMax(3)  //kW
                 .priceBattery(5e3)
                 .socRange(Range.closed(0d,1d))
 
@@ -28,7 +28,8 @@ public class SettingsTradingFactory {
                 .energyPriceTraj(new double[]{0.1, 0.2, 0.3, 0.4, 0.5})  //Eur/kWh
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,0.11))  //Eur/kW
                 //.priceFCR(1)
-                .stdActivationFCR(0.1).powerCapacityFcr(1)
+                .stdActivationFCR(0.1)
+                .powerCapacityFcrRange(Range.closed(0d,1d))
                 .nCyclesLifetime(5000)
                 .failPenalty(FAIL_PENALTY)
                 .build();
@@ -52,12 +53,13 @@ public class SettingsTradingFactory {
     public static SettingsTrading new100kWhVehicleEmptyPrices() {
         return SettingsTrading.builder()
                 .dt(1)
-                .energyBatt(100).powerBattMax(100).priceBattery(30e3)
+                .energyBatt(100).powerChargeMax(22).priceBattery(30e3)
                 //.socMin(0.0).socMax(1)
                 .socRange(Range.closed(0d,1d))
                 .socTerminalMin(0.5)
                 .energyPriceTraj(EMPTY_ARR).capacityPriceTraj(EMPTY_ARR)
-                .stdActivationFCR(0.1).powerCapacityFcr(1)
+                .stdActivationFCR(0.1)
+                .powerCapacityFcrRange(Range.closed(0d,1d))
                 .nCyclesLifetime(2000)
                 .failPenalty(FAIL_PENALTY)
                 .build();
@@ -68,14 +70,15 @@ public class SettingsTradingFactory {
     public static SettingsTrading new24HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
                 .dt(1)
-                .energyBatt(100).powerBattMax(100).priceBattery(30e3)
+                .energyBatt(100).powerChargeMax(100).priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
                 //.socMin(0.0).socMax(1)
                 .socTerminalMin(0.5)
                 .energyPriceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1, 0.1, 24)))
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(24,0.03))
                 //.priceFCR(0.03)
-                .stdActivationFCR(0.1).powerCapacityFcr(1)
+                .stdActivationFCR(0.1)
+                .powerCapacityFcrRange(Range.closed(0d,1d))
                 .nCyclesLifetime(2000)
                 .failPenalty(FAIL_PENALTY)
                 .build();

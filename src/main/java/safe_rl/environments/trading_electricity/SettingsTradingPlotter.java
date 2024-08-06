@@ -44,11 +44,11 @@ public class SettingsTradingPlotter {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.add(createLabel("Energy batt. (kWh):" + settings.energyBatt()));
-        leftPanel.add(createLabel("Power batt. max (kW):"+ settings.powerBattMax()));
+        leftPanel.add(createLabel("Power batt. max (kW):"+ settings.powerChargeMax()));
         leftPanel.add(createLabel("Price batt. (Euro):"+ settings.priceBattery()));
         leftPanel.add(createLabel("nCyclesLifetime. (-):"+ settings.nCyclesLifetime()));
         leftPanel.add(createLabel("socTerminalMin (%):"+ settings.socTerminalMin()*100));
-        leftPanel.add(createLabel("PowerCapacity Fcr. (kW):"+ settings.powerCapacityFcr()));
+        leftPanel.add(createLabel("PowerCapacity Fcr. (kW):"+ settings.powerCapacityFcrRange().upperEndpoint()));
         leftPanel.add(createLabel("priceFCR. (Euro/kW/h):"+ Arrays.stream(settings.capacityPriceTraj()).average()));
         leftPanel.add(createLabel("stdActivationFCR. (-):"+ settings.stdActivationFCR()));
         leftPanel.add(createLabel("dt (hour):"+ settings.dt()));
