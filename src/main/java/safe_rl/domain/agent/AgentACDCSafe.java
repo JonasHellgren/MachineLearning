@@ -20,10 +20,6 @@ import safe_rl.domain.agent.aggregates.DisCoMemoryInitializer;
 import safe_rl.domain.agent.helpers.LossTracker;
 
 import java.util.Arrays;
-import java.util.List;
-
-import static common.list_arrays.ListUtils.doublesStartEndStep;
-import static common.other.MyFunctions.*;
 
 /**
  * ACDC = actor critic with discrete and continuous memory
@@ -37,8 +33,6 @@ import static common.other.MyFunctions.*;
 public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
 
     public static final double SMALLEST_DENOM = 1e-5;
-    public static final double SOC_MIN = 0d;
-    public static final double STD_TAR = 0d;
 
     StateI<V> state;
     SettingsEnvironmentI settings;
@@ -78,9 +72,9 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
     }
 
     private void initMemories(@NotNull StateI<V> state) {
-        getInitializer(state, actorMean, parameters.targetMean()).initialize();
-        getInitializer(state, actorLogStd, parameters.targetLogStd()).initialize();
-        getInitializer(state, critic, parameters.targetCritic()).initialize();
+        DisCoMemoryInitializer.create(state, actorMean, parameters.targetMean(), settings).initialize();
+        DisCoMemoryInitializer.create(state, actorLogStd, parameters.targetLogStd(), settings).initialize();
+        DisCoMemoryInitializer.create(state, critic, parameters.targetCritic(), settings).initialize();
     }
 
     @Override
@@ -140,7 +134,6 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         return critic.read(state);
     }
 
-
     @Override
     public double entropy(StateI<V> state) {
         var mAndS = actorMeanAndStd(state);
@@ -151,18 +144,6 @@ public class AgentACDCSafe<V> implements AgentACDiscoI<V> {
         return Pair.create(actorMean.read(state), Math.exp(actorLogStd.read(state)));
     }
 
-    private DisCoMemoryInitializer<V> getInitializer(StateI<V> state,
-                                                     DisCoMemory<V> memory1,
-                                                     double tarValue) {
-        return DisCoMemoryInitializer.<V>builder()
-                .memory(memory1)
-                .discreteFeatSet(List.of(
-                        doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
-                .contFeatMinMax(Pair.create(List.of(SOC_MIN), List.of(settings.socMax())))
-                .valTarMeanStd(Pair.create(tarValue,STD_TAR))
-                .state(state)
-                .build();
-    }
 
     /**
      * std memory stores log std, to print std, exp(log std) is needed for each element

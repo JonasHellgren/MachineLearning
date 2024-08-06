@@ -12,8 +12,11 @@ import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
 
 import java.util.List;
+
+import static common.list_arrays.ListUtils.doublesStartEndStep;
 
 /**
  * Fills DiscoMemory with init values
@@ -28,6 +31,8 @@ public class DisCoMemoryInitializer<V> {
     public static final double ALPHA = 1e-1;
     public static final int LENGTH_AVG_WINDOW = 100;
     public static final double DELTA_BETA_MAX = 1d;
+    public static final double STD_TAR = 0d;
+
     DisCoMemory<V> memory;
     List<List<Double>> discreteFeatSet;
     Pair<List<Double>, List<Double>> contFeatMinMax;
@@ -68,6 +73,23 @@ public class DisCoMemoryInitializer<V> {
         this.fitter=new LinearFitter(alpha, DELTA_BETA_MAX, nContinuousFeatures);
         this.sampler=new NormDistributionSampler();
     }
+
+    public static <V> DisCoMemoryInitializer<V> create(StateI<V> state,
+                                                       DisCoMemory<V> memory,
+                                                       double tarValue,
+                                                       SettingsEnvironmentI settings) {
+        double socMin = settings.socRange().lowerEndpoint();
+        double socMax = settings.socRange().upperEndpoint();
+        return DisCoMemoryInitializer.<V>builder()
+                .memory(memory)
+                .discreteFeatSet(List.of(
+                        doublesStartEndStep(0, settings.timeEnd(), settings.dt())))
+                .contFeatMinMax(Pair.create(List.of(socMin), List.of(socMax)))
+                .valTarMeanStd(Pair.create(tarValue, STD_TAR))
+                .state(state)
+                .build();
+    }
+
 
     public void initialize() {
         var featureCombinations = Lists.cartesianProduct(discreteFeatSet);

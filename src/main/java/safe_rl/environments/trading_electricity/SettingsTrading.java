@@ -1,6 +1,7 @@
 package safe_rl.environments.trading_electricity;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Range;
 import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
@@ -12,7 +13,8 @@ public record SettingsTrading(
         double energyBatt,  //kWh
         double powerBattMax,  //kW
         @With double priceBattery,  //Euro
-        double socMin, double socMax,
+        //double socMin, double socMax,
+        Range<Double> socRange,
         @With double socTerminalMin,
         @With double[] energyPriceTraj,  //Euro/kWh
         @With double[] capacityPriceTraj,  //Euro/kW

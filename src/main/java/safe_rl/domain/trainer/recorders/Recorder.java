@@ -18,10 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Recorder<V> {
 
-    //public final RecorderStateValues recorderStateValues = new RecorderStateValues();
     public final RecorderTrainingProgress recorderTrainingProgress = new RecorderTrainingProgress();
     AgentSimulator<V> simulator;
-
 
     @SneakyThrows
     public void recordTrainingProgress(List<Experience<V>> experiences,

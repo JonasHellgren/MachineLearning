@@ -1,6 +1,7 @@
 package safe_rl.environments.buying_electricity;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Range;
 import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
@@ -10,7 +11,8 @@ public record SettingsBuying  (
         double dt,
         double energyBatt,
         double powerBattMax,
-        double socMax,
+        //double socMax,
+        Range<Double> socRange,
         double priceEnd,
         @With double[] priceTraj
 ) implements SettingsEnvironmentI
@@ -19,7 +21,8 @@ public record SettingsBuying  (
     public static SettingsBuying new5HoursIncreasingPrice() {
         return SettingsBuying.builder()
                 .dt(1)
-                .energyBatt(10).powerBattMax(3).socMax(1)
+                .energyBatt(10).powerBattMax(3)  //.socMax(1)
+                .socRange(Range.closed(0d,1d))
                 .priceEnd(10).priceTraj(new double[]{1,2,3,4,5})
                 .build();
     }

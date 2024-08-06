@@ -55,7 +55,7 @@ public class EnvironmentBuying  implements EnvironmentI<VariablesBuying> {
         double[] c=new double[3];
         c[0]=-power;   //power>0
         c[1]=power-settings.powerBattMax();   //power<powerBattMax
-        c[2]=socNew-settings.socMax();   //soc<socMax
+        c[2]=socNew-settings.socRange().upperEndpoint();   //soc<socMax
         return c;
     }
 }

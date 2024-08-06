@@ -1,6 +1,7 @@
 package safe_rl.environments.factories;
 
 import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Range;
 import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,10 @@ public class SettingsTradingFactory {
                 .energyBatt(10)  //kWh
                 .powerBattMax(3)  //kW
                 .priceBattery(5e3)
-                .socMin(0.0).socMax(1).socTerminalMin(0.5)
+                .socRange(Range.closed(0d,1d))
+
+                //.socMin(0.0).socMax(1)
+                .socTerminalMin(0.5)
                 .energyPriceTraj(new double[]{0.1, 0.2, 0.3, 0.4, 0.5})  //Eur/kWh
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,0.11))  //Eur/kW
                 //.priceFCR(1)
@@ -49,7 +53,9 @@ public class SettingsTradingFactory {
         return SettingsTrading.builder()
                 .dt(1)
                 .energyBatt(100).powerBattMax(100).priceBattery(30e3)
-                .socMin(0.0).socMax(1).socTerminalMin(0.5)
+                //.socMin(0.0).socMax(1)
+                .socRange(Range.closed(0d,1d))
+                .socTerminalMin(0.5)
                 .energyPriceTraj(EMPTY_ARR).capacityPriceTraj(EMPTY_ARR)
                 .stdActivationFCR(0.1).powerCapacityFcr(1)
                 .nCyclesLifetime(2000)
@@ -63,7 +69,9 @@ public class SettingsTradingFactory {
         var settings = SettingsTrading.builder()
                 .dt(1)
                 .energyBatt(100).powerBattMax(100).priceBattery(30e3)
-                .socMin(0.0).socMax(1).socTerminalMin(0.5)
+                .socRange(Range.closed(0d,1d))
+                //.socMin(0.0).socMax(1)
+                .socTerminalMin(0.5)
                 .energyPriceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1, 0.1, 24)))
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(24,0.03))
                 //.priceFCR(0.03)
