@@ -8,11 +8,12 @@ public class TrainerParametersFactory {
 
     public static TrainerParameters trading24Hours() {
         return TrainerParameters.newDefault()
-                .withNofEpisodes(3000).withGamma(1.0)
+                .withNofEpisodes(2000).withGamma(1.0)
                 .withMiniBatchSize(50).withNReplayBufferFitsPerEpisode(5)
                 .withLearningRateReplayBufferCritic(1e-1)
                 .withLearningRateReplayBufferActor(1e-2)
-                .withLearningRateReplayBufferActorStd(1e-2);
+                .withLearningRateReplayBufferActorStd(1e-2)
+                .withRatioPenCorrectedAction(10d);
     }
 
     public static TrainerParameters buying5Hours() {

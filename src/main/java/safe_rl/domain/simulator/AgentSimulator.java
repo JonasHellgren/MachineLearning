@@ -50,7 +50,7 @@ public class AgentSimulator<V> {
                     : agent.chooseActionNoExploration(state);
             var state0 = state.copy();
             var actionCorrected = safetyLayer.correctAction(state, action);
-            log.info("stateNew = " + state + ", action = " + action+ ", actionCorr = " + actionCorrected);
+            log.fine("stateNew = " + state + ", action = " + action+ ", actionCorr = " + actionCorrected);
 
             sr = environment.step(state, actionCorrected);
             state.setVariables(sr.state().getVariables());

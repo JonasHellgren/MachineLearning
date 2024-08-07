@@ -184,7 +184,7 @@ data fråm C  x
 
 fixa så att PC blir soc beroende, PC max för soc=0.5, skall minska med gap till min,max x
 PC_FCR i constraint 0 och 1  x
-action = -4.3, actionCorr = 7.6   - väl olika
+action = -4.3, actionCorr = 7.6   - väl olika - ratioPenCorrectedAction
 
 effekt plot som stairs
 plotta PC och om corrected
