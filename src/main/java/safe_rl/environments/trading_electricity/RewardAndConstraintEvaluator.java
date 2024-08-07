@@ -40,13 +40,6 @@ public class RewardAndConstraintEvaluator {
     }
 
     public double calculateReward(StateTrading s0, double power, double dSoh) {
-/*        var s=settings;
-        double energySell=max(0, -power * s.dt());  //pos if power is neg (selling)
-        double energyBuy=max(0, power * s.dt());  //pos if power is positive (buying)
-        double priceEnergy= energyPriceInterpolator.priceAtTime(s0.time());
-        double priceCap= capacityPriceInterpolator.priceAtTime(s0.time());
-        return priceCap*s.powerCapacityFcr(s0.soc())+priceEnergy*energySell-
-                (priceEnergy*energyBuy+ s.priceBattery()* Math.abs(dSoh)); */
         return calculateIncomes(s0,power,dSoh).reward();
     }
 

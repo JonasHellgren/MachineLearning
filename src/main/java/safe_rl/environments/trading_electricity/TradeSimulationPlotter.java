@@ -4,12 +4,10 @@ import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
 import common.other.NumberFormatterUtil;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -41,7 +39,6 @@ public class TradeSimulationPlotter<V> {
     public void plot(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, double valueInStartState) {
         List<XYChart> charts = Lists.newArrayList();
         Function<SimulationResult<V>, Double> extractorRev = sr -> sr.reward();
-
         addPowerChart(simulationResultsMap, charts);
         addPowerCapChart(simulationResultsMap, charts);
         addPowerChangeChart(simulationResultsMap, charts);
@@ -55,8 +52,6 @@ public class TradeSimulationPlotter<V> {
         new SwingWrapper<>(charts).displayChartMatrix();
     }
 
-
-
     @SneakyThrows
     public void savePlots(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, String path, String caseName) {
         List<XYChart> charts = Lists.newArrayList();
@@ -67,18 +62,74 @@ public class TradeSimulationPlotter<V> {
         saveBitmapWithDPI(charts.get(1), getFileName(path, "soc", caseName), FORMAT, DPI);
     }
 
-    @NotNull
-    private static String getFileName(String path, String measureName, String caseName) {
+     String getFileName(String path, String measureName, String caseName) {
         return path + "/" + measureName + "_"+ caseName;
     }
 
-    private static void styleCharts(List<XYChart> charts) {
-        charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.NONE)));
-        charts.forEach(c -> c.getStyler().setChartBackgroundColor(Color.WHITE));
-        charts.forEach(c -> c.getStyler().setPlotBorderVisible(false)); // Border
-        charts.forEach(c -> c.getStyler().setLegendVisible(false));
+    private void addAccRevChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
+                                List<XYChart> charts,
+                                Function<SimulationResult<V>, Double> extractorRev,
+                                double valueInStartState) {
+        var formatter=NumberFormatterUtil.formatterTwoDigits;
+        var chart= getXyChart(
+                "Start state value (Euro)="+formatter.format(valueInStartState),
+                "Acc revenue (Euro)");
+        for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
+            List<Double> revenues = entry.getValue().stream().map(extractorRev).toList();
+            XYSeries series = chart.addSeries(
+                    "" + entry.getKey(),
+                    getTimes(revenues),
+                    ListUtils.cumulativeSum(revenues));
+            series.setMarker(SeriesMarkers.NONE);
+        }
+        charts.add(chart);
     }
 
+    private void addPowerChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+        Function<SimulationResult<V>, Double> extractor = sr -> sr.actionCorrected().asDouble();
+        List<Double> allValues = getAllValues(simulationResultsMap, extractor);
+        var chartAction = createChart("Power (kW)");
+        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
+        addDataToChart(simulationResultsMap, chartAction, extractor);
+        charts.add(chartAction);
+    }
+
+    private void addSocChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+        var chart = getXyChart("","Soc");
+        setYMinMax(chart, settings.socMin(), settings.socMax());
+        Function<SimulationResult<V>, Double> extractorSoc = sr ->
+                sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
+        addDataToChart(simulationResultsMap, chart, extractorSoc);
+        charts.add(chart);
+    }
+
+    private void addPowerCapChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+        var chart = getXyChart("","PC");
+        var range = settings.powerCapacityFcrRange();
+        setYMinMax(chart, range.lowerEndpoint(), range.upperEndpoint());
+        Function<SimulationResult<V>, Double> extractorPC = sr ->
+                settings.powerCapacityFcr(sr.state().continuousFeatures()[StateTrading.INDEX_SOC]);
+        addDataToChart(simulationResultsMap, chart, extractorPC);
+        charts.add(chart);
+    }
+
+    private void addPowerChangeChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
+        var chart = getXyChart("","Power change (kW)");
+        setYMinMax(chart, 0, settings.powerChargeMax());
+        Function<SimulationResult<V>, Double> extractorSoc = SimulationResult::getActionChange;
+        addDataToChart(simulationResultsMap, chart, extractorSoc);
+        charts.add(chart);
+    }
+
+    private void addRevenueChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
+                                 List<XYChart> charts,
+                                 Function<SimulationResult<V>, Double> extractorRev) {
+        List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
+        var chart= getXyChart("","Revenue (Euro)");
+        setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        addDataToChart(simulationResultsMap, chart, extractorRev);
+        charts.add(chart);
+    }
 
     private  void addRevFCR(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         Function<SimulationResult<V>, Double> extractor = sr -> {
@@ -87,8 +138,7 @@ public class TradeSimulationPlotter<V> {
             return evaluator.calculateIncomes(state,a,0d).incomeFcr();
         };
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        XYChart chartAction = new XYChartBuilder()
-                .xAxisTitle(AXIS_TITLE).yAxisTitle("Inc. FCR (Euro/h)").width(WIDTH).height(HEIGHT).build();
+        XYChart chartAction = createChart("Inc. FCR (Euro/h)");
         setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
         addDataToChart(simulationResultsMap, chartAction, extractor);
         charts.add(chartAction);
@@ -102,11 +152,10 @@ public class TradeSimulationPlotter<V> {
             return evaluator.calculateIncomes(state,a,0d).incomeEnergy();
         };
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        XYChart chartAction = new XYChartBuilder()
-                .xAxisTitle(AXIS_TITLE).yAxisTitle("Inc. energy (Euro/h)").width(WIDTH).height(HEIGHT).build();
-        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor);
-        charts.add(chartAction);
+        var chart = createChart("Inc. energy (Euro/h)");
+        setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        addDataToChart(simulationResultsMap, chart, extractor);
+        charts.add(chart);
 
     }
 
@@ -118,69 +167,10 @@ public class TradeSimulationPlotter<V> {
             return evaluator.calculateIncomes(state,a,updaterRes.dSoh()).costDegradation();
         };
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        XYChart chartAction = new XYChartBuilder()
-                .xAxisTitle(AXIS_TITLE).yAxisTitle("Cost. degradation (Euro/h)").width(WIDTH).height(HEIGHT).build();
-        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor);
-        charts.add(chartAction);
-    }
-
-    private void addAccRevChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
-                                List<XYChart> charts,
-                                Function<SimulationResult<V>, Double> extractorRev,
-                                double valueInStartState) {
-        DecimalFormat formatter=NumberFormatterUtil.formatterTwoDigits;
-        XYChart chartAccumRev= getXyChart(
-                "Start state value (Euro)="+formatter.format(valueInStartState),
-                "Acc revenue (Euro)");
-        for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
-            List<Double> revenues = entry.getValue().stream().map(extractorRev).toList();
-            XYSeries series = chartAccumRev.addSeries(
-                    "" + entry.getKey(),
-                    getTimes(revenues),
-                    ListUtils.cumulativeSum(revenues));
-            series.setMarker(SeriesMarkers.NONE);
-        }
-        charts.add(chartAccumRev);
-    }
-
-    private void addPowerChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        Function<SimulationResult<V>, Double> extractor = sr -> sr.actionCorrected().asDouble();
-        List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        XYChart chartAction = new XYChartBuilder()
-                .xAxisTitle(AXIS_TITLE).yAxisTitle("Power (kW)").width(WIDTH).height(HEIGHT).build();
-        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor);
-        charts.add(chartAction);
-    }
-
-    private void addSocChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        XYChart chartSoc = getXyChart("","Soc");
-        setYMinMax(chartSoc, 0, 1);
-        Function<SimulationResult<V>, Double> extractorSoc = sr ->
-                sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
-        addDataToChart(simulationResultsMap, chartSoc, extractorSoc);
-        charts.add(chartSoc);
-    }
-
-    private void addPowerCapChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        var chart = getXyChart("","PC");
-        var range = settings.powerCapacityFcrRange();
-        setYMinMax(chart, range.lowerEndpoint(), range.upperEndpoint());
-        Function<SimulationResult<V>, Double> extractorPC = sr ->
-                settings.powerCapacityFcr(sr.state().continuousFeatures()[StateTrading.INDEX_SOC]);
-        addDataToChart(simulationResultsMap, chart, extractorPC);
+        var chart = createChart("Cost. degradation (Euro/h)");
+        setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        addDataToChart(simulationResultsMap, chart, extractor);
         charts.add(chart);
-
-    }
-
-
-    private void addPowerChangeChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
-        XYChart chartSoc = getXyChart("","Power change (kW)");
-        setYMinMax(chartSoc, 0, settings.powerChargeMax());
-        Function<SimulationResult<V>, Double> extractorSoc = SimulationResult::getActionChange;
-        addDataToChart(simulationResultsMap, chartSoc, extractorSoc);
-        charts.add(chartSoc);
     }
 
 
@@ -194,14 +184,9 @@ public class TradeSimulationPlotter<V> {
     }
 
 
-    private void addRevenueChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
-                                 List<XYChart> charts,
-                                 Function<SimulationResult<V>, Double> extractorRev) {
-        List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
-        XYChart chartRev= getXyChart("","Revenue (Euro)");
-        setYMinMax(chartRev, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartRev, extractorRev);
-        charts.add(chartRev);
+    private static XYChart createChart(String yAxisTitle) {
+        return new XYChartBuilder()
+                .xAxisTitle(AXIS_TITLE).yAxisTitle(yAxisTitle).width(WIDTH).height(HEIGHT).build();
     }
 
 
@@ -236,6 +221,13 @@ public class TradeSimulationPlotter<V> {
 
     private List<Double> getTimes(List<Double> yList) {
         return ListUtils.doublesStartEndStep(0, settings.dt() * (yList.size() - 1), settings.dt());
+    }
+
+    void styleCharts(List<XYChart> charts) {
+        charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.NONE)));
+        charts.forEach(c -> c.getStyler().setChartBackgroundColor(Color.WHITE));
+        charts.forEach(c -> c.getStyler().setPlotBorderVisible(false)); // Border
+        charts.forEach(c -> c.getStyler().setLegendVisible(false));
     }
 
 
