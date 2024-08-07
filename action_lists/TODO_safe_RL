@@ -188,7 +188,7 @@ action = -4.3, actionCorr = 7.6   - väl olika - ratioPenCorrectedAction x
 plotta action corrected vs epis x
 
 plotta PC och om corrected x
-cleaner
+cleaner x
 effekt plot som stairs
 
 optimera powerFCR - gärna med parallesiering

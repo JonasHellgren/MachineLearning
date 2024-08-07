@@ -43,7 +43,7 @@ public class Runner24HoursTradingRealData {
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
 
-    public static int DAY_IDX = 2;
+    public static int DAY_IDX = 0;
     public static List<DayId> DAYS = List.of(
             DayId.of(24,0,0,"se3"),
             DayId.of(24,0,4,"se3"),

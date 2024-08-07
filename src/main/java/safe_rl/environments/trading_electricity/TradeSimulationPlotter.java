@@ -3,7 +3,9 @@ package safe_rl.environments.trading_electricity;
 import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
 import common.other.NumberFormatterUtil;
+import common.plotters.StairDataGenerator;
 import lombok.SneakyThrows;
+import org.apache.commons.math3.util.Pair;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
@@ -24,6 +26,8 @@ public class TradeSimulationPlotter<V> {
     public static final int HEIGHT = 200;
     public static final BitmapEncoder.BitmapFormat FORMAT = BitmapEncoder.BitmapFormat.PNG;
     public static final int DPI = 300;
+    public static final boolean IS_STAIRS = true;
+    public static final boolean IS_NOT_STAIRS = false;
 
     SettingsTrading settings;
     RewardAndConstraintEvaluator evaluator;
@@ -90,7 +94,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chartAction = createChart("Power (kW)");
         setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor);
+        addDataToChart(simulationResultsMap, chartAction, extractor, IS_STAIRS);
         charts.add(chartAction);
     }
 
@@ -99,7 +103,7 @@ public class TradeSimulationPlotter<V> {
         setYMinMax(chart, settings.socMin(), settings.socMax());
         Function<SimulationResult<V>, Double> extractorSoc = sr ->
                 sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
-        addDataToChart(simulationResultsMap, chart, extractorSoc);
+        addDataToChart(simulationResultsMap, chart, extractorSoc,IS_NOT_STAIRS);
         charts.add(chart);
     }
 
@@ -109,7 +113,7 @@ public class TradeSimulationPlotter<V> {
         setYMinMax(chart, range.lowerEndpoint(), range.upperEndpoint());
         Function<SimulationResult<V>, Double> extractorPC = sr ->
                 settings.powerCapacityFcr(sr.state().continuousFeatures()[StateTrading.INDEX_SOC]);
-        addDataToChart(simulationResultsMap, chart, extractorPC);
+        addDataToChart(simulationResultsMap, chart, extractorPC,IS_STAIRS);
         charts.add(chart);
     }
 
@@ -117,7 +121,7 @@ public class TradeSimulationPlotter<V> {
         var chart = getXyChart("","Power change (kW)");
         setYMinMax(chart, 0, settings.powerChargeMax());
         Function<SimulationResult<V>, Double> extractorSoc = SimulationResult::getActionChange;
-        addDataToChart(simulationResultsMap, chart, extractorSoc);
+        addDataToChart(simulationResultsMap, chart, extractorSoc, IS_STAIRS);
         charts.add(chart);
     }
 
@@ -127,7 +131,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
         var chart= getXyChart("","Revenue (Euro)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chart, extractorRev);
+        addDataToChart(simulationResultsMap, chart, extractorRev,IS_STAIRS);
         charts.add(chart);
     }
 
@@ -140,7 +144,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         XYChart chartAction = createChart("Inc. FCR (Euro/h)");
         setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor);
+        addDataToChart(simulationResultsMap, chartAction, extractor,IS_STAIRS);
         charts.add(chartAction);
     }
 
@@ -154,7 +158,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Inc. energy (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chart, extractor);
+        addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
 
     }
@@ -169,7 +173,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Cost. degradation (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chart, extractor);
+        addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
     }
 
@@ -207,16 +211,26 @@ public class TradeSimulationPlotter<V> {
 
     private void addDataToChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
                                 XYChart chart,
-                                Function<SimulationResult<V>, Double> extractor) {
+                                Function<SimulationResult<V>, Double> extractor,
+                                boolean isStairs) {
         for (Map.Entry<Integer, List<SimulationResult<V>>> entry : simulationResultsMap.entrySet()) {
             List<Double> values = entry.getValue().stream().map(extractor).toList();
-            XYSeries series = addValuesToChart(chart, values, entry.getKey());
+            XYSeries series = isStairs
+                    ? addValuesAsStairsToChart(chart, values, entry.getKey())
+                    : addValuesToChart(chart, values, entry.getKey());
             series.setMarker(SeriesMarkers.NONE);
         }
     }
 
     private  XYSeries addValuesToChart(XYChart chart, List<Double> values, Integer simNr) {
         return chart.addSeries("" + simNr, getTimes(values), values);
+    }
+
+    private  XYSeries addValuesAsStairsToChart(XYChart chart, List<Double> values, Integer simNr) {
+        var xyDataStair= StairDataGenerator.generateWithEndStep(Pair.create(
+                ListUtils.toArray(getTimes(values)),ListUtils.toArray(values)));
+
+        return chart.addSeries("" + simNr, xyDataStair.getFirst(), xyDataStair.getSecond());
     }
 
     private List<Double> getTimes(List<Double> yList) {
@@ -226,8 +240,8 @@ public class TradeSimulationPlotter<V> {
     void styleCharts(List<XYChart> charts) {
         charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.NONE)));
         charts.forEach(c -> c.getStyler().setChartBackgroundColor(Color.WHITE));
-        charts.forEach(c -> c.getStyler().setPlotBorderVisible(false)); // Border
-        charts.forEach(c -> c.getStyler().setLegendVisible(false));
+        charts.forEach(c -> c.getStyler().setPlotBorderVisible(IS_NOT_STAIRS)); // Border
+        charts.forEach(c -> c.getStyler().setLegendVisible(IS_NOT_STAIRS));
     }
 
 
