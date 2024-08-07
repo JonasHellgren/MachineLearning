@@ -23,13 +23,46 @@ public record SettingsTrading(
         @With double failPenalty
 ) implements SettingsEnvironmentI {
 
+    @Builder
+    record DataChecker(
+            boolean isPowerCapOk,
+            boolean isEnergyTrajLengthOk,
+            boolean isCapacityTrajLengthOk
+    ) {
+        boolean isOk() {
+            return isPowerCapOk && isEnergyTrajLengthOk && isCapacityTrajLengthOk;
+        }
+    }
 
     public void check() {
-        double powerCapExt=powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
+/*        double powerCapExt= maxPowerCapacity();
         Preconditions.checkArgument(powerAvgFcrExtreme(powerCapExt) < powerChargeMax(),
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
         Preconditions.checkArgument(energyPriceTraj.length > 0, "Empty energy price trajectory");
-        Preconditions.checkArgument(capacityPriceTraj.length > 0, "Empty cap price trajectory");
+        Preconditions.checkArgument(capacityPriceTraj.length > 0, "Empty cap price trajectory");*/
+        DataChecker checker = getDataChecker();
+        Preconditions.checkArgument(checker.isPowerCapOk,
+                "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
+        Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
+        Preconditions.checkArgument(checker.isCapacityTrajLengthOk, "Empty cap price trajectory");
+
+    }
+
+    public boolean isDataOk() {
+        DataChecker checker = getDataChecker();
+        return checker.isOk();
+    }
+
+    private DataChecker getDataChecker() {
+        return DataChecker.builder()
+                .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacity()) < powerChargeMax())
+                .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
+                .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
+                .build();
+    }
+
+    private double maxPowerCapacity() {
+        return powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
     }
 
     //time for final price item in energyPriceTraj
@@ -62,7 +95,7 @@ public record SettingsTrading(
         return powerAvgExtremeFromPowerCapacity(powerCapacityFcr(soC));
     }
 
-    private double powerAvgExtremeFromPowerCapacity(double powerCap) {
+    public double powerAvgExtremeFromPowerCapacity(double powerCap) {
         return powerCap * 2 * stdActivationFCR();
     }
 

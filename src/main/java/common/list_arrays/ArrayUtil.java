@@ -3,8 +3,7 @@ package common.list_arrays;
 import common.math.MathUtils;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -59,6 +58,7 @@ public class ArrayUtil {
         return transposedMatrix;
     }
 
+
     public static Pair<Integer, Integer> getDimensions(int[][] data) {
         // Check for a null or empty array to avoid NullPointerException
         if (data == null || data.length == 0 || data[0].length == 0) {
@@ -89,5 +89,20 @@ public class ArrayUtil {
                 .filter(n -> !Objects.isNull(n))
                 .max(Double::compareTo)   // Optional<Double>
                 .orElseThrow(() -> new IllegalArgumentException("The array must not be null or empty"));
+    }
+
+    public static Pair<double[], double[]> convertMapToArrays(Map<Double, Double> map) {
+         List<Double> xList = new ArrayList<>(map.keySet());
+        Collections.sort(xList);  // Sort the x values
+
+        List<Double> yList = new ArrayList<>();
+        for (Double x : xList) {
+            yList.add(map.get(x));  // Arrange y values according to the sorted x values
+        }
+
+        double[] xArray = xList.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] yArray = yList.stream().mapToDouble(Double::doubleValue).toArray();
+
+        return Pair.create(xArray, yArray);
     }
 }

@@ -1,5 +1,6 @@
 package safe_rl.domain.trainer.recorders;
 
+import com.joptimizer.exception.JOptimizerException;
 import common.list_arrays.ListUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -29,13 +30,20 @@ public class Recorder<V> {
         this.recorderTrainingProgress = new RecorderTrainingProgress(trainerParameters);
     }
 
-    @SneakyThrows
+    //@SneakyThrows
     public void recordTrainingProgress(List<Experience<V>> experiences,
                                        AgentACDiscoI<V> agent) {
         var ei = new EpisodeInfo<>(experiences);
         List<Double> entropies = experiences.stream()
                 .map(e -> agent.entropy(e.state())).toList();
-        var simulationResults = simulator.simulateWithNoExploration();
+
+        List<SimulationResult<V>> simulationResults = null;
+        try {
+            simulationResults = simulator.simulateWithNoExploration();
+        } catch (JOptimizerException e) {
+            recorderTrainingProgress=new RecorderTrainingProgress(trainerParameters);
+            return;
+        }
         var lossTracker = agent.getLossTracker();
         recorderTrainingProgress.add(ProgressMeasures.builder()
                 .nSteps(ei.size())

@@ -13,6 +13,7 @@ import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.factories.TrainerParametersFactory;
@@ -34,7 +35,9 @@ public class RunnerHelperTrading<V> {
 
     public  static final String PICS="src/main/java/safe_rl/runners/pics";
 
-    public  Pair<TrainerMultiStepACDC<V>, AgentSimulator<V>> createTrainerAndSimulator() {
+
+    public  Pair<TrainerMultiStepACDC<V>, AgentSimulator<V>> createTrainerAndSimulator(
+            TrainerParameters trainerParameters) {
         EnvironmentI<V> environment = (EnvironmentI<V>) new EnvironmentTrading(settings);
         StateI<V>  startState = (StateI<V>) StateTrading.of(VariablesTrading.newSoc(socStart));
         SafetyLayer<V> safetyLayer = (SafetyLayer<V>) new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
@@ -48,7 +51,7 @@ public class RunnerHelperTrading<V> {
         var trainer = TrainerMultiStepACDC.<V>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
-                .trainerParameters(TrainerParametersFactory.trading24Hours())
+                .trainerParameters(trainerParameters)
                 .startStateSupplier(() -> startState.copy())
                 .build();
         var simulator = AgentSimulator.<V>builder()
@@ -59,6 +62,15 @@ public class RunnerHelperTrading<V> {
         return Pair.create(trainer,simulator);
     }
 
+    public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> getAgentSimulatorPair(
+            SettingsTrading settings, int nSimulations, double socStart) {
+        var helper = RunnerHelperTrading.<VariablesTrading>builder()
+                .nSim(nSimulations)
+                .settings(settings)
+                .socStart(socStart)
+                .build();
+        return helper.createTrainerAndSimulator(TrainerParametersFactory.tradingNightHoursFewEpisodes());
+    }
 
     public  void plotAndPrint(
             Pair<TrainerMultiStepACDC<VariablesTrading>,

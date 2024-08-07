@@ -56,7 +56,12 @@ public class CpuTimer {
     public  String timeInMinutesAsString() {
         double timeInMin = absoluteProgressInMillis() * 1d / 1000 / 60 ;
         return "Time (minutes) = "  + timeInMin;
-
     }
+
+    public  String timeInSecondsAsString() {
+        double timeInSec = absoluteProgressInMillis() * 1d / 1000 ;
+        return String.valueOf(timeInSec);
+    }
+
 
 }

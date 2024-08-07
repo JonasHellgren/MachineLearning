@@ -4,6 +4,7 @@ import com.google.common.collect.Range;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import safe_rl.environments.factories.SettingsTradingFactory;
+import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class Runner24HoursTrading {
                 .nSim(N_SIMULATIONS).settings(settings)
                 .socStart(SOC_START)
                 .build();
-        var trainerAndSimulator = helper.createTrainerAndSimulator();
+        var trainerAndSimulator = helper.createTrainerAndSimulator(TrainerParametersFactory.trading24Hours());
         var trainer = trainerAndSimulator.getFirst();
         trainer.train();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
