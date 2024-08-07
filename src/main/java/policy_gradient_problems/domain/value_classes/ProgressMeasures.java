@@ -6,9 +6,12 @@ import lombok.With;
 import static common.other.MyFunctions.defaultIfNullDouble;
 import static common.other.MyFunctions.defaultIfNullInteger;
 
+@Builder
 public record ProgressMeasures(
         @With Double sumRewards,
         @With Integer nSteps,
+//        @With Double powerCap,
+        @With Double actionChange,
         @With Double eval,
         @With Double criticLoss,
         @With Double actorLoss,
@@ -18,17 +21,16 @@ public record ProgressMeasures(
     public static final double DEFAULT_VALUE = 0d;
 
     public static ProgressMeasures ofAllZero() {
-        return ProgressMeasures.builder().build();
+        return ProgressMeasures.builder()
+                .sumRewards(0d)
+                .nSteps(0)
+                .actionChange(0d)
+                .eval(0d)
+                .criticLoss(0d)
+                .actorLoss(0d)
+                .entropy(0d)
+                .build();
     }
 
-    @Builder
-    public ProgressMeasures(Double sumRewards, Integer nSteps, Double eval,
-                            Double criticLoss, Double actorLoss,  Double entropy) {
-        this.sumRewards = defaultIfNullDouble.apply(sumRewards, DEFAULT_VALUE);
-        this.nSteps = defaultIfNullInteger.apply(nSteps, N_STEPS);
-        this.eval = defaultIfNullDouble.apply(eval,DEFAULT_VALUE);
-        this.criticLoss = defaultIfNullDouble.apply(criticLoss,DEFAULT_VALUE);
-        this.actorLoss = defaultIfNullDouble.apply(actorLoss,DEFAULT_VALUE);
-        this.entropy = defaultIfNullDouble.apply(entropy,DEFAULT_VALUE);
-    }
+
 }

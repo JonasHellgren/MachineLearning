@@ -57,12 +57,17 @@ public class RecorderTrainingProgress {
         return measuresList.isEmpty();
     }
 
-    public List<Integer> nStepsTraj() {
+/*    public List<Integer> nStepsTraj() {
         return measuresList.stream().map(tm -> tm.nSteps()).toList();
-    }
+    }*/
 
     public List<Double> sumRewardsTraj() {
         return getMeasure(ProgressMeasures::sumRewards);
+    }
+
+
+    public List<Double> actionChangeTraj() {
+        return getMeasure(ProgressMeasures::actionChange);
     }
 
     public List<Double> actorLossTraj() {
@@ -92,7 +97,8 @@ public class RecorderTrainingProgress {
             return;
         }
         List<XYChart> charts = new ArrayList<>();
-        charts.add(createChart("nSteps", ints2NumList(nStepsTraj())));
+       // charts.add(createChart("nSteps", ints2NumList(nStepsTraj())));
+        charts.add(createChart("actionChange", doubles2NumList(actionChangeTraj())));
         charts.add(createChart("accum reward", doubles2NumList(sumRewardsTraj())));
         charts.add(createChart("eval", doubles2NumList(evalTraj())));
         charts.add(createChart("actor loss", doubles2NumList(actorLossTraj())));
@@ -111,17 +117,6 @@ public class RecorderTrainingProgress {
         saveBitmapWithDPI(chartCriticLoss, path+"/"+"criticLoss", FORMAT, DPI);
     }
 
-    private static void reduceXAxisTicksClutter(XYChart chart, int xStep) {
-        Function<Double, String> tickLabelsFormatter = value -> {
-            int intValue = value.intValue();
-            if (intValue % xStep == 0) {
-                return String.valueOf(intValue);
-            } else {
-                return ""; // Skip labels for other values
-            }
-        };
-        chart.setCustomXAxisTickLabelsFormatter(tickLabelsFormatter);
-    }
 
     private List<Number> ints2NumList(List<Integer> intList) {
         return intList.stream().map(i -> (Number) i).toList();
@@ -149,11 +144,20 @@ public class RecorderTrainingProgress {
         styler.setPlotBorderVisible(false);
         styler.setLegendVisible(false);
         int xStep = (trainerParameters.nofEpisodes() / N_XTICK_INTERVALS);
-        //   styler.setXAxisTickMarkSpacingHint(xStep);  // Spacing between ticks
-        System.out.println("xStep = " + xStep);
         Conditionals.executeIfTrue(trainerParameters.nofEpisodes()> MIN_N_EPIS_FOR_CLUTTER, () ->
                 reduceXAxisTicksClutter(chart, xStep));
     }
 
+    private static void reduceXAxisTicksClutter(XYChart chart, int xStep) {
+        Function<Double, String> tickLabelsFormatter = value -> {
+            int intValue = value.intValue();
+            if (intValue % xStep == 0) {
+                return String.valueOf(intValue);
+            } else {
+                return ""; // Skip labels for other values
+            }
+        };
+        chart.setCustomXAxisTickLabelsFormatter(tickLabelsFormatter);
+    }
 
 }

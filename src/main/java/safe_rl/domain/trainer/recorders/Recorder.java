@@ -39,6 +39,7 @@ public class Recorder<V> {
         var lossTracker = agent.getLossTracker();
         recorderTrainingProgress.add(ProgressMeasures.builder()
                 .nSteps(ei.size())
+                .actionChange(SimulationResult.meanActionChange(simulationResults))
                 .sumRewards(ei.sumRewards())
                 .eval(SimulationResult.sumRewards(simulationResults))
                 .criticLoss(lossCriticLastUpdates(lossTracker))

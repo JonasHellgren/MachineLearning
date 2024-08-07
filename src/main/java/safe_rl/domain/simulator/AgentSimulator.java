@@ -54,13 +54,16 @@ public class AgentSimulator<V> {
 
             sr = environment.step(state, actionCorrected);
             state.setVariables(sr.state().getVariables());
-            isTerminalOrFail = sr.isTerminal() || sr.isFail();
+
             simulationResults.add(
-                    new SimulationResult<>(state0, sr.reward(), actionCorrected));
+                    new SimulationResult<>(state0, sr.reward(), action, actionCorrected));
+            isTerminalOrFail = sr.isTerminal() || sr.isFail();
+
         }
         simulationResults.add(
-                new SimulationResult<>(sr.state(), sr.reward(), Action.ofDouble(0d)));
+                new SimulationResult<>(sr.state(), sr.reward(), Action.ofDouble(0d),Action.ofDouble(0d)));
         return simulationResults;
     }
+
 
 }
