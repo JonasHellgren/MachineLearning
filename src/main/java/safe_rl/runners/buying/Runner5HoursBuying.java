@@ -40,7 +40,7 @@ public class Runner5HoursBuying {
         var trainer = trainerAndSimulator.getFirst();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
         trainer.train();
-        trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC");
+        trainer.getRecorder().plot("Multi step ACDC");
         var simulator = trainerAndSimulator.getSecond();
         var simRes = simulator.simulateWithNoExploration();
         printing(trainer, simRes, timer);

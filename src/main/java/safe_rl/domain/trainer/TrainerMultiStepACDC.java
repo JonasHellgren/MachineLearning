@@ -57,8 +57,9 @@ public class TrainerMultiStepACDC<V> {
         this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
-        recorder = new Recorder<>(new AgentSimulator<>(
-                agent, safetyLayer, startStateSupplier, environment));
+        AgentSimulator<V> simulator = new AgentSimulator<>(
+                agent, safetyLayer, startStateSupplier, environment);
+        recorder = new Recorder<>(simulator,trainerParameters);
     }
 
     public void train() throws JOptimizerException {
@@ -83,7 +84,7 @@ public class TrainerMultiStepACDC<V> {
 
 
     MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
-        var errorList = recorder.recorderTrainingProgress.criticLossTraj();
+        var errorList = recorder.criticLossTraj();
         return episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }
 

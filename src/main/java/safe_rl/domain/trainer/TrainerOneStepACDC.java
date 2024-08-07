@@ -48,8 +48,9 @@ public class TrainerOneStepACDC<V> {
                 .<V>builder()
                 .agent(agent).parameters(trainerParameters)
                 .build();
-        recorder=new Recorder<>(new AgentSimulator<>(
-                agent,safetyLayer,startStateSupplier,environment));
+        AgentSimulator<V> simulator = new AgentSimulator<>(
+                agent, safetyLayer, startStateSupplier, environment);
+        recorder=new Recorder<>(simulator,trainerParameters);
     }
 
     public void train() throws JOptimizerException {
@@ -65,7 +66,7 @@ public class TrainerOneStepACDC<V> {
 
     private void processEpisode() throws JOptimizerException {
         var experiences = evaluate();
-        var errorList= recorder.recorderTrainingProgress.criticLossTraj();
+        var errorList= recorder.criticLossTraj();
         episodeTrainer.trainAgentFromExperiences(experiences,errorList);
         recorder.recordTrainingProgress(experiences,agent);
     }

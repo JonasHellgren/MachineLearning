@@ -65,9 +65,9 @@ public class RunnerHelperTrading<V> {
                     AgentSimulator<VariablesTrading>> trainerAndSimulator,
             CpuTimer timer, String title) throws JOptimizerException {
         var trainer=trainerAndSimulator.getFirst();
-        var trainingProgress = trainer.getRecorder().recorderTrainingProgress;
-        trainingProgress.plot("Multi step ACDC trading");
-        trainingProgress.saveCharts(RunnerHelperTrading.PICS);
+        var recorder = trainer.getRecorder();
+        recorder.plot("Multi step ACDC trading");
+        recorder.saveCharts(RunnerHelperTrading.PICS);
         var helper = RunnerHelperTrading.builder().nSim(nSim).settings(settings).build();
         helper.printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();

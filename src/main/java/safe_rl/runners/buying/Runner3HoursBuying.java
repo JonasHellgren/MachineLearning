@@ -23,7 +23,7 @@ public class Runner3HoursBuying {
     public static void main(String[] args) {
         var trainer = createTrainer();
         trainer.train();
-        trainer.getRecorder().recorderTrainingProgress.plot("One step ACDC");
+        trainer.getRecorder().plot("One step ACDC");
         log.info("agent = " + trainer.getAgent());
     }
 

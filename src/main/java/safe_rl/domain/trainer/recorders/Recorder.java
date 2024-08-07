@@ -1,25 +1,33 @@
 package safe_rl.domain.trainer.recorders;
 
 import common.list_arrays.ListUtils;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.experimental.Delegate;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
-import policy_gradient_problems.helpers.RecorderStateValues;
-import policy_gradient_problems.helpers.RecorderTrainingProgress;
 import safe_rl.domain.agent.helpers.LossTracker;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
 import safe_rl.domain.simulator.AgentSimulator;
 import safe_rl.domain.trainer.helpers.EpisodeInfo;
+import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
 import java.util.List;
 
-@AllArgsConstructor
 public class Recorder<V> {
 
-    public final RecorderTrainingProgress recorderTrainingProgress = new RecorderTrainingProgress();
+    @Delegate
+    RecorderTrainingProgress recorderTrainingProgress;
+
     AgentSimulator<V> simulator;
+    TrainerParameters trainerParameters;
+
+    public Recorder(AgentSimulator<V> simulator, TrainerParameters trainerParameters) {
+        this.simulator = simulator;
+        this.trainerParameters = trainerParameters;
+        this.recorderTrainingProgress = new RecorderTrainingProgress(trainerParameters);
+    }
 
     @SneakyThrows
     public void recordTrainingProgress(List<Experience<V>> experiences,

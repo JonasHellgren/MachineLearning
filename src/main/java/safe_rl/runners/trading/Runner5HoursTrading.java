@@ -38,7 +38,7 @@ public class Runner5HoursTrading {
         var timer= CpuTimer.newWithTimeBudgetInMilliSec(0);
         var helper= RunnerHelperTrading.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         trainer.train();
-        trainer.getRecorder().recorderTrainingProgress.plot("Multi step ACDC trading");
+        trainer.getRecorder().plot("Multi step ACDC trading");
         helper.printing(trainer, timer);
         helper.simulateAndPlot(trainerAndSimulator.getSecond());
         helper.plotMemory(trainer.getAgent().getCritic(), "critic");
