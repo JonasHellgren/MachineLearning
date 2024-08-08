@@ -8,13 +8,18 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
+import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.*;
 
 import java.util.List;
 
+import static safe_rl.persistance.ElDataFinals.FILE_ENERGY;
+import static safe_rl.persistance.ElDataFinals.FILE_FCR;
+import static safe_rl.runners.trading.RunnerCapacityEvaluation.fileEnergy;
+import static safe_rl.runners.trading.RunnerCapacityEvaluation.fileFcr;
+
 public class RunnerNightHoursTradingRealData {
 
-    static final String PATH = "src/main/java/safe_rl/persistance/data/";
     public static final ElPriceRepoPlotter.Settings NO_LEGEND_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault().withIsLegend(false);
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
@@ -23,10 +28,9 @@ public class RunnerNightHoursTradingRealData {
     public static final double SOC_TERMINAL_MIN = 0.95;
     public static final double POWER_CAPACITY_FCR = 10d;
 
-    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
-    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
 
-    public static int DAY_IDX = 0;
+
+    public static int DAY_IDX = 2;
     public static List<DayId> DAYS = List.of(
             DayId.of(24,0,0,"se3"),
             DayId.of(24,0,4,"se3"),
@@ -38,18 +42,12 @@ public class RunnerNightHoursTradingRealData {
     @SneakyThrows
     public static void main(String[] args) {
         var dayId=DAYS.get(DAY_IDX);
-        ElPriceRepo repo = ElPriceRepo.empty();
-        ElPriceXlsReader reader = ElPriceXlsReader.of(repo);
-        reader.readDataFromFile(fileEnergy, ElType.ENERGY);
-        reader.readDataFromFile(fileFcr, ElType.FCR);
-        var elDataEnergyEuroPerMwh=repo.pricesFromHourToHour(dayId, FROM_TO_HOUR,ElType.ENERGY);
-        var elDataFcrEuroPerMW=repo.pricesFromHourToHour(dayId, FROM_TO_HOUR,ElType.FCR);
-        var elDataEnergyEuroPerKwh=repo.fromPerMegaToPerKilo(elDataEnergyEuroPerMwh);
-        var elDataFCREuroPerKW=repo.fromPerMegaToPerKilo(elDataFcrEuroPerMW);
+        var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR,Pair.create(FILE_ENERGY,FILE_FCR));
+
         var settings =SettingsTradingFactory.new100kWhVehicleEmptyPrices()
                 .withPowerCapacityFcrRange(Range.closed(0d,POWER_CAPACITY_FCR))
-                .withEnergyPriceTraj(ListUtils.toArray(elDataEnergyEuroPerKwh))
-                .withCapacityPriceTraj(ListUtils.toArray(elDataFCREuroPerKW))
+                .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
+                .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
                 .withSocTerminalMin(SOC_TERMINAL_MIN);
         settings.check();
         var helper = RunnerHelperTrading.<VariablesTrading>builder()

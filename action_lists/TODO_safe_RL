@@ -189,9 +189,12 @@ plotta action corrected vs epis x
 
 plotta PC och om corrected x
 cleaner x
-effekt plot som stairs
+effekt plot som stairs  x
 
-optimera powerFCR - gärna med parallesiering
+optimera powerFCR - gärna med parallesiering x
+plantuml för golden search
+TestGoldenSearch
+
 powerBattMax -> powerChargeMax
 
 fixa addAccRevFCR
