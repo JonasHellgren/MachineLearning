@@ -15,8 +15,6 @@ import java.util.List;
 
 import static safe_rl.persistance.ElDataFinals.FILE_ENERGY;
 import static safe_rl.persistance.ElDataFinals.FILE_FCR;
-import static safe_rl.runners.trading.RunnerCapacityEvaluation.fileEnergy;
-import static safe_rl.runners.trading.RunnerCapacityEvaluation.fileFcr;
 
 public class RunnerNightHoursTradingRealData {
 

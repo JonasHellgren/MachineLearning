@@ -1,9 +1,10 @@
-package safe_rl.other;
+package common.math;
 
 import com.google.common.base.Preconditions;
 import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import safe_rl.other.SearchSettings;
 
 /**
  * https://en.wikipedia.org/wiki/Golden-section_search
@@ -44,32 +45,35 @@ public class GoldenSearcher {
     SearchSettings settings;
 
     public double searchMin() {
-        return goldenSectionSearchMax(true);
+        return goldenSectionSearch(true);
     }
 
     public double searchMax() {
-        return goldenSectionSearchMax(false);
+        return goldenSectionSearch(false);
     }
 
-    double goldenSectionSearchMax(boolean isMinSearch) {
+    double goldenSectionSearch(boolean isMinSearch) {
         double a=settings.xMin();
         double b=settings.xMax();
-        double tol=settings.tol();
         Preconditions.checkArgument(a<b,"Bad interval");
-
+        double tol=settings.tol();
         double c = calcC(a, b);
         double d = calcD(a, b);
 
         int i=0;
         while (isTolViolated(a, b, tol) && isNofIterationsNotExceeded(i)) {
-            double fC = isMinSearch?function.f(c):-function.f(c);
-            double fD = isMinSearch?function.f(d):-function.f(d);
-            if (fC < fD) {
+            double fC0 = function.f(c);
+            double fC1 = isMinSearch? fC0 :-fC0;
+            double fD0 = function.f(d);
+            double fD1 = isMinSearch? fD0 :-fD0;
+            System.out.println("Interval, (c,d)=" + "(" + c + "," + d + ")");
+            System.out.println("Function values, (fC,fD)=" + "(" + fC0 + "," + fD0 + ")");
+            if (fC1 < fD1) {
                 b = d;
             } else {
                 a = c;
             }
-            log.fine("New interval, (a,b)=" + "(" + a + "," + b + ")");
+            log.info("New interval, (a,b)=" + "(" + a + "," + b + ")");
             c = calcC(a, b);
             d = calcD(a, b);
             i++;

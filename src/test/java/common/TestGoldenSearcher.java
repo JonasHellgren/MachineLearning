@@ -1,10 +1,10 @@
-package safe_rl.golden_search;
+package common;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import safe_rl.other.FunctionWrapperI;
-import safe_rl.other.GoldenSearcher;
+import common.math.FunctionWrapperI;
+import common.math.GoldenSearcher;
 import safe_rl.other.SearchSettings;
 
 class TestGoldenSearcher {

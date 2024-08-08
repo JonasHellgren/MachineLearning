@@ -1,4 +1,4 @@
-package safe_rl.other;
+package common.math;
 
 public interface FunctionWrapperI {
 

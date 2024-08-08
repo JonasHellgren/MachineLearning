@@ -15,12 +15,9 @@ import org.knowm.xchart.XYChart;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.persistance.ElDataHelper;
-import safe_rl.persistance.trade_environment.*;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
-
 import static safe_rl.persistance.ElDataFinals.*;
 import static safe_rl.runners.trading.RunnerHelperTrading.getAgentSimulatorPair;
 import static safe_rl.runners.trading.RunnerHelperTrading.getSettings;
@@ -33,21 +30,22 @@ public class RunnerCapacityEvaluation {
 
     static final String PATH = "src/main/java/safe_rl/persistance/data/";
 
-    public static final double POOR_VALUE = -100d;
+
     public static final int N_CAPS = 5;
 
+/*
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
+*/
 
     public static int DAY_IDX = 2;
-    public static final int N_SIMULATIONS = 5;
-    public static final double SOC_START = 0.5;
+
 
     public static void main(String[] args) {
         var dayId = DAYS.get(DAY_IDX);
         var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR,Pair.create(FILE_ENERGY,FILE_FCR));
         double powerMax = SettingsTradingFactory.new100kWhVehicleEmptyPrices().powerChargeMax();
-        final List<Double> powerCapList = ListUtils.doublesStartEndStep(0, powerMax,powerMax/ N_CAPS);
+        final List<Double> powerCapList = ListUtils.doublesStartEndStep(POWER_MIN, powerMax,powerMax/ N_CAPS);
 
         Map<Double, Double> capValueMap = new HashMap<>();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);

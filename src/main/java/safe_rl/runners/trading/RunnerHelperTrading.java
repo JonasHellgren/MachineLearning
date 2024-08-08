@@ -93,13 +93,16 @@ public class RunnerHelperTrading<V> {
         var recorder = trainer.getRecorder();
         recorder.plot("Multi step ACDC trading");
         recorder.saveCharts(RunnerHelperTrading.PICS);
-        var helper = RunnerHelperTrading.builder().nSim(nSim).settings(settings).build();
-        helper.printing(trainer, timer);
+        //var helper = RunnerHelperTrading.builder().nSim(nSim).settings(settings).build();
+        printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();
-        helper.simulateAndPlot(simulator);
-        helper.simulateAndSavePlots(simulator, title);
-        helper.plotMemory(trainer.getAgent().getCritic(), "critic");
-        helper.plotMemory(trainer.getAgent().getActorMean(), "actor mean");
+        simulateAndPlot(simulator);
+        simulateAndSavePlots(simulator, title);
+    }
+
+    public void plotMemories(TrainerMultiStepACDC<VariablesTrading> trainer) {
+        plotMemory(trainer.getAgent().getCritic(), "critic");
+        plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
 
     void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
