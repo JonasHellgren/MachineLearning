@@ -199,6 +199,7 @@ fixa addAccRevFCR  x
 
 whenFirstDecreasingThenFixed
 eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge  x
+G2V settting x
 
 ScenariosEvaluator - räknar på ngt av clusers prisdata
 räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome

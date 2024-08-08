@@ -38,6 +38,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_CONSTRAINTS = 5;
     public static final int MAX_NOF_INIT_GUESSES = 1_000;
     public static final double K_MARGIN_SOC_MAX = 0.7;  //smaller than 1 <=> underestimation of dSoCMax => safer opt
+    public static final double TOL_POWER = 1d;  //to help finding start point when powerMin is zero
 
     @NonNull Double powerMin;
     @NonNull Double powerMax;
@@ -83,9 +84,8 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         Counter counter = new Counter(MAX_NOF_INIT_GUESSES);
         double randPower;
         boolean violation;
-        //double powerBattMax = settings.powerChargeRange();
         do {
-            randPower = RandUtils.getRandomDouble(settings.powerChargeMin(), settings.powerChargeMax());
+            randPower = RandUtils.getRandomDouble(settings.powerChargeMin()-TOL_POWER, settings.powerChargeMax());
             violation = isAnyViolation(randPower);
             counter.increase();
         } while (violation && !counter.isExceeded());
@@ -99,7 +99,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         if (counter.isExceeded()) {
             log.fine("timeNew = " + timeNew+", soc = " + soc);
             throw new IterationsLimitException("Nof random init power guesses exceeded, " +
-                    "try decrease socTerminalMin and/orpowerCapacityFcr");
+                    "try decrease socTerminalMin and/or powerCapacityFcr");
         }
         if (isAnyViolation(randPower)) {
             throw new InfeasibleProblemException("Nof feasible init guess found, constraints = "
@@ -121,7 +121,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
      *  [2] soc+g*(power-powerFcr)-dSoCPC>socMin  =>
      *              power-powerFcr>(socMin-soc+dSoCPC)/g => power>(socMin+dSoCPC-soc)/g+powerFcr
      *  [3] soc+g*(power+powerFcr)+dSoCPC<socMax  =>
-     *              power+powerFcr>(socMax-soc-dSoCPC)/g => power>(socMin-dSoCPC-soc)/g-powerFcr
+     *              power+powerFcr<(socMax-soc-dSoCPC)/g => power<(socMax-dSoCPC-soc)/g-powerFcr
      *  [4] soc+dSocMax+g*(power-powerFcr)>socTerminalMin =>
                     power-powerFcr>(socTerminalMin-soc-dSocMax)/g => power>....+powerFcr
      */
@@ -129,20 +129,12 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     ConvexMultivariateRealFunction[] constraints() {
         var s=settings;
         double powerFcr=s.powerAvgFcrExtreme(soc);
-        double PCfcr=s.powerCapacityFcr(soc);
+        double capFcr=s.powerCapacityFcr(soc);
         double dSoCPC = s.dSoCPC(soc);
-
-        var dea=LowerBoundConstraint.ofSingle(-1);
-
         var inequalities = new ConvexMultivariateRealFunction[N_CONSTRAINTS];
-/*
-        inequalities[0] = dea; //LowerBoundConstraint.ofSingle(powerMin+powerFcr);
-        inequalities[1] = dea; // UpperBoundConstraint.ofSingle(powerMax-powerFcr);
-*/
 
-        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+PCfcr);
-        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-PCfcr);
-
+        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+capFcr-TOL_POWER);
+        inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-capFcr);
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin+dSoCPC)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax-dSoCPC)-powerFcr);
         double powerMinSoCTerminal=(socTerminalMin-soc-kMargindSocMax*s.dSocMax(timeNew,soc))/s.gFunction()+powerFcr;

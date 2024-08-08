@@ -5,6 +5,7 @@ import com.google.common.collect.Range;
 import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
 import lombok.NoArgsConstructor;
+import org.apache.commons.math3.util.Pair;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 
 import java.util.List;
@@ -63,6 +64,32 @@ public class SettingsTradingFactory {
                 .build();
     }
 
+    public static SettingsTrading getSettingsV2G(Pair<List<Double>,List<Double>> energyFcrPricePair,
+                                                 double cap,
+                                                 double socTerminalMin,
+                                                 double powerChargeMax,
+                                                 double priceBattery) {
+        return SettingsTradingFactory.new100kWhVehicleEmptyPrices()
+                .withPowerCapacityFcrRange(Range.closed(0d, cap))
+                .withPowerChargeRange(Range.closed(-powerChargeMax, powerChargeMax))
+                .withPriceBattery(priceBattery)
+                .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
+                .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
+                .withSocTerminalMin(socTerminalMin);
+    }
+
+    public static SettingsTrading getSettingsG2V(Pair<List<Double>,List<Double>> energyFcrPricePair,
+                                                 double socTerminalMin,
+                                                 double powerChargeMax,
+                                                 double priceBattery) {
+        return SettingsTradingFactory.new100kWhVehicleEmptyPrices()
+                .withPowerCapacityFcrRange(Range.closed(0d, 0d))
+                .withPowerChargeRange(Range.closed(0d, powerChargeMax))
+                .withPriceBattery(priceBattery)
+                .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
+                .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
+                .withSocTerminalMin(socTerminalMin);
+    }
 
 
     public static SettingsTrading new24HoursIncreasingPrice() {

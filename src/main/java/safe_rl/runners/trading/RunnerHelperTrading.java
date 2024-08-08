@@ -1,8 +1,6 @@
 package safe_rl.runners.trading;
 
-import com.google.common.collect.Range;
 import com.joptimizer.exception.JOptimizerException;
-import common.list_arrays.ListUtils;
 import common.other.CpuTimer;
 import lombok.Builder;
 import lombok.extern.java.Log;
@@ -18,7 +16,6 @@ import safe_rl.domain.simulator.value_objects.SimulationResult;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
-import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
@@ -65,25 +62,16 @@ public class RunnerHelperTrading<V> {
         return Pair.create(trainer,simulator);
     }
 
-    public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> getAgentSimulatorPair(
-            SettingsTrading settings, int nSimulations, double socStart) {
+    public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>>
+    trainerSimulatorPairFewEpis(SettingsTrading settings, int nSimulations, double socStart, int nofEpisodes) {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(nSimulations)
                 .settings(settings)
                 .socStart(socStart)
                 .build();
-        return helper.createTrainerAndSimulator(TrainerParametersFactory.tradingNightHoursFewEpisodes());
+        return helper.createTrainerAndSimulator(TrainerParametersFactory.tradingNightHours(nofEpisodes));
     }
 
-    public static SettingsTrading getSettings(Pair<List<Double>,List<Double>> energyFcrPricePair,
-                                              double cap,
-                                              double socTerminalMin) {
-        return SettingsTradingFactory.new100kWhVehicleEmptyPrices()
-                .withPowerCapacityFcrRange(Range.closed(0d, cap))
-                .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
-                .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(socTerminalMin);
-    }
 
     public  void plotAndPrint(
             Pair<TrainerMultiStepACDC<VariablesTrading>,
@@ -93,7 +81,6 @@ public class RunnerHelperTrading<V> {
         var recorder = trainer.getRecorder();
         recorder.plot("Multi step ACDC trading");
         recorder.saveCharts(RunnerHelperTrading.PICS);
-        //var helper = RunnerHelperTrading.builder().nSim(nSim).settings(settings).build();
         printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();
         simulateAndPlot(simulator);

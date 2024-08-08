@@ -13,7 +13,7 @@ import java.util.Arrays;
 public record SettingsTrading(
         double dt,
         double energyBatt,  //kWh
-        Range<Double> powerChargeRange,  //kW
+        @With Range<Double> powerChargeRange,  //kW
         @With double priceBattery,  //Euro
         Range<Double> socRange,
         @With double socTerminalMin,
@@ -43,6 +43,9 @@ public record SettingsTrading(
         DataChecker checker = getDataChecker();
         Preconditions.checkArgument(checker.isPowerCapOk,
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
+        Preconditions.checkArgument(checker.isPowerChargeRangeOk,"Faulty power range");
+        Preconditions.checkArgument(checker.isPowerChargeAlsoNegativeWhenFcr,
+                "FCR requires V2G (also neg charge power)");
         Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
         Preconditions.checkArgument(checker.isCapacityTrajLengthOk, "Empty cap price trajectory");
 
@@ -147,7 +150,7 @@ public record SettingsTrading(
                                 powerChargeMax() > 0 &&
                                 powerChargeMin() < Double.MIN_VALUE
                 )
-                .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacityFcr()) < minAbsolutePowerCharge())
+                .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacityFcr()) < minAbsolutePowerCharge()+Double.MIN_VALUE)
                 .isPowerChargeAlsoNegativeWhenFcr(MathUtils.isNonZero(maxPowerCapacityFcr())
                         ? MathUtils.isNeg(powerChargeMin())
                         : MathUtils.isZero(powerChargeMin()))

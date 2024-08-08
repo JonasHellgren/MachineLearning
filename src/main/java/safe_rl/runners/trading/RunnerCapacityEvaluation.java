@@ -12,12 +12,12 @@ import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import safe_rl.environments.factories.SettingsTradingFactory;
-import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.persistance.ElDataHelper;
 import java.util.*;
+
+import static safe_rl.environments.factories.SettingsTradingFactory.getSettingsV2G;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.getAgentSimulatorPair;
-import static safe_rl.runners.trading.RunnerHelperTrading.getSettings;
+import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairFewEpis;
 
 @Log
 public class RunnerCapacityEvaluation {
@@ -36,7 +36,8 @@ public class RunnerCapacityEvaluation {
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
 
         for (double cap : powerCapList) {
-            SettingsTrading settings = getSettings(energyFcrPricePair, cap, SOC_TERMINAL_MIN);
+            var settings = getSettingsV2G(
+                    energyFcrPricePair, cap, SOC_TERMINAL_MIN, POWER_CHARGE_MAX, PRICE_BATTERY);
 
             if (!settings.isDataOk()) {
                 capValueMap.put(cap, POOR_VALUE);
@@ -44,7 +45,7 @@ public class RunnerCapacityEvaluation {
                 continue;
             }
 
-            var trainerAndSimulator = getAgentSimulatorPair(settings, N_SIMULATIONS, SOC_START);
+            var trainerAndSimulator = trainerSimulatorPairFewEpis(settings, N_SIMULATIONS, SOC_START, 300);
             var trainer = trainerAndSimulator.getFirst();
             var simulator = trainerAndSimulator.getSecond();
             try {

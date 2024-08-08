@@ -15,13 +15,13 @@ public class TrainerParametersFactory {
                 .withLearningRateReplayBufferActorStd(1e-2)
                 .withRatioPenCorrectedAction(10d);
     }
-
+/*
     public static TrainerParameters tradingNightHours() {
         return TrainerParametersFactory.trading24Hours().withNofEpisodes(2000);
-    }
+    }*/
 
-    public static TrainerParameters tradingNightHoursFewEpisodes() {
-        return TrainerParametersFactory.trading24Hours().withNofEpisodes(300);
+    public static TrainerParameters tradingNightHours(int nofEpisodes) {
+        return TrainerParametersFactory.trading24Hours().withNofEpisodes(nofEpisodes);
     }
 
 

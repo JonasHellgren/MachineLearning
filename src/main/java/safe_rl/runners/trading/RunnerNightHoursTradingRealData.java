@@ -53,7 +53,7 @@ public class RunnerNightHoursTradingRealData {
                 .socStart(SOC_START)
                 .build();
         var trainerAndSimulator = helper.createTrainerAndSimulator(
-                TrainerParametersFactory.tradingNightHours());
+                TrainerParametersFactory.tradingNightHours(300));
         var trainer = trainerAndSimulator.getFirst();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
         trainer.train();

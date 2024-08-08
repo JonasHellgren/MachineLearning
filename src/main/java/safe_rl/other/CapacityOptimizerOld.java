@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 
-import static safe_rl.runners.trading.RunnerHelperTrading.getAgentSimulatorPair;
+import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairFewEpis;
 
 /**
  * https://web2.qatar.cmu.edu/~gdicaro/15382/additional/one-dimensional-search-methods.pdf
@@ -65,7 +65,7 @@ public class CapacityOptimizerOld {
             return poorValue;
         }
 
-        var trainerAndSimulator = getAgentSimulatorPair(settings, DYMMY_N_SIMULATIONS, DUMMY_SOC);
+        var trainerAndSimulator = trainerSimulatorPairFewEpis(settings, DYMMY_N_SIMULATIONS, DUMMY_SOC, 300);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         try {

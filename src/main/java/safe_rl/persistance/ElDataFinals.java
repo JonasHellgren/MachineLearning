@@ -28,6 +28,8 @@ public class ElDataFinals {
     public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
 
     public static final double POWER_MIN = 0d;
+    public static final double POWER_CHARGE_MAX = 22d;
+    public static final double PRICE_BATTERY = 30e3;
 
     public static final double SOC_START = 0.5;
     public static final double SOC_TERMINAL_MIN = 0.95;
@@ -38,5 +40,8 @@ public class ElDataFinals {
     public static final double TOL_GOLDEN_SEARCH = 1d;
     public static final int N_ITER_MAX_GOLDEN_SEARCH = 100;
 
+
+    public static final double DUMMY_CAP = 0d;
+    public static final int DYMMY_N_SIMULATIONS = 1;
 
 }
