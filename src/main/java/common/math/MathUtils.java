@@ -32,6 +32,10 @@ public class MathUtils {
         return (Math.abs(value-0)<2*Double.MIN_VALUE);
     }
 
+    public static boolean isNonZero(double value) {
+        return !isZero(value);
+    }
+
     public static boolean isZero(int value) {
         return (value==0);
     }

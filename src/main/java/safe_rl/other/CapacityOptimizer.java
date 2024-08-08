@@ -11,9 +11,9 @@ public class CapacityOptimizer {
     FunctionWrapperI function;
 
     public CapacityOptimizer(SettingsTrading settingsTrading, Double tol) {
-        this.function=new CapacityFunctionWrapper(settingsTrading, POOR_VALUE);
+        this.function=new CapacityFunctionWrapper(settingsTrading,POOR_VALUE);
         var settingsSearch= SearchSettings.builder()
-                .xMin(POWER_MIN).xMax(settingsTrading.powerChargeMax())
+                .xMin(POWER_MIN).xMax(settingsTrading.minAbsolutePowerCharge())
                 .tol(tol).nIterMax(N_ITER_MAX_GOLDEN_SEARCH)
                 .build();
         this.searcher=new GoldenSearcher(function,settingsSearch);

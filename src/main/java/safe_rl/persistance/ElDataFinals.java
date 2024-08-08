@@ -4,10 +4,16 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.persistance.trade_environment.DayId;
 import safe_rl.persistance.trade_environment.PathAndFile;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 public class ElDataFinals {
     public static final String PATH = "src/main/java/safe_rl/persistance/data/";
+
+    public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US); //US <=> only dots
+    public static final DecimalFormat formatter = new DecimalFormat("#.#", SYMBOLS);
 
 
     public static PathAndFile FILE_ENERGY = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");

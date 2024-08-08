@@ -8,13 +8,14 @@ import static safe_rl.persistance.ElDataFinals.*;
 import static safe_rl.runners.trading.RunnerHelperTrading.getSettings;
 
 public class RunnerCapacityOptimizer {
+    public static final double DUMMY_CAP = 0d;
     public static int DAY_IDX = 2;
 
     public static void main(String[] args) {
 
         var dayId = DAYS.get(DAY_IDX);
         var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR, Pair.create(FILE_ENERGY,FILE_FCR));
-        SettingsTrading settings = getSettings(energyFcrPricePair, 0d, SOC_TERMINAL_MIN);
+        SettingsTrading settings = getSettings(energyFcrPricePair, DUMMY_CAP, SOC_TERMINAL_MIN);
 
         var optimizer=new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH);
         double capBest=optimizer.optimize();

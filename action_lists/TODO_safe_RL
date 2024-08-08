@@ -192,14 +192,17 @@ cleaner x
 effekt plot som stairs  x
 
 optimera powerFCR - gärna med parallesiering x
-plantuml för golden search
-TestGoldenSearch
+plantuml för golden search  x
+TestGoldenSearch  x
+powerBattMax -> powerChargeMax x
+fixa addAccRevFCR  x
 
-powerBattMax -> powerChargeMax
+whenFirstDecreasingThenFixed
+eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge  x
 
-fixa addAccRevFCR
-settings.priceTraj -> settings.priceTrajSell + settings.priceTrajBuy för att klara SingleEVHome, alt constraint som blockar sälj
-eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge
+ScenariosEvaluator - räknar på ngt av clusers prisdata
+räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome
+resultat i xls
 
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR

@@ -1,6 +1,5 @@
 package safe_rl.runners.trading;
 
-import com.google.common.collect.Range;
 import com.joptimizer.exception.JOptimizerException;
 import common.list_arrays.ArrayUtil;
 import common.list_arrays.ListUtils;
@@ -15,8 +14,6 @@ import org.knowm.xchart.XYChart;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.persistance.ElDataHelper;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 import static safe_rl.persistance.ElDataFinals.*;
 import static safe_rl.runners.trading.RunnerHelperTrading.getAgentSimulatorPair;
@@ -25,19 +22,7 @@ import static safe_rl.runners.trading.RunnerHelperTrading.getSettings;
 @Log
 public class RunnerCapacityEvaluation {
 
-    public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US); //US <=> only dots
-    public static final DecimalFormat formatter = new DecimalFormat("#.#", SYMBOLS);
-
-    static final String PATH = "src/main/java/safe_rl/persistance/data/";
-
-
     public static final int N_CAPS = 5;
-
-/*
-    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
-    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
-*/
-
     public static int DAY_IDX = 2;
 
 

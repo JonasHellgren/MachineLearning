@@ -46,8 +46,8 @@ public class TestEnvironmentTrading5hRandomSearch {
         var simulator = RandomActionSimulator.<VariablesTrading>builder()
                 .environment(environment).safetyLayer(safetyLayer)
                 .minMaxAction(Pair.of(
-                        -settings.powerChargeMax(),
-                        settings.powerChargeMax())).build();
+                        settings.powerChargeMin(),settings.powerChargeMax()))
+                .build();
 
         Pair<Double, List<Double>> bestRes = Pair.of(-Double.MAX_VALUE, new ArrayList<>());
         for (int i = 0; i < N_SIMULATIONS; i++) {

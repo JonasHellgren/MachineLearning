@@ -2,16 +2,18 @@ package safe_rl.environments.trading_electricity;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
+import common.math.MathUtils;
 import lombok.Builder;
 import lombok.With;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
+
 import java.util.Arrays;
 
 @Builder
 public record SettingsTrading(
         double dt,
         double energyBatt,  //kWh
-        double powerChargeMax,  //kW
+        Range<Double> powerChargeRange,  //kW
         @With double priceBattery,  //Euro
         Range<Double> socRange,
         @With double socTerminalMin,
@@ -26,20 +28,18 @@ public record SettingsTrading(
     @Builder
     record DataChecker(
             boolean isPowerCapOk,
+            boolean isPowerChargeRangeOk,
+            boolean isPowerChargeAlsoNegativeWhenFcr,
             boolean isEnergyTrajLengthOk,
             boolean isCapacityTrajLengthOk
     ) {
         boolean isOk() {
-            return isPowerCapOk && isEnergyTrajLengthOk && isCapacityTrajLengthOk;
+            return isPowerCapOk && isPowerChargeRangeOk && isPowerChargeAlsoNegativeWhenFcr &&
+                    isEnergyTrajLengthOk && isCapacityTrajLengthOk ;
         }
     }
 
     public void check() {
-/*        double powerCapExt= maxPowerCapacity();
-        Preconditions.checkArgument(powerAvgFcrExtreme(powerCapExt) < powerChargeMax(),
-                "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
-        Preconditions.checkArgument(energyPriceTraj.length > 0, "Empty energy price trajectory");
-        Preconditions.checkArgument(capacityPriceTraj.length > 0, "Empty cap price trajectory");*/
         DataChecker checker = getDataChecker();
         Preconditions.checkArgument(checker.isPowerCapOk,
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
@@ -53,16 +53,16 @@ public record SettingsTrading(
         return checker.isOk();
     }
 
-    private DataChecker getDataChecker() {
-        return DataChecker.builder()
-                .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacity()) < powerChargeMax())
-                .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
-                .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
-                .build();
+    public double minAbsolutePowerCharge() {
+        return Math.min(Math.abs(powerChargeMin()), Math.abs(powerChargeMax()));
     }
 
-    private double maxPowerCapacity() {
-        return powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
+    public Double powerChargeMin() {
+        return powerChargeRange.lowerEndpoint();
+    }
+
+    public Double powerChargeMax() {
+        return powerChargeRange.upperEndpoint();
     }
 
     //time for final price item in energyPriceTraj
@@ -75,8 +75,8 @@ public record SettingsTrading(
     }
 
     public double powerCapacityFcr(double soC) {
-        double nsr=Math.min(Math.abs(socMax()-soC),Math.abs(socMin()-soC))/normalizedSoCReserve();
-        return capacityFcrMax()*nsr+capacityFcrMin() *(1-nsr);
+        double nsr = Math.min(Math.abs(socMax() - soC), Math.abs(socMin() - soC)) / normalizedSoCReserve();
+        return capacityFcrMax() * nsr + capacityFcrMin() * (1 - nsr);
     }
 
     Double socMax() {
@@ -84,11 +84,11 @@ public record SettingsTrading(
     }
 
     double socMin() {
-        return  socRange.lowerEndpoint();
+        return socRange.lowerEndpoint();
     }
 
     private double normalizedSoCReserve() {
-        return Math.abs(socMax()-socMin())/2;
+        return Math.abs(socMax() - socMin()) / 2;
     }
 
     public double powerAvgFcrExtreme(double soC) {
@@ -99,7 +99,7 @@ public record SettingsTrading(
         return powerCap * 2 * stdActivationFCR();
     }
 
-    public double powerFcrAvg(double aFcrLumped,double soC) {
+    public double powerFcrAvg(double aFcrLumped, double soC) {
         return powerCapacityFcr(soC) * aFcrLumped;
     }
 
@@ -108,14 +108,14 @@ public record SettingsTrading(
     }
 
     /**
-     *  The estimated max possible change in SoC for charging capacity is set in a conservative manner
-     *  Assumes capacity reduction is due to the maximum FCR capacity
+     * The estimated max possible change in SoC for charging capacity is set in a conservative manner
+     * Assumes capacity reduction is due to the maximum FCR capacity
      */
 
-    public double dSocMax(double time,double soC) {
+    public double dSocMax(double time, double soC) {
         double capacityReduction = capacityFcrMax();
         double powerLosses = powerAvgExtremeFromPowerCapacity(capacityReduction);
-        double dEnergyMax = (timeTerminal() - time) * (powerChargeMax - capacityReduction - powerLosses);
+        double dEnergyMax = (timeTerminal() - time) * (powerChargeMax() - capacityReduction - powerLosses);
         return dEnergyMax / energyBatt;
     }
 
@@ -123,13 +123,13 @@ public record SettingsTrading(
         return capacityPriceTraj.length;
     }
 
-   public double revFCRPerTimeStep(double soC) {
-        double priceFCR= Arrays.stream(capacityPriceTraj()).average().orElseThrow();
-       return priceFCR * powerCapacityFcr(soC);
+    public double revFCRPerTimeStep(double soC) {
+        double priceFCR = Arrays.stream(capacityPriceTraj()).average().orElseThrow();
+        return priceFCR * powerCapacityFcr(soC);
     }
 
     public double dSoCPC(double soC) {
-        return powerCapacityFcr(soC)* dt/ energyBatt;
+        return powerCapacityFcr(soC) * dt / energyBatt;
     }
 
     private Double capacityFcrMin() {
@@ -139,5 +139,27 @@ public record SettingsTrading(
     private Double capacityFcrMax() {
         return powerCapacityFcrRange.upperEndpoint();
     }
+
+    private DataChecker getDataChecker() {
+        return DataChecker.builder()
+                .isPowerChargeRangeOk(
+                        powerChargeMin() < powerChargeMax() &&
+                                powerChargeMax() > 0 &&
+                                powerChargeMin() < Double.MIN_VALUE
+                )
+                .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacityFcr()) < minAbsolutePowerCharge())
+                .isPowerChargeAlsoNegativeWhenFcr(MathUtils.isNonZero(maxPowerCapacityFcr())
+                        ? MathUtils.isNeg(powerChargeMin())
+                        : MathUtils.isZero(powerChargeMin()))
+                .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
+                .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
+                .build();
+    }
+
+    private double maxPowerCapacityFcr() {
+        return powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
+    }
+
+
 
 }

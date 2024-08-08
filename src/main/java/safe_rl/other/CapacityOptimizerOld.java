@@ -25,7 +25,7 @@ public class CapacityOptimizerOld {
     double poorValue;
 
     public double optimize(double tol) {
-        return goldenSectionSearchMax(POWER_MIN, settingsTrading.powerChargeMax(), tol);
+        return goldenSectionSearchMax(POWER_MIN, settingsTrading.minAbsolutePowerCharge(), tol);
     }
 
     public double goldenSectionSearchMax(double a, double b, double tol) {

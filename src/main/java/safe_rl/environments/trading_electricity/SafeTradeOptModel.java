@@ -83,9 +83,9 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         Counter counter = new Counter(MAX_NOF_INIT_GUESSES);
         double randPower;
         boolean violation;
-        double powerBattMax = settings.powerChargeMax();
+        //double powerBattMax = settings.powerChargeRange();
         do {
-            randPower = RandUtils.getRandomDouble(-powerBattMax, powerBattMax);
+            randPower = RandUtils.getRandomDouble(settings.powerChargeMin(), settings.powerChargeMax());
             violation = isAnyViolation(randPower);
             counter.increase();
         } while (violation && !counter.isExceeded());

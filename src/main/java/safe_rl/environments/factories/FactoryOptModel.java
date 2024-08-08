@@ -28,7 +28,7 @@ public class FactoryOptModel {
 
     public static SafeTradeOptModel<VariablesTrading> createTradeModel(SettingsTrading settings) {
         return SafeTradeOptModel.<VariablesTrading>builder()
-                .powerMin(-settings.powerChargeMax()).powerMax(settings.powerChargeMax())
+                .powerMin(settings.powerChargeMin()).powerMax(settings.powerChargeMax())
                 .settings(settings)
                 .socTerminalMin(settings.socTerminalMin())
                 .timeNew(TIME_NEW_DUMMY)

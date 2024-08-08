@@ -5,10 +5,12 @@ import com.joptimizer.exception.JOptimizerException;
 import common.math.FunctionWrapperI;
 import common.other.CpuTimer;
 import lombok.AllArgsConstructor;
+import org.apache.commons.math3.util.Pair;
+import safe_rl.domain.simulator.AgentSimulator;
+import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.runners.trading.RunnerHelperTrading;
-
 import static safe_rl.persistance.ElDataFinals.SOC_START;
 import static safe_rl.runners.trading.RunnerHelperTrading.getAgentSimulatorPair;
 
@@ -33,15 +35,18 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
         var simulator = trainerAndSimulator.getSecond();
         try {
             trainer.train();
-            var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                    .nSim(5).settings(settings)
-                    .socStart(0.5)
-                    .build();
-
-            helper.plotAndPrint(trainerAndSimulator,new CpuTimer(),"");
+            plotting(settings, trainerAndSimulator);
             return simulator.valueInStartState();
         } catch (JOptimizerException e) {
             return poorValue;
         }
+    }
+
+    private static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
+        var helper = RunnerHelperTrading.<VariablesTrading>builder()
+                .nSim(5).settings(settings)
+                .socStart(SOC_START)
+                .build();
+        helper.plotAndPrint(trainerAndSimulator,new CpuTimer(),"");
     }
 }
