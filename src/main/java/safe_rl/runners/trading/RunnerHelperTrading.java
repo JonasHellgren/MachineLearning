@@ -63,7 +63,7 @@ public class RunnerHelperTrading<V> {
     }
 
     public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>>
-    trainerSimulatorPairFewEpis(SettingsTrading settings, int nSimulations, double socStart, int nofEpisodes) {
+    trainerSimulatorPairNight(SettingsTrading settings, int nSimulations, double socStart, int nofEpisodes) {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(nSimulations)
                 .settings(settings)
@@ -81,7 +81,6 @@ public class RunnerHelperTrading<V> {
         var recorder = trainer.getRecorder();
         recorder.plot("Multi step ACDC trading");
         recorder.saveCharts(RunnerHelperTrading.PICS);
-        printing(trainer, timer);
         var simulator = trainerAndSimulator.getSecond();
         simulateAndPlot(simulator);
         simulateAndSavePlots(simulator, title);

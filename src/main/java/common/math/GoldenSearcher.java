@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.apache.commons.math3.util.Pair;
 import safe_rl.other.SearchSettings;
 
 /**
@@ -45,14 +46,24 @@ public class GoldenSearcher {
     SearchSettings settings;
 
     public double searchMin() {
-        return goldenSectionSearch(true);
+        return goldenSectionSearch(true).getFirst();
     }
 
     public double searchMax() {
+        return goldenSectionSearch(false).getFirst();
+    }
+
+    public Pair<Double,Double> searchMinWithFunctionValue() {
+        return goldenSectionSearch(true);
+    }
+
+    public Pair<Double,Double> searchMaxWithFunctionValue() {
         return goldenSectionSearch(false);
     }
 
-    double goldenSectionSearch(boolean isMinSearch) {
+
+    Pair<Double, Double> goldenSectionSearch(boolean isMinSearch) {
+        double fBest=isMinSearch ? Double.MAX_VALUE: -Double.MAX_VALUE;
         double a=settings.xMin();
         double b=settings.xMax();
         Preconditions.checkArgument(a<b,"Bad interval");
@@ -66,8 +77,8 @@ public class GoldenSearcher {
             double fC1 = isMinSearch? fC0 :-fC0;
             double fD0 = function.f(d);
             double fD1 = isMinSearch? fD0 :-fD0;
-            System.out.println("Interval, (c,d)=" + "(" + c + "," + d + ")");
-            System.out.println("Function values, (fC,fD)=" + "(" + fC0 + "," + fD0 + ")");
+            log.fine("Interval, (c,d)=" + "(" + c + "," + d + ")");
+            log.fine("Function values, (fC,fD)=" + "(" + fC0 + "," + fD0 + ")");
             if (fC1 < fD1) {
                 b = d;
             } else {
@@ -77,11 +88,12 @@ public class GoldenSearcher {
             c = calcC(a, b);
             d = calcD(a, b);
             i++;
+            fBest=isMinSearch?Math.min(fBest,Math.min(fC0,fD0)):Math.max(fBest,Math.max(fC0,fD0));
         }
 
         log.info("Gold search finished in "+i+" iterations");
         Conditionals.executeIfTrue(isTolViolated(a, b, tol), () -> log.warning("Tolerance not fulfilled"));
-        return (b + a) / 2;
+        return Pair.create((b + a) / 2,fBest);
     }
 
     private static boolean isTolViolated(double a, double b, double tol) {

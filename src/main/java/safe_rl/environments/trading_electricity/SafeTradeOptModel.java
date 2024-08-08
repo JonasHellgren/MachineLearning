@@ -38,7 +38,7 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     public static final int N_CONSTRAINTS = 5;
     public static final int MAX_NOF_INIT_GUESSES = 1_000;
     public static final double K_MARGIN_SOC_MAX = 0.7;  //smaller than 1 <=> underestimation of dSoCMax => safer opt
-    public static final double TOL_POWER = 1d;  //to help finding start point when powerMin is zero
+
 
     @NonNull Double powerMin;
     @NonNull Double powerMax;
@@ -82,10 +82,11 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
     @Override
     public double correctedPower(@NonNull Double powerProposed) throws JOptimizerException {
         Counter counter = new Counter(MAX_NOF_INIT_GUESSES);
+        double tolPower=settings.powerTolerance();
         double randPower;
         boolean violation;
         do {
-            randPower = RandUtils.getRandomDouble(settings.powerChargeMin()-TOL_POWER, settings.powerChargeMax());
+            randPower = RandUtils.getRandomDouble(settings.powerChargeMin()-tolPower, settings.powerChargeMax());
             violation = isAnyViolation(randPower);
             counter.increase();
         } while (violation && !counter.isExceeded());
@@ -131,9 +132,10 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         double powerFcr=s.powerAvgFcrExtreme(soc);
         double capFcr=s.powerCapacityFcr(soc);
         double dSoCPC = s.dSoCPC(soc);
+        double tolPower=settings.powerTolerance();
         var inequalities = new ConvexMultivariateRealFunction[N_CONSTRAINTS];
 
-        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+capFcr-TOL_POWER);
+        inequalities[0] = LowerBoundConstraint.ofSingle(powerMin+capFcr-tolPower);
         inequalities[1] = UpperBoundConstraint.ofSingle(powerMax-capFcr);
         inequalities[2] = LowerBoundConstraint.ofSingle(powerToHitSocLimit(socMin+dSoCPC)+powerFcr);
         inequalities[3] = UpperBoundConstraint.ofSingle(powerToHitSocLimit(socMax-dSoCPC)-powerFcr);

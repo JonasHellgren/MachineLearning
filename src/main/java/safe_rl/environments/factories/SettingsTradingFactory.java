@@ -10,10 +10,13 @@ import safe_rl.environments.trading_electricity.SettingsTrading;
 
 import java.util.List;
 
+import static safe_rl.persistance.ElDataFinals.POWER_TOL;
+
 @NoArgsConstructor
 public class SettingsTradingFactory {
 
     public static final int FAIL_PENALTY = 10;
+
     public static final double[] EMPTY_ARR = {};
 
     public static SettingsTrading new5HoursIncreasingPrice() {
@@ -21,6 +24,7 @@ public class SettingsTradingFactory {
                 .dt(1)
                 .energyBatt(10)  //kWh
                 .powerChargeRange(Range.closed(-3d,3d))  //kW
+                .powerTolerance(POWER_TOL)
                 .priceBattery(5e3)
                 .socRange(Range.closed(0d,1d))
                 .socTerminalMin(0.5)
@@ -53,6 +57,7 @@ public class SettingsTradingFactory {
                 .dt(1)
                 .energyBatt(100)
                 .powerChargeRange(Range.closed(-22d,22d))
+                .powerTolerance(POWER_TOL)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
                 .socTerminalMin(0.5)
@@ -95,7 +100,10 @@ public class SettingsTradingFactory {
     public static SettingsTrading new24HoursIncreasingPrice() {
         var settings = SettingsTrading.builder()
                 .dt(1)
-                .energyBatt(100).powerChargeRange(Range.closed(-100d,100d)).priceBattery(30e3)
+                .energyBatt(100)
+                .powerChargeRange(Range.closed(-100d,100d))
+                .powerTolerance(POWER_TOL)
+                .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
                 .socTerminalMin(0.5)
                 .energyPriceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1, 0.1, 24)))

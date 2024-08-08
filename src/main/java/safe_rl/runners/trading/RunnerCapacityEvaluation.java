@@ -17,7 +17,7 @@ import java.util.*;
 
 import static safe_rl.environments.factories.SettingsTradingFactory.getSettingsV2G;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairFewEpis;
+import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
 
 @Log
 public class RunnerCapacityEvaluation {
@@ -45,7 +45,7 @@ public class RunnerCapacityEvaluation {
                 continue;
             }
 
-            var trainerAndSimulator = trainerSimulatorPairFewEpis(settings, N_SIMULATIONS, SOC_START, 300);
+            var trainerAndSimulator = trainerSimulatorPairNight(settings, N_SIMULATIONS, SOC_START, 300);
             var trainer = trainerAndSimulator.getFirst();
             var simulator = trainerAndSimulator.getSecond();
             try {

@@ -203,7 +203,11 @@ G2V settting x
 
 ScenariosEvaluator - räknar på ngt av clusers prisdata
 räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome
+ScenarioTableHelper
 resultat i xls
+
+value from sim isf agent memory
+x-ticks enligt riktigt tid fromToHout
 
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR

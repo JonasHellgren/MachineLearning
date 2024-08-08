@@ -70,7 +70,7 @@ public class RewardAndConstraintEvaluator {
         double dSoCPC = s.dSoCPC(s0.soc());
         double[] c=new double[N_CONSTRAINTS];
         double g=s.gFunction();
-        c[0]=(s.powerChargeMin())-(power-capFcr);   //power-capFcr>powerChargeMin
+        c[0]=(s.powerChargeMin()-s.powerTolerance())-(power-capFcr);   //power-capFcr>powerChargeMin
         c[1]=(power+capFcr)-s.powerChargeMax();   //power+capFcr<powerChargeMax
         c[2]=s.socMin()-(s0.soc()+g*(power-powerFcr)-dSoCPC);   //soc0+-->socMin
         c[3]=(s0.soc()+g*(power+powerFcr)+dSoCPC)-s.socMax();   //soc0+..<socMax

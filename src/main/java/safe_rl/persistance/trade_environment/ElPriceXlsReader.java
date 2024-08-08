@@ -43,7 +43,7 @@ public class ElPriceXlsReader {
         for (Map.Entry<String, Table<Integer, Integer, Double>> entry: map.entrySet()) {
             String sheetName = entry.getKey();
             var table=entry.getValue();
-            log.info("Adding price data for sheet="+ sheetName);
+            log.fine("Adding price data for sheet="+ sheetName);
             for (Integer day:table.columnKeySet()) {
                 var nameDecoder = new SheetNameDecoder(sheetName);
                 var id = DayId.of(nameDecoder.year(), nameDecoder.month(), day, nameDecoder.region());
@@ -95,7 +95,7 @@ public class ElPriceXlsReader {
         for (Row row : sheet) {
             for (Cell cell : row) {
                 switch (cell.getCellType()) {
-                    case STRING -> log.info("String data excluded, sheet=" + sheet.getSheetName() + ", cell=" + cell);
+                    case STRING -> log.fine("String data excluded, sheet=" + sheet.getSheetName() + ", cell=" + cell);
                     case NUMERIC -> table.put(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
                     default -> log.fine("Unknown cell type, sheet=" + sheet.getSheetName());
                 }

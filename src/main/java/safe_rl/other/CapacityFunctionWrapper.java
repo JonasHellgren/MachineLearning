@@ -13,13 +13,14 @@ import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.runners.trading.RunnerHelperTrading;
 
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairFewEpis;
+import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
 
 @AllArgsConstructor
 public class CapacityFunctionWrapper implements FunctionWrapperI {
 
     SettingsTrading settingsTrading;
     double poorValue;
+    int nEpis;
 
     @Override
     public double f(double x) {
@@ -29,7 +30,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
             return poorValue;
         }
 
-        var trainerAndSimulator = trainerSimulatorPairFewEpis(settings, DYMMY_N_SIMULATIONS, SOC_START, 300);
+        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, SOC_START, nEpis);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         try {

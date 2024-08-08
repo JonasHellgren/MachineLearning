@@ -18,8 +18,8 @@ public class RunnerCapacityOptimizer {
         SettingsTrading settings = getSettingsV2G(
                 energyFcrPricePair, DUMMY_CAP, SOC_TERMINAL_MIN,POWER_CHARGE_MAX, PRICE_BATTERY);
 
-        var optimizer=new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH);
-        double capBest=optimizer.optimize();
+        var optimizer=new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH,N_EPIS);
+        var capBest=optimizer.optimize();
 
         System.out.println("capBest = " + capBest);
 
