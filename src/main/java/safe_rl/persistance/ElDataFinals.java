@@ -11,6 +11,7 @@ import java.util.Locale;
 
 public class ElDataFinals {
     public static final String PATH = "src/main/java/safe_rl/persistance/data/";
+    public static final String RES_PATH= "src/main/java/safe_rl/runners/trading/results/";
 
     public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US); //US <=> only dots
     public static final DecimalFormat formatter = new DecimalFormat("#.#", SYMBOLS);
@@ -43,6 +44,7 @@ public class ElDataFinals {
 
 
     public static final double DUMMY_CAP = 0d;
+    public static final double DUMMY_CAP_NON_ZERO = 10d;
     public static final int DYMMY_N_SIMULATIONS = 1;
 
 }

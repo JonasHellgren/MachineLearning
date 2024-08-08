@@ -5,7 +5,7 @@ import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.other.SearchSettings;
+import safe_rl.other.capacity_search.SearchSettings;
 
 /**
  * https://en.wikipedia.org/wiki/Golden-section_search

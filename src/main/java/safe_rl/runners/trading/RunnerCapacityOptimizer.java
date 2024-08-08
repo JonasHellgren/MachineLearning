@@ -1,7 +1,7 @@
 package safe_rl.runners.trading;
 
 import org.apache.commons.math3.util.Pair;
-import safe_rl.other.CapacityOptimizer;
+import safe_rl.other.capacity_search.CapacityOptimizer;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.persistance.ElDataHelper;
 

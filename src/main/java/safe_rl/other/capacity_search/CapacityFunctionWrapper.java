@@ -1,4 +1,4 @@
-package safe_rl.other;
+package safe_rl.other.capacity_search;
 
 import com.google.common.collect.Range;
 import com.joptimizer.exception.JOptimizerException;

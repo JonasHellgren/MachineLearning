@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import common.math.FunctionWrapperI;
 import common.math.GoldenSearcher;
-import safe_rl.other.SearchSettings;
+import safe_rl.other.capacity_search.SearchSettings;
 
 class TestGoldenSearcher {
 

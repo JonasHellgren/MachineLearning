@@ -1,4 +1,4 @@
-package safe_rl.other;
+package safe_rl.other.capacity_search;
 
 import common.math.FunctionWrapperI;
 import common.math.GoldenSearcher;

@@ -201,11 +201,12 @@ whenFirstDecreasingThenFixed
 eller nog bäst powerBattMax -> powerBattMaxCharge, powerBattMaxDisCharge  x
 G2V settting x
 
-ScenariosEvaluator - räknar på ngt av clusers prisdata
-räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome
-ScenarioTableHelper
-resultat i xls
+räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome  x
+ScenarioTableHelper  x
+resultat i xls x
 
+ScenariosEvaluator - räknar på ngt av clusers prisdata
+HW cost från annuitet
 value from sim isf agent memory
 x-ticks enligt riktigt tid fromToHout
 
