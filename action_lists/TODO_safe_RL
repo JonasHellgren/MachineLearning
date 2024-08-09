@@ -213,6 +213,7 @@ soc delta i settings  socTermMin som fcn  x
 RunnerHelperTrading rörig - dela upp  x
 
 HW cost från annuitet  x
+RunnerSingleScenario med cluster dag  x
 ScenariosCreator - skapar scenarior kombinatoriskt
 RunnerMultipleScenarios
 

@@ -29,6 +29,12 @@ public class ElDataFinals {
             DayId.of(24, 3, 8, "se3")  //high fcr price
     );
 
+    public static List<DayId> DAYS_CLUSTER_ANALYSIS = List.of(
+            DayId.of(24, 0, 7, "se3"),  //high energy price std, low fcr price
+            DayId.of(24, 4, 10, "se3") //low energy price std, high fcr price
+    );
+
+
     public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
 
     public static final double POWER_MIN = 0d;
@@ -55,13 +61,15 @@ public class ElDataFinals {
 
     public static final double INTEREST_RATE = 0.05;
     public static final double LIFT_TIME = 5;
-    public static final double PRICE_HW = 100d;
+    public static final double PRICE_HW = 1000d;
+    public static final int N_DAYS_YEAR = 365;
+
 
     public static double getCostHwPerDay(double priceHW) {
         AnnuityCalculator calculator= AnnuityCalculator.builder()
                 .price(priceHW).restValue(0d).i(INTEREST_RATE).lifeTimeInYears(LIFT_TIME)
                 .build();
-        return calculator.annuity()/365;
+        return calculator.annuity()/ N_DAYS_YEAR;
     }
 
 

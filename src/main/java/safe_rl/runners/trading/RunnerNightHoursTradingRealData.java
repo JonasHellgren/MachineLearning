@@ -31,7 +31,7 @@ public class RunnerNightHoursTradingRealData {
 
     @SneakyThrows
     public static void main(String[] args) {
-        var dayId=DAYS.get(DAY_IDX);
+        var dayId = DAYS_CLUSTER_ANALYSIS.get(DAY_IDX);
         var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR,Pair.create(FILE_ENERGY,FILE_FCR));
 
         var settings =SettingsTradingFactory.new100kWhVehicleEmptyPrices()
@@ -40,6 +40,7 @@ public class RunnerNightHoursTradingRealData {
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
                 .withSocStart(SOC_START).withSocDelta(SOC_DELTA)
+                .withPriceBattery(PRICE_BATTERY)
                 .withFromToHour(FROM_TO_HOUR);
         settings.check();
         var helper = PlotterSaverAndPrinterTrading.<VariablesTrading>builder()

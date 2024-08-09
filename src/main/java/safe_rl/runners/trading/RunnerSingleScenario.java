@@ -18,16 +18,16 @@ import static safe_rl.other.scenerio_table.ScenarioTableHelper.ROW_KEY_G2V;
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.*;
 import static safe_rl.persistance.ElDataFinals.*;
 
-public class RunnerScenariosEvaluator {
+public class RunnerSingleScenario {
 
     public static final int NOF_EPISODES_G2V = 1_000;
     public static final int NOF_EPISODES_V2G = 500;
 
-    public static int DAY_IDX = 0;
+    public static int DAY_IDX = 1;
 
     @SneakyThrows
     public static void main(String[] args) {
-        var dayId = DAYS.get(DAY_IDX);
+        var dayId = DAYS_CLUSTER_ANALYSIS.get(DAY_IDX);
         double costHwPerDay = getCostHwPerDay(PRICE_HW);
 
         var energyFcrPricePair = ElDataHelper.getPricePair(dayId, FROM_TO_HOUR, Pair.create(FILE_ENERGY, FILE_FCR));
