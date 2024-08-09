@@ -6,8 +6,10 @@ import com.joptimizer.exception.JOptimizerException;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import safe_rl.environments.trading_electricity.SettingsTrading;
+import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
 
-import static safe_rl.other.runner_helpers.RunnerHelperTrading.trainerSimulatorPairNight;
+import static safe_rl.persistance.ElDataFinals.NOF_EPISODES;
+
 
 /**
  * https://web2.qatar.cmu.edu/~gdicaro/15382/additional/one-dimensional-search-methods.pdf
@@ -65,7 +67,8 @@ public class CapacityOptimizerOld {
             return poorValue;
         }
 
-        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, 300);
+        var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(
+                settings, NOF_EPISODES);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         try {

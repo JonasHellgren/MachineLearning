@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.other.capacity_search.CapacityOptimizer;
+import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
 import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.PathAndFile;
 
@@ -17,7 +18,6 @@ import static safe_rl.other.scenerio_table.ScenarioTable2ExcelConverter.convertT
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.ROW_KEY_G2V;
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.*;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.other.runner_helpers.RunnerHelperTrading.trainerSimulatorPairNight;
 
 public class RunnerScenariosEvaluator {
 
@@ -51,13 +51,13 @@ public class RunnerScenariosEvaluator {
 
     private static Pair<Double, Double> getResultV2G(SettingsTrading settings) {
         settings.check();
-        var optimizer = new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH, NOF_EPISODES_V2G);
+        var optimizer=new CapacityOptimizer(settings,  TOL_GOLDEN_SEARCH);
         return optimizer.optimize();
     }
 
     private static double getResultG2V(SettingsTrading settings) throws JOptimizerException {
         settings.check();
-        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, NOF_EPISODES_G2V);
+        var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(settings, NOF_EPISODES_G2V);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         trainer.train();

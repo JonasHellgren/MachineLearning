@@ -73,7 +73,7 @@ public class SettingsTradingFactory {
     public static SettingsTrading getSettingsV2G(Pair<List<Double>,List<Double>> energyFcrPricePair,
                                                  double cap,
                                                  double socStart,
-                                                 double socTerminalMin,
+                                                 double socDelta,
                                                  double powerChargeMax,
                                                  double priceBattery) {
         return SettingsTradingFactory.new100kWhVehicleEmptyPrices()
@@ -82,12 +82,12 @@ public class SettingsTradingFactory {
                 .withPriceBattery(priceBattery)
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocStart(SOC_START).withSocDelta(SOC_DELTA);
+                .withSocStart(socStart).withSocDelta(socDelta);
     }
 
     public static SettingsTrading getSettingsG2V(Pair<List<Double>,List<Double>> energyFcrPricePair,
                                                  double socStart,
-                                                 double socTerminalMin,
+                                                 double socDelta,
                                                  double powerChargeMax,
                                                  double priceBattery) {
         return SettingsTradingFactory.new100kWhVehicleEmptyPrices()
@@ -96,7 +96,7 @@ public class SettingsTradingFactory {
                 .withPriceBattery(priceBattery)
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocStart(SOC_START).withSocDelta(SOC_DELTA);
+                .withSocStart(socStart).withSocDelta(socDelta);
 
     }
 

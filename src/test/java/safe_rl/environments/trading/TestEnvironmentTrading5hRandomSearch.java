@@ -34,7 +34,9 @@ public class TestEnvironmentTrading5hRandomSearch {
     void init() {
         settings = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcrRange(Range.closed(1d,1d))
-                .withSocTerminalMin(SOC).withPriceBattery(5e3);
+                //.withSocTerminalMin(SOC)
+                .withSocStart(SOC).withSocDelta(0)
+                .withPriceBattery(5e3);
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
     }

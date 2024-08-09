@@ -15,10 +15,9 @@ import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
-import safe_rl.other.runner_helpers.RunnerHelperTrading;
+import safe_rl.other.runner_helpers.PlotterSaverAndPrinterTrading;
 
 import static safe_rl.persistance.ElDataFinals.SOC_DELTA;
-import static safe_rl.persistance.ElDataFinals.SOC_START;
 
 /***
  * withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting needs to be small
@@ -40,7 +39,7 @@ public class Runner5HoursTrading {
         var trainerAndSimulator = createTrainerAndSimulator();
         var trainer=trainerAndSimulator.getFirst();
         var timer= CpuTimer.newWithTimeBudgetInMilliSec(0);
-        var helper= RunnerHelperTrading.builder().nSim(N_SIMULATIONS).settings(settings5).build();
+        var helper= PlotterSaverAndPrinterTrading.builder().nSim(N_SIMULATIONS).settings(settings5).build();
         trainer.train();
         trainer.getRecorder().plot("Multi step ACDC trading");
         helper.printing(trainer, timer);

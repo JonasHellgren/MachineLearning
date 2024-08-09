@@ -10,15 +10,17 @@ import java.util.List;
 import java.util.Locale;
 
 public class ElDataFinals {
-    public static final String PATH = "src/main/java/safe_rl/persistance/data/";
+    public static final String PATH_DATA = "src/main/java/safe_rl/persistance/data/";
     public static final String RES_PATH= "src/main/java/safe_rl/runners/trading/results/";
+    public  static final String PICS_FOLDER ="src/main/java/safe_rl/runners/pics";
+
 
     public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US); //US <=> only dots
     public static final DecimalFormat formatter = new DecimalFormat("#.#", SYMBOLS);
 
 
-    public static PathAndFile FILE_ENERGY = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
-    public static PathAndFile FILE_FCR = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
+    public static PathAndFile FILE_ENERGY = PathAndFile.xlsxOf(PATH_DATA, "Day-ahead-6months-EuroPerMWh");
+    public static PathAndFile FILE_FCR = PathAndFile.xlsxOf(PATH_DATA, "FCR-N-6months-EuroPerMW");
 
     public static List<DayId> DAYS = List.of(
             DayId.of(24, 0, 0, "se3"),

@@ -28,7 +28,9 @@ class TestSafetyLayerTrading {
 
     @BeforeEach
     void init() {
-        settings = SettingsTradingFactory.new5HoursIncreasingPrice().withSocTerminalMin(0.8d);
+        settings = SettingsTradingFactory.new5HoursIncreasingPrice()
+                .withSocStart(0.5).withSocDelta(0.3);
+                //.withSocTerminalMin(0.8d);
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);
     }

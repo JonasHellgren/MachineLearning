@@ -20,7 +20,7 @@ public class TestSettingsTrading {
         settings = SettingsTradingFactory.new24HoursIncreasingPrice()  //case 0 and 1
                 .withPowerCapacityFcrRange(Range.closed(0d,10d))
                 .withStdActivationFCR(STD_ACTIVATION_FCR)
-                .withSocTerminalMin(0.9)
+                .withSocStart(0.5).withSocDelta(0.4)
                 .withPriceBattery(PRICE_BATTERY);
     }
 

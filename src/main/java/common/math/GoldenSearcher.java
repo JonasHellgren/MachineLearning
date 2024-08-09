@@ -77,8 +77,8 @@ public class GoldenSearcher {
             double fC1 = isMinSearch? fC0 :-fC0;
             double fD0 = function.f(d);
             double fD1 = isMinSearch? fD0 :-fD0;
-            log.fine("Interval, (c,d)=" + "(" + c + "," + d + ")");
-            log.fine("Function values, (fC,fD)=" + "(" + fC0 + "," + fD0 + ")");
+            log.info("Interval, (c,d)=" + "(" + c + "," + d + ")");
+            log.info("Function values, (fC,fD)=" + "(" + fC0 + "," + fD0 + ")");
             if (fC1 < fD1) {
                 b = d;
             } else {

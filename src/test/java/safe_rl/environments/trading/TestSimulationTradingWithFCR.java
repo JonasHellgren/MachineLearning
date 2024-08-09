@@ -87,8 +87,9 @@ public class TestSimulationTradingWithFCR {
         settings = SettingsTradingFactory.new5HoursIncreasingPrice()
                 //.withPowerCapacityFcr(powerCapacityFcr)
                 .withPowerCapacityFcrRange(Range.closed(0d,powerCapacityFcr))
-
-                .withSocTerminalMin(SOC).withPriceBattery(5e3)
+                .withSocStart(SOC).withSocDelta(0.0)
+                //.withSocTerminalMin(SOC)
+                .withPriceBattery(5e3)
         .withCapacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,priceFCR));
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
         environment = new EnvironmentTrading(settings);

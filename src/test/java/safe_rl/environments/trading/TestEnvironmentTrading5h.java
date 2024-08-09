@@ -48,6 +48,7 @@ class TestEnvironmentTrading5h {
     void init() {
         settingsZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcrRange(Range.closed(0d,0d))
+                .withSocStart(0.5).withSocDelta(0.0)
                 .withPriceBattery(0);
         stateAllZero=StateTrading.allZero();
         stateTime3SoC0d5 =StateTrading.of(VariablesTrading.newTimeSoc(3,0.5));
@@ -77,7 +78,8 @@ class TestEnvironmentTrading5h {
             "-2,      3,0.3,-9.4,true",   //  ...>socTerminalMin violated already at time 2
     })
     void givenZeroPC_whenTime2_thenCorrect(ArgumentsAccessor arguments) {
-        environment=new EnvironmentTrading(settingsZeroPC.withSocTerminalMin(0.9));
+        environment=new EnvironmentTrading(settingsZeroPC
+                .withSocStart(0.5).withSocDelta(0.4));
         var pa= ParArg.newOf(arguments);
         var sr=environment.step(stateTime2SoC0d5, Action.ofDouble(pa.power));
         assertParamTest(pa, sr);

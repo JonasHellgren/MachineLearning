@@ -5,10 +5,12 @@ import common.list_arrays.ListUtils;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-import safe_rl.other.runner_helpers.RunnerHelperTrading;
+import safe_rl.other.runner_helpers.PlotterSaverAndPrinterTrading;
+import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
 import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.*;
 
@@ -40,11 +42,12 @@ public class RunnerNightHoursTradingRealData {
                 .withSocStart(SOC_START).withSocDelta(SOC_DELTA)
                 .withFromToHour(FROM_TO_HOUR);
         settings.check();
-        var helper = RunnerHelperTrading.<VariablesTrading>builder()
+        var helper = PlotterSaverAndPrinterTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
                 .build();
-        var trainerAndSimulator = helper.createTrainerAndSimulator(
-                TrainerParametersFactory.tradingNightHours(300));
+        var trainerAndSimulator = TrainerSimulatorFactoryTrading.<VariablesTrading>createTrainerAndSimulator(
+                TrainerParametersFactory.tradingNightHours(NOF_EPISODES),
+                AgentParametersFactory.trading24Hours(settings), settings);
         var trainer = trainerAndSimulator.getFirst();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
         trainer.train();

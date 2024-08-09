@@ -5,69 +5,25 @@ import common.other.CpuTimer;
 import lombok.Builder;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.agent.aggregates.DisCoMemory;
-import safe_rl.domain.agent.interfaces.AgentACDiscoI;
-import safe_rl.domain.environment.EnvironmentI;
-import safe_rl.domain.environment.aggregates.StateI;
-import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
-import safe_rl.domain.trainer.value_objects.TrainerParameters;
-import safe_rl.environments.factories.AgentParametersFactory;
-import safe_rl.environments.factories.FactoryOptModel;
-import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static safe_rl.persistance.ElDataFinals.N_SIMULATIONS_PLOTTING;
+import static safe_rl.persistance.ElDataFinals.PICS_FOLDER;
+
 
 @Builder
 @Log
-public class RunnerHelperTrading<V> {
+public class PlotterSaverAndPrinterTrading<V> {
 
     SettingsTrading settings;
     int nSim;
-
-    public  static final String PICS="src/main/java/safe_rl/runners/pics";
-
-
-    public  Pair<TrainerMultiStepACDC<V>, AgentSimulator<V>> createTrainerAndSimulator(
-            TrainerParameters trainerParameters) {
-        EnvironmentI<V> environment = (EnvironmentI<V>) new EnvironmentTrading(settings);
-        StateI<V>  startState = (StateI<V>) StateTrading.of(VariablesTrading.newSoc(settings.socStart()));
-        SafetyLayer<V> safetyLayer = (SafetyLayer<V>) new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
-
-        AgentACDiscoI<V> agent = AgentACDCSafe.of(
-                AgentParametersFactory.trading24Hours(
-                        settings,
-                        settings.powerCapacityFcrRange().upperEndpoint()),
-                settings,
-                startState.copy());
-        var trainer = TrainerMultiStepACDC.<V>builder()
-                .environment(environment).agent(agent)
-                .safetyLayer(safetyLayer)
-                .trainerParameters(trainerParameters)
-                .startStateSupplier(() -> startState.copy())
-                .build();
-        var simulator = AgentSimulator.<V>builder()
-                .agent(agent).safetyLayer(safetyLayer)
-                .startStateSupplier(() -> startState.copy())
-                .environment(environment).build();
-
-        return Pair.create(trainer,simulator);
-    }
-
-    public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>>
-    trainerSimulatorPairNight(SettingsTrading settings, int nSimulations, int nofEpisodes) {
-        var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(nSimulations)
-                .settings(settings)
-                .build();
-        return helper.createTrainerAndSimulator(TrainerParametersFactory.tradingNightHours(nofEpisodes));
-    }
 
 
     public  void plotAndPrint(
@@ -88,6 +44,14 @@ public class RunnerHelperTrading<V> {
         plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
 
+
+    public static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
+        var helper = PlotterSaverAndPrinterTrading.<VariablesTrading>builder()
+                .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
+                .build();
+        helper.plotAndPrint(trainerAndSimulator,new CpuTimer(),"");
+    }
+
     public void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
         var simulationResultsMap =  getSimulationResultsMap(simulator);
         double valueInStartState=simulator.criticValueInStartState();
@@ -97,7 +61,7 @@ public class RunnerHelperTrading<V> {
     public void simulateAndSavePlots(AgentSimulator<VariablesTrading> simulator,
                                      String caseName) throws JOptimizerException {
         var simulationResultsMap =  getSimulationResultsMap(simulator);
-        new TradeSimulationPlotter<VariablesTrading>(settings).savePlots(simulationResultsMap,PICS,caseName);
+        new TradeSimulationPlotter<VariablesTrading>(settings).savePlots(simulationResultsMap, PICS_FOLDER,caseName);
     }
 
     Map<Integer, List<SimulationResult<VariablesTrading>>> getSimulationResultsMap(

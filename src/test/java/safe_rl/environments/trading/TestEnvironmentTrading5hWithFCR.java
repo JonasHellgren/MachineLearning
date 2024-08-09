@@ -31,7 +31,9 @@ public class TestEnvironmentTrading5hWithFCR {
                 .withPriceBattery(0);
         var settingsNonZeroPC = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcrRange(Range.closed(0.1d,0.1d))
-                .withPriceBattery(0).withSocTerminalMin(SOC_TERMINAL_MIN);
+                .withPriceBattery(0)
+                .withSocStart(0.5).withSocDelta(0.0);
+                //.withSocTerminalMin(SOC_TERMINAL_MIN);
 
         var settingsZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice().withPriceBattery(0);
         var settingsNonZeroPriceBatt = SettingsTradingFactory.new5HoursIncreasingPrice();

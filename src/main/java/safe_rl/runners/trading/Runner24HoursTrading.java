@@ -3,10 +3,12 @@ package safe_rl.runners.trading;
 import com.google.common.collect.Range;
 import common.other.CpuTimer;
 import lombok.SneakyThrows;
+import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-import safe_rl.other.runner_helpers.RunnerHelperTrading;
+import safe_rl.other.runner_helpers.PlotterSaverAndPrinterTrading;
+import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
 
 import java.util.List;
 
@@ -33,13 +35,15 @@ public class Runner24HoursTrading {
                 .withSocDelta(SOC_INCREASE_LIST.get(CASE_NR))
                 .withPriceBattery(PRICE_BATTERY);
 
-        var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(N_SIMULATIONS).settings(settings)
-                .build();
-        var trainerAndSimulator = helper.createTrainerAndSimulator(TrainerParametersFactory.trading24Hours());
+        var trainerAndSimulator = TrainerSimulatorFactoryTrading.<VariablesTrading>createTrainerAndSimulator(
+                TrainerParametersFactory.trading24Hours(),
+                AgentParametersFactory.trading24Hours(settings), settings);
         var trainer = trainerAndSimulator.getFirst();
         trainer.train();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
+        var helper = PlotterSaverAndPrinterTrading.<VariablesTrading>builder()
+                .nSim(N_SIMULATIONS).settings(settings)
+                .build();
         helper.plotAndPrint(trainerAndSimulator,timer,CASES.get(CASE_NR));
     }
 

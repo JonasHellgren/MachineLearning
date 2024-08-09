@@ -210,7 +210,7 @@ x-ticks enligt riktigt tid fromToHout  x
 START_SOC och DELTA_SOC isf SOC_FINAL  x
 soc_start till TradingSettings - ej socStart i helper  x
 soc delta i settings  socTermMin som fcn  x
-RunnerHelperTrading rörig - dela upp
+RunnerHelperTrading rörig - dela upp  x
 
 HW cost från annuitet
 ScenariosCreator - skapar scenarior kombinatoriskt

@@ -22,8 +22,9 @@ public class AgentParametersFactory {
     return buying5Hours().withGradMaxActor(10d).withGradMaxCritic(10d);
     }
 
-    public static AgentParameters trading24Hours(SettingsTrading settings, Double gradCriticMax) {
+    public static AgentParameters trading24Hours(SettingsTrading settings) {
         double powerNom = settings.powerChargeMax() / 10;
+        Double gradCriticMax= settings.powerCapacityFcrRange().upperEndpoint();
         return  AgentParameters.newDefault()
                 .withTargetMean(0d)
                 .withTargetLogStd(Math.log(settings.powerChargeMax()))
