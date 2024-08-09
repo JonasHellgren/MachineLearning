@@ -205,8 +205,9 @@ räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome  x
 ScenarioTableHelper  x
 resultat i xls x
 
-value from sim isf agent memory
+value from sim isf agent memory x
 x-ticks enligt riktigt tid fromToHout
+START_SOC och DELTA_SOC isf SOC_FINAL
 DayClusterEvaluator - räknar på ngt av clusers prisdata
 RunnerDayClusterEvaluator
 HW cost från annuitet

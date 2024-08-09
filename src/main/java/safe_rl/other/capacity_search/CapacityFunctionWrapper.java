@@ -36,7 +36,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
         try {
             trainer.train();
             plotting(settings, trainerAndSimulator);
-            return simulator.valueInStartState();
+            return simulator.simulationValueInStartState(N_SIM_START_STATE_EVAL);
         } catch (JOptimizerException e) {
             return poorValue;
         }
@@ -44,7 +44,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
 
     private static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(N_SIMULATIONS).settings(settings)
+                .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
                 .socStart(SOC_START)
                 .build();
         helper.plotAndPrint(trainerAndSimulator,new CpuTimer(),"");

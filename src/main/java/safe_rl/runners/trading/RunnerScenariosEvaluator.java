@@ -49,7 +49,7 @@ public class RunnerScenariosEvaluator {
         trainer.train();
         plotting(settings, trainerAndSimulator);
 
-        double valG2V = simulator.valueInStartState();
+        double valG2V = simulator.simulationValueInStartState(1);
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d));
 
         settings = getSettingsV2G(
@@ -66,7 +66,7 @@ public class RunnerScenariosEvaluator {
 
     private static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(N_SIMULATIONS).settings(settings)
+                .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
                 .socStart(SOC_START)
                 .build();
         helper.plotAndPrint(trainerAndSimulator, new CpuTimer(), "");

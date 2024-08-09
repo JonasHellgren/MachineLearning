@@ -45,12 +45,12 @@ public class RunnerCapacityEvaluation {
                 continue;
             }
 
-            var trainerAndSimulator = trainerSimulatorPairNight(settings, N_SIMULATIONS, SOC_START, 300);
+            var trainerAndSimulator = trainerSimulatorPairNight(settings, N_SIMULATIONS_PLOTTING, SOC_START, 300);
             var trainer = trainerAndSimulator.getFirst();
             var simulator = trainerAndSimulator.getSecond();
             try {
                 trainer.train();
-                double val = simulator.valueInStartState();
+                double val = simulator.simulationValueInStartState(N_SIM_START_STATE_EVAL);
                 capValueMap.put(cap, val);
                 log.info("all fine");
             } catch (JOptimizerException e) {

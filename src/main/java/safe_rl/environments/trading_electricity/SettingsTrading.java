@@ -30,12 +30,12 @@ public record SettingsTrading(
     record DataChecker(
             boolean isPowerCapOk,
             boolean isPowerChargeRangeOk,
-            boolean isPowerChargeAlsoNegativeWhenFcr,
+            boolean isNotFcrAndZeroPowerChargeMin,
             boolean isEnergyTrajLengthOk,
             boolean isCapacityTrajLengthOk
     ) {
         boolean isOk() {
-            return isPowerCapOk && isPowerChargeRangeOk && isPowerChargeAlsoNegativeWhenFcr &&
+            return isPowerCapOk && isPowerChargeRangeOk && isNotFcrAndZeroPowerChargeMin &&
                     isEnergyTrajLengthOk && isCapacityTrajLengthOk ;
         }
     }
@@ -49,7 +49,7 @@ public record SettingsTrading(
         System.out.println("MathUtils.isNonZero(maxPowerCapacityFcr()) = " + MathUtils.isNonZero(maxPowerCapacityFcr()));
         System.out.println("maxPowerCapacityFcr() = " + maxPowerCapacityFcr());
         System.out.println("powerChargeMin() = " + powerChargeMin());
-        Preconditions.checkArgument(checker.isPowerChargeAlsoNegativeWhenFcr,
+        Preconditions.checkArgument(checker.isNotFcrAndZeroPowerChargeMin,
                 "FCR requires V2G (also neg charge power)");
         Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
         Preconditions.checkArgument(checker.isCapacityTrajLengthOk, "Empty cap price trajectory");
@@ -149,6 +149,7 @@ public record SettingsTrading(
     }
 
     private DataChecker getDataChecker() {
+        boolean isFcr=MathUtils.isNonZero(maxPowerCapacityFcr());
         return DataChecker.builder()
                 .isPowerChargeRangeOk(
                         powerChargeMin() < powerChargeMax() &&
@@ -156,18 +157,22 @@ public record SettingsTrading(
                                 powerChargeMin() < Double.MIN_VALUE
                 )
                 .isPowerCapOk(powerAvgFcrExtreme(maxPowerCapacityFcr()) < minAbsolutePowerCharge()+Double.MIN_VALUE)
-                .isPowerChargeAlsoNegativeWhenFcr(MathUtils.isNonZero(maxPowerCapacityFcr())
-                        ? MathUtils.isNeg(powerChargeMin())
-                        : MathUtils.isZero(powerChargeMin()))
+                .isNotFcrAndZeroPowerChargeMin(!(isFcr && MathUtils.isZero(powerChargeMin())))
                 .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
                 .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
                 .build();
     }
 
+
     private double maxPowerCapacityFcr() {
         return powerAvgExtremeFromPowerCapacity(powerCapacityFcrRange.upperEndpoint());
     }
+/*
 
+                    .isNotFcrAndZeroPowerChargeMin(MathUtils.isNonZero(maxPowerCapacityFcr())
+            ? MathUtils.isNeg(powerChargeMin())
+            : MathUtils.isZero(powerChargeMin()))
+*/
 
 
 }

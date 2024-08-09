@@ -70,7 +70,7 @@ public class CapacityOptimizerOld {
         var simulator = trainerAndSimulator.getSecond();
         try {
             trainer.train();
-            return simulator.valueInStartState();
+            return simulator.criticValueInStartState();
         } catch (JOptimizerException e) {
             return poorValue;
         }

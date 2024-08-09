@@ -93,7 +93,7 @@ public class RunnerHelperTrading<V> {
 
     void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
         var simulationResultsMap =  getSimulationResultsMap(simulator);
-        double valueInStartState=simulator.valueInStartState();
+        double valueInStartState=simulator.criticValueInStartState();
         new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap,valueInStartState);
     }
 

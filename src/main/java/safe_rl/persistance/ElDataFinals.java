@@ -34,7 +34,8 @@ public class ElDataFinals {
 
     public static final double SOC_START = 0.85;
     public static final double SOC_TERMINAL_MIN = 0.95;
-    public static final int N_SIMULATIONS = 5;
+    public static final int N_SIMULATIONS_PLOTTING = 5;
+    public static final int N_SIM_START_STATE_EVAL = 10;
 
     public static final double POOR_VALUE = -100d;
     public static final double POWER_TOL = 0.25;

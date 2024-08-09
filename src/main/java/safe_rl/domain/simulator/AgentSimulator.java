@@ -2,6 +2,8 @@ package safe_rl.domain.simulator;
 
 import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
+import common.list_arrays.ArrayUtil;
+import common.list_arrays.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
@@ -16,6 +18,7 @@ import safe_rl.domain.environment.value_objects.StepReturn;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 @Builder
 @AllArgsConstructor
@@ -34,8 +37,19 @@ public class AgentSimulator<V> {
         return simulate(false);
     }
 
-    public double valueInStartState() {
+    public double criticValueInStartState() {
         return agent.readCritic(startStateSupplier.get());
+    }
+
+    public double simulationValueInStartState(int nSim) throws JOptimizerException {
+
+        List<Double> srList=Lists.newArrayList();
+        for (int i = 0; i < nSim ; i++) {
+            var simresList=simulate(false);
+            double sumReward=simresList.stream().mapToDouble(sr -> sr.reward()).sum();
+            srList.add(sumReward);
+        }
+        return ListUtils.findAverage(srList).orElseThrow();
     }
 
     List<SimulationResult<V>> simulate(boolean exploration) throws JOptimizerException {

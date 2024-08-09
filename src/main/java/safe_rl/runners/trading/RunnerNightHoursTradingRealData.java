@@ -13,8 +13,7 @@ import safe_rl.persistance.trade_environment.*;
 
 import java.util.List;
 
-import static safe_rl.persistance.ElDataFinals.FILE_ENERGY;
-import static safe_rl.persistance.ElDataFinals.FILE_FCR;
+import static safe_rl.persistance.ElDataFinals.*;
 
 public class RunnerNightHoursTradingRealData {
 
@@ -34,7 +33,6 @@ public class RunnerNightHoursTradingRealData {
             DayId.of(24,0,4,"se3"),
             DayId.of(24,3,8,"se3")  //high fcr price
     );
-    public static final int N_SIMULATIONS = 5;
     public static final double SOC_START = 0.5;
 
     @SneakyThrows
@@ -49,7 +47,7 @@ public class RunnerNightHoursTradingRealData {
                 .withSocTerminalMin(SOC_TERMINAL_MIN);
         settings.check();
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(N_SIMULATIONS).settings(settings)
+                .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
                 .socStart(SOC_START)
                 .build();
         var trainerAndSimulator = helper.createTrainerAndSimulator(
