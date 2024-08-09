@@ -1,5 +1,6 @@
 package safe_rl.persistance;
 
+import common.economics.AnnuityCalculator;
 import org.apache.commons.math3.util.Pair;
 import safe_rl.persistance.trade_environment.DayId;
 import safe_rl.persistance.trade_environment.PathAndFile;
@@ -51,5 +52,18 @@ public class ElDataFinals {
     public static final double DUMMY_CAP = 0d;
     public static final double DUMMY_CAP_NON_ZERO = 10d;
     public static final int DYMMY_N_SIMULATIONS = 1;
+
+    public static final double INTEREST_RATE = 0.05;
+    public static final double LIFT_TIME = 5;
+    public static final double PRICE_HW = 100d;
+
+    public static double getCostHwPerDay(double priceHW) {
+        AnnuityCalculator calculator= AnnuityCalculator.builder()
+                .price(priceHW).restValue(0d).i(INTEREST_RATE).lifeTimeInYears(LIFT_TIME)
+                .build();
+        return calculator.annuity()/365;
+    }
+
+
 
 }

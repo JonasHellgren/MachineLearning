@@ -212,7 +212,7 @@ soc_start till TradingSettings - ej socStart i helper  x
 soc delta i settings  socTermMin som fcn  x
 RunnerHelperTrading rörig - dela upp  x
 
-HW cost från annuitet
+HW cost från annuitet  x
 ScenariosCreator - skapar scenarior kombinatoriskt
 RunnerMultipleScenarios
 

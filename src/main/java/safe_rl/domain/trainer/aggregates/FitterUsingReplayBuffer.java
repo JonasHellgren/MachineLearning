@@ -126,7 +126,7 @@ public class FitterUsingReplayBuffer<V> {
         var maxEntry = multiset.entrySet().stream()
                 .max(Ordering.natural().onResultOf(Multiset.Entry::getCount));
         Conditionals.executeIfTrue(maxEntry.orElseThrow().getCount() < MIN_NOF_POINTS, () ->
-                log.warning("Few items in time step for fitting"));
+                log.fine("Few items in time step for fitting"));
         return maxEntry.orElseThrow().getElement();
     }
 

@@ -49,10 +49,6 @@ public record SettingsTrading(
         Preconditions.checkArgument(checker.isPowerCapOk,
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");
         Preconditions.checkArgument(checker.isPowerChargeRangeOk,"Faulty power range");
-
-        System.out.println("MathUtils.isNonZero(maxPowerCapacityFcr()) = " + MathUtils.isNonZero(maxPowerCapacityFcr()));
-        System.out.println("maxPowerCapacityFcr() = " + maxPowerCapacityFcr());
-        System.out.println("powerChargeMin() = " + powerChargeMin());
         Preconditions.checkArgument(checker.isNotFcrAndZeroPowerChargeMin,
                 "FCR requires V2G (also neg charge power)");
         Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
