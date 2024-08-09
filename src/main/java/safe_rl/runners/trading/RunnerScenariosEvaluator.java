@@ -51,7 +51,7 @@ public class RunnerScenariosEvaluator {
 
     private static Pair<Double, Double> getResultV2G(SettingsTrading settings) {
         settings.check();
-        var optimizer=new CapacityOptimizer(settings,  TOL_GOLDEN_SEARCH);
+        var optimizer=new CapacityOptimizer(settings,  TOL_GOLDEN_SEARCH,NOF_EPISODES_V2G);
         return optimizer.optimize();
     }
 

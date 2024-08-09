@@ -14,6 +14,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
 
     SettingsTrading settingsTrading;
     double poorValue;
+    int nofEpis;
 
     @Override
     public double f(double x) {
@@ -25,7 +26,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
 
         //Maybe not super-clean construct trainerAndSimulator  here, but alt is the hassle of injecting settings
         var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(
-                settings, NOF_EPISODES);
+                settings, nofEpis);
 
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
