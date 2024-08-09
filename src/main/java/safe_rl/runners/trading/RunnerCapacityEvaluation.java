@@ -35,9 +35,11 @@ public class RunnerCapacityEvaluation {
         Map<Double, Double> capValueMap = new HashMap<>();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
 
+        double socTermMin=SOC_START+SOC_DELTA;
+
         for (double cap : powerCapList) {
             var settings = getSettingsV2G(
-                    energyFcrPricePair, cap, SOC_TERMINAL_MIN, POWER_CHARGE_MAX, PRICE_BATTERY);
+                    energyFcrPricePair, cap, socTermMin, POWER_CHARGE_MAX, PRICE_BATTERY);
 
             if (!settings.isDataOk()) {
                 capValueMap.put(cap, POOR_VALUE);

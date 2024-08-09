@@ -34,11 +34,12 @@ public record SettingsTrading(
             boolean isPowerChargeRangeOk,
             boolean isNotFcrAndZeroPowerChargeMin,
             boolean isEnergyTrajLengthOk,
-            boolean isCapacityTrajLengthOk
+            boolean isCapacityTrajLengthOk,
+            boolean isOkSocTerminalMin
     ) {
         boolean isOk() {
             return isPowerCapOk && isPowerChargeRangeOk && isNotFcrAndZeroPowerChargeMin &&
-                    isEnergyTrajLengthOk && isCapacityTrajLengthOk ;
+                    isEnergyTrajLengthOk && isCapacityTrajLengthOk && isOkSocTerminalMin;
         }
     }
 
@@ -55,6 +56,7 @@ public record SettingsTrading(
                 "FCR requires V2G (also neg charge power)");
         Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
         Preconditions.checkArgument(checker.isCapacityTrajLengthOk, "Empty cap price trajectory");
+        Preconditions.checkArgument(checker.isOkSocTerminalMin, "Bad SocTerminalMin");
 
     }
 
@@ -162,6 +164,7 @@ public record SettingsTrading(
                 .isNotFcrAndZeroPowerChargeMin(!(isFcr && MathUtils.isZero(powerChargeMin())))
                 .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
                 .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
+                .isOkSocTerminalMin(socTerminalMin<socMax())
                 .build();
     }
 

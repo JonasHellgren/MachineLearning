@@ -207,7 +207,7 @@ resultat i xls x
 
 value from sim isf agent memory x
 x-ticks enligt riktigt tid fromToHout  x
-START_SOC och DELTA_SOC isf SOC_FINAL
+START_SOC och DELTA_SOC isf SOC_FINAL  x
 DayClusterEvaluator - räknar på ngt av clusers prisdata
 RunnerDayClusterEvaluator
 HW cost från annuitet

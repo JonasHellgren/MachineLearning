@@ -22,10 +22,7 @@ public class RunnerNightHoursTradingRealData {
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault();
     public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
-    public static final double SOC_TERMINAL_MIN = 0.95;
     public static final double POWER_CAPACITY_FCR = 10d;
-
-
 
     public static int DAY_IDX = 2;
     public static List<DayId> DAYS = List.of(
@@ -43,7 +40,7 @@ public class RunnerNightHoursTradingRealData {
                 .withPowerCapacityFcrRange(Range.closed(0d,POWER_CAPACITY_FCR))
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(SOC_TERMINAL_MIN)
+                .withSocTerminalMin(SOC_START+SOC_DELTA)
                 .withFromToHour(FROM_TO_HOUR);
         settings.check();
         var helper = RunnerHelperTrading.<VariablesTrading>builder()

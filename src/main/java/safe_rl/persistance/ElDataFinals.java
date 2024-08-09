@@ -32,8 +32,10 @@ public class ElDataFinals {
     public static final double POWER_CHARGE_MAX = 22d;
     public static final double PRICE_BATTERY = 30e3;
 
-    public static final double SOC_START = 0.85;
-    public static final double SOC_TERMINAL_MIN = 0.95;
+    public static final double SOC_START = 0.55;
+    public static final double SOC_DELTA = 0.10;
+
+//    public static final double SOC_TERMINAL_MIN = 0.95;
     public static final int N_SIMULATIONS_PLOTTING = 5;
     public static final int N_SIM_START_STATE_EVAL = 10;
 

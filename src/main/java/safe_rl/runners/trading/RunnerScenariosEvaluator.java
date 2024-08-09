@@ -21,7 +21,6 @@ import static safe_rl.other.scenerio_table.ScenarioTable2ExcelConverter.convertT
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.ROW_KEY_G2V;
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.*;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.persistance.ElDataFinals.SOC_TERMINAL_MIN;
 import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
 
 public class RunnerScenariosEvaluator {
@@ -41,7 +40,8 @@ public class RunnerScenariosEvaluator {
         Table<Integer, Integer, String> resTable = HashBasedTable.create();
         createHeader(resTable);
 
-        var settings = getSettingsG2V(energyFcrPricePair, SOC_TERMINAL_MIN, POWER_CHARGE_MAX1, PRICE_BATTERY1);
+        double socTermMin=SOC_START+SOC_DELTA;
+        var settings = getSettingsG2V(energyFcrPricePair, socTermMin, POWER_CHARGE_MAX1, PRICE_BATTERY1);
         settings.check();
         var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, SOC_START, NOF_EPISODES_G2V);
         var trainer = trainerAndSimulator.getFirst();
@@ -53,7 +53,7 @@ public class RunnerScenariosEvaluator {
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d));
 
         settings = getSettingsV2G(
-                energyFcrPricePair, DUMMY_CAP_NON_ZERO, SOC_TERMINAL_MIN, POWER_CHARGE_MAX, PRICE_BATTERY);
+                energyFcrPricePair, DUMMY_CAP_NON_ZERO, socTermMin, POWER_CHARGE_MAX, PRICE_BATTERY);
         settings.check();
         var optimizer = new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH, NOF_EPISODES_V2G);
         var capBest = optimizer.optimize();
