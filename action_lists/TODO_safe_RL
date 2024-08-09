@@ -206,7 +206,7 @@ ScenarioTableHelper  x
 resultat i xls x
 
 value from sim isf agent memory x
-x-ticks enligt riktigt tid fromToHout
+x-ticks enligt riktigt tid fromToHout  x
 START_SOC och DELTA_SOC isf SOC_FINAL
 DayClusterEvaluator - räknar på ngt av clusers prisdata
 RunnerDayClusterEvaluator
@@ -215,6 +215,7 @@ ScenariosCreator - skapar scenarior kombinatoriskt
 
 tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
 
+RunnerHelperTrading rörig - dela upp
 
 multidim graf som visar hur isV2gBetter beror på batt price etc
 

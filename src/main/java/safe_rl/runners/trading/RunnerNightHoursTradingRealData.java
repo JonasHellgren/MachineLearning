@@ -33,7 +33,6 @@ public class RunnerNightHoursTradingRealData {
             DayId.of(24,0,4,"se3"),
             DayId.of(24,3,8,"se3")  //high fcr price
     );
-    public static final double SOC_START = 0.5;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -44,7 +43,8 @@ public class RunnerNightHoursTradingRealData {
                 .withPowerCapacityFcrRange(Range.closed(0d,POWER_CAPACITY_FCR))
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(SOC_TERMINAL_MIN);
+                .withSocTerminalMin(SOC_TERMINAL_MIN)
+                .withFromToHour(FROM_TO_HOUR);
         settings.check();
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS_PLOTTING).settings(settings)

@@ -5,6 +5,7 @@ import com.google.common.collect.Range;
 import common.math.MathUtils;
 import lombok.Builder;
 import lombok.With;
+import org.apache.commons.math3.util.Pair;
 import safe_rl.domain.environment.interfaces.SettingsEnvironmentI;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ public record SettingsTrading(
         double powerTolerance, //kW helps finding start point when powerMin is zero
         @With double priceBattery,  //Euro
         Range<Double> socRange,
+        @With  Pair<Integer, Integer> fromToHour,
         @With double socTerminalMin,
         @With double[] energyPriceTraj,  //Euro/kWh
         @With double[] capacityPriceTraj,  //Euro/kW

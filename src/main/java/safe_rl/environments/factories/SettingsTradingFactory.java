@@ -60,6 +60,7 @@ public class SettingsTradingFactory {
                 .powerTolerance(POWER_TOL)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
+                .fromToHour(Pair.create(17, 8))
                 .socTerminalMin(0.5)
                 .energyPriceTraj(EMPTY_ARR).capacityPriceTraj(EMPTY_ARR)
                 .stdActivationFCR(0.1)

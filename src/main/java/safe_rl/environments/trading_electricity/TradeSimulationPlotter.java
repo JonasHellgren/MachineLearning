@@ -92,15 +92,17 @@ public class TradeSimulationPlotter<V> {
     private void addPowerChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         Function<SimulationResult<V>, Double> extractor = sr -> sr.actionCorrected().asDouble();
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        var chartAction = createChart("Power (kW)");
-        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor, IS_STAIRS);
-        charts.add(chartAction);
+        var chart = createChart("Power (kW)");
+        setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        setXTicks(chart);
+        addDataToChart(simulationResultsMap, chart, extractor, IS_STAIRS);
+        charts.add(chart);
     }
 
     private void addSocChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         var chart = getXyChart("","Soc");
         setYMinMax(chart, settings.socMin(), settings.socMax());
+        setXTicks(chart);
         Function<SimulationResult<V>, Double> extractorSoc = sr ->
                 sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
         addDataToChart(simulationResultsMap, chart, extractorSoc,IS_NOT_STAIRS);
@@ -111,6 +113,7 @@ public class TradeSimulationPlotter<V> {
         var chart = getXyChart("","PC");
         var range = settings.powerCapacityFcrRange();
         setYMinMax(chart, range.lowerEndpoint(), range.upperEndpoint());
+        setXTicks(chart);
         Function<SimulationResult<V>, Double> extractorPC = sr ->
                 settings.powerCapacityFcr(sr.state().continuousFeatures()[StateTrading.INDEX_SOC]);
         addDataToChart(simulationResultsMap, chart, extractorPC,IS_STAIRS);
@@ -120,6 +123,7 @@ public class TradeSimulationPlotter<V> {
     private void addPowerChangeChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         var chart = getXyChart("","Power change (kW)");
         setYMinMax(chart, 0, settings.powerChargeMax());
+        setXTicks(chart);
         Function<SimulationResult<V>, Double> extractorSoc = SimulationResult::getActionChange;
         addDataToChart(simulationResultsMap, chart, extractorSoc, IS_STAIRS);
         charts.add(chart);
@@ -131,6 +135,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
         var chart= getXyChart("","Revenue (Euro)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        setXTicks(chart);
         addDataToChart(simulationResultsMap, chart, extractorRev,IS_STAIRS);
         charts.add(chart);
     }
@@ -142,10 +147,11 @@ public class TradeSimulationPlotter<V> {
             return evaluator.calculateIncomes(state,a,0d).incomeFcr();
         };
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        XYChart chartAction = createChart("Inc. FCR (Euro/h)");
-        setYMinMax(chartAction, Collections.min(allValues), Collections.max(allValues));
-        addDataToChart(simulationResultsMap, chartAction, extractor,IS_STAIRS);
-        charts.add(chartAction);
+        var chart = createChart("Inc. FCR (Euro/h)");
+        setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        setXTicks(chart);
+        addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
+        charts.add(chart);
     }
 
 
@@ -158,6 +164,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Inc. energy (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        setXTicks(chart);
         addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
 
@@ -171,8 +178,9 @@ public class TradeSimulationPlotter<V> {
             return evaluator.calculateIncomes(state,a,updaterRes.dSoh()).costDegradation();
         };
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
-        var chart = createChart("Cost. degradation (Euro/h)");
+        var chart = createChart("Cost. degr. (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
+        setXTicks(chart);
         addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
     }
@@ -209,6 +217,17 @@ public class TradeSimulationPlotter<V> {
         chart.getStyler().setYAxisMax(yAxisMax);
     }
 
+    private void setXTicks(XYChart chart) {
+        var fromToHour=settings.fromToHour();
+        double timeMax = 24;
+        Function<Double, String> xTickFormatter = time -> {
+            double timeAdded=time+fromToHour.getFirst();
+            double timeShowed=(timeAdded< timeMax)?timeAdded:(timeAdded- timeMax);
+            return String.format("%.1f", timeShowed);
+        };
+        chart.getStyler().setxAxisTickLabelsFormattingFunction(xTickFormatter);
+    }
+    
     private void addDataToChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
                                 XYChart chart,
                                 Function<SimulationResult<V>, Double> extractor,
