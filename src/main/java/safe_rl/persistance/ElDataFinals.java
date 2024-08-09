@@ -40,8 +40,7 @@ public class ElDataFinals {
     public static final double POWER_MIN = 0d;
     public static final double POWER_CHARGE_MAX = 22d;
     public static final double PRICE_BATTERY = 30e3;
-
-    public static final double SOC_START = 0.55;
+    public static final double SOC_START = 0.85;
     public static final double SOC_DELTA = 0.10;
 
 //    public static final double SOC_TERMINAL_MIN = 0.95;
@@ -56,13 +55,20 @@ public class ElDataFinals {
 
 
     public static final double DUMMY_CAP = 0d;
-    public static final double DUMMY_CAP_NON_ZERO = 10d;
+    public static final double DUMMY_CAP_NON_ZERO = 0.1d;
     public static final int DYMMY_N_SIMULATIONS = 1;
 
     public static final double INTEREST_RATE = 0.05;
     public static final double LIFT_TIME = 5;
     public static final double PRICE_HW = 1000d;
     public static final int N_DAYS_YEAR = 365;
+
+    //Alternative values used by ScenarioParameterVariantsFactory
+
+    public static final double PRICE_BATTERY2 = 20e3;
+    public static final double PRICE_HW2 = 500d;
+    public static final double SOC_START2 = 0.55;
+    public static final double POWER_CHARGE_MAX2 = 3.5d;
 
 
     public static double getCostHwPerDay(double priceHW) {

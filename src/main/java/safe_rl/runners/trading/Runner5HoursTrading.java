@@ -27,6 +27,7 @@ import static safe_rl.persistance.ElDataFinals.SOC_DELTA;
 public class Runner5HoursTrading {
 
     public static final double PRICE_BATTERY = 1e3;
+
     public static final int N_SIMULATIONS = 5;
     static StateI<VariablesTrading> startState;
     static SettingsTrading settings5;

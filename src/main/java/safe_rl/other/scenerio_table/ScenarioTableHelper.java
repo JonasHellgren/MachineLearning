@@ -15,6 +15,8 @@ public class ScenarioTableHelper {
     public static final int ROW_KEY_V2G = 2;
     public static final Set<Integer> ROWS_SCEANRIOS = Set.of(1, 2);
     public static final Set<Integer> COLUMNS_DATA = Set.of(1, 2, 3);
+    public static final int SUM_COLUMN = 4;
+
 
     public static void createHeader(Table<Integer, Integer, String> resTable) {
         resTable.put(HEADER_ROW, SCEN_NAME_COL, "Scenario");

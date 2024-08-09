@@ -214,8 +214,10 @@ RunnerHelperTrading rörig - dela upp  x
 
 HW cost från annuitet  x
 RunnerSingleScenario med cluster dag  x
-ScenariosCreator - skapar scenarior kombinatoriskt
-RunnerMultipleScenarios
+ScenariosCreator - skapar scenarior kombinatoriskt  x
+RunnerMultipleScenarios x
+
+RunnerManyScenarios
 
 multidim graf som visar hur isV2gBetter beror på batt price etc
 
