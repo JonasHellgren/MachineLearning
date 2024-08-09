@@ -35,12 +35,12 @@ public class ElDataFinals {
     public static final double SOC_START = 0.85;
     public static final double SOC_TERMINAL_MIN = 0.95;
     public static final int N_SIMULATIONS = 5;
-    public static final int N_EPIS = 5;
 
     public static final double POOR_VALUE = -100d;
     public static final double POWER_TOL = 0.25;
     public static final double TOL_GOLDEN_SEARCH = 1d;
     public static final int N_ITER_MAX_GOLDEN_SEARCH = 100;
+    public static final int NOF_EPISODES = 500;
 
 
     public static final double DUMMY_CAP = 0d;

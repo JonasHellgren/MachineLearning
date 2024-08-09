@@ -205,10 +205,17 @@ räkna på Table 10 	Scenarios  - SingleEVHome SingleV2GVHome  x
 ScenarioTableHelper  x
 resultat i xls x
 
-ScenariosEvaluator - räknar på ngt av clusers prisdata
-HW cost från annuitet
 value from sim isf agent memory
 x-ticks enligt riktigt tid fromToHout
+DayClusterEvaluator - räknar på ngt av clusers prisdata
+RunnerDayClusterEvaluator
+HW cost från annuitet
+ScenariosCreator - skapar scenarior kombinatoriskt
+
+tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
+
+
+multidim graf som visar hur isV2gBetter beror på batt price etc
 
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR
