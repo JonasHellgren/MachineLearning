@@ -22,6 +22,7 @@ import static safe_rl.persistance.ElDataFinals.*;
 
 public class RunnerManyScenarios {
 
+
     @SneakyThrows
     public static void main(String[] args) {
 
@@ -47,11 +48,12 @@ public class RunnerManyScenarios {
 
             computeSumColumns(resTable, ROWS_SCEANARIOS, COLUMNS_DATA, SUM_COLUMN);
             printTableAsMatrix(resTable);
+            System.out.println("p = " + p);
 
             sumCostMap.put(p, sumCosts(resTable, ROW_KEY_V2G)- sumCosts(resTable, ROW_KEY_G2V));
         }
 
-        ScenarioSumCostMap2ExcelConverter.convertTableToExcel(sumCostMap, PathAndFile.xlsxOf(RES_PATH,"g2vVsV2g"));
+        ScenarioSumCostMap2ExcelConverter.convertTableToExcel(sumCostMap, PathAndFile.xlsxOf(RES_PATH, FILE_MANY_SCEN));
 
     }
 

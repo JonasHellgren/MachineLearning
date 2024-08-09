@@ -22,6 +22,8 @@ public class ElDataFinals {
 
     public static PathAndFile FILE_ENERGY = PathAndFile.xlsxOf(PATH_DATA, "Day-ahead-6months-EuroPerMWh");
     public static PathAndFile FILE_FCR = PathAndFile.xlsxOf(PATH_DATA, "FCR-N-6months-EuroPerMW");
+    public static final String FILE_MANY_SCEN = "g2vVsV2g";
+
 
     public static List<DayId> DAYS = List.of(
             DayId.of(24, 0, 0, "se3"),
@@ -48,7 +50,7 @@ public class ElDataFinals {
     public static final int N_SIM_START_STATE_EVAL = 10;
 
     public static final double POOR_VALUE = -100d;
-    public static final double POWER_TOL = 0.25;
+    public static final double POWER_TOL = 0.5;
     public static final double TOL_GOLDEN_SEARCH = 1d;
     public static final int N_ITER_MAX_GOLDEN_SEARCH = 100;
     public static final int NOF_EPISODES = 500;
