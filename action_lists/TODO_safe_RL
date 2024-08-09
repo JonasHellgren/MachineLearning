@@ -223,6 +223,12 @@ multidim graf som visar hur isV2gBetter beror på batt price etc
 
 tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
 
+
+MeanLossCritic verkar som beräknas ofta
+BufferFitter - verkligen bra välja vanligast tid
+TrainerMediator
+
+
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR
 

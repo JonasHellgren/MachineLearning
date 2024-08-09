@@ -38,7 +38,7 @@ public class RunnerSingleScenario {
         var resultV2G = getResultV2G(settings);
         putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(resultV2G.getSecond(), -costHwPerDay,0d));
 
-        computeSumColumns(resTable, ROWS_SCEANRIOS, COLUMNS_DATA,SUM_COLUMN);
+        computeSumColumns(resTable, ROWS_SCEANARIOS, COLUMNS_DATA,SUM_COLUMN);
         printTableAsMatrix(resTable);
         convertTableToExcel(resTable, PathAndFile.xlsxOf(RES_PATH,"scen_res_"+dayId.toString()));
     }
