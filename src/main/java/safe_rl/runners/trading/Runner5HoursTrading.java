@@ -15,6 +15,10 @@ import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
+import safe_rl.other.runner_helpers.RunnerHelperTrading;
+
+import static safe_rl.persistance.ElDataFinals.SOC_DELTA;
+import static safe_rl.persistance.ElDataFinals.SOC_START;
 
 /***
  * withLearningRateReplayBufferActor(1e-2).withGradMeanActorMaxBufferFitting needs to be small
@@ -52,7 +56,8 @@ public class Runner5HoursTrading {
         settings5 = SettingsTradingFactory.new5HoursIncreasingPrice()
                 .withPowerCapacityFcrRange(Range.closed(0d,1d))
                 .withStdActivationFCR(0.1)
-                .withSocTerminalMin(SOC_START+ SOC_INCREASE).withPriceBattery(PRICE_BATTERY);
+                .withSocStart(SOC_START).withSocDelta(SOC_DELTA)
+                .withPriceBattery(PRICE_BATTERY);
         var environment = new EnvironmentTrading(settings5);
         startState = StateTrading.of(VariablesTrading.newSoc(SOC_START));
         var safetyLayer = new SafetyLayer<>(FactoryOptModel.createTradeModel(settings5));

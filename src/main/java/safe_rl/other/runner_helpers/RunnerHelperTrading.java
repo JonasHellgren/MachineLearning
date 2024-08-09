@@ -1,4 +1,4 @@
-package safe_rl.runners.trading;
+package safe_rl.other.runner_helpers;
 
 import com.joptimizer.exception.JOptimizerException;
 import common.other.CpuTimer;
@@ -19,7 +19,6 @@ import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.*;
 import safe_rl.domain.simulator.AgentSimulator;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class RunnerHelperTrading<V> {
 
     SettingsTrading settings;
     int nSim;
-    double socStart;
 
     public  static final String PICS="src/main/java/safe_rl/runners/pics";
 
@@ -39,7 +37,7 @@ public class RunnerHelperTrading<V> {
     public  Pair<TrainerMultiStepACDC<V>, AgentSimulator<V>> createTrainerAndSimulator(
             TrainerParameters trainerParameters) {
         EnvironmentI<V> environment = (EnvironmentI<V>) new EnvironmentTrading(settings);
-        StateI<V>  startState = (StateI<V>) StateTrading.of(VariablesTrading.newSoc(socStart));
+        StateI<V>  startState = (StateI<V>) StateTrading.of(VariablesTrading.newSoc(settings.socStart()));
         SafetyLayer<V> safetyLayer = (SafetyLayer<V>) new SafetyLayer<>(FactoryOptModel.createTradeModel(settings));
 
         AgentACDiscoI<V> agent = AgentACDCSafe.of(
@@ -63,11 +61,10 @@ public class RunnerHelperTrading<V> {
     }
 
     public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>>
-    trainerSimulatorPairNight(SettingsTrading settings, int nSimulations, double socStart, int nofEpisodes) {
+    trainerSimulatorPairNight(SettingsTrading settings, int nSimulations, int nofEpisodes) {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(nSimulations)
                 .settings(settings)
-                .socStart(socStart)
                 .build();
         return helper.createTrainerAndSimulator(TrainerParametersFactory.tradingNightHours(nofEpisodes));
     }
@@ -80,7 +77,7 @@ public class RunnerHelperTrading<V> {
         var trainer=trainerAndSimulator.getFirst();
         var recorder = trainer.getRecorder();
         recorder.plot("Multi step ACDC trading");
-        recorder.saveCharts(RunnerHelperTrading.PICS);
+     //   recorder.saveCharts(RunnerHelperTrading.PICS);
         var simulator = trainerAndSimulator.getSecond();
         simulateAndPlot(simulator);
         simulateAndSavePlots(simulator, title);
@@ -91,13 +88,13 @@ public class RunnerHelperTrading<V> {
         plotMemory(trainer.getAgent().getActorMean(), "actor mean");
     }
 
-    void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
+    public void simulateAndPlot(AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
         var simulationResultsMap =  getSimulationResultsMap(simulator);
         double valueInStartState=simulator.criticValueInStartState();
         new TradeSimulationPlotter<VariablesTrading>(settings).plot(simulationResultsMap,valueInStartState);
     }
 
-    void simulateAndSavePlots(AgentSimulator<VariablesTrading> simulator,
+    public void simulateAndSavePlots(AgentSimulator<VariablesTrading> simulator,
                                      String caseName) throws JOptimizerException {
         var simulationResultsMap =  getSimulationResultsMap(simulator);
         new TradeSimulationPlotter<VariablesTrading>(settings).savePlots(simulationResultsMap,PICS,caseName);
@@ -112,13 +109,13 @@ public class RunnerHelperTrading<V> {
         return simulationResultsMap;
     }
 
-    void plotMemory(DisCoMemory<VariablesTrading> critic, String name) {
+    public void plotMemory(DisCoMemory<VariablesTrading> critic, String name) {
         TradingMemoryPlotter<VariablesTrading> plotter=
                 new TradingMemoryPlotter<>(critic, name,(int) settings.timeEnd());
         plotter.plot();
     }
 
-      void printing(
+    public void printing(
             TrainerMultiStepACDC<VariablesTrading> trainer,
             CpuTimer timer) {
         log.info("agent = " + trainer.getAgent());

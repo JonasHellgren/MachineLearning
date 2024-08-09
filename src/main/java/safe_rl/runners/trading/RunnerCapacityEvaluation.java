@@ -17,7 +17,7 @@ import java.util.*;
 
 import static safe_rl.environments.factories.SettingsTradingFactory.getSettingsV2G;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
+import static safe_rl.other.runner_helpers.RunnerHelperTrading.trainerSimulatorPairNight;
 
 @Log
 public class RunnerCapacityEvaluation {
@@ -39,7 +39,7 @@ public class RunnerCapacityEvaluation {
 
         for (double cap : powerCapList) {
             var settings = getSettingsV2G(
-                    energyFcrPricePair, cap, socTermMin, POWER_CHARGE_MAX, PRICE_BATTERY);
+                    energyFcrPricePair, cap, SOC_START, socTermMin, POWER_CHARGE_MAX, PRICE_BATTERY);
 
             if (!settings.isDataOk()) {
                 capValueMap.put(cap, POOR_VALUE);
@@ -47,7 +47,7 @@ public class RunnerCapacityEvaluation {
                 continue;
             }
 
-            var trainerAndSimulator = trainerSimulatorPairNight(settings, N_SIMULATIONS_PLOTTING, SOC_START, 300);
+            var trainerAndSimulator = trainerSimulatorPairNight(settings, N_SIMULATIONS_PLOTTING, NOF_EPISODES);
             var trainer = trainerAndSimulator.getFirst();
             var simulator = trainerAndSimulator.getSecond();
             try {

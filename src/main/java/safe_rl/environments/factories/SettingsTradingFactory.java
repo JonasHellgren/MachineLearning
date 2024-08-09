@@ -10,7 +10,7 @@ import safe_rl.environments.trading_electricity.SettingsTrading;
 
 import java.util.List;
 
-import static safe_rl.persistance.ElDataFinals.POWER_TOL;
+import static safe_rl.persistance.ElDataFinals.*;
 
 @NoArgsConstructor
 public class SettingsTradingFactory {
@@ -27,7 +27,7 @@ public class SettingsTradingFactory {
                 .powerTolerance(POWER_TOL)
                 .priceBattery(5e3)
                 .socRange(Range.closed(0d,1d))
-                .socTerminalMin(0.5)
+                .socStart(SOC_START).socDelta(SOC_DELTA)
                 .energyPriceTraj(new double[]{0.1, 0.2, 0.3, 0.4, 0.5})  //Eur/kWh
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(5,0.11))  //Eur/kW
                 .stdActivationFCR(0.1)
@@ -60,8 +60,8 @@ public class SettingsTradingFactory {
                 .powerTolerance(POWER_TOL)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
+                .socStart(SOC_START).socDelta(SOC_DELTA)
                 .fromToHour(Pair.create(17, 8))
-                .socTerminalMin(0.5)
                 .energyPriceTraj(EMPTY_ARR).capacityPriceTraj(EMPTY_ARR)
                 .stdActivationFCR(0.1)
                 .powerCapacityFcrRange(Range.closed(0d,1d))
@@ -72,6 +72,7 @@ public class SettingsTradingFactory {
 
     public static SettingsTrading getSettingsV2G(Pair<List<Double>,List<Double>> energyFcrPricePair,
                                                  double cap,
+                                                 double socStart,
                                                  double socTerminalMin,
                                                  double powerChargeMax,
                                                  double priceBattery) {
@@ -81,10 +82,11 @@ public class SettingsTradingFactory {
                 .withPriceBattery(priceBattery)
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(socTerminalMin);
+                .withSocStart(SOC_START).withSocDelta(SOC_DELTA);
     }
 
     public static SettingsTrading getSettingsG2V(Pair<List<Double>,List<Double>> energyFcrPricePair,
+                                                 double socStart,
                                                  double socTerminalMin,
                                                  double powerChargeMax,
                                                  double priceBattery) {
@@ -94,7 +96,8 @@ public class SettingsTradingFactory {
                 .withPriceBattery(priceBattery)
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(socTerminalMin);
+                .withSocStart(SOC_START).withSocDelta(SOC_DELTA);
+
     }
 
 
@@ -106,7 +109,8 @@ public class SettingsTradingFactory {
                 .powerTolerance(POWER_TOL)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
-                .socTerminalMin(0.5)
+                .socStart(SOC_START).socDelta(SOC_DELTA)
+                .fromToHour(Pair.create(13, 13))
                 .energyPriceTraj(ListUtils.toArray(ListUtils.doublesStartStepNitems(0.1, 0.1, 24)))
                 .capacityPriceTraj(ArrayUtil.createArrayWithSameDoubleNumber(24,0.03))
                 .stdActivationFCR(0.1)

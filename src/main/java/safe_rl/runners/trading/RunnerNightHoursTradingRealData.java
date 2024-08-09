@@ -8,10 +8,9 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
+import safe_rl.other.runner_helpers.RunnerHelperTrading;
 import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.*;
-
-import java.util.List;
 
 import static safe_rl.persistance.ElDataFinals.*;
 
@@ -22,14 +21,11 @@ public class RunnerNightHoursTradingRealData {
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault();
     public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
-    public static final double POWER_CAPACITY_FCR = 10d;
+    public static final double POWER_CHARGE = 22d;
+    public static final double POWER_CAPACITY_FCR = POWER_CHARGE/2;
 
-    public static int DAY_IDX = 2;
-    public static List<DayId> DAYS = List.of(
-            DayId.of(24,0,0,"se3"),
-            DayId.of(24,0,4,"se3"),
-            DayId.of(24,3,8,"se3")  //high fcr price
-    );
+    public static int DAY_IDX = 1;
+
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -38,14 +34,14 @@ public class RunnerNightHoursTradingRealData {
 
         var settings =SettingsTradingFactory.new100kWhVehicleEmptyPrices()
                 .withPowerCapacityFcrRange(Range.closed(0d,POWER_CAPACITY_FCR))
+                .withPowerChargeRange(Range.closed(-POWER_CHARGE, POWER_CHARGE))
                 .withEnergyPriceTraj(ListUtils.toArray(energyFcrPricePair.getFirst()))
                 .withCapacityPriceTraj(ListUtils.toArray(energyFcrPricePair.getSecond()))
-                .withSocTerminalMin(SOC_START+SOC_DELTA)
+                .withSocStart(SOC_START).withSocDelta(SOC_DELTA)
                 .withFromToHour(FROM_TO_HOUR);
         settings.check();
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
-                .socStart(SOC_START)
                 .build();
         var trainerAndSimulator = helper.createTrainerAndSimulator(
                 TrainerParametersFactory.tradingNightHours(300));

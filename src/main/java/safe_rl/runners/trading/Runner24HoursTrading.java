@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
 import safe_rl.environments.trading_electricity.VariablesTrading;
+import safe_rl.other.runner_helpers.RunnerHelperTrading;
 
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class Runner24HoursTrading {
                 : SettingsTradingFactory.new24HoursIncreasingPrice()  //case 0 and 1
                 .withPowerCapacityFcrRange(Range.closed(0d,powerCapacityFCR))
                 .withStdActivationFCR(STD_ACTIVATION_FCR)
-                .withSocTerminalMin(SOC_START + SOC_INCREASE_LIST.get(CASE_NR))
+                .withSocStart(SOC_START)
+                .withSocDelta(SOC_INCREASE_LIST.get(CASE_NR))
                 .withPriceBattery(PRICE_BATTERY);
 
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS).settings(settings)
-                .socStart(SOC_START)
                 .build();
         var trainerAndSimulator = helper.createTrainerAndSimulator(TrainerParametersFactory.trading24Hours());
         var trainer = trainerAndSimulator.getFirst();

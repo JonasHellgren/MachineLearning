@@ -10,10 +10,10 @@ import safe_rl.domain.simulator.AgentSimulator;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
-import safe_rl.runners.trading.RunnerHelperTrading;
+import safe_rl.other.runner_helpers.RunnerHelperTrading;
 
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
+import static safe_rl.other.runner_helpers.RunnerHelperTrading.trainerSimulatorPairNight;
 
 @AllArgsConstructor
 public class CapacityFunctionWrapper implements FunctionWrapperI {
@@ -30,12 +30,11 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
             return poorValue;
         }
 
-        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, SOC_START, nEpis);
+        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, nEpis);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         try {
             trainer.train();
-            plotting(settings, trainerAndSimulator);
             return simulator.simulationValueInStartState(N_SIM_START_STATE_EVAL);
         } catch (JOptimizerException e) {
             return poorValue;
@@ -45,7 +44,6 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
     private static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
         var helper = RunnerHelperTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
-                .socStart(SOC_START)
                 .build();
         helper.plotAndPrint(trainerAndSimulator,new CpuTimer(),"");
     }

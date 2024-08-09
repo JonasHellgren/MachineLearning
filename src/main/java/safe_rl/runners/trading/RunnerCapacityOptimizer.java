@@ -17,7 +17,7 @@ public class RunnerCapacityOptimizer {
         double socTermMin=SOC_START+SOC_DELTA;
         var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR, Pair.create(FILE_ENERGY,FILE_FCR));
         SettingsTrading settings = getSettingsV2G(
-                energyFcrPricePair, DUMMY_CAP, socTermMin,POWER_CHARGE_MAX, PRICE_BATTERY);
+                energyFcrPricePair, DUMMY_CAP, SOC_START, socTermMin,POWER_CHARGE_MAX, PRICE_BATTERY);
 
         var optimizer=new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH,NOF_EPISODES);
         var capBest=optimizer.optimize();

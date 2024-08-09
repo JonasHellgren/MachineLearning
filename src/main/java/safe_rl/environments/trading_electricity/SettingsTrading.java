@@ -18,8 +18,9 @@ public record SettingsTrading(
         double powerTolerance, //kW helps finding start point when powerMin is zero
         @With double priceBattery,  //Euro
         Range<Double> socRange,
+        @With double socStart,
+        @With double socDelta,   //increase during charging
         @With  Pair<Integer, Integer> fromToHour,
-        @With double socTerminalMin,
         @With double[] energyPriceTraj,  //Euro/kWh
         @With double[] capacityPriceTraj,  //Euro/kW
         @With double stdActivationFCR,
@@ -57,7 +58,6 @@ public record SettingsTrading(
         Preconditions.checkArgument(checker.isEnergyTrajLengthOk, "Empty energy price trajectory");
         Preconditions.checkArgument(checker.isCapacityTrajLengthOk, "Empty cap price trajectory");
         Preconditions.checkArgument(checker.isOkSocTerminalMin, "Bad SocTerminalMin");
-
     }
 
     public boolean isDataOk() {
@@ -91,6 +91,10 @@ public record SettingsTrading(
         return capacityFcrMax() * nsr + capacityFcrMin() * (1 - nsr);
     }
 
+    public double socTerminalMin() {
+        return  socStart+socDelta;
+    }
+
     Double socMax() {
         return socRange.upperEndpoint();
     }
@@ -98,6 +102,7 @@ public record SettingsTrading(
     double socMin() {
         return socRange.lowerEndpoint();
     }
+
 
     private double normalizedSoCReserve() {
         return Math.abs(socMax() - socMin()) / 2;
@@ -164,7 +169,7 @@ public record SettingsTrading(
                 .isNotFcrAndZeroPowerChargeMin(!(isFcr && MathUtils.isZero(powerChargeMin())))
                 .isEnergyTrajLengthOk(energyPriceTraj.length > 0)
                 .isCapacityTrajLengthOk(capacityPriceTraj.length > 0)
-                .isOkSocTerminalMin(socTerminalMin<socMax())
+                .isOkSocTerminalMin(socTerminalMin()<socMax())
                 .build();
     }
 

@@ -3,14 +3,10 @@ package safe_rl.runners.trading;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.joptimizer.exception.JOptimizerException;
-import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.simulator.AgentSimulator;
-import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.environments.trading_electricity.SettingsTrading;
-import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.other.capacity_search.CapacityOptimizer;
 import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.PathAndFile;
@@ -21,7 +17,7 @@ import static safe_rl.other.scenerio_table.ScenarioTable2ExcelConverter.convertT
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.ROW_KEY_G2V;
 import static safe_rl.other.scenerio_table.ScenarioTableHelper.*;
 import static safe_rl.persistance.ElDataFinals.*;
-import static safe_rl.runners.trading.RunnerHelperTrading.trainerSimulatorPairNight;
+import static safe_rl.other.runner_helpers.RunnerHelperTrading.trainerSimulatorPairNight;
 
 public class RunnerScenariosEvaluator {
 
@@ -32,7 +28,6 @@ public class RunnerScenariosEvaluator {
     public static final double CAP_COST_HW = 0.5;
     public static int DAY_IDX = 0;
 
-
     @SneakyThrows
     public static void main(String[] args) {
         var dayId = DAYS.get(DAY_IDX);
@@ -40,39 +35,34 @@ public class RunnerScenariosEvaluator {
         Table<Integer, Integer, String> resTable = HashBasedTable.create();
         createHeader(resTable);
 
-        double socTermMin=SOC_START+SOC_DELTA;
-        var settings = getSettingsG2V(energyFcrPricePair, socTermMin, POWER_CHARGE_MAX1, PRICE_BATTERY1);
-        settings.check();
-        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, SOC_START, NOF_EPISODES_G2V);
-        var trainer = trainerAndSimulator.getFirst();
-        var simulator = trainerAndSimulator.getSecond();
-        trainer.train();
-        plotting(settings, trainerAndSimulator);
-
-        double valG2V = simulator.simulationValueInStartState(1);
+        var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, POWER_CHARGE_MAX1, PRICE_BATTERY1);
+        double valG2V = getResultG2V(settings);
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d));
 
         settings = getSettingsV2G(
-                energyFcrPricePair, DUMMY_CAP_NON_ZERO, socTermMin, POWER_CHARGE_MAX, PRICE_BATTERY);
-        settings.check();
-        var optimizer = new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH, NOF_EPISODES_V2G);
-        var capBest = optimizer.optimize();
-        putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(capBest.getSecond(), -CAP_COST_HW,0d));
+                energyFcrPricePair, DUMMY_CAP_NON_ZERO, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
+        var resultV2G = getResultV2G(settings);
+        putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(resultV2G.getSecond(), -CAP_COST_HW,0d));
 
         computeSumColumns(resTable, ROWS_SCEANRIOS, COLUMNS_DATA,4);
         printTableAsMatrix(resTable);
         convertTableToExcel(resTable, PathAndFile.xlsxOf(RES_PATH,"scen_res_"+dayId.toString()));
     }
 
-    private static void plotting(SettingsTrading settings, Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>> trainerAndSimulator) throws JOptimizerException {
-        var helper = RunnerHelperTrading.<VariablesTrading>builder()
-                .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
-                .socStart(SOC_START)
-                .build();
-        helper.plotAndPrint(trainerAndSimulator, new CpuTimer(), "");
+    private static Pair<Double, Double> getResultV2G(SettingsTrading settings) {
+        settings.check();
+        var optimizer = new CapacityOptimizer(settings, TOL_GOLDEN_SEARCH, NOF_EPISODES_V2G);
+        return optimizer.optimize();
     }
 
-
+    private static double getResultG2V(SettingsTrading settings) throws JOptimizerException {
+        settings.check();
+        var trainerAndSimulator = trainerSimulatorPairNight(settings, DYMMY_N_SIMULATIONS, NOF_EPISODES_G2V);
+        var trainer = trainerAndSimulator.getFirst();
+        var simulator = trainerAndSimulator.getSecond();
+        trainer.train();
+        return simulator.simulationValueInStartState(1);
+    }
 
 
 }

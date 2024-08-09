@@ -208,16 +208,17 @@ resultat i xls x
 value from sim isf agent memory x
 x-ticks enligt riktigt tid fromToHout  x
 START_SOC och DELTA_SOC isf SOC_FINAL  x
-DayClusterEvaluator - räknar på ngt av clusers prisdata
-RunnerDayClusterEvaluator
-HW cost från annuitet
-ScenariosCreator - skapar scenarior kombinatoriskt
-
-tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
-
+soc_start till TradingSettings - ej socStart i helper  x
+soc delta i settings  socTermMin som fcn  x
 RunnerHelperTrading rörig - dela upp
 
+HW cost från annuitet
+ScenariosCreator - skapar scenarior kombinatoriskt
+RunnerMultipleScenarios
+
 multidim graf som visar hur isV2gBetter beror på batt price etc
+
+tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
 
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR
@@ -233,3 +234,4 @@ plotta filtrerad data, kanske klass som lumpar typ 100 siffror åt gången
 ide om 2 faster. 1 mc critic preproc. 2 ac
 TrainerI
 går fitActor göra snabbare - kopieras ju data nu
+DayClusterEvaluator - räknar på ngt av clusers prisdata
