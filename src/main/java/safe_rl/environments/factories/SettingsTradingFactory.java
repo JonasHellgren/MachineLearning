@@ -35,20 +35,20 @@ public class SettingsTradingFactory {
                 .nCyclesLifetime(5000)
                 .failPenalty(FAIL_PENALTY)
                 .build();
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
     public static SettingsTrading new3HoursSamePrice() {
         var settings = new5HoursIncreasingPrice().withEnergyPriceTraj(new double[]{1, 1, 1});
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
     public static SettingsTrading new5HoursDecreasingPrice() {
         var settings = new5HoursIncreasingPrice()
                 .withEnergyPriceTraj(new double[]{0.5, 0.4, 0.3, 0.2, 0.1});
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
@@ -118,7 +118,7 @@ public class SettingsTradingFactory {
                 .nCyclesLifetime(2000)
                 .failPenalty(FAIL_PENALTY)
                 .build();
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
@@ -129,7 +129,7 @@ public class SettingsTradingFactory {
         listZigSaw.addAll(list);
         double[] priceTraj = ListUtils.toArray(listZigSaw);
         var settings = new24HoursIncreasingPrice().withEnergyPriceTraj(priceTraj);
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
@@ -137,7 +137,7 @@ public class SettingsTradingFactory {
         double[] priceTraj = new double[]{64.9900, 61.7400, 55.0700, 48.0100, 44.0100, 45.2000, 38.0000, 38.0000,
                 33.5600, 32.0300, 32.2900, 36.7000, 41.7200, 49.1800, 58.7500};
         var settings = new24HoursIncreasingPrice().withEnergyPriceTraj(perMWh2PerKWh(priceTraj));
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 
@@ -145,7 +145,7 @@ public class SettingsTradingFactory {
         double[] priceTraj = new double[]{    526.2500, 349.9500, 181.9100, 149.6000, 112.8200, 100.1000, 92.8700, 84.8800,
                 83.2000, 82.0300, 82.1800, 82.5300, 84.1300, 84.4800, 87.4300};
         var settings = new24HoursIncreasingPrice().withEnergyPriceTraj(perMWh2PerKWh(priceTraj));
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         return settings;
     }
 

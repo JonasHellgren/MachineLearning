@@ -97,10 +97,6 @@ public class ArrayUtil {
         for (Double x : xList) {
             yList.add(map.get(x));  // Arrange y values according to the sorted x values
         }
-
-        double[] xArray = xList.stream().mapToDouble(Double::doubleValue).toArray();
-        double[] yArray = yList.stream().mapToDouble(Double::doubleValue).toArray();
-
-        return Pair.create(xArray, yArray);
+        return Pair.create(ListUtils.toArray(xList), ListUtils.toArray(yList));
     }
 }

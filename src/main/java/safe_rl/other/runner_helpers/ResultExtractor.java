@@ -18,7 +18,7 @@ public class ResultExtractor {
     @SneakyThrows
     //Triple = (capacityBest,sumRewards,endState)
     public static Triple<Double, Double,StateI<VariablesTrading>> getResultV2G(SettingsTrading settings) {
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         var optimizer=new CapacityOptimizer(settings,  TOL_GOLDEN_SEARCH,NOF_EPISODES_V2G);
         Pair<Double,Double> capSumRewPair= optimizer.optimize();
         StateI<VariablesTrading> endState= optimizer.endStateFromSimulation();
@@ -27,7 +27,7 @@ public class ResultExtractor {
 
     //Pair = (sumRewards,endState)
     public static Pair<Double,StateI<VariablesTrading>> getResultG2V(SettingsTrading settings) throws JOptimizerException {
-        settings.check();
+        settings.throwExceptionIfNonCorrect();
         var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(settings, NOF_EPISODES_G2V);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();

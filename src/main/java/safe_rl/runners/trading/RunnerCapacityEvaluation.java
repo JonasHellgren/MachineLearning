@@ -23,6 +23,7 @@ import static safe_rl.persistance.ElDataFinals.*;
 public class RunnerCapacityEvaluation {
 
     public static final int N_CAPS = 5;
+    public static final double VAL_IF_FAIL = -10d;
     public static int DAY_IDX = 2;
 
 
@@ -42,7 +43,7 @@ public class RunnerCapacityEvaluation {
                     energyFcrPricePair, cap, SOC_START, SOC_DELTA, powerMax, PRICE_BATTERY);
 
             if (!settings.isDataOk()) {
-                capValueMap.put(cap, POOR_VALUE);
+                capValueMap.put(cap, VAL_IF_FAIL);
                 log.info("bad data");
                 continue;
             }
@@ -59,7 +60,7 @@ public class RunnerCapacityEvaluation {
                 capValueMap.put(cap, val);
                 log.info("all fine");
             } catch (JOptimizerException e) {
-                capValueMap.put(cap, POOR_VALUE);
+                capValueMap.put(cap, VAL_IF_FAIL);
                 log.info("failed learning");
             }
         }

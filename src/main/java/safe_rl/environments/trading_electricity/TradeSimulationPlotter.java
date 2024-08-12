@@ -19,6 +19,8 @@ import java.util.function.Function;
  */
 
 import static org.knowm.xchart.BitmapEncoder.saveBitmapWithDPI;
+import static safe_rl.other.runner_helpers.XticksSetter.getXTicks;
+import static safe_rl.other.runner_helpers.XticksSetter.setXTicks;
 
 public class TradeSimulationPlotter<V> {
     public static final String AXIS_TITLE = "Time (h)";
@@ -82,7 +84,7 @@ public class TradeSimulationPlotter<V> {
             List<Double> revenues = entry.getValue().stream().map(extractorRev).toList();
             XYSeries series = chart.addSeries(
                     "" + entry.getKey(),
-                    getTimes(revenues),
+                    getXTicks(revenues, settings),
                     ListUtils.cumulativeSum(revenues));
             series.setMarker(SeriesMarkers.NONE);
         }
@@ -94,7 +96,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Power (kW)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         addDataToChart(simulationResultsMap, chart, extractor, IS_STAIRS);
         charts.add(chart);
     }
@@ -102,7 +104,7 @@ public class TradeSimulationPlotter<V> {
     private void addSocChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         var chart = getXyChart("","Soc");
         setYMinMax(chart, settings.socMin(), settings.socMax());
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         Function<SimulationResult<V>, Double> extractorSoc = sr ->
                 sr.state().continuousFeatures()[StateTrading.INDEX_SOC];
         addDataToChart(simulationResultsMap, chart, extractorSoc,IS_NOT_STAIRS);
@@ -113,7 +115,7 @@ public class TradeSimulationPlotter<V> {
         var chart = getXyChart("","PC");
         var range = settings.powerCapacityFcrRange();
         setYMinMax(chart, range.lowerEndpoint(), range.upperEndpoint());
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         Function<SimulationResult<V>, Double> extractorPC = sr ->
                 settings.powerCapacityFcr(sr.state().continuousFeatures()[StateTrading.INDEX_SOC]);
         addDataToChart(simulationResultsMap, chart, extractorPC,IS_STAIRS);
@@ -123,7 +125,7 @@ public class TradeSimulationPlotter<V> {
     private void addPowerChangeChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap, List<XYChart> charts) {
         var chart = getXyChart("","Power change (kW)");
         setYMinMax(chart, 0, settings.powerChargeMax());
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         Function<SimulationResult<V>, Double> extractorSoc = SimulationResult::getActionChange;
         addDataToChart(simulationResultsMap, chart, extractorSoc, IS_STAIRS);
         charts.add(chart);
@@ -135,7 +137,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractorRev);
         var chart= getXyChart("","Revenue (Euro)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         addDataToChart(simulationResultsMap, chart, extractorRev,IS_STAIRS);
         charts.add(chart);
     }
@@ -149,7 +151,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Inc. FCR (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
     }
@@ -164,7 +166,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Inc. energy (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
 
@@ -180,7 +182,7 @@ public class TradeSimulationPlotter<V> {
         List<Double> allValues = getAllValues(simulationResultsMap, extractor);
         var chart = createChart("Cost. degr. (Euro/h)");
         setYMinMax(chart, Collections.min(allValues), Collections.max(allValues));
-        setXTicks(chart);
+        setXTicks(chart, settings.fromToHour());
         addDataToChart(simulationResultsMap, chart, extractor,IS_STAIRS);
         charts.add(chart);
     }
@@ -217,16 +219,7 @@ public class TradeSimulationPlotter<V> {
         chart.getStyler().setYAxisMax(yAxisMax);
     }
 
-    private void setXTicks(XYChart chart) {
-        var fromToHour=settings.fromToHour();
-        double timeMax = 24;
-        Function<Double, String> xTickFormatter = time -> {
-            double timeAdded=time+fromToHour.getFirst();
-            double timeShowed=(timeAdded< timeMax)?timeAdded:(timeAdded- timeMax);
-            return String.format("%.1f", timeShowed);
-        };
-        chart.getStyler().setxAxisTickLabelsFormattingFunction(xTickFormatter);
-    }
+
     
     private void addDataToChart(Map<Integer, List<SimulationResult<V>>> simulationResultsMap,
                                 XYChart chart,
@@ -242,19 +235,16 @@ public class TradeSimulationPlotter<V> {
     }
 
     private  XYSeries addValuesToChart(XYChart chart, List<Double> values, Integer simNr) {
-        return chart.addSeries("" + simNr, getTimes(values), values);
+        return chart.addSeries("" + simNr, getXTicks(values, settings), values);
     }
 
     private  XYSeries addValuesAsStairsToChart(XYChart chart, List<Double> values, Integer simNr) {
         var xyDataStair= StairDataGenerator.generateWithEndStep(Pair.create(
-                ListUtils.toArray(getTimes(values)),ListUtils.toArray(values)));
+                ListUtils.toArray(getXTicks(values, settings)),ListUtils.toArray(values)));
 
         return chart.addSeries("" + simNr, xyDataStair.getFirst(), xyDataStair.getSecond());
     }
 
-    private List<Double> getTimes(List<Double> yList) {
-        return ListUtils.doublesStartEndStep(0, settings.dt() * (yList.size() - 1), settings.dt());
-    }
 
     void styleCharts(List<XYChart> charts) {
         charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.NONE)));

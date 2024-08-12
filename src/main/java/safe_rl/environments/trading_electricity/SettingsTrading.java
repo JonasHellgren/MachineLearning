@@ -45,7 +45,7 @@ public record SettingsTrading(
         }
     }
 
-    public void check() {
+    public void throwExceptionIfNonCorrect() {
         DataChecker checker = getDataChecker();
         Preconditions.checkArgument(checker.isPowerCapOk,
                 "powerFcrExtreme is to large, decrease e.g. powerCapacityFcr");

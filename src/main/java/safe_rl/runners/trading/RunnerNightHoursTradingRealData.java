@@ -6,6 +6,7 @@ import org.apache.commons.math3.util.Pair;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.factories.TrainerParametersFactory;
+import safe_rl.environments.trading_electricity.ElectricPricePlotter;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.other.runner_helpers.PlotterSaverAndPrinterTrading;
 import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
@@ -16,23 +17,32 @@ public class RunnerNightHoursTradingRealData {
 
     static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
     static int DAY_IDX = 1;
-    static boolean IS_G2V =false;
+    static boolean IS_G2V =true;
 
     @SneakyThrows
     public static void main(String[] args) {
         var dayId = DAYS_CLUSTER_ANALYSIS.get(DAY_IDX);
-        var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR,Pair.create(FILE_ENERGY,FILE_FCR));
+        var fromToHour = FROM_TO_HOUR;
+        var energyFcrPricePair= ElDataHelper.getPricePair(dayId, fromToHour,Pair.create(FILE_ENERGY,FILE_FCR));
+
+
+
         double powerChargeMax=POWER_CHARGE_MAX2;
         double cap=powerChargeMax/2;
-
 
         var settings= IS_G2V
                 ? SettingsTradingFactory.getSettingsG2V(
                         energyFcrPricePair, SOC_START, SOC_DELTA, powerChargeMax, PRICE_BATTERY)
                 : SettingsTradingFactory.getSettingsV2G(
                         energyFcrPricePair, cap, SOC_START, SOC_DELTA, powerChargeMax, PRICE_BATTERY);
+        settings.throwExceptionIfNonCorrect();
 
-        settings.check();
+        var plotter= ElectricPricePlotter.builder()
+                .dayId(dayId).fromToHour(fromToHour).energyFcrPricePair(energyFcrPricePair)
+                .settings(settings)
+                .build();
+
+        plotter.plot();
         var helper = PlotterSaverAndPrinterTrading.<VariablesTrading>builder()
                 .nSim(N_SIMULATIONS_PLOTTING).settings(settings)
                 .build();
