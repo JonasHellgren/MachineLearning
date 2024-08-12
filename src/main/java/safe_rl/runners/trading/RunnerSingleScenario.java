@@ -30,7 +30,10 @@ public class RunnerSingleScenario {
         createHeader(resTable);
 
         var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
-        double valG2V = getResultG2V(settings);
+        var resG2V= getResultG2V(settings);
+        double valG2V=resG2V.getFirst();
+        double sohEnd=resG2V.getSecond().getVariables().soh();
+        System.out.println("sohEnd = " + sohEnd);
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d));
 
         settings = getSettingsV2G(

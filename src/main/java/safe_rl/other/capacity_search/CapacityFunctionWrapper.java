@@ -33,7 +33,7 @@ public class CapacityFunctionWrapper implements FunctionWrapperI {
         try {
             trainer.train();
             //plotting(settings,trainerAndSimulator);
-            return simulator.simulationValueInStartState(N_SIM_START_STATE_EVAL);
+            return simulator.sumRewardsFromSimulations(N_SIM_START_STATE_EVAL);
         } catch (JOptimizerException e) {
             return poorValue;
         }

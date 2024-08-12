@@ -2,8 +2,10 @@ package safe_rl.other.runner_helpers;
 
 import com.joptimizer.exception.JOptimizerException;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.environments.factories.TrainerSimulatorFactoryTrading;
 import safe_rl.environments.trading_electricity.SettingsTrading;
+import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.other.capacity_search.CapacityOptimizer;
 
 import static safe_rl.persistance.ElDataFinals.TOL_GOLDEN_SEARCH;
@@ -19,13 +21,13 @@ public class ResultExtractor {
         return optimizer.optimize();
     }
 
-    public static double getResultG2V(SettingsTrading settings) throws JOptimizerException {
+    public static Pair<Double,StateI<VariablesTrading>> getResultG2V(SettingsTrading settings) throws JOptimizerException {
         settings.check();
         var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(settings, NOF_EPISODES_G2V);
         var trainer = trainerAndSimulator.getFirst();
         var simulator = trainerAndSimulator.getSecond();
         trainer.train();
-        return simulator.simulationValueInStartState(1);
+        return Pair.create(simulator.sumRewardsFromSimulations(1),simulator.endStateFromSingleSimulation());
     }
 
 }

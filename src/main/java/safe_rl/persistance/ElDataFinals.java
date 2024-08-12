@@ -36,16 +36,6 @@ public class ElDataFinals {
             DayId.of(24, 4, 10, "se3") //low energy price std, high fcr price
     );
 
-
-    public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
-
-    public static final double POWER_MIN = 0d;
-    public static final double POWER_CHARGE_MAX = 22d;
-    public static final double PRICE_BATTERY = 30e3;
-    public static final double SOC_START = 0.85;
-    public static final double SOC_DELTA = 0.10;
-
-//    public static final double SOC_TERMINAL_MIN = 0.95;
     public static final int N_SIMULATIONS_PLOTTING = 5;
     public static final int N_SIM_START_STATE_EVAL = 10;
 
@@ -62,15 +52,23 @@ public class ElDataFinals {
 
     public static final double INTEREST_RATE = 0.05;
     public static final double LIFT_TIME = 5;
-    public static final double PRICE_HW = 1000d;
     public static final int N_DAYS_YEAR = 365;
 
-    //Alternative values used by ScenarioParameterVariantsFactory
+    public static final Pair<Integer, Integer> FROM_TO_HOUR = Pair.create(17, 8);
 
+    public static final double POWER_MIN = 0d;
+    public static final double SOC_DELTA = 0.10;
+
+    public static final double PRICE_BATTERY = 40e3;  //Euro
+    public static final double PRICE_HW = 1000d;    //Euro
+    public static final double SOC_START = 0.85;
+    public static final double POWER_CHARGE_MAX = 3.5d;  //kW
+
+    //Alternative values used by ScenarioParameterVariantsFactory
     public static final double PRICE_BATTERY2 = 20e3;
     public static final double PRICE_HW2 = 500d;
     public static final double SOC_START2 = 0.55;
-    public static final double POWER_CHARGE_MAX2 = 3.5d;
+    public static final double POWER_CHARGE_MAX2 = 22d;
 
 
     public static double getCostHwPerDay(double priceHW) {

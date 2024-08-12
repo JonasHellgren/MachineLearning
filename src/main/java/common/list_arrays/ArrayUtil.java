@@ -2,10 +2,8 @@ package common.list_arrays;
 
 import common.math.MathUtils;
 import org.apache.commons.math3.util.Pair;
-
 import java.util.*;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public class ArrayUtil {
 

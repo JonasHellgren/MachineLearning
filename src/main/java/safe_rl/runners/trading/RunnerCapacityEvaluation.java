@@ -52,7 +52,7 @@ public class RunnerCapacityEvaluation {
             var simulator = trainerAndSimulator.getSecond();
             try {
                 trainer.train();
-                double val = simulator.simulationValueInStartState(N_SIM_START_STATE_EVAL);
+                double val = simulator.sumRewardsFromSimulations(N_SIM_START_STATE_EVAL);
                 capValueMap.put(cap, val);
                 log.info("all fine");
             } catch (JOptimizerException e) {

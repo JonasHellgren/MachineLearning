@@ -38,7 +38,7 @@ public class RunnerManyScenarios {
 
             var energyFcrPricePair = ElDataHelper.getPricePair(dayId, FROM_TO_HOUR, Pair.create(FILE_ENERGY, FILE_FCR));
             var settings = getSettingsG2V(energyFcrPricePair, p.socStart(), SOC_DELTA, p.powerChargeMax(), p.priceBattery());
-            double valG2V = getResultG2V(settings);
+            double valG2V = getResultG2V(settings).getFirst();
             putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d, 0d));
 
             settings = getSettingsV2G(

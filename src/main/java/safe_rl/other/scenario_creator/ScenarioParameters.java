@@ -16,8 +16,8 @@ public record ScenarioParameters(double priceBattery,
         return List.of("priceBattery","priceHWAddOn", "socStart", "powerChargeMax","dayIdx");
     }
 
-    public  List<Number> asListOfNumbers() {
-        return List.of(priceBattery,priceHWAddOn, socStart, powerChargeMax,dayIdx);
+    public List<Number> asListOfNumbers() {
+        return List.of(priceBattery,priceHWAddOn, socStart, powerChargeMax, dayIdx);
     }
 
 
