@@ -5,6 +5,7 @@ import com.google.common.collect.Table;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.util.Pair;
+import safe_rl.other.runner_helpers.ResultExtractor;
 import safe_rl.persistance.ElDataHelper;
 import safe_rl.persistance.trade_environment.PathAndFile;
 import static safe_rl.environments.factories.SettingsTradingFactory.getSettingsG2V;
@@ -18,7 +19,7 @@ import static safe_rl.persistance.ElDataFinals.*;
 
 public class RunnerSingleScenario {
 
-    public static int DAY_IDX = 1;
+    public static int DAY_IDX = 0;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -32,22 +33,21 @@ public class RunnerSingleScenario {
         var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
         var resG2V= getResultG2V(settings);
         double valG2V=resG2V.getFirst();
-        double sohEnd=resG2V.getSecond().getVariables().soh();
-        System.out.println("sohEnd = " + sohEnd);
-        putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d));
+        double dSoHG2V= ResultExtractor.dSoHInPercentage(resG2V.getSecond());
+        System.out.println("dSoHG2V = " + dSoHG2V);
+        putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d),dSoHG2V);
 
         settings = getSettingsV2G(
                 energyFcrPricePair, DUMMY_CAP_NON_ZERO, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
         var resultV2G = getResultV2G(settings);
-        putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(resultV2G.getSecond(), -costHwPerDay,0d));
+        double valV2G=resultV2G.getMiddle();
+        double dSoHV2G= ResultExtractor.dSoHInPercentage(resultV2G.getRight());
+        System.out.println("dSoHV2G = " + dSoHV2G);
+        putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(valV2G, -costHwPerDay,0d),dSoHV2G);
 
         computeSumColumns(resTable, ROWS_SCEANARIOS, COLUMNS_DATA,SUM_COLUMN);
         printTableAsMatrix(resTable);
         convertTableToExcel(resTable, PathAndFile.xlsxOf(RES_PATH,"scen_res_"+dayId.toString()));
     }
-
-
-
-
 
 }

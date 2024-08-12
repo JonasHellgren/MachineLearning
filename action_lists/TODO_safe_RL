@@ -221,7 +221,7 @@ RunnerManyScenarios  x
 
 multidim graf som visar hur isV2gBetter beror på batt price targetCritic x
 
-RunnerSingleScenario visa rel delta soh
+RunnerSingleScenario visa rel delta soh x
 
 tänk igenom non versus ändra data (2) för RunnerLoadAndPlotManyScenarios
 

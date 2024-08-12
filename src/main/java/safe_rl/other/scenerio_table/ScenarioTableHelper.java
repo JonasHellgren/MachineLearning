@@ -24,13 +24,19 @@ public class ScenarioTableHelper {
         resTable.put(HEADER_ROW, 2, "HW cost");
         resTable.put(HEADER_ROW, 3, "House el cost");
         resTable.put(HEADER_ROW, 4, "Adj. rev.");
+        resTable.put(HEADER_ROW, 5, "dSoH (ppm)");
     }
 
-    public static void putDataInRow(Table<Integer, Integer, String> resTable, int rowIdx, String scenName, Triple<Double,Double,Double> data) {
+    public static void putDataInRow(Table<Integer, Integer, String> resTable,
+                                    int rowIdx,
+                                    String scenName,
+                                    Triple<Double,Double,Double> data,
+                                    double dSohEnd) {
         resTable.put(rowIdx, 0, scenName);
         resTable.put(rowIdx, 1, formatter.format(data.getLeft()));
         resTable.put(rowIdx, 2, formatter.format(data.getMiddle()));
         resTable.put(rowIdx, 3, formatter.format(data.getRight()));
+        resTable.put(rowIdx, 5, formatter.format(dSohEnd));
     }
 
     public static void computeSumColumns(Table<Integer, Integer, String> table, Set<Integer> rowKeys, Set<Integer> columnKeys, int sumColumnKey) {
