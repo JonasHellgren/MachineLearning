@@ -19,7 +19,7 @@ import static safe_rl.persistance.ElDataFinals.*;
 
 public class RunnerSingleScenario {
 
-    public static int DAY_IDX = 0;
+    public static int DAY_IDX = 1;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -34,7 +34,6 @@ public class RunnerSingleScenario {
         var resG2V= getResultG2V(settings);
         double valG2V=resG2V.getFirst();
         double dSoHG2V= ResultExtractor.dSoHInPercentage(resG2V.getSecond());
-        System.out.println("dSoHG2V = " + dSoHG2V);
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d),dSoHG2V);
 
         settings = getSettingsV2G(
@@ -42,7 +41,6 @@ public class RunnerSingleScenario {
         var resultV2G = getResultV2G(settings);
         double valV2G=resultV2G.getMiddle();
         double dSoHV2G= ResultExtractor.dSoHInPercentage(resultV2G.getRight());
-        System.out.println("dSoHV2G = " + dSoHV2G);
         putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(valV2G, -costHwPerDay,0d),dSoHV2G);
 
         computeSumColumns(resTable, ROWS_SCEANARIOS, COLUMNS_DATA,SUM_COLUMN);

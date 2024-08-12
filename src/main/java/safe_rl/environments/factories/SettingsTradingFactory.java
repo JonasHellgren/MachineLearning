@@ -24,7 +24,7 @@ public class SettingsTradingFactory {
                 .dt(1)
                 .energyBatt(10)  //kWh
                 .powerChargeRange(Range.closed(-3d,3d))  //kW
-                .powerTolerance(POWER_TOL)
+                .powerTolerance(POWER_TOL).probZeroPower(PROB_ZERO_POWER)
                 .priceBattery(5e3)
                 .socRange(Range.closed(0d,1d))
                 .socStart(SOC_START).socDelta(SOC_DELTA)
@@ -57,7 +57,7 @@ public class SettingsTradingFactory {
                 .dt(1)
                 .energyBatt(100)
                 .powerChargeRange(Range.closed(-22d,22d))
-                .powerTolerance(POWER_TOL)
+                .powerTolerance(POWER_TOL).probZeroPower(PROB_ZERO_POWER)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
                 .socStart(SOC_START).socDelta(SOC_DELTA)
@@ -106,7 +106,7 @@ public class SettingsTradingFactory {
                 .dt(1)
                 .energyBatt(100)
                 .powerChargeRange(Range.closed(-100d,100d))
-                .powerTolerance(POWER_TOL)
+                .powerTolerance(POWER_TOL).probZeroPower(PROB_ZERO_POWER)
                 .priceBattery(30e3)
                 .socRange(Range.closed(0d,1d))
                 .socStart(SOC_START).socDelta(SOC_DELTA)

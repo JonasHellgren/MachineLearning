@@ -16,6 +16,7 @@ public record SettingsTrading(
         double energyBatt,  //kWh
         @With Range<Double> powerChargeRange,  //kW
         double powerTolerance, //kW helps finding start point when powerMin is zero
+        double probZeroPower,
         @With double priceBattery,  //Euro
         Range<Double> socRange,
         @With double socStart,

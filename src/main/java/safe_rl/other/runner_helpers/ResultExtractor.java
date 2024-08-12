@@ -10,12 +10,10 @@ import safe_rl.environments.trading_electricity.SettingsTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.other.capacity_search.CapacityOptimizer;
 
-import static safe_rl.persistance.ElDataFinals.TOL_GOLDEN_SEARCH;
+import static safe_rl.persistance.ElDataFinals.*;
 
 public class ResultExtractor {
 
-    public static final int NOF_EPISODES_G2V = 1_000;
-    public static final int NOF_EPISODES_V2G = 500;
 
     @SneakyThrows
     //Triple = (capacityBest,sumRewards,endState)

@@ -29,16 +29,17 @@ public class RunnerCapacityEvaluation {
     public static void main(String[] args) {
         var dayId = DAYS.get(DAY_IDX);
         var energyFcrPricePair= ElDataHelper.getPricePair(dayId,FROM_TO_HOUR,Pair.create(FILE_ENERGY,FILE_FCR));
-        double powerMax = SettingsTradingFactory.new100kWhVehicleEmptyPrices().powerChargeMax();
+        double powerMax = POWER_CHARGE_MAX;
         final List<Double> powerCapList = ListUtils.doublesStartEndStep(POWER_MIN, powerMax,powerMax/ N_CAPS);
 
         Map<Double, Double> capValueMap = new HashMap<>();
         var timer = CpuTimer.newWithTimeBudgetInMilliSec(0);
 
+        System.out.println("powerCapList = " + powerCapList);
 
         for (double cap : powerCapList) {
             var settings = getSettingsV2G(
-                    energyFcrPricePair, cap, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
+                    energyFcrPricePair, cap, SOC_START, SOC_DELTA, powerMax, PRICE_BATTERY);
 
             if (!settings.isDataOk()) {
                 capValueMap.put(cap, POOR_VALUE);
@@ -51,7 +52,9 @@ public class RunnerCapacityEvaluation {
             var trainer = trainerAndSimulator.getFirst();
             var simulator = trainerAndSimulator.getSecond();
             try {
+                log.info("Training started");
                 trainer.train();
+                log.info("Training finished");
                 double val = simulator.sumRewardsFromSimulations(N_SIM_START_STATE_EVAL);
                 capValueMap.put(cap, val);
                 log.info("all fine");

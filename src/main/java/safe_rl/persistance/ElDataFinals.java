@@ -36,11 +36,17 @@ public class ElDataFinals {
             DayId.of(24, 4, 10, "se3") //low energy price std, high fcr price
     );
 
+
+    public static final int NOF_EPISODES_G2V = 1_000;
+    public static final int NOF_EPISODES_V2G = 500;
+
     public static final int N_SIMULATIONS_PLOTTING = 5;
     public static final int N_SIM_START_STATE_EVAL = 10;
 
     public static final double POOR_VALUE = -100d;
-    public static final double POWER_TOL = 0.5;
+    public static final double POWER_TOL = 1e-6;
+    public static final double PROB_ZERO_POWER = 0.1;
+
     public static final double TOL_GOLDEN_SEARCH = 1d;
     public static final int N_ITER_MAX_GOLDEN_SEARCH = 100;
     public static final int NOF_EPISODES = 500;

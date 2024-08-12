@@ -223,6 +223,8 @@ multidim graf som visar hur isV2gBetter beror på batt price targetCritic x
 
 RunnerSingleScenario visa rel delta soh x
 
+dSoH V2G mindre än för G2V  x
+
 tänk igenom non versus ändra data (2) för RunnerLoadAndPlotManyScenarios
 
 tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
