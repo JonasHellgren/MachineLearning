@@ -2,8 +2,6 @@ package safe_rl.domain.trainer.recorders;
 
 import com.joptimizer.exception.JOptimizerException;
 import common.list_arrays.ListUtils;
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.experimental.Delegate;
 import policy_gradient_problems.domain.value_classes.ProgressMeasures;
 import safe_rl.domain.agent.helpers.LossTracker;
@@ -39,7 +37,7 @@ public class Recorder<V> {
 
         List<SimulationResult<V>> simulationResults = null;
         try {
-            simulationResults = simulator.simulateWithNoExploration();
+            simulationResults = simulator.simulateWithNoExplorationEndStateNotEnded();
         } catch (JOptimizerException e) {
             recorderTrainingProgress=new RecorderTrainingProgress(trainerParameters);
             return;

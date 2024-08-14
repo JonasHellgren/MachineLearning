@@ -225,14 +225,16 @@ RunnerSingleScenario visa rel delta soh x
 
 dSoH V2G mindre än för G2V  x
 
-tänk igenom non versus ändra data (2) för RunnerLoadAndPlotManyScenarios
+tänk igenom non versus ändra data (2) för RunnerLoadAndPlotManyScenarios x
 
-tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?
+tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?  ja x
 
+AgentSimulator snyggare  x
+
+TrainerMediator
 
 MeanLossCritic verkar som beräknas ofta
 BufferFitter - verkligen bra välja vanligast tid
-TrainerMediator
 
 
 critic loss alltid noll

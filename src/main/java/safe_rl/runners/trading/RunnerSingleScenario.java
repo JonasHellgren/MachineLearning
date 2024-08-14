@@ -19,7 +19,7 @@ import static safe_rl.persistance.ElDataFinals.*;
 
 public class RunnerSingleScenario {
 
-    public static int DAY_IDX = 1;
+    public static int DAY_IDX = 0;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -30,17 +30,18 @@ public class RunnerSingleScenario {
         Table<Integer, Integer, String> resTable = HashBasedTable.create();
         createHeader(resTable);
 
-        var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
+        double powerChargeMax = POWER_CHARGE_MAX;
+        var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, powerChargeMax, PRICE_BATTERY);
         var resG2V= getResultG2V(settings);
         double valG2V=resG2V.getFirst();
-        double dSoHG2V= ResultExtractor.dSoHInPercentage(resG2V.getSecond());
+        double dSoHG2V= ResultExtractor.dSoHInPPM(resG2V.getSecond());
         putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d,0d),dSoHG2V);
 
         settings = getSettingsV2G(
-                energyFcrPricePair, DUMMY_CAP_NON_ZERO, SOC_START, SOC_DELTA, POWER_CHARGE_MAX, PRICE_BATTERY);
+                energyFcrPricePair, DUMMY_CAP_NON_ZERO, SOC_START, SOC_DELTA, powerChargeMax, PRICE_BATTERY);
         var resultV2G = getResultV2G(settings);
         double valV2G=resultV2G.getMiddle();
-        double dSoHV2G= ResultExtractor.dSoHInPercentage(resultV2G.getRight());
+        double dSoHV2G= ResultExtractor.dSoHInPPM(resultV2G.getRight());
         putDataInRow(resTable, ROW_KEY_V2G,"V2G", Triple.of(valV2G, -costHwPerDay,0d),dSoHV2G);
 
         computeSumColumns(resTable, ROWS_SCEANARIOS, COLUMNS_DATA,SUM_COLUMN);

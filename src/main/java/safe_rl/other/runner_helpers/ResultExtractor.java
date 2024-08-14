@@ -30,13 +30,14 @@ public class ResultExtractor {
         settings.throwExceptionIfNonCorrect();
         var trainerAndSimulator = TrainerSimulatorFactoryTrading.trainerSimulatorPairNight(settings, NOF_EPISODES_G2V);
         var trainer = trainerAndSimulator.getFirst();
-        var simulator = trainerAndSimulator.getSecond();
         trainer.train();
-        return Pair.create(simulator.sumRewardsFromSimulations(1),simulator.endStateFromSingleSimulation());
+        var simulator = trainerAndSimulator.getSecond();
+        StateI<VariablesTrading> endStateFromSingleSimulation = simulator.endStateFromSingleSimulation();
+        return Pair.create(simulator.sumRewardsFromSimulations(1), endStateFromSingleSimulation);
     }
 
-    public static double dSoHInPercentage(StateI<VariablesTrading> result) {
-        return (1-result.getVariables().soh())*1e6;
+    public static double dSoHInPPM(StateI<VariablesTrading> state) {
+        return (1-state.getVariables().soh())*1e6;
     }
 
 }

@@ -28,11 +28,19 @@ public class AgentSimulator<V> {
     @NonNull EnvironmentI<V> environment;
 
     public List<SimulationResult<V>> simulateWithExploration() throws JOptimizerException {
-        return simulate(true);
+        return simulate(true, false);
     }
 
-    public List<SimulationResult<V>> simulateWithNoExploration() throws JOptimizerException {
-        return simulate(false);
+    public List<SimulationResult<V>> simulateWithNoExplorationEndStateNotEnded() throws JOptimizerException {
+        return simulate(false, false);
+    }
+
+    public List<SimulationResult<V>> simulateWithNoExplorationEndStateEnded() throws JOptimizerException {
+        return simulate(false, true);
+    }
+
+    public List<SimulationResult<V>> simulateWithExplorationEndStateEnded() throws JOptimizerException {
+        return simulate(true, true);
     }
 
     public double criticValueInStartState() {
@@ -41,34 +49,34 @@ public class AgentSimulator<V> {
 
     public double sumRewardsFromSimulations(int nSim) throws JOptimizerException {
 
-        List<Double> srList=Lists.newArrayList();
-        for (int i = 0; i < nSim ; i++) {
-            List<SimulationResult<V>> simresList=simulate(false);
-            double sumReward=simresList.stream().mapToDouble(sr -> sr.reward()).sum();
+        List<Double> srList = Lists.newArrayList();
+        for (int i = 0; i < nSim; i++) {
+            List<SimulationResult<V>> simresList = simulateWithNoExplorationEndStateNotEnded();
+            double sumReward = simresList.stream().mapToDouble(sr -> sr.reward()).sum();
             srList.add(sumReward);
         }
         return ListUtils.findAverage(srList).orElseThrow();
     }
 
     public StateI<V> endStateFromSingleSimulation() throws JOptimizerException {
-        List<SimulationResult<V>> simresList=simulate(false);
+        List<SimulationResult<V>> simresList = simulateWithNoExplorationEndStateEnded();
         return ListUtils.findEnd(simresList).orElseThrow().state();
     }
 
 
-    List<SimulationResult<V>> simulate(boolean exploration) throws JOptimizerException {
+    List<SimulationResult<V>> simulate(boolean exploration, boolean isAddEndState) throws JOptimizerException {
         boolean isTerminalOrFail = false;
         var state = startStateSupplier.get().copy();
         List<SimulationResult<V>> simulationResults = Lists.newArrayList();
 
-        StepReturn<V> sr=null;
+        StepReturn<V> sr = null;
         while (!isTerminalOrFail) {
             var action = exploration
                     ? agent.chooseAction(state)
                     : agent.chooseActionNoExploration(state);
             var state0 = state.copy();
             var actionCorrected = safetyLayer.correctAction(state, action);
-            log.fine("stateNew = " + state + ", action = " + action+ ", actionCorr = " + actionCorrected);
+            log.fine("stateNew = " + state + ", action = " + action + ", actionCorr = " + actionCorrected);
 
             sr = environment.step(state, actionCorrected);
             state.setVariables(sr.state().getVariables());
@@ -78,8 +86,11 @@ public class AgentSimulator<V> {
             isTerminalOrFail = sr.isTerminal() || sr.isFail();
 
         }
-        simulationResults.add(
-                new SimulationResult<>(sr.state(), sr.reward(), Action.ofDouble(0d),Action.ofDouble(0d)));
+        //the state after the very last step is used by method endStateFromSingleSimulation()
+        if (isAddEndState) {
+            simulationResults.add(
+                    new SimulationResult<>(sr.state(), 0d, Action.ofDouble(0d), Action.ofDouble(0d)));
+        }
         return simulationResults;
     }
 

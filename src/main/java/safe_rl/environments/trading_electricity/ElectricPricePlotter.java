@@ -29,7 +29,7 @@ public class ElectricPricePlotter {
         var pricesEnergy = energyFcrPricePair.getFirst();
         var pricesFcr = energyFcrPricePair.getSecond();
         charts.add(getChart(pricesEnergy, "Energy (E/kWh)"));
-        charts.add(getChart(pricesFcr, "FCR E/kW)"));
+        charts.add(getChart(pricesFcr, "FCR (E/kW)"));
         new SwingWrapper<>(charts).displayChartMatrix();
     }
 

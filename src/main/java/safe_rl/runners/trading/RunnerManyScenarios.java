@@ -41,14 +41,14 @@ public class RunnerManyScenarios {
             var settings = getSettingsG2V(energyFcrPricePair, p.socStart(), SOC_DELTA, p.powerChargeMax(), p.priceBattery());
             var resG2V= getResultG2V(settings);
             double valG2V=resG2V.getFirst();
-            double dSoHG2V= ResultExtractor.dSoHInPercentage(resG2V.getSecond());
+            double dSoHG2V= ResultExtractor.dSoHInPPM(resG2V.getSecond());
             putDataInRow(resTable, ROW_KEY_G2V, "G2V", Triple.of(valG2V, -0d, 0d),dSoHG2V);
 
             settings = getSettingsV2G(
                     energyFcrPricePair, DUMMY_CAP_NON_ZERO,p.socStart(), SOC_DELTA, p.powerChargeMax(), p.priceBattery());
             var resultV2G =  getResultV2G(settings);
             double valV2G=resultV2G.getMiddle();
-            double dSoHV2G= ResultExtractor.dSoHInPercentage(resultV2G.getRight());
+            double dSoHV2G= ResultExtractor.dSoHInPPM(resultV2G.getRight());
 
             putDataInRow(resTable, ROW_KEY_V2G, "V2G", Triple.of(valV2G, -costHwPerDay, 0d),dSoHV2G);
 

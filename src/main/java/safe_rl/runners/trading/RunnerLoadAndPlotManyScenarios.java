@@ -38,7 +38,7 @@ public class RunnerLoadAndPlotManyScenarios {
     }
 
     static Function<Double, Integer> categorize = (Double d) -> {
-        if (d < 0.5) {
+        if (d < 0) {
             return 1;
         } else if (d>10) {
             return 3;

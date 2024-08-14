@@ -68,7 +68,7 @@ public class PlotterSaverAndPrinterTrading<V> {
             AgentSimulator<VariablesTrading> simulator) throws JOptimizerException {
         Map<Integer, List<SimulationResult<VariablesTrading>>> simulationResultsMap=new HashMap<>();
         for (int i = 0; i < nSim; i++) {
-            simulationResultsMap.put(i, simulator.simulateWithNoExploration());
+            simulationResultsMap.put(i, simulator.simulateWithNoExplorationEndStateNotEnded());
         }
         return simulationResultsMap;
     }

@@ -64,7 +64,7 @@ public class ElPriceRepoPlotter {
     public void plotScatterWithAddedPoints(List<Double> avgList, List<Double> stdList) {
         Preconditions.checkArgument(!avgList.isEmpty() && avgList.size()==stdList.size(),"Non correct list(s)");
         XYChart chart = getScatterChartDay();
-        var series=chart.addSeries("Close to cluster", avgList, stdList);
+        var series=chart.addSeries("Representative days", avgList, stdList);
         series.setMarkerColor(MARKER_COLOR_ADDED);
         new SwingWrapper<>(chart).displayChart();
     }

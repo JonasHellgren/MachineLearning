@@ -88,6 +88,7 @@ public class TradeSimulationPlotter<V> {
                     ListUtils.cumulativeSum(revenues));
             series.setMarker(SeriesMarkers.NONE);
         }
+        setXTicks(chart, settings.fromToHour());
         charts.add(chart);
     }
 
@@ -247,7 +248,8 @@ public class TradeSimulationPlotter<V> {
 
 
     void styleCharts(List<XYChart> charts) {
-        charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.NONE)));
+        charts.forEach(c -> c.getSeriesMap().values().forEach(s -> s.setMarker(SeriesMarkers.CIRCLE)));
+        charts.forEach(c -> c.getStyler().setMarkerSize(3));
         charts.forEach(c -> c.getStyler().setChartBackgroundColor(Color.WHITE));
         charts.forEach(c -> c.getStyler().setPlotBorderVisible(IS_NOT_STAIRS)); // Border
         charts.forEach(c -> c.getStyler().setLegendVisible(IS_NOT_STAIRS));

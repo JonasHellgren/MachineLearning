@@ -4,13 +4,11 @@ import common.other.CpuTimer;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.util.Pair;
-import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.TrainerMultiStepACDC;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
-import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 import safe_rl.environments.factories.AgentParametersFactory;
 import safe_rl.environments.factories.FactoryOptModel;
@@ -42,7 +40,7 @@ public class Runner5HoursBuying {
         trainer.train();
         trainer.getRecorder().plot("Multi step ACDC");
         var simulator = trainerAndSimulator.getSecond();
-        var simRes = simulator.simulateWithNoExploration();
+        var simRes = simulator.simulateWithNoExplorationEndStateNotEnded();
         printing(trainer, simRes, timer);
     }
 

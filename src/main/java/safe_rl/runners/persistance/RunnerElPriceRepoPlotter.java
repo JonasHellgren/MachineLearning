@@ -13,14 +13,6 @@ public class RunnerElPriceRepoPlotter {
     public static final ElPriceRepoPlotter.Settings DEF_SETTINGS =
             ElPriceRepoPlotter.Settings.newDefault();
     public static final int N_CLUSTERS = 4;
-
-
-/*
-    static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "day-ahead-2024_EurPerMWh");
-    static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "fcr-n-2024_EurPerMW");
-*/
-
-
     static PathAndFile fileEnergy = PathAndFile.xlsxOf(PATH, "Day-ahead-6months-EuroPerMWh");
     static PathAndFile fileFcr = PathAndFile.xlsxOf(PATH, "FCR-N-6months-EuroPerMW");
 
