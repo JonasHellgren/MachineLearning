@@ -4,6 +4,8 @@ import com.joptimizer.exception.JOptimizerException;
 import common.other.Conditionals;
 import lombok.Getter;
 import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.environment.value_objects.StepReturn;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
@@ -23,7 +25,7 @@ public class Mediator<V> implements MediatorI<V> {
     Recorder<V> recorder;
 
     EpisodeCreator<V> episodeCreator;
-    ACDCMultiStepEpisodeTrainer<V> episodeFitter;
+    ACDCMultiStepEpisodeFitter<V> episodeFitter;
     FitterUsingReplayBuffer<V> bufferFitter;
 
     public Mediator(TrainerExternal<V> external,
@@ -34,7 +36,7 @@ public class Mediator<V> implements MediatorI<V> {
         this.parameters = parameters;
         this.recorder = recorder;
         this.episodeCreator = new EpisodeCreator<>(this);
-        this.episodeFitter = new ACDCMultiStepEpisodeTrainer<>(this);
+        this.episodeFitter = new ACDCMultiStepEpisodeFitter<>(this);
         this.bufferFitter = new FitterUsingReplayBuffer<>(this,indexFeature);
     }
 
@@ -49,28 +51,38 @@ public class Mediator<V> implements MediatorI<V> {
         return episodeCreator.getExperiences(external.agent(), getStartState());
     }
 
-/*    @Override
-    public void train() {
-
-    }
-
     @Override
-    public double pRandomAction() {
-        return 0;
-    }
-*/
-
-    @Override
-    public MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
+    public MultiStepResults<V> fitAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList = recorder.criticLossTraj();
         return episodeFitter.trainAgentFromExperiences(experiences, errorList);
     }
 
     @Override
-    public void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
+    public void fitAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
         Conditionals.executeIfFalse(buffer.isEmpty(), () ->
                 IntStream.range(0, parameters.nReplayBufferFitsPerEpisode())
                         .forEach(i -> bufferFitter.fit(buffer)));
+    }
+
+    @Override
+    public void updateRecorder(List<Experience<V>> experiences) {
+        recorder.recordTrainingProgress(experiences, external.agent());
+    }
+
+    @Override
+    public void addNewExperiencesToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer) {
+        Conditionals.executeIfFalse(msr.isEmpty(), () ->
+                buffer.addAll(msr.experienceList()));
+    }
+
+    @Override
+    public Action correctAction(StateI<V> state, Action action) throws JOptimizerException {
+        return getExternal().safetyLayer().correctAction(state, action);
+    }
+
+    @Override
+    public StepReturn<V> step(StateI<V> state, Action action) {
+        return external.environment().step(state, action);
     }
 
 }

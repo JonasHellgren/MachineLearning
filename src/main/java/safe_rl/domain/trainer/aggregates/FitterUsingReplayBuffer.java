@@ -34,23 +34,9 @@ public class FitterUsingReplayBuffer<V> {
 
     public static final int N_FEAT = 1;
     public static final int MIN_NOF_POINTS = 2;
-/*
-    AgentACDiscoI<V> agent;
-    TrainerParameters parameters;
-*/
     int indexFeature;
     LinearBatchFitter fitterCritic, fitterActorMean, fitterActorStd;
 
-/*    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
-                                   TrainerParameters trainerParameters,
-                                   int indexFeature) {
-        this.agent = agent;
-        this.parameters = trainerParameters;
-        this.indexFeature = indexFeature;
-        this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
-        this.fitterActorMean = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
-        this.fitterActorStd = new LinearBatchFitter(parameters.learningRateReplayBufferActorStd());
-    }*/
 
     public FitterUsingReplayBuffer(MediatorI<V> mediator,
                                    int indexFeature) {
@@ -86,10 +72,6 @@ public class FitterUsingReplayBuffer<V> {
         var batchDataActor = createData(experiences, loss, true);
         paramsActor = fitterActorMean.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
-    }
-
-     AgentACDiscoI<V> getAgent() {
-        return mediator.getExternal().agent();
     }
 
     private void fitActorStd(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
@@ -180,6 +162,10 @@ public class FitterUsingReplayBuffer<V> {
 
     private  TrainerParameters getParameters() {
         return mediator.getParameters();
+    }
+
+    private AgentACDiscoI<V> getAgent() {
+        return mediator.getExternal().agent();
     }
 
 

@@ -14,6 +14,7 @@ import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.simulator.value_objects.SimulationResult;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.environment.value_objects.StepReturn;
+import safe_rl.domain.trainer.value_objects.TrainerExternal;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -26,6 +27,10 @@ public class AgentSimulator<V> {
     @NonNull SafetyLayer<V> safetyLayer;
     @NonNull Supplier<StateI<V>> startStateSupplier;
     @NonNull EnvironmentI<V> environment;
+
+    public static <V> AgentSimulator<V> ofExternal(TrainerExternal<V> ext) {
+        return new AgentSimulator<>(ext.agent(),ext.safetyLayer(), ext.startStateSupplier(), ext.environment());
+    }
 
     public List<SimulationResult<V>> simulateWithExploration() throws JOptimizerException {
         return simulate(true, false);

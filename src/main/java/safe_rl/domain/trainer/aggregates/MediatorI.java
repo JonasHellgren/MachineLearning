@@ -3,6 +3,8 @@ package safe_rl.domain.trainer.aggregates;
 
 import com.joptimizer.exception.JOptimizerException;
 import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.environment.value_objects.Action;
+import safe_rl.domain.environment.value_objects.StepReturn;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
@@ -19,10 +21,13 @@ public interface MediatorI<V> {
 
     List<Experience<V>> getExperiences() throws JOptimizerException;
 
-    MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences);
-    void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer);
+    MultiStepResults<V> fitAgentFromNewExperiences(List<Experience<V>> experiences);
+    void fitAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer);
+    void updateRecorder(List<Experience<V>> experiences);
+    void addNewExperiencesToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer);
 
-
+    Action correctAction(StateI<V> state, Action action) throws JOptimizerException;
+    StepReturn<V> step(StateI<V> state, Action action);
 
     //   void train();
    // Episode<V> runEpisode();
