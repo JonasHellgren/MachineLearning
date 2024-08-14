@@ -40,9 +40,10 @@ public class TrainerOneStepACDC<V> {
         this.environment = environment;
         this.agent = agent;
         this.trainerParameters = trainerParameters;
-        this.episodeCreator = EpisodeCreator.<V>builder()
+/*        this.episodeCreator = EpisodeCreator.<V>builder()
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
-                .build();
+                .build();*/
+        this.episodeCreator=new EpisodeCreator<>(null);  //TODO FIX
         this.startStateSupplier=startStateSupplier;
         this.episodeTrainer = ACDCOneStepEpisodeTrainer
                 .<V>builder()

@@ -50,9 +50,9 @@ public class TrainerMultiStepACDC<V> {
         this.environment = environment;
         this.agent = agent;
     //    this.trainerParameters = trainerParameters;
-        var episodeCreator = EpisodeCreator.<V>builder()
+      /*  var episodeCreator = EpisodeCreator.<V>builder()
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
-                .build();
+                .build();*/
       //  this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
@@ -62,7 +62,7 @@ public class TrainerMultiStepACDC<V> {
 
         this.mediator=new Mediator<>(
                 new TrainerExternal<>(environment,agent,safetyLayer,startStateSupplier),
-                trainerParameters,recorder,episodeCreator);
+                trainerParameters,recorder);
     }
 
 
@@ -85,13 +85,6 @@ public class TrainerMultiStepACDC<V> {
         return ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
                 parameters.replayBufferSize(), parameters.isRemoveOldest());
     }
-
-/*
-    List<Experience<V>> getExperiences() throws JOptimizerException {
-        return episodeCreator.getExperiences(agent, mediator.getStartState());
-    }
-*/
-
 
     MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList = mediator.getRecorder().criticLossTraj();

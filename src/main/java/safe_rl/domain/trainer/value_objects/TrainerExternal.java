@@ -13,6 +13,6 @@ public record TrainerExternal<V>(
         @NonNull EnvironmentI<V> environment,
         @NonNull AgentACDiscoI<V> agent,
         @NonNull SafetyLayer<V> safetyLayer,
-        Supplier<StateI<V>> startStateSupplier
+        @NonNull Supplier<StateI<V>> startStateSupplier
 ) {
 }

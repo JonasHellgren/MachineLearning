@@ -39,10 +39,10 @@ class TestEpisodeCreator {
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
-        episodeCreator = EpisodeCreator.<VariablesBuying>builder()
+      /*  episodeCreator = EpisodeCreator.<VariablesBuying>builder()
                 .environment(environment).parameters(trainerParameters).safetyLayer(safetyLayer)
                 .build();
-    }
+*/    }
 
     @Test
     @SneakyThrows

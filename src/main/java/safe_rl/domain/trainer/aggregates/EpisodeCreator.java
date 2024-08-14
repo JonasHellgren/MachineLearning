@@ -3,6 +3,7 @@ package safe_rl.domain.trainer.aggregates;
 
 import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import safe_rl.domain.agent.interfaces.AgentI;
 import safe_rl.domain.environment.value_objects.Action;
@@ -17,12 +18,20 @@ import safe_rl.domain.safety_layer.SafetyLayer;
 import java.util.List;
 import java.util.Optional;
 
-@Builder
+//@AllArgsConstructor
 public class EpisodeCreator<V> {
     public static final int VALUE_DUMMY = 0;
+/*
     EnvironmentI<V> environment;
     TrainerParameters parameters;
     SafetyLayer<V> safetyLayer;
+*/
+
+    MediatorI<V> mediator;
+
+    public EpisodeCreator(MediatorI<V> mediator) {
+        this.mediator = mediator;
+    }
 
     public List<Experience<V>> getExperiences(AgentI<V> agent, StateI<V> stateStart) throws JOptimizerException {
         List<Experience<V>> experienceList = Lists.newArrayList();
@@ -31,8 +40,8 @@ public class EpisodeCreator<V> {
         var state=stateStart.copy();
         do {
             var action = agent.chooseAction(state);
-            var actionMaybeCorrected = safetyLayer.correctAction(state, action);
-            sr = environment.step(state, actionMaybeCorrected);
+            var actionMaybeCorrected = mediator.getExternal().safetyLayer().correctAction(state, action);
+            sr = mediator.getExternal().environment().step(state, actionMaybeCorrected);
             experienceList.add(createExperience(state, sr, action, actionMaybeCorrected));
             si++;
             state=sr.state();
@@ -64,7 +73,7 @@ public class EpisodeCreator<V> {
     }
 
     boolean isNotTerminalAndNofStepsNotExceeded(int si, StepReturn<V> sr) {
-        return !sr.isTerminal() && si < parameters.nofStepsMax();
+        return !sr.isTerminal() && si < mediator.getParameters().nofStepsMax();
     }
 
 }

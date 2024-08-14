@@ -2,6 +2,7 @@ package safe_rl.domain.trainer.aggregates;
 
 import com.joptimizer.exception.JOptimizerException;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
@@ -10,29 +11,21 @@ import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
 import java.util.List;
 
-@AllArgsConstructor
 public class Mediator<V> implements MediatorI<V> {
 
-    TrainerExternal<V> external;
-    TrainerParameters parameters;
-    Recorder<V> recorder;
+    @Getter  TrainerExternal<V> external;
+    @Getter TrainerParameters parameters;
+    @Getter Recorder<V> recorder;
 
     EpisodeCreator<V> episodeCreator;
 
-    @Override
-    public TrainerExternal<V> getExternal() {
-        return null;
+    public Mediator(TrainerExternal<V> external, TrainerParameters parameters, Recorder<V> recorder) {
+        this.external = external;
+        this.parameters = parameters;
+        this.recorder = recorder;
+        this.episodeCreator=new EpisodeCreator<>(this);
     }
 
-    @Override
-    public TrainerParameters getParameters() {
-        return parameters;
-    }
-
-    @Override
-    public Recorder<V> getRecorder() {
-        return recorder;
-    }
 
     @Override
     public StateI<V> getStartState() {
@@ -42,7 +35,6 @@ public class Mediator<V> implements MediatorI<V> {
     @Override
     public List<Experience<V>> getExperiences() throws JOptimizerException {
         return episodeCreator.getExperiences(external.agent(), getStartState());
-
     }
 
 /*    @Override

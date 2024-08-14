@@ -235,6 +235,8 @@ Mediator skeeleton x
 TrainerMediator
 
 
+fix TrainerOneStepACDC med mediator
+
 MeanLossCritic verkar som beräknas ofta
 BufferFitter - verkligen bra välja vanligast tid
 
