@@ -10,6 +10,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
+import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.trainer.value_objects.MultiStepResultItem;
@@ -29,14 +30,18 @@ import static common.math.MathUtils.clip;
 @Log
 public class FitterUsingReplayBuffer<V> {
 
+    MediatorI<V> mediator;
+
     public static final int N_FEAT = 1;
     public static final int MIN_NOF_POINTS = 2;
+/*
     AgentACDiscoI<V> agent;
     TrainerParameters parameters;
+*/
     int indexFeature;
     LinearBatchFitter fitterCritic, fitterActorMean, fitterActorStd;
 
-    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
+/*    public FitterUsingReplayBuffer(AgentACDiscoI<V> agent,
                                    TrainerParameters trainerParameters,
                                    int indexFeature) {
         this.agent = agent;
@@ -45,7 +50,16 @@ public class FitterUsingReplayBuffer<V> {
         this.fitterCritic = new LinearBatchFitter(parameters.learningRateReplayBufferCritic());
         this.fitterActorMean = new LinearBatchFitter(parameters.learningRateReplayBufferActor());
         this.fitterActorStd = new LinearBatchFitter(parameters.learningRateReplayBufferActorStd());
+    }*/
 
+    public FitterUsingReplayBuffer(MediatorI<V> mediator,
+                                   int indexFeature) {
+        this.mediator=mediator;
+        this.indexFeature = indexFeature;
+        var p = getParameters();
+        this.fitterCritic = new LinearBatchFitter(p.learningRateReplayBufferCritic());
+        this.fitterActorMean = new LinearBatchFitter(p.learningRateReplayBufferActor());
+        this.fitterActorStd = new LinearBatchFitter(p.learningRateReplayBufferActorStd());
     }
 
     public void fit(ReplayBufferMultiStepExp<V> buffer) {
@@ -58,7 +72,7 @@ public class FitterUsingReplayBuffer<V> {
 
 
     private void fitCritic(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
-        var critic = agent.getCritic();
+        var critic = getAgent().getCritic();
         RealVector paramsCritic = new ArrayRealVector(critic.readThetas(stateAtTime));
         var batchData = createData(experiences, targetFcn, false);
         paramsCritic = fitterCritic.fit(paramsCritic, batchData);
@@ -67,15 +81,19 @@ public class FitterUsingReplayBuffer<V> {
 
 
     private void fitActorMean(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
-        var actorMean = agent.getActorMean();
+        var actorMean = getAgent().getActorMean();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
         var batchDataActor = createData(experiences, loss, true);
         paramsActor = fitterActorMean.fitFromErrors(paramsActor, batchDataActor);
         actorMean.save(stateAtTime, paramsActor.toArray());
     }
 
+     AgentACDiscoI<V> getAgent() {
+        return mediator.getExternal().agent();
+    }
+
     private void fitActorStd(List<MultiStepResultItem<V>> experiences, StateI<V> stateAtTime) {
-        var actorMean = agent.getActorLogStd();
+        var actorMean = getAgent().getActorLogStd();
         RealVector paramsActor = new ArrayRealVector(actorMean.readThetas(stateAtTime));
         var batchDataActor = createData(experiences, lossAdvClipper, false);
         paramsActor = fitterActorStd.fitFromErrors(paramsActor, batchDataActor);
@@ -83,7 +101,7 @@ public class FitterUsingReplayBuffer<V> {
     }
 
     private List<MultiStepResultItem<V>> getExperiencesAtRandomTime(ReplayBufferMultiStepExp<V> buffer) {
-        var batch = buffer.getMiniBatch(parameters.miniBatchSize());
+        var batch = buffer.getMiniBatch(getParameters().miniBatchSize());
         var ei = new EpisodeInfoMultiStep<>(batch);
         var presentTimes = ei.getValuesOfSpecificDiscreteFeature(indexFeature)
                 .stream().toList();
@@ -94,9 +112,10 @@ public class FitterUsingReplayBuffer<V> {
     ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> targetFcn = (exp, isMean) ->
             exp.isStateFutureTerminalOrNotPresent()
                     ? exp.sumOfRewards()
-                    : exp.sumOfRewards() + parameters.gammaPowN() * agent.readCritic(exp.stateFuture());
+                    : exp.sumOfRewards() + getParameters().gammaPowN() * getAgent().readCritic(exp.stateFuture());
 
     ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> loss = (exp, isMean) -> {
+        var agent = getAgent();
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
         double advantage = valueTarget(exp) - agent.readCritic(exp.state());
         //double gradMax = parameters.gradActorMax();
@@ -110,6 +129,7 @@ public class FitterUsingReplayBuffer<V> {
      */
 
     ToDoubleBiFunction<MultiStepResultItem<V>, Boolean> lossAdvClipper = (exp, isMean) -> {
+        var agent = getAgent();
         var grad = agent.gradientMeanAndStd(exp.state(), exp.actionApplied());
         double advantage = valueTarget(exp) - agent.readCritic(exp.state());
         double gradVal = isMean ? grad.getFirst() : grad.getSecond();
@@ -150,9 +170,16 @@ public class FitterUsingReplayBuffer<V> {
     }
 
     private double valueTarget(MultiStepResultItem<V> experience) {
+        var agent = getAgent();
+        var p=getParameters();
         return experience.isStateFutureTerminalOrNotPresent()
                 ? experience.sumOfRewards()
-                : experience.sumOfRewards() + parameters.gammaPowN() * agent.readCritic(experience.stateFuture());
+                : experience.sumOfRewards() + p.gammaPowN() * agent.readCritic(experience.stateFuture());
+    }
+
+
+    private  TrainerParameters getParameters() {
+        return mediator.getParameters();
     }
 
 

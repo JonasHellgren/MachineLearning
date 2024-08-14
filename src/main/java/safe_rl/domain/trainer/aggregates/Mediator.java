@@ -1,6 +1,7 @@
 package safe_rl.domain.trainer.aggregates;
 
 import com.joptimizer.exception.JOptimizerException;
+import common.other.Conditionals;
 import lombok.Getter;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.trainer.recorders.Recorder;
@@ -10,6 +11,7 @@ import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Mediator<V> implements MediatorI<V> {
 
@@ -21,14 +23,19 @@ public class Mediator<V> implements MediatorI<V> {
     Recorder<V> recorder;
 
     EpisodeCreator<V> episodeCreator;
-    ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
+    ACDCMultiStepEpisodeTrainer<V> episodeFitter;
+    FitterUsingReplayBuffer<V> bufferFitter;
 
-    public Mediator(TrainerExternal<V> external, TrainerParameters parameters, Recorder<V> recorder) {
+    public Mediator(TrainerExternal<V> external,
+                    TrainerParameters parameters,
+                    Recorder<V> recorder,
+                    int indexFeature) {
         this.external = external;
         this.parameters = parameters;
         this.recorder = recorder;
         this.episodeCreator = new EpisodeCreator<>(this);
-        this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(this);
+        this.episodeFitter = new ACDCMultiStepEpisodeTrainer<>(this);
+        this.bufferFitter = new FitterUsingReplayBuffer<>(this,indexFeature);
     }
 
 
@@ -56,7 +63,14 @@ public class Mediator<V> implements MediatorI<V> {
     @Override
     public MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList = recorder.criticLossTraj();
-        return episodeTrainer.trainAgentFromExperiences(experiences, errorList);
+        return episodeFitter.trainAgentFromExperiences(experiences, errorList);
+    }
+
+    @Override
+    public void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
+        Conditionals.executeIfFalse(buffer.isEmpty(), () ->
+                IntStream.range(0, parameters.nReplayBufferFitsPerEpisode())
+                        .forEach(i -> bufferFitter.fit(buffer)));
     }
 
 }

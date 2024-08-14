@@ -39,7 +39,7 @@ public class TrainerMultiStepACDC<V> {
     //Supplier<StateI<V>> startStateSupplier;
    // EpisodeCreator<V> episodeCreator;
 //    ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
-    FitterUsingReplayBuffer<V> fitter;
+//    FitterUsingReplayBuffer<V> fitter;
 
     @Builder
     public TrainerMultiStepACDC(EnvironmentI<V> environment,
@@ -55,14 +55,14 @@ public class TrainerMultiStepACDC<V> {
                 .build();*/
       //  this.startStateSupplier = startStateSupplier;
   //      this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
-        this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
+  //      this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
         AgentSimulator<V> simulator = new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment);
         var recorder = new Recorder<>(simulator,trainerParameters);
 
         this.mediator=new Mediator<>(
                 new TrainerExternal<>(environment,agent,safetyLayer,startStateSupplier),
-                trainerParameters,recorder);
+                trainerParameters,recorder,StateTrading.INDEX_SOC);
     }
 
 
@@ -76,7 +76,7 @@ public class TrainerMultiStepACDC<V> {
             var experiences = mediator.getExperiences();
             var msr = mediator.trainAgentFromNewExperiences(experiences);
             addNewExperienceToBuffer(msr, buffer);
-            trainAgentFromOldExperiences(buffer);
+            mediator.trainAgentFromOldExperiences(buffer);
             updateRecorder(experiences);
         }
     }
@@ -92,11 +92,13 @@ public class TrainerMultiStepACDC<V> {
                 buffer.addAll(msr.experienceList()));
     }
 
+/*
     void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
         Conditionals.executeIfFalse(buffer.isEmpty(), () ->
                 IntStream.range(0, mediator.getParameters().nReplayBufferFitsPerEpisode())
                         .forEach(i -> fitter.fit(buffer)));
     }
+*/
 
     void updateRecorder(List<Experience<V>> experiences) {
         mediator.getRecorder().recordTrainingProgress(experiences, agent);

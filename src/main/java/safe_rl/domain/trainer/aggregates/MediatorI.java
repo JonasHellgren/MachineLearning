@@ -20,6 +20,9 @@ public interface MediatorI<V> {
     List<Experience<V>> getExperiences() throws JOptimizerException;
 
     MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences);
+    void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer);
+
+
 
     //   void train();
    // Episode<V> runEpisode();
