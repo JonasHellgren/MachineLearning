@@ -236,6 +236,9 @@ TrainerMediator
 MeanLossCritic verkar som beräknas ofta
 BufferFitter - verkligen bra välja vanligast tid
 
+använda common från project
+
+flytta till RISE repo
 
 critic loss alltid noll
 fixa TradeSimulationPlotter addAccRevFCR

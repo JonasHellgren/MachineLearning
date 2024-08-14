@@ -8,16 +8,14 @@ import lombok.extern.java.Log;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.environment.EnvironmentI;
 import safe_rl.domain.environment.aggregates.StateI;
-import safe_rl.domain.trainer.aggregates.ACDCMultiStepEpisodeTrainer;
-import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
-import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
+import safe_rl.domain.trainer.aggregates.*;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
+import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.domain.simulator.AgentSimulator;
-import safe_rl.domain.trainer.aggregates.EpisodeCreator;
 import safe_rl.domain.trainer.recorders.Recorder;
 
 import java.util.List;
@@ -31,6 +29,9 @@ import java.util.stream.IntStream;
 
 @Log
 public class TrainerMultiStepACDC<V> {
+
+    Mediator<V> mediator;
+
     EnvironmentI<V> environment;
     @Getter
     AgentACDiscoI<V> agent;
@@ -60,6 +61,10 @@ public class TrainerMultiStepACDC<V> {
         AgentSimulator<V> simulator = new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment);
         recorder = new Recorder<>(simulator,trainerParameters);
+
+        this.mediator=new Mediator<>(
+                new TrainerExternal<>(environment,agent,safetyLayer),
+                trainerParameters);
     }
 
     public void train() throws JOptimizerException {

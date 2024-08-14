@@ -43,12 +43,13 @@ public class TrainerSimulatorFactoryTrading {
         return Pair.create(trainer,simulator);
     }
 
+
+
     public static Pair<TrainerMultiStepACDC<VariablesTrading>, AgentSimulator<VariablesTrading>>
     trainerSimulatorPairNight(SettingsTrading settings, int nofEpisodes) {
         return createTrainerAndSimulator(
                 TrainerParametersFactory.tradingNightHours(nofEpisodes),
                 AgentParametersFactory.trading24Hours(settings), settings);
     }
-
 
 }
