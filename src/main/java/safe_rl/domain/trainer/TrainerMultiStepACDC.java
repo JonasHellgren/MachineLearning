@@ -2,12 +2,13 @@ package safe_rl.domain.trainer;
 
 import com.joptimizer.exception.JOptimizerException;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.java.Log;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.environment.EnvironmentI;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.trainer.aggregates.*;
+import safe_rl.domain.trainer.mediators.MediatorMultiStep;
+import safe_rl.domain.trainer.mediators.MediatorMultiStepI;
 import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
@@ -24,11 +25,7 @@ import java.util.function.Supplier;
 
 @Log
 public class TrainerMultiStepACDC<V> {
-    Mediator<V> mediator;
-
-    EnvironmentI<V> environment;
-    @Getter
-    AgentACDiscoI<V> agent;
+    MediatorMultiStepI<V> mediator;
 
     @Builder
     public TrainerMultiStepACDC(EnvironmentI<V> environment,
@@ -36,18 +33,21 @@ public class TrainerMultiStepACDC<V> {
                                 SafetyLayer<V> safetyLayer,
                                 TrainerParameters trainerParameters,
                                 Supplier<StateI<V>> startStateSupplier) {
-        this.environment = environment;
-        this.agent = agent;
-        var external = new TrainerExternal<>(environment, agent, safetyLayer, startStateSupplier);
+        var external = new TrainerExternal<>(
+                environment, agent, safetyLayer, startStateSupplier);
         var simulator = AgentSimulator.ofExternal(external);
         var recorder = new Recorder<>(simulator,trainerParameters);
-        this.mediator=new Mediator<>(
+        this.mediator=new MediatorMultiStep<>(
                 external,
                 trainerParameters,recorder,StateTrading.INDEX_SOC);
     }
 
     public  Recorder<V> getRecorder() {
         return mediator.getRecorder();
+    }
+
+    public AgentACDiscoI<V>  getAgent() {
+        return  mediator.getExternal().agent();
     }
 
     public void train() throws JOptimizerException {
@@ -61,12 +61,10 @@ public class TrainerMultiStepACDC<V> {
         }
     }
 
-    private static <V> ReplayBufferMultiStepExp<V> createReplayBuffer(TrainerParameters parameters) {
+    private static <V> ReplayBufferMultiStepExp<V> createReplayBuffer(
+            TrainerParameters parameters) {
         return ReplayBufferMultiStepExp.newFromSizeAndIsRemoveOldest(
                 parameters.replayBufferSize(), parameters.isRemoveOldest());
     }
-
-
-
 
 }

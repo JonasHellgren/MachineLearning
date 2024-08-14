@@ -1,4 +1,4 @@
-package safe_rl.domain.trainer.aggregates;
+package safe_rl.domain.trainer.mediators;
 
 import com.joptimizer.exception.JOptimizerException;
 import common.other.Conditionals;
@@ -6,6 +6,10 @@ import lombok.Getter;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.value_objects.StepReturn;
+import safe_rl.domain.trainer.aggregates.ACDCMultiStepEpisodeFitter;
+import safe_rl.domain.trainer.aggregates.EpisodeCreator;
+import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
+import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
@@ -15,8 +19,7 @@ import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Mediator<V> implements MediatorI<V> {
-
+public class MediatorMultiStep<V> implements MediatorMultiStepI<V> {
     @Getter
     TrainerExternal<V> external;
     @Getter
@@ -28,10 +31,10 @@ public class Mediator<V> implements MediatorI<V> {
     ACDCMultiStepEpisodeFitter<V> episodeFitter;
     FitterUsingReplayBuffer<V> bufferFitter;
 
-    public Mediator(TrainerExternal<V> external,
-                    TrainerParameters parameters,
-                    Recorder<V> recorder,
-                    int indexFeature) {
+    public MediatorMultiStep(TrainerExternal<V> external,
+                             TrainerParameters parameters,
+                             Recorder<V> recorder,
+                             int indexFeature) {
         this.external = external;
         this.parameters = parameters;
         this.recorder = recorder;
@@ -39,7 +42,6 @@ public class Mediator<V> implements MediatorI<V> {
         this.episodeFitter = new ACDCMultiStepEpisodeFitter<>(this);
         this.bufferFitter = new FitterUsingReplayBuffer<>(this,indexFeature);
     }
-
 
     @Override
     public StateI<V> getStartState() {
@@ -77,7 +79,7 @@ public class Mediator<V> implements MediatorI<V> {
 
     @Override
     public Action correctAction(StateI<V> state, Action action) throws JOptimizerException {
-        return getExternal().safetyLayer().correctAction(state, action);
+        return external.safetyLayer().correctAction(state, action);
     }
 
     @Override

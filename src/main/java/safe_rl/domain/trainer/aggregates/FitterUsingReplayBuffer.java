@@ -10,9 +10,9 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.trainer.mediators.MediatorMultiStepI;
 import safe_rl.domain.trainer.value_objects.MultiStepResultItem;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.domain.trainer.helpers.EpisodeInfoMultiStep;
@@ -30,7 +30,7 @@ import static common.math.MathUtils.clip;
 @Log
 public class FitterUsingReplayBuffer<V> {
 
-    MediatorI<V> mediator;
+    MediatorMultiStepI<V> mediator;
 
     public static final int N_FEAT = 1;
     public static final int MIN_NOF_POINTS = 2;
@@ -38,7 +38,7 @@ public class FitterUsingReplayBuffer<V> {
     LinearBatchFitter fitterCritic, fitterActorMean, fitterActorStd;
 
 
-    public FitterUsingReplayBuffer(MediatorI<V> mediator,
+    public FitterUsingReplayBuffer(MediatorMultiStepI<V> mediator,
                                    int indexFeature) {
         this.mediator=mediator;
         this.indexFeature = indexFeature;

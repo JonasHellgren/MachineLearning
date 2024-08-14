@@ -6,13 +6,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import safe_rl.domain.agent.AgentACDCSafe;
+import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.agent.value_objects.AgentParameters;
 import safe_rl.domain.safety_layer.SafetyLayer;
 import safe_rl.domain.trainer.aggregates.EpisodeCreator;
+import safe_rl.domain.trainer.mediators.MediatorBaseI;
 import safe_rl.domain.trainer.helpers.EpisodeInfo;
+import safe_rl.domain.trainer.mediators.MediatorSingleStep;
+import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.buying_electricity.*;
 import safe_rl.environments.factories.FactoryOptModel;
+import safe_rl.environments.trading_electricity.StateTrading;
 
 class TestEpisodeCreator {
 
@@ -33,16 +38,22 @@ class TestEpisodeCreator {
         safetyLayer = new SafetyLayer<>(FactoryOptModel.createChargeModel(settings3));
         var trainerParameters = TrainerParameters.newDefault();
         agent = AgentACDCSafe.<VariablesBuying>builder()
-                //.trainerParameters(TrainerParameters.newDefault())
                 .parameters(AgentParameters.newDefault()
                         .withTargetMean(TARGET_MEAN).withTargetLogStd(Math.log(TARGET_STD)))
                 .settings(SettingsBuying.new3HoursSamePrice())
                 .state(StateBuying.newZero())
                 .build();
-      /*  episodeCreator = EpisodeCreator.<VariablesBuying>builder()
-                .environment(environment).parameters(trainerParameters).safetyLayer(safetyLayer)
-                .build();
-*/    }
+    var mediator=createDummyMediator(trainerParameters,agent);
+    episodeCreator=new EpisodeCreator<>(mediator);
+    }
+
+    MediatorBaseI<VariablesBuying> createDummyMediator(TrainerParameters paramsTrainer,
+                                                       AgentACDiscoI<VariablesBuying> agent) {
+        return new MediatorSingleStep<>(
+                new TrainerExternal<>(environment, agent, safetyLayer, null),
+                paramsTrainer, null, StateTrading.INDEX_SOC);
+    }
+
 
     @Test
     @SneakyThrows

@@ -24,7 +24,7 @@ public class Runner3HoursBuying {
         var trainer = createTrainer();
         trainer.train();
         trainer.getRecorder().plot("One step ACDC");
-        log.info("agent = " + trainer.getAgent());
+        //log.info("agent = " + trainer.getAgent());
     }
 
     private static TrainerOneStepACDC<VariablesBuying> createTrainer() {

@@ -10,9 +10,9 @@ import safe_rl.domain.safety_layer.SafetyLayer;
 import java.util.function.Supplier;
 
 public record TrainerExternal<V>(
-        @NonNull EnvironmentI<V> environment,
+        EnvironmentI<V> environment,
         @NonNull AgentACDiscoI<V> agent,
-        @NonNull SafetyLayer<V> safetyLayer,
-        @NonNull Supplier<StateI<V>> startStateSupplier
+        SafetyLayer<V> safetyLayer,
+        Supplier<StateI<V>> startStateSupplier
 ) {
 }

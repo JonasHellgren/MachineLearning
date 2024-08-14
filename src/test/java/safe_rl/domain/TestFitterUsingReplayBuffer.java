@@ -13,9 +13,11 @@ import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.agent.AgentACDCSafe;
 import safe_rl.domain.agent.aggregates.DisCoMemory;
+import safe_rl.domain.trainer.mediators.MediatorMultiStep;
 import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
 import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
 import safe_rl.domain.trainer.value_objects.MultiStepResultItem;
+import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.environments.factories.SettingsTradingFactory;
 import safe_rl.environments.trading_electricity.SettingsTrading;
@@ -60,18 +62,21 @@ public class TestFitterUsingReplayBuffer {
         StateTrading state = StateTrading.newFullAndFresh();
         AgentACDiscoI<VariablesTrading> agent= AgentACDCSafe.<VariablesTrading>builder()
                 .settings(settingsTrading)
-              //  .trainerParameters(TrainerParameters.newDefault())
-              /*  .targetMean(0.0d).targetLogStd(Math.log(3d)).targetCritic(0d).absActionNominal(1d)
-                .learningRateActorMean(1e-2).learningRateActorStd(1e-2).learningRateCritic(1e-3)
-                .gradMaxActor0(1d).gradMaxCritic0(1d)
-              */
                 .parameters(AgentParameters.newDefault())
                 .state(state.copy())
                 .build();
         critic=agent.getCritic();
         var initializer = getInitializer(state, critic, TAR_VALUE_INIT, STD_TAR);
         initializer.initialize();
-        fitter = new FitterUsingReplayBuffer<>(agent, paramsTrainer,StateTrading.INDEX_SOC);
+        var mediator= createDummyMediator(paramsTrainer, agent);
+        fitter = new FitterUsingReplayBuffer<>(mediator,StateTrading.INDEX_SOC);
+    }
+
+     MediatorMultiStep<VariablesTrading> createDummyMediator(TrainerParameters paramsTrainer,
+                                                             AgentACDiscoI<VariablesTrading> agent) {
+        return new MediatorMultiStep<>(
+                new TrainerExternal<>(null, agent, null, null),
+                paramsTrainer, null, StateTrading.INDEX_SOC);
     }
 
 

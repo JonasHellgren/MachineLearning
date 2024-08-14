@@ -6,18 +6,23 @@ import com.joptimizer.exception.JOptimizerException;
 import safe_rl.domain.agent.interfaces.AgentI;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.aggregates.StateI;
+import safe_rl.domain.trainer.mediators.MediatorBaseI;
 import safe_rl.domain.trainer.value_objects.ActionRewardStateNew;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.environment.value_objects.StepReturn;
 import java.util.List;
 import java.util.Optional;
 
+/***
+ * Polymorhism in action: mediator is MediatorBaseI or any of its sub-classes
+ */
+
 public class EpisodeCreator<V> {
     public static final int VALUE_DUMMY = 0;
 
-    MediatorI<V> mediator;
+    MediatorBaseI<V> mediator;
 
-    public EpisodeCreator(MediatorI<V> mediator) {
+    public EpisodeCreator(MediatorBaseI<V> mediator) {
         this.mediator = mediator;
     }
 
