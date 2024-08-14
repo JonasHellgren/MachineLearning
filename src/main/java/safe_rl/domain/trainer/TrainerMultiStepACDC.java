@@ -38,7 +38,7 @@ public class TrainerMultiStepACDC<V> {
   //  TrainerParameters trainerParameters;
     //Supplier<StateI<V>> startStateSupplier;
    // EpisodeCreator<V> episodeCreator;
-    ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
+//    ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
     FitterUsingReplayBuffer<V> fitter;
 
     @Builder
@@ -54,7 +54,7 @@ public class TrainerMultiStepACDC<V> {
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();*/
       //  this.startStateSupplier = startStateSupplier;
-        this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
+  //      this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
         AgentSimulator<V> simulator = new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment);
@@ -74,7 +74,7 @@ public class TrainerMultiStepACDC<V> {
         ReplayBufferMultiStepExp<V> buffer = createReplayBuffer(mediator.getParameters());
         for (int i = 0; i < mediator.getParameters().nofEpisodes(); i++) {
             var experiences = mediator.getExperiences();
-            var msr = trainAgentFromNewExperiences(experiences);
+            var msr = mediator.trainAgentFromNewExperiences(experiences);
             addNewExperienceToBuffer(msr, buffer);
             trainAgentFromOldExperiences(buffer);
             updateRecorder(experiences);
@@ -86,10 +86,6 @@ public class TrainerMultiStepACDC<V> {
                 parameters.replayBufferSize(), parameters.isRemoveOldest());
     }
 
-    MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
-        var errorList = mediator.getRecorder().criticLossTraj();
-        return episodeTrainer.trainAgentFromExperiences(experiences, errorList);
-    }
 
     void addNewExperienceToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer) {
         Conditionals.executeIfFalse(msr.isEmpty(), () ->

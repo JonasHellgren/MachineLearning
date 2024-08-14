@@ -12,14 +12,19 @@ import java.util.List;
 
 public class ACDCMultiStepEpisodeTrainer<V> {
 
+/*
     @NonNull AgentACDiscoI<V> agent;
     @NonNull TrainerParameters parameters;
+*/
+
+    MediatorI<V> mediator;
 
     MultiStepResultsGenerator<V> generator;
     MultiStepActorUpdater<V> actorUpdater;
     MultiStepCriticUpdater<V> criticUpdater;
 
 
+/*
     public ACDCMultiStepEpisodeTrainer(@NonNull AgentACDiscoI<V> agent,
                                        @NonNull TrainerParameters parameters) {
         this.agent = agent;
@@ -28,6 +33,19 @@ public class ACDCMultiStepEpisodeTrainer<V> {
         actorUpdater=new MultiStepActorUpdater<>(agent,parameters);
         criticUpdater=new MultiStepCriticUpdater<>(agent,parameters);
     }
+*/
+
+
+    public ACDCMultiStepEpisodeTrainer(MediatorI<V> mediator) {
+        this.mediator=mediator;
+        var agent=mediator.getExternal().agent();
+        var parameters=mediator.getParameters();
+        generator=new MultiStepResultsGenerator<>(parameters,agent);
+        actorUpdater=new MultiStepActorUpdater<>(agent,parameters);
+        criticUpdater=new MultiStepCriticUpdater<>(agent,parameters);
+    }
+
+
 
     public MultiStepResults<V> trainAgentFromExperiences(List<Experience<V>> experienceList,
                                           List<Double> lossCritic) {
