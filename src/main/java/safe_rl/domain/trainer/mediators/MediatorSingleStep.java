@@ -14,6 +14,11 @@ import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
 import java.util.List;
 
+/**
+ * See comment in MediatorMultiStep
+ * @param <V>
+ */
+
 public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
     @Getter
     TrainerExternal<V> external;
@@ -27,8 +32,7 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
 
     public MediatorSingleStep(TrainerExternal<V> external,
                               TrainerParameters parameters,
-                              Recorder<V> recorder,
-                              int indexFeature) {
+                              Recorder<V> recorder) {
         this.external = external;
         this.parameters = parameters;
         this.recorder = recorder;

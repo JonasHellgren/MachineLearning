@@ -15,9 +15,17 @@ import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
 import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
-
 import java.util.List;
 import java.util.stream.IntStream;
+
+/**
+ *  This mediator supports a multi-step trainer. Benefits:
+ *   - Cleaner trainer code
+ *   - Loose coupling between trainer classes, for example EpisodeCreator gets
+ *      access to Environment via the mediator
+ *   - Easier to add functionality/classes
+ *   - Fewer fields in trainer and its sub-classes, the mediator has all fields
+ */
 
 public class MediatorMultiStep<V> implements MediatorMultiStepI<V> {
     @Getter

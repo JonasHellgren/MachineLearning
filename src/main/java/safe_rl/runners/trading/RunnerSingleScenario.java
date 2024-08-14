@@ -30,7 +30,7 @@ public class RunnerSingleScenario {
         Table<Integer, Integer, String> resTable = HashBasedTable.create();
         createHeader(resTable);
 
-        double powerChargeMax = POWER_CHARGE_MAX;
+        double powerChargeMax = POWER_CHARGE_MAX2;
         var settings = getSettingsG2V(energyFcrPricePair, SOC_START, SOC_DELTA, powerChargeMax, PRICE_BATTERY);
         var resG2V= getResultG2V(settings);
         double valG2V=resG2V.getFirst();

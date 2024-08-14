@@ -38,8 +38,7 @@ public class TrainerMultiStepACDC<V> {
         var simulator = AgentSimulator.ofExternal(external);
         var recorder = new Recorder<>(simulator,trainerParameters);
         this.mediator=new MediatorMultiStep<>(
-                external,
-                trainerParameters,recorder,StateTrading.INDEX_SOC);
+                external,trainerParameters,recorder,StateTrading.INDEX_SOC);
     }
 
     public  Recorder<V> getRecorder() {

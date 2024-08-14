@@ -40,7 +40,7 @@ public class Runner3HoursBuying {
         return TrainerOneStepACDC.<VariablesBuying>builder()
                 .environment(environment).agent(agent)
                 .safetyLayer(safetyLayer)
-                .trainerParameters(TrainerParametersFactory.buying3Hours())
+                .parameters(TrainerParametersFactory.buying3Hours())
                 .startStateSupplier(() -> startState.copy() )
                 .build();
     }

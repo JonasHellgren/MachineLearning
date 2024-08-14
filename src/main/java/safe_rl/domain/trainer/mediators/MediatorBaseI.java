@@ -20,12 +20,8 @@ public interface MediatorBaseI<V> {
     StateI<V> getStartState();
 
     List<Experience<V>> getExperiences() throws JOptimizerException;
-//    MultiStepResults<V> fitAgentFromNewExperiences(List<Experience<V>> experiences);
-//    void fitAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer);
     void updateRecorder(List<Experience<V>> experiences);
-  //  void addNewExperiencesToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer);
 
     Action correctAction(StateI<V> state, Action action) throws JOptimizerException;
     StepReturn<V> step(StateI<V> state, Action action);
-
 }

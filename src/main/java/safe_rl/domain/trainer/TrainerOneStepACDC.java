@@ -28,16 +28,15 @@ public class TrainerOneStepACDC<V> {
     public TrainerOneStepACDC(EnvironmentI<V> environment,
                               AgentACDiscoI<V> agent,
                               SafetyLayer<V> safetyLayer,
-                              TrainerParameters trainerParameters,
+                              TrainerParameters parameters,
                               Supplier<StateI<V>> startStateSupplier) {
 
         var external = new TrainerExternal<>(
                 environment, agent, safetyLayer, startStateSupplier);
         var simulator = AgentSimulator.ofExternal(external);
-        var recorder = new Recorder<>(simulator,trainerParameters);
-        this.mediator=new MediatorSingleStep<>(
-                external,
-                trainerParameters,recorder, StateTrading.INDEX_SOC);
+        var recorder = new Recorder<>(simulator, parameters);
+        this.mediator = new MediatorSingleStep<>(
+                external, parameters, recorder);
     }
 
     public Recorder<V> getRecorder() {
@@ -48,20 +47,16 @@ public class TrainerOneStepACDC<V> {
         return mediator.getExperiences();
     }
 
-    public   AgentACDiscoI<V> getAgent() {
+    public AgentACDiscoI<V> getAgent() {
         return mediator.getExternal().agent();
     }
 
-
     public void train() throws JOptimizerException {
-        var trainerParameters=mediator.getParameters();
-        int bound = trainerParameters.nofEpisodes();
-        for (int i = 0; i < bound; i++) {
-            var experiences=mediator.getExperiences();
+        for (int i = 0; i < mediator.getParameters().nofEpisodes(); i++) {
+            var experiences = mediator.getExperiences();
             mediator.fitAgentFromNewExperiences(experiences);
             mediator.updateRecorder(experiences);
         }
     }
-
 
 }

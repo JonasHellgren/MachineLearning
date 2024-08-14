@@ -51,7 +51,7 @@ class TestEpisodeCreator {
                                                        AgentACDiscoI<VariablesBuying> agent) {
         return new MediatorSingleStep<>(
                 new TrainerExternal<>(environment, agent, safetyLayer, null),
-                paramsTrainer, null, StateTrading.INDEX_SOC);
+                paramsTrainer, null);
     }
 
 
