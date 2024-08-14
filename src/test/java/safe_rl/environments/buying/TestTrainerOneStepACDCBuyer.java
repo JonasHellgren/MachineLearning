@@ -67,7 +67,7 @@ public class TestTrainerOneStepACDCBuyer {
 
         var ei=new EpisodeInfo<>(experiences);
         var powerList=ei.actionsApplied();
-        /*var ac=(AgentACDCSafe) trainer.getAgent();
+        var ac=(AgentACDCSafe) trainer.getAgent();
         var memMean=ac.getActorMean();
         var memCrit=ac.getCritic();
         double vc2=memCrit.read(StateBuying.of(VariablesBuying.newTimeSoc(2, SOC_END)));
@@ -75,8 +75,8 @@ public class TestTrainerOneStepACDCBuyer {
         double powerExpected = settings3hours.powerBattMax();
 
         Assertions.assertEquals(powerExpected,powerList.get(0), TOL_POWER);
-      //  Assertions.assertEquals(settings3hours.priceEnd()*(SOC_END- SOC_START)* settings3hours.energyBatt(),vc2,10);
-        Assertions.assertEquals(powerExpected,va0, TOL_POWER);*/
+        Assertions.assertEquals(settings3hours.priceEnd()*(SOC_END- SOC_START)* settings3hours.energyBatt(),vc2,10);
+        Assertions.assertEquals(powerExpected,va0, TOL_POWER);
 
     }
 

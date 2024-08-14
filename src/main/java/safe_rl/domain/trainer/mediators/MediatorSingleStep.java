@@ -5,12 +5,10 @@ import lombok.Getter;
 import safe_rl.domain.environment.aggregates.StateI;
 import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.value_objects.StepReturn;
-import safe_rl.domain.trainer.aggregates.ACDCMultiStepEpisodeFitter;
-import safe_rl.domain.trainer.aggregates.ACDCOneStepEpisodeTrainer;
+import safe_rl.domain.trainer.aggregates.ACDCOneStepEpisodeFitter;
 import safe_rl.domain.trainer.aggregates.EpisodeCreator;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
-import safe_rl.domain.trainer.value_objects.MultiStepResults;
 import safe_rl.domain.trainer.value_objects.TrainerExternal;
 import safe_rl.domain.trainer.value_objects.TrainerParameters;
 
@@ -25,7 +23,7 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
     Recorder<V> recorder;
 
     EpisodeCreator<V> episodeCreator;
-    ACDCOneStepEpisodeTrainer<V> episodeFitter;
+    ACDCOneStepEpisodeFitter<V> episodeFitter;
 
     public MediatorSingleStep(TrainerExternal<V> external,
                               TrainerParameters parameters,
@@ -35,7 +33,7 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
         this.parameters = parameters;
         this.recorder = recorder;
         this.episodeCreator = new EpisodeCreator<>(this);
-        this.episodeFitter = new ACDCOneStepEpisodeTrainer<>(this);
+        this.episodeFitter = new ACDCOneStepEpisodeFitter<>(this);
     }
 
     @Override

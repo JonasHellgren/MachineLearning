@@ -1,12 +1,8 @@
 package safe_rl.domain.trainer.aggregates;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NonNull;
-import safe_rl.domain.agent.interfaces.AgentACDiscoI;
 import safe_rl.domain.trainer.mediators.MediatorSingleStepI;
 import safe_rl.domain.trainer.value_objects.Experience;
-import safe_rl.domain.trainer.value_objects.TrainerParameters;
 import safe_rl.domain.trainer.helpers.CorrectedActionPenalizer;
 import safe_rl.domain.trainer.helpers.ReturnCalculator;
 
@@ -14,16 +10,12 @@ import java.util.List;
 
 //@Builder
 @AllArgsConstructor
-public class ACDCOneStepEpisodeTrainer<V> {
+public class ACDCOneStepEpisodeFitter<V> {
 
     MediatorSingleStepI<V> mediator;
 
     public static final double VALUE_TERM = 0d;
     public static final int LENGTH_WINDOW = 100;
-/*
-    @NonNull AgentACDiscoI<V> agent;
-    @NonNull TrainerParameters parameters;
-*/
 
     public void trainAgentFromExperiences(List<Experience<V>> experienceList, List<Double> lossCriticList) {
         var rc = new ReturnCalculator<V>();
