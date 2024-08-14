@@ -231,7 +231,9 @@ tolPower i SafeTradeOptModel bra - tvinga fram power=0 bättre?  ja x
 
 AgentSimulator snyggare  x
 
+Mediator skeeleton x
 TrainerMediator
+
 
 MeanLossCritic verkar som beräknas ofta
 BufferFitter - verkligen bra välja vanligast tid

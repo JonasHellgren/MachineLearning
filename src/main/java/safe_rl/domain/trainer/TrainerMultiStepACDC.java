@@ -35,13 +35,11 @@ public class TrainerMultiStepACDC<V> {
     EnvironmentI<V> environment;
     @Getter
     AgentACDiscoI<V> agent;
-    TrainerParameters trainerParameters;
-    Supplier<StateI<V>> startStateSupplier;
-    EpisodeCreator<V> episodeCreator;
+  //  TrainerParameters trainerParameters;
+    //Supplier<StateI<V>> startStateSupplier;
+   // EpisodeCreator<V> episodeCreator;
     ACDCMultiStepEpisodeTrainer<V> episodeTrainer;
     FitterUsingReplayBuffer<V> fitter;
-    @Getter
-    Recorder<V> recorder;
 
     @Builder
     public TrainerMultiStepACDC(EnvironmentI<V> environment,
@@ -51,26 +49,31 @@ public class TrainerMultiStepACDC<V> {
                                 Supplier<StateI<V>> startStateSupplier) {
         this.environment = environment;
         this.agent = agent;
-        this.trainerParameters = trainerParameters;
-        this.episodeCreator = EpisodeCreator.<V>builder()
+    //    this.trainerParameters = trainerParameters;
+        var episodeCreator = EpisodeCreator.<V>builder()
                 .environment(environment).safetyLayer(safetyLayer).parameters(trainerParameters)
                 .build();
-        this.startStateSupplier = startStateSupplier;
+      //  this.startStateSupplier = startStateSupplier;
         this.episodeTrainer = new ACDCMultiStepEpisodeTrainer<>(agent, trainerParameters);
         this.fitter = new FitterUsingReplayBuffer<>(agent, trainerParameters, StateTrading.INDEX_SOC);
         AgentSimulator<V> simulator = new AgentSimulator<>(
                 agent, safetyLayer, startStateSupplier, environment);
-        recorder = new Recorder<>(simulator,trainerParameters);
+        var recorder = new Recorder<>(simulator,trainerParameters);
 
         this.mediator=new Mediator<>(
-                new TrainerExternal<>(environment,agent,safetyLayer),
-                trainerParameters);
+                new TrainerExternal<>(environment,agent,safetyLayer,startStateSupplier),
+                trainerParameters,recorder,episodeCreator);
+    }
+
+
+    public  Recorder<V> getRecorder() {
+        return mediator.getRecorder();
     }
 
     public void train() throws JOptimizerException {
-        ReplayBufferMultiStepExp<V> buffer = createReplayBuffer(trainerParameters);
-        for (int i = 0; i < trainerParameters.nofEpisodes(); i++) {
-            var experiences = getExperiences();
+        ReplayBufferMultiStepExp<V> buffer = createReplayBuffer(mediator.getParameters());
+        for (int i = 0; i < mediator.getParameters().nofEpisodes(); i++) {
+            var experiences = mediator.getExperiences();
             var msr = trainAgentFromNewExperiences(experiences);
             addNewExperienceToBuffer(msr, buffer);
             trainAgentFromOldExperiences(buffer);
@@ -83,13 +86,15 @@ public class TrainerMultiStepACDC<V> {
                 parameters.replayBufferSize(), parameters.isRemoveOldest());
     }
 
+/*
     List<Experience<V>> getExperiences() throws JOptimizerException {
-        return episodeCreator.getExperiences(agent, startStateSupplier.get());
+        return episodeCreator.getExperiences(agent, mediator.getStartState());
     }
+*/
 
 
     MultiStepResults<V> trainAgentFromNewExperiences(List<Experience<V>> experiences) {
-        var errorList = recorder.criticLossTraj();
+        var errorList = mediator.getRecorder().criticLossTraj();
         return episodeTrainer.trainAgentFromExperiences(experiences, errorList);
     }
 
@@ -100,12 +105,12 @@ public class TrainerMultiStepACDC<V> {
 
     void trainAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer) {
         Conditionals.executeIfFalse(buffer.isEmpty(), () ->
-                IntStream.range(0, trainerParameters.nReplayBufferFitsPerEpisode())
+                IntStream.range(0, mediator.getParameters().nReplayBufferFitsPerEpisode())
                         .forEach(i -> fitter.fit(buffer)));
     }
 
     void updateRecorder(List<Experience<V>> experiences) {
-        recorder.recordTrainingProgress(experiences, agent);
+        mediator.getRecorder().recordTrainingProgress(experiences, agent);
     }
 
 }
