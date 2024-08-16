@@ -11,4 +11,5 @@ public interface MediatorMultiStepI<V> extends MediatorBaseI<V> {
     MultiStepResults<V> fitAgentFromNewExperiences(List<Experience<V>> experiences);
     void fitAgentFromOldExperiences(ReplayBufferMultiStepExp<V> buffer);
     void addNewExperiencesToBuffer(MultiStepResults<V> msr, ReplayBufferMultiStepExp<V> buffer);
+    void maybePenalizeActionCorrection(MultiStepResults<V> msr, List<Double> lossCriticList);
 }

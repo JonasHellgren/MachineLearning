@@ -22,15 +22,19 @@ public class MultiStepActorUpdater<V> {
 
     @SneakyThrows
     public void update(MultiStepResults<V> msr, List<Double> lossCriticList) {
-        var penalizer = CorrectedActionPenalizer.<V>builder()
-                .agent(agent).parameters(parameters)
-                .lossCriticList(lossCriticList).multiStepResults(msr)
-                .build();
 
+        throw new IllegalArgumentException("To fix  using safe rl classes");
+     /*   var penalizer = CorrectedActionPenalizer.<V>builder()
+                .agent(agent).parameters(parameters)
+                //.lossCriticList(lossCriticList)  //.multiStepResults(msr)
+                .build();
+*/
+/*
         for (int step = 0; step < msr.nExperiences(); step++) {
-            penalizer.maybePenalize(step);
+            //penalizer.maybePenalize(step, msr, lossCriticList);
             agent.fitActor(msr.stateAtStep(step),msr.actionAppliedAtStep(step),msr.advantageAtStep(step));
         }
+*/
 
     }
 

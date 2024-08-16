@@ -7,6 +7,7 @@ import safe_rl.domain.environment.value_objects.Action;
 import safe_rl.domain.environment.value_objects.StepReturn;
 import safe_rl.domain.trainer.aggregates.ACDCOneStepEpisodeFitter;
 import safe_rl.domain.trainer.aggregates.EpisodeCreator;
+import safe_rl.domain.trainer.helpers.CorrectedActionPenalizer;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.TrainerExternal;
@@ -29,6 +30,8 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
 
     EpisodeCreator<V> episodeCreator;
     ACDCOneStepEpisodeFitter<V> episodeFitter;
+    CorrectedActionPenalizer<V> actionPenalizer;
+
 
     public MediatorSingleStep(TrainerExternal<V> external,
                               TrainerParameters parameters,
@@ -38,6 +41,7 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
         this.recorder = recorder;
         this.episodeCreator = new EpisodeCreator<>(this);
         this.episodeFitter = new ACDCOneStepEpisodeFitter<>(this);
+        this.actionPenalizer=new CorrectedActionPenalizer<>(this);
     }
 
     @Override
@@ -70,5 +74,10 @@ public class MediatorSingleStep<V> implements MediatorSingleStepI<V> {
     public void fitAgentFromNewExperiences(List<Experience<V>> experiences) {
         var errorList= recorder.criticLossTraj();
         episodeFitter.trainAgentFromExperiences(experiences,errorList);
+    }
+
+    @Override
+    public void maybePenalizeActionCorrection(Experience<V> experience, List<Double> lossCriticList) {
+        actionPenalizer.maybePenalize(experience,lossCriticList);
     }
 }

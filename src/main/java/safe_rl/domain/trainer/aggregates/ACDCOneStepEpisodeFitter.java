@@ -3,12 +3,10 @@ package safe_rl.domain.trainer.aggregates;
 import lombok.AllArgsConstructor;
 import safe_rl.domain.trainer.mediators.MediatorSingleStepI;
 import safe_rl.domain.trainer.value_objects.Experience;
-import safe_rl.domain.trainer.helpers.CorrectedActionPenalizer;
 import safe_rl.domain.trainer.helpers.ReturnCalculator;
 
 import java.util.List;
 
-//@Builder
 @AllArgsConstructor
 public class ACDCOneStepEpisodeFitter<V> {
 
@@ -22,13 +20,10 @@ public class ACDCOneStepEpisodeFitter<V> {
         var parameters=mediator.getParameters();
         var agent=mediator.getExternal().agent();
         var elwr = rc.createExperienceListWithReturns(experienceList, parameters.gamma());
-        var penalizer = CorrectedActionPenalizer.<V>builder()
-                .agent(agent).parameters(parameters).lossCriticList(lossCriticList)
-                .build();
 
         for (Experience<V> e : elwr) {
             double tdError = calcTdError(e);
-            penalizer.maybePenalize(e);
+            mediator.maybePenalizeActionCorrection(e,lossCriticList);
             agent.fitActor(e.state(),e.actionApplied(), tdError);
             agent.fitCritic(e.state(),tdError);
         }

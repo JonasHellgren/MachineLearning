@@ -15,8 +15,7 @@ import safe_rl.domain.trainer.helpers.EpisodeInfo;
 
 /***
  * Optimal behavior in this test is max power two first steps
- *
- * critical params:  targetMean(2d).targetStd(3d).targetCritic(0d)
+ critical params:  targetMean(2d).targetStd(3d).targetCritic(0d)
  */
 
 public class TestTrainerOneStepACDCBuyer {

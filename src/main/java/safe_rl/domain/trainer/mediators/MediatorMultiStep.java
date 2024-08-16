@@ -10,6 +10,7 @@ import safe_rl.domain.trainer.aggregates.ACDCMultiStepEpisodeFitter;
 import safe_rl.domain.trainer.aggregates.EpisodeCreator;
 import safe_rl.domain.trainer.aggregates.FitterUsingReplayBuffer;
 import safe_rl.domain.trainer.aggregates.ReplayBufferMultiStepExp;
+import safe_rl.domain.trainer.helpers.CorrectedActionPenalizer;
 import safe_rl.domain.trainer.recorders.Recorder;
 import safe_rl.domain.trainer.value_objects.Experience;
 import safe_rl.domain.trainer.value_objects.MultiStepResults;
@@ -38,6 +39,7 @@ public class MediatorMultiStep<V> implements MediatorMultiStepI<V> {
     EpisodeCreator<V> episodeCreator;
     ACDCMultiStepEpisodeFitter<V> episodeFitter;
     FitterUsingReplayBuffer<V> bufferFitter;
+    CorrectedActionPenalizer<V> actionPenalizer;
 
     public MediatorMultiStep(TrainerExternal<V> external,
                              TrainerParameters parameters,
@@ -49,6 +51,7 @@ public class MediatorMultiStep<V> implements MediatorMultiStepI<V> {
         this.episodeCreator = new EpisodeCreator<>(this);
         this.episodeFitter = new ACDCMultiStepEpisodeFitter<>(this);
         this.bufferFitter = new FitterUsingReplayBuffer<>(this,indexFeature);
+        this.actionPenalizer=new CorrectedActionPenalizer<>(this);
     }
 
     @Override
@@ -93,6 +96,13 @@ public class MediatorMultiStep<V> implements MediatorMultiStepI<V> {
     @Override
     public StepReturn<V> step(StateI<V> state, Action action) {
         return external.environment().step(state, action);
+    }
+
+    @Override
+    public void maybePenalizeActionCorrection(MultiStepResults<V> msr, List<Double> lossCriticList) {
+        for (int step = 0; step < msr.nExperiences(); step++) {
+            actionPenalizer.maybePenalize(step, msr, lossCriticList);
+        }
     }
 
 }
