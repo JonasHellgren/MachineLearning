@@ -2,7 +2,7 @@ package safe_rl.domain;
 
 import com.beust.jcommander.internal.Lists;
 import common.list_arrays.ListUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,7 +88,7 @@ public class TestFitterUsingReplayBuffer {
 
         System.out.println("critic = " + critic);
         for (int i = 0; i < N_ASSERTS; i++) {
-            double soc = RandUtils.randomNumberBetweenZeroAndOne();
+            double soc = RandUtilsML.randomNumberBetweenZeroAndOne();
             int randomTime = getRandomTime();
             Assertions.assertEquals(
                     getaRewardForSoc(soc),
@@ -99,7 +99,7 @@ public class TestFitterUsingReplayBuffer {
 
     private static MultiStepResultItem<VariablesTrading> getExperience(TrainerParameters paramsTrainer) {
         int time = getRandomTime();
-        double soc = RandUtils.randomNumberBetweenZeroAndOne();
+        double soc = RandUtilsML.randomNumberBetweenZeroAndOne();
         boolean isTerminal;
         List<Double> rewardList = Lists.newArrayList();
         List<Action> actionList = Lists.newArrayList();
@@ -107,7 +107,7 @@ public class TestFitterUsingReplayBuffer {
         int n = 0;
         int timeNext;
         do {
-            double action = RandUtils.randomNumberBetweenZeroAndOne() - 0.5;
+            double action = RandUtilsML.randomNumberBetweenZeroAndOne() - 0.5;
             timeNext = time + 1;
             isTerminal = timeNext > T_END;
             double reward = isTerminal ? getaRewardForSoc(soc) : TAR_VALUE_INIT;
@@ -134,7 +134,7 @@ public class TestFitterUsingReplayBuffer {
     }
 
     private static int getRandomTime() {
-        return RandUtils.getRandomIntNumber(TAR_VALUE_INIT, T_TERM); //T_TERM exclusive
+        return RandUtilsML.getRandomIntNumber(TAR_VALUE_INIT, T_TERM); //T_TERM exclusive
     }
 
     private static double getaRewardForSoc(double soc) {

@@ -1,7 +1,7 @@
 package policygradient.maze;
 
 import common.list_arrays.Array2ListConverter;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +37,8 @@ public class TestMazeAgentPPO {
         double[][] inMat = new double[nRows][2];
         double[] out = new double[nRows];
         for (int i = 0; i < nRows; i++) {
-            int x = RandUtils.getRandomIntNumber(0, mazeSettings.gridWidth());
-            int y = RandUtils.getRandomIntNumber(0, mazeSettings.gridHeight());
+            int x = RandUtilsML.getRandomIntNumber(0, mazeSettings.gridWidth());
+            int y = RandUtilsML.getRandomIntNumber(0, mazeSettings.gridHeight());
             var pxy = new Point2D.Double(x, y);
             double value = pxy.distance(pos00);
             inMat[i] = new double[]{x, y};

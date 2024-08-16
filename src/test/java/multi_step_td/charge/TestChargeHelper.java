@@ -1,6 +1,6 @@
 package multi_step_td.charge;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
 import multi_step_temp_diff.domain.environments.charge.ChargeVariables;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -29,7 +29,7 @@ public class TestChargeHelper {
     public static BiPredicate<StateInterface<ChargeVariables>,StateInterface<ChargeVariables>> sameSoCB = (s0,s1) ->
             ChargeState.socB.apply(s0).equals(ChargeState.socB.apply(s1));
 
-    public static Supplier<Integer> randomAction = () -> RandUtils.getRandomIntNumber(0, 4);
+    public static Supplier<Integer> randomAction = () -> RandUtilsML.getRandomIntNumber(0, 4);
 
     public static void printStepReturn(StepReturn stepReturn) {
         System.out.println("stepReturn = " + stepReturn);

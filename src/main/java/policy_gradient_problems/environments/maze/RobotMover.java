@@ -3,7 +3,7 @@ import java.awt.geom.Point2D;
 
 import common.math.BucketLimitsHandler;
 import common.list_arrays.IndexFinder;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import policy_gradient_problems.domain.abstract_classes.Action;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class RobotMover {
 
     public Point2D newIntendedPos(Point2D pos, Action action) {
         Point2D dPos = actionDPosMap.get(action.asInt());
-        int bucket = IndexFinder.findBucket(toArray(probLimits), RandUtils.randomNumberBetweenZeroAndOne());
+        int bucket = IndexFinder.findBucket(toArray(probLimits), RandUtilsML.randomNumberBetweenZeroAndOne());
         return switch (bucket) {
             case 0 -> new Point2D.Double(pos.getX() + dPos.getX(),pos.getY() + dPos.getY());  // Intended direction
             case 1 -> new Point2D.Double(pos.getX() + dPos.getY(),pos.getY() - dPos.getX());  // +90 degrees rotation (Clockwise)

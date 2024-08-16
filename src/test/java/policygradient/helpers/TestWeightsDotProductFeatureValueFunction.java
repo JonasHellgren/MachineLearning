@@ -1,7 +1,7 @@
 package policygradient.helpers;
 
 import common.list_arrays.ArrayUtil;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         ArrayRealVector out=new ArrayRealVector(ArrayUtil.createArrayInRange(0,1.0,10));
 
         for (int i = 0; i < NOF_ITERATIONS; i++) {
-            int randIndex= RandUtils.getRandomIntNumber(in.getMinIndex(),in.getMaxIndex()+1);
+            int randIndex= RandUtilsML.getRandomIntNumber(in.getMinIndex(),in.getMaxIndex()+1);
             ArrayRealVector stateIn = getStateIn(in.getEntry(randIndex));
             double valueRef = out.getEntry(randIndex);
             valueFunction.update(stateIn,valueRef);

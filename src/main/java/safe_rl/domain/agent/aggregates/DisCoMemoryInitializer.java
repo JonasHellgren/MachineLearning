@@ -147,7 +147,7 @@ public class DisCoMemoryInitializer<V> {
     private List<Double> getContFeat(List<Double> minContFeat, List<Double> maxContFeat) {
         List<Double> contFeat=Lists.newArrayListWithCapacity(nContinuousFeatures);
         for (int i = 0; i < nContinuousFeatures; i++) {
-            double val= RandUtils.getRandomDouble(minContFeat.get(i), maxContFeat.get(i));
+            double val= RandUtilsML.getRandomDouble(minContFeat.get(i), maxContFeat.get(i));
             contFeat.add(val);
         }
         return contFeat;

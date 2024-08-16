@@ -1,6 +1,6 @@
 package monte_carlo_search.mcts_elevator;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.domains.elevator.ElevatorValueMemoryNetwork;
 import monte_carlo_tree_search.domains.elevator.StateElevator;
@@ -59,7 +59,7 @@ public class TestElevatorStateValueMemoryDP {
     private List<Experience<VariablesElevator, Integer>> createMiniBatch() {
         List<Experience<VariablesElevator, Integer>> miniBatch=new ArrayList<>();
         for (int i = 0; i < MINI_BATCH_SIZE; i++) {
-            double randNum=RandUtils.getRandomDouble(MIN_OUT,MAX_OUT);
+            double randNum= RandUtilsML.getRandomDouble(MIN_OUT,MAX_OUT);
             double soE=Math.abs(randNum/Math.abs(MIN_OUT));
             miniBatch.add(createExperience(soE,randNum));
 

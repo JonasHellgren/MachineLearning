@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static common.other.RandUtils.getRandomIntNumber;
+import static common.other.RandUtilsML.getRandomIntNumber;
 
 @AllArgsConstructor
 public class StartStateSupplierFactoryApple {

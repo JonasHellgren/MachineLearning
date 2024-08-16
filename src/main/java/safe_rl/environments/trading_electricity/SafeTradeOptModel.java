@@ -13,7 +13,7 @@ import common.joptimizer.LowerBoundConstraint;
 import common.joptimizer.UpperBoundConstraint;
 import common.list_arrays.ListUtils;
 import common.other.Counter;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -22,8 +22,6 @@ import safe_rl.domain.environment.aggregates.StateI;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static safe_rl.persistance.ElDataFinals.PROB_ZERO_POWER;
 
 /**
  * min f=1/2*(power-powerProposed)^2  w.r.t.
@@ -96,9 +94,9 @@ public class SafeTradeOptModel<V> implements OptModelI<V> {
         double randPower;
         boolean violation;
         do {
-            randPower = RandUtils.randomNumberBetweenZeroAndOne() < probZeroPower
+            randPower = RandUtilsML.randomNumberBetweenZeroAndOne() < probZeroPower
                     ? ZERO_POWER
-                    : RandUtils.getRandomDouble(
+                    : RandUtilsML.getRandomDouble(
                             settings.powerChargeMin() - tolPower, settings.powerChargeMax());
             violation = isAnyViolation(randPower);
             counter.increase();

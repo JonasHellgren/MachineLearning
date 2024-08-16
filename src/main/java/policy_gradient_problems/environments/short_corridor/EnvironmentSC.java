@@ -1,7 +1,7 @@
 package policy_gradient_problems.environments.short_corridor;
 
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
 import policy_gradient_problems.domain.abstract_classes.StateI;
@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static common.other.MySetUtils.getSetFromRange;
-import static common.other.RandUtils.getRandomDouble;
-import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
+import static common.other.RandUtilsML.getRandomDouble;
+import static common.other.RandUtilsML.randomNumberBetweenZeroAndOne;
 
 /***
  * See shortCorridor.md for description
@@ -68,7 +68,7 @@ public class EnvironmentSC implements EnvironmentI<VariablesSC> {
     }
 
     public static int getRandomNonTerminalState() {
-        RandUtils<Integer> randUtils = new RandUtils<>();
+        RandUtilsML<Integer> randUtils = new RandUtilsML<>();
         return randUtils.getRandomItemFromList(new ArrayList<>(EnvironmentSC.NON_TERMINAL));
     }
 

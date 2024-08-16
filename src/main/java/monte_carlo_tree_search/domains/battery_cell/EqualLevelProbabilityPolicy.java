@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -19,7 +19,7 @@ public class EqualLevelProbabilityPolicy implements SimulationPolicyInterface<Ce
     @Override
     public ActionInterface<Integer> chooseAction(StateInterface<CellVariables> state) {
         ActionInterface<Integer> action=actionTemplate.copy();
-        RandUtils<Integer> randUtils=new RandUtils<>();
+        RandUtilsML<Integer> randUtils=new RandUtilsML<>();
         List<Integer> avList= new ArrayList<>(actionTemplate.applicableActions());
         action.setValue(randUtils.getRandomItemFromList(avList));
         return action;

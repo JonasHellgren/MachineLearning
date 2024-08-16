@@ -12,7 +12,7 @@ import java.util.List;
 import static common.list_arrays.ArrayUtil.createArrayWithSameDoubleNumber;
 import static common.list_arrays.IndexFinder.findBucket;
 import static common.list_arrays.ListUtils.toArray;
-import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
+import static common.other.RandUtilsML.randomNumberBetweenZeroAndOne;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
 import static common.math.BucketLimitsHandler.getLimits;
 import static common.math.BucketLimitsHandler.throwIfBadLimits;

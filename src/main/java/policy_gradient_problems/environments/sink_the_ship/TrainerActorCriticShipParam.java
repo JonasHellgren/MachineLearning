@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,7 +32,7 @@ public final class TrainerActorCriticShipParam extends TrainerAbstractShip {
     @Override
     public void train() {
         for (int ei = 0; ei < parameters.nofEpisodes(); ei++) {
-            agent.setState(StateShip.newFromPos(RandUtils.getRandomIntNumber(0,EnvironmentShip.nofStates())));
+            agent.setState(StateShip.newFromPos(RandUtilsML.getRandomIntNumber(0,EnvironmentShip.nofStates())));
             episodeTrainer.trainAgentFromExperiences(getExperiences(agent));
             Map<Integer, List<Double>> map = getStateAngleMap(agent);
             updateTracker(map);

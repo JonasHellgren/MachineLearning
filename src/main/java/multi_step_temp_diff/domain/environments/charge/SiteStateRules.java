@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.charge;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.extern.java.Log;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 
@@ -40,7 +40,7 @@ public class SiteStateRules {
         if (fcnList.size()>1) {
             log.fine("stateNew = " + state);
             log.fine("Multiple matching rules, nof ="+fcnList.size());
-            int randRuleIndex= RandUtils.getRandomIntNumber(0,fcnList.size());
+            int randRuleIndex= RandUtilsML.getRandomIntNumber(0,fcnList.size());
             return fcnList.get(randRuleIndex).get();
         }
         if (fcnList.size()==0) {

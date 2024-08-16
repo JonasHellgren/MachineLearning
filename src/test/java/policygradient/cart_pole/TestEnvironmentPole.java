@@ -1,7 +1,7 @@
 package policygradient.cart_pole;
 
 import common.other.Counter;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.StateI;
@@ -79,7 +79,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         var state = stateStart.copy();
         Counter counter=new Counter();
         do {
-            int randomAction = RandUtils.getRandomIntNumber(0, EnvironmentPole.NOF_ACTIONS);
+            int randomAction = RandUtilsML.getRandomIntNumber(0, EnvironmentPole.NOF_ACTIONS);
             stepReturn = environment.step(state, Action.ofInteger(randomAction));
             state = stepReturn.state().copy();
             counter.increase();

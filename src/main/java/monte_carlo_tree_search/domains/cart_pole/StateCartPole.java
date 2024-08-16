@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.cart_pole;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -43,10 +43,10 @@ public class StateCartPole  implements StateInterface<CartPoleVariables> {
         double xMax=EnvironmentCartPole.X_TRESHOLD;
         double xDotMax=EnvironmentCartPole.X_DOT_THRESHOLD;
         return  new StateCartPole(CartPoleVariables.builder()
-                .theta(RandUtils.getRandomDouble(-thetaMax,thetaMax))
-                .thetaDot(RandUtils.getRandomDouble(-thetaDotMax,thetaDotMax))
-                .x(RandUtils.getRandomDouble(-xMax,xMax))
-                .xDot(RandUtils.getRandomDouble(-xDotMax,xDotMax))
+                .theta(RandUtilsML.getRandomDouble(-thetaMax,thetaMax))
+                .thetaDot(RandUtilsML.getRandomDouble(-thetaDotMax,thetaDotMax))
+                .x(RandUtilsML.getRandomDouble(-xMax,xMax))
+                .xDot(RandUtilsML.getRandomDouble(-xDotMax,xDotMax))
                 .build());
     }
 

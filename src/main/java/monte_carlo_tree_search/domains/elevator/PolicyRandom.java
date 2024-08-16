@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -11,11 +11,11 @@ import java.util.Set;
 public class PolicyRandom
         implements SimulationPolicyInterface<VariablesElevator, Integer> {
 
-    RandUtils<Integer> randGenerator;
+    RandUtilsML<Integer> randGenerator;
     List<Integer> actionList;
 
     public PolicyRandom() {
-        randGenerator=new RandUtils<>();
+        randGenerator=new RandUtilsML<>();
         ActionElevator actionElevator=ActionElevator.newValueDefaultRange(0);
         actionList= new ArrayList<>(actionElevator.applicableActions());
     }

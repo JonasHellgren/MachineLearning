@@ -2,7 +2,7 @@ package safe_rl.domain.simulator;
 
 import com.beust.jcommander.internal.Lists;
 import com.joptimizer.exception.JOptimizerException;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -36,7 +36,7 @@ public class RandomActionSimulator<V> {
         Action action=null;
         Action actionCorrected=null;
         while (!isTerminalOrFail) {
-            double power = RandUtils.getRandomDouble(minMaxAction.getLeft(), minMaxAction.getRight());
+            double power = RandUtilsML.getRandomDouble(minMaxAction.getLeft(), minMaxAction.getRight());
             action = Action.ofDouble(power);
             logStateAndAction(state, action);
             actionCorrected = safetyLayer.correctAction(state, action);

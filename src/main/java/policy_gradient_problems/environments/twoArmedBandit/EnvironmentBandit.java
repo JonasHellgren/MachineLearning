@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.twoArmedBandit;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
@@ -32,7 +32,7 @@ public class EnvironmentBandit implements EnvironmentI<VariablesBandit> {
     }
 
     private static double tryToGetCoin(double probWinningAction) {
-        return RandUtils.getRandomDouble(0, 1) < probWinningAction ? NOF_COINS_IF_WINNING : 0;
+        return RandUtilsML.getRandomDouble(0, 1) < probWinningAction ? NOF_COINS_IF_WINNING : 0;
     }
 
 }

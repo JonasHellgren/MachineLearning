@@ -1,7 +1,7 @@
 package policy_gradient_problems.domain.abstract_classes;
 
 import common.list_arrays.ListUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +29,6 @@ public abstract class AgentA<V> implements AgentI<V> {
     public Action chooseAction() {
         var limits = getLimits(actionProbabilitiesInPresentState());
         throwIfBadLimits(limits);
-        return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtils.randomNumberBetweenZeroAndOne()));
+        return Action.ofInteger(findBucket(ListUtils.toArray(limits), RandUtilsML.randomNumberBetweenZeroAndOne()));
     }
 }

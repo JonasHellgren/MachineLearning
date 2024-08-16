@@ -2,7 +2,7 @@ package common;
 
 import common.list_arrays.ListUtils;
 import common.math.LinearFitter;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ public class TestLinearFitter {
         fitter.fit(randomDataPoint());
         }
 
-        int i = RandUtils.getRandomIntNumber(0, yArr.length);
+        int i = RandUtilsML.getRandomIntNumber(0, yArr.length);
         double y=yArr[i];
         double yPred=fitter.predict(xMat[i]);
 
@@ -63,7 +63,7 @@ public class TestLinearFitter {
 
         Pair<Double, double[]> randomDataPoint() {
 
-        int i = RandUtils.getRandomIntNumber(0, yArr.length);
+        int i = RandUtilsML.getRandomIntNumber(0, yArr.length);
         double[] x = new double[nDim];
         x[0] = xMat[i][0];
         double y = yArr[i];

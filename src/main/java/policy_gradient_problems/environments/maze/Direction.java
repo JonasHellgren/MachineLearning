@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.AllArgsConstructor;
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -17,7 +17,7 @@ public enum Direction {
 
     public static  Direction random() {
         List<Direction> directionList=List.of(UP, RIGHT, DOWN, LEFT);
-        RandUtils<Direction> randUtils=new RandUtils<>();
+        RandUtilsML<Direction> randUtils=new RandUtilsML<>();
         return randUtils.getRandomItemFromList(directionList);
     }
 

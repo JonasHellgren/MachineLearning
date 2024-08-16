@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.create_tree;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.search_tree_node_models.NodeInterface;
@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 @Log
 public class ActionSelector<S, A> {
     MonteCarloSettings<S, A> settings;
-    RandUtils<ActionInterface<A>> randUtils;
+    RandUtilsML<ActionInterface<A>> randUtils;
     ActionInterface<A> actionTemplate;
 
     public ActionSelector(MonteCarloSettings<S, A> settings, ActionInterface<A> actionTemplate) {
-        this.randUtils = new RandUtils<>();
+        this.randUtils = new RandUtilsML<>();
         this.settings = settings;
         this.actionTemplate = actionTemplate;
     }
@@ -62,7 +62,7 @@ public class ActionSelector<S, A> {
 
     public ActionInterface<A> getRandomAction() {
         Set<A> actions = actionTemplate.applicableActions();
-        RandUtils<A> randUtils = new RandUtils<>();
+        RandUtilsML<A> randUtils = new RandUtilsML<>();
         actionTemplate.setValue(randUtils.getRandomItemFromList(new ArrayList<>(actions)));
         return actionTemplate;
     }

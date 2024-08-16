@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import policy_gradient_problems.domain.abstract_classes.Action;
@@ -46,7 +46,7 @@ public class EnvironmentShip implements EnvironmentI<VariablesShip> {
     }
 
     public static  Integer getRandomPos() {
-        int randIndex=RandUtils.getRandomIntNumber(0,nofStates());
+        int randIndex= RandUtilsML.getRandomIntNumber(0,nofStates());
         return POSITIONS.stream().toList().get(randIndex);
     }
 

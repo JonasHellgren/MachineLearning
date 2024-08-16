@@ -1,7 +1,7 @@
 package marl;
 
 import common.linear_regression_batch_fitting.DataSetCreator;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_agent_rl.domain.memories.CriticLinear;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
@@ -76,7 +76,7 @@ public class TestCriticLinear {
     }
 
     private static double getRandomX() {
-        return RandUtils.getRandomDouble(MIN_X, MAX_X);
+        return RandUtilsML.getRandomDouble(MIN_X, MAX_X);
     }
 
 }

@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.battery_cell;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
@@ -26,7 +26,7 @@ public class RandomFeasiblePolicy  implements SimulationPolicyInterface<CellVari
 
         List<Integer> feasibleValueList = cellPolicyHelper.getValueList(state, action);
 
-        RandUtils<Integer> randUtils=new RandUtils<>();
+        RandUtilsML<Integer> randUtils=new RandUtilsML<>();
         int av=(feasibleValueList.isEmpty())
                 ? action.nonApplicableAction()
                 :randUtils.getRandomItemFromList(feasibleValueList);

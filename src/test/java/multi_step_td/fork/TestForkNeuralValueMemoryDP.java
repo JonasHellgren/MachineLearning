@@ -1,6 +1,6 @@
 package multi_step_td.fork;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
@@ -164,7 +164,7 @@ public class TestForkNeuralValueMemoryDP {
     private List<NstepExperience<ForkVariables>> createBatchOddEven(double valueOdd, double valueEven) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomIntNumber = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
+            final int randomIntNumber = RandUtilsML.getRandomIntNumber(0, envSettings.nofStates());
             final double value = isEven.test(randomIntNumber) ? valueEven : valueOdd;
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomIntNumber))

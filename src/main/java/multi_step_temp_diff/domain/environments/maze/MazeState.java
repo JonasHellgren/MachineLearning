@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.maze;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
 import multi_step_temp_diff.domain.environment_abstract.StepReturn;
@@ -39,8 +39,8 @@ public class MazeState implements StateInterface<MazeVariables> {
     public static MazeState newFromRandomPos() {
         int randomX, randomY;
         do {
-            randomX = RandUtils.getRandomIntNumber(0, MazeEnvironment.settings.nofCols());
-            randomY = RandUtils.getRandomIntNumber(0, MazeEnvironment.settings.nofRows());
+            randomX = RandUtilsML.getRandomIntNumber(0, MazeEnvironment.settings.nofCols());
+            randomY = RandUtilsML.getRandomIntNumber(0, MazeEnvironment.settings.nofRows());
         } while (!MazeEnvironment.isValidStartPosition.apply(randomX,randomY));
 
         return new MazeState(MazeVariables.newFromXY(randomX,randomY));

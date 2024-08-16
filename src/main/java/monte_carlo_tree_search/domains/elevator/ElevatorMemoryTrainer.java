@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.elevator;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -81,7 +81,7 @@ public class ElevatorMemoryTrainer
     }
 
     private double getAverageReturnPerStep(MonteCarloSimulator<VariablesElevator, Integer> simulator, StateInterface<VariablesElevator> stateRandomCopy) {
-        stateRandomCopy.getVariables().SoE = RandUtils.getRandomDouble
+        stateRandomCopy.getVariables().SoE = RandUtilsML.getRandomDouble
                 (EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH);
         SimulationResults simulationResults = simulator.simulate(stateRandomCopy, false, START_DEPTH);
         return getAverageReturn(simulationResults)/(double)

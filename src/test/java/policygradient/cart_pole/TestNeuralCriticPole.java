@@ -1,6 +1,6 @@
 package policygradient.cart_pole;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +64,7 @@ import java.util.function.Function;
             List<List<Double>> in = new ArrayList<>();
             List<Double> out = new ArrayList<>();
             for (int j = 0; j < NOF_SAMPLES; j++) {
-                double angle = RandUtils.getRandomDouble(-parameters.angleMax(), parameters.angleMax());
+                double angle = RandUtilsML.getRandomDouble(-parameters.angleMax(), parameters.angleMax());
                 var state = stateFcn.apply(angle);
                 double value = (Math.abs(angle) > 0.1) ? 20 : 200d;
                 in.add(state.asList());

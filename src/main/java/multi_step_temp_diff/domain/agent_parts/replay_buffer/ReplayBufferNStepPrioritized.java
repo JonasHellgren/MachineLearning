@@ -5,7 +5,7 @@ import common.math.MathUtils;
 import common.other.Conditionals;
 import common.other.Counter;
 import common.other.CpuTimer;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -114,7 +114,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
         intervalFinder.setInput(ListUtils.merge(List.of(0d),accumulatedProbabilities));
         List<Integer> indexes= IntStream.range(0,batchLength).boxed().map(i ->
         {
-            double randomBetweenZeroAndOneToPointOutExperience = RandUtils.getRandomDouble(0, 1);
+            double randomBetweenZeroAndOneToPointOutExperience = RandUtilsML.getRandomDouble(0, 1);
             return intervalFinder.find(randomBetweenZeroAndOneToPointOutExperience);
         }).toList();
 
@@ -140,7 +140,7 @@ public class ReplayBufferNStepPrioritized <S> implements ReplayBufferInterface<S
 
     private boolean removeRandomItemIfFull() {
         if (size() >= maxSize) {
-            int indexToRemove= RandUtils.getRandomIntNumber(0,size());
+            int indexToRemove= RandUtilsML.getRandomIntNumber(0,size());
             buffer.remove(indexToRemove);
             return true;
         }

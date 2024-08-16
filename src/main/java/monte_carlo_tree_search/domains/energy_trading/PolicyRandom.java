@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -13,11 +13,11 @@ public class PolicyRandom
         implements SimulationPolicyInterface<VariablesEnergyTrading, Integer> {
 
     private static final int DUMMY_VALUE = 0;
-    RandUtils<Integer> randGenerator;
+    RandUtilsML<Integer> randGenerator;
     List<Integer> actionList;
 
     public PolicyRandom() {
-        randGenerator = new RandUtils<>();
+        randGenerator = new RandUtilsML<>();
         ActionEnergyTrading action = getDummyAction();
         actionList = new ArrayList<>(action.applicableActions());
     }

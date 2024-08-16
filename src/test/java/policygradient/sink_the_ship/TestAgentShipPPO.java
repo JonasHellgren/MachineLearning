@@ -3,7 +3,7 @@ package policygradient.sink_the_ship;
 import common.list_arrays.Array2ListConverter;
 import common.math.MathUtils;
 import common.other.NormDistributionSampler;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.extern.java.Log;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -79,7 +79,7 @@ public class TestAgentShipPPO {
     }
 
     private int randomPos() {
-        return RandUtils.getRandomIntNumber(0, shipSettings.nStates());
+        return RandUtilsML.getRandomIntNumber(0, shipSettings.nStates());
     }
 
     /**
@@ -136,7 +136,7 @@ public class TestAgentShipPPO {
         int nHits = 0;
 
         do {
-            int pos = RandUtils.getRandomIntNumber(0, EnvironmentShip.POSITIONS.size());
+            int pos = RandUtilsML.getRandomIntNumber(0, EnvironmentShip.POSITIONS.size());
             var meanAndStd = agent.meanAndStd(StateShip.newFromPos(pos));
             double a = sampler.sampleFromNormDistribution(meanAndStd);
             double pdfOld = MathUtils.pdf(a, meanAndStd);

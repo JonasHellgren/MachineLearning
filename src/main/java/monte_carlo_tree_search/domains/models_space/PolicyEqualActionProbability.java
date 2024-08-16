@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.models_space;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import monte_carlo_tree_search.interfaces.ActionInterface;
 import monte_carlo_tree_search.interfaces.SimulationPolicyInterface;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -18,7 +18,7 @@ public class PolicyEqualActionProbability implements SimulationPolicyInterface<S
 
     @Override
     public ActionInterface<ShipActionSet> chooseAction(StateInterface<ShipVariables> state) {
-        RandUtils<ShipActionSet> randUtils=new RandUtils<>();
+        RandUtilsML<ShipActionSet> randUtils=new RandUtilsML<>();
         List<ShipActionSet> avList= new ArrayList<>(applicableActions);
         return new ActionShip(randUtils.getRandomItemFromList(avList));
      }

@@ -10,7 +10,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import static common.other.RandUtils.getRandomDouble;
+import static common.other.RandUtilsML.getRandomDouble;
 
 @Builder
 public class SumDataGenerator {

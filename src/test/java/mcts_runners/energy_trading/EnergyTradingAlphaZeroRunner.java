@@ -2,7 +2,7 @@ package mcts_runners.energy_trading;
 
 import common.math.ScalerLinear;
 import common.other.Conditionals;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -153,7 +153,7 @@ public class EnergyTradingAlphaZeroRunner {
     }
 
     private static boolean isRandomAction(ScalerLinear probScaler, int episode) {
-        return RandUtils.getRandomDouble(0, 1) < probScaler.calcOutDouble(episode);
+        return RandUtilsML.getRandomDouble(0, 1) < probScaler.calcOutDouble(episode);
     }
 
     private static ActionInterface<Integer> getActionFromSearch(

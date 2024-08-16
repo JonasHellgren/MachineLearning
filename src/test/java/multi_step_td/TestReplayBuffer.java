@@ -1,7 +1,7 @@
 package multi_step_td;
 
 import common.other.CpuTimer;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
 import multi_step_temp_diff.domain.agent_parts.replay_buffer.ReplayBufferInterface;
@@ -36,7 +36,7 @@ public class TestReplayBuffer {
     public void whenAddingTenExperiences_thenExists() {
 
         for (int i = 0; i < 10 ; i++) {
-            double sumOfRewards= RandUtils.getRandomDouble(0,10);
+            double sumOfRewards= RandUtilsML.getRandomDouble(0,10);
             buffer.addExperience(NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(i)).sumOfRewards(sumOfRewards)
                     .stateToBackupFrom(ForkState.newFromPos(i + n)).isBackupStatePresent(true)

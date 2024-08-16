@@ -2,7 +2,7 @@ package policygradient.sink_the_ship;
 
 import common.other.Counter;
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         Counter counter=new Counter(10_000);
         do {
             //angle = RandUtils.getRandomDouble(-5,10);
-            angle = RandUtils.getRandomDouble(0,1);
+            angle = RandUtilsML.getRandomDouble(0,1);
 
             sr=environment.step(StateShip.newFromPos(state), Action.ofDouble(angle));
             counter.increase();

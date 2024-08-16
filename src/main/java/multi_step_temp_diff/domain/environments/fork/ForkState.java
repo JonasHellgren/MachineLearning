@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.environments.fork;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import multi_step_temp_diff.domain.agent_abstract.StateInterface;
@@ -32,7 +32,7 @@ public class ForkState implements StateInterface<ForkVariables> {
 
     public static ForkState newFromRandomPos() {
         ForkEnvironmentSettings envSettings=ForkEnvironmentSettings.getDefault();  //slows down
-        final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates()-1);
+        final int randomPos = RandUtilsML.getRandomIntNumber(0, envSettings.nofStates()-1);
         return new ForkState(ForkVariables.newFromPos(randomPos));
     }
 

@@ -1,7 +1,7 @@
 package policygradient.short_corridor;
 
 import common.list_arrays.ListUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -51,7 +51,7 @@ public class TestNeuralActorIMemorySCLossCEM {
     static void trainActor() {
         Map<Integer, Triple<Integer, Integer, Double>> caseSAGtMap = getCaseSAGtMap();
         for (int ei = 0; ei < NOF_STEPS; ei++) {
-            int caseNr= RandUtils.getRandomIntNumber(0,4);
+            int caseNr= RandUtilsML.getRandomIntNumber(0,4);
             var triplet=caseSAGtMap.get(caseNr);
             var state=StateSC.newFromRealPos(triplet.getLeft());
             List<Double> in = state.asList();

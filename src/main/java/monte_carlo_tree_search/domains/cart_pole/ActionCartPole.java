@@ -2,7 +2,7 @@ package monte_carlo_tree_search.domains.cart_pole;
 
 import common.other.Conditionals;
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.extern.java.Log;
@@ -29,7 +29,7 @@ public class ActionCartPole implements ActionInterface<Integer> {
         ActionCartPole actionDummy=new ActionCartPole(0);
         Set<Integer> actions= actionDummy.applicableActions();
         List<Integer> actionlist=new ArrayList<>(actions);
-        RandUtils<Integer> rand=new RandUtils<>();
+        RandUtilsML<Integer> rand=new RandUtilsML<>();
         return ActionCartPole.builder().rawValue(rand.getRandomItemFromList(actionlist)).build();
     }
 

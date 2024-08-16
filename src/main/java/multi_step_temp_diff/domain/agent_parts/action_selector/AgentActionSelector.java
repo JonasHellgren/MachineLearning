@@ -2,7 +2,7 @@ package multi_step_temp_diff.domain.agent_parts.action_selector;
 
 import common.other.Conditionals;
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -39,7 +39,7 @@ public class AgentActionSelector<S> {
     Function<StateInterface<S>, Double> readMemoryFunction;
 
     public int chooseRandomAction() {
-        return RandUtils.getRandomIntNumber(0, nofActions);
+        return RandUtilsML.getRandomIntNumber(0, nofActions);
     }
 
     record ActionAndValue(int action, double value) {
@@ -61,7 +61,7 @@ public class AgentActionSelector<S> {
                                                           Predicate<ActionAndValue> condition,
                                                           long nofMatches) {
         return actionAndValueList.stream()
-                .filter(condition).toList().get(RandUtils.getRandomIntNumber(0, (int) nofMatches));
+                .filter(condition).toList().get(RandUtilsML.getRandomIntNumber(0, (int) nofMatches));
     }
 
     private static void maybeLog(long nofMatches, ActionAndValue actionAndValueChosen) {
@@ -89,7 +89,7 @@ public class AgentActionSelector<S> {
     }
 
     public int chooseAction(double probRandom, StateInterface<S> state) {
-        return (RandUtils.getRandomDouble(0, 1) < probRandom)
+        return (RandUtilsML.getRandomDouble(0, 1) < probRandom)
                 ? chooseRandomAction()
                 : chooseBestAction(state);
     }

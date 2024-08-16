@@ -2,7 +2,7 @@ package monte_carlo_tree_search.domains.elevator;
 
 import common.list_arrays.ListUtils;
 import common.math.MathUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -40,24 +40,24 @@ public class VariablesElevator {
 
     public static VariablesElevator newRandom(int maxNPersonsInElevator, int maxNPersonsWaitingTotal) {
 
-        RandUtils<Integer> speedRand = new RandUtils<>();
+        RandUtilsML<Integer> speedRand = new RandUtilsML<>();
         List<Integer> waitingList = createWaitingList(maxNPersonsWaitingTotal);
 
         return VariablesElevator.builder()
                 .speed(speedRand.getRandomItemFromList(Arrays.asList(SPEED_UP, SPEED_STILL, SPEED_DOWN)))
-                .pos(RandUtils.getRandomIntNumber(EnvironmentElevator.MIN_POS, EnvironmentElevator.MAX_POS + 1))
-                .nPersonsInElevator(RandUtils.getRandomIntNumber(0, maxNPersonsInElevator + 1))
+                .pos(RandUtilsML.getRandomIntNumber(EnvironmentElevator.MIN_POS, EnvironmentElevator.MAX_POS + 1))
+                .nPersonsInElevator(RandUtilsML.getRandomIntNumber(0, maxNPersonsInElevator + 1))
                 .nPersonsWaiting(waitingList)
-                .SoE(RandUtils.getRandomDouble(EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH))
+                .SoE(RandUtilsML.getRandomDouble(EnvironmentElevator.SOE_LOW, EnvironmentElevator.SoE_HIGH))
                 .build();
     }
 
     private static List<Integer> createWaitingList(int maxNPersonsWaitingTotal) {
         List<Integer> waitingList;
         do {
-            int nw1 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
-            int nw2 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
-            int nw3 = RandUtils.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            int nw1 = RandUtilsML.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            int nw2 = RandUtilsML.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
+            int nw3 = RandUtilsML.getRandomIntNumber(0, maxNPersonsWaitingTotal + 1);
             waitingList = Arrays.asList(nw1, nw2, nw3);
         } while (ListUtils.sumIntegerList(waitingList) != maxNPersonsWaitingTotal);
         return waitingList;

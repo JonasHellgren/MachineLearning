@@ -37,8 +37,7 @@ public class TestTrainerOneStepACDCBuyer {
                 .withLearningRateReplayBufferActor(1e-3)  //1e-3
                 .withLearningRateReplayBufferActorStd(1e-3)  //1e-3
                 .withLearningRateReplayBufferCritic(1e-1)  //1e-1
-                .withNofEpisodes(3000).withGamma(1.0).withRatioPenCorrectedAction(2d)
-                ;
+                .withNofEpisodes(3000).withGamma(1.0).withRatioPenCorrectedAction(2d);
         var agent= AgentACDCSafe.<VariablesBuying>builder()
                 .settings(settings3hours)
                 .parameters(AgentParameters.newDefault()

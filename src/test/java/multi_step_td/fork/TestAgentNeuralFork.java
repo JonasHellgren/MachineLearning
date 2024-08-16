@@ -1,6 +1,6 @@
 package multi_step_td.fork;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
@@ -61,7 +61,7 @@ public class TestAgentNeuralFork {
     private List<NstepExperience<ForkVariables>> createBatch(double value) {
         List<NstepExperience<ForkVariables>> batch=new ArrayList<>();
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final int randomPos = RandUtils.getRandomIntNumber(0, envSettings.nofStates());
+            final int randomPos = RandUtilsML.getRandomIntNumber(0, envSettings.nofStates());
             NstepExperience<ForkVariables> exp= NstepExperience.<ForkVariables>builder()
                     .stateToUpdate(ForkState.newFromPos(randomPos))
                     .value(value)

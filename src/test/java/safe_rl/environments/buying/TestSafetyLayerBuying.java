@@ -12,7 +12,7 @@ import safe_rl.environments.buying_electricity.*;
 import safe_rl.environments.factories.FactoryOptModel;
 import safe_rl.domain.simulator.RandomActionSimulator;
 
-import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
+import static common.other.RandUtilsML.randomNumberBetweenZeroAndOne;
 
 @Log
 class TestSafetyLayerBuying {

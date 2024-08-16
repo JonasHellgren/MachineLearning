@@ -1,6 +1,6 @@
 package common.plotters.parallel_coordinates;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,6 @@ public class NoiseToValuesInput {
     }
 
     private static double generateNoise(double noiseLevel) {
-        return RandUtils.getRandomDouble(-noiseLevel,noiseLevel);  // Generate noise in range [-noiseLevel, noiseLevel]
+        return RandUtilsML.getRandomDouble(-noiseLevel,noiseLevel);  // Generate noise in range [-noiseLevel, noiseLevel]
     }
 }

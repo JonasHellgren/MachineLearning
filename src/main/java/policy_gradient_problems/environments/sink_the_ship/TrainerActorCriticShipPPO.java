@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.sink_the_ship;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -54,7 +54,7 @@ public class TrainerActorCriticShipPPO extends TrainerAbstractShip {
     }
 
     private void setStartStateInAgent() {
-        agent.setState(StateShip.newFromPos(RandUtils.getRandomIntNumber(0,shipSettings.nStates())));
+        agent.setState(StateShip.newFromPos(RandUtilsML.getRandomIntNumber(0,shipSettings.nStates())));
         //agent.setState(StateShip.newFromPos());
 
     }

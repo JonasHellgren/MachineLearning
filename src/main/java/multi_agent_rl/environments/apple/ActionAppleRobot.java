@@ -2,7 +2,7 @@ package multi_agent_rl.environments.apple;
 
 import com.google.common.base.Preconditions;
 import common.math.Discrete2DVector;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public enum ActionAppleRobot {
     }
 
     public static ActionAppleRobot random() {
-        int randIdx= RandUtils.getRandomIntNumber(0, nActions() -1);
+        int randIdx= RandUtilsML.getRandomIntNumber(0, nActions() -1);
         return INTEGER_ACTION_ROBOT_MAP.get(randIdx);
     }
 

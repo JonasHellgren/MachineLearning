@@ -16,7 +16,7 @@ import safe_rl.environments.trading_electricity.StateTrading;
 import safe_rl.environments.trading_electricity.VariablesTrading;
 import safe_rl.domain.simulator.RandomActionSimulator;
 
-import static common.other.RandUtils.randomNumberBetweenZeroAndOne;
+import static common.other.RandUtilsML.randomNumberBetweenZeroAndOne;
 
 @Log
 class TestSafetyLayerTrading {

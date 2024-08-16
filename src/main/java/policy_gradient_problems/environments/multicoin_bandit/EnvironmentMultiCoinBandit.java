@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.multicoin_bandit;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Builder;
 import policy_gradient_problems.domain.abstract_classes.Action;
 import policy_gradient_problems.domain.abstract_classes.EnvironmentI;
@@ -16,7 +16,7 @@ public class EnvironmentMultiCoinBandit implements EnvironmentI<VariablesBandit>
     Double probWinAction0;
     Double probWinAction1;
 
-    final RandUtils<Double> rand=new RandUtils<>();
+    final RandUtilsML<Double> rand=new RandUtilsML<>();
 
 
     public static EnvironmentMultiCoinBandit newWithProbabilities(double prob0, double prob1) {
@@ -35,6 +35,6 @@ public class EnvironmentMultiCoinBandit implements EnvironmentI<VariablesBandit>
 
     private  double tryToGetCoin(double probWinningAction) {
         double coinValue=rand.getRandomItemFromList(COINS);
-        return RandUtils.getRandomDouble(0, 1) < probWinningAction ? coinValue : 0;
+        return RandUtilsML.getRandomDouble(0, 1) < probWinningAction ? coinValue : 0;
     }
 }

@@ -1,6 +1,6 @@
 package multi_step_td.fork;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_temp_diff.domain.environments.fork.ForkEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.fork.ForkState;
 import multi_step_temp_diff.domain.environments.fork.ForkVariables;
@@ -51,19 +51,19 @@ public class TestForkEnvironment {
 
     @Test
     public void whenActionIs0Or1InState0_thenState1() {
-        stepReturn=environment.step(POS0, RandUtils.getRandomIntNumber(0,2));
+        stepReturn=environment.step(POS0, RandUtilsML.getRandomIntNumber(0,2));
         assertEquals(1,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0Or1InState6_thenState11() {
-        stepReturn=environment.step(POS6, RandUtils.getRandomIntNumber(0,2));
+        stepReturn=environment.step(POS6, RandUtilsML.getRandomIntNumber(0,2));
         assertEquals(11,(int) getPos.apply(stepReturn.newState));
     }
 
     @Test
     public void whenActionIs0Or1InState14_thenState15AndTerminalAndRewardHell() {
-        stepReturn=environment.step(POS14, RandUtils.getRandomIntNumber(0,2));
+        stepReturn=environment.step(POS14, RandUtilsML.getRandomIntNumber(0,2));
         System.out.println("stepReturn = " + stepReturn);
         assertEquals(15,(int) getPos.apply(stepReturn.newState));
         assertTrue(stepReturn.isNewStateTerminal);

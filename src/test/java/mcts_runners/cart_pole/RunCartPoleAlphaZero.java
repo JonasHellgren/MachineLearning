@@ -2,7 +2,7 @@ package mcts_runners.cart_pole;
 
 import common.other.Conditionals;
 import common.plotters.PlotterMultiplePanelsTrajectory;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import common.math.ScalerLinear;
 import lombok.extern.java.Log;
 import monte_carlo_tree_search.create_tree.MonteCarloSettings;
@@ -120,7 +120,7 @@ public class RunCartPoleAlphaZero {
     }
 
     private static boolean isRandomAction(ScalerLinear probScaler, int episode) {
-        return RandUtils.getRandomDouble(0, 1) < probScaler.calcOutDouble(episode);
+        return RandUtilsML.getRandomDouble(0, 1) < probScaler.calcOutDouble(episode);
     }
 
     private static void doPlotting(List<Double> learningErrors,List<Double> returns) {

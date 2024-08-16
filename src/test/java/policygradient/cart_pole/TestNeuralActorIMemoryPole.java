@@ -1,7 +1,7 @@
 package policygradient.cart_pole;
 
 import common.list_arrays.ListUtils;
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import common.dl4j.Dl4JUtil;
 import org.junit.jupiter.api.*;
 import policy_gradient_problems.environments.cart_pole.*;
@@ -52,7 +52,7 @@ import java.util.List;
             var state= StatePole.newAllRandom(parametersPole);
             List<Double> in = state.asList();
             int action=(state.angle()<0) ? 0 : 1;  //neg angle -> push left and vice vera
-            double nofSteps= RandUtils.getRandomDouble(0,parametersPole.maxNofSteps()/10);
+            double nofSteps= RandUtilsML.getRandomDouble(0,parametersPole.maxNofSteps()/10);
             List<Double> oneHotOut = Dl4JUtil.createListWithOneHotWithValue(EnvironmentPole.NOF_ACTIONS,action,nofSteps);
             actor.fit(List.of(in), List.of(oneHotOut));
         }

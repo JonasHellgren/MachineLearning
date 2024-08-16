@@ -1,6 +1,6 @@
 package multi_step_temp_diff.domain.helpers_specific;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.AllArgsConstructor;
 import multi_step_temp_diff.domain.environments.charge.ChargeEnvironmentSettings;
 import multi_step_temp_diff.domain.environments.charge.ChargeState;
@@ -27,16 +27,16 @@ public class ChargeStateSuppliers {
     }
 
     public double randomSoC() {
-        return RandUtils.getRandomDouble(settings.socBad(), settings.socMax());
+        return RandUtilsML.getRandomDouble(settings.socBad(), settings.socMax());
     }
 
     public double randomSoCAbove(double socMin) {
-        return RandUtils.getRandomDouble(socMin, settings.socMax());
+        return RandUtilsML.getRandomDouble(socMin, settings.socMax());
     }
 
 
     public int randomSitePos() {
-        RandUtils<Integer> randUtils=new RandUtils<>();
+        RandUtilsML<Integer> randUtils=new RandUtilsML<>();
         List<Integer> es = new ArrayList<>(settings.siteNodes());
         return randUtils.getRandomItemFromList(es);
     }

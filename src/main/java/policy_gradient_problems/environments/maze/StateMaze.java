@@ -1,6 +1,6 @@
 package policy_gradient_problems.environments.maze;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.math3.linear.RealVector;
@@ -17,8 +17,8 @@ public class StateMaze implements StateI<VariablesMaze> {
         boolean isObstacleOrTerminal;
         StateMaze state;
         do  {
-            int x= RandUtils.getRandomIntNumber(0,mazeSettings.gridWidth());
-            int y= RandUtils.getRandomIntNumber(0,mazeSettings.gridHeight());
+            int x= RandUtilsML.getRandomIntNumber(0,mazeSettings.gridWidth());
+            int y= RandUtilsML.getRandomIntNumber(0,mazeSettings.gridHeight());
             state=newFromPoint(new Point2D.Double(x,y));
             isObstacleOrTerminal=mazeSettings.isObstacle(state) || mazeSettings.isTerminal(state);
         } while (isObstacleOrTerminal);

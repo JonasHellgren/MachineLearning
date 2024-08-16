@@ -1,6 +1,6 @@
 package policygradient.short_corridor;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ import java.util.*;
         List<Double> values2=new ArrayList<>();
 
         for (int ei = 0; ei < 1000 ; ei++) {
-            int caseNr= RandUtils.getRandomIntNumber(0, NOF_CASES);
+            int caseNr= RandUtilsML.getRandomIntNumber(0, NOF_CASES);
             var pair=caseSGtMap.get(caseNr);
             var state= StateSC.newFromObsPos(pair.getLeft());
             List<Double> in = state.asList();

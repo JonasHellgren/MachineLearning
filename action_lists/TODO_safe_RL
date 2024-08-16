@@ -239,17 +239,16 @@ CorrectedActionPenalizer som del av mediator  x
 MeanLossCritic verkar som beräknas ofta
 BufferFitter - verkligen bra välja vanligast tid
 
-använda common från project
+använda common från project + kommentering
+
+clean up tests
 
 flytta till RISE repo
 
 critic loss alltid noll
-fixa TradeSimulationPlotter addAccRevFCR
-
 
 
 kanske senare:
-snygga upp trainer mha mediator
 Automatiskt avstanna tränining agent v2g cb (acc reward planar ut)
 TestTrainerOneStepACDCBuyer fuckar ibland
 Fcr d up och n

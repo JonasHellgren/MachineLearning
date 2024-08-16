@@ -1,6 +1,6 @@
 package monte_carlo_tree_search.domains.energy_trading;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import lombok.Getter;
 import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
 import monte_carlo_tree_search.interfaces.StateInterface;
@@ -38,8 +38,8 @@ public class StateEnergyTrading implements StateInterface<VariablesEnergyTrading
 
 
     public static StateEnergyTrading newRandom() {
-        int time= RandUtils.getRandomIntNumber(EnvironmentEnergyTrading.MIN_TIME,EnvironmentEnergyTrading.MAX_TIME+1);
-        double SoE=RandUtils.getRandomDouble(EnvironmentEnergyTrading.SOE_MIN,EnvironmentEnergyTrading.SOE_MAX);
+        int time= RandUtilsML.getRandomIntNumber(EnvironmentEnergyTrading.MIN_TIME,EnvironmentEnergyTrading.MAX_TIME+1);
+        double SoE= RandUtilsML.getRandomDouble(EnvironmentEnergyTrading.SOE_MIN,EnvironmentEnergyTrading.SOE_MAX);
         return StateEnergyTrading.newFromVariables(VariablesEnergyTrading.builder().time(time).SoE(SoE).build());
     }
 

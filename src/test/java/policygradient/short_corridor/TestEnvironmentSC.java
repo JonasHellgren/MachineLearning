@@ -1,6 +1,6 @@
 package policygradient.short_corridor;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,8 +57,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @Test
      void givenHighProbDirectToTerminal_whenStep_thenCorrect() {
         environment=new EnvironmentSC(1);
-        int stateRandom= RandUtils.getRandomIntNumber(2,7);
-        int actionRandom= RandUtils.getRandomIntNumber(0,2);
+        int stateRandom= RandUtilsML.getRandomIntNumber(2,7);
+        int actionRandom= RandUtilsML.getRandomIntNumber(0,2);
 
         var sr=environment.step(StateSC.newFromRealPos(stateRandom), Action.ofInteger(actionRandom));
         assertTrue(sr.isTerminal());

@@ -1,6 +1,6 @@
 package multi_step_td.maze;
 
-import common.other.RandUtils;
+import common.other.RandUtilsML;
 import multi_step_td.helpers.StateAsserter;
 import multi_step_temp_diff.domain.helpers_common.StateValuePrinter;
 import multi_step_temp_diff.domain.helpers_specific.MazeHelper;
@@ -71,7 +71,7 @@ public class TestAgentNeuralMazeMockedData {
         List<NstepExperience<MazeVariables>> batch=new ArrayList<>();
         List<StateInterface<MazeVariables>> states=new ArrayList<>(environment.stateSet());
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            MazeState state  = (MazeState) states.get(RandUtils.getRandomIntNumber(0,states.size()));
+            MazeState state  = (MazeState) states.get(RandUtilsML.getRandomIntNumber(0,states.size()));
             NstepExperience<MazeVariables> exp= NstepExperience.<MazeVariables>builder()
                     .stateToUpdate(state)
                     .value(sumXy.apply(state))
