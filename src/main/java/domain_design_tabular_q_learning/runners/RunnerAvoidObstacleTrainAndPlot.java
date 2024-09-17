@@ -23,7 +23,7 @@ public class RunnerAvoidObstacleTrainAndPlot {
     public static void main(String[] args) {
         training = TrainingServiceFactory.createRoadMaze();
         training.getEnvironment().setProperties(
-                training.getEnvironment().getProperties().withRewardFailTerminalStd(0d)); //0,30
+                training.getEnvironment().getProperties().withRewardFailTerminalStd(10d)); //0,30
         training.train();
 
         PlottingSettings settings= PlottingSettings.newRunnerRoad();

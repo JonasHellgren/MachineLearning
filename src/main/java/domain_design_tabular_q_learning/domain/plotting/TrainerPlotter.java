@@ -1,5 +1,6 @@
 package domain_design_tabular_q_learning.domain.plotting;
 
+import common.math.MovingAverage;
 import lombok.AllArgsConstructor;
 import domain_design_tabular_q_learning.domain.trainer.Trainer;
 import domain_design_tabular_q_learning.domain.trainer.aggregates.Recorder;
@@ -20,7 +21,9 @@ import static org.knowm.xchart.BitmapEncoder.*;
 public class TrainerPlotter<V,A,P> {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 200;
-    public static final String X_AXIS_TITLE = "episode";
+    public static final String X_AXIS_TITLE = "Episode";
+    public static final int LENGTH_WINDOW_R = 10;
+    public static final int LENGTH_WINDOW_TD = 10;
     Trainer<V,A,P> trainer;
 
     public static <V,A,P> TrainerPlotter<V,A,P> ofTrainingService(
@@ -38,10 +41,10 @@ public class TrainerPlotter<V,A,P> {
         var recorder = trainer.getMediator().getRecorder();
         var pRandActionList = getListWithInfoValues(recorder, ei -> ei.pRandomAction() );
         var tdErrorList = getListWithInfoValues(recorder, ei -> ei.tdErrorAvg() );
-        charts.add(getChart("Acc. rewards", getSumRewardsList(recorder)));
-        charts.add(getChart("Prob. randAction", pRandActionList));
-        charts.add(getChart("T.d. error", tdErrorList));
-        charts.add(getChart("Nof. steps", getNStepsList(recorder)));
+        charts.add(getChart("Accumulated rewards", filter(getSumRewardsList(recorder), LENGTH_WINDOW_R)));
+        charts.add(getChart("Prob. rand. action", pRandActionList));
+        charts.add(getChart("Temporal diff. error", filter(tdErrorList, LENGTH_WINDOW_TD)));
+        charts.add(getChart("Number of steps", getNStepsList(recorder)));
         charts.forEach(c -> reduceXAxisTicksClutter(c,100));
         return charts;
     }
@@ -92,5 +95,10 @@ public class TrainerPlotter<V,A,P> {
                 return ""; // Skip labels for other values
             }
         });
+    }
+
+    private List<Double> filter(List<Double> inList, int lengthWindow) {
+        MovingAverage movingAverage = new MovingAverage(lengthWindow, inList);
+        return movingAverage.getFiltered();
     }
 }

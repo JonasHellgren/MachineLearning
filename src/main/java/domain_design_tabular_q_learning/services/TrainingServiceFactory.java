@@ -16,7 +16,7 @@ public class TrainingServiceFactory {
     public static <V,A,P> TrainingService<V,A,P> createRoadMaze() {
         EnvironmentI<V,A,P> environment =
                  EnvironmentRoad.roadMazeI();
-        var trainerProperties = TrainerProperties.roadObstacle().withNEpisodes(500);
+        var trainerProperties = TrainerProperties.roadObstacle().withNEpisodes(1000);
         var agent = new Agent<>(AgentProperties.roadMaze(), environment);
         var trainer = new Trainer<>(environment, agent, trainerProperties);
         return TrainingService.<V,A,P>builder()
