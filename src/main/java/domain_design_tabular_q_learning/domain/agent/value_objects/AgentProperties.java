@@ -17,7 +17,7 @@ public record AgentProperties(
         return AgentProperties.builder()
                 .probRandomActionStartEnd(Pair.create(0.5,0.0)) //0.5,0.0
                 .learningRate(0.9) //0.9,0.2 (std non zero)
-                .defaultValue(0)
+                .defaultValue(-100)
                 .gamma(1.0)
                 .build();
     }

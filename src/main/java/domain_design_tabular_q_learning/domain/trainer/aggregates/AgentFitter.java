@@ -19,7 +19,7 @@ public class AgentFitter<V,A,P> {
         var sa = StateAction.ofSars(e);
         var pa=agent.getProperties();
         double r=e.getSars().r();
-        double v=memory.valueOfState(e.getSars().sNext());
+        double v=(e.getType().isTerminal()) ? 0 : memory.valueOfState(e.getSars().sNext());
         double qSaTar=r+pa.gamma()*v;
         return agent.getMemory().fit(sa,qSaTar);
     }

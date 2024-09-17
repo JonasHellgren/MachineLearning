@@ -243,10 +243,7 @@ använda common från project + kommentering
 
 clean up tests
 
-flytta till RISE repo
-
 critic loss alltid noll
-
 
 kanske senare:
 Automatiskt avstanna tränining agent v2g cb (acc reward planar ut)
