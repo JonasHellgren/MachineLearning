@@ -46,7 +46,7 @@ public class Mediator<V,A,P> implements MediatorI<V,A,P> {
     @Override
     public double pRandomAction() {
         double trainingProgress = getRecorder().size() / (double) properties.nEpisodes();
-        return external.agent().getProperties().probRandomAction(trainingProgress);
+        return external.agent().getProperties().probRandomActionExponentialDecay(trainingProgress);
     }
 
     @Override

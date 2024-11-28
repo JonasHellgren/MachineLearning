@@ -13,9 +13,11 @@ public record AgentProperties(
        // ActionRoad[] actions
 ) {
 
+    public static final double SMALL_DOUBLE = 1e-10;
+
     public static AgentProperties roadMaze() {
         return AgentProperties.builder()
-                .probRandomActionStartEnd(Pair.create(0.5,0.0)) //0.5,0.0
+                .probRandomActionStartEnd(Pair.create(0.5,1e-3)) //0.5,0.0
                 .learningRate(0.9) //0.9,0.2 (std non zero)
                 .defaultValue(-100)
                 .gamma(1.0)
@@ -26,9 +28,9 @@ public record AgentProperties(
         return roadMaze();
     }
 
-    public double probRandomAction(double progress) {
+    public double probRandomActionExponentialDecay(double progress) {
         Double p0 = probRandomActionStartEnd.getFirst();
-        Double p1 = probRandomActionStartEnd.getSecond();
-        return p0+progress*(p1-p0);
+        Double p1 = Math.max(probRandomActionStartEnd.getSecond(), SMALL_DOUBLE);
+        return p0 * Math.pow((p1 / p0), progress);
     }
 }

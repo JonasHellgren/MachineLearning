@@ -19,10 +19,10 @@ import static org.knowm.xchart.BitmapEncoder.*;
 
 @AllArgsConstructor
 public class TrainerPlotter<V,A,P> {
-    public static final int WIDTH = 400;
+    public static final int WIDTH = 250;
     public static final int HEIGHT = 200;
     public static final String X_AXIS_TITLE = "Episode";
-    public static final int LENGTH_WINDOW_R = 10;
+    public static final int LENGTH_WINDOW_R = 50;
     public static final int LENGTH_WINDOW_TD = 10;
     Trainer<V,A,P> trainer;
 
