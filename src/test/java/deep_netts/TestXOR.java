@@ -9,7 +9,6 @@ import deepnetts.net.loss.LossType;
 */
 import org.junit.Test;
 
-import javax.visrec.ml.data.DataSet;
 
 public class TestXOR {
 

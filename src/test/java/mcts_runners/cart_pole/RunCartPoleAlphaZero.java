@@ -5,17 +5,6 @@ import common.plotters.PlotterMultiplePanelsTrajectory;
 import common.other.RandUtilsML;
 import common.math.ScalerLinear;
 import lombok.extern.java.Log;
-import monte_carlo_tree_search.create_tree.MonteCarloSettings;
-import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.models_and_support_classes.StepReturnGeneric;
-import monte_carlo_tree_search.domains.cart_pole.*;
-import monte_carlo_tree_search.exceptions.StartStateIsTrapException;
-import monte_carlo_tree_search.interfaces.ActionInterface;
-import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.interfaces.NetworkMemoryInterface;
-import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.network_training.*;
-import monte_carlo_tree_search.swing.CartPoleGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -58,6 +47,7 @@ public class RunCartPoleAlphaZero {
     private static final double FRACTION_OF_EPISODE_BUFFER_TO_INCLUDE = 0.5;
     private static final String FILE = "networks/cartPoleStateValue.nnet";
 
+    /*
     public static void main(String[] args) {
         NetworkMemoryInterface<CartPoleVariables,Integer> memory = new CartPoleValueMemoryNetwork<>();  //todo interface
         MonteCarloTreeCreator<CartPoleVariables, Integer> mcForSearch = createTreeCreatorForSearch(memory);
@@ -220,6 +210,6 @@ public class RunCartPoleAlphaZero {
                 .memory(memory)
                 .build();
     }
-
+*/
 
 }

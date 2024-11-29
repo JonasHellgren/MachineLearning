@@ -1,15 +1,10 @@
 package mcts_runners.cart_pole;
 import common.plotters.PlotterMultiplePanelsTrajectory;
-import monte_carlo_tree_search.create_tree.MonteCarloSettings;
-import monte_carlo_tree_search.create_tree.MonteCarloTreeCreator;
-import monte_carlo_tree_search.domains.cart_pole.*;
-import monte_carlo_tree_search.interfaces.ActionInterface;
-import monte_carlo_tree_search.interfaces.EnvironmentGenericInterface;
-import monte_carlo_tree_search.interfaces.StateInterface;
-import monte_carlo_tree_search.domains.cart_pole.CartPoleValueMemoryNetwork;
+
 
 import java.util.Arrays;
 
+/**
 public class RunCartPoleAlphaZeroLearningAndSearch {
     private static final int MAX_NOF_STEPS_IN_EVALUATION = Integer.MAX_VALUE;
     private static final int TIME_BUDGET_MILLI_SECONDS_SEARCH = 20;  //small => faster search
@@ -59,3 +54,5 @@ public class RunCartPoleAlphaZeroLearningAndSearch {
     }
 
 }
+
+ */

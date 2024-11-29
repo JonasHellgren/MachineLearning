@@ -2,9 +2,6 @@ package deep_netts;
 
 import lombok.extern.java.Log;
 import org.junit.Test;
-import org.neuroph.util.data.norm.MaxNormalizer;
-
-import javax.visrec.ml.data.DataSet;
 import java.io.IOException;
 import java.util.logging.Logger;
 
