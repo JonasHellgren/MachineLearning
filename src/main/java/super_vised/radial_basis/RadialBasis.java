@@ -17,7 +17,6 @@ public class RadialBasis {
 
     public double output(double[] input, double[] weights) {
         Preconditions.checkArgument(nKernels() == weights.length, "kernels size should be same as weights length");
-        Preconditions.checkArgument(nKernels() == input.length, "kernels size should be same as input length");
         var activations=activations(input);
         double result = 0.0;
         for (int i = 0; i < nKernels(); i++) {
@@ -27,25 +26,25 @@ public class RadialBasis {
     }
 
     public List<Double> activations(double[] input) {
-        Preconditions.checkArgument(nKernels() == input.length, "kernels size should be same as input length");
         List<Double> activations=new ArrayList<>(nKernels());
-        for (int i = 0; i < input.length; i++) {
-            activations.set(i,kernelActivation(input, kernels.get(i)));
+        for (int i = 0; i < nKernels(); i++) {
+            KernelProperties kernel = kernels.get(i);
+            activations.add(activation(input, kernel));
         }
         return activations;
     }
 
-    public double kernelActivation(double[] x, KernelProperties kernel) {
+    public int nKernels() {
+        return kernels.size();
+    }
+
+
+    private double activation(double[] x, KernelProperties kernel) {
         double distanceSquared = 0.0;
         for (int i = 0; i < x.length; i++) {
             distanceSquared += Math.pow(x[i] - kernel.centerCoordinates()[i], 2);
         }
         return Math.exp(-kernel.gamma() * distanceSquared);
-    }
-
-
-    private int nKernels() {
-        return kernels.size();
     }
 
 }
