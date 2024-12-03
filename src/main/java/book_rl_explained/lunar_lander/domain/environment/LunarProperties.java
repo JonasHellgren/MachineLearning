@@ -6,12 +6,13 @@ public record LunarProperties(
         double g,  //constant of gravity on moon
         double forceMax,
         double ySurface,
+        double yMax,
         double spdMax,
         double rewardFail,
         double rewardStep) {
 
     public static LunarProperties defaultProps() {
-        return new LunarProperties(1000.0, 1, 1.62,5000,0d,3d,-100,-1);
+        return new LunarProperties(1000.0, 1, 1.62,5000,0d,10,3d,-100,-1);
     }
 
 

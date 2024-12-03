@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import common.list_arrays.Array2ListConverter;
 import common.list_arrays.List2ArrayConverter;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -25,19 +27,37 @@ public class WeightUpdater {
     /**
      * Updates the weights of the RBF network based on the input data and target outputs.
      *
-     * @param inputs    the input data
-     * @param yTargets  the target outputs
+     * @param inputs   the input data
+     * @param yTargets the target outputs
      */
 
-    public void updateWeights(List<List<Double>> inputs, List<Double>  yTargets) {
+    public void updateWeights(List<List<Double>> inputs, List<Double> yTargets) {
         double[][] array = List2ArrayConverter.convertListWithListToDoubleMat(inputs);
         double[] vector = List2ArrayConverter.convertListToDoubleArr(yTargets);
-        updateWeights(array,vector);
+        updateWeights(array, vector);
     }
 
-    public void  updateWeights(double[][] inputs, double[] yTargets) {
-        var weights=radialBasis.weights;
-        double[] gradient = weightGradient(inputs, yTargets);
+    public void updateWeightsFromErrors(List<List<Double>> inputs, List<Double> yErrors) {
+        double[][] array = List2ArrayConverter.convertListWithListToDoubleMat(inputs);
+        double[] vector = List2ArrayConverter.convertListToDoubleArr(yErrors);
+        updateWeightsFromErrors(array, vector);
+    }
+
+    public void updateWeights(double[][] inputs, double[] yTargets) {
+        double[] yErrors = getErrors(inputs, yTargets);
+        updateWeightsFromErrors(inputs, yErrors);
+    }
+
+    /**
+     * Updates the weights of the RBF network based on the input data and errors.
+     *
+     * @param inputs  the input data
+     * @param yErrors the target errors
+     */
+
+    public void updateWeightsFromErrors(double[][] inputs, double[] yErrors) {
+        double[] gradient = weightGradientFromErrors(inputs, yErrors);
+        var weights = radialBasis.weights;
         for (int i = 0; i < weights.length; i++) {
             weights[i] += learningRate * gradient[i];
         }
@@ -50,21 +70,39 @@ public class WeightUpdater {
      */
 
     private double[] weightGradient(double[][] inputs, double[] yTargets) {
-        int nExamples= inputs.length;
-        Preconditions.checkArgument(nExamples == yTargets.length, "inputs and yTargets should be same length");
+        double[] yErrors = getErrors(inputs, yTargets);
+        return weightGradientFromErrors(inputs, yErrors);
+    }
+
+    /***
+     * gradient[kernel_idx] =
+     * (1/nExamples) * ∑yErr[i] * φ(x[i], kernel_idx)
+     */
+
+    private double[] weightGradientFromErrors(double[][] inputs, double[] yErrors) {
+        int nExamples = inputs.length;
+        Preconditions.checkArgument(nExamples == yErrors.length, "inputs and yTargets should be same length");
         int nKernels = radialBasis.nKernels();
         double[] gradient = new double[nKernels];
         for (int idxKernel = 0; idxKernel < nKernels; idxKernel++) {
             for (int idxExample = 0; idxExample < inputs.length; idxExample++) {
                 double[] x = inputs[idxExample];
                 double activation = radialBasis.activation(x, radialBasis.getKernel(idxKernel));
-                double yTarget = yTargets[idxExample];
-                double yPredicted=radialBasis.outPut(x);
-                gradient[idxKernel] += (yTarget-yPredicted) * activation;
+                double yErr = yErrors[idxExample];
+                gradient[idxKernel] += yErr * activation;
             }
-            gradient[idxKernel]=gradient[idxKernel]/nExamples;
+            gradient[idxKernel] = gradient[idxKernel] / nExamples;
         }
         return gradient;
+    }
+
+
+    private double[] getErrors(double[][] inputs, double[] yTargets) {
+        double[] yErrors = new double[inputs.length];
+        for (int i = 0; i < inputs.length; i++) {
+            yErrors[i] = yTargets[i] - radialBasis.outPut(inputs[i]);
+        }
+        return yErrors;
     }
 
     public static double[] convertListToDoubleArr(List<Double> inList) {

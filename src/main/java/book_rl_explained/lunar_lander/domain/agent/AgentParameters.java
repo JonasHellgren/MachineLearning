@@ -7,6 +7,7 @@ public record AgentParameters(
         Pair<Double,Double> minMaxSpeed,
         int nKernelsY,
         int nKernelsSpeed,
-        double[] gammas
+        double[] gammas,
+        double learningRate
 ) {
 }

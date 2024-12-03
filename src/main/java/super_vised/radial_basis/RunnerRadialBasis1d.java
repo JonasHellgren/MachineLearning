@@ -2,6 +2,7 @@ package super_vised.radial_basis;
 
 import common.list_arrays.List2ArrayConverter;
 import common.other.CpuTimer;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
@@ -11,7 +12,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class RunnerRadialBasis {
+@Log
+public class RunnerRadialBasis1d {
 
     public static final int GAMMA = 100;
     public static final int N_FITS = 10_000;
@@ -29,7 +31,7 @@ public class RunnerRadialBasis {
         List<Double> outList = OUT_LIST2;
         CpuTimer timer= new CpuTimer();
         fitRB(rb, inList, outList);
-        System.out.println("time used fitting (ms) = " + timer.absoluteProgressInMillis());
+        log.info("time used fitting (ms) = " + timer.absoluteProgressInMillis());
         System.out.println(rb);
         plotOutRB(rb, inList, outList);
     }
@@ -40,7 +42,6 @@ public class RunnerRadialBasis {
         var kernels = new ArrayList<KernelProperties>();
         for (int i = 0; i <= N_KERNELS; i++) {
             double center = (double) i / N_KERNELS;
-            System.out.println("center = " + center);
             kernels.add(KernelProperties.of(new double[]{center}, new double[]{GAMMA}));
         }
         return RadialBasis.of(kernels);
