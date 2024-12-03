@@ -15,6 +15,11 @@ public class RadialBasis {
         kernels.add(kernel);
     }
 
+    public KernelProperties getKernel(int index) {
+        Preconditions.checkArgument(index >= 0 && index < nKernels(), "kernel index should be between 0 and " + (nKernels() - 1));
+        return kernels.get(index);
+    }
+
     public double output(double[] input, double[] weights) {
         Preconditions.checkArgument(nKernels() == weights.length, "kernels size should be same as weights length");
         var activations=activations(input);
@@ -39,7 +44,7 @@ public class RadialBasis {
     }
 
 
-    private double activation(double[] x, KernelProperties kernel) {
+    public double activation(double[] x, KernelProperties kernel) {
         double distanceSquared = 0.0;
         for (int i = 0; i < x.length; i++) {
             distanceSquared += Math.pow(x[i] - kernel.centerCoordinates()[i], 2);

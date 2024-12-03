@@ -1,4 +1,4 @@
-package supervised;
+package supervised.relu;
 
 import org.junit.jupiter.api.Test;
 import super_vised.single_relu_fitting.InversedReluFunctionApproximator;
