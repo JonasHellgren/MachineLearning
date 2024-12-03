@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /**
  * tuple={sInit,ai,ri,si}, si is new stateNew from transition T(sInit,a)
  * Qsa i=   |r(sInit,ai)                (si isTerminal)
- *          |r(sInit,ai)+gamma*V(si)    (else)
+ *          |r(sInit,ai)+gammas*V(si)    (else)
  * where V(si)=max a Q(si,a)
  */
 

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * high withStepHorizon => better convergence
  * learning rates and gradMax very critical
- * gamma<1 seems to improve convergence
+ * gammas<1 seems to improve convergence
  * <p>
  * BuySettings: decreasing price shall give high power in end, increasing price high power in start
  */

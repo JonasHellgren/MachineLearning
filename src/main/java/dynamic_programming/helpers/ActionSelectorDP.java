@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 /***
  * Applies Bellman equation for selecting best action
  * The action maximizing
- * V(s)=R(s,a)+gamma*V(T(s,a)
+ * V(s)=R(s,a)+gammas*V(T(s,a)
  * is best
  */
 

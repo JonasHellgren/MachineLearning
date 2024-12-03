@@ -6,7 +6,7 @@ import domain_design_tabular_q_learning.domain.trainer.entities.Experience;
 
 /***
  *  qSa <- qSa+learningRate*(qSaTar-qSa)
- *  where v(s')=qSa(s',aBest) and qSaTar=r+gamma*v(s')
+ *  where v(s')=qSa(s',aBest) and qSaTar=r+gammas*v(s')
  */
 
 @AllArgsConstructor

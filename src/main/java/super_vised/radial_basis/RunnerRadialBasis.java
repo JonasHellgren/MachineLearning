@@ -41,7 +41,7 @@ public class RunnerRadialBasis {
         for (int i = 0; i <= N_KERNELS; i++) {
             double center = (double) i / N_KERNELS;
             System.out.println("center = " + center);
-            kernels.add(KernelProperties.of(new double[]{center}, GAMMA));
+            kernels.add(KernelProperties.of(new double[]{center}, new double[]{GAMMA}));
         }
         return RadialBasis.of(kernels);
     }

@@ -19,7 +19,7 @@ public class TestRadialBasisOutPut {
         var kernels = new ArrayList<KernelProperties>();
         for (int i = 0; i < 10; i++) {
             double center = (double) i / 10;
-            kernels.add(KernelProperties.of(new double[]{center}, GAMMA));
+            kernels.add(KernelProperties.of(new double[]{center}, new double[]{GAMMA}));
         }
         rb = RadialBasis.of(kernels);
     }

@@ -6,9 +6,9 @@ import lombok.ToString;
  *
  * https://en.wikipedia.org/wiki/Exponential_decay
  *
- * out(t)=e^(C)*e^(-gamma*t)
+ * out(t)=e^(C)*e^(-gammas*t)
  *
- * the parameters C and gamma are set from start and end values of out, i.e. outStart=out(0) and outEnd=out(timeEnd)
+ * the parameters C and gammas are set from start and end values of out, i.e. outStart=out(0) and outEnd=out(timeEnd)
  */
 
 @ToString

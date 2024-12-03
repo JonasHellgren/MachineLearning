@@ -88,13 +88,16 @@ public class RadialBasis {
         return kernels.size();
     }
 
+    /**
+     * phi(x) = exp(-sum(gamma_i * (x_i - c_i)^2))
+     */
 
     public double activation(double[] input, KernelProperties kernel) {
-        double distanceSquared = 0.0;
+        double distanceSquaredSum = 0.0;
         for (int i = 0; i < input.length; i++) {
-            distanceSquared += Math.pow(input[i] - kernel.centerCoordinates()[i], 2);
+            distanceSquaredSum += kernel.gammas()[i]*Math.pow(input[i] - kernel.centerCoordinates()[i], 2);
         }
-        return Math.exp(-kernel.gamma() * distanceSquared);
+        return Math.exp(-distanceSquaredSum);
     }
 
     @Override

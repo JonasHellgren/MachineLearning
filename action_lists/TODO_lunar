@@ -1,11 +1,12 @@
 
-enviroment doc
-EnviromentLunar
-TestEnviromentLunar
+enviroment doc  x
+EnviromentLunar x
+TestEnviromentLunar x
+CriticMemoryLunar
+kernel.gamma en per dimension  x
+TestCriticMemoryLunar
 ActorMemoryLunar
 TestActorMemoryLunar
-CriticMemoryLunar
-TestCriticMemoryLunar
 TestEpisodeCreator  -mocked agent -  random actions
 TrainerLunar  - one step actor critic
 TestTrainerLunar

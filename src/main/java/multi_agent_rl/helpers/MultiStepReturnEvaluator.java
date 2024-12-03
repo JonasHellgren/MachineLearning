@@ -18,11 +18,11 @@ import java.util.stream.IntStream;
  *
  * Used by trainers to derive return (sum rewards) at tStart for given experienceList
  *
- *  n-step return si Gk:k+n=R(k)...gamma^(n-1)*R(k+n-1)+gamma^n*V(S(k+n-1))
+ *  n-step return si Gk:k+n=R(k)...gammas^(n-1)*R(k+n-1)+gammas^n*V(S(k+n-1))
  *  k is referring to experience index
  *  therefore
- *  Gk=(k=0,1=2, gamma=1)=R0+V(stateNew(0))   (standard TD)
- *  Gk=(k=0,n=2, gamma=1)=R0+R1+V(stateNew(1))
+ *  Gk=(k=0,1=2, gammas=1)=R0+V(stateNew(0))   (standard TD)
+ *  Gk=(k=0,n=2, gammas=1)=R0+R1+V(stateNew(1))
  *
  *  A basic principle is that reward for stepping into terminal is included but value
  *  of terminal stateNew is zero

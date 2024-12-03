@@ -22,7 +22,7 @@ import java.util.List;
         returnCalculator=new ReturnCalculator<>();
     }
 
-    //rewards=[0,1,1], gamma=1 => returns=[2,2,1]
+    //rewards=[0,1,1], gammas=1 => returns=[2,2,1]
     @Test
      void givenReturns0d1d1dGamma1_thenCorrect() {
         var rewards= List.of(0d,1d,1d);
@@ -31,7 +31,7 @@ import java.util.List;
         Assertions.assertEquals(List.of(2d,2d,1d),returns);
     }
 
-    //rewards=[0,1,1], gamma=0d5 => returns=[2,1,0.25]
+    //rewards=[0,1,1], gammas=0d5 => returns=[2,1,0.25]
     @Test
      void givenReturns0d1d1dGamma0d5_thenCorrect() {
         var rewards= List.of(0d,1d,1d);
