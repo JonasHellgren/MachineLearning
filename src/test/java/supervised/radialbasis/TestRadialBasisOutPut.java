@@ -21,7 +21,7 @@ public class TestRadialBasisOutPut {
             double center = (double) i / 10;
             kernels.add(KernelProperties.of(new double[]{center}, GAMMA));
         }
-        rb = new RadialBasis(kernels);
+        rb = RadialBasis.of(kernels);
     }
 
     @ParameterizedTest
@@ -44,7 +44,8 @@ public class TestRadialBasisOutPut {
     })
     void givenXandWeights_whenCorrect(double x, int expectedOut) {
         double[] weights = new double[]{0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
-        double out = rb.output(new double[]{x}, weights);
+        rb.setWeights(weights);
+        double out = rb.outPut(new double[]{x});
         double delta = 0.01;
         Assertions.assertEquals(expectedOut, out, delta);
     }

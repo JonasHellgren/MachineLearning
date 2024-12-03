@@ -4,14 +4,17 @@ import com.google.common.base.Preconditions;
 import common.list_arrays.Array2ListConverter;
 import common.list_arrays.List2ArrayConverter;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+
+/**
+ * This class is responsible for updating the weights of a Radial Basis Function (RBF) network.
+ * It provides methods for updating the weights based on the input data and target outputs.
+ */
 
 @AllArgsConstructor
 public class WeightUpdater {
 
-    public static final double LEARNING_RATE = 0.01;
+    public static final double LEARNING_RATE = 0.1;
     RadialBasis radialBasis;
     double learningRate;
 
@@ -19,30 +22,35 @@ public class WeightUpdater {
         return new WeightUpdater(radialBasis, LEARNING_RATE);
     }
 
-    public List<Double> updateWeights(List<List<Double>> inputs, List<Double>  yTargets, List<Double> weightList) {
+    /**
+     * Updates the weights of the RBF network based on the input data and target outputs.
+     *
+     * @param inputs    the input data
+     * @param yTargets  the target outputs
+     */
+
+    public void updateWeights(List<List<Double>> inputs, List<Double>  yTargets) {
         double[][] array = List2ArrayConverter.convertListWithListToDoubleMat(inputs);
         double[] vector = List2ArrayConverter.convertListToDoubleArr(yTargets);
-        double[] weights = List2ArrayConverter.convertListToDoubleArr(weightList);
-        return Array2ListConverter.convertDoubleArrToList(updateWeights(array,vector, weights));
+        updateWeights(array,vector);
     }
 
-
-    public double[]  updateWeights(double[][] inputs, double[] yTargets, double[] weights) {
-        double[] gradient = weightGradient(inputs, yTargets, weights);
+    public void  updateWeights(double[][] inputs, double[] yTargets) {
+        var weights=radialBasis.weights;
+        double[] gradient = weightGradient(inputs, yTargets);
         for (int i = 0; i < weights.length; i++) {
             weights[i] += learningRate * gradient[i];
         }
-        return weights;
+        radialBasis.setWeights(weights);
     }
 
-    public List<Double> weightGradient(List<List<Double>> inputs, List<Double>  yTargets, List<Double>  weightList) {
+    private List<Double> weightGradient(List<List<Double>> inputs, List<Double>  yTargets) {
         double[][] array = List2ArrayConverter.convertListWithListToDoubleMat(inputs);
         double[] vector = List2ArrayConverter.convertListToDoubleArr(yTargets);
-        double[] weights = List2ArrayConverter.convertListToDoubleArr(weightList);
-        return Array2ListConverter.convertDoubleArrToList(weightGradient(array,vector, weights));
+        return Array2ListConverter.convertDoubleArrToList(weightGradient(array,vector));
     }
 
-    public  double[] weightGradient(double[][] inputs, double[] yTargets, double[] weights) {
+    private double[] weightGradient(double[][] inputs, double[] yTargets) {
         int nExamples= inputs.length;
         Preconditions.checkArgument(nExamples == yTargets.length, "inputs and yTargets should be same length");
         int nKernels = radialBasis.nKernels();
@@ -52,7 +60,7 @@ public class WeightUpdater {
                 double[] x = inputs[idxExample];
                 double activation = radialBasis.activation(x, radialBasis.getKernel(idxKernel));
                 double yTarget = yTargets[idxExample];
-                double yPredicted=radialBasis.output(x, weights);
+                double yPredicted=radialBasis.outPut(x);
                 gradient[idxKernel] += (yTarget-yPredicted) * activation;
             }
             gradient[idxKernel]=gradient[idxKernel]/nExamples;

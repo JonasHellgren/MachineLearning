@@ -1,7 +1,8 @@
 
 
-weights in i RadialBasis
-TestWeighUpdater
-RunnerRadialBasis
+weights in i RadialBasis  /
+TestWeighUpdater1d /
+TestWeighUpdater2d
+RunnerRadialBasis  x
 import JavaCommon
-clean up
+clean up  x
