@@ -10,7 +10,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 /**
- * A utility class for creating lists of doubles with various properties.
+ * A utility class for creating lists of doubles with various trainerParameters.
  */
 public class ListCreator {
 

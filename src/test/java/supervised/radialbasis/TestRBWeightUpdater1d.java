@@ -18,12 +18,11 @@ public class TestRBWeightUpdater1d {
 
     @BeforeEach
     void init() {
-        var kernels = new ArrayList<KernelProperties>();
+        rb =  RadialBasis.empty();
         for (int i = 0; i < 10; i++) {
             double center = (double) i / 10;
-            kernels.add(KernelProperties.of(new double[]{center}, GAMMA));
+            rb.addKernel(KernelProperties.of(new double[]{center}, GAMMA));
         }
-        rb =  RadialBasis.of(kernels);
     }
 
      @Test

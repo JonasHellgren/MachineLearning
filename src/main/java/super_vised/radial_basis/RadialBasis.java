@@ -28,19 +28,20 @@ public class RadialBasis {
     double[] weights;
 
     public static RadialBasis empty() {
-        return new RadialBasis(new ArrayList<>(), getWeightsAllZero(0));
+        return new RadialBasis(new ArrayList<>(), createWeightsAllZero(0));
     }
 
     public static RadialBasis of(@NonNull List<KernelProperties> kernels) {
-        return new RadialBasis(kernels, getWeightsAllZero(kernels.size()));
+        return new RadialBasis(kernels, createWeightsAllZero(kernels.size()));
     }
 
-    private static double[] getWeightsAllZero(int size) {
+    private static double[] createWeightsAllZero(int size) {
         return new double[size];
     }
 
     public void addKernel(KernelProperties kernel) {
         kernels.add(kernel);
+        weights=createWeightsAllZero(kernels.size());
     }
 
     public KernelProperties getKernel(int index) {

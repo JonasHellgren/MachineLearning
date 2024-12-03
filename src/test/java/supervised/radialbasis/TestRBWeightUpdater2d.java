@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import super_vised.radial_basis.KernelProperties;
 import super_vised.radial_basis.RadialBasis;
 import super_vised.radial_basis.WeightUpdater;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestRBWeightUpdater2d {
@@ -17,16 +16,14 @@ public class TestRBWeightUpdater2d {
 
     @BeforeEach
     void init() {
-        var kernels = new ArrayList<KernelProperties>();
+        rb =  RadialBasis.empty();
         for (int x = 0; x < 10; x++) {
             double centerX = (double) x / 10;
             for (int y = 0; y < 10; y++) {
                 double centerY = (double) y / 10;
-                kernels.add(KernelProperties.of(new double[]{centerX, centerY}, GAMMA));
+                rb.addKernel(KernelProperties.of(new double[]{centerX, centerY}, GAMMA));
             }
-
         }
-        rb =  RadialBasis.of(kernels);
     }
 
     @Test

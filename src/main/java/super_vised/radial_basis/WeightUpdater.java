@@ -44,11 +44,10 @@ public class WeightUpdater {
         radialBasis.setWeights(weights);
     }
 
-    private List<Double> weightGradient(List<List<Double>> inputs, List<Double>  yTargets) {
-        double[][] array = List2ArrayConverter.convertListWithListToDoubleMat(inputs);
-        double[] vector = List2ArrayConverter.convertListToDoubleArr(yTargets);
-        return Array2ListConverter.convertDoubleArrToList(weightGradient(array,vector));
-    }
+    /***
+     * gradient[kernel_idx] =
+     * (1/nExamples) * ∑[yTarget[i] - yPredicted[i]] * φ(x[i], kernel_idx)
+     */
 
     private double[] weightGradient(double[][] inputs, double[] yTargets) {
         int nExamples= inputs.length;
