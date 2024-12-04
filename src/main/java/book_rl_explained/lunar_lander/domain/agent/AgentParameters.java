@@ -1,13 +1,37 @@
 package book_rl_explained.lunar_lander.domain.agent;
 
+import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
+import lombok.With;
 import org.apache.commons.math3.util.Pair;
 
 public record AgentParameters(
-        Pair<Double,Double> minMaxY,
-        Pair<Double,Double> minMaxSpeed,
         int nKernelsY,
         int nKernelsSpeed,
         double[] gammas,
-        double learningRate
+        @With  double learningRate
 ) {
+
+    public static final int N_KERNELS_Y = 11;
+    public static final int N_KERNELS_SPD = 11;
+    public static final double LEARNING_RATE = 0.01;
+
+    public static AgentParameters defaultProps(LunarProperties ep) {
+        double sigmaY= (ep.yMax()-ep.ySurface()) / N_KERNELS_Y;
+        double sigmaSpd = (ep.spdMax() - -ep.spdMax()) / N_KERNELS_SPD;
+        return new AgentParameters(N_KERNELS_Y, N_KERNELS_SPD,
+                new double[]{gamma(sigmaY), gamma(sigmaSpd)},
+                LEARNING_RATE);
+    }
+
+    /**
+     *
+     * Sigma is like the radius of a circle, controlling the size of the kernel.
+     * Gamma is like the "stickiness" of the kernel, controlling how quickly it
+     * decays as you move away from the center.
+     */
+
+    static double gamma (double sigma) {
+        return 1 / (2 * sigma * sigma);
+    }
+
 }

@@ -6,6 +6,7 @@ import common.list_arrays.List2ArrayConverter;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -105,12 +106,5 @@ public class WeightUpdater {
         return yErrors;
     }
 
-    public static double[] convertListToDoubleArr(List<Double> inList) {
-        double[] outArray = new double[inList.size()];
-        for (int i = 0; i < inList.size(); i++) {
-            outArray[i] = inList.get(i); // Auto-unboxing converts Double to double
-        }
-        return outArray;
-    }
 
 }

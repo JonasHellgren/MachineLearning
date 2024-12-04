@@ -4,9 +4,11 @@ EnviromentLunar x
 TestEnviromentLunar x
 CriticMemoryLunar
 kernel.gamma en per dimension  x
-TestCriticMemoryLunar
+TestCriticMemoryLunar x
+fimpa scaler x
 test för updateWeightsFromErrors
 RunnerRadialBasis2d - weights = 1
+
 ActorMemoryLunar
 TestActorMemoryLunar
 TestEpisodeCreator  -mocked agent -  random actions
