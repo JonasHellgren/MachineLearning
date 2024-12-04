@@ -3,6 +3,9 @@ package book_rl_explained.lunar_lander.domain.environment;
 import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hellgren.utilities.unit_converter.MyUnitConverter;
+import org.hellgren.utilities.unit_converter.NonSIUnits;
+import tec.units.ri.unit.Units;
 
 @Getter
 @AllArgsConstructor
@@ -19,7 +22,8 @@ public class EnvironmentLunar implements EnvironmentI {
         double speed0 = state.variables.spd();
         double y0 = state.variables.y();
         double m = props.massLander();
-        double force= MathUtils.clip(action, -props.forceMax(), props.forceMax());
+        double forceInNewton=getForceInNewton(action);
+        double force= MathUtils.clip(forceInNewton, -props.forceMax(), props.forceMax());
         double acc = (force - m * props.g()) / m;
         double speed = speed0 + acc * props.dt();
         double y = y0 + speed * props.dt();
@@ -37,4 +41,15 @@ public class EnvironmentLunar implements EnvironmentI {
                 .reward(reward)
                 .build();
     }
+
+    public double getForceInKiloNewton(double forceInNewton) {
+        return MyUnitConverter.convertForce(forceInNewton, Units.NEWTON, NonSIUnits.KILO_NEWTON);
+    }
+
+    public double getForceInNewton(double forceInKiloNewton) {
+        return MyUnitConverter.convertForce(forceInKiloNewton, NonSIUnits.KILO_NEWTON, Units.NEWTON);
+    }
+
+
+
 }

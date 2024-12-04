@@ -10,13 +10,11 @@ test för updateWeightsFromErrors  x
 ActorMemoryLunar  x
 TestActorMemoryLunar x
 StateLunar asList på fler ställen  x
-AgentLunar
-TestAgentLunar
-Action i kN, samt mindre massa lander, så std=1 är lagom
-
-
-EpisodeCreator
-TestEpisodeCreator  -mocked agent -  random actions
+AgentLunar x
+TestAgentLunar x
+Action i kN, samt mindre massa lander, så std=1 är lagom  x
+EpisodeCreator x
+TestEpisodeCreator x
 TrainerLunar  - one step actor critic
 TestTrainerLunar
 

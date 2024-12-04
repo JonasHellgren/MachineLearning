@@ -72,7 +72,7 @@ class TestAgentCriticMemory {
 
     @Test
     void testFit_AllStatesToTarget5() {
-        double vTarget = 10;
+        double vTarget = 5;
         for (int i = 0; i < 200; i++) {
             StateLunar state = StateLunar.randomPosAndSpeed(lunarProperties);
             fitMemory(memory, state, vTarget);

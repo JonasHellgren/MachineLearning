@@ -25,7 +25,7 @@ public class EpisodeCreator {
         while (sr.isNotTerminalAndNofStepsNotExceeded(counter)) {
             var action = agent.chooseAction(state);
             sr = environment.step(state, action);
-            experienceList.add(ExperienceLunar.of(state, action, sr.reward(), sr.stateNew()));
+            experienceList.add(ExperienceLunar.of(state, action, sr));
             state=sr.stateNew();
             counter.increase();
         }

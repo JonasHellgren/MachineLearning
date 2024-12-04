@@ -7,13 +7,13 @@ public record ExperienceLunar(
         StateLunar state,
         double action,
         double reward,
-        StateLunar stateNew
+        StateLunar stateNew,
+        boolean isFail
 
 ) {
     public static ExperienceLunar of(StateLunar state,
                                      double action,
-                                     double reward,
-                                     StateLunar stateNew) {
-        return new ExperienceLunar(state, action, reward, stateNew);
+                                     StepReturnLunar sr) {
+        return new ExperienceLunar(state, action, sr.reward(), sr.stateNew(), sr.isFail());
     }
 }

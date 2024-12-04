@@ -5,26 +5,35 @@ import book_rl_explained.lunar_lander.helpers.EpisodeCreator;
 import book_rl_explained.lunar_lander.domain.agent.*;
 import book_rl_explained.lunar_lander.domain.environment.*;
 import book_rl_explained.lunar_lander.domain.trainer.*;
+import book_rl_explained.lunar_lander.helpers.ExperiencesInfo;
+import book_rl_explained.lunar_lander.helpers.StartStateSupplierRandomHeightZeroSpeed;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestEpisodeCreator {
+class TestEpisodeCreator {
 
     EpisodeCreator creator;
 
-     @BeforeEach
-      void init() {
+    @BeforeEach
+    void init() {
 
-         var ep = LunarProperties.defaultProps();
-         var p=AgentParameters.defaultProps(ep);
-         var trainerDependencies = TrainerDependencies.builder()
-                 .agent(AgentLunar.zeroWeights(p,ep))
-                 .environment(EnvironmentLunar.createDefault())
-                 .trainerParameters(TrainerParameters.defaultParams())
-                 //.startStateSupplier(StateLunar::randomPosAndZeroSpeed)
-                 .build();
-         creator = new EpisodeCreator(trainerDependencies);
+        var ep = LunarProperties.defaultProps();
+        var p = AgentParameters.defaultProps(ep);
+        var trainerDependencies = TrainerDependencies.builder()
+                .agent(AgentLunar.zeroWeights(p, ep))
+                .environment(EnvironmentLunar.createDefault())
+                .trainerParameters(TrainerParameters.defaultParams())
+                .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
+                .build();
+        creator = new EpisodeCreator(trainerDependencies);
+    }
 
 
-
-      }
+    @Test
+    void givenNonTrainedAgent_thenWillFail() {
+        var experiences = creator.getExperiences();
+        var info = ExperiencesInfo.of(experiences);
+        Assertions.assertTrue(info.endExperience().isFail());
+    }
 }

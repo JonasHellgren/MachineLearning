@@ -12,7 +12,7 @@ public record LunarProperties(
         double rewardStep) {
 
     public static LunarProperties defaultProps() {
-        return new LunarProperties(1000.0, 1, 1.62,5000,0d,10,3d,-100,-1);
+        return new LunarProperties(500.0, 1, 1.62,5000,0d,10,3d,-100,-1);
     }
 
 
