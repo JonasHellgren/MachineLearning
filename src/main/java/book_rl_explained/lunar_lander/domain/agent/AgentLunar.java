@@ -24,7 +24,7 @@ public class AgentLunar implements AgentI{
 
     @Override
     public double chooseAction(StateLunar state) {
-        var meanAndStd=actorMemory.actorMeanAndStd(state);
+        var meanAndStd= readActor(state);
         return sampler.sampleFromNormDistribution(meanAndStd.mean(),meanAndStd.std());
     }
 
@@ -46,9 +46,14 @@ public class AgentLunar implements AgentI{
     }
 
     @Override
+    public MeanAndStd readActor(StateLunar state) {
+        return actorMemory.actorMeanAndStd(state);
+    }
+
+    @Override
     public MeanAndStd gradientMeanAndLogStd(StateLunar state, double action) {
         var meanAndLogStd=actorMemory.actorMeanAndLogStd(state);
-        var meanAndStd=actorMemory.actorMeanAndStd(state);
+        var meanAndStd= readActor(state);
         double mean = meanAndStd.mean();
         double gradMean = gradCalc.gradientMean(action, mean, meanAndStd.std());
         double gradLogStd = gradCalc.gradientLogStd(action, mean, meanAndLogStd.std());

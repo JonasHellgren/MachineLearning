@@ -10,7 +10,7 @@ import static common.dl4j.LossPPO.*;
 /**
  * activOutLayer(Activation.SOFTPLUS)  very important, ensures positive std
  * also beta entropy for ppo shall not be to large
- * very sensitive to learningRate(3e-3)
+ * very sensitive to learningRateCritic(3e-3)
  */
 
 public class NeuralActorMemoryShipLossPPO {

@@ -2,4 +2,6 @@
 
 ![img.png](img.png)
 
+![gradMean.png](pics%2FgradMean.png)
+
 

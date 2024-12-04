@@ -22,8 +22,8 @@ public class ActorMemoryLunar {
     public static ActorMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var memExp = MemoryFactory.createMemoryManyCenters(p,ep);
         var memStd = MemoryFactory.createMemoryOneWideCenter(p,ep);
-        var updExp = new WeightUpdater(memExp,p.learningRate());
-        var updStd = new WeightUpdater(memStd,p.learningRate());
+        var updExp = new WeightUpdater(memExp,p.learningRateActor());
+        var updStd = new WeightUpdater(memStd,p.learningRateActor());
         return new ActorMemoryLunar(memExp, memStd, updExp, updStd,p);
     }
 

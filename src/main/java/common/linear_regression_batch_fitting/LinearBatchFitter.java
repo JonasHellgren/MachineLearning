@@ -15,8 +15,8 @@ import java.util.Arrays;
  * Argument: batchData includes a matrix and a vector, every row in matrix is feature values (x).
  * In vector a row is value (y)
  * applied update rule
- * w <- w-learningRate*gradW,    gradW=xMat'*errors*2/batchSize
- * b <- b-learningRate*gradB,    gradB=sum(errors)*2/batchSize
+ * w <- w-learningRateCritic*gradW,    gradW=xMat'*errors*2/batchSize
+ * b <- b-learningRateCritic*gradB,    gradB=sum(errors)*2/batchSize
  * where errors=xMat*w-y
  */
 

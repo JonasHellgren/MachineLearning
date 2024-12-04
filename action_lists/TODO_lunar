@@ -12,6 +12,8 @@ TestActorMemoryLunar x
 StateLunar asList på fler ställen  x
 AgentLunar
 TestAgentLunar
+Action i kN, samt mindre massa lander, så std=1 är lagom
+
 
 EpisodeCreator
 TestEpisodeCreator  -mocked agent -  random actions

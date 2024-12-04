@@ -19,7 +19,7 @@ public class CriticMemoryLunar {
 
     public static CriticMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var mem = MemoryFactory.createMemoryManyCenters(p,ep);
-        var updater0 = new WeightUpdater(mem,p.learningRate());
+        var updater0 = new WeightUpdater(mem,p.learningRateCritic());
         return new CriticMemoryLunar(mem, updater0);
     }
 

@@ -26,7 +26,7 @@ class TestAgentCriticMemory {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultProps(lunarProperties).withLearningRate(LEARNING_RATE);
+        agentParameters = AgentParameters.defaultProps(lunarProperties).withLearningRateCritic(LEARNING_RATE);
         memory = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
     }
 
@@ -73,7 +73,7 @@ class TestAgentCriticMemory {
     @Test
     void testFit_AllStatesToTarget5() {
         double vTarget = 10;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             StateLunar state = StateLunar.randomPosAndSpeed(lunarProperties);
             fitMemory(memory, state, vTarget);
         }

@@ -14,7 +14,7 @@ import static policy_gradient_problems.environments.maze.MazeInputEncoder.manyOn
 
 /***
  * nHidden important, shall not be to small
- * learningRate important, shall be smaller than for the actor. Else to large entropy.
+ * learningRateCritic important, shall be smaller than for the actor. Else to large entropy.
  */
 
 public class NeuralCriticMemoryMazeLossPPO {
