@@ -5,20 +5,18 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.MemoryFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.math3.util.Pair;
 import super_vised.radial_basis.RadialBasis;
 import super_vised.radial_basis.WeightUpdater;
-
 import java.util.List;
 
 @AllArgsConstructor
 @Getter
 public class ActorMemoryLunar {
 
-    RadialBasis memoryExp;
-    RadialBasis memoryStd;
-    WeightUpdater updaterExp;
-    WeightUpdater updaterStd;
+    RadialBasis memoryMean;
+    RadialBasis memoryLogStd;
+    WeightUpdater updaterMean;
+    WeightUpdater updaterLogStd;
     AgentParameters agentParameters;
 
     public static ActorMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
@@ -30,10 +28,11 @@ public class ActorMemoryLunar {
     }
 
     /**
-     * //todo clip grad
-     * @param state
-     * @param adv
-     * @param grad0
+     * Updates the actor's memory based on the provided state, advantage, and gradient.
+     *
+     * @param state the input state
+     * @param adv the advantage value
+     * @param grad0 the gradient value, using logStd
      */
 
     public void fit(StateLunar state, double adv, MeanAndStd grad0) {
@@ -41,14 +40,25 @@ public class ActorMemoryLunar {
         var grad=grad0.createClipped(agentParameters);
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
-        updaterExp.updateWeightsFromErrors(inputs, errorListMean);
-        updaterStd.updateWeightsFromErrors(inputs, errorListStd);
+        updaterMean.updateWeightsFromErrors(inputs, errorListMean);
+        updaterLogStd.updateWeightsFromErrors(inputs, errorListStd);
     }
 
+    /**
+     * Returns the mean and standard deviation of the actor's output for the given state.
+     *
+     * @param state the input state
+     * @return a MeanAndStd object containing the mean and standard deviation of the actor's output
+     */
 
     public MeanAndStd actorMeanAndStd(StateLunar state) {
         var in = state.asList();
-        return MeanAndStd.of(memoryExp.outPut(in),Math.exp(memoryStd.outPut(in)));
+        return MeanAndStd.of(memoryMean.outPut(in),Math.exp(memoryLogStd.outPut(in)));
+    }
+
+    public MeanAndStd actorMeanAndLogStd(StateLunar state) {
+        var in = state.asList();
+        return MeanAndStd.of(memoryMean.outPut(in), memoryLogStd.outPut(in));
     }
 
 }

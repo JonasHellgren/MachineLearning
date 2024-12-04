@@ -26,10 +26,10 @@ class TestAgentActorMemory {
 
     @Test
     void testZeroWeights() {
-        assertNotNull(actorMemoryLunar.getMemoryExp());
-        assertNotNull(actorMemoryLunar.getMemoryStd());
-        assertNotNull(actorMemoryLunar.getUpdaterExp());
-        assertNotNull(actorMemoryLunar.getUpdaterStd());
+        assertNotNull(actorMemoryLunar.getMemoryMean());
+        assertNotNull(actorMemoryLunar.getMemoryLogStd());
+        assertNotNull(actorMemoryLunar.getUpdaterMean());
+        assertNotNull(actorMemoryLunar.getUpdaterLogStd());
     }
 
 

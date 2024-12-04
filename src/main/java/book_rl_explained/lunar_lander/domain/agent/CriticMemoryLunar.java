@@ -28,7 +28,7 @@ public class CriticMemoryLunar {
     }
 
     public  void fit(StateLunar state, double error) {
-        var inputs = List.of(List.of(state.y(),state.spd()));
+        var inputs = List.of(state.asList());
         var errorList = List.of(error);
         updater.updateWeightsFromErrors(inputs, errorList);
     }

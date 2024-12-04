@@ -8,8 +8,12 @@ TestCriticMemoryLunar x
 fimpa scaler x
 test för updateWeightsFromErrors  x
 ActorMemoryLunar  x
-StateLunar asList på fler ställen
-TestActorMemoryLunar
+TestActorMemoryLunar x
+StateLunar asList på fler ställen  x
+AgentLunar
+TestAgentLunar
+
+EpisodeCreator
 TestEpisodeCreator  -mocked agent -  random actions
 TrainerLunar  - one step actor critic
 TestTrainerLunar

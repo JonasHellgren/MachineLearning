@@ -2,7 +2,6 @@ package book_rl_explained.lunar_lander.domain.agent;
 
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import lombok.With;
-import org.apache.commons.math3.util.Pair;
 
 public record AgentParameters(
         int nKernelsY,
