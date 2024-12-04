@@ -19,24 +19,26 @@ public class ActorMemoryLunar {
     RadialBasis memoryStd;
     WeightUpdater updaterExp;
     WeightUpdater updaterStd;
+    AgentParameters agentParameters;
 
     public static ActorMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var memExp = MemoryFactory.createMemoryManyCenters(p,ep);
         var memStd = MemoryFactory.createMemoryOneWideCenter(p,ep);
         var updExp = new WeightUpdater(memExp,p.learningRate());
         var updStd = new WeightUpdater(memStd,p.learningRate());
-        return new ActorMemoryLunar(memExp, memStd, updExp, updStd);
+        return new ActorMemoryLunar(memExp, memStd, updExp, updStd,p);
     }
 
     /**
      * //todo clip grad
      * @param state
      * @param adv
-     * @param grad
+     * @param grad0
      */
 
-    public void fit(StateLunar state, double adv, MeanAndStd grad) {
+    public void fit(StateLunar state, double adv, MeanAndStd grad0) {
         var inputs = List.of(state.asList());
+        var grad=grad0.createClipped(agentParameters);
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
         updaterExp.updateWeightsFromErrors(inputs, errorListMean);
@@ -45,9 +47,8 @@ public class ActorMemoryLunar {
 
 
     public MeanAndStd actorMeanAndStd(StateLunar state) {
-        return MeanAndStd.of(
-                memoryExp.outPut(state.asList()),
-                Math.exp(memoryStd.outPut(state.asList())));
+        var in = state.asList();
+        return MeanAndStd.of(memoryExp.outPut(in),Math.exp(memoryStd.outPut(in)));
     }
 
 }

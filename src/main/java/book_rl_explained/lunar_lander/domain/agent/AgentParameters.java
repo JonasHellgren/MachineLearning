@@ -9,12 +9,16 @@ public record AgentParameters(
         int nKernelsSpeed,
         double[] gammas,
         double[] gammasOneCenter,
-        @With  double learningRate
+        @With  double learningRate,
+        @With double gradMeanMax,
+        @With double gradStdMax
 ) {
 
     public static final int N_KERNELS_Y = 11;
     public static final int N_KERNELS_SPD = 11;
     public static final double LEARNING_RATE = 0.01;
+    public static final double GRAD_MEAN_MAX = 0.1;
+    public static final double GRAD_STD_MAX = 0.1;
 
     public static AgentParameters defaultProps(LunarProperties ep) {
         double sigmaY= (ep.yMax()-ep.ySurface()) / N_KERNELS_Y;
@@ -24,7 +28,9 @@ public record AgentParameters(
         return new AgentParameters(N_KERNELS_Y, N_KERNELS_SPD,
                 new double[]{gamma(sigmaY), gamma(sigmaSpd)},
                 new double[]{gamma(sigmaYWide), gamma(sigmaSpdWide)},
-                LEARNING_RATE);
+                LEARNING_RATE,
+                GRAD_MEAN_MAX,
+                GRAD_STD_MAX);
     }
 
     /**

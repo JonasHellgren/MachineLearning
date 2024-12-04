@@ -1,9 +1,7 @@
 package book_rl_explained.lunar_lander.domain.environment;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.hellgren.utilities.random.RandUtils;
-import org.mapdb.Atomic;
 
 import java.util.List;
 
@@ -17,11 +15,11 @@ public class StateLunar {
     }
 
     public static StateLunar randomPosAndSpeed(LunarProperties ep) {
-        return of(getyRand(ep), getSpdRand(ep));
+        return of(getRandY(ep), getRandSpd(ep));
     }
 
     public static StateLunar randomPosAndZeroSpeed(LunarProperties ep) {
-        return of(getyRand(ep), 0);
+        return of(getRandY(ep), 0);
     }
 
     public double y() {
@@ -42,11 +40,11 @@ public class StateLunar {
     }
 
 
-    private static double getSpdRand(LunarProperties ep) {
+    private static double getRandSpd(LunarProperties ep) {
         return RandUtils.getRandomDouble(-ep.spdMax(), ep.spdMax());
     }
 
-    private static double getyRand(LunarProperties ep) {
+    private static double getRandY(LunarProperties ep) {
         return RandUtils.getRandomDouble(ep.ySurface(), ep.yMax());
     }
 
