@@ -30,7 +30,6 @@ class TestAgentCriticMemory {
         memory = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
     }
 
-
     @Test
     void testCreateMemory() {
         var criticMemoryLunar = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);

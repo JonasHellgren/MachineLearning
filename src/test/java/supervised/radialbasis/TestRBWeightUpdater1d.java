@@ -1,5 +1,7 @@
 package supervised.radialbasis;
 
+import book_rl_explained.lunar_lander.domain.agent.CriticMemoryLunar;
+import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,11 +37,33 @@ public class TestRBWeightUpdater1d {
          Assertions.assertEquals(out2,rb.outPut(in2), TOL);
      }
 
+    @Test
+    void whenUpdatingUsingError_thenCorrectOutput() {
+        List<Double> in1 = List.of(0.5);
+        List<Double> in2 = List.of(0.9);
+        double out1 = -1d;
+        double out2 = 0d;
+        fitWeightsFromError(in1, in2, out1, out2);
+        Assertions.assertEquals(out1,rb.outPut(in1), TOL);
+        Assertions.assertEquals(out2,rb.outPut(in2), TOL);
+    }
+
+
     private void fitWeights(List<Double> in1, List<Double> in2, double out1, double out2) {
         var updater =  WeightUpdater.of(rb);
         for (int i = 0; i < N_FITS; i++) {
             updater.updateWeights(List.of(in1, in2), List.of(out1, out2));
         }
     }
+
+    private void fitWeightsFromError(List<Double> in1, List<Double> in2, double out1, double out2) {
+        var updater =  WeightUpdater.of(rb);
+        for (int i = 0; i < N_FITS; i++) {
+            double err1= out1 - rb.outPut(in1);
+            double err2= out2 - rb.outPut(in2);
+            updater.updateWeightsFromErrors(List.of(in1, in2), List.of(err1,err2));
+        }
+    }
+
 
 }
