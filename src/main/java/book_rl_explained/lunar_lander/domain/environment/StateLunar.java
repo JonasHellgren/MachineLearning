@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.hellgren.utilities.random.RandUtils;
 import org.mapdb.Atomic;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class StateLunar {
 
@@ -29,6 +31,11 @@ public class StateLunar {
     public double spd() {
         return variables.spd();
     }
+
+    public List<Double> asList() {
+        return List.of(y(),spd());
+    }
+
 
     public StateLunar copy() {
         return new StateLunar(variables);

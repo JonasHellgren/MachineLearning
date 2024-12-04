@@ -1,7 +1,5 @@
 package supervised.radialbasis;
 
-import book_rl_explained.lunar_lander.domain.agent.CriticMemoryLunar;
-import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
