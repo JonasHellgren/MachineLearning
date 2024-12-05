@@ -6,14 +6,30 @@ import book_rl_explained.lunar_lander.domain.environment.StepReturnLunar;
 public record ExperienceLunar(
         StateLunar state,
         double action,
-        double reward,
-        StateLunar stateNew,
-        boolean isFail
+        StepReturnLunar stepReturn
 
 ) {
     public static ExperienceLunar of(StateLunar state,
                                      double action,
                                      StepReturnLunar sr) {
-        return new ExperienceLunar(state, action, sr.reward(), sr.stateNew(), sr.isFail());
+        return new ExperienceLunar(state, action, sr);
     }
+
+    public double reward() {
+        return stepReturn.reward();
+    }
+
+    public boolean isTerminal() {
+        return stepReturn.isTerminal();
+    }
+
+    public boolean isFail() {
+        return stepReturn.isFail();
+    }
+
+    public StateLunar stateNew() {
+        return stepReturn.stateNew();
+    }
+
+
 }

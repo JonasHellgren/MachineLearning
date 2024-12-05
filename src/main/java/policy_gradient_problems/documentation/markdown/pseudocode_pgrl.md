@@ -45,7 +45,7 @@
         a ← action given by current policy π(·|θ) in state s
         Take action a, observe reward r and next state s'
         δ ← r + γ * V(s') - V(s)  //TD error
-        Store s, estimated Gt, δ for later actor and critic updating
+        Store s, estimated  δ for later actor and critic updating
         s ← s'  
         Until s is terminal
 
