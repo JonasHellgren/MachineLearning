@@ -46,16 +46,19 @@ public class TrainerLunar implements TrainerI {
     public ProgressMeasures fitAgentFromNewExperiences(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
         var tdList= Lists.<Double>newArrayList();
-        var logStdList= Lists.<Double>newArrayList();
+        var stdList= Lists.<Double>newArrayList();
         for (ExperienceLunar experience : experiences) {
             double e = calculateTemporalDifferenceError(experience);
-            var mAndStd=agent.fitActor(experience.state(),experience.action(), e);
+            agent.fitActor(experience.state(),experience.action(), e);
             agent.fitCritic(experience.state(),e);
+
+
             tdList.add(e);
-            logStdList.add(mAndStd.std());
+            var mAndStd=agent.readActor(experience.state());
+            stdList.add(mAndStd.std());
         }
 
-        return ProgressMeasures.of(experiences, tdList,logStdList);
+        return ProgressMeasures.of(experiences, tdList,stdList);
 
     }
 

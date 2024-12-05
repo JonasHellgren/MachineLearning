@@ -40,6 +40,9 @@ public class ActorMemoryLunar {
         var grad=grad0.createClipped(agentParameters);
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
+
+        //System.out.println("grad0 = " + grad0+", grad = " + grad+", errorListStd"+errorListStd);
+
         updaterMean.updateWeightsFromErrors(inputs, errorListMean);
         updaterLogStd.updateWeightsFromErrors(inputs, errorListStd);
     }

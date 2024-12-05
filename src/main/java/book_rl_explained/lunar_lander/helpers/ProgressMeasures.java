@@ -17,9 +17,8 @@ public record ProgressMeasures(
 
     public static ProgressMeasures of(List<ExperienceLunar> experiences,
                                       List<Double> tdList,
-                                      List<Double> logStdList) {
+                                      List<Double> stdList) {
         var info=ExperiencesInfo.of(experiences);
-        var stdList=logStdList.stream().map(logS -> Math.exp(logS)).toList();
 
         return ProgressMeasures.builder()
                 .sumRewards(info.sumRewards())

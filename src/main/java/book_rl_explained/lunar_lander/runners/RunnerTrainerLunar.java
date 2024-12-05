@@ -16,7 +16,7 @@ public class RunnerTrainerLunar {
 
         var ep = LunarProperties.defaultProps();
         var p = AgentParameters.defaultProps(ep);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(30);
+        var tp = TrainerParameters.defaultParams().withNEpisodes(300).withNofStepsMax(10);
         var trainerDependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.createDefault())
