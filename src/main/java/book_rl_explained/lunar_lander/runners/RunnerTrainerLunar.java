@@ -15,8 +15,8 @@ public class RunnerTrainerLunar {
     public static void main(String[] args) {
 
         var ep = LunarProperties.defaultProps();
-        var p = AgentParameters.defaultProps(ep);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(300).withNofStepsMax(10);
+        var p = AgentParameters.defaultProps(ep).withLearningRateActor(0.01).withLearningRateCritic(0.01);
+        var tp = TrainerParameters.defaultParams().withNEpisodes(1000).withNofStepsMax(100);
         var trainerDependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.createDefault())
@@ -31,10 +31,6 @@ public class RunnerTrainerLunar {
 
         var plotter= PlotterProgressMeasures.of(trainer);
         plotter.plot("TrainerLunar");
-
-
-
-
 
     }
 }
