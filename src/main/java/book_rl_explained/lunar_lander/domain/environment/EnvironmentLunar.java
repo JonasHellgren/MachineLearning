@@ -33,8 +33,8 @@ public class EnvironmentLunar implements EnvironmentI {
         boolean isTerminal = y < props.ySurface() || y > yFarOf;
         boolean isFail = isTerminal && speed < -props.spdMax() || y > yFarOf;
         //double rewardFail = isFail ? props.rewardFail() : 0d;
-        double devSpd=Math.abs(speed - -props.spdMax());
-        double rewardFail = isFail ? props.rewardFail()*devSpd : 0d;
+        double devSpd=Math.abs(speed) > Math.abs(props.spdMax()) ? Math.abs(Math.abs(speed) - Math.abs(props.spdMax())):0;
+        double rewardFail = isFail ? props.rewardFail()*(0+devSpd/10) : 0d;
         double reward = props.rewardStep() + rewardFail;
 
         return StepReturnLunar.builder()

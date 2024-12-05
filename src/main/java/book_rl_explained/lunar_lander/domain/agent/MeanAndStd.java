@@ -1,6 +1,5 @@
 package book_rl_explained.lunar_lander.domain.agent;
 
-import common.math.MathUtils;
 import org.hellgren.utilities.math.MyMathUtils;
 
 public record MeanAndStd(
@@ -19,4 +18,9 @@ public record MeanAndStd(
     }
 
 
+    public MeanAndStd zeroGradIfValueNotInRange(MeanAndStd grad, MeanAndStd meanAndLogStd, AgentParameters agentParameters) {
+        double gradMean= (agentParameters.rangeMean().contains(meanAndLogStd.mean())) ? grad.mean() : 0.0;
+        double gradStd= (agentParameters.rangeLogStd().contains(meanAndLogStd.std())) ?  grad.std(): 0.0 ;
+        return new MeanAndStd(gradMean, gradStd);
+    }
 }

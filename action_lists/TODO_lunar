@@ -16,7 +16,9 @@ Action i kN, samt mindre massa lander, så std=1 är lagom  x
 EpisodeCreator x
 TestEpisodeCreator x
 TrainerLunar  - one step actor critic
-TestTrainerLunar
-
+RunnerTrainerLunar  x
+hård begr std
+först clip log std
+clip hårdare
 
 

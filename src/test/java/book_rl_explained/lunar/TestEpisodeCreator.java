@@ -34,6 +34,10 @@ class TestEpisodeCreator {
     void givenNonTrainedAgent_thenWillFail() {
         var experiences = creator.getExperiences();
         var info = ExperiencesInfo.of(experiences);
+
+
+        System.out.println("info.endExperience() = " + info.endExperience());
+
         Assertions.assertTrue(info.endExperience().isFail());
     }
 }

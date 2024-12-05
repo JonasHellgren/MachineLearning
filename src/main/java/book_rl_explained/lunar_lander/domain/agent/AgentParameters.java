@@ -1,17 +1,22 @@
 package book_rl_explained.lunar_lander.domain.agent;
 
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
+import com.google.common.collect.Range;
 import lombok.With;
 
+@With
 public record AgentParameters(
         int nKernelsY,
         int nKernelsSpeed,
         double[] gammas,
         double[] gammasOneCenter,
-        @With  double learningRateCritic,
-        @With  double learningRateActor,
-        @With double gradMeanMax,
-        @With double gradStdMax
+        double learningRateCritic,
+        double learningRateActor,
+        double gradMeanMax,
+        double gradStdMax,
+        Range<Double> rangeMean,
+        Range<Double> rangeLogStd
+
 ) {
 
     public static final int N_KERNELS_Y = 11;
@@ -26,13 +31,17 @@ public record AgentParameters(
         double sigmaSpd = (ep.spdMax() - -ep.spdMax()) / N_KERNELS_SPD;
         double sigmaYWide = sigmaY*N_KERNELS_Y*10;
         double sigmaSpdWide = sigmaSpd*N_KERNELS_SPD*10;
+        double forceMaxKn = ep.forceMax() / 1000;
         return new AgentParameters(N_KERNELS_Y, N_KERNELS_SPD,
                 new double[]{gamma(sigmaY), gamma(sigmaSpd)},
                 new double[]{gamma(sigmaYWide), gamma(sigmaSpdWide)},
                 LEARNING_RATE_CRITIC,
                 LEARNING_RATE_ACTOR,
                 GRAD_MEAN_MAX,
-                GRAD_STD_MAX);
+                GRAD_STD_MAX,
+                Range.closed(-forceMaxKn, forceMaxKn),
+                Range.closed(-1d,1d)
+                );
     }
 
     /**

@@ -8,7 +8,7 @@ public record LunarProperties(
         double ySurface,
         double yMax,
         double spdMax,
-        double rewardFail,
+        double rewardFail,  //-100
         double rewardStep) {
 
     public static LunarProperties defaultProps() {
