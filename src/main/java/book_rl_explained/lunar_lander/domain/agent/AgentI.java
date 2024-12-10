@@ -8,7 +8,7 @@ public interface AgentI {
     MeanAndStd fitActor(StateLunar state, double action, double adv);
     void fitCritic(StateLunar state, double error);
     double readCritic(StateLunar state);
-
+    AgentParameters getAgentParameters();
     MeanAndStd readActor(StateLunar state);
 
     MeanAndStd gradientMeanAndLogStd(StateLunar state, double action);

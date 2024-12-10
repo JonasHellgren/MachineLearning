@@ -7,10 +7,10 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecorderTrainingProgress {
 
-    @Getter
     List<ProgressMeasures> measuresList;
 
     public static RecorderTrainingProgress empty() {

@@ -16,10 +16,8 @@ public class MemoryFactory {
 
     public static RadialBasis createMemoryManyCenters(AgentParameters p, LunarProperties ep) {
         var mem = RadialBasis.empty();
-        var yList = createFromStartToEndWithNofItems(ep.ySurface(), ep.yMax(), p.nKernelsY());
-        var spdList = createFromStartToEndWithNofItems(-ep.spdMax(), ep.spdMax(), p.nKernelsSpeed());
-        for (double yNorm : yList) {
-            for (double spdNorm : spdList) {
+        for (double yNorm : ep.ySpace(p.nKernelsY())) {
+            for (double spdNorm : ep.spdSpace(p.nKernelsSpeed())) {
                 mem.addKernel(KernelProperties.of(new double[]{yNorm, spdNorm}, p.gammas()));
             }
         }

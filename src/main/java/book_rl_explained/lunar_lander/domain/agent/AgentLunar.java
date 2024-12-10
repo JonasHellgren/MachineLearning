@@ -3,12 +3,15 @@ package book_rl_explained.lunar_lander.domain.agent;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.hellgren.utilities.gradient.NormalDistributionGradientCalculator;
 import org.hellgren.utilities.normal_distribution.NormDistributionSampler;
 
 @AllArgsConstructor
+@Getter
 public class AgentLunar implements AgentI{
 
+    AgentParameters agentParameters;
     ActorMemoryLunar actorMemory;
     CriticMemoryLunar criticMemory;
     NormDistributionSampler sampler;
@@ -19,7 +22,7 @@ public class AgentLunar implements AgentI{
         var critMemory = CriticMemoryLunar.zeroWeights(p, ep);
         var sampler = new NormDistributionSampler();
         var gc=new NormalDistributionGradientCalculator();
-        return new AgentLunar(actMemory, critMemory,sampler,gc);
+        return new AgentLunar(p,actMemory, critMemory,sampler,gc);
     }
 
     @Override

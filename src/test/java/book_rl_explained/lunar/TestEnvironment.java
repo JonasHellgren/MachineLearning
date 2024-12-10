@@ -17,7 +17,7 @@ class TestEnvironment {
     @BeforeEach
     void setUp() {
         environment = EnvironmentLunar.createDefault();
-        properties = environment.getProps();
+        properties = environment.getProperties();
     }
 
     @Test

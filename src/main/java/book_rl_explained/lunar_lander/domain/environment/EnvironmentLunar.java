@@ -11,7 +11,7 @@ import tec.units.ri.unit.Units;
 @AllArgsConstructor
 public class EnvironmentLunar implements EnvironmentI {
 
-    LunarProperties props;
+    LunarProperties properties;
 
     public static EnvironmentLunar createDefault() {
         return new EnvironmentLunar(LunarProperties.defaultProps());
@@ -21,21 +21,18 @@ public class EnvironmentLunar implements EnvironmentI {
     public StepReturnLunar step(StateLunar state, double action) {
         double speed0 = state.variables.spd();
         double y0 = state.variables.y();
-        double m = props.massLander();
-        double forceInNewton=getForceInNewton(action);
-        double force= MathUtils.clip(forceInNewton, -props.forceMax(), props.forceMax());
-        double acc = (force - m * props.g()) / m;
-        double speed = speed0 + acc * props.dt();
-        double y = y0 + speed * props.dt();
+        double acc = calculateAcceleration(action);
+        double speed = speed0 + acc * properties.dt();
+        double y = y0 + speed * properties.dt();
 
         var stateNew = StateLunar.of(y, speed);
-        double yFarOf = props.yMax();
-        boolean isTerminal = y < props.ySurface() || y > yFarOf;
-        boolean isFail = isTerminal && speed < -props.spdMax() || y > yFarOf;
+        double yFarOf = properties.yMax();
+        boolean isTerminal = y < properties.ySurface() || y > yFarOf;
+        boolean isFail = isTerminal && speed < -properties.spdMax() || y > yFarOf;
         //double rewardFail = isFail ? props.rewardFail() : 0d;
-        double devSpd=Math.abs(speed) > Math.abs(props.spdMax()) ? Math.abs(Math.abs(speed) - Math.abs(props.spdMax())):0;
-        double rewardFail = isFail ? props.rewardFail()*(0+devSpd/10) : 0d;
-        double reward = props.rewardStep() + rewardFail;
+        double devSpd=Math.abs(speed) > Math.abs(properties.spdMax()) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
+        double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
+        double reward = properties.rewardStep() + rewardFail;
 
         return StepReturnLunar.builder()
                 .stateNew(stateNew)
@@ -43,6 +40,13 @@ public class EnvironmentLunar implements EnvironmentI {
                 .isTerminal(isTerminal)
                 .reward(reward)
                 .build();
+    }
+
+    public double calculateAcceleration(double action) {
+        double m = properties.massLander();
+        double forceInNewton=getForceInNewton(action);
+        double force= MathUtils.clip(forceInNewton, -properties.forceMax(), properties.forceMax());
+        return (force - m * properties.g()) / m;
     }
 
     public double getForceInKiloNewton(double forceInNewton) {
