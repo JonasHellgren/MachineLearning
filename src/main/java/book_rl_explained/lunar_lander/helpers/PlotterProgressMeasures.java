@@ -50,7 +50,8 @@ public class PlotterProgressMeasures {
             return;
         }
         List<XYChart> charts = new ArrayList<>();
-        charts.add(createChart("accum reward", recorder.trajOf("sumRewards")));
+        charts.add(createChart("acc reward", recorder.trajOf("sumRewards")));
+        charts.add(createChart("acc rew. not expl.", recorder.trajOf("sumRewardsNotExploring")));
         charts.add(createChart("nSteps", recorder.trajOf("nSteps")));
         charts.add(createChart("tdErr", recorder.trajOf("tdError")));
         charts.add(createChart("stdActor", recorder.trajOf("stdActor")));

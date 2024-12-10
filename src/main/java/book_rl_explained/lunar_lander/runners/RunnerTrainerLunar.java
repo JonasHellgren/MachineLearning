@@ -18,7 +18,7 @@ public class RunnerTrainerLunar {
         var ep = LunarProperties.defaultProps();
         var p = AgentParameters.defaultProps(ep)
                 .withLearningRateActor(0.01).withLearningRateCritic(0.01)
-                .withGradStdMax(1e-1).withRangeLogStd(Range.closed(1e-5,3d))
+                .withGradStdMax(1e-1).withRangeLogStd(Range.closed(1e-5,5d))
                 //.withGradStdMax(1e-3).withRangeLogStd(Range.closed(1e-5,3d))
                 .withInitWeightLogStd(1.0);
         var tp = TrainerParameters.defaultParams().withNEpisodes(5_000).withNofStepsMax(100);

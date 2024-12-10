@@ -5,6 +5,7 @@ import book_rl_explained.lunar_lander.helpers.ExperiencesInfo;
 import book_rl_explained.lunar_lander.helpers.ProgressMeasures;
 import book_rl_explained.lunar_lander.helpers.RecorderTrainingProgress;
 import com.beust.jcommander.internal.Lists;
+import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -32,6 +33,10 @@ public class TrainerLunar implements TrainerI {
         for (int i = 0; i < getnEpisodes(); i++) {
             var experiences = creator.getExperiences();
             var pm=fitAgentFromNewExperiences(experiences);
+
+            var experiencesNotExploring = creator.getExperiencesNotExploring();
+            var sumRewardsNotExploring=ExperiencesInfo.of(experiencesNotExploring).sumRewards();
+            pm= pm.withSumRewardsNoExploring(sumRewardsNotExploring);
             recorder.add(pm);
             log(experiences, i);
         }
@@ -51,9 +56,7 @@ public class TrainerLunar implements TrainerI {
             double e = calculateTemporalDifferenceError(experience);
             agent.fitActor(experience.state(),experience.action(), e);
             agent.fitCritic(experience.state(),e);
-
-
-            tdList.add(e);
+            tdList.add(Math.abs(e));
             var mAndStd=agent.readActor(experience.state());
             stdList.add(mAndStd.std());
         }

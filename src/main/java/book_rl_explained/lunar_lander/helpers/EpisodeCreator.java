@@ -15,6 +15,15 @@ public class EpisodeCreator {
     TrainerDependencies dependencies;
 
     public List<ExperienceLunar> getExperiences() {
+        return getExperiencesWithFlag(true);
+    }
+
+    public List<ExperienceLunar> getExperiencesNotExploring() {
+        return getExperiencesWithFlag(false);
+    }
+
+
+    public List<ExperienceLunar> getExperiencesWithFlag(boolean isExploring) {
         List<ExperienceLunar> experienceList = Lists.newArrayList();
         var agent=dependencies.agent();
         var stateStart=dependencies.startState();
@@ -23,7 +32,7 @@ public class EpisodeCreator {
         StepReturnLunar sr=StepReturnLunar.ofNotFailAndNotTerminal();
         var state=stateStart.copy();
         while (sr.isNotTerminalAndNofStepsNotExceeded(counter)) {
-            var action = agent.chooseAction(state);
+            var action = (isExploring) ? agent.chooseAction(state) : agent.chooseActionNoExploration(state);
             sr = environment.step(state, action);
             experienceList.add(ExperienceLunar.of(state, action, sr));
             state=sr.stateNew();

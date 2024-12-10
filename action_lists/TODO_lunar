@@ -18,8 +18,7 @@ TestEpisodeCreator x
 TrainerLunar  - one step actor critic
 RunnerTrainerLunar  x
 annat start värde std mem x
-
-acc rew no expl
+acc rew no expl x
 plotta policy
 
 Ny klas för gradient

@@ -27,10 +27,10 @@ public record MeanAndStd(
         return new MeanAndStd(mean, Math.signum(std)*Math.log(Math.abs(std)+1));
     }
 
-    public MeanAndStd createClipped(AgentParameters p) {
+    public MeanAndStd createClipped(double meanMax, double stdMax) {
         return new MeanAndStd(
-                MyMathUtils.clip(mean, -p.gradMeanMax(), p.gradMeanMax()),
-                MyMathUtils.clip(std, -p.gradStdMax(), p.gradStdMax()));
+                MyMathUtils.clip(mean, -meanMax, meanMax),
+                MyMathUtils.clip(std, -stdMax, stdMax));
     }
 
 

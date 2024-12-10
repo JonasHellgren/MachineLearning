@@ -26,7 +26,7 @@ class TestMeanAndStd {
     @Test
     void testCreateClipped() {
         MeanAndStd gradMeanAndStd = new MeanAndStd(10.0, 20.0);
-        MeanAndStd clipped = gradMeanAndStd.createClipped(agentParameters);
+        MeanAndStd clipped = gradMeanAndStd.createClipped(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
         assertEquals(1.0, clipped.mean(), 0.0);
         assertEquals(1.0, clipped.std(), 0.0);
     }

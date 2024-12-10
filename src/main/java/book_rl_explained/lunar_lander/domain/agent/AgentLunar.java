@@ -29,6 +29,12 @@ public class AgentLunar implements AgentI{
     }
 
     @Override
+    public double chooseActionNoExploration(StateLunar state) {
+        var meanAndStd= readActor(state);
+        return sampler.sampleFromNormDistribution(meanAndStd.mean(),0);
+    }
+
+    @Override
     public MeanAndStd fitActor(StateLunar state, double action, double adv) {
         var grad = gradientMeanAndLogStd(state, action);
         actorMemory.fit(state, adv, grad);

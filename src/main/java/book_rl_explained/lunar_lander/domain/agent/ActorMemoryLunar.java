@@ -43,7 +43,7 @@ public class ActorMemoryLunar {
       //  System.out.println("grad0 = " + grad0);
       // grad=grad.createStdFromLogStd();
       //  System.out.println("grad 1= " + grad);
-        grad=grad.createClipped(agentParameters);
+        grad=grad.createClipped(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
       //  System.out.println("grad 2 = " + grad);
 
       //  grad=grad.zeroGradIfValueNotInRange(grad,actorMeanAndStd(state), agentParameters);
@@ -71,7 +71,14 @@ public class ActorMemoryLunar {
 
     public MeanAndStd actorMeanAndStd(StateLunar state) {
         var in = state.asList();
-        return MeanAndStd.of(memoryMean.outPut(in),Math.exp(memoryLogStd.outPut(in)));
+        double std0 = Math.exp(memoryLogStd.outPut(in));
+        var rLogStd=agentParameters.rangeLogStd();
+      //  double std= MyMathUtils.clip(std0, rLogStd.lowerEndpoint(), rLogStd.upperEndpoint());
+      //  double std=std0.createClipped(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
+
+        var meanAndStd=MeanAndStd.of(memoryMean.outPut(in), Math.exp(memoryLogStd.outPut(in)));
+
+        return meanAndStd;
     }
 
     public MeanAndStd actorMeanAndLogStd(StateLunar state) {
