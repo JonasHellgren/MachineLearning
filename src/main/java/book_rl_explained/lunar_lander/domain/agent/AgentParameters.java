@@ -40,7 +40,8 @@ public record AgentParameters(
                 GRAD_MEAN_MAX,
                 GRAD_STD_MAX,
                 Range.closed(-forceMaxKn, forceMaxKn),
-                Range.closed(-1d,1d)
+                //Range.closed(-1d,1d)
+                Range.closed(0.1,1d)
                 );
     }
 

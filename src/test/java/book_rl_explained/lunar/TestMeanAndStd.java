@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestMeanAndStd {
+class TestMeanAndStd {
 
     LunarProperties lunarProperties;
     AgentParameters agentParameters;
@@ -20,7 +20,7 @@ public class TestMeanAndStd {
         agentParameters = AgentParameters.defaultProps(lunarProperties)
                 .withGradMeanMax(1).withGradStdMax(1)
                 .withRangeMean(Range.closed(-1d,1d))
-                .withRangeStd(Range.closed(0d,1d));
+                .withRangeLogStd(Range.closed(0d,1d));
       }
 
     @Test

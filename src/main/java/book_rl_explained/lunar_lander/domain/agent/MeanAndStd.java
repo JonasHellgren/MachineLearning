@@ -11,6 +11,17 @@ public record MeanAndStd(
         return new MeanAndStd(mean, std);
     }
 
+    public MeanAndStd createStdFromLogStd() {
+        return new MeanAndStd(mean, Math.exp(std));
+    }
+
+    public MeanAndStd createLogStdFromStd() {
+        //g(w)=sign(derF)⋅log(∣derF∣+1):
+
+        //return new MeanAndStd(mean, Math.max(-1,Math.log(std))); //todo fixa
+        return new MeanAndStd(mean, Math.signum(std)*Math.log(Math.abs(std)+1));
+    }
+
     public MeanAndStd createClipped(AgentParameters p) {
         return new MeanAndStd(
                 MyMathUtils.clip(mean, -p.gradMeanMax(), p.gradMeanMax()),
@@ -18,9 +29,9 @@ public record MeanAndStd(
     }
 
 
-    public MeanAndStd zeroGradIfValueNotInRange(MeanAndStd grad, MeanAndStd meanAndLogStd, AgentParameters agentParameters) {
-        double gradMean= (agentParameters.rangeMean().contains(meanAndLogStd.mean())) ? grad.mean() : 0.0;
-        double gradStd= (agentParameters.rangeLogStd().contains(meanAndLogStd.std())) ?  grad.std(): 0.0 ;
+    public MeanAndStd zeroGradIfValueNotInRange(MeanAndStd grad, MeanAndStd meanAndStd, AgentParameters agentParameters) {
+        double gradMean= (agentParameters.rangeMean().contains(meanAndStd.mean())) ? grad.mean() : 0.0;
+        double gradStd= (agentParameters.rangeLogStd().contains(meanAndStd.std())) ?  grad.std(): 0.0 ;
         return new MeanAndStd(gradMean, gradStd);
     }
 }

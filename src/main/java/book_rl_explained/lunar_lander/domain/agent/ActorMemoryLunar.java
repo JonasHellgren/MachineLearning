@@ -37,9 +37,20 @@ public class ActorMemoryLunar {
 
     public void fit(StateLunar state, double adv, MeanAndStd grad0) {
         var inputs = List.of(state.asList());
-        var grad=grad0.createClipped(agentParameters);
-        var meanAndLogStd=actorMeanAndLogStd(state);
-        grad=grad0.zeroGradIfValueNotInRange(grad,meanAndLogStd, agentParameters);
+        var grad=grad0;
+      //  System.out.println("grad0 = " + grad0);
+      // grad=grad.createStdFromLogStd();
+      //  System.out.println("grad 1= " + grad);
+        grad=grad.createClipped(agentParameters);
+      //  System.out.println("grad 2 = " + grad);
+
+     //   grad=grad.zeroGradIfValueNotInRange(grad,actorMeanAndStd(state), agentParameters);
+      //  System.out.println("grad 3= " + grad);
+
+//        grad=grad.createLogStdFromStd();
+      //  System.out.println("grad 4= " + grad);
+
+
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
 

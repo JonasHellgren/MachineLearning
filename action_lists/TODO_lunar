@@ -17,8 +17,9 @@ EpisodeCreator x
 TestEpisodeCreator x
 TrainerLunar  - one step actor critic
 RunnerTrainerLunar  x
+Ny klas för gradient
 hård begr std
-först clip log std
+förstå clip log std
 clip hårdare
 
 
