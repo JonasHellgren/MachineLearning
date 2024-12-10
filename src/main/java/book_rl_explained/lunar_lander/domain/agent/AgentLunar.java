@@ -15,7 +15,7 @@ public class AgentLunar implements AgentI{
     NormalDistributionGradientCalculator gradCalc;
 
     public static AgentLunar zeroWeights(AgentParameters p, LunarProperties ep) {
-        var actMemory = ActorMemoryLunar.zeroWeights(p, ep);
+        var actMemory = ActorMemoryLunar.create(p, ep);
         var critMemory = CriticMemoryLunar.zeroWeights(p, ep);
         var sampler = new NormDistributionSampler();
         var gc=new NormalDistributionGradientCalculator();

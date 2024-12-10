@@ -21,7 +21,7 @@ public class TestRadialBasisOutPut {
             double center = (double) i / 10;
             kernels.add(KernelProperties.of(new double[]{center}, new double[]{GAMMA}));
         }
-        rb = RadialBasis.of(kernels);
+        rb = RadialBasis.ofKernels(kernels);
     }
 
     @ParameterizedTest

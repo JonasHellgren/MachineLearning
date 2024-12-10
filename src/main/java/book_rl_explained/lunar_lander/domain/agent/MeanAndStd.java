@@ -11,6 +11,11 @@ public record MeanAndStd(
         return new MeanAndStd(mean, std);
     }
 
+
+    public MeanAndStd createStdFromLogStdDummy() {
+        return new MeanAndStd(mean, std);
+    }
+
     public MeanAndStd createStdFromLogStd() {
         return new MeanAndStd(mean, Math.exp(std));
     }

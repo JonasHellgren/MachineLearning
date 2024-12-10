@@ -44,7 +44,7 @@ public class RunnerRadialBasis1d {
             double center = (double) i / N_KERNELS;
             kernels.add(KernelProperties.of(new double[]{center}, new double[]{GAMMA}));
         }
-        return RadialBasis.of(kernels);
+        return RadialBasis.ofKernels(kernels);
     }
 
     private static void fitRB(RadialBasis rb, List<Double> inList1, List<Double> outList) {

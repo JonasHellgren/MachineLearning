@@ -31,9 +31,16 @@ public class RadialBasis {
         return new RadialBasis(new ArrayList<>(), createWeightsAllZero(0));
     }
 
-    public static RadialBasis of(@NonNull List<KernelProperties> kernels) {
+    public static RadialBasis ofKernels(@NonNull List<KernelProperties> kernels) {
         return new RadialBasis(kernels, createWeightsAllZero(kernels.size()));
     }
+
+    public static RadialBasis ofKernelsAndWeights(@NonNull List<KernelProperties> kernels, double [] weights) {
+        Preconditions.checkArgument(kernels.size() == weights.length,
+                "kernels and weights must have the same size");
+        return new RadialBasis(kernels, weights);
+    }
+
 
     private static double[] createWeightsAllZero(int size) {
         return new double[size];

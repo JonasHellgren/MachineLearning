@@ -17,6 +17,11 @@ EpisodeCreator x
 TestEpisodeCreator x
 TrainerLunar  - one step actor critic
 RunnerTrainerLunar  x
+annat start värde std mem x
+
+acc rew no expl
+plotta policy
+
 Ny klas för gradient
 hård begr std
 förstå clip log std

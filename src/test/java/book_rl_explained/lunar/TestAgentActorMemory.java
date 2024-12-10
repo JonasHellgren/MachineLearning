@@ -8,12 +8,13 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TestAgentActorMemory {
 
-    private ActorMemoryLunar actorMemoryLunar;
+    private ActorMemoryLunar actorMemoryLunar, actorMemoryLunarOneForStd;
     private LunarProperties lunarProperties;
     private AgentParameters agentParameters;
 
@@ -21,7 +22,8 @@ class TestAgentActorMemory {
     void setup() {
         lunarProperties = LunarProperties.defaultProps();
         agentParameters = AgentParameters.defaultProps(lunarProperties);
-        actorMemoryLunar = ActorMemoryLunar.zeroWeights(agentParameters, lunarProperties);
+        actorMemoryLunar = ActorMemoryLunar.create(agentParameters, lunarProperties);
+        actorMemoryLunarOneForStd = ActorMemoryLunar.create(agentParameters.withInitWeightLogStd(1), lunarProperties);
     }
 
     @Test
@@ -35,11 +37,24 @@ class TestAgentActorMemory {
 
     @Test
     void testActorMeanAndStd() {
-        var state = StateLunar.randomPosAndSpeed(lunarProperties);
-        var meanAndStd = actorMemoryLunar.actorMeanAndStd(state);
-        assertNotNull(meanAndStd);
-        assertEquals(0.0, meanAndStd.mean());
-        assertEquals(1.0, meanAndStd.std());  //e^0 = 1
+        for (int i = 0; i < 100; i++) {
+            var state = StateLunar.randomPosAndSpeed(lunarProperties);
+            var meanAndStd = actorMemoryLunar.actorMeanAndStd(state);
+            assertNotNull(meanAndStd);
+            assertEquals(0.0, meanAndStd.mean());
+            assertEquals(1.0, meanAndStd.std());  //e^0 = 1
+        }
+    }
+
+    @Test
+    void testActorMeanAndStd_oneForStd() {
+        for (int i = 0; i < 100; i++) {
+            var state = StateLunar.randomPosAndSpeed(lunarProperties);
+            var meanAndStd = actorMemoryLunarOneForStd.actorMeanAndStd(state);
+            assertNotNull(meanAndStd);
+            assertEquals(0.0, meanAndStd.mean());
+            assertEquals(Math.exp(1), meanAndStd.std(),0.01);  //e^0 = 1
+        }
     }
 
 

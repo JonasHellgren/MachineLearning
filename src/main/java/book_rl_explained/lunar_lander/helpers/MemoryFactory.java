@@ -28,10 +28,15 @@ public class MemoryFactory {
 
     public static RadialBasis createMemoryOneWideCenter(AgentParameters p, LunarProperties ep) {
         var mem = RadialBasis.empty();
+        addBigKernel(p, ep, mem);
+        mem.setWeights(new double[]{p.initWeightLogStd()});
+        return mem;
+    }
+
+    private static void addBigKernel(AgentParameters p, LunarProperties ep, RadialBasis mem) {
         double yCenter = (ep.yMax() - ep.ySurface()) / 2;
         double spdCenter = 0d;
         mem.addKernel(KernelProperties.of(new double[]{yCenter, spdCenter}, p.gammasOneCenter()));
-        return mem;
     }
 
 }

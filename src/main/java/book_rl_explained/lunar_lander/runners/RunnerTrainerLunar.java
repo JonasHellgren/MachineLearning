@@ -9,6 +9,7 @@ import book_rl_explained.lunar_lander.domain.trainer.TrainerLunar;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerParameters;
 import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 import book_rl_explained.lunar_lander.helpers.StartStateSupplierRandomHeightZeroSpeed;
+import com.google.common.collect.Range;
 
 public class RunnerTrainerLunar {
 
@@ -16,15 +17,17 @@ public class RunnerTrainerLunar {
 
         var ep = LunarProperties.defaultProps();
         var p = AgentParameters.defaultProps(ep)
-                .withLearningRateActor(0.01).withLearningRateCritic(0.01).withGradStdMax(1e-1);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(3000).withNofStepsMax(100);
+                .withLearningRateActor(0.01).withLearningRateCritic(0.01)
+                .withGradStdMax(1e-1).withRangeLogStd(Range.closed(1e-5,3d))
+                //.withGradStdMax(1e-3).withRangeLogStd(Range.closed(1e-5,3d))
+                .withInitWeightLogStd(1.0);
+        var tp = TrainerParameters.defaultParams().withNEpisodes(5_000).withNofStepsMax(100);
         var trainerDependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.createDefault())
                 .trainerParameters(tp)
                 .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
                 .build();
-
 
         var trainer= TrainerLunar.of(trainerDependencies);
 

@@ -19,13 +19,15 @@ public class ActorMemoryLunar {
     WeightUpdater updaterLogStd;
     AgentParameters agentParameters;
 
-    public static ActorMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
+    public static ActorMemoryLunar create(AgentParameters p, LunarProperties ep) {
         var memExp = MemoryFactory.createMemoryManyCenters(p,ep);
         var memStd = MemoryFactory.createMemoryOneWideCenter(p,ep);
         var updExp = new WeightUpdater(memExp,p.learningRateActor());
         var updStd = new WeightUpdater(memStd,p.learningRateActor());
         return new ActorMemoryLunar(memExp, memStd, updExp, updStd,p);
     }
+
+
 
     /**
      * Updates the actor's memory based on the provided state, advantage, and gradient.
@@ -44,10 +46,10 @@ public class ActorMemoryLunar {
         grad=grad.createClipped(agentParameters);
       //  System.out.println("grad 2 = " + grad);
 
-     //   grad=grad.zeroGradIfValueNotInRange(grad,actorMeanAndStd(state), agentParameters);
+      //  grad=grad.zeroGradIfValueNotInRange(grad,actorMeanAndStd(state), agentParameters);
       //  System.out.println("grad 3= " + grad);
 
-//        grad=grad.createLogStdFromStd();
+  //      grad=grad.createLogStdFromStd();
       //  System.out.println("grad 4= " + grad);
 
 
