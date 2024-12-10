@@ -12,7 +12,9 @@ import book_rl_explained.lunar_lander.helpers.PlotterAgent;
 import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 import book_rl_explained.lunar_lander.helpers.StartStateSupplierRandomHeightZeroSpeed;
 import com.google.common.collect.Range;
+import lombok.extern.java.Log;
 
+@Log
 public class RunnerTrainerLunar {
 
     public static final PlotterAgent.Settings SETTINGS_PLOTTERAGENT = PlotterAgent.Settings.builder()
@@ -20,16 +22,18 @@ public class RunnerTrainerLunar {
 
     public static void main(String[] args) {
 
-        var ep = LunarProperties.defaultProps();
+        var ep = LunarProperties.defaultProps().withDt(0.5).withRewardFail(-100).withYMax(3);
         var p = AgentParameters.defaultProps(ep)
-                .withLearningRateActor(0.01).withLearningRateCritic(0.01)
-                .withGradStdMax(1e-1).withRangeLogStd(Range.closed(1e-5,5d))
+                //.withLearningRateActor(1e-3).withLearningRateCritic(1e-2)
+                .withLearningRateActor(1e-3).withLearningRateCritic(1e-2)
+                .withGradStdMax(1e-2).withRangeLogStd(Range.closed(1e-5,5d))
                 //.withGradStdMax(1e-3).withRangeLogStd(Range.closed(1e-5,3d))
-                .withInitWeightLogStd(1.0);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(10_000).withNofStepsMax(100);
+                .withInitWeightLogStd(0.0);
+        var tp = TrainerParameters.defaultParams()
+                .withNEpisodes(15000).withNofStepsMax(30).withGamma(0.95).withTdMax(10);
         var trainerDependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
-                .environment(EnvironmentLunar.createDefault())
+                .environment(EnvironmentLunar.of(ep))
                 .trainerParameters(tp)
                 .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
                 .build();
@@ -46,7 +50,7 @@ public class RunnerTrainerLunar {
         agentPlotter.plotAll();
 
         AgentEvaluator evaluator = new AgentEvaluator(trainerDependencies);
-        double fractionFails= evaluator.fractionFails(5);
+        double fractionFails= evaluator.fractionFails(10);
         System.out.println("fractionFails = " + fractionFails);
         evaluator.plotSimulation();
 

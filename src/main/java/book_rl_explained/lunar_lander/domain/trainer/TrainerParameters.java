@@ -6,11 +6,12 @@ import lombok.With;
 public record TrainerParameters(
         int nofStepsMax,
         int nEpisodes,
-        double gamma
+        double gamma,
+        double tdMax
 ) {
 
     public static TrainerParameters defaultParams() {
-        return new TrainerParameters(1000,1000,0.99);
+        return new TrainerParameters(1000,1000,0.99,10d);
     }
 
 }

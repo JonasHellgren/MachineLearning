@@ -32,11 +32,11 @@ public class RecorderTrainingProgress {
     public List<Double> trajOf(String name) {
         return switch (name) {
             case "sumRewards" -> measuresList.stream().map(pm -> pm.sumRewards()).toList();
-            case "sumRewardsNotExploring" -> measuresList.stream().map(pm -> pm.sumRewardsNoExploring()).toList();
+            case "stateValuePos2Spd0" -> measuresList.stream().map(pm -> pm.stateValuePos2Spd0()).toList();
             case "nSteps" -> measuresList.stream().map(pm -> (double) pm.nSteps()).toList();
             case "tdError" -> measuresList.stream().map(pm -> pm.tdError()).toList();
             case "stdActor" -> measuresList.stream().map(pm -> pm.stdActor()).toList();
-            default -> throw new IllegalArgumentException("Invalid day");
+            default -> throw new IllegalArgumentException("Invalid measure");
         };
     }
 

@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
+import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.EpisodeCreator;
 import book_rl_explained.lunar_lander.helpers.ExperiencesInfo;
 import book_rl_explained.lunar_lander.helpers.ProgressMeasures;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.conditionals.Conditionals;
+import org.hellgren.utilities.math.MyMathUtils;
 
 import java.util.List;
 
@@ -30,13 +32,16 @@ public class TrainerLunar implements TrainerI {
     public void train() {
         var creator = new EpisodeCreator(dependencies);
         recorder.clear();
+        var agent = dependencies.agent();
+        log.info("start training");
+
         for (int i = 0; i < getnEpisodes(); i++) {
             var experiences = creator.getExperiences();
+          //  System.out.println("experiences created");
+          //  experiences.forEach(System.out::println);
             var pm=fitAgentFromNewExperiences(experiences);
-
-            var experiencesNotExploring = creator.getExperiencesNotExploring();
-            var sumRewardsNotExploring=ExperiencesInfo.of(experiencesNotExploring).sumRewards();
-            pm= pm.withSumRewardsNoExploring(sumRewardsNotExploring);
+            double stateValuePos2Spd0=agent.readCritic(StateLunar.of(2,0));
+            pm= pm.withStateValuePos2Spd0(stateValuePos2Spd0);
             recorder.add(pm);
             log(experiences, i);
         }
@@ -50,10 +55,12 @@ public class TrainerLunar implements TrainerI {
 
     public ProgressMeasures fitAgentFromNewExperiences(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
+        var tp = dependencies.trainerParameters();
         var tdList= Lists.<Double>newArrayList();
         var stdList= Lists.<Double>newArrayList();
         for (ExperienceLunar experience : experiences) {
-            double e = calculateTemporalDifferenceError(experience);
+            double e0 = calculateTemporalDifferenceError(experience);
+            double e= MyMathUtils.clip(e0, -tp.tdMax(), tp.tdMax());
             agent.fitActor(experience.state(),experience.action(), e);
             agent.fitCritic(experience.state(),e);
             tdList.add(Math.abs(e));

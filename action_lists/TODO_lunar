@@ -27,6 +27,7 @@ y och spd list från ep x
 AgentEvaluator - nFails etc för x antal körningar  x
 plot simulation  x
 fixa fail ratio - verkar ofta y maxa x
+clip i fitCritic
 value känns fel
 Ny klas för gradient
 hård begr std

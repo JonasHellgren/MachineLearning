@@ -1,11 +1,13 @@
 package book_rl_explained.lunar_lander.domain.environment;
 
+import lombok.With;
 import org.hellgren.utilities.list_arrays.ListCreator;
 
 import java.util.List;
 
 import static org.hellgren.utilities.list_arrays.ListCreator.createFromStartToEndWithNofItems;
 
+@With
 public record LunarProperties(
         double massLander,
         double dt,
