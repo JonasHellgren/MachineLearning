@@ -26,7 +26,8 @@ grid resolution  x
 y och spd list från ep x
 AgentEvaluator - nFails etc för x antal körningar  x
 plot simulation  x
-fixa fail ratio - verkar ofta y maxa
+fixa fail ratio - verkar ofta y maxa x
+value känns fel
 Ny klas för gradient
 hård begr std
 förstå clip log std

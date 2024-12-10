@@ -26,13 +26,11 @@ public class EnvironmentLunar implements EnvironmentI {
         double y = y0 + speed * properties.dt();
 
         var stateNew = StateLunar.of(y, speed);
-        double yFarOf = properties.yMax();
-        boolean isTerminal = y < properties.ySurface() || y > yFarOf;
-        boolean isFail = isTerminal && speed < -properties.spdMax() || y > yFarOf;
+
+        boolean isTerminal = isLanded(y) || isToHighPosition(y);
+        boolean isFail = isTerminal && isToHighSpeed(speed) || isToHighPosition(y);
         //double rewardFail = isFail ? props.rewardFail() : 0d;
-        double devSpd=Math.abs(speed) > Math.abs(properties.spdMax()) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
-        double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
-        double reward = properties.rewardStep() + rewardFail;
+        double reward = calculateReward(y,speed, isFail);
 
         return StepReturnLunar.builder()
                 .stateNew(stateNew)
@@ -40,6 +38,36 @@ public class EnvironmentLunar implements EnvironmentI {
                 .isTerminal(isTerminal)
                 .reward(reward)
                 .build();
+    }
+
+    private boolean isLanded(double y) {
+        return y < properties.ySurface();
+    }
+
+    private  boolean isToHighPosition(double y) {
+        return y > properties.yMax();
+    }
+
+
+    private double calculateReward( double y,double speed, boolean isFail) {
+        double devSpd= isToHighSpeed(speed) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
+        //double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
+        boolean isSuccess = isLanded(y) && !isToHighSpeed(speed);
+        double rewardSuccess= isSuccess? -properties.rewardFail(): 0d;
+        double rewardFail = isFail ? properties.rewardFail() : 0d;
+        return properties.rewardStep() + rewardFail+rewardSuccess;
+    }
+
+    private boolean isToHighSpeed(double speed) {
+        return Math.abs(speed) > Math.abs(properties.spdMax());
+    }
+
+
+    private double calculateRewardOld(double speed, boolean isFail) {
+        double devSpd= isToHighSpeed(speed) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
+        //double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
+        double rewardFail = isFail ? properties.rewardFail()*(0.1+devSpd/10) : 0d;
+        return properties.rewardStep() + rewardFail;
     }
 
     public double calculateAcceleration(double action) {

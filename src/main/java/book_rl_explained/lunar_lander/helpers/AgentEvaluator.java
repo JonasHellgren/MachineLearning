@@ -29,7 +29,7 @@ public class AgentEvaluator {
             var experiencesNotExploring = creator.getExperiencesNotExploring();
             ExperienceLunar endExperience = ExperiencesInfo.of(experiencesNotExploring).endExperience();
             Conditionals.executeIfTrue(endExperience.isFail(), () -> failCounter.increase());
-            Conditionals.executeIfTrue(!endExperience.isFail(), () -> experiencesNotExploring.forEach(System.out::println));
+            Conditionals.executeIfTrue(true, () -> experiencesNotExploring.forEach(System.out::println));
             evalCounter.increase();
         }
         return (double) failCounter.getCount() / nEvals;
