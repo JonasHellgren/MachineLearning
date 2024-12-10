@@ -25,6 +25,8 @@ plotta policy critic value
 grid resolution  x
 y och spd list från ep x
 AgentEvaluator - nFails etc för x antal körningar  x
+plot simulation  x
+fixa fail ratio - verkar ofta y maxa
 Ny klas för gradient
 hård begr std
 förstå clip log std

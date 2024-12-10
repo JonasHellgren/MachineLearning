@@ -45,8 +45,11 @@ public class RunnerTrainerLunar {
         //var agentPlotter= PlotterAgent.ofAgentParameters(trainerDependencies);
         agentPlotter.plotAll();
 
-        double fractionFails= new AgentEvaluator(trainerDependencies).evaluate(100);
+        AgentEvaluator evaluator = new AgentEvaluator(trainerDependencies);
+        double fractionFails= evaluator.fractionFails(100);
         System.out.println("fractionFails = " + fractionFails);
+        evaluator.plotSimulation();
+
 
     }
 }

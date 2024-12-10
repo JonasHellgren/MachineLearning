@@ -2,6 +2,7 @@ package book_rl_explained.lunar_lander.helpers;
 
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
 import lombok.AllArgsConstructor;
+import org.hellgren.utilities.list_arrays.ListCreator;
 import org.hellgren.utilities.list_arrays.MyListUtils;
 
 import java.util.List;
@@ -46,5 +47,23 @@ public class ExperiencesInfo {
 
     public Integer nSteps() {
         return experiences.size();
+    }
+
+    public List<Double> forces() {
+        return experiences.stream().map(e -> e.action()).toList();
+    }
+
+    public List<Double> speeds() {
+        return experiences.stream().map(e -> e.state().spd()).toList();
+    }
+
+    public List<Double> positions() {
+        return experiences.stream().map(e -> e.state().y()).toList();
+    }
+
+
+    public List<Double> times(double dt) {
+        int nSteps=nSteps();
+        return ListCreator.createFromStartWithStepWithNofItems(0, dt,nSteps);
     }
 }
