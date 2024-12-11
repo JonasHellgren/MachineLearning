@@ -66,7 +66,7 @@ public class EnvironmentLunar implements EnvironmentI {
         double rewardSuccess= isSuccess? -properties.rewardFail(): 0d;
         double rewardFail = isFail ? properties.rewardFail()*(1+0*devSpd/10) : 0d;
         double rewardPosAcc= MyMathUtils.isPos(acc) ? -Math.abs(acc) : 0d;
-        return properties.rewardStep() + rewardFail+rewardSuccess+rewardPosAcc;
+        return properties.rewardStep() + rewardFail+rewardSuccess; //+rewardPosAcc;
     }
 
     private boolean isToHighSpeed(double speed) {

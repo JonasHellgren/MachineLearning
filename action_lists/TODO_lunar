@@ -27,9 +27,12 @@ y och spd list från ep x
 AgentEvaluator - nFails etc för x antal körningar  x
 plot simulation  x
 fixa fail ratio - verkar ofta y maxa x
-clip i fitCritic
-value känns fel
+clip i fitCritic x
+value känns fel x
+filterera acc reward etc x
 Ny klas för gradient
+större spd
+prova olika n kluster
 hård begr std
 förstå clip log std
 clip hårdare

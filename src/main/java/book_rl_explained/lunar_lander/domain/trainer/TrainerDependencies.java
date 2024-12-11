@@ -5,8 +5,10 @@ import book_rl_explained.lunar_lander.domain.environment.EnvironmentI;
 import book_rl_explained.lunar_lander.domain.environment.StartStateSupplierI;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import lombok.Builder;
+import lombok.With;
 
 @Builder
+@With
 public record TrainerDependencies(
         AgentI agent,
         EnvironmentI environment,

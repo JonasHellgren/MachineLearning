@@ -6,7 +6,7 @@ import book_rl_explained.lunar_lander.domain.agent.*;
 import book_rl_explained.lunar_lander.domain.environment.*;
 import book_rl_explained.lunar_lander.domain.trainer.*;
 import book_rl_explained.lunar_lander.helpers.ExperiencesInfo;
-import book_rl_explained.lunar_lander.helpers.StartStateSupplierRandomHeightZeroSpeed;
+import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomHeightZeroSpeed;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
