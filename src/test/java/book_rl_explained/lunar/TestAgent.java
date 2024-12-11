@@ -38,7 +38,7 @@ class TestAgent {
     @Test
     void givenSameActionAsActorMean_thenCorrectGradientMeanAndLogStd() {
         double action = agent.readActor(stateRandomPosAndSpeed).mean();
-        MeanAndStd grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
+        var grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
         Assertions.assertEquals(0.0, grad.mean(), 0.0);
         Assertions.assertEquals(-ADV, grad.std(), 0.0);
     }
@@ -46,7 +46,7 @@ class TestAgent {
     @Test
     void givenLargerActionAsActorMean_thenCorrectGradientMeanAndLogStd() {
         double action = agent.readActor(stateRandomPosAndSpeed).mean() + 5;
-        MeanAndStd grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
+        var grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
         Assertions.assertTrue(grad.mean() > 0.0);
         Assertions.assertTrue(grad.std() > 0.0);
     }
@@ -54,7 +54,7 @@ class TestAgent {
     @Test
     void givenSmallerActionAsActorMean_thenCorrectGradientMeanAndLogStd() {
         double action = agent.readActor(stateRandomPosAndSpeed).mean() - 5;
-        MeanAndStd grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
+        var grad = agent.gradientMeanAndLogStd(stateRandomPosAndSpeed, action);
         Assertions.assertTrue(grad.mean() < 0.0);
         Assertions.assertTrue(grad.std() > 0.0);
     }

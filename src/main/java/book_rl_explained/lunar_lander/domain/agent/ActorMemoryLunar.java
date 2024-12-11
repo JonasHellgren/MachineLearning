@@ -27,37 +27,19 @@ public class ActorMemoryLunar {
         return new ActorMemoryLunar(memExp, memStd, updExp, updStd,p);
     }
 
-
-
     /**
      * Updates the actor's memory based on the provided state, advantage, and gradient.
      *
      * @param state the input state
      * @param adv the advantage value
-     * @param grad0 the gradient value, using logStd
+     * @param grad the gradient value, using logStd
      */
 
-    public void fit(StateLunar state, double adv, MeanAndStd grad0) {
+    public void fit(StateLunar state, double adv, GradientMeanStd grad) {
         var inputs = List.of(state.asList());
-        var grad=grad0;
-      //  System.out.println("grad0 = " + grad0);
-      // grad=grad.createStdFromLogStd();
-      //  System.out.println("grad 1= " + grad);
-        grad=grad.createClipped(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-      //  System.out.println("grad 2 = " + grad);
-
-      //  grad=grad.zeroGradIfValueNotInRange(grad,actorMeanAndStd(state), agentParameters);
-      //  System.out.println("grad 3= " + grad);
-
-  //      grad=grad.createLogStdFromStd();
-      //  System.out.println("grad 4= " + grad);
-
-
+        grad=grad.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
-
-        //System.out.println("grad0 = " + grad0+", grad = " + grad+", errorListStd"+errorListStd);
-
         updaterMean.updateWeightsFromErrors(inputs, errorListMean);
         updaterLogStd.updateWeightsFromErrors(inputs, errorListStd);
     }
@@ -71,14 +53,7 @@ public class ActorMemoryLunar {
 
     public MeanAndStd actorMeanAndStd(StateLunar state) {
         var in = state.asList();
-        double std0 = Math.exp(memoryLogStd.outPut(in));
-        var rLogStd=agentParameters.rangeLogStd();
-      //  double std= MyMathUtils.clip(std0, rLogStd.lowerEndpoint(), rLogStd.upperEndpoint());
-      //  double std=std0.createClipped(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-
-        var meanAndStd=MeanAndStd.of(memoryMean.outPut(in), Math.exp(memoryLogStd.outPut(in)));
-
-        return meanAndStd;
+        return MeanAndStd.of(memoryMean.outPut(in), Math.exp(memoryLogStd.outPut(in)));
     }
 
     public MeanAndStd actorMeanAndLogStd(StateLunar state) {

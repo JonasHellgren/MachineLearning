@@ -38,7 +38,7 @@ public class AgentLunar implements AgentI{
     }
 
     @Override
-    public MeanAndStd fitActor(StateLunar state, double action, double adv) {
+    public GradientMeanStd fitActor(StateLunar state, double action, double adv) {
         var grad = gradientMeanAndLogStd(state, action);
         actorMemory.fit(state, adv, grad);
         return grad;
@@ -60,12 +60,12 @@ public class AgentLunar implements AgentI{
     }
 
     @Override
-    public MeanAndStd gradientMeanAndLogStd(StateLunar state, double action) {
+    public GradientMeanStd gradientMeanAndLogStd(StateLunar state, double action) {
         var meanAndLogStd=actorMemory.actorMeanAndLogStd(state);
         var meanAndStd= readActor(state);
         double mean = meanAndStd.mean();
         double gradMean = gradCalc.gradientMean(action, mean, meanAndStd.std());
         double gradLogStd = gradCalc.gradientLogStd(action, mean, meanAndLogStd.std());
-        return MeanAndStd.of(gradMean, gradLogStd);
+        return GradientMeanStd.of(gradMean, gradLogStd);
     }
 }
