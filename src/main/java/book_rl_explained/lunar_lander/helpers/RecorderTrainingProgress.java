@@ -37,6 +37,8 @@ public class RecorderTrainingProgress {
                  filter(measuresList.stream().map(pm -> pm.sumRewards()).toList(), LENGTH_WINDOW);
             case "stateValuePos2Spd0" ->
                     measuresList.stream().map(pm -> pm.stateValuePos2Spd0()).toList();
+            case "stateValuePos5Spd2" ->
+                    measuresList.stream().map(pm -> pm.stateValuePos5Spd2()).toList();
             case "nSteps" ->
                     filter(measuresList.stream().map(pm -> (double) pm.nSteps()).toList(),LENGTH_WINDOW);
             case "tdError" ->

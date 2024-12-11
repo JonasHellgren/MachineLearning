@@ -52,6 +52,7 @@ public class PlotterProgressMeasures {
         List<XYChart> charts = new ArrayList<>();
         charts.add(createChart("acc reward", recorder.trajOf("sumRewards")));
         charts.add(createChart("stateValuePos2Spd0", recorder.trajOf("stateValuePos2Spd0")));
+        charts.add(createChart("stateValuePos5Spd2", recorder.trajOf("stateValuePos5Spd2")));
         charts.add(createChart("nSteps", recorder.trajOf("nSteps")));
         charts.add(createChart("tdErr", recorder.trajOf("tdError")));
         charts.add(createChart("stdActor", recorder.trajOf("stdActor")));

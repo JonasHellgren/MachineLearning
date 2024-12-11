@@ -13,7 +13,8 @@ public record ProgressMeasures(
         Integer nSteps,
         Double tdError,
         Double stdActor,
-        Double stateValuePos2Spd0) {
+        Double stateValuePos2Spd0,
+        Double stateValuePos5Spd2) {
 
 
     public static ProgressMeasures of(List<ExperienceLunar> experiences,

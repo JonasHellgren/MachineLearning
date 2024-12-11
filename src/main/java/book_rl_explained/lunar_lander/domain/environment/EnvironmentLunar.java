@@ -63,7 +63,7 @@ public class EnvironmentLunar implements EnvironmentI {
         double devSpd= isToHighSpeed(speed) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
         //double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
         boolean isSuccess = isLanded(y) && !isToHighSpeed(speed);
-        double rewardSuccess= isSuccess? -properties.rewardFail(): 0d;
+        double rewardSuccess= isSuccess? properties.rewardSuccess(): 0d;
         double rewardFail = isFail ? properties.rewardFail()*(1+0*devSpd/10) : 0d;
         double rewardPosAcc= MyMathUtils.isPos(acc) ? -Math.abs(acc) : 0d;
         return properties.rewardStep() + rewardFail+rewardSuccess; //+rewardPosAcc;

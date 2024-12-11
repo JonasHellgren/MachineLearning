@@ -39,7 +39,7 @@ class TestEnvironment {
 
         assertTrue(stepReturn.isTerminal());
         assertFalse(stepReturn.isFail());
-        assertEquals(properties.rewardStep(), stepReturn.reward(), TOL);
+        assertEquals(properties.rewardSuccess()+properties.rewardStep(), stepReturn.reward(), TOL);
     }
 
     @Test
