@@ -3,7 +3,6 @@ package book_rl_explained.lunar;
 import book_rl_explained.lunar_lander.domain.agent.AgentI;
 import book_rl_explained.lunar_lander.domain.agent.AgentLunar;
 import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
-import book_rl_explained.lunar_lander.domain.agent.MeanAndStd;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +21,7 @@ class TestAgent {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        var agentParameters = AgentParameters.defaultProps(lunarProperties);
+        var agentParameters = AgentParameters.defaultParams(lunarProperties);
         agent = AgentLunar.zeroWeights(agentParameters, lunarProperties);
         stateRandomPosAndSpeed = StateLunar.randomPosAndSpeed(lunarProperties);
         state0and0 = StateLunar.of(0, 0);

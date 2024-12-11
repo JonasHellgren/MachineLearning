@@ -30,7 +30,8 @@ fixa fail ratio - verkar ofta y maxa x
 clip i fitCritic x
 value känns fel x
 filterera acc reward etc x
-Ny klas för gradient
+Ny klas för gradient x
+banta AgentParameters x
 större spd
 prova olika n kluster
 hård begr std

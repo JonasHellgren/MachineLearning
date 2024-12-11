@@ -4,7 +4,6 @@ import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.agent.CriticMemoryLunar;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
-import org.hellgren.utilities.random.RandUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import super_vised.radial_basis.RadialBasis;
@@ -26,7 +25,7 @@ class TestAgentCriticMemory {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultProps(lunarProperties).withLearningRateCritic(LEARNING_RATE);
+        agentParameters = AgentParameters.defaultParams(lunarProperties).withLearningRateCritic(LEARNING_RATE);
         memory = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
     }
 

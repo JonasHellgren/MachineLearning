@@ -4,7 +4,6 @@ import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.agent.GradientMeanStd;
 import book_rl_explained.lunar_lander.domain.agent.MeanAndStd;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
-import com.google.common.collect.Range;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestMeanAndStd {
 
+    public static final int GRAD_MEAN_MAX = 1;
+    public static final int GRAD_STD_MAX = 1;
     LunarProperties lunarProperties;
     AgentParameters agentParameters;
 
      @BeforeEach
       void init() {
         lunarProperties=LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultProps(lunarProperties)
-                .withGradMeanMax(1).withGradStdMax(1)
-                .withRangeMean(Range.closed(-1d,1d))
-                .withRangeLogStd(Range.closed(0d,1d));
+        agentParameters = AgentParameters.defaultParams(lunarProperties)
+                .withGradMeanMax(GRAD_MEAN_MAX).withGradStdMax(GRAD_STD_MAX);
       }
 
     @Test
@@ -47,8 +46,8 @@ class TestMeanAndStd {
         GradientMeanStd gradMeanAndStd = GradientMeanStd.of(10.0, 20.0);
         GradientMeanStd clipped = gradMeanAndStd.clip(
                 agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-        assertEquals(1.0, clipped.mean(), 0.0);
-        assertEquals(1.0, clipped.std(), 0.0);
+        assertEquals(GRAD_MEAN_MAX, clipped.mean(), 0.0);
+        assertEquals(GRAD_STD_MAX, clipped.std(), 0.0);
     }
 
 
