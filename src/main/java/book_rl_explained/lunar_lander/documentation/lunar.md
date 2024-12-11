@@ -6,17 +6,17 @@ y,v
 
 Height over ground and speed relative ground
 ### Action set
--1<action<1
+-foreMax<action<foreMax
 
 Applied force F
 ### Terminal states
-y<ySurface	
+isLanded(y) or isToHighPosition(y)
 
 Touching ground
 ### Fail states
-(y<ySurface) and (v>vMax)	
+isLanded(y)  and isToHighSpeed(speed) or isToHighPosition(y)
 
-Hitting ground to hard
+Hitting ground to hard or outside of upper bound
 
 
 ### Physics

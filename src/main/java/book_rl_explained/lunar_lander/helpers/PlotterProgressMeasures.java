@@ -4,21 +4,17 @@ import book_rl_explained.lunar_lander.domain.trainer.TrainerLunar;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerParameters;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.conditionals.Conditionals;
 import org.hellgren.utilities.list_arrays.ListCreator;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import static org.knowm.xchart.BitmapEncoder.saveBitmapWithDPI;
 
 @Log
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,7 +23,7 @@ public class PlotterProgressMeasures {
     public static final int WIDTH = 200;
     public static final int HEIGHT = 150;
     public static final int N_XTICK_INTERVALS = 5;
-    public static final int MIN_N_EPIS_FOR_CLUTTER = 300;
+    public static final int MIN_N_EPIS_FOR_CLUTTER = 500;
 
     RecorderTrainingProgress recorder;
     TrainerParameters trainerParameters;
@@ -59,37 +55,16 @@ public class PlotterProgressMeasures {
         var frame= new SwingWrapper<>(charts).displayChartMatrix();
         frame.setTitle(title);
     }
-/*
 
-    @SneakyThrows
-    public void saveCharts(String path) {
-        var chartAccRew=createChart("Acc. reward", doubles2NumList(sumRewardsTraj()));
-        saveBitmapWithDPI(chartAccRew, path+"/"+"accReward", FORMAT, DPI);
-        var chartCriticLoss=createChart("Critic loss", doubles2NumList(criticLossTraj()));
-        saveBitmapWithDPI(chartCriticLoss, path+"/"+"criticLoss", FORMAT, DPI);
-    }
-*/
-
-
-    private List<Number> ints2NumList(List<Integer> intList) {
-        return intList.stream().map(i -> (Number) i).toList();
-    }
-
-    private List<Number> doubles2NumList(List<Double> doubleList) {
-        return doubleList.stream().map(i -> (Number) i).toList();
-    }
-
-    @NotNull
     private  XYChart createChart(String name, List<Double> yData) {
-        XYChart chart = new XYChartBuilder()
+        var chart = new XYChartBuilder()
                 .xAxisTitle("Episode").yAxisTitle(name).width(WIDTH).height(HEIGHT).build();
-        List<Double> xList= ListCreator.createFromStartWithStepWithNofItems(0d,1d,yData.size());
-        XYSeries series = chart.addSeries(name, xList, yData);
+        var xList= ListCreator.createFromStartWithStepWithNofItems(0d,1d,yData.size());
+        var series = chart.addSeries(name, xList, yData);
         series.setMarker(SeriesMarkers.NONE);
         styleChart(chart);
         return chart;
     }
-
 
     private void styleChart(XYChart chart) {
         var styler = chart.getStyler();
@@ -112,6 +87,5 @@ public class PlotterProgressMeasures {
         };
         chart.setCustomXAxisTickLabelsFormatter(tickLabelsFormatter);
     }
-
 
 }

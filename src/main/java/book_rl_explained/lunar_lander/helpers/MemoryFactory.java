@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 import super_vised.radial_basis.KernelProperties;
 import super_vised.radial_basis.RadialBasis;
 
-import java.util.List;
-
-import static org.hellgren.utilities.list_arrays.ListCreator.createFromStartToEndWithNofItems;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemoryFactory {
 

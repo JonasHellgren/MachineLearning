@@ -19,10 +19,10 @@ public class AgentLunar implements AgentI{
 
     public static AgentLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var actMemory = ActorMemoryLunar.create(p, ep);
-        var critMemory = CriticMemoryLunar.zeroWeights(p, ep);
+        var criticMemory = CriticMemoryLunar.zeroWeights(p, ep);
         var sampler = new NormDistributionSampler();
         var gc=new NormalDistributionGradientCalculator();
-        return new AgentLunar(p,actMemory, critMemory,sampler,gc);
+        return new AgentLunar(p,actMemory, criticMemory,sampler,gc);
     }
 
     @Override
@@ -33,15 +33,14 @@ public class AgentLunar implements AgentI{
 
     @Override
     public double chooseActionNoExploration(StateLunar state) {
-        var meanAndStd= readActor(state);
-        return sampler.sampleFromNormDistribution(meanAndStd.mean(),0);
+        var meanStd= readActor(state);
+        return sampler.sampleFromNormDistribution(meanStd.mean(),0);
     }
 
     @Override
-    public GradientMeanStd fitActor(StateLunar state, double action, double adv) {
+    public void fitActor(StateLunar state, double action, double adv) {
         var grad = gradientMeanAndLogStd(state, action);
         actorMemory.fit(state, adv, grad);
-        return grad;
     }
 
     @Override
@@ -55,7 +54,7 @@ public class AgentLunar implements AgentI{
     }
 
     @Override
-    public MeanAndStd readActor(StateLunar state) {
+    public MeanStd readActor(StateLunar state) {
         return actorMemory.actorMeanAndStd(state);
     }
 

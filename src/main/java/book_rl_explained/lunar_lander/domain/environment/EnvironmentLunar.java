@@ -25,22 +25,16 @@ public class EnvironmentLunar implements EnvironmentI {
 
     @Override
     public StepReturnLunar step(StateLunar state, double action) {
+        double dt = properties.dt();
         double speed0 = state.variables.spd();
         double y0 = state.variables.y();
         double acc = calculateAcceleration(action);
-        double speed = speed0 + acc * properties.dt();
-        double y = y0 + speed * properties.dt();
-
+        double speed = speed0 + acc * dt;
+        double y = y0 + speed * dt;
         var stateNew = StateLunar.of(y, speed);
         boolean isTerminal = isLanded(y) || isToHighPosition(y);
-        boolean isFail = isTerminal && isToHighSpeed(speed) || isToHighPosition(y);
-
-        //double rewardFail = isFail ? props.rewardFail() : 0d;
-
-       /* boolean isTerminal = isLanded(y);
-        boolean isFail = isTerminal && isToHighSpeed(speed);
-*/
-        double reward = calculateReward(y,speed, acc, isFail);
+        boolean isFail = isLanded(y)  && isToHighSpeed(speed) || isToHighPosition(y);
+        double reward = calculateReward(y, speed, isFail);
 
         return StepReturnLunar.builder()
                 .stateNew(stateNew)
@@ -54,37 +48,26 @@ public class EnvironmentLunar implements EnvironmentI {
         return y < properties.ySurface();
     }
 
-    private  boolean isToHighPosition(double y) {
+    private boolean isToHighPosition(double y) {
         return y > properties.yMax();
     }
 
 
-    private double calculateReward( double y,double speed, double acc, boolean isFail) {
-        double devSpd= isToHighSpeed(speed) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
-        //double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
+    private double calculateReward(double y, double speed,  boolean isFail) {
         boolean isSuccess = isLanded(y) && !isToHighSpeed(speed);
-        double rewardSuccess= isSuccess? properties.rewardSuccess(): 0d;
-        double rewardFail = isFail ? properties.rewardFail()*(1+0*devSpd/10) : 0d;
-        double rewardPosAcc= MyMathUtils.isPos(acc) ? -Math.abs(acc) : 0d;
-        return properties.rewardStep() + rewardFail+rewardSuccess; //+rewardPosAcc;
+        double rewardSuccess = isSuccess ? properties.rewardSuccess() : 0d;
+        double rewardFail = isFail ? properties.rewardFail() : 0d;
+        return properties.rewardStep() + rewardFail + rewardSuccess;
     }
 
     private boolean isToHighSpeed(double speed) {
         return Math.abs(speed) > Math.abs(properties.spdMax());
     }
 
-
-    private double calculateRewardOld(double speed, boolean isFail) {
-        double devSpd= isToHighSpeed(speed) ? Math.abs(Math.abs(speed) - Math.abs(properties.spdMax())):0;
-        //double rewardFail = isFail ? properties.rewardFail()*(0+devSpd/10) : 0d;
-        double rewardFail = isFail ? properties.rewardFail()*(0.1+devSpd/10) : 0d;
-        return properties.rewardStep() + rewardFail;
-    }
-
     public double calculateAcceleration(double action) {
         double m = properties.massLander();
-        double forceInNewton=getForceInNewton(action);
-        double force= MathUtils.clip(forceInNewton, -properties.forceMax(), properties.forceMax());
+        double forceInNewton = getForceInNewton(action);
+        double force = MathUtils.clip(forceInNewton, -properties.forceMax(), properties.forceMax());
         return (force - m * properties.g()) / m;
     }
 
@@ -95,7 +78,6 @@ public class EnvironmentLunar implements EnvironmentI {
     public double getForceInNewton(double forceInKiloNewton) {
         return MyUnitConverter.convertForce(forceInKiloNewton, NonSIUnits.KILO_NEWTON, Units.NEWTON);
     }
-
 
 
 }

@@ -58,22 +58,19 @@ public class PlotterAgent {
 
     public void plotExpectedForce() {
         Function<StateLunar,Double> func = s -> dependencies.agent().readActor(s).mean();
-        double[][] data = getData(func);
-        showData(settings.titleForce(), data);
+        showData(settings.titleForce(), getData(func));
     }
 
     public void plotExpectedAcceleration() {
         var env=(EnvironmentLunar) dependencies.environment();
         Function<StateLunar,Double> func = s ->
                 env.calculateAcceleration(dependencies.agent().readActor(s).mean());
-        double[][] data = getData(func);
-        showData(settings.titleAcc, data);
+        showData(settings.titleAcc, getData(func));
     }
 
     public void plotValue() {
         Function<StateLunar,Double> func = s -> dependencies.agent().readCritic(s);
-        double[][] data = getData(func);
-        showData(settings.titleValue, data);
+        showData(settings.titleValue, getData(func));
     }
 
     private double[][] getData(Function<StateLunar,Double> func) {

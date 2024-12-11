@@ -33,6 +33,4 @@ public class CriticMemoryLunar {
         updater.updateWeightsFromErrors(inputs, errorList);
     }
 
-
-
 }

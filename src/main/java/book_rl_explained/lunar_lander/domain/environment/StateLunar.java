@@ -39,7 +39,6 @@ public class StateLunar {
         return new StateLunar(variables);
     }
 
-
     private static double getRandSpd(LunarProperties ep) {
         return RandUtils.getRandomDouble(-ep.spdMax(), ep.spdMax());
     }

@@ -40,7 +40,6 @@ public class ExperiencesInfo {
         return discountedElements(returns,gamma);
     }
 
-
     public Double sumRewards() {
         return MyListUtils.sumList(rewards());
     }

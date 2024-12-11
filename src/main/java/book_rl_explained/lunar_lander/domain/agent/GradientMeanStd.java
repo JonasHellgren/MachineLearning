@@ -6,10 +6,10 @@ import org.hellgren.utilities.math.MyMathUtils;
  * Represents a gradient of the mean and standard deviation of a normal distribution.
  */
 
-public record GradientMeanStd(MeanAndStd meanAndStd) {
+public record GradientMeanStd(MeanStd meanStd) {
 
     public static GradientMeanStd of(double gradMean, double gradLogStd) {
-        return new GradientMeanStd(new MeanAndStd(gradMean, gradLogStd));
+        return new GradientMeanStd(new MeanStd(gradMean, gradLogStd));
     }
 
     /**
@@ -22,15 +22,15 @@ public record GradientMeanStd(MeanAndStd meanAndStd) {
 
     public GradientMeanStd clip(double meanMax, double stdMax) {
         return GradientMeanStd.of(
-                MyMathUtils.clip(meanAndStd.mean(), -meanMax, meanMax),
-                MyMathUtils.clip(meanAndStd.std(), -stdMax, stdMax));
+                MyMathUtils.clip(meanStd.mean(), -meanMax, meanMax),
+                MyMathUtils.clip(meanStd.std(), -stdMax, stdMax));
     }
 
     public double mean() {
-        return meanAndStd.mean();
+        return meanStd.mean();
     }
 
     public double std() {
-        return meanAndStd.std();
+        return meanStd.std();
     }
 }

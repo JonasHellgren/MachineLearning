@@ -51,14 +51,14 @@ public class ActorMemoryLunar {
      * @return a MeanAndStd object containing the mean and standard deviation of the actor's output
      */
 
-    public MeanAndStd actorMeanAndStd(StateLunar state) {
+    public MeanStd actorMeanAndStd(StateLunar state) {
         var in = state.asList();
-        return MeanAndStd.of(memoryMean.outPut(in), Math.exp(memoryLogStd.outPut(in)));
+        return MeanStd.of(memoryMean.outPut(in), Math.exp(memoryLogStd.outPut(in)));
     }
 
-    public MeanAndStd actorMeanAndLogStd(StateLunar state) {
+    public MeanStd actorMeanAndLogStd(StateLunar state) {
         var in = state.asList();
-        return MeanAndStd.of(memoryMean.outPut(in), memoryLogStd.outPut(in));
+        return MeanStd.of(memoryMean.outPut(in), memoryLogStd.outPut(in));
     }
 
 }

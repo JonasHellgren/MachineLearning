@@ -2,14 +2,14 @@ package book_rl_explained.lunar;
 
 import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.agent.GradientMeanStd;
-import book_rl_explained.lunar_lander.domain.agent.MeanAndStd;
+import book_rl_explained.lunar_lander.domain.agent.MeanStd;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestMeanAndStd {
+class TestMeanStd {
 
     public static final int GRAD_MEAN_MAX = 1;
     public static final int GRAD_STD_MAX = 1;
@@ -27,18 +27,18 @@ class TestMeanAndStd {
     void testOfMethod() {
         double mean = 10.0;
         double std = 5.0;
-        MeanAndStd meanAndStd = MeanAndStd.of(mean, std);
-        assertEquals(mean, meanAndStd.mean());
-        assertEquals(std, meanAndStd.std());
+        MeanStd meanStd = MeanStd.of(mean, std);
+        assertEquals(mean, meanStd.mean());
+        assertEquals(std, meanStd.std());
     }
 
     @Test
     void testEquality() {
         double mean = 10.0;
         double std = 5.0;
-        MeanAndStd meanAndStd1 = new MeanAndStd(mean, std);
-        MeanAndStd meanAndStd2 = new MeanAndStd(mean, std);
-        assertEquals(meanAndStd1, meanAndStd2);
+        MeanStd meanStd1 = new MeanStd(mean, std);
+        MeanStd meanStd2 = new MeanStd(mean, std);
+        assertEquals(meanStd1, meanStd2);
     }
 
     @Test

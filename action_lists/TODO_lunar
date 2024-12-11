@@ -32,12 +32,13 @@ value känns fel x
 filterera acc reward etc x
 Ny klas för gradient x
 banta AgentParameters x
+clean up x
+clip foreMax i env
 större spd
 prova olika n kluster
 hård begr std
 förstå clip log std
 clip hårdare
 
-clean up
 
 

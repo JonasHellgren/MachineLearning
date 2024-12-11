@@ -37,8 +37,6 @@ public class TrainerLunar implements TrainerI {
 
         for (int i = 0; i < getnEpisodes(); i++) {
             var experiences = creator.getExperiences();
-          //  System.out.println("experiences created");
-          //  experiences.forEach(System.out::println);
             var pm=fitAgentFromNewExperiences(experiences);
             pm = addtMeasures(agent, pm);
             recorder.add(pm);

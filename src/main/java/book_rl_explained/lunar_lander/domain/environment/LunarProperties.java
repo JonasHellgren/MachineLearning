@@ -11,12 +11,12 @@ import static org.hellgren.utilities.list_arrays.ListCreator.createFromStartToEn
 public record LunarProperties(
         double massLander,
         double dt,
-        double g,  //constant of gravity on moon
+        double g,  //constant of gravity at moon
         double forceMax,
         double ySurface,
         double yMax,
         double spdMax,
-        double rewardFail,  //-100
+        double rewardFail,
         double rewardSuccess,
         double rewardStep) {
 
