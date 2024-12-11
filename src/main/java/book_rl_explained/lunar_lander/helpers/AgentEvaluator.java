@@ -17,6 +17,11 @@ public class AgentEvaluator {
 
     TrainerDependencies dependencies;
 
+    public static AgentEvaluator of(TrainerDependencies dependencies) {
+        return new AgentEvaluator(dependencies);
+    }
+
+
     public double fractionFails(int nEvals) {
         var creator = new EpisodeCreator(dependencies);
         var failCounter = new Counter();
@@ -40,7 +45,7 @@ public class AgentEvaluator {
         var forces = ExperiencesInfo.of(experiencesNotExploring).forces();
         var positions = ExperiencesInfo.of(experiencesNotExploring).positions();
         var times = ExperiencesInfo.of(experiencesNotExploring).times(ep.dt());
-        XYChart chart = new XYChartBuilder().xAxisTitle("X").yAxisTitle("Y").width(600).height(400).build();
+        XYChart chart = new XYChartBuilder().xAxisTitle("Time(s)").yAxisTitle("").width(600).height(400).build();
         addSeries(chart,times, forces, "Force(kN)");
         addSeries(chart,times, speeds, "Speed(m/s)");
         addSeries(chart,times, positions, "Pos(m)");
@@ -48,8 +53,8 @@ public class AgentEvaluator {
 }
 
     private void addSeries(XYChart chart, List<Double> times, List<Double> values, String measure) {
-        chart.getStyler().setYAxisMin(-10d);
-        chart.getStyler().setYAxisMax(10d);
+        chart.getStyler().setYAxisMin(-2d);
+        chart.getStyler().setYAxisMax(6d);
         XYSeries series = chart.addSeries(measure, times, values);
         series.setMarker(SeriesMarkers.NONE);
     }

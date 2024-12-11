@@ -11,7 +11,7 @@ public record TrainerParameters(
 ) {
 
     public static TrainerParameters defaultParams() {
-        return new TrainerParameters(1000,1000,0.99,10d);
+        return new TrainerParameters(1000,30,0.99,10d);
     }
 
 }

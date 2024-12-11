@@ -33,12 +33,10 @@ filterera acc reward etc x
 Ny klas för gradient x
 banta AgentParameters x
 clean up x
-clip foreMax i env
-större spd
+clip foreMax i env  x
+nDigits x
+större spd x
 prova olika n kluster
-hård begr std
-förstå clip log std
-clip hårdare
-
+MultiStepTrainerLunar
 
 

@@ -21,10 +21,10 @@ public record AgentParameters(
 
     public static final int N_KERNELS_Y = 11;
     public static final int N_KERNELS_SPD = 11;
-    public static final double LEARNING_RATE_CRITIC = 0.01;
-    public static final double LEARNING_RATE_ACTOR = 0.001;
+    public static final double LEARNING_RATE_CRITIC = 0.1;
+    public static final double LEARNING_RATE_ACTOR = 0.01;
     public static final double GRAD_MEAN_MAX = 0.1;
-    public static final double GRAD_STD_MAX = 0.1;
+    public static final double GRAD_STD_MAX = 0.01;
     public static final double INIT_WEIGHT_LOG_STD = 0d;
 
     public static AgentParameters defaultParams(LunarProperties ep) {

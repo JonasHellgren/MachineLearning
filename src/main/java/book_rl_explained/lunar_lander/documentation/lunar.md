@@ -1,6 +1,8 @@
 
 # Lunar lander
 
+![lunar.png](pics%2Flunar.png)
+
 ### State variables
 y,v	 
 

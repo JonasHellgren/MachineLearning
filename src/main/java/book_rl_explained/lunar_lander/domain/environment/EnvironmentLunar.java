@@ -61,7 +61,7 @@ public class EnvironmentLunar implements EnvironmentI {
     }
 
     private boolean isToHighSpeed(double speed) {
-        return Math.abs(speed) > Math.abs(properties.spdMax());
+        return Math.abs(speed) > Math.abs(properties.spdLimitCrash());
     }
 
     public double calculateAcceleration(double action) {

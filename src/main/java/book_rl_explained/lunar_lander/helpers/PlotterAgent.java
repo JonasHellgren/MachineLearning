@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.hellgren.plotters.plotting_2d.SwingHeatMapPlotter;
 import org.hellgren.utilities.list_arrays.List2ArrayConverter;
+
 import java.util.function.Function;
 
 @AllArgsConstructor
@@ -17,7 +18,8 @@ public class PlotterAgent {
     public record Settings(
             int nY,
             int nSpd,
-            int nDigits,
+            int nDigitsAxisLabels,
+            String valueFormat,
             int plotWidth,
             int plotHeight,
             String titleForce,
@@ -27,7 +29,9 @@ public class PlotterAgent {
 
         //default values
         public static SettingsBuilder builder() {
-            return new SettingsBuilder().nDigits(1).plotWidth(800).plotHeight(500)
+            return new SettingsBuilder().
+                    nDigitsAxisLabels(1).valueFormat("%.1f").
+                    plotWidth(500).plotHeight(300)
                     .titleForce("Force").titleAcc("Acc").titleValue("Value");
         }
 
@@ -76,6 +80,7 @@ public class PlotterAgent {
     private double[][] getData(Function<StateLunar,Double> func) {
         var yList = dependencies.environment().getProperties().ySpace(settings.nY());
         var spdList = dependencies.environment().getProperties().spdSpace(settings.nSpd());
+        System.out.println("spdList = " + spdList);
         double[][] data = new double[yList.size()][spdList.size()];
         for (double y : yList) {
             for (double spd : spdList) {
@@ -92,8 +97,9 @@ public class PlotterAgent {
         var spdList = dependencies.environment().getProperties().spdSpace(settings.nSpd());
         var shower = SwingHeatMapPlotter.builder()
                 .plotWidth(settings.plotWidth).plotHeight(settings.plotHeight)
-                .xAxisLabels(List2ArrayConverter.convertListToStringArr(spdList, settings.nDigits()))
-                .yAxisLabels(List2ArrayConverter.convertListToStringArr(yList, settings.nDigits()))
+                .xAxisLabels(List2ArrayConverter.convertListToStringArr(spdList, settings.nDigitsAxisLabels()))
+                .yAxisLabels(List2ArrayConverter.convertListToStringArr(yList, settings.nDigitsAxisLabels()))
+                .valueFormat(settings.valueFormat)
                 .showLabels(true)
                 .build();
         shower.showHeatMap(data, title);
