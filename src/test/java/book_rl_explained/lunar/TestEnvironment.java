@@ -22,7 +22,7 @@ class TestEnvironment {
 
     @Test
     void testStep_NotTerminal_NotFail() {
-        var state = StateLunar.of(10.0, 0.0);
+        var state = StateLunar.of(4.0, 0.0);
         double action = 0.0;
         var stepReturn = environment.step(state, action);
 
@@ -44,8 +44,8 @@ class TestEnvironment {
 
     @Test
     void testStep_Terminal_Fail() {
-        var state = StateLunar.of(1.0, 0.0);
-        double action = -properties.forceMax();
+        var state = StateLunar.of(1.0, -5.0);
+        double action = 0;
         var stepReturn = environment.step(state, action);
         assertTrue(stepReturn.isTerminal());
         assertTrue(stepReturn.isFail());

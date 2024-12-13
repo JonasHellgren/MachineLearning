@@ -34,7 +34,7 @@ public class RunnerTrainerLunar {
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
         var p = AgentParameters.defaultParams(ep);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(5000).withGamma(0.999);
+        var tp = TrainerParameters.defaultParams().withNEpisodes(50000).withGamma(0.99);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
