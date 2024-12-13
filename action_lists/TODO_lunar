@@ -39,11 +39,10 @@ större spd x
 MultiStepTrainerLunar x
 TestMultiStepResultsGenerator x
 cleaup up MultiStepResultsGenerator x
+PlotterProgressMeasures plot - ersätt många charts.add x
+RecorderTrainingProgress ersätt switch med map ngt x
 
-
-PlotterProgressMeasures plot - ersätt många charts.add
-RecorderTrainingProgress ersätt switch med map ngt
-
+RunnerPlotTrainedCriticMemory
 TestAgentCriticMemory mer tester
 
 när tid:

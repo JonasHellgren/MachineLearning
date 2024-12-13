@@ -1,6 +1,5 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
-import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import com.google.common.collect.Lists;
 import lombok.Builder;
 
@@ -9,7 +8,7 @@ import java.util.List;
 @Builder
 public record MultiStepResults(
         int nExperiences,  //equal to length of below lists
-        List<MultiStepResultItem> results
+        List<MultiStepResult> results
 ) {
 
     public static MultiStepResults create(int nExp) {
@@ -19,7 +18,7 @@ public record MultiStepResults(
                 .build();
     }
 
-    public void add(MultiStepResultItem experience) {
+    public void add(MultiStepResult experience) {
         results.add(experience);
     }
 
@@ -27,7 +26,7 @@ public record MultiStepResults(
         return nExperiences == 0;
     }
 
-    public MultiStepResultItem experienceAtStep(int step) {
+    public MultiStepResult experienceAtStep(int step) {
         return results.get(step);
     }
 
@@ -49,7 +48,7 @@ public record MultiStepResults(
         var sb=new StringBuilder();
         String lineSep = System.lineSeparator();
         sb.append("nExperiences=").append(nExperiences).append(lineSep);
-        for (MultiStepResultItem resultItem:results) {
+        for (MultiStepResult resultItem:results) {
             sb.append(resultItem).append(lineSep);
         }
         return sb.toString();

@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.reinforcement_learning.MyRewardListUtils;
 import book_rl_explained.lunar_lander.helpers.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class MultiStepResultsGenerator {
         return results;
     }
 
-    private MultiStepResultItem createResultAtTime(int time, EpisodeInfo informer) {
+    private MultiStepResult createResultAtTime(int time, EpisodeInfo informer) {
         var experience = informer.experienceAtTime(time);
         int nExperiences = informer.size();
         var parameters = dependencies.trainerParameters();
@@ -61,7 +60,7 @@ public class MultiStepResultsGenerator {
         StateLunar stateFuture = getStateFuture(informer, isEndStateOutSide, idxEnd);
         double valueTarget = calculator.valueOfTakingAction(isEndStateOutSide, stateFuture, rewardSum);
         double advantage = calculator.advantage(dependencies.agent(), experience.state(), valueTarget);
-        return MultiStepResultItem.builder()
+        return MultiStepResult.builder()
                 .state(experience.state())
                 .action(experience.action())
                 .sumRewards(rewardSum)

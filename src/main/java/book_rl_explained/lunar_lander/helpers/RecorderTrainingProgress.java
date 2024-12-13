@@ -1,12 +1,15 @@
 package book_rl_explained.lunar_lander.helpers;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hellgren.utilities.math.MovingAverage;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -31,26 +34,26 @@ public class RecorderTrainingProgress {
         return measuresList.isEmpty();
     }
 
-    public List<Double> trajOf(String name) {
-        return switch (name) {
-            case "sumRewards" ->
-                 filter(measuresList.stream().map(pm -> pm.sumRewards()).toList(), LENGTH_WINDOW);
-            case "stateValuePos2Spd0" ->
-                    measuresList.stream().map(pm -> pm.stateValuePos2Spd0()).toList();
-            case "stateValuePos5Spd2" ->
-                    measuresList.stream().map(pm -> pm.stateValuePos5Spd2()).toList();
-            case "nSteps" ->
-                    filter(measuresList.stream().map(pm -> (double) pm.nSteps()).toList(),LENGTH_WINDOW);
-            case "tdError" ->
-                    filter(measuresList.stream().map(pm -> pm.tdError()).toList(), LENGTH_WINDOW);
-            case "stdActor" ->
-                    measuresList.stream().map(pm -> pm.stdActor()).toList();
-            default -> throw new IllegalArgumentException("Invalid measure");
-        };
+    public List<Double> trajectory(String name) {
+        var functionHashMap = getStringFunctionHashMap();
+        Preconditions.checkArgument(functionHashMap.containsKey(name), "Unknown name: " + name);
+        return filter(measuresList.stream().map((functionHashMap.get(name))).toList());
     }
 
-    private static List<Double> filter(List<Double> inList, int lengthWindow) {
-        MovingAverage movingAverage = new MovingAverage(lengthWindow, inList);
+    @NotNull
+    private static HashMap<String, Function<ProgressMeasures, Double>> getStringFunctionHashMap() {
+        HashMap<String, Function<ProgressMeasures, Double>> map=new HashMap<>();
+        map.put("sumRewards",pm -> pm.sumRewards());
+        map.put("stateValuePos2Spd0",ProgressMeasures::stateValuePos2Spd0);
+        map.put("stateValuePos5Spd2",ProgressMeasures::stateValuePos5Spd2);
+        map.put("nSteps",pm -> (double) pm.nSteps());
+        map.put("tdError",ProgressMeasures::tdError);
+        map.put("stdActor",ProgressMeasures::stdActor);
+        return map;
+    }
+
+    private static List<Double> filter(List<Double> inList) {
+        MovingAverage movingAverage = new MovingAverage(LENGTH_WINDOW, inList);
         return movingAverage.getFiltered();
     }
 

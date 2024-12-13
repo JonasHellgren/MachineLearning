@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.NonNull;
 
 @Builder
-public record MultiStepResultItem (
+public record MultiStepResult(
         StateLunar state,
         double action,
         Double sumRewards,
@@ -16,12 +16,12 @@ public record MultiStepResultItem (
 ) {
 
     @NonNull
-    public static MultiStepResultItem core(StateLunar state,
-                                                            double action,
-                                                            Double sumRewards,
-                                                            StateLunar stateFut,
-                                                            Boolean isStateFutureTerminalOrNotPresent) {
-        return MultiStepResultItem.builder()
+    public static MultiStepResult core(StateLunar state,
+                                       double action,
+                                       Double sumRewards,
+                                       StateLunar stateFut,
+                                       Boolean isStateFutureTerminalOrNotPresent) {
+        return MultiStepResult.builder()
                 .state(state)
                 .action(action)
                 .sumRewards(sumRewards)

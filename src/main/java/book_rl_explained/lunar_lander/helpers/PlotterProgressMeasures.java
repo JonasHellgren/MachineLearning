@@ -2,6 +2,7 @@ package book_rl_explained.lunar_lander.helpers;
 
 import book_rl_explained.lunar_lander.domain.trainer.TrainerLunarSingleStep;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerParameters;
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
@@ -12,7 +13,6 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -41,17 +41,11 @@ public class PlotterProgressMeasures {
 
 
     public void plot(String title) {
-        if (recorder.isEmpty()) {
-            log.warning("No training progress data to plot");
-            return;
-        }
-        List<XYChart> charts = new ArrayList<>();
-        charts.add(createChart("acc reward", recorder.trajOf("sumRewards")));
-        charts.add(createChart("valuePos2Spd0", recorder.trajOf("stateValuePos2Spd0")));
-        charts.add(createChart("valuePos5Spd2", recorder.trajOf("stateValuePos5Spd2")));
-        charts.add(createChart("nSteps", recorder.trajOf("nSteps")));
-        charts.add(createChart("tdErr", recorder.trajOf("tdError")));
-        charts.add(createChart("stdActor", recorder.trajOf("stdActor")));
+        Preconditions.checkArgument(!recorder.isEmpty(), "No training progress data to plot");
+        var measures=List.of("sumRewards","stateValuePos2Spd0","stateValuePos5Spd2","nSteps","tdError","stdActor");
+        var charts = measures.stream()
+                .map(measure -> createChart(measure, recorder.trajectory(measure)))
+                .toList();
         var frame= new SwingWrapper<>(charts).displayChartMatrix();
         frame.setTitle(title);
     }
