@@ -5,11 +5,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math3.util.Pair;
 import org.hellgren.utilities.list_arrays.MyListUtils;
-import org.hellgren.utilities.math.MyMathUtils;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EpisodeInfo {
@@ -27,7 +24,7 @@ public class EpisodeInfo {
     }
 
     public int nIsTerminal() {
-        return (int) experiences.stream().filter(e -> e.isTerminal()).count();
+        return (int) experiences.stream().filter(e -> e.isTransitionToTerminal()).count();
     }
 
 /*

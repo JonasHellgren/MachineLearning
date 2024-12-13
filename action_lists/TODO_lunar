@@ -37,10 +37,14 @@ clip foreMax i env  x
 nDigits x
 större spd x
 MultiStepTrainerLunar
+TestMultiStepResultsGenerator
+
+EvaluateResult är nog onödig - slå ihop createRes och evaluateRewardsSum
 
 PlotterProgressMeasures plot - ersätt många charts.add
 RecorderTrainingProgress ersätt switch med map ngt
 
+TestAgentCriticMemory mer tester
 
 när tid:
 prova olika n kluster

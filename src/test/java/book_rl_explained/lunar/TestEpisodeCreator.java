@@ -23,7 +23,7 @@ class TestEpisodeCreator {
         var trainerDependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.createDefault())
-                .trainerParameters(TrainerParameters.defaultParams())
+                .trainerParameters(TrainerParameters.newDefault())
                 .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
                 .build();
         creator = new EpisodeCreator(trainerDependencies);
@@ -38,6 +38,6 @@ class TestEpisodeCreator {
 
         System.out.println("info.endExperience() = " + info.endExperience());
 
-        Assertions.assertTrue(info.endExperience().isFail());
+        Assertions.assertTrue(info.endExperience().isTransitionToFail());
     }
 }

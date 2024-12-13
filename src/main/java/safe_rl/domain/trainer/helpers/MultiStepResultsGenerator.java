@@ -78,7 +78,7 @@ public class MultiStepResultsGenerator<V> {
     }
 
     /***
-     * Used to derive return (sum rewards) at tStart for given experienceList
+     * Used to derive return (sum rewards) at tStart for given results
      *  n-step return si Gk:k+n=R(k)...gammas^(n-1)*R(k+n-1)+gammas^n*V(S(k+n-1))
      *  k is referring to experience index
      *  therefore

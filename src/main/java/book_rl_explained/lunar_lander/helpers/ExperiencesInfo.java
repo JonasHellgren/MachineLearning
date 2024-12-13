@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.helpers;
 
+import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
 import lombok.AllArgsConstructor;
 import org.hellgren.utilities.list_arrays.ListCreator;
@@ -64,5 +65,9 @@ public class ExperiencesInfo {
     public List<Double> times(double dt) {
         int nSteps=nSteps();
         return ListCreator.createFromStartWithStepWithNofItems(0, dt,nSteps);
+    }
+
+    public StateLunar stateAtStep(int step) {
+        return experiences.get(step).state();
     }
 }

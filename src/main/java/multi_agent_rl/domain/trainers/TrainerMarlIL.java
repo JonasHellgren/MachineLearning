@@ -59,7 +59,7 @@ public class TrainerMarlIL<V,O> {
     void addNewExperienceToBuffer() {
         var msRes = episodeTrainer.getMultiStepResultsFromPrevFit();
         Conditionals.executeIfFalse(msRes.orElseThrow().isEmpty(), () ->
-                buffer.addAll(msRes.orElseThrow().experienceList()));
+                buffer.addAll(msRes.orElseThrow().results()));
     }
 */
 

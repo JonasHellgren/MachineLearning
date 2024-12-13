@@ -40,11 +40,16 @@ public class MultiStepResultsGenerator {
     private MultiStepResultItem createMultiStepResultAtTime(int t, EpisodeInfo informer) {
         var se = informer.experienceAtTime(t);
         var rs = evaluateRewardsSum(t, informer);
-        return createFullyDefined(se, rs);
+        return createResult(se, rs);
     }
+/*
+    //public <=> to enable testing
+    public EvaluateResult evaluateRewardsSum(int tStart, List<ExperienceLunar> experiences) {
+        return evaluateRewardsSum(tStart, EpisodeInfo.of(experiences));
+    }*/
 
-    public MultiStepResultItem createFullyDefined(ExperienceLunar singleStepExperience,
-                                                     EvaluateResult rs) {
+    public MultiStepResultItem createResult(ExperienceLunar singleStepExperience,
+                                            EvaluateResult rs) {
         var agent=dependencies.agent();
         double valueTarget = calculator.valueOfTakingAction(
                 rs.isFutureOutsideOrTerminal(), rs.stateFuture(), rs.sumRewardsNSteps());
@@ -61,9 +66,8 @@ public class MultiStepResultsGenerator {
     }
 
 
-
     /***
-     * Used to derive return (sum rewards) at tStart for given experienceList
+     * Used to derive return (sum rewards) at tStart for given results
      *  n-step return si Gk:k+n=R(k)...gamma^(n-1)*R(k+n-1)+gamma^n*V(S(k+n-1))
      *  k is referring to experience index
      *  therefore
@@ -73,17 +77,14 @@ public class MultiStepResultsGenerator {
      *  of terminal stateNew is zero
      */
 
-    //public <=> to enable testing
-    public EvaluateResult evaluateRewardsSum(int tStart, List<ExperienceLunar> experiences) {
-        return evaluateRewardsSum(tStart, EpisodeInfo.of(experiences));
-    }
+
 
     EvaluateResult evaluateRewardsSum(int tStart, EpisodeInfo informer) {
         int nExperiences = informer.size();
         Preconditions.checkArgument(tStart < nExperiences, "Non valid start index, tStart=" + tStart);
-        TrainerParameters trainerParameters = dependencies.trainerParameters();
+        var trainerParameters = dependencies.trainerParameters();
         int idxEnd = tStart + trainerParameters.stepHorizon();
-        var rewards = IntStream.rangeClosed(tStart, Math.min(idxEnd, nExperiences - 1))  //end inclusive
+        var rewards = IntStream.rangeClosed(tStart, Math.min(idxEnd-1, nExperiences - 1))  //end inclusive
                 .mapToObj(t -> informer.experienceAtTime(t).reward()).toList();
         double rewardSumDiscounted = MyRewardListUtils.discountedSum(rewards, trainerParameters.gamma());
         boolean isEndOutSide = idxEnd > nExperiences - 1;
@@ -91,7 +92,7 @@ public class MultiStepResultsGenerator {
         StateLunar stateFuture = isEndOutSide
                 ? null
                 : informer.experienceAtTime(idxEnd - 1).stateNew();
-        boolean isFutureTerminal = !isEndOutSide && informer.experienceAtTime(idxEnd).isTerminal();
+        boolean isFutureTerminal = !isEndOutSide && informer.experienceAtTime(idxEnd).isTransitionToTerminal();
         return new EvaluateResult(rewardSumDiscounted, stateFuture, isEndOutSide, isFutureTerminal);
     }
 

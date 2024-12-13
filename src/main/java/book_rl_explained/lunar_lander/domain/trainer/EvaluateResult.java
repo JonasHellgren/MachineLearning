@@ -10,6 +10,7 @@ public record EvaluateResult(
         boolean isFutureTerminal) {
 
     public boolean isFutureOutsideOrTerminal() {
-        return isFutureTerminal || isFutureStateOutside;
+        //return isFutureTerminal || isFutureStateOutside;
+        return isFutureStateOutside;
     }
 }

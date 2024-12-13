@@ -52,7 +52,7 @@ public class TrainerLunarSingleStep implements TrainerI {
     }
 
     private static void log(List<ExperienceLunar> experiences, int i) {
-        boolean isFail = ExperiencesInfo.of(experiences).endExperience().isFail();
+        boolean isFail = ExperiencesInfo.of(experiences).endExperience().isTransitionToFail();
         Conditionals.executeIfFalse(isFail, () -> log.fine("Yes, lunar landed safely!. Episode=: " + i));
     }
 
@@ -79,7 +79,7 @@ public class TrainerLunarSingleStep implements TrainerI {
     private double calculateTemporalDifferenceError(ExperienceLunar experience) {
         var agent = dependencies.agent();
         double v = agent.readCritic(experience.state());
-        double vNext = experience.isTerminal()
+        double vNext = experience.isTransitionToTerminal()
                 ? VALUE_TERM
                 : agent.readCritic(experience.stateNew());
         return experience.reward() + dependencies.getGamma() * vNext - v;

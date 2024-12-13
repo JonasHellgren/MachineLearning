@@ -9,13 +9,13 @@ import java.util.List;
 @Builder
 public record MultiStepResults(
         int nExperiences,  //equal to length of below lists
-        List<MultiStepResultItem> experienceList
+        List<MultiStepResultItem> results
 ) {
 
     public static MultiStepResults create(int nExp) {
         return MultiStepResults.builder()
                 .nExperiences(nExp)
-                .experienceList(Lists.newArrayListWithCapacity(nExp))
+                .results(Lists.newArrayListWithCapacity(nExp))
                 .build();
     }
 
@@ -25,7 +25,7 @@ public record MultiStepResults(
     }
 
     public MultiStepResultItem experienceAtStep(int step) {
-        return experienceList.get(step);
+        return results.get(step);
     }
 
     public StateLunar stateAtStep(int step) {
@@ -49,7 +49,19 @@ public record MultiStepResults(
     }
 
     public void add(MultiStepResultItem experience) {
-        experienceList.add(experience);
-
+        results.add(experience);
     }
+
+    @Override
+    public String toString() {
+        var sb=new StringBuilder();
+        String lineSep = System.lineSeparator();
+        sb.append("nExperiences=").append(nExperiences).append(lineSep);
+        for (MultiStepResultItem resultItem:results) {
+            sb.append(resultItem).append(lineSep);
+        }
+        return sb.toString();
+    }
+
+
 }

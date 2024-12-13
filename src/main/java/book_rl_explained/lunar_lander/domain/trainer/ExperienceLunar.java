@@ -19,11 +19,11 @@ public record ExperienceLunar(
         return stepReturn.reward();
     }
 
-    public boolean isTerminal() {
+    public boolean isTransitionToTerminal() {
         return stepReturn.isTerminal();
     }
 
-    public boolean isFail() {
+    public boolean isTransitionToFail() {
         return stepReturn.isFail();
     }
 

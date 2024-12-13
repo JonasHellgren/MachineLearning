@@ -22,6 +22,10 @@ public class StateLunar {
         return of(getRandY(ep), 0);
     }
 
+    public static StateLunar zeroPosAndSpeed() {
+        return of(0, 0);
+    }
+
     public double y() {
         return variables.y();
     }
