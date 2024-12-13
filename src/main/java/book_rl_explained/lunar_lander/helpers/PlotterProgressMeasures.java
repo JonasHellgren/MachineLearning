@@ -1,6 +1,6 @@
 package book_rl_explained.lunar_lander.helpers;
 
-import book_rl_explained.lunar_lander.domain.trainer.TrainerLunar;
+import book_rl_explained.lunar_lander.domain.trainer.TrainerLunarSingleStep;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerParameters;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class PlotterProgressMeasures {
         return new PlotterProgressMeasures(recorder,trainerParameters);
     }
 
-    public static PlotterProgressMeasures of(TrainerLunar trainer) {
+    public static PlotterProgressMeasures of(TrainerLunarSingleStep trainer) {
         return new PlotterProgressMeasures(
                 trainer.getRecorder(),
                 trainer.getDependencies().trainerParameters());

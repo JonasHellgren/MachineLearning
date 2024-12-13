@@ -7,7 +7,7 @@ import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierAllRandom;
 import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierFromMaxHeight;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
-import book_rl_explained.lunar_lander.domain.trainer.TrainerLunar;
+import book_rl_explained.lunar_lander.domain.trainer.TrainerLunarSingleStep;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerParameters;
 import book_rl_explained.lunar_lander.helpers.AgentEvaluator;
 import book_rl_explained.lunar_lander.helpers.PlotterAgent;
@@ -16,13 +16,12 @@ import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.St
 import lombok.extern.java.Log;
 
 @Log
-public class RunnerTrainerLunar {
-
+public class RunnerTrainerLunarSingleStep {
 
     public static void main(String[] args) {
         var ep = getEnvironmentProperties();
         var trainerDependencies = getDependencies(ep);
-        var trainer= TrainerLunar.of(trainerDependencies);
+        var trainer= TrainerLunarSingleStep.of(trainerDependencies);
         trainer.train();
         plot(trainer, trainerDependencies);
         evaluate(trainerDependencies, ep);
@@ -34,7 +33,7 @@ public class RunnerTrainerLunar {
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
         var p = AgentParameters.defaultParams(ep);
-        var tp = TrainerParameters.defaultParams().withNEpisodes(50000).withGamma(0.99);
+        var tp = TrainerParameters.defaultParams().withNEpisodes(5000).withGamma(0.99);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
@@ -43,13 +42,13 @@ public class RunnerTrainerLunar {
                 .build();
     }
 
-    public static final PlotterAgent.Settings SETTINGS_PLOTTERAGENT = PlotterAgent.Settings.builder()
+    public static final PlotterAgent.Settings SETTINGS_PLOTTER_AGENT = PlotterAgent.Settings.builder()
             .nY(6).nSpd(7).nDigitsAxisLabels(1).valueFormat("%.1f").build();
 
-    private static void plot(TrainerLunar trainer, TrainerDependencies trainerDependencies) {
+    private static void plot(TrainerLunarSingleStep trainer, TrainerDependencies trainerDependencies) {
         var progressPlotter= PlotterProgressMeasures.of(trainer);
         progressPlotter.plot("TrainerLunar");
-        var agentPlotter= PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTERAGENT);
+        var agentPlotter= PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
         agentPlotter.plotAll();
     }
 

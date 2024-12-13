@@ -20,5 +20,12 @@ public record TrainerDependencies(
         return startStateSupplier.getStartState();
     }
 
+    public double getGamma() {
+        return trainerParameters().gamma();
+    }
+
+    public int getnEpisodes() {
+        return trainerParameters().nEpisodes();
+    }
 
 }

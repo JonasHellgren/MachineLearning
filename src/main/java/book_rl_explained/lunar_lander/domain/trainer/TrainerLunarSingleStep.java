@@ -18,14 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Log
-public class TrainerLunar implements TrainerI {
+public class TrainerLunarSingleStep implements TrainerI {
     public static final double VALUE_TERM = 0d;
 
     TrainerDependencies dependencies;
     RecorderTrainingProgress recorder;
 
-    public static TrainerLunar of(TrainerDependencies dependencies) {
-        return new TrainerLunar(dependencies, RecorderTrainingProgress.empty());
+    public static TrainerLunarSingleStep of(TrainerDependencies dependencies) {
+        return new TrainerLunarSingleStep(dependencies, RecorderTrainingProgress.empty());
     }
 
     @Override
@@ -34,17 +34,16 @@ public class TrainerLunar implements TrainerI {
         recorder.clear();
         var agent = dependencies.agent();
         log.info("start training");
-
-        for (int i = 0; i < getnEpisodes(); i++) {
+        for (int i = 0; i < dependencies.getnEpisodes(); i++) {
             var experiences = creator.getExperiences();
             var pm=fitAgentFromNewExperiences(experiences);
-            pm = addtMeasures(agent, pm);
+            pm = addValuesSpecifStates(agent, pm);
             recorder.add(pm);
             log(experiences, i);
         }
     }
 
-    private static ProgressMeasures addtMeasures(AgentI agent, ProgressMeasures pm) {
+    private static ProgressMeasures addValuesSpecifStates(AgentI agent, ProgressMeasures pm) {
         double stateValuePos2Spd0= agent.readCritic(StateLunar.of(2,0));
         pm = pm.withStateValuePos2Spd0(stateValuePos2Spd0);
         double stateValuePos5Spd2= agent.readCritic(StateLunar.of(5,2));
@@ -83,15 +82,8 @@ public class TrainerLunar implements TrainerI {
         double vNext = experience.isTerminal()
                 ? VALUE_TERM
                 : agent.readCritic(experience.stateNew());
-        return experience.reward() + getGamma() * vNext - v;
+        return experience.reward() + dependencies.getGamma() * vNext - v;
     }
 
-    private double getGamma() {
-        return dependencies.trainerParameters().gamma();
-    }
-
-    private int getnEpisodes() {
-        return dependencies.trainerParameters().nEpisodes();
-    }
 
 }

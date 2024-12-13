@@ -36,10 +36,13 @@ clean up x
 clip foreMax i env  x
 nDigits x
 större spd x
-prova olika n kluster
 MultiStepTrainerLunar
 
 PlotterProgressMeasures plot - ersätt många charts.add
 RecorderTrainingProgress ersätt switch med map ngt
+
+
+när tid:
+prova olika n kluster
 
 

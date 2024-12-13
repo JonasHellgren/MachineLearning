@@ -7,11 +7,16 @@ public record TrainerParameters(
         int nofStepsMax,
         int nEpisodes,
         double gamma,
-        double tdMax
+        double tdMax,
+        int stepHorizon
+
 ) {
 
     public static TrainerParameters defaultParams() {
-        return new TrainerParameters(1000,30,0.99,10d);
+        return new TrainerParameters(1000,30,0.99,10d,5);
     }
 
+    public double gammaPowN() {
+        return Math.pow(gamma, stepHorizon);
+    }
 }
