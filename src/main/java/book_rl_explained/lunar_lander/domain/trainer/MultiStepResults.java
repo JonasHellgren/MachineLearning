@@ -19,6 +19,9 @@ public record MultiStepResults(
                 .build();
     }
 
+    public void add(MultiStepResultItem experience) {
+        results.add(experience);
+    }
 
     public boolean isEmpty() {
         return nExperiences == 0;
@@ -26,10 +29,6 @@ public record MultiStepResults(
 
     public MultiStepResultItem experienceAtStep(int step) {
         return results.get(step);
-    }
-
-    public StateLunar stateAtStep(int step) {
-        return experienceAtStep(step).state();
     }
 
     public boolean isFutureOutsideOrTerminalAtStep(int step) {
@@ -44,13 +43,6 @@ public record MultiStepResults(
         return experienceAtStep(step).advantage();
     }
 
-    public double actionAppliedAtStep(int step) {
-        return experienceAtStep(step).action();
-    }
-
-    public void add(MultiStepResultItem experience) {
-        results.add(experience);
-    }
 
     @Override
     public String toString() {

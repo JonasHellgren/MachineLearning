@@ -36,10 +36,10 @@ clean up x
 clip foreMax i env  x
 nDigits x
 större spd x
-MultiStepTrainerLunar
-TestMultiStepResultsGenerator
+MultiStepTrainerLunar x
+TestMultiStepResultsGenerator x
+cleaup up MultiStepResultsGenerator x
 
-EvaluateResult är nog onödig - slå ihop createRes och evaluateRewardsSum
 
 PlotterProgressMeasures plot - ersätt många charts.add
 RecorderTrainingProgress ersätt switch med map ngt

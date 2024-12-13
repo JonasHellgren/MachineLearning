@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.helpers;
 
+import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,15 @@ public class EpisodeInfo {
     public ExperienceLunar experienceAtTime(int timeStep) {
         return experiences.get(timeStep);
     }
+
+    public double rewardAtTime(int timeStep) {
+        return experiences.get(timeStep).reward();
+    }
+
+    public StateLunar stateNewAtTime(int timeStep) {
+        return experiences.get(timeStep).stateNew();
+    }
+
 
     public Pair<Double, Double> minMaxAppliedAction() {
         return Pair.create(

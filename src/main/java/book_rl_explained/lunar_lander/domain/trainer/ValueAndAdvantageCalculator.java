@@ -1,10 +1,10 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
 import book_rl_explained.lunar_lander.domain.agent.AgentI;
-import book_rl_explained.lunar_lander.domain.agent.AgentI;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -27,41 +27,20 @@ public class ValueAndAdvantageCalculator {
         return new ValueAndAdvantageCalculator(dependencies);
     }
 
-    public  double valueOfTakingAction(@NonNull Boolean stateFutureTerminalOrNotPresent,
+    public  double valueOfTakingAction(@NonNull Boolean isStateOutside,
                                        StateLunar stateFuture,
                                        double sumRewards) {
         var agent=dependencies.agent();
         var parameters=dependencies.trainerParameters();
-        return stateFutureTerminalOrNotPresent
+        return isStateOutside
                 ? sumRewards
                 : sumRewards + parameters.gammaPowN() * agent.readCritic(stateFuture);
     }
 
-    double advantage(AgentI agent,
-                     ExperienceLunar singleStepExperience,
-                     EvaluateResult rs) {
-        return advantage(agent,
-                rs.isFutureOutsideOrTerminal(),
-                singleStepExperience.state(),
-                rs.stateFuture(),
-                rs.sumRewardsNSteps());
+
+    public  double advantage(@NotNull AgentI agent, StateLunar state, double valueOfTakingAction) {
+        return valueOfTakingAction - agent.readCritic(state);
     }
 
-    double advantage(@NonNull AgentI agent, MultiStepResultItem msri) {
-        return advantage(agent,
-                msri.isStateFutureTerminalOrNotPresent(),
-                msri.state(),
-                msri.stateFuture(),
-                msri.sumRewards());
-    }
-
-    private double advantage(@NonNull AgentI agent,
-                             @NonNull Boolean stateFutureTerminalOrNotPresent,
-                             StateLunar state,
-                             StateLunar stateFuture,
-                             double sumRewards) {
-        var value = valueOfTakingAction(stateFutureTerminalOrNotPresent, stateFuture, sumRewards);
-        return value - agent.readCritic(state);
-    }
 
 }

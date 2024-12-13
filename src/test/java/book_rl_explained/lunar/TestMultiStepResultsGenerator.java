@@ -29,7 +29,8 @@ class TestMultiStepResultsGenerator {
 
     MultiStepResultsGenerator generator;
     TrainerDependencies dependencies;
-    List<ExperienceLunar> experiences;
+    List<ExperienceLunar> experiencesSpreadOnes;
+    List<ExperienceLunar> experiencesOneBigMinusInEnd;
 
     @BeforeEach
     void init() {
@@ -37,7 +38,8 @@ class TestMultiStepResultsGenerator {
         var exp0 = expNotFail(0, false);
         var exp1 = expNotFail(1, false);
         var exp1tTerm = expNotFail(1, true);
-        experiences = List.of(exp1, exp0, exp1, exp1, exp1tTerm);
+        experiencesSpreadOnes = List.of(exp1, exp0, exp1, exp1, exp1tTerm);
+        experiencesOneBigMinusInEnd = List.of(exp0, exp0, exp0, exp0, exp0, expNotFail(-100, true));
     }
 
     private MultiStepResultsGenerator createGenerator(int stepHorizon, double gamma) {
@@ -63,7 +65,7 @@ class TestMultiStepResultsGenerator {
 
     @Test
     void whenGenerating_thenCorrectNofExp() {
-        var multiStepResults = generator.generate(experiences);
+        var multiStepResults = generator.generate(experiencesSpreadOnes);
         Assertions.assertEquals(5, multiStepResults.nExperiences());
     }
 
@@ -75,7 +77,7 @@ class TestMultiStepResultsGenerator {
     })
     void givenStepHorizon1_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(1, 1.0);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
     }
 
     @ParameterizedTest
@@ -86,7 +88,7 @@ class TestMultiStepResultsGenerator {
     })
     void givenStepHorizon3_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(3, 1.0);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
     }
 
     @ParameterizedTest
@@ -97,7 +99,7 @@ class TestMultiStepResultsGenerator {
     })
     void givenStepHorizon5_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(5, 1.0);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
    }
 
     @Test
@@ -120,7 +122,7 @@ class TestMultiStepResultsGenerator {
     void givenStepHorizon3AndCriticValue1_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(3, 1.0);
         fitMemory(dependencies.agent(), 1.0);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
     }
 
     @ParameterizedTest
@@ -130,7 +132,7 @@ class TestMultiStepResultsGenerator {
     })
     void givenStepHorizon1AndCriticValue0AndGamma0dot5_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(3, 0.5);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
     }
 
     @ParameterizedTest
@@ -141,8 +143,24 @@ class TestMultiStepResultsGenerator {
     void givenStepHorizon1AndCriticValue1AndGamma0dot5_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
         generator = createGenerator(3, 0.5);
         fitMemory(dependencies.agent(), 1.0);
-        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiences));
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesSpreadOnes));
     }
+
+    // 0,0,0,0,0,-100
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, 0.125,-0.875,false",  //sumRewards=0, value(sFut) = 0.5^3*1=1/8 => value=0.125,  adv=0.125-1=-0.875
+            "2, 0.125,-0.875,false",   //sumRewards=0+0.5^3*0=0, value(sFut) = 0.5^3*1=1/8 => value=0.125,  adv=-0.875
+            "3, -25,-26,true",   //sumRewards=0+0.5^2*-100=-25, value(sFut) = 0 => value=-25,  adv=-26
+    })
+    void givenOneBigMinusInEndExperience_whenGenerating_thenCorrectValueAndAdvantage(ArgumentsAccessor arguments) {
+        generator = createGenerator(3, 0.5);
+        fitMemory(dependencies.agent(), 1.0);
+        experiencesOneBigMinusInEnd.forEach(System.out::println);
+        assertMultiStepResults(ArgumentAdaptor.of(arguments), generator.generate(experiencesOneBigMinusInEnd));
+    }
+
 
     record ArgumentAdaptor(int step, double value, double advantage, boolean isFutOutSide) {
         public static ArgumentAdaptor of(ArgumentsAccessor arguments) {
