@@ -14,7 +14,11 @@ public class EpisodeCreator {
 
     TrainerDependencies dependencies;
 
-    public List<ExperienceLunar> getExperiences() {
+    public static EpisodeCreator of(TrainerDependencies dependencies) {
+        return new EpisodeCreator(dependencies);
+    }
+
+    public List<ExperienceLunar> experiences() {
         return getExperiencesWithFlag(true);
     }
 

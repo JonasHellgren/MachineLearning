@@ -1,17 +1,10 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
-import book_rl_explained.lunar_lander.domain.agent.AgentI;
-import book_rl_explained.lunar_lander.domain.environment.StateLunar;
-import book_rl_explained.lunar_lander.helpers.EpisodeCreator;
-import book_rl_explained.lunar_lander.helpers.ExperiencesInfo;
-import book_rl_explained.lunar_lander.helpers.ProgressMeasures;
-import book_rl_explained.lunar_lander.helpers.RecorderTrainingProgress;
-import com.beust.jcommander.internal.Lists;
+import book_rl_explained.lunar_lander.helpers.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.conditionals.Conditionals;
-import org.hellgren.utilities.math.MyMathUtils;
 
 import java.util.List;
 
@@ -19,72 +12,39 @@ import java.util.List;
 @Getter
 @Log
 public class TrainerLunarSingleStep implements TrainerI {
-    public static final double VALUE_TERM = 0d;
 
     TrainerDependencies dependencies;
     RecorderTrainingProgress recorder;
+    ValueCalculator calculator;
 
     public static TrainerLunarSingleStep of(TrainerDependencies dependencies) {
-        return new TrainerLunarSingleStep(dependencies, RecorderTrainingProgress.empty());
+        return new TrainerLunarSingleStep(
+                dependencies,
+                RecorderTrainingProgress.empty(),
+                ValueCalculator.of(dependencies));
     }
 
     @Override
     public void train() {
-        var creator = new EpisodeCreator(dependencies);
+        var epCreator = EpisodeCreator.of(dependencies);
+        var pmCreator= ProgressMeasuresCreator.of(dependencies);
         recorder.clear();
-        var agent = dependencies.agent();
-        log.info("start training");
+        log.info("starting training");
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
-            var experiences = creator.getExperiences();
-            var pm=fitAgentFromNewExperiences(experiences);
-            pm = addValuesSpecifStates(agent, pm);
-            recorder.add(pm);
-            log(experiences, i);
+            var experiences = epCreator.experiences();
+            fitAgent(experiences);
+            recorder.add(pmCreator.progressMeasures(experiences));
         }
     }
 
-    private static ProgressMeasures addValuesSpecifStates(AgentI agent, ProgressMeasures pm) {
-        double stateValuePos2Spd0= agent.readCritic(StateLunar.of(2,0));
-        pm = pm.withStateValuePos2Spd0(stateValuePos2Spd0);
-        double stateValuePos5Spd2= agent.readCritic(StateLunar.of(5,2));
-        pm = pm.withStateValuePos5Spd2(stateValuePos5Spd2);
-        return pm;
-    }
-
-    private static void log(List<ExperienceLunar> experiences, int i) {
-        boolean isFail = ExperiencesInfo.of(experiences).endExperience().isTransitionToFail();
-        Conditionals.executeIfFalse(isFail, () -> log.fine("Yes, lunar landed safely!. Episode=: " + i));
-    }
-
-    //todo ProgressMeasures i egen metod
-
-    public ProgressMeasures fitAgentFromNewExperiences(List<ExperienceLunar> experiences) {
+    public void fitAgent(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
         var tp = dependencies.trainerParameters();
-        var tdList= Lists.<Double>newArrayList();
-        var stdList= Lists.<Double>newArrayList();
         for (ExperienceLunar experience : experiences) {
-            double e0 = calculateTemporalDifferenceError(experience);
-            double e= MyMathUtils.clip(e0, -tp.tdMax(), tp.tdMax());
-            agent.fitActor(experience.state(),experience.action(), e);
-            agent.fitCritic(experience.state(),e);
-            tdList.add(Math.abs(e));
-            var mAndStd=agent.readActor(experience.state());
-            stdList.add(mAndStd.std());
+            double e = tp.clipTdError(calculator.temporalDifferenceError(experience));
+            agent.fitActor(experience.state(), experience.action(), e);
+            agent.fitCritic(experience.state(), e);
         }
-
-        return ProgressMeasures.of(experiences, tdList,stdList);
-
     }
-
-    private double calculateTemporalDifferenceError(ExperienceLunar experience) {
-        var agent = dependencies.agent();
-        double v = agent.readCritic(experience.state());
-        double vNext = experience.isTransitionToTerminal()
-                ? VALUE_TERM
-                : agent.readCritic(experience.stateNew());
-        return experience.reward() + dependencies.getGamma() * vNext - v;
-    }
-
 
 }

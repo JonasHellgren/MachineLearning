@@ -30,10 +30,10 @@ import java.util.stream.IntStream;
 public class MultiStepResultsGenerator {
 
     TrainerDependencies dependencies;
-    ValueAndAdvantageCalculator calculator;
+    ValueCalculator calculator;
 
     public static MultiStepResultsGenerator of(TrainerDependencies dependencies) {
-        return new MultiStepResultsGenerator(dependencies, ValueAndAdvantageCalculator.of(dependencies));
+        return new MultiStepResultsGenerator(dependencies, ValueCalculator.of(dependencies));
     }
 
     @SneakyThrows
