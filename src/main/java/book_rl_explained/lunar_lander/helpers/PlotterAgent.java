@@ -68,7 +68,7 @@ public class PlotterAgent {
     public void plotExpectedAcceleration() {
         var env=(EnvironmentLunar) dependencies.environment();
         Function<StateLunar,Double> func = s ->
-                env.calculateAcceleration(dependencies.agent().readActor(s).mean());
+                env.acceleration(dependencies.agent().readActor(s).mean());
         showData(settings.titleAcc, getData(func));
     }
 

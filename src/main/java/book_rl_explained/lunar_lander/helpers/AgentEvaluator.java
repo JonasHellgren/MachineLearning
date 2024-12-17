@@ -38,11 +38,11 @@ public class AgentEvaluator {
     }
 
     public void plotSimulation() {
-        var creator = new EpisodeCreator(dependencies);
+        var creator = EpisodeCreator.of(dependencies);
         var experiencesNotExploring = creator.getExperiencesNotExploring();
         var ep = dependencies.environment().getProperties();
         var speeds = ExperiencesInfo.of(experiencesNotExploring).speeds();
-        var forces = ExperiencesInfo.of(experiencesNotExploring).forces();
+        var forces = ExperiencesInfo.of(experiencesNotExploring).forces(ep);
         var positions = ExperiencesInfo.of(experiencesNotExploring).positions();
         var times = ExperiencesInfo.of(experiencesNotExploring).times(ep.dt());
         XYChart chart = new XYChartBuilder().xAxisTitle("Time(s)").yAxisTitle("").width(600).height(400).build();
@@ -53,8 +53,8 @@ public class AgentEvaluator {
 }
 
     private void addSeries(XYChart chart, List<Double> times, List<Double> values, String measure) {
-        chart.getStyler().setYAxisMin(-2d);
-        chart.getStyler().setYAxisMax(6d);
+        chart.getStyler().setYAxisMin(-5d);
+        chart.getStyler().setYAxisMax(5d);
         XYSeries series = chart.addSeries(measure, times, values);
         series.setMarker(SeriesMarkers.NONE);
     }

@@ -15,7 +15,7 @@ public record TrainerParameters(
 ) {
 
     public static TrainerParameters newDefault() {
-        return new TrainerParameters(1000,30,0.99,10d,10d,5);
+        return new TrainerParameters(1000,5000,0.99,10d,10d,5);
     }
 
     public double gammaPowN() {

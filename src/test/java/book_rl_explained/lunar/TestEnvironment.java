@@ -57,7 +57,7 @@ class TestEnvironment {
     void testStep_ForceIsMassTimesG_thenZeroSpeed() {
         var state = StateLunar.of(5.0, 0.0);
         double action = properties.massLander()*properties.g();
-        double forceInKNewton = environment.getForceInKiloNewton(action);
+        double forceInKNewton = environment.forceInKiloNewton(action);
         var stepReturn = environment.step(state, forceInKNewton);
         assertFalse(stepReturn.isTerminal());
         assertFalse(stepReturn.isFail());
@@ -67,7 +67,7 @@ class TestEnvironment {
     @Test
     void testStep_ForceClipped() {
         var state = StateLunar.of(10e3, 0.0);
-        double forceInKNewton = environment.getForceInKiloNewton(properties.forceMax());
+        double forceInKNewton = environment.forceInKiloNewton(properties.forceMax());
         var stepReturn1 = environment.step(state, forceInKNewton);
         var stepReturn2 = environment.step(state, forceInKNewton * 2);
         assertEquals(stepReturn1.stateNew().y(), stepReturn2.stateNew().y());

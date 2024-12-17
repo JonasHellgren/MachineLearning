@@ -1,9 +1,7 @@
 package book_rl_explained.lunar_lander.domain.environment;
 
-import common.math.MathUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hellgren.utilities.math.MyMathUtils;
 import org.hellgren.utilities.unit_converter.MyUnitConverter;
 import org.hellgren.utilities.unit_converter.NonSIUnits;
 import tec.units.ri.unit.Units;
@@ -28,7 +26,7 @@ public class EnvironmentLunar implements EnvironmentI {
         double dt = properties.dt();
         double speed0 = state.variables.spd();
         double y0 = state.variables.y();
-        double acc = calculateAcceleration(action);
+        double acc = acceleration(action);
         double speed = speed0 + acc * dt;
         double y = y0 + speed * dt;
         var stateNew = StateLunar.of(y, speed);
@@ -52,7 +50,6 @@ public class EnvironmentLunar implements EnvironmentI {
         return y > properties.yMax();
     }
 
-
     private double calculateReward(double y, double speed,  boolean isFail) {
         boolean isSuccess = isLanded(y) && !isToHighSpeed(speed);
         double rewardSuccess = isSuccess ? properties.rewardSuccess() : 0d;
@@ -64,18 +61,17 @@ public class EnvironmentLunar implements EnvironmentI {
         return Math.abs(speed) > Math.abs(properties.spdLimitCrash());
     }
 
-    public double calculateAcceleration(double action) {
+    public double acceleration(double action) {
         double m = properties.massLander();
-        double forceInNewton = getForceInNewton(action);
-        double force = MathUtils.clip(forceInNewton, -properties.forceMax(), properties.forceMax());
-        return (force - m * properties.g()) / m;
+        double force = properties.clippedForce(action);
+        return (forceInNewton(force) - m * properties.g()) / m;
     }
 
-    public double getForceInKiloNewton(double forceInNewton) {
+    public double forceInKiloNewton(double forceInNewton) {
         return MyUnitConverter.convertForce(forceInNewton, Units.NEWTON, NonSIUnits.KILO_NEWTON);
     }
 
-    public double getForceInNewton(double forceInKiloNewton) {
+    public double forceInNewton(double forceInKiloNewton) {
         return MyUnitConverter.convertForce(forceInKiloNewton, NonSIUnits.KILO_NEWTON, Units.NEWTON);
     }
 

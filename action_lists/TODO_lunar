@@ -41,10 +41,8 @@ TestMultiStepResultsGenerator x
 cleaup up MultiStepResultsGenerator x
 PlotterProgressMeasures plot - ersätt många charts.add x
 RecorderTrainingProgress ersätt switch med map ngt x
-
 RunnerTrainerLunarMultiStep x
-
-only pos force
+only pos force  x
 
 3 plotting i math repo
 batch träning RBD meth repo

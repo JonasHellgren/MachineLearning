@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.helpers;
 
+import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
 import lombok.AllArgsConstructor;
@@ -49,8 +50,8 @@ public class ExperiencesInfo {
         return experiences.size();
     }
 
-    public List<Double> forces() {
-        return experiences.stream().map(e -> e.action()).toList();
+    public List<Double> forces(LunarProperties ep) {
+        return experiences.stream().map(e -> ep.clippedForce(e.action())).toList();
     }
 
     public List<Double> speeds() {
