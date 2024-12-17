@@ -60,6 +60,7 @@ public class MultiStepResultsGenerator {
         StateLunar stateFuture = getStateFuture(informer, isEndStateOutSide, idxEnd);
         double valueTarget = calculator.valueOfTakingAction(isEndStateOutSide, stateFuture, rewardSum);
         double advantage = calculator.advantage(dependencies.agent(), experience.state(), valueTarget);
+        double tdError = calculator.temporalDifferenceError(experience);
         return MultiStepResult.builder()
                 .state(experience.state())
                 .action(experience.action())
@@ -68,6 +69,7 @@ public class MultiStepResultsGenerator {
                 .isStateFutureTerminalOrNotPresent(isEndStateOutSide)
                 .valueTarget(valueTarget)
                 .advantage(advantage)
+                .tdError(tdError)
                 .build();
     }
 

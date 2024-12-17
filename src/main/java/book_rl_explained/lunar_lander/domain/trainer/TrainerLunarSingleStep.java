@@ -56,6 +56,7 @@ public class TrainerLunarSingleStep implements TrainerI {
         Conditionals.executeIfFalse(isFail, () -> log.fine("Yes, lunar landed safely!. Episode=: " + i));
     }
 
+    //todo ProgressMeasures i egen metod
 
     public ProgressMeasures fitAgentFromNewExperiences(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();

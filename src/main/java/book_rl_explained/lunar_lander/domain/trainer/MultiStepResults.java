@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
+import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import com.google.common.collect.Lists;
 import lombok.Builder;
 
@@ -34,14 +35,28 @@ public record MultiStepResults(
         return experienceAtStep(step).isStateFutureTerminalOrNotPresent();
     }
 
+    public StateLunar stateAtStep(int step) {
+        return experienceAtStep(step).state();
+    }
+
+    public double actionAtStep(int step) {
+        return experienceAtStep(step).action();
+    }
+
+
     public double valueTarAtStep(int step) {
         return experienceAtStep(step).valueTarget();
     }
+
 
     public double advantageAtStep(int step) {
         return experienceAtStep(step).advantage();
     }
 
+
+    public double tdErrorAtStep(int step) {
+        return experienceAtStep(step).tdError();
+    }
 
     @Override
     public String toString() {

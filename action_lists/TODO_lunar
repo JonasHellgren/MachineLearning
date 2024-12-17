@@ -42,8 +42,18 @@ cleaup up MultiStepResultsGenerator x
 PlotterProgressMeasures plot - ersätt många charts.add x
 RecorderTrainingProgress ersätt switch med map ngt x
 
+
+RunnerTrainerLunarMultiStep
+
+TrainerLunarSingleStep calcTD från class ..
+
+3 plotting i math repo
+batch träning RBD meth repo
+
 RunnerPlotTrainedCriticMemory
 TestAgentCriticMemory mer tester
+
+
 
 när tid:
 prova olika n kluster

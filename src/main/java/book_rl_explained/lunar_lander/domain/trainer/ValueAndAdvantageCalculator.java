@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 public class ValueAndAdvantageCalculator {
+    public static final double VALUE_TERM = 0d;
 
     TrainerDependencies dependencies;
 
@@ -37,9 +38,17 @@ public class ValueAndAdvantageCalculator {
                 : sumRewards + parameters.gammaPowN() * agent.readCritic(stateFuture);
     }
 
-
     public  double advantage(@NotNull AgentI agent, StateLunar state, double valueOfTakingAction) {
         return valueOfTakingAction - agent.readCritic(state);
+    }
+
+    public double temporalDifferenceError(ExperienceLunar experience) {
+        var agent = dependencies.agent();
+        double v = agent.readCritic(experience.state());
+        double vNext = experience.isTransitionToTerminal()
+                ? VALUE_TERM
+                : agent.readCritic(experience.stateNew());
+        return experience.reward() + dependencies.getGamma() * vNext - v;
     }
 
 

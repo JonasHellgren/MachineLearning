@@ -12,9 +12,10 @@ public record MultiStepResult(
         StateLunar stateFuture,
         Boolean isStateFutureTerminalOrNotPresent,
         Double valueTarget,
-        Double advantage
+        Double advantage,
+        double tdError
 ) {
-
+/*
     @NonNull
     public static MultiStepResult core(StateLunar state,
                                        double action,
@@ -28,6 +29,6 @@ public record MultiStepResult(
                 .stateFuture(stateFut)
                 .isStateFutureTerminalOrNotPresent(isStateFutureTerminalOrNotPresent)
                 .build();
-    }
+    }*/
 
 }
