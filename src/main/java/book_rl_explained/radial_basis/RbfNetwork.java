@@ -1,14 +1,11 @@
 package book_rl_explained.radial_basis;
 
-import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-import static book_rl_explained.radial_basis.RbfNetworkHelper.calcOutput;
-import static book_rl_explained.radial_basis.RbfNetworkHelper.validateInput;
-import static org.hellgren.utilities.conditionals.Conditionals.executeIfTrue;
+import static book_rl_explained.radial_basis.RbfNetworkHelper.*;
 
 @AllArgsConstructor
 @Getter
@@ -30,18 +27,14 @@ public class RbfNetwork {
         return kernels.size();
     }
 
-    public Kernel getKernel(int i) {
-        return kernels.get(i);
-    }
-
-    /**
+     /**
      * Trains the RBF network for a specified number of iterations.
      *
      * @param data the training data
      * @param nFits the number of iterations to train for
      */
     public void train(TrainData data, int nFits) {
-        IntStream.range(0, nFits).forEach(i -> train(data));
+        IntStream.range(0, nFits).forEach(i -> fit(data));
     }
 
     /**
@@ -49,7 +42,7 @@ public class RbfNetwork {
      *
      * @param data the training data
      */
-    public void train(TrainData data) {
+    public void fit(TrainData data) {
         if (data.isErrors()) {
             fitFromErrors(data.inputs(), data.errors());
         } else {
@@ -65,7 +58,7 @@ public class RbfNetwork {
      * @param outputs the target outputs
      */
 
-    public void train(List<List<Double>> inputs, List<Double> outputs) {
+    public void fit(List<List<Double>> inputs, List<Double> outputs) {
         fitFromErrors(inputs, getErrors(inputs, outputs));
     }
 
@@ -77,11 +70,9 @@ public class RbfNetwork {
      */
     public void fitFromErrors(List<List<Double>> inputs, List<Double> errors) {
         var data = TrainData.ofErrors(inputs, errors);
-        int nSamples=data.nSamples();
-        executeIfTrue(activations.nSamples()!=nSamples, () ->
-                activations = Activations.of(nSamples));
-        activations.calcuteActivations(data, kernels);
-        updater.updateWeightsFromErrors(data, weights, activations);
+        activations=createActivationIfNeeded(data.nSamples(), activations);
+        activations.calculateActivations(data, kernels);
+        updater.updateWeights(data, weights, activations);
     }
 
     /**
@@ -91,14 +82,13 @@ public class RbfNetwork {
      * @return the output of the RBF network
      */
     public double outPut(List<Double> input) {
-        int nKernels = kernels.size();
         validateInput(input, weights, kernels);
         var activation = kernels.getActivationOfSingleInput(input);
-        executeIfTrue(activations.nSamples()!=1, () ->
-                activations = Activations.of(1));
-        activations.change(0, activation);
-        return calcOutput(nKernels, activation, weights);
+        activations=createActivationIfNeeded(1, activations);
+        activations.set(0, activation);
+        return calcOutput(activation, weights);
     }
+
 
     /**
      * Handy to save computation time if you already have the activations in other identical rbf
@@ -106,8 +96,7 @@ public class RbfNetwork {
      */
 
     public void copyActivations(RbfNetwork other) {
-        Preconditions.checkArgument(other.nKernels() == nKernels()
-                ,"kernels should be same size");
+        validateOtherRbf(other, nKernels());
         Activations activationsOther = other.activations;
         activations = Activations.of(activationsOther.nSamples());
         RbfNetworkHelper.copyActivations(activations, activationsOther);
@@ -123,5 +112,13 @@ public class RbfNetwork {
         return errors;
     }
 
+    @Override
+    public String toString() {
+        return "RbfNetwork{" +
+                "kernels=" + kernels +
+                ", activations=" + activations +
+                ", weights=" + weights +
+                '}';
+    }
 
 }

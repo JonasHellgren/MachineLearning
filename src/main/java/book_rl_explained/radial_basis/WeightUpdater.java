@@ -18,13 +18,6 @@ public class WeightUpdater {
         return new WeightUpdater(learningRate);
     }
 
-    public void updateWeights(TrainData data, Weights weights, Activations activations) {
-        Preconditions.checkArgument(weights.size() == activations.nKernels(),
-                "weights and nKernels should have same length, nWeights = " + weights.size()
-                        + ", nKernels = " + activations.nKernels());
-
-        updateWeightsFromErrors(data, weights, activations);
-    }
 
     /**
      * Updates the weights based on the errors and activations.
@@ -34,7 +27,10 @@ public class WeightUpdater {
      * @param activations The activations of the network.
      */
 
-    public void updateWeightsFromErrors(TrainData data, Weights weights, Activations activations) {
+    public void updateWeights(TrainData data, Weights weights, Activations activations) {
+        Preconditions.checkArgument(weights.size() == activations.nKernels(),
+                "weights and nKernels should have same length, nWeights = " + weights.size()
+                        + ", nKernels = " + activations.nKernels());
         double[] gradient = weightGradientFromErrors(data, activations);
         for (int i = 0; i < weights.size(); i++) {
             double wOld = weights.get(i);

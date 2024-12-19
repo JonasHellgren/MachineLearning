@@ -80,7 +80,7 @@ public class RunnerRadialBasis1dLine {
     static void fitWeightsBatch(RbfNetwork rb) {
         for (int i = 0; i < N_FITS; i++) {
             List<Double> outListNoisy = getListNoisy();
-            rb.train(inList, outListNoisy);
+            rb.fit(inList, outListNoisy);
         }
     }
 
@@ -88,7 +88,7 @@ public class RunnerRadialBasis1dLine {
         for (int i = 0; i < N_FITS; i++) {
             List<Double> outListNoisy = getListNoisy();
             for (int j = 0; j < inList.size() ; j++) {
-                rb.train(List.of(inList.get(j)),List.of(outListNoisy.get(j)));
+                rb.fit(List.of(inList.get(j)),List.of(outListNoisy.get(j)));
             }
         }
     }
@@ -97,7 +97,7 @@ public class RunnerRadialBasis1dLine {
     private static List<Double> getXData() {
         List<Double> xData = new LinkedList<>();
         for (int i = 0; i < rbObo.nKernels(); i++) {
-            xData.add(rbObo.getKernel(i).centerCoordinates()[0]);
+            xData.add(rbObo.getKernels().get(i).centerCoordinates()[0]);
         }
         return xData;
     }

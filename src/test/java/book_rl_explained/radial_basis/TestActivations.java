@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
         kernels.addKernel(kernel);
 
         Activations activations = Activations.of(data.nSamples());
-        activations.calcuteActivations(data, kernels);
+        activations.calculateActivations(data, kernels);
 
         // Verify that activations were changed
         assertEquals(2, activations.nSamples());
@@ -55,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.*;
      void testChange() {
         Activations activations = Activations.of(1);
         List<Double> newActivations = Arrays.asList(1.0, 2.0);
-        activations.change(0, newActivations);
+        activations.set(0, newActivations);
         assertEquals(newActivations, activations.activationsAllExamples.get(0));
     }
 
@@ -63,7 +63,7 @@ import static org.junit.jupiter.api.Assertions.*;
      void testGet() {
         Activations activations = Activations.of(1);
         List<Double> newActivations = Arrays.asList(1.0, 2.0);
-        activations.change(0, newActivations);
+        activations.set(0, newActivations);
         assertEquals(1.0, activations.get(0, 0), 1e-6);
         assertEquals(2.0, activations.get(0, 1), 1e-6);
     }

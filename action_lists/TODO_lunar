@@ -57,6 +57,8 @@ copyActivation  x
 RbdfNetwork cleaner x
 RunnerRadialBasisComplex3d
 
+Lunar med ny rbf
+ta bort rbf old
 recorder - mean och std på reward och td
 plotta reward och td med error band plot
 learning rate rbf i lunar - nog fel - nu frusen som 0.1

@@ -57,5 +57,13 @@ public class Kernels {
         return activations;
     }
 
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        for (Kernel kernel : kernels) {
+            sb.append(kernel).append("\n");
+        }
+        return "\n" + sb;
+    }
 
 }

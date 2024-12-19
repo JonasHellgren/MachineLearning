@@ -27,11 +27,11 @@ public class Activations {
         return new Activations(new ArrayList<>());
     }
 
-    public void calcuteActivations(TrainData data, Kernels kernels) {
+    public void calculateActivations(TrainData data, Kernels kernels) {
         for (int i = 0; i < data.inputs().size(); i++) {
             var input = data.inputs().get(i);
             var activationsOfInput = kernels.getActivationOfSingleInput(input);
-            change(i, activationsOfInput);
+            set(i, activationsOfInput);
         }
     }
 
@@ -42,7 +42,7 @@ public class Activations {
      * @param activations the new activations
      */
 
-    public void change(int idxSample, List<Double> activations) {
+    public void set(int idxSample, List<Double> activations) {
         activationsAllExamples.set(idxSample, activations);
     }
 
@@ -75,9 +75,9 @@ public class Activations {
         var sb = new StringBuilder();
         for (List<Double> activation : activationsAllExamples) {
             int idx = activationsAllExamples.indexOf(activation);
-            sb.append("  Sample idx:=" + idx + ":").append(activation).append("\n");
+            sb.append("  Sample idx:=").append(idx).append(":").append(activation).append("\n");
         }
-        return "\n" + sb.toString();
+        return "\n" + sb;
     }
 
 

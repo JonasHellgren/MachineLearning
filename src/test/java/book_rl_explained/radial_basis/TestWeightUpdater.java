@@ -20,7 +20,7 @@ public class TestWeightUpdater {
         kernels.addKernel(kernel);
         Weights weights = Weights.allZero(kernels.size());
         Activations activations = Activations.of(data.nSamples());
-        activations.calcuteActivations(data, kernels);
+        activations.calculateActivations(data, kernels);
 
         var updater = WeightUpdater.of(LEARNING_RATE);
         updater.updateWeights(data, weights, activations);
@@ -43,7 +43,7 @@ public class TestWeightUpdater {
         kernels.addKernel(kernel2);
         Weights weights = Weights.allZero(kernels.size());
         Activations activations = Activations.of(data.nSamples());
-        activations.calcuteActivations(data, kernels);
+        activations.calculateActivations(data, kernels);
 
         var updater = WeightUpdater.of(LEARNING_RATE);
         updater.updateWeights(data, weights, activations);
