@@ -41,8 +41,8 @@ import static org.junit.jupiter.api.Assertions.*;
         Kernel kernel = new Kernel(new double[]{1.0}, new double[]{1.0});
         kernels.addKernel(kernel);
 
-        Activations activations = Activations.of(data.nExamples());
-        activations.setActivations(data, kernels);
+        Activations activations = Activations.of(data.nSamples());
+        activations.calcuteActivations(data, kernels);
 
         // Verify that activations were changed
         assertEquals(2, activations.nSamples());

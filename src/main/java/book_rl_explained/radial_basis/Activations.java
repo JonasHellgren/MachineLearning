@@ -27,7 +27,7 @@ public class Activations {
         return new Activations(new ArrayList<>());
     }
 
-    public void setActivations(TrainData data, Kernels kernels) {
+    public void calcuteActivations(TrainData data, Kernels kernels) {
         for (int i = 0; i < data.inputs().size(); i++) {
             var input = data.inputs().get(i);
             var activationsOfInput = kernels.getActivationOfSingleInput(input);
@@ -38,7 +38,7 @@ public class Activations {
     /**
      * Changes the activations for a specific example.
      *
-     * @param idxSample the index of the example
+     * @param idxSample   the index of the example
      * @param activations the new activations
      */
 

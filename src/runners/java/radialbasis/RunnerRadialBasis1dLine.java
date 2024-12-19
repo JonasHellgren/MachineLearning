@@ -21,7 +21,7 @@ import java.util.Random;
 public class RunnerRadialBasis1dLine {
 
     public static final double TOL = 1.0;
-    public static final int N_FITS = 100_000;
+    public static final int N_FITS = 1000;
     public static final double MAX_X = 10d;
     public static final double MAX_Y = 10d;
     public static final int N_KERNELS = 6;

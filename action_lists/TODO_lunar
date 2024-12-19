@@ -54,7 +54,7 @@ ny rbf x
 namn sample  x
 cleaner x
 copyActivation  x
-RbdfNetwork cleaner
+RbdfNetwork cleaner x
 RunnerRadialBasisComplex3d
 
 recorder - mean och std på reward och td

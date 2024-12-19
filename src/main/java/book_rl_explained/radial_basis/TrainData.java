@@ -36,7 +36,7 @@ public record TrainData(
         outputs.add(output);
     }
 
-    public int nExamples() {
+    public int nSamples() {
         return inputs.size();
     }
 
