@@ -3,10 +3,14 @@ package book_rl_explained.radial_basis;
 import com.google.common.base.Preconditions;
 import common.list_arrays.List2ArrayConverter;
 import lombok.AllArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class represents a collection of Kernel objects.
+ * Each Kernel represents a radial basis function with a specific center and gamma value.
+ */
 @AllArgsConstructor
 public class Kernels {
 

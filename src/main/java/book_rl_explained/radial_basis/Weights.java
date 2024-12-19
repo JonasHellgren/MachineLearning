@@ -28,6 +28,11 @@ public class Weights {
         return weights[index];
     }
 
+
+    public double[] getArray() {
+        return weights;
+    }
+
     public int size() {
         return weights.length;
     }

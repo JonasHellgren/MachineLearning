@@ -24,6 +24,15 @@ public class RbfNetwork {
     }
 
 
+    public int nKernels() {
+        return kernels.size();
+    }
+
+
+    public Kernel getKernel(int i) {
+        return kernels.get(i);
+    }
+
     public void train(TrainData data, int nFits) {
         for (int i = 0; i < nFits; i++) {
             train(data);
@@ -43,11 +52,11 @@ public class RbfNetwork {
      * Updates the weights of the RBF network based on the input data and target outputs.
      *
      * @param inputs   the input data
-     * @param yTargets the target outputs
+     * @param outputs the target outputs
      */
 
-    public void train(List<List<Double>> inputs, List<Double> yTargets) {
-        var errors = getErrors(inputs, yTargets);
+    public void train(List<List<Double>> inputs, List<Double> outputs) {
+        var errors = getErrors(inputs, outputs);
         fitFromErrors(inputs, errors);
     }
 
@@ -62,6 +71,8 @@ public class RbfNetwork {
         int nKernels = kernels.size();
         validateInput(input, nKernels);
         var activation = kernels.getActivationOfSingleInput(input);
+        activations = Activations.of(1);
+        activations.change(0, activation);
         double result = 0;
         for (int i = 0; i < nKernels; i++) {
             result += weights.get(i) * activation.get(i);
@@ -79,16 +90,24 @@ public class RbfNetwork {
                         ", lengthCenterCoord = " + lengthCenterCoord);
     }
 
-    public void copyActivations(RbfNetwork other) {
+    /**
+     * Handy to save computation time if you already have the activations in other identical rbf
+     * @param other, the other rbf to copy from
+     */
 
+    public void copyActivations(RbfNetwork other) {
+        Preconditions.checkArgument(other.nKernels() == nKernels()
+                ,"kernels should be same size");
+        activations = Activations.of(other.activations.nSamples());
+        for(int i = 0; i < other.activations.nSamples(); i++) {
+            activations.change(i, other.activations.get(i));
+        }
     }
 
 
     private List<Double> getErrors(List<List<Double>> inputs, List<Double> yTargets) {
-        //double[] yErrors = new double[inputs.length];
         List<Double> errors = new ArrayList<>();
         for (int i = 0; i < inputs.size(); i++) {
-            //yErrors[i] = yTargets[i] - outPut(inputs[i]);
             double error = yTargets.get(i) - outPut(inputs.get(i));
             errors.add(error);
         }

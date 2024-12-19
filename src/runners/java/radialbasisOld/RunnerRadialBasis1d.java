@@ -1,4 +1,4 @@
-package radial_basis;
+package radialbasisOld;
 
 import common.list_arrays.List2ArrayConverter;
 import common.other.CpuTimer;

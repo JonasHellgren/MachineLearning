@@ -1,7 +1,8 @@
-package radial_basis;
+package radialbasis;
 
-import book_rl_explained.radialbasis.RadialBasis;
-import book_rl_explained.radialbasis.WeightUpdaterOld;
+
+import book_rl_explained.radial_basis.Kernels;
+import book_rl_explained.radial_basis.RbfNetwork;
 import org.hellgren.utilities.list_arrays.Array2ListConverter;
 import org.hellgren.utilities.list_arrays.ArrayCreator;
 import org.hellgren.utilities.list_arrays.ListCreator;
@@ -11,6 +12,7 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.XYStyler;
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Random;
 public class RunnerRadialBasis1dLine {
 
     public static final double TOL = 1.0;
-    public static final int N_FITS = 1000;
+    public static final int N_FITS = 100_000;
     public static final double MAX_X = 10d;
     public static final double MAX_Y = 10d;
     public static final int N_KERNELS = 6;
@@ -28,7 +30,7 @@ public class RunnerRadialBasis1dLine {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 200;
     public static final double NOISE = 2;
-    static RadialBasis rbObo, rbBatch;
+    static RbfNetwork rbObo, rbBatch;
     static List<Double> in0;
     static List<List<Double>> inList;
     static List<Double> outList;
@@ -44,12 +46,13 @@ public class RunnerRadialBasis1dLine {
     }
 
     private static void init() {
-        double[] centers = ArrayCreator.createArrayFromStartAndEndWithNofItems(0d-0*SIGMA, MAX_X+0*SIGMA, N_KERNELS);
+        double[] centers = ArrayCreator.createArrayFromStartAndEndWithNofItems(0d, MAX_X, N_KERNELS);
         double[] sigmas = ArrayCreator.createArrayWithSameDoubleNumber(N_KERNELS, SIGMA);
-        rbObo = RadialBasis.empty();
-        rbObo.addKernelsWithCentersAndSigmas(centers, sigmas);
-        rbBatch = RadialBasis.empty();
-        rbBatch.addKernelsWithCentersAndSigmas(centers, sigmas);
+        var kernels = Kernels.empty();
+        kernels.addKernelsWithCentersAndSigmas(centers,sigmas);
+        rbObo = RbfNetwork.of(kernels,LEARNING_RATE);
+        rbBatch = RbfNetwork.of(kernels,LEARNING_RATE);
+
         in0 = ListCreator.createFromStartToEndWithNofItems(0d, MAX_X, 10);
         inList = in0.stream().map(in -> List.of(in)).toList();
         outList = ListCreator.createFromStartToEndWithNofItems(0d, MAX_Y, 10);
@@ -65,29 +68,27 @@ public class RunnerRadialBasis1dLine {
     }
 
 
-    private static void showKernelChart(RadialBasis rb1, String titleRbf) {
+    private static void showKernelChart(RbfNetwork rb1, String titleRbf) {
         var chartRbf = getChartRbf(titleRbf);
         List<Double> xData = getXData();
-        List<Double> yData = Array2ListConverter.arrayToList(rb1.getWeights());
+        List<Double> yData = Array2ListConverter.arrayToList(rb1.getWeights().getArray());
         chartRbf.addSeries(titleRbf, xData, yData);
         new SwingWrapper<>(chartRbf).displayChart();
     }
 
 
-    static void fitWeightsBatch(RadialBasis rb1) {
-        var updater = WeightUpdaterOld.withLearningRate(rb1, LEARNING_RATE);
+    static void fitWeightsBatch(RbfNetwork rb) {
         for (int i = 0; i < N_FITS; i++) {
             List<Double> outListNoisy = getListNoisy();
-            updater.updateWeights(inList, outListNoisy);
+            rb.train(inList, outListNoisy);
         }
     }
 
-    static void fitWeightsOneByOne(RadialBasis rb1) {
-        var updater = WeightUpdaterOld.withLearningRate(rb1, LEARNING_RATE);
+    static void fitWeightsOneByOne(RbfNetwork rb) {
         for (int i = 0; i < N_FITS; i++) {
             List<Double> outListNoisy = getListNoisy();
             for (int j = 0; j < inList.size() ; j++) {
-                updater.updateWeights(List.of(inList.get(j)),List.of(outListNoisy.get(j)));
+                rb.train(List.of(inList.get(j)),List.of(outListNoisy.get(j)));
             }
         }
     }
@@ -114,8 +115,8 @@ public class RunnerRadialBasis1dLine {
     }
 
 
-    private static List<Double> getOutRbfList(RadialBasis rb1) {
-        return  in0.stream().map(in -> rb1.outPut(List.of(in))).toList();
+    private static List<Double> getOutRbfList(RbfNetwork rb) {
+        return  in0.stream().map(in -> rb.outPut(List.of(in))).toList();
     }
 
 

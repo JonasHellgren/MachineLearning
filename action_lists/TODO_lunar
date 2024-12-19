@@ -50,9 +50,11 @@ TestRBWeightUpdater1dLine x
 RunnerRBWeightUpdater1dLine x
 
 visa gradient på många exempel ger bättre träning  x
-ny rbf
-namn sample
-TrainData intern
+ny rbf x
+namn sample  x
+cleaner x
+copyActivation  x
+RbdfNetwork cleaner
 RunnerRadialBasisComplex3d
 
 recorder - mean och std på reward och td

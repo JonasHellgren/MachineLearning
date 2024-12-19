@@ -4,6 +4,10 @@ import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+/**
+ * Represents a radial basis function (RBF) kernel.
+ * A kernel is defined by its center coordinates and gammas (stickiness).
+ */
 public record Kernel  (
         double[] centerCoordinates,
         double[] gammas) {

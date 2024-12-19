@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testSize() {
         Activations activations = Activations.of(5);
-        assertEquals(5, activations.nExamples());
+        assertEquals(5, activations.nSamples());
     }
 
     @Test
      void testOf() {
         int nExamples = 5;
         Activations activations = Activations.of(nExamples);
-        assertEquals(nExamples, activations.nExamples());
+        assertEquals(nExamples, activations.nSamples());
         for (int i = 0; i < nExamples; i++) {
             assertTrue(activations.activationsAllExamples.get(i).isEmpty());
         }
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testEmpty() {
         Activations activations = Activations.empty();
-        assertEquals(0, activations.nExamples());
+        assertEquals(0, activations.nSamples());
     }
 
     @Test
@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.*;
         activations.setActivations(data, kernels);
 
         // Verify that activations were changed
-        assertEquals(2, activations.nExamples());
+        assertEquals(2, activations.nSamples());
         assertNotNull(activations.activationsAllExamples.get(0));
         assertNotNull(activations.activationsAllExamples.get(1));
         assertTrue(activations.get(0,0)>activations.get(1,0));  //example 1 has higher activation

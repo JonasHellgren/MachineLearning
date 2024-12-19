@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the activations of a set of examples.
+ * Each example has a list of activations corresponding to different kernels.
+ */
 @AllArgsConstructor
 public class Activations {
 
@@ -31,20 +35,38 @@ public class Activations {
         }
     }
 
-    public void change(int idxExample, List<Double> activations) {
-      activationsAllExamples.set(idxExample, activations);
+    /**
+     * Changes the activations for a specific example.
+     *
+     * @param idxSample the index of the example
+     * @param activations the new activations
+     */
+
+    public void change(int idxSample, List<Double> activations) {
+        activationsAllExamples.set(idxSample, activations);
     }
 
-    public double get(int idxExample,int idxKernel) {
-        return activationsAllExamples.get(idxExample).get(idxKernel);
+    /**
+     * Gets the activation for a specific example and kernel.
+     *
+     * @param idxSample the index of the sample
+     * @param idxKernel the index of the kernel
+     * @return the activation
+     */
+    public double get(int idxSample, int idxKernel) {
+        return get(idxSample).get(idxKernel);
     }
 
-    public  int nExamples() {
+    public List<Double> get(int idxSample) {
+        return activationsAllExamples.get(idxSample);
+    }
+
+    public int nSamples() {
         return activationsAllExamples.size();
     }
 
     public int nKernels() {
-        Preconditions.checkArgument(nExamples() > 0, "activations should not be empty");
+        Preconditions.checkArgument(nSamples() > 0, "activations should not be empty");
         return activationsAllExamples.get(0).size();
     }
 
@@ -53,9 +75,9 @@ public class Activations {
         var sb = new StringBuilder();
         for (List<Double> activation : activationsAllExamples) {
             int idx = activationsAllExamples.indexOf(activation);
-            sb.append("  Example idx:="+ idx+":").append(activation).append("\n");
-    }
-        return "\n"+sb.toString();
+            sb.append("  Sample idx:=" + idx + ":").append(activation).append("\n");
+        }
+        return "\n" + sb.toString();
     }
 
 

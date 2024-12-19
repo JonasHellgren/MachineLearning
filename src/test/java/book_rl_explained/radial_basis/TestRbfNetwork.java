@@ -10,7 +10,7 @@ public class TestRbfNetwork {
     public static final double LEARNING_RATE = 0.5;
     public static final double TOL = 0.01;
     public static final int N_FITS = 100;
-    RbfNetwork rbfNetwork;
+    RbfNetwork rbfNetwork, rbfNetworkClone;
     TrainData data;
 
     @BeforeEach
@@ -25,6 +25,7 @@ public class TestRbfNetwork {
         kernels.addKernel(kernel2);
 
         rbfNetwork = RbfNetwork.of(kernels, LEARNING_RATE);
+        rbfNetworkClone = RbfNetwork.of(kernels, LEARNING_RATE);
     }
 
     @Test
@@ -35,5 +36,15 @@ public class TestRbfNetwork {
         Assertions.assertEquals(data.output(0), out0, TOL);
         Assertions.assertEquals(data.output(1), out1, TOL);
     }
+
+     @Test
+      void whenCopyActivation_thenCorrect() {
+         double out0 = rbfNetwork.outPut(data.input(0));
+         rbfNetworkClone.copyActivations(rbfNetwork);
+         var activations=rbfNetwork.getActivations();
+
+         System.out.println("activations = " + activations);
+
+     }
 
 }
