@@ -21,7 +21,7 @@ public record LunarProperties(
         double rewardStep) {
 
     public static LunarProperties defaultProps() {
-        return new LunarProperties(500.0, 0.2, 1.62, 0, 2, 0d, 5, 3, 2d, -10, 10, -1);
+        return new LunarProperties(500.0, 0.1, 1.62, 0, 2, 0d, 5, 3, 1d, -100, 100, -1);
     }
 
     public List<Double> ySpace(int nItems) {

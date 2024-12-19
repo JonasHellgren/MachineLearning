@@ -5,8 +5,8 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.MemoryFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import super_vised.radial_basis.RadialBasis;
-import super_vised.radial_basis.WeightUpdater;
+import book_rl_explained.radialbasis.RadialBasis;
+import book_rl_explained.radialbasis.WeightUpdaterOld;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,15 +15,15 @@ public class ActorMemoryLunar {
 
     RadialBasis memoryMean;
     RadialBasis memoryLogStd;
-    WeightUpdater updaterMean;
-    WeightUpdater updaterLogStd;
+    WeightUpdaterOld updaterMean;
+    WeightUpdaterOld updaterLogStd;
     AgentParameters agentParameters;
 
     public static ActorMemoryLunar create(AgentParameters p, LunarProperties ep) {
         var memExp = MemoryFactory.createMemoryManyCenters(p,ep);
         var memStd = MemoryFactory.createMemoryOneWideCenter(p,ep);
-        var updExp = new WeightUpdater(memExp,p.learningRateActor());
-        var updStd = new WeightUpdater(memStd,p.learningRateActor());
+        var updExp = new WeightUpdaterOld(memExp,p.learningRateActor());
+        var updStd = new WeightUpdaterOld(memStd,p.learningRateActor());
         return new ActorMemoryLunar(memExp, memStd, updExp, updStd,p);
     }
 

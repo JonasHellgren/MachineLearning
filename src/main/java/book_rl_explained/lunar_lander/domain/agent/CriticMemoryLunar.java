@@ -5,8 +5,8 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.MemoryFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import super_vised.radial_basis.RadialBasis;
-import super_vised.radial_basis.WeightUpdater;
+import book_rl_explained.radialbasis.RadialBasis;
+import book_rl_explained.radialbasis.WeightUpdaterOld;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ public class CriticMemoryLunar {
 
     @Getter
     RadialBasis memory;
-    WeightUpdater updater;
+    WeightUpdaterOld updater;
 
     public static CriticMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var mem = MemoryFactory.createMemoryManyCenters(p,ep);
-        var updater0 = new WeightUpdater(mem,p.learningRateCritic());
+        var updater0 = new WeightUpdaterOld(mem,p.learningRateCritic());
         return new CriticMemoryLunar(mem, updater0);
     }
 

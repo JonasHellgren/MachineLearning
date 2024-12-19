@@ -6,7 +6,7 @@ import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import super_vised.radial_basis.RadialBasis;
+import book_rl_explained.radialbasis.RadialBasis;
 
 import java.util.List;
 
