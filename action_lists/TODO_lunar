@@ -55,7 +55,11 @@ namn sample  x
 cleaner x
 copyActivation  x
 RbdfNetwork cleaner x
-RunnerRadialBasisComplex3d
+RunnerRadialBasisComplex3d  x
+TrainData createBatch(int len) x
+randomIndices till commons x
+TrainData cleaner x
+RunnerRadialBasis3dFunction cleaner
 
 Lunar med ny rbf
 ta bort rbf old

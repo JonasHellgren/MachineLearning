@@ -1,5 +1,6 @@
 package book_rl_explained.radial_basis;
 
+import org.hellgren.utilities.random.RandUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,11 @@ public record TrainData(
 
 
     public static TrainData emptyFourOutputs() {
-        return new TrainData(new ArrayList<>(),  null, new ArrayList<>());
+        return new TrainData(new ArrayList<>(), null, new ArrayList<>());
     }
 
     public static TrainData emptyFourErrors() {
-        return new TrainData(new ArrayList<>(), new ArrayList<>(),null);
+        return new TrainData(new ArrayList<>(), new ArrayList<>(), null);
     }
 
     public static TrainData ofErrors(List<List<Double>> inputs, List<Double> errors) {
@@ -30,10 +31,29 @@ public record TrainData(
         return new TrainData(inputs, null, outputs);
     }
 
-
-    public void addInOutPair(List<Double> input,double output) {
+    public void addInOutPair(List<Double> input, double output) {
         inputs.add(input);
         outputs.add(output);
+    }
+
+    public TrainData createBatch(int len) {
+        var randomIndices = RandUtils.randomIndices(len, nSamples());
+        var newInputs = new ArrayList<List<Double>>();
+        if (isErrors()) {
+            var newErrors = new ArrayList<Double>();
+            for (int i : randomIndices) {
+                newInputs.add(inputs.get(i));
+                newErrors.add(errors.get(i));
+            }
+            return TrainData.ofErrors(newInputs, newErrors);
+        } else {
+            var newOutputs = new ArrayList<Double>();
+            for (int i : randomIndices) {
+                newInputs.add(inputs.get(i));
+                newOutputs.add(outputs.get(i));
+            }
+            return TrainData.ofOutputs(newInputs, newOutputs);
+        }
     }
 
     public int nSamples() {
@@ -51,4 +71,20 @@ public record TrainData(
     public double output(int i) {
         return outputs.get(i);
     }
+
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        for (int i = 0; i < nSamples(); i++) {
+            if (isErrors()) {
+                sb.append(input(i)).append(" ").append(errors.get(i)).append("\n");
+            } else {
+                sb.append(input(i)).append(" ").append(output(i)).append("\n");
+            }
+        }
+        return sb.toString();
+
+
+    }
+
 }
