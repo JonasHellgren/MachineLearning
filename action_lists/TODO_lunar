@@ -59,7 +59,7 @@ RunnerRadialBasisComplex3d  x
 TrainData createBatch(int len) x
 randomIndices till commons x
 TrainData cleaner x
-RunnerRadialBasis3dFunction cleaner
+RunnerRadialBasis3dFunction cleaner  x
 
 Lunar med ny rbf
 ta bort rbf old
