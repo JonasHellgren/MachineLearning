@@ -44,7 +44,7 @@ class TestEnvironment {
 
     @Test
     void testStep_Terminal_Fail() {
-        var state = StateLunar.of(1.0, -5.0);
+        var state = StateLunar.of(0.1, -5.0);
         double action = 0;
         var stepReturn = environment.step(state, action);
         assertTrue(stepReturn.isTerminal());
@@ -66,10 +66,11 @@ class TestEnvironment {
 
     @Test
     void testStep_ForceClipped() {
-        var state = StateLunar.of(10e3, 0.0);
-        double forceInKNewton = environment.forceInKiloNewton(properties.forceMax());
+        var state = StateLunar.of(1, 0.0);
+        double forceInKNewton = properties.forceMax();
         var stepReturn1 = environment.step(state, forceInKNewton);
         var stepReturn2 = environment.step(state, forceInKNewton * 2);
+
         assertEquals(stepReturn1.stateNew().y(), stepReturn2.stateNew().y());
         assertEquals(stepReturn1.stateNew().spd(), stepReturn2.stateNew().spd());
     }

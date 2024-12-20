@@ -79,3 +79,11 @@ när tid:
 prova olika n kluster
 
 
+    public double acceleration(double action) {
+        double m = properties.massLander();
+        double forceInNewton = forceInNewton(action);
+        double forceClipped = properties.clippedForce(forceInNewton);
+        return (forceClipped - m * properties.g()) / m;
+    }
+
+

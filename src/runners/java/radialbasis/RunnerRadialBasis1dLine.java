@@ -1,6 +1,5 @@
 package radialbasis;
 
-
 import book_rl_explained.radial_basis.Kernels;
 import book_rl_explained.radial_basis.RbfNetwork;
 import org.hellgren.utilities.list_arrays.Array2ListConverter;
@@ -12,7 +11,6 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.XYStyler;
-
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
