@@ -37,13 +37,22 @@ public class Weights {
         return weights.length;
     }
 
-    private static double[] createWeightsAllZero(int size) {
-        return new double[size];
+    public void setWeights(double[] doubles) {
+        Preconditions.checkArgument(doubles.length == size(),
+                "weights and doubles should have same length");
+        for (int i = 0; i <size() ; i++) {
+            set(i,doubles[i]);
+        }
     }
 
     public void set(int i, double v) {
         weights[i] = v;
     }
+
+    private static double[] createWeightsAllZero(int size) {
+        return new double[size];
+    }
+
 
     @Override
     public String toString() {

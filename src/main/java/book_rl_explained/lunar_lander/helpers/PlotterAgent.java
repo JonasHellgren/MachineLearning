@@ -6,8 +6,10 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.hellgren.plotters.plotting_2d.HeatMapChartCreator;
 import org.hellgren.plotters.plotting_2d.SwingHeatMapPlotter;
 import org.hellgren.utilities.list_arrays.List2ArrayConverter;
+import org.knowm.xchart.SwingWrapper;
 
 import java.util.function.Function;
 
@@ -92,7 +94,24 @@ public class PlotterAgent {
         return data;
     }
 
+
+
     private void showData(String title, double[][] data) {
+        var settingsMap = HeatMapChartCreator.Settings.defaultBuilder()
+                .xAxisLabel("Speed").yAxisLabel("Height")
+                .title(title).showDataValues(false).build();
+        var yList = dependencies.environment().getProperties().ySpace(settings.nY());
+        var spdList = dependencies.environment().getProperties().spdSpace(settings.nSpd());
+        var creator = HeatMapChartCreator.of(
+                settingsMap,
+                data,
+                List2ArrayConverter.convertListToDoubleArr(spdList),
+                List2ArrayConverter.convertListToDoubleArr(yList));
+        new SwingWrapper<>(creator.create()).displayChart();
+    }
+
+
+    private void showDataOld(String title, double[][] data) {
         var yList = dependencies.environment().getProperties().ySpace(settings.nY());
         var spdList = dependencies.environment().getProperties().spdSpace(settings.nSpd());
         var shower = SwingHeatMapPlotter.builder()

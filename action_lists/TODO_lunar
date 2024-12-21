@@ -61,11 +61,14 @@ randomIndices till commons x
 TrainData cleaner x
 RunnerRadialBasis3dFunction cleaner  x
 
-Lunar med ny rbf
-ta bort rbf old
-recorder - mean och std på reward och td
-plotta reward och td med error band plot
-learning rate rbf i lunar - nog fel - nu frusen som 0.1
+Lunar med ny rbf x
+CriticMemoryLunar x
+ta bort rbf old  x
+recorder - mean och std på reward och td  x
+plotta reward och td med error band plot  x
+snygg 3d plot  x
+learning rate rbf i lunar - nog fel - nu frusen som 0.1  x
+HeatMapChartCreator x y axis ticks 3d plot  x
 batch isf obo för att fitta RBF minnen
 snabbare lunar genom activ matrix som delas mellan actor o critic
 påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft

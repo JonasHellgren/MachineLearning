@@ -44,7 +44,7 @@ public class RunnerTrainerLunarSingleStep {
 
     private static void plot(TrainerLunarSingleStep trainer, TrainerDependencies trainerDependencies) {
         var progressPlotter= PlotterProgressMeasures.of(trainer);
-        progressPlotter.plot("TrainerLunar");
+        progressPlotter.plot();
         var agentPlotter= PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
         agentPlotter.plotAll();
     }

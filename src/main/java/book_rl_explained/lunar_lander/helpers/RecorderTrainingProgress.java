@@ -15,7 +15,6 @@ import java.util.function.Function;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecorderTrainingProgress {
 
-    public static final int LENGTH_WINDOW = 100;
     List<ProgressMeasures> measuresList;
 
     public static RecorderTrainingProgress empty() {
@@ -37,7 +36,7 @@ public class RecorderTrainingProgress {
     public List<Double> trajectory(String name) {
         var functionHashMap = getStringFunctionHashMap();
         Preconditions.checkArgument(functionHashMap.containsKey(name), "Unknown name: " + name);
-        return filter(measuresList.stream().map((functionHashMap.get(name))).toList());
+        return measuresList.stream().map((functionHashMap.get(name))).toList();
     }
 
     @NotNull
@@ -52,10 +51,7 @@ public class RecorderTrainingProgress {
         return map;
     }
 
-    private static List<Double> filter(List<Double> inList) {
-        MovingAverage movingAverage = new MovingAverage(LENGTH_WINDOW, inList);
-        return movingAverage.getFiltered();
-    }
+
 
     public int nSteps() {
         return measuresList.size();

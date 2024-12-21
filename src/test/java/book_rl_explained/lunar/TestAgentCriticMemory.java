@@ -6,8 +6,6 @@ import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import book_rl_explained.radialbasis.RadialBasis;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +30,8 @@ class TestAgentCriticMemory {
     @Test
     void testCreateMemory() {
         var criticMemoryLunar = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
-        RadialBasis rb = criticMemoryLunar.getMemory();
-        assertEquals(agentParameters.nKernelsY() * agentParameters.nKernelsSpeed(), rb.getWeights().length);
+        var rb = criticMemoryLunar.getMemory();
+        assertEquals(agentParameters.nKernelsY() * agentParameters.nKernelsSpeed(), rb.getWeights().size());
     }
 
     @Test
@@ -43,7 +41,6 @@ class TestAgentCriticMemory {
             assertEquals(0.0, memory.read(state));
         }
     }
-
 
     @Test
     void testFit_oneState() {
@@ -72,7 +69,7 @@ class TestAgentCriticMemory {
     @Test
     void testFit_AllStatesToTarget5() {
         double vTarget = 5;
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 500; i++) {
             StateLunar state = StateLunar.randomPosAndSpeed(lunarProperties);
             fitMemory(memory, state, vTarget);
         }

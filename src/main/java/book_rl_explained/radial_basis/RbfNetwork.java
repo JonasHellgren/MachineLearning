@@ -1,5 +1,6 @@
 package book_rl_explained.radial_basis;
 
+import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.ArrayList;
@@ -110,6 +111,10 @@ public class RbfNetwork {
             errors.add(error);
         }
         return errors;
+    }
+
+    public void setWeights(double[] doubles) {
+            weights.setWeights(doubles);
     }
 
     @Override

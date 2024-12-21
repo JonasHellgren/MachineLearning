@@ -1,7 +1,5 @@
 package radialbasisOld;
 
-import book_rl_explained.radialbasis.RadialBasis;
-import book_rl_explained.radialbasis.WeightUpdaterOld;
 import org.hellgren.utilities.list_arrays.Array2ListConverter;
 import org.hellgren.utilities.list_arrays.ArrayCreator;
 import org.hellgren.utilities.list_arrays.ListCreator;

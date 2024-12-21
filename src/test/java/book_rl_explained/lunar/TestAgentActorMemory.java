@@ -30,8 +30,6 @@ class TestAgentActorMemory {
     void testZeroWeights() {
         assertNotNull(actorMemoryLunar.getMemoryMean());
         assertNotNull(actorMemoryLunar.getMemoryLogStd());
-        assertNotNull(actorMemoryLunar.getUpdaterMean());
-        assertNotNull(actorMemoryLunar.getUpdaterLogStd());
     }
 
 
