@@ -4,10 +4,10 @@ import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.RbfMemoryFactory;
 import book_rl_explained.radial_basis.RbfNetwork;
+import book_rl_explained.radial_basis.TrainData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -31,75 +31,34 @@ public class ActorMemoryLunar {
      * @param grad the gradient value, using logStd
      */
 
-    public void fit(StateLunar state, double adv, GradientMeanStd grad) {
+    public void fitOne(StateLunar state, double adv, GradientMeanStd grad) {
         var inputs = List.of(state.asList());
         grad=grad.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
         var errorListMean = List.of(grad.mean() * adv);
         var errorListStd = List.of(grad.std() * adv);
-
-        //System.out.println("fit");
-        //System.out.println("inputs = " + inputs);
-       // System.out.println("adv = " + adv);
-       // System.out.println("errorListMean = " + errorListMean);
-
         memoryMean.fitFromErrors(inputs, errorListMean);
         memoryLogStd.fitFromErrors(inputs, errorListStd);
     }
 
-    public void fitBatch1(List<StateLunar> states, List<Double> advs, List<GradientMeanStd> grads0) {
-        var inputs = states.stream().map(StateLunar::asList).toList();
-
-        List<GradientMeanStd> grads=new ArrayList<>();
-        for(GradientMeanStd grad0:grads0) {
-            var grad=grad0.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-            grads.add(grad);
-        }
-
-        List<Double> errorListMean=new ArrayList<>();
-        for (int i = 0; i < advs.size() ; i++) {
-            errorListMean.add( grads.get(i).mean()*advs.get(i));
-        }
-        List<Double> errorListStd=new ArrayList<>();
-        for (int i = 0; i < advs.size() ; i++) {
-            errorListStd.add( grads.get(i).std()*advs.get(i));
-        }
-
-       // System.out.println("fitBatch");
-        //inputs.forEach(System.out::println);
-       // advs.forEach(System.out::println);
-        //errorListMean.forEach(System.out::println);
-
-        for (int i = 0; i < inputs.size() ; i++) {
-            memoryMean.fitFromErrors(List.of(inputs.get(i)), List.of(errorListMean.get(i)));
-            memoryLogStd.fitFromErrors(List.of(inputs.get(i)), List.of(errorListStd.get(i)));
-        }
-
-    }
 
     public void fitBatch(List<StateLunar> states, List<Double> advs, List<GradientMeanStd> grads0) {
-        var inputs = states.stream().map(StateLunar::asList).toList();
-
-        List<GradientMeanStd> grads=new ArrayList<>();
-        for(GradientMeanStd grad0:grads0) {
+        var dataMean=TrainData.emptyFourErrors();
+        var dataStd=TrainData.emptyFourErrors();
+        for (int i = 0; i < states.size() ; i++) {
+            var grad0=grads0.get(i);
             var grad=grad0.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-            grads.add(grad);
+            var stateAsList=states.get(i).asList();
+            dataMean.addInErrorPair(stateAsList, grad.mean()*advs.get(i));
+            dataStd.addInErrorPair(stateAsList, grad.std()*advs.get(i));
         }
-
-        List<Double> errorListMean=new ArrayList<>();
-        for (int i = 0; i < advs.size() ; i++) {
-            errorListMean.add( grads.get(i).mean()*advs.get(i));
-        }
-        List<Double> errorListStd=new ArrayList<>();
-        for (int i = 0; i < advs.size() ; i++) {
-            errorListStd.add( grads.get(i).std()*advs.get(i));
-        }
-
-        for (int i = 0; i < 1 ; i++) {
-        memoryMean.fitFromErrors(inputs, errorListMean);
-        memoryLogStd.fitFromErrors(inputs, errorListStd);
+        int batchSize = Math.min(states.size(), agentParameters.batchSize());
+        for (int i = 0; i < agentParameters.nEpochs() ; i++) {
+        memoryMean.fit(dataMean.createBatch(batchSize));
+        memoryLogStd.fit(dataStd.createBatch(batchSize));
         }
 
     }
+
 
     /**
      * Returns the mean and standard deviation of the actor's output for the given state.

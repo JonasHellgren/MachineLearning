@@ -36,6 +36,12 @@ public record TrainData(
         outputs.add(output);
     }
 
+    public void addInErrorPair(List<Double> input, double error) {
+        inputs.add(input);
+        errors.add(error);
+    }
+
+
     public TrainData createBatch(int len) {
         var randomIndices = RandUtils.randomIndices(len, nSamples());
         var newInputs = new ArrayList<List<Double>>();

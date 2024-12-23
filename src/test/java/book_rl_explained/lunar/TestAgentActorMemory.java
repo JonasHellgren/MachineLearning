@@ -62,7 +62,7 @@ class TestAgentActorMemory {
         double adv = 1.0;
         var grad = GradientMeanStd.of(1.0, 2.0);
         var expStd0 = actorMemoryLunar.actorMeanAndStd(state);
-        actorMemoryLunar.fit(state, adv, grad);
+        actorMemoryLunar.fitOne(state, adv, grad);
         var expStdNew = actorMemoryLunar.actorMeanAndStd(state);
         Assertions.assertTrue(expStdNew.mean() > expStd0.mean());
         Assertions.assertTrue(expStdNew.std() > expStd0.std());

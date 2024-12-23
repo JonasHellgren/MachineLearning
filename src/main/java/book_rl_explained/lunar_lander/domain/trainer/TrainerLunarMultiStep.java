@@ -36,7 +36,6 @@ public class TrainerLunarMultiStep implements TrainerI {
             var experiences = epCreator.experiences();
             var msr = msrGenerator.generate(experiences);
             updateActorBatch(msr);
-           // updateActorStep(msr);
             updateCriticBatch(msr);
             recorder.add(pmCreator.progressMeasures(experiences));
         }

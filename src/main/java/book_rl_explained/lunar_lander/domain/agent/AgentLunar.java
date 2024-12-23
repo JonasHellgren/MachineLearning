@@ -43,7 +43,7 @@ public class AgentLunar implements AgentI{
     @Override
     public void fitActor(StateLunar state, double action, double adv) {
         var grad = gradientMeanAndLogStd(state, action);
-        actorMemory.fit(state, adv, grad);
+        actorMemory.fitOne(state, adv, grad);
     }
 
 

@@ -69,7 +69,7 @@ plotta reward och td med error band plot  x
 snygg 3d plot  x
 learning rate rbf i lunar - nog fel - nu frusen som 0.1  x
 HeatMapChartCreator x y axis ticks 3d plot  x
-batch isf obo för att fitta RBF minnen
+batch isf obo för att fitta RBF minnen x
 enkom data klass som skickas in till rbf
 fixa dev skugga för accReward etc
 snyggare plottar, force acc etc
