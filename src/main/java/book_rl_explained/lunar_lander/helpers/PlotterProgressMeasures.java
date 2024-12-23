@@ -21,9 +21,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hellgren.utilities.list_arrays.MyListUtils.elementSubtraction;
+import static org.hellgren.utilities.list_arrays.MyListUtils.everyItemAbsolute;
 
 @Log
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -58,7 +60,8 @@ public class PlotterProgressMeasures {
             int length = yData0.size();
             var yDataFiltered= filter(yData0,length/ N_WINDOWS);
             var errData= elementSubtraction(yDataFiltered, yData0);
-            var errDataFiltered= filter(errData,length/ N_WINDOWS);
+            errData = everyItemAbsolute(errData);
+            var errDataFiltered= filter(errData,length/ (N_WINDOWS));
             showPlot(measure, yDataFiltered, errDataFiltered);
         }
     }

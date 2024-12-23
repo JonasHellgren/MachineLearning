@@ -31,7 +31,7 @@ public class RunnerTrainerLunarMultiStep {
 
         var p = IS_BATCH_LEARNING ?
                 AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.05)
-                        .withBatchSize(10).withNEpochs(5)
+                        .withBatchSize(20).withNEpochs(1)
                 : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
         var tp = TrainerParameters.newDefault()
                 .withStepHorizon(5).withNEpisodes(3000).withBatchLearning(IS_BATCH_LEARNING);
