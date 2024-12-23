@@ -54,7 +54,7 @@ public class AgentLunar implements AgentI{
         for (int i = 0; i < states.size(); i++) {
             grads.add(gradientMeanAndLogStd(states.get(i), actions.get(i)));
         }
-        actorMemory.fitBatch(states, actions, grads);
+        actorMemory.fitBatch(states, advantages, grads);
     }
 
     @Override

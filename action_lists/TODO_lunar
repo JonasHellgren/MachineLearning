@@ -70,6 +70,9 @@ snygg 3d plot  x
 learning rate rbf i lunar - nog fel - nu frusen som 0.1  x
 HeatMapChartCreator x y axis ticks 3d plot  x
 batch isf obo för att fitta RBF minnen
+enkom data klass som skickas in till rbf
+fixa dev skugga för accReward etc
+snyggare plottar, force acc etc
 snabbare lunar genom activ matrix som delas mellan actor o critic
 påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
 

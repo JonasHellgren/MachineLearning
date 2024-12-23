@@ -35,7 +35,8 @@ public class TrainerLunarMultiStep implements TrainerI {
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
             var experiences = epCreator.experiences();
             var msr = msrGenerator.generate(experiences);
-            updateActorStep(msr);
+            updateActorBatch(msr);
+           // updateActorStep(msr);
             updateCriticBatch(msr);
             recorder.add(pmCreator.progressMeasures(experiences));
         }
@@ -48,19 +49,29 @@ public class TrainerLunarMultiStep implements TrainerI {
         List<Double> errors = new ArrayList<>();
         for (int step = 0; step < msr.nExperiences(); step++) {
             double adv = tp.clipAdvantage(msr.advantageAtStep(step));
-            states.add(msr.stateAtStep(step));
+            states.add(msr.stateAtStep(step).copy());
             actions.add(msr.actionAtStep(step));
             errors.add(adv);
         }
+/*
+        System.out.println("updateActorBatch");
+        states.forEach(System.out::println);
+        actions.forEach(System.out::println);
+        errors.forEach(System.out::println);
+*/
         dependencies.agent().fitActorBatch(states,actions,errors);
     }
 
     private void updateActorStep(MultiStepResults msr) {
         var agent = dependencies.agent();
         var tp = dependencies.trainerParameters();
+     //   System.out.println("updateActorStep");
         for (int step = 0; step < msr.nExperiences(); step++) {
             double adv = tp.clipAdvantage(msr.advantageAtStep(step));
             agent.fitActor(msr.stateAtStep(step), msr.actionAtStep(step), adv);
+/*            System.out.println("msr.stateAtStep(step) = " + msr.stateAtStep(step));
+            System.out.println("msr.actionAtStep(step) = " + msr.actionAtStep(step));
+            System.out.println("adv = " + adv);*/
         }
     }
 
