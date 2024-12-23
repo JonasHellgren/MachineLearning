@@ -10,12 +10,13 @@ public record TrainerParameters(
         double gamma,
         double tdMax,
         double advMax,
-        int stepHorizon
+        int stepHorizon,
+        boolean isBatchLearning
 
 ) {
 
     public static TrainerParameters newDefault() {
-        return new TrainerParameters(100,5000,0.99,10d,10d,5);
+        return new TrainerParameters(100,5000,0.99,10d,10d,5,true);
     }
 
     public double gammaPowN() {

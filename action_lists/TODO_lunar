@@ -72,8 +72,8 @@ HeatMapChartCreator x y axis ticks 3d plot  x
 batch isf obo för att fitta RBF minnen x
 enkom data klass som skickas in till rbf  x
 färre metoder AgentLunar x
-AgentMemoryUpdater
-flagga för step eller batch i trainer
+AgentMemoryUpdater  x
+flagga för step eller batch i trainer x
 fixa dev skugga för accReward etc
 snyggare plottar, force acc etc, plotta acc istället
 snabbare lunar genom activ matrix som delas mellan actor o critic

@@ -11,10 +11,12 @@ import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 
 public class RunnerTrainerLunarMultiStep {
 
+     static final boolean IS_BATCH_LEARNING = true;
+
     public static void main(String[] args) {
         var ep = getEnvironmentProperties();
         var trainerDependencies = getDependencies(ep);
-        var trainer= TrainerLunarMultiStep.of(trainerDependencies);
+        var trainer = TrainerLunarMultiStep.of(trainerDependencies);
         trainer.train();
         plot(trainer, trainerDependencies);
         RunnerHelper.evaluate(trainerDependencies, ep);
@@ -25,10 +27,14 @@ public class RunnerTrainerLunarMultiStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-        var p = AgentParameters.defaultParams(ep); //batch
-            //    .withLearningRateCritic(0.01).withLearningRateActor(0.001); //step
-                //.withNEpochs(5).withBatchSize(20);*/
-        var tp = TrainerParameters.newDefault().withStepHorizon(5).withNEpisodes(3000);
+
+
+        var p = IS_BATCH_LEARNING ?
+                AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.05)
+                        .withBatchSize(10).withNEpochs(5)
+                : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
+        var tp = TrainerParameters.newDefault()
+                .withStepHorizon(5).withNEpisodes(3000).withBatchLearning(IS_BATCH_LEARNING);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
@@ -41,9 +47,9 @@ public class RunnerTrainerLunarMultiStep {
             .nY(50).nSpd(50).nDigitsAxisLabels(1).valueFormat("%.1f").build();
 
     private static void plot(TrainerI trainer, TrainerDependencies trainerDependencies) {
-        var progressPlotter= PlotterProgressMeasures.of(trainer);
+        var progressPlotter = PlotterProgressMeasures.of(trainer);
         progressPlotter.plot();
-        var agentPlotter= PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
+        var agentPlotter = PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
         agentPlotter.plotAll();
     }
 

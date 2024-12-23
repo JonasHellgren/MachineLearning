@@ -14,6 +14,7 @@ import lombok.extern.java.Log;
 
 @Log
 public class RunnerTrainerLunarSingleStep {
+   static final boolean IS_BATCH_LEARNING = true;
 
     public static void main(String[] args) {
         var ep = getEnvironmentProperties();
@@ -29,9 +30,12 @@ public class RunnerTrainerLunarSingleStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-        var p = AgentParameters.defaultParams(ep) //batch
-            .withLearningRateCritic(0.01).withLearningRateActor(0.001); //step
-        var tp = TrainerParameters.newDefault();
+        var p = IS_BATCH_LEARNING ?
+                AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.01)
+                : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
+        var tp = TrainerParameters.newDefault()
+                .withNEpisodes(3000).withBatchLearning(IS_BATCH_LEARNING);
+
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
