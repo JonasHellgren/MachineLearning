@@ -49,7 +49,6 @@ public class AgentLunar implements AgentI{
 
     @Override
     public void fitActorBatch(List<StateLunar> states, List<Double> actions, List<Double> advantages) {
-        //var grads=advantages.stream().map(adv->gradientMeanAndLogStd(states.get(0), actions.get(0)).asList()).toList();
         List<GradientMeanStd> grads=new ArrayList<>();
         for (int i = 0; i < states.size(); i++) {
             grads.add(gradientMeanAndLogStd(states.get(i), actions.get(i)));

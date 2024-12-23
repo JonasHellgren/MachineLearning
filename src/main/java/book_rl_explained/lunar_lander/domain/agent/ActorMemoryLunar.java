@@ -42,14 +42,14 @@ public class ActorMemoryLunar {
 
 
     public void fitBatch(List<StateLunar> states, List<Double> advs, List<GradientMeanStd> grads0) {
-        var dataMean=TrainData.emptyFourErrors();
-        var dataStd=TrainData.emptyFourErrors();
+        var dataMean=TrainData.emptyFromErrors();
+        var dataStd=TrainData.emptyFromErrors();
         for (int i = 0; i < states.size() ; i++) {
             var grad0=grads0.get(i);
             var grad=grad0.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
             var stateAsList=states.get(i).asList();
-            dataMean.addInErrorPair(stateAsList, grad.mean()*advs.get(i));
-            dataStd.addInErrorPair(stateAsList, grad.std()*advs.get(i));
+            dataMean.addInAndError(stateAsList, grad.mean()*advs.get(i));
+            dataStd.addInAndError(stateAsList, grad.std()*advs.get(i));
         }
         int batchSize = Math.min(states.size(), agentParameters.batchSize());
         for (int i = 0; i < agentParameters.nEpochs() ; i++) {

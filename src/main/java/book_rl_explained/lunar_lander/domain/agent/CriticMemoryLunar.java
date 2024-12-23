@@ -4,6 +4,7 @@ import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.helpers.RbfMemoryFactory;
 import book_rl_explained.radial_basis.RbfNetwork;
+import book_rl_explained.radial_basis.TrainData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.List;
@@ -13,10 +14,11 @@ import java.util.List;
 public class CriticMemoryLunar {
 
     RbfNetwork memory;
+    AgentParameters agentParameters;
 
     public static CriticMemoryLunar zeroWeights(AgentParameters p, LunarProperties ep) {
         var mem = RbfMemoryFactory.createMemoryManyCenters(p,ep, p.learningRateCritic());
-        return new CriticMemoryLunar(mem);
+        return new CriticMemoryLunar(mem,p);
     }
 
     public double read(StateLunar state) {
@@ -30,6 +32,18 @@ public class CriticMemoryLunar {
     }
 
     public void fitBatch(List<StateLunar> states, List<Double> errors) {
+        var data= TrainData.emptyFromErrors();
+        for (int i = 0; i < states.size() ; i++) {
+            var stateAsList=states.get(i).asList();
+            data.addInAndError(stateAsList, errors.get(i));
+        }
+        int batchSize = Math.min(states.size(), agentParameters.batchSize());
+        for (int i = 0; i < agentParameters.nEpochs() ; i++) {
+            memory.fit(data.createBatch(batchSize));
+        }
+    }
+
+    public void fitBatch0(List<StateLunar> states, List<Double> errors) {
         var inputs = states.stream().map(StateLunar::asList).toList();
         memory.fitFromErrors(inputs, errors);
     }

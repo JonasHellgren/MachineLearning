@@ -58,7 +58,7 @@ class RunnerRadialBasis3dFunction {
         var trainData = TrainData.emptyFourOutputs();
         for (double x : getXData()) {
             for (double y : getYData()) {
-                trainData.addInOutPair(List.of(x, y), fcn.applyAsDouble(x, y));
+                trainData.addIAndOut(List.of(x, y), fcn.applyAsDouble(x, y));
             }
         }
         return trainData;

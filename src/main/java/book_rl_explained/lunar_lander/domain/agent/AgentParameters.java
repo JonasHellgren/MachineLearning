@@ -28,7 +28,7 @@ public record AgentParameters(
     public static final double GRAD_MEAN_MAX = 0.1;
     public static final double GRAD_STD_MAX = 0.01;
     public static final double INIT_WEIGHT_LOG_STD = 0d;
-    public static final int BATCH_SIZE = 10;
+    public static final int BATCH_SIZE = 20;
     public static final int N_EPOCHS = 5;
 
     public static AgentParameters defaultParams(LunarProperties ep) {

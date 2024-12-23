@@ -25,7 +25,9 @@ public class RunnerTrainerLunarMultiStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-        var p = AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.01);
+        var p = AgentParameters.defaultParams(ep);
+                /*.withLearningRateCritic(0.1).withLearningRateActor(0.01)
+                .withNEpochs(5).withBatchSize(20);*/
         var tp = TrainerParameters.newDefault().withStepHorizon(5).withNEpisodes(3000);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
@@ -36,7 +38,7 @@ public class RunnerTrainerLunarMultiStep {
     }
 
     public static final PlotterAgent.Settings SETTINGS_PLOTTER_AGENT = PlotterAgent.Settings.builder()
-            .nY(30).nSpd(30).nDigitsAxisLabels(1).valueFormat("%.1f").build();
+            .nY(50).nSpd(50).nDigitsAxisLabels(1).valueFormat("%.1f").build();
 
     private static void plot(TrainerI trainer, TrainerDependencies trainerDependencies) {
         var progressPlotter= PlotterProgressMeasures.of(trainer);

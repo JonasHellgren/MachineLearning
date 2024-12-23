@@ -19,7 +19,7 @@ public record TrainData(
         return new TrainData(new ArrayList<>(), null, new ArrayList<>());
     }
 
-    public static TrainData emptyFourErrors() {
+    public static TrainData emptyFromErrors() {
         return new TrainData(new ArrayList<>(), new ArrayList<>(), null);
     }
 
@@ -31,12 +31,12 @@ public record TrainData(
         return new TrainData(inputs, null, outputs);
     }
 
-    public void addInOutPair(List<Double> input, double output) {
+    public void addIAndOut(List<Double> input, double output) {
         inputs.add(input);
         outputs.add(output);
     }
 
-    public void addInErrorPair(List<Double> input, double error) {
+    public void addInAndError(List<Double> input, double error) {
         inputs.add(input);
         errors.add(error);
     }

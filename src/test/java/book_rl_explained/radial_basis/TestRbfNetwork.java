@@ -16,8 +16,8 @@ public class TestRbfNetwork {
     @BeforeEach
     void init() {
         data=TrainData.emptyFourOutputs();
-        data.addInOutPair(List.of(0.0), 1.0);
-        data.addInOutPair(List.of(1.0), 2.0);
+        data.addIAndOut(List.of(0.0), 1.0);
+        data.addIAndOut(List.of(1.0), 2.0);
         Kernels kernels = Kernels.empty();
         Kernel kernel1 = Kernel.ofSigmas(new double[]{0.0}, new double[]{1.0});
         Kernel kernel2 = Kernel.ofSigmas(new double[]{1.0}, new double[]{1.0});
