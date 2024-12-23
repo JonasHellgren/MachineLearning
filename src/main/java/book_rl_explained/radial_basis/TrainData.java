@@ -15,7 +15,7 @@ public record TrainData(
 ) {
 
 
-    public static TrainData emptyFourOutputs() {
+    public static TrainData emptyFromOutputs() {
         return new TrainData(new ArrayList<>(), null, new ArrayList<>());
     }
 

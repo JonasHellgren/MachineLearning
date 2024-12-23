@@ -15,7 +15,7 @@ public class TestRbfNetwork {
 
     @BeforeEach
     void init() {
-        data=TrainData.emptyFourOutputs();
+        data=TrainData.emptyFromOutputs();
         data.addIAndOut(List.of(0.0), 1.0);
         data.addIAndOut(List.of(1.0), 2.0);
         Kernels kernels = Kernels.empty();
@@ -30,7 +30,7 @@ public class TestRbfNetwork {
 
     @Test
     void whenTrained_thenCorrectOutput() {
-        rbfNetwork.train(data, N_FITS);
+        rbfNetwork.fit(data, N_FITS);
         double out0 = rbfNetwork.outPut(data.input(0));
         double out1 = rbfNetwork.outPut(data.input(1));
         Assertions.assertEquals(data.output(0), out0, TOL);

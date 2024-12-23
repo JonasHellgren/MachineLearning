@@ -2,6 +2,7 @@ package radialbasis;
 
 import book_rl_explained.radial_basis.Kernels;
 import book_rl_explained.radial_basis.RbfNetwork;
+import book_rl_explained.radial_basis.TrainData;
 import org.hellgren.utilities.list_arrays.Array2ListConverter;
 import org.hellgren.utilities.list_arrays.ArrayCreator;
 import org.hellgren.utilities.list_arrays.ListCreator;
@@ -76,13 +77,32 @@ public class RunnerRadialBasis1dLine {
 
 
     static void fitWeightsBatch(RbfNetwork rb) {
-        for (int i = 0; i < N_FITS; i++) {
-            List<Double> outListNoisy = getListNoisy();
-            rb.fit(inList, outListNoisy);
-        }
+       // for (int i = 0; i < N_FITS; i++) {
+       /*     List<Double> outListNoisy = getListNoisy();
+            rb.fit(inList, outListNoisy);*/
+            var data= TrainData.emptyFromOutputs();
+            for (int i = 0; i < inList.size(); i++) {
+            data.addIAndOut(inList.get(i),outList.get(i));
+            }
+
+        rb.fit(data,N_FITS);
+
+
     }
 
     static void fitWeightsOneByOne(RbfNetwork rb) {
+        for (int i = 0; i < N_FITS; i++) {
+            List<Double> outListNoisy = getListNoisy();
+            for (int j = 0; j < inList.size() ; j++) {
+                var data= TrainData.emptyFromOutputs();
+                data.addIAndOut(inList.get(j),outListNoisy.get(j));
+                rb.fit(data);
+                //rb.fit(List.of(inList.get(j)),List.of(outListNoisy.get(j)));
+            }
+        }
+    }
+
+ /*   static void fitWeightsOneByOne0(RbfNetwork rb) {
         for (int i = 0; i < N_FITS; i++) {
             List<Double> outListNoisy = getListNoisy();
             for (int j = 0; j < inList.size() ; j++) {
@@ -90,7 +110,7 @@ public class RunnerRadialBasis1dLine {
             }
         }
     }
-
+*/
 
     private static List<Double> getXData() {
         List<Double> xData = new LinkedList<>();

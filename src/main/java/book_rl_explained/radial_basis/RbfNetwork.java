@@ -34,9 +34,19 @@ public class RbfNetwork {
      * @param data the training data
      * @param nFits the number of iterations to train for
      */
-    public void train(TrainData data, int nFits) {
+    public void fit(TrainData data, int nFits) {
         IntStream.range(0, nFits).forEach(i -> fit(data));
     }
+
+
+    public void fit(TrainData data, int nEpochs, int batchSize) {
+        Preconditions.checkArgument(nEpochs > 0, "nEpochs should be > 0");
+        Preconditions.checkArgument(data.nSamples()>=batchSize, "nSamples should be >= batchSize");
+        for (int i = 0; i < nEpochs; i++) {
+            fit(data.createBatch(batchSize));
+        }
+    }
+
 
     /**
      * Trains the RBF network for a single iteration using the provided training data.
@@ -50,30 +60,6 @@ public class RbfNetwork {
             var errors = getErrors(data.inputs(), data.outputs());
             fitFromErrors(data.inputs(), errors);
         }
-    }
-
-    /**
-     * Updates the weights of the RBF network based on the input data and target outputs.
-     *
-     * @param inputs   the input data
-     * @param outputs the target outputs
-     */
-
-    public void fit(List<List<Double>> inputs, List<Double> outputs) {
-        fitFromErrors(inputs, getErrors(inputs, outputs));
-    }
-
-    /**
-     * Updates the weights of the RBF network based on the input data and error values.
-     *
-     * @param inputs  the input data
-     * @param errors  the error values
-     */
-    public void fitFromErrors(List<List<Double>> inputs, List<Double> errors) {
-        var data = TrainData.ofErrors(inputs, errors);
-        activations=createActivationIfNeeded(data.nSamples(), activations);
-        activations.calculateActivations(data, kernels);
-        updater.updateWeights(data, weights, activations);
     }
 
     /**
@@ -102,6 +88,21 @@ public class RbfNetwork {
         activations = Activations.of(activationsOther.nSamples());
         RbfNetworkHelper.copyActivations(activations, activationsOther);
     }
+
+
+    /**
+     * Updates the weights of the RBF network based on the input data and error values.
+     *
+     * @param inputs  the input data
+     * @param errors  the error values
+     */
+    private void fitFromErrors(List<List<Double>> inputs, List<Double> errors) {
+        var data = TrainData.ofErrors(inputs, errors);
+        activations=createActivationIfNeeded(data.nSamples(), activations);
+        activations.calculateActivations(data, kernels);
+        updater.updateWeights(data, weights, activations);
+    }
+
 
 
     private List<Double> getErrors(List<List<Double>> inputs, List<Double> yTargets) {

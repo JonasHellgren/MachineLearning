@@ -18,8 +18,8 @@ public class ActorMemoryLunar {
     AgentParameters agentParameters;
 
     public static ActorMemoryLunar create(AgentParameters p, LunarProperties ep) {
-        var memExp = RbfMemoryFactory.createMemoryManyCenters(p,ep,p.learningRateActor());
-        var memStd = RbfMemoryFactory.createMemoryOneWideCenter(p,ep,p.learningRateActor());
+        var memExp = RbfMemoryFactory.createMemoryManyCenters(p, ep, p.learningRateActor());
+        var memStd = RbfMemoryFactory.createMemoryOneWideCenter(p, ep, p.learningRateActor());
         return new ActorMemoryLunar(memExp, memStd, p);
     }
 
@@ -27,11 +27,22 @@ public class ActorMemoryLunar {
      * Updates the actor's memory based on the provided state, advantage, and gradient.
      *
      * @param state the input state
-     * @param adv the advantage value
-     * @param grad the gradient value, using logStd
+     * @param adv   the advantage value
+     * @param grad  the gradient value, using logStd
      */
 
     public void fitOne(StateLunar state, double adv, GradientMeanStd grad) {
+        var dataMean = TrainData.emptyFromErrors();
+        var dataStd = TrainData.emptyFromErrors();
+        grad = grad.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
+        dataMean.addInAndError(state.asList(), grad.mean() * adv);
+        dataStd.addInAndError(state.asList(), grad.std() * adv);
+        memoryMean.fit(dataMean);
+        memoryLogStd.fit(dataStd);
+    }
+
+/*
+    public void fitOne0(StateLunar state, double adv, GradientMeanStd grad) {
         var inputs = List.of(state.asList());
         grad=grad.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
         var errorListMean = List.of(grad.mean() * adv);
@@ -39,23 +50,30 @@ public class ActorMemoryLunar {
         memoryMean.fitFromErrors(inputs, errorListMean);
         memoryLogStd.fitFromErrors(inputs, errorListStd);
     }
+*/
 
 
     public void fitBatch(List<StateLunar> states, List<Double> advs, List<GradientMeanStd> grads0) {
-        var dataMean=TrainData.emptyFromErrors();
-        var dataStd=TrainData.emptyFromErrors();
-        for (int i = 0; i < states.size() ; i++) {
-            var grad0=grads0.get(i);
-            var grad=grad0.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
-            var stateAsList=states.get(i).asList();
-            dataMean.addInAndError(stateAsList, grad.mean()*advs.get(i));
-            dataStd.addInAndError(stateAsList, grad.std()*advs.get(i));
+        var dataMean = TrainData.emptyFromErrors();
+        var dataStd = TrainData.emptyFromErrors();
+        for (int i = 0; i < states.size(); i++) {
+            var grad0 = grads0.get(i);
+            var grad = grad0.clip(agentParameters.gradMeanMax(), agentParameters.gradStdMax());
+            var stateAsList = states.get(i).asList();
+            dataMean.addInAndError(stateAsList, grad.mean() * advs.get(i));
+            dataStd.addInAndError(stateAsList, grad.std() * advs.get(i));
         }
         int batchSize = Math.min(states.size(), agentParameters.batchSize());
+/*
         for (int i = 0; i < agentParameters.nEpochs() ; i++) {
         memoryMean.fit(dataMean.createBatch(batchSize));
         memoryLogStd.fit(dataStd.createBatch(batchSize));
         }
+*/
+
+        memoryMean.fit(dataMean, agentParameters.nEpochs(),batchSize);
+        memoryLogStd.fit(dataStd, agentParameters.nEpochs(),batchSize);
+
 
     }
 

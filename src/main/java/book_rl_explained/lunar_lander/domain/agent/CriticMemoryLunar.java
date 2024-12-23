@@ -26,10 +26,18 @@ public class CriticMemoryLunar {
     }
 
     public  void fit(StateLunar state, double error) {
+        var data= TrainData.emptyFromErrors();
+        data.addInAndError(state.asList(), error);
+        memory.fit(data);
+    }
+
+/*
+    public  void fit0(StateLunar state, double error) {
         var inputs = List.of(state.asList());
         var errorList = List.of(error);
         memory.fitFromErrors(inputs, errorList);
     }
+*/
 
     public void fitBatch(List<StateLunar> states, List<Double> errors) {
         var data= TrainData.emptyFromErrors();
@@ -42,9 +50,9 @@ public class CriticMemoryLunar {
             memory.fit(data.createBatch(batchSize));
         }
     }
-
+/*
     public void fitBatch0(List<StateLunar> states, List<Double> errors) {
         var inputs = states.stream().map(StateLunar::asList).toList();
         memory.fitFromErrors(inputs, errors);
-    }
+    }*/
 }

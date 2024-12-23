@@ -16,13 +16,11 @@ public class TrainerLunarMultiStep implements TrainerI {
 
     TrainerDependencies dependencies;
     RecorderTrainingProgress recorder;
-    ValueCalculator calculator;
 
 
     public static TrainerLunarMultiStep of(TrainerDependencies dependencies) {
         return new TrainerLunarMultiStep(dependencies,
-                RecorderTrainingProgress.empty(),
-                ValueCalculator.of(dependencies));
+                RecorderTrainingProgress.empty());
     }
 
     @Override
@@ -35,8 +33,14 @@ public class TrainerLunarMultiStep implements TrainerI {
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
             var experiences = epCreator.experiences();
             var msr = msrGenerator.generate(experiences);
+/*
+            updateActorStep(msr);
+            updateCriticStep(msr);
+*/
+
             updateActorBatch(msr);
             updateCriticBatch(msr);
+
             recorder.add(pmCreator.progressMeasures(experiences));
         }
     }
