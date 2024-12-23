@@ -8,9 +8,6 @@ import lombok.Getter;
 import org.hellgren.utilities.gradient.NormalDistributionGradientCalculator;
 import org.hellgren.utilities.normal_distribution.NormDistributionSampler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @AllArgsConstructor
 @Getter
 public class AgentLunar implements AgentI{

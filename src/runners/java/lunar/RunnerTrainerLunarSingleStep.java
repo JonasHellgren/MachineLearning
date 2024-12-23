@@ -29,7 +29,8 @@ public class RunnerTrainerLunarSingleStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-        var p = AgentParameters.defaultParams(ep);
+        var p = AgentParameters.defaultParams(ep) //batch
+            .withLearningRateCritic(0.01).withLearningRateActor(0.001); //step
         var tp = TrainerParameters.newDefault();
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
