@@ -9,13 +9,13 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.environment.StepReturnLunar;
 import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomHeightZeroSpeed;
 import book_rl_explained.lunar_lander.domain.trainer.*;
+import book_rl_explained.radial_basis.TrainData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-
 import java.util.List;
 
 /****
@@ -44,7 +44,8 @@ class TestMultiStepResultsGenerator {
 
     private MultiStepResultsGenerator createGenerator(int stepHorizon, double gamma) {
         var ep = LunarProperties.defaultProps();
-        var p = AgentParameters.defaultParams(ep).withLearningRateCritic(0.5);
+        var p = AgentParameters.defaultParams(ep).withLearningRateCritic(0.5)
+                .withBatchSize(1).withNEpochs(N_EPOCHS);
         var trainerParameters = TrainerParameters.newDefault().withStepHorizon(stepHorizon).withGamma(gamma);
         dependencies = TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
@@ -188,18 +189,11 @@ class TestMultiStepResultsGenerator {
                 state, 0d, StepReturnLunar.ofNotFail(stateNew, isTerminal, reward));
     }
 
-
     private void fitMemory(AgentI agent, double vTarget) {
-        for (int i = 0; i < N_EPOCHS; i++) {
-            //StateLunar state = StateLunar.randomPosAndSpeed(dependencies.environment().getProperties());
-            StateLunar state = StateLunar.zeroPosAndSpeed();
-            for (int j = 0; j < N_FITS; j++) {
-                double error = vTarget - agent.readCritic(state);
-                agent.fitCritic(state, error);
-            }
-        }
-
+        StateLunar state = StateLunar.zeroPosAndSpeed();
+        var data= TrainData.emptyFromOutputs();
+        data.addIAndOut(state.asList(),vTarget);
+        agent.fitCriticBatch(data);
     }
-
 
 }

@@ -22,7 +22,7 @@ public class CriticMemoryLunar {
     }
 
     public double read(StateLunar state) {
-        return memory.outPut(List.of(state.y(),state.spd()));
+        return memory.outPut(state.asList());
     }
 
     public  void fit(StateLunar state, double error) {
@@ -31,28 +31,10 @@ public class CriticMemoryLunar {
         memory.fit(data);
     }
 
-/*
-    public  void fit0(StateLunar state, double error) {
-        var inputs = List.of(state.asList());
-        var errorList = List.of(error);
-        memory.fitFromErrors(inputs, errorList);
-    }
-*/
 
-    public void fitBatch(List<StateLunar> states, List<Double> errors) {
-        var data= TrainData.emptyFromErrors();
-        for (int i = 0; i < states.size() ; i++) {
-            var stateAsList=states.get(i).asList();
-            data.addInAndError(stateAsList, errors.get(i));
-        }
-        int batchSize = Math.min(states.size(), agentParameters.batchSize());
-        for (int i = 0; i < agentParameters.nEpochs() ; i++) {
-            memory.fit(data.createBatch(batchSize));
-        }
+    public void fitBatch(TrainData data) {
+        int batchSize = Math.min(data.nSamples(), agentParameters.batchSize());
+        memory.fit(data, agentParameters.nEpochs(),batchSize);
     }
-/*
-    public void fitBatch0(List<StateLunar> states, List<Double> errors) {
-        var inputs = states.stream().map(StateLunar::asList).toList();
-        memory.fitFromErrors(inputs, errors);
-    }*/
+
 }

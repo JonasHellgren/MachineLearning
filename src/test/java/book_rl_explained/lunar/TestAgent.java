@@ -5,6 +5,7 @@ import book_rl_explained.lunar_lander.domain.agent.AgentLunar;
 import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
+import book_rl_explained.radial_basis.TrainData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,10 @@ class TestAgent {
     void testFitActorWithNegativeAction() {
         double action0 = agent.readActor(state0and0).mean();
         int actionApplied = -1;
-        agent.fitActor(state0and0, actionApplied, ADV);
+        var dataMean = TrainData.emptyFromErrors();
+        dataMean.addInAndError(state0and0.asList(), actionApplied*ADV);
+        var dummyData=dataMean;
+        agent.fitActorBatch(dataMean,dummyData);
         double action = agent.readActor(state0and0).mean();
         Assertions.assertTrue(action < action0);
     }
@@ -80,7 +84,10 @@ class TestAgent {
     void testFitActorWithPositiveAction() {
         double action0 = agent.readActor(state0and0).mean();
         int actionApplied = 1;
-        agent.fitActor(state0and0, actionApplied, ADV);
+        var dataMean = TrainData.emptyFromErrors();
+        dataMean.addInAndError(state0and0.asList(), actionApplied*ADV);
+        var dummyData=dataMean;
+        agent.fitActorBatch(dataMean,dummyData);
         double action = agent.readActor(state0and0).mean();
         Assertions.assertTrue(action > action0);
     }
@@ -90,7 +97,11 @@ class TestAgent {
     void testFitCritic() {
         double value0 = agent.readCritic(state0and0);
         int valTarget = 10;
-        agent.fitCritic(state0and0, valTarget);
+        var data=TrainData.emptyFromOutputs();
+        data.addIAndOut(state0and0.asList(), valTarget);
+        agent.fitCriticBatch(data);
+
+    //    agent.fitCritic(state0and0, valTarget);
         double value = agent.readCritic(state0and0);
         Assertions.assertTrue(value > value0);
     }
@@ -99,7 +110,12 @@ class TestAgent {
     void fitCriticOneState_thenValueOtherStateNotAffected() {
         double value0 = agent.readCritic(state0and0);
         int valTarget = 10;
-        agent.fitCritic(state0and0, valTarget);
+        var data=TrainData.emptyFromOutputs();
+        data.addIAndOut(state0and0.asList(), valTarget);
+        agent.fitCriticBatch(data);
+
+
+//        agent.fitCritic(state0and0, valTarget);
         double value = agent.readCritic(state0and0);
         double valueOther = agent.readCritic(StateLunar.of(10, 0));
         Assertions.assertTrue(value > value0);

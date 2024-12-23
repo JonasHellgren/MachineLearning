@@ -42,6 +42,15 @@ public record TrainData(
     }
 
 
+    public void clear() {
+        inputs.clear();
+        if (isErrors()) {
+            errors.clear();
+        } else {
+            outputs.clear();
+        }
+    }
+
     public TrainData createBatch(int len) {
         var randomIndices = RandUtils.randomIndices(len, nSamples());
         var newInputs = new ArrayList<List<Double>>();

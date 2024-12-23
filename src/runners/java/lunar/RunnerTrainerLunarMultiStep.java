@@ -25,9 +25,9 @@ public class RunnerTrainerLunarMultiStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-        var p = AgentParameters.defaultParams(ep);
-                /*.withLearningRateCritic(0.1).withLearningRateActor(0.01)
-                .withNEpochs(5).withBatchSize(20);*/
+        var p = AgentParameters.defaultParams(ep)
+                .withLearningRateCritic(0.01).withLearningRateActor(0.001); //step
+                //.withNEpochs(5).withBatchSize(20);*/
         var tp = TrainerParameters.newDefault().withStepHorizon(5).withNEpisodes(3000);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))

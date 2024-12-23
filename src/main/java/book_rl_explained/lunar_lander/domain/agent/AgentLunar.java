@@ -2,6 +2,7 @@ package book_rl_explained.lunar_lander.domain.agent;
 
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
+import book_rl_explained.radial_basis.TrainData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hellgren.utilities.gradient.NormalDistributionGradientCalculator;
@@ -40,30 +41,16 @@ public class AgentLunar implements AgentI{
         return sampler.sampleFromNormDistribution(meanStd.mean(),0);
     }
 
+
     @Override
-    public void fitActor(StateLunar state, double action, double adv) {
-        var grad = gradientMeanAndLogStd(state, action);
-        actorMemory.fitOne(state, adv, grad);
+    public void fitActorBatch(TrainData dataMean, TrainData dataStd) {
+        actorMemory.fitBatch(dataMean,dataStd);
     }
 
 
     @Override
-    public void fitActorBatch(List<StateLunar> states, List<Double> actions, List<Double> advantages) {
-        List<GradientMeanStd> grads=new ArrayList<>();
-        for (int i = 0; i < states.size(); i++) {
-            grads.add(gradientMeanAndLogStd(states.get(i), actions.get(i)));
-        }
-        actorMemory.fitBatch(states, advantages, grads);
-    }
-
-    @Override
-    public void fitCritic(StateLunar state, double error) {
-        criticMemory.fit(state, error);
-    }
-
-    @Override
-    public void fitCriticBatch(List<StateLunar> states, List<Double> errors) {
-        criticMemory.fitBatch(states, errors);
+    public void fitCriticBatch(TrainData data) {
+        criticMemory.fitBatch(data);
     }
 
     @Override

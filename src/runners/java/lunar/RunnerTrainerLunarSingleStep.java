@@ -40,7 +40,7 @@ public class RunnerTrainerLunarSingleStep {
     }
 
     public static final PlotterAgent.Settings SETTINGS_PLOTTER_AGENT = PlotterAgent.Settings.builder()
-            .nY(6).nSpd(7).nDigitsAxisLabels(1).valueFormat("%.1f").build();
+            .nY(50).nSpd(50).nDigitsAxisLabels(1).valueFormat("%.1f").build();
 
     private static void plot(TrainerLunarSingleStep trainer, TrainerDependencies trainerDependencies) {
         var progressPlotter= PlotterProgressMeasures.of(trainer);

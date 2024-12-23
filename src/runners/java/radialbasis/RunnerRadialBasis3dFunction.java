@@ -29,8 +29,7 @@ class RunnerRadialBasis3dFunction {
         var kernels = createKernels();
         rbfn = RbfNetwork.of(kernels, LEARNING_RATE);
         var trainData = createTrainData(fcn);
-        IntStream.range(0, N_EPOCHS)
-                .forEach(i -> rbfn.fit(trainData.createBatch(BATCH_LEN), N_FITS));
+        rbfn.fit(trainData,N_EPOCHS,BATCH_LEN);
         showData(createArrayData(fcn), "Ref HeatMap");
         DoubleBinaryOperator fcnRbn = (x, y) -> rbfn.outPut(List.of(x, y));
         showData(createArrayData(fcnRbn), "Rbf HeatMap");

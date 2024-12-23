@@ -1,6 +1,7 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
 import book_rl_explained.lunar_lander.helpers.*;
+import book_rl_explained.radial_basis.TrainData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -37,7 +38,29 @@ public class TrainerLunarSingleStep implements TrainerI {
         }
     }
 
+
     public void fitAgent(List<ExperienceLunar> experiences) {
+        var agent = dependencies.agent();
+        var tp = dependencies.trainerParameters();
+        var ap = agent.getAgentParameters();
+        var dataMean = TrainData.emptyFromErrors();
+        var dataStd = TrainData.emptyFromErrors();
+        var data = TrainData.emptyFromErrors();
+        for (ExperienceLunar experience : experiences) {
+            double tdError = tp.clipTdError(calculator.temporalDifferenceError(experience));
+            var state = experience.state();
+            var grad = agent.gradientMeanAndLogStd(state, experience.action());
+            grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
+            dataMean.addInAndError(state.asList(), grad.mean() * tdError);
+            dataStd.addInAndError(state.asList(), grad.std() * tdError);
+            data.addInAndError(state.asList(), tdError);
+
+        }
+        agent.fitActorBatch(dataMean, dataStd);
+        agent.fitCriticBatch(data);
+    }
+
+/*    public void fitAgent0(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
         var tp = dependencies.trainerParameters();
         for (ExperienceLunar experience : experiences) {
@@ -45,6 +68,6 @@ public class TrainerLunarSingleStep implements TrainerI {
             agent.fitActor(experience.state(), experience.action(), e);
             agent.fitCritic(experience.state(), e);
         }
-    }
+    }*/
 
 }
