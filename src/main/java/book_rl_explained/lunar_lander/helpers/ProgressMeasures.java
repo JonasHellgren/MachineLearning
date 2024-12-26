@@ -12,6 +12,9 @@ public record ProgressMeasures(
         Double sumRewards,
         Integer nSteps,
         Double tdError,
+        Double tdErrorClipped,
+        Double gradMean,
+        Double gradMeanClipped,
         Double stdActor,
         Double stateValuePos2Spd0,
         Double stateValuePos5Spd2) {
@@ -19,13 +22,19 @@ public record ProgressMeasures(
 
     public static ProgressMeasures of(List<ExperienceLunar> experiences,
                                       List<Double> tdList,
-                                      List<Double> stdList) {
+                                      List<Double> tdListClipped,
+                                      List<Double> stdList,
+                                      List<Double> gradMeanList,
+                                      List<Double> gradMeanListClipped) {
         var info=ExperiencesInfo.of(experiences);
 
         return ProgressMeasures.builder()
                 .sumRewards(info.sumRewards())
                 .nSteps(info.nSteps())
-                .tdError(tdList.stream().mapToDouble(i-> i).sum())
+                .tdError(MyListUtils.findAverage(tdList).orElseThrow())
+                .tdErrorClipped(MyListUtils.findAverage(tdListClipped).orElseThrow())
+                .gradMean(MyListUtils.findAverage(gradMeanList).orElseThrow())
+                .gradMeanClipped(MyListUtils.findAverage(gradMeanListClipped).orElseThrow())
                 .stdActor(MyListUtils.findAverage(stdList).orElseThrow())
                 .build();
 

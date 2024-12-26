@@ -47,6 +47,9 @@ public class RecorderTrainingProgress {
         map.put("stateValuePos5Spd2",ProgressMeasures::stateValuePos5Spd2);
         map.put("nSteps",pm -> (double) pm.nSteps());
         map.put("tdError",ProgressMeasures::tdError);
+        map.put("tdErrorClipped",ProgressMeasures::tdErrorClipped);
+        map.put("gradMean",ProgressMeasures::gradMean);
+        map.put("gradMeanClipped",ProgressMeasures::gradMeanClipped);
         map.put("stdActor",ProgressMeasures::stdActor);
         return map;
     }

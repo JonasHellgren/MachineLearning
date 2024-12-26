@@ -54,7 +54,7 @@ public class PlotterProgressMeasures {
 
     public void plot() {
         Preconditions.checkArgument(!recorder.isEmpty(), "No training progress data to plot");
-        var measures=List.of("sumRewards","tdError","stdActor");
+        var measures=List.of("sumRewards","tdError","tdErrorClipped","gradMean","gradMeanClipped","stdActor");
         for (String measure : measures) {
             List<Double> yData0 = recorder.trajectory(measure);
             int length = yData0.size();

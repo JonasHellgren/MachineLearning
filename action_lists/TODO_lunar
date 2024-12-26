@@ -78,9 +78,10 @@ fixa dev skugga för accReward etc  x
 större td  x
 snyggare plottar, force acc etc, plotta acc istället  x
 cpu tid train  x
-fimpa batch learning
-plotta tdErrorBestAction gradient
+plotta  gradient x
+tdErrorBestAction
 snabbare lunar genom activ matrix som delas mellan actor o critic
+fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika
 få td error gå mot mindre värde
 RmsProp eller dyl

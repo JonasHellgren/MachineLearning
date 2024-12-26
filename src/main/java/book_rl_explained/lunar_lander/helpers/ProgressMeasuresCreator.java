@@ -22,16 +22,27 @@ public class ProgressMeasuresCreator {
 
     public ProgressMeasures progressMeasures(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
+        var ap = agent.getAgentParameters();
         var tp = dependencies.trainerParameters();
         var tdList = Lists.<Double>newArrayList();
+        var tdListClipped = Lists.<Double>newArrayList();
+        var gradMeanList = Lists.<Double>newArrayList();
+        var gradMeanListClipped = Lists.<Double>newArrayList();
+
         var stdList = Lists.<Double>newArrayList();
         for (ExperienceLunar experience : experiences) {
-            double e = tp.clipTdError(calculator.temporalDifferenceError(experience));
-            tdList.add(Math.abs(e));
+            double td0 = calculator.temporalDifferenceError(experience);
+            double td = tp.clipTdError(td0);
+            var grad = agent.gradientMeanAndLogStd(experience.state(), experience.action());
+            var gradClipped = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
             var mAndStd = agent.readActor(experience.state());
+            tdList.add(Math.abs(td0));
+            tdListClipped.add(Math.abs(td));
             stdList.add(mAndStd.std());
+            gradMeanList.add(grad.mean());
+            gradMeanListClipped.add(gradClipped.mean());
         }
-        ProgressMeasures pm = ProgressMeasures.of(experiences, tdList, stdList);
+        ProgressMeasures pm = ProgressMeasures.of(experiences, tdList, tdListClipped, stdList, gradMeanList, gradMeanListClipped);
         pm = addValuesSpecifStates(agent, pm);
         return pm;
     }
