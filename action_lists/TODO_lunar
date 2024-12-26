@@ -75,11 +75,19 @@ färre metoder AgentLunar x
 AgentMemoryUpdater  x
 flagga för step eller batch i trainer x
 fixa dev skugga för accReward etc  x
+större td  x
 snyggare plottar, force acc etc, plotta acc istället  x
+
+cpu tid train
+fimpa batch learning
+plotta tdErrorBestAction gradient
 snabbare lunar genom activ matrix som delas mellan actor o critic
-hyper par tuning
-påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
+tp.clipTdError ap.gradMax osnygg i olika
 få td error gå mot mindre värde
+RmsProp eller dyl
+hyper par tuning - plotta ACCREW vs n
+verbNoun på methoder
+påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
 RunnerPlotTrainedCriticMemory
 TestAgentCriticMemory mer tester
 

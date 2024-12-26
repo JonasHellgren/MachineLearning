@@ -1,5 +1,6 @@
 package book_rl_explained.lunar_lander.helpers;
 
+import book_rl_explained.lunar_lander.domain.environment.EnvironmentLunar;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
@@ -54,6 +55,10 @@ public class ExperiencesInfo {
         return experiences.stream().map(e -> ep.clippedForce(e.action())).toList();
     }
 
+    public List<Double> accelerations(EnvironmentLunar env) {
+        return experiences.stream().map(e -> env.acceleration(e.action())).toList();
+    }
+
     public List<Double> speeds() {
         return experiences.stream().map(e -> e.state().spd()).toList();
     }
@@ -71,4 +76,5 @@ public class ExperiencesInfo {
     public StateLunar stateAtStep(int step) {
         return experiences.get(step).state();
     }
+
 }

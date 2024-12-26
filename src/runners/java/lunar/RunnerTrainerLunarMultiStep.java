@@ -11,10 +11,10 @@ import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 
 public class RunnerTrainerLunarMultiStep {
 
-     static final boolean IS_BATCH_LEARNING = true;
+     static final boolean IS_BATCH_LEARNING = false;
 
     public static void main(String[] args) {
-        var ep = getEnvironmentProperties();
+        var ep =  LunarProperties.defaultProps();
         var trainerDependencies = getDependencies(ep);
         var trainer = TrainerLunarMultiStep.of(trainerDependencies);
         trainer.train();
@@ -22,19 +22,14 @@ public class RunnerTrainerLunarMultiStep {
         RunnerHelper.evaluate(trainerDependencies, ep);
     }
 
-    private static LunarProperties getEnvironmentProperties() {
-        return LunarProperties.defaultProps();
-    }
-
     private static TrainerDependencies getDependencies(LunarProperties ep) {
 
-
         var p = IS_BATCH_LEARNING ?
-                AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.05)
-                        .withBatchSize(20).withNEpochs(1)
+                AgentParameters.defaultParams(ep).withLearningRateCritic(0.9).withLearningRateActor(0.1)
+                        .withBatchSize(10).withNEpochs(1)
                 : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
         var tp = TrainerParameters.newDefault()
-                .withStepHorizon(5).withNEpisodes(3000).withBatchLearning(IS_BATCH_LEARNING);
+                .withStepHorizon(5).withNEpisodes(5_000).withBatchLearning(IS_BATCH_LEARNING);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
