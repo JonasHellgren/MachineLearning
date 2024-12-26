@@ -30,6 +30,7 @@ public record AgentParameters(
     public static final double INIT_WEIGHT_LOG_STD = 0d;
     public static final int BATCH_SIZE = 20;
     public static final int N_EPOCHS = 5;
+    public static final double REL_SIGMA = 0.9;
 
     public static AgentParameters defaultParams(LunarProperties ep) {
         return of(ep, N_KERNELS_Y, N_KERNELS_SPD);
@@ -67,11 +68,11 @@ public record AgentParameters(
     }
 
     private static double getSigmaSpd(LunarProperties ep, int nKernelsSpd) {
-        return (ep.spdMax() - -ep.spdMax()) / nKernelsSpd;
+        return REL_SIGMA *(ep.spdMax() - -ep.spdMax()) / nKernelsSpd;
     }
 
     private static double getSigmaY(LunarProperties ep, int nKernelsY1) {
-        return (ep.yMax() - ep.ySurface()) / nKernelsY1;
+        return REL_SIGMA *(ep.yMax() - ep.ySurface()) / nKernelsY1;
     }
 
     /**

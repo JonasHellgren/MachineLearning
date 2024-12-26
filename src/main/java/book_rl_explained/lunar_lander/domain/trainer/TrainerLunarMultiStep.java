@@ -1,8 +1,6 @@
 package book_rl_explained.lunar_lander.domain.trainer;
 
 import book_rl_explained.lunar_lander.helpers.*;
-import book_rl_explained.radial_basis.TrainData;
-import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;

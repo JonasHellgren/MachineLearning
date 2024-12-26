@@ -80,10 +80,13 @@ snyggare plottar, force acc etc, plotta acc istället  x
 cpu tid train  x
 plotta  gradient x
 tdErrorBestAction  x
-snabbare lunar genom activ matrix som delas mellan actor o critic
+plotta grad.mean() * adv
 fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika
+testa olika clippinggs
+snabbare lunar genom activ matrix som delas mellan actor o critic
 få td error gå mot mindre värde
+motivera REL_SIGMA
 RmsProp eller dyl
 hyper par tuning - plotta ACCREW vs n
 verbNoun på methoder

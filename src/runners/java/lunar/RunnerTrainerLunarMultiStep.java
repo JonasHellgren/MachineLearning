@@ -5,6 +5,7 @@ import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.environment.EnvironmentLunar;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierAllRandom;
+import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomHeightZeroSpeed;
 import book_rl_explained.lunar_lander.domain.trainer.*;
 import book_rl_explained.lunar_lander.helpers.PlotterAgent;
 import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
@@ -32,12 +33,13 @@ public class RunnerTrainerLunarMultiStep {
                         .withBatchSize(10).withNEpochs(1)
                 : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
         var tp = TrainerParameters.newDefault()
-                .withStepHorizon(3).withNEpisodes(5_000).withBatchLearning(IS_BATCH_LEARNING);
+                .withStepHorizon(5).withNEpisodes(5_000).withBatchLearning(IS_BATCH_LEARNING);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
                 .trainerParameters(tp)
-                .startStateSupplier(StartStateSupplierAllRandom.create(ep))
+                //.startStateSupplier(StartStateSupplierAllRandom.create(ep))
+                .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
                 .build();
     }
 
