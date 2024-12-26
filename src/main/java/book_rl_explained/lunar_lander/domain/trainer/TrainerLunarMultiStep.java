@@ -6,6 +6,7 @@ import common.other.Conditionals;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
+import org.hellgren.utilities.timer.CpuTimer;
 
 import static org.hellgren.utilities.conditionals.Conditionals.executeOneOfTwo;
 
@@ -30,6 +31,7 @@ public class TrainerLunarMultiStep implements TrainerI {
         var epCreator = EpisodeCreator.of(dependencies);
         var pmCreator = ProgressMeasuresCreator.of(dependencies);
         var msrGenerator = MultiStepResultsGenerator.of(dependencies);
+        var timer= CpuTimer.empty();
         recorder.clear();
         log.info("starting training");
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
@@ -40,6 +42,8 @@ public class TrainerLunarMultiStep implements TrainerI {
                     () -> memoryUpdater.fitStep(msr));
             recorder.add(pmCreator.progressMeasures(experiences));
         }
+        log.info("Training finished in (s): " + timer.timeInSecondsAsString());
+
     }
 
 }

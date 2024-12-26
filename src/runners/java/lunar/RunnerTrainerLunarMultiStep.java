@@ -8,7 +8,10 @@ import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.St
 import book_rl_explained.lunar_lander.domain.trainer.*;
 import book_rl_explained.lunar_lander.helpers.PlotterAgent;
 import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
+import lombok.extern.java.Log;
+import org.hellgren.utilities.timer.CpuTimer;
 
+@Log
 public class RunnerTrainerLunarMultiStep {
 
      static final boolean IS_BATCH_LEARNING = false;

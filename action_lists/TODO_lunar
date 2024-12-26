@@ -77,8 +77,7 @@ flagga för step eller batch i trainer x
 fixa dev skugga för accReward etc  x
 större td  x
 snyggare plottar, force acc etc, plotta acc istället  x
-
-cpu tid train
+cpu tid train  x
 fimpa batch learning
 plotta tdErrorBestAction gradient
 snabbare lunar genom activ matrix som delas mellan actor o critic
