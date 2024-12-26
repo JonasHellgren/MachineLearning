@@ -51,6 +51,7 @@ public class RecorderTrainingProgress {
         map.put("gradMean",ProgressMeasures::gradMean);
         map.put("gradMeanClipped",ProgressMeasures::gradMeanClipped);
         map.put("stdActor",ProgressMeasures::stdActor);
+        map.put("tdBestAction",ProgressMeasures::tdBestAction);
         return map;
     }
 

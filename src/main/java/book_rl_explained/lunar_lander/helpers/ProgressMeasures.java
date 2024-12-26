@@ -17,6 +17,7 @@ public record ProgressMeasures(
         Double gradMean,
         Double gradMeanClipped,
         Double stdActor,
+        Double tdBestAction,
         Double stateValuePos2Spd0,
         Double stateValuePos5Spd2) {
 
@@ -24,10 +25,12 @@ public record ProgressMeasures(
                                List<Double> tdListClipped,
                                List<Double> stdList,
                                List<Double> gradMeanList,
-                               List<Double> gradMeanListClipped) {
+                               List<Double> gradMeanListClipped,
+                               List<Double> tdBestActionList) {
 
         public static MeasureLists empty() {
             return new MeasureLists(
+                    ListCreator.emptyDouble(),
                     ListCreator.emptyDouble(),
                     ListCreator.emptyDouble(),
                     ListCreator.emptyDouble(),
@@ -50,6 +53,9 @@ public record ProgressMeasures(
             gradMeanListClipped.add(gradMean); }
 
 
+        public void addTdBestAction(double td) {
+            tdBestActionList.add(td);
+        }
     }
 
     public static ProgressMeasures of(List<ExperienceLunar> experiences,
@@ -64,6 +70,7 @@ public record ProgressMeasures(
                 .gradMean(MyListUtils.findAverage(measureLists.gradMeanList).orElseThrow())
                 .gradMeanClipped(MyListUtils.findAverage(measureLists.gradMeanListClipped).orElseThrow())
                 .stdActor(MyListUtils.findAverage(measureLists.stdList).orElseThrow())
+                .tdBestAction(MyListUtils.findAverage(measureLists.tdBestActionList).orElseThrow())
                 .build();
 
     }

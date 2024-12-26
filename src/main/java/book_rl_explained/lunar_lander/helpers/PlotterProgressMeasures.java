@@ -43,8 +43,7 @@ public class PlotterProgressMeasures {
 
     RecorderTrainingProgress recorder;
 
-    public static PlotterProgressMeasures of(RecorderTrainingProgress recorder,
-                                             TrainerParameters trainerParameters) {
+    public static PlotterProgressMeasures of(RecorderTrainingProgress recorder) {
         return new PlotterProgressMeasures(recorder);
     }
 
@@ -56,7 +55,7 @@ public class PlotterProgressMeasures {
 
     public void plot() {
         Preconditions.checkArgument(!recorder.isEmpty(), "No training progress data to plot");
-        var measures=List.of("sumRewards","stdActor");
+        var measures=List.of("sumRewards","stdActor","tdBestAction");
         showOneMeasurePerPlot(measures);
         measures=List.of("tdError","tdErrorClipped");
         showTwoMeasuresInOnePlot(measures, "tdError");

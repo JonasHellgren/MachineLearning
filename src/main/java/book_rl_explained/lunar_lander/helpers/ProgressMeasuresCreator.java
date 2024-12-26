@@ -31,11 +31,13 @@ public class ProgressMeasuresCreator {
             var grad = agent.gradientMeanAndLogStd(experience.state(), experience.action());
             var gradClipped = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
             var mAndStd = agent.readActor(experience.state());
+            double tdErrorBestAction = calculator.temporalDifferenceErrorBestAction(experience);
             measureLists.addTd(Math.abs(td0));
             measureLists.addTdClipped(Math.abs(td));
             measureLists.addStd(mAndStd.std());
             measureLists.addGradMean(grad.mean());
             measureLists.addGradMeanClipped(gradClipped.mean());
+            measureLists.addTdBestAction(Math.abs(tdErrorBestAction));
         }
         var pm = ProgressMeasures.of(experiences, measureLists);
         pm = addValuesSpecifStates(agent, pm);

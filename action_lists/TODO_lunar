@@ -79,7 +79,7 @@ större td  x
 snyggare plottar, force acc etc, plotta acc istället  x
 cpu tid train  x
 plotta  gradient x
-tdErrorBestAction
+tdErrorBestAction  x
 snabbare lunar genom activ matrix som delas mellan actor o critic
 fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika

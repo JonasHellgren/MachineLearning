@@ -69,4 +69,12 @@ public class ValueCalculator {
     }
 
 
+    public double temporalDifferenceErrorBestAction(ExperienceLunar experience) {
+        var agent = dependencies.agent();
+        var env=dependencies.environment();
+        double aBest=agent.chooseActionNoExploration(experience.state());
+        var sr=env.step(experience.state(),aBest);
+        return temporalDifferenceError(ExperienceLunar.of(experience.state(),aBest,sr));
+
+    }
 }
