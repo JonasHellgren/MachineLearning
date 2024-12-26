@@ -7,22 +7,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.hellgren.plotters.plotting_2d.ErrorBandCreator;
-import org.hellgren.utilities.conditionals.Conditionals;
 import org.hellgren.utilities.list_arrays.ArrayCreator;
 import org.hellgren.utilities.list_arrays.List2ArrayConverter;
-import org.hellgren.utilities.list_arrays.ListCreator;
-import org.hellgren.utilities.list_arrays.MyListUtils;
 import org.hellgren.utilities.math.MovingAverage;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.style.markers.SeriesMarkers;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.hellgren.utilities.list_arrays.MyListUtils.elementSubtraction;
 import static org.hellgren.utilities.list_arrays.MyListUtils.everyItemAbsolute;
@@ -31,71 +24,84 @@ import static org.hellgren.utilities.list_arrays.MyListUtils.everyItemAbsolute;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlotterProgressMeasures {
 
+    public static final String EPISODE = "Episode";
+
+    record ErrorBandData(List<Double> yData0) {
+        int length() { return yData0.size(); }
+        List<Double> yDataFiltered() { return filter(yData0,length()/ N_WINDOWS); }
+        List<Double> errData0() { return elementSubtraction(yDataFiltered(), yData0); }
+        List<Double> errData() { return everyItemAbsolute(errData0()); }
+        List<Double> errDataFiltered() { return filter(errData(),length()/ (N_WINDOWS)); }
+        double[] errDataFilteredAsArray() { return List2ArrayConverter.convertListToDoubleArr(errDataFiltered()); }
+        double[] yDataFilteredAsArray() { return List2ArrayConverter.convertListToDoubleArr(yDataFiltered()); }
+        double[] xDataAsArray() { return ArrayCreator.createArrayFromStartAndEndWithNofItems(0d, length()-1.0, length()); }
+    }
+
     public static final int N_WINDOWS = 10;
     public static final int WIDTH = 200;
     public static final int HEIGHT = 150;
-    public static final int N_XTICK_INTERVALS = 5;
-    public static final int MIN_N_EPIS_FOR_CLUTTER = 500;
 
     RecorderTrainingProgress recorder;
-    TrainerParameters trainerParameters;
 
     public static PlotterProgressMeasures of(RecorderTrainingProgress recorder,
                                              TrainerParameters trainerParameters) {
-        return new PlotterProgressMeasures(recorder,trainerParameters);
+        return new PlotterProgressMeasures(recorder);
     }
 
     public static PlotterProgressMeasures of(TrainerI trainer) {
         return new PlotterProgressMeasures(
-                trainer.getRecorder(),
-                trainer.getDependencies().trainerParameters());
+                trainer.getRecorder()
+);
     }
-
 
     public void plot() {
         Preconditions.checkArgument(!recorder.isEmpty(), "No training progress data to plot");
-        var measures=List.of("sumRewards","tdError","tdErrorClipped","gradMean","gradMeanClipped","stdActor");
+        var measures=List.of("sumRewards","stdActor");
+        showOneMeasurePerPlot(measures);
+        measures=List.of("tdError","tdErrorClipped");
+        showTwoMeasuresInOnePlot(measures, "tdError");
+        measures=List.of("gradMean","gradMeanClipped");
+        showTwoMeasuresInOnePlot(measures, "gradMean");
+    }
+
+    private void showOneMeasurePerPlot(List<String> measures) {
         for (String measure : measures) {
-            List<Double> yData0 = recorder.trajectory(measure);
-            int length = yData0.size();
-            var yDataFiltered= filter(yData0,length/ N_WINDOWS);
-            var errData= elementSubtraction(yDataFiltered, yData0);
-            errData = everyItemAbsolute(errData);
-            var errDataFiltered= filter(errData,length/ (N_WINDOWS));
-            showPlot(measure, yDataFiltered, errDataFiltered);
+            var errorBandData= new ErrorBandData(recorder.trajectory(measure));
+            showPlotNew(measure, errorBandData);
         }
     }
 
-    private static void showPlot(String measure, List<Double> yDataFiltered, List<Double> errDataFiltered) {
+    private void showTwoMeasuresInOnePlot(List<String> measures, String yAxisLabel) {
         var settings = ErrorBandCreator.Settings.ofDefaults()
-                .withTitle(measure).withYAxisLabel(measure).withXAxisLabel("Episode").withShowLegend(false);
+                .withTitle("").withYAxisLabel(yAxisLabel).withXAxisLabel(EPISODE).withShowLegend(false);
         var creator = ErrorBandCreator.newOfSettings(settings);
-        var yDataFilteredArr= List2ArrayConverter.convertListToDoubleArr(yDataFiltered);
-        var errDataArr= List2ArrayConverter.convertListToDoubleArr(errDataFiltered);
-        int length = yDataFiltered.size();
-        var xData= ArrayCreator.createArrayFromStartAndEndWithNofItems(0d, length-1.0, length);
-        creator.addErrorBand(measure, xData, yDataFilteredArr, errDataArr, Color.BLACK);
+        for (String measure : measures) {
+            var errorBandData= new ErrorBandData(recorder.trajectory(measure));
+            addErrorBand(measure, creator, errorBandData);
+        }
         SwingUtilities.invokeLater(() -> creator.create().setVisible(true));
     }
 
+    private static void addErrorBand(String measure, ErrorBandCreator creator, ErrorBandData errorBandData) {
+        creator.addErrorBand(measure,
+                errorBandData.xDataAsArray(),
+                errorBandData.yDataFilteredAsArray(),
+                errorBandData.errDataFilteredAsArray(),
+                Color.BLACK);
+    }
+
+    private static void showPlotNew(String measure, ErrorBandData errorBandData) {
+        var settings = ErrorBandCreator.Settings.ofDefaults()
+                .withTitle(measure).withYAxisLabel(measure).withXAxisLabel(EPISODE).withShowLegend(false);
+        var creator = ErrorBandCreator.newOfSettings(settings);
+        addErrorBand(measure, creator, errorBandData);
+        SwingUtilities.invokeLater(() -> creator.create().setVisible(true));
+    }
 
     private static List<Double> filter(List<Double> inList, int lengthWindow) {
         MovingAverage movingAverage = new MovingAverage(lengthWindow, inList);
         return movingAverage.getFiltered();
     }
 
-
-
-    private static void reduceXAxisTicksClutter(XYChart chart, int xStep) {
-        Function<Double, String> tickLabelsFormatter = value -> {
-            int intValue = value.intValue();
-            if (intValue % xStep == 0) {
-                return String.valueOf(intValue);
-            } else {
-                return ""; // Skip labels for other values
-            }
-        };
-        chart.setCustomXAxisTickLabelsFormatter(tickLabelsFormatter);
-    }
 
 }
