@@ -32,7 +32,7 @@ class TestEpisodeCreator {
 
     @Test
     void givenNonTrainedAgent_thenWillFail() {
-        var experiences = creator.experiences();
+        var experiences = creator.create();
         var info = ExperiencesInfo.of(experiences);
 
 

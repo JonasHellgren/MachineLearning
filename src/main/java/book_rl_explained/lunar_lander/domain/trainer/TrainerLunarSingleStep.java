@@ -28,7 +28,7 @@ public class TrainerLunarSingleStep implements TrainerI {
         recorder.clear();
         log.info("starting training");
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
-            var experiences = epCreator.experiences();
+            var experiences = epCreator.create();
             memoryUpdater.fit(experiences);
             recorder.add(pmCreator.progressMeasures(experiences,null));
         }

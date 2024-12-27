@@ -7,7 +7,6 @@ import book_rl_explained.radial_basis.RbfNetwork;
 import book_rl_explained.radial_basis.TrainData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -25,14 +24,7 @@ public class CriticMemoryLunar {
         return memory.outPut(state.asList());
     }
 
-    public  void fit(StateLunar state, double error) {
-        var data= TrainData.emptyFromErrors();
-        data.addInAndError(state.asList(), error);
-        memory.fit(data);
-    }
-
-
-    public void fitBatch(TrainData data) {
+    public void fit(TrainData data) {
         int batchSize = Math.min(data.nSamples(), agentParameters.batchSize());
         memory.fit(data, agentParameters.nEpochs(),batchSize);
     }

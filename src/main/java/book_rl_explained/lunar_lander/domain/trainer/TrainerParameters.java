@@ -11,7 +11,7 @@ public record TrainerParameters(
         int stepHorizon) {
 
     public static TrainerParameters newDefault() {
-        return new TrainerParameters(20,5000,0.99,5);
+        return new TrainerParameters(100,5000,0.99,5);
     }
 
     public double gammaPowN() {

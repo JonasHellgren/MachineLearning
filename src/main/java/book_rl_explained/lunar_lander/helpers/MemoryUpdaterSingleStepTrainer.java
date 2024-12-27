@@ -37,8 +37,8 @@ public class MemoryUpdaterSingleStepTrainer {
             dataMean.addInAndError(state.asList(), grad.mean() * tdError);
             dataStd.addInAndError(state.asList(), grad.std() * tdError);
             data.addInAndError(state.asList(), tdError);
-            agent.fitActorBatch(dataMean, dataStd);
-            agent.fitCriticBatch(data);
+            agent.fitActor(dataMean, dataStd);
+            agent.fitCritic(data);
         }
     }
 

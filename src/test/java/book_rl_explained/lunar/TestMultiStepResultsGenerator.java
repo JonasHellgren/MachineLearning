@@ -193,7 +193,7 @@ class TestMultiStepResultsGenerator {
         StateLunar state = StateLunar.zeroPosAndSpeed();
         var data= TrainData.emptyFromOutputs();
         data.addIAndOut(state.asList(),vTarget);
-        agent.fitCriticBatch(data);
+        agent.fitCritic(data);
     }
 
 }

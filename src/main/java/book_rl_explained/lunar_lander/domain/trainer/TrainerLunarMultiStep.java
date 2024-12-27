@@ -31,7 +31,7 @@ public class TrainerLunarMultiStep implements TrainerI {
         recorder.clear();
         log.info("starting training");
         for (int i = 0; i < dependencies.getnEpisodes(); i++) {
-            var experiences = epCreator.experiences();
+            var experiences = epCreator.create();
             var msr = msrGenerator.generate(experiences);
             memoryUpdater.fit(msr);
             recorder.add(pmCreator.progressMeasures(experiences,msr));

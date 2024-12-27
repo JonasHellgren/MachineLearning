@@ -57,7 +57,7 @@ class TestEpisodeCreator {
 
     @Test
     @SneakyThrows
-    void whenGettingExperiences_thenCorrect() {
+    void whenGettingCreate_thenCorrect() {
         var experiences = episodeCreator.getExperiences(agent, state);
         var ei = new EpisodeInfo<>(experiences);
         var minMax = ei.minMaxAppliedAction();

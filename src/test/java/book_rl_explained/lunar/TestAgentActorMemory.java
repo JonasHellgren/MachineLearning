@@ -5,6 +5,7 @@ import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.agent.GradientMeanStd;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
+import book_rl_explained.radial_basis.TrainData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,12 @@ class TestAgentActorMemory {
         double adv = 1.0;
         var grad = GradientMeanStd.of(1.0, 2.0);
         var expStd0 = actorMemoryLunar.actorMeanAndStd(state);
-        actorMemoryLunar.fitOne(state, adv, grad);
+        var dataMean = TrainData.emptyFromErrors();
+        var dataStd = TrainData.emptyFromErrors();
+
+        dataMean.addInAndError(state.asList(), grad.mean() * adv);
+        dataStd.addInAndError(state.asList(), grad.std() * adv);
+        actorMemoryLunar.fit(dataMean,dataStd);
         var expStdNew = actorMemoryLunar.actorMeanAndStd(state);
         Assertions.assertTrue(expStdNew.mean() > expStd0.mean());
         Assertions.assertTrue(expStdNew.std() > expStd0.std());

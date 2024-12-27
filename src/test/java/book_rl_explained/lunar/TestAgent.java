@@ -74,7 +74,7 @@ class TestAgent {
         var dataMean = TrainData.emptyFromErrors();
         dataMean.addInAndError(state0and0.asList(), actionApplied*ADV);
         var dummyData=dataMean;
-        agent.fitActorBatch(dataMean,dummyData);
+        agent.fitActor(dataMean,dummyData);
         double action = agent.readActor(state0and0).mean();
         Assertions.assertTrue(action < action0);
     }
@@ -87,7 +87,7 @@ class TestAgent {
         var dataMean = TrainData.emptyFromErrors();
         dataMean.addInAndError(state0and0.asList(), actionApplied*ADV);
         var dummyData=dataMean;
-        agent.fitActorBatch(dataMean,dummyData);
+        agent.fitActor(dataMean,dummyData);
         double action = agent.readActor(state0and0).mean();
         Assertions.assertTrue(action > action0);
     }
@@ -99,7 +99,7 @@ class TestAgent {
         int valTarget = 10;
         var data=TrainData.emptyFromOutputs();
         data.addIAndOut(state0and0.asList(), valTarget);
-        agent.fitCriticBatch(data);
+        agent.fitCritic(data);
 
     //    agent.fitCritic(state0and0, valTarget);
         double value = agent.readCritic(state0and0);
@@ -112,7 +112,7 @@ class TestAgent {
         int valTarget = 10;
         var data=TrainData.emptyFromOutputs();
         data.addIAndOut(state0and0.asList(), valTarget);
-        agent.fitCriticBatch(data);
+        agent.fitCritic(data);
 
 
 //        agent.fitCritic(state0and0, valTarget);

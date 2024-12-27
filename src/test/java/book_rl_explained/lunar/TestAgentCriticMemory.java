@@ -4,6 +4,7 @@ import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.agent.CriticMemoryLunar;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
+import book_rl_explained.radial_basis.TrainData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -23,7 +24,8 @@ class TestAgentCriticMemory {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        agentParameters = AgentParameters.newDefault(lunarProperties).withLearningRateCritic(LEARNING_RATE);
+        agentParameters = AgentParameters.newDefault(lunarProperties).withLearningRateCritic(LEARNING_RATE)
+                .withNEpochs(1);
         memory = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
     }
 
@@ -98,7 +100,9 @@ class TestAgentCriticMemory {
     private static void fitMemory(CriticMemoryLunar criticMemoryLunar, StateLunar state, double vTarget) {
         for (int i = 0; i < N_FITS; i++) {
             double error = vTarget - criticMemoryLunar.read(state);
-            criticMemoryLunar.fit(state, error);
+            var data = TrainData.emptyFromErrors();
+            data.addInAndError(state.asList(), error);
+            criticMemoryLunar.fit(data);
         }
     }
 

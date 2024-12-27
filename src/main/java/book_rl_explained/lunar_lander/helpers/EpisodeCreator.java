@@ -4,12 +4,15 @@ import book_rl_explained.lunar_lander.domain.environment.StepReturnLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
 import com.beust.jcommander.internal.Lists;
+import common.other.Conditionals;
 import common.other.Counter;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 
 import java.util.List;
 
 @AllArgsConstructor
+@Log
 public class EpisodeCreator {
 
     TrainerDependencies dependencies;
@@ -18,7 +21,7 @@ public class EpisodeCreator {
         return new EpisodeCreator(dependencies);
     }
 
-    public List<ExperienceLunar> experiences() {
+    public List<ExperienceLunar> create() {
         return getExperiencesWithFlag(true);
     }
 
@@ -41,6 +44,7 @@ public class EpisodeCreator {
             state=sr.stateNew();
             counter.increase();
         }
+        Conditionals.executeIfTrue(counter.isExceeded(), () -> log.info("Nof steps exceeded"));
         return experienceList;
     }
 

@@ -40,14 +40,14 @@ public class AgentLunar implements AgentI{
 
 
     @Override
-    public void fitActorBatch(TrainData dataMean, TrainData dataStd) {
-        actorMemory.fitBatch(dataMean,dataStd);
+    public void fitActor(TrainData dataMean, TrainData dataStd) {
+        actorMemory.fit(dataMean,dataStd);
     }
 
 
     @Override
-    public void fitCriticBatch(TrainData data) {
-        criticMemory.fitBatch(data);
+    public void fitCritic(TrainData data) {
+        criticMemory.fit(data);
     }
 
     @Override
