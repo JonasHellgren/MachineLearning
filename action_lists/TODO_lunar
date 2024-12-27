@@ -85,18 +85,19 @@ StartStateSupplierRandomAndClipped x
 speed plottas -3 tom 3 x
 fimpa batch learning  x
 tp.clipTdError ap.gradMax osnygg i olika  x
-inte clippa grad och adv separat
+inte clippa grad och adv separat - jo skall man visst x
 testa olika clippinggs
 snabbare lunar genom activ matrix som delas mellan actor o critic
 få td error gå mot mindre värde
 motivera REL_SIGMA
-RmsProp eller dyl
 hyper par tuning - plotta ACCREW vs n
+cleaner
 verbNoun på methoder
+
+RmsProp eller dyl
 påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
 RunnerPlotTrainedCriticMemory
 TestAgentCriticMemory mer tester
-
 
 
 när tid:

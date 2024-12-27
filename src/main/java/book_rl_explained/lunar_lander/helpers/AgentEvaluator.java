@@ -24,8 +24,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AgentEvaluator {
 
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 300;
+    public static final int WIDTH = 400;
+    public static final int HEIGHT = 200;
     TrainerDependencies dependencies;
 
     public static AgentEvaluator of(TrainerDependencies dependencies) {
