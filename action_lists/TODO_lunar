@@ -82,7 +82,7 @@ plotta  gradient x
 tdErrorBestAction  x
 plotta grad.mean() * adv  x
 StartStateSupplierRandomAndClipped x
-speed plottas -3 tom 3
+speed plottas -3 tom 3 x
 fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika
 testa olika clippinggs

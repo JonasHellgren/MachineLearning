@@ -14,9 +14,11 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.XYStyler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @AllArgsConstructor
@@ -58,9 +60,11 @@ public class AgentEvaluator {
         var times = ExperiencesInfo.of(experiencesNotExploring).times(ep.dt());
         XYChart chart = new XYChartBuilder()
                 .xAxisTitle("Time(s)").yAxisTitle("").width(WIDTH).height(HEIGHT).build();
-        chart.getStyler().setChartBackgroundColor(Color.WHITE);
-        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideE);
-
+        XYStyler styler = chart.getStyler();
+        styler.setChartBackgroundColor(Color.WHITE);
+        styler.setLegendPosition(Styler.LegendPosition.OutsideE);
+        styler.setxAxisTickLabelsFormattingFunction(value ->
+                new DecimalFormat("#").format(value)); //avoid x ticks cluttering
         var minMax = getMinMax(speeds, forces, accelerations, positions);
         addSeries(chart,times, forces, minMax, "Force(kN)");
         addSeries(chart,times, accelerations, minMax,"Acc. (m/s^2)");
@@ -87,6 +91,5 @@ public class AgentEvaluator {
         XYSeries series = chart.addSeries(measure, times, values);
         series.setMarker(SeriesMarkers.NONE);
     }
-
 
 }

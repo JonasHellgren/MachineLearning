@@ -20,16 +20,18 @@ public record LunarProperties(
         double rewardSuccess,
         double rewardStep) {
 
+    public static final double TOL = 1e-3;
+
     public static LunarProperties defaultProps() {
         return new LunarProperties(500.0, 0.2, 1.62, 0, 2, 0d, 5, 3, 1d, -100, 100, -1);
     }
 
     public List<Double> ySpace(int nItems) {
-        return createFromStartToEndWithNofItems(ySurface(), yMax(), nItems);
+        return createFromStartToEndWithNofItems(ySurface(), yMax()+TOL, nItems);
     }
 
     public List<Double> spdSpace(int nItems) {
-        return createFromStartToEndWithNofItems(-spdMax(), spdMax(), nItems);
+        return createFromStartToEndWithNofItems(-spdMax(), spdMax()+ TOL, nItems);
     }
 
     public double clippedForce(double forceInNewton) {

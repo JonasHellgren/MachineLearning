@@ -83,6 +83,7 @@ public class PlotterAgent {
         var yList = dependencies.environment().getProperties().ySpace(settings.nY());
         var spdList = dependencies.environment().getProperties().spdSpace(settings.nSpd());
         System.out.println("spdList = " + spdList);
+
         double[][] data = new double[yList.size()][spdList.size()];
         for (double y : yList) {
             for (double spd : spdList) {
