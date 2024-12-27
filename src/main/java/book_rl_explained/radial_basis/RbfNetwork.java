@@ -38,15 +38,24 @@ public class RbfNetwork {
         IntStream.range(0, nFits).forEach(i -> fit(data));
     }
 
+    public void fitNoUpdateActivations(TrainData data, int nFits) {
+        IntStream.range(0, nFits).forEach(i -> fitNoUpdateActivations(data));
+    }
+
 
     public void fit(TrainData data, int nEpochs, int batchSize) {
-        Preconditions.checkArgument(nEpochs > 0, "nEpochs should be > 0");
-        Preconditions.checkArgument(data.nSamples()>=batchSize, "nSamples should be >= batchSize");
+        validate(data, nEpochs, batchSize);
         for (int i = 0; i < nEpochs; i++) {
             fit(data.createBatch(batchSize));
         }
     }
 
+    public void fitNoUpdateActivations(TrainData data, int nEpochs, int batchSize) {
+        validate(data, nEpochs, batchSize);
+        for (int i = 0; i < nEpochs; i++) {
+            fitNoUpdateActivations(data.createBatch(batchSize));
+        }
+    }
 
     /**
      * Trains the RBF network for a single iteration using the provided training data.
@@ -54,12 +63,11 @@ public class RbfNetwork {
      * @param data the training data
      */
     public void fit(TrainData data) {
-        if (data.isErrors()) {
-            fitFromErrors(data.inputs(), data.errors());
-        } else {
-            var errors = getErrors(data.inputs(), data.outputs());
-            fitFromErrors(data.inputs(), errors);
-        }
+        fitMayUpdateActivations(data, true);
+    }
+
+    public void fitNoUpdateActivations(TrainData data ) {
+        fitMayUpdateActivations(data, false);
     }
 
     /**
@@ -90,19 +98,36 @@ public class RbfNetwork {
     }
 
 
+    private void fitMayUpdateActivations(TrainData data, boolean updateActivations) {
+        if (data.isErrors()) {
+            fitFromErrors(data.inputs(), data.errors(), updateActivations);
+        } else {
+            var errors = getErrors(data.inputs(), data.outputs());
+            fitFromErrors(data.inputs(), errors, updateActivations);
+        }
+    }
+
+
+    private static void validate(TrainData data, int nEpochs, int batchSize) {
+        Preconditions.checkArgument(nEpochs > 0, "nEpochs should be > 0");
+        Preconditions.checkArgument(data.nSamples()>= batchSize, "nSamples should be >= batchSize");
+    }
+
+
     /**
      * Updates the weights of the RBF network based on the input data and error values.
      *
      * @param inputs  the input data
      * @param errors  the error values
      */
-    private void fitFromErrors(List<List<Double>> inputs, List<Double> errors) {
+    private void fitFromErrors(List<List<Double>> inputs, List<Double> errors, boolean updateActivations) {
         var data = TrainData.ofErrors(inputs, errors);
-        activations=createActivationIfNeeded(data.nSamples(), activations);
-        activations.calculateActivations(data, kernels);
+        if (updateActivations) {
+            activations = createActivationIfNeeded(data.nSamples(), activations);
+            activations.calculateActivations(data, kernels);
+        }
         updater.updateWeights(data, weights, activations);
     }
-
 
 
     private List<Double> getErrors(List<List<Double>> inputs, List<Double> yTargets) {

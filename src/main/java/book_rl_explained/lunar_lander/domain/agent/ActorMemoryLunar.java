@@ -37,6 +37,13 @@ public class ActorMemoryLunar {
         memoryLogStd.fit(dataStd, agentParameters.nEpochs(),batchSize);
     }
 
+
+    public void fitNoUpdateActivationsMean(TrainData dataMean, TrainData dataStd) {
+        int batchSize = Math.min(dataMean.nSamples(), agentParameters.batchSize());
+        memoryMean.fitNoUpdateActivations(dataMean, agentParameters.nEpochs(),batchSize);
+        memoryLogStd.fit(dataStd, agentParameters.nEpochs(),batchSize);
+    }
+
     /**
      * Returns the mean and standard deviation of the actor's output for the given state.
      *
@@ -55,4 +62,7 @@ public class ActorMemoryLunar {
     }
 
 
+    public void copyActivationsInCriticToActorMean(CriticMemoryLunar criticMemory) {
+        memoryMean.copyActivations(criticMemory.memory);
+    }
 }

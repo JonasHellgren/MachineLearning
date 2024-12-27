@@ -6,13 +6,11 @@ import book_rl_explained.radial_basis.TrainData;
 public interface AgentI {
     double chooseAction(StateLunar state);
     double chooseActionNoExploration(StateLunar state);
- //   void fitActor(StateLunar state, double action, double adv);
-//    void fitCritic(StateLunar state, double error);
     void fitCritic(TrainData data);
     double readCritic(StateLunar state);
     AgentParameters getAgentParameters();
     MeanStd readActor(StateLunar state);
     GradientMeanStd gradientMeanAndLogStd(StateLunar state, double action);
-    //void fitActorBatch(List<StateLunar> states, List<Double> actions, List<Double> errors);
     void fitActor(TrainData dataMean, TrainData dataStd);
+    void copyActivationsInCriticToActorMean();
 }

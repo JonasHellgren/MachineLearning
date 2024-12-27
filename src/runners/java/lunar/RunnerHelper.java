@@ -5,7 +5,10 @@ import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.St
 import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomHeightZeroSpeed;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
 import book_rl_explained.lunar_lander.helpers.AgentEvaluator;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RunnerHelper {
 
 

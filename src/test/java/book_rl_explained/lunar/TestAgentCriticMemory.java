@@ -82,14 +82,16 @@ class TestAgentCriticMemory {
     }
 
 
-    private static void assertStatesAndTargets(List<StateLunar> states, List<Double> vTargets, CriticMemoryLunar criticMemoryLunar) {
+    private static void assertStatesAndTargets(
+            List<StateLunar> states, List<Double> vTargets, CriticMemoryLunar criticMemoryLunar) {
         for (StateLunar state : states) {
             double vTarget = vTargets.get(states.indexOf(state));
             assertEquals(vTarget, criticMemoryLunar.read(state), TOL);
         }
     }
 
-    private static void fitStatesToTargets(List<StateLunar> states, List<Double> vTargets, CriticMemoryLunar criticMemoryLunar) {
+    private static void fitStatesToTargets(
+            List<StateLunar> states, List<Double> vTargets, CriticMemoryLunar criticMemoryLunar) {
         for (StateLunar state : states) {
             double vTarget = vTargets.get(states.indexOf(state));
             fitMemory(criticMemoryLunar, state, vTarget);

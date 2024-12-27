@@ -16,7 +16,6 @@ import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.XYStyler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
-
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -42,7 +41,7 @@ public class AgentEvaluator {
             var experiencesNotExploring = creator.getExperiencesNotExploring();
             ExperienceLunar endExperience = ExperiencesInfo.of(experiencesNotExploring).endExperience();
             Conditionals.executeIfTrue(endExperience.isTransitionToFail(), () -> failCounter.increase());
-            Conditionals.executeIfTrue(true, () -> experiencesNotExploring.forEach(System.out::println));
+            //Conditionals.executeIfTrue(true, () -> experiencesNotExploring.forEach(System.out::println));
             evalCounter.increase();
         }
         return (double) failCounter.getCount() / nEvals;

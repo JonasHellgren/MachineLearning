@@ -47,8 +47,9 @@ public class MemoryUpdaterMultiStepTrainer {
             dataMean.addInAndError(state.asList(), grad.mean() * adv);
             dataStd.addInAndError(state.asList(), grad.std() * adv);
             data.addInAndError(msr.stateAtStep(step).asList(), adv);
-            agent.fitActor(dataMean, dataStd);
             agent.fitCritic(data);
+            agent.copyActivationsInCriticToActorMean();
+            agent.fitActor(dataMean, dataStd);
         }
     }
 

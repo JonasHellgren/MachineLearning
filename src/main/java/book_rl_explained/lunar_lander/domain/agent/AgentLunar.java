@@ -40,15 +40,23 @@ public class AgentLunar implements AgentI{
 
 
     @Override
-    public void fitActor(TrainData dataMean, TrainData dataStd) {
-        actorMemory.fit(dataMean,dataStd);
+    public void fitCritic(TrainData data) {
+        criticMemory.fit(data);
     }
 
 
     @Override
-    public void fitCritic(TrainData data) {
-        criticMemory.fit(data);
+    public void copyActivationsInCriticToActorMean() {
+        actorMemory.copyActivationsInCriticToActorMean(criticMemory);
     }
+
+
+    @Override
+    public void fitActor(TrainData dataMean, TrainData dataStd) {
+      //  actorMemory.fit(dataMean,dataStd);
+        actorMemory.fitNoUpdateActivationsMean(dataMean,dataStd);
+    }
+
 
     @Override
     public double readCritic(StateLunar state) {
