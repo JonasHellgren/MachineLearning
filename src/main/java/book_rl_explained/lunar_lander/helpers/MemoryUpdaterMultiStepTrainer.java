@@ -14,29 +14,7 @@ public class MemoryUpdaterMultiStepTrainer {
        return new MemoryUpdaterMultiStepTrainer(dependencies);
     }
 
-    public void fitBatch(MultiStepResults msr) {
-        var dataMean = TrainData.emptyFromErrors();
-        var dataStd = TrainData.emptyFromErrors();
-        var data = TrainData.emptyFromErrors();
-        var agent = dependencies.agent();
-        var ap = agent.getAgentParameters();
-        var tp = dependencies.trainerParameters();
-
-        for (int step = 0; step < msr.nExperiences(); step++) {
-            double adv = tp.clipAdvantage(msr.advantageAtStep(step));
-            var state = msr.stateAtStep(step);
-            var grad = agent.gradientMeanAndLogStd(state, msr.actionAtStep(step));
-            grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
-            dataMean.addInAndError(state.asList(), grad.mean() * adv);
-            dataStd.addInAndError(state.asList(), grad.std() * adv);
-            data.addInAndError(msr.stateAtStep(step).asList(), adv);
-        }
-        agent.fitActorBatch(dataMean, dataStd);
-        agent.fitCriticBatch(data);
-
-    }
-
-    public void fitStep(MultiStepResults msr) {
+    public void fit(MultiStepResults msr) {
         var agent = dependencies.agent();
         var ap = agent.getAgentParameters();
         var tp = dependencies.trainerParameters();
@@ -58,8 +36,6 @@ public class MemoryUpdaterMultiStepTrainer {
             agent.fitActorBatch(dataMean, dataStd);
             agent.fitCriticBatch(data);
         }
-
     }
-
 
 }

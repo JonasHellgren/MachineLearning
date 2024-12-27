@@ -14,7 +14,6 @@ import org.apache.commons.math3.util.Pair;
 @Log
 public class RunnerTrainerLunarMultiStep {
 
-    static final boolean IS_BATCH_LEARNING = false;
     public static final double MIN_START_HEIGHT = 3d;
     public static final double MIN_START_SPD = -2d;
     public static final double MAX_START_SPD = -0d;
@@ -29,13 +28,8 @@ public class RunnerTrainerLunarMultiStep {
     }
 
     private static TrainerDependencies getDependencies(LunarProperties ep) {
-
-        var p = IS_BATCH_LEARNING ?
-                AgentParameters.defaultParams(ep).withLearningRateCritic(0.9).withLearningRateActor(0.1)
-                        .withBatchSize(10).withNEpochs(1)
-                : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
-        var tp = TrainerParameters.newDefault()
-                .withStepHorizon(5).withNEpisodes(1_000).withBatchLearning(IS_BATCH_LEARNING);
+        var p = AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
+        var tp = TrainerParameters.newDefault().withStepHorizon(5).withNEpisodes(1_000);
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))

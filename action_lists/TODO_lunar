@@ -83,7 +83,7 @@ tdErrorBestAction  x
 plotta grad.mean() * adv  x
 StartStateSupplierRandomAndClipped x
 speed plottas -3 tom 3 x
-fimpa batch learning
+fimpa batch learning  x
 tp.clipTdError ap.gradMax osnygg i olika
 testa olika clippinggs
 snabbare lunar genom activ matrix som delas mellan actor o critic

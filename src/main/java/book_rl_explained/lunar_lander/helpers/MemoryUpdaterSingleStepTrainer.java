@@ -19,29 +19,7 @@ public class MemoryUpdaterSingleStepTrainer {
         return new MemoryUpdaterSingleStepTrainer(dependencies,ValueCalculator.of(dependencies));
     }
 
-
-    public void fitBatch(List<ExperienceLunar> experiences) {
-        var agent = dependencies.agent();
-        var tp = dependencies.trainerParameters();
-        var ap = agent.getAgentParameters();
-        var dataMean = TrainData.emptyFromErrors();
-        var dataStd = TrainData.emptyFromErrors();
-        var data = TrainData.emptyFromErrors();
-        for (ExperienceLunar experience : experiences) {
-            double tdError = tp.clipTdError(calculator.temporalDifferenceError(experience));
-            var state = experience.state();
-            var grad = agent.gradientMeanAndLogStd(state, experience.action());
-            grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
-            dataMean.addInAndError(state.asList(), grad.mean() * tdError);
-            dataStd.addInAndError(state.asList(), grad.std() * tdError);
-            data.addInAndError(state.asList(), tdError);
-
-        }
-        agent.fitActorBatch(dataMean, dataStd);
-        agent.fitCriticBatch(data);
-    }
-
-    public void fitStep(List<ExperienceLunar> experiences) {
+    public void fit(List<ExperienceLunar> experiences) {
         var agent = dependencies.agent();
         var tp = dependencies.trainerParameters();
         var ap = agent.getAgentParameters();

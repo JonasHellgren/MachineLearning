@@ -33,8 +33,7 @@ public class RunnerTrainerLunarSingleStep {
         var p = IS_BATCH_LEARNING ?
                 AgentParameters.defaultParams(ep).withLearningRateCritic(0.5).withLearningRateActor(0.01)
                 : AgentParameters.defaultParams(ep).withLearningRateCritic(0.01).withLearningRateActor(0.001);
-        var tp = TrainerParameters.newDefault()
-                .withNEpisodes(3000).withBatchLearning(IS_BATCH_LEARNING);
+        var tp = TrainerParameters.newDefault().withNEpisodes(3000);
 
         return TrainerDependencies.builder()
                 .agent(AgentLunar.zeroWeights(p, ep))
