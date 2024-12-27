@@ -37,7 +37,7 @@ public class TrainerLunarSingleStep implements TrainerI {
             executeOneOfTwo(dependencies.trainerParameters().isBatchLearning(),
                     () -> memoryUpdater.fitBatch(experiences),
                     () -> memoryUpdater.fitStep(experiences));
-            recorder.add(pmCreator.progressMeasures(experiences));
+            recorder.add(pmCreator.progressMeasures(experiences,null));
         }
     }
 

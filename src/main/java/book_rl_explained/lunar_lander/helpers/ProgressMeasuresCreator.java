@@ -3,9 +3,9 @@ package book_rl_explained.lunar_lander.helpers;
 import book_rl_explained.lunar_lander.domain.agent.AgentI;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.trainer.ExperienceLunar;
+import book_rl_explained.lunar_lander.domain.trainer.MultiStepResults;
 import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
 import book_rl_explained.lunar_lander.domain.trainer.ValueCalculator;
-import com.beust.jcommander.internal.Lists;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -20,11 +20,11 @@ public class ProgressMeasuresCreator {
         return new ProgressMeasuresCreator(dependencies, ValueCalculator.of(dependencies));
     }
 
-    public ProgressMeasures progressMeasures(List<ExperienceLunar> experiences) {
+    public ProgressMeasures progressMeasures(List<ExperienceLunar> experiences, MultiStepResults msrs) {
         var agent = dependencies.agent();
         var ap = agent.getAgentParameters();
         var tp = dependencies.trainerParameters();
-        var measureLists=ProgressMeasures.MeasureLists.empty();
+        var measureLists = ProgressMeasures.MeasureLists.empty();
         for (ExperienceLunar experience : experiences) {
             double td0 = calculator.temporalDifferenceError(experience);
             double td = tp.clipTdError(td0);
@@ -32,11 +32,19 @@ public class ProgressMeasuresCreator {
             var gradClipped = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
             var mAndStd = agent.readActor(experience.state());
             double tdErrorBestAction = calculator.temporalDifferenceErrorBestAction(experience);
+            //double adv=calculator.advantage(agent,experience.state(),tdErrorBestAction);
             measureLists.addTd(Math.abs(td0));
             measureLists.addTdClipped(Math.abs(td));
             measureLists.addStd(mAndStd.std());
-            measureLists.addGradMean(grad.mean());
-            measureLists.addGradMeanClipped(gradClipped.mean());
+
+            if (msrs == null) {
+                measureLists.addGradMean(0);
+                measureLists.addGradMeanClipped(0);
+            } else {
+                double adv = msrs.advantageAtStep(experiences.indexOf(experience));
+                measureLists.addGradMean(gradClipped.mean() * adv * 0);
+                measureLists.addGradMeanClipped(gradClipped.mean() * adv);
+            }
             measureLists.addTdBestAction(Math.abs(tdErrorBestAction));
         }
         var pm = ProgressMeasures.of(experiences, measureLists);
@@ -51,7 +59,6 @@ public class ProgressMeasuresCreator {
         pm = pm.withStateValuePos5Spd2(stateValuePos5Spd2);
         return pm;
     }
-
 
 
 }

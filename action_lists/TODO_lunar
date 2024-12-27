@@ -80,7 +80,9 @@ snyggare plottar, force acc etc, plotta acc istället  x
 cpu tid train  x
 plotta  gradient x
 tdErrorBestAction  x
-plotta grad.mean() * adv
+plotta grad.mean() * adv  x
+StartStateSupplierRandomHeightRandomFeasibleSpeed
+speed plottas -3 tom 3
 fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika
 testa olika clippinggs

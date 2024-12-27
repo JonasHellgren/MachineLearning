@@ -38,7 +38,7 @@ public class TrainerLunarMultiStep implements TrainerI {
             executeOneOfTwo(dependencies.trainerParameters().isBatchLearning(),
                     () -> memoryUpdater.fitBatch(msr),
                     () -> memoryUpdater.fitStep(msr));
-            recorder.add(pmCreator.progressMeasures(experiences));
+            recorder.add(pmCreator.progressMeasures(experiences,msr));
         }
         log.info("Training finished in (s): " + timer.timeInSecondsAsString());
 
