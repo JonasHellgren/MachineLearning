@@ -81,7 +81,7 @@ cpu tid train  x
 plotta  gradient x
 tdErrorBestAction  x
 plotta grad.mean() * adv  x
-StartStateSupplierRandomHeightRandomFeasibleSpeed
+StartStateSupplierRandomAndClipped x
 speed plottas -3 tom 3
 fimpa batch learning
 tp.clipTdError ap.gradMax osnygg i olika

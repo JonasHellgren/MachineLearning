@@ -4,18 +4,20 @@ import book_rl_explained.lunar_lander.domain.agent.AgentLunar;
 import book_rl_explained.lunar_lander.domain.agent.AgentParameters;
 import book_rl_explained.lunar_lander.domain.environment.EnvironmentLunar;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
-import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierAllRandom;
-import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomHeightZeroSpeed;
+import book_rl_explained.lunar_lander.domain.environment.startstate_suppliers.StartStateSupplierRandomAndClipped;
 import book_rl_explained.lunar_lander.domain.trainer.*;
 import book_rl_explained.lunar_lander.helpers.PlotterAgent;
 import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 import lombok.extern.java.Log;
-import org.hellgren.utilities.timer.CpuTimer;
+import org.apache.commons.math3.util.Pair;
 
 @Log
 public class RunnerTrainerLunarMultiStep {
 
-     static final boolean IS_BATCH_LEARNING = false;
+    static final boolean IS_BATCH_LEARNING = false;
+    public static final double MIN_START_HEIGHT = 3d;
+    public static final double MIN_START_SPD = -2d;
+    public static final double MAX_START_SPD = -0d;
 
     public static void main(String[] args) {
         var ep =  LunarProperties.defaultProps();
@@ -38,8 +40,8 @@ public class RunnerTrainerLunarMultiStep {
                 .agent(AgentLunar.zeroWeights(p, ep))
                 .environment(EnvironmentLunar.of(ep))
                 .trainerParameters(tp)
-                //.startStateSupplier(StartStateSupplierAllRandom.create(ep))
-                .startStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep))
+                .startStateSupplier(StartStateSupplierRandomAndClipped.create(
+                        ep, Pair.create(MIN_START_HEIGHT, ep.yMax()), Pair.create(MIN_START_SPD, MAX_START_SPD)))
                 .build();
     }
 
