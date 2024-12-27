@@ -89,11 +89,11 @@ inte clippa grad och adv separat - jo skall man visst x
 testa olika clippinggs  x
 remove fitOne and fit  x
 snabbare lunar genom activ matrix som delas mellan actor o critic x
-få td error gå mot mindre värde
-motivera REL_SIGMA
-hyper par tuning - plotta ACCREW vs n
+hyper par tuning - plotta ACCREW vs n  x
 cleaner
 verbNoun på methoder
+motivera REL_SIGMA
+
 
 RmsProp eller dyl
 påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
