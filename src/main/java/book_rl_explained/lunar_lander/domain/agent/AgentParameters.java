@@ -26,14 +26,16 @@ public record AgentParameters(
 
     public static final int N_KERNELS_Y = 11;
     public static final int N_KERNELS_SPD = 11;
-    public static final double LEARNING_RATE_CRITIC = 0.1;
-    public static final double LEARNING_RATE_ACTOR = 0.01;
-    public static final double GRAD_MEAN_MAX = 0.1;
-    public static final double GRAD_STD_MAX = 0.01;
+    public static final double LEARNING_RATE_CRITIC = 1e-3;
+    public static final double LEARNING_RATE_ACTOR = 1e-3;
     public static final double INIT_WEIGHT_LOG_STD = 0d;
     public static final int BATCH_SIZE = 20;
     public static final int N_EPOCHS = 5;
     public static final double REL_SIGMA = 0.9;
+    public static final double GRAD_MEAN_MAX = 0.1;
+    public static final double GRAD_STD_MAX = 0.01;  //small => std decreases slowly
+    public static final double TD_MAX = 10d;
+    public static final double ADV_MAX = 10d;
 
     public static AgentParameters newDefault(LunarProperties ep) {
         return of(ep, N_KERNELS_Y, N_KERNELS_SPD);
@@ -56,9 +58,8 @@ public record AgentParameters(
                 learningRateActor(LEARNING_RATE_ACTOR).
                 batchSize(BATCH_SIZE).
                 nEpochs(N_EPOCHS).
-                gradMeanMax(GRAD_MEAN_MAX).
-                gradStdMax(GRAD_STD_MAX).
-                tdMax(10d).advMax(10d).
+                gradMeanMax(GRAD_MEAN_MAX).gradStdMax(GRAD_STD_MAX).
+                tdMax(TD_MAX).advMax(ADV_MAX).
                 build();
     }
 

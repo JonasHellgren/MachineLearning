@@ -86,7 +86,7 @@ speed plottas -3 tom 3 x
 fimpa batch learning  x
 tp.clipTdError ap.gradMax osnygg i olika  x
 inte clippa grad och adv separat - jo skall man visst x
-testa olika clippinggs
+testa olika clippinggs  x
 snabbare lunar genom activ matrix som delas mellan actor o critic
 få td error gå mot mindre värde
 motivera REL_SIGMA
