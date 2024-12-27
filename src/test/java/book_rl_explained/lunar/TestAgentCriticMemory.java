@@ -23,7 +23,7 @@ class TestAgentCriticMemory {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultParams(lunarProperties).withLearningRateCritic(LEARNING_RATE);
+        agentParameters = AgentParameters.newDefault(lunarProperties).withLearningRateCritic(LEARNING_RATE);
         memory = CriticMemoryLunar.zeroWeights(agentParameters, lunarProperties);
     }
 

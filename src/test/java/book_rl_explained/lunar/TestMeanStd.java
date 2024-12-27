@@ -19,7 +19,7 @@ class TestMeanStd {
      @BeforeEach
       void init() {
         lunarProperties=LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultParams(lunarProperties)
+        agentParameters = AgentParameters.newDefault(lunarProperties)
                 .withGradMeanMax(GRAD_MEAN_MAX).withGradStdMax(GRAD_STD_MAX);
       }
 

@@ -27,7 +27,7 @@ public class MemoryUpdaterSingleStepTrainer {
         var dataStd = TrainData.emptyFromErrors();
         var data = TrainData.emptyFromErrors();
         for (ExperienceLunar experience : experiences) {
-            double tdError = tp.clipTdError(calculator.temporalDifferenceError(experience));
+            double tdError = ap.clipTdError(calculator.temporalDifferenceError(experience));
             var state = experience.state();
             var grad = agent.gradientMeanAndLogStd(state, experience.action());
             grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());

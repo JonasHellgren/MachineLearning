@@ -3,6 +3,7 @@ package book_rl_explained.lunar_lander.domain.agent;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import lombok.Builder;
 import lombok.With;
+import org.hellgren.utilities.math.MyMathUtils;
 
 @With
 @Builder
@@ -17,7 +18,9 @@ public record AgentParameters(
         int batchSize,
         int nEpochs,
         double gradMeanMax,
-        double gradStdMax
+        double gradStdMax,
+        double tdMax,
+        double advMax
 
 ) {
 
@@ -32,7 +35,7 @@ public record AgentParameters(
     public static final int N_EPOCHS = 5;
     public static final double REL_SIGMA = 0.9;
 
-    public static AgentParameters defaultParams(LunarProperties ep) {
+    public static AgentParameters newDefault(LunarProperties ep) {
         return of(ep, N_KERNELS_Y, N_KERNELS_SPD);
     }
 
@@ -55,7 +58,17 @@ public record AgentParameters(
                 nEpochs(N_EPOCHS).
                 gradMeanMax(GRAD_MEAN_MAX).
                 gradStdMax(GRAD_STD_MAX).
+                tdMax(10d).advMax(10d).
                 build();
+    }
+
+
+    public double clipAdvantage(double adv0) {
+        return MyMathUtils.clip(adv0, -advMax, advMax);
+    }
+
+    public double clipTdError(double e0) {
+        return MyMathUtils.clip(e0, -tdMax(), tdMax());
     }
 
 

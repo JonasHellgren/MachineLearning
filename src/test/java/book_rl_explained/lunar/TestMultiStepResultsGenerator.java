@@ -44,7 +44,7 @@ class TestMultiStepResultsGenerator {
 
     private MultiStepResultsGenerator createGenerator(int stepHorizon, double gamma) {
         var ep = LunarProperties.defaultProps();
-        var p = AgentParameters.defaultParams(ep).withLearningRateCritic(0.5)
+        var p = AgentParameters.newDefault(ep).withLearningRateCritic(0.5)
                 .withBatchSize(1).withNEpochs(N_EPOCHS);
         var trainerParameters = TrainerParameters.newDefault().withStepHorizon(stepHorizon).withGamma(gamma);
         dependencies = TrainerDependencies.builder()

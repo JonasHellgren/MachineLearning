@@ -27,7 +27,7 @@ public class ProgressMeasuresCreator {
         var measureLists = ProgressMeasures.MeasureLists.empty();
         for (ExperienceLunar experience : experiences) {
             double td0 = calculator.temporalDifferenceError(experience);
-            double td = tp.clipTdError(td0);
+            double td = ap.clipTdError(td0);
             var grad = agent.gradientMeanAndLogStd(experience.state(), experience.action());
             var gradClipped = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
             var mAndStd = agent.readActor(experience.state());

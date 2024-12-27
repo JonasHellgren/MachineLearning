@@ -22,7 +22,7 @@ class TestAgent {
     @BeforeEach
     void init() {
         lunarProperties = LunarProperties.defaultProps();
-        var agentParameters = AgentParameters.defaultParams(lunarProperties);
+        var agentParameters = AgentParameters.newDefault(lunarProperties);
         agent = AgentLunar.zeroWeights(agentParameters, lunarProperties);
         stateRandomPosAndSpeed = StateLunar.randomPosAndSpeed(lunarProperties);
         state0and0 = StateLunar.of(0, 0);

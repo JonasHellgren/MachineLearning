@@ -17,13 +17,12 @@ public class MemoryUpdaterMultiStepTrainer {
     public void fit(MultiStepResults msr) {
         var agent = dependencies.agent();
         var ap = agent.getAgentParameters();
-        var tp = dependencies.trainerParameters();
         var dataMean = TrainData.emptyFromErrors();
         var dataStd = TrainData.emptyFromErrors();
         var data = TrainData.emptyFromErrors();
 
         for (int step = 0; step < msr.nExperiences(); step++) {
-            double adv = tp.clipAdvantage(msr.advantageAtStep(step));
+            double adv = ap.clipAdvantage(msr.advantageAtStep(step));
             var state = msr.stateAtStep(step);
             var grad = agent.gradientMeanAndLogStd(state, msr.actionAtStep(step));
             grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());

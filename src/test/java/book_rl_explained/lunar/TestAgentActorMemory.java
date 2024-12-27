@@ -21,7 +21,7 @@ class TestAgentActorMemory {
     @BeforeEach
     void setup() {
         lunarProperties = LunarProperties.defaultProps();
-        agentParameters = AgentParameters.defaultParams(lunarProperties);
+        agentParameters = AgentParameters.newDefault(lunarProperties);
         actorMemoryLunar = ActorMemoryLunar.create(agentParameters, lunarProperties);
         actorMemoryLunarOneForStd = ActorMemoryLunar.create(agentParameters.withInitWeightLogStd(1), lunarProperties);
     }

@@ -84,7 +84,8 @@ plotta grad.mean() * adv  x
 StartStateSupplierRandomAndClipped x
 speed plottas -3 tom 3 x
 fimpa batch learning  x
-tp.clipTdError ap.gradMax osnygg i olika
+tp.clipTdError ap.gradMax osnygg i olika  x
+inte clippa grad och adv separat
 testa olika clippinggs
 snabbare lunar genom activ matrix som delas mellan actor o critic
 få td error gå mot mindre värde
