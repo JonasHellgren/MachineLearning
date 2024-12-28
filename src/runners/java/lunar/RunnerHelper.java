@@ -16,6 +16,20 @@ import book_rl_explained.lunar_lander.helpers.PlotterProgressMeasures;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.apache.commons.math3.util.Pair;
+import org.hellgren.plotters.chart_saver.ChartSaver;
+import org.hellgren.utilities.file_io.PathAndFile;
+import org.hellgren.utilities.list_arrays.ListConverter;
+import org.hellgren.utilities.list_arrays.ListCreator;
+import org.hellgren.utilities.list_arrays.MyListUtils;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.markers.SeriesMarkers;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RunnerHelper {
@@ -24,6 +38,54 @@ public class RunnerHelper {
     public static final double MIN_START_SPD = -2d;
     public static final double MAX_START_SPD = -0d;
     public static final String CHART_DIR = "src/runners/java/lunar/pics/";
+
+
+
+    record ResultsNStep(Map<Integer, List<Double>> resultMap) {
+        public static ResultsNStep empty() {
+            return new ResultsNStep(new HashMap<>());
+        }
+
+        public void add(int nSteps, double sumRewardAverage) {
+            resultMap.computeIfAbsent(nSteps, k -> ListCreator.emptyDouble()).add(sumRewardAverage);
+        }
+
+        public double average(int nSteps) {
+            return MyListUtils.findAverage(resultMap.get(nSteps)).orElseThrow();
+        }
+
+        public double maxMinusMin(int nSteps) {
+            double max = MyListUtils.findMax(resultMap.get(nSteps)).orElseThrow();
+            double min = MyListUtils.findMin(resultMap.get(nSteps)).orElseThrow();
+            return max - min;
+        }
+    }
+
+    static void plotNStepResults(ResultsNStep results, List<Integer> nStepsList) {
+        var xList= ListConverter.integer2Double(nStepsList);
+        var yList = nStepsList.stream()
+                .map(nSteps -> results.average(nSteps)).toList();
+        var errList = nStepsList.stream()
+                .map(nSteps -> results.maxMinusMin(nSteps)).toList();
+        var chart = new XYChartBuilder()
+                .width(600).height(200)
+                .title("").xAxisTitle("N Steps").yAxisTitle("Avg. sumRewards")
+                .build();
+        var styler = chart.getStyler();
+        styler.setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
+        styler.setChartTitleVisible(false);
+        styler.setLegendVisible(false);
+        styler.setAxisTitlesVisible(true);
+        styler.setXAxisDecimalPattern("0");
+        styler.setChartBackgroundColor(Color.WHITE);
+        XYSeries series = chart.addSeries("a", xList, yList, errList);
+        series.setMarkerColor(Color.GRAY);
+        series.setMarker(SeriesMarkers.SQUARE);
+        new SwingWrapper<>(chart).displayChart();
+        ChartSaver.saveXYChart(chart, PathAndFile.ofPng(CHART_DIR, "lunar_step_horizon_evaluator.png"));
+
+    }
+
 
     public static void evaluate(TrainerDependencies trainerDependencies, LunarProperties ep) {
         trainerDependencies = trainerDependencies.withStartStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep));

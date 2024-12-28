@@ -72,7 +72,7 @@ public class AgentEvaluator {
         addSeries(chart,times, speeds, minMax,"Speed(m/s)");
         addSeries(chart,times, positions, minMax,"Pos(m)");
         new SwingWrapper<>(chart).displayChart();
-        ChartSaver.saveXYChart(chart, PathAndFile.ofPng(path, "simulation"));
+        ChartSaver.saveXYChart(chart, PathAndFile.ofPng(path, "lunar_simulation"));
 }
 
      static Pair<Double, Double> getMinMax(List<Double> speeds,
