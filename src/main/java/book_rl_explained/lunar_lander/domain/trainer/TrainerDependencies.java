@@ -7,6 +7,12 @@ import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import lombok.Builder;
 import lombok.With;
 
+/**
+ * Represents the dependencies required for a trainer in the lunar lander domain.
+ * This includes the agent, environment, trainer parameters, and start
+ * state supplier.
+ */
+
 @Builder
 @With
 public record TrainerDependencies(
@@ -24,7 +30,7 @@ public record TrainerDependencies(
         return trainerParameters().gamma();
     }
 
-    public int getnEpisodes() {
+    public int getNofEpisodes() {
         return trainerParameters().nEpisodes();
     }
 

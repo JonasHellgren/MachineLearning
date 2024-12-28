@@ -20,18 +20,18 @@ public class ProgressMeasuresCreator {
         return new ProgressMeasuresCreator(dependencies, ValueCalculator.of(dependencies));
     }
 
-    public ProgressMeasures progressMeasures(List<ExperienceLunar> experiences, MultiStepResults msrs) {
+    public ProgressMeasures getProgressMeasures(List<ExperienceLunar> experiences, MultiStepResults msrs) {
         var agent = dependencies.agent();
         var ap = agent.getAgentParameters();
         var tp = dependencies.trainerParameters();
         var measureLists = ProgressMeasures.MeasureLists.empty();
         for (ExperienceLunar experience : experiences) {
-            double td0 = calculator.temporalDifferenceError(experience);
+            double td0 = calculator.calcTemporalDifferenceError(experience);
             double td = ap.clipTdError(td0);
             var grad = agent.gradientMeanAndLogStd(experience.state(), experience.action());
             var gradClipped = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
             var mAndStd = agent.readActor(experience.state());
-            double tdErrorBestAction = calculator.temporalDifferenceErrorBestAction(experience);
+            double tdErrorBestAction = calculator.calcTemporalDifferenceErrorBestAction(experience);
             //double adv=calculator.advantage(agent,experience.state(),tdErrorBestAction);
             measureLists.addTd(Math.abs(td0));
             measureLists.addTdClipped(Math.abs(td));

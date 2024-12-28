@@ -3,10 +3,16 @@ package book_rl_explained.lunar_lander.domain.agent;
 import book_rl_explained.lunar_lander.domain.environment.LunarProperties;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.radial_basis.TrainData;
+import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hellgren.utilities.gradient.NormalDistributionGradientCalculator;
 import org.hellgren.utilities.normal_distribution.NormDistributionSampler;
+
+/**
+ * This class represents an agent for the Lunar Lander game.
+ * It uses radial basis functions for the actor and the critic.
+ */
 
 @AllArgsConstructor
 @Getter
@@ -50,13 +56,12 @@ public class AgentLunar implements AgentI{
         actorMemory.copyActivationsInCriticToActorMean(criticMemory);
     }
 
-
     @Override
-    public void fitActor(TrainData dataMean, TrainData dataStd) {
-      //  actorMemory.fit(dataMean,dataStd);
+    public void fitActorUseCriticActivations(TrainData dataMean, TrainData dataStd) {
+        Preconditions.checkArgument(actorMemory.memoryMean.nKernels() == criticMemory.memory.nKernels(),
+                "nKernels must be the same");
         actorMemory.fitNoUpdateActivationsMean(dataMean,dataStd);
     }
-
 
     @Override
     public double readCritic(StateLunar state) {

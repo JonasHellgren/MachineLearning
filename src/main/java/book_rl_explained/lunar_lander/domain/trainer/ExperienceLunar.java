@@ -3,6 +3,11 @@ package book_rl_explained.lunar_lander.domain.trainer;
 import book_rl_explained.lunar_lander.domain.environment.StateLunar;
 import book_rl_explained.lunar_lander.domain.environment.StepReturnLunar;
 
+/**
+ * Represents a single experience in the lunar lander environment.
+ * An experience consists of a state, an action taken in that state,
+ * and the resulting step return.
+ */
 public record ExperienceLunar(
         StateLunar state,
         double action,

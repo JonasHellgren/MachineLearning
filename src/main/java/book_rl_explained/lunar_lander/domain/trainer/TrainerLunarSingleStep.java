@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
+
+/**
+ * This class represents a single-step trainer for the 1 dimensional Lunar Lander game
+ */
+
 @AllArgsConstructor
 @Getter
 @Log
@@ -27,10 +32,10 @@ public class TrainerLunarSingleStep implements TrainerI {
         var pmCreator= ProgressMeasuresCreator.of(dependencies);
         recorder.clear();
         log.info("starting training");
-        for (int i = 0; i < dependencies.getnEpisodes(); i++) {
+        for (int i = 0; i < dependencies.getNofEpisodes(); i++) {
             var experiences = epCreator.create();
             memoryUpdater.fit(experiences);
-            recorder.add(pmCreator.progressMeasures(experiences,null));
+            recorder.add(pmCreator.getProgressMeasures(experiences,null));
         }
     }
 }

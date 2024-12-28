@@ -92,12 +92,13 @@ snabbare lunar genom activ matrix som delas mellan actor o critic x
 hyper par tuning - plotta ACCREW vs n  x
 spara bilder png  x
 RunnerStepHorizonEvaluator cleaner x
-cleaner
+cleaner  x
+
+om tid:
 verbNoun på methoder
 prova fler rbf std minne
 motivera REL_SIGMA
-
-när tid:
+opt hyperpar
 annan reward function
 prova olika n kluster
 RmsProp eller dyl

@@ -87,7 +87,7 @@ public class RunnerHelper {
     }
 
 
-    public static void evaluate(TrainerDependencies trainerDependencies, LunarProperties ep) {
+    static void evaluate(TrainerDependencies trainerDependencies, LunarProperties ep) {
         trainerDependencies = trainerDependencies.withStartStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep));
         var evaluatorFails = AgentEvaluator.of(trainerDependencies);
         double fractionFails= evaluatorFails.fractionFails(10);
@@ -110,7 +110,7 @@ public class RunnerHelper {
                 .build();
     }
 
-    public static final PlotterAgent.Settings SETTINGS_PLOTTER_AGENT = PlotterAgent.Settings.builder()
+    static final PlotterAgent.Settings SETTINGS_PLOTTER_AGENT = PlotterAgent.Settings.builder()
             .nY(50).nSpd(50).nDigitsAxisLabels(1).valueFormat("%.1f").build();
 
     static void plot(TrainerI trainer, TrainerDependencies trainerDependencies) {

@@ -6,6 +6,12 @@ import lombok.Builder;
 
 import java.util.List;
 
+/**
+ * Represents the results of a multi-step generation, from class MultiStepResultsGenerator
+ * This class contains a list of MultiStepResult objects, each representing a single
+ * step in the experience.
+ */
+
 @Builder
 public record MultiStepResults(
         int nExperiences,  //equal to length of below lists

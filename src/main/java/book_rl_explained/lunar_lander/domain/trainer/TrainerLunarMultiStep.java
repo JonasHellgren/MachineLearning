@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.timer.CpuTimer;
 
+
+/**
+ * This class represents a multi-step trainer for the 1 dimensional Lunar Lander game
+ */
+
 @AllArgsConstructor
 @Getter
 @Log
@@ -30,14 +35,12 @@ public class TrainerLunarMultiStep implements TrainerI {
         var timer= CpuTimer.empty();
         recorder.clear();
         log.info("starting training");
-        for (int i = 0; i < dependencies.getnEpisodes(); i++) {
+        for (int i = 0; i < dependencies.getNofEpisodes(); i++) {
             var experiences = epCreator.create();
             var msr = msrGenerator.generate(experiences);
             memoryUpdater.fit(msr);
-            recorder.add(pmCreator.progressMeasures(experiences,msr));
+            recorder.add(pmCreator.getProgressMeasures(experiences,msr));
         }
         log.info("Training finished in (s): " + timer.timeInSecondsAsString());
-
     }
-
 }

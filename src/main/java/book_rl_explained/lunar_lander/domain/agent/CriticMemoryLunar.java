@@ -29,7 +29,4 @@ public class CriticMemoryLunar {
         memory.fit(data, agentParameters.nEpochs(),batchSize);
     }
 
-    public void copyActivations(RbfNetwork other) {
-        memory.copyActivations(other);
-    }
 }

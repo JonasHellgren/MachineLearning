@@ -6,6 +6,12 @@ import org.hellgren.utilities.unit_converter.MyUnitConverter;
 import org.hellgren.utilities.unit_converter.NonSIUnits;
 import tec.units.ri.unit.Units;
 
+/**
+ * Environment class for the Lunar Lander problem.
+ * This class implements the EnvironmentI interface and provides methods for
+ * stepping the environment and calculating rewards.
+ */
+
 @Getter
 @AllArgsConstructor
 public class EnvironmentLunar implements EnvironmentI {
@@ -20,6 +26,12 @@ public class EnvironmentLunar implements EnvironmentI {
         return new EnvironmentLunar(ep);
     }
 
+    /**
+     * Steps the environment forward in time, given the current state and action.
+     * @param state the current state of the environment
+     * @param action the action to take in the environment
+     * @return the new state and reward after taking the action
+     */
 
     @Override
     public StepReturnLunar step(StateLunar state, double action) {
@@ -33,13 +45,26 @@ public class EnvironmentLunar implements EnvironmentI {
         boolean isTerminal = isLanded(y) || isToHighPosition(y);
         boolean isFail = isLanded(y)  && isToHighSpeed(speed) || isToHighPosition(y);
         double reward = calculateReward(y, speed, isFail);
-
         return StepReturnLunar.builder()
                 .stateNew(stateNew)
                 .isFail(isFail)
                 .isTerminal(isTerminal)
                 .reward(reward)
                 .build();
+    }
+
+    public double acceleration(double action) {
+        double m = properties.massLander();
+        double force = properties.clippedForce(action);
+        return (forceInNewton(force) - m * properties.g()) / m;
+    }
+
+    public static double forceInKiloNewton(double forceInNewton) {
+        return MyUnitConverter.convertForce(forceInNewton, Units.NEWTON, NonSIUnits.KILO_NEWTON);
+    }
+
+    public static double forceInNewton(double forceInKiloNewton) {
+        return MyUnitConverter.convertForce(forceInKiloNewton, NonSIUnits.KILO_NEWTON, Units.NEWTON);
     }
 
     private boolean isLanded(double y) {
@@ -60,20 +85,5 @@ public class EnvironmentLunar implements EnvironmentI {
     private boolean isToHighSpeed(double speed) {
         return Math.abs(speed) > Math.abs(properties.spdLimitCrash());
     }
-
-    public double acceleration(double action) {
-        double m = properties.massLander();
-        double force = properties.clippedForce(action);
-        return (forceInNewton(force) - m * properties.g()) / m;
-    }
-
-    public double forceInKiloNewton(double forceInNewton) {
-        return MyUnitConverter.convertForce(forceInNewton, Units.NEWTON, NonSIUnits.KILO_NEWTON);
-    }
-
-    public double forceInNewton(double forceInKiloNewton) {
-        return MyUnitConverter.convertForce(forceInKiloNewton, NonSIUnits.KILO_NEWTON, Units.NEWTON);
-    }
-
 
 }

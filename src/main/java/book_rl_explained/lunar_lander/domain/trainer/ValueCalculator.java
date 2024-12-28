@@ -47,7 +47,7 @@ public class ValueCalculator {
      * @param value the value of taking an action in the given state
      * @return the advantage of taking an action in the given state
      */
-    public  double advantage(@NotNull AgentI agent, StateLunar state, double value) {
+    public  double calcAdvantage(@NotNull AgentI agent, StateLunar state, double value) {
         double valueCritic = agent.readCritic(state);
         return value - valueCritic;
     }
@@ -58,7 +58,7 @@ public class ValueCalculator {
      * @param experience the experience to calculate the error for
      * @return the temporal difference error for the given experience
      */
-    public double temporalDifferenceError(ExperienceLunar experience) {
+    public double calcTemporalDifferenceError(ExperienceLunar experience) {
         var agent = dependencies.agent();
         double valueCritic = agent.readCritic(experience.state());
         double vNext = experience.isTransitionToTerminal()
@@ -69,12 +69,12 @@ public class ValueCalculator {
     }
 
 
-    public double temporalDifferenceErrorBestAction(ExperienceLunar experience) {
+    public double calcTemporalDifferenceErrorBestAction(ExperienceLunar experience) {
         var agent = dependencies.agent();
         var env=dependencies.environment();
         double aBest=agent.chooseActionNoExploration(experience.state());
         var sr=env.step(experience.state(),aBest);
-        return temporalDifferenceError(ExperienceLunar.of(experience.state(),aBest,sr));
+        return calcTemporalDifferenceError(ExperienceLunar.of(experience.state(),aBest,sr));
 
     }
 }

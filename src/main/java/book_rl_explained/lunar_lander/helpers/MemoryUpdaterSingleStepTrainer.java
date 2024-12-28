@@ -27,7 +27,7 @@ public class MemoryUpdaterSingleStepTrainer {
         var dataStd = TrainData.emptyFromErrors();
         var data = TrainData.emptyFromErrors();
         for (ExperienceLunar experience : experiences) {
-            double tdError = ap.clipTdError(calculator.temporalDifferenceError(experience));
+            double tdError = ap.clipTdError(calculator.calcTemporalDifferenceError(experience));
             var state = experience.state();
             var grad = agent.gradientMeanAndLogStd(state, experience.action());
             grad = grad.clip(ap.gradMeanMax(), ap.gradStdMax());
@@ -37,7 +37,7 @@ public class MemoryUpdaterSingleStepTrainer {
             dataMean.addInAndError(state.asList(), grad.mean() * tdError);
             dataStd.addInAndError(state.asList(), grad.std() * tdError);
             data.addInAndError(state.asList(), tdError);
-            agent.fitActor(dataMean, dataStd);
+            agent.fitActorUseCriticActivations(dataMean, dataStd);
             agent.fitCritic(data);
         }
     }

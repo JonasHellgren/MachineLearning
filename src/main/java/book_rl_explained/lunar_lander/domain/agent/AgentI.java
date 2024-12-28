@@ -11,6 +11,6 @@ public interface AgentI {
     AgentParameters getAgentParameters();
     MeanStd readActor(StateLunar state);
     GradientMeanStd gradientMeanAndLogStd(StateLunar state, double action);
-    void fitActor(TrainData dataMean, TrainData dataStd);
+    void fitActorUseCriticActivations(TrainData dataMean, TrainData dataStd);
     void copyActivationsInCriticToActorMean();
 }

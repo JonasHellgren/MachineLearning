@@ -11,14 +11,11 @@ import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EpisodeInfo {
-    public static final double VAL_TOL = 1e-5;
     List<ExperienceLunar> experiences;
 
     public static EpisodeInfo of(List<ExperienceLunar> experiences) {
         return new EpisodeInfo(experiences);
     }
-
-
 
     public int size() {
         return experiences.size();
@@ -27,13 +24,6 @@ public class EpisodeInfo {
     public int nIsTerminal() {
         return (int) experiences.stream().filter(e -> e.isTransitionToTerminal()).count();
     }
-
-/*
-    public int nZeroValued() {
-        return (int) experiences.stream()
-                .filter(e -> MyMathUtils.isEqualDoubles(e.value(), 0, VAL_TOL)).count();
-    }
-*/
 
     public double sumRewards() {
         return MyListUtils.sumList(rewards());
@@ -66,21 +56,5 @@ public class EpisodeInfo {
         return experiences.stream()
                 .map(e -> e.action()).toList();
     }
-
-
-/*
-    public Set<Integer> getValuesOfSpecificDiscreteFeature(int featureIndex) {
-        List<Integer> grossList = experiences.stream()
-                .map(e -> e.state().discreteFeatures()[featureIndex]).toList();
-        return new HashSet<>(grossList);
-    }
-
-
-    public   List<Experience<V>> getExperiencesWithDiscreteFeatureValue(int timeChosen, int featureIndex) {
-        return experiences.stream()
-                .filter(e -> e.state().discreteFeatures()[featureIndex]== timeChosen).toList();
-    }
-*/
-
 
 }
