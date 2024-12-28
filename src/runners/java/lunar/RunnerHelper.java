@@ -23,7 +23,7 @@ public class RunnerHelper {
     public static final double MIN_START_HEIGHT = 3d;
     public static final double MIN_START_SPD = -2d;
     public static final double MAX_START_SPD = -0d;
-
+    public static final String CHART_DIR = "src/runners/java/lunar/pics/";
 
     public static void evaluate(TrainerDependencies trainerDependencies, LunarProperties ep) {
         trainerDependencies = trainerDependencies.withStartStateSupplier(StartStateSupplierRandomHeightZeroSpeed.create(ep));
@@ -32,7 +32,7 @@ public class RunnerHelper {
         System.out.println("fractionFails = " + fractionFails);
         trainerDependencies = trainerDependencies.withStartStateSupplier(StartStateSupplierFromMaxHeight.create(ep));
         var evaluatorSim = AgentEvaluator.of(trainerDependencies);
-        evaluatorSim.plotSimulation();
+        evaluatorSim.plotAndSavePicFromSimulation(CHART_DIR);
     }
 
 
@@ -55,7 +55,7 @@ public class RunnerHelper {
         var progressPlotter = PlotterProgressMeasures.of(trainer);
         progressPlotter.plot();
         var agentPlotter = PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
-        agentPlotter.plotAll();
+        agentPlotter.plotAndSaveAll();
     }
 
 

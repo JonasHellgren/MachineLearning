@@ -5,22 +5,17 @@ import book_rl_explained.lunar_lander.domain.trainer.TrainerLunarMultiStep;
 import lombok.extern.java.Log;
 import org.hellgren.utilities.list_arrays.ListCreator;
 import org.hellgren.utilities.list_arrays.MyListUtils;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
-import org.knowm.xchart.style.XYStyler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static lunar.RunnerHelper.*;
+import static lunar.RunnerHelper.getDependencies;
 
 @Log
 public class RunnerStepHorizonEvaluator {
@@ -76,7 +71,7 @@ public class RunnerStepHorizonEvaluator {
                 .map(nSteps -> results.maxMinusMin(nSteps)).toList();
         var chart = new XYChartBuilder()
                 .width(400).height(200)
-                .title("ErrorChart").xAxisTitle("n Steps").yAxisTitle("avg. sumRewards")
+                .title("").xAxisTitle("N Steps").yAxisTitle("Avg. sumRewards")
                 .build();
         var styler = chart.getStyler();
         styler.setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
@@ -84,6 +79,7 @@ public class RunnerStepHorizonEvaluator {
         styler.setLegendVisible(false);
         styler.setAxisTitlesVisible(true);
         styler.setXAxisDecimalPattern("0");
+        styler.setChartBackgroundColor(Color.WHITE);
         XYSeries series = chart.addSeries("a", N_STEPS_LIST, yList, errList);
         series.setMarkerColor(Color.GRAY);
         series.setMarker(SeriesMarkers.SQUARE);

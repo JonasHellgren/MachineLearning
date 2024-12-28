@@ -90,26 +90,17 @@ testa olika clippinggs  x
 remove fitOne and fit  x
 snabbare lunar genom activ matrix som delas mellan actor o critic x
 hyper par tuning - plotta ACCREW vs n  x
+spara bilder png  x
+RunnerStepHorizonEvaluator cleaner
 cleaner
 verbNoun på methoder
+prova fler rbf std minne
 motivera REL_SIGMA
-
-
-RmsProp eller dyl
-påvisa multi step bättre - kasnke genom tex mindre kraft eller slump kraft
-RunnerPlotTrainedCriticMemory
-TestAgentCriticMemory mer tester
-
 
 när tid:
 prova olika n kluster
+RmsProp eller dyl
+TestAgentCriticMemory mer tester
 
-
-    public double acceleration(double action) {
-        double m = properties.massLander();
-        double forceInNewton = forceInNewton(action);
-        double forceClipped = properties.clippedForce(forceInNewton);
-        return (forceClipped - m * properties.g()) / m;
-    }
 
 

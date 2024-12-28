@@ -50,7 +50,7 @@ public class RunnerTrainerLunarSingleStep {
         var progressPlotter= PlotterProgressMeasures.of(trainer);
         progressPlotter.plot();
         var agentPlotter= PlotterAgent.of(trainerDependencies, SETTINGS_PLOTTER_AGENT);
-        agentPlotter.plotAll();
+        agentPlotter.plotAndSaveAll();
     }
 
 }

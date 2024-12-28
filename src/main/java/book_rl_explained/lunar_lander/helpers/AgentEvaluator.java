@@ -6,8 +6,10 @@ import book_rl_explained.lunar_lander.domain.trainer.TrainerDependencies;
 import com.beust.jcommander.internal.Lists;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hellgren.plotters.chart_saver.ChartSaver;
 import org.hellgren.utilities.conditionals.Conditionals;
 import org.hellgren.utilities.conditionals.Counter;
+import org.hellgren.utilities.file_io.PathAndFile;
 import org.hellgren.utilities.list_arrays.MyListUtils;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
@@ -47,7 +49,7 @@ public class AgentEvaluator {
         return (double) failCounter.getCount() / nEvals;
     }
 
-    public void plotSimulation() {
+    public void plotAndSavePicFromSimulation(String path) {
         var creator = EpisodeCreator.of(dependencies);
         var experiencesNotExploring = creator.getExperiencesNotExploring();
         var ep = dependencies.environment().getProperties();
@@ -66,10 +68,11 @@ public class AgentEvaluator {
                 new DecimalFormat("#").format(value)); //avoid x ticks cluttering
         var minMax = getMinMax(speeds, forces, accelerations, positions);
         addSeries(chart,times, forces, minMax, "Force(kN)");
-        addSeries(chart,times, accelerations, minMax,"Acc. (m/s^2)");
+     //   addSeries(chart,times, accelerations, minMax,"Acc. (m/s^2)");
         addSeries(chart,times, speeds, minMax,"Speed(m/s)");
         addSeries(chart,times, positions, minMax,"Pos(m)");
         new SwingWrapper<>(chart).displayChart();
+        ChartSaver.saveXYChart(chart, PathAndFile.ofPng(path, "simulation"));
 }
 
      static Pair<Double, Double> getMinMax(List<Double> speeds,

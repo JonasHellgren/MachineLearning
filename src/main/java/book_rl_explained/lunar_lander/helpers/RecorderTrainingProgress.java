@@ -42,7 +42,7 @@ public class RecorderTrainingProgress {
     @NotNull
     private static HashMap<String, Function<ProgressMeasures, Double>> getStringFunctionHashMap() {
         HashMap<String, Function<ProgressMeasures, Double>> map=new HashMap<>();
-        map.put("sumRewards",pm -> pm.sumRewards());
+        map.put("Sum rewards",pm -> pm.sumRewards());
         map.put("stateValuePos2Spd0",ProgressMeasures::stateValuePos2Spd0);
         map.put("stateValuePos5Spd2",ProgressMeasures::stateValuePos5Spd2);
         map.put("nSteps",pm -> (double) pm.nSteps());
@@ -50,8 +50,8 @@ public class RecorderTrainingProgress {
         map.put("tdErrorClipped",ProgressMeasures::tdErrorClipped);
         map.put("gradMean",ProgressMeasures::gradMean);
         map.put("gradMeanClipped",ProgressMeasures::gradMeanClipped);
-        map.put("stdActor",ProgressMeasures::stdActor);
-        map.put("tdBestAction",ProgressMeasures::tdBestAction);
+        map.put("Std actor",ProgressMeasures::stdActor);
+        map.put("Td error best action",ProgressMeasures::tdBestAction);
         return map;
     }
 
