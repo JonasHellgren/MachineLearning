@@ -54,6 +54,8 @@ public class AgentEvaluator {
         var ep = dependencies.environment().getProperties();
         var speeds = ExperiencesInfo.of(experiencesNotExploring).speeds();
         var forces = ExperiencesInfo.of(experiencesNotExploring).forces(ep);
+        var accelerations = ExperiencesInfo.of(experiencesNotExploring)
+                .accelerations((EnvironmentLunar) dependencies.environment());
         var positions = ExperiencesInfo.of(experiencesNotExploring).positions();
         var times = ExperiencesInfo.of(experiencesNotExploring).times(ep.dt());
         XYChart chart = new XYChartBuilder()
@@ -63,8 +65,9 @@ public class AgentEvaluator {
         styler.setLegendPosition(Styler.LegendPosition.OutsideE);
         styler.setxAxisTickLabelsFormattingFunction(value ->
                 new DecimalFormat("#").format(value)); //avoid x ticks cluttering
-        var minMax = getMinMax(speeds, forces,  positions);
+        var minMax = getMinMax(speeds, forces, accelerations,  positions);
         addSeries(chart,times, forces, minMax, "Force(kN)");
+        addSeries(chart,times, accelerations, minMax,"Acc. (m/s^2)");
         addSeries(chart,times, speeds, minMax,"Speed(m/s)");
         addSeries(chart,times, positions, minMax,"Pos(m)");
         new SwingWrapper<>(chart).displayChart();
@@ -73,15 +76,21 @@ public class AgentEvaluator {
 
      static Pair<Double, Double> getMinMax(List<Double> speeds,
                                                   List<Double> forces,
+                                                  List<Double> accelerations,
                                                   List<Double> positions) {
         List<Double> mergedList= Lists.newArrayList();
         mergedList.addAll(speeds);
         mergedList.addAll(forces);
+        mergedList.addAll(accelerations);
         mergedList.addAll(positions);
         return Pair.of(MyListUtils.findMin(mergedList).orElseThrow(),MyListUtils.findMax(mergedList).orElseThrow());
     }
 
-    private void addSeries(XYChart chart, List<Double> times, List<Double> values, Pair<Double,Double> minMax, String measure) {
+    private void addSeries(XYChart chart,
+                           List<Double> times,
+                           List<Double> values,
+                           Pair<Double,Double> minMax,
+                           String measure) {
         chart.getStyler().setYAxisMin(minMax.getLeft());
         chart.getStyler().setYAxisMax(minMax.getRight());
         XYSeries series = chart.addSeries(measure, times, values);

@@ -42,7 +42,7 @@ public class ProgressMeasuresCreator {
                 measureLists.addGradMeanClipped(0);
             } else {
                 double adv = msrs.advantageAtStep(experiences.indexOf(experience));
-                measureLists.addGradMean(gradClipped.mean() * adv * 0);
+                measureLists.addGradMean(gradClipped.mean() * adv);
                 measureLists.addGradMeanClipped(gradClipped.mean() * adv);
             }
             measureLists.addTdBestAction(Math.abs(tdErrorBestAction));

@@ -48,8 +48,8 @@ public class RecorderTrainingProgress {
         map.put("nSteps",pm -> (double) pm.nSteps());
         map.put("tdError",ProgressMeasures::tdError);
         map.put("tdErrorClipped",ProgressMeasures::tdErrorClipped);
-        map.put("gradMean",ProgressMeasures::gradMean);
-        map.put("gradMeanClipped",ProgressMeasures::gradMeanClipped);
+        map.put("Gradient actor mean",ProgressMeasures::gradMean);
+        map.put("Gradient actor mean clipped",ProgressMeasures::gradMeanClipped);
         map.put("Std actor",ProgressMeasures::stdActor);
         map.put("Td error best action",ProgressMeasures::tdBestAction);
         return map;

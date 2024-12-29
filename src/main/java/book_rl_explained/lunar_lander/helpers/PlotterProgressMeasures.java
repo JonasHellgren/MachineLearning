@@ -80,12 +80,14 @@ public class PlotterProgressMeasures {
 
     public void plot() {
         Preconditions.checkArgument(!recorder.isEmpty(), "No training progress data to plot");
-        var measures = List.of("Sum rewards", "Std actor", "Td error best action");
+        var measures = List.of("Sum rewards", "Std actor", "Td error best action","Gradient actor mean");
         showOneMeasurePerPlot(measures);
         measures = List.of("tdError", "tdErrorClipped");
         showTwoMeasuresInOnePlot(measures, "tdError");
+/*
         measures = List.of("gradMean", "gradMeanClipped");
         showTwoMeasuresInOnePlot(measures, "gradMean");
+*/
     }
 
     private void showOneMeasurePerPlot(List<String> measures) {
